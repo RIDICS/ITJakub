@@ -112,12 +112,26 @@ namespace Vokabular.MainService.Core.Managers
 
         public PagedResultList<ResponsiblePersonContract> GetResponsiblePersonList(int? start, int? count)
         {
-            throw new System.NotImplementedException();
+            var dbResult = m_personRepository.InvokeUnitOfWork(x => x.GetResponsiblePersonList(GetStart(start), GetCount(count)));
+            var resultList = Mapper.Map<List<ResponsiblePersonContract>>(dbResult.List);
+
+            return new PagedResultList<ResponsiblePersonContract>
+            {
+                List = resultList,
+                TotalCount = dbResult.Count
+            };
         }
 
         public PagedResultList<OriginalAuthorContract> GetOriginalAuthorList(int? start, int? count)
         {
-            throw new System.NotImplementedException();
+            var dbResult = m_personRepository.InvokeUnitOfWork(x => x.GetOriginalAuthorList(GetStart(start), GetCount(count)));
+            var resultList = Mapper.Map<List<OriginalAuthorContract>>(dbResult.List);
+
+            return new PagedResultList<OriginalAuthorContract>
+            {
+                List = resultList,
+                TotalCount = dbResult.Count
+            };
         }
     }
 }

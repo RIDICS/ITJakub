@@ -33,11 +33,11 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
         }
 
-        public PagedResultList<ProjectContract> GetProjectList(int start, int count)
+        public PagedResultList<ProjectDetailContract> GetProjectList(int start, int count, bool fetchPageCount = false)
         {
             try
             {
-                var result = GetPagedList<ProjectContract>($"project?start={start}&count={count}");
+                var result = GetPagedList<ProjectDetailContract>($"project?start={start}&count={count}&fetchPageCount={fetchPageCount}");
                 return result;
             }
             catch (HttpRequestException e)
@@ -49,11 +49,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public ProjectContract GetProject(long projectId)
+        public ProjectDetailContract GetProject(long projectId, bool fetchPageCount = false)
         {
             try
             {
-                var project = Get<ProjectContract>($"project/{projectId}");
+                var project = Get<ProjectDetailContract>($"project/{projectId}?fetchPageCount={fetchPageCount}");
                 return project;
             }
             catch (HttpRequestException e)
@@ -134,7 +134,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Put<object>($"project/{projectId}/literarykind", request);
+                Put<object>($"project/{projectId}/literary-kind", request);
             }
             catch (HttpRequestException e)
             {
@@ -149,7 +149,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Put<object>($"project/{projectId}/literarygenre", request);
+                Put<object>($"project/{projectId}/literary-genre", request);
             }
             catch (HttpRequestException e)
             {
@@ -179,7 +179,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Put<object>($"project/{projectId}/responsibleperson", request);
+                Put<object>($"project/{projectId}/responsible-person", request);
             }
             catch (HttpRequestException e)
             {

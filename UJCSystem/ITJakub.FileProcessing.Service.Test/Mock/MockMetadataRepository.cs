@@ -17,11 +17,9 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             DeletedObjects = new List<object>();
         }
 
-        public List<ProjectOriginalAuthor> ProjectOriginalAuthors { get; set; }
         public List<object> CreatedObjects { get; }
         public List<object> UpdatedObjects { get; }
         public List<object> DeletedObjects { get; }
-        public bool CanFindAuthorByName { get; set; }
         public bool CanGetLatestMetadata { get; set; }
         public int LatestMetadataVersion { get; set; }
 
@@ -103,26 +101,6 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
         public override void SaveAll(IEnumerable data)
         {
             throw new NotSupportedException();
-        }
-
-        public override IList<ProjectOriginalAuthor> GetProjectOriginalAuthorList(long projectId, bool includeAuthors = false)
-        {
-            return ProjectOriginalAuthors;
-        }
-
-        public override OriginalAuthor GetAuthorByName(string firstName, string lastName)
-        {
-            if (CanFindAuthorByName)
-            {
-                return new OriginalAuthor
-                {
-                    Id = 48,
-                    FirstName = firstName,
-                    LastName = lastName
-                };
-            }
-
-            return null;
         }
 
         public override MetadataResource GetLatestMetadataResource(long projectId)

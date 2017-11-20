@@ -11,11 +11,13 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 {
     public class UpdateResponsiblePersonSubtask
     {
-        private readonly MetadataRepository m_metadataRepository;
+        private readonly ProjectRepository m_projectRepository;
+        private readonly PersonRepository m_personRepository;
 
-        public UpdateResponsiblePersonSubtask(MetadataRepository metadataRepository)
+        public UpdateResponsiblePersonSubtask(ProjectRepository projectRepository, PersonRepository personRepository)
         {
-            m_metadataRepository = metadataRepository;
+            m_projectRepository = projectRepository;
+            m_personRepository = personRepository;
         }
 
         public void UpdateResponsiblePersonList(long projectId, BookData bookData)
@@ -24,8 +26,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 return;
 
             var itemsToCreate = new List<ProjectResponsiblePerson>();
-            var project = m_metadataRepository.Load<Project>(projectId);
-            var dbResponsibles = m_metadataRepository.GetProjectResponsibleList(projectId);
+            var project = m_projectRepository.Load<Project>(projectId);
+            var dbResponsibles = m_projectRepository.GetProjectResponsibleList(projectId);
 
             foreach (var responsiblePerson in bookData.Responsibles)
             {
@@ -49,13 +51,13 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 }
             }
 
-            m_metadataRepository.CreateAll(itemsToCreate);
+            m_projectRepository.CreateAll(itemsToCreate);
         }
 
         private ResponsiblePerson GetOrCreateResponsiblePerson(string responsiblePersonName)
         {
             var personData = PersonHelper.ConvertToEntity(responsiblePersonName);
-            var responsible = m_metadataRepository.GetResponsiblePersonByName(personData.FirstName, personData.LastName);
+            var responsible = m_personRepository.GetResponsiblePersonByName(personData.FirstName, personData.LastName);
             if (responsible != null)
             {
                 return responsible;
@@ -66,7 +68,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 FirstName = personData.FirstName,
                 LastName = personData.LastName
             };
-            m_metadataRepository.Create(responsible);
+            m_projectRepository.Create(responsible);
             return responsible;
         }
 
@@ -78,7 +80,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             foreach (var typeText in typeTexts)
             {
                 var trimmedTypeText = typeText.Trim();
-                var responsibleType = m_metadataRepository.GetResponsibleTypeByName(trimmedTypeText);
+                var responsibleType = m_personRepository.GetResponsibleTypeByName(trimmedTypeText);
 
                 if (responsibleType != null)
                 {
@@ -94,7 +96,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     Text = trimmedTypeText,
                     Type = typeEnum
                 };
-                m_metadataRepository.Create(responsibleType);
+                m_projectRepository.Create(responsibleType);
                 resultList.Add(responsibleType);
             }
 

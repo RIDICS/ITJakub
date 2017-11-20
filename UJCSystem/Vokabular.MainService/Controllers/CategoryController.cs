@@ -67,5 +67,12 @@ namespace Vokabular.MainService.Controllers
         {
             return m_categoryManager.GetCategoryList();
         }
+
+        [HttpGet("tree")]
+        public List<CategoryTreeContract> GetCategoryTree()
+        {
+            var result = m_categoryManager.GetCategoryTree();
+            return result;
+        }
     }
 }

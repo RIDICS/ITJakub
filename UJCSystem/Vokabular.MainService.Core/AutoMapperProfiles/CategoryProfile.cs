@@ -16,6 +16,10 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.ExternalId, opt => opt.MapFrom(src => src.ExternalId))
                 .ForMember(dest => dest.ParentCategoryId, opt => opt.MapFrom(src => src.ParentCategory.Id));
 
+            CreateMap<Category, CategoryTreeContract>()
+                .IncludeBase<Category, CategoryContract>()
+                .ForMember(dest => dest.Subcategories, opt => opt.MapFrom(src => src.Categories));
+
             CreateMap<BookType, BookTypeContract>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type));

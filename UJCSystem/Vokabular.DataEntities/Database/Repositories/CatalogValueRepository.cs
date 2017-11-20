@@ -45,5 +45,12 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .OrderBy(x => x.Text).Asc
                 .List();
         }
+
+        public virtual Keyword GetKeywordByName(string name)
+        {
+            return GetSession().QueryOver<Keyword>()
+                .Where(x => x.Text == name)
+                .SingleOrDefault();
+        }
     }
 }

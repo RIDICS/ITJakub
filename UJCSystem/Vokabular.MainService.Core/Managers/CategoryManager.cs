@@ -46,5 +46,11 @@ namespace Vokabular.MainService.Core.Managers
             var result = m_categoryRepository.InvokeUnitOfWork(x => x.FindById<Category>(categoryId));
             return Mapper.Map<CategoryContract>(result);
         }
+
+        public List<CategoryTreeContract> GetCategoryTree()
+        {
+            var result = m_categoryRepository.InvokeUnitOfWork(x => x.GetCategoriesWithSubcategories());
+            return Mapper.Map<List<CategoryTreeContract>>(result);
+        }
     }
 }

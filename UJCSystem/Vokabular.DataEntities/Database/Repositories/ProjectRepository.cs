@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
+using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
@@ -11,21 +13,23 @@ namespace Vokabular.DataEntities.Database.Repositories
         public ProjectRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
-
-        public virtual int GetProjectCount()
+        
+        public virtual ListWithTotalCountResult<Project> GetProjectList(int start, int count)
         {
-            return GetSession().QueryOver<Project>()
-                .RowCount();
-        }
-
-        public virtual IList<Project> GetProjectList(int start, int count)
-        {
-            return GetSession().QueryOver<Project>()
+            var query = GetSession().QueryOver<Project>()
                 .Fetch(x => x.CreatedByUser).Eager
                 .OrderBy(x => x.Name).Asc
                 .Skip(start)
-                .Take(count)
-                .List();
+                .Take(count);
+
+            var list = query.Future();
+            var totalCount = query.ToRowCountQuery().FutureValue<int>();
+
+            return new ListWithTotalCountResult<Project>
+            {
+                List = list.ToList(),
+                Count = totalCount.Value
+            };
         }
 
         public virtual Project GetProject(long projectId)
@@ -68,6 +72,36 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .OrderBy(x => x.VersionNumber).Desc
                 .Take(1)
                 .SingleOrDefault();
+        }
+
+        public virtual Project GetProjectWithKeywords(long projectId)
+        {
+            return GetSession().QueryOver<Project>()
+                .Where(x => x.Id == projectId)
+                .Fetch(x => x.Keywords).Eager
+                .SingleOrDefault();
+        }
+
+        public virtual IList<ProjectOriginalAuthor> GetProjectOriginalAuthorList(long projectId, bool includeAuthors = false)
+        {
+            var query = GetSession().QueryOver<ProjectOriginalAuthor>()
+                .Where(x => x.Project.Id == projectId);
+
+            if (includeAuthors)
+            {
+                query.Fetch(x => x.OriginalAuthor);
+            }
+
+            return query.List();
+        }
+        
+        public virtual IList<ProjectResponsiblePerson> GetProjectResponsibleList(long projectId)
+        {
+            return GetSession().QueryOver<ProjectResponsiblePerson>()
+                .Where(x => x.Project.Id == projectId)
+                .Fetch(x => x.ResponsiblePerson).Eager
+                .Fetch(x => x.ResponsibleType).Eager
+                .List();
         }
     }
 }

@@ -14,19 +14,21 @@ namespace Vokabular.MainService.Controllers
     {
         private readonly ProjectManager m_projectManager;
         private readonly ProjectMetadataManager m_projectMetadataManager;
+        private readonly ProjectInfoManager m_projectInfoManager;
         private readonly PageManager m_pageManager;
 
-        public ProjectController(ProjectManager projectManager, ProjectMetadataManager projectMetadataManager, PageManager pageManager)
+        public ProjectController(ProjectManager projectManager, ProjectMetadataManager projectMetadataManager, ProjectInfoManager projectInfoManager, PageManager pageManager)
         {
             m_projectManager = projectManager;
             m_projectMetadataManager = projectMetadataManager;
+            m_projectInfoManager = projectInfoManager;
             m_pageManager = pageManager;
         }
         
         [HttpGet]
-        public List<ProjectContract> GetProjectList([FromQuery] int? start, [FromQuery] int? count)
+        public List<ProjectDetailContract> GetProjectList([FromQuery] int? start, [FromQuery] int? count, [FromQuery] bool? fetchPageCount)
         {
-            var result = m_projectManager.GetProjectList(start, count);
+            var result = m_projectManager.GetProjectList(start, count, fetchPageCount ?? false);
 
             SetTotalCountHeader(result.TotalCount);
 
@@ -34,10 +36,10 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("{projectId}")]
-        [ProducesResponseType(typeof(ProjectContract), StatusCodes.Status200OK)]
-        public IActionResult GetProject(long projectId)
+        [ProducesResponseType(typeof(ProjectDetailContract), StatusCodes.Status200OK)]
+        public IActionResult GetProject(long projectId, [FromQuery] bool? fetchPageCount)
         {
-            var projectData = m_projectManager.GetProject(projectId);
+            var projectData = m_projectManager.GetProject(projectId, fetchPageCount ?? false);
             if (projectData == null)
                 return NotFound();
 
@@ -50,10 +52,16 @@ namespace Vokabular.MainService.Controllers
             return m_projectManager.CreateProject(project);
         }
 
+        [HttpPut("{projectId}")]
+        public void UpdateProject(long projectId, [FromBody] ProjectContract data)
+        {
+            m_projectManager.UpdateProject(projectId, data);
+        }
+
         [HttpDelete("{projectId}")]
         public void DeleteProject(long projectId)
         {
-            throw new System.NotImplementedException();
+            m_projectManager.DeleteProject(projectId);
         }
 
         [HttpGet("{projectId}/metadata")]
@@ -83,28 +91,46 @@ namespace Vokabular.MainService.Controllers
             return m_projectMetadataManager.CreateNewProjectMetadataVersion(projectId, metadata);
         }
 
-        [HttpPut("{projectId}/literarykind")]
+        [HttpPut("{projectId}/literary-kind")]
         public void SetLiteraryKinds(long projectId, [FromBody] IntegerIdListContract kindIdList)
         {
-            m_projectMetadataManager.SetLiteraryKinds(projectId, kindIdList);
+            m_projectInfoManager.SetLiteraryKinds(projectId, kindIdList);
         }
 
-        [HttpPut("{projectId}/literarygenre")]
+        [HttpPut("{projectId}/literary-genre")]
         public void SetLiteraryGenres(long projectId, [FromBody] IntegerIdListContract genreIdList)
         {
-            m_projectMetadataManager.SetLiteraryGenres(projectId, genreIdList);
+            m_projectInfoManager.SetLiteraryGenres(projectId, genreIdList);
+        }
+
+        [HttpPut("{projectId}/literary-original")]
+        public void SetLiteraryOriginal(long projectId, [FromBody] IntegerIdListContract litOriginalIdList)
+        {
+            m_projectInfoManager.SetLiteraryOriginals(projectId, litOriginalIdList);
+        }
+
+        [HttpPut("{projectId}/keyword")]
+        public void SetKeywords(long projectId, [FromBody] IntegerIdListContract keywordIdList)
+        {
+            m_projectInfoManager.SetKeywords(projectId, keywordIdList);
+        }
+
+        [HttpPut("{projectId}/category")]
+        public void SetCategories(long projectId, [FromBody] IntegerIdListContract categoryIdList)
+        {
+            m_projectInfoManager.SetCategories(projectId, categoryIdList);
         }
 
         [HttpPut("{projectId}/author")]
         public void SetAuthors(long projectId, [FromBody] IntegerIdListContract authorIdList)
         {
-            m_projectMetadataManager.SetAuthors(projectId, authorIdList);
+            m_projectInfoManager.SetAuthors(projectId, authorIdList);
         }
 
-        [HttpPut("{projectId}/responsibleperson")]
+        [HttpPut("{projectId}/responsible-person")]
         public void SetResponsiblePersons(long projectId, [FromBody] List<ProjectResponsiblePersonIdContract> projectResposibleIdList)
         {
-            m_projectMetadataManager.SetResponsiblePersons(projectId, projectResposibleIdList);
+            m_projectInfoManager.SetResponsiblePersons(projectId, projectResposibleIdList);
         }
 
         [HttpGet("{projectId}/page")]
@@ -118,6 +144,13 @@ namespace Vokabular.MainService.Controllers
         public List<TextWithPageContract> GetTextResourceList(long projectId, [FromQuery] long? resourceGroupId)
         {
             var result = m_pageManager.GetTextResourceList(projectId, resourceGroupId);
+            return result;
+        }
+
+        [HttpGet("{projectId}/image")]
+        public List<ImageWithPageContract> GetImageList(long projectId)
+        {
+            var result = m_pageManager.GetImageResourceList(projectId);
             return result;
         }
         
@@ -164,6 +197,17 @@ namespace Vokabular.MainService.Controllers
         public void DeleteComment(long commentId)
         {
             m_pageManager.DeleteComment(commentId);
+        }
+
+        [HttpGet("image/{imageId}")]
+        public IActionResult GetImage(long imageId)
+        {
+            var result = m_pageManager.GetImageResource(imageId);
+            if (result == null)
+                return NotFound();
+
+            Response.ContentLength = result.FileSize;
+            return File(result.Stream, result.MimeType, result.FileName);
         }
     }
 }

@@ -68,26 +68,6 @@ namespace Vokabular.MainService.Core.Managers
             return resultId;
         }
 
-        public void SetLiteraryKinds(long projectId, IntegerIdListContract kindIdList)
-        {
-            new SetLiteraryKindWork(m_metadataRepository, projectId, kindIdList.IdList).Execute();
-        }
-
-        public void SetLiteraryGenres(long projectId, IntegerIdListContract genreIdList)
-        {
-            new SetLiteraryGenreWork(m_metadataRepository, projectId, genreIdList.IdList).Execute();
-        }
-
-        public void SetAuthors(long projectId, IntegerIdListContract authorIdList)
-        {
-            new SetAuthorsWork(m_metadataRepository, projectId, authorIdList.IdList).Execute();
-        }
-
-        public void SetResponsiblePersons(long projectId, List<ProjectResponsiblePersonIdContract> projectResposibleIdList)
-        {
-            new SetResponsiblePersonsWork(m_metadataRepository, projectId, projectResposibleIdList).Execute();
-        }
-
         public List<string> GetPublisherAutocomplete(string query)
         {
             var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetPublisherAutocomplete(query, DefaultValues.AutocompleteMaxCount));
