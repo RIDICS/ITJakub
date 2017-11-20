@@ -18,4 +18,13 @@ namespace Vokabular.MainService.DataContracts.Contracts
     {
         public List<AudioContract> Recordings { get; set; }
     }
+
+    public class CreateTrackContract
+    {
+        public string Name { get; set; }
+        public string Text { get; set; }
+        public int Position { get; set; }
+        public long? ChapterId { get; set; }
+        public long? BeginningPageId { get; set; }
+    }
 }

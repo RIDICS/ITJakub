@@ -42,6 +42,11 @@ namespace Vokabular.MainService.Core.Managers
             return new CreateOrUpdateResponsibleTypeWork(m_catalogValueRepository, null, responsibleTypeData).Execute();
         }
 
+        public int CreateTermCategory(TermCategoryContract data)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public List<LiteraryGenreContract> GetLiteraryGenreList()
         {
             var result = m_catalogValueRepository.InvokeUnitOfWork(x => x.GetLiteraryGenreList());
@@ -71,6 +76,11 @@ namespace Vokabular.MainService.Core.Managers
             var resultList = m_catalogValueRepository.InvokeUnitOfWork(x => x.GetResponsibleTypeList());
             return Mapper.Map<List<ResponsibleTypeContract>>(resultList);
         }
+        
+        public List<TermCategoryContract> GetTermCategoryList()
+        {
+            throw new System.NotImplementedException();
+        }
 
         public void UpdateLiteraryGenre(int literaryGenreId, LiteraryGenreContract data)
         {
@@ -97,6 +107,11 @@ namespace Vokabular.MainService.Core.Managers
             new CreateOrUpdateResponsibleTypeWork(m_catalogValueRepository, responsibleTypeId, data).Execute();
         }
 
+        public void UpdateTermCategory(int termCategoryId, TermCategoryContract data)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void DeleteLiteraryGenre(int literaryGenreId)
         {
             new DeleteCatalogValueWork<LiteraryGenre>(m_catalogValueRepository, literaryGenreId).Execute();
@@ -120,6 +135,11 @@ namespace Vokabular.MainService.Core.Managers
         public void DeleteResponsibleType(int responsibleTypeId)
         {
             new DeleteCatalogValueWork<ResponsibleType>(m_catalogValueRepository, responsibleTypeId).Execute();
+        }
+
+        public void DeleteTermCategory(int termCategoryId)
+        {
+            throw new System.NotImplementedException();
         }
 
         public LiteraryGenreContract GetLiteraryGenre(int literaryGenreId)
@@ -150,6 +170,11 @@ namespace Vokabular.MainService.Core.Managers
         {
             var result = m_catalogValueRepository.InvokeUnitOfWork(x => x.FindById<ResponsibleType>(responsibleTypeId));
             return Mapper.Map<ResponsibleTypeContract>(result);
+        }
+        
+        public TermCategoryContract GetTermCategory(int termCategoryId)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

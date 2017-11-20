@@ -15,4 +15,11 @@ namespace Vokabular.MainService.DataContracts.Contracts
     {
         public List<ChapterHierarchyContract> SubChapters { get; set; }
     }
+
+    public class CreateChapterContract
+    {
+        public string Name { get; set; }
+        public int Position { get; set; }
+        public long BeginningPageId { get; set; }
+    }
 }

@@ -25,6 +25,7 @@ namespace Vokabular.MainService.Core
             container.AddPerWebRequest<ProjectManager>();
             container.AddPerWebRequest<ProjectMetadataManager>();
             container.AddPerWebRequest<ProjectResourceManager>();
+            container.AddPerWebRequest<TermManager>();
             container.AddPerWebRequest<UserManager>();
 
             container.AddPerWebRequest<CommunicationConfigurationProvider>();

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
@@ -139,6 +140,18 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
+        [HttpGet("{projectId}/chapter")]
+        public List<ChapterHierarchyContract> GetChapterList(long projectId)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet("{projectId}/track")]
+        public List<TrackContract> GetTrackList(long projectId)
+        {
+            throw new NotImplementedException();
+        }
+
         [HttpGet("{projectId}/text")]
         public List<TextWithPageContract> GetTextResourceList(long projectId, [FromQuery] long? resourceGroupId)
         {
@@ -152,7 +165,73 @@ namespace Vokabular.MainService.Controllers
             var result = m_pageManager.GetImageResourceList(projectId);
             return result;
         }
+
+        [HttpGet("page/{pageId}")]
+        public PageContract GetPageResource(long pageId)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost("{projectId}/page")]
+        public IActionResult CreatePageResource(long projectId, [FromBody] CreatePageContract pageData)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPut("page/{pageId}")]
+        public IActionResult UpdatePageResource(long pageId, [FromBody] CreatePageContract pageData)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet("page/{pageId}/term")]
+        public List<TermContract> GetPageTermList(long pageId)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPut("page/{pageId}/term")]
+        public IActionResult SetTerms(long pageId, IntegerIdListContract termIdList)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet("chapter/{chapterId}")]
+        public ChapterContractBase GetChapterResource(long chapterId)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost("{projectId}/chapter")]
+        public IActionResult CreateChapterResource(long projectId, [FromBody] CreateChapterContract chapterData)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPut("chapter/{chapterId}")]
+        public IActionResult UpdateChapterResource(long chapterId, CreateChapterContract chapterData)
+        {
+            throw new NotImplementedException();
+        }
         
+        [HttpGet("track/{trackId}")]
+        public TrackContract GetTrackResource(long trackId)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost("{projectId}/track")]
+        public IActionResult CreateTrackResource(long projectId, [FromBody] CreateTrackContract trackData)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPut("track/{trackId}")]
+        public IActionResult UpdateTrackResource(long trackId, [FromBody] CreateTrackContract trackData)
+        {
+            throw new NotImplementedException();
+        }
+
         [HttpGet("text/{textId}")]
         public FullTextContract GetTextResource(long textId, [FromQuery] TextFormatEnumContract? format)
         {
@@ -197,8 +276,31 @@ namespace Vokabular.MainService.Controllers
             if (result == null)
                 return NotFound();
 
-            Response.ContentLength = result.FileSize;
-            return File(result.Stream, result.MimeType, result.FileName);
+            return File(result.Stream, result.MimeType, result.FileName, result.FileSize);
+        }
+
+        [HttpPost("image/{imageId}")]
+        [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
+        public IActionResult CreateNewImageResourceVersion(long imageId, [FromQuery] string fileName, [FromQuery] long? originalVersionId, [FromQuery] long? pageId)
+        {
+            if (fileName == null || originalVersionId == null || pageId == null)
+            {
+                return BadRequest("Missing required parameters");
+            }
+            var stream = Request.Body;
+            throw new NotImplementedException();
+        }
+
+        [HttpPost("audio/{audioId}")]
+        [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
+        public IActionResult CreateAudioResourceVersion(long audioId, [FromQuery] string fileName, [FromQuery] long? originalVersionId, [FromQuery] long? trackId, [FromQuery] TimeSpan? duration)
+        {
+            if (fileName == null || originalVersionId == null || trackId == null || duration == null)
+            {
+                return BadRequest("Missing required parameters");
+            }
+            var stream = Request.Body;
+            throw new NotImplementedException();
         }
     }
 }
