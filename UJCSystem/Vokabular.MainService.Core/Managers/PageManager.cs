@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using Vokabular.Core.Storage;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Works.Text;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
-using Vokabular.RestClient.Results;
-using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -18,13 +15,11 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly ResourceRepository m_resourceRepository;
         private readonly UserManager m_userManager;
-        private readonly FileSystemManager m_fileSystemManager;
 
-        public PageManager(ResourceRepository resourceRepository, UserManager userManager, FileSystemManager fileSystemManager)
+        public PageManager(ResourceRepository resourceRepository, UserManager userManager)
         {
             m_resourceRepository = resourceRepository;
             m_userManager = userManager;
-            m_fileSystemManager = fileSystemManager;
         }
 
         public List<PageContract> GetPageList(long projectId)
@@ -93,20 +88,6 @@ namespace Vokabular.MainService.Core.Managers
         {
             var deleteCommentWork = new DeleteTextCommentWork(m_resourceRepository, commentId);
             deleteCommentWork.Execute();
-        }
-
-        public FileResultData GetImageResource(long imageId)
-        {
-            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestResourceVersion<ImageResource>(imageId));
-
-            var imageStream = m_fileSystemManager.GetResource(dbResult.Resource.Project.Id, null, dbResult.FileId, ResourceType.Image);
-            return new FileResultData
-            {
-                FileName = dbResult.FileName,
-                MimeType = dbResult.MimeType,
-                Stream = imageStream,
-                FileSize = imageStream.Length,
-            };
         }
     }
 }

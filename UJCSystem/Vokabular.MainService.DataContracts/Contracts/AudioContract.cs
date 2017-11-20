@@ -14,4 +14,15 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public AudioTypeEnumContract AudioType { get; set; }
         public string MimeType { get; set; }
     }
+
+    public class CreateAudioContract
+    {
+        public string Comment { get; set; }
+        public long OriginalVersionId { get; set; }
+        public long? ResourceTrackId { get; set; }
+        public TimeSpan? Duration { get; set; }
+        public string FileName { get; set; }
+        //public AudioTypeEnumContract AudioType { get; set; }
+        //public string MimeType { get; set; }
+    }
 }

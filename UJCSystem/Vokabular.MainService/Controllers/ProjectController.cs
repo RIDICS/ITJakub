@@ -16,13 +16,16 @@ namespace Vokabular.MainService.Controllers
         private readonly ProjectMetadataManager m_projectMetadataManager;
         private readonly ProjectInfoManager m_projectInfoManager;
         private readonly PageManager m_pageManager;
+        private readonly ProjectContentManager m_projectContentManager;
 
-        public ProjectController(ProjectManager projectManager, ProjectMetadataManager projectMetadataManager, ProjectInfoManager projectInfoManager, PageManager pageManager)
+        public ProjectController(ProjectManager projectManager, ProjectMetadataManager projectMetadataManager,
+            ProjectInfoManager projectInfoManager, PageManager pageManager, ProjectContentManager projectContentManager)
         {
             m_projectManager = projectManager;
             m_projectMetadataManager = projectMetadataManager;
             m_projectInfoManager = projectInfoManager;
             m_pageManager = pageManager;
+            m_projectContentManager = projectContentManager;
         }
         
         [HttpGet]
@@ -272,7 +275,7 @@ namespace Vokabular.MainService.Controllers
         [HttpGet("image/{imageId}")]
         public IActionResult GetImage(long imageId)
         {
-            var result = m_pageManager.GetImageResource(imageId);
+            var result = m_projectContentManager.GetImageResource(imageId);
             if (result == null)
                 return NotFound();
 
@@ -281,26 +284,47 @@ namespace Vokabular.MainService.Controllers
 
         [HttpPost("image/{imageId}")]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-        public IActionResult CreateNewImageResourceVersion(long imageId, [FromQuery] string fileName, [FromQuery] long? originalVersionId, [FromQuery] long? pageId)
+        public IActionResult CreateNewImageResourceVersion(long imageId, [FromQuery] string fileName, [FromQuery] long? originalVersionId, [FromQuery] long? pageId, [FromQuery] string comment)
         {
             if (fileName == null || originalVersionId == null || pageId == null)
             {
                 return BadRequest("Missing required parameters");
             }
+
             var stream = Request.Body;
-            throw new NotImplementedException();
+            var contract = new CreateImageContract
+            {
+                Comment = comment,
+                FileName = fileName,
+                OriginalVersionId = originalVersionId.Value,
+                ResourcePageId = pageId.Value,
+            };
+
+            var resultVersionId = m_projectContentManager.CreateNewImageVersion(imageId, contract, stream);
+            return Ok(resultVersionId);
         }
 
         [HttpPost("audio/{audioId}")]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-        public IActionResult CreateAudioResourceVersion(long audioId, [FromQuery] string fileName, [FromQuery] long? originalVersionId, [FromQuery] long? trackId, [FromQuery] TimeSpan? duration)
+        public IActionResult CreateAudioResourceVersion(long audioId, [FromQuery] string fileName, [FromQuery] long? originalVersionId, [FromQuery] long? trackId, [FromQuery] TimeSpan? duration, [FromQuery] string comment)
         {
             if (fileName == null || originalVersionId == null || trackId == null || duration == null)
             {
                 return BadRequest("Missing required parameters");
             }
+
             var stream = Request.Body;
-            throw new NotImplementedException();
+            var contract = new CreateAudioContract
+            {
+                Comment = comment,
+                FileName = fileName,
+                OriginalVersionId = originalVersionId.Value,
+                ResourceTrackId = trackId.Value,
+                Duration = duration,
+            };
+
+            var resultVersionId = m_projectContentManager.CreateNewAudioVersion(audioId, contract, stream);
+            return Ok(resultVersionId);
         }
     }
 }
