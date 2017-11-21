@@ -102,25 +102,7 @@ namespace Vokabular.MainService.Core.Managers
         public List<ChapterHierarchyContract> GetBookChapterList(long projectId)
         {
             var dbResult = m_bookRepository.InvokeUnitOfWork(x => x.GetChapterList(projectId));
-            var resultList = new List<ChapterHierarchyContract>(dbResult.Count);
-            var chaptersDictionary = new Dictionary<long, ChapterHierarchyContract>();
-
-            foreach (var chapterResource in dbResult)
-            {
-                var resultChapter = Mapper.Map<ChapterHierarchyContract>(chapterResource);
-                resultChapter.SubChapters = new List<ChapterHierarchyContract>();
-                chaptersDictionary.Add(resultChapter.Id, resultChapter);
-
-                if (chapterResource.ParentResource == null)
-                {
-                    resultList.Add(resultChapter);
-                }
-                else
-                {
-                    var parentChapter = chaptersDictionary[chapterResource.ParentResource.Id];
-                    parentChapter.SubChapters.Add(resultChapter);
-                }
-            }
+            var resultList = ChaptersHelper.ChapterToHierarchyContracts(dbResult);
             
             return resultList;
         }
