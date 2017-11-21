@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Parameter;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.Utils;
+using Vokabular.RestClient.Headers;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -23,6 +25,7 @@ namespace Vokabular.MainService.Controllers
         }
         
         [HttpGet]
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, "int", "Total records count")]
         public List<ProjectDetailContract> GetProjectList([FromQuery] int? start, [FromQuery] int? count, [FromQuery] bool? fetchPageCount)
         {
             var result = m_projectManager.GetProjectList(start, count, fetchPageCount ?? false);

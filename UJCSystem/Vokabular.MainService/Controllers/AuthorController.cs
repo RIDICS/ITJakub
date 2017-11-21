@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.Utils;
 using Vokabular.RestClient.Errors;
+using Vokabular.RestClient.Headers;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
@@ -70,6 +72,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("")]
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, "int", "Total records count")]
         public List<OriginalAuthorContract> GetOriginalAuthorList([FromQuery] int? start, [FromQuery] int? count)
         {
             var result = m_personManager.GetOriginalAuthorList(start, count);
