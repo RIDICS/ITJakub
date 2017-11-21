@@ -37,7 +37,9 @@
                     if (pageListTextareaEl.length) {
                         pageListTextareaEl.remove();
                     }
-                    this.startGeneration(listGenerator, projectId, util, listStructure);
+                    const doublePageRadiobuttonEl = $(".doublepage-radiobutton");
+                    const doublePageGeneration = doublePageRadiobuttonEl.prop("checked") as boolean;
+                    this.startGeneration(listGenerator, projectId, util, listStructure, doublePageGeneration);
                 });
             $(".page-list-editor-content").on("click",
                 ".move-page-up",
@@ -226,7 +228,7 @@
     private startGeneration(listGenerator: PageListGenerator,
         projectId: number,
         util: EditorsUtil,
-        listStructure: PageListStructure) {
+        listStructure: PageListStructure, doublePage:boolean) {
             const fromFieldValue = $("#project-pages-generate-from").val();
             const toFieldValue = $("#project-pages-generate-to").val();
             if (/\d+/.test(fromFieldValue) && /\d+/.test(toFieldValue)) {
@@ -236,7 +238,7 @@
                 const format = PageListFormat[formatString] as number;
                 if (!isNaN(from) && !isNaN(to)) {
                     if (to > from) {
-                        const pageList = listGenerator.generatePageList(from, to, format);
+                        const pageList = listGenerator.generatePageList(from, to, format, doublePage);
                         this.populateList(pageList, listStructure);
                         this.enableCheckboxes();
                         this.trackSpecialPagesCheckboxesState();

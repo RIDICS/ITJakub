@@ -6,15 +6,32 @@
 };
 
 class PageListGenerator {
-    generatePageList(from: number, to: number, style: number): string[] {
+    generatePageList(from: number, to: number, style: number, doublePage: boolean): string[
+        ] {
         var stringList: string[] = [];
+        var beginCount = 1;
+        var leftPage = "";
+        if (doublePage) {
+            to = to * 2;
+        }
         switch (style) {
         case PageListFormat["1r"]:
         {
             for (let i = from; i <= to; i++) {
                 const numbericalPart = Math.ceil(i / 2);
                 const literalPart = i % 2 === 0 ? "v" : "r"; //TODO check whether v/r depict even/odd
-                stringList.push(`${numbericalPart}${literalPart}`);
+                const pageName = `${numbericalPart}${literalPart}`;
+                if (doublePage) {
+                    if (beginCount % 2 !== 0) {
+                        leftPage = pageName;
+                    }
+                    if (beginCount % 2 === 0) {
+                        stringList.push(`${leftPage}–${pageName}`);
+                    }
+                    beginCount++;
+                } else {
+                    stringList.push(pageName);
+                }
             }
             break;
         }
@@ -24,21 +41,54 @@ class PageListGenerator {
                 const prefix = "I"; //TODO check how prefix is defined
                 const numbericalPart = Math.ceil(i / 2);
                 const literalPart = i % 2 === 0 ? "v" : "r"; //TODO check whether v/r depict even/odd
-                stringList.push(`${prefix}'${numbericalPart}${literalPart}`);
+                const pageName = `${prefix}'${numbericalPart}${literalPart}`;
+                if (doublePage) {
+                    if (beginCount % 2 !== 0) {
+                        leftPage = pageName;
+                    }
+                    if (beginCount % 2 === 0) {
+                        stringList.push(`${leftPage}–${pageName}`);
+                    }
+                    beginCount++;
+                } else {
+                    stringList.push(pageName);
+                }
             }
             break;
         }
         case PageListFormat.Roman:
         {
             for (let i = from; i <= to; i++) {
-                stringList.push(this.romanise(i));
+                const pageName = this.romanise(i);
+                if (doublePage) {
+                    if (beginCount % 2 !== 0) {
+                        leftPage = pageName;
+                    }
+                    if (beginCount % 2 === 0) {
+                        stringList.push(`${leftPage}–${pageName}`);
+                    }
+                    beginCount++;
+                } else {
+                    stringList.push(pageName);
+                }
             }
             break;
         }
         case PageListFormat.Arabic:
         {
             for (let i = from; i <= to; i++) {
-                stringList.push(i.toString());
+                const pageName = i.toString();
+                if (doublePage) {
+                    if (beginCount % 2 !== 0) {
+                        leftPage = pageName;
+                    }
+                    if (beginCount % 2 === 0) {
+                        stringList.push(`${leftPage}–${pageName}`);
+                    }
+                    beginCount++;
+                } else {
+                    stringList.push(pageName);
+                }
             }
             break;
         }
