@@ -46,8 +46,8 @@
         const listEl = $(".selectable-list-div");
         listEl.empty();
         const splitArray = this.splitCategoryArray(this.categoryItemList.children(".page-list-item"), pageNumber);
-        listEl.append(`<div class="page-list"></div>`);
-        listEl.children(".page-list").append(splitArray);
+        listEl.append(`<div class="list-group"></div>`);
+        listEl.children(".list-group").append(splitArray);
         this.makeSelectable(listEl);
         this.collapseCategories();
     }
@@ -61,14 +61,14 @@
     }
 
     private generateListStructure(categoryItemList: ICategoryContract[]):JQuery {
-        const listStart = `<div class="page-list">`;
+        const listStart = `<div class="list-group">`;
         const listItemEnd = `</div>`;
         const listEnd = "</div>";
         var elm = "";
         elm += listStart;
         for (let i = 0; i < categoryItemList.length; i++) {
             const listItemStart =
-                `<div class="page-list-item" data-category-id="${categoryItemList[i].id}" data-parent-category-id="${categoryItemList[i].parentCategoryId}">`;
+                `<div class="page-list-item list-group-item" data-category-id="${categoryItemList[i].id}" data-parent-category-id="${categoryItemList[i].parentCategoryId}">`;
             elm += listItemStart;
             elm += categoryItemList[i].description;
             elm += listItemEnd;
@@ -96,7 +96,7 @@
     }
 
     private collapseCategories() {
-        const mainCategoriesEls = $(".page-list").children(".page-list-item");
+        const mainCategoriesEls = $(".list-group").children(".page-list-item");
         mainCategoriesEls.each((index, element) => {
             const mainCategoryEl = $(element);
             const childrenCategories = mainCategoryEl.children(".child-category");
@@ -132,7 +132,7 @@
                             if (parentCategorySelectString === "new") {
                                 parentCategoryIdNumber = null;
                             } else if (parentCategorySelectString === "fromChosen") {
-                                const selectedPageEl = $(".page-list").find(".page-list-item-selected");
+                                const selectedPageEl = $(".list-group").find(".page-list-item-selected");
                                 if (!selectedPageEl.length) {
                                     this.gui.showInfoDialog("Info", "Please choose a category");
                                     return;
@@ -159,7 +159,7 @@
         $(".crud-buttons-div").on("click",
             ".rename-key-table-entry",
             () => {
-                const selectedPageEl = $(".page-list").find(".page-list-item-selected");
+                const selectedPageEl = $(".list-group").find(".page-list-item-selected");
                 if (selectedPageEl.length) {
                     this.gui.showSingleInputDialog("Name input", "Please input category name after rename:");
                     const textareaEl = $(".input-dialog-textarea");
@@ -196,7 +196,7 @@
         $(".crud-buttons-div").on("click",
             ".delete-key-table-entry",
             () => {
-                const selectedPageEl = $(".page-list").find(".page-list-item-selected");
+                const selectedPageEl = $(".list-group").find(".page-list-item-selected");
                 if (selectedPageEl.length) {
                     this.gui.showConfirmationDialog("Confirm", "Are you sure you want to delete this category?");
                     $(".confirmation-ok-button").on("click",

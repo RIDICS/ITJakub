@@ -84,7 +84,7 @@
         $(".crud-buttons-div").on("click",
             ".rename-key-table-entry",
             () => {
-                const selectedPageEl = $(".page-list").children(".page-list-item-selected");
+                const selectedPageEl = $(".list-group").children(".page-list-item-selected");
                 if (selectedPageEl.length) {
                     this.gui.showSingleInputDialog("Name input", "Please input literary kind after rename:");
                     const textareaEl = $(".input-dialog-textarea");
@@ -116,7 +116,7 @@
         $(".crud-buttons-div").on("click",
             ".delete-key-table-entry",
             () => {
-                const selectedPageEl = $(".page-list").find(".page-list-item-selected");
+                const selectedPageEl = $(".list-group").find(".page-list-item-selected");
                 if (selectedPageEl.length) {
                     this.gui.showConfirmationDialog("Confirmation",
                         "Are you sure you want to delete this literary kind?");

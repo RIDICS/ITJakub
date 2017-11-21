@@ -48,14 +48,14 @@
     }
 
     private generateListStructure(originalAuthorItemList: IOriginalAuthor[]): JQuery {
-        const listStart = `<div class="page-list">`;
+        const listStart = `<div class="list-group">`;
         const listItemEnd = `</div>`;
         const listEnd = "</div>";
         var elm = "";
         elm += listStart;
         for (let i = 0; i < originalAuthorItemList.length; i++) {
             const listItemStart =
-                `<div class="page-list-item" data-key-id="${originalAuthorItemList[i].id}"><span class="person-name">${
+                `<div class="page-list-item list-group-item" data-key-id="${originalAuthorItemList[i].id}"><span class="person-name">${
                     originalAuthorItemList[i].firstName}</span><span class="person-surname">${originalAuthorItemList[i]
                     .lastName}</span>`;
             elm += listItemStart;
@@ -100,7 +100,7 @@
         $(".crud-buttons-div").on("click",
             ".rename-key-table-entry",
             () => {
-                const selectedPageEl = $(".page-list").children(".page-list-item-selected");
+                const selectedPageEl = $(".list-group").children(".page-list-item-selected");
                 if (selectedPageEl.length) {
                     this.gui.showAuthorInputDialog("Rename author's name",
                         "Please input new author's name:",
@@ -139,7 +139,7 @@
         $(".crud-buttons-div").on("click",
             ".delete-key-table-entry",
             () => {
-                const selectedPageEl = $(".page-list").find(".page-list-item-selected");
+                const selectedPageEl = $(".list-group").find(".page-list-item-selected");
                 if (selectedPageEl.length) {
                     this.gui.showConfirmationDialog("Confirm", "Are you sure you want to delete this author?");
                     $(".confirmation-ok-button").on("click",

@@ -50,14 +50,14 @@
     }
 
     private generateListStructure(responsibleTypeItemList: IResponsibleType[]): JQuery {
-        const listStart = `<div class="page-list">`;
+        const listStart = `<div class="list-group">`;
         const listItemEnd = `</div>`;
         const listEnd = "</div>";
         var elm = "";
         elm += listStart;
         for (let i = 0; i < responsibleTypeItemList.length; i++) {
             const listItemStart =
-                `<div class="page-list-item" data-key-id="${responsibleTypeItemList[i].id}" data-responsibility-type="${ResponsibleTypeEnum[responsibleTypeItemList[i].type]}">`;
+                `<div class="page-list-item list-group-item" data-key-id="${responsibleTypeItemList[i].id}" data-responsibility-type="${ResponsibleTypeEnum[responsibleTypeItemList[i].type]}">`;
             elm += listItemStart;
             elm += responsibleTypeItemList[i].text;
             elm += listItemEnd;
@@ -106,7 +106,7 @@
         $(".crud-buttons-div").on("click",
             ".rename-key-table-entry",
             () => {
-                const selectedPageEl = $(".page-list").children(".page-list-item-selected");
+                const selectedPageEl = $(".list-group").children(".page-list-item-selected");
                 if (selectedPageEl.length) {
                     this.gui.showResponsibleTypeInputDialog("Responsible type input",
                         "Please input new description:",
@@ -150,7 +150,7 @@
         $(".crud-buttons-div").on("click",
             ".delete-key-table-entry",
             () => {
-                const selectedPageEl = $(".page-list").find(".page-list-item-selected");
+                const selectedPageEl = $(".list-group").find(".page-list-item-selected");
                 if (selectedPageEl.length) {
                     this.gui.showConfirmationDialog("Confirm",
                         "Are you sure you want to delete this responsibility type?");

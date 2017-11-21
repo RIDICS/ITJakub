@@ -46,14 +46,14 @@
     }
 
     private generateListStructure(responsiblePersonItemList: IResponsiblePerson[]): JQuery {
-        const listStart = `<div class="page-list">`;
+        const listStart = `<div class="list-group">`;
         const listItemEnd = `</div>`;
         const listEnd = "</div>";
         var elm = "";
         elm += listStart;
         for (let i = 0; i < responsiblePersonItemList.length; i++) {
             const listItemStart =
-                `<div class="page-list-item" data-key-id="${responsiblePersonItemList[i].id}"><span class="person-name">${responsiblePersonItemList[i].firstName}</span><span class="person-surname">${responsiblePersonItemList[i].lastName}</span>`;
+                `<div class="page-list-item list-group-item" data-key-id="${responsiblePersonItemList[i].id}"><span class="person-name">${responsiblePersonItemList[i].firstName}</span><span class="person-surname">${responsiblePersonItemList[i].lastName}</span>`;
             elm += listItemStart;
             elm += listItemEnd;
         }
@@ -94,7 +94,7 @@
         $(".crud-buttons-div").on("click",
             ".rename-key-table-entry",
             () => {
-                const selectedPageEl = $(".page-list").children(".page-list-item-selected");
+                const selectedPageEl = $(".list-group").children(".page-list-item-selected");
                 if (selectedPageEl.length) {
                     const nameTextareaEl = $(".primary-input-author-textarea");
                     const surnameTextareaEl = $(".secondary-input-author-textarea");
@@ -135,7 +135,7 @@
         $(".crud-buttons-div").on("click",
             ".delete-key-table-entry",
             () => {
-                const selectedPageEl = $(".page-list").find(".page-list-item-selected");
+                const selectedPageEl = $(".list-group").find(".page-list-item-selected");
                 if (selectedPageEl.length) {
                     this.gui.showConfirmationDialog("Confirm",
                         "Are you sure you want to delete this responsible person?");

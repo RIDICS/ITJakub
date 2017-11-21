@@ -13,8 +13,8 @@
         pagination.make(itemsCount, itemsOnPage);
     }
 
-    protected makeSelectable(jEl: JQuery) {
-        jEl.children(".page-list").on("click", ".page-list-item", (event) => {
+    protected makeSelectable(jEl: JQuery) {//TODO investigate parent category selection
+        jEl.children(".list-group").on("click", ".page-list-item", (event) => {
             event.stopPropagation();
             var targetEl = $(event.target);
             if (targetEl.hasClass("collapse-category-button") || targetEl.parent().hasClass("collapse-category-button")) {
@@ -23,8 +23,8 @@
             if (!targetEl.hasClass("page-list-item")) {
                 targetEl = targetEl.closest(".page-list-item");
             }
-            targetEl.toggleClass("page-list-item-selected");
-            $(".page-list-item").not(targetEl).removeClass("page-list-item-selected");
+            targetEl.toggleClass("page-list-item-selected active");
+            $(".page-list-item").not(targetEl).removeClass("page-list-item-selected active");
         });
     }
 
@@ -37,14 +37,14 @@
     }
 
     protected generateSimpleList(ids: number[], names:string[], jEl: JQuery): JQuery {
-        const listStart = `<div class="page-list">`;
+        const listStart = `<div class="list-group">`;
         const listItemEnd = "</div>";
         const listEnd = "</div>";
         var elm = "";
         elm += listStart;
         for (let i = 0; i < ids.length; i++) {
             const listItemStart =
-                `<div class="page-list-item" data-key-id="${ids[i]}">`;
+                `<div class="page-list-item list-group-item" data-key-id="${ids[i]}">`;
             elm += listItemStart;
             elm += names[i];
             elm += listItemEnd;
