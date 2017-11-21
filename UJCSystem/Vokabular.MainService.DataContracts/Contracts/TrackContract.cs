@@ -21,6 +21,7 @@ namespace Vokabular.MainService.DataContracts.Contracts
 
     public class CreateTrackContract
     {
+        public string Comment { get; set; }
         public string Name { get; set; }
         public string Text { get; set; }
         public int Position { get; set; }

@@ -10,35 +10,41 @@ namespace Vokabular.MainService.Controllers
     [Route("api/Project")]
     public class ProjectAudio : BaseController
     {
+        private readonly ProjectItemManager m_projectItemManager;
         private readonly ProjectContentManager m_projectContentManager;
 
-        public ProjectAudio(ProjectContentManager projectContentManager)
+        public ProjectAudio(ProjectItemManager projectItemManager, ProjectContentManager projectContentManager)
         {
+            m_projectItemManager = projectItemManager;
             m_projectContentManager = projectContentManager;
         }
 
         [HttpGet("{projectId}/track")]
         public List<TrackContract> GetTrackList(long projectId)
         {
-            throw new NotImplementedException();
+            var result = m_projectItemManager.GetTrackList(projectId);
+            return result;
         }
 
         [HttpGet("track/{trackId}")]
         public TrackContract GetTrackResource(long trackId)
         {
-            throw new NotImplementedException();
+            var result = m_projectItemManager.GetTrackResource(trackId);
+            return result;
         }
 
         [HttpPost("{projectId}/track")]
         public IActionResult CreateTrackResource(long projectId, [FromBody] CreateTrackContract trackData)
         {
-            throw new NotImplementedException();
+            var resourceId = m_projectItemManager.CreateTrackResource(projectId, trackData);
+            return Ok(resourceId);
         }
 
         [HttpPut("track/{trackId}")]
         public IActionResult UpdateTrackResource(long trackId, [FromBody] CreateTrackContract trackData)
         {
-            throw new NotImplementedException();
+            m_projectItemManager.UpdateTrackResource(trackId, trackData);
+            return Ok();
         }
 
         [HttpPost("audio/{audioId}")]

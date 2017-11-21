@@ -92,5 +92,34 @@ namespace Vokabular.MainService.Core.Managers
             var userId = m_userManager.GetCurrentUserId();
             new CreateOrUpdateChapterWork(m_resourceRepository, chapterData, null, chapterId, userId).Execute();
         }
+
+        public List<TrackContract> GetTrackList(long projectId)
+        {
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectTracks(projectId));
+            var result = Mapper.Map<List<TrackContract>>(dbResult);
+            return result;
+        }
+
+        public TrackContract GetTrackResource(long trackId)
+        {
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestResourceVersion<TrackResource>(trackId));
+            var result = Mapper.Map<TrackContract>(dbResult);
+            return result;
+        }
+
+        public long CreateTrackResource(long projectId, CreateTrackContract trackData)
+        {
+            var userId = m_userManager.GetCurrentUserId();
+            var work = new CreateOrUpdateTrackWork(m_resourceRepository, trackData, projectId, null, userId);
+            work.Execute();
+
+            return work.ResourceId;
+        }
+
+        public void UpdateTrackResource(long trackId, CreateTrackContract trackData)
+        {
+            var userId = m_userManager.GetCurrentUserId();
+            new CreateOrUpdateTrackWork(m_resourceRepository, trackData, null, trackId, userId).Execute();
+        }
     }
 }
