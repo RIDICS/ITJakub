@@ -351,21 +351,19 @@ interface ICategoryContract {
     description: string;
 }
 
-interface IOriginalAuthorContract {
-    id: number;
-    firstName: string;
-    lastName: string;
-}
-
-interface IResponsiblePersonContract {
-    id: number;
-    firstName: string;
-    lastName: string;
-}
-
 interface IEditionNote { //TODO expand after server functionality is done
     projectId: number;
     content: string;
+}
+
+interface IResponsiblePersonPagedResult {
+    totalCount: number;
+    list: IResponsiblePerson[];
+}
+
+interface IOriginalAuthorPagedResult {
+    totalCount: number;
+    list: IOriginalAuthor[];
 }
 
 enum AudioType {

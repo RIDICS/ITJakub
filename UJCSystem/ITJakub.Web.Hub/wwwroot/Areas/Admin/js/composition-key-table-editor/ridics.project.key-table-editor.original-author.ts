@@ -15,7 +15,8 @@
         $(".delete-key-table-entry").text("Delete original author");
         {
             const initialPage = 1;
-            this.loadPage(initialPage);
+            const initial = true;
+            this.loadPage(initialPage, initial);
             this.currentPage = initialPage;
             this.authorRename();
             this.authorDelete();
@@ -24,18 +25,19 @@
     };
 
     private updateContentAfterChange() {
-            this.loadPage(this.currentPage);
+        const initial = true;
+        this.loadPage(this.currentPage, initial);
     }
 
-    private loadPage(pageNumber: number) {
+    private loadPage(pageNumber: number, initial?: boolean) {
         const listEl = $(".selectable-list-div");
         const startIndex = (pageNumber - 1) * this.numberOfItemsPerPage;
         const endIndex = pageNumber * this.numberOfItemsPerPage;
         const pagedAuthorListAjax = this.util.getOriginalAuthorList(startIndex, endIndex);
-        pagedAuthorListAjax.done((data: IOriginalAuthorContract[]) => {
+        pagedAuthorListAjax.done((data: IOriginalAuthorPagedResult) => {
             listEl.empty();
-            this.initPagination(data.length, this.numberOfItemsPerPage, this.loadPage.bind(this));
-            const generatedListStructure = this.generateAuthorList(data, listEl);
+            if (initial) { this.initPagination(data.totalCount, this.numberOfItemsPerPage, this.loadPage.bind(this));}
+            const generatedListStructure = this.generateAuthorList(data.list, listEl);
             listEl.append(generatedListStructure);
             this.makeSelectable(listEl); 
         }).fail(() => {
@@ -44,7 +46,7 @@
         });
     }
 
-    private generateAuthorList(genreItemList: IOriginalAuthorContract[], jEl: JQuery): JQuery {
+    private generateAuthorList(genreItemList: IOriginalAuthor[], jEl: JQuery): JQuery {
         const nameArray = genreItemList.map(a => (a.firstName+" "+a.lastName));
         const idArray = genreItemList.map(a => a.id);
         return this.generateSimpleList(idArray, nameArray, jEl);

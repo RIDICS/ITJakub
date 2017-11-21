@@ -114,10 +114,43 @@
     }
     //kind section end
 
-    //responsible person editor section start
-
-    //responsible person editor section end
-
+    //responsible person type section start
+    getResponsiblePersonTypeList(): JQueryXHR {
+        const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetResponsibleTypeList`);
+        return ajax;
+    }
+    renameResponsiblePersonType(responsibleTypeId: number, responsibleType: ResponsibleTypeEnum, text: string): JQueryXHR {
+        const responsibleTypeBody: IResponsibleType = {
+            id: responsibleTypeId,
+            text: text,
+            type: responsibleType
+        };
+        const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/RenameResponsibleType`,
+            {
+                responsibleTypeId: responsibleTypeId,
+                data: responsibleTypeBody
+            });
+        return ajax;
+    }
+    deleteResponsiblePersonType(responsibleTypeId: number): JQueryXHR {
+        const url = `${getBaseUrl()}Admin/KeyTable/DeleteResponsibleType`;
+        const ajax = $.post(url,
+            {
+                responsibleTypeId: responsibleTypeId
+            });
+        return ajax;
+    }
+    createNewResponsiblePersonType(responsibleType: ResponsibleTypeEnum, text: string): JQueryXHR {
+        const url = `${getBaseUrl()}Admin/KeyTable/CreateResponsibleType`;
+        const id = 0; //genre doesn't have an id yet
+        const payload: IResponsibleType = {
+            text: text,
+            id: id,
+            type: responsibleType
+        };
+        return $.post(url, { request: payload });
+    }
+    //responsible person type section end
     //responsible person section start
     getResponsiblePersonList(start?: number, count?: number): JQueryXHR {
         const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetResponsiblePersonList`,
@@ -131,7 +164,7 @@
     createResponsiblePerson(name: string, surname: string) {//TODO
         const url = `${getBaseUrl()}Admin/KeyTable/CreateResponsiblePerson`;
         const id = 0; //keyword doesn't have an id yet
-        const payload: IResponsiblePersonContract = {
+        const payload: IResponsiblePerson = {
             id: id,
             firstName: name,
             lastName: surname
@@ -139,7 +172,7 @@
         return $.post(url, { request: payload });
     }
     renameResponsiblePerson(responsiblePersonId: number, name: string, surname: string): JQueryXHR {
-        const responsiblePerson: IResponsiblePersonContract = {
+        const responsiblePerson: IResponsiblePerson = {
             id: responsiblePersonId,
             firstName: name,
             lastName: surname
@@ -206,7 +239,7 @@
     createOriginalAuthor(name: string, surname: string) {
         const url = `${getBaseUrl()}Admin/KeyTable/CreateAuthor`;
         const id = 0; //keyword doesn't have an id yet
-        const payload: IOriginalAuthorContract = {
+        const payload: IOriginalAuthor = {
             id: id,
             firstName: name,
             lastName: surname
@@ -214,7 +247,7 @@
         return $.post(url, { request: payload });
     }
     renameOriginalAuthor(authorId: number, name: string, surname: string): JQueryXHR {
-        const originalAuthor: IOriginalAuthorContract = {
+        const originalAuthor: IOriginalAuthor = {
             id: authorId,
             firstName: name,
             lastName: surname

@@ -22,7 +22,6 @@
     <Content Remove="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.literary-original.ts" />
     <Content Remove="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.main.ts" />
     <Content Remove="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.original-author.ts" />
-    <Content Remove="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.responsible-person-editor.ts" />
     <Content Remove="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.table-base.ts" />
     <Content Remove="wwwroot\Areas\Admin\js\edition-note\ridics.project.edition-note.main.ts" />
     <Content Remove="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.gui.ts" />
@@ -98,7 +97,7 @@
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.literary-original.ts" />
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.main.ts" />
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.original-author.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.responsible-person-editor.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.responsible-person-type.ts" />
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.responsible-person.ts" />
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.table-base.ts" />
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.util.ts" />

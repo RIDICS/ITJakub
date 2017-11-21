@@ -1,7 +1,7 @@
 ﻿class KeyTableResponsiblePerson extends KeyTableEditorBase{
     private readonly util: KeyTableUtilManager;
     private readonly gui: EditorsGui;
-    private responsiblePersonItemList: IResponsiblePersonContract[];
+    private responsiblePersonItemList: IResponsiblePerson[];
 
     constructor() {
         super();
@@ -16,7 +16,8 @@
         $(".delete-key-table-entry").text("Delete responsible person");
         {
             const initialPage = 1;
-            this.loadPage(initialPage);
+            const initial = true;
+            this.loadPage(initialPage, initial);
             this.currentPage = initialPage;
             this.responsiblePersonRename();
             this.responsiblePersonDelete();
@@ -24,18 +25,19 @@
         };
     };
     private updateContentAfterChange() {
-        this.loadPage(this.currentPage);
+        const initial = true;
+        this.loadPage(this.currentPage, initial);
     }
 
-    private loadPage(pageNumber: number) {
+    private loadPage(pageNumber: number, initial? : boolean) {
         const listEl = $(".selectable-list-div");
         const startIndex = (pageNumber - 1) * this.numberOfItemsPerPage;
         const endIndex = pageNumber * this.numberOfItemsPerPage;
         const pagedResponsiblePersonListAjax = this.util.getResponsiblePersonList(startIndex, endIndex);
-        pagedResponsiblePersonListAjax.done((data: IResponsiblePersonContract[]) => {
+        pagedResponsiblePersonListAjax.done((data: IResponsiblePersonPagedResult) => {
             listEl.empty();
-            this.initPagination(data.length, this.numberOfItemsPerPage, this.loadPage.bind(this));
-            const generatedListStructure = this.generateResponsiblePersonList(data, listEl);
+            if(initial){this.initPagination(data.totalCount, this.numberOfItemsPerPage, this.loadPage.bind(this));}
+            const generatedListStructure = this.generateResponsiblePersonList(data.list, listEl);
             listEl.append(generatedListStructure);
             this.makeSelectable(listEl);
         }).fail(() => {
@@ -44,13 +46,13 @@
         });
     }
 
-    private generateResponsiblePersonList(genreItemList: IResponsiblePersonContract[], jEl: JQuery): JQuery {
+    private generateResponsiblePersonList(genreItemList: IResponsiblePerson[], jEl: JQuery): JQuery {
         const nameArray = genreItemList.map(a => (a.firstName + " " + a.lastName));
         const idArray = genreItemList.map(a => a.id);
         return this.generateSimpleList(idArray, nameArray, jEl);
     }
 
-    private responsiblePersonCreation() {//TODO
+    private responsiblePersonCreation() {
         $(".crud-buttons-div").on("click",
             ".create-key-table-entry",
             () => {
@@ -77,7 +79,7 @@
             });
     }
 
-    private responsiblePersonRename() {//TODO
+    private responsiblePersonRename() {
         $(".crud-buttons-div").on("click",
             ".rename-key-table-entry",
             () => {
@@ -110,7 +112,7 @@
             });
     }
 
-    private responsiblePersonDelete() {//TODO
+    private responsiblePersonDelete() {
         $(".crud-buttons-div").on("click",
             ".delete-key-table-entry",
             () => {

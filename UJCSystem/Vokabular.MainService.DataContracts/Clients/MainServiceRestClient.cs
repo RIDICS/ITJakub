@@ -406,7 +406,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var response = Put<object>("literarygenre/"+literaryGenreId, data);
+                var response = Put<object>($"literarygenre/{literaryGenreId}", data);
                 return response;
             }
             catch (HttpRequestException e)
@@ -422,7 +422,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Delete("literarygenre/"+ literaryGenreId);
+                Delete($"literarygenre/{literaryGenreId}");
             }
             catch (HttpRequestException e)
             {
@@ -433,11 +433,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<OriginalAuthorContract> GetOriginalAuthorList(int? start, int? count)
+        public PagedResultList<OriginalAuthorContract> GetOriginalAuthorList(int start, int count)
         {
             try
             {
-                var result = Get<List<OriginalAuthorContract>>(UrlQueryBuilder.Create("author").AddParameter("start", start.ToString()).AddParameter("count", count.ToString()).ToQuery());
+                var result = GetPagedList<OriginalAuthorContract>(UrlQueryBuilder.Create("author").AddParameter("start", start.ToString()).AddParameter("count", count.ToString()).ToQuery());
                 return result;
             }
             catch (HttpRequestException e)
@@ -469,7 +469,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var response = Put<object>("author/" + authorId, data);
+                var response = Put<object>($"author/{authorId}", data);
                 return response;
             }
             catch (HttpRequestException e)
@@ -485,7 +485,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Delete("author/" + authorId);
+                Delete($"author/{authorId}");
             }
             catch (HttpRequestException e)
             {
@@ -512,11 +512,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<ResponsiblePersonContract> GetResponsiblePersonList(int? start, int? count)
+        public PagedResultList<ResponsiblePersonContract> GetResponsiblePersonList(int start, int count)
         {
             try
             {
-                var result = Get<List<ResponsiblePersonContract>>(UrlQueryBuilder.Create("responsibleperson").AddParameter("start", start.ToString()).AddParameter("count", count.ToString()).ToQuery());
+                var result = GetPagedList<ResponsiblePersonContract>(UrlQueryBuilder.Create("responsibleperson").AddParameter("start", start.ToString()).AddParameter("count", count.ToString()).ToQuery());
                 return result;
             }
             catch (HttpRequestException e)
@@ -532,7 +532,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var response = Put<object>("responsibleperson/" + responsiblePersonId, data);
+                var response = Put<object>($"responsibleperson/{responsiblePersonId}", data);
                 return response;
             }
             catch (HttpRequestException e)
@@ -548,7 +548,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Delete("responsibleperson/" + responsiblePersonId);
+                Delete($"responsibleperson/{responsiblePersonId}");
             }
             catch (HttpRequestException e)
             {
@@ -595,7 +595,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var response = Put<object>("literarykind/" + literaryKindId, data);
+                var response = Put<object>($"literarykind/{literaryKindId}", data);
                 return response;
             }
             catch (HttpRequestException e)
@@ -611,7 +611,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Delete("literarykind/" + literaryKindId);
+                Delete($"literarykind/{literaryKindId}");
             }
             catch (HttpRequestException e)
             {
@@ -658,7 +658,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var response = Put<object>("keyword/" + keywordId, data);
+                var response = Put<object>($"keyword/{keywordId}", data);
                 return response;
             }
             catch (HttpRequestException e)
@@ -674,7 +674,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Delete("keyword/" + keywordId);
+                Delete($"keyword/{keywordId}");
             }
             catch (HttpRequestException e)
             {
@@ -737,7 +737,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var response = Put<object>("literaryoriginal/" + literaryOriginalId, data);
+                var response = Put<object>($"literaryoriginal/{literaryOriginalId}", data);
                 return response;
             }
             catch (HttpRequestException e)
@@ -753,7 +753,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Delete("literaryoriginal/" + literaryOriginalId);
+                Delete($"literaryoriginal/{literaryOriginalId}");
             }
             catch (HttpRequestException e)
             {
@@ -780,11 +780,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public object UpdateCategory(int categoryId, CategoryContract category)//TODO
+        public object UpdateCategory(int categoryId, CategoryContract category)
         {
             try
             {
-                var resultId = Put<object>("category/"+categoryId, category);
+                var resultId = Put<object>($"category/{categoryId}", category);
                 return resultId;
             }
             catch (HttpRequestException e)
@@ -800,7 +800,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Delete("category/"+categoryId);
+                Delete($"category/{categoryId}");
             }
             catch (HttpRequestException e)
             {
@@ -849,6 +849,37 @@ namespace Vokabular.MainService.DataContracts.Clients
             {
                 var result = Get<List<ResponsibleTypeContract>>("responsibleperson/type");
                 return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void DeleteResponsibleType(int responsibleTypeId)
+        {
+            try
+            {
+                Delete($"responsibleperson/type/{responsibleTypeId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public object UpdateResponsibleType(int responsibleTypeId, ResponsibleTypeContract data)
+        {
+            try
+            {
+                var resultId = Put<object>($"responsibleperson/type/{responsibleTypeId}", data);
+                return resultId;
             }
             catch (HttpRequestException e)
             {

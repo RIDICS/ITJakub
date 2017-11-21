@@ -18,7 +18,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return View();
         }
 
-        //Category
+        #region Category
         [HttpGet]
         public IActionResult GetCategoryList()
         {
@@ -55,8 +55,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 client.DeleteCategory(categoryId);
             }
         }
-
-        //Genre
+        #endregion
+        #region Genre
         [HttpPost]
         public IActionResult CreateLiteraryGenre(LiteraryGenreContract request)
         {
@@ -96,8 +96,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 client.DeleteLiteraryGenre(literaryGenreId);
             }
         }
-
-        //Kind
+        #endregion
+        #region Kind
         [HttpGet]
         public IActionResult GetLiteraryKindList()
         {
@@ -133,9 +133,45 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 return Json(response);
             }
         }
-        //Responsible person editor
-
-        //Responsible person
+        #endregion
+        #region Responsible person type
+        [HttpGet]
+        public IActionResult GetResponsibleTypeList()
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetResponsibleTypeList();
+                return Json(result);
+            }
+        }
+        [HttpPost]
+        public IActionResult CreateResponsibleType(ResponsibleTypeContract request)
+        {
+            using (var client = GetRestClient())
+            {
+                var newId = client.CreateResponsibleType(request);
+                return Json(newId);
+            }
+        }
+        [HttpPost]
+        public void DeleteResponsibleType(int responsibleTypeId)
+        {
+            using (var client = GetRestClient())
+            {
+                client.DeleteResponsibleType(responsibleTypeId);
+            }
+        }
+        [HttpPost]
+        public IActionResult RenameResponsibleType(int responsibleTypeId, ResponsibleTypeContract data)
+        {
+            using (var client = GetRestClient())
+            {
+                var response = client.UpdateResponsibleType(responsibleTypeId, data);
+                return Json(response);
+            }
+        }
+        #endregion
+        #region Responsible person
         [HttpPost]
         public IActionResult CreateResponsiblePerson(ResponsiblePersonContract request)
         {
@@ -146,7 +182,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
         [HttpGet]
-        public IActionResult GetResponsiblePersonList(int? start, int? count)
+        public IActionResult GetResponsiblePersonList(int start, int count)
         {
             using (var client = GetRestClient())
             {
@@ -171,7 +207,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 client.DeleteResponsiblePerson(responsiblePersonId);
             }
         }
-        //Literary original
+        #endregion
+        #region Literary original
         [HttpGet]
         public IActionResult GetLiteraryOriginalList()
         {
@@ -207,9 +244,10 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 return Json(response);
             }
         }
-        //Original author
+        #endregion
+        #region Original author
         [HttpGet]
-        public IActionResult GetOriginalAuthorList(int? start, int? count)
+        public IActionResult GetOriginalAuthorList(int start, int count)
         {
             using (var client = GetRestClient())
             {
@@ -243,7 +281,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 client.DeleteOriginalAuthor(authorId);
             }
         }
-        //Keyword
+        #endregion
+        #region Keyword
         [HttpGet]
         public IActionResult GetKeywordList()
         {
@@ -279,5 +318,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 return Json(response);
             }
         }
+        #endregion
     }
 }
