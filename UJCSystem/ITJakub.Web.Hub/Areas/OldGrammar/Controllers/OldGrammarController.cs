@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Web.Hub.Areas.OldGrammar.Models;
@@ -15,8 +14,6 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.Shared.DataContracts.Search.Criteria;
-using Vokabular.Shared.DataContracts.Search.CriteriaItem;
-using Vokabular.Shared.DataContracts.Search.OldCriteriaItem;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
@@ -57,7 +54,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 
         public ActionResult ListTerms()
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
                 var termCategories = client.GetTermCategoriesWithTerms();
                 return View(new TermCategoriesWithTermsModel

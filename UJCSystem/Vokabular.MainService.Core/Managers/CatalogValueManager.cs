@@ -178,5 +178,11 @@ namespace Vokabular.MainService.Core.Managers
             var result = m_catalogValueRepository.InvokeUnitOfWork(x => x.FindById<TermCategory>(termCategoryId));
             return Mapper.Map<TermCategoryContract>(result);
         }
+
+        public List<TermCategoryDetailContract> GetTermCategoriesWithTerms()
+        {
+            var result = m_catalogValueRepository.InvokeUnitOfWork(x => x.GetTermCategoriesWithTerms());
+            return Mapper.Map<List<TermCategoryDetailContract>>(result);
+        }
     }
 }

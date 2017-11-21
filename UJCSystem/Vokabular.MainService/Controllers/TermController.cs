@@ -121,5 +121,11 @@ namespace Vokabular.MainService.Controllers
         {
             return m_catalogValueManager.GetTermCategoryList();
         }
+
+        [HttpGet("category/detail")]
+        public List<TermCategoryDetailContract> GetTermCategoriesWithTerms()
+        {
+            return m_catalogValueManager.GetTermCategoriesWithTerms();
+        }
     }
 }

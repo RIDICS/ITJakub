@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using NHibernate.SqlCommand;
+using NHibernate.Transform;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.UnitOfWork;
@@ -71,6 +73,18 @@ namespace Vokabular.DataEntities.Database.Repositories
             }
 
             return query.List();
+        }
+
+        public virtual IList<TermCategory> GetTermCategoriesWithTerms()
+        {
+            Term termAlias = null;
+
+            return GetSession().QueryOver<TermCategory>()
+                .JoinAlias(x => x.Terms, () => termAlias, JoinType.LeftOuterJoin)
+                .Fetch(x => x.Terms).Eager
+                .OrderBy(() => termAlias.Position).Asc
+                .TransformUsing(Transformers.DistinctRootEntity)
+                .List();
         }
     }
 }
