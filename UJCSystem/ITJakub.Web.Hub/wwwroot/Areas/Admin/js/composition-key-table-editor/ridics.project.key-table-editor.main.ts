@@ -15,9 +15,9 @@ class KeyTableEditorMain {
         this.initEditor(editorId);
         firstEditorListItem.addClass("active");
         this.switchOnClick();
-        var $splitterButton = $("#splitter-button");
+        const $splitterButton = $("#splitter-button");
         $splitterButton.click(() => {
-            var $leftMenu = $("#left-menu");
+            const $leftMenu = $("#left-menu");
             if ($leftMenu.is(":visible")) {
                 $leftMenu.hide("slide", { direction: "left" });
                 $splitterButton.html("<span class=\"glyphicon glyphicon-menu-right\"></span>");
