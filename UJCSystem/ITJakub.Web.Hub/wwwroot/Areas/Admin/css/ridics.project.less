@@ -477,48 +477,59 @@ table {
 
 .table-of-keys-content {
     height: 640px;
-    .table-of-keys-container{
+
+    .table-of-keys-container {
         height: inherit;
-    
-    .table-of-keys {
-        height: 90%;
 
-        .selectable-list-div {
-            height: inherit;
-            overflow-y: scroll;
-            padding-right: 0 !important;
-            padding-left: 0 !important;
+        .table-of-keys {
+            height: 90%;
 
-            .page-list-item-selected {
-                background: @page-list-element-selected-color;
-                color: white;
-            }
+            .selectable-list-div {
+                height: inherit;
+                overflow-y: scroll;
+                padding-right: 0 !important;
+                padding-left: 0 !important;
 
-            .page-list {
-                list-style-type: none;
-
-                .collapse-category-button {
-                    position: absolute;
-                    top: 0;
-                    right: 0;
-                    margin-right: 5px;
+                .page-list-item-selected {
+                    background: @page-list-element-selected-color;
+                    color: white;
                 }
 
-                .child-category {
-                    margin-left: 1.5em;
-                    margin-top: 0.3em;
-                    margin-bottom: 0.1em;
+                .page-list-item {
+                    .person-surname {
+                        margin-left: 8px;
+                    }
+
+                    .person-name {
+                        margin-left: 1px;
+                    }
                 }
 
-                &-item {
-                    position: relative;
-                    min-height: 20px;
-                    user-select: none;
-                    border: 1px solid #dddddd;
+                .page-list {
+                    list-style-type: none;
+
+                    .collapse-category-button {
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        margin-right: 5px;
+                    }
+
+                    .child-category {
+                        margin-left: 1.5em;
+                        margin-top: 0.3em;
+                        margin-bottom: 0.1em;
+                    }
+
+                    &-item {
+                        position: relative;
+                        min-height: 20px;
+                        user-select: none;
+                        border: 1px solid #dddddd;
+                    }
                 }
             }
         }
-    }
     }
 
     .pagination-row-elements {

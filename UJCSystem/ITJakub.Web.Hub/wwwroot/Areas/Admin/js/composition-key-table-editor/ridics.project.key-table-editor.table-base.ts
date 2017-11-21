@@ -15,10 +15,13 @@
 
     protected makeSelectable(jEl: JQuery) {
         jEl.children(".page-list").on("click", ".page-list-item", (event) => {
-            event.stopImmediatePropagation();
-            const targetEl = $(event.target);
+            event.stopPropagation();
+            var targetEl = $(event.target);
             if (targetEl.hasClass("collapse-category-button") || targetEl.parent().hasClass("collapse-category-button")) {
                 return;
+            }
+            if (!targetEl.hasClass("page-list-item")) {
+                targetEl = targetEl.closest(".page-list-item");
             }
             targetEl.toggleClass("page-list-item-selected");
             $(".page-list-item").not(targetEl).removeClass("page-list-item-selected");

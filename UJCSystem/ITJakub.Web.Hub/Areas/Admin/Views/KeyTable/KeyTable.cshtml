@@ -98,10 +98,9 @@
                                     <p class="secondary-input-dialog-message"></p>
                                     <select class="responsible-type-selection">
                                         @{
-                                            foreach (ResponsibleTypeEnumContract responsibleType in Enum.GetValues(typeof(ResponsibleTypeEnumContract)))
-                                            {
-                                                <option value="@((int)responsibleType)">@responsibleType.ToString()</option>
-                                            }
+                                                <option value="@((int)ResponsibleTypeEnumContract.Unknown)">Unknown</option>
+                                                <option value="@((int)ResponsibleTypeEnumContract.Editor)">Editor</option>
+                                                <option value="@((int)ResponsibleTypeEnumContract.Kolace)">Collation</option>
                                          }
 </select>
                                 </div>

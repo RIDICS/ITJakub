@@ -159,34 +159,36 @@
         $(".crud-buttons-div").on("click",
             ".rename-key-table-entry",
             () => {
-                this.gui.showSingleInputDialog("Name input", "Please input category name after rename:");
-                $(".info-dialog-ok-button").on("click",
-                    () => {
-                        const textareaEl = $(".input-dialog-textarea");
-                        const categoryString = textareaEl.val();
-                        if (!categoryString) {
-                            this.gui.showInfoDialog("Warning", "You haven't entered anything.");
-                        } else {
-                            const selectedPageEl = $(".page-list").find(".page-list-item-selected");
-                            if (selectedPageEl.length) {
-                                const id = selectedPageEl.data("category-id") as number;
-                                const parentCategoryid = selectedPageEl.data("parent-category-id") as number;
-                                const renameAjax = this.util.renameCategory(id, categoryString, parentCategoryid);
-                                renameAjax.done(() => {
-                                    textareaEl.val("");
-                                    this.gui.showInfoDialog("Success", "Category has been renamed");
-                                    $(".info-dialog-ok-button").off();
-                                    this.updateContentAfterChange();
-                                });
-                                renameAjax.fail(() => {
-                                    this.gui.showInfoDialog("Error", "Category has not been renamed");
-                                    $(".info-dialog-ok-button").off();
-                                });
+                const selectedPageEl = $(".page-list").find(".page-list-item-selected");
+                if (selectedPageEl.length) {
+                    this.gui.showSingleInputDialog("Name input", "Please input category name after rename:");
+                    const textareaEl = $(".input-dialog-textarea");
+                    const originalText = selectedPageEl.text();
+                    textareaEl.val(originalText);
+                    $(".info-dialog-ok-button").on("click",
+                        () => {
+                            const categoryString = textareaEl.val();
+                            if (!categoryString) {
+                                this.gui.showInfoDialog("Warning", "You haven't entered anything.");
                             } else {
-                                this.gui.showInfoDialog("Info", "Please choose a category");
+                                    const id = selectedPageEl.data("category-id") as number;
+                                    const parentCategoryid = selectedPageEl.data("parent-category-id") as number;
+                                    const renameAjax = this.util.renameCategory(id, categoryString, parentCategoryid);
+                                    renameAjax.done(() => {
+                                        textareaEl.val("");
+                                        this.gui.showInfoDialog("Success", "Category has been renamed");
+                                        $(".info-dialog-ok-button").off();
+                                        this.updateContentAfterChange();
+                                    });
+                                    renameAjax.fail(() => {
+                                        this.gui.showInfoDialog("Error", "Category has not been renamed");
+                                        $(".info-dialog-ok-button").off();
+                                    });
                             }
-                        }
-                    });
+                        });
+                } else {
+                    this.gui.showInfoDialog("Info", "Please choose a category");
+                }
             });
     }
 
@@ -194,26 +196,26 @@
         $(".crud-buttons-div").on("click",
             ".delete-key-table-entry",
             () => {
-                this.gui.showConfirmationDialog("Confirm", "Are you sure you want to delete this category?");
-                $(".confirmation-ok-button").on("click",
-                    () => {
-                        const selectedPageEl = $(".page-list").find(".page-list-item-selected");
-                        if (selectedPageEl.length) {
-                            const id = selectedPageEl.data("category-id") as number;
-                            const deleteAjax = this.util.deleteCategory(id);
-                            deleteAjax.done(() => {
-                                $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog("Success", "Category deletion was successful");
-                                this.updateContentAfterChange();
-                            });
-                            deleteAjax.fail(() => {
-                                $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog("Error", "Category deletion was not successful");
-                            });
-                        } else {
-                            this.gui.showInfoDialog("Info", "Please choose a category");
-                        }
-                    });
+                const selectedPageEl = $(".page-list").find(".page-list-item-selected");
+                if (selectedPageEl.length) {
+                    this.gui.showConfirmationDialog("Confirm", "Are you sure you want to delete this category?");
+                    $(".confirmation-ok-button").on("click",
+                        () => {
+                                const id = selectedPageEl.data("category-id") as number;
+                                const deleteAjax = this.util.deleteCategory(id);
+                                deleteAjax.done(() => {
+                                    $(".confirmation-ok-button").off();
+                                    this.gui.showInfoDialog("Success", "Category deletion was successful");
+                                    this.updateContentAfterChange();
+                                });
+                                deleteAjax.fail(() => {
+                                    $(".confirmation-ok-button").off();
+                                    this.gui.showInfoDialog("Error", "Category deletion was not successful");
+                                });
+                        });
+                } else {
+                    this.gui.showInfoDialog("Info", "Please choose a category");
+                }
             });
     }
 }

@@ -36,27 +36,44 @@
         const pagedAuthorListAjax = this.util.getOriginalAuthorList(startIndex, endIndex);
         pagedAuthorListAjax.done((data: IOriginalAuthorPagedResult) => {
             listEl.empty();
-            if (initial) { this.initPagination(data.totalCount, this.numberOfItemsPerPage, this.loadPage.bind(this));}
-            const generatedListStructure = this.generateAuthorList(data.list, listEl);
-            listEl.append(generatedListStructure);
-            this.makeSelectable(listEl); 
+            if (initial) {
+                this.initPagination(data.totalCount, this.numberOfItemsPerPage, this.loadPage.bind(this));
+            }
+            listEl.append(this.generateListStructure(data.list));
+            this.makeSelectable(listEl);
         }).fail(() => {
             const error = new AlertComponentBuilder(AlertType.Error).addContent("Failed to load editor");
             $("#project-layout-content").empty().append(error.buildElement());
         });
     }
 
-    private generateAuthorList(genreItemList: IOriginalAuthor[], jEl: JQuery): JQuery {
-        const nameArray = genreItemList.map(a => (a.firstName+" "+a.lastName));
-        const idArray = genreItemList.map(a => a.id);
-        return this.generateSimpleList(idArray, nameArray, jEl);
+    private generateListStructure(originalAuthorItemList: IOriginalAuthor[]): JQuery {
+        const listStart = `<div class="page-list">`;
+        const listItemEnd = `</div>`;
+        const listEnd = "</div>";
+        var elm = "";
+        elm += listStart;
+        for (let i = 0; i < originalAuthorItemList.length; i++) {
+            const listItemStart =
+                `<div class="page-list-item" data-key-id="${originalAuthorItemList[i].id}"><span class="person-name">${
+                    originalAuthorItemList[i].firstName}</span><span class="person-surname">${originalAuthorItemList[i]
+                    .lastName}</span>`;
+            elm += listItemStart;
+            elm += listItemEnd;
+        }
+        elm += listEnd;
+        const html = $.parseHTML(elm);
+        const jListEl = $(html);
+        return jListEl;
     }
 
     private authorCreation() {
         $(".crud-buttons-div").on("click",
             ".create-key-table-entry",
             () => {
-                this.gui.showAuthorInputDialog("Create new author", "Please input new author's name:", "Please input new author's surname:");
+                this.gui.showAuthorInputDialog("Create new author",
+                    "Please input new author's name:",
+                    "Please input new author's surname:");
                 $(".info-dialog-ok-button").on("click",
                     () => {
                         const nameTextareaEl = $(".primary-input-author-textarea");
@@ -83,15 +100,21 @@
         $(".crud-buttons-div").on("click",
             ".rename-key-table-entry",
             () => {
-                this.gui.showAuthorInputDialog("Rename author's name", "Please input new author's name:", "Please input new author's surname:");
-                $(".info-dialog-ok-button").on("click",
-                    () => {
-                        const nameTextareaEl = $(".primary-input-author-textarea");
-                        const nameString = nameTextareaEl.val();
-                        const surnameTextareaEl = $(".secondary-input-author-textarea");
-                        const surnameString = surnameTextareaEl.val();
-                        const selectedPageEl = $(".page-list").children(".page-list-item-selected");
-                        if (selectedPageEl.length) {
+                const selectedPageEl = $(".page-list").children(".page-list-item-selected");
+                if (selectedPageEl.length) {
+                    this.gui.showAuthorInputDialog("Rename author's name",
+                        "Please input new author's name:",
+                        "Please input new author's surname:");
+                    const nameTextareaEl = $(".primary-input-author-textarea");
+                    const surnameTextareaEl = $(".secondary-input-author-textarea");
+                    const originalName = selectedPageEl.children(".person-name").text();
+                    const originalSurname = selectedPageEl.children(".person-surname").text();
+                    nameTextareaEl.val(originalName);
+                    surnameTextareaEl.val(originalSurname);
+                    $(".info-dialog-ok-button").on("click",
+                        () => {
+                            const nameString = nameTextareaEl.val();
+                            const surnameString = surnameTextareaEl.val();
                             const authorId = selectedPageEl.data("key-id") as number;
                             const renameAjax = this.util.renameOriginalAuthor(authorId, nameString, surnameString);
                             renameAjax.done(() => {
@@ -105,10 +128,10 @@
                                 this.gui.showInfoDialog("Error", "Author has not been renamed");
                                 $(".info-dialog-ok-button").off();
                             });
-                        } else {
-                            this.gui.showInfoDialog("Warning", "Please choose an author");
-                        }
-                    });
+                        });
+                } else {
+                    this.gui.showInfoDialog("Warning", "Please choose an author");
+                }
             });
     }
 
@@ -116,11 +139,11 @@
         $(".crud-buttons-div").on("click",
             ".delete-key-table-entry",
             () => {
-                this.gui.showConfirmationDialog("Confirm", "Are you sure you want to delete this author?");
-                $(".confirmation-ok-button").on("click",
-                    () => {
-                        const selectedPageEl = $(".page-list").find(".page-list-item-selected");
-                        if (selectedPageEl.length) {
+                const selectedPageEl = $(".page-list").find(".page-list-item-selected");
+                if (selectedPageEl.length) {
+                    this.gui.showConfirmationDialog("Confirm", "Are you sure you want to delete this author?");
+                    $(".confirmation-ok-button").on("click",
+                        () => {
                             const id = selectedPageEl.data("key-id") as number;
                             const deleteAjax = this.util.deleteOriginalAuthor(id);
                             deleteAjax.done(() => {
@@ -132,10 +155,10 @@
                                 $(".confirmation-ok-button").off();
                                 this.gui.showInfoDialog("Error", "Author deletion was not successful");
                             });
-                        } else {
-                            this.gui.showInfoDialog("Warning", "Please choose an author");
-                        }
-                    });
+                        });
+                } else {
+                    this.gui.showInfoDialog("Warning", "Please choose an author");
+                }
             });
     }
 }

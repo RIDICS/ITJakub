@@ -84,13 +84,15 @@
         $(".crud-buttons-div").on("click",
             ".rename-key-table-entry",
             () => {
-                this.gui.showSingleInputDialog("Name input", "Please input genre name after rename:");
+                const selectedPageEl = $(".page-list").children(".page-list-item-selected");
+                if (selectedPageEl.length) {
+                    this.gui.showSingleInputDialog("Name input", "Please input genre name after rename:");
+                    const textareaEl = $(".input-dialog-textarea");
+                    const originalText = selectedPageEl.text();
+                    textareaEl.val(originalText);
                 $(".info-dialog-ok-button").on("click",
                     () => {
-                        const textareaEl = $(".input-dialog-textarea");
                         const genreName = textareaEl.val();
-                        const selectedPageEl = $(".page-list").children(".page-list-item-selected");
-                        if (selectedPageEl.length) {
                             const genreId = selectedPageEl.data("key-id") as number;
                             const renameAjax = this.util.renameGenre(genreId, genreName);
                             renameAjax.done(() => {
@@ -103,10 +105,10 @@
                                 this.gui.showInfoDialog("Error", "Genre has not been renamed");
                                 $(".info-dialog-ok-button").off();
                             });
-                        } else {
-                            this.gui.showInfoDialog("Warning", "Please choose a genre");
-                        }
                     });
+                } else {
+                    this.gui.showInfoDialog("Warning", "Please choose a genre");
+                }
             });
     }
 
@@ -114,26 +116,26 @@
         $(".crud-buttons-div").on("click",
             ".delete-key-table-entry",
             () => {
-                this.gui.showConfirmationDialog("Confirm", "Are you sure you want to delete this genre?");
-                $(".confirmation-ok-button").on("click",
-                    () => {
-                        const selectedPageEl = $(".page-list").find(".page-list-item-selected");
-                        if (selectedPageEl.length) {
-                            const id = selectedPageEl.data("key-id") as number;
-                            const deleteAjax = this.util.deleteGenre(id);
-                            deleteAjax.done(() => {
-                                $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog("Success", "Genre deletion was successful");
-                                this.updateContentAfterChange();
-                            });
-                            deleteAjax.fail(() => {
-                                $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog("Error", "Genre deletion was not successful");
-                            });
-                        } else {
-                            this.gui.showInfoDialog("Warning", "Please choose a genre");
-                        }
-                    });
+                const selectedPageEl = $(".page-list").find(".page-list-item-selected");
+                if (selectedPageEl.length) {
+                    this.gui.showConfirmationDialog("Confirm", "Are you sure you want to delete this genre?");
+                    $(".confirmation-ok-button").on("click",
+                        () => {
+                                const id = selectedPageEl.data("key-id") as number;
+                                const deleteAjax = this.util.deleteGenre(id);
+                                deleteAjax.done(() => {
+                                    $(".confirmation-ok-button").off();
+                                    this.gui.showInfoDialog("Success", "Genre deletion was successful");
+                                    this.updateContentAfterChange();
+                                });
+                                deleteAjax.fail(() => {
+                                    $(".confirmation-ok-button").off();
+                                    this.gui.showInfoDialog("Error", "Genre deletion was not successful");
+                                });
+                        });
+                } else {
+                    this.gui.showInfoDialog("Warning", "Please choose a genre");
+                }
             });
     }
 }

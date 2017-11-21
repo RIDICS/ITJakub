@@ -1,4 +1,4 @@
-﻿class KeyTableResponsiblePersonEditor extends KeyTableEditorBase {
+﻿class KeyTableResponsiblePersonType extends KeyTableEditorBase {
     private readonly util: KeyTableUtilManager;
     private readonly gui: EditorsGui;
     private responsibleTypeItemList: IResponsibleType[];
@@ -45,15 +45,27 @@
         const listEl = $(".selectable-list-div");
         const splitArray = this.splitArray(this.responsibleTypeItemList, pageNumber);
         listEl.empty();
-        const generatedListStructure = this.generateresponsibleTypeList(splitArray, listEl);
-        listEl.append(generatedListStructure);
+        listEl.append(this.generateListStructure(splitArray));
         this.makeSelectable(listEl);
     }
 
-    private generateresponsibleTypeList(genreItemList: IResponsibleType[], jEl: JQuery): JQuery {
-        const nameArray = genreItemList.map(a => a.text);
-        const idArray = genreItemList.map(a => a.id);
-        return this.generateSimpleList(idArray, nameArray, jEl);
+    private generateListStructure(responsibleTypeItemList: IResponsibleType[]): JQuery {
+        const listStart = `<div class="page-list">`;
+        const listItemEnd = `</div>`;
+        const listEnd = "</div>";
+        var elm = "";
+        elm += listStart;
+        for (let i = 0; i < responsibleTypeItemList.length; i++) {
+            const listItemStart =
+                `<div class="page-list-item" data-key-id="${responsibleTypeItemList[i].id}" data-responsibility-type="${ResponsibleTypeEnum[responsibleTypeItemList[i].type]}">`;
+            elm += listItemStart;
+            elm += responsibleTypeItemList[i].text;
+            elm += listItemEnd;
+        }
+        elm += listEnd;
+        const html = $.parseHTML(elm);
+        const jListEl = $(html);
+        return jListEl;
     }
 
     private responsibleTypeCreation() {
@@ -94,37 +106,43 @@
         $(".crud-buttons-div").on("click",
             ".rename-key-table-entry",
             () => {
-                this.gui.showResponsibleTypeInputDialog("Responsible type input",
-                    "Please input new description:",
-                    "Please input new responsibility type");
-                $(".info-dialog-ok-button").on("click",
-                    () => {
-                        const textareaEl = $(".responsible-type-text-input-dialog-textarea");
-                        const typeDescriptionString = textareaEl.val();
-                        const responsibilityTypeSelectEl = $(".responsible-type-selection");
-                        const responsibilityTypeSelect = responsibilityTypeSelectEl.val() as ResponsibleTypeEnum;
-                        const selectedPageEl = $(".page-list").children(".page-list-item-selected");
-                        if (!typeDescriptionString) {
-                            this.gui.showInfoDialog("Warning", "You haven't entered anything.");
-                        } else {
-                            if (selectedPageEl.length) {
-                                const responsibleTypeId = selectedPageEl.data("key-id") as number;
-                                const renameAjax = this.util.renameResponsiblePersonType(responsibleTypeId, responsibilityTypeSelect, typeDescriptionString);
-                                renameAjax.done(() => {
-                                    textareaEl.val("");
-                                    this.gui.showInfoDialog("Success", "Responsibility type has been changed");
-                                    $(".info-dialog-ok-button").off();
-                                    this.updateContentAfterChange();
-                                });
-                                renameAjax.fail(() => {
-                                    this.gui.showInfoDialog("Error", "Responsibility type has not been changed");
-                                    $(".info-dialog-ok-button").off();
-                                });
+                const selectedPageEl = $(".page-list").children(".page-list-item-selected");
+                if (selectedPageEl.length) {
+                    this.gui.showResponsibleTypeInputDialog("Responsible type input",
+                        "Please input new description:",
+                        "Please input new responsibility type");
+                    const textareaEl = $(".responsible-type-text-input-dialog-textarea");
+                    const originalText = selectedPageEl.text();
+                    textareaEl.val(originalText);
+                    const responsibilityType = selectedPageEl.data("responsibility-type") as ResponsibleTypeEnum;
+                    const responsibilityTypeSelectEl = $(".responsible-type-selection");
+                    responsibilityTypeSelectEl.val(responsibilityType);
+                    $(".info-dialog-ok-button").on("click",
+                        () => {
+                            const typeDescriptionString = textareaEl.val();
+                            const responsibilityTypeSelect = responsibilityTypeSelectEl.val() as ResponsibleTypeEnum;
+                            if (!typeDescriptionString) {
+                                this.gui.showInfoDialog("Warning", "You haven't entered anything.");
                             } else {
-                                this.gui.showInfoDialog("Warning", "Please choose a responsibility type");
+                                    const responsibleTypeId = selectedPageEl.data("key-id") as number;
+                                    const renameAjax = this.util.renameResponsiblePersonType(responsibleTypeId,
+                                        responsibilityTypeSelect,
+                                        typeDescriptionString);
+                                    renameAjax.done(() => {
+                                        textareaEl.val("");
+                                        this.gui.showInfoDialog("Success", "Responsibility type has been changed");
+                                        $(".info-dialog-ok-button").off();
+                                        this.updateContentAfterChange();
+                                    });
+                                    renameAjax.fail(() => {
+                                        this.gui.showInfoDialog("Error", "Responsibility type has not been changed");
+                                        $(".info-dialog-ok-button").off();
+                                    });
                             }
-                        }
-                    });
+                        });
+                } else {
+                    this.gui.showInfoDialog("Warning", "Please choose a responsibility type");
+                }
             });
     }
 
@@ -132,11 +150,12 @@
         $(".crud-buttons-div").on("click",
             ".delete-key-table-entry",
             () => {
-                this.gui.showConfirmationDialog("Confirm", "Are you sure you want to delete this responsibility type?");
-                $(".confirmation-ok-button").on("click",
-                    () => {
-                        const selectedPageEl = $(".page-list").find(".page-list-item-selected");
-                        if (selectedPageEl.length) {
+                const selectedPageEl = $(".page-list").find(".page-list-item-selected");
+                if (selectedPageEl.length) {
+                    this.gui.showConfirmationDialog("Confirm",
+                        "Are you sure you want to delete this responsibility type?");
+                    $(".confirmation-ok-button").on("click",
+                        () => {
                             const id = selectedPageEl.data("key-id") as number;
                             const deleteAjax = this.util.deleteResponsiblePersonType(id);
                             deleteAjax.done(() => {
@@ -148,10 +167,10 @@
                                 $(".confirmation-ok-button").off();
                                 this.gui.showInfoDialog("Error", "Responsibility type deletion was not successful");
                             });
-                        } else {
-                            this.gui.showInfoDialog("Warning", "Please choose a responsibility type");
-                        }
-                    });
+                        });
+                } else {
+                    this.gui.showInfoDialog("Warning", "Please choose a responsibility type");
+                }
             });
     }
 }

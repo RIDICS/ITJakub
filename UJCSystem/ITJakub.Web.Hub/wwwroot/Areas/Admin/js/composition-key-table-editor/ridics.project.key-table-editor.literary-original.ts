@@ -84,29 +84,32 @@
         $(".crud-buttons-div").on("click",
             ".rename-key-table-entry",
             () => {
-                this.gui.showSingleInputDialog("Name input", "Please input literary original after rename:");
-                $(".info-dialog-ok-button").on("click",
-                    () => {
-                        const textareaEl = $(".input-dialog-textarea");
-                        const literaryOriginalName = textareaEl.val();
-                        const selectedPageEl = $(".page-list").children(".page-list-item-selected");
-                        if (selectedPageEl.length) {
-                            const literaryOriginalId = selectedPageEl.data("key-id") as number;
-                            const renameAjax = this.util.renameLiteraryOriginal(literaryOriginalId, literaryOriginalName);
-                            renameAjax.done(() => {
-                                textareaEl.val("");
-                                this.gui.showInfoDialog("Success", "Literary original has been renamed");
-                                $(".info-dialog-ok-button").off();
-                                this.updateContentAfterChange();
-                            });
-                            renameAjax.fail(() => {
-                                this.gui.showInfoDialog("Error", "Literary original has not been renamed");
-                                $(".info-dialog-ok-button").off();
-                            });
-                        } else {
-                            this.gui.showInfoDialog("Warning", "Please choose a literary original");
-                        }
-                    });
+                const selectedPageEl = $(".page-list").children(".page-list-item-selected");
+                if (selectedPageEl.length) {
+                    this.gui.showSingleInputDialog("Name input", "Please input literary original after rename:");
+                    const textareaEl = $(".input-dialog-textarea");
+                    const originalText = selectedPageEl.text();
+                    textareaEl.val(originalText);
+                    $(".info-dialog-ok-button").on("click",
+                        () => {
+                            const literaryOriginalName = textareaEl.val();
+                                const literaryOriginalId = selectedPageEl.data("key-id") as number;
+                                const renameAjax =
+                                    this.util.renameLiteraryOriginal(literaryOriginalId, literaryOriginalName);
+                                renameAjax.done(() => {
+                                    textareaEl.val("");
+                                    this.gui.showInfoDialog("Success", "Literary original has been renamed");
+                                    $(".info-dialog-ok-button").off();
+                                    this.updateContentAfterChange();
+                                });
+                                renameAjax.fail(() => {
+                                    this.gui.showInfoDialog("Error", "Literary original has not been renamed");
+                                    $(".info-dialog-ok-button").off();
+                                });
+                        });
+                } else {
+                    this.gui.showInfoDialog("Warning", "Please choose a literary original");
+                }
             });
     }
 
@@ -114,26 +117,27 @@
         $(".crud-buttons-div").on("click",
             ".delete-key-table-entry",
             () => {
-                this.gui.showConfirmationDialog("Confirmation", "Are you sure you want to delete this literary original?");
-                $(".confirmation-ok-button").on("click",
-                    () => {
-                        const selectedPageEl = $(".page-list").find(".page-list-item-selected");
-                        if (selectedPageEl.length) {
-                            const literaryOriginalId = selectedPageEl.data("key-id") as number;
-                            const deleteAjax = this.util.deleteLiteraryOriginal(literaryOriginalId);
-                            deleteAjax.done(() => {
-                                $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog("Success", "Literary original deletion was successful");
-                                this.updateContentAfterChange();
-                            });
-                            deleteAjax.fail(() => {
-                                $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog("Error", "Literary original deletion was not successful");
-                            });
-                        } else {
-                            this.gui.showInfoDialog("Warning", "Please choose a literary original");
-                        }
-                    });
+                const selectedPageEl = $(".page-list").find(".page-list-item-selected");
+                if (selectedPageEl.length) {
+                    this.gui.showConfirmationDialog("Confirmation",
+                        "Are you sure you want to delete this literary original?");
+                    $(".confirmation-ok-button").on("click",
+                        () => {
+                                const literaryOriginalId = selectedPageEl.data("key-id") as number;
+                                const deleteAjax = this.util.deleteLiteraryOriginal(literaryOriginalId);
+                                deleteAjax.done(() => {
+                                    $(".confirmation-ok-button").off();
+                                    this.gui.showInfoDialog("Success", "Literary original deletion was successful");
+                                    this.updateContentAfterChange();
+                                });
+                                deleteAjax.fail(() => {
+                                    $(".confirmation-ok-button").off();
+                                    this.gui.showInfoDialog("Error", "Literary original deletion was not successful");
+                                });
+                        });
+                } else {
+                    this.gui.showInfoDialog("Warning", "Please choose a literary original");
+                }
             });
     }
 }

@@ -84,13 +84,15 @@
         $(".crud-buttons-div").on("click",
             ".rename-key-table-entry",
             () => {
-                this.gui.showSingleInputDialog("Name input", "Please input new keyword name:");
+                const selectedPageEl = $(".page-list").children(".page-list-item-selected");
+                if (selectedPageEl.length) {
+                    this.gui.showSingleInputDialog("Name input", "Please input new keyword name:");
+                    const textareaEl = $(".input-dialog-textarea");
+                    const originalText = selectedPageEl.text();
+                    textareaEl.val(originalText);
                 $(".info-dialog-ok-button").on("click",
                     () => {
-                        const textareaEl = $(".input-dialog-textarea");
                         const keywordName = textareaEl.val();
-                        const selectedPageEl = $(".page-list").children(".page-list-item-selected");
-                        if (selectedPageEl.length) {
                             const keywordId = selectedPageEl.data("key-id") as number;
                             const renameAjax = this.util.renameKeyword(keywordId, keywordName);
                             renameAjax.done(() => {
@@ -103,10 +105,10 @@
                                 this.gui.showInfoDialog("Error", "Keyword has not been renamed");
                                 $(".info-dialog-ok-button").off();
                             });
-                        } else {
-                            this.gui.showInfoDialog("Warning", "Please choose a keyword");
-                        }
                     });
+                } else {
+                    this.gui.showInfoDialog("Warning", "Please choose a keyword");
+                }
             });
     }
 
@@ -114,11 +116,11 @@
         $(".crud-buttons-div").on("click",
             ".delete-key-table-entry",
             () => {
+                const selectedPageEl = $(".page-list").find(".page-list-item-selected");
+                if (selectedPageEl.length) {
                 this.gui.showConfirmationDialog("Confirm", "Are you sure you want to delete this keyword?");
                 $(".confirmation-ok-button").on("click",
                     () => {
-                        const selectedPageEl = $(".page-list").find(".page-list-item-selected");
-                        if (selectedPageEl.length) {
                             const id = selectedPageEl.data("key-id") as number;
                             const deleteAjax = this.util.deleteKeyword(id);
                             deleteAjax.done(() => {
@@ -130,10 +132,10 @@
                                 $(".confirmation-ok-button").off();
                                 this.gui.showInfoDialog("Error", "Keyword deletion was not successful");
                             });
-                        } else {
-                            this.gui.showInfoDialog("Warning", "Please choose a keyword");
-                        }
                     });
+                } else {
+                    this.gui.showInfoDialog("Warning", "Please choose a keyword");
+                }
             });
     }
 }

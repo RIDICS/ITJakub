@@ -58,8 +58,8 @@ class KeyTableEditorMain {
             const personEditor = new KeyTableResponsiblePerson();
             personEditor.init();
             break;
-        case KeyTableEditorType.ResponsiblePersonEditor:
-            const editorPersonEditor = new KeyTableResponsiblePersonEditor();
+        case KeyTableEditorType.ResponsiblePersonType:
+            const editorPersonEditor = new KeyTableResponsiblePersonType();
             editorPersonEditor.init();
             break;
         case KeyTableEditorType.Keyword:
