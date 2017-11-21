@@ -122,7 +122,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return GetSession().QueryOver<Term>()
                 .JoinAlias(x => x.PageResources, () => pageResourceAlias)
                 .JoinAlias(() => pageResourceAlias.Resource, () => resourceAlias)
-                .Where(() => resourceAlias.Id == resourcePageId)
+                .Where(() => resourceAlias.Id == resourcePageId && resourceAlias.LatestVersion.Id == pageResourceAlias.Id)
                 .OrderBy(x => x.Position).Asc
                 .List();
         }

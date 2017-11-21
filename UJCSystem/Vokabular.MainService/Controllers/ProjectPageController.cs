@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -26,31 +25,36 @@ namespace Vokabular.MainService.Controllers
         [HttpGet("page/{pageId}")]
         public PageContract GetPageResource(long pageId)
         {
-            throw new NotImplementedException();
+            var result = m_projectItemManager.GetPage(pageId);
+            return result;
         }
 
         [HttpPost("{projectId}/page")]
         public IActionResult CreatePageResource(long projectId, [FromBody] CreatePageContract pageData)
         {
-            throw new NotImplementedException();
+            var resourcePageId = m_projectItemManager.CreatePage(projectId, pageData);
+            return Ok(resourcePageId);
         }
 
         [HttpPut("page/{pageId}")]
         public IActionResult UpdatePageResource(long pageId, [FromBody] CreatePageContract pageData)
         {
-            throw new NotImplementedException();
+            m_projectItemManager.UpdatePage(pageId, pageData);
+            return Ok();
         }
 
         [HttpGet("page/{pageId}/term")]
         public List<TermContract> GetPageTermList(long pageId)
         {
-            throw new NotImplementedException();
+            var result = m_projectItemManager.GetPageTermList(pageId);
+            return result;
         }
 
         [HttpPut("page/{pageId}/term")]
-        public IActionResult SetTerms(long pageId, IntegerIdListContract termIdList)
+        public IActionResult SetTerms(long pageId, [FromBody] IntegerIdListContract termIdList)
         {
-            throw new NotImplementedException();
+            m_projectItemManager.SetPageTerms(pageId, termIdList.IdList);
+            return Ok();
         }
     }
 }
