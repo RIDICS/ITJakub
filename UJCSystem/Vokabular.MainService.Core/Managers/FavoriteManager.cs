@@ -10,6 +10,7 @@ using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts.Contracts.Favorite;
 using Vokabular.RestClient.Errors;
+using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataContracts.Types.Favorite;
 
@@ -17,6 +18,10 @@ namespace Vokabular.MainService.Core.Managers
 {
     public class FavoriteManager
     {
+        private const int DefaultStart = 0;
+        private const int DefaultCount = 20;
+        private const int MaxCount = 200;
+
         private readonly UserManager m_userManager;
         private readonly CatalogValueRepository m_catalogValueRepository;
         private readonly FavoritesRepository m_favoritesRepository;
@@ -30,6 +35,18 @@ namespace Vokabular.MainService.Core.Managers
             m_catalogValueRepository = catalogValueRepository;
             m_favoritesRepository = favoritesRepository;
             m_resourceRepository = resourceRepository;
+        }
+
+        private int GetStart(int? start)
+        {
+            return start ?? DefaultStart;
+        }
+
+        private int GetCount(int? count)
+        {
+            return count != null
+                ? Math.Min(count.Value, MaxCount)
+                : DefaultCount;
         }
 
         private User TryGetUser()
@@ -69,7 +86,7 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
-        public long CreatePageBookmark(CreateFavoritePageContract data)
+        public long CreateFavoritePage(CreateFavoritePageContract data)
         {
             var now = DateTime.UtcNow;
             var user = TryGetUser();
@@ -132,14 +149,15 @@ namespace Vokabular.MainService.Core.Managers
         //    m_favoritesRepository.DeleteHeadwordBookmark(bookXmlId, entryXmlId, userName);
         //}
 
-        public List<FavoriteBookGroupedContract> GetFavoriteLabeledBooks(IList<long> projectIds)
+        public List<FavoriteBookGroupedContract> GetFavoriteLabeledBooks(IList<long> projectIds, BookTypeEnumContract? bookType)
         {
             if (projectIds == null)
             {
                 projectIds = new List<long>();
             }
             var user = TryGetUser();
-            var dbResult = m_favoritesRepository.GetFavoriteLabeledBooks(projectIds, user.Id);
+            var bookTypeEnum = Mapper.Map<BookTypeEnum?>(bookType);
+            var dbResult = m_favoritesRepository.GetFavoriteLabeledBooks(projectIds, bookTypeEnum, user.Id);
 
             var resultList = new List<FavoriteBookGroupedContract>();
             foreach (var favoriteBookGroup in dbResult.GroupBy(x => x.Project.Id))
@@ -154,14 +172,10 @@ namespace Vokabular.MainService.Core.Managers
             return resultList;
         }
 
-        public List<FavoriteCategoryGroupedContract> GetFavoriteLabeledCategories(IList<int> categoryIds)
+        public List<FavoriteCategoryGroupedContract> GetFavoriteLabeledCategories()
         {
-            if (categoryIds == null)
-            {
-                categoryIds = new List<int>();
-            }
             var user = TryGetUser();
-            var dbResult = m_favoritesRepository.GetFavoriteLabeledCategories(categoryIds, user.Id);
+            var dbResult = m_favoritesRepository.GetFavoriteLabeledCategories(user.Id);
 
             var resultList = new List<FavoriteCategoryGroupedContract>();
             foreach (var favoriteCategoryGroup in dbResult.GroupBy(x => x.Category.Id))
@@ -199,13 +213,13 @@ namespace Vokabular.MainService.Core.Managers
             return label;
         }
 
-        public long CreateFavoriteBook(long projectId, string title, long labelId)
+        public long CreateFavoriteBook(CreateFavoriteProjectContract data)
         {
             var now = DateTime.UtcNow;
             var user = TryGetUser();
-            var project = m_favoritesRepository.Load<Project>(projectId);
+            var project = m_favoritesRepository.Load<Project>(data.ProjectId);
 
-            var label = GetFavoriteLabelAndCheckAuthorization(labelId, user.Id);
+            var label = GetFavoriteLabelAndCheckAuthorization(data.FavoriteLabelId, user.Id);
             label.LastUseTime = now;
 
             var favoriteItem = new FavoriteProject
@@ -213,20 +227,20 @@ namespace Vokabular.MainService.Core.Managers
                 Project = project,
                 CreateTime = now,
                 FavoriteLabel = label,
-                Title = title
+                Title = data.Title
             };
             
             var resultId = (long) m_favoritesRepository.Create(favoriteItem);
             return resultId;
         }
 
-        public long CreateFavoriteCategory(int categoryId, string title, long labelId)
+        public long CreateFavoriteCategory(CreateFavoriteCategoryContract data)
         {
             var now = DateTime.UtcNow;
             var user = TryGetUser();
-            var category = m_favoritesRepository.Load<Category>(categoryId);
+            var category = m_favoritesRepository.Load<Category>(data.CategoryId);
 
-            var label = GetFavoriteLabelAndCheckAuthorization(labelId, user.Id);
+            var label = GetFavoriteLabelAndCheckAuthorization(data.FavoriteLabelId, user.Id);
             
             label.LastUseTime = now;
 
@@ -235,34 +249,34 @@ namespace Vokabular.MainService.Core.Managers
                 Category = category,
                 CreateTime = now,
                 FavoriteLabel = label,
-                Title = title
+                Title = data.Title
             };
             
             var resultId = (long) m_favoritesRepository.Create(favoriteItem);
             return resultId;
         }
 
-        public long CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, long labelId)
+        public long CreateFavoriteQuery(CreateFavoriteQueryContract data)
         {
             var now = DateTime.UtcNow;
             var user = TryGetUser();
             
-            var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
-            var queryTypeEnum = Mapper.Map<QueryTypeEnum>(queryType);
+            var bookTypeEnum = Mapper.Map<BookTypeEnum>(data.BookType);
+            var queryTypeEnum = Mapper.Map<QueryTypeEnum>(data.QueryType);
 
             var bookTypeEntity = m_catalogValueRepository.GetBookType(bookTypeEnum);
-            var label = GetFavoriteLabelAndCheckAuthorization(labelId, user.Id);
+            var label = GetFavoriteLabelAndCheckAuthorization(data.FavoriteLabelId, user.Id);
 
             label.LastUseTime = now;
 
             var favoriteItem = new FavoriteQuery
             {
                 BookType = bookTypeEntity,
-                Query = query,
+                Query = data.Query,
                 QueryType = queryTypeEnum,
                 CreateTime = now,
                 FavoriteLabel = label,
-                Title = title,
+                Title = data.Title,
             };
             
             var resultId = (long) m_favoritesRepository.Create(favoriteItem);
@@ -280,44 +294,37 @@ namespace Vokabular.MainService.Core.Managers
             return Mapper.Map<List<FavoriteLabelContract>>(dbResult);
         }
 
-        public List<FavoriteBaseInfoContract> GetFavoriteItems(long? labelId, FavoriteTypeEnumContract? filterByType, string filterByTitle, FavoriteSortEnumContract sort, int start, int count)
+        public PagedResultList<FavoriteBaseInfoContract> GetFavoriteItems(int? start, int? count, long? labelId, FavoriteTypeEnumContract? filterByType, string filterByTitle, FavoriteSortEnumContract sort)
         {
             var user = TryGetUser();
+            var startValue = GetStart(start);
+            var countValue = GetCount(count);
             var typeFilter = Mapper.Map<FavoriteTypeEnum?>(filterByType);
 
-            var dbResult = m_favoritesRepository.GetFavoriteItems(labelId, typeFilter, filterByTitle, sort, start, count, user.Id);
+            var dbResult = m_favoritesRepository.GetFavoriteItems(labelId, typeFilter, filterByTitle, sort, startValue, countValue, user.Id);
 
-            return Mapper.Map<List<FavoriteBaseInfoContract>>(dbResult);
+            return new PagedResultList<FavoriteBaseInfoContract>
+            {
+                List = Mapper.Map<List<FavoriteBaseInfoContract>>(dbResult.List),
+                TotalCount = dbResult.Count
+            };
         }
 
-        public int GetFavoriteItemsCount(long? labelId, FavoriteTypeEnumContract? filterByType, string filterByTitle)
+        public PagedResultList<FavoriteQueryContract> GetFavoriteQueries(int? start, int? count, long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle)
         {
             var user = TryGetUser();
-            var typeFilter = Mapper.Map<FavoriteTypeEnum?>(filterByType);
-
-            var resultCount = m_favoritesRepository.GetFavoriteItemsCount(labelId, typeFilter, filterByTitle, user.Id);
-            return resultCount;
-        }
-
-        public List<FavoriteQueryContract> GetFavoriteQueries(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, int start, int count)
-        {
-            var user = TryGetUser();
+            var startValue = GetStart(start);
+            var countValue = GetCount(count);
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
             var queryTypeEnum = Mapper.Map<QueryTypeEnum>(queryType);
 
-            var dbResult = m_favoritesRepository.GetFavoriteQueries(labelId, bookTypeEnum, queryTypeEnum, filterByTitle, start, count, user.Id);
+            var dbResult = m_favoritesRepository.GetFavoriteQueries(labelId, bookTypeEnum, queryTypeEnum, filterByTitle, startValue, countValue, user.Id);
 
-            return Mapper.Map<List<FavoriteQueryContract>>(dbResult);
-        }
-
-        public int GetFavoriteQueriesCount(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle)
-        {
-            var user = TryGetUser();
-            var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
-            var queryTypeEnum = Mapper.Map<QueryTypeEnum>(queryType);
-
-            var resultCount = m_favoritesRepository.GetFavoriteQueriesCount(labelId, bookTypeEnum, queryTypeEnum, filterByTitle, user.Id);
-            return resultCount;
+            return new PagedResultList<FavoriteQueryContract>
+            {
+                List = Mapper.Map<List<FavoriteQueryContract>>(dbResult.List),
+                TotalCount = dbResult.Count,
+            };
         }
 
         public List<FavoritePageContract> GetPageBookmarks(long projectId)
@@ -378,14 +385,14 @@ namespace Vokabular.MainService.Core.Managers
                 .ToList();
         }
 
-        public long CreateFavoriteLabel(string name, string color, bool isDefault)
+        public long CreateFavoriteLabel(FavoriteLabelContractBase data, bool isDefault = false)
         {
             var now = DateTime.UtcNow;
             var user = TryGetUser();
             var favoriteLabel = new FavoriteLabel
             {
-                Name = name,
-                Color = color,
+                Name = data.Name,
+                Color = data.Color,
                 IsDefault = isDefault,
                 LastUseTime = now,
                 User = m_favoritesRepository.Load<User>(user.Id)
@@ -395,7 +402,7 @@ namespace Vokabular.MainService.Core.Managers
             return (long) id;
         }
 
-        public void UpdateFavoriteLabel(long labelId, string name, string color)
+        public void UpdateFavoriteLabel(long labelId, FavoriteLabelContractBase data)
         {
             var now = DateTime.UtcNow;
             var user = TryGetUser();
@@ -406,8 +413,8 @@ namespace Vokabular.MainService.Core.Managers
             if (favoriteLabel.IsDefault)
                 throw new HttpErrorCodeException("User can't modify default favorite label", HttpStatusCode.BadRequest);
 
-            favoriteLabel.Name = name;
-            favoriteLabel.Color = color;
+            favoriteLabel.Name = data.Name;
+            favoriteLabel.Color = data.Color;
             favoriteLabel.LastUseTime = now;
 
             m_favoritesRepository.Update(favoriteLabel);
@@ -426,14 +433,14 @@ namespace Vokabular.MainService.Core.Managers
             m_favoritesRepository.Delete(favoriteLabel);
         }
 
-        public void UpdateFavoriteItem(long id, string title)
+        public void UpdateFavoriteItem(long id, UpdateFavoriteContract data)
         {
             var user = TryGetUser();
             var favoriteItem = m_favoritesRepository.GetFavoriteItem(id);
 
             CheckItemOwnership(favoriteItem.FavoriteLabel.User.Id, user);
 
-            favoriteItem.Title = title;
+            favoriteItem.Title = data.Name;
             
             m_favoritesRepository.Update(favoriteItem);
         }

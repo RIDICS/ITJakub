@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts.Favorite;
+using Vokabular.MainService.Utils;
+using Vokabular.RestClient.Headers;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataContracts.Types.Favorite;
 
@@ -30,39 +31,47 @@ namespace Vokabular.MainService.Controllers
         [HttpPost("label")]
         public IActionResult CreateFavoriteLabel([FromBody] FavoriteLabelContractBase data)
         {
-            throw new NotImplementedException();
+            var resultId = m_favoriteManager.CreateFavoriteLabel(data);
+            return Ok(resultId);
         }
 
         [HttpPut("label")]
         public IActionResult UpdateFavoriteLabel(long favoriteLabelId, [FromBody] FavoriteLabelContractBase data)
         {
-            throw new NotImplementedException();
+            m_favoriteManager.UpdateFavoriteLabel(favoriteLabelId, data);
+            return Ok();
         }
 
         [HttpDelete("label")]
         public IActionResult DeleteFavoriteLabel(long favoriteLabelId)
         {
-            throw new NotImplementedException();
+            m_favoriteManager.DeleteFavoriteLabel(favoriteLabelId);
+            return Ok();
         }
 
         [HttpGet("")]
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, "int", "Total count")]
         public List<FavoriteBaseInfoContract> GetFavoriteItems([FromQuery] int? start,
             [FromQuery] int? count,
-            [FromQuery] long? labelId,
+            [FromQuery] long? filterByLabelId,
             [FromQuery] FavoriteTypeEnumContract? filterByType,
             [FromQuery] string filterByTitle,
             [FromQuery] FavoriteSortEnumContract? sort)
         {
-            SetTotalCountHeader(0);
+            var sortValue = sort ?? FavoriteSortEnumContract.TitleAsc;
+            var result = m_favoriteManager.GetFavoriteItems(start, count, filterByLabelId, filterByType, filterByTitle, sortValue);
 
-            throw new NotImplementedException();
+            SetTotalCountHeader(result.TotalCount);
+
+            return result.List;
         }
 
         [HttpGet("query")]
         [ProducesResponseType(typeof(List<FavoriteQueryContract>), StatusCodes.Status200OK)]
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, "int", "Total count")]
         public IActionResult GetFavoriteQueries([FromQuery] int? start,
             [FromQuery] int? count,
-            [FromQuery] long? labelId,
+            [FromQuery] long? filterByLabelId,
             [FromQuery] BookTypeEnumContract? bookType,
             [FromQuery] QueryTypeEnumContract? queryType,
             [FromQuery] string filterByTitle)
@@ -72,9 +81,11 @@ namespace Vokabular.MainService.Controllers
                 return BadRequest("Missing required parameters BookType and QueryType");
             }
 
-            SetTotalCountHeader(0);
+            var result = m_favoriteManager.GetFavoriteQueries(start, count, filterByLabelId, bookType.Value, queryType.Value, filterByTitle);
 
-            throw new NotImplementedException();
+            SetTotalCountHeader(result.TotalCount);
+
+            return Ok(result.List);
         }
 
         [HttpGet("page")]
@@ -86,29 +97,35 @@ namespace Vokabular.MainService.Controllers
                 return BadRequest("Missing required parameter ProjectId");
             }
 
-            //TODO possibly change URL to book/{projectId}/favorite-page
-
-            throw new NotImplementedException();
+            var result = m_favoriteManager.GetPageBookmarks(projectId.Value);
+            return Ok(result);
         }
 
         [HttpGet("{favoriteId}/detail")]
         public FavoriteFullInfoContract GetFavoriteItem(long favoriteId)
         {
-            throw new NotImplementedException();
+            var result = m_favoriteManager.GetFavoriteItem(favoriteId);
+            return result;
         }
 
         [HttpPut("{favoriteId}")]
         public void UpdateFavorite(long favoriteId, [FromBody] UpdateFavoriteContract data)
         {
-            throw new NotImplementedException();
+            m_favoriteManager.UpdateFavoriteItem(favoriteId, data);
         }
 
         [HttpDelete("{favoriteId}")]
         public void DeleteFavorite(long favoriteId)
         {
-            throw new NotImplementedException();
+            m_favoriteManager.DeleteFavoriteItem(favoriteId);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="projectIds">List of project ID (disjunction with BookType)</param>
+        /// <param name="bookType">BookType (disjunction with ProjectIds)</param>
+        /// <returns></returns>
         [HttpGet("book/grouped")]
         [ProducesResponseType(typeof(List<FavoriteBookGroupedContract>), StatusCodes.Status200OK)]
         public IActionResult GetFavoriteLabeledBooks([FromQuery] IList<long> projectIds, [FromQuery] BookTypeEnumContract? bookType)
@@ -121,16 +138,18 @@ namespace Vokabular.MainService.Controllers
             {
                 return BadRequest($"Max ProjectIds count is limited to {MaxProjectIdsCount}");
             }
-            
-            // TODO update UI for using BookType parameter
 
-            throw new NotImplementedException();
+            var result = m_favoriteManager.GetFavoriteLabeledBooks(projectIds, bookType);
+            return Ok(result);
+
+            // TODO update UI for using BookType parameter
         }
 
         [HttpGet("category/grouped")]
         public List<FavoriteCategoryGroupedContract> GetFavoriteLabeledCategories(/*[FromQuery] IList<int> categoryIds*/)
         {
-            throw new NotImplementedException();
+            var result = m_favoriteManager.GetFavoriteLabeledCategories();
+            return result;
         }
 
         [HttpGet("label/with-books-and-categories")]
@@ -142,33 +161,36 @@ namespace Vokabular.MainService.Controllers
                 return BadRequest("Missing required parameter BookType");
             }
 
-            throw new NotImplementedException();
+            var result = m_favoriteManager.GetFavoriteLabelsWithBooksAndCategories(bookType.Value);
+            return Ok(result);
         }
-
-        //TODO create methods for Favorite items
-
+        
         [HttpPost("book")]
         public long CreateFavoriteBook([FromBody] CreateFavoriteProjectContract data)
         {
-            throw new NotImplementedException();
+            var resultId = m_favoriteManager.CreateFavoriteBook(data);
+            return resultId;
         }
 
         [HttpPost("category")]
         public long CreateFavoriteCategory([FromBody] CreateFavoriteCategoryContract data)
         {
-            throw new NotImplementedException();
+            var resultId = m_favoriteManager.CreateFavoriteCategory(data);
+            return resultId;
         }
 
         [HttpPost("query")]
         public long CreateFavoriteQuery([FromBody] CreateFavoriteQueryContract data)
         {
-            throw new NotImplementedException();
+            var resultId = m_favoriteManager.CreateFavoriteQuery(data);
+            return resultId;
         }
 
         [HttpPost("page")]
-        public long CreatePageBookmark([FromBody] CreateFavoritePageContract data)
+        public long CreateFavoritePage([FromBody] CreateFavoritePageContract data)
         {
-            throw new NotImplementedException();
+            var resultId = m_favoriteManager.CreateFavoritePage(data);
+            return resultId;
         }
     }
 }
