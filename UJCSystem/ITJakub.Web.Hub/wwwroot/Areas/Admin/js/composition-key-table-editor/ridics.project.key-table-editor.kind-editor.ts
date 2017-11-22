@@ -14,6 +14,7 @@
         $(".create-key-table-entry-description").text("Create new literary kind");
         $(".rename-key-table-entry-description").text("Rename literary kind");
         $(".delete-key-table-entry-description").text("Delete literary kind");
+        this.unbindEventsDialog();
         this.util.getLitararyKindList().done((data: ILiteraryKindContract[]) => {
             this.literaryKindItemList = data;
             const itemsOnPage = this.numberOfItemsPerPage;

@@ -14,6 +14,7 @@
         $(".create-key-table-entry-description").text("Create new literary original");
         $(".rename-key-table-entry-description").text("Rename literary original");
         $(".delete-key-table-entry-description").text("Delete literary original");
+        this.unbindEventsDialog();
         this.util.getLiteraryOriginalList().done((data: ILiteraryOriginalContract[]) => {
             this.literaryOriginalItemList = data;
             const itemsOnPage = this.numberOfItemsPerPage;

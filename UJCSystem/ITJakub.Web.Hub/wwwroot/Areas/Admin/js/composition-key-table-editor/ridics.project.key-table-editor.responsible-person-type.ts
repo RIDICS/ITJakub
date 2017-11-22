@@ -14,6 +14,7 @@
         $(".create-key-table-entry-description").text("Create new responsible person type");
         $(".rename-key-table-entry-description").text("Change responsible person type");
         $(".delete-key-table-entry-description").text("Delete responsible person type");
+        this.unbindEventsDialog();
         this.util.getResponsiblePersonTypeList().done((data: IResponsibleType[]) => {
             this.responsibleTypeItemList = data;
             const itemsOnPage = this.numberOfItemsPerPage;

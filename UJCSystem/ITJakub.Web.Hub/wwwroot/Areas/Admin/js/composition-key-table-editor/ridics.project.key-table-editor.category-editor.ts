@@ -15,6 +15,7 @@
         $(".create-key-table-entry-description").text("Create new category");
         $(".rename-key-table-entry-description").text("Change category");
         $(".delete-key-table-entry-description").text("Delete category");
+        this.unbindEventsDialog();
         this.util.getCategoryList().done((data: ICategoryContract[]) => {
             this.categoryCreation();
             this.categoryItemList = this.generateListStructure(data);

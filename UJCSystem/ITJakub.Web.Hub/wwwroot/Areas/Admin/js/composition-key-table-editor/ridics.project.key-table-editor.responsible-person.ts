@@ -14,6 +14,7 @@
         $(".create-key-table-entry-description").text("Create new responsible person");
         $(".rename-key-table-entry-description").text("Rename responsible person");
         $(".delete-key-table-entry-description").text("Delete responsible person");
+        this.unbindEventsDialog();
         {
             const initialPage = 1;
             const initial = true;

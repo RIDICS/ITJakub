@@ -14,6 +14,7 @@
         $(".create-key-table-entry-description").text("Create new genre");
         $(".rename-key-table-entry-description").text("Rename genre");
         $(".delete-key-table-entry-description").text("Delete genre");
+        this.unbindEventsDialog();
         this.util.getLiteraryGenreList().done((data: IGenreResponseContract[]) => {
             this.genreItemList = data;
             const itemsOnPage = this.numberOfItemsPerPage;

@@ -14,6 +14,7 @@
         $(".create-key-table-entry-description").text("Create new keyword");
         $(".rename-key-table-entry-description").text("Rename keyword");
         $(".delete-key-table-entry-description").text("Delete keyword");
+        this.unbindEventsDialog();
         this.util.getKeywordList().done((data: IKeywordContract[]) => {
             this.keywordItemList = data;
             const itemsOnPage = this.numberOfItemsPerPage;
