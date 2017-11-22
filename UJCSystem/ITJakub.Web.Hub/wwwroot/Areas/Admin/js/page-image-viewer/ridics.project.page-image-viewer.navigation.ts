@@ -103,7 +103,11 @@
             this.gui.showInfoDialog("Warning", "You haven't entered anything. Please enter a page name.");
         } else {
             const namesStringArray: string[] = $.map(pages, (x) => { return x.name });
-            const index = this.getPageIdByPageName(inputFieldValue, namesStringArray);//TODO precise page names are needed. Implement partial page name search?
+            var index = this.getPageIdByPageName(inputFieldValue, namesStringArray);//TODO precise page names are needed. Implement partial page name search?
+            if (index === -1) {
+                const minusToDashInputValue = inputFieldValue.replace("-", "–");
+                index = this.getPageIdByPageName(minusToDashInputValue, namesStringArray);
+            }
             if (index === -1) {
                 this.gui.showInfoDialog("Warning", "No such page.");
             } else {
