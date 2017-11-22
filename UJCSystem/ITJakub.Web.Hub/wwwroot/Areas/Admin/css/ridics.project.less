@@ -490,16 +490,6 @@ table {
                 padding-right: 0 !important;
                 padding-left: 0 !important;
 
-                .page-list-item {
-                    .person-surname {
-                        margin-left: 8px;
-                    }
-
-                    .person-name {
-                        margin-left: 1px;
-                    }
-                }
-
                 .list-group {
                     list-style-type: none;
 
@@ -518,6 +508,16 @@ table {
                     }
 
                     .page-list-item {
+                        word-wrap: break-word;
+
+                        .person-surname {
+                            margin-left: 8px;
+                        }
+
+                        .person-name {
+                            margin-left: 1px;
+                        }
+
                         .active {
                             background-color: @key-table-list-active-item-color;
                         }
