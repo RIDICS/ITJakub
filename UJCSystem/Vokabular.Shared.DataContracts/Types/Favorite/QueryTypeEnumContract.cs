@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Vokabular.MainService.DataContracts.Contracts.Favorite.Type
+namespace Vokabular.Shared.DataContracts.Types.Favorite
 {
     [JsonConverter(typeof(StringEnumConverter))]
     public enum QueryTypeEnumContract

@@ -3,6 +3,7 @@ using NHibernate.SqlCommand;
 using NHibernate.Transform;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
@@ -85,6 +86,13 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .OrderBy(() => termAlias.Position).Asc
                 .TransformUsing(Transformers.DistinctRootEntity)
                 .List();
+        }
+
+        public virtual BookType GetBookType(BookTypeEnum bookTypeEnum)
+        {
+            return GetSession().QueryOver<BookType>()
+                .Where(x => x.Type == bookTypeEnum)
+                .SingleOrDefault();
         }
     }
 }

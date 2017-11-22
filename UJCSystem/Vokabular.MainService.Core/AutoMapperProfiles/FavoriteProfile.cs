@@ -2,7 +2,7 @@
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.MainService.DataContracts.Contracts.Favorite;
-using Vokabular.MainService.DataContracts.Contracts.Favorite.Type;
+using Vokabular.Shared.DataContracts.Types.Favorite;
 
 namespace Vokabular.MainService.Core.AutoMapperProfiles
 {

@@ -1,6 +1,6 @@
 ﻿using System;
-using Vokabular.MainService.DataContracts.Contracts.Favorite.Type;
 using Vokabular.Shared.DataContracts.Types;
+using Vokabular.Shared.DataContracts.Types.Favorite;
 
 namespace Vokabular.MainService.DataContracts.Contracts.Favorite
 {

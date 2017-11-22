@@ -2,25 +2,29 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts.Favorite;
-using Vokabular.MainService.DataContracts.Contracts.Favorite.Type;
 using Vokabular.Shared.DataContracts.Types;
+using Vokabular.Shared.DataContracts.Types.Favorite;
 
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
     public class FavoriteController : BaseController
     {
+        private readonly FavoriteManager m_favoriteManager;
         private const int MaxProjectIdsCount = 200;
 
-        public FavoriteController()
+        public FavoriteController(FavoriteManager favoriteManager)
         {
+            m_favoriteManager = favoriteManager;
         }
 
         [HttpGet("label")]
         public List<FavoriteLabelContract> GetFavoriteLabelList([FromQuery] int? count)
         {
-            throw new NotImplementedException();
+            var result = m_favoriteManager.GetFavoriteLabels(count);
+            return result;
         }
 
         [HttpPost("label")]
