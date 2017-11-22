@@ -1,6 +1,6 @@
 ﻿class KeyTableEditorBase {
     protected currentPage: number;
-    protected numberOfItemsPerPage = 12;
+    protected numberOfItemsPerPage = 14;
 
     protected initPagination(itemsCount: number, itemsOnPage: number, callback : Function) {
         const pagination = new Pagination({
