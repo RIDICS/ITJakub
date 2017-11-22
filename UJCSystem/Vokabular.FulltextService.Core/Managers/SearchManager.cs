@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Nest;
 using Vokabular.FulltextService.Core.Communication;
 using Vokabular.FulltextService.DataContracts.Contracts;
@@ -23,10 +24,12 @@ namespace Vokabular.FulltextService.Core.Managers
         private const int DefaultStart = 0;
         private const int DefaultSize = 10;
         private const string HighlightTag = "$";
-        
-        public SearchManager(CommunicationProvider communicationProvider) : base(communicationProvider){}
 
-   
+        public SearchManager(CommunicationProvider communicationProvider) : base(communicationProvider)
+        {
+        }
+
+
         public FulltextSearchResultContract SearchByCriteriaCount(SearchRequestContractBase searchRequest)
         {
             var filterQuery = GetFilterSearchQueryFromRequest(searchRequest);
@@ -46,17 +49,16 @@ namespace Vokabular.FulltextService.Core.Managers
             );
 
             if (!response.IsValid)
-            {
                 throw new Exception(response.DebugInformation);
-            }
 
-            return new FulltextSearchResultContract{Count = response.Count};
+            return new FulltextSearchResultContract {Count = response.Count};
         }
+
         public FulltextSearchResultContract SearchByCriteria(SearchRequestContractBase searchRequest)
         {
             var filterQuery = GetFilterSearchQueryFromRequest(searchRequest);
             var mustQuery = GetMustSearchQueryFromRequest(searchRequest);
-            
+
             var client = CommunicationProvider.GetElasticClient();
 
             var response = client.Search<SnapshotResourceContract>(s => s
@@ -78,16 +80,14 @@ namespace Vokabular.FulltextService.Core.Managers
                     )
                 )
             );
-            
+
             if (!response.IsValid)
-            {
                 throw new Exception(response.DebugInformation);
-            }
 
             var result = new FulltextSearchResultContract();
             result.ProjectIds = new List<long>();
             result.ProjectIds.AddRange(response.Documents.Select(d => d.ProjectId));
-            
+
             return result;
         }
 
@@ -122,27 +122,18 @@ namespace Vokabular.FulltextService.Core.Managers
                         .NumberOfFragments(FragmentNumber)
                         .FragmentSize(FragmentSize)
                         .Type(HighlighterType.Fvh)
-                        )
+                    )
                 )
-                
             );
 
             if (!response.IsValid)
-            {
                 throw new Exception(response.DebugInformation);
-            }
-            int counter = 0;
+            var counter = 0;
             foreach (var highlightField in response.Hits.Select(d => d.Highlights))
-            {
-                foreach (var value in highlightField.Values)
-                {
-                    foreach (var highlight in value.Highlights)
-                    {
-                        counter += GetNumberOfHighlitOccurences(highlight);
-                    }
-                }
-            }
-            return new FulltextSearchCorpusResultContract{ Count = counter };
+            foreach (var value in highlightField.Values)
+            foreach (var highlight in value.Highlights)
+                counter += GetNumberOfHighlitOccurences(highlight);
+            return new FulltextSearchCorpusResultContract {Count = counter};
         }
 
         public CorpusSearchResultDataList SearchCorpusByCriteria(CorpusSearchRequestContract searchRequest)
@@ -158,9 +149,10 @@ namespace Vokabular.FulltextService.Core.Managers
                 .Index(Index)
                 .Type(SnapshotType)
                 .Source(sf => sf
-                    .Includes(i => i
+                    .IncludeAll()
+                    .Excludes(i => i
                         .Fields(
-                            f => null
+                            f => f.SnapshotText
                         )
                     )
                 )
@@ -180,19 +172,19 @@ namespace Vokabular.FulltextService.Core.Managers
                         .Type(HighlighterType.Fvh)
                     )
                 )
-
             );
 
             if (!response.IsValid)
-            {
                 throw new Exception(response.DebugInformation);
-            }
-            int startCounter = 0;
-            var result = new CorpusSearchResultDataList {List = new List<CorpusSearchResultData>(),  SearchResultType = FulltextSearchResultType.ProjectExternalId};
-            
-            foreach (var highlightField in response.Hits.Select(d => d.Highlights))
+            var startCounter = 0;
+            var result = new CorpusSearchResultDataList
             {
-                foreach (var value in highlightField.Values)
+                List = new List<CorpusSearchResultData>(),
+                SearchResultType = FulltextSearchResultType.ProjectId
+            };
+            foreach (var hit in response.Hits)
+            {
+                foreach (var value in hit.Highlights.Values)
                 {
                     foreach (var highlight in value.Highlights)
                     {
@@ -204,7 +196,8 @@ namespace Vokabular.FulltextService.Core.Managers
                             continue;
                         }
 
-                        var resultData = GetCorpusSearchResultDataList(highlight, value.DocumentId);
+                        var resultData = GetCorpusSearchResultDataList(highlight, hit.Source.ProjectId);
+                        AddPageIdsToResult(resultData, hit.Source.Pages);
 
                         if (startCounter < start)
                         {
@@ -213,20 +206,37 @@ namespace Vokabular.FulltextService.Core.Managers
                         }
 
                         if (result.List.Count + resultData.Count > count)
-                        {
                             resultData = resultData.GetRange(0, count - result.List.Count);
-                        }
 
                         result.List.AddRange(resultData);
-                        
+
                         if (result.List.Count == count)
-                        {
                             return result;
-                        }
                     }
                 }
             }
             return result;
+        }
+
+        private void AddPageIdsToResult(List<CorpusSearchResultData> resultData, List<SnapshotPageResourceContract> sourcePages)
+        {
+            foreach (var searchResultData in resultData)
+            {
+                var snapshotIndex = Regex.Match(searchResultData.PageResultContext.ContextStructure.After, @"<([^>]*)>").Groups[1].Value;
+                if (string.IsNullOrWhiteSpace(snapshotIndex))
+                {
+                    snapshotIndex = Regex.Match(searchResultData.PageResultContext.ContextStructure.Before, @"<([^>]*)>").Groups[1].Value;
+                }
+                var pageId = GetPageIdFromIndex(Int32.Parse(snapshotIndex), sourcePages);
+                searchResultData.PageResultContext.TextExternalId = pageId;
+                searchResultData.PageResultContext.ContextStructure.After = Regex.Replace(searchResultData.PageResultContext.ContextStructure.After, @"<[^>]*>", "");
+                searchResultData.PageResultContext.ContextStructure.Before = Regex.Replace(searchResultData.PageResultContext.ContextStructure.Before, @"<[^>]*>", "");
+            }
+        }
+
+        private string GetPageIdFromIndex(int snapshotIndex, List<SnapshotPageResourceContract> sourcePages)
+        {
+            return sourcePages.Where(page => page.indexFrom <= snapshotIndex && snapshotIndex <= page.indexTo).Select(page => page.Id).FirstOrDefault();
         }
 
         public TextResourceContract SearchPageByCriteria(string textResourceId, SearchPageRequestContract searchRequest)
@@ -262,12 +272,9 @@ namespace Vokabular.FulltextService.Core.Managers
             );
 
             if (!response.IsValid)
-            {
                 throw new Exception(response.DebugInformation);
-            }
             foreach (var highlight in response.Hits.Select(d => d.Highlights))
             {
-
             }
             return null;
         }
@@ -287,110 +294,99 @@ namespace Vokabular.FulltextService.Core.Managers
             return GetQueriesFromRequest(searchRequest.ConditionConjunction, QueryType.HighlightQuery);
         }
 
-        private IEnumerable<QueryContainer> GetQueriesFromRequest(IList<SearchCriteriaContract> conditionConjunction, QueryType queryType)
+        private IEnumerable<QueryContainer> GetQueriesFromRequest(IList<SearchCriteriaContract> conditionConjunction,
+            QueryType queryType)
         {
             var queryList = new List<QueryContainer>();
             var minimumShouldMatch = queryType == QueryType.SearchQuery ? 1 : 0;
 
             foreach (var searchCriteria in conditionConjunction)
-            {
                 if (queryType == QueryType.FilterQuery && searchCriteria.Key == CriteriaKey.SnapshotResultRestriction)
                 {
-                    var snapshotIdFilterQuery = GetSnapshotIdFilterQueryFromCriteria(searchCriteria as SnapshotResultRestrictionCriteriaContract);
+                    var snapshotIdFilterQuery =
+                        GetSnapshotIdFilterQueryFromCriteria(
+                            searchCriteria as SnapshotResultRestrictionCriteriaContract);
 
                     if (snapshotIdFilterQuery != null)
-                    {
                         queryList.Add(snapshotIdFilterQuery);
-                    }
                 }
-                else if ((queryType == QueryType.SearchQuery || queryType == QueryType.HighlightQuery) && searchCriteria.Key == CriteriaKey.Fulltext)
+                else if ((queryType == QueryType.SearchQuery || queryType == QueryType.HighlightQuery) &&
+                         searchCriteria.Key == CriteriaKey.Fulltext)
                 {
                     var query = GetBoolShouldQuery(searchCriteria as WordListCriteriaContract, minimumShouldMatch);
                     if (query != null)
-                    {
                         queryList.Add(query);
-                    }
                 }
-            }
 
             return queryList;
         }
 
-        private BoolQuery GetBoolShouldQuery(WordListCriteriaContract worldListCriteriaContract, int minimumShouldMatch = 1)
+        private BoolQuery GetBoolShouldQuery(WordListCriteriaContract worldListCriteriaContract,
+            int minimumShouldMatch = 1)
         {
             if (worldListCriteriaContract == null)
-            {
                 return null;
-            }
 
             var shouldQueryList = new List<QueryContainer>();
 
             foreach (var disjunction in worldListCriteriaContract.Disjunctions)
-            {
                 shouldQueryList.Add(new RegexpQuery
                 {
                     Field = SnapshotTextField,
                     Value = GetRegexpFromDisjunction(disjunction),
-                    Flags = RegexpQueryFlags,
+                    Flags = RegexpQueryFlags
                 });
-            }
 
             return new BoolQuery
             {
                 Should = shouldQueryList,
-                MinimumShouldMatch = minimumShouldMatch,
+                MinimumShouldMatch = minimumShouldMatch
             };
         }
 
-        private QueryContainer GetSnapshotIdFilterQueryFromCriteria(SnapshotResultRestrictionCriteriaContract resultRestrictionCriteria)
+        private QueryContainer GetSnapshotIdFilterQueryFromCriteria(
+            SnapshotResultRestrictionCriteriaContract resultRestrictionCriteria)
         {
-            return resultRestrictionCriteria == null ? null :
-                new QueryContainer(new TermsQuery
+            return resultRestrictionCriteria == null
+                ? null
+                : new QueryContainer(new TermsQuery
                 {
                     Field = SnapshotIdField,
-                    Terms = resultRestrictionCriteria.SnapshotIds.Select(id => (object)id), //HACK long to object
+                    Terms = resultRestrictionCriteria.SnapshotIds.Select(id => (object) id) //HACK long to object
                 });
         }
 
         private string GetRegexpFromDisjunction(WordCriteriaContract disjunction)
         {
             if (!string.IsNullOrWhiteSpace(disjunction.ExactMatch))
-            {
                 return disjunction.ExactMatch;
-            }
 
             var regexpBuilder = new StringBuilder();
 
             if (!string.IsNullOrWhiteSpace(disjunction.StartsWith))
-            {
                 regexpBuilder.Append(disjunction.StartsWith.ToLower());
-            }
 
             regexpBuilder.Append(".*");
 
             foreach (var contain in disjunction.Contains)
-            {
                 if (!string.IsNullOrWhiteSpace(contain))
                 {
                     regexpBuilder.Append(contain.ToLower());
                     regexpBuilder.Append(".*");
                 }
-            }
 
             if (!string.IsNullOrWhiteSpace(disjunction.EndsWith))
-            {
                 regexpBuilder.Append(disjunction.EndsWith.ToLower());
-            }
 
             return regexpBuilder.ToString();
         }
-        
+
         private int GetNumberOfHighlitOccurences(string highlightedText)
         {
-            return highlightedText.Split(new[] { HighlightTag }, StringSplitOptions.None).Length / 2;
+            return highlightedText.Split(new[] {HighlightTag}, StringSplitOptions.None).Length / 2;
         }
 
-        private List<CorpusSearchResultData> GetCorpusSearchResultDataList(string highlightedText, string externalId)
+        private List<CorpusSearchResultData> GetCorpusSearchResultDataList(string highlightedText, long projectId)
         {
             var result = new List<CorpusSearchResultData>();
 
@@ -398,17 +394,16 @@ namespace Vokabular.FulltextService.Core.Managers
 
             do
             {
-                var corpusSearchResult = GetCorpusSearchResultData(highlightedText, externalId, index, out index);
+                var corpusSearchResult = GetCorpusSearchResultData(highlightedText, projectId, index, out index);
                 result.Add(corpusSearchResult);
 
                 index = highlightedText.IndexOf(HighlightTag, index + HighlightTag.Length, StringComparison.Ordinal);
-
             } while (index > 0);
 
             return result;
         }
 
-        private CorpusSearchResultData GetCorpusSearchResultData(string highlightedText, string externalId, int index, out int newIndex)
+        private CorpusSearchResultData GetCorpusSearchResultData(string highlightedText, long projectId, int index, out int newIndex)
         {
             newIndex = highlightedText.IndexOf(HighlightTag, index + 1, StringComparison.Ordinal);
 
@@ -419,7 +414,16 @@ namespace Vokabular.FulltextService.Core.Managers
             before = before.Replace(HighlightTag, "");
             after = after.Replace(HighlightTag, "");
 
-            return new CorpusSearchResultData { ProjectExternalId = externalId, PageResultContext = new CorpusSearchPageResultData { ContextStructure = new KwicStructure { After = after, Before = before, Match = match } } };
+            return new CorpusSearchResultData
+            {
+                ProjectId = projectId,
+                PageResultContext = new CorpusSearchPageResultData
+                {
+                    ContextStructure = new KwicStructure {After = after, Before = before, Match = match},
+                    
+
+                }
+            };
         }
     }
 
@@ -427,6 +431,6 @@ namespace Vokabular.FulltextService.Core.Managers
     {
         FilterQuery,
         SearchQuery,
-        HighlightQuery,
+        HighlightQuery
     }
 }

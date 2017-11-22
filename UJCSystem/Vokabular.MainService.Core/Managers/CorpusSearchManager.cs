@@ -7,6 +7,7 @@ using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
 using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.Shared.DataContracts.Search.Corpus;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -36,7 +37,32 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<CorpusSearchResultContract> GetCorpusSearchResultByStandardIds(List<CorpusSearchResultData> list)
         {
-            throw new NotImplementedException();
+            var projectIds = list.Select(x => x.ProjectId).Distinct().ToList();
+            var dbProjects = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByProjectIds(projectIds));
+            var bookDictionary = dbProjects.ToDictionary(x => x.Resource.Project.Id);
+
+            var orderedResultList = new List<CorpusSearchResultContract>();
+            foreach (var corpusResultData in list)
+            {
+                var projectMetadata = bookDictionary[corpusResultData.ProjectId];
+                
+                var corpusItemContract = new CorpusSearchResultContract
+                {
+                    PageResultContext = new PageWithContextContract{Name = corpusResultData.PageResultContext.TextExternalId , ContextStructure = new KwicStructure{Before = corpusResultData.PageResultContext.ContextStructure.Before, Match = corpusResultData.PageResultContext.ContextStructure.Match, After = corpusResultData.PageResultContext.ContextStructure.After} },
+                    Author = projectMetadata.AuthorsLabel,
+                    BookId = projectMetadata.Resource.Project.Id,
+                    OriginDate = projectMetadata.OriginDate,
+                    RelicAbbreviation = projectMetadata.RelicAbbreviation,
+                    SourceAbbreviation = projectMetadata.SourceAbbreviation,
+                    Title = projectMetadata.Title,
+                    Notes = corpusResultData.Notes,
+                    BibleVerseResultContext = corpusResultData.BibleVerseResultContext,
+                    VerseResultContext = corpusResultData.VerseResultContext,
+                };
+                orderedResultList.Add(corpusItemContract);
+            }
+
+            return orderedResultList;
         }
 
         public List<CorpusSearchResultContract> GetCorpusSearchResultByExternalIds(List<CorpusSearchResultData> list)
