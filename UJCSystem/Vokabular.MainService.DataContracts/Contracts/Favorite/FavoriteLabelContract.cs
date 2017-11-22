@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Vokabular.MainService.DataContracts.Contracts.Favorite
 {
@@ -16,5 +17,12 @@ namespace Vokabular.MainService.DataContracts.Contracts.Favorite
         public DateTime? LastUseTime { get; set; }
 
         public bool IsDefault { get; set; }
+    }
+
+    public class FavoriteLabelWithBooksAndCategories : FavoriteLabelContract
+    {
+        public List<long> ProjectIdList { get; set; }
+
+        public List<int> CategoryIdList { get; set; }
     }
 }

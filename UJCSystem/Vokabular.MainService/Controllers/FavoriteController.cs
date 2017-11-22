@@ -11,6 +11,8 @@ namespace Vokabular.MainService.Controllers
     [Route("api/[controller]")]
     public class FavoriteController : BaseController
     {
+        private const int MaxProjectIdsCount = 200;
+
         public FavoriteController()
         {
         }
@@ -40,7 +42,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("")]
-        List<FavoriteBaseInfoContract> GetFavoriteItems([FromQuery] int? start,
+        public List<FavoriteBaseInfoContract> GetFavoriteItems([FromQuery] int? start,
             [FromQuery] int? count,
             [FromQuery] long? labelId,
             [FromQuery] FavoriteTypeEnumContract? filterByType,
@@ -54,7 +56,7 @@ namespace Vokabular.MainService.Controllers
 
         [HttpGet("query")]
         [ProducesResponseType(typeof(List<FavoriteQueryContract>), StatusCodes.Status200OK)]
-        IActionResult GetFavoriteQueries([FromQuery] int? start,
+        public IActionResult GetFavoriteQueries([FromQuery] int? start,
             [FromQuery] int? count,
             [FromQuery] long? labelId,
             [FromQuery] BookTypeEnumContract? bookType,
@@ -86,7 +88,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("{favoriteId}/detail")]
-        FavoriteFullInfoContract GetFavoriteItem(long favoriteId)
+        public FavoriteFullInfoContract GetFavoriteItem(long favoriteId)
         {
             throw new NotImplementedException();
         }
@@ -104,26 +106,65 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("book/grouped")]
-        List<FavoriteBookGroupedContract> GetFavoriteLabeledBooks([FromQuery] IList<long> projectIds)
+        [ProducesResponseType(typeof(List<FavoriteBookGroupedContract>), StatusCodes.Status200OK)]
+        public IActionResult GetFavoriteLabeledBooks([FromQuery] IList<long> projectIds, [FromQuery] BookTypeEnumContract? bookType)
         {
-            // TODO Consider getting books and categories in one request (ProjectId WHERE IN database limit problem)
+            if (bookType == null && projectIds.Count == 0)
+            {
+                return BadRequest("Missing required parameter BookType or ProjectIds");
+            }
+            if (projectIds.Count > MaxProjectIdsCount)
+            {
+                return BadRequest($"Max ProjectIds count is limited to {MaxProjectIdsCount}");
+            }
+            
+            // TODO update UI for using BookType parameter
+
             throw new NotImplementedException();
         }
 
         [HttpGet("category/grouped")]
-        List<FavoriteCategoryGroupedContract> GetFavoriteLabeledCategories([FromQuery] IList<int> categoryIds)
+        public List<FavoriteCategoryGroupedContract> GetFavoriteLabeledCategories(/*[FromQuery] IList<int> categoryIds*/)
         {
             throw new NotImplementedException();
         }
 
-        [HttpGet("label/fetch-books-and-categories")]
-        public void GetFavoriteLabelsWithBooksAndCategories([FromQuery] BookTypeEnumContract? bookType)
+        [HttpGet("label/with-books-and-categories")]
+        [ProducesResponseType(typeof(List<FavoriteLabelWithBooksAndCategories>), StatusCodes.Status200OK)]
+        public IActionResult GetFavoriteLabelsWithBooksAndCategories([FromQuery] BookTypeEnumContract? bookType)
         {
-            // TODO is this method required? is correct?
-            // TODO specify response type
+            if (bookType == null)
+            {
+                return BadRequest("Missing required parameter BookType");
+            }
+
             throw new NotImplementedException();
         }
 
         //TODO create methods for Favorite items
+
+        [HttpPost("book")]
+        public long CreateFavoriteBook([FromBody] CreateFavoriteProjectContract data)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost("category")]
+        public long CreateFavoriteCategory([FromBody] CreateFavoriteCategoryContract data)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost("query")]
+        public long CreateFavoriteQuery([FromBody] CreateFavoriteQueryContract data)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost("page")]
+        public long CreatePageBookmark([FromBody] CreateFavoritePageContract data)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
