@@ -102,7 +102,7 @@
             const childrenCategories = mainCategoryEl.children(".child-category");
             if (childrenCategories.length) {
                 childrenCategories.hide();
-                mainCategoryEl.append(`<span class="collapse-category-button text-center" title="Toggle collapsed category"><i class="fa fa-arrows-v" aria-hidden="true"></i></span>`);
+                mainCategoryEl.append(`<span class="collapse-category-button" title="Toggle collapsed category"><i class="fa fa-arrows-v fa-pull-right" aria-hidden="true"></i></span>`);
                 this.trackCollapseCategoryButton(childrenCategories);
             }
         });
