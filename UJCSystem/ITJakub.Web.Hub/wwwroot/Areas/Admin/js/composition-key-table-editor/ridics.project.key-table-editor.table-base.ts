@@ -1,6 +1,6 @@
 ﻿class KeyTableEditorBase {
     protected currentPage: number;
-    protected numberOfItemsPerPage = 25;
+    protected numberOfItemsPerPage = 12;
 
     protected initPagination(itemsCount: number, itemsOnPage: number, callback : Function) {
         const pagination = new Pagination({
@@ -13,7 +13,7 @@
         pagination.make(itemsCount, itemsOnPage);
     }
 
-    protected makeSelectable(jEl: JQuery) {//TODO investigate parent category selection
+    protected makeSelectable(jEl: JQuery) {
         jEl.children(".list-group").on("click", ".page-list-item", (event) => {
             event.stopPropagation();
             var targetEl = $(event.target);
