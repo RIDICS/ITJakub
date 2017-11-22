@@ -42,60 +42,42 @@ namespace Vokabular.DataEntities.Database.Entities
 
     public class FavoritePage : FavoriteBase
     {
-        public override FavoriteTypeEnum FavoriteTypeEnum
-        {
-            get { return FavoriteTypeEnum.Page; }
-        }
+        public override FavoriteTypeEnum FavoriteTypeEnum => FavoriteTypeEnum.Page;
 
-        public virtual Resource PageResource { get; set; }
+        public virtual Resource ResourcePage { get; set; }
     }
 
     public class FavoriteCategory : FavoriteBase
     {
-        public override FavoriteTypeEnum FavoriteTypeEnum
-        {
-            get { return FavoriteTypeEnum.Category; }
-        }
+        public override FavoriteTypeEnum FavoriteTypeEnum => FavoriteTypeEnum.Category;
 
         public virtual Category Category { get; set; }
     }
 
     public class FavoriteProject : FavoriteBase
     {
-        public override FavoriteTypeEnum FavoriteTypeEnum
-        {
-            get { return FavoriteTypeEnum.Project; }
-        }
+        public override FavoriteTypeEnum FavoriteTypeEnum => FavoriteTypeEnum.Project;
 
         public virtual Project Project { get; set; }
     }
 
     public class FavoriteSnapshot : FavoriteBase
     {
-        public override FavoriteTypeEnum FavoriteTypeEnum
-        {
-            get { return FavoriteTypeEnum.Snapshot; }
-        }
+        public override FavoriteTypeEnum FavoriteTypeEnum => FavoriteTypeEnum.Snapshot;
 
         //TODO public virtual Snapshot Snapshot { get; set; }
     }
 
     public class FavoriteHeadword : FavoriteBase
     {
-        public override FavoriteTypeEnum FavoriteTypeEnum
-        {
-            get { return FavoriteTypeEnum.Headword; }
-        }
+        public override FavoriteTypeEnum FavoriteTypeEnum => FavoriteTypeEnum.Headword;
 
         public virtual Resource DefaultHeadwordResource { get; set; }
     }
 
     public class FavoriteQuery : FavoriteBase
     {
-        public override FavoriteTypeEnum FavoriteTypeEnum
-        {
-            get { return FavoriteTypeEnum.Query; }
-        }
+        public override FavoriteTypeEnum FavoriteTypeEnum => FavoriteTypeEnum.Query;
 
         public virtual BookType BookType { get; set; }
 

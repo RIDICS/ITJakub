@@ -31,7 +31,8 @@
       name="FavoritePage"
       discriminator-value="Page">
       
-      <many-to-one name="PageResource"
+      <many-to-one name="ResourcePage"
+                   column="Resource"
                    class="Resource"
                    lazy="proxy" />
 
