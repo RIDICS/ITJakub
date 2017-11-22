@@ -34,7 +34,7 @@ class KeyTableEditorMain {
             (event) => {
                 const targetEl = $(event.target);
                 const target: KeyTableEditorType = targetEl.data("editor-type");
-                targetEl.toggleClass("active");
+                targetEl.addClass("active");
                 targetEl.siblings(".key-table-editor-selection").removeClass("active");
                 this.initEditor(target);
             });
