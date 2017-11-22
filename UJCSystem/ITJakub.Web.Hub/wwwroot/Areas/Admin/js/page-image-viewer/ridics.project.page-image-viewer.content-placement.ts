@@ -9,7 +9,10 @@
         const imgUrl = this.util.getImageUrlOnPage(pageId);
         const pageImageEl = $(".page-image");
         const imageString = `<img src="${imgUrl}">`;
-        pageImageEl.empty();
-        pageImageEl.append(imageString);
+        pageImageEl.fadeOut(150, () => {
+            pageImageEl.empty(); 
+            pageImageEl.append(imageString);
+        });
+        pageImageEl.fadeIn(150);
     }
 }
