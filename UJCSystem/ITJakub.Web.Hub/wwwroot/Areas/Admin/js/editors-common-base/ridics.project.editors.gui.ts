@@ -18,17 +18,6 @@
         dialogEl.modal("show");
     }
 
-    showDoubleInputDialog(title: string, primaryMessage: string, secondaryMessage: string) {
-        const dialogEl = $(".double-input-modal-dialog");
-        const titleEl = dialogEl.find(".double-input-dialog-title");
-        const primaryMessageEl = dialogEl.find(".primary-input-dialog-message");
-        const secondaryMessageEl = dialogEl.find(".secondary-input-dialog-message");
-        titleEl.text(title);
-        primaryMessageEl.text(primaryMessage);
-        secondaryMessageEl.text(secondaryMessage);
-        dialogEl.modal("show");
-    }
-
     showAuthorInputDialog(title: string, primaryMessage: string, secondaryMessage: string) {
         const dialogEl = $(".author-input-modal-dialog");
         const titleEl = dialogEl.find(".author-input-dialog-title");
@@ -57,6 +46,17 @@
         const messageEl = dialogEl.find(".confirmation-dialog-message");
         titleEl.text(title);
         messageEl.text(message);
+        dialogEl.modal("show");
+    }
+
+    showCategoryInputDialog(title: string, primaryMessage: string, secondaryMessage: string) {
+        const dialogEl = $(".category-change-input-modal-dialog");
+        const titleEl = dialogEl.find(".double-input-dialog-title");
+        const primaryMessageEl = dialogEl.find(".primary-input-dialog-message");
+        const secondaryMessageEl = dialogEl.find(".secondary-input-dialog-message");
+        titleEl.text(title);
+        primaryMessageEl.text(primaryMessage);
+        secondaryMessageEl.text(secondaryMessage);
         dialogEl.modal("show");
     }
 }
