@@ -11,9 +11,9 @@
 
     init() {
         $("#project-layout-content").find("*").off();
-        $(".create-key-table-entry").text("Create new literary original");
-        $(".rename-key-table-entry").text("Rename literary original");
-        $(".delete-key-table-entry").text("Delete literary original");
+        $(".create-key-table-entry-description").text("Create new literary original");
+        $(".rename-key-table-entry-description").text("Rename literary original");
+        $(".delete-key-table-entry-description").text("Delete literary original");
         this.util.getLiteraryOriginalList().done((data: ILiteraryOriginalContract[]) => {
             this.literaryOriginalItemList = data;
             const itemsOnPage = this.numberOfItemsPerPage;

@@ -11,9 +11,9 @@
 
     init() {
         $("#project-layout-content").find("*").off();
-        $(".create-key-table-entry").text("Create new genre");
-        $(".rename-key-table-entry").text("Rename genre");
-        $(".delete-key-table-entry").text("Delete genre");
+        $(".create-key-table-entry-description").text("Create new genre");
+        $(".rename-key-table-entry-description").text("Rename genre");
+        $(".delete-key-table-entry-description").text("Delete genre");
         this.util.getLiteraryGenreList().done((data: IGenreResponseContract[]) => {
             this.genreItemList = data;
             const itemsOnPage = this.numberOfItemsPerPage;

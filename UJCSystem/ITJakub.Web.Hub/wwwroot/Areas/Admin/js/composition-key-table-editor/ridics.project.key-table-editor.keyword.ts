@@ -11,9 +11,9 @@
 
     init() {
         $("#project-layout-content").find("*").off();
-        $(".create-key-table-entry").text("Create new keyword");
-        $(".rename-key-table-entry").text("Rename keyword");
-        $(".delete-key-table-entry").text("Delete keyword");
+        $(".create-key-table-entry-description").text("Create new keyword");
+        $(".rename-key-table-entry-description").text("Rename keyword");
+        $(".delete-key-table-entry-description").text("Delete keyword");
         this.util.getKeywordList().done((data: IKeywordContract[]) => {
             this.keywordItemList = data;
             const itemsOnPage = this.numberOfItemsPerPage;

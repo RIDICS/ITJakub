@@ -11,9 +11,9 @@
 
     init() {
         $("#project-layout-content").find("*").off();
-        $(".create-key-table-entry").text("Create new responsible person type");
-        $(".rename-key-table-entry").text("Change responsible person type");
-        $(".delete-key-table-entry").text("Delete responsible person type");
+        $(".create-key-table-entry-description").text("Create new responsible person type");
+        $(".rename-key-table-entry-description").text("Change responsible person type");
+        $(".delete-key-table-entry-description").text("Delete responsible person type");
         this.util.getResponsiblePersonTypeList().done((data: IResponsibleType[]) => {
             this.responsibleTypeItemList = data;
             const itemsOnPage = this.numberOfItemsPerPage;

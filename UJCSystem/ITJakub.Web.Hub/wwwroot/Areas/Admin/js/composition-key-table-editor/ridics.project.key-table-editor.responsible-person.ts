@@ -11,9 +11,9 @@
 
     init() {
         $("#project-layout-content").find("*").off();
-        $(".create-key-table-entry").text("Create new responsible person");
-        $(".rename-key-table-entry").text("Rename responsible person");
-        $(".delete-key-table-entry").text("Delete responsible person");
+        $(".create-key-table-entry-description").text("Create new responsible person");
+        $(".rename-key-table-entry-description").text("Rename responsible person");
+        $(".delete-key-table-entry-description").text("Delete responsible person");
         {
             const initialPage = 1;
             const initial = true;

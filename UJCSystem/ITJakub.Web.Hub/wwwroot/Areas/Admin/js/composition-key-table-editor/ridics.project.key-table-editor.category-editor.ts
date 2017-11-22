@@ -11,9 +11,9 @@
 
     init() {
         $("#project-layout-content").find("*").off();
-        $(".create-key-table-entry").text("Create new category");
-        $(".rename-key-table-entry").text("Rename category");
-        $(".delete-key-table-entry").text("Delete category");
+        $(".create-key-table-entry-description").text("Create new category");
+        $(".rename-key-table-entry-description").text("Rename category");
+        $(".delete-key-table-entry-description").text("Delete category");
         this.util.getCategoryList().done((data: ICategoryContract[]) => {
             this.categoryCreation();
             this.categoryItemList = this.generateListStructure(data);

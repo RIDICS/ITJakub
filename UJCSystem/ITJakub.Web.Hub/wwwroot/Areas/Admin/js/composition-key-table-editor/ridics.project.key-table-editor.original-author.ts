@@ -10,9 +10,9 @@
 
     init() {
         $("#project-layout-content").find("*").off();
-        $(".create-key-table-entry").text("Create new original author");
-        $(".rename-key-table-entry").text("Rename original author");
-        $(".delete-key-table-entry").text("Delete original author");
+        $(".create-key-table-entry-description").text("Create new original author");
+        $(".rename-key-table-entry-description").text("Rename original author");
+        $(".delete-key-table-entry-description").text("Delete original author");
         {
             const initialPage = 1;
             const initial = true;
