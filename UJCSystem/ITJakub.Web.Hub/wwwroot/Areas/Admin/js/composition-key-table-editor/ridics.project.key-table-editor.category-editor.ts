@@ -137,7 +137,7 @@
                                     this.gui.showInfoDialog("Info", "Please choose a category");
                                     return;
                                 }
-                                parentCategoryIdNumber = selectedPageEl.data("category-id") as number;//TODO check when page is not selected
+                                parentCategoryIdNumber = selectedPageEl.data("category-id") as number;
                             }
                             const newCategoryAjax = this.util.createNewCategory(categoryString, parentCategoryIdNumber);
                             newCategoryAjax.done(() => {
