@@ -612,8 +612,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = GetPagedList<ResponsiblePersonContract>(UrlQueryBuilder.Create("responsibleperson")
-                    .AddParameter("start", start.ToString()).AddParameter("count", count.ToString()).ToQuery());
+                var result = GetPagedList<ResponsiblePersonContract>($"responsibleperson/?start={start}?count={count}");
                 return result;
             }
             catch (HttpRequestException e)
@@ -798,8 +797,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = GetPagedList<OriginalAuthorContract>(UrlQueryBuilder.Create("author")
-                    .AddParameter("start", start.ToString()).AddParameter("count", count.ToString()).ToQuery());
+                var result = GetPagedList<OriginalAuthorContract>($"author/?start={start}?count={count}");
                 return result;
             }
             catch (HttpRequestException e)
