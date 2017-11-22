@@ -115,10 +115,12 @@
         return result;
     }
 
-    loadEditionNote(projectId: number): JQueryXHR {
+    loadEditionNote(projectId: number): JQueryXHR {//TODO
+        const format: TextFormatEnumContract = TextFormatEnumContract.Raw;
         const ajax = $.get(`${this.serverPath}Admin/ContentEditor/GetEditionNote`,
             {
                 projectId: projectId,
+                format: format
             });
         return ajax;
     }

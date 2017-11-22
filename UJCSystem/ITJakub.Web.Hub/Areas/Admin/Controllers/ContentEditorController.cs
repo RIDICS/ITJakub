@@ -162,12 +162,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetEditionNote(long projectId)
+        public IActionResult GetEditionNote(long projectId, TextFormatEnumContract format)
         {
             using (var client = GetRestClient())
             {
-                //var result = client.
-                var result = "Example text of a note";//TODO add logic
+                var result = client.GetEditionNote(projectId, format);
                 return Json(result);
             }
         }
