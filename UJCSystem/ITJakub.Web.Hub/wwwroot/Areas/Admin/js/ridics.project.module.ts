@@ -159,13 +159,17 @@ class ProjectImageViewerModule {
 
     init() {
         const url = getBaseUrl() + "Admin/Project/GetImageViewer";
-        $("#project-layout-content").empty();
-        $("#project-layout-content").load(url,
+        const loadingSpinner = $(`<div class="loading"></div>`);
+        const projectLayoutEl = $("#project-layout-content");
+        projectLayoutEl.empty();
+        projectLayoutEl.append(loadingSpinner);
+        projectLayoutEl.load(url,
             (response, status, xhr) => {
                 if (status === "error") {
                     const error = new AlertComponentBuilder(AlertType.Error).addContent("Image viewer loading error");
                     $("#project-layout-content").empty().append(error.buildElement());
                 } else {
+                    loadingSpinner.hide();
                     $("#project-resource-images").off();
                     const imageViewer = new ImageViewerMain();
                     imageViewer.init(this.projectId);
@@ -183,13 +187,17 @@ class ProjectTextPreviewModule {
 
     init() {
         const url = getBaseUrl() + "Admin/Project/GetTextPreview";
-        $("#project-layout-content").empty();
-        $("#project-layout-content").load(url,
+        const projectLayoutEl = $("#project-layout-content");
+        const loadingSpinner = $(`<div class="loading"></div>`);
+        projectLayoutEl.empty();
+        projectLayoutEl.append(loadingSpinner);
+        projectLayoutEl.load(url,
             (response, status, xhr) => {
                 if (status === "error") {
                     const error = new AlertComponentBuilder(AlertType.Error).addContent("Text preview loading error");
                     $("#project-layout-content").empty().append(error.buildElement());
                 } else {
+                    loadingSpinner.hide();
                     $("#project-resource-preview").off();
                     const main = new TextEditorMain();
                     main.init(this.projectId);
