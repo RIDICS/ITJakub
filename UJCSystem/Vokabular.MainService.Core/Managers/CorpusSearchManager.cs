@@ -45,10 +45,15 @@ namespace Vokabular.MainService.Core.Managers
             foreach (var corpusResultData in list)
             {
                 var projectMetadata = bookDictionary[corpusResultData.ProjectId];
-                
+
+                var pageResource = m_bookRepository.InvokeUnitOfWork(repository =>
+                {
+                    return m_bookRepository.GetPagesByTextExternalId(new[] { corpusResultData.PageResultContext.TextExternalId }, corpusResultData.ProjectId).FirstOrDefault();
+                });
+
                 var corpusItemContract = new CorpusSearchResultContract
                 {
-                    PageResultContext = new PageWithContextContract{Name = corpusResultData.PageResultContext.TextExternalId , ContextStructure = new KwicStructure{Before = corpusResultData.PageResultContext.ContextStructure.Before, Match = corpusResultData.PageResultContext.ContextStructure.Match, After = corpusResultData.PageResultContext.ContextStructure.After} },
+                    PageResultContext = new PageWithContextContract{Name = pageResource.Name, Id = pageResource.Id, ContextStructure = new KwicStructure{Before = corpusResultData.PageResultContext.ContextStructure.Before, Match = corpusResultData.PageResultContext.ContextStructure.Match, After = corpusResultData.PageResultContext.ContextStructure.After} },
                     Author = projectMetadata.AuthorsLabel,
                     BookId = projectMetadata.Resource.Project.Id,
                     OriginDate = projectMetadata.OriginDate,
