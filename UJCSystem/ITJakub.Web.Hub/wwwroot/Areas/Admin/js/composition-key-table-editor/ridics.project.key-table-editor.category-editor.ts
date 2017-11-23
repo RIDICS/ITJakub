@@ -38,10 +38,11 @@
 
         this.util.getCategoryList().done((data: ICategoryContract[]) => {
             this.categoryItemList = this.generateListStructure(data);
+            const numberOfParentCategories = this.categoryItemList.children(".page-list-item").length;
             this.categoryItemListArray = data;
             this.loadPage(this.currentPage);
             const itemsOnPage = this.numberOfItemsPerPage;
-            this.initPagination(data.length, itemsOnPage, this.loadPage.bind(this));
+            this.initPagination(numberOfParentCategories, itemsOnPage, this.loadPage.bind(this));
         }).fail(() => {
             this.gui.showInfoDialog("Warning", "Connection to server lost.\nAutomatic page reload is not possible.");
         });
