@@ -72,9 +72,9 @@
       name="FavoriteHeadword"
       discriminator-value="Headword">
 
-      <many-to-one name="DefaultHeadwordResource"
+      <!--<many-to-one name="DefaultHeadwordResource"
                    class="Resource"
-                   lazy="proxy" />
+                   lazy="proxy" />-->
 
     </subclass>
 

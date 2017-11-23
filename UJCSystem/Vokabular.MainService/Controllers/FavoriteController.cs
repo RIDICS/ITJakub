@@ -168,7 +168,7 @@ namespace Vokabular.MainService.Controllers
         [HttpPost("book")]
         public long CreateFavoriteBook([FromBody] CreateFavoriteProjectContract data)
         {
-            var resultId = m_favoriteManager.CreateFavoriteBook(data);
+            var resultId = m_favoriteManager.CreateFavoriteProject(data);
             return resultId;
         }
 
