@@ -312,6 +312,7 @@
                 const deleteAjax = this.util.deleteComment(commentId);
                 deleteAjax.done(() => {
                     const textId = commentActionsRowEl.parents(".page-row").data("page");
+                    this.gui.showMessageDialog("Success", "Comment successfully deleted.");
                     this.reloadCommentArea(textId);
                 });
                 deleteAjax.fail(() => {
