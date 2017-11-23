@@ -128,6 +128,16 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
+        public IActionResult GetImageViewer()
+        {
+                        return PartialView("Resource/_Images");
+        }
+
+        public IActionResult GetTextPreview()
+        {
+            return PartialView("Resource/_Preview");
+        }
+
         public IActionResult ProjectResourceModuleTab(ProjectModuleTabType tabType, long? resourceId)
         {
             if (resourceId == null)
@@ -139,12 +149,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             {
                 switch (tabType)
                 {
-                    case ProjectModuleTabType.ResourcePreview:
-                        return PartialView("Resource/_Preview");
                     case ProjectModuleTabType.ResourceDiscussion:
                         return PartialView("Resource/_Discussion");
-                    case ProjectModuleTabType.ResourceImages:
-                        return PartialView("Resource/_Images");
                     case ProjectModuleTabType.ResourceMetadata:
                         var resourceMetadata = client.GetResourceMetadata(resourceId.Value);
                         var resourceMetadataViewModel = Mapper.Map<ProjectResourceMetadataViewModel>(resourceMetadata);

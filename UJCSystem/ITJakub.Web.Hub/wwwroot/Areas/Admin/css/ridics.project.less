@@ -51,7 +51,6 @@
 
 .project-layout {
     display: table-row;
-    height: 640px;
 
     .left-menu, .vertical-splitter, .vertical-splitter-control, .content {
         display: table-cell;
@@ -534,8 +533,7 @@ table {
 }
 
 #project-resource-images {
-    height: 95%;
-    padding-right: 15px;
+    height: 644px;//TODO
 
     .go-to-page-field-group {
         user-select: none; //page selection arrows on the same row select text here on double click
@@ -550,7 +548,8 @@ table {
     }
 
     .content-images {
-        height: 90%;
+        height: 90%; //TODO
+        overflow-y: auto;
 
         .image-container {
             height: 100%;
@@ -567,7 +566,175 @@ table {
     }
 }
 
-#resource-tab-content {
+#project-resource-preview {
+    height: 654px; //TODO
+    .toggle-mode-panel {
+        .editing-mode-button {
+            margin-bottom: 4px;
+        }
+    }
+
+    .editor {
+        &-areas {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            height: 100%;
+            padding-top: 15px;
+
+            .pages-start {
+                position: relative;
+                height: 520px; //TODO
+                overflow: auto;
+
+                .page-row {
+                    position: relative;
+                    min-height: 150px;
+
+                    .highlighted-element {
+                        background: rgba(255,0,0,0.4);
+                    }
+
+                    .comment-area {
+                        min-height: @comment-area-min-height;
+                        position: relative;
+
+                        .respond-to-comment, .edit-comment, .delete-comment {
+                            background-color: @comment-action-background-color;
+                            color: @comment-action-font-color;
+                            border: none;
+
+                            &:hover, &:active {
+                                background-color: @comment-action-background-color-hover;
+                            }
+                        }
+
+                        .comment-placeholder {
+                            &-container {
+                                text-align: center;
+                                margin-top: 15px;
+                            }
+
+                            &-text {
+                                font-weight: bold;
+                                color: @comment-placeholder-text-color;
+                                font-size: 1.1em;
+                            }
+                        }
+
+                        .comment-actions-row {
+                            max-height: 22px;
+                            font-size: 11px;
+                        }
+
+                        .comment-body {
+                            font-size: 12px;
+                            margin-bottom: 4px;
+                            word-break: break-word;
+                        }
+
+                        .id-in-comment-area {
+                            font-weight: bolder;
+                            font-size: 12px;
+                            margin-bottom: 3px;
+                        }
+
+                        .thread-divider {
+                            height: 1px;
+                            background-color: @thread-divider-color;
+                        }
+
+                        .nested-comment-collapsed {
+                            display: none;
+                        }
+
+                        .show-nested-comments {
+                            cursor: pointer;
+                        }
+
+                        .collapse-icon {
+                            display: none;
+                        }
+
+                        .ellipsis {
+                            color: @toggle-comment-section-icon-color;
+                            cursor: pointer;
+
+                            &-container {
+                                position: absolute;
+                                top: 5px;
+                                right: 5px;
+                            }
+                        }
+
+                        .respond-to-comment {
+                            max-height: 22px;
+                            font-size: 11px;
+
+                            &-textarea {
+                                width: 100%;
+                            }
+                        }
+
+                        .replied-on {
+                            font-size: 10px;
+                            margin-bottom: 4px;
+                        }
+
+                        &-collapsed {
+                            min-height: 170px;
+                            overflow-y: auto; /* Trigger vertical scroll    */
+                            overflow-x: hidden; /* Hide the horizontal scroll */
+                            &-even {
+                                background-color: @even-comment-area-background-color;
+                            }
+
+                            &-odd {
+                                background-color: @odd-comment-area-background-color;
+                            }
+                        }
+                    }
+
+                    .composition-area {
+                        &-loading {
+                            position: absolute;
+                            top: 25%;
+                            left: 40%;
+                        }
+
+                        .editor {
+                            width: 100%;
+
+                            & textarea {
+                                width: 100%;
+                                min-height: 100px;
+                            }
+                        }
+
+                        .cm-comment {
+                            &-start {
+                                background: @comment-start-color;
+                                cursor: not-allowed;
+                            }
+
+                            &-end {
+                                background: @comment-end-color;
+                                cursor: not-allowed;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        &-super-container {
+            height: 475px;
+            position: relative;
+        }
+    }
+}
+
+#project-resource-images, #project-resource-preview {
     .text-editor-page-slider {
         background-color: @editor-sliderbar-color;
         border: none !important; /*to override default jquery border styling*/
@@ -629,175 +796,6 @@ table {
             &-field {
                 border: none !important;
                 outline: none !important;
-            }
-        }
-    }
-
-    #project-resource-preview { /*parent has overflow y auto, which might create vertical scrollbar, which takes space of usually 15px*/
-        padding-right: 15px;
-
-        .toggle-mode-panel {
-            .editing-mode-button {
-                margin-bottom: 4px;
-            }
-        }
-
-        .editor {
-            &-areas {
-                position: absolute;
-                width: 100%;
-                top: 0;
-                height: 100%;
-                padding-top: 15px;
-
-                .pages-start {
-                    position: relative;
-                    max-height: 100%;
-                    overflow: auto;
-
-                    .page-row {
-                        position: relative;
-                        min-height: 150px;
-
-                        .highlighted-element {
-                            background: rgba(255,0,0,0.4);
-                        }
-
-                        .comment-area {
-                            min-height: @comment-area-min-height;
-                            position: relative;
-
-                            .respond-to-comment, .edit-comment, .delete-comment {
-                                background-color: @comment-action-background-color;
-                                color: @comment-action-font-color;
-                                border: none;
-
-                                &:hover, &:active {
-                                    background-color: @comment-action-background-color-hover;
-                                }
-                            }
-
-                            .comment-placeholder {
-                                &-container {
-                                    text-align: center;
-                                    margin-top: 15px;
-                                }
-
-                                &-text {
-                                    font-weight: bold;
-                                    color: @comment-placeholder-text-color;
-                                    font-size: 1.1em;
-                                }
-                            }
-
-                            .comment-actions-row {
-                                max-height: 22px;
-                                font-size: 11px;
-                            }
-
-                            .comment-body {
-                                font-size: 12px;
-                                margin-bottom: 4px;
-                                word-break: break-word;
-                            }
-
-                            .id-in-comment-area {
-                                font-weight: bolder;
-                                font-size: 12px;
-                                margin-bottom: 3px;
-                            }
-
-                            .thread-divider {
-                                height: 1px;
-                                background-color: @thread-divider-color;
-                            }
-
-                            .nested-comment-collapsed {
-                                display: none;
-                            }
-
-                            .show-nested-comments {
-                                cursor: pointer;
-                            }
-
-                            .collapse-icon {
-                                display: none;
-                            }
-
-                            .ellipsis {
-                                color: @toggle-comment-section-icon-color;
-                                cursor: pointer;
-
-                                &-container {
-                                    position: absolute;
-                                    top: 5px;
-                                    right: 5px;
-                                }
-                            }
-
-                            .respond-to-comment {
-                                max-height: 22px;
-                                font-size: 11px;
-
-                                &-textarea {
-                                    width: 100%;
-                                }
-                            }
-
-                            .replied-on {
-                                font-size: 10px;
-                                margin-bottom: 4px;
-                            }
-
-                            &-collapsed {
-                                min-height: 170px;
-                                overflow-y: auto; /* Trigger vertical scroll    */
-                                overflow-x: hidden; /* Hide the horizontal scroll */
-                                &-even {
-                                    background-color: @even-comment-area-background-color;
-                                }
-
-                                &-odd {
-                                    background-color: @odd-comment-area-background-color;
-                                }
-                            }
-                        }
-
-                        .composition-area {
-                            &-loading {
-                                position: absolute;
-                                top: 25%;
-                                left: 40%;
-                            }
-
-                            .editor {
-                                width: 100%;
-
-                                & textarea {
-                                    width: 100%;
-                                    min-height: 100px;
-                                }
-                            }
-
-                            .cm-comment {
-                                &-start {
-                                    background: @comment-start-color;
-                                    cursor: not-allowed;
-                                }
-
-                                &-end {
-                                    background: @comment-end-color;
-                                    cursor: not-allowed;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            &-super-container {
-                height: 475px;
-                position: relative;
             }
         }
     }
