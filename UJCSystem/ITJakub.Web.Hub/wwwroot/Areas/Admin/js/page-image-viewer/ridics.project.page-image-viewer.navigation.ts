@@ -1,6 +1,7 @@
 ﻿class ImageViewerPageNavigation {
     private readonly contentAddition: ImageViewerContentAddition;
     private readonly gui: EditorsGui;
+    private pages: IPage[];
 
     constructor(contentAddition: ImageViewerContentAddition, gui: EditorsGui) {
         this.contentAddition = contentAddition;
@@ -10,7 +11,8 @@
     init(pages: IPage[]) {
         this.createSlider(pages);
         this.showTooltipOnHover();
-        this.pageButtonClickProcess(pages);
+        this.pages = pages;
+        this.pageButtonClickProcess();
         this.listenToPageEnteredConfirmation(pages);
     }
 
@@ -48,32 +50,52 @@
         return index;
     }
 
-    private pageButtonClickProcess(pages: IPage[]) {
+    private loadNextPage() {
+        let index = parseInt($(".text-editor-page-slider").slider("option", "value"));
+        if (!isNaN(index)) {
+            index++;
+            if (index > -1 && index < this.pages.length) {
+                $(".text-editor-page-slider").slider("value", index);
+            } else {
+                this.gui.showInfoDialog("Warning", "No more pages on the right.");
+            }
+        }
+    }
+
+    private loadPreviousPage() {
+        let index = parseInt($(".text-editor-page-slider").slider("option", "value"));
+        if (!isNaN(index)) {
+            index--;
+            if (index > -1 && index < this.pages.length) {
+                $(".text-editor-page-slider").slider("value", index);
+            } else {
+                this.gui.showInfoDialog("Warning", "No more pages on the left.");
+            }
+        }
+    }
+
+    private pageButtonClickProcess() {
         $(".page-navigator").on("click",
             ".previous-page",
             () => {
-                var index = parseInt($(".text-editor-page-slider").slider("option", "value"));
-                if (!isNaN(index)) {
-                    index--;
-                    if (index > -1 && index < pages.length) {
-                        $(".text-editor-page-slider").slider("value", index);
-                    } else {
-                        this.gui.showInfoDialog("Warning", "No more pages on the left.");
-                    }
-                }
-
+                this.loadPreviousPage();
             });
         $(".page-navigator").on("click",
             ".next-page",
             () => {
-                var index = parseInt($(".text-editor-page-slider").slider("option", "value"));
-                if (!isNaN(index)) {
-                    index++;
-                    if (index > -1 && index < pages.length) {
-                        $(".text-editor-page-slider").slider("value", index);
-                    } else {
-                        this.gui.showInfoDialog("Warning", "No more pages on the right.");
-                    }
+                this.loadNextPage();
+            });
+        $(document).keypress(
+            (event) => {
+                var keycode = (event.which);
+                switch (keycode) {
+                case 106: //j
+                    this.loadPreviousPage();
+                    break;
+                case 107: //k
+                    this.loadNextPage();
+                    break;
+                default:
                 }
             });
     }
@@ -98,12 +120,12 @@
     private processPageInputField(pages: IPage[]) {
         const inputField = $(".go-to-page-field");
         const inputFieldValue = inputField.val() as string;
-        console.log(inputFieldValue);
         if (inputFieldValue === "") {
             this.gui.showInfoDialog("Warning", "You haven't entered anything. Please enter a page name.");
         } else {
             const namesStringArray: string[] = $.map(pages, (x) => { return x.name });
-            var index = this.getPageIdByPageName(inputFieldValue, namesStringArray);//TODO precise page names are needed. Implement partial page name search?
+            let index = this.getPageIdByPageName(inputFieldValue,
+                namesStringArray); //TODO precise page names are needed. Implement partial page name search?
             if (index === -1) {
                 const minusToDashInputValue = inputFieldValue.replace("-", "–");
                 index = this.getPageIdByPageName(minusToDashInputValue, namesStringArray);
