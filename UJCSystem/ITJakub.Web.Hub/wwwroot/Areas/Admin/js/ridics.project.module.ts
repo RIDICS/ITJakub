@@ -53,13 +53,13 @@ class ProjectModule {
             break;
         case "project-navigation-image": //TODO
             this.currentModule = null;
-                const imageViewer = new ProjectImageViewerModule(this.projectId);
+            const imageViewer = new ProjectImageViewerModule(this.projectId);
             imageViewer.init();
             break;
         case "project-navigation-text": //TODO
             this.currentModule = null;
             const textPreview = new ProjectTextPreviewModule(this.projectId);
-                textPreview.init();
+            textPreview.init();
             break;
         case "project-navigation-audio":
             this.currentModule = new ProjectResourceModule(this.projectId, ResourceType.Audio);
@@ -70,7 +70,9 @@ class ProjectModule {
         default:
             this.currentModule = new ProjectWorkModule(this.projectId);
         }
-        this.currentModule.init();
+        if (this.currentModule !== null) {
+            this.currentModule.init();
+        }
     }
 }
 
@@ -158,16 +160,17 @@ class ProjectImageViewerModule {
     init() {
         const url = getBaseUrl() + "Admin/Project/GetImageViewer";
         $("#project-layout-content").empty();
-        $("#project-layout-content").load(url, (response, status, xhr) => {
-            if (status === "error") {
-                const error = new AlertComponentBuilder(AlertType.Error).addContent("Image viewer loading error");
-                $("#project-layout-content").empty().append(error.buildElement());
-            } else {
-                $("#project-resource-images").off();
-                const imageViewer = new ImageViewerMain();
-                imageViewer.init(this.projectId);
-            }
-        });
+        $("#project-layout-content").load(url,
+            (response, status, xhr) => {
+                if (status === "error") {
+                    const error = new AlertComponentBuilder(AlertType.Error).addContent("Image viewer loading error");
+                    $("#project-layout-content").empty().append(error.buildElement());
+                } else {
+                    $("#project-resource-images").off();
+                    const imageViewer = new ImageViewerMain();
+                    imageViewer.init(this.projectId);
+                }
+            });
     }
 }
 
@@ -181,16 +184,17 @@ class ProjectTextPreviewModule {
     init() {
         const url = getBaseUrl() + "Admin/Project/GetTextPreview";
         $("#project-layout-content").empty();
-        $("#project-layout-content").load(url, (response, status, xhr) => {
-            if (status === "error") {
-                const error = new AlertComponentBuilder(AlertType.Error).addContent("Text preview loading error");
-                $("#project-layout-content").empty().append(error.buildElement());
-            } else {
-                $("#project-resource-preview").off();
-                const main = new TextEditorMain();
-                main.init(this.projectId);
-            }
-        });
+        $("#project-layout-content").load(url,
+            (response, status, xhr) => {
+                if (status === "error") {
+                    const error = new AlertComponentBuilder(AlertType.Error).addContent("Text preview loading error");
+                    $("#project-layout-content").empty().append(error.buildElement());
+                } else {
+                    $("#project-resource-preview").off();
+                    const main = new TextEditorMain();
+                    main.init(this.projectId);
+                }
+            });
     }
 }
 
@@ -270,21 +274,12 @@ class ProjectResourceModule extends ProjectModuleBase {
         var self = this;
 
         $("#resource-panel").show();
-        $("#resource-list").empty().off();
 
         this.toggleElementsVisibility(false, null);
-
-        $("#resource-list").change(function() {
-            var resourceList = <HTMLSelectElement>this;
-            var isResourceSelected = resourceList.selectedIndex >= 0;
-            var resourceId = isResourceSelected ? $(resourceList).val() : null;
-            self.toggleElementsVisibility(isResourceSelected, resourceId);
-        });
         ProjectResourceVersionModule.staticInit();
 
         this.initDialogs();
         this.initMainResourceButtons();
-        this.loadResourceList();
     }
 
     getTabPanelType(panelSelector: string): ProjectModuleTabType {
@@ -409,53 +404,6 @@ class ProjectResourceModule extends ProjectModuleBase {
         }
     }
 
-    private loadResourceList(callback: () => void = null) {
-        $("#resource-list").empty().addClass("loading");
-
-        this.projectClient.getResourceList(this.projectId,
-            this.resourceType,
-            (list, errorCode) => {
-                if (errorCode != null) {
-                    this.showErrorInResourceList();
-                    return;
-                }
-
-                this.fillResourceList(list);
-
-                if (callback != null) {
-                    callback();
-                }
-            });
-    }
-
-    private fillResourceList(list: IProjectResource[]) {
-        var $resourceList = $("#resource-list");
-        $resourceList.removeClass("loading");
-        for (let i = 0; i < list.length; i++) {
-            var projectResource = list[i];
-            var optionElement = document.createElement("option");
-            $(optionElement)
-                .val(projectResource.id)
-                .text(projectResource.name)
-                .appendTo($resourceList);
-        }
-    }
-
-    private showErrorInResourceList() {
-        var $resourceList = $("#resource-list");
-        $resourceList.removeClass("loading");
-
-        var optionElement = document.createElement("option");
-        $(optionElement)
-            .prop("disabled", true)
-            .text("Chyba při načítání zdrojů")
-            .appendTo($resourceList);
-    }
-
-    private selectResource(resourceId: number) {
-        $("#resource-list").val(resourceId).trigger("change");
-    }
-
     private addResource() {
         var sessionId = $("#new-resource-session-id").val();
         var comment = $("#new-resource-comment").val();
@@ -469,7 +417,6 @@ class ProjectResourceModule extends ProjectModuleBase {
                 }
 
                 this.toggleElementsVisibility(false, null);
-                this.loadResourceList();
 
                 this.addResourceDialog.hide();
             });
@@ -489,9 +436,6 @@ class ProjectResourceModule extends ProjectModuleBase {
                 }
 
                 this.toggleElementsVisibility(false, null);
-                this.loadResourceList(() => {
-                    this.selectResource(resourceId);
-                });
 
                 this.createResourceVersionDialog.hide();
             });
@@ -506,7 +450,6 @@ class ProjectResourceModule extends ProjectModuleBase {
                     return;
                 }
 
-                $(`#resource-list option[value=${resourceId}]`).remove();
                 this.toggleElementsVisibility(false, null);
 
                 this.deleteResourceDialog.hide();
@@ -524,8 +467,6 @@ class ProjectResourceModule extends ProjectModuleBase {
                     return;
                 }
 
-                $(`#resource-list option[value=${resourceId}]`).text(newName);
-
                 this.renameResourceDialog.hide();
             });
     }
@@ -541,9 +482,6 @@ class ProjectResourceModule extends ProjectModuleBase {
                 }
 
                 this.toggleElementsVisibility(false, null);
-                this.loadResourceList(() => {
-                    this.selectResource(resourceId);
-                });
 
                 this.duplicateResourceDialog.hide();
             });
