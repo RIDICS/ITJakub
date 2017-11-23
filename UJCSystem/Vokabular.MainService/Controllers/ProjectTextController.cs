@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.RestClient.Errors;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -49,10 +50,32 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPost("text/{textId}/comment")]
-        public long CreateComment(long textId, [FromBody] CreateTextCommentContract request)
+        [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
+        public IActionResult CreateComment(long textId, [FromBody] CreateTextCommentContract request)
         {
-            var resultId = m_projectContentManager.CreateNewComment(textId, request);
-            return resultId;
+            try
+            {
+                var resultId = m_projectContentManager.CreateNewComment(textId, request);
+                return Ok(resultId);
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode((int)exception.StatusCode, exception.Message);
+            }
+        }
+
+        [HttpPut("text/comment/{commentId}")]
+        public IActionResult UpdateComment(long commentId, [FromBody] UpdateTextCommentContract request)
+        {
+            try
+            {
+                m_projectContentManager.UpdateComment(commentId, request);
+                return Ok();
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode((int) exception.StatusCode, exception.Message);
+            }
         }
 
         [HttpDelete("text/comment/{commentId}")]

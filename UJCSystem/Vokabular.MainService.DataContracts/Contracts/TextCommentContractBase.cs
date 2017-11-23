@@ -27,4 +27,9 @@ namespace Vokabular.MainService.DataContracts.Contracts
 
         public long TextResourceId { get; set; }
     }
+
+    public class UpdateTextCommentContract
+    {
+        public string Text { get; set; }
+    }
 }

@@ -74,6 +74,12 @@ namespace Vokabular.MainService.Core.Managers
             var resultId = createNewCommentWork.Execute();
             return resultId;
         }
+        
+        public void UpdateComment(long commentId, UpdateTextCommentContract data)
+        {
+            var userId = m_userManager.GetCurrentUserId();
+            new UpdateTextCommentWork(m_resourceRepository, commentId, data, userId).Execute();
+        }
 
         public void DeleteComment(long commentId)
         {
