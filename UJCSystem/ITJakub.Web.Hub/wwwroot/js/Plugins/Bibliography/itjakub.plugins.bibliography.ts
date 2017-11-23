@@ -123,7 +123,7 @@ class BibliographyModule {
         if (bookIds.length === 0) return;
 
         var favoriteLabels: IFavoriteLabel[] = null;
-        var favoriteBooksDictionary: DictionaryWrapper<IFavoriteBaseInfo[]> = null;
+        var favoriteBooksDictionary: DictionaryWrapper<IFavoriteBaseInfoWithLabel[]> = null;
 
         favoriteManager.getLatestFavoriteLabels(labels => {
             favoriteLabels = labels;
@@ -133,8 +133,8 @@ class BibliographyModule {
             }
         });
 
-        favoriteManager.getFavoritesForBooks(bookIds, favoriteBooks => {
-            favoriteBooksDictionary = new DictionaryWrapper<IFavoriteBaseInfo[]>();
+        favoriteManager.getFavoritesForBooks(null, bookIds, favoriteBooks => {
+            favoriteBooksDictionary = new DictionaryWrapper<IFavoriteBaseInfoWithLabel[]>();
             $.each(favoriteBooks, (index, favoriteLabeledBook) => {
                 favoriteBooksDictionary.add(favoriteLabeledBook.id, favoriteLabeledBook.favoriteInfo); 
             });
@@ -145,7 +145,7 @@ class BibliographyModule {
         });
     }
 
-    private finishShowingFavoriteLabels(bookDataList: IBookRenderData[], favoriteBooksDictionary: DictionaryWrapper<IFavoriteBaseInfo[]>, favoriteLabels: IFavoriteLabel[]) {
+    private finishShowingFavoriteLabels(bookDataList: IBookRenderData[], favoriteBooksDictionary: DictionaryWrapper<IFavoriteBaseInfoWithLabel[]>, favoriteLabels: IFavoriteLabel[]) {
         $.each(bookDataList, (index, bookData) => {
             var bookFavorites = favoriteBooksDictionary.get(bookData.bookId);
             if (bookFavorites) {
@@ -158,7 +158,7 @@ class BibliographyModule {
                 return;
             }
             var newFavoriteDialog = NewFavoriteDialogProvider.getInstance(true);
-            var favoriteStar = new FavoriteStar(bookData.$favoriteButton, FavoriteType.Book, bookData.bookId.toString(), bookData.bookName, newFavoriteDialog, new FavoriteManager(), () => {
+            var favoriteStar = new FavoriteStar(bookData.$favoriteButton, FavoriteType.Project, bookData.bookId.toString(), bookData.bookName, newFavoriteDialog, new FavoriteManager(), () => {
                 new NewFavoriteNotification().show();
             });
             if (bookFavorites) {

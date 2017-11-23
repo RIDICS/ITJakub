@@ -1,16 +1,16 @@
-using ITJakub.ITJakubService.DataContracts.Contracts.Favorite;
+using Vokabular.Shared.DataContracts.Types.Favorite;
 
 namespace ITJakub.Web.Hub.Models.Favorite
 {
     public class FavoriteFilterViewModel
     {
-        public FavoriteFilterViewModel(FavoriteTypeContract favoriteType, string name)
+        public FavoriteFilterViewModel(FavoriteTypeEnumContract favoriteType, string name)
         {
             FavoriteType = favoriteType;
             Name = name;
         }
 
-        public FavoriteTypeContract FavoriteType { get; set; }
+        public FavoriteTypeEnumContract FavoriteType { get; set; }
 
         public string Name { get; set; }
     }

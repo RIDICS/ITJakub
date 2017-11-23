@@ -1142,7 +1142,7 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         #region Favorite items
 
-        public List<FavoriteLabelContract> GetFavoriteLabelList(int? count)
+        public List<FavoriteLabelContract> GetFavoriteLabelList(int? count = null)
         {
             try
             {
@@ -1286,7 +1286,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void UpdateFavorite(long favoriteId, UpdateFavoriteContract data)
+        public void UpdateFavoriteItem(long favoriteId, UpdateFavoriteContract data)
         {
             try
             {
@@ -1301,7 +1301,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void DeleteFavorite(long favoriteId)
+        public void DeleteFavoriteItem(long favoriteId)
         {
             try
             {
@@ -1353,11 +1353,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<FavoriteLabelWithBooksAndCategories> GetFavoriteLabelsWithBooksAndCategories(BookTypeEnumContract? bookType)
+        public List<FavoriteLabelWithBooksAndCategories> GetFavoriteLabelsWithBooksAndCategories(BookTypeEnumContract bookType)
         {
             try
             {
-                var result = Get<List<FavoriteLabelWithBooksAndCategories>>("favorite/label/with-books-and-categories");
+                var result = Get<List<FavoriteLabelWithBooksAndCategories>>($"favorite/label/with-books-and-categories?bookType={bookType.ToString()}");
                 return result;
             }
             catch (HttpRequestException e)

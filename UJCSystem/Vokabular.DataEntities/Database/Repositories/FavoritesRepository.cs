@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
+using NHibernate.Transform;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
@@ -118,6 +119,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .And(() => favoriteLabelAlias.User.Id == userId)
                 .OrderBy(() => favoriteLabelAlias.Name).Asc
                 .OrderBy(() => favoriteItemAlias.Title).Asc
+                .TransformUsing(Transformers.DistinctRootEntity)
                 .List();
         }
         
@@ -242,7 +244,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             };
         }
 
-        private IQueryOver<FavoriteQuery, FavoriteQuery> CreateGetFavoriteQueriesQuery(long? labelId, BookTypeEnum bookTypeEnum, QueryTypeEnum queryTypeEnum, string filterByTitle, int userId)
+        public virtual ListWithTotalCountResult<FavoriteQuery> GetFavoriteQueries(long? labelId, BookTypeEnum bookTypeEnum, QueryTypeEnum queryTypeEnum, string filterByTitle, int start, int count, int userId)
         {
             FavoriteQuery favoriteQueryAlias = null;
             FavoriteLabel favoriteLabelAlias = null;
@@ -251,37 +253,27 @@ namespace Vokabular.DataEntities.Database.Repositories
             var query = GetSession().QueryOver(() => favoriteQueryAlias)
                 .JoinAlias(() => favoriteQueryAlias.FavoriteLabel, () => favoriteLabelAlias)
                 .JoinAlias(() => favoriteQueryAlias.BookType, () => bookTypeAlias)
-                .Where(() => bookTypeAlias.Type == bookTypeEnum && favoriteQueryAlias.QueryType == queryTypeEnum && favoriteLabelAlias.User.Id == userId);
+                .Where(() => bookTypeAlias.Type == bookTypeEnum && favoriteQueryAlias.QueryType == queryTypeEnum && favoriteLabelAlias.User.Id == userId)
+                .Fetch(x => x.FavoriteLabel).Eager
+                .Fetch(x => x.BookType).Eager
+                .OrderBy(x => x.Title).Asc
+                .OrderBy(() => favoriteLabelAlias.Name).Asc;
 
             if (labelId != null)
             {
                 query.And(() => favoriteQueryAlias.FavoriteLabel.Id == labelId.Value);
             }
+
             if (!string.IsNullOrEmpty(filterByTitle))
             {
                 query.AndRestrictionOn(() => favoriteQueryAlias.Title).IsLike(filterByTitle, MatchMode.Anywhere);
             }
 
-            return query;
-        }
+            var list = query.Skip(start)
+                .Take(count)
+                .Future();
 
-        public virtual ListWithTotalCountResult<FavoriteQuery> GetFavoriteQueries(long? labelId, BookTypeEnum bookTypeEnum, QueryTypeEnum queryTypeEnum, string filterByTitle, int start, int count, int userId)
-        {
-            FavoriteLabel favoriteLabelAlias = null;
-
-            var query1 = CreateGetFavoriteQueriesQuery(labelId, bookTypeEnum, queryTypeEnum, filterByTitle, userId);
-
-            var query2 = query1.JoinAlias(x => x.FavoriteLabel, () => favoriteLabelAlias)
-                .Fetch(x => x.FavoriteLabel).Eager
-                .Fetch(x => x.BookType).Eager
-                .OrderBy(x => x.Title).Asc
-                .OrderBy(() => favoriteLabelAlias.Name).Asc
-                .Skip(start)
-                .Take(count);
-
-            var list = query2.Future();
-
-            var totalCount = query2.ToRowCountQuery()
+            var totalCount = query.ToRowCountQuery()
                 .FutureValue<int>();
 
             return new ListWithTotalCountResult<FavoriteQuery>
@@ -309,21 +301,13 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
-        public virtual IList<FavoriteCategory> GetFavoriteCategoriesWithLabel(BookTypeEnum bookType, int userId)
+        public virtual IList<FavoriteCategory> GetFavoriteCategoriesWithLabel(int userId)
         {
             FavoriteLabel favoriteLabelAlias = null;
-            Project projectAlias = null;
-            Snapshot latestSnapshotAlias = null;
-            BookType bookTypeAlias = null;
-            Category categoryAlias = null;
 
             return GetSession().QueryOver<FavoriteCategory>()
                 .JoinAlias(x => x.FavoriteLabel, () => favoriteLabelAlias)
-                .JoinAlias(x => x.Category, () => categoryAlias)
-                .JoinAlias(() => categoryAlias.Projects, () => projectAlias)
-                .JoinAlias(() => projectAlias.LatestPublishedSnapshot, () => latestSnapshotAlias)
-                .JoinAlias(() => latestSnapshotAlias.BookTypes, () => bookTypeAlias)
-                .Where(() => favoriteLabelAlias.User.Id == userId && bookTypeAlias.Type == bookType)
+                .Where(() => favoriteLabelAlias.User.Id == userId )
                 .Fetch(x => x.FavoriteLabel).Eager
                 .OrderBy(x => x.Title).Asc
                 .List();

@@ -184,7 +184,7 @@ namespace Vokabular.MainService.Core.Managers
             var typeFilter = Mapper.Map<FavoriteTypeEnum?>(filterByType);
 
             var dbResult = m_favoritesRepository.InvokeUnitOfWork(x => x.GetFavoriteItems(labelId, typeFilter, filterByTitle, sort, startValue, countValue, user.Id));
-
+            
             return new PagedResultList<FavoriteBaseInfoContract>
             {
                 List = Mapper.Map<List<FavoriteBaseInfoContract>>(dbResult.List),
@@ -242,7 +242,7 @@ namespace Vokabular.MainService.Core.Managers
             m_favoritesRepository.InvokeUnitOfWork(repository =>
             {
                 booksDbResult = repository.GetFavoriteBooksWithLabel(bookTypeEnum, user.Id);
-                categoriesDbResult = repository.GetFavoriteCategoriesWithLabel(bookTypeEnum, user.Id);
+                categoriesDbResult = repository.GetFavoriteCategoriesWithLabel(user.Id);
             });
 
             foreach (var favoriteBook in booksDbResult)
@@ -329,7 +329,9 @@ namespace Vokabular.MainService.Core.Managers
                     break;
                 case FavoriteTypeEnum.Page:
                     var favoritePageBookmark = (FavoritePage) favoriteItem;
+                    var resourcePage = m_favoritesRepository.InvokeUnitOfWork(x => x.FindById<Resource>(favoritePageBookmark.ResourcePage.Id));
                     result.PageId = favoritePageBookmark.ResourcePage.Id;
+                    result.ProjectId = resourcePage.Project.Id;
                     break;
                 case FavoriteTypeEnum.Query:
                     var favoriteQuery = (FavoriteQuery) favoriteItem;

@@ -35,14 +35,14 @@ namespace Vokabular.MainService.Controllers
             return Ok(resultId);
         }
 
-        [HttpPut("label")]
+        [HttpPut("label/{favoriteLabelId}")]
         public IActionResult UpdateFavoriteLabel(long favoriteLabelId, [FromBody] FavoriteLabelContractBase data)
         {
             m_favoriteManager.UpdateFavoriteLabel(favoriteLabelId, data);
             return Ok();
         }
 
-        [HttpDelete("label")]
+        [HttpDelete("label/{favoriteLabelId}")]
         public IActionResult DeleteFavoriteLabel(long favoriteLabelId)
         {
             m_favoriteManager.DeleteFavoriteLabel(favoriteLabelId);
@@ -141,8 +141,6 @@ namespace Vokabular.MainService.Controllers
 
             var result = m_favoriteManager.GetFavoriteLabeledBooks(projectIds, bookType);
             return Ok(result);
-
-            // TODO update UI for using BookType parameter
         }
 
         [HttpGet("category/grouped")]

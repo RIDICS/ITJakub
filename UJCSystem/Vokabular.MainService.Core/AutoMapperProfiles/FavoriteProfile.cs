@@ -17,7 +17,9 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
                 .ForMember(dest => dest.CreateTime, opt => opt.MapFrom(src => src.CreateTime))
                 .ForMember(dest => dest.FavoriteType, opt => opt.MapFrom(src => src.FavoriteTypeEnum))
-                .ForMember(dest => dest.FavoriteLabelId, opt => opt.MapFrom(src => src.FavoriteLabel.Id));
+                .ForMember(dest => dest.FavoriteLabelId, opt => opt.MapFrom(src => src.FavoriteLabel.Id))
+                .Include<FavoriteQuery, FavoriteBaseInfoContract>()
+                .Include<FavoritePage, FavoriteBaseInfoContract>();
 
             CreateMap<FavoriteBase, FavoriteBaseWithLabelContract>()
                 .IncludeBase<FavoriteBase, FavoriteBaseInfoContract>()
@@ -26,11 +28,16 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
             CreateMap<FavoriteBase, FavoriteFullInfoContract>()
                 .IncludeBase<FavoriteBase, FavoriteBaseInfoContract>();
 
+            // Specific type to general
+
+            CreateMap<FavoriteQuery, FavoriteBaseInfoContract>();
+            CreateMap<FavoritePage, FavoriteBaseInfoContract>();
+
             // Specific types
 
             CreateMap<FavoriteQuery, FavoriteQueryContract>()
                 .IncludeBase<FavoriteBase, FavoriteBaseInfoContract>()
-                .ForMember(dest => dest.BookType, opt => opt.MapFrom(src => src.BookType))
+                .ForMember(dest => dest.BookType, opt => opt.MapFrom(src => src.BookType.Type))
                 .ForMember(dest => dest.FavoriteLabel, opt => opt.MapFrom(src => src.FavoriteLabel))
                 .ForMember(dest => dest.Query, opt => opt.MapFrom(src => src.Query))
                 .ForMember(dest => dest.QueryType, opt => opt.MapFrom(src => src.QueryType));
@@ -38,7 +45,7 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
             CreateMap<FavoritePage, FavoritePageContract>()
                 .IncludeBase<FavoriteBase, FavoriteBaseInfoContract>()
                 .ForMember(dest => dest.FavoriteLabel, opt => opt.MapFrom(src => src.FavoriteLabel))
-                .ForMember(dest => dest.PageId, opt => opt.MapFrom(src => src.ResourcePage));
+                .ForMember(dest => dest.PageId, opt => opt.MapFrom(src => src.ResourcePage.Id));
 
             // Enum
 

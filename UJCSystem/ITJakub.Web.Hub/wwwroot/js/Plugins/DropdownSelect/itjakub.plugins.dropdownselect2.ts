@@ -174,7 +174,7 @@
             }
         });
 
-        this.favoriteManager.getFavoritesForBooks(this.bookIdList, (favoriteBooks) => {
+        this.favoriteManager.getFavoritesForBooks(this.bookType, this.bookIdList, (favoriteBooks) => {
             loadedFavoriteBooks = favoriteBooks;
 
             if (isAllLoaded()) {

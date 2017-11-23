@@ -600,11 +600,11 @@ class FavoriteManagementItem {
         $(icon).addClass("glyphicon");
 
         switch (this.type) {
-            case FavoriteType.Book:
+            case FavoriteType.Project:
                 $(icon).addClass("glyphicon-book")
                     .attr("title", "Kniha");
                 break;
-            case FavoriteType.PageBookmark:
+            case FavoriteType.Page:
                 $(icon).addClass("glyphicon-bookmark")
                     .attr("title", "Záložka na stránku v knize");
                 break;
@@ -616,7 +616,7 @@ class FavoriteManagementItem {
                 $(icon).addClass("glyphicon-search")
                     .attr("title", "Vyhledávací dotaz");
                 break;
-            case FavoriteType.BookVersion:
+            case FavoriteType.Snapshot:
                 $(icon).addClass("glyphicon-tags")
                     .attr("title", "Verze knihy");
                 break;

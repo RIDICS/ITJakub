@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using ITJakub.Shared.Contracts.Favorites;
 using Vokabular.Shared.DataContracts.Types;
+using Vokabular.Shared.DataContracts.Types.Favorite;
 
 namespace ITJakub.Web.Hub.Models.Requests.Favorite
 {

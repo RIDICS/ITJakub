@@ -60,7 +60,7 @@
                 var bookmark = item.bookmarks[j];
                 if (bookmark.id === id) {
                     return {
-                        favoriteType: FavoriteType.PageBookmark,
+                        favoriteType: FavoriteType.Page,
                         storageItemIndex: j,
                         storageIndex: i,
                         storageItem: item,
@@ -78,7 +78,7 @@
                 var favoriteBook = favoriteLabeledBook.favoriteInfo[j];
                 if (favoriteBook.id === id) {
                     return {
-                        favoriteType: FavoriteType.Book,
+                        favoriteType: FavoriteType.Project,
                         storageItemIndex: j,
                         storageIndex: i,
                         storageItem: favoriteLabeledBook,
@@ -210,13 +210,13 @@
         });
     }
 
-    public getFavoritesForBooks(bookIds: Array<number>, callback: (favoriteBooks: Array<IFavoriteLabeledBook>) => void): void {
+    public getFavoritesForBooks(orBookType: BookTypeEnum, orBookIds: Array<number>, callback: (favoriteBooks: Array<IFavoriteLabeledBook>) => void): void {
         if (!this.isUserLoggedIn) {
             var favoriteLabeledBooks: IFavoriteLabeledBook[] = this.getFromStorage("favoriteLabeledBooks");
             var bookIdSet = new Set();
             var resultArray = new Array<IFavoriteLabeledBook>();
 
-            bookIdSet.addAll(bookIds);
+            bookIdSet.addAll(orBookIds);
             for (var i = 0; i < favoriteLabeledBooks.length; i++) {
                 var favoriteLabeledBook = favoriteLabeledBooks[i];
                 if (bookIdSet.contains(favoriteLabeledBook.id)) {
@@ -228,12 +228,17 @@
             return;
         }
 
+        if (orBookType != null) {
+            orBookIds = null; // because max ID count limit
+        }
+
         $.ajax({
             type: "POST",
             traditional: true,
             url: getBaseUrl() + "Favorite/GetFavoriteLabeledBooks",
             data: JSON.stringify({
-                bookIds: bookIds
+                bookType: orBookType,
+                bookIds: orBookIds
             }),
             dataType: "json",
             contentType: "application/json",
@@ -288,13 +293,13 @@
                 id: defaultLabel.id,
                 name: defaultLabel.name,
                 color: defaultLabel.color,
-                bookIdList: [],
+                projectIdList: [],
                 categoryIdList: []
             }
 
             for (let i = 0; i < favoriteLabeledBooks.length; i++) {
                 var favoriteLabeledBook = favoriteLabeledBooks[i];
-                resultLabel.bookIdList.push(favoriteLabeledBook.id);
+                resultLabel.projectIdList.push(favoriteLabeledBook.id);
             }
             for (let i = 0; i < favoriteLabeledCategories.length; i++) {
                 var favoriteLabeledCategory = favoriteLabeledCategories[i];
@@ -395,14 +400,14 @@
         });
     }
 
-    public getPageBookmarks(bookXmlId: string, callback: (bookmarks: IBookPageBookmark[]) => void) {
+    public getPageBookmarks(bookId: number, callback: (bookmarks: IBookPageBookmark[]) => void) {
         if (!this.isUserLoggedIn) {
             var favoritePageBookmarks: IPageBookmarkStorageItem[] = this.getFromStorage("favoritePageBookmarkItems");
             var resultList = new Array<IBookPageBookmark>();
 
             for (var i = 0; i < favoritePageBookmarks.length; i++) {
                 var item = favoritePageBookmarks[i];
-                if (item.bookXmlId === bookXmlId) {
+                if (item.bookId === bookId) {
                     for (var j = 0; j < item.bookmarks.length; j++) {
                         var bookmark = item.bookmarks[j];
                         resultList.push(bookmark);
@@ -419,7 +424,7 @@
             traditional: true,
             url: getBaseUrl() + "Favorite/GetPageBookmarks",
             data: {
-                bookXmlId: bookXmlId
+                bookId: bookId
             },
             dataType: "json",
             contentType: "application/json",
@@ -506,7 +511,7 @@
             var storageItemInfo = this.findLocalItemById(favoriteId);
             if (storageItemInfo) {
                 switch (storageItemInfo.favoriteType) {
-                    case FavoriteType.Book:
+                    case FavoriteType.Project:
                         var bookStorage = <IFavoriteLabeledBook[]>storageItemInfo.storage;
                         var favoriteLabeledBook = <IFavoriteLabeledBook>storageItemInfo.storageItem;
                         var favoriteBook = favoriteLabeledBook.favoriteInfo[storageItemInfo.storageItemIndex];
@@ -529,7 +534,7 @@
                         favoriteQuery.title = title;
                         this.storage.save("favoriteQueries", queryStorage);
                         break;
-                    case FavoriteType.PageBookmark:
+                    case FavoriteType.Page:
                         var bookmarkStorage = <IPageBookmarkStorageItem[]>storageItemInfo.storage;
                         var bookmarkStorageItem = <IPageBookmarkStorageItem>storageItemInfo.storageItem;
                         var bookmark = bookmarkStorageItem.bookmarks[storageItemInfo.storageItemIndex];
@@ -570,7 +575,7 @@
             var storageItemInfo = this.findLocalItemById(favoriteId);
             if (storageItemInfo) {
                 switch (storageItemInfo.favoriteType) {
-                    case FavoriteType.Book:
+                    case FavoriteType.Project:
                         var bookStorage = <IFavoriteLabeledBook[]>storageItemInfo.storage;
                         var favoriteLabeledBook = <IFavoriteLabeledBook>storageItemInfo.storageItem;
 
@@ -598,7 +603,7 @@
                         queryStorage.splice(storageItemInfo.storageIndex, 1);
                         this.storage.save("favoriteQueries", queryStorage);
                         break;
-                    case FavoriteType.PageBookmark:
+                    case FavoriteType.Page:
                         var bookmarkStorage = <IPageBookmarkStorageItem[]>storageItemInfo.storage;
                         var bookmarkStorageItem = <IPageBookmarkStorageItem>storageItemInfo.storageItem;
                         
@@ -638,7 +643,7 @@
 
     public createFavoriteItem(itemType: FavoriteType, itemId: string, favoriteTitle: string, favoriteLabelIds: number[], callback: (ids: number[], error: string) => void) {
         switch (itemType) {
-            case FavoriteType.Book:
+            case FavoriteType.Project:
                 this.createFavoriteBook(Number(itemId), favoriteTitle, favoriteLabelIds, callback);
                 break;
             case FavoriteType.Category:
@@ -669,11 +674,11 @@
                 favoriteLabeledBooks.push(favoriteLabeledBook);
             }
 
-            var newFavoriteBook: IFavoriteBaseInfo = {
+            var newFavoriteBook: IFavoriteBaseInfoWithLabel = {
                 id: this.generateLocalId(),
                 createTime: this.getCurrentTime(),
                 favoriteLabel: this.getDefaultFavoriteLabel(),
-                favoriteType: FavoriteType.Book,
+                favoriteType: FavoriteType.Project,
                 title: favoriteTitle
             };
             favoriteLabeledBook.favoriteInfo.push(newFavoriteBook);
@@ -723,7 +728,7 @@
                 favoriteLabeledCategories.push(favoriteLabeledCategory);
             }
 
-            var newFavoriteCategory: IFavoriteBaseInfo = {
+            var newFavoriteCategory: IFavoriteBaseInfoWithLabel = {
                 id: this.generateLocalId(),
                 createTime: this.getCurrentTime(),
                 favoriteLabel: this.getDefaultFavoriteLabel(),
@@ -799,20 +804,20 @@
         });
     }
 
-    public createPageBookmark(bookXmlId: string, pageXmlId: string, favoriteTitle: string, favoriteLabelIds: number[], callback: (ids: number[], error: string) => void) {
+    public createPageBookmark(bookId: number, pageId: number, favoriteTitle: string, favoriteLabelIds: number[], callback: (ids: number[], error: string) => void) {
         if (!this.isUserLoggedIn) {
             var favoritePageBookmarkItems: IPageBookmarkStorageItem[] = this.getFromStorage("favoritePageBookmarkItems");
             var item: IPageBookmarkStorageItem = null;
             for (var i = 0; i < favoritePageBookmarkItems.length; i++) {
                 var storageItem = favoritePageBookmarkItems[i];
-                if (storageItem.bookXmlId === bookXmlId) {
+                if (storageItem.bookId === bookId) {
                     item = storageItem;
                     break;
                 }
             }
             if (item == null) {
                 item = {
-                    bookXmlId: bookXmlId,
+                    bookId: bookId,
                     bookmarks: []
                 };
                 favoritePageBookmarkItems.push(item);
@@ -821,8 +826,7 @@
             var bookmark: IBookPageBookmark = {
                 id: this.generateLocalId(),
                 title: favoriteTitle,
-                pageXmlId: pageXmlId,
-                pagePosition: null,
+                pageId: pageId,
                 favoriteLabel: this.getDefaultFavoriteLabel()
             };
             item.bookmarks.push(bookmark);
@@ -837,8 +841,8 @@
             traditional: true,
             url: getBaseUrl() + "Favorite/CreatePageBookmark",
             data: JSON.stringify({
-                bookXmlId: bookXmlId,
-                pageXmlId: pageXmlId,
+                bookId: bookId,
+                pageId: pageId,
                 title: favoriteTitle,
                 labelIds: favoriteLabelIds
             }),
@@ -910,7 +914,7 @@ interface IFavoriteLabelColorData {
 }
 
 interface IPageBookmarkStorageItem {
-    bookXmlId: string;
+    bookId: number;
     bookmarks: IBookPageBookmark[];
 }
 

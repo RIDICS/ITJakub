@@ -666,7 +666,7 @@
     }
 
     private loadBookmarks() {
-        this.favoriteManager.getPageBookmarks(this.bookId, (bookmarks) => {
+        this.favoriteManager.getPageBookmarks(Number(this.bookId), (bookmarks) => {
             for (var i = 0; i < bookmarks.length; i++) {
                 var bookmark = bookmarks[i];
                 this.loadBookmark(bookmark);
@@ -677,7 +677,7 @@
     private loadBookmark(actualBookmark: IBookPageBookmark) {
         for (var pageIndex = 0; pageIndex < this.pages.length; pageIndex++) {
             var actualPage = this.pages[pageIndex];
-            if (actualBookmark.pageXmlId === actualPage.pageId.toString()) {
+            if (actualBookmark.pageId === actualPage.pageId) {
                 var bookmarkPosition = this.bookmarks[pageIndex];
                 if (!bookmarkPosition) {
                     bookmarkPosition = {
@@ -1050,8 +1050,7 @@
             var bookPageBookmark: IBookPageBookmark = {
                 id: 0,
                 favoriteLabel: favoriteLabel,
-                pagePosition: page.position,
-                pageXmlId: page.pageId.toString(),
+                pageId: page.pageId,
                 title: data.itemName
             };
 
@@ -1078,7 +1077,7 @@
             }
         };
 
-        this.favoriteManager.createPageBookmark(this.bookId, page.pageId.toString(), data.itemName, labelIds, (ids, error) => {
+        this.favoriteManager.createPageBookmark(Number(this.bookId), page.pageId, data.itemName, labelIds, (ids, error) => {
             if (error) {
                 this.newFavoriteDialog.showError("Chyba při vytváření záložky");
                 return;
@@ -1764,7 +1763,7 @@ class BookmarksPanel extends LeftSidePanel {
         page.classList.add("reader-bookmarks-content-item-page");
 
         const actionHook = () => {
-            var pageId = Number(bookmark.pageXmlId);
+            var pageId = bookmark.pageId;
             rootReference.parentReader.moveToPage(pageId, true);
         };
         bookmarkIco.addEventListener("click", actionHook);
