@@ -18,7 +18,9 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.CreateTime, opt => opt.MapFrom(src => src.CreateTime))
                 .ForMember(dest => dest.TextResourceId, opt => opt.MapFrom(src => src.ResourceText.Id))
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.CreatedByUser))
-                .ForMember(dest => dest.TextComments, opt => opt.MapFrom(src => src.TextComments));
+                .ForMember(dest => dest.TextComments, opt => opt.MapFrom(src => src.TextComments))
+                .ForMember(dest => dest.EditCount, opt => opt.MapFrom(src => src.EditCount ?? 0))
+                .ForMember(dest => dest.LastEditTime, opt => opt.MapFrom(src => src.LastEditTime));
         }
     }
 }

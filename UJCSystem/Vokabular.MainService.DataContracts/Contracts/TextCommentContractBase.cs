@@ -26,6 +26,10 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public List<GetTextCommentContract> TextComments { get; set; }
 
         public long TextResourceId { get; set; }
+
+        public int EditCount { get; set; }
+        
+        public DateTime? LastEditTime { get; set; }
     }
 
     public class UpdateTextCommentContract

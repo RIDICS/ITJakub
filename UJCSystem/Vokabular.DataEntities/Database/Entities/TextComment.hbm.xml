@@ -11,6 +11,10 @@
     <property name="Text" not-null="true" />
 
     <property name="CreateTime" not-null="true" />
+
+    <property name="EditCount" not-null="false" />
+
+    <property name="LastEditTime" not-null="false" />
     
     <many-to-one name="CreatedByUser" class="User" lazy="proxy" />
 

@@ -1,4 +1,5 @@
-﻿using Vokabular.DataEntities.Database.Entities;
+﻿using System;
+using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Utils;
@@ -23,14 +24,14 @@ namespace Vokabular.MainService.Core.Works.Text
 
         protected override void ExecuteWorkImplementation()
         {
-            //var now = DateTime.UtcNow;
+            var now = DateTime.UtcNow;
             var comment = m_resourceRepository.FindById<TextComment>(m_commentId);
 
             OwnershipHelper.CheckItemOwnership(comment.CreatedByUser.Id, m_userId);
 
             comment.Text = m_data.Text;
-            //comment.UpdateTime = now; // TODO add new property for LastEditTime
-            //comment.UpdateCount++; // TODO add property
+            comment.LastEditTime = now;
+            comment.EditCount = comment.EditCount + 1 ?? 1;
 
             m_resourceRepository.Update(comment);
         }

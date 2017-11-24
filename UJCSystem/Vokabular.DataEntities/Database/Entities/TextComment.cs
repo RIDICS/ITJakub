@@ -19,6 +19,10 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual Resource ResourceText { get; set; }
 
+        public virtual int? EditCount { get; set; }
+
+        public virtual DateTime? LastEditTime { get; set; }
+
         public virtual IList<TextComment> TextComments { get; set; }
 
         public virtual bool Equals(TextComment other)
