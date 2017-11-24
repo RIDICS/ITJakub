@@ -59,6 +59,7 @@ namespace Vokabular.MainService.Core
             container.AddSingleton<Profile, TextCommentProfile>();
             container.AddSingleton<Profile, TextProfile>();
             container.AddSingleton<Profile, TrackProfile>();
+            container.AddSingleton<Profile, TransformationProfile>();
             container.AddSingleton<Profile, UserProfile>();
 
             container.Install<CoreContainerRegistration>();

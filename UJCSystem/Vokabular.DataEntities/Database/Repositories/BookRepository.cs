@@ -59,7 +59,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        public IList<AudioResource> GetRecordings(long projectId)
+        public virtual IList<AudioResource> GetRecordings(long projectId)
         {
             Snapshot snapshotAlias = null;
             Project projectAlias = null;
@@ -76,7 +76,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        public IList<TrackResource> GetTracks(long projectId)
+        public virtual IList<TrackResource> GetTracks(long projectId)
         {
             Snapshot snapshotAlias = null;
             Project projectAlias = null;
@@ -383,7 +383,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return pageResourceIds;
         }
 
-        public IList<PageResource> GetPagesByTextExternalId(IList<string> textExternalIds, long? projectId, string projectExternalId = null)
+        public virtual IList<PageResource> GetPagesByTextExternalId(IList<string> textExternalIds, long? projectId, string projectExternalId = null)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;
@@ -412,6 +412,16 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             var pageResourceIds = query.List();
             return pageResourceIds;
+        }
+
+        public virtual Transformation GetDefaultTransformation(OutputFormatEnum outputFormat, BookTypeEnum requestedBookType)
+        {
+            BookType bookTypeAlias = null;
+
+            return GetSession().QueryOver<Transformation>()
+                .JoinAlias(x => x.BookType, () => bookTypeAlias)
+                .Where(x => x.OutputFormat == outputFormat && x.IsDefaultForBookType && bookTypeAlias.Type == requestedBookType)
+                .SingleOrDefault();
         }
     }
 }
