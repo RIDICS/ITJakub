@@ -199,7 +199,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        public IList<PageResource> GetPagesWithTerms(TermCriteriaPageConditionCreator creator)
+        public virtual IList<PageResource> GetPagesWithTerms(TermCriteriaPageConditionCreator creator)
         {
             var query = GetSession().CreateQuery(creator.GetQueryString())
                 .SetParameters(creator)
@@ -360,7 +360,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List<string>();
         }
 
-        public IList<MetadataResource> GetMetadataByProjectIds(IEnumerable<long> projectIds)
+        public virtual IList<MetadataResource> GetMetadataByProjectIds(IEnumerable<long> projectIds)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;
@@ -373,7 +373,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
-        public IList<MetadataResource> GetMetadataByProjectExternalIds(IEnumerable<string> projectExternalIds)
+        public virtual IList<MetadataResource> GetMetadataByProjectExternalIds(IEnumerable<string> projectExternalIds)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;

@@ -290,7 +290,9 @@ namespace Vokabular.MainService.Core.Managers
             IList<PageResource> resultPages;
             if (pagesByMetadata != null && pagesByFulltext != null)
             {
-                resultPages = pagesByMetadata.Intersect(pagesByFulltext).ToList();
+                resultPages = pagesByMetadata.Intersect(pagesByFulltext)
+                    .OrderBy(x => x.Position)
+                    .ToList();
             }
             else if (pagesByFulltext != null)
             {
