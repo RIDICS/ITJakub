@@ -20,6 +20,7 @@ namespace Vokabular.MainService.Core
             container.AddPerWebRequest<FavoriteManager>();
             container.AddPerWebRequest<HeadwordSearchManager>();
             container.AddPerWebRequest<NamedResourceGroupManager>();
+            container.AddPerWebRequest<NewsManager>();
             container.AddPerWebRequest<PersonManager>();
             container.AddPerWebRequest<ProjectContentManager>();
             container.AddPerWebRequest<ProjectInfoManager>();
@@ -50,6 +51,7 @@ namespace Vokabular.MainService.Core
             container.AddSingleton<Profile, LiteraryOriginalProfile>();
             container.AddSingleton<Profile, MetadataProfile>();
             container.AddSingleton<Profile, NamedResourceGroupProfile>();
+            container.AddSingleton<Profile, NewsProfile>();
             container.AddSingleton<Profile, OriginalAuthorProfile>();
             container.AddSingleton<Profile, PageProfile>();
             container.AddSingleton<Profile, ProjectProfile>();

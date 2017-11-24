@@ -1,4 +1,5 @@
-﻿using ITJakub.Shared.Contracts.Notes;
+﻿using System.Linq;
+using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
@@ -89,27 +90,29 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult GetTypeaheadAuthor(string query)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var result = client.GetTypeaheadAuthors(query);
-                return Json(result);
+                var result = client.GetOriginalAuthorAutocomplete(query);
+                var response = result.Select(x => x.FirstName != null ? $"{x.FirstName} {x.LastName}" : x.LastName)
+                    .ToList();
+                return Json(response);
             }
         }
 
         public ActionResult GetTypeaheadTitle(string query)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var result = client.GetTypeaheadTitles(query);
+                var result = client.GetTitleAutocomplete(query);
                 return Json(result);
             }
         }
 
         public ActionResult GetTypeaheadDictionaryHeadword(string query)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var result = client.GetTypeaheadDictionaryHeadwords(null, null, query, null);
+                var result = client.GetHeadwordAutocomplete(query);
                 return Json(result);
             }
         }

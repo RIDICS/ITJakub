@@ -1434,5 +1434,47 @@ namespace Vokabular.MainService.DataContracts.Clients
         }
 
         #endregion
+
+        #region News
+
+        public PagedResultList<NewsSyndicationItemContract> GetNewsSyndicationItems(int start, int count, NewsTypeEnumContract? itemType)
+        {
+            try
+            {
+                var url = UrlQueryBuilder.Create("news")
+                    .AddParameter("start", start)
+                    .AddParameter("count", count)
+                    .AddParameter("itemType", itemType)
+                    .ToQuery();
+                var result = GetPagedList<NewsSyndicationItemContract>(url);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public long CreateNewsSyndicationItem(CreateNewsSyndicationItemContract data)
+        {
+            try
+            {
+                var result = Post<long>("news", data);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
+        
     }
 }
