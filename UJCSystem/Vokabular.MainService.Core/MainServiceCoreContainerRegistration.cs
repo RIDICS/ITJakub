@@ -18,6 +18,7 @@ namespace Vokabular.MainService.Core
             container.AddPerWebRequest<CategoryManager>();
             container.AddPerWebRequest<CorpusSearchManager>();
             container.AddPerWebRequest<FavoriteManager>();
+            container.AddPerWebRequest<FeedbackManager>();
             container.AddPerWebRequest<HeadwordSearchManager>();
             container.AddPerWebRequest<NamedResourceGroupManager>();
             container.AddPerWebRequest<NewsManager>();
@@ -43,6 +44,7 @@ namespace Vokabular.MainService.Core
             container.AddSingleton<Profile, ChapterProfile>();
             container.AddSingleton<Profile, FavoriteLabelProfile>();
             container.AddSingleton<Profile, FavoriteProfile>();
+            container.AddSingleton<Profile, FeedbackProfile>();
             container.AddSingleton<Profile, HeadwordProfile>();
             container.AddSingleton<Profile, ImageProfile>();
             container.AddSingleton<Profile, KeywordProfile>();
