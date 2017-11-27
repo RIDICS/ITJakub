@@ -1,6 +1,6 @@
 {
-	"name": "asp.net",
-	"private": true,
+  "name": "asp.net",
+  "private": true,
   "dependencies": {
     "jquery": "2.2.4",
     "jquery-ui": "1.12.1",
@@ -18,6 +18,10 @@
     "simplemde-custom-markdown-mode": "#71b7a583e230b967116c99141291d94276ba1433",
     "font-awesome": "4.7.0",
     "bootstrap-colorpicker-plus": "#0fdd970",
-    "s-pagination": "1.1.1"
+    "s-pagination": "1.1.1",
+    "bootstrap-tagsinput": "0.8.0"
+  },
+  "resolutions": {
+    "jquery": "2.2.4"
   }
 }

@@ -285,7 +285,6 @@ class ProjectResourceModule extends ProjectModuleBase {
 
         this.toggleElementsVisibility(false, null);
         ProjectResourceVersionModule.staticInit();
-
         this.initDialogs();
         this.initMainResourceButtons();
     }

@@ -110,7 +110,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                         var literaryGenres = client.GetLiteraryGenreList();
                         var literaryOriginals = client.GetLiteraryOriginalList();
                         var responsibleTypes = client.GetResponsibleTypeList();
-                        var projectMetadata = client.GetProjectMetadata(projectId.Value, true, true, true, true, true);
+                        var projectMetadata = client.GetProjectMetadata(projectId.Value, true, true, true, true, true, true);
                         var workMetadaViewModel = Mapper.Map<ProjectWorkMetadataViewModel>(projectMetadata);
                         workMetadaViewModel.AllLiteraryKindList = literaryKinds;
                         workMetadaViewModel.AllLiteraryGenreList = literaryGenres;
@@ -130,7 +130,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult GetImageViewer()
         {
-                        return PartialView("Resource/_Images");
+            return PartialView("Resource/_Images");
         }
 
         public IActionResult GetTextPreview()
@@ -353,6 +353,18 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult GetProjectMetadata([FromQuery] long projectId, [FromQuery] bool includeAuthor, [FromQuery] bool includeResponsiblePerson,
+            [FromQuery] bool includeKind, [FromQuery] bool includeGenre, [FromQuery] bool includeOriginal, [FromQuery] bool includeKeyword)
+        {
+            using (var client = GetRestClient())
+            {
+                var response = client.GetProjectMetadata(projectId, includeAuthor,
+                includeResponsiblePerson, includeKind, includeGenre, includeOriginal, includeKeyword);
+                return Json(response);
+            }
+        }
+
         [HttpPost]
         public IActionResult SaveMetadata([FromQuery] long projectId, [FromBody] SaveMetadataRequest request)
         {
@@ -385,7 +397,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     RelicAbbreviation = request.RelicAbbreviation,
                     SourceAbbreviation = request.SourceAbbreviation,
                     SubTitle = request.SubTitle,
-                    Title = request.Title
+                    Title = request.Title,
                 };
                 long newResourceVersionId = -1;
                 int unsuccessRequestCount = 0;
@@ -437,6 +449,15 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     unsuccessRequestCount++;
                 }
 
+                try
+                {
+                    client.SetProjectKeywords(projectId, new IntegerIdListContract {IdList = request.KeywordIdList});
+                }
+                catch (HttpRequestException)
+                {
+                    unsuccessRequestCount++;
+                }
+
                 if (unsuccessRequestCount > 0)
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError);
@@ -455,7 +476,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
-        
+
         #region Typeahead
 
         public IActionResult GetTypeaheadOriginalAuthor(string query)

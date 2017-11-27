@@ -61,9 +61,20 @@
         };
     }
 
+    private getProjectMetadataWithKeywords(projectId: number) {
+        return $.get(`${getBaseUrl()}Admin/Project/GetProjectMetadata`, { projectId: projectId, includeKeyword: true});
+    }
+
     initTab(): void {
         super.initTab();
-
+        const keywordListAjax = this.getProjectMetadataWithKeywords(this.projectId);
+        $(".keywords-textarea").tagsinput({ itemValue: "id", itemText: "label" });
+        keywordListAjax.done((data: IGetMetadataResource) => {
+            for (let i = 0; i < data.keywordList.length; i++) {
+                $(".keywords-textarea").tagsinput("add", { id: data.keywordList[i].id, label: data.keywordList[i].name });
+            }
+        });
+        $(".keywords-textarea").tagsinput();
         var $addResponsibleTypeButton = $("#add-responsible-type-button");
         var $addResponsibleTypeContainer = $("#add-responsible-type-container");
 
@@ -334,7 +345,10 @@
             selectedGenreIds.push($(elem).val());
         });
 
+        const keywordsInputEl = $(".keywords-container").children(".bootstrap-tagsinput");
+
         var data: ISaveMetadataResource = {
+            keywordIdList: keywordsInputEl.val(),
             biblText: $("#work-metadata-bibl-text").val(),
             copyright: $("#work-metadata-copyright").val(),
             manuscriptCountry: $("#work-metadata-original-country").val(),

@@ -219,10 +219,20 @@ interface IChapterHieararchyContract {
 }
 
 interface ISaveMetadataResource extends IMetadataResource {
+    keywordIdList: Array<number>;
     literaryKindIdList: Array<number>;
     literaryGenreIdList: Array<number>;
     authorIdList: Array<number>;
     projectResponsiblePersonIdList: Array<ISaveProjectResponsiblePerson>;
+}
+
+interface IGetMetadataResource extends IMetadataResource {
+    keywordList?: Array<IKeywordContract>;
+    literaryKindList?: Array<ILiteraryKindContract>;
+    literaryGenreList?: Array<ILiteraryGenreContract>;
+    authorIdList?: Array<IOriginalAuthor>;
+    responsiblePersonList?: Array<{responsibleType: IResponsibleType , id:number,firestName:string, lastName:string}>;
+    literaryOriginalList?: Array<ILiteraryOriginalContract>;
 }
 
 interface IMetadataSaveResult {
