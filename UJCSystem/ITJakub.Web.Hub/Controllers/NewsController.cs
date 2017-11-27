@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ServiceModel.Syndication;
-using ITJakub.Shared.Contracts.News;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Identity;
 using ITJakub.Web.Hub.Models;
@@ -9,6 +8,8 @@ using ITJakub.Web.Hub.Models.FeedResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -37,14 +38,14 @@ namespace ITJakub.Web.Hub.Controllers
 
             var items = new List<SyndicationItem>();
 
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var feeds = client.GetWebNewsSyndicationItems(0, count);
-                foreach (var feed in feeds)
+                var feeds = client.GetNewsSyndicationItems(0, count, NewsTypeEnumContract.Web);
+                foreach (var feed in feeds.List)
                 {
                     var syndicationItem = new SyndicationItem(feed.Title, feed.Text, new Uri(feed.Url));
-                    syndicationItem.PublishDate = feed.CreateDate;
-                    var person = new SyndicationPerson(feed.UserEmail) {Name = $"{feed.UserFirstName} {feed.UserLastName}"};
+                    syndicationItem.PublishDate = feed.CreateTime;
+                    var person = new SyndicationPerson(feed.CreatedByUser.Email) {Name = $"{feed.CreatedByUser.FirstName} {feed.CreatedByUser.LastName}"};
                     syndicationItem.Authors.Add(person);
 
                     items.Add(syndicationItem);
@@ -65,25 +66,13 @@ namespace ITJakub.Web.Hub.Controllers
         [AllowAnonymous]
         public virtual ActionResult GetSyndicationItems(int start, int count)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var feeds = client.GetWebNewsSyndicationItems(start, count);
+                var feeds = client.GetNewsSyndicationItems(start, count, NewsTypeEnumContract.Web);
                 return Json(feeds);
             }
         }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public virtual ActionResult GetSyndicationItemCount()
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var feedCount = client.GetWebNewsSyndicationItemCount();
-                return Json(feedCount);
-            }
-        }
-
-
+        
         public ActionResult Add()
         {
             return View("AddNews");
@@ -94,10 +83,17 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Add(NewsSyndicationItemViewModel model)
         {
-            var username = GetUserName();
-
-            using (var client = GetMainServiceClient())
-                client.CreateNewsSyndicationItem(model.Title, model.Content, model.Url, (NewsTypeContract) model.ItemType, username);
+            using (var client = GetRestClient())
+            {
+                var data = new CreateNewsSyndicationItemContract
+                {
+                    Title = model.Title,
+                    ItemType = (NewsTypeEnumContract) model.ItemType,
+                    Text = model.Content,
+                    Url = model.Url,
+                };
+                client.CreateNewsSyndicationItem(data);
+            }
 
             return RedirectToAction("Index", "Home");
         }

@@ -4,6 +4,7 @@ using AutoMapper;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.MainService.Core.Works.Portal;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
@@ -16,10 +17,12 @@ namespace Vokabular.MainService.Core.Managers
         private const int DefaultCount = 20;
         private const int MaxCount = 200;
         private readonly PortalRepository m_portalRepository;
+        private readonly UserManager m_userManager;
 
-        public NewsManager(PortalRepository portalRepository)
+        public NewsManager(PortalRepository portalRepository, UserManager userManager)
         {
             m_portalRepository = portalRepository;
+            m_userManager = userManager;
         }
 
         private int GetStart(int? start)
@@ -52,7 +55,10 @@ namespace Vokabular.MainService.Core.Managers
 
         public long CreateNewsSyndicationItem(CreateNewsSyndicationItemContract data)
         {
-            throw new System.NotImplementedException();
+            var userId = m_userManager.GetCurrentUserId();
+            var work = new CreateNewsWork(m_portalRepository, data, userId);
+            var resultId = work.Execute();
+            return resultId;
         }
     }
 }

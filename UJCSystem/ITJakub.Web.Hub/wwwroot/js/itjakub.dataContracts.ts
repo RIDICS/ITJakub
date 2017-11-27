@@ -1,8 +1,13 @@
-﻿interface IFeedback {
+﻿interface IPagedResultArray<T> {
+    list: Array<T>;
+    totalCount: number;
+}
+
+interface IFeedback {
     id: number;
     text: string;
     createDate: string;
-    user: IUser;
+    user: IUserDetail;
     filledName: string;
     filledEmail: string;
     category: FeedbackCategoryEnum;
@@ -18,22 +23,25 @@ interface IFeedbackHeadwordInfo {
 }
 
 interface IUser {
-    id: Number;
-    email: string;
+    id: number;
     userName: string;
     firstName: string;
     lastName: string;
+    avatarUrl: string;
+}
+
+interface IUserDetail extends IUser {
+    email: string;
     createTime: string;
 }
 
 interface INewsSyndicationItemContract {
+    id: number;
     title: string;
     text: string;
     url: string;
-    userEmail: string;
-    createDate: string;
-    userFirstName: string;
-    userLastName: string;
+    createTime: string;
+    createdByUser: IUser;
 }
 
 interface IFavoriteBaseInfo {
