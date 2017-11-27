@@ -61,8 +61,6 @@
             return this.mDictionary[dictionaryKey];
         }
 
-        console.log(dictionary);
-
         return dictionary;
     }
 

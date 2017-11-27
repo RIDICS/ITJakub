@@ -12,8 +12,48 @@
 		"CreatePublisherError" : "Chyba při vytváření nového nakladatele",
 		"MissingName" : "Nebyl vyplněn název",
 		"CreateLiteraryKind" : "Chyba při vytváření nového literárního druhu",
-		"CreateLiteraryGenre" : "Chyba při vytváření nového literárního žánru",
+		"CreateLiteraryGenre" : "Chyba při vytváření nového literárního žánru",		
+		"CreateResourcesError" : "Chyba při načítání zdrojů k publikaci",
 		
-		"CreateResourcesError" : "Chyba při načítání zdrojů k publikaci"
+		"ProjectHeader" : "Projekt - ",
+		"ProjectTitle" : "Název díla",
+		"Project" : "Dílo",
+		"ImageScan" : "Obrazové skeny",
+		"Texts" : "Texty",
+		"Audio" : "Audio",
+		"Video" : "Video",
+		"AddResource" : "Přidat zdroj",
+		"DeleteResource" : "Smazat zdroj",
+		"RenameResource" : "Přejmenovat zdroj",
+		"DuplicateResource" : "Duplikovat zdroj",
+		"CreateNewVersion" : "Vytvořit novou verzi",
+		"NewFiles" : "Nové soubory",
+		"FirstVersionComment" : "Komentář k první verzi",
+		"ErrorDuringSave" : "Chyba při ukládání",
+		"Cancel" : "Zrušit",
+		"Done" : "Hotovo",
+		"OriginalTitle" : "Původní název",
+		"NewTitle" : "Nový název",
+		"Save" : "Uložit",
+		"DeleteResourceModal" : "Opravdu chcete smazat zdroj ",
+		"ErrorDuringDelete" : "Chyba při mazání",
+		"Delete" : "Smazat",
+		"ResourceDuplicateModal" : "Opravdu chcete duplikovat zdroj ",
+		"ErrorDuringDuplicate" : "Chyba při duplikování",
+		"Duplicate" : "Duplikovat",
+		"ResourceNewVersion" : "Nová verze zdroje ",
+		"NewVesionComment" : "Komentář k nové verzi",
+		"Projects-List" : "Projekty - Seznam",
+		"" : "",
+		"" : "",
+		"" : "",
+		"" : "",
+		"" : "",
+		
+		
+		
+		
+		
+		
 		}
 }

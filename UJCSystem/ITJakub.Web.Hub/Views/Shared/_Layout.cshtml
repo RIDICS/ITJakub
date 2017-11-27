@@ -143,7 +143,7 @@
                                     </li>
                                     <li>
                                         <a href='@Url.Action("Search", "BohemianTextBank", new {area = "BohemianTextBank"})'>
-                                            <span>@Localizer.Translate("Search", "layout, LocTranslationSource.File")</span>
+                                            <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
@@ -578,10 +578,11 @@
             </ul>
             <div class="footer-text">
                 @{
-                    string vokabularStarted = FooterHelper.VokabularStarted(new DateTime(2015, 1, 1)).Value;
+                    
+                    //string vokabularStarted = FooterHelper.VokabularStarted(new DateTime(2015, 1, 1)).Value;
                     string vokabularStartedNew = FooterHelper.VokabularStartedLocalized(new DateTime(2015, 1, 1), Context.Request.Cookies[ServiceBase.CultureCookieName]).Value;
                 }
-
+                
                 @Localizer.TranslateFormat("FooterText", new object[] {vokabularStartedNew}, "layout", LocTranslationSource.File)
             </div>
             <div class="footer-logos">

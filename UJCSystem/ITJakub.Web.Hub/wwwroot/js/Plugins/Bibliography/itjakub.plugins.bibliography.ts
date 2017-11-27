@@ -104,7 +104,7 @@ class BibliographyModule {
         } else {
             var divElement: HTMLDivElement = document.createElement('div');
             $(divElement).addClass('bib-listing-empty');
-            divElement.innerHTML = localization.translate("NoResultsToShow", "PluginsJs");
+            divElement.innerHTML = localization.translate("NoResultsToShow", "PluginsJs").value;
             this.booksContainer.appendChild(divElement);
         }
 

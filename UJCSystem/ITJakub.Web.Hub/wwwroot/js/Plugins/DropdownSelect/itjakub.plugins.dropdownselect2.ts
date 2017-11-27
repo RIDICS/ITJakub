@@ -295,8 +295,8 @@
         }
         
         var infoDiv = document.createElement("div");
-        var infoText = localization.translate("SearchCategories", "PluginsJs") + categoriesCountString + "<br>"
-            + localization.translate("SearchBooks", "PluginsJs") + booksCountString;
+        var infoText = localization.translate("SearchCategories", "PluginsJs").value + categoriesCountString + "<br>"
+            + localization.translate("SearchBooks", "PluginsJs").value + booksCountString;
         
         infoDiv.innerHTML = infoText;
 

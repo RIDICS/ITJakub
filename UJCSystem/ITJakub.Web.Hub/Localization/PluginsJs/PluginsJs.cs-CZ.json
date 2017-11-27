@@ -122,7 +122,9 @@
 		"Continue" : "Pokračovat",
 		"LearnMore" : "Zjistit více",
 		
-		"TitleSearchBox" : "Název"
+		"TitleSearchBox" : "Název",
+		
+		"ChooseSearchFiled" : "Zvolte oblast vyhledávání"
 
 		}
 }

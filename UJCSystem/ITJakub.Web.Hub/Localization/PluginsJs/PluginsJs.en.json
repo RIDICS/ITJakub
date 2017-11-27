@@ -122,7 +122,9 @@
 		"Continue" : "translate[Pokračovat]",
 		"LearnMore" : "translate[Zjistit více]",
 		
-		"TitleSearchBox" : "translate[Název]"
+		"TitleSearchBox" : "translate[Název]",
+		
+		"ChooseSearchFiled" : "translate[Zvolte oblast vyhledávání]"
 
 		}
 }
