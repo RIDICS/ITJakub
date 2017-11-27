@@ -21,10 +21,11 @@ namespace Vokabular.FulltextService.Core.Managers
     public class SearchManager : ElasticsearchManagerBase
     {
         private const int FragmentSize = 50;
-        private const int FragmentNumber = 10000;
+        private const int FragmentNumber = 1000000;
         private const int DefaultStart = 0;
         private const int DefaultSize = 10;
         private const string HighlightTag = "$";
+        private const string ReservedChars = ".?+*|{}[]()\"\\#@&<>~";
 
         private readonly SearchResultProcessor m_searchResultProcessor;
 
@@ -158,7 +159,7 @@ namespace Vokabular.FulltextService.Core.Managers
                 )
             );
 
-            return m_searchResultProcessor.SearchCorpusByCriteria(response, HighlightTag, searchRequest.Start ?? 0, searchRequest.Count ?? 10);
+            return m_searchResultProcessor.ProcessSearchCorpusByCriteria(response, HighlightTag, searchRequest.Start ?? 0, searchRequest.Count ?? 10);
         }
 
         
@@ -280,7 +281,7 @@ namespace Vokabular.FulltextService.Core.Managers
         private string GetRegexFromDisjunction(WordCriteriaContract disjunction)
         {
             if (!string.IsNullOrWhiteSpace(disjunction.ExactMatch))
-                return disjunction.ExactMatch;
+                return EscapeChars(disjunction.ExactMatch);
 
             var regexBuilder = new StringBuilder();
 
@@ -295,7 +296,8 @@ namespace Vokabular.FulltextService.Core.Managers
             {
                 if (!string.IsNullOrWhiteSpace(contain))
                 {
-                    regexBuilder.Append(contain.ToLower());
+                    var escapedText = EscapeChars(contain.ToLower());
+                    regexBuilder.Append(escapedText);
                     regexBuilder.Append(".*");
                 }
             }
@@ -308,7 +310,16 @@ namespace Vokabular.FulltextService.Core.Managers
             return regexBuilder.ToString();
         }
 
-        
+        private string EscapeChars(string text)
+        {
+            return text; //TODO 
+            foreach (var reservedChar in ReservedChars)
+            {
+                text = text.Replace(reservedChar.ToString(), $"\\{reservedChar}");
+            }
+
+            return text;
+        }
 
         
     }

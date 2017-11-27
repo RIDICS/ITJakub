@@ -62,7 +62,7 @@ namespace Vokabular.FulltextService.Core.Helpers
             return highlightedText.Split(new[] { highlightTag }, StringSplitOptions.None).Length / 2;
         }
 
-        public CorpusSearchResultDataList SearchCorpusByCriteria(ISearchResponse<SnapshotResourceContract> response, string highlightTag, int start, int count)
+        public CorpusSearchResultDataList ProcessSearchCorpusByCriteria(ISearchResponse<SnapshotResourceContract> response, string highlightTag, int start, int count)
         {
             if (!response.IsValid)
             {

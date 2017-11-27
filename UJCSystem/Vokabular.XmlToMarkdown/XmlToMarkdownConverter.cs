@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -38,6 +39,29 @@ namespace Vokabular.XmlToMarkdown
                 }
             }
             var markdown = Regex.Replace(text, "<h.*?>", "## ");
+            markdown = Regex.Replace(markdown, "</h.*?>", Environment.NewLine);
+            foreach (Match match in Regex.Matches(markdown, "class=\"itj-line\""))
+            {
+                var index = match.Index;
+                Stack<int> elements = new Stack<int>();
+                elements.Push(index);
+                while (elements.Count != 0)
+                {
+                    var mat = Regex.Match(markdown.Substring(elements.Peek()), "<([^>]*span[^>]*)>");
+                    var m = mat.Groups[1].Value.Split(' ')[0];
+                    if (m[0].Equals('/'))
+                    {
+                        index = elements.Pop();
+                        
+                    } else
+                    {
+                        elements.Push(match.Index + mat.Index + 1);
+                    }
+                }
+                var tm = Regex.Match(markdown.Substring(index), ">");
+                markdown.Insert(tm.Index + 1, Environment.NewLine);
+
+            }
             return Regex.Replace(markdown, "<.*?>", string.Empty);
         }
     }
