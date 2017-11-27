@@ -7,10 +7,11 @@
         public bool IncludeOriginal { get; set; }
         public bool IncludeAuthor { get; set; }
         public bool IncludeResponsiblePerson { get; set; }
+        public bool IncludeKeyword { get; set; }
 
         public bool IsAnyAdditionalParameter()
         {
-            return IncludeGenre || IncludeKind || IncludeOriginal || IncludeAuthor || IncludeResponsiblePerson;
+            return IncludeGenre || IncludeKind || IncludeOriginal || IncludeAuthor || IncludeResponsiblePerson || IncludeKeyword;
         }
     }
 }

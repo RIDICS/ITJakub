@@ -67,7 +67,7 @@ namespace Vokabular.MainService.Controllers
         [HttpGet("{projectId}/metadata")]
         [ProducesResponseType(typeof(ProjectMetadataResultContract), StatusCodes.Status200OK)]
         public IActionResult GetProjectMetadata(long projectId, [FromQuery] bool includeAuthor, [FromQuery] bool includeResponsiblePerson,
-            [FromQuery] bool includeKind, [FromQuery] bool includeGenre, [FromQuery] bool includeOriginal)
+            [FromQuery] bool includeKind, [FromQuery] bool includeGenre, [FromQuery] bool includeOriginal, [FromQuery] bool includeKeyword)
         {
             var parameters = new GetProjectMetadataParameter
             {
@@ -75,7 +75,8 @@ namespace Vokabular.MainService.Controllers
                 IncludeGenre = includeGenre,
                 IncludeOriginal = includeOriginal,
                 IncludeResponsiblePerson = includeResponsiblePerson,
-                IncludeAuthor = includeAuthor
+                IncludeAuthor = includeAuthor,
+                IncludeKeyword = includeKeyword
             };
             var resultData = m_projectMetadataManager.GetProjectMetadata(projectId, parameters);
 
