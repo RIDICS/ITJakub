@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.Core.Works.Portal;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
@@ -10,30 +12,38 @@ namespace Vokabular.MainService.Core.Managers
     public class FeedbackManager
     {
         private readonly PortalRepository m_portalRepository;
+        private readonly UserManager m_userManager;
 
-        public FeedbackManager(PortalRepository portalRepository)
+        public FeedbackManager(PortalRepository portalRepository, UserManager userManager)
         {
             m_portalRepository = portalRepository;
+            m_userManager = userManager;
         }
 
         public long CreateFeedback(CreateFeedbackContract data)
         {
-            throw new System.NotImplementedException();
+            var userId = m_userManager.GetCurrentUserId();
+            var resultId = new CreateFeedbackWork(m_portalRepository, data, FeedbackType.Generic, userId).Execute();
+            return resultId;
         }
 
         public long CreateAnonymousFeedback(CreateAnonymousFeedbackContract data)
         {
-            throw new System.NotImplementedException();
+            var resultId = new CreateFeedbackWork(m_portalRepository, data, FeedbackType.Generic).Execute();
+            return resultId;
         }
 
         public long CreateResourceFeedback(long resourceVersionId, CreateFeedbackContract data)
         {
-            throw new System.NotImplementedException();
+            var userId = m_userManager.GetCurrentUserId();
+            var resultId = new CreateFeedbackWork(m_portalRepository, data, FeedbackType.Headword, userId, resourceVersionId).Execute();
+            return resultId;
         }
 
         public long CreateAnonymousResourceFeedback(long resourceVersionId, CreateFeedbackContract data)
         {
-            throw new System.NotImplementedException();
+            var resultId = new CreateFeedbackWork(m_portalRepository, data, FeedbackType.Headword, null, resourceVersionId).Execute();
+            return resultId;
         }
 
         public PagedResultList<FeedbackContract> GetFeedbackList(int? start, int? count, FeedbackSortEnumContract sort, SortDirectionEnumContract sortDirection, IList<FeedbackCategoryEnumContract> filterCategoryIds)

@@ -317,7 +317,7 @@ BEGIN TRAN
 	   [AuthorUser] int NULL CONSTRAINT [FK_Feedback(AuthorUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
 	   [FeedbackCategory] smallint NOT NULL,
 	   [Project] bigint NULL CONSTRAINT [FK_Feedback(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project](Id),
-	   [Resource] bigint NULL CONSTRAINT [FK_Feedback(Resource)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
+	   [ResourceVersion] bigint NULL CONSTRAINT [FK_Feedback(ResourceVersion)_ResourceVersion(Id)] FOREIGN KEY REFERENCES [dbo].[ResourceVersion](Id)
 	)
 
 	CREATE TABLE [dbo].[NewsSyndicationItem]

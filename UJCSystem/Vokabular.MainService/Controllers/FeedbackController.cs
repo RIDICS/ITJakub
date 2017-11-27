@@ -32,15 +32,15 @@ namespace Vokabular.MainService.Controllers
             return resultId;
         }
 
-        [HttpPost("resource/version/{resourceVersionId}")]
-        public long CreateResourceFeedback(long resourceVersionId, [FromBody] CreateFeedbackContract data)
+        [HttpPost("headword/version/{resourceVersionId}")]
+        public long CreateHeadwordFeedback(long resourceVersionId, [FromBody] CreateFeedbackContract data)
         {
             var resultId = m_feedbackManager.CreateResourceFeedback(resourceVersionId, data);
             return resultId;
         }
 
-        [HttpPost("resource/version/{resourceVersionId}/anonymous")]
-        public long CreateAnonymousResourceFeedback(long resourceVersionId, [FromBody] CreateFeedbackContract data)
+        [HttpPost("headword/version/{resourceVersionId}/anonymous")]
+        public long CreateAnonymousHeadwordFeedback(long resourceVersionId, [FromBody] CreateFeedbackContract data)
         {
             var resultId = m_feedbackManager.CreateAnonymousResourceFeedback(resourceVersionId, data);
             return resultId;

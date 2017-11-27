@@ -28,15 +28,15 @@ namespace Vokabular.MainService.DataContracts.Contracts.Feedback
 
     public class CreateFeedbackContract
     {
-        string Text { get; set; }
+        public string Text { get; set; }
 
-        FeedbackCategoryEnumContract FeedbackCategory { get; set; }
+        public FeedbackCategoryEnumContract FeedbackCategory { get; set; }
     }
 
     public class CreateAnonymousFeedbackContract : CreateFeedbackContract
     {
-        string AuthorName { get; set; }
+        public string AuthorName { get; set; }
 
-        string AuthorEmail { get; set; }
+        public string AuthorEmail { get; set; }
     }
 }

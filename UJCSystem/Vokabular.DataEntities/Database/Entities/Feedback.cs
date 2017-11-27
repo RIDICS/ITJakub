@@ -47,6 +47,6 @@ namespace Vokabular.DataEntities.Database.Entities
     {
         public override FeedbackType FeedbackType => FeedbackType.Headword;
 
-        public virtual Resource HeadwordResource { get; set; }
+        public virtual HeadwordResource HeadwordResource { get; set; }
     }
 }
