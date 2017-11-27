@@ -3,6 +3,7 @@ using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Core.AutoMapperProfiles
 {
@@ -21,6 +22,8 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Text));
             
             CreateMap<FeedbackCategoryEnum, FeedbackCategoryEnumContract>().ReverseMap();
+
+            CreateMap<FeedbackSortEnum, FeedbackSortEnumContract>().ReverseMap();
         }
     }
 }

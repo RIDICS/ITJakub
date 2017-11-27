@@ -31,6 +31,11 @@ namespace Vokabular.MainService.Core.Works.Portal
         {
             var feedbackEntity = CreateEntity();
 
+            if (m_feedbackType == FeedbackType.Headword)
+            {
+                feedbackEntity.FeedbackCategory = FeedbackCategoryEnum.Dictionaries; // Feedback category correction for headwords
+            }
+
             return (long) m_portalRepository.Create(feedbackEntity);
         }
 
