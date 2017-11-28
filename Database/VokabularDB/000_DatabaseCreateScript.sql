@@ -317,7 +317,7 @@ BEGIN TRAN
 	   [AuthorUser] int NULL CONSTRAINT [FK_Feedback(AuthorUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
 	   [FeedbackCategory] smallint NOT NULL,
 	   [Project] bigint NULL CONSTRAINT [FK_Feedback(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project](Id),
-	   [Resource] bigint NULL CONSTRAINT [FK_Feedback(Resource)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
+	   [ResourceVersion] bigint NULL CONSTRAINT [FK_Feedback(ResourceVersion)_ResourceVersion(Id)] FOREIGN KEY REFERENCES [dbo].[ResourceVersion](Id)
 	)
 
 	CREATE TABLE [dbo].[NewsSyndicationItem]
@@ -380,7 +380,9 @@ BEGIN TRAN
 		[CreateTime] datetime NOT NULL,
 		[CreatedByUser] int NOT NULL CONSTRAINT [FK_TextComment(CreatedByUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
 		[ParentComment] bigint NULL CONSTRAINT [FK_TextComment(ParentComment)_TextComment(Id)] FOREIGN KEY REFERENCES [dbo].[TextComment](Id),
-		[ResourceText] bigint NOT NULL CONSTRAINT [FK_TextComment(TextResource)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
+		[ResourceText] bigint NOT NULL CONSTRAINT [FK_TextComment(TextResource)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id),
+		[EditCount] int NULL,
+		[LastEditTime] datetime NULL
 	)
 
 		

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Web.Hub.Areas.Dictionaries.Models;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
@@ -20,6 +19,7 @@ using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Types;
 using BookContract = Vokabular.MainService.DataContracts.Contracts.BookContract;
+using FeedbackCategoryEnumContract = ITJakub.Shared.Contracts.Notes.FeedbackCategoryEnumContract;
 using HeadwordBookInfoContract = ITJakub.Web.Hub.DataContracts.HeadwordBookInfoContract;
 
 namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers

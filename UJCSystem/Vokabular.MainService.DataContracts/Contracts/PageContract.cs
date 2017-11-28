@@ -7,4 +7,11 @@
         public string Name { get; set; }
         public int Position { get; set; }
     }
+
+    public class CreatePageContract
+    {
+        public string Name { get; set; }
+        public int Position { get; set; }
+        public string Comment { get; set; }
+    }
 }

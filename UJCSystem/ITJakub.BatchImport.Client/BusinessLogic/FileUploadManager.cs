@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ITJakub.BatchImport.Client.BusinessLogic.Communication;
 using ITJakub.BatchImport.Client.ViewModel;
 using ITJakub.Shared.Contracts.Resources;
+using Vokabular.MainService.DataContracts.Contracts;
 
 namespace ITJakub.BatchImport.Client.BusinessLogic
 {
@@ -49,18 +50,18 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
         public void ProcessAllItems(string username, string password, int threadCount, Action<string, Exception> callback)
         {            
             var formattedPassword = m_communicationProvider.GetFormattedPasswordAsAuthToken(password);
-            ParallelLoopResult result = Parallel.ForEach(m_files, 
-                new ParallelOptions {MaxDegreeOfParallelism = threadCount }, 
-                model=> ProcessFile(model, username, formattedPassword, callback));            
+            ParallelLoopResult result = Parallel.ForEach(m_files,
+                new ParallelOptions {MaxDegreeOfParallelism = threadCount},
+                model => ProcessFile(model, username, formattedPassword, callback));
         }
     
 
         private void ProcessFile(FileModel file, string username, string password, Action<string, Exception> callback)
         {
-            
             var session = Guid.NewGuid().ToString();
 
-            using (var client = m_communicationProvider.GetStreamingClientAuthenticated(username, password))
+            //using (var client = m_communicationProvider.GetStreamingClientAuthenticated(username, password))
+            using (var client = m_communicationProvider.GetMainServiceClient())
             {
                 file.CurrentState = FileStateType.Uploading;
                 using (var dataStream = GetDataStream(file.FullPath))
@@ -68,13 +69,13 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
                     try
                     {
                         var contract = new UploadResourceContract
-                    {
-                        FileName = file.FileName,
-                        Data = dataStream,
-                        SessionId = session
-                    };
+                        {
+                            FileName = file.FileName,
+                            Data = dataStream,
+                            SessionId = session
+                        };
 
-                    client.AddResource(contract);
+                        client.UploadResource(session, dataStream, file.FileName);
                     }
                     catch (Exception)
                     {
@@ -87,11 +88,15 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
 
             file.CurrentState = FileStateType.Processing;
 
-            using (var client = m_communicationProvider.GetAuthenticatedClient(username, password))
+            //using (var client = m_communicationProvider.GetAuthenticatedClient(username, password))
+            using (var client = m_communicationProvider.GetMainServiceClient())
             {
                 try
                 {
-                    client.ProcessSession(session, null, DefaultUploadMessage);
+                    client.ProcessSessionAsImport(session, new NewBookImportContract
+                    {
+                        Comment = DefaultUploadMessage
+                    });
                     file.CurrentState = FileStateType.Done;
                 }
                 catch (FaultException ex)

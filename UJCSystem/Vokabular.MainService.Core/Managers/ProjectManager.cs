@@ -1,21 +1,39 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Works;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.MainService.DataContracts.Data;
+using Vokabular.RestClient.Results;
 
 namespace Vokabular.MainService.Core.Managers
 {
     public class ProjectManager
     {
+        private const int DefaultStartItem = 0;
+        private const int DefaultProjectItemCount = 5;
+        private const int MaxResultCount = 200;
+
         private readonly ProjectRepository m_projectRepository;
+        private readonly MetadataRepository m_metadataRepository;
         private readonly UserManager m_userManager;
 
-        public ProjectManager(ProjectRepository projectRepository, UserManager userManager)
+        public ProjectManager(ProjectRepository projectRepository, MetadataRepository metadataRepository, UserManager userManager)
         {
             m_projectRepository = projectRepository;
+            m_metadataRepository = metadataRepository;
             m_userManager = userManager;
+        }
+
+        private int GetStart(int? start)
+        {
+            return start ?? DefaultStartItem;
+        }
+
+        private int GetCount(int? count)
+        {
+            return count != null ? Math.Min(count.Value, MaxResultCount) : DefaultProjectItemCount;
         }
 
         public long CreateProject(ProjectContract projectData)
@@ -27,25 +45,61 @@ namespace Vokabular.MainService.Core.Managers
             return resultId;
         }
 
-        public ProjectListData GetProjectList(int start, int count)
+        public void UpdateProject(long projectId, ProjectContract data)
         {
-            var work = new GetProjectListWork(m_projectRepository, start, count);
-            var resultEntities = work.Execute();
-
-            var result = new ProjectListData
-            {
-                List = Mapper.Map<List<ProjectContract>>(resultEntities),
-                TotalCount = work.GetResultCount()
-            };
-            return result;
+            var currentUserId = m_userManager.GetCurrentUserId();
+            var work = new UpdateProjectWork(m_projectRepository, projectId, data, currentUserId);
+            work.Execute();
         }
 
-        public ProjectContract GetProject(long projectId)
+        public void DeleteProject(long projectId)
         {
-            var work = new GetProjectWork(m_projectRepository, projectId);
-            var resultEntity = work.Execute();
+            // TODO probably only set Project as removed
+            throw new NotImplementedException();
+        }
 
-            var result = Mapper.Map<ProjectContract>(resultEntity);
+        public PagedResultList<ProjectDetailContract> GetProjectList(int? start, int? count, bool fetchPageCount)
+        {
+            var startValue = GetStart(start);
+            var countValue = GetCount(count);
+
+            var work = new GetProjectListWork(m_projectRepository, m_metadataRepository, startValue, countValue, fetchPageCount);
+            var resultEntities = work.Execute();
+
+            var metadataList = work.GetMetadataResources();
+            var pageCountList = work.GetPageCountList();
+            var resultList = Mapper.Map<List<ProjectDetailContract>>(resultEntities);
+            foreach (var projectContract in resultList)
+            {
+                var metadataResource = metadataList.FirstOrDefault(x => x.Resource.Project.Id == projectContract.Id);
+                var pageCountResult = pageCountList.FirstOrDefault(x => x.ProjectId == projectContract.Id);
+
+                var metadataContract = Mapper.Map<ProjectMetadataContract>(metadataResource);
+                projectContract.LatestMetadata = metadataContract;
+                projectContract.PageCount = pageCountResult?.PageCount;
+            }
+
+            return new PagedResultList<ProjectDetailContract>
+            {
+                List = resultList,
+                TotalCount = work.GetResultCount()
+            };
+        }
+
+        public ProjectDetailContract GetProject(long projectId, bool fetchPageCount)
+        {
+            var work = new GetProjectWork(m_projectRepository, m_metadataRepository, projectId, fetchPageCount);
+            var project = work.Execute();
+
+            if (project == null)
+            {
+                return null;
+            }
+
+            var result = Mapper.Map<ProjectDetailContract>(project);
+            result.LatestMetadata = Mapper.Map<ProjectMetadataContract>(work.GetMetadataResource());
+            result.PageCount = work.GetPageCount();
+
             return result;
         }
     }

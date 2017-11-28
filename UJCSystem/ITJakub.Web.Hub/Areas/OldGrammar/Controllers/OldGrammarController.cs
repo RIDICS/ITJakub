@@ -54,7 +54,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 
         public ActionResult ListTerms()
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
                 var termCategories = client.GetTermCategoriesWithTerms();
                 return View(new TermCategoriesWithTermsModel

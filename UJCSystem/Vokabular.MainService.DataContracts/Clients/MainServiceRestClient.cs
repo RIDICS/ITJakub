@@ -5,9 +5,9 @@ using System.Net;
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.Favorite;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
-using Vokabular.MainService.DataContracts.Data;
 using Vokabular.RestClient;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Extensions;
@@ -15,6 +15,7 @@ using Vokabular.RestClient.Results;
 using Vokabular.Shared;
 using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Types;
+using Vokabular.Shared.DataContracts.Types.Favorite;
 using Vokabular.Shared.Extensions;
 
 namespace Vokabular.MainService.DataContracts.Clients
@@ -35,16 +36,12 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
         }
 
-        public ProjectListData GetProjectList(int start, int count)
+        public PagedResultList<ProjectDetailContract> GetProjectList(int start, int count, bool fetchPageCount = false)
         {
             try
             {
-                var result = GetFull<List<ProjectContract>>($"project?start={start}&count={count}");
-                return new ProjectListData
-                {
-                    TotalCount = result.GetTotalCountHeader(),
-                    List = result.Result
-                };
+                var result = GetPagedList<ProjectDetailContract>($"project?start={start}&count={count}&fetchPageCount={fetchPageCount}");
+                return result;
             }
             catch (HttpRequestException e)
             {
@@ -55,11 +52,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public ProjectContract GetProject(long projectId)
+        public ProjectDetailContract GetProject(long projectId, bool fetchPageCount = false)
         {
             try
             {
-                var project = Get<ProjectContract>($"project/{projectId}");
+                var project = Get<ProjectDetailContract>($"project/{projectId}?fetchPageCount={fetchPageCount}");
                 return project;
             }
             catch (HttpRequestException e)
@@ -140,7 +137,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Put<object>($"project/{projectId}/literarykind", request);
+                Put<object>($"project/{projectId}/literary-kind", request);
             }
             catch (HttpRequestException e)
             {
@@ -155,7 +152,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Put<object>($"project/{projectId}/literarygenre", request);
+                Put<object>($"project/{projectId}/literary-genre", request);
             }
             catch (HttpRequestException e)
             {
@@ -185,7 +182,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Put<object>($"project/{projectId}/responsibleperson", request);
+                Put<object>($"project/{projectId}/responsible-person", request);
             }
             catch (HttpRequestException e)
             {
@@ -1174,5 +1171,359 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+
+        public List<TermCategoryDetailContract> GetTermCategoriesWithTerms()
+        {
+            try
+            {
+                var result = Get<List<TermCategoryDetailContract>>("term/category/detail");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+
+        #region Favorite items
+
+        public List<FavoriteLabelContract> GetFavoriteLabelList(int? count = null)
+        {
+            try
+            {
+                var result = Get<List<FavoriteLabelContract>>(UrlQueryBuilder.Create("favorite/label").AddParameter("count", count).ToQuery());
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public long CreateFavoriteLabel(FavoriteLabelContractBase data)
+        {
+            try
+            {
+                var result = Post<long>("favorite/label", data);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void UpdateFavoriteLabel(long favoriteLabelId, FavoriteLabelContractBase data)
+        {
+            try
+            {
+                Put<object>($"favorite/label/{favoriteLabelId}", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void DeleteFavoriteLabel(long favoriteLabelId)
+        {
+            try
+            {
+                Delete($"favorite/label/{favoriteLabelId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public PagedResultList<FavoriteBaseInfoContract> GetFavoriteItems(int start, int count, long? filterByLabelId, FavoriteTypeEnumContract? filterByType, string filterByTitle, FavoriteSortEnumContract? sort)
+        {
+            try
+            {
+                var url = UrlQueryBuilder.Create("favorite")
+                    .AddParameter("start", start)
+                    .AddParameter("count", count)
+                    .AddParameter("filterByLabelId", filterByLabelId)
+                    .AddParameter("filterByType", filterByType)
+                    .AddParameter("filterByTitle", filterByTitle)
+                    .AddParameter("sort", sort)
+                    .ToQuery();
+                    
+                var result = GetPagedList<FavoriteBaseInfoContract>(url);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public PagedResultList<FavoriteQueryContract> GetFavoriteQueries(int start, int count, long? filterByLabelId, BookTypeEnumContract? bookType, QueryTypeEnumContract? queryType, string filterByTitle)
+        {
+            try
+            {
+                var url = UrlQueryBuilder.Create("favorite/query")
+                    .AddParameter("start", start)
+                    .AddParameter("count", count)
+                    .AddParameter("filterByLabelId", filterByLabelId)
+                    .AddParameter("bookType", bookType)
+                    .AddParameter("queryType", queryType)
+                    .AddParameter("filterByTitle", filterByTitle)
+                    .ToQuery();
+
+                var result = GetPagedList<FavoriteQueryContract>(url);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<FavoritePageContract> GetPageBookmarks(long projectId)
+        {
+            try
+            {
+                var result = Get<List<FavoritePageContract>>($"favorite/page?projectId={projectId}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public FavoriteFullInfoContract GetFavoriteItem(long favoriteId)
+        {
+            try
+            {
+                var result = Get<FavoriteFullInfoContract>($"favorite/{favoriteId}/detail");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void UpdateFavoriteItem(long favoriteId, UpdateFavoriteContract data)
+        {
+            try
+            {
+                Put<object>($"favorite/{favoriteId}", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void DeleteFavoriteItem(long favoriteId)
+        {
+            try
+            {
+                Delete($"favorite/{favoriteId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<FavoriteBookGroupedContract> GetFavoriteLabeledBooks(IList<long> projectIds, BookTypeEnumContract? bookType)
+        {
+            try
+            {
+                var url = UrlQueryBuilder.Create("favorite/book/grouped")
+                    .AddParameterList("projectIds", projectIds)
+                    .AddParameter("bookType", bookType)
+                    .ToQuery();
+
+                var result = Get<List<FavoriteBookGroupedContract>>(url);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<FavoriteCategoryGroupedContract> GetFavoriteLabeledCategories()
+        {
+            try
+            {
+                var result = Get<List<FavoriteCategoryGroupedContract>>("favorite/category/grouped");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<FavoriteLabelWithBooksAndCategories> GetFavoriteLabelsWithBooksAndCategories(BookTypeEnumContract bookType)
+        {
+            try
+            {
+                var result = Get<List<FavoriteLabelWithBooksAndCategories>>($"favorite/label/with-books-and-categories?bookType={bookType.ToString()}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public long CreateFavoriteBook(CreateFavoriteProjectContract data)
+        {
+            try
+            {
+                var result = Post<long>("favorite/book", data);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public long CreateFavoriteCategory(CreateFavoriteCategoryContract data)
+        {
+            try
+            {
+                var result = Post<long>("favorite/category", data);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public long CreateFavoriteQuery(CreateFavoriteQueryContract data)
+        {
+            try
+            {
+                var result = Post<long>("favorite/query", data);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+        
+        public long CreateFavoritePage(CreateFavoritePageContract data)
+        {
+            try
+            {
+                var result = Post<long>("favorite/page", data);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region News
+
+        public PagedResultList<NewsSyndicationItemContract> GetNewsSyndicationItems(int start, int count, NewsTypeEnumContract? itemType)
+        {
+            try
+            {
+                var url = UrlQueryBuilder.Create("news")
+                    .AddParameter("start", start)
+                    .AddParameter("count", count)
+                    .AddParameter("itemType", itemType)
+                    .ToQuery();
+                var result = GetPagedList<NewsSyndicationItemContract>(url);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public long CreateNewsSyndicationItem(CreateNewsSyndicationItemContract data)
+        {
+            try
+            {
+                var result = Post<long>("news", data);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
+        
     }
 }

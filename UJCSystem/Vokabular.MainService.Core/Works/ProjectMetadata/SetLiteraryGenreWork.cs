@@ -7,13 +7,13 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
 {
     public class SetLiteraryGenreWork : UnitOfWorkBase
     {
-        private readonly MetadataRepository m_metadataRepository;
+        private readonly ProjectRepository m_projectRepository;
         private readonly long m_projectId;
         private readonly IList<int> m_genreIdList;
         
-        public SetLiteraryGenreWork(MetadataRepository metadataRepository, long projectId, IList<int> genreIdList) : base(metadataRepository)
+        public SetLiteraryGenreWork(ProjectRepository projectRepository, long projectId, IList<int> genreIdList) : base(projectRepository)
         {
-            m_metadataRepository = metadataRepository;
+            m_projectRepository = projectRepository;
             m_projectId = projectId;
             m_genreIdList = genreIdList;
         }
@@ -23,14 +23,14 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
             var literaryGenreList = new List<LiteraryGenre>();
             foreach (var id in m_genreIdList)
             {
-                var literaryGenre = m_metadataRepository.Load<LiteraryGenre>(id);
+                var literaryGenre = m_projectRepository.Load<LiteraryGenre>(id);
                 literaryGenreList.Add(literaryGenre);
             }
 
-            var project = m_metadataRepository.Load<Project>(m_projectId);
+            var project = m_projectRepository.Load<Project>(m_projectId);
             project.LiteraryGenres = literaryGenreList;
 
-            m_metadataRepository.Update(project);
+            m_projectRepository.Update(project);
         }
     }
 }

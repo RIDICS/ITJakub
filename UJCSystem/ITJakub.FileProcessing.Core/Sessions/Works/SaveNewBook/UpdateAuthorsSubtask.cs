@@ -9,16 +9,18 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 {
     public class UpdateAuthorsSubtask
     {
-        private readonly MetadataRepository m_metadataRepository;
+        private readonly ProjectRepository m_projectRepository;
+        private readonly PersonRepository m_personRepository;
 
-        public UpdateAuthorsSubtask(MetadataRepository metadataRepository)
+        public UpdateAuthorsSubtask(ProjectRepository projectRepository, PersonRepository personRepository)
         {
-            m_metadataRepository = metadataRepository;
+            m_projectRepository = projectRepository;
+            m_personRepository = personRepository;
         }
 
         public void UpdateAuthors(long projectId, BookData bookData)
         {
-            var dbProjectAuthors = m_metadataRepository.GetProjectOriginalAuthorList(projectId, true);
+            var dbProjectAuthors = m_projectRepository.GetProjectOriginalAuthorList(projectId, true);
             var dbAuthors = dbProjectAuthors.Select(x => x.OriginalAuthor).ToList();
             var newAuthors = bookData.Authors?.Select(x => PersonHelper.ConvertToOriginalAuthor(x.Name)).ToList() ?? new List<OriginalAuthor>();
 
@@ -35,7 +37,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             foreach (var author in authorsToRemove)
             {
                 var projectAuthor = dbProjectAuthors.Single(x => x.OriginalAuthor.Id == author.Id);
-                m_metadataRepository.Delete(projectAuthor);
+                m_projectRepository.Delete(projectAuthor);
             }
 
 
@@ -48,23 +50,23 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     var newProjectAuthor = new ProjectOriginalAuthor
                     {
                         OriginalAuthor = dbAuthor,
-                        Project = m_metadataRepository.Load<Project>(projectId),
+                        Project = m_projectRepository.Load<Project>(projectId),
                         Sequence = i + 1
                     };
-                    m_metadataRepository.Create(newProjectAuthor);
+                    m_projectRepository.Create(newProjectAuthor);
                 }
                 else
                 {
                     var projectAuthor = dbProjectAuthors.Single(x => x.OriginalAuthor.FirstName == newAuthor.FirstName && x.OriginalAuthor.LastName == newAuthor.LastName);
                     projectAuthor.Sequence = i + 1;
-                    m_metadataRepository.Update(projectAuthor);
+                    m_projectRepository.Update(projectAuthor);
                 }
             }
         }
 
         private OriginalAuthor GetOrCreateAuthor(string firstName, string lastName)
         {
-            var dbAuthor = m_metadataRepository.GetAuthorByName(firstName, lastName);
+            var dbAuthor = m_personRepository.GetAuthorByName(firstName, lastName);
             if (dbAuthor != null)
             {
                 return dbAuthor;
@@ -75,8 +77,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 FirstName = firstName,
                 LastName = lastName
             };
-            m_metadataRepository.Create(newDbAuthor);
-            newDbAuthor = m_metadataRepository.Load<OriginalAuthor>(newDbAuthor.Id);
+            m_projectRepository.Create(newDbAuthor);
+            newDbAuthor = m_projectRepository.Load<OriginalAuthor>(newDbAuthor.Id);
 
             return newDbAuthor;
         }

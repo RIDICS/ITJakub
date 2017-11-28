@@ -12,6 +12,7 @@ using Vokabular.Core;
 using Vokabular.MainService.Containers.Extensions;
 using Vokabular.MainService.Containers;
 using Vokabular.MainService.Containers.Installers;
+using Vokabular.MainService.Utils;
 using Vokabular.Shared;
 using Vokabular.Shared.Container;
 using Vokabular.Shared.Options;
@@ -67,6 +68,7 @@ namespace Vokabular.MainService
                     Version = "v1",
                 });
                 options.DescribeAllEnumsAsStrings();
+                options.OperationFilter<AddResponseHeadersFilter>();
             });
 
             // IoC

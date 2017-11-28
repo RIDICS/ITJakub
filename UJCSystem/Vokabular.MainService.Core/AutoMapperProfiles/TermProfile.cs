@@ -17,6 +17,10 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
             CreateMap<TermCategory, TermCategoryContract>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
+
+            CreateMap<TermCategory, TermCategoryDetailContract>()
+                .IncludeBase<TermCategory, TermCategoryContract>()
+                .ForMember(dest => dest.Terms, opt => opt.MapFrom(src => src.Terms));
         }
     }
 }

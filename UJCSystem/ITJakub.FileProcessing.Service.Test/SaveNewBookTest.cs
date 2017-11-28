@@ -96,9 +96,12 @@ namespace ITJakub.FileProcessing.Service.Test
             };
 
 
-            var metadataRepository = new MockMetadataRepository(unitOfWork)
+            var personRepository = new MockPersonRepository(unitOfWork)
             {
-                CanFindAuthorByName = true,
+                CanFindAuthorByName = true
+            };
+            var projectRepository = new MockProjectRepository(unitOfWork)
+            {
                 ProjectOriginalAuthors = new List<ProjectOriginalAuthor>
                 {
                     new ProjectOriginalAuthor
@@ -113,16 +116,16 @@ namespace ITJakub.FileProcessing.Service.Test
                     }
                 }
             };
-            var subtask = new UpdateAuthorsSubtask(metadataRepository);
+            var subtask = new UpdateAuthorsSubtask(projectRepository, personRepository);
 
             subtask.UpdateAuthors(41, bookData);
 
-            Assert.AreEqual(1, metadataRepository.CreatedObjects.Count);
-            Assert.AreEqual(1, metadataRepository.UpdatedObjects.Count);
-            Assert.AreEqual(1, metadataRepository.DeletedObjects.Count);
+            Assert.AreEqual(1, projectRepository.CreatedObjects.Count);
+            Assert.AreEqual(1, projectRepository.UpdatedObjects.Count);
+            Assert.AreEqual(1, projectRepository.DeletedObjects.Count);
 
-            var createdItem = (ProjectOriginalAuthor) metadataRepository.CreatedObjects.Single();
-            var updatedItem = (ProjectOriginalAuthor) metadataRepository.UpdatedObjects.Single();
+            var createdItem = (ProjectOriginalAuthor) projectRepository.CreatedObjects.Single();
+            var updatedItem = (ProjectOriginalAuthor) projectRepository.UpdatedObjects.Single();
             Assert.AreEqual(1, updatedItem.Sequence);
             Assert.AreEqual(2, createdItem.Sequence);
         }

@@ -11,8 +11,22 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public long BeginningPageId { get; set; }
     }
 
+    public class GetChapterContract : ChapterContractBase
+    {
+        public long? ParentChapterId { get; set; }
+    }
+
     public class ChapterHierarchyContract : ChapterContractBase
     {
         public List<ChapterHierarchyContract> SubChapters { get; set; }
+    }
+
+    public class CreateChapterContract
+    {
+        public string Comment { get; set; }
+        public string Name { get; set; }
+        public int Position { get; set; }
+        public long BeginningPageId { get; set; }
+        public long? ParentChapterId { get; set; }
     }
 }

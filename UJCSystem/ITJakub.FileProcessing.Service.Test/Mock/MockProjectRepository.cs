@@ -13,13 +13,16 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
         {
             CreatedObjects = new List<object>();
             UpdatedObjects = new List<object>();
+            DeletedObjects = new List<object>();
         }
 
         public static readonly long GetProjectIdValue = 555;
 
+        public List<ProjectOriginalAuthor> ProjectOriginalAuthors { get; set; }
         public bool CanFindProjectByExternalId { get; set; }
         public List<object> CreatedObjects { get; }
         public List<object> UpdatedObjects { get; }
+        public List<object> DeletedObjects { get; }
 
         public override object FindById(Type type, object id)
         {
@@ -84,7 +87,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
 
         public override void Delete(object instance)
         {
-            throw new NotSupportedException();
+            DeletedObjects.Add(instance);
         }
 
         public override void Update(object instance)
@@ -124,6 +127,11 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             }
 
             return null;
+        }
+
+        public override IList<ProjectOriginalAuthor> GetProjectOriginalAuthorList(long projectId, bool includeAuthors = false)
+        {
+            return ProjectOriginalAuthors;
         }
     }
 }

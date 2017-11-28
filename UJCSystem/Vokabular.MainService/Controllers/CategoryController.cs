@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -50,10 +51,28 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
+        [HttpGet("{categoryId}")]
+        [ProducesResponseType(typeof(CategoryContract), StatusCodes.Status200OK)]
+        public IActionResult GetCategory(int categoryId)
+        {
+            var result = m_categoryManager.GetCategory(categoryId);
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
         [HttpGet("")]
         public List<CategoryContract> GetCategoryList()
         {
             return m_categoryManager.GetCategoryList();
+        }
+
+        [HttpGet("tree")]
+        public List<CategoryTreeContract> GetCategoryTree()
+        {
+            var result = m_categoryManager.GetCategoryTree();
+            return result;
         }
     }
 }

@@ -335,7 +335,7 @@ class DropDownSelect {
                 favoriteType = FavoriteType.Category;
             } else if (type === "item") {
                 favoriteItem = leafsDictionary.get(id);
-                favoriteType = FavoriteType.Book;
+                favoriteType = FavoriteType.Project;
             }
 
             var favoriteStarContainer = $(element).children(".save-item");

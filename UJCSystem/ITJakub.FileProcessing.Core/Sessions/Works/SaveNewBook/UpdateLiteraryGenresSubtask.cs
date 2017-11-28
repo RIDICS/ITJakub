@@ -7,10 +7,12 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 {
     public class UpdateLiteraryGenresSubtask
     {
+        private readonly CatalogValueRepository m_catalogValueRepository;
         private readonly MetadataRepository m_metadataRepository;
 
-        public UpdateLiteraryGenresSubtask(MetadataRepository metadataRepository)
+        public UpdateLiteraryGenresSubtask(CatalogValueRepository catalogValueRepository, MetadataRepository metadataRepository)
         {
+            m_catalogValueRepository = catalogValueRepository;
             m_metadataRepository = metadataRepository;
         }
 
@@ -19,7 +21,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             if (bookData.LiteraryGenres == null)
                 return;
 
-            var dbGenreList = m_metadataRepository.GetLiteraryGenreList();
+            var dbGenreList = m_catalogValueRepository.GetLiteraryGenreList();
             var project = m_metadataRepository.GetAdditionalProjectMetadata(projectId, false, false, false, true, false);
 
             foreach (var newGenreName in bookData.LiteraryGenres)
@@ -33,7 +35,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     {
                         Name = newGenreName
                     };
-                    m_metadataRepository.Create(dbGenre);
+                    m_catalogValueRepository.Create(dbGenre);
                     dbGenreList.Add(dbGenre);
                 }
 
@@ -43,7 +45,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     project.LiteraryGenres.Add(dbGenre);
                 }
             }
-            m_metadataRepository.Update(project);
+            m_catalogValueRepository.Update(project);
         }
     }
 }

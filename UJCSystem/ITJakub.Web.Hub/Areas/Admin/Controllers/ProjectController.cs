@@ -19,7 +19,7 @@ using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
-using Vokabular.MainService.DataContracts.Data;
+using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
@@ -33,7 +33,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
         }
 
-        private ProjectListViewModel CreateProjectListViewModel(ProjectListData data, int start)
+        private ProjectListViewModel CreateProjectListViewModel(PagedResultList<ProjectDetailContract> data, int start)
         {
             var listViewModel = Mapper.Map<List<ProjectItemViewModel>>(data.List);
             return new ProjectListViewModel
@@ -50,7 +50,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             using (var client = GetRestClient())
             {
                 const int start = 0;
-                var result = client.GetProjectList(start, ProjectListPageSize);
+                var result = client.GetProjectList(start, ProjectListPageSize, true);
                 var viewModel = CreateProjectListViewModel(result, start);
                 return View(viewModel);
             }
@@ -70,7 +70,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             using (var client = GetRestClient())
             {
-                var result = client.GetProjectList(start, count);
+                var result = client.GetProjectList(start, count, true);
                 var viewModel = CreateProjectListViewModel(result, start);
                 return PartialView("_ProjectListContent", viewModel);
             }

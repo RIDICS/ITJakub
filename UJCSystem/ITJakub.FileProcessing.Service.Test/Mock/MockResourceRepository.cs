@@ -198,7 +198,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             };
         }
 
-        public override IList<ImageResource> GetProjectImages(long projectId, long namedResourceGroupId)
+        public override IList<ImageResource> GetProjectImages(long projectId, long? namedResourceGroupId, bool fetchParentPage)
         {
             return new List<ImageResource>
             {

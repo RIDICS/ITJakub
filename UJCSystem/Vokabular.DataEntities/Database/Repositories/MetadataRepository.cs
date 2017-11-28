@@ -18,27 +18,6 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
         }
 
-        public virtual IList<LiteraryKind> GetLiteraryKindList()
-        {
-            return GetSession().QueryOver<LiteraryKind>()
-                .OrderBy(x => x.Name).Asc
-                .List();
-        }
-
-        public virtual IList<LiteraryGenre> GetLiteraryGenreList()
-        {
-            return GetSession().QueryOver<LiteraryGenre>()
-                .OrderBy(x => x.Name).Asc
-                .List();
-        }
-
-        public virtual IList<LiteraryOriginal> GetLiteraryOriginalList()
-        {
-            return GetSession().QueryOver<LiteraryOriginal>()
-                .OrderBy(x => x.Name).Asc
-                .List();
-        }
-
         public virtual MetadataResource GetLatestMetadataResource(long projectId)
         {
             Resource resourceAlias = null;
@@ -101,65 +80,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => x.Id == projectId)
                 .FutureValue().Value;
         }
-
-        public virtual Project GetProjectWithKeywords(long projectId)
-        {
-            return GetSession().QueryOver<Project>()
-                .Where(x => x.Id == projectId)
-                .Fetch(x => x.Keywords).Eager
-                .SingleOrDefault();
-        }
-
-        public virtual IList<ProjectOriginalAuthor> GetProjectOriginalAuthorList(long projectId, bool includeAuthors = false)
-        {
-            var query = GetSession().QueryOver<ProjectOriginalAuthor>()
-                .Where(x => x.Project.Id == projectId);
-
-            if (includeAuthors)
-            {
-                query.Fetch(x => x.OriginalAuthor);
-            }
-
-            return query.List();
-        }
-
-        public virtual OriginalAuthor GetAuthorByName(string firstName, string lastName)
-        {
-            return GetSession().QueryOver<OriginalAuthor>()
-                .Where(x => x.FirstName == firstName && x.LastName == lastName)
-                .SingleOrDefault();
-        }
         
-        public virtual Keyword GetKeywordByName(string name)
-        {
-            return GetSession().QueryOver<Keyword>()
-                .Where(x => x.Text == name)
-                .SingleOrDefault();
-        }
-
-        public virtual IList<ProjectResponsiblePerson> GetProjectResponsibleList(long projectId)
-        {
-            return GetSession().QueryOver<ProjectResponsiblePerson>()
-                .Where(x => x.Project.Id == projectId)
-                .Fetch(x => x.ResponsiblePerson).Eager
-                .Fetch(x => x.ResponsibleType).Eager
-                .List();
-        }
-
-        public virtual ResponsiblePerson GetResponsiblePersonByName(string firstName, string lastName)
-        {
-            return GetSession().QueryOver<ResponsiblePerson>()
-                .Where(x => x.FirstName == firstName && x.LastName == lastName)
-                .SingleOrDefault();
-        }
-
-        public virtual ResponsibleType GetResponsibleTypeByName(string text)
-        {
-            return GetSession().QueryOver<ResponsibleType>()
-                .Where(x => x.Text == text)
-                .SingleOrDefault();
-        }
-
         public virtual IList<MetadataResource> GetMetadataByBookType(BookTypeEnum bookTypeEnum)
         {
             Resource resourceAlias = null;
@@ -231,6 +152,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
+        // TODO MOVE THIS AWAY: (THIS IS NOT METADATA!)
         public virtual IList<HeadwordResource> GetHeadwordWithFetch(IEnumerable<long> headwordIds)
         {
             var result = GetSession().QueryOver<HeadwordResource>()
@@ -277,7 +199,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        public IList<PageResource> GetPagesWithTerms(TermCriteriaPageConditionCreator creator)
+        public virtual IList<PageResource> GetPagesWithTerms(TermCriteriaPageConditionCreator creator)
         {
             var query = GetSession().CreateQuery(creator.GetQueryString())
                 .SetParameters(creator)
@@ -438,7 +360,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List<string>();
         }
 
-        public IList<MetadataResource> GetMetadataByProjectIds(IEnumerable<long> projectIds)
+        public virtual IList<MetadataResource> GetMetadataByProjectIds(IEnumerable<long> projectIds)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;
@@ -451,7 +373,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
-        public IList<MetadataResource> GetMetadataByProjectExternalIds(IEnumerable<string> projectExternalIds)
+        public virtual IList<MetadataResource> GetMetadataByProjectExternalIds(IEnumerable<string> projectExternalIds)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;

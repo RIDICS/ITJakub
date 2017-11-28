@@ -9,14 +9,14 @@
 
 class UserPermissionEditor {
     private mainContainer: string;
-    private searchBox: SingleSetTypeaheadSearchBox<IUser>;
+    private searchBox: SingleSetTypeaheadSearchBox<IUserDetail>;
     private groupSearchBox: SingleSetTypeaheadSearchBox<IGroup>;
-    private currentUserSelectedItem: IUser;
+    private currentUserSelectedItem: IUserDetail;
     private groupSearchCurrentSelectedItem: IGroup;
 
     constructor(mainContainer: string) {
         this.mainContainer = mainContainer;
-        this.searchBox = new SingleSetTypeaheadSearchBox<IUser>("#mainSearchInput", "Permission",
+        this.searchBox = new SingleSetTypeaheadSearchBox<IUserDetail>("#mainSearchInput", "Permission",
             this.getFullNameString,
             (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(this.getFullNameString(item), item.email));
         this.groupSearchBox = new SingleSetTypeaheadSearchBox<IGroup>("#groupSearchInput", "Permission",
@@ -39,7 +39,7 @@ class UserPermissionEditor {
             }
 
             if (selectionConfirmed) {
-                var selectedItem = <IUser>this.searchBox.getValue();
+                var selectedItem = this.searchBox.getValue();
                 this.loadUser(selectedItem);
             }
         });
@@ -51,7 +51,7 @@ class UserPermissionEditor {
             }
 
             if (selectionConfirmed) {
-                var selectedItem = <IGroup>this.groupSearchBox.getValue();
+                var selectedItem = this.groupSearchBox.getValue();
                 this.groupSearchCurrentSelectedItem = selectedItem;
                 $("#specificGroupName").text(selectedItem.name);
                 $("#specificGroupDescription").text(selectedItem.description);
@@ -105,7 +105,7 @@ class UserPermissionEditor {
         });
     }
 
-    private loadUser(user: IUser) {
+    private loadUser(user: IUserDetail) {
         this.currentUserSelectedItem = user;
         updateQueryStringParameter("userId", user.id);
 

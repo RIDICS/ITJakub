@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Castle.Core.Resource;
@@ -7,6 +8,9 @@ using Castle.Windsor;
 using Castle.Windsor.Installer;
 using log4net;
 using log4net.Config;
+using Microsoft.Extensions.Logging;
+using Vokabular.Log4Net;
+using Vokabular.Shared;
 
 namespace ITJakub.BatchImport.Client
 {
@@ -33,6 +37,8 @@ namespace ITJakub.BatchImport.Client
             //configure log4net
             XmlConfigurator.Configure(new FileInfo("log4net.config"));
             m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+            var log4NetProvider = new Log4NetProvider(typeof(Container).Assembly);
+            ApplicationLogging.LoggerFactory = new LoggerFactory(new List<ILoggerProvider> {log4NetProvider});
 
             //Add subresolvers
             AddSubresolvers();

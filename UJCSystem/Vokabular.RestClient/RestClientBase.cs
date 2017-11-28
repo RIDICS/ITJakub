@@ -102,6 +102,31 @@ namespace Vokabular.RestClient
             });
         }
 
+        protected Task<PagedResultList<T>> GetPagedListAsync<T>(string uriPath)
+        {
+            return Task.Run(async () =>
+            {
+                try
+                {
+                    var request = CreateRequestMessage(HttpMethod.Get, uriPath);
+                    var response = await m_client.SendAsync(request);
+
+                    ProcessResponseInternal(response);
+                    var result = GetResponseBody<List<T>>(response);
+
+                    return new PagedResultList<T>
+                    {
+                        TotalCount = response.Headers.GetTotalCountHeader(),
+                        List = result,
+                    };
+                }
+                catch (TaskCanceledException e)
+                {
+                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                }
+            });
+        }
+
         protected Task<T> GetAsync<T>(string uriPath)
         {
             return Task.Run(async () =>
