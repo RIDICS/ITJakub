@@ -67,7 +67,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("")]
-        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, "int", "Total records count")]
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total records count")]
         public List<ResponsiblePersonContract> GetResponsiblePersonList([FromQuery] int? start, [FromQuery] int? count)
         {
             var result = m_personManager.GetResponsiblePersonList(start, count);

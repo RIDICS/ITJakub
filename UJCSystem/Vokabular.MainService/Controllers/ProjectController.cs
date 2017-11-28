@@ -25,7 +25,7 @@ namespace Vokabular.MainService.Controllers
         }
         
         [HttpGet]
-        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, "int", "Total records count")]
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total records count")]
         public List<ProjectDetailContract> GetProjectList([FromQuery] int? start, [FromQuery] int? count, [FromQuery] bool? fetchPageCount)
         {
             var result = m_projectManager.GetProjectList(start, count, fetchPageCount ?? false);

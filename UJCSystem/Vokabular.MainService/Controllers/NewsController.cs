@@ -20,7 +20,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("")]
-        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, "int", "Total count")]
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
         public List<NewsSyndicationItemContract> GetNewsSyndicationItems([FromQuery] int? start, [FromQuery] int? count, [FromQuery] NewsTypeEnumContract? itemType)
         {
             var result = m_newsManager.GetNewsSyndicationItems(start, count, itemType);

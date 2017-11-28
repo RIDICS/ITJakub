@@ -82,7 +82,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("")]
-        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, "int", "Total count")]
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
         public List<FeedbackContract> GetFeedbackList([FromQuery] int? start,
             [FromQuery] int? count,
             [FromQuery] FeedbackSortEnumContract? sort,
