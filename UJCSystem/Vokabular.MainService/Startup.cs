@@ -12,9 +12,10 @@ using Vokabular.Core;
 using Vokabular.MainService.Containers.Extensions;
 using Vokabular.MainService.Containers;
 using Vokabular.MainService.Containers.Installers;
-using Vokabular.MainService.Utils;
+using Vokabular.MainService.Utils.Documentation;
 using Vokabular.Shared;
 using Vokabular.Shared.Container;
+using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.Options;
 
 namespace Vokabular.MainService
@@ -69,6 +70,9 @@ namespace Vokabular.MainService
                 });
                 options.DescribeAllEnumsAsStrings();
                 options.OperationFilter<AddResponseHeadersFilter>();
+
+                options.DocumentFilter<PolymorphismDocumentFilter<SearchCriteriaContract>>();
+                options.SchemaFilter<PolymorphismSchemaFilter<SearchCriteriaContract>>();
             });
 
             // IoC
