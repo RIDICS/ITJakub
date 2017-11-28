@@ -46,10 +46,16 @@
             submitCallback: this.addEditor.bind(this)
         });
 
-        this.authorTypeahead = new SingleSetTypeaheadSearchBox<IOriginalAuthor>("#add-author-search", "Admin/Project", x => `${x.lastName} ${x.firstName}`, null);
+        this.authorTypeahead = new SingleSetTypeaheadSearchBox<IOriginalAuthor>("#add-author-search",
+            "Admin/Project",
+            x => `${x.lastName} ${x.firstName}`,
+            null);
         this.authorTypeahead.setDataSet("OriginalAuthor");
 
-        this.editorTypeahead = new SingleSetTypeaheadSearchBox<IResponsiblePerson>("#add-editor-search", "Admin/Project", x => `${x.lastName} ${x.firstName}`, null);
+        this.editorTypeahead = new SingleSetTypeaheadSearchBox<IResponsiblePerson>("#add-editor-search",
+            "Admin/Project",
+            x => `${x.lastName} ${x.firstName}`,
+            null);
         this.editorTypeahead.setDataSet("ResponsiblePerson");
     }
 
@@ -62,19 +68,55 @@
     }
 
     private getProjectMetadataWithKeywords(projectId: number) {
-        return $.get(`${getBaseUrl()}Admin/Project/GetProjectMetadata`, { projectId: projectId, includeKeyword: true});
+        return $.get(`${getBaseUrl()}Admin/Project/GetProjectMetadata`, { projectId: projectId, includeKeyword: true });
+    }
+
+    private getKeywordList() { return $.get(`${getBaseUrl()}Admin/KeyTable/GetKeywordList`); }
+
+    private initKeywords() {
+        this.getKeywordList().done((data: IKeywordContract[]) => {
+            var allKeywords = [];
+            for (let i = 0; i < data.length; i++) {
+                allKeywords.push({ value: data[i].id, label: data[i].name });
+            }
+            var engine = new Bloodhound({
+                local: allKeywords,
+                datumTokenizer: (d) => Bloodhound.tokenizers.whitespace(d.label),
+                queryTokenizer: Bloodhound.tokenizers.whitespace
+            });
+            engine.initialize();
+            $(".keywords-textarea").tokenfield({
+                typeahead: [{
+                    hint: true,
+                    highlight: true,
+                    minLength: 1
+                },
+                    {
+                        source: engine.ttAdapter(),
+                        display: "label"
+                    }]
+            });
+            const keywordListAjax = this.getProjectMetadataWithKeywords(this.projectId);
+            var tags = [];
+            $(".keywords-textarea").on("tokenfield:createdtoken",
+                (event) => {
+                    const keywordsArray = $.map($(".keywords-textarea").val().split(","), $.trim);
+                    console.log(keywordsArray);
+                });
+            keywordListAjax.done((data: IGetMetadataResource) => {
+                for (let i = 0; i < data.keywordList.length; i++) {
+                    tags.push({ value: data.keywordList[i].id, label: data.keywordList[i].name });
+                }
+            });
+        }).fail(
+            () => {
+                alert("Keyword loading failed");//TODO change to dialog or message.
+            });
     }
 
     initTab(): void {
         super.initTab();
-        const keywordListAjax = this.getProjectMetadataWithKeywords(this.projectId);
-        $(".keywords-textarea").tagsinput({ itemValue: "id", itemText: "label" });
-        keywordListAjax.done((data: IGetMetadataResource) => {
-            for (let i = 0; i < data.keywordList.length; i++) {
-                $(".keywords-textarea").tagsinput("add", { id: data.keywordList[i].id, label: data.keywordList[i].name });
-            }
-        });
-        $(".keywords-textarea").tagsinput();
+        this.initKeywords();
         var $addResponsibleTypeButton = $("#add-responsible-type-button");
         var $addResponsibleTypeContainer = $("#add-responsible-type-container");
 
@@ -171,15 +213,17 @@
             this.addPublisherDialog.showError("Nebyl vyplněn název nakladatele");
         }
 
-        this.projectClient.createPublisher(name, email, (newPublisherId, errorCode) => {
-            if (errorCode !== null) {
-                this.addPublisherDialog.showError("Chyba při vytváření nového nakladatele");
-                return;
-            }
+        this.projectClient.createPublisher(name,
+            email,
+            (newPublisherId, errorCode) => {
+                if (errorCode !== null) {
+                    this.addPublisherDialog.showError("Chyba při vytváření nového nakladatele");
+                    return;
+                }
 
-            UiHelper.addSelectOptionAndSetDefault($("#work-metadata-publisher"), name, newPublisherId);
-            this.addPublisherDialog.hide();
-        });
+                UiHelper.addSelectOptionAndSetDefault($("#work-metadata-publisher"), name, newPublisherId);
+                this.addPublisherDialog.hide();
+            });
     }
 
     private createNewLiteraryKind() {
@@ -189,15 +233,16 @@
             this.addLiteraryKindDialog.showError("Nebyl vyplněn název");
         }
 
-        this.projectClient.createLiteraryKind(name, (newId, errorCode) => {
-            if (errorCode !== null) {
-                this.addLiteraryKindDialog.showError("Chyba při vytváření nového literárního druhu");
-                return;
-            }
+        this.projectClient.createLiteraryKind(name,
+            (newId, errorCode) => {
+                if (errorCode !== null) {
+                    this.addLiteraryKindDialog.showError("Chyba při vytváření nového literárního druhu");
+                    return;
+                }
 
-            UiHelper.addCheckboxAndSetChecked($("#work-metadata-literary-kind"), name, newId);
-            this.addLiteraryKindDialog.hide();
-        });
+                UiHelper.addCheckboxAndSetChecked($("#work-metadata-literary-kind"), name, newId);
+                this.addLiteraryKindDialog.hide();
+            });
     }
 
     private createNewLiteraryGenre() {
@@ -207,15 +252,16 @@
             this.addLiteraryGenreDialog.showError("Nebyl vyplněn název");
         }
 
-        this.projectClient.createLiteraryGenre(name, (newId, errorCode) => {
-            if (errorCode !== null) {
-                this.addLiteraryGenreDialog.showError("Chyba při vytváření nového literárního žánru");
-                return;
-            }
+        this.projectClient.createLiteraryGenre(name,
+            (newId, errorCode) => {
+                if (errorCode !== null) {
+                    this.addLiteraryGenreDialog.showError("Chyba při vytváření nového literárního žánru");
+                    return;
+                }
 
-            UiHelper.addCheckboxAndSetChecked($("#work-metadata-literary-genre"), name, newId);
-            this.addLiteraryGenreDialog.hide();
-        });
+                UiHelper.addCheckboxAndSetChecked($("#work-metadata-literary-genre"), name, newId);
+                this.addLiteraryGenreDialog.hide();
+            });
     }
 
     private addAuthor() {
@@ -241,15 +287,17 @@
             firstName = $("#add-author-first-name").val();
             lastName = $("#add-author-last-name").val();
 
-            this.projectClient.createAuthor(firstName, lastName, (newAuthorId, errorCode) => {
-                if (errorCode != null) {
-                    this.addAuthorDialog.showError();
-                    return;
-                }
+            this.projectClient.createAuthor(firstName,
+                lastName,
+                (newAuthorId, errorCode) => {
+                    if (errorCode != null) {
+                        this.addAuthorDialog.showError();
+                        return;
+                    }
 
-                id = newAuthorId;
-                finishAddingAuthor();
-            });
+                    id = newAuthorId;
+                    finishAddingAuthor();
+                });
         }
     }
 
@@ -261,23 +309,25 @@
         var $savingIcon = $("#add-responsible-type-saving-icon");
         $savingIcon.show();
 
-        this.projectClient.createResponsibleType(type, text, (newResponsibleTypeId, errorCode) => {
-            if (errorCode != null) {
+        this.projectClient.createResponsibleType(type,
+            text,
+            (newResponsibleTypeId, errorCode) => {
+                if (errorCode != null) {
+                    $savingIcon.hide();
+                    return;
+                    //TODO handle error
+                }
+
                 $savingIcon.hide();
-                return;
-                //TODO handle error
-            }
 
-            $savingIcon.hide();
+                $("#add-responsible-type-container").hide();
+                $("#add-responsible-type-button").prop("disabled", false);
+                $("#add-responsible-type-type").val(0);
+                $("#add-responsible-type-text").val("");
 
-            $("#add-responsible-type-container").hide();
-            $("#add-responsible-type-button").prop("disabled", false);
-            $("#add-responsible-type-type").val(0);
-            $("#add-responsible-type-text").val("");
-
-            var optionName = `${text} (${typeLabel})`;
-            UiHelper.addSelectOptionAndSetDefault($("#add-editor-type"), optionName, newResponsibleTypeId);
-        });
+                var optionName = `${text} (${typeLabel})`;
+                UiHelper.addSelectOptionAndSetDefault($("#add-editor-type"), optionName, newResponsibleTypeId);
+            });
     }
 
     private addEditor() {
@@ -304,15 +354,18 @@
             lastName = $("#add-editor-last-name").val();
             var responsibleTypeId = $("#add-editor-type").val();
 
-            this.projectClient.createResponsiblePerson(firstName, lastName, responsibleTypeId, (newResponsiblePersonId, errorCode) => {
-                if (errorCode != null) {
-                    this.addEditorDialog.showError();
-                    return;
-                }
+            this.projectClient.createResponsiblePerson(firstName,
+                lastName,
+                responsibleTypeId,
+                (newResponsiblePersonId, errorCode) => {
+                    if (errorCode != null) {
+                        this.addEditorDialog.showError();
+                        return;
+                    }
 
-                id = newResponsiblePersonId;
-                finishAddingEditor();
-            });
+                    id = newResponsiblePersonId;
+                    finishAddingEditor();
+                });
         }
     }
 
@@ -345,7 +398,8 @@
             selectedGenreIds.push($(elem).val());
         });
 
-        const keywordsInputEl = $(".keywords-container").children(".bootstrap-tagsinput");
+        const keywordsInputEl = $(".keywords-container");
+        const keywordsArray = keywordsInputEl.val().split(",");
 
         var data: ISaveMetadataResource = {
             keywordIdList: keywordsInputEl.val(),
@@ -381,19 +435,21 @@
         $successAlert.finish().hide();
         $errorAlert.hide();
 
-        this.projectClient.saveMetadata(this.projectId, data, (resultData, errorCode) => {
-            $loadingGlyph.hide();
-            $buttons.prop("disabled", false);
+        this.projectClient.saveMetadata(this.projectId,
+            data,
+            (resultData, errorCode) => {
+                $loadingGlyph.hide();
+                $buttons.prop("disabled", false);
 
-            if (errorCode != null) {
-                $errorAlert.show();
-                return;
-            }
+                if (errorCode != null) {
+                    $errorAlert.show();
+                    return;
+                }
 
-            $successAlert.show().delay(3000).fadeOut(2000);
-            $("#work-metadata-last-modification").text(resultData.lastModificationText);
-            $("#work-metadata-literary-original").text(resultData.literaryOriginalText);
-        });
+                $successAlert.show().delay(3000).fadeOut(2000);
+                $("#work-metadata-last-modification").text(resultData.lastModificationText);
+                $("#work-metadata-literary-original").text(resultData.literaryOriginalText);
+            });
     }
 }
 
@@ -435,17 +491,19 @@ class ProjectWorkPublicationsTab extends ProjectModuleTabBase {
     private openNewSnapshotPanel() {
         var url = getBaseUrl() + "Admin/Project/NewSnapshot?projectId=" + this.projectId;
 
-        $("#new-snapshot-container").append("<div class=\"loader\"></div>").load(url, null, (responseText, textStatus, xmlHttpRequest) => {
-            if (xmlHttpRequest.status !== HttpStatusCode.Success) {
-                var errorElement = new AlertComponentBuilder(AlertType.Error)
-                    .addContent("Chyba při načítání zdrojů k publikaci")
-                    .buildElement();
-                $("#new-snapshot-container").empty().append(errorElement);
-                return;
-            }
+        $("#new-snapshot-container").append("<div class=\"loader\"></div>").load(url,
+            null,
+            (responseText, textStatus, xmlHttpRequest) => {
+                if (xmlHttpRequest.status !== HttpStatusCode.Success) {
+                    var errorElement = new AlertComponentBuilder(AlertType.Error)
+                        .addContent("Chyba při načítání zdrojů k publikaci")
+                        .buildElement();
+                    $("#new-snapshot-container").empty().append(errorElement);
+                    return;
+                }
 
-            this.initNewSnapshotPanel();
-        });
+                this.initNewSnapshotPanel();
+            });
     }
 
     private initNewSnapshotPanel() {
@@ -470,7 +528,7 @@ class ProjectWorkPublicationsResource {
                 var checkbox = <HTMLInputElement>event.currentTarget;
                 var isChecked = checkbox.checked;
 
-                $(`td:nth-child(${index+1}) input[type=checkbox]`, this.$container).each((index, elem) => {
+                $(`td:nth-child(${index + 1}) input[type=checkbox]`, this.$container).each((index, elem) => {
                     var checkbox2 = <HTMLInputElement>elem;
                     checkbox2.checked = isChecked;
                 });
@@ -489,7 +547,9 @@ class ProjectWorkPublicationsResource {
                 }
             });
 
-            var allCheckBox = <HTMLInputElement>$(`.subheader th:nth-child(${position}) input[type=checkbox]`, this.$container).get(0);
+            var allCheckBox =
+                <HTMLInputElement>$(`.subheader th:nth-child(${position}) input[type=checkbox]`, this.$container)
+                .get(0);
             allCheckBox.checked = isAllChecked;
         });
     }
@@ -503,7 +563,7 @@ class ProjectWorkCooperationTab extends ProjectModuleTabBase {
         this.projectId = projectId;
     }
 
-    initTab() { }
+    initTab() {}
 }
 
 class ProjectWorkHistoryTab extends ProjectModuleTabBase {
@@ -514,7 +574,7 @@ class ProjectWorkHistoryTab extends ProjectModuleTabBase {
         this.projectId = projectId;
     }
 
-    initTab() { }
+    initTab() {}
 }
 
 class ProjectWorkNoteTab extends ProjectModuleTabBase {

@@ -596,6 +596,7 @@ abstract class ProjectMetadataTabBase extends ProjectModuleTabBase {
     }
 
     protected enabledEdit() {
+        $(".keywords-textarea").tokenfield("enable");
         var config = this.getConfiguration();
         var $inputs = $("input", config.$panel);
         var $selects = $("select", config.$panel);
@@ -608,6 +609,7 @@ abstract class ProjectMetadataTabBase extends ProjectModuleTabBase {
     }
 
     protected disableEdit() {
+        $(".keywords-textarea").tokenfield("disable");
         var config = this.getConfiguration();
         var $inputs = $("input", config.$panel);
         var $selects = $("select", config.$panel);

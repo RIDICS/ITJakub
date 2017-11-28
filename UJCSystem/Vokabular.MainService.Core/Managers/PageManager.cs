@@ -60,10 +60,10 @@ namespace Vokabular.MainService.Core.Managers
             switch (formatValue)
             {
                 case TextFormatEnumContract.Raw:
-                    result.Text = "*Mock text* from **MainService.**";
+                    result.Text = "**One morning**, when *Gregor Samsa* woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could see his brown belly, slightly domed and divided by arches into stiff sections. The bedding was hardly able to cover it and seemed ready to slide off any moment. His many legs, pitifully thin compared with the size of the rest of him, waved about helplessly as he looked. \"What's happened to me? \" he thought. It wasn't a dream.His room, a proper human room although a little too small, lay peacefully between its four familiar walls.";
                     break;
                 case TextFormatEnumContract.Html:
-                    result.Text = "<b>Mock <span id=\"dc3b9720-199c-4d79-93e5-ba94efb1f44a-text\">text</span></b> from <i>MainService.</i>";
+                    result.Text = "<b>One morning</b>, when <i>Gregor Samsa</i> woke from <span id=\"51c8716b-7091-4ab3-a9f6-73546e46e53f-text\">troubled</span> dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could see his brown belly, slightly domed and divided by arches into stiff sections. The bedding was hardly able to cover it and seemed ready to slide off any moment. His many legs, pitifully thin compared with the size of the rest of him, waved about helplessly as he looked. \"What's happened to me? \" he thought. It wasn't a dream.His room, a proper human room although a little too small, lay peacefully between its four familiar walls.";
                     break;
                 case TextFormatEnumContract.Rtf:
                     throw new NotSupportedException();

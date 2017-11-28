@@ -19,9 +19,10 @@
     "font-awesome": "4.7.0",
     "bootstrap-colorpicker-plus": "#0fdd970",
     "s-pagination": "1.1.1",
-    "bootstrap-tagsinput": "0.8.0"
+    "bootstrap-tokenfield": "0.12.1"
   },
   "resolutions": {
-    "jquery": "2.2.4"
+    "jquery": "2.2.4",
+    "bootstrap": ">= 3.0.0"
   }
 }
