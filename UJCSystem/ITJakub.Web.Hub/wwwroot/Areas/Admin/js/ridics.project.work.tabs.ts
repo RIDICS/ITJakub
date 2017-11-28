@@ -73,6 +73,20 @@
 
     private getKeywordList() { return $.get(`${getBaseUrl()}Admin/KeyTable/GetKeywordList`); }
 
+    private createNewKeywordsByArray(names: string[]): JQueryXHR {
+        const url = `${getBaseUrl()}Admin/Project/CreateKeywordsWithArray`;
+        const id = 0; //keyword doesn't have an id yet
+        const payload: IKeywordContract[] = [];
+        for (let i = 0; i < names.length; i++) {
+            payload.push(
+                {
+                    name: names[i],
+                    id: id
+                });
+        };
+        return $.post(url, { request: payload });
+    }
+
     private initKeywords() {
         this.getKeywordList().done((data: IKeywordContract[]) => {
             var allKeywords = [];
@@ -96,22 +110,26 @@
                         display: "label"
                     }]
             });
+            $(".keywords-textarea").on("tokenfield:createdtoken", (event) => {
+                console.log(event.target);
+            });
             const keywordListAjax = this.getProjectMetadataWithKeywords(this.projectId);
             var tags = [];
-            $(".keywords-textarea").on("tokenfield:createdtoken",
-                (event) => {
-                    const keywordsArray = $.map($(".keywords-textarea").val().split(","), $.trim);
-                    console.log(keywordsArray);
-                });
             keywordListAjax.done((data: IGetMetadataResource) => {
                 for (let i = 0; i < data.keywordList.length; i++) {
                     tags.push({ value: data.keywordList[i].id, label: data.keywordList[i].name });
                 }
+                $(".keywords-textarea").tokenfield("setTokens", tags);
             });
         }).fail(
             () => {
                 alert("Keyword loading failed");//TODO change to dialog or message.
             });
+    }
+
+    private returnUniqueElsArray(array:any[]) {
+        var seen = {};
+        return array.filter(item => seen.hasOwnProperty(item) ? false : (seen[item] = true));
     }
 
     initTab(): void {
@@ -398,58 +416,74 @@
             selectedGenreIds.push($(elem).val());
         });
 
-        const keywordsInputEl = $(".keywords-container");
-        const keywordsArray = keywordsInputEl.val().split(",");
+        const keywordsInputEl = $(".keywords-container").children(".tokenfield").children(".keywords-textarea");
+        const keywordsArray = $.map(keywordsInputEl.val().split(","), $.trim);
+        console.log(keywordsArray);
+        const uniqueKeywordArray = this.returnUniqueElsArray(keywordsArray);
+        var keywordIdList: number[] = [];
+        var keywordNonIdList: string[] = [];
+        const onlyNumbersRegex = new RegExp(/^[0-9]*$/);
+        for (let i = 0; i < uniqueKeywordArray.length; i++) {
+            if (onlyNumbersRegex.test(uniqueKeywordArray[i])) {
+                keywordIdList.push(uniqueKeywordArray[i]);
+            } else {
+                keywordNonIdList.push(uniqueKeywordArray[i]);
+            }
+        }
+        const createNewKeywordAjax = this.createNewKeywordsByArray(keywordNonIdList);
+        createNewKeywordAjax.done((newIds: number[]) => {
+            const allKeywordIds = keywordIdList.concat(newIds);
+            var data: ISaveMetadataResource = {
+                keywordIdList: allKeywordIds,
+                biblText: $("#work-metadata-bibl-text").val(),
+                copyright: $("#work-metadata-copyright").val(),
+                manuscriptCountry: $("#work-metadata-original-country").val(),
+                manuscriptExtent: $("#work-metadata-original-extent").val(),
+                manuscriptIdno: $("#work-metadata-original-idno").val(),
+                manuscriptRepository: $("#work-metadata-original-repository").val(),
+                manuscriptSettlement: $("#work-metadata-original-settlement").val(),
+                notAfter: $("#work-metadata-not-after").val(),
+                notBefore: $("#work-metadata-not-before").val(),
+                originDate: $("#work-metadata-origin-date").val(),
+                publishDate: $("#work-metadata-publish-date").val(),
+                publishPlace: $("#work-metadata-publish-place").val(),
+                publisherId: $("#work-metadata-publisher").val(),
+                relicAbbreviation: $("#work-metadata-relic-abbreviation").val(),
+                sourceAbbreviation: $("#work-metadata-source-abbreviation").val(),
+                subTitle: $("#work-metadata-subtitle").val(),
+                title: $("#work-metadata-title").val(),
+                authorIdList: selectedAuthorIds,
+                literaryGenreIdList: selectedGenreIds,
+                literaryKindIdList: selectedKindIds,
+                projectResponsiblePersonIdList: selectedResponsibleIds
+            };
+            var $loadingGlyph = $("#work-metadata-save-button .saving-icon");
+            var $buttons = $("#work-metadata-editor-button-panel button");
+            var $successAlert = $("#work-metadata-save-success");
+            var $errorAlert = $("#work-metadata-save-error");
+            $loadingGlyph.show();
+            $buttons.prop("disabled", true);
+            $successAlert.finish().hide();
+            $errorAlert.hide();
 
-        var data: ISaveMetadataResource = {
-            keywordIdList: keywordsInputEl.val(),
-            biblText: $("#work-metadata-bibl-text").val(),
-            copyright: $("#work-metadata-copyright").val(),
-            manuscriptCountry: $("#work-metadata-original-country").val(),
-            manuscriptExtent: $("#work-metadata-original-extent").val(),
-            manuscriptIdno: $("#work-metadata-original-idno").val(),
-            manuscriptRepository: $("#work-metadata-original-repository").val(),
-            manuscriptSettlement: $("#work-metadata-original-settlement").val(),
-            notAfter: $("#work-metadata-not-after").val(),
-            notBefore: $("#work-metadata-not-before").val(),
-            originDate: $("#work-metadata-origin-date").val(),
-            publishDate: $("#work-metadata-publish-date").val(),
-            publishPlace: $("#work-metadata-publish-place").val(),
-            publisherId: $("#work-metadata-publisher").val(),
-            relicAbbreviation: $("#work-metadata-relic-abbreviation").val(),
-            sourceAbbreviation: $("#work-metadata-source-abbreviation").val(),
-            subTitle: $("#work-metadata-subtitle").val(),
-            title: $("#work-metadata-title").val(),
-            authorIdList: selectedAuthorIds,
-            literaryGenreIdList: selectedGenreIds,
-            literaryKindIdList: selectedKindIds,
-            projectResponsiblePersonIdList: selectedResponsibleIds
-        };
+            this.projectClient.saveMetadata(this.projectId,
+                data,
+                (resultData, errorCode) => {
+                    $loadingGlyph.hide();
+                    $buttons.prop("disabled", false);
 
-        var $loadingGlyph = $("#work-metadata-save-button .saving-icon");
-        var $buttons = $("#work-metadata-editor-button-panel button");
-        var $successAlert = $("#work-metadata-save-success");
-        var $errorAlert = $("#work-metadata-save-error");
-        $loadingGlyph.show();
-        $buttons.prop("disabled", true);
-        $successAlert.finish().hide();
-        $errorAlert.hide();
+                    if (errorCode != null) {
+                        $errorAlert.show();
+                        return;
+                    }
 
-        this.projectClient.saveMetadata(this.projectId,
-            data,
-            (resultData, errorCode) => {
-                $loadingGlyph.hide();
-                $buttons.prop("disabled", false);
-
-                if (errorCode != null) {
-                    $errorAlert.show();
-                    return;
-                }
-
-                $successAlert.show().delay(3000).fadeOut(2000);
-                $("#work-metadata-last-modification").text(resultData.lastModificationText);
-                $("#work-metadata-literary-original").text(resultData.literaryOriginalText);
-            });
+                    $successAlert.show().delay(3000).fadeOut(2000);
+                    $("#work-metadata-last-modification").text(resultData.lastModificationText);
+                    $("#work-metadata-literary-original").text(resultData.literaryOriginalText);
+                });
+        }).fail(() => {
+            //TODO show that some keyword failed to save, posiible duplicates
+        });
     }
 }
 

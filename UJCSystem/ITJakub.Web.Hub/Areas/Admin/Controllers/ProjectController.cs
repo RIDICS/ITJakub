@@ -321,6 +321,21 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        public IActionResult CreateKeywordsWithArray(List<KeywordContract> request)
+        {
+            using (var client = GetRestClient())
+            {
+                var ids = new List<int>();
+                foreach (KeywordContract t in request)
+                {
+                    var newId = client.CreateKeyword(t);
+                    ids.Add(newId);
+                }
+                return Json(ids);
+            }
+        }
+
+        [HttpPost]
         public IActionResult DeleteResource([FromBody] DeleteResourceRequest request)
         {
             using (var client = GetRestClient())
