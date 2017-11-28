@@ -8,6 +8,11 @@
     <None Remove="XslTransformations\commonToHtml-block.xsl" />
     <None Remove="XslTransformations\commonToHtml-inline.xsl" />
     <None Remove="XslTransformations\pageToHtml.xsl" />
+    <None Remove="XslTransformations\pageToPlainText.xsl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="XslTransformations\pageToPlainText.xsl" />
   </ItemGroup>
 
   <ItemGroup>

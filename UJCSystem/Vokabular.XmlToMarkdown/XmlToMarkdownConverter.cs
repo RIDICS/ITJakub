@@ -11,33 +11,36 @@ namespace Vokabular.XmlToMarkdown
 {
     public class XmlToMarkdownConverter : IXmlToTextConverter
     {
-        private const string TransformationFile = "\\Vokabular.XmlToMarkdown\\XslTransformations\\pageToPlainText.xsl";
+        private const string TransformationFile = "Vokabular.XmlToMarkdown.XslTransformations.pageToPlainText.xsl";
+
         public string Convert(Stream stream)
         {
-            /*Assembly assembly = Assembly.GetExecutingAssembly();
-            var xslt = assembly.GetFile("Vokabular.XmlToMarkdown.XslTransformations.pageToHtml.xsl");
-            XmlReader xmlReader = new XmlTextReader(xslt);*/ //TODO 
-            string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;//HACK to build absolute path to xsl transformation file
-            DirectoryInfo parentDir = Directory.GetParent(currentDirectory.EndsWith("\\") ? currentDirectory : string.Concat(currentDirectory, "\\"));
-            var myParentDir = parentDir.Parent.FullName;
-            var transformationFilePath = $"{myParentDir}{TransformationFile}";
+            var assembly = Assembly.GetExecutingAssembly();
+            var xslstream = assembly.GetManifestResourceStream(TransformationFile) ?? throw new InvalidOperationException();
 
-            XslCompiledTransform myXslTrans = new XslCompiledTransform();
-            myXslTrans.Load(transformationFilePath);
+            XslCompiledTransform xslTrans = new XslCompiledTransform();
             string text;
-            using (Stream memStream = new MemoryStream())
+            using (xslstream)
             {
-                using (XmlReader xml = XmlReader.Create(stream))
+                using (var xmlReader = XmlReader.Create(xslstream))
                 {
-                    myXslTrans.Transform(xml, null, memStream);
-                }
+                    xslTrans.Load(xmlReader);
+                    using (Stream memStream = new MemoryStream())
+                    {
+                        using (XmlReader xml = XmlReader.Create(stream))
+                        {
+                            xslTrans.Transform(xml, null, memStream);
+                        }
 
-                memStream.Seek(0, SeekOrigin.Begin);
-                using (StreamReader reader = new StreamReader(memStream))
-                {
-                    text = reader.ReadToEnd();
-                }
+                        memStream.Seek(0, SeekOrigin.Begin);
+                        using (StreamReader reader = new StreamReader(memStream))
+                        {
+                            text = reader.ReadToEnd();
+                        }
+                    }
+                };
             }
+
             return text;
         }
     }

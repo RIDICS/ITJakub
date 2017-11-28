@@ -1,10 +1,39 @@
-PUT module 
+PUT module
 {
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "module_analyzer": {
+          "type": "custom",
+          "char_filter": "escaped_chars",
+          "tokenizer": "punctuation", 
+          "filter": "lowercase"
+        }
+      },
+      "tokenizer": {
+        "punctuation": { 
+          "type": "pattern",
+          "pattern": "[ .,!?]"
+        }
+      },
+      "char_filter": {
+        "escaped_chars": { 
+          "type": "pattern_replace",
+          "pattern": "/[aZ]?|<[1-9]*?>",
+          "replacement": ""
+        }
+      }
+    }
+  },
   "mappings": {
     "page": { 
       "_all":       { "enabled": false  }, 
       "properties": { 
-        "text":    { "type": "text" }, 
+        "pageText":    { 
+          "type": "text", 
+          "term_vector": "with_positions_offsets", 
+          "analyzer": "module_analyzer" 
+        }, 
         "versionNumber":     { "type": "integer"  }
         
       }
@@ -12,8 +41,13 @@ PUT module
     "snapshot": { 
       "_all":       { "enabled": false  }, 
       "properties": { 
-        "snapshotId":	{ "type": "long"  }, 
-        "text":     { "type": "text" }
+        "snapshotId":    { "type": "long"  }, 
+        "projectId":    { "type": "long"  }, 
+        "snapshotText":     { 
+          "type": "text", 
+          "term_vector": "with_positions_offsets", 
+          "analyzer": "module_analyzer" 
+        }
       }
     }
   }
