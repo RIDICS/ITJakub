@@ -6,13 +6,14 @@
 interface IFeedback {
     id: number;
     text: string;
-    createDate: string;
-    user: IUserDetail;
-    filledName: string;
-    filledEmail: string;
-    category: FeedbackCategoryEnum;
+    createTime: string;
+    authorUser: IUserDetail;
+    authorName: string;
+    authorEmail: string;
+    feedbackCategory: FeedbackCategoryEnum;
     feedbackType: FeedbackTypeEnum;
-    headwordInfo: IFeedbackHeadwordInfo;
+    headwordInfo: IHeadwordContract;
+    projectInfo: IProject;
 }
 
 interface IFeedbackHeadwordInfo {
@@ -127,6 +128,11 @@ interface IPage {
 
 interface IPageWithContext extends IPage {
     contextStructure: IKwicStructure;
+}
+
+interface IProject {
+    id: number;
+    name: string;
 }
 
 interface IMetadataResource {

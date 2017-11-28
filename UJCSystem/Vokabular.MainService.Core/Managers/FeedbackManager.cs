@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
@@ -70,7 +71,17 @@ namespace Vokabular.MainService.Core.Managers
             var countValue = GetCount(count);
             var sortValue = Mapper.Map<FeedbackSortEnum>(sort);
             var filterCategoryValues = Mapper.Map<List<FeedbackCategoryEnum>>(filterCategories);
-            var result = m_portalRepository.InvokeUnitOfWork(x => x.GetFeedbackList(startValue, countValue, sortValue, sortDirection, filterCategoryValues));
+
+            var result = m_portalRepository.InvokeUnitOfWork(repository =>
+            {
+                var dbFeedbacks = repository.GetFeedbackList(startValue, countValue, sortValue, sortDirection, filterCategoryValues);
+
+                var headwordFeedbackIds = dbFeedbacks.List.Where(x => x.FeedbackType == FeedbackType.Headword)
+                    .Select(x => x.Id);
+                repository.FetchHeadwordFeedbacks(headwordFeedbackIds);
+
+                return dbFeedbacks;
+            });
 
             return new PagedResultList<FeedbackContract>
             {

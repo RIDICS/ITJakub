@@ -6,6 +6,7 @@ using System.Net.Http;
 using Microsoft.Extensions.Logging;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Favorite;
+using Vokabular.MainService.DataContracts.Contracts.Feedback;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient;
@@ -1475,6 +1476,108 @@ namespace Vokabular.MainService.DataContracts.Clients
         }
 
         #endregion
-        
+
+        #region Feedback
+
+        public long CreateFeedback(CreateFeedbackContract data)
+        {
+            try
+            {
+                var result = Post<long>("feedback", data);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public long CreateAnonymousFeedback(CreateAnonymousFeedbackContract data)
+        {
+            try
+            {
+                var result = Post<long>("feedback/anonymous", data);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public long CreateHeadwordFeedback(long resourceVersionId, CreateFeedbackContract data)
+        {
+            try
+            {
+                var result = Post<long>($"feedback/headword/version/{resourceVersionId}", data);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public long CreateAnonymousHeadwordFeedback(long resourceVersionId, CreateAnonymousFeedbackContract data)
+        {
+            try
+            {
+                var result = Post<long>($"feedback/headword/version/{resourceVersionId}/anonymous", data);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public PagedResultList<FeedbackContract> GetFeedbackList(int start,
+            int count,
+            FeedbackSortEnumContract sort,
+            SortDirectionEnumContract sortDirection,
+            IList<FeedbackCategoryEnumContract> filterCategories)
+        {
+            try
+            {
+                var result = GetPagedList<FeedbackContract>("feedback");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void DeleteFeedback(long feedbackId)
+        {
+            try
+            {
+                Delete($"feedback/{feedbackId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
     }
 }

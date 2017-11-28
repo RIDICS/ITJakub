@@ -19,8 +19,14 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.AuthorUser, opt => opt.MapFrom(src => src.AuthorUser))
                 .ForMember(dest => dest.FeedbackCategory, opt => opt.MapFrom(src => src.FeedbackCategory))
                 .ForMember(dest => dest.FeedbackType, opt => opt.MapFrom(src => src.FeedbackType))
-                .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Text));
-            
+                .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Text))
+                .Include<HeadwordFeedback, FeedbackContract>();
+
+            CreateMap<HeadwordFeedback, FeedbackContract>()
+                .ForMember(dest => dest.HeadwordInfo, opt => opt.MapFrom(src => src.HeadwordResource))
+                .ForMember(dest => dest.ProjectInfo, opt => opt.MapFrom(src => src.HeadwordResource.Resource.Project));
+
+
             CreateMap<FeedbackCategoryEnum, FeedbackCategoryEnumContract>().ReverseMap();
 
             CreateMap<FeedbackSortEnum, FeedbackSortEnumContract>().ReverseMap();
