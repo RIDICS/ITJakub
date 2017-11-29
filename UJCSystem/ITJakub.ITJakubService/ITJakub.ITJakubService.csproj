@@ -218,6 +218,10 @@
       <Project>{130f3c52-e563-4b9b-a70f-e7e5bbab4296}</Project>
       <Name>Vokabular.Shared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj">
+      <Project>{d172f949-ae59-4029-bf5c-40b633362034}</Project>
+      <Name>Vokabular.Shared.DataContracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

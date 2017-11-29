@@ -3,285 +3,282 @@
 @model ITJakub.Web.Hub.Areas.Admin.Models.ProjectWorkMetadataViewModel
 
 <div class="row resource-tab-row-fix">
-    <div class="project-layout-box project-layout-box-500">
-        <div class="panel-group" id="work-metadata-container">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    Obecné informace
-                </div>
-                <div class="panel-body">
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-name">Název projektu</label>
-                            <div class="col-md-7">
-                                <input type="text" id="work-metadata-name" class="form-control" value="NULL" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-title">Titul</label>
-                            <div class="col-md-7">
-                                <input type="text" id="work-metadata-title" class="form-control" value="@Model.Title" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-subtitle">Podtitul</label>
-                            <div class="col-md-7">
-                                <input type="text" id="work-metadata-subtitle" class="form-control" value="@Model.Subtitle" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-relic-abbreviation">Zkratka památky</label>
-                            <div class="col-md-7">
-                                <input type="text" id="work-metadata-relic-abbreviation" class="form-control" value="@Model.RelicAbbreviation" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-source-abbreviation">Zkratka pramene</label>
-                            <div class="col-md-7">
-                                <input type="text" id="work-metadata-source-abbreviation" class="form-control" value="@Model.SourceAbbreviation" />
-                            </div>
-                        </div>
-                    </div>
+<div class="project-layout-box project-layout-box-500">
+<div class="panel-group" id="work-metadata-container">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Obecné informace
+    </div>
+    <div class="panel-body">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="work-metadata-title">Název projektu</label>
+                <div class="col-md-7">
+                    <input type="text" id="work-metadata-title" class="form-control" value="@Model.Title"/>
                 </div>
             </div>
-
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    Publikace
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="work-metadata-subtitle">Podnázev projektu</label>
+                <div class="col-md-7">
+                    <input type="text" id="work-metadata-subtitle" class="form-control" value="@Model.Subtitle"/>
                 </div>
-                <div class="panel-body">
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-publisher">Nakladatel</label>
-                            <div class="col-md-6">
-                                <select id="work-metadata-publisher" class="form-control">
-                                    <option disabled selected value="" class="hidden"></option>
-                                    <option>TODO change to text field with autocomplete</option>
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <button class="btn btn-default" id="add-publisher-button">
-                                    <span class="glyphicon glyphicon-plus"></span>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="work-metadata-relic-abbreviation">Zkratka památky</label>
+                <div class="col-md-7">
+                    <input type="text" id="work-metadata-relic-abbreviation" class="form-control" value="@Model.RelicAbbreviation"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="work-metadata-source-abbreviation">Zkratka pramene</label>
+                <div class="col-md-7">
+                    <input type="text" id="work-metadata-source-abbreviation" class="form-control" value="@Model.SourceAbbreviation"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Publikace
+    </div>
+    <div class="panel-body">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="work-metadata-publisher">Nakladatel</label>
+                <div class="col-md-6">
+                    <select id="work-metadata-publisher" class="form-control">
+                        <option disabled selected value="" class="hidden"></option>
+                        <option>TODO change to text field with autocomplete</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-default" id="add-publisher-button">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="work-metadata-publish-place">Místo publikace</label>
+                <div class="col-md-7">
+                    <input type="text" id="work-metadata-publish-place" class="form-control" value="@Model.PublishPlace"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="work-metadata-publish-date">Rok/roky publikace</label>
+                <div class="col-md-7">
+                    <input type="text" id="work-metadata-publish-date" class="form-control" value="@Model.PublishDate"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Responsible people</label>
+                <div class="col-md-7">
+                    <div id="work-metadata-editors">
+                        @foreach (var editor in Model.ResponsiblePersons)
+                        {
+                            <div class="editor-item" data-person-id="@editor.Id" data-responsible-type-id="@editor.ResponsibleType.Id">
+                                <button class="btn btn-default remove-button">
+                                    <span class="glyphicon glyphicon-remove"></span>
                                 </button>
+                                <span class="text-as-form-control">@editor.FirstName @editor.LastName - @editor.ResponsibleType.Text </span>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-publish-place">Místo publikace</label>
-                            <div class="col-md-7">
-                                <input type="text" id="work-metadata-publish-place" class="form-control" value="@Model.PublishPlace" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-publish-date">Rok/roky publikace</label>
-                            <div class="col-md-7">
-                                <input type="text" id="work-metadata-publish-date" class="form-control" value="@Model.PublishDate" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-bibl-text">Bibliografie</label>
-                            <div class="col-md-7">
-                                <input type="text" id="work-metadata-bibl-text" class="form-control" value="@Model.BiblText" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-copyright">Copyright</label>
-                            <div class="col-md-7">
-                                <input type="text" id="work-metadata-copyright" class="form-control" value="@Model.Copyright" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">Editoři</label>
-                            <div class="col-md-7">
-                                <div id="work-metadata-editors">
-                                    @foreach (var editor in Model.ResponsiblePersons)
-                                    {
-                                        <div class="editor-item" data-person-id="@editor.Id" data-responsible-type-id="@editor.ResponsibleType.Id">
-                                            <button class="btn btn-default remove-button"><span class="glyphicon glyphicon-remove"></span></button>
-                                            <span class="text-as-form-control">@editor.FirstName @editor.LastName (@editor.ResponsibleType.Text)</span>
-                                        </div>
-                                    }
-                                </div>
-                                
-                                <button class="btn btn-default" id="add-editor-button">Přidat</button>
-                            </div>
-                        </div>
+                        }
                     </div>
+
+                    <button class="btn btn-default" id="add-editor-button">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
                 </div>
             </div>
-
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    Předloha/rukopis
-                </div>
-                <div class="panel-body">
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-literary-original">Předloha</label>
-                            <div class="col-md-7">
-                                <span class="text-as-form-control" id="work-metadata-literary-original">@Model.LiteraryOriginalText</span>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="form-group">
-                                <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-country">Země</label>
-                                <div class="col-md-7">
-                                    <input type="text" id="work-metadata-original-country" class="form-control" value="@Model.ManuscriptCountry" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-settlement">Město</label>
-                                <div class="col-md-7">
-                                    <input type="text" id="work-metadata-original-settlement" class="form-control" value="@Model.ManuscriptSettlement" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-repository">Instituce</label>
-                                <div class="col-md-7">
-                                    <input type="text" id="work-metadata-original-repository" class="form-control" value="@Model.ManuscriptRepository" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-idno">Signatura</label>
-                                <div class="col-md-7">
-                                    <input type="text" id="work-metadata-original-idno" class="form-control" value="@Model.ManuscriptIdno" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-extent">Rozsah</label>
-                                <div class="col-md-7">
-                                    <input type="text" id="work-metadata-original-extent" class="form-control" value="@Model.ManuscriptExtent" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">Autoři</label>
-                            <div class="col-md-7">
-                                <div id="work-metadata-authors">
-                                    @foreach (var author in Model.Authors)
-                                    {
-                                        <div class="author-item" data-id="@author.Id">
-                                            <button class="btn btn-default remove-button"><span class="glyphicon glyphicon-remove"></span></button>
-                                            <span class="text-as-form-control">@author.FirstName @author.LastName</span>
-                                        </div>
-                                    }
-                                </div>
-
-                                <button class="btn btn-default" id="add-author-button">Přidat</button>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-origin-date">Vydáno (slovní popis)</label>
-                            <div class="col-md-7">
-                                <input type="text" id="work-metadata-origin-date" class="form-control" value="@Model.OriginDate" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-not-before">Nevydáno před rokem</label>
-                            <div class="col-md-7">
-                                <input type="text" id="work-metadata-not-before" class="form-control" value="@Model.NotBefore" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-not-after">Nevydáno po roce</label>
-                            <div class="col-md-7">
-                                <input type="text" id="work-metadata-not-after" class="form-control" value="@Model.NotAfter" />
-                            </div>
-                        </div>
-                    </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="work-metadata-publisher-email">E-mail</label>
+                <div class="col-md-7">
+                    <input type="text" id="work-metadata-publisher-email" class="form-control" value="@Model.PublisherEmail"/>
                 </div>
             </div>
-
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    Kategorizace
-                </div>
-                <div class="panel-body">
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-category">Kategorie</label>
-                            <div class="col-md-7">
-                                <input type="text" id="work-metadata-category" class="form-control" value="TODO kategorie" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">Literární druh</label>
-                            <div class="col-md-7">
-                                <div id="work-metadata-literary-kind">
-                                    @foreach (var kind in Model.AllLiteraryKindList)
-                                    {
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox" value="@kind.Id" @(Model.SelectedLiteraryKindIds.Contains(kind.Id) ? "checked" : null) /> @kind.Name
-                                            </label>
-                                        </div>
-                                    }
-                                </div>
-
-                                <div class="add-button">
-                                    <button class="btn btn-default" id="add-literary-kind-button">Přidat</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">Literární žánr</label>
-                            <div class="col-md-6">
-                                <div id="work-metadata-literary-genre">
-                                    @foreach (var genre in Model.AllLiteraryGenreList)
-                                    {
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox" value="@genre.Id" @(Model.SelectedLiteraryGenreIds.Contains(genre.Id) ? "checked" : null) /> @genre.Name
-                                            </label>
-                                        </div>
-                                    }
-                                </div>
-
-                                <div class="add-button">
-                                    <button class="btn btn-default" id="add-literary-genre-button">Přidat</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="work-metadata-copyright">Copyright</label>
+                <div class="col-md-7">
+                    <input type="text" id="work-metadata-copyright" class="form-control" value="@Model.Copyright"/>
                 </div>
             </div>
-
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-last-modification">Poslední úprava</label>
-                            <div class="col-md-7">
-                                <span class="text-as-form-control" id="work-metadata-last-modification">@Model.LastModification</span>
-                            </div>
-                        </div>
-                    </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="work-metadata-bibl-text">Bibliografie</label>
+                <div class="col-md-7">
+                    <input type="text" id="work-metadata-bibl-text" class="form-control" value="@Model.BiblText"/>
                 </div>
-            </div>
+            </div>          
         </div>
-        <div class="project-form-bottom-buttons" style="margin-top: 10px;">
-            <div id="work-metadata-view-button-panel">
-                <button class="btn btn-default" id="work-metadata-edit-button">Upravit</button>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Předloha/rukopis
+    </div>
+    <div class="panel-body">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="work-metadata-literary-original">Předloha</label>
+                <div class="col-md-7">
+                    <span class="text-as-form-control" id="work-metadata-literary-original">@Model.LiteraryOriginalText</span>
+                </div>
             </div>
-            <div id="work-metadata-editor-button-panel">
-                <div class="alert alert-success" id="work-metadata-save-success">Metadata uložena</div>
-                <div class="alert alert-danger" id="work-metadata-save-error">Některá metadata se nepodařilo uložit</div>
-                <button class="btn btn-default" id="work-metadata-cancel-button">Zrušit</button>
-                <button class="btn btn-default" id="work-metadata-save-button"><span class="saving-icon loading-small-button"></span> Uložit</button>
+            <div>
+                <div class="form-group">
+                    <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-country">Země</label>
+                    <div class="col-md-7">
+                        <input type="text" id="work-metadata-original-country" class="form-control" value="@Model.ManuscriptCountry" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-settlement">Město</label>
+                    <div class="col-md-7">
+                        <input type="text" id="work-metadata-original-settlement" class="form-control" value="@Model.ManuscriptSettlement" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-repository">Instituce</label>
+                    <div class="col-md-7">
+                        <input type="text" id="work-metadata-original-repository" class="form-control" value="@Model.ManuscriptRepository" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-idno">Signatura</label>
+                    <div class="col-md-7">
+                        <input type="text" id="work-metadata-original-idno" class="form-control" value="@Model.ManuscriptIdno" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-extent">Rozsah</label>
+                    <div class="col-md-7">
+                        <input type="text" id="work-metadata-original-extent" class="form-control" value="@Model.ManuscriptExtent" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Authors (from book)</label>
+                <div class="col-md-7">
+                    <div id="work-metadata-authors">
+                        @foreach (var author in Model.Authors)
+                        {
+                            <div class="author-item" data-id="@author.Id">
+                                <button class="btn btn-default remove-button">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                                <span class="text-as-form-control">@author.FirstName @author.LastName</span>
+                            </div>
+                        }
+                    </div>
+
+                    <button class="btn btn-default" id="add-author-button">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="work-metadata-origin-date">Vydáno (slovní popis)</label>
+                <div class="col-md-7">
+                    <input type="text" id="work-metadata-origin-date" class="form-control" value="@Model.OriginDate"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="work-metadata-not-before">Nevydáno před rokem</label>
+                <div class="col-md-7">
+                    <input type="text" id="work-metadata-not-before" class="form-control" value="@Model.NotBefore"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="work-metadata-not-after">Nevydáno po roce</label>
+                <div class="col-md-7">
+                    <input type="text" id="work-metadata-not-after" class="form-control" value="@Model.NotAfter"/>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Kategorizace
+    </div>
+    <div class="panel-body">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="col-md-4 control-label">Literární žánr</label>
+                <div class="col-md-6">
+                    <div id="work-metadata-literary-genre">
+                        @foreach (var genre in Model.AllLiteraryGenreList)
+                        {
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" value="@genre.Id" @(Model.SelectedLiteraryGenreIds.Contains(genre.Id) ? "checked" : null) /> @genre.Name
+                                </label>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="add-button">
+                        <button class="btn btn-default" id="add-literary-genre-button">Přidat</button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Literární druh</label>
+                <div class="col-md-7">
+                    <div id="work-metadata-literary-kind">
+                        @foreach (var kind in Model.AllLiteraryKindList)
+                        {
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" value="@kind.Id" @(Model.SelectedLiteraryKindIds.Contains(kind.Id) ? "checked" : null) /> @kind.Name
+                                </label>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="add-button">
+                        <button class="btn btn-default" id="add-literary-kind-button">Přidat</button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="work-metadata-category">Kategorie</label>
+                <div class="col-md-7">
+                    <input type="text" id="work-metadata-category" class="form-control" value="TODO kategorie" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Keywords</label>
+                <div class="col-md-7 keywords-container">
+                    <input class="keywords-textarea form-control" type="text"/>
+                </div>
             </div>
         </div>
     </div>
-    <div class="project-layout-box project-layout-box-200">
-        <div class="light-border">
-            <h4>Kategorie</h4>
-            <div>
-                <label><input type="checkbox" /><span> Staročeský</span></label>
-            </div>
-            <div>
-                <label><input type="checkbox" /><span> Středněčeský</span></label>
+</div>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="work-metadata-last-modification">Poslední úprava</label>
+                <div class="col-md-7">
+                    <span class="text-as-form-control" id="work-metadata-last-modification">@Model.LastModification</span>
+                </div>
             </div>
         </div>
     </div>
+</div>
+</div>
+<div class="project-form-bottom-buttons" style="margin-top: 10px;">
+    <div id="work-metadata-view-button-panel">
+        <button class="btn btn-default" id="work-metadata-edit-button">Upravit</button>
+    </div>
+    <div id="work-metadata-editor-button-panel">
+        <div class="alert alert-success" id="work-metadata-save-success">Metadata uložena</div>
+        <div class="alert alert-danger" id="work-metadata-save-error">Některá metadata se nepodařilo uložit</div>
+        <button class="btn btn-default" id="work-metadata-cancel-button">Zrušit</button>
+        <button class="btn btn-default" id="work-metadata-save-button"><span class="saving-icon loading-small-button"></span> Uložit</button>
+    </div>
+</div>
 </div>
 
 <div class="modal fade" role="dialog" id="add-publisher-dialog">
@@ -296,13 +293,13 @@
                     <div class="form-group">
                         <label class="col-md-3 control-label" for="add-publisher-name">Název</label>
                         <div class="col-md-7">
-                            <input type="text" id="add-publisher-name" class="form-control" />
+                            <input type="text" id="add-publisher-name" class="form-control"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label" for="add-publisher-email">E-mail</label>
                         <div class="col-md-7">
-                            <input type="text" id="add-publisher-email" class="form-control" />
+                            <input type="text" id="add-publisher-email" class="form-control"/>
                         </div>
                     </div>
                 </div>
@@ -328,7 +325,7 @@
                     <div class="form-group">
                         <label class="col-md-3 control-label" for="add-literary-kind-name">Název</label>
                         <div class="col-md-7">
-                            <input type="text" id="add-literary-kind-name" class="form-control" />
+                            <input type="text" id="add-literary-kind-name" class="form-control"/>
                         </div>
                     </div>
                 </div>
@@ -354,7 +351,7 @@
                     <div class="form-group">
                         <label class="col-md-3 control-label" for="add-literary-genre-name">Název</label>
                         <div class="col-md-7">
-                            <input type="text" id="add-literary-genre-name" class="form-control" />
+                            <input type="text" id="add-literary-genre-name" class="form-control"/>
                         </div>
                     </div>
                 </div>
@@ -406,7 +403,7 @@
                                     <input class="form-control" id="add-author-last-name-preview" type="text" disabled="disabled">
                                 </div>
                             </div>
-                            <input type="hidden" id="add-author-id-preview" />
+                            <input type="hidden" id="add-author-id-preview"/>
                         </div>
                     </div>
                     <div id="tab-create-new-author" class="tab-pane">
@@ -534,4 +531,5 @@
             </div>
         </div>
     </div>
+</div>
 </div>

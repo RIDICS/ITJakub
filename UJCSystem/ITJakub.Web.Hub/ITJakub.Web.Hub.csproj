@@ -15,6 +15,27 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.category-editor.ts" />
+    <Content Remove="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.genre-editor.ts" />
+    <Content Remove="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.keyword.ts" />
+    <Content Remove="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.kind-editor.ts" />
+    <Content Remove="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.literary-original.ts" />
+    <Content Remove="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.main.ts" />
+    <Content Remove="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.original-author.ts" />
+    <Content Remove="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.table-base.ts" />
+    <Content Remove="wwwroot\Areas\Admin\js\edition-note\ridics.project.edition-note.main.ts" />
+    <Content Remove="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.gui.ts" />
+    <Content Remove="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.main.ts" />
+    <Content Remove="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.navigation.ts" />
+    <Content Remove="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.upload.ts" />
+    <Content Remove="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.editor.ts" />
+    <Content Remove="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.generator.ts" />
+    <Content Remove="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.list-structure.ts" />
+    <Content Remove="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.util.ts" />
+    <Content Remove="wwwroot\Areas\Admin\js\text-editor\ridics.project.text-editor.gui.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="App.config" />
     <None Update="wwwroot\**\*;Views\**\*;Areas\**\Views\**\*.cshtml;Content\**\*;log4net.config">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -66,6 +87,32 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.category-editor.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.genre-editor.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.keyword.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.kind-editor.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.literary-original.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.main.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.original-author.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.responsible-person-type.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.responsible-person.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.table-base.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.util.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\edition-note\ridics.project.edition-note.main.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.content-placement.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\editors-common-base\ridics.project.editors.gui.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.main.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.navigation.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.upload.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.editor.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.generator.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.list-structure.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.main.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\editors-common-base\ridics.project.editors.util.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\text-editor\ridics.project.text-editor.gui.ts" />
   </ItemGroup>
 
   <Target Name="ApplyXdtConfigTransform" BeforeTargets="MSDeployPublish">

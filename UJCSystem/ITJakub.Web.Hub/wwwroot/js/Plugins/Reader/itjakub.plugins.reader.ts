@@ -2720,7 +2720,7 @@ class SearchResult {
     pageName: string;
     before: string;
     after: string;
-    match; string;
+    match: string;
 }
 
 class PageDescription {

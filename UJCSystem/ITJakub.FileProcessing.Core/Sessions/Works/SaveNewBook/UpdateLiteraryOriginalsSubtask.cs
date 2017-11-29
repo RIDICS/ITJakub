@@ -22,7 +22,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 return;
 
             var dbOriginalList = m_catalogValueRepository.GetLiteraryOriginalList();
-            var project = m_metadataRepository.GetAdditionalProjectMetadata(projectId, false, false, false, false, true);
+            var project = m_metadataRepository.GetAdditionalProjectMetadata(projectId, false, false, false, false, true, false);
 
             foreach (var newOriginalName in bookData.LiteraryOriginals)
             {

@@ -232,10 +232,20 @@ interface IChapterHieararchyContract {
 }
 
 interface ISaveMetadataResource extends IMetadataResource {
+    keywordIdList: Array<number>;
     literaryKindIdList: Array<number>;
     literaryGenreIdList: Array<number>;
     authorIdList: Array<number>;
     projectResponsiblePersonIdList: Array<ISaveProjectResponsiblePerson>;
+}
+
+interface IGetMetadataResource extends IMetadataResource {
+    keywordList?: Array<IKeywordContract>;
+    literaryKindList?: Array<ILiteraryKindContract>;
+    literaryGenreList?: Array<ILiteraryGenreContract>;
+    authorIdList?: Array<IOriginalAuthor>;
+    responsiblePersonList?: Array<{responsibleType: IResponsibleType , id:number,firestName:string, lastName:string}>;
+    literaryOriginalList?: Array<ILiteraryOriginalContract>;
 }
 
 interface IMetadataSaveResult {
@@ -254,8 +264,7 @@ enum FavoriteType {
     Headword = "Headword",
 }
 
-enum QueryTypeEnum
-{
+enum QueryTypeEnum {
     Search = "Search",
     List = "List",
     Reader = "Reader",
@@ -280,12 +289,118 @@ enum ResponsibleTypeEnum {
     Kolace = 2,
 }
 
+enum KeyTableEditorType {
+    Genre = 0,
+    Kind = 1,
+    Category = 2,
+    ResponsiblePerson = 3,
+    ResponsiblePersonType = 4,
+    Keyword = 5,
+    OriginalAuthor = 6,
+    LiteraryOriginal = 7
+}
+
+interface IGenreResponseContract {
+    id: number,
+    name: string;
+}
+
+interface ICommentStructureBase {
+    id: number;
+    textReferenceId: string;
+    text: string;
+}
+
+interface ICommentStructureReply extends ICommentStructureBase {
+    parentCommentId: number;
+}
+
+interface ICommentSctucture extends ICommentStructureBase {
+    picture: string;
+    nested: boolean;
+    textId: number;
+    name: string;
+    surname: string;
+    order: number;
+    time: number;
+}
+
+interface ITextWithPage {
+    bookVersionId: number;
+    id: number;
+    parentPage: IPage;
+    versionId: number;
+    versionNumber: number;
+}
+
+interface ICreateTextVersion {
+    text: string;
+    id: number;
+    versionNumber: number;
+}
+
+interface ITextWithContent {
+    id: number;
+    versionId: number;
+    versionNumber: number;
+    bookVersionId: number;
+    text: string;
+}
+
+interface ILiteraryGenreContract {
+    id: number;
+    name: string;
+}
+
+interface IKeywordContract {
+    id: number;
+    name: string;
+}
+
+interface ILiteraryOriginalContract {
+    id: number;
+    name: string;
+}
+
+interface ILiteraryKindContract {
+    id: number;
+    name: string;
+}
+
+interface ICategoryContract {
+    id: number;
+    parentCategoryId?: number;
+    externalId: string;
+    description: string;
+}
+
+interface IEditionNote { //TODO expand after server functionality is done
+    projectId: number;
+    content: string;
+}
+
+interface IResponsiblePersonPagedResult {
+    totalCount: number;
+    list: IResponsiblePerson[];
+}
+
+interface IOriginalAuthorPagedResult {
+    totalCount: number;
+    list: IOriginalAuthor[];
+}
+
 enum AudioType {
     Unknown = "Unknown",
     Mp3 = "Mp3",
     Ogg = "Ogg",
     Wav = "Wav",
 }
+
+enum TextFormatEnumContract {
+    Raw = 0,
+    Html = 1
+}
+
 
 //TODO Switch TypeScript to version 2.4 and use enums with String values
 //enum ResourceType {

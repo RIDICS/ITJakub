@@ -107,22 +107,35 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                         return PartialView("Work/_Cooperation");
                     case ProjectModuleTabType.WorkMetadata:
                         var literaryKinds = client.GetLiteraryKindList();
-                        var literaryGenres = client.GetLitararyGenreList();
-                        var literaryOriginals = client.GetLitararyOriginalList();
+                        var literaryGenres = client.GetLiteraryGenreList();
+                        var literaryOriginals = client.GetLiteraryOriginalList();
                         var responsibleTypes = client.GetResponsibleTypeList();
-                        var projectMetadata = client.GetProjectMetadata(projectId.Value, true, true, true, true, true);
+                        var projectMetadata = client.GetProjectMetadata(projectId.Value, true, true, true, true, true, true);
                         var workMetadaViewModel = Mapper.Map<ProjectWorkMetadataViewModel>(projectMetadata);
                         workMetadaViewModel.AllLiteraryKindList = literaryKinds;
                         workMetadaViewModel.AllLiteraryGenreList = literaryGenres;
                         workMetadaViewModel.AllLiteraryOriginalList = literaryOriginals;
-                        workMetadaViewModel.AllResponsibleTypeList = Mapper.Map<List<ResponsibleTypeViewModel>>(responsibleTypes);
+                        workMetadaViewModel.AllResponsibleTypeList =
+                            Mapper.Map<List<ResponsibleTypeViewModel>>(responsibleTypes);
                         return PartialView("Work/_Metadata", workMetadaViewModel);
                     case ProjectModuleTabType.WorkHistory:
                         return PartialView("Work/_History");
+                    case ProjectModuleTabType.WorkNote:
+                        return PartialView("Work/_Note");
                     default:
                         return NotFound();
                 }
             }
+        }
+
+        public IActionResult GetImageViewer()
+        {
+            return PartialView("Resource/_Images");
+        }
+
+        public IActionResult GetTextPreview()
+        {
+            return PartialView("Resource/_Preview");
         }
 
         public IActionResult ProjectResourceModuleTab(ProjectModuleTabType tabType, long? resourceId)
@@ -136,8 +149,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             {
                 switch (tabType)
                 {
-                    case ProjectModuleTabType.ResourcePreview:
-                        return PartialView("Resource/_Preview");
                     case ProjectModuleTabType.ResourceDiscussion:
                         return PartialView("Resource/_Discussion");
                     case ProjectModuleTabType.ResourceMetadata:
@@ -152,7 +163,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult ProjectResourceVersion(long resourceId)
         {
-            using (var client= GetRestClient())
+            using (var client = GetRestClient())
             {
                 var resourceVersionList = client.GetResourceVersionHistory(resourceId);
                 var viewModel = Mapper.Map<List<ResourceVersionViewModel>>(resourceVersionList);
@@ -299,12 +310,28 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             using (var client = GetRestClient())
             {
-                var resourceVersionId = client.ProcessUploadedResourceVersion(request.ResourceId, new NewResourceContract
-                {
-                    SessionId = request.SessionId,
-                    Comment = request.Comment
-                });
+                var resourceVersionId = client.ProcessUploadedResourceVersion(request.ResourceId,
+                    new NewResourceContract
+                    {
+                        SessionId = request.SessionId,
+                        Comment = request.Comment
+                    });
                 return Json(resourceVersionId);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult CreateKeywordsWithArray(List<KeywordContract> request)
+        {
+            using (var client = GetRestClient())
+            {
+                var ids = new List<int>();
+                foreach (KeywordContract t in request)
+                {
+                    var newId = client.CreateKeyword(t);
+                    ids.Add(newId);
+                }
+                return Json(ids);
             }
         }
 
@@ -340,82 +367,16 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 return Json(newResourceId);
             }
         }
-        
-        [HttpPost]
-        public IActionResult CreateLiteraryKind([FromBody] LiteraryKindContract request)
-        {
-            using (var client = GetRestClient())
-            {
-                var newId = client.CreateLiteraryKind(request);
-                return Json(newId);
-            }
-        }
 
-        [HttpPost]
-        public IActionResult CreateLiteraryGenre([FromBody] LiteraryGenreContract request)
+        [HttpGet]
+        public IActionResult GetProjectMetadata([FromQuery] long projectId, [FromQuery] bool includeAuthor, [FromQuery] bool includeResponsiblePerson,
+            [FromQuery] bool includeKind, [FromQuery] bool includeGenre, [FromQuery] bool includeOriginal, [FromQuery] bool includeKeyword)
         {
             using (var client = GetRestClient())
             {
-                var newId = client.CreateLiteraryGenre(request);
-                return Json(newId);
-            }
-        }
-
-        [HttpPost]
-        public IActionResult CreateAuthor([FromBody] OriginalAuthorContract request)
-        {
-            using (var client = GetRestClient())
-            {
-                var newId = client.CreateOriginalAuthor(request);
-                return Json(newId);
-            }
-        }
-
-        [HttpPost]
-        public IActionResult CreateResponsiblePerson([FromBody] ResponsiblePersonContract request)
-        {
-            using (var client = GetRestClient())
-            {
-                var newId = client.CreateResponsiblePerson(request);
-                return Json(newId);
-            }
-        }
-
-        [HttpPost]
-        public IActionResult CreateResponsibleType([FromBody] ResponsibleTypeContract request)
-        {
-            using (var client = GetRestClient())
-            {
-                var newId = client.CreateResponsibleType(request);
-                return Json(newId);
-            }
-        }
-
-        [HttpPost]
-        public IActionResult CreateCategory([FromBody] CategoryContract request)
-        {
-            using (var client = GetRestClient())
-            {
-                var newId = client.CreateCategory(request);
-                return Json(newId);
-            }
-        }
-
-        public IActionResult GetCategoryList()
-        {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetCategoryList();
-                return Json(result);
-            }
-        }
-
-        public IActionResult GetResponsibleTypeList()
-        {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetResponsibleTypeList();
-                return Json(result);
+                var response = client.GetProjectMetadata(projectId, includeAuthor,
+                includeResponsiblePerson, includeKind, includeGenre, includeOriginal, includeKeyword);
+                return Json(response);
             }
         }
 
@@ -439,8 +400,10 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     ManuscriptIdno = request.ManuscriptIdno,
                     ManuscriptRepository = request.ManuscriptRepository,
                     ManuscriptSettlement = request.ManuscriptSettlement,
-                    NotAfter = request.NotAfter != null ? (DateTime?)new DateTime(request.NotAfter.Value, 1, 1) : null,
-                    NotBefore = request.NotBefore != null ? (DateTime?)new DateTime(request.NotBefore.Value, 1, 1) : null,
+                    NotAfter = request.NotAfter != null ? (DateTime?) new DateTime(request.NotAfter.Value, 1, 1) : null,
+                    NotBefore = request.NotBefore != null
+                        ? (DateTime?) new DateTime(request.NotBefore.Value, 1, 1)
+                        : null,
                     OriginDate = request.OriginDate,
                     PublishDate = request.PublishDate,
                     PublishPlace = request.PublishPlace,
@@ -449,7 +412,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     RelicAbbreviation = request.RelicAbbreviation,
                     SourceAbbreviation = request.SourceAbbreviation,
                     SubTitle = request.SubTitle,
-                    Title = request.Title
+                    Title = request.Title,
                 };
                 long newResourceVersionId = -1;
                 int unsuccessRequestCount = 0;
@@ -483,7 +446,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
                 try
                 {
-                    client.SetProjectLiteraryKinds(projectId, new IntegerIdListContract {IdList = request.LiteraryKindIdList});
+                    client.SetProjectLiteraryKinds(projectId,
+                        new IntegerIdListContract {IdList = request.LiteraryKindIdList});
                 }
                 catch (HttpRequestException)
                 {
@@ -492,7 +456,17 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
                 try
                 {
-                    client.SetProjectLiteraryGenres(projectId, new IntegerIdListContract {IdList = request.LiteraryGenreIdList});
+                    client.SetProjectLiteraryGenres(projectId,
+                        new IntegerIdListContract {IdList = request.LiteraryGenreIdList});
+                }
+                catch (HttpRequestException)
+                {
+                    unsuccessRequestCount++;
+                }
+
+                try
+                {
+                    client.SetProjectKeywords(projectId, new IntegerIdListContract {IdList = request.KeywordIdList});
                 }
                 catch (HttpRequestException)
                 {
@@ -509,12 +483,14 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     NewResourceVersionId = newResourceVersionId,
                     LastModificationText = DateTime.Now.ToString(CultureInfo.CurrentCulture),
                     LiteraryOriginalText =
-                        LiteraryOriginalTextConverter.GetLiteraryOriginalText(request.ManuscriptCountry, request.ManuscriptSettlement,
+                        LiteraryOriginalTextConverter.GetLiteraryOriginalText(request.ManuscriptCountry,
+                            request.ManuscriptSettlement,
                             request.ManuscriptRepository, request.ManuscriptIdno, request.ManuscriptExtent),
                 };
                 return Json(response);
             }
         }
+
 
         #region Typeahead
 

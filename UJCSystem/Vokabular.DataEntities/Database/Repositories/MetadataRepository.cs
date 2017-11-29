@@ -30,7 +30,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return query.SingleOrDefault();
         }
 
-        public virtual Project GetAdditionalProjectMetadata(long projectId, bool includeAuthors, bool includeResponsibles, bool includeKind, bool includeGenre, bool includeOriginal)
+        public virtual Project GetAdditionalProjectMetadata(long projectId, bool includeAuthors, bool includeResponsibles, bool includeKind, bool includeGenre, bool includeOriginal, bool includeKeyword)
         {
             var session = GetSession();
 
@@ -75,7 +75,13 @@ namespace Vokabular.DataEntities.Database.Repositories
                     .Fetch(x => x.LiteraryOriginals).Eager
                     .FutureValue();
             }
-
+            if (includeKeyword)
+            {
+                session.QueryOver<Project>()
+                    .Where(x => x.Id == projectId)
+                    .Fetch(x => x.Keywords).Eager
+                    .FutureValue();
+            }
             return session.QueryOver<Project>()
                 .Where(x => x.Id == projectId)
                 .FutureValue().Value;

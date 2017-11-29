@@ -57,6 +57,10 @@ namespace Vokabular.MainService.Core.Managers
                 {
                     resultContract.LiteraryOriginalList = Mapper.Map<List<LiteraryOriginalContract>>(project.LiteraryOriginals);
                 }
+                if (parameters.IncludeKeyword)
+                {
+                    resultContract.KeywordList = Mapper.Map<List<KeywordContract>>(project.Keywords);
+                }
             }
 
             return resultContract;
