@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -19,10 +18,6 @@ namespace Vokabular.MainService.Core.Managers
 {
     public class FavoriteManager
     {
-        private const int DefaultStart = 0;
-        private const int DefaultCount = 20;
-        private const int MaxCount = 200;
-
         private readonly UserManager m_userManager;
         private readonly CatalogValueRepository m_catalogValueRepository;
         private readonly FavoritesRepository m_favoritesRepository;
@@ -36,18 +31,6 @@ namespace Vokabular.MainService.Core.Managers
             m_catalogValueRepository = catalogValueRepository;
             m_favoritesRepository = favoritesRepository;
             m_resourceRepository = resourceRepository;
-        }
-
-        private int GetStart(int? start)
-        {
-            return start ?? DefaultStart;
-        }
-
-        private int GetCount(int? count)
-        {
-            return count != null
-                ? Math.Min(count.Value, MaxCount)
-                : DefaultCount;
         }
 
         private User TryGetUser()
@@ -179,8 +162,8 @@ namespace Vokabular.MainService.Core.Managers
         public PagedResultList<FavoriteBaseInfoContract> GetFavoriteItems(int? start, int? count, long? labelId, FavoriteTypeEnumContract? filterByType, string filterByTitle, FavoriteSortEnumContract sort)
         {
             var user = TryGetUser();
-            var startValue = GetStart(start);
-            var countValue = GetCount(count);
+            var startValue = PagingHelper.GetStart(start);
+            var countValue = PagingHelper.GetCount(count);
             var typeFilter = Mapper.Map<FavoriteTypeEnum?>(filterByType);
 
             var dbResult = m_favoritesRepository.InvokeUnitOfWork(x => x.GetFavoriteItems(labelId, typeFilter, filterByTitle, sort, startValue, countValue, user.Id));
@@ -195,8 +178,8 @@ namespace Vokabular.MainService.Core.Managers
         public PagedResultList<FavoriteQueryContract> GetFavoriteQueries(int? start, int? count, long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle)
         {
             var user = TryGetUser();
-            var startValue = GetStart(start);
-            var countValue = GetCount(count);
+            var startValue = PagingHelper.GetStart(start);
+            var countValue = PagingHelper.GetCount(count);
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
             var queryTypeEnum = Mapper.Map<QueryTypeEnum>(queryType);
 

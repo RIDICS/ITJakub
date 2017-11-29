@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Results;
@@ -11,10 +12,6 @@ namespace Vokabular.MainService.Core.Managers
 {
     public class ProjectManager
     {
-        private const int DefaultStartItem = 0;
-        private const int DefaultProjectItemCount = 5;
-        private const int MaxResultCount = 200;
-
         private readonly ProjectRepository m_projectRepository;
         private readonly MetadataRepository m_metadataRepository;
         private readonly UserManager m_userManager;
@@ -24,16 +21,6 @@ namespace Vokabular.MainService.Core.Managers
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
             m_userManager = userManager;
-        }
-
-        private int GetStart(int? start)
-        {
-            return start ?? DefaultStartItem;
-        }
-
-        private int GetCount(int? count)
-        {
-            return count != null ? Math.Min(count.Value, MaxResultCount) : DefaultProjectItemCount;
         }
 
         public long CreateProject(ProjectContract projectData)
@@ -60,8 +47,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public PagedResultList<ProjectDetailContract> GetProjectList(int? start, int? count, bool fetchPageCount)
         {
-            var startValue = GetStart(start);
-            var countValue = GetCount(count);
+            var startValue = PagingHelper.GetStart(start);
+            var countValue = PagingHelper.GetCountForProject(count);
 
             var work = new GetProjectListWork(m_projectRepository, m_metadataRepository, startValue, countValue, fetchPageCount);
             var resultEntities = work.Execute();

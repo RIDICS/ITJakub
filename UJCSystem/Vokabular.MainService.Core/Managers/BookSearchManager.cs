@@ -13,6 +13,7 @@ using Vokabular.DataEntities.Database.Search;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Search;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
@@ -101,8 +102,8 @@ namespace Vokabular.MainService.Core.Managers
             {
                 Sort = request.Sort,
                 SortDirection = request.SortDirection,
-                Start = request.Start,
-                Count = request.Count
+                Start = PagingHelper.GetStart(request.Start),
+                Count = PagingHelper.GetCountForProject(request.Count)
             };
 
             if (processedCriterias.NonMetadataCriterias.Count > 0)
@@ -149,8 +150,8 @@ namespace Vokabular.MainService.Core.Managers
             {
                 Sort = request.Sort,
                 SortDirection = request.SortDirection,
-                Start = request.Start,
-                Count = request.Count
+                Start = PagingHelper.GetStart(request.Start),
+                Count = PagingHelper.GetCountForProject(request.Count)
             };
 
             // Search only in relational DB
@@ -189,8 +190,8 @@ namespace Vokabular.MainService.Core.Managers
             {
                 Sort = request.Sort,
                 SortDirection = request.SortDirection,
-                Start = request.Start,
-                Count = request.Count
+                Start = PagingHelper.GetStart(request.Start),
+                Count = PagingHelper.GetCountForProject(request.Count)
             };
 
             if (processedCriterias.NonMetadataCriterias.Count > 0)
@@ -224,8 +225,8 @@ namespace Vokabular.MainService.Core.Managers
 
             var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters)
             {
-                Start = request.Start,
-                Count = request.Count
+                Start = PagingHelper.GetStart(request.Start),
+                Count = PagingHelper.GetCount(request.Count)
             };
 
             if (processedCriterias.NonMetadataCriterias.Count > 0)
@@ -271,8 +272,8 @@ namespace Vokabular.MainService.Core.Managers
 
             var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters)
             {
-                Start = request.Start,
-                Count = request.Count
+                Start = PagingHelper.GetStart(request.Start),
+                Count = PagingHelper.GetCount(request.Count)
             };
 
             if (processedCriterias.NonMetadataCriterias.Count > 0)
