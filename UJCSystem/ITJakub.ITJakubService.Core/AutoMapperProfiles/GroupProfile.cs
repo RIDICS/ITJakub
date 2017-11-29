@@ -6,7 +6,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
     public class GroupProfile : Profile
     {
-        protected override void Configure()
+        public GroupProfile()
         {
             CreateMap<Group, GroupDetailContract>()
                 .ForMember(m => m.Id, opt => opt.MapFrom(src => src.Id))

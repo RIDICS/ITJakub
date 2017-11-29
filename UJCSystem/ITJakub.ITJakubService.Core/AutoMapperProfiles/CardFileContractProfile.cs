@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 using ITJakub.CardFile.Core.DataContractEntities;
-using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Contracts;
 
 namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
     public class CardFileContractProfile : Profile
     {
-        protected override void Configure()
+        public CardFileContractProfile()
         {
             CreateMap<file, CardFileContract>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.id))

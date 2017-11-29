@@ -6,7 +6,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
     public class FavoriteLabelProfile : Profile
     {
-        protected override void Configure()
+        public FavoriteLabelProfile()
         {
             CreateMap<FavoriteLabel, FavoriteLabelContract>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))

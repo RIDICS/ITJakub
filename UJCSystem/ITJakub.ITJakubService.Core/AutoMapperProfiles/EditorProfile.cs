@@ -6,7 +6,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
     public class EditorProfile : Profile
     {
-        protected override void Configure()
+        public EditorProfile()
         {
             CreateMap<Responsible, EditorContract>();
         }

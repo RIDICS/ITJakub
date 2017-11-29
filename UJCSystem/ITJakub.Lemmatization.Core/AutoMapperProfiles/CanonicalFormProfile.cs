@@ -6,7 +6,7 @@ namespace ITJakub.Lemmatization.Core.AutoMapperProfiles
 {
     public class CanonicalFormProfile : Profile
     {
-        protected override void Configure()
+        public CanonicalFormProfile()
         {
             CreateMap<CanonicalForm, CanonicalFormContract>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))

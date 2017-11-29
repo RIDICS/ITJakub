@@ -6,7 +6,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
     public class BookPageProfile : Profile
     {
-        protected override void Configure()
+        public BookPageProfile()
         {
             CreateMap<BookPage, BookPageContract>()
                 .ForMember(m => m.XmlId, opt => opt.MapFrom(src => src.XmlId))

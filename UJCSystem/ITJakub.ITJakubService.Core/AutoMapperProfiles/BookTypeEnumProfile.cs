@@ -6,7 +6,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
     public class BookTypeEnumProfile : Profile
     {
-        protected override void Configure()
+        public BookTypeEnumProfile()
         {
             CreateMap<BookTypeEnum, BookTypeEnumContract>().ReverseMap();
             CreateMap<BookTypeEnum, MobileApps.MobileContracts.BookTypeContract>().ReverseMap();
