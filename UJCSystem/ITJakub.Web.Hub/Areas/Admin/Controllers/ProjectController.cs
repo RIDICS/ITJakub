@@ -110,10 +110,12 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                         var literaryGenres = client.GetLiteraryGenreList();
                         var literaryOriginals = client.GetLiteraryOriginalList();
                         var responsibleTypes = client.GetResponsibleTypeList();
+                        var keywords = client.GetKeywordList();
                         var projectMetadata = client.GetProjectMetadata(projectId.Value, true, true, true, true, true, true);
                         var workMetadaViewModel = Mapper.Map<ProjectWorkMetadataViewModel>(projectMetadata);
                         workMetadaViewModel.AllLiteraryKindList = literaryKinds;
                         workMetadaViewModel.AllLiteraryGenreList = literaryGenres;
+                        workMetadaViewModel.AllKeywordsList = keywords;
                         workMetadaViewModel.AllLiteraryOriginalList = literaryOriginals;
                         workMetadaViewModel.AllResponsibleTypeList =
                             Mapper.Map<List<ResponsibleTypeViewModel>>(responsibleTypes);

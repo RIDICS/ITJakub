@@ -110,9 +110,6 @@
                         display: "label"
                     }]
             });
-            $(".keywords-textarea").on("tokenfield:createdtoken", (event) => {
-                console.log(event.target);
-            });
             const keywordListAjax = this.getProjectMetadataWithKeywords(this.projectId);
             var tags = [];
             keywordListAjax.done((data: IGetMetadataResource) => {

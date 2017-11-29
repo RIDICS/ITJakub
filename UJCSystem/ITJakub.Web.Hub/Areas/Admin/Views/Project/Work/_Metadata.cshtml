@@ -107,7 +107,7 @@
                 <div class="col-md-7">
                     <input type="text" id="work-metadata-bibl-text" class="form-control" value="@Model.BiblText"/>
                 </div>
-            </div>          
+            </div>
         </div>
     </div>
 </div>
@@ -127,31 +127,31 @@
                 <div class="form-group">
                     <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-country">Země</label>
                     <div class="col-md-7">
-                        <input type="text" id="work-metadata-original-country" class="form-control" value="@Model.ManuscriptCountry" />
+                        <input type="text" id="work-metadata-original-country" class="form-control" value="@Model.ManuscriptCountry"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-settlement">Město</label>
                     <div class="col-md-7">
-                        <input type="text" id="work-metadata-original-settlement" class="form-control" value="@Model.ManuscriptSettlement" />
+                        <input type="text" id="work-metadata-original-settlement" class="form-control" value="@Model.ManuscriptSettlement"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-repository">Instituce</label>
                     <div class="col-md-7">
-                        <input type="text" id="work-metadata-original-repository" class="form-control" value="@Model.ManuscriptRepository" />
+                        <input type="text" id="work-metadata-original-repository" class="form-control" value="@Model.ManuscriptRepository"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-idno">Signatura</label>
                     <div class="col-md-7">
-                        <input type="text" id="work-metadata-original-idno" class="form-control" value="@Model.ManuscriptIdno" />
+                        <input type="text" id="work-metadata-original-idno" class="form-control" value="@Model.ManuscriptIdno"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-extent">Rozsah</label>
                     <div class="col-md-7">
-                        <input type="text" id="work-metadata-original-extent" class="form-control" value="@Model.ManuscriptExtent" />
+                        <input type="text" id="work-metadata-original-extent" class="form-control" value="@Model.ManuscriptExtent"/>
                     </div>
                 </div>
             </div>
@@ -192,7 +192,7 @@
                 <div class="col-md-7">
                     <input type="text" id="work-metadata-not-after" class="form-control" value="@Model.NotAfter"/>
                 </div>
-            </div> 
+            </div>
         </div>
     </div>
 </div>
@@ -210,7 +210,7 @@
                         {
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" value="@genre.Id" @(Model.SelectedLiteraryGenreIds.Contains(genre.Id) ? "checked" : null) /> @genre.Name
+                                    <input type="checkbox" value="@genre.Id" @(Model.SelectedLiteraryGenreIds.Contains(genre.Id) ? "checked" : null)/> @genre.Name
                                 </label>
                             </div>
                         }
@@ -229,7 +229,7 @@
                         {
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" value="@kind.Id" @(Model.SelectedLiteraryKindIds.Contains(kind.Id) ? "checked" : null) /> @kind.Name
+                                    <input type="checkbox" value="@kind.Id" @(Model.SelectedLiteraryKindIds.Contains(kind.Id) ? "checked" : null)/> @kind.Name
                                 </label>
                             </div>
                         }
@@ -243,12 +243,25 @@
             <div class="form-group">
                 <label class="col-md-4 control-label" for="work-metadata-category">Kategorie</label>
                 <div class="col-md-7">
-                    <input type="text" id="work-metadata-category" class="form-control" value="TODO kategorie" />
+                    <input type="text" id="work-metadata-category" class="form-control" value="TODO kategorie"/>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-4 control-label">Keywords</label>
                 <div class="col-md-7 keywords-container">
+                    <div class="keywords-list-all hidden">
+                        @foreach (var keyword in Model.AllKeywordsList)
+                        {
+                            <div data-id="@keyword.Id" data-name="@keyword.Name"></div>
+                        }
+                    </div>
+                    <div class="keywords-list-selected hidden">
+                        @foreach (var selectedKeyword in Model.SelectedKeywordIds)
+                        {
+                            <div data-id="@selectedKeyword"></div>
+                        }
+                    </div>
+
                     <input class="keywords-textarea form-control" type="text"/>
                 </div>
             </div>

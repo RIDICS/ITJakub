@@ -14,6 +14,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
         public string RelicAbbreviation { get; set; }
         public string SourceAbbreviation { get; set; }
 
+        public List<KeywordContract> AllKeywordsList { get; set; }
         public List<LiteraryKindContract> AllLiteraryKindList { get; set; }
         public List<LiteraryGenreContract> AllLiteraryGenreList { get; set; }
         public List<LiteraryOriginalContract> AllLiteraryOriginalList { get; set; }
@@ -22,6 +23,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
         public HashSet<int> SelectedLiteraryKindIds { get; set; }
         public HashSet<int> SelectedLiteraryGenreIds { get; set; }
         public HashSet<int> SelectedLiteraryOriginalIds { get; set; }
+        public HashSet<int> SelectedKeywordIds { get; set; }
         public List<OriginalAuthorContract> Authors { get; set; }
         public List<ProjectResponsiblePersonContract> ResponsiblePersons { get; set; }
 
