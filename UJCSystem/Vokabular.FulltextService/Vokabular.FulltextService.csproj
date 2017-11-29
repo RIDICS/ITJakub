@@ -4,6 +4,11 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netcoreapp2.0\Vokabular.FulltextService.xml</DocumentationFile>
+    <NoWarn>1701;1702;1705;1591</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
@@ -25,6 +30,7 @@
     <ProjectReference Include="..\Vokabular.FulltextService.Core\Vokabular.FulltextService.Core.csproj" />
     <ProjectReference Include="..\Vokabular.FulltextService.DataContracts\Vokabular.FulltextService.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.Log4Net\Vokabular.Log4Net.csproj" />
+    <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj" />
   </ItemGroup>
 
