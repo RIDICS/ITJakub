@@ -19,7 +19,7 @@
         });
         noteContentAjax.fail(() => {
             const error = new AlertComponentBuilder(AlertType.Error).addContent("Failed to load edition note");
-            $(".tab-content").empty().append(error.buildElement());
+            $("#project-work-note").empty().append(error.buildElement());
         });
     }
 
