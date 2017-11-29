@@ -11,9 +11,10 @@
 
     init() {
         $("#project-layout-content").find("*").off();
-        $(".create-key-table-entry-description").text("Create new literary kind");
-        $(".rename-key-table-entry-description").text("Rename literary kind");
-        $(".delete-key-table-entry-description").text("Delete literary kind");
+        this.createEntryButtonEl.text("Create new literary kind");
+        this.changeEntryButtonEl.text("Rename literary kind");
+        this.deleteEntryButtonEl.text("Delete literary kind");
+        this.titleEl.text("Literary kinds");
         this.unbindEventsDialog();
         this.util.getLitararyKindList().done((data: ILiteraryKindContract[]) => {
             this.literaryKindItemList = data;

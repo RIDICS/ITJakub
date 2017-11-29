@@ -11,9 +11,10 @@
 
     init() {
         $("#project-layout-content").find("*").off();
-        $(".create-key-table-entry-description").text("Create new literary original");
-        $(".rename-key-table-entry-description").text("Rename literary original");
-        $(".delete-key-table-entry-description").text("Delete literary original");
+        this.createEntryButtonEl.text("Create new literary original");
+        this.changeEntryButtonEl.text("Rename literary original");
+        this.deleteEntryButtonEl.text("Delete literary original");
+        this.titleEl.text("Literary originals");
         this.unbindEventsDialog();
         this.util.getLiteraryOriginalList().done((data: ILiteraryOriginalContract[]) => {
             this.literaryOriginalItemList = data;

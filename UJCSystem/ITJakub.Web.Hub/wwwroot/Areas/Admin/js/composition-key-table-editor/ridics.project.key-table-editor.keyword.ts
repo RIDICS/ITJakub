@@ -11,9 +11,10 @@
 
     init() {
         $("#project-layout-content").find("*").off();
-        $(".create-key-table-entry-description").text("Create new keyword");
-        $(".rename-key-table-entry-description").text("Rename keyword");
-        $(".delete-key-table-entry-description").text("Delete keyword");
+        this.createEntryButtonEl.text("Create new keyword");
+        this.changeEntryButtonEl.text("Rename keyword");
+        this.deleteEntryButtonEl.text("Delete keyword");
+        this.titleEl.text("Keywords");
         this.unbindEventsDialog();
         this.util.getKeywordList().done((data: IKeywordContract[]) => {
             this.keywordItemList = data;

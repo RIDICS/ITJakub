@@ -1,6 +1,10 @@
 ﻿class KeyTableEditorBase {
     protected currentPage: number;
     protected numberOfItemsPerPage = 14;
+    protected createEntryButtonEl = $(".create-key-table-entry-description");
+    protected changeEntryButtonEl = $(".rename-key-table-entry-description");
+    protected deleteEntryButtonEl = $(".delete-key-table-entry-description");
+    protected titleEl = $(".table-of-keys-title");
 
     protected initPagination(itemsCount: number, itemsOnPage: number, callback : Function) {
         const pagination = new Pagination({

@@ -11,9 +11,10 @@
 
     init() {
         $("#project-layout-content").find("*").off();
-        $(".create-key-table-entry-description").text("Create new responsible person");
-        $(".rename-key-table-entry-description").text("Rename responsible person");
-        $(".delete-key-table-entry-description").text("Delete responsible person");
+        this.createEntryButtonEl.text("Create new responsible person");
+        this.changeEntryButtonEl.text("Rename responsible person");
+        this.deleteEntryButtonEl.text("Delete responsible person");
+        this.titleEl.text("Responsible people");
         this.unbindEventsDialog();
         {
             const initialPage = 1;

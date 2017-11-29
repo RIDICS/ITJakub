@@ -11,9 +11,10 @@
 
     init() {
         $("#project-layout-content").find("*").off();
-        $(".create-key-table-entry-description").text("Create new responsible person type");
-        $(".rename-key-table-entry-description").text("Change responsible person type");
-        $(".delete-key-table-entry-description").text("Delete responsible person type");
+        this.createEntryButtonEl.text("Create new responsible person type");
+        this.changeEntryButtonEl.text("Change responsible person type");
+        this.deleteEntryButtonEl.text("Delete responsible person type");
+        this.titleEl.text("Responsible person types");
         this.unbindEventsDialog();
         this.util.getResponsiblePersonTypeList().done((data: IResponsibleType[]) => {
             this.responsibleTypeItemList = data;

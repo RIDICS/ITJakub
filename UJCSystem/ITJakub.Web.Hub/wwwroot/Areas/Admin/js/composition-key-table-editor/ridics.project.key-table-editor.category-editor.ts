@@ -12,9 +12,10 @@
 
     init() {
         $("#project-layout-content").find("*").off();
-        $(".create-key-table-entry-description").text("Create new category");
-        $(".rename-key-table-entry-description").text("Change category");
-        $(".delete-key-table-entry-description").text("Delete category");
+        this.createEntryButtonEl.text("Create new category");
+        this.changeEntryButtonEl.text("Change category");
+        this.deleteEntryButtonEl.text("Delete category");
+        this.titleEl.text("Categories");
         this.unbindEventsDialog();
         this.util.getCategoryList().done((data: ICategoryContract[]) => {
             this.categoryCreation();

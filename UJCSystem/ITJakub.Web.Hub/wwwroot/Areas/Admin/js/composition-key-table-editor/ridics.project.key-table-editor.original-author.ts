@@ -10,9 +10,10 @@
 
     init() {
         $("#project-layout-content").find("*").off();
-        $(".create-key-table-entry-description").text("Create new original author");
-        $(".rename-key-table-entry-description").text("Rename original author");
-        $(".delete-key-table-entry-description").text("Delete original author");
+        this.createEntryButtonEl.text("Create new original author");
+        this.changeEntryButtonEl.text("Rename original author");
+        this.deleteEntryButtonEl.text("Delete original author");
+        this.titleEl.text("Original authors");
         this.unbindEventsDialog();
         {
             const initialPage = 1;
