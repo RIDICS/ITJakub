@@ -337,6 +337,16 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult KeywordTypeahead([FromQuery] string keyword)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetKeywordList();//TODO temporary until backend function implementation
+                return Json(result);
+            }
+        }
+
         [HttpPost]
         public IActionResult DeleteResource([FromBody] DeleteResourceRequest request)
         {

@@ -82,17 +82,22 @@
     }
 
     private initKeywords() {
-        var allKeywords = [];
-        const allKeywordEls = $(".keywords-list-all").children();
         const selectedKeywordEls = $(".keywords-list-selected").children();
-        allKeywordEls.each((index, element) => {
-            const jEl = $(element);
-            allKeywords.push({ value: jEl.data("id"), label: jEl.data("name") });
-        });
         const engine = new Bloodhound({
-            local: allKeywords,
-            datumTokenizer: (d) => Bloodhound.tokenizers.whitespace(d.label),
-            queryTokenizer: Bloodhound.tokenizers.whitespace
+            //TODO preparation for ajax autocomplete function
+            datumTokenizer: (d: any) => Bloodhound.tokenizers.whitespace(d.label),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                url: `${getBaseUrl()}Admin/Project/KeywordTypeahead?keyword=%QUERY`,
+                wildcard: "%QUERY",
+                transform: (response: IKeywordContract[]) =>
+                    $.map(response,
+                        (keyword: IKeywordContract) => ({
+                            value: keyword.id,
+                            label: keyword.name
+                        }))
+
+            }
         });
         engine.initialize();
         $(".keywords-textarea").tokenfield({
@@ -113,7 +118,7 @@
             const jEl = $(element);
             tags.push({ value: jEl.data("id"), label: jEl.data("name") });
         });
-            $(".keywords-textarea").tokenfield("setTokens", tags);       
+        $(".keywords-textarea").tokenfield("setTokens", tags);
     }
 
     private returnUniqueElsArray(array: any[]) {
