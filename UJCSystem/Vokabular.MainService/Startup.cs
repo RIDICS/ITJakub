@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
 using Vokabular.Core;
 using Vokabular.MainService.Containers.Extensions;
@@ -69,6 +70,7 @@ namespace Vokabular.MainService
                     Version = "v1",
                 });
                 options.DescribeAllEnumsAsStrings();
+                options.IncludeXmlComments(GetXmlCommentsPath());
                 options.OperationFilter<AddResponseHeadersFilter>();
 
                 options.DocumentFilter<PolymorphismDocumentFilter<SearchCriteriaContract>>();
@@ -113,6 +115,12 @@ namespace Vokabular.MainService
         private void OnShutdown()
         {
             Container.Dispose();
+        }
+
+        private string GetXmlCommentsPath()
+        {
+            var app = PlatformServices.Default.Application;
+            return Path.Combine(app.ApplicationBasePath, $"{app.ApplicationName}.xml");
         }
     }
 }

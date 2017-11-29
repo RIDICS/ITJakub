@@ -19,6 +19,29 @@ namespace Vokabular.MainService.Controllers
             m_bookSearchManager = bookSearchManager;
         }
 
+        /// <summary>
+        /// Search headwords
+        /// </summary>
+        /// <remarks>
+        /// Search headwords. Supported search criteria (key property - data type):
+        /// - Author - WordListCriteriaContract
+        /// - Title - WordListCriteriaContract
+        /// - Editor - WordListCriteriaContract
+        /// - Fulltext - WordListCriteriaContract
+        /// - Heading - WordListCriteriaContract
+        /// - Sentence - WordListCriteriaContract
+        /// - Headword - WordListCriteriaContract
+        /// - HeadwordDescription - WordListCriteriaContract
+        /// - Term - WordListCriteriaContract
+        /// - Dating - DatingListCriteriaContract
+        /// - TokenDistance - TokenDistanceListCriteriaContract
+        /// - HeadwordDescriptionTokenDistance - TokenDistanceListCriteriaContract
+        /// - SelectedCategory - SelectedCategoryCriteriaContract
+        /// </remarks>
+        /// <param name="request">
+        /// Request contains list of search criteria with different data types described in method description
+        /// </param>
+        /// <returns></returns>
         [HttpPost("search")]
         public List<HeadwordContract> SearchHeadword([FromBody] HeadwordSearchRequestContract request)
         {
@@ -26,6 +49,11 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
+        /// <summary>
+        /// Search audio books, return count
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("search-count")]
         public long SearchHeadwordResultCount([FromBody] HeadwordSearchRequestContract request)
         {
@@ -33,6 +61,14 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
+        /// <summary>
+        /// Search for location of specified headword
+        /// </summary>
+        /// <remarks>
+        /// Search for headword location in headword listing (in list with all headwords from selected dictionaries sorted by name)
+        /// </remarks>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("search-row-number")]
         public long SearchHeadwordRowNumber([FromBody] HeadwordRowNumberSearchRequestContract request)
         {
