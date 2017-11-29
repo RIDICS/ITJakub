@@ -109,7 +109,8 @@
                 },
                 {
                     source: engine.ttAdapter(),
-                    display: "label"
+                    display: "label",
+                    limit: 15
                 }
             ]
         });
