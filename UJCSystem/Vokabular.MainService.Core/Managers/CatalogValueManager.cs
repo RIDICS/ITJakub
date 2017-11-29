@@ -3,8 +3,10 @@ using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.CatalogValues;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.RestClient.Results;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -65,10 +67,16 @@ namespace Vokabular.MainService.Core.Managers
             return Mapper.Map<List<LiteraryOriginalContract>>(result);
         }
 
-        public List<KeywordContract> GetKeywordList()
+        public PagedResultList<KeywordContract> GetKeywordList(int? start, int? count)
         {
-            var resultList = m_catalogValueRepository.InvokeUnitOfWork(x => x.GetKeywordList());
-            return Mapper.Map<List<KeywordContract>>(resultList);
+            var startValue = PagingHelper.GetStart(start);
+            var countValue = PagingHelper.GetCount(count);
+            var dbResult = m_catalogValueRepository.InvokeUnitOfWork(x => x.GetKeywordList(startValue, countValue));
+            return new PagedResultList<KeywordContract>
+            {
+                List = Mapper.Map<List<KeywordContract>>(dbResult.List),
+                TotalCount = dbResult.Count,
+            };
         }
 
         public List<ResponsibleTypeContract> GetResponsibleTypeList()

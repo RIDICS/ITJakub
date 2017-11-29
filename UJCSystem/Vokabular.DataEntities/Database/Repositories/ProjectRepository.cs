@@ -85,7 +85,8 @@ namespace Vokabular.DataEntities.Database.Repositories
         public virtual IList<ProjectOriginalAuthor> GetProjectOriginalAuthorList(long projectId, bool includeAuthors = false)
         {
             var query = GetSession().QueryOver<ProjectOriginalAuthor>()
-                .Where(x => x.Project.Id == projectId);
+                .Where(x => x.Project.Id == projectId)
+                .OrderBy(x => x.Sequence).Asc;
 
             if (includeAuthors)
             {
@@ -101,6 +102,46 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => x.Project.Id == projectId)
                 .Fetch(x => x.ResponsiblePerson).Eager
                 .Fetch(x => x.ResponsibleType).Eager
+                .List();
+        }
+
+        public virtual IList<LiteraryKind> GetProjectLiteraryKinds(long projectId)
+        {
+            Project projectAlias = null;
+
+            return GetSession().QueryOver<LiteraryKind>()
+                .JoinAlias(x => x.Projects, () => projectAlias)
+                .Where(() => projectAlias.Id == projectId)
+                .List();
+        }
+
+        public virtual IList<LiteraryGenre> GetProjectLiteraryGenres(long projectId)
+        {
+            Project projectAlias = null;
+
+            return GetSession().QueryOver<LiteraryGenre>()
+                .JoinAlias(x => x.Projects, () => projectAlias)
+                .Where(() => projectAlias.Id == projectId)
+                .List();
+        }
+
+        public virtual IList<LiteraryOriginal> GetProjectLiteraryOriginals(long projectId)
+        {
+            Project projectAlias = null;
+
+            return GetSession().QueryOver<LiteraryOriginal>()
+                .JoinAlias(x => x.Projects, () => projectAlias)
+                .Where(() => projectAlias.Id == projectId)
+                .List();
+        }
+        
+        public virtual IList<Category> GetProjectCategories(long projectId)
+        {
+            Project projectAlias = null;
+
+            return GetSession().QueryOver<Category>()
+                .JoinAlias(x => x.Projects, () => projectAlias)
+                .Where(() => projectAlias.Id == projectId)
                 .List();
         }
     }

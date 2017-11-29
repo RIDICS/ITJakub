@@ -132,5 +132,47 @@ namespace Vokabular.MainService.Controllers
         {
             m_projectInfoManager.SetResponsiblePersons(projectId, projectResposibleIdList);
         }
+
+        [HttpGet("{projectId}/literary-kind")]
+        public List<LiteraryKindContract> GetLiteraryKinds(long projectId)
+        {
+            return m_projectInfoManager.GetLiteraryKinds(projectId);
+        }
+
+        [HttpGet("{projectId}/literary-genre")]
+        public List<LiteraryGenreContract> GetLiteraryGenres(long projectId)
+        {
+            return m_projectInfoManager.GetLiteraryGenres(projectId);
+        }
+
+        [HttpGet("{projectId}/literary-original")]
+        public List<LiteraryOriginalContract> GetLiteraryOriginal(long projectId)
+        {
+            return m_projectInfoManager.GetLiteraryOriginals(projectId);
+        }
+
+        [HttpGet("{projectId}/keyword")]
+        public List<KeywordContract> GetKeywords(long projectId)
+        {
+            return m_projectInfoManager.GetKeywords(projectId);
+        }
+
+        [HttpGet("{projectId}/category")]
+        public List<CategoryContract> GetCategories(long projectId)
+        {
+            return m_projectInfoManager.GetCategories(projectId);
+        }
+
+        [HttpGet("{projectId}/author")]
+        public List<OriginalAuthorContract> GetAuthors(long projectId)
+        {
+            return m_projectInfoManager.GetAuthors(projectId);
+        }
+
+        [HttpGet("{projectId}/responsible-person")]
+        public List<ProjectResponsiblePersonContract> GetProjectResponsiblePersons(long projectId)
+        {
+            return m_projectInfoManager.GetProjectResponsiblePersons(projectId);
+        }
     }
 }
