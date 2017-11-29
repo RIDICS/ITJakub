@@ -256,9 +256,9 @@
                         }
                     </div>
                     <div class="keywords-list-selected hidden">
-                        @foreach (var selectedKeyword in Model.SelectedKeywordIds)
+                        @foreach (var selectedKeyword in Model.SelectedKeywords)
                         {
-                            <div data-id="@selectedKeyword"></div>
+                            <div data-id="@selectedKeyword.Id" data-name="@selectedKeyword.Name"></div>
                         }
                     </div>
 

@@ -67,12 +67,6 @@
         };
     }
 
-    private getProjectMetadataWithKeywords(projectId: number) {
-        return $.get(`${getBaseUrl()}Admin/Project/GetProjectMetadata`, { projectId: projectId, includeKeyword: true });
-    }
-
-    private getKeywordList() { return $.get(`${getBaseUrl()}Admin/KeyTable/GetKeywordList`); }
-
     private createNewKeywordsByArray(names: string[]): JQueryXHR {
         const url = `${getBaseUrl()}Admin/Project/CreateKeywordsWithArray`;
         const id = 0; //keyword doesn't have an id yet
@@ -88,43 +82,41 @@
     }
 
     private initKeywords() {
-        this.getKeywordList().done((data: IKeywordContract[]) => {
-            var allKeywords = [];
-            for (let i = 0; i < data.length; i++) {
-                allKeywords.push({ value: data[i].id, label: data[i].name });
-            }
-            var engine = new Bloodhound({
-                local: allKeywords,
-                datumTokenizer: (d) => Bloodhound.tokenizers.whitespace(d.label),
-                queryTokenizer: Bloodhound.tokenizers.whitespace
-            });
-            engine.initialize();
-            $(".keywords-textarea").tokenfield({
-                typeahead: [{
+        var allKeywords = [];
+        const allKeywordEls = $(".keywords-list-all").children();
+        const selectedKeywordEls = $(".keywords-list-selected").children();
+        allKeywordEls.each((index, element) => {
+            const jEl = $(element);
+            allKeywords.push({ value: jEl.data("id"), label: jEl.data("name") });
+        });
+        const engine = new Bloodhound({
+            local: allKeywords,
+            datumTokenizer: (d) => Bloodhound.tokenizers.whitespace(d.label),
+            queryTokenizer: Bloodhound.tokenizers.whitespace
+        });
+        engine.initialize();
+        $(".keywords-textarea").tokenfield({
+            typeahead: [
+                {
                     hint: true,
                     highlight: true,
                     minLength: 1
                 },
-                    {
-                        source: engine.ttAdapter(),
-                        display: "label"
-                    }]
-            });
-            const keywordListAjax = this.getProjectMetadataWithKeywords(this.projectId);
-            var tags = [];
-            keywordListAjax.done((data: IGetMetadataResource) => {
-                for (let i = 0; i < data.keywordList.length; i++) {
-                    tags.push({ value: data.keywordList[i].id, label: data.keywordList[i].name });
+                {
+                    source: engine.ttAdapter(),
+                    display: "label"
                 }
-                $(".keywords-textarea").tokenfield("setTokens", tags);
-            });
-        }).fail(
-            () => {
-                alert("Keyword loading failed");//TODO change to dialog or message.
-            });
+            ]
+        });
+        var tags = [];
+        selectedKeywordEls.each((index, element) => {
+            const jEl = $(element);
+            tags.push({ value: jEl.data("id"), label: jEl.data("name") });
+        });
+            $(".keywords-textarea").tokenfield("setTokens", tags);       
     }
 
-    private returnUniqueElsArray(array:any[]) {
+    private returnUniqueElsArray(array: any[]) {
         var seen = {};
         return array.filter(item => seen.hasOwnProperty(item) ? false : (seen[item] = true));
     }

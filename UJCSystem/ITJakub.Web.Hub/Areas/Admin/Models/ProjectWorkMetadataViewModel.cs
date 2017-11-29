@@ -23,7 +23,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
         public HashSet<int> SelectedLiteraryKindIds { get; set; }
         public HashSet<int> SelectedLiteraryGenreIds { get; set; }
         public HashSet<int> SelectedLiteraryOriginalIds { get; set; }
-        public HashSet<int> SelectedKeywordIds { get; set; }
+        public IList<KeywordContract> SelectedKeywords { get; set; }
         public List<OriginalAuthorContract> Authors { get; set; }
         public List<ProjectResponsiblePersonContract> ResponsiblePersons { get; set; }
 
