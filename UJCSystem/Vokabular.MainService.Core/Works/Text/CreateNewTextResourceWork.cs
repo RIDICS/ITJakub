@@ -10,11 +10,11 @@ namespace Vokabular.MainService.Core.Works.Text
     public class CreateNewTextResourceWork : UnitOfWorkBase<long>
     {
         private readonly ResourceRepository m_resourceRepository;
-        private readonly ShortTextContract m_newTextContract;
+        private readonly CreateTextRequestContract m_newTextContract;
         private readonly int m_userId;
         private readonly CommunicationProvider m_communicationProvider;
 
-        public CreateNewTextResourceWork(ResourceRepository resourceRepository, ShortTextContract newTextContract, int userId, CommunicationProvider communicationProvider) : base(resourceRepository)
+        public CreateNewTextResourceWork(ResourceRepository resourceRepository, CreateTextRequestContract newTextContract, int userId, CommunicationProvider communicationProvider) : base(resourceRepository)
         {
             m_resourceRepository = resourceRepository;
             m_newTextContract = newTextContract;

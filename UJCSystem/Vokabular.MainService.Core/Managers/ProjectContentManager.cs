@@ -11,7 +11,6 @@ using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Works.Content;
 using Vokabular.MainService.Core.Works.Text;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -132,7 +131,7 @@ namespace Vokabular.MainService.Core.Managers
             return resultVersionId;
         }
 		
-		public long CreateNewTextResourceVersion(ShortTextContract request)
+		public long CreateNewTextResourceVersion(CreateTextRequestContract request)
         {
             var userId = m_userManager.GetCurrentUserId();
             var createNewTextResourceWork = new CreateNewTextResourceWork(m_resourceRepository, request, userId, m_communicationProvider);
