@@ -1,12 +1,17 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using ITJakub.FileProcessing.Core.Sessions.Processors;
+using log4net;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.FileProcessing.Core.Sessions
 {
     public class ResourceProcessorManager
     {
+        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         private readonly AudioBookArchiveProcessor m_audiobookArchiveProcessor;
         private readonly BasicProjectDataRelationalDbStoreProcessor m_basicProjectDataRelationalDbStoreProcessor;
         private readonly ExistDbStoreProcessor m_existDbStoreProcessor;
@@ -78,32 +83,86 @@ namespace ITJakub.FileProcessing.Core.Sessions
 
         private void ProcessFileDbStore(ResourceSessionDirector resourceDirector)
         {
-            m_fileDbStoreProcessor.Process(resourceDirector);
+            try
+            {
+                m_fileDbStoreProcessor.Process(resourceDirector);
+            }
+            catch (Exception e)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error("Error storing data to file storage", e);
+                throw;
+            }
         }
 
         private void ProcessExistDbStore(ResourceSessionDirector resourceDirector)
         {
-            m_existDbStoreProcessor.Process(resourceDirector);
+            try
+            {
+                m_existDbStoreProcessor.Process(resourceDirector);
+            }
+            catch (Exception e)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error("Error storing data to eXist-db", e);
+                throw;
+            }
         }
 
         private void ProcessBasicProjectDataRelationalDbStore(ResourceSessionDirector resourceDirector)
         {
-            m_basicProjectDataRelationalDbStoreProcessor.Process(resourceDirector);
+            try
+            {
+                m_basicProjectDataRelationalDbStoreProcessor.Process(resourceDirector);
+            }
+            catch (Exception e)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error("Error storing basic project data to relational database", e);
+                throw;
+            }
         }
 
         private void ProcessRelationalDbStore(ResourceSessionDirector resourceDirector)
         {
-            m_relationalDbStoreProcessor.Process(resourceDirector);
+            try
+            {
+                m_relationalDbStoreProcessor.Process(resourceDirector);
+            }
+            catch (Exception e)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error("Error storing data to relational database", e);
+                throw;
+            }
         }
 
         private void ProcessMetaData(ResourceSessionDirector resourceDirector)
         {
-            m_metadataProcessor.Process(resourceDirector);
+            try
+            {
+                m_metadataProcessor.Process(resourceDirector);
+            }
+            catch (Exception e)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error("Error processing XMD metadata", e);
+                throw;
+            }
         }
 
         private void ProcessXmlConversion(ResourceSessionDirector resourceDirector)
         {
-            m_xmlConversionProcessor.Process(resourceDirector);
+            try
+            {
+                m_xmlConversionProcessor.Process(resourceDirector);
+            }
+            catch (Exception e)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error("Error processing DOCX file to XML", e);
+                throw;
+            }
         }
     }
 }
