@@ -380,55 +380,47 @@
                 <h4 class="modal-title">Přidat nového autora</h4>
             </div>
             <div class="modal-body">
-                <ul class="nav nav-tabs">
-                    <li class="active">
-                        <a href="#tab-select-existing-author" data-toggle="tab">Výběr existujícího</a>
-                    </li>
-                    <li>
-                        <a href="#tab-create-new-author" data-toggle="tab">Vytvoření nového</a>
-                    </li>
-                </ul>
-
-                <div class="tab-content">
-                    <div id="tab-select-existing-author" class="tab-pane active">
-                        <div class="form-horizontal">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xs-7 col-no-padding">
                             <div class="form-group">
-                                <label for="add-author-search" class="col-md-3 control-label">Vyhledat autora</label>
-                                <div class="col-md-7">
-                                    <input class="form-control" id="add-author-search" type="text">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Jméno</label>
-                                <div class="col-md-7">
-                                    <input class="form-control" id="add-author-first-name-preview" type="text" disabled="disabled">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Příjmení</label>
-                                <div class="col-md-7">
-                                    <input class="form-control" id="add-author-last-name-preview" type="text" disabled="disabled">
-                                </div>
-                            </div>
-                            <input type="hidden" id="add-author-id-preview"/>
-                        </div>
-                    </div>
-                    <div id="tab-create-new-author" class="tab-pane">
-                        <div class="form-horizontal">
-                            <div class="form-group">
-                                <label for="add-author-first-name" class="col-md-3 control-label">Jméno</label>
-                                <div class="col-md-7">
-                                    <input class="form-control" id="add-author-first-name" type="text">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="add-author-last-name" class="col-md-3 control-label">Příjmení</label>
-                                <div class="col-md-7">
-                                    <input class="form-control" id="add-author-last-name" type="text">
-                                </div>
+                                <label for="add-author-search" class="col-xs-5 control-label">Vyhledat autora</label>
+                                <input class="form-control" id="add-author-search" type="text">
                             </div>
                         </div>
+                        <div class="col-xs-5">
+                        </div>
                     </div>
+                        <div class="row">
+                            <div class="col-xs-7 name-surname-typeahead">
+                                <div class="typeahead-fill-suggestions">
+                                    <div class="row table-header border-between">
+                                        <div class="col-xs-6">Name</div>
+                                        <div class="col-xs-6">Surname</div>
+                                    </div>
+                                </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 new-original-author">
+                                                <div class="row name-input-row border-between">
+                                                    <div class="col-xs-6">
+                                                        <input class="form-control" id="add-author-first-name" type="text" placeholder="Name">
+                                                    </div>
+                                                    <div class="col-xs-6">
+                                                        <input class="form-control" id="add-author-last-name" type="text" placeholder="Surname">
+                                                    </div>
+                                                </div>
+                                                <div class="row new-author-button-row">
+                                                    <div class="col-xs-12 col-no-padding">
+                                                        <button class="new-original-author-button btn btn-default">Add new author</button>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            <div class="col-xs-offset-1 col-xs-4 works-produced">
+                                Works
+                            </div>
+                        </div>
                 </div>
             </div>
             <div class="modal-footer">

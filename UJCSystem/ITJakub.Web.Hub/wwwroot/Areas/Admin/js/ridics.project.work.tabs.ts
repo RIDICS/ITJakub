@@ -46,10 +46,13 @@
             submitCallback: this.addEditor.bind(this)
         });
 
+        const suggestEl = $(".typeahead-fill-suggestions");
         this.authorTypeahead = new SingleSetTypeaheadSearchBox<IOriginalAuthor>("#add-author-search",
             "Admin/Project",
             x => `${x.lastName} ${x.firstName}`,
-            null);
+            (item) => {
+                return `<div class="row border-between"><div class="col-xs-6 existing-original-author-name">${item.firstName}</div><div class="col-xs-6 existing-original-author-surname">${item.lastName}</div></div>`;
+            }, suggestEl);
         this.authorTypeahead.setDataSet("OriginalAuthor");
 
         this.editorTypeahead = new SingleSetTypeaheadSearchBox<IResponsiblePerson>("#add-editor-search",
@@ -163,19 +166,42 @@
             this.addEditorDialog.show();
         });
 
+        $(".new-original-author-button").on("click", () => {
+            this.authorTypeahead.setValue("");
+            $("#add-author-search").prop("disabled", true);
+            $(".name-input-row").show();
+        });
+
+        const addAuthorDialogCancelButton = $("#add-author-dialog").find(`[data-dismiss="modal"]`);
+        addAuthorDialogCancelButton.on("click", () => {
+            $(".name-input-row").hide();
+            $("#add-author-search").prop("disabled", false);
+            this.authorTypeahead.setValue("");
+            $(".existing-original-author-selected").removeClass("existing-original-author-selected");
+            const newAuthorButtonEl = $(".new-original-author-button");
+            newAuthorButtonEl.prop("disabled", false);
+        });
+
         this.authorTypeahead.create((selectedExists, selectConfirmed) => {
-            var $firstName = $("#add-author-first-name-preview");
-            var $lastName = $("#add-author-last-name-preview");
             var $authorId = $("#add-author-id-preview");
+            const newAuthorNameEl = $(".add-author-first-name");
+            const newAuthorSurnameEl = $(".add-author-last-name");
+            const newAuthorButtonEl = $(".new-original-author-button");
             if (selectedExists) {
+                newAuthorButtonEl.prop("disabled", true);
+                newAuthorNameEl.prop("disabled", true);
+                newAuthorSurnameEl.prop("disabled", true);
+                $(".name-input-row").hide();
+                $(".existing-original-author-selected").removeClass("existing-original-author-selected");
                 var author = this.authorTypeahead.getValue();
-                $firstName.val(author.firstName);
-                $lastName.val(author.lastName);
+                const selectedEl = $(".typeahead-fill-suggestions").children(".tt-dataset").children(`:contains(${author.lastName}):contains(${author.firstName})`);
+                selectedEl.addClass("existing-original-author-selected");
                 $authorId.val(author.id);
                 this.selectedAuthorId = author.id;
             } else {
-                $firstName.val("");
-                $lastName.val("");
+                newAuthorButtonEl.prop("disabled", false);
+                newAuthorNameEl.prop("disabled", false);
+                newAuthorSurnameEl.prop("disabled", false);
                 $authorId.val("");
                 this.selectedAuthorId = null;
             }
@@ -290,10 +316,11 @@
             this.addAuthorDialog.hide();
         };
 
-        if ($("#tab-select-existing-author").hasClass("active")) {
+        const selectedExistingAuthorEl = $(".existing-original-author-selected");
+        if (selectedExistingAuthorEl.length) {
             id = $("#add-author-id-preview").val();
-            firstName = $("#add-author-first-name-preview").val();
-            lastName = $("#add-author-last-name-preview").val();
+            firstName = selectedExistingAuthorEl.children(".existing-original-author-name").text();
+            lastName = selectedExistingAuthorEl.children(".existing-original-author-surname").text();
 
             finishAddingAuthor();
         } else {

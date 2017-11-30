@@ -466,6 +466,10 @@ table {
     }
 }
 
+.existing-original-author-selected{
+    background-color:orange;//TODO debug
+}
+
 .table-of-keys-content {
 
     .table-of-keys-container {
@@ -530,8 +534,66 @@ table {
 
 #project-work-metadata {
     .keywords-container {
-        .bootstrap-tagsinput{
-            width:100%;
+        .bootstrap-tagsinput {
+            width: 100%;
+        }
+    }
+
+    #add-author-dialog {
+        .modal-body {
+            .border-between > [class*='col-']:before {
+                background: black;
+                bottom: 0;
+                content: " ";
+                left: 0;
+                position: absolute;
+                width: 1px;
+                top: 0;
+            }
+
+            .col-no-padding {
+                padding: 0;
+            }
+
+            .border-between > [class*='col-']:first-child:before {
+                display: none;
+            }
+
+            .name-input-row {
+                display: none;
+                border: solid 1px;
+                border-top: none;
+
+                [class*="col-"] {
+                    padding-right: 0;
+                    padding-left: 0;
+                }
+            }
+
+            .new-author-button-row{
+                margin-top: 4px;
+            }
+            
+            .name-surname-typeahead {
+
+                .table-header {
+                    border: solid 1px;
+                    line-height:1.5em;
+                }
+
+                .tt-dataset {
+                    .tt-suggestion {
+                        padding: 0;
+                        border: solid 1px;
+                        border-top: none;
+                        line-height: 2em;
+                    }
+                }
+            }
+
+            .works-produced {
+                border: solid 1px;
+            }
         }
     }
 }
