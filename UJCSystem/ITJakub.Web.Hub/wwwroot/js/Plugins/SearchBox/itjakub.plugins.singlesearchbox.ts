@@ -1,4 +1,6 @@
-﻿class SingleSetTypeaheadSearchBox<T> {
+﻿///<reference path="../../../lib-custom/@types/typeahead-menu/index.d.ts" />
+
+class SingleSetTypeaheadSearchBox<T> {
     private displayPath: (item: T) => string;
     private suggestionTemplate: (item: T) => string;
     private inputField: string;
@@ -8,7 +10,7 @@
     private bloodhound: Bloodhound<T>;
     private currentItem: T;
 
-    constructor(inputFieldElement: string, controllerName: string, displayPath: (item: T) => string, suggestionTemplate: (item: T) => string = null) {
+    constructor(inputFieldElement: string, controllerName: string, displayPath: (item: T) => string, suggestionTemplate: (item: T) => string = null, menuEl?: JQuery) {
         this.inputField = inputFieldElement;
         this.suggestionTemplate = suggestionTemplate;
         this.displayPath = displayPath;
@@ -17,7 +19,8 @@
         this.options = {
             hint: true,
             highlight: false,
-            minLength: 1
+            minLength: 1,
+            menu: menuEl
         };
     }
 
