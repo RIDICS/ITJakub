@@ -23,6 +23,7 @@ namespace Vokabular.MainService.Test
 
             var profiles = container.ResolveAll<Profile>();
 
+            Mapper.Reset();
             Mapper.Initialize(cfg =>
             {
                 foreach (var profile in profiles)
