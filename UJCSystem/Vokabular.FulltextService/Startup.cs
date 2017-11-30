@@ -83,7 +83,7 @@ namespace Vokabular.FulltextService
             // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Vokabular FulltextService API v1");
+                c.SwaggerEndpoint("v1/swagger.json", "Vokabular FulltextService API v1"); // using relative address to Swagger UI
             });
 
             applicationLifetime.ApplicationStopped.Register(OnShutdown);
