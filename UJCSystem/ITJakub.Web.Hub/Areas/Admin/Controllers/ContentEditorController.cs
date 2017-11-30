@@ -93,7 +93,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public void DeleteComment(long commentId)//TODO needs response code
+        public void DeleteComment(long commentId)
         {
             using (var client = GetRestClient())
             {
