@@ -1,7 +1,6 @@
 using System.Linq;
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
-using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.Shared.Contracts;
 
@@ -9,7 +8,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
     public class BookInfoProfile : Profile
     {
-        protected override void Configure()
+        public BookInfoProfile()
         {
             CreateMap<BookVersion, BookInfoWithPagesContract>()
                 .ForMember(dest => dest.BookId, opts => opts.MapFrom(src => src.Book.Id))

@@ -44,7 +44,8 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public ListWithTotalCountResult<Feedback> GetFeedbackList(int start, int count, FeedbackSortEnum sort, SortDirectionEnumContract sortDirection, IList<FeedbackCategoryEnum> filterCategories)
         {
-            var query = GetSession().QueryOver<Feedback>();
+            var query = GetSession().QueryOver<Feedback>()
+                .Fetch(x => x.AuthorUser).Eager;
 
             IQueryOverOrderBuilder<Feedback, Feedback> queryOrder;
 
@@ -94,6 +95,17 @@ namespace Vokabular.DataEntities.Database.Repositories
                 List = list.ToList(),
                 Count = totalCount.Value,
             };
+        }
+
+        public void FetchHeadwordFeedbacks(IEnumerable<long> feedbackIds)
+        {
+            GetSession().QueryOver<HeadwordFeedback>()
+                .WhereRestrictionOn(x => x.Id).IsInG(feedbackIds)
+                .Fetch(x => x.HeadwordResource).Eager
+                .Fetch(x => x.HeadwordResource.Resource).Eager
+                .Fetch(x => x.HeadwordResource.Resource.Project).Eager
+                .Fetch(x => x.HeadwordResource.HeadwordItems).Eager
+                .List();
         }
     }
 }

@@ -1,44 +1,36 @@
 ﻿enum FeedbackCategoryEnum {
-    None = 0,
-    Dictionaries = 1,
-    Editions = 2,
-    BohemianTextBank = 3,
-    OldGrammar = 4,
-    ProfessionalLiterature = 5,
-    Bibliographies = 6,
-    CardFiles = 7,
-    AudioBooks = 8,
-    Tools = 9,
+    None = "None",
+    Dictionaries = "Dictionaries",
+    Editions = "Editions",
+    BohemianTextBank = "BohemianTextBank",
+    OldGrammar = "OldGrammar",
+    ProfessionalLiterature = "ProfessionalLiterature",
+    Bibliographies = "Bibliographies",
+    CardFiles = "CardFiles",
+    AudioBooks = "AudioBooks",
+    Tools = "Tools",
 }
 
-var categoryTranslation = [
-    "Žádná",
-    "Slovníky",
-    "Edice",
-    "Korpusy",
-    "Mluvnice",
-    "Odborná literatura",
-    "Bibliografie",
-    "Kartotéky",
-    "Audioknihy",
-    "Pomůcky"
-];
+var categoryTranslation = new DictionaryWrapper<string>();
+categoryTranslation.add(FeedbackCategoryEnum.None, "Žádná");
+categoryTranslation.add(FeedbackCategoryEnum.Dictionaries, "Slovníky");
+categoryTranslation.add(FeedbackCategoryEnum.Editions, "Edice");
+categoryTranslation.add(FeedbackCategoryEnum.BohemianTextBank, "Korpusy");
+categoryTranslation.add(FeedbackCategoryEnum.OldGrammar, "Mluvnice");
+categoryTranslation.add(FeedbackCategoryEnum.ProfessionalLiterature, "Odborná literatura");
+categoryTranslation.add(FeedbackCategoryEnum.Bibliographies, "Bibliografie");
+categoryTranslation.add(FeedbackCategoryEnum.CardFiles, "Kartotéky");
+categoryTranslation.add(FeedbackCategoryEnum.AudioBooks, "Audioknihy");
+categoryTranslation.add(FeedbackCategoryEnum.Tools, "Pomůcky");
 
 enum FeedbackSortEnum {
     Date = 0,
     Category = 1,
 }
 
-var sortEnumTranslation = [
-    "Autor",
-    "E-mail",
-    "Kategorie",
-    "Datum"
-];
-
 enum FeedbackTypeEnum {
-    Generic = 0,
-    Headword = 1,
+    Generic = "Generic",
+    Headword = "Headword",
 }
 
 var sortCriteria = FeedbackSortEnum.Date;
@@ -104,17 +96,17 @@ $(document).ready(() => {
                     var name = "";
                     var email = "";
                     var signed = "";
-                    var category = actualFeedback.category;
-                    var date = new Date(actualFeedback.createDate);
+                    var category = actualFeedback.feedbackCategory;
+                    var date = new Date(actualFeedback.createTime);
 
-                    var user = actualFeedback.user;
+                    var user = actualFeedback.authorUser;
                     if (typeof user !== "undefined" && user !== null) {
                         name = user.firstName + " " + user.lastName;
                         email = user.email;
                         signed = "ano";
                     } else {
-                        name = actualFeedback.filledName;
-                        email = actualFeedback.filledEmail;
+                        name = actualFeedback.authorName;
+                        email = actualFeedback.authorEmail;
                         signed = "ne";
                     }
 
@@ -146,7 +138,7 @@ $(document).ready(() => {
 
                     var feedbackCategorySpan = document.createElement("span");
                     $(feedbackCategorySpan).addClass("feedback-category");
-                    feedbackCategorySpan.innerHTML = `Kategorie: ${categoryTranslation[category]}`;
+                    feedbackCategorySpan.innerHTML = `Kategorie: ${categoryTranslation.get(category)}`;
 
                     feedbackHeaderInfosDiv.appendChild(feedbackCategorySpan);
 
@@ -196,7 +188,7 @@ $(document).ready(() => {
                         $(feedbackHeadwordDiv).text("Slovníkové heslo: " + actualFeedback.headwordInfo.defaultHeadword);
 
                         var feedbackDictionaryDiv = document.createElement("div");
-                        $(feedbackDictionaryDiv).text("Slovník: " + actualFeedback.headwordInfo.dictionaryName);
+                        $(feedbackDictionaryDiv).text("Slovník: " + actualFeedback.projectInfo.name);
 
                         $(feedbackBodyDiv)
                             .append(separator)

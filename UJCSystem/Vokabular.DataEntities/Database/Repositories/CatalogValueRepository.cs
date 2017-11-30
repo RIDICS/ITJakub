@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
+using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
@@ -35,11 +37,21 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
-        public virtual IList<Keyword> GetKeywordList()
+        public virtual ListWithTotalCountResult<Keyword> GetKeywordList(int start, int count)
         {
-            return GetSession().QueryOver<Keyword>()
+            var query = GetSession().QueryOver<Keyword>()
                 .OrderBy(x => x.Text).Asc
-                .List();
+                .Take(count)
+                .Skip(start);
+
+            var list = query.Future();
+            var totalCount = query.ToRowCountQuery().FutureValue<int>();
+            
+            return new ListWithTotalCountResult<Keyword>
+            {
+                List = list.ToList(),
+                Count = totalCount.Value,
+            };
         }
 
         public virtual IList<ResponsibleType> GetResponsibleTypeList()

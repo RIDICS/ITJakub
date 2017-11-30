@@ -1,11 +1,11 @@
 ﻿class PageStructure {
     private readonly commentArea: CommentArea;
-    private readonly util: Util;
+    private readonly util: EditorsUtil;
     private readonly main: TextEditorMain;
     private readonly editor: Editor;
     private readonly gui: TextEditorGui;
 
-    constructor(commentArea: CommentArea, util: Util, main: TextEditorMain, editor: Editor, gui:TextEditorGui) {
+    constructor(commentArea: CommentArea, util: EditorsUtil, main: TextEditorMain, editor: Editor, gui: TextEditorGui) {
         this.commentArea = commentArea;
         this.util = util;
         this.main = main;
@@ -13,51 +13,52 @@
         this.gui = gui;
     }
 
-    createPage(pageNumber: number) {
-        const pageEl = $(`*[data-page="${pageNumber}"]`);
-        if (pageEl.length) {
+    loadSection(targetEl: JQuery) {
+        if (targetEl.hasClass("composition-area")) {
             const isEditingMode = this.editor.getIsEditingMode();
-            const showPageNumber = this.main.getShowPageNumbers();
-            let elm = "";
-            const pageName = pageEl.data("page-name");
-            let invisibleClass = "";
-            if (!showPageNumber) {
-                invisibleClass = "invisible";
-            }
-            elm += `<div class="page-number text-center ${invisibleClass}">[${pageName}]</div><div class="col-xs-7 composition-area"><div class="loading composition-area-loading"></div><div class="page">`;
-            if (!isEditingMode) {
-                elm += `<div class="viewer"><span class="rendered-text"></span></div></div></div>`;
-            }
             if (isEditingMode) {
-                elm += `<div class="editor"><textarea class="plain-text"></textarea></div></div></div>`;
+                this.appendPlainText(targetEl.parent(".page-row"));
             }
-            const html = $.parseHTML(elm);
-            $(pageEl).append(html);
             if (!isEditingMode) {
-                this.appendRenderedText(pageNumber, showPageNumber);
+                this.appendRenderedText(targetEl.parent(".page-row"));
             }
-            if (isEditingMode) {
-                this.appendPlainText(pageNumber);
-            }
-            this.commentArea.asyncConstructCommentArea(pageNumber,
-                true,
-                true);
-        } else {
-            console.log("You are requesting to create a page for which element does not exist");
+        }
+
+        if (targetEl.hasClass("comment-area")) {
+            this.commentArea.asyncConstructCommentArea(targetEl);
         }
     }
 
-    private appendRenderedText(textId: number, showPageNumber: boolean){
+    loadPage(pageEl: JQuery) {
+        const commentArea = pageEl.children(".comment-area");
+        const isEditingMode = this.editor.getIsEditingMode();
+        if (isEditingMode) {
+            const ajax = this.appendPlainText(pageEl);
+            const ajax2 = this.commentArea.asyncConstructCommentArea(commentArea);
+            $.when(ajax, ajax2).done(() => {
+                this.commentArea.collapseIfCommentAreaIsTall(commentArea, true, true);
+            });
+        }
+        if (!isEditingMode) {
+            const ajax = this.appendRenderedText(pageEl);
+            const ajax2 = this.commentArea.asyncConstructCommentArea(commentArea);
+            $.when(ajax, ajax2).done(() => {
+                this.commentArea.collapseIfCommentAreaIsTall(commentArea, true, true);
+            });
+        }
+    }
+
+    private appendRenderedText(pageEl: JQuery): JQueryXHR {
+        const textId = pageEl.data("page") as number;
         const renderedText = this.util.loadRenderedText(textId);
-        const pageEl = $(`*[data-page="${textId}"]`);
         const compositionAreaDiv = pageEl.find(".rendered-text");
-        renderedText.done((data: IPageText) => {
-            const compositionAreaEl = pageEl.children(".composition-area");           
+        renderedText.done((data: ITextWithContent) => {
+            const compositionAreaEl = pageEl.children(".composition-area");
             const pageBody = data.text;
             const id = data.id;
             const versionNumber = data.versionNumber;
             compositionAreaEl.attr({ "data-id": id, "data-version-number": versionNumber });
-            $(compositionAreaDiv).append(pageBody);
+            compositionAreaDiv.append(pageBody);
             pageEl.css("min-height", "0");
             var event = $.Event("pageConstructed", { page: textId });
             compositionAreaDiv.trigger(event);
@@ -69,28 +70,30 @@
             pageEl.css("min-height", "0");
         });
         renderedText.always(() => {
-            $(pageEl).find(".loading").hide();
+            pageEl.find(".loading").hide();
         });
+        return renderedText;
     }
 
-    private appendPlainText(pageNumber: number){
-        const plainText = this.util.loadPlainText(pageNumber);
-        const pageEl = $(`*[data-page="${pageNumber}"]`);
+    private appendPlainText(pageEl: JQuery): JQueryXHR {
+        const textId = pageEl.data("page") as number;
+        const plainText = this.util.loadPlainText(textId);
         const textAreaEl = $(pageEl.find(".plain-text"));
-        plainText.done((data: IPageText) => {
+        plainText.done((data: ITextWithContent) => {
             textAreaEl.val(data.text);
             const compositionAreaEl = pageEl.children(".composition-area");
             const id = data.id;
             const versionNumber = data.versionNumber;
             compositionAreaEl.attr({ "data-id": id, "data-version-number": versionNumber });
-            var event = $.Event("pageConstructed", { page: pageNumber });
+            var event = $.Event("pageConstructed", { page: textId });
             textAreaEl.trigger(event);
         });
         plainText.fail(() => {
             textAreaEl.val("Failed to load content.");
         });
         plainText.always(() => {
-            $(pageEl).find(".loading").hide();
+            pageEl.find(".loading").hide();
         });
+        return plainText;
     }
 }

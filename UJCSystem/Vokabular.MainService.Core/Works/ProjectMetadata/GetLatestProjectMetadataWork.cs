@@ -25,7 +25,7 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
             if (m_parameters.IsAnyAdditionalParameter())
             {
                 m_metadataRepository.GetAdditionalProjectMetadata(m_projectId, m_parameters.IncludeAuthor, m_parameters.IncludeResponsiblePerson,
-                    m_parameters.IncludeKind, m_parameters.IncludeGenre, m_parameters.IncludeOriginal);
+                    m_parameters.IncludeKind, m_parameters.IncludeGenre, m_parameters.IncludeOriginal, m_parameters.IncludeKeyword);
             }
             
             return result;

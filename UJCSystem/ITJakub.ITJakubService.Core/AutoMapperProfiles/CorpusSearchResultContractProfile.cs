@@ -7,7 +7,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
     public class CorpusSearchResultContractProfile : Profile
     {
-        protected override void Configure()
+        public CorpusSearchResultContractProfile()
         {
             CreateMap<BookVersion, CorpusSearchResultContract>()
                 .ForMember(dest => dest.BookId, opts => opts.MapFrom(src => src.Book.Id))

@@ -1,53 +1,49 @@
 ﻿class Editor {
-    private currentPageNumber = 0; //default initialisation
+    private currentTextId = 0; //default initialisation
     private editingMode = false;
     private originalContent = "";
     private simplemde: SimpleMDE;
     private readonly commentInput: CommentInput;
-    private readonly util: Util;
+    private readonly util: EditorsUtil;
     private readonly gui: TextEditorGui;
+    private readonly commentArea: CommentArea;
 
-    constructor(commentInput: CommentInput, util: Util, gui: TextEditorGui) {
+    constructor(commentInput: CommentInput, util: EditorsUtil, gui: TextEditorGui, commentArea: CommentArea) {
         this.commentInput = commentInput;
         this.util = util;
         this.gui = gui;
+        this.commentArea = commentArea;
     }
 
     private userIsEnteringText = false;
 
-    getCurrentPageNumber() {
-        return this.currentPageNumber;
+    getCurrentTextId() {
+        return this.currentTextId;
     }
 
     getIsEditingMode() {
         return this.editingMode;
     }
 
+    init() {
+        this.processAreaSwitch();
+    }
+
     private toggleCommentFromEditor = (editor: SimpleMDE, userIsEnteringText: boolean) => {
         if (userIsEnteringText) {
             $(".preloading-pages-spinner").show();
-            const textId = this.getCurrentPageNumber();
-            const ajax = (this.commentInput).toggleCommentSignsAndReturnCommentNumber(editor, true);
-            ajax.done((data: string) => {
-                const textReferenceId = data;
+            const textId = this.getCurrentTextId();
+            const textReferenceId = (this.commentInput).toggleCommentSignsAndReturnCommentNumber(editor, true);
+                $(".preloading-pages-spinner").hide();
                 const id = 0; //creating comment
-                const parentComment = 0; //creating comment
-                this.commentInput.processCommentSendClick(textId, textReferenceId, id, parentComment);
-                const commentInputDialogEl = $(".comment-input-dialog");
-                commentInputDialogEl.on("click", ".comment-input-dialog-close-button",
-                    (event: JQueryEventObject) => {
-                        event.stopImmediatePropagation();
+                const parentComment = null; //creating comment
+                const dialog = this.gui.showCommentInputDialog(() => {
+                        this.commentInput.processCommentSendClick(textId, textReferenceId, id, parentComment, dialog);
+                    },
+                    () => {
                         this.userIsEnteringText = !this.userIsEnteringText;
                         this.commentInput.toggleCommentSignsAndReturnCommentNumber(editor, false);
-                        commentInputDialogEl.off();
                     });
-            });
-            ajax.fail(() => {
-                this.gui.showMessageDialog("Error", "Comment addition failed");
-            });
-            ajax.always(() => {
-                $(".preloading-pages-spinner").hide();
-            });
         } else {
             const commentInputDialogEl = $(".comment-input-dialog");
             (this.commentInput).toggleCommentSignsAndReturnCommentNumber(editor, false);
@@ -55,17 +51,17 @@
         }
     }
 
-    processAreaSwitch = () => {
+    private processAreaSwitch = () => {
         var editorExistsInTab = false;
         $("#project-resource-preview").on("click",
             ".editor",
             (e: JQueryEventObject) => { //dynamically instantiating SimpleMDE editor on textarea
                 if (this.editingMode) {
                     let pageDiffers = false;
-                    const jElSelected = e.target as HTMLElement;
-                    const jEl = $(jElSelected).closest(".page-row");
-                    const pageNumber = jEl.data("page") as number;
-                    if (pageNumber !== this.currentPageNumber) {
+                    const elSelected = e.target as HTMLElement;
+                    const jElSelected = $(elSelected).closest(".page-row");
+                    const textId = jElSelected.data("page") as number;
+                    if (textId !== this.currentTextId) {
                         pageDiffers = true;
                     }
                     const editorEl = $(".CodeMirror");
@@ -75,10 +71,11 @@
                             this.simplemde.toTextArea();
                             this.simplemde = null;
                         }
-                        this.addEditor(jEl);
+                        this.addEditor(jElSelected);
                         this.originalContent = this.simplemde.value();
                     }
                     if (editorExistsInTab && pageDiffers) {
+                        const previousPageEl = $(`*[data-page="${this.currentTextId}"]`);
                         const contentBeforeClose = this.simplemde.value();
                         if (contentBeforeClose !== this.originalContent) {
                             const dialogEl = $("#save-confirmation-dialog");
@@ -87,24 +84,18 @@
                                 `There's an open editor in page ${editorPageName
                                 }. Are you sure you want to close it without saving?`);
                             this.gui.createConfirmationDialog(() => {
-                                    this.simplemde.toTextArea();
-                                    this.simplemde = null;
-                                    this.addEditor(jEl);
-                                    this.originalContent = this.simplemde.value();
+                                    this.editorChangePage(previousPageEl, jElSelected);
                                 },
                                 () => {
-                                    const textareaEl = jEl.find(".editor").children(".textarea-plain-text");
+                                    const textareaEl = jElSelected.find(".editor").children(".textarea-plain-text");
                                     textareaEl.trigger("blur");
                                     this.simplemde.codemirror.focus();
                                 },
                                 () => {
-                                    this.saveContents(this.currentPageNumber, contentBeforeClose);
+                                    this.saveContents(this.currentTextId, contentBeforeClose);
                                 });
                         } else if (contentBeforeClose === this.originalContent) {
-                            this.simplemde.toTextArea();
-                            this.simplemde = null;
-                            this.addEditor(jEl);
-                            this.originalContent = this.simplemde.value();
+                            this.editorChangePage(previousPageEl, jElSelected);
                         }
                     }
                 }
@@ -137,7 +128,7 @@
                                 this.editingMode = !this.editingMode; //Switch back to editing mode on cancel
                             },
                             () => {
-                                this.saveContents(this.currentPageNumber, contentBeforeClose);
+                                this.saveContents(this.currentTextId, contentBeforeClose);
                                 thisClass.simplemde.toTextArea();
                                 thisClass.simplemde = null;
                                 thisClass.toggleDivAndTextarea();
@@ -148,8 +139,17 @@
                         thisClass.toggleDivAndTextarea();
                     }
                 }
-
             });
+    }
+
+    private editorChangePage(previousPageEl: JQuery, currentPageEl: JQuery) {
+        const previousPageCommentAreaEl = previousPageEl.children(".comment-area");
+        this.simplemde.toTextArea();
+        this.simplemde = null;
+        this.commentArea.updateCommentAreaHeight(previousPageEl);
+        this.commentArea.toggleAreaSizeIconHide(previousPageCommentAreaEl);
+        this.addEditor(currentPageEl);
+        this.originalContent = this.simplemde.value();
     }
 
     private saveContents(textId: number, contents: string) {
@@ -157,7 +157,7 @@
         const compositionArea = pageEl.children(".composition-area");
         const id = compositionArea.data("id");
         const versionNumber = compositionArea.data("version-number");
-        const request: IPageTextBase = {
+        const request: ICreateTextVersion = {
             id: id,
             text: contents,
             versionNumber: versionNumber
@@ -176,18 +176,23 @@
         });
     }
 
+    private openMarkdownHelp() {
+        const url = "#";//TODO add link to actual markdown help
+        window.open(url, "_blank");
+    }
+
     private addEditor(jEl: JQuery) {
-        const editor = jEl.find(".editor");
-        const textAreaEl = $(editor).children("textarea");
+        const editorEl = jEl.find(".editor");
+        const textAreaEl = editorEl.children("textarea");
         const textId = jEl.data("page") as number;
-        this.currentPageNumber = textId;
+        this.currentTextId = textId;
         const simpleMdeOptions: SimpleMDE.Options = {
             element: textAreaEl[0],
             autoDownloadFontAwesome: false,
             spellChecker: false,
             mode: "gfm",
             toolbar: [
-                "bold", "italic", "heading", "|", "quote", "preview", {
+                "bold", "italic", "|", "unordered-list", "ordered-list", "|", "heading-1", "heading-2", "heading-3", "|", "quote", "preview","horizontal-rule", "|", {
                     name: "comment",
                     action: ((editor) => {
                         this.userIsEnteringText = !this.userIsEnteringText;
@@ -195,6 +200,11 @@
                     }),
                     className: "fa fa-comment",
                     title: "Add comment"
+                }, {
+                    name: "help",
+                    action: (() => { this.openMarkdownHelp(); }),
+                    className: "fa fa-question-circle",
+                    title:"Markdown help"
                 }, "|", {
                     name: "save",
                     action: (editor) => { this.saveContents(textId, editor.value()) },
@@ -229,89 +239,66 @@
 
         this.simplemde.codemirror.addOverlay("comment");
         this.simplemde.codemirror.focus();
+        this.commentArea.updateCommentAreaHeight(jEl);
+        this.commentArea.toggleAreaSizeIconHide(jEl.children(".comment-area"));
     }
 
     toggleDivAndTextarea = () => {
-        var pageRow = $(".lazyloaded");
+        const pageRow = $(".page-row");
+        const lazyloadedCompositionEl = pageRow.children(".composition-area");
+        if (pageRow.hasClass("lazyloaded") && !lazyloadedCompositionEl.hasClass("lazyloaded")) {
+            lazyloadedCompositionEl.addClass("lazyload");
+        }
+        if (lazyloadedCompositionEl.hasClass("lazyloaded")) {
+            lazyloadedCompositionEl.removeClass("lazyloaded");
+            lazyloadedCompositionEl.addClass("lazyload");
+        }
         if (this.editingMode) { // changing div to textarea here
             pageRow.each((index: number, child: Element) => {
-                const pageNumber = $(child).data("page") as number;
-                const compositionAreaEl = $(child).children(".composition-area");
-                const placeholderSpinner = $(child).find(".loading");
+                const pageEl = $(child);
+                const compositionAreaEl = pageEl.children(".composition-area");
+                this.commentArea.updateCommentAreaHeight(pageEl);
+                const placeholderSpinner = pageEl.find(".loading");
                 placeholderSpinner.show();
-                const plainTextAjax = this.util.loadPlainText(pageNumber);
-                this.createEditorAreaBody(compositionAreaEl, plainTextAjax);
+                this.createEditorAreaBody(compositionAreaEl);
             });
         } else { // changing textarea to div here
             pageRow.each((index: number, child: Element) => {
-                const pageNumber = $(child).data("page") as number;
-                const compositionAreaEl = $(child).children(".composition-area");
-                const placeholderSpinner = $(child).find(".loading");
+                const pageEl = $(child);
+                const compositionAreaEl = pageEl.children(".composition-area");
+                this.commentArea.updateCommentAreaHeight(pageEl);
+                const placeholderSpinner = pageEl.find(".loading");
                 placeholderSpinner.show();
-                const renderedTextAjax = this.util.loadRenderedText(pageNumber);
-                this.createViewerAreaBody(compositionAreaEl, renderedTextAjax);
+                this.createViewerAreaBody(compositionAreaEl);
             });
         }
     }
 
-    private createEditorAreaBody(compositionAreaEl: JQuery, ajax: JQueryXHR) {
+    private createEditorAreaBody(compositionAreaEl: JQuery) {
         const child = compositionAreaEl.children(".page");
-        ajax.done((data: IPageText) => {
-            const editorElement = child.children(".editor");
-            if (editorElement.length) {
-                editorElement.remove();
-            }
-            const viewerElement = child.children(".viewer");
-            viewerElement.remove();
-            const placeHolderSpinner = $(child).siblings(".loading");
-            const plainText = data.text;
-            const id = data.id;
-            const versionNumber = data.versionNumber;
-            compositionAreaEl.attr({ "data-id": id, "data-version-number": versionNumber });
-            const elm = `<div class="editor"><textarea class="textarea-plain-text">${plainText}</textarea></div>`;
-            if (this.editingMode) {
-                $(child).append(elm);
-            }
-            placeHolderSpinner.hide();
-        });
-        ajax.fail(() => {
-            const placeHolderSpinner = $(child).siblings(".loading");
-            if (this.editingMode) {
-                const elm =
-                    `<div class="editor"><textarea class="textarea-plain-text">Failed to load data from server</textarea></div>`;
-                $(child).append(elm);
-            }
-            placeHolderSpinner.hide();
-        });
+        const editorElement = child.children(".editor");
+        if (editorElement.length) {
+            editorElement.remove();
+        }
+        const viewerElement = child.children(".viewer");
+        viewerElement.remove();
+        if (this.editingMode) {
+            const elm = `<div class="editor"><textarea class="plain-text textarea-no-resize"></textarea></div>`;
+            child.append(elm);
+        }
     }
 
-    private createViewerAreaBody(compositionAreaEl: JQuery, ajax: JQueryXHR) {
+    private createViewerAreaBody(compositionAreaEl: JQuery) {
         const child = compositionAreaEl.children(".page");
-        ajax.done((data: IPageText) => {
-            const viewerElement = child.children(".viewer");
-            if (viewerElement.length) {
-                viewerElement.remove();
-            }
-            const editorElement = child.children(".editor");
-            editorElement.remove();
-            const placeHolderSpinner = $(child).siblings(".loading");
-            const renderedText = data.text;
-            const id = data.id;
-            const versionNumber = data.versionNumber;
-            compositionAreaEl.attr({ "data-id": id, "data-version-number": versionNumber });
-            const elm = `<div class="viewer">${renderedText}</div>`;
-            if (!this.editingMode) {
-                $(child).append(elm);
-            }
-            placeHolderSpinner.hide();
-        });
-        ajax.fail(() => {
-            const placeHolderSpinner = $(child).siblings(".loading");
-            if (!this.editingMode) {
-                const elm = `<div class="viewer">Failed to load data from server</div>`;
-                $(child).append(elm);
-            }
-            placeHolderSpinner.hide();
-        });
+        const viewerElement = child.children(".viewer");
+        if (viewerElement.length) {
+            viewerElement.remove();
+        }
+        const editorElement = child.children(".editor");
+        editorElement.remove();
+        if (!this.editingMode) {
+            const elm = `<div class="viewer"><span class="rendered-text"></span></div>`;
+            child.append(elm);
+        }
     }
 }

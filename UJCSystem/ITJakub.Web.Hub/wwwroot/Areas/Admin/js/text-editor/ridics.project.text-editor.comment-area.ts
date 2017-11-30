@@ -1,36 +1,42 @@
 ﻿class CommentArea {
-    private readonly util: Util;
+    private readonly util: EditorsUtil;
     private readonly gui: TextEditorGui;
 
-    constructor(util: Util, gui: TextEditorGui) {
+    constructor(util: EditorsUtil, gui: TextEditorGui) {
         this.util = util;
         this.gui = gui;
     }
 
+    init() {
+        this.processToggleCommentAresSizeClick();
+        this.processToggleNestedCommentClick();
+        this.processDeleteCommentClick();
+    }
+
     /**
  * Creates html structure of comment area. Input must be sorted by comment id, nestedness, nested comment order. Returns JQuery object.
- * @param {string[][]} content  - Array or arrays of comment values in format {comment id, comment nestedness, comment page, person's name, comment body, order of nested comment, time}
- * @param {Number} pageNUmber - Number of page, which comments relates to.
+ * @param {ICommentSctucture[]} content  - Array or comments.
+ * @param {JQuery} commentAreaEl - Comment area element for which to construct area..
  */
-    private constructCommentAreaHtml(content: ICommentSctucture[], pageNumber: number) {
+    private constructCommentAreaHtml(content: ICommentSctucture[], commentAreaEl: JQuery) {
         if (content === null) {
             return null;
         }
-        const sectionStart = `<div class="col-xs-5 comment-area">`;
-        const sectionEnd = `</div>`;
+        const textId = commentAreaEl.parent(".page-row").data("page") as number;
+        const threadsContainerStart = `<div class="threads-container">`;
         const threadStart = `<ul class="media-list">`;
         const threadEnd = `</ul>`;
         const listStart = `<li class="media">`;
         const listEnd = "</li>";
         const commentLeftPartEnd = "</div>";
-        const commentBodyStart = "<div class=\"media-body\">";
         const mainCommentBodyEnd = "</div>";
         const nestedCommentStart = "<div class=\"media\">";
         const nestedCommentLeftPartStart = "<div class=\"media-left nested-comment\">";
         const nestedCommentBodyEnd = "</div>";
         const nestedCommentEnd = "</div>";
+        const threadsContainerEnd = "</div>";
         var nested: boolean = false;
-        var textId: number = 0;
+        var commentTextId: number = 0;
         var textReferenceId: string = "";
         var id: number = 0;
         var picture: string = "";
@@ -42,7 +48,7 @@
         var orderOfNestedComment: number = 0;
         var numberOfComments = content.length;
         var areaContent: string = "";
-        areaContent += sectionStart;
+        areaContent += threadsContainerStart;
         for (let i = 0; i < numberOfComments; i++) {
             id = content[i].id;
             textReferenceId = content[i].textReferenceId;
@@ -52,14 +58,16 @@
             }
             currentId = textReferenceId;
             nested = content[i].nested;
-            textId = content[i].textId;
+            commentTextId = content[i].textId;
             name = content[i].name;
             surname = content[i].surname;
             body = content[i].text;
             picture = content[i].picture;
+            id = content[i].id;
             orderOfNestedComment = content[i].order;
-            var time = content[i].time;
-            var timeUtc = new Date(time);
+            var unixTimeMilliseconds = content[i].time;
+            var timeUtc = new Date(unixTimeMilliseconds);
+            var commentBodyStart = `<div class="media-body" data-comment-id=${id}>`;
             var commentImage =
                 `<a href="#"><img alt="48x48" class="media-object" src="${picture
                     }" style="width: 48px; height: 48px;"></a>`;
@@ -69,7 +77,7 @@
             var mainCommentBody =
                 `<p class="comment-body">${body}</p><button class="respond-to-comment">Respond</button>`;
             var nestedCommentBody = `<p class="comment-body">${body}</p>`;
-            if (textId === pageNumber) {
+            if (commentTextId === textId) {
                 if (needToCloseTag) {
                     areaContent += mainCommentBodyEnd;
                     areaContent += listEnd;
@@ -103,212 +111,218 @@
                         .toTimeString().split(" ")[0]}</p>`; //only date and time, no timezone
                     areaContent += nestedCommentBody;
                     areaContent += nestedCommentBodyEnd;
+                    areaContent += `<div class="row comment-actions-row"><div class="col-xs-8"></div><div class="col-xs-4"><div class="btn-group"><button type="button" class="edit-comment">Edit</button><button type="button" class="delete-comment">Delete</button></div></div></div>`;
                     areaContent += nestedCommentEnd;
                 }
             }
-            if (textId !== pageNumber) {
-                console.log(`Something is wrong. Page numbers are not equal. ${textId} ${pageNumber}`);
+            if (commentTextId !== textId) {
+                console.log(`Something is wrong. Page numbers are not equal. ${commentTextId} ${textId}`);
             }
         }
-
-        areaContent += sectionEnd;
+        areaContent += threadsContainerEnd;
         var html = $.parseHTML(areaContent);
-        if (pageNumber % 2 === 0) {
-            $(html).addClass("comment-area-collapsed-even"); //style even and odd comment sections separately
-        } else {
-            $(html).addClass("comment-area-collapsed-odd");
-        }
         return html;
-    }
-
-    private getNestedCommentsNumber = (content: ICommentSctucture[],
-        pageNumber: number,
-        sectionCollapsed: boolean,
-        nestedCommentCollapsed: boolean) => {
-        var nestedComments: number[] = [];
-        var thread = 0;
-        if (content !== null && typeof content !== "undefined") {
-            let id = content[0].id;
-            nestedComments[0] = 0;
-            for (let i = 0; i < content.length; i++) {
-                const currentId = content[i].id;
-                if (currentId !== id) {
-                    thread++;
-                    id = currentId;
-                    nestedComments[thread] = 0;
-                }
-                if (content[i].nested) {
-                    nestedComments[thread]++;
-                }
-            }
-            //this.collapseIfCommentAreaIsTall(nestedComments, pageNumber, sectionCollapsed, nestedCommentCollapsed); TODO
-        }
     }
 
     /**
      * Collapses comment area, adds buttons to enlarge
-     * @param pageNumber - Number of page where to collapse comment area
-     * @param sectionCollapsed - Whether section has to be collapsed
-     * @param nestedCommentCollapsed - Whether nested comments have to be collapsed
+     * @param {JQuery} commentAreaEl - Comment area element which needs collapsing.
+     * @param {boolean} sectionCollapsed - Whether section has to be collapsed
+     * @param {boolean} nestedCommentCollapsed - Whether nested comments have to be collapsed
      */
-    collapseIfCommentAreaIsTall = (numberOfNestedComments: number[],
-        pageNumber: number,
+    collapseIfCommentAreaIsTall = (
+        commentAreaEl: JQuery,
         sectionCollapsed: boolean,
         nestedCommentCollapsed: boolean) => {
-            var areaContent = "";
-            const ellipsisStart = "<div class=\"ellipsis-container\">";
-            const ellipsisBodyStart = "<div class=\"ellipsis toggleCommentViewAreaSize\">";
-            const ellipsisIconExpand =
-                "<i class=\"fa fa-expand expand-icon fa-lg\" aria-hidden=\"true\" title=\"Expand comment area\"></i>";
-            const ellipsisIconCollapse =
-                "<i class=\"fa fa-compress collapse-icon fa-lg\" aria-hidden=\"true\" title=\"Collapse comment area\"></i>";
-            const ellipsisBodyEnd = "</div>";
-            const ellipsisEnd = "</div>";
-            areaContent += ellipsisStart;
-            areaContent += ellipsisBodyStart;
-            areaContent += ellipsisIconExpand;
-            areaContent += ellipsisIconCollapse;
-            areaContent += ellipsisBodyEnd;
-            areaContent += ellipsisEnd;
-            const html = $.parseHTML(areaContent);
-            const compositionArea = $(`*[data-page="${pageNumber}"]`).children(".composition-area");
-            const compositionAreaHeight = $(compositionArea).height();
-            console.log($(compositionArea).height());
-            const commentArea = compositionArea.siblings(".comment-area");
-            const commentAreaHeight = $(commentArea).height();
-            if (commentAreaHeight > compositionAreaHeight
-            ) {
-                if (sectionCollapsed) {
-                    $(commentArea).toggleClass("comment-area-collapsed");
-                    $(commentArea).css("max-height", compositionAreaHeight);
-                }
-                const children = $(commentArea).children(".media-list");
-                children.each((index: number, childNode: Node) => {
-                    if (numberOfNestedComments[index] > 2) {
-                        const child = childNode as Element;
-                        if (nestedCommentCollapsed) {
-                            $(child).children(".media").children(".media-body").children(".media")
-                                .addClass("nested-comment-collapsed");
-                        }
-                        $(child).append(`<p class="text-center">
-                                         <i class="fa fa-bars fa-lg toggle-nested-comments" aria-hidden="true" title="Toggle nested comments"></i>
-                                     </p>`);
-                    }
-                });
-                $(commentArea).append(html);
+        var areaContent = "";
+        const ellipsisStart = "<div class=\"ellipsis-container\">";
+        const ellipsisBodyStart = "<div class=\"ellipsis toggleCommentViewAreaSize\">";
+        const ellipsisIconExpand =
+            "<i class=\"fa fa-expand expand-icon fa-lg\" aria-hidden=\"true\" title=\"Expand comment area\"></i>";
+        const ellipsisIconCollapse =
+            "<i class=\"fa fa-compress collapse-icon fa-lg\" aria-hidden=\"true\" title=\"Collapse comment area\"></i>";
+        const ellipsisBodyEnd = "</div>";
+        const ellipsisEnd = "</div>";
+        areaContent += ellipsisStart;
+        areaContent += ellipsisBodyStart;
+        areaContent += ellipsisIconExpand;
+        areaContent += ellipsisIconCollapse;
+        areaContent += ellipsisBodyEnd;
+        areaContent += ellipsisEnd;
+        const html = $.parseHTML(areaContent);
+        const compositionAreaEl = commentAreaEl.siblings(".composition-area");
+        const compositionAreaHeight = compositionAreaEl.height();
+        const commentAreaHeight = commentAreaEl.height();
+        if (commentAreaHeight > compositionAreaHeight
+        ) {
+            if (sectionCollapsed) {
+                commentAreaEl.addClass("comment-area-collapsed");
+                commentAreaEl.height(compositionAreaHeight);
             }
+            if (nestedCommentCollapsed) {
+                this.collapseNestedComments(commentAreaEl);
+            }
+            const threadsContainer = commentAreaEl.children(".threads-container");
+            threadsContainer.append(html);
+        }
+        this.toggleAreaSizeIconHide(
+            commentAreaEl); //collapse section on page load, collapse nested comments on page load
     }
 
-    private toggleAreaSizeIconHide(textId: number) {
-        const page = $(`*[data-page="${textId}"]`);
-        const commentArea = page.children(".comment-area");
-        const compositionArea = page.children(".composition-area");
-        const commentAreaCollapsedMaxHeight = compositionArea.height();
-        const commentAreaHeight = $(commentArea).prop("scrollHeight");
-        const ellipsisIconExpand = commentArea.find(".expand-icon");
-        const ellipsisIconCollapse = commentArea.find(".collapse-icon");
-        if (commentAreaHeight <= commentAreaCollapsedMaxHeight) {
+    private collapseNestedComments(commentAreaEl: JQuery) {
+        const threadsContainer = commentAreaEl.children(".threads-container");
+        const children = threadsContainer.children(".media-list");
+        const commentsHeight = children.prop("scrollHeight");
+        const commentAreaHeight = commentAreaEl.height();
+        if (children.length) {
+            if (commentsHeight > commentAreaHeight) {
+                children.each((index: number, childNode: Element) => {
+                    const thread = $(childNode);
+                    const nestedComments = thread.children(".media").children(".media-body").children(".media");
+                    if (nestedComments.length) {
+                        nestedComments.addClass("nested-comment-collapsed");
+                        thread.append(`<p class="text-center toggle-nested-comments-icon-container">
+                                           <i class="fa fa-bars fa-lg toggle-nested-comments" aria-hidden="true" title="Toggle nested comments"></i>
+                                       </p>`);
+                    }
+                });
+            }
+        }
+    }
+
+    updateCommentAreaHeight(pageEl: JQuery) {
+        const compositionAreaEl = pageEl.children(".composition-area");
+        const commentAreaEl = pageEl.children(".comment-area");
+        const compositionAreaHeight = compositionAreaEl.height();
+        const commentAreaHeight = commentAreaEl.height();
+        if (commentAreaEl.hasClass("comment-area-collapsed")) {
+            commentAreaEl.height(compositionAreaHeight);
+        } else {
+            if (commentAreaHeight < compositionAreaHeight) {
+                commentAreaEl.height(compositionAreaHeight);
+            } else {
+                commentAreaEl.height("auto");
+            }
+        }
+    }
+
+    toggleAreaSizeIconHide(commentAreaContainer: JQuery) {
+        const commentAreaContainerHeight = commentAreaContainer.height();
+        const threadsEl = commentAreaContainer.children(".threads-container");
+        const commentsHeight = threadsEl.prop("scrollHeight");
+        const ellipsisIconExpand = commentAreaContainer.find(".expand-icon");
+        const ellipsisIconCollapse = commentAreaContainer.find(".collapse-icon");
+        if (commentsHeight < commentAreaContainerHeight || typeof commentsHeight === "undefined") {
             ellipsisIconExpand.hide();
             ellipsisIconCollapse.hide();
         }
-        if (commentAreaHeight > commentAreaCollapsedMaxHeight) {
-            if (!($(ellipsisIconCollapse).is(":visible") || $(ellipsisIconExpand).is(":visible"))) {
-                ellipsisIconExpand.show();
+        if (commentsHeight > commentAreaContainerHeight) {
+            if (!(ellipsisIconCollapse.is(":visible") || ellipsisIconExpand.is(":visible"))) {
+                if (commentAreaContainer.hasClass("comment-area-collapsed")) {
+                    ellipsisIconExpand.show();
+                }
+            }
+        }
+        if (commentsHeight === commentAreaContainerHeight) {
+            if ((ellipsisIconCollapse.is(":visible") || !ellipsisIconExpand.is(":visible"))) {
+                if (!commentAreaContainer.hasClass("comment-area-collapsed")) {
+                    ellipsisIconCollapse.show();
+                }
             }
         }
     }
 
-    /**
+/**
  * Loads contents of files with comments in a page from the server.
- * @param {Number} pageNumber Number of page for which to load comment file contents
- * @param {boolean} sectionCollapsed Whether comment area has to be collapsed
- * @param {boolean} nestedCommentCollapsed Whether nested comments have to be collapsed
+ * @param {JQuery} commentAreaEl Comment area element for which to construct structure
  */
-    asyncConstructCommentArea(textId: number, sectionCollapsed: boolean, nestedCommentCollapsed: boolean) {
-        let fileContent: ICommentSctucture[];
-        const pageName = $(`*[data-page="${textId}"]`).data("page-name") as string;
-        const ajax = $.post(`${this.util.getServerAddress()}admin/project/LoadCommentFile`,
+    asyncConstructCommentArea(commentAreaEl: JQuery): JQueryXHR {
+        const pageRowEl = commentAreaEl.parent(".page-row");
+        const pageName = pageRowEl.data("page-name") as string;
+        const textId = pageRowEl.data("page") as number;
+        const ajax = $.post(`${this.util.getServerAddress()}Admin/ContentEditor/LoadCommentFile`,
             { textId: textId });
         ajax.done(
-            (data: ICommentSctucture[]) => {
-                fileContent = data;
-                if (fileContent.length > 0) {
-                    this.loadCommentFile(fileContent, textId, sectionCollapsed, nestedCommentCollapsed);
+            (fileContent: ICommentSctucture[]) => {
+                if (fileContent.length) {
+                    if (fileContent !== null && typeof fileContent !== "undefined") {
+                        this.parseLoadedCommentFiles(fileContent, commentAreaEl);
+                    }
+                } else {
+                    const placeHolderText =
+                        `<div class="comment-placeholder-container"><div class="comment-placeholder-text">No comments yet.</div></div>`;
+                    commentAreaEl.append(placeHolderText);
                 }
-                this.toggleAreaSizeIconHide(
-                    textId); //collapse section on page load, collapse nested comments on page load
             });
         ajax.fail(() => {
             this.gui.showMessageDialog("Error", `Failed to construct comment area for page ${pageName}`);
         });
-    }
-
-    private loadCommentFile(contentStringArray: ICommentSctucture[],
-        pageNumber: number,
-        sectionCollapsed: boolean,
-        nestedCommentCollapsed: boolean) {
-        if (contentStringArray !== null && typeof contentStringArray !== "undefined") {
-            this.parseLoadedCommentFiles(contentStringArray, pageNumber, sectionCollapsed, nestedCommentCollapsed);
-        }
+        return ajax;
     }
 
     /**
      * Parses comments to construct comment area later.
      * @param {ICommentSctucture[]} content Array of comments
-     * @param {number} pageNumber Number of page comments are on
-     * @param {boolean} sectionCollapsed Whether comment area has to be collapsed
-     * @param nestedCommentCollapsed Whether nested comments have to be collapsed
+     * @param {JQuery} commentAreaEl Comment area element of page comments are in
      */
     private parseLoadedCommentFiles(content: ICommentSctucture[],
-        pageNumber: number,
-        sectionCollapsed: boolean,
-        nestedCommentCollapsed: boolean) {
+        commentAreaEl: JQuery) {
         if (content !== null && typeof content !== "undefined") {
-            if (content.length > 0) {
-                content.sort((a, b) => { //sort by id, ascending
-                    if (a.id < b.id) {
+            if (content.length) {
+                content.sort((a, b) => { //sort by textReferenceId, ascending
+                    if (a.textReferenceId < b.textReferenceId) {
                         return -1;
                     }
-                    if (a.id === b.id) {
+                    if (a.textReferenceId === b.textReferenceId) {
                         return 0;
                     }
-                    if (a.id > b.id) {
+                    if (a.textReferenceId > b.textReferenceId) {
                         return 1;
                     }
                 });
 
-                let id = content[0].id;
+                let textReferenceId = content[0].textReferenceId;
                 const indexes: number[] = [];
                 for (let i = 0; i < content.length; i++) {
-                    const currentId = content[i].id;
-                    if (currentId !== id) {
+                    const currentTextReferenceId = content[i].textReferenceId;
+                    if (currentTextReferenceId !== textReferenceId) {
                         indexes.push(i);
-                        id = currentId;
+                        textReferenceId = currentTextReferenceId;
                     }
                 }
                 const sortedContent = this.util.splitArrayToArrays(content, indexes);
-                this.constructCommentArea(sortedContent, pageNumber, sectionCollapsed, nestedCommentCollapsed);
+                this.constructCommentArea(sortedContent, commentAreaEl);
             }
         }
     }
 
     private constructCommentArea = (content: ICommentSctucture[],
-        pageNumber: number,
-        sectionCollapsed: boolean,
-        nestedCommentCollapsed: boolean) => {
-        const html = this.constructCommentAreaHtml(content, pageNumber);
-        const pageRow = $(`*[data-page="${pageNumber}"]`);
-        $(pageRow).append(html);
-        this.getNestedCommentsNumber(content, pageNumber, sectionCollapsed, nestedCommentCollapsed);
+        commentAreaEl: JQuery) => {
+        const html = this.constructCommentAreaHtml(content, commentAreaEl);
+        commentAreaEl.append(html);
     }
 
-    private destroyCommentArea(pageNumber: number) {
-        const page = $(`*[data-page="${pageNumber}"]`);
-        const commentArea = page.children(".comment-area");
-        $(commentArea).remove();
+    private processDeleteCommentClick() {
+        $("#project-resource-preview").on("click", ".delete-comment", (event: JQueryEventObject) => {
+            const target = $(event.target);
+            const commentActionsRowEl = target.parents(".comment-actions-row");
+            const commentId = parseInt(commentActionsRowEl.siblings(".media-body").attr("data-comment-id"));
+            console.log(commentId);
+            this.gui.createDeleteConfirmationDialog(() => {
+                const deleteAjax = this.util.deleteComment(commentId);
+                deleteAjax.done(() => {
+                    const textId = commentActionsRowEl.parents(".page-row").data("page");
+                    this.gui.showMessageDialog("Success", "Comment successfully deleted.");
+                    this.reloadCommentArea(textId);
+                });
+                deleteAjax.fail(() => {
+                    this.gui.showMessageDialog("Fail", "Failed to delete this comment.");
+                });
+            });
+        });
     }
 
-    processToggleNestedCommentClick() {
+    private processToggleNestedCommentClick() {
         $("#project-resource-preview").on("click",
             ".toggle-nested-comments",
             (event: JQueryEventObject) => {
@@ -316,78 +330,100 @@
                 const editorPageContainer = ".pages-start";
                 var target = $(event.target as HTMLElement);
                 var parentComment = target.parents(".media-list");
-                var commentArea = parentComment.parent(".comment-area");
-                var textId = commentArea.parent(".page-row").data("page") as number;
-                var nestedComments = target.parent().siblings(".media").children(".media-body").children(".media");
-                if ($(nestedComments).hasClass("nested-comment-collapsed")) {
+                var commentArea = parentComment.parent(".threads-container").parent(".comment-area");
+                var nestedComments = target.parent(".toggle-nested-comments-icon-container").siblings(".media")
+                    .children(".media-body").children(".media");
+                if (nestedComments.hasClass("nested-comment-collapsed")) {
                     const container = target.parents(".comment-area");
-                    if ($(container).hasClass("comment-area-collapsed")) {
+                    if (container.hasClass("comment-area-collapsed")) {
                         $(".nested-comment-opened").addClass("nested-comment-collapsed");
                         $(".nested-comment-opened").removeClass("nested-comment-opened");
                     }
-                    $(nestedComments).removeClass("nested-comment-collapsed");
+                    nestedComments.removeClass("nested-comment-collapsed");
                     $(nestedComments).addClass("nested-comment-opened");
                 } else {
-                    $(nestedComments).removeClass("nested-comment-opened");
-                    $(nestedComments).addClass("nested-comment-collapsed");
+                    nestedComments.removeClass("nested-comment-opened");
+                    nestedComments.addClass("nested-comment-collapsed");
                     const container = target.parents(".comment-area");
                     const editorPageContainerEl = $(editorPageContainer);
-                    if ($(container).hasClass("comment-area-collapsed")) {
-                        container.animate({
-                            scrollTop:
-                                $(parentComment).offset().top - container.offset().top + container.scrollTop()
-                        });
+                    if (container.hasClass("comment-area-collapsed")) {
+                        const scrollToMainComment = $(parentComment).offset().top -
+                            container.offset().top +
+                            container.scrollTop();
+                        if (scrollToMainComment < container.scrollTop()) {
+                            container.animate({
+                                scrollTop: scrollToMainComment
+                            });
+                        }
                     } else {
-                        const scroll =
-                        {
-                            scrollTop: $(parentComment).offset().top -
-                                editorPageContainerEl.offset().top +
-                                editorPageContainerEl.scrollTop()
-                        };
-                        $(`${editorPageContainer}`).animate(scroll);
+                        const scrollToMainCommentWhileExpanded = $(parentComment).offset().top -
+                            editorPageContainerEl.offset().top +
+                            editorPageContainerEl.scrollTop();
+                        if (scrollToMainCommentWhileExpanded < $(editorPageContainer).scrollTop()) {
+                            const scroll =
+                            {
+                                scrollTop: scrollToMainCommentWhileExpanded
+                            };
+                            $(editorPageContainer).animate(scroll);
+                        }
                     }
                 }
-                this.toggleAreaSizeIconHide(textId);
+                this.toggleAreaSizeIconHide(commentArea);
             });
     }
 
-    processToggleCommentAresSizeClick() {
+    private processToggleCommentAresSizeClick() {
         $("#project-resource-preview").on("click",
             ".toggleCommentViewAreaSize",
             (event: JQueryEventObject) => {
                 event.stopImmediatePropagation();
                 const target = $(event.target as HTMLElement);
-                const commentViewArea = target.parents(".comment-area");
-                const textCenter = $(target).parents(".ellipsis-container");
-                const commentArea = commentViewArea.parents(".comment-area");
+                const commentArea = target.parents(".comment-area");
+                const commentAreaHeight = commentArea.height();
+                const threadsContainer = commentArea.children(".threads-container");
+                const commentsHeight = threadsContainer.height();
+                const textCenter = target.parents(".ellipsis-container");
                 const compositionArea = commentArea.siblings(".composition-area");
                 const compositionAreaHeight = compositionArea.height();
-                if (commentViewArea.hasClass("comment-area-collapsed")) {
-                    $(commentViewArea).css("max-height", compositionAreaHeight);
+                commentArea.toggleClass("comment-area-collapsed");
+                const collapseIconEl = textCenter.children(".ellipsis").children(".collapse-icon");
+                const expandIconEl = textCenter.children(".ellipsis").children(".expand-icon");
+                if (commentArea.hasClass("comment-area-collapsed")) {
+                    commentArea.height(compositionAreaHeight);
+                    expandIconEl.show();
+                    collapseIconEl.hide();
                 } else {
-                    $(commentViewArea).css("max-height", "initial");
+                    expandIconEl.hide();
+                    collapseIconEl.show();
+                    if (commentsHeight > commentAreaHeight) {
+                        commentArea.height("auto");
+                    }
                 }
-                $(commentViewArea).toggleClass("comment-area-collapsed");
-                $(textCenter).children(".ellipsis").children(".expand-icon").toggle();
-                $(textCenter).children(".ellipsis").children(".collapse-icon").toggle();
             });
     }
 
 
-    reloadCommentArea(page: number) {
-        this.destroyCommentArea(page);
-        const commentAreaEl = $(`*[data-page="${page}"]`).children(".comment-area");
-        const sectionWasCollapsed = $(commentAreaEl).hasClass("comment-area-collapsed");
-        const nestedCommentsCollapsed = $(commentAreaEl).children(".media-list").children(".media")
-            .children(".media-body").children(".media")
-            .hasClass(
-                "nested-comment-collapsed"); // if nested comments section was collapsed, collapse it after reload too.
-        this.asyncConstructCommentArea(page, sectionWasCollapsed, nestedCommentsCollapsed);
+    reloadCommentArea(textId: number) {
+        const commentAreaEl = $(`*[data-page="${textId}"]`).children(".comment-area");
+        const threadsContainer = commentAreaEl.children(".threads-container");
+        threadsContainer.remove();
+        if (commentAreaEl.children(".comment-placeholder-container").length) {
+            commentAreaEl.children(".comment-placeholder-container").remove();
+        }
+        const sectionWasCollapsed = commentAreaEl.hasClass("comment-area-collapsed");
+        const threadsEl = threadsContainer.children(".media-list");
+        const nestedCommentsEl = threadsEl.children(".media")
+            .children(".media-body").children(".media");
+        const nestedCommentsCollapsed = nestedCommentsEl.hasClass(
+            "nested-comment-collapsed"); // if nested comments section was collapsed, collapse it after reload too.
+        const commentAreaAjax = this.asyncConstructCommentArea(commentAreaEl);
+        commentAreaAjax.done(() => {
+            this.collapseIfCommentAreaIsTall(commentAreaEl, sectionWasCollapsed, nestedCommentsCollapsed);
+        });
         const buttonAreaSize = $(".toggleCommentViewAreaSize");
         buttonAreaSize.off();
-        this.processToggleCommentAresSizeClick();
         const buttonNestedComments = $(".toggle-nested-comments");
         buttonNestedComments.off();
-        this.processToggleNestedCommentClick();
+        this.init();
     }
 }

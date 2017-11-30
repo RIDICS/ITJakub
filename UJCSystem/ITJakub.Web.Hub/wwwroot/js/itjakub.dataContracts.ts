@@ -6,13 +6,14 @@
 interface IFeedback {
     id: number;
     text: string;
-    createDate: string;
-    user: IUserDetail;
-    filledName: string;
-    filledEmail: string;
-    category: FeedbackCategoryEnum;
+    createTime: string;
+    authorUser: IUserDetail;
+    authorName: string;
+    authorEmail: string;
+    feedbackCategory: FeedbackCategoryEnum;
     feedbackType: FeedbackTypeEnum;
-    headwordInfo: IFeedbackHeadwordInfo;
+    headwordInfo: IHeadwordContract;
+    projectInfo: IProject;
 }
 
 interface IFeedbackHeadwordInfo {
@@ -129,6 +130,11 @@ interface IPageWithContext extends IPage {
     contextStructure: IKwicStructure;
 }
 
+interface IProject {
+    id: number;
+    name: string;
+}
+
 interface IMetadataResource {
     title: string;
     subTitle: string;
@@ -226,10 +232,20 @@ interface IChapterHieararchyContract {
 }
 
 interface ISaveMetadataResource extends IMetadataResource {
+    keywordIdList: Array<number>;
     literaryKindIdList: Array<number>;
     literaryGenreIdList: Array<number>;
     authorIdList: Array<number>;
     projectResponsiblePersonIdList: Array<ISaveProjectResponsiblePerson>;
+}
+
+interface IGetMetadataResource extends IMetadataResource {
+    keywordList?: Array<IKeywordContract>;
+    literaryKindList?: Array<ILiteraryKindContract>;
+    literaryGenreList?: Array<ILiteraryGenreContract>;
+    authorIdList?: Array<IOriginalAuthor>;
+    responsiblePersonList?: Array<{responsibleType: IResponsibleType , id:number,firestName:string, lastName:string}>;
+    literaryOriginalList?: Array<ILiteraryOriginalContract>;
 }
 
 interface IMetadataSaveResult {
@@ -273,6 +289,22 @@ enum ResponsibleTypeEnum {
     Kolace = 2,
 }
 
+enum KeyTableEditorType {
+    Genre = 0,
+    Kind = 1,
+    Category = 2,
+    ResponsiblePerson = 3,
+    ResponsiblePersonType = 4,
+    Keyword = 5,
+    OriginalAuthor = 6,
+    LiteraryOriginal = 7
+}
+
+interface IGenreResponseContract {
+    id: number,
+    name: string;
+}
+
 interface ICommentStructureBase {
     id: number;
     textReferenceId: string;
@@ -293,32 +325,68 @@ interface ICommentSctucture extends ICommentStructureBase {
     time: number;
 }
 
-interface IParentPage {
-    id: number;
-    versionId: number;
-    name: string;
-    position: number;
-}
-
-interface ITextProjectPage {
+interface ITextWithPage {
     bookVersionId: number;
-    externalId: string;
     id: number;
-    parentPage: IParentPage;
+    parentPage: IPage;
     versionId: number;
     versionNumber: number;
 }
 
-interface IPageTextBase {
+interface ICreateTextVersion {
     text: string;
     id: number;
     versionNumber: number;
 }
 
-interface IPageText extends IPageTextBase{
+interface ITextWithContent {
+    id: number;
     versionId: number;
-    externalId: string;
+    versionNumber: number;
     bookVersionId: number;
+    text: string;
+}
+
+interface ILiteraryGenreContract {
+    id: number;
+    name: string;
+}
+
+interface IKeywordContract {
+    id: number;
+    name: string;
+}
+
+interface ILiteraryOriginalContract {
+    id: number;
+    name: string;
+}
+
+interface ILiteraryKindContract {
+    id: number;
+    name: string;
+}
+
+interface ICategoryContract {
+    id: number;
+    parentCategoryId?: number;
+    externalId: string;
+    description: string;
+}
+
+interface IEditionNote { //TODO expand after server functionality is done
+    projectId: number;
+    content: string;
+}
+
+interface IResponsiblePersonPagedResult {
+    totalCount: number;
+    list: IResponsiblePerson[];
+}
+
+interface IOriginalAuthorPagedResult {
+    totalCount: number;
+    list: IOriginalAuthor[];
 }
 
 enum AudioType {
@@ -326,6 +394,11 @@ enum AudioType {
     Mp3 = "Mp3",
     Ogg = "Ogg",
     Wav = "Wav",
+}
+
+enum TextFormatEnumContract {
+    Raw = 0,
+    Html = 1
 }
 
 

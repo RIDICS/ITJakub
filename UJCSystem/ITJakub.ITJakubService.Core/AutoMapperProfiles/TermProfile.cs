@@ -6,7 +6,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
     public class TermProfile : Profile
     {
-        protected override void Configure()
+        public TermProfile()
         {
             CreateMap<Term, TermContract>()
                 .ForMember(dest => dest.XmlId, opts => opts.MapFrom(src => src.XmlId))

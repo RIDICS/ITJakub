@@ -1,4 +1,4 @@
-﻿class PageNavigation {
+﻿class TextEditorPageNavigation {
 
     private readonly main: TextEditorMain;
     private readonly gui: TextEditorGui;
@@ -14,7 +14,7 @@
     private skippingToPage = false;
 
 
-    init(compositionPages: ITextProjectPage[]) {
+    init(compositionPages: ITextWithPage[]) {
         var loadingPages: number[] = [];
         this.createSlider(loadingPages, compositionPages);
         $(".pages-start").on("scroll resize",
@@ -27,16 +27,19 @@
         this.showTooltipOnHover();
     }
 
-    private createSlider(loadingPages: number[], compositionPages: ITextProjectPage[]) {
+    private createSlider(loadingPages: number[], compositionPages: ITextWithPage[]) {
         $(() => {
             var tooltip = $(".slider-tooltip");
             var tooltipText = tooltip.children(".slider-tooltip-text");
+            const thisClass = this;
             $("#page-slider").slider({
                 min: 0,
                 max: compositionPages.length - 1,
                 step: 1,
                 create: function() {
-                    tooltipText.text(`Page: ${compositionPages[$(this).slider("value")].parentPage.name}`);
+                    const pageName = compositionPages[$(this).slider("value")].parentPage.name;
+                    tooltipText.text(`Page: ${pageName}`);
+                    thisClass.updatePageIndicator(pageName);
                 },
                 slide(event, ui) {
                     tooltipText.text(`Page: ${compositionPages[ui.value].parentPage.name}`);
@@ -54,19 +57,24 @@
 
     private showTooltipOnHover() {
         var tooltip = $(".slider-tooltip");
-        $("#project-resource-preview").on("mouseenter", "#page-slider-handle", () => { tooltip.show(); });
-        $("#project-resource-preview").on("mouseleave", "#page-slider-handle", () => { tooltip.hide(); });
+        $("#project-resource-preview").on("mouseenter", ".page-slider-handle", () => { tooltip.show(); });
+        $("#project-resource-preview").on("mouseleave", ".page-slider-handle", () => { tooltip.hide(); });
     }
 
-    private updateSlider(textId: number) {
+    private updatePageNames(textId: number) {
         const pageEl = $(`*[data-page="${textId}"]`);
-        const pageName = pageEl.data("page-name");
+        const pageName = pageEl.data("page-name") as string;
         const index = $(".page-row").index(pageEl);
         $("#page-slider").slider("option", "value", index);
         $(".slider-tooltip-text").text(`Page: ${pageName}`);
+        this.updatePageIndicator(pageName);
     }
 
-    private refreshSwatch(loadingPages: number[], compositionPages: ITextProjectPage[]) {
+    private updatePageIndicator(pageName: string) {
+        $(".page-indicator").text(pageName);
+    }
+
+    private refreshSwatch(loadingPages: number[], compositionPages: ITextWithPage[]) {
         const pageIdIndex = $("#page-slider").slider("value");
         const pageId = compositionPages[pageIdIndex].id;
         this.navigateToPage(pageId, loadingPages, compositionPages);
@@ -76,20 +84,18 @@
         const containerXPos = $(".pages-start").offset().left;
         const containerYPos = $(".pages-start").offset().top;
         const element = document.elementFromPoint(containerXPos, containerYPos);
-        const jqEl = $(element);
-        const page = jqEl.parents(".page-row");
-
-        if (page !== null && typeof page !== "undefined") {
-            const pageNumber: number = $(page).data("page");
-            if (typeof pageNumber !== "undefined" && pageNumber !== null && !this.skippingToPage) {
+        if (element !== null && typeof element !== "undefined") {
+            const pageNumberString = element.getAttribute("data-page");
+            if (typeof pageNumberString !== "undefined" && pageNumberString !== null && !this.skippingToPage) {
+                const pageNumber = parseInt(pageNumberString);
                 this.updateOnlySliderValue = true;
-                this.updateSlider(pageNumber);
+                this.updatePageNames(pageNumber);
                 this.updateOnlySliderValue = false;
             }
         }
     }
 
-    private attachEventToGoToPageButton(loadingPages: number[], compositionPages: ITextProjectPage[]) {
+    private attachEventToGoToPageButton(loadingPages: number[], compositionPages: ITextWithPage[]) {
         $("#project-resource-preview").on("click",
             ".go-to-page-button",
             () => {
@@ -97,7 +103,7 @@
             });
     }
 
-    private attachEventInputFieldEnterKey(loadingPages: number[], compositionPages: ITextProjectPage[]) {
+    private attachEventInputFieldEnterKey(loadingPages: number[], compositionPages: ITextWithPage[]) {
         $("#project-resource-preview").on("keypress",
             ".go-to-page-field",
             (event) => {
@@ -117,7 +123,7 @@
         }
     }
 
-    private processPageInputField(loadingPages: number[], compositionPages: ITextProjectPage[]) {
+    private processPageInputField(loadingPages: number[], compositionPages: ITextWithPage[]) {
         const inputField = $(".go-to-page-field");
         const inputFieldValue = inputField.val() as string;
         if (inputFieldValue === "") {
@@ -136,28 +142,28 @@
         }
     }
 
-    private navigateToPage(pageNumber: number, loadingPages: number[], compositionPages: ITextProjectPage[]) {
+    private navigateToPage(textId: number, loadingPages: number[], compositionPages: ITextWithPage[]) {
         const firstId = compositionPages[0].id;
         const numberOfPagesToPreload = 10;
-        const preloadedPage = pageNumber - numberOfPagesToPreload;
+        const preloadedPage = textId - numberOfPagesToPreload;
         if (preloadedPage > firstId) {
             $(".preloading-pages-spinner").show();
-            this.pageToSkipTo = pageNumber;
+            this.pageToSkipTo = textId;
             this.skippingToPage = true;
-            for (let i = preloadedPage; i <= pageNumber; i++) {
+            for (let i = preloadedPage; i <= textId; i++) {
                 const currentPageEl = $(`*[data-page="${i}"]`);
                 if (!currentPageEl.hasClass("lazyloaded")) {
                     loadingPages.push(i);
                     lazySizes.loader.unveil(currentPageEl[0]);
                 }
             }
-            if ($(`*[data-page="${pageNumber}"]`).hasClass("lazyloaded")) {
-                this.scrollToPage(pageNumber);
+            if ($(`*[data-page="${textId}"]`).hasClass("lazyloaded")) {
+                this.scrollToPage(textId);
                 this.skippingToPage = false;
                 $(".preloading-pages-spinner").hide();
             }
         } else {
-            this.scrollToPage(pageNumber);
+            this.scrollToPage(textId);
         }
 
     }
@@ -179,16 +185,16 @@
             });
     }
 
-    private scrollToPage(pageNumber: number) {
+    private scrollToPage(textId: number) {
         const container = $(".pages-start");
-        const pageEl = $(`*[data-page="${pageNumber}"]`);
+        const pageEl = $(`*[data-page="${textId}"]`);
         const editorPageContainer = ".pages-start";
         const compositionPagePosition = pageEl.offset().top;
         const compositionPageContainerPosition = container.offset().top;
         const scrollTo = compositionPagePosition - compositionPageContainerPosition + container.scrollTop();
         $(editorPageContainer).scrollTop(scrollTo);
         this.updateOnlySliderValue = true;
-        this.updateSlider(pageNumber);
+        this.updatePageNames(textId);
         this.updateOnlySliderValue = false;
     }
 

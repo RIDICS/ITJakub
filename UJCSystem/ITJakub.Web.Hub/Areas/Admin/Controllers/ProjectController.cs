@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -16,7 +15,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
-using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
@@ -110,10 +108,10 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                         return PartialView("Work/_Cooperation");
                     case ProjectModuleTabType.WorkMetadata:
                         var literaryKinds = client.GetLiteraryKindList();
-                        var literaryGenres = client.GetLitararyGenreList();
-                        var literaryOriginals = client.GetLitararyOriginalList();
+                        var literaryGenres = client.GetLiteraryGenreList();
+                        var literaryOriginals = client.GetLiteraryOriginalList();
                         var responsibleTypes = client.GetResponsibleTypeList();
-                        var projectMetadata = client.GetProjectMetadata(projectId.Value, true, true, true, true, true);
+                        var projectMetadata = client.GetProjectMetadata(projectId.Value, true, true, true, true, true, true);
                         var workMetadaViewModel = Mapper.Map<ProjectWorkMetadataViewModel>(projectMetadata);
                         workMetadaViewModel.AllLiteraryKindList = literaryKinds;
                         workMetadaViewModel.AllLiteraryGenreList = literaryGenres;
@@ -123,10 +121,22 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                         return PartialView("Work/_Metadata", workMetadaViewModel);
                     case ProjectModuleTabType.WorkHistory:
                         return PartialView("Work/_History");
+                    case ProjectModuleTabType.WorkNote:
+                        return PartialView("Work/_Note");
                     default:
                         return NotFound();
                 }
             }
+        }
+
+        public IActionResult GetImageViewer()
+        {
+            return PartialView("Resource/_Images");
+        }
+
+        public IActionResult GetTextPreview()
+        {
+            return PartialView("Resource/_Preview");
         }
 
         public IActionResult ProjectResourceModuleTab(ProjectModuleTabType tabType, long? resourceId)
@@ -140,8 +150,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             {
                 switch (tabType)
                 {
-                    case ProjectModuleTabType.ResourcePreview:
-                        return PartialView("Resource/_Preview");
                     case ProjectModuleTabType.ResourceDiscussion:
                         return PartialView("Resource/_Discussion");
                     case ProjectModuleTabType.ResourceMetadata:
@@ -314,6 +322,21 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        public IActionResult CreateKeywordsWithArray(List<KeywordContract> request)
+        {
+            using (var client = GetRestClient())
+            {
+                var ids = new List<int>();
+                foreach (KeywordContract t in request)
+                {
+                    var newId = client.CreateKeyword(t);
+                    ids.Add(newId);
+                }
+                return Json(ids);
+            }
+        }
+
+        [HttpPost]
         public IActionResult DeleteResource([FromBody] DeleteResourceRequest request)
         {
             using (var client = GetRestClient())
@@ -346,81 +369,15 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
-        [HttpPost]
-        public IActionResult CreateLiteraryKind([FromBody] LiteraryKindContract request)
+        [HttpGet]
+        public IActionResult GetProjectMetadata([FromQuery] long projectId, [FromQuery] bool includeAuthor, [FromQuery] bool includeResponsiblePerson,
+            [FromQuery] bool includeKind, [FromQuery] bool includeGenre, [FromQuery] bool includeOriginal, [FromQuery] bool includeKeyword)
         {
             using (var client = GetRestClient())
             {
-                var newId = client.CreateLiteraryKind(request);
-                return Json(newId);
-            }
-        }
-
-        [HttpPost]
-        public IActionResult CreateLiteraryGenre([FromBody] LiteraryGenreContract request)
-        {
-            using (var client = GetRestClient())
-            {
-                var newId = client.CreateLiteraryGenre(request);
-                return Json(newId);
-            }
-        }
-
-        [HttpPost]
-        public IActionResult CreateAuthor([FromBody] OriginalAuthorContract request)
-        {
-            using (var client = GetRestClient())
-            {
-                var newId = client.CreateOriginalAuthor(request);
-                return Json(newId);
-            }
-        }
-
-        [HttpPost]
-        public IActionResult CreateResponsiblePerson([FromBody] ResponsiblePersonContract request)
-        {
-            using (var client = GetRestClient())
-            {
-                var newId = client.CreateResponsiblePerson(request);
-                return Json(newId);
-            }
-        }
-
-        [HttpPost]
-        public IActionResult CreateResponsibleType([FromBody] ResponsibleTypeContract request)
-        {
-            using (var client = GetRestClient())
-            {
-                var newId = client.CreateResponsibleType(request);
-                return Json(newId);
-            }
-        }
-
-        [HttpPost]
-        public IActionResult CreateCategory([FromBody] CategoryContract request)
-        {
-            using (var client = GetRestClient())
-            {
-                var newId = client.CreateCategory(request);
-                return Json(newId);
-            }
-        }
-
-        public IActionResult GetCategoryList()
-        {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetCategoryList();
-                return Json(result);
-            }
-        }
-
-        public IActionResult GetResponsibleTypeList()
-        {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetResponsibleTypeList();
-                return Json(result);
+                var response = client.GetProjectMetadata(projectId, includeAuthor,
+                includeResponsiblePerson, includeKind, includeGenre, includeOriginal, includeKeyword);
+                return Json(response);
             }
         }
 
@@ -456,7 +413,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     RelicAbbreviation = request.RelicAbbreviation,
                     SourceAbbreviation = request.SourceAbbreviation,
                     SubTitle = request.SubTitle,
-                    Title = request.Title
+                    Title = request.Title,
                 };
                 long newResourceVersionId = -1;
                 int unsuccessRequestCount = 0;
@@ -508,6 +465,15 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     unsuccessRequestCount++;
                 }
 
+                try
+                {
+                    client.SetProjectKeywords(projectId, new IntegerIdListContract {IdList = request.KeywordIdList});
+                }
+                catch (HttpRequestException)
+                {
+                    unsuccessRequestCount++;
+                }
+
                 if (unsuccessRequestCount > 0)
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError);
@@ -526,159 +492,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
-        [HttpPost]
-        public IActionResult GetGuid()
-        {
-            var guid = Guid.NewGuid();
-            return Json(guid);
-        }
-
-        [HttpPost]
-        public IActionResult LoadCommentFile(long textId)
-        {
-            var parts = new List<CommentStructure>();
-            using (var client = GetRestClient())
-            {
-                //var result = client.GetCommentsForText(textId); TODO return when server returns actual data
-                var comment2 = new GetTextCommentContract////TODO remove from this line when server returns actual data
-                {
-                    CreateTime = DateTime.Now,
-                    TextResourceId = 1L,
-                    Id = 2L,
-                    TextReferenceId = "dc3b9720-199c-4d79-93e5-ba94efb1f44a",
-                    Text = "Green",
-                    User = new UserContract
-                    {
-                        Id = 2,
-                        AvatarUrl = "http://via.placeholder.com/48x48",
-                        FirstName = "Arya",
-                        LastName = "Stark",
-                        UserName = "Arry"
-                    },
-                    TextComments = new List<GetTextCommentContract>()
-                };
-                var comment3 = new GetTextCommentContract
-                {
-                    CreateTime = DateTime.Now,
-                    TextResourceId = 1L,
-                    Id = 3L,
-                    TextReferenceId = "dc3b9720-199c-4d79-93e5-ba94efb1f44a",
-                    Text = "Red",
-                    User = new UserContract
-                    {
-                        Id = 2,
-                        AvatarUrl = "http://via.placeholder.com/48x48",
-                        FirstName = "John",
-                        LastName = "Snow",
-                        UserName = "king"
-                    },
-                    TextComments = new List<GetTextCommentContract>()
-                };
-                var inter = new List<GetTextCommentContract> {comment2, comment3};
-                var comment1 = new GetTextCommentContract
-                {
-                    CreateTime = DateTime.Now,
-                    TextResourceId = 1L,
-                    Id = 1L,
-                    TextReferenceId = "dc3b9720-199c-4d79-93e5-ba94efb1f44a",
-                    Text = "Tea",
-                    User = new UserContract
-                    {
-                        Id = 1,
-                        AvatarUrl = "http://via.placeholder.com/48x48",
-                        FirstName = "John",
-                        LastName = "Arryn",
-                        UserName = "Johnny"
-                    },
-                    TextComments =inter
-                };
-                var result = new List<GetTextCommentContract> {comment1};//TODO remove to this line when server returns actual data
-                if (result.Count <= 0)
-                {
-                    return Json(parts);
-                }
-                foreach (var pageComments in result)
-                {
-                    var order = 0;
-                    var mainComment = new CommentStructure
-                    {
-                        Order = order,
-                        Time = ((DateTimeOffset) pageComments.CreateTime).ToUnixTimeSeconds(),
-                        Text = pageComments.Text,
-                        Picture = pageComments.User.AvatarUrl,
-                        Id = pageComments.Id,
-                        Nested = false,
-                        TextId = textId,
-                        TextReferenceId = pageComments.TextReferenceId,
-                        Name = pageComments.User.FirstName,
-                        Surname = pageComments.User.LastName
-                    };
-                    parts.Add(mainComment);
-                    if (pageComments.TextComments.Count > 0)
-                    {
-                        foreach (var textComment in pageComments.TextComments)
-                        {
-                            order++;
-                            var nestedComment = new CommentStructure
-                            {
-                                Order = order,
-                                Time = ((DateTimeOffset)textComment.CreateTime).ToUnixTimeSeconds(),
-                                Text = textComment.Text,
-                                Picture = textComment.User.AvatarUrl,
-                                Id = textComment.Id,
-                                Nested = true,
-                                TextId = textId,
-                                TextReferenceId = textComment.TextReferenceId,
-                                Name = textComment.User.FirstName,
-                                Surname = textComment.User.LastName
-                            };
-                            parts.Add(nestedComment);
-                        }
-                    }
-                }
-            }
-            return Json(parts);
-        }
-
-        [HttpPost]
-        public IActionResult SaveComment(CreateTextCommentContract comment, long textId)
-        {
-            using (var client = GetRestClient())
-            {
-                var result = client.CreateComment(textId, comment);
-                return Json(result);
-            }
-        }
-
-        [HttpPost]
-        public IActionResult GetProjectContent(long projectId, long? resourceGroupId)
-        {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetAllTextResourceList(projectId, resourceGroupId);
-                return Json(result);
-            }
-        }
-
-        [HttpPost]
-        public IActionResult GetTextResource(long textId, TextFormatEnumContract? format)
-        {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetTextResource(textId, format);
-                return Json(result);
-            }
-        }
-
-        [HttpPost]
-        public IActionResult SetTextResource(long textId, ShortTextContract request)
-        {
-            using (var client = GetRestClient())
-            {
-                var result = client.SetTextResource(textId, request);
-                return Json(result);
-            }
-        }
 
         #region Typeahead
 
@@ -701,17 +514,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         #endregion
-    }
-
-    public class CommentStructure : TextCommentContractBase
-    {
-        public string Picture { get; set; }
-        public bool Nested { get; set; }
-        public long TextId { get; set; }
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public int Order { get; set; }
-        public long Time { get; set; }
     }
 
     public static class ProjectMock

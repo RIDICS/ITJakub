@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.Utils.Documentation;
 using Vokabular.RestClient.Errors;
+using Vokabular.RestClient.Headers;
 
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
-    public class KeywordController : Controller
+    public class KeywordController : BaseController
     {
         private readonly CatalogValueManager m_catalogValueManager;
 
@@ -64,10 +66,14 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("")]
-        public List<KeywordContract> GetKeywordList()
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
+        public List<KeywordContract> GetKeywordList([FromQuery] int? start, [FromQuery] int? count)
         {
-            var result = m_catalogValueManager.GetKeywordList();
-            return result;
+            var result = m_catalogValueManager.GetKeywordList(start, count);
+
+            SetTotalCountHeader(result.TotalCount);
+
+            return result.List;
         }
     }
 }

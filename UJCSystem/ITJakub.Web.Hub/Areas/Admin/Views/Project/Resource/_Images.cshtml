@@ -1,0 +1,97 @@
+﻿@using ITJakub.Web.Hub.Core
+<div id="project-resource-images">
+    <div class="text-editor-page-slider">
+        <div class="ui-slider-handle page-slider-handle">
+            <div class="slider-tooltip">
+                <div class="slider-tooltip-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row page-menu-row">
+        <div class="col-xs-2">
+            <div class="input-group go-to-page-field-group">
+                <input type="text" class="form-control go-to-page-field" placeholder="Go to page..." aria-label="Go to page...">
+                <span class="input-group-btn">
+                    <button class="btn btn-default go-to-page-button" type="button">
+                        <span class="glyphicon glyphicon-arrow-right"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-xs-2"></div>
+        <div class="col-xs-4 page-navigator">
+            <div class="col-xs-4 previous-page page-navigation-arrow text-center">
+                <i class="fa fa-chevron-left" aria-hidden="true"></i>
+            </div>
+            <div class="col-xs-4 page-indicator text-center"></div>
+            <div class="col-xs-4 next-page page-navigation-arrow text-center">
+                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+            </div>
+        </div>
+        <div class="col-xs-2"></div>
+        <div class="col-xs-2">
+            <button class="btn btn-default upload-new-image-button">Upload new version</button>
+        </div>
+    </div>
+    <div class="content-images">
+        <div class="container-fluid image-container">
+            <div class="row image-row">
+                <div class="col-xs-12 text-center page-image">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" role="dialog" id="upload-image-dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Nové soubory</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <form action="@Url.Action("UploadResource", "Project")" method="post" class="dropzone" enctype="multipart/form-data" id="new-image-upload">
+                                    <div class="hidden">
+                                        <input type="hidden" id="new-image-resource-session-id" name="sessionId" value="0"/>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label for="new-resource-comment">Komentář k první verzi</label>
+                                <textarea class="form-control" id="new-image-resource-comment" maxlength="@Projects.MaxResourceCommentLength"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="dialog-error alert alert-danger true-inline-alert">Chyba při ukládání</div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
+                    <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>Hotovo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade info-modal-dialog" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title info-dialog-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <p class="info-dialog-message"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

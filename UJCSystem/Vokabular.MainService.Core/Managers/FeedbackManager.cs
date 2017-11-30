@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Portal;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
 using Vokabular.MainService.DataContracts.Contracts.Type;
@@ -14,9 +15,6 @@ namespace Vokabular.MainService.Core.Managers
 {
     public class FeedbackManager
     {
-        private const int DefaultStart = 0;
-        private const int DefaultCount = 20;
-        private const int MaxCount = 200;
         private readonly PortalRepository m_portalRepository;
         private readonly UserManager m_userManager;
 
@@ -24,18 +22,6 @@ namespace Vokabular.MainService.Core.Managers
         {
             m_portalRepository = portalRepository;
             m_userManager = userManager;
-        }
-
-        private int GetStart(int? start)
-        {
-            return start ?? DefaultStart;
-        }
-
-        private int GetCount(int? count)
-        {
-            return count != null
-                ? Math.Min(count.Value, MaxCount)
-                : DefaultCount;
         }
 
         public long CreateFeedback(CreateFeedbackContract data)
@@ -66,11 +52,21 @@ namespace Vokabular.MainService.Core.Managers
 
         public PagedResultList<FeedbackContract> GetFeedbackList(int? start, int? count, FeedbackSortEnumContract sort, SortDirectionEnumContract sortDirection, IList<FeedbackCategoryEnumContract> filterCategories)
         {
-            var startValue = GetStart(start);
-            var countValue = GetCount(count);
+            var startValue = PagingHelper.GetStart(start);
+            var countValue = PagingHelper.GetCount(count);
             var sortValue = Mapper.Map<FeedbackSortEnum>(sort);
             var filterCategoryValues = Mapper.Map<List<FeedbackCategoryEnum>>(filterCategories);
-            var result = m_portalRepository.InvokeUnitOfWork(x => x.GetFeedbackList(startValue, countValue, sortValue, sortDirection, filterCategoryValues));
+
+            var result = m_portalRepository.InvokeUnitOfWork(repository =>
+            {
+                var dbFeedbacks = repository.GetFeedbackList(startValue, countValue, sortValue, sortDirection, filterCategoryValues);
+
+                var headwordFeedbackIds = dbFeedbacks.List.Where(x => x.FeedbackType == FeedbackType.Headword)
+                    .Select(x => x.Id);
+                repository.FetchHeadwordFeedbacks(headwordFeedbackIds);
+
+                return dbFeedbacks;
+            });
 
             return new PagedResultList<FeedbackContract>
             {

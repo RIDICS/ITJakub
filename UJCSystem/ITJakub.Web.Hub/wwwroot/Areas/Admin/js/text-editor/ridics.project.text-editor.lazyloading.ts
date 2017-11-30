@@ -1,18 +1,23 @@
-﻿class PageLazyLoading {
+﻿declare var lazySizes: any;
+
+class PageLazyLoading {
     private readonly pageStructure: PageStructure;
 
     constructor(pageStructure: PageStructure) {
         this.pageStructure = pageStructure;
     }
 
-    lazyLoad() {
-        this.initConfig();
+    init() {
         $(".pages-start").on("lazybeforeunveil",
             (event) => {
-                var target = $(event.target);
-                var page = target.data("page");
-                this.pageStructure.createPage(page);
+                var targetEl = $(event.target);
+                if (targetEl.hasClass("page-row")) {
+                    this.pageStructure.loadPage(targetEl);
+                } else {
+                    this.pageStructure.loadSection(targetEl);
+                }
             });
+        this.initConfig();
     }
 
     private initConfig() {

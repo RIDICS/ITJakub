@@ -6,7 +6,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
     public class QueryTypeEnumProfile : Profile
     {
-        protected override void Configure()
+        public QueryTypeEnumProfile()
         {
             CreateMap<QueryTypeEnum, QueryTypeEnumContract>().ReverseMap();
         }

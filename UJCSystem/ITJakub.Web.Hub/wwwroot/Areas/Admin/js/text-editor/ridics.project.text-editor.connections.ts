@@ -29,10 +29,11 @@ class Connections {
 
     private drawConnections(commentId: string): void {
         const from = $(`#${commentId}-text`);
+        from.addClass("highlighted-element");
         const to = $(`#${commentId}-comment`).children().children(".media-object");
         jqSimpleConnect.connect(from,
             to,
-            { radius: 2, color: "cyan", anchorA: "vertical", anchorB: "horizontal", roundedCorners: true });
+            { radius: 2, color: "red", anchorA: "vertical", anchorB: "horizontal", roundedCorners: true });
     }
 
     private connectionsOnEnter(): void {
@@ -48,7 +49,8 @@ class Connections {
                     if (!this.checkIfOverFlowing(uniqueId)) {
                         this.drawConnections(uniqueId);
                         this.interval = setInterval(() => {
-                                if (this.checkIfOverFlowing(uniqueId)) {
+                            if (this.checkIfOverFlowing(uniqueId)) {
+                                $(".highlighted-element").removeClass("highlighted-element");
                                     jqSimpleConnect.removeAll();
                                 } else {
                                     if ($(".jqSimpleConnect").length) {
@@ -74,11 +76,12 @@ class Connections {
                 if (typeof this.interval !== "undefined") {
                     clearInterval(this.interval);
                 }
+                $(".highlighted-element").removeClass("highlighted-element");
                 jqSimpleConnect.removeAll();
             });
     }
 
-    toggleConnections(): void {
+    init(): void {
         this.connectionsOnEnter();
         this.connectionsOnLeave();
     }

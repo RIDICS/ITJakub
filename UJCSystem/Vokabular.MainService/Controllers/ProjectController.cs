@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Parameter;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.MainService.Utils;
+using Vokabular.MainService.Utils.Documentation;
 using Vokabular.RestClient.Headers;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -26,7 +27,7 @@ namespace Vokabular.MainService.Controllers
         }
         
         [HttpGet]
-        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, "int", "Total records count")]
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total records count")]
         public List<ProjectDetailContract> GetProjectList([FromQuery] int? start, [FromQuery] int? count, [FromQuery] bool? fetchPageCount)
         {
             var result = m_projectManager.GetProjectList(start, count, fetchPageCount ?? false);
@@ -68,7 +69,7 @@ namespace Vokabular.MainService.Controllers
         [HttpGet("{projectId}/metadata")]
         [ProducesResponseType(typeof(ProjectMetadataResultContract), StatusCodes.Status200OK)]
         public IActionResult GetProjectMetadata(long projectId, [FromQuery] bool includeAuthor, [FromQuery] bool includeResponsiblePerson,
-            [FromQuery] bool includeKind, [FromQuery] bool includeGenre, [FromQuery] bool includeOriginal)
+            [FromQuery] bool includeKind, [FromQuery] bool includeGenre, [FromQuery] bool includeOriginal, [FromQuery] bool includeKeyword)
         {
             var parameters = new GetProjectMetadataParameter
             {
@@ -76,7 +77,8 @@ namespace Vokabular.MainService.Controllers
                 IncludeGenre = includeGenre,
                 IncludeOriginal = includeOriginal,
                 IncludeResponsiblePerson = includeResponsiblePerson,
-                IncludeAuthor = includeAuthor
+                IncludeAuthor = includeAuthor,
+                IncludeKeyword = includeKeyword
             };
             var resultData = m_projectMetadataManager.GetProjectMetadata(projectId, parameters);
 
@@ -132,6 +134,48 @@ namespace Vokabular.MainService.Controllers
         public void SetResponsiblePersons(long projectId, [FromBody] List<ProjectResponsiblePersonIdContract> projectResposibleIdList)
         {
             m_projectInfoManager.SetResponsiblePersons(projectId, projectResposibleIdList);
+        }
+
+        [HttpGet("{projectId}/literary-kind")]
+        public List<LiteraryKindContract> GetLiteraryKinds(long projectId)
+        {
+            return m_projectInfoManager.GetLiteraryKinds(projectId);
+        }
+
+        [HttpGet("{projectId}/literary-genre")]
+        public List<LiteraryGenreContract> GetLiteraryGenres(long projectId)
+        {
+            return m_projectInfoManager.GetLiteraryGenres(projectId);
+        }
+
+        [HttpGet("{projectId}/literary-original")]
+        public List<LiteraryOriginalContract> GetLiteraryOriginal(long projectId)
+        {
+            return m_projectInfoManager.GetLiteraryOriginals(projectId);
+        }
+
+        [HttpGet("{projectId}/keyword")]
+        public List<KeywordContract> GetKeywords(long projectId)
+        {
+            return m_projectInfoManager.GetKeywords(projectId);
+        }
+
+        [HttpGet("{projectId}/category")]
+        public List<CategoryContract> GetCategories(long projectId)
+        {
+            return m_projectInfoManager.GetCategories(projectId);
+        }
+
+        [HttpGet("{projectId}/author")]
+        public List<OriginalAuthorContract> GetAuthors(long projectId)
+        {
+            return m_projectInfoManager.GetAuthors(projectId);
+        }
+
+        [HttpGet("{projectId}/responsible-person")]
+        public List<ProjectResponsiblePersonContract> GetProjectResponsiblePersons(long projectId)
+        {
+            return m_projectInfoManager.GetProjectResponsiblePersons(projectId);
         }
     }
 }

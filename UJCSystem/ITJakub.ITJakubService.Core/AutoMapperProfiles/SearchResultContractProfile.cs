@@ -9,7 +9,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
     public class SearchResultContractProfile : Profile
     {
-        protected override void Configure()
+        public SearchResultContractProfile()
         {
             CreateMap<BookVersion, SearchResultContract>()
                 .ForMember(dest => dest.BookId, opts => opts.MapFrom(src => src.Book.Id))

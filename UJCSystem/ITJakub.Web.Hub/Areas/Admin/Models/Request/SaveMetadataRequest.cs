@@ -29,6 +29,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models.Request
         public List<int> LiteraryKindIdList { get; set; }
         public List<int> LiteraryGenreIdList { get; set; }
         public List<int> AuthorIdList { get; set; }
+        public List<int> KeywordIdList { get; set; }
         public List<ProjectResponsiblePersonIdContract> ProjectResponsiblePersonIdList { get; set; }
     }
 }

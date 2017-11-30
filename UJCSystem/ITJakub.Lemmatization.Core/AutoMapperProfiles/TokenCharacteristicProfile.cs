@@ -6,7 +6,7 @@ namespace ITJakub.Lemmatization.Core.AutoMapperProfiles
 {
     public class TokenCharacteristicProfile : Profile
     {
-        protected override void Configure()
+        public TokenCharacteristicProfile()
         {
             CreateMap<TokenCharacteristic, TokenCharacteristicContract>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))

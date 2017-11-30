@@ -1,36 +1,63 @@
-﻿class Util {
-    private serverAddress = getBaseUrl();
+﻿class EditorsUtil {
+    private serverPath = getBaseUrl();
+
+    getPagesList(projectId: number): JQueryXHR {
+        const pageListAjax = $.get(`${this.serverPath}Admin/ContentEditor/GetPageList`,
+            {
+                projectId: projectId
+            });
+        return pageListAjax;
+    }
+
+    getImageUrlOnPage(pageId: number): string {
+        return `${this.serverPath}Admin/ContentEditor/GetPageImage?pageId=${pageId}`;
+    }
+
+    savePageList(pageList: string[]): JQueryXHR {
+        const pageAjax = $.post(`${this.serverPath}Admin/ContentEditor/SavePageList`,
+            {
+                pageList: pageList
+            });
+        return pageAjax;
+    }
 
     getServerAddress(): string {
-        return this.serverAddress;
+        return this.serverPath;
     }
 
     /**
  * Generates guid on the server
  * @returns {JQueryXHR} Ajax conraining GUID
  */
-    createTextRefereceId(): JQueryXHR {
-        const ajax = $.post(`${this.serverAddress}admin/project/GetGuid`);
-        return ajax;
+    createTextRefereceId(): string {
+        const guid = Guid.generate();
+        return guid;
     }
 
     getProjectContent(projectId: number): JQueryXHR {
-        const ajax = $.post(`${this.serverAddress}admin/project/GetProjectContent`,
+        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetProjectContent`,
             {
                 projectId: projectId
             });
         return ajax;
     }
 
+    deleteComment(commentId: number): JQueryXHR {
+        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/DeleteComment`,
+            {
+                commentId: commentId
+            });
+        return ajax;
+    }
 
     /**
 * Loads plain text with markdown from the server.
-* @param {Number} pageNumber - Number of page for which to load plain text
+* @param {Number} textId - Number of page for which to load plain text
 * @returns {JQueryXHR} Ajax containing page plain text
 */
     loadPlainText(textId: number): JQueryXHR {
-        const ajax = $.post(`${this.serverAddress}admin/project/GetTextResource`,
-            { textId: textId, format: "Raw" });
+        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetTextResource`,
+            { textId: textId, format: TextFormatEnumContract.Raw });
         return ajax;
     }
 
@@ -40,12 +67,13 @@
 * @returns {JQueryXHR} Ajax query of rendered text
 */
     loadRenderedText(textId: number): JQueryXHR {
-        const ajax = $.post(`${this.serverAddress}admin/project/GetTextResource`, { textId: textId, format: "Html" });
+        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetTextResource`,
+            { textId: textId, format: TextFormatEnumContract.Html });
         return ajax;
     }
 
-    savePlainText(textId: number, request: IPageTextBase): JQueryXHR {
-        const ajax = $.post(`${this.serverAddress}admin/project/SetTextResource`,
+    savePlainText(textId: number, request: ICreateTextVersion): JQueryXHR {
+        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/SetTextResource`,
             {
                 textId: textId,
                 request: request
@@ -87,4 +115,19 @@
         return result;
     }
 
+    loadEditionNote(projectId: number): JQueryXHR {//TODO
+        const format: TextFormatEnumContract = TextFormatEnumContract.Raw;
+        const ajax = $.get(`${this.serverPath}Admin/ContentEditor/GetEditionNote`,
+            {
+                projectId: projectId,
+                format: format
+            });
+        return ajax;
+    }
+
+    saveEditionNote(noteRequest: IEditionNote) {
+        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/SetEditionNote`,
+            noteRequest);
+        return ajax;
+    }
 }

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts.Favorite;
-using Vokabular.MainService.Utils;
+using Vokabular.MainService.Utils.Documentation;
 using Vokabular.RestClient.Headers;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataContracts.Types.Favorite;
@@ -50,7 +50,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("")]
-        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, "int", "Total count")]
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
         public List<FavoriteBaseInfoContract> GetFavoriteItems([FromQuery] int? start,
             [FromQuery] int? count,
             [FromQuery] long? filterByLabelId,
@@ -68,7 +68,7 @@ namespace Vokabular.MainService.Controllers
 
         [HttpGet("query")]
         [ProducesResponseType(typeof(List<FavoriteQueryContract>), StatusCodes.Status200OK)]
-        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, "int", "Total count")]
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
         public IActionResult GetFavoriteQueries([FromQuery] int? start,
             [FromQuery] int? count,
             [FromQuery] long? filterByLabelId,

@@ -32,6 +32,29 @@ namespace Vokabular.MainService.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Search books
+        /// </summary>
+        /// <remarks>
+        /// Search book. Supported search criteria (key property - data type):
+        /// - Author - WordListCriteriaContract
+        /// - Title - WordListCriteriaContract
+        /// - Editor - WordListCriteriaContract
+        /// - Fulltext - WordListCriteriaContract
+        /// - Heading - WordListCriteriaContract
+        /// - Sentence - WordListCriteriaContract
+        /// - Headword - WordListCriteriaContract
+        /// - HeadwordDescription - WordListCriteriaContract
+        /// - Term - WordListCriteriaContract
+        /// - Dating - DatingListCriteriaContract
+        /// - TokenDistance - TokenDistanceListCriteriaContract
+        /// - HeadwordDescriptionTokenDistance - TokenDistanceListCriteriaContract
+        /// - SelectedCategory - SelectedCategoryCriteriaContract
+        /// </remarks>
+        /// <param name="request">
+        /// Request contains list of search criteria with different data types described in method description
+        /// </param>
+        /// <returns></returns>
         [HttpPost("search")]
         public List<SearchResultContract> SearchBook([FromBody] SearchRequestContract request)
             // TODO possible switch SearchResultContract to BookContract
@@ -40,6 +63,11 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
+        /// <summary>
+        /// Search books, return count
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("search-count")]
         public long SearchBookResultCount([FromBody] SearchRequestContract request)
         {
@@ -47,6 +75,30 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
+        /// <summary>
+        /// Search pages in specified book
+        /// </summary>
+        /// <remarks>
+        /// Search pages. Supported search criteria (key property - data type):
+        /// - Author - WordListCriteriaContract
+        /// - Title - WordListCriteriaContract
+        /// - Editor - WordListCriteriaContract
+        /// - Fulltext - WordListCriteriaContract
+        /// - Heading - WordListCriteriaContract
+        /// - Sentence - WordListCriteriaContract
+        /// - Headword - WordListCriteriaContract
+        /// - HeadwordDescription - WordListCriteriaContract
+        /// - Term - WordListCriteriaContract
+        /// - Dating - DatingListCriteriaContract
+        /// - TokenDistance - TokenDistanceListCriteriaContract
+        /// - HeadwordDescriptionTokenDistance - TokenDistanceListCriteriaContract
+        /// - SelectedCategory - SelectedCategoryCriteriaContract
+        /// </remarks>
+        /// <param name="projectId">Book identification</param>
+        /// <param name="request">
+        /// Request contains list of search criteria with different data types described in method description
+        /// </param>
+        /// <returns></returns>
         [HttpPost("{projectId}/page/search")]
         public List<PageContract> SearchPage(long projectId, [FromBody] SearchPageRequestContract request)
         {
@@ -110,6 +162,12 @@ namespace Vokabular.MainService.Controllers
             return hasText ? (IActionResult) Ok() : NotFound();
         }
 
+        /// <summary>
+        /// Load selected page text
+        /// </summary>
+        /// <param name="pageId"></param>
+        /// <param name="format"></param>
+        /// <returns>Selected page text</returns>
         [HttpGet("page/{pageId}/text")]
         public IActionResult GetPageText(long pageId, [FromQuery] TextFormatEnumContract? format)
         {
@@ -121,6 +179,29 @@ namespace Vokabular.MainService.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Load selected page text with search highlights
+        /// </summary>
+        /// <remarks>
+        /// Load selected page text with search highlights. Supported search criteria (key property - data type):
+        /// - Author - WordListCriteriaContract
+        /// - Title - WordListCriteriaContract
+        /// - Editor - WordListCriteriaContract
+        /// - Fulltext - WordListCriteriaContract
+        /// - Heading - WordListCriteriaContract
+        /// - Sentence - WordListCriteriaContract
+        /// - Headword - WordListCriteriaContract
+        /// - HeadwordDescription - WordListCriteriaContract
+        /// - Term - WordListCriteriaContract
+        /// - Dating - DatingListCriteriaContract
+        /// - TokenDistance - TokenDistanceListCriteriaContract
+        /// - HeadwordDescriptionTokenDistance - TokenDistanceListCriteriaContract
+        /// - SelectedCategory - SelectedCategoryCriteriaContract
+        /// </remarks>
+        /// <param name="pageId"></param>
+        /// <param name="format"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("page/{pageId}/text/search")]
         public IActionResult GetPageTextFromSearch(long pageId, [FromQuery] TextFormatEnumContract? format, [FromBody] SearchPageRequestContract request)
         {
@@ -161,6 +242,12 @@ namespace Vokabular.MainService.Controllers
             return File(result.Stream, result.MimeType, result.FileName);
         }
 
+        /// <summary>
+        /// Load selected headword description text
+        /// </summary>
+        /// <param name="headwordId"></param>
+        /// <param name="format"></param>
+        /// <returns></returns>
         [HttpGet("headword/{headwordId}/text")]
         public IActionResult GetHeadwordText(long headwordId, [FromQuery] TextFormatEnumContract? format)
         {
@@ -172,6 +259,29 @@ namespace Vokabular.MainService.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Load selected headword description text with search highlights
+        /// </summary>
+        /// <remarks>
+        /// Load selected headword description text with search highlights. Supported search criteria (key property - data type):
+        /// - Author - WordListCriteriaContract
+        /// - Title - WordListCriteriaContract
+        /// - Editor - WordListCriteriaContract
+        /// - Fulltext - WordListCriteriaContract
+        /// - Heading - WordListCriteriaContract
+        /// - Sentence - WordListCriteriaContract
+        /// - Headword - WordListCriteriaContract
+        /// - HeadwordDescription - WordListCriteriaContract
+        /// - Term - WordListCriteriaContract
+        /// - Dating - DatingListCriteriaContract
+        /// - TokenDistance - TokenDistanceListCriteriaContract
+        /// - HeadwordDescriptionTokenDistance - TokenDistanceListCriteriaContract
+        /// - SelectedCategory - SelectedCategoryCriteriaContract
+        /// </remarks>
+        /// <param name="headwordId"></param>
+        /// <param name="format"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("headword/{headwordId}/text/search")]
         public IActionResult GetHeadwordTextFromSearch(long headwordId, [FromQuery] TextFormatEnumContract? format, [FromBody] SearchPageRequestContract request)
         {

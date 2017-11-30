@@ -1,12 +1,12 @@
 {
-	"name": "asp.net",
-	"private": true,
+  "name": "asp.net",
+  "private": true,
   "dependencies": {
     "jquery": "2.2.4",
     "jquery-ui": "1.12.1",
     "jquery-validation": "1.17.0",
     "jquery-validation-unobtrusive": "3.2.6",
-    "lazysizes": "#9f00ad8ad98f45d79a922a24edff1dd98aefec9b",
+    "lazysizes": "4.0.1",
     "bootstrap": "3.3.7",
     "modernizr": "2.8.3",
     "respond": "1.4.2",
@@ -18,6 +18,11 @@
     "simplemde-custom-markdown-mode": "#71b7a583e230b967116c99141291d94276ba1433",
     "font-awesome": "4.7.0",
     "bootstrap-colorpicker-plus": "#0fdd970",
-    "s-pagination": "1.1.1"
+    "s-pagination": "1.1.1",
+    "bootstrap-tokenfield": "0.12.1"
+  },
+  "resolutions": {
+    "jquery": "2.2.4",
+    "bootstrap": ">= 3.0.0"
   }
 }

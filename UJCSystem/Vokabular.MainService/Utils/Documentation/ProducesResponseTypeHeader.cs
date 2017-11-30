@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vokabular.MainService.Utils
+namespace Vokabular.MainService.Utils.Documentation
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class ProducesResponseTypeHeader : Attribute

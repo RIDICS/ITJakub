@@ -6,7 +6,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
     public class CategoryProfile : Profile
     {
-        protected override void Configure()
+        public CategoryProfile()
         {
             CreateMap<Category, CategoryContract>();
         }

@@ -4,13 +4,18 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netcoreapp2.0\Vokabular.FulltextService.xml</DocumentationFile>
+    <NoWarn>1701;1702;1705;1591</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="6.1.1" />
-    <PackageReference Include="DryIoc.dll" Version="2.12.3" />
+    <PackageReference Include="AutoMapper" Version="6.2.1" />
+    <PackageReference Include="DryIoc.dll" Version="2.12.5" />
     <PackageReference Include="DryIoc.Microsoft.DependencyInjection" Version="1.3.1" />
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
@@ -25,6 +30,7 @@
     <ProjectReference Include="..\Vokabular.FulltextService.Core\Vokabular.FulltextService.Core.csproj" />
     <ProjectReference Include="..\Vokabular.FulltextService.DataContracts\Vokabular.FulltextService.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.Log4Net\Vokabular.Log4Net.csproj" />
+    <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj" />
   </ItemGroup>
 

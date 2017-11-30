@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.MainService.Utils.Documentation;
 using Vokabular.RestClient.Errors;
-using Vokabular.RestClient.Results;
+using Vokabular.RestClient.Headers;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
@@ -81,7 +82,8 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("")]
-        public PagedResultList<FeedbackContract> GetFeedbackList([FromQuery] int? start,
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
+        public List<FeedbackContract> GetFeedbackList([FromQuery] int? start,
             [FromQuery] int? count,
             [FromQuery] FeedbackSortEnumContract? sort,
             [FromQuery] SortDirectionEnumContract? sortDirection,
@@ -91,7 +93,10 @@ namespace Vokabular.MainService.Controllers
             var sortDirectionValue = sortDirection ?? SortDirectionEnumContract.Desc;
 
             var result = m_feedbackManager.GetFeedbackList(start, count, sortValue, sortDirectionValue, filterCategories);
-            return result;
+
+            SetTotalCountHeader(result.TotalCount);
+
+            return result.List;
         }
 
         [HttpDelete("{feedbackId}")]

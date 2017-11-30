@@ -6,7 +6,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
     public class SpecialPermissionProfile : Profile
     {
-        protected override void Configure()
+        public SpecialPermissionProfile()
         {
             CreateMap<SpecialPermission, SpecialPermissionContract>()
                 .Include<UploadBookPermission, UploadBookPermissionContract>()

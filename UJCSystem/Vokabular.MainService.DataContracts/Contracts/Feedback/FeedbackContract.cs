@@ -11,7 +11,7 @@ namespace Vokabular.MainService.DataContracts.Contracts.Feedback
 
         public DateTime CreateTime { get; set; }
 
-        public UserContract AuthorUser { get; set; }
+        public UserDetailContract AuthorUser { get; set; }
 
         public string AuthorName { get; set; }
 

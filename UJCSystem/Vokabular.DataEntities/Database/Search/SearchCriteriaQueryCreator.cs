@@ -10,9 +10,6 @@ namespace Vokabular.DataEntities.Database.Search
 {
     public class SearchCriteriaQueryCreator : ISearchCriteriaCreator
     {
-        private const int MaxCount = 100;
-        private const int DefaultCount = 10;
-        private const int DefaultStart = 0;
         private const string FromClause = "from MetadataResource metadata inner join metadata.Resource resource inner join resource.Project project inner join project.LatestPublishedSnapshot snapshot left outer join snapshot.BookVersion bookVersion";
         // inner join to LatestPublishedSnapshots filters result only to published Projects
         private const string ResultFromClause = "from MetadataResource metadata1 inner join metadata1.Resource resource1";// left outer join resource1.Project project1 inner join project1.LatestPublishedSnapshot snapshot1";
@@ -29,17 +26,17 @@ namespace Vokabular.DataEntities.Database.Search
 
         public SortTypeEnumContract? Sort { get; set; }
         public SortDirectionEnumContract? SortDirection { get; set; }
-        public int? Start { get; set; }
-        public int? Count { get; set; }
+        public int Start { get; set; }
+        public int Count { get; set; }
 
         public int GetStart()
         {
-            return Start ?? DefaultStart;
+            return Start;
         }
 
         public int GetCount()
         {
-            return Count != null ? Math.Min(Count.Value, MaxCount) : DefaultCount;
+            return Count;
         }
 
         public Dictionary<string, object> Parameters => m_metadataParameters;

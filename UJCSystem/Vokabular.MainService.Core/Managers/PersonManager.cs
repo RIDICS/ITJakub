@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
@@ -15,24 +14,11 @@ namespace Vokabular.MainService.Core.Managers
 {
     public class PersonManager
     {
-        private const int DefaultStart = 0;
-        private const int DefaultCount = 20;
-        private const int MaxResultCount = 200;
         private readonly PersonRepository m_personRepository;
 
         public PersonManager(PersonRepository personRepository)
         {
             m_personRepository = personRepository;
-        }
-
-        private int GetStart(int? start)
-        {
-            return start ?? DefaultStart;
-        }
-
-        private int GetCount(int? count)
-        {
-            return count != null ? Math.Min(count.Value, MaxResultCount) : DefaultCount;
         }
 
         #region OriginalAuthor CRUD
@@ -112,7 +98,9 @@ namespace Vokabular.MainService.Core.Managers
 
         public PagedResultList<ResponsiblePersonContract> GetResponsiblePersonList(int? start, int? count)
         {
-            var dbResult = m_personRepository.InvokeUnitOfWork(x => x.GetResponsiblePersonList(GetStart(start), GetCount(count)));
+            var startValue = PagingHelper.GetStart(start);
+            var countValue = PagingHelper.GetCount(count);
+            var dbResult = m_personRepository.InvokeUnitOfWork(x => x.GetResponsiblePersonList(startValue, countValue));
             var resultList = Mapper.Map<List<ResponsiblePersonContract>>(dbResult.List);
 
             return new PagedResultList<ResponsiblePersonContract>
@@ -124,7 +112,9 @@ namespace Vokabular.MainService.Core.Managers
 
         public PagedResultList<OriginalAuthorContract> GetOriginalAuthorList(int? start, int? count)
         {
-            var dbResult = m_personRepository.InvokeUnitOfWork(x => x.GetOriginalAuthorList(GetStart(start), GetCount(count)));
+            var startValue = PagingHelper.GetStart(start);
+            var countValue = PagingHelper.GetCount(count);
+            var dbResult = m_personRepository.InvokeUnitOfWork(x => x.GetOriginalAuthorList(startValue, countValue));
             var resultList = Mapper.Map<List<OriginalAuthorContract>>(dbResult.List);
 
             return new PagedResultList<OriginalAuthorContract>

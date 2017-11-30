@@ -6,7 +6,7 @@
 class ProjectModule {
     private currentModule: ProjectModuleBase;
     private projectId: number;
-    
+
     constructor() {
         this.currentModule = null;
         this.projectId = Number($("#project-id").text());
@@ -27,14 +27,14 @@ class ProjectModule {
         });
 
         var $projectNavigationLinks = $("#project-navigation a");
-        $projectNavigationLinks.click(function (e) {
+        $projectNavigationLinks.click(function(e) {
             e.preventDefault();
             $projectNavigationLinks.removeClass("active");
             $(this).addClass("active");
             self.showModule(e.currentTarget.id);
         });
 
-        
+
         var dropzoneOptions = DropzoneHelper.getFullConfiguration({
             //url: getBaseUrl() + "Admin/Project/UploadResource"
             error: DropzoneHelper.getErrorFunction()
@@ -44,29 +44,35 @@ class ProjectModule {
 
         this.showModule(null);
     }
-    
+
     public showModule(identificator: string) {
         $("#resource-panel").hide();
         switch (identificator) {
-            case "project-navigation-root":
-                this.currentModule = new ProjectWorkModule(this.projectId);
-                break;
-            case "project-navigation-image":
-                this.currentModule = new ProjectResourceModule(this.projectId, ResourceType.Image);
-                break;
-            case "project-navigation-text":
-                this.currentModule = new ProjectResourceModule(this.projectId, ResourceType.Text);
-                break;
-            case "project-navigation-audio":
-                this.currentModule = new ProjectResourceModule(this.projectId, ResourceType.Audio);
-                break;
-            case "project-navigation-video":
-                this.currentModule = new ProjectResourceModule(this.projectId, ResourceType.Video);
-                break;
-            default:
-                this.currentModule = new ProjectWorkModule(this.projectId);
+        case "project-navigation-root":
+            this.currentModule = new ProjectWorkModule(this.projectId);
+            break;
+        case "project-navigation-image": //TODO
+            this.currentModule = null;
+            const imageViewer = new ProjectImageViewerModule(this.projectId);
+            imageViewer.init();
+            break;
+        case "project-navigation-text": //TODO
+            this.currentModule = null;
+            const textPreview = new ProjectTextPreviewModule(this.projectId);
+            textPreview.init();
+            break;
+        case "project-navigation-audio":
+            this.currentModule = new ProjectResourceModule(this.projectId, ResourceType.Audio);
+            break;
+        case "project-navigation-video":
+            this.currentModule = new ProjectResourceModule(this.projectId, ResourceType.Video);
+            break;
+        default:
+            this.currentModule = new ProjectWorkModule(this.projectId);
         }
-        this.currentModule.init();
+        if (this.currentModule !== null) {
+            this.currentModule.init();
+        }
     }
 }
 
@@ -74,15 +80,20 @@ abstract class ProjectModuleBase {
     protected moduleTab: ProjectModuleTabBase;
 
     public abstract getModuleType(): ProjectModuleType;
+
     public abstract getTabsId(): string;
+
     public abstract initModule(): void;
+
     public abstract getTabPanelType(panelSelector: string): ProjectModuleTabType;
+
     public abstract getLoadTabPanelContentUrl(panelType: ProjectModuleTabType): string;
+
     public abstract makeProjectModuleTab(panelType: ProjectModuleTabType): ProjectModuleTabBase;
 
     protected initTabs() {
         var self = this;
-        $(`#${this.getTabsId()} a`).click(function (e) {
+        $(`#${this.getTabsId()} a`).click(function(e) {
             e.preventDefault();
             $(this).tab('show');
             var tabPanelSelector = $(this).attr("href");
@@ -97,18 +108,20 @@ abstract class ProjectModuleBase {
         $contentContainer
             .empty()
             .addClass("loading")
-            .load(url, null, (responseText, textStatus, xmlHttpRequest) => {
-                $contentContainer.removeClass("loading");
-                if (xmlHttpRequest.status === HttpStatusCode.Success) {
-                    this.initTabs();
-                    this.initModule();
-                } else {
-                    var alert = new AlertComponentBuilder(AlertType.Error)
-                        .addContent("Chyba při načítání modulu")
-                        .buildElement();
-                    $contentContainer.append(alert);
-                }
-            });
+            .load(url,
+                null,
+                (responseText, textStatus, xmlHttpRequest) => {
+                    $contentContainer.removeClass("loading");
+                    if (xmlHttpRequest.status === HttpStatusCode.Success) {
+                        this.initTabs();
+                        this.initModule();
+                    } else {
+                        var alert = new AlertComponentBuilder(AlertType.Error)
+                            .addContent("Chyba při načítání modulu")
+                            .buildElement();
+                        $contentContainer.append(alert);
+                    }
+                });
     }
 
     private loadTabPanel(tabPanelSelector: string) {
@@ -117,18 +130,77 @@ abstract class ProjectModuleBase {
         var url = this.getLoadTabPanelContentUrl(tabPanelType);
         $tabPanel
             .html("<div class=\"loader\"></div>")
-            .load(url, null, (responseText, textStatus, xmlHttpRequest) => {
-                if (xmlHttpRequest.status !== HttpStatusCode.Success) {
-                    var errorDiv = new AlertComponentBuilder(AlertType.Error).addContent("Chyba při načítání záložky.")
-                        .buildElement();
-                    $tabPanel.empty().append(errorDiv);
-                    this.moduleTab = null;
-                    return;
-                }
+            .load(url,
+                null,
+                (responseText, textStatus, xmlHttpRequest) => {
+                    if (xmlHttpRequest.status !== HttpStatusCode.Success) {
+                        var errorDiv = new AlertComponentBuilder(AlertType.Error)
+                            .addContent("Chyba při načítání záložky.")
+                            .buildElement();
+                        $tabPanel.empty().append(errorDiv);
+                        this.moduleTab = null;
+                        return;
+                    }
 
-                this.moduleTab = this.makeProjectModuleTab(tabPanelType);
-                if (this.moduleTab != null) {
-                    this.moduleTab.initTab();
+                    this.moduleTab = this.makeProjectModuleTab(tabPanelType);
+                    if (this.moduleTab != null) {
+                        this.moduleTab.initTab();
+                    }
+                });
+    }
+}
+
+class ProjectImageViewerModule {
+    private readonly projectId: number;
+
+    constructor(projectId: number) {
+        this.projectId = projectId;
+    }
+
+    init() {
+        const url = getBaseUrl() + "Admin/Project/GetImageViewer";
+        const loadingSpinner = $(`<div class="loading"></div>`);
+        const projectLayoutEl = $("#project-layout-content");
+        projectLayoutEl.empty();
+        projectLayoutEl.append(loadingSpinner);
+        projectLayoutEl.load(url,
+            (response, status, xhr) => {
+                if (status === "error") {
+                    const error = new AlertComponentBuilder(AlertType.Error).addContent("Image viewer loading error");
+                    $("#project-layout-content").empty().append(error.buildElement());
+                } else {
+                    loadingSpinner.hide();
+                    $("#project-resource-images").off();
+                    const imageViewer = new ImageViewerMain();
+                    imageViewer.init(this.projectId);
+                }
+            });
+    }
+}
+
+class ProjectTextPreviewModule {
+    private readonly projectId: number;
+
+    constructor(projectId: number) {
+        this.projectId = projectId;
+    }
+
+    init() {
+        const url = getBaseUrl() + "Admin/Project/GetTextPreview";
+        const projectLayoutEl = $("#project-layout-content");
+        const loadingSpinner = $(`<div class="loading"></div>`);
+        projectLayoutEl.empty();
+        projectLayoutEl.append(loadingSpinner);
+        projectLayoutEl.load(url,
+            (response, status, xhr) => {
+                if (status === "error") {
+                    const error = new AlertComponentBuilder(AlertType.Error).addContent("Text preview loading error");
+                    $("#project-layout-content").empty().append(error.buildElement());
+                } else {
+                    loadingSpinner.hide();
+                    $("#project-resource-preview").off();
+                    const main = new TextEditorMain();
+                    main.init(this.projectId);
                 }
             });
     }
@@ -143,6 +215,7 @@ class ProjectWorkModule extends ProjectModuleBase {
     }
 
     getModuleType(): ProjectModuleType { return ProjectModuleType.Work; }
+
     getTabsId(): string { return "project-work-tabs" }
 
     initModule(): void {
@@ -155,23 +228,29 @@ class ProjectWorkModule extends ProjectModuleBase {
     }
 
     getLoadTabPanelContentUrl(tabPanelType: ProjectModuleTabType): string {
-        return getBaseUrl() + "Admin/Project/ProjectWorkModuleTab?tabType=" + tabPanelType + "&projectId=" + this.projectId;
+        return getBaseUrl() +
+            "Admin/Project/ProjectWorkModuleTab?tabType=" +
+            tabPanelType +
+            "&projectId=" +
+            this.projectId;
     }
 
     makeProjectModuleTab(tabPanelType: ProjectModuleTabType): ProjectModuleTabBase {
         switch (tabPanelType) {
-            case ProjectModuleTabType.WorkMetadata:
-                return new ProjectWorkMetadataTab(this.projectId);
-            case ProjectModuleTabType.WorkPageList:
-                return new ProjectWorkPageListTab(this.projectId);
-            case ProjectModuleTabType.WorkPublications:
-                return new ProjectWorkPublicationsTab(this.projectId);
-            case ProjectModuleTabType.WorkCooperation:
-                return new ProjectWorkCooperationTab(this.projectId);
-            case ProjectModuleTabType.WorkHistory:
-                return new ProjectWorkHistoryTab(this.projectId);
-            default:
-                return null;
+        case ProjectModuleTabType.WorkMetadata:
+            return new ProjectWorkMetadataTab(this.projectId);
+        case ProjectModuleTabType.WorkPageList:
+            return new ProjectWorkPageListTab(this.projectId);
+        case ProjectModuleTabType.WorkPublications:
+            return new ProjectWorkPublicationsTab(this.projectId);
+        case ProjectModuleTabType.WorkCooperation:
+            return new ProjectWorkCooperationTab(this.projectId);
+        case ProjectModuleTabType.WorkHistory:
+            return new ProjectWorkHistoryTab(this.projectId);
+        case ProjectModuleTabType.WorkNote:
+            return new ProjectWorkNoteTab(this.projectId);
+        default:
+            return null;
         }
     }
 }
@@ -196,27 +275,18 @@ class ProjectResourceModule extends ProjectModuleBase {
     }
 
     getModuleType(): ProjectModuleType { return ProjectModuleType.Resource; }
+
     getTabsId(): string { return "project-resource-tabs" }
 
     initModule(): void {
         var self = this;
 
         $("#resource-panel").show();
-        $("#resource-list").empty().off();
 
         this.toggleElementsVisibility(false, null);
-
-        $("#resource-list").change(function() {
-            var resourceList = <HTMLSelectElement>this;
-            var isResourceSelected = resourceList.selectedIndex >= 0;
-            var resourceId = isResourceSelected ? $(resourceList).val() : null;
-            self.toggleElementsVisibility(isResourceSelected, resourceId);
-        });
         ProjectResourceVersionModule.staticInit();
-
         this.initDialogs();
         this.initMainResourceButtons();
-        this.loadResourceList();
     }
 
     getTabPanelType(panelSelector: string): ProjectModuleTabType {
@@ -224,19 +294,25 @@ class ProjectResourceModule extends ProjectModuleBase {
     }
 
     getLoadTabPanelContentUrl(tabPanelType: ProjectModuleTabType): string {
-        return getBaseUrl() + "Admin/Project/ProjectResourceModuleTab?tabType=" + tabPanelType + "&resourceId=" + this.currentResourceId;
+        return getBaseUrl() +
+            "Admin/Project/ProjectResourceModuleTab?tabType=" +
+            tabPanelType +
+            "&resourceId=" +
+            this.currentResourceId;
     }
 
     makeProjectModuleTab(tabPanelType: ProjectModuleTabType): ProjectModuleTabBase {
         switch (tabPanelType) {
-            case ProjectModuleTabType.ResourceMetadata:
-                return new ProjectResourceMetadataTab(this.currentResourceId);
-            case ProjectModuleTabType.ResourcePreview:
-                return new ProjectResourcePreviewTab(this.currentResourceId, this.projectId);
-            case ProjectModuleTabType.ResourceDiscussion:
-                return new ProjectResourceDiscussionTab(this.currentResourceId);
-            default:
-                return null;
+        case ProjectModuleTabType.ResourceMetadata:
+            return new ProjectResourceMetadataTab(this.currentResourceId);
+        case ProjectModuleTabType.ResourcePreview:
+            return new ProjectResourcePreviewTab(this.currentResourceId, this.projectId);
+        case ProjectModuleTabType.ResourceImages:
+            return new ProjectResourceImagesTab(this.currentResourceId, this.projectId);
+        case ProjectModuleTabType.ResourceDiscussion:
+            return new ProjectResourceDiscussionTab(this.currentResourceId);
+        default:
+            return null;
         }
     }
 
@@ -307,7 +383,9 @@ class ProjectResourceModule extends ProjectModuleBase {
     private toggleElementsVisibility(isResourceSelected: boolean, resourceId: number) {
         var $tabs = $("#" + this.getTabsId());
         var $tabPanels = $("#resource-tab-content");
-        var $selectionDependentButtons = $("#delete-resource-button, #rename-resource-button, #duplicate-resource-button, #create-resource-version-button, #project-resource-version-button");
+        var $selectionDependentButtons =
+            $(
+                "#delete-resource-button, #rename-resource-button, #duplicate-resource-button, #create-resource-version-button, #project-resource-version-button");
         this.currentResourceId = resourceId;
 
         $selectionDependentButtons.prop("disabled", !isResourceSelected);
@@ -333,132 +411,87 @@ class ProjectResourceModule extends ProjectModuleBase {
         }
     }
 
-    private loadResourceList(callback: () => void = null) {
-        $("#resource-list").empty().addClass("loading");
-
-        this.projectClient.getResourceList(this.projectId, this.resourceType, (list, errorCode) => {
-            if (errorCode != null) {
-                this.showErrorInResourceList();
-                return;
-            }
-
-            this.fillResourceList(list);
-
-            if (callback != null) {
-                callback();
-            }
-        });
-    }
-
-    private fillResourceList(list: IProjectResource[]) {
-        var $resourceList = $("#resource-list");
-        $resourceList.removeClass("loading");
-        for (let i = 0; i < list.length; i++) {
-            var projectResource = list[i];
-            var optionElement = document.createElement("option");
-            $(optionElement)
-                .val(projectResource.id)
-                .text(projectResource.name)
-                .appendTo($resourceList);
-        }
-    }
-
-    private showErrorInResourceList() {
-        var $resourceList = $("#resource-list");
-        $resourceList.removeClass("loading");
-        
-        var optionElement = document.createElement("option");
-        $(optionElement)
-            .prop("disabled", true)
-            .text("Chyba při načítání zdrojů")
-            .appendTo($resourceList);
-    }
-
-    private selectResource(resourceId: number) {
-        $("#resource-list").val(resourceId).trigger("change");
-    }
-
     private addResource() {
         var sessionId = $("#new-resource-session-id").val();
         var comment = $("#new-resource-comment").val();
-        this.projectClient.processUploadedResources(this.projectId, sessionId, comment, errorCode => {
-            if (errorCode != null) {
-                this.addResourceDialog.showError();
-                return;
-            }
+        this.projectClient.processUploadedResources(this.projectId,
+            sessionId,
+            comment,
+            errorCode => {
+                if (errorCode != null) {
+                    this.addResourceDialog.showError();
+                    return;
+                }
 
-            this.toggleElementsVisibility(false, null);
-            this.loadResourceList();
+                this.toggleElementsVisibility(false, null);
 
-            this.addResourceDialog.hide();
-        });
+                this.addResourceDialog.hide();
+            });
     }
 
     private createResourceVersion() {
         var resourceId = this.currentResourceId;
         var sessionId = $("#new-resource-version-session-id").val();
         var comment = $("#new-resource-version-comment").val();
-        this.projectClient.processUploadedResourceVersion(resourceId, sessionId, comment, errorCode => {
-            if (errorCode != null) {
-                this.createResourceVersionDialog.showError();
-                return;
-            }
+        this.projectClient.processUploadedResourceVersion(resourceId,
+            sessionId,
+            comment,
+            errorCode => {
+                if (errorCode != null) {
+                    this.createResourceVersionDialog.showError();
+                    return;
+                }
 
-            this.toggleElementsVisibility(false, null);
-            this.loadResourceList(() => {
-                this.selectResource(resourceId);
+                this.toggleElementsVisibility(false, null);
+
+                this.createResourceVersionDialog.hide();
             });
-
-            this.createResourceVersionDialog.hide();
-        });
     }
 
     private deleteResource() {
         var resourceId = this.currentResourceId;
-        this.projectClient.deleteResource(resourceId, errorCode => {
-            if (errorCode != null) {
-                this.deleteResourceDialog.showError();
-                return;
-            }
+        this.projectClient.deleteResource(resourceId,
+            errorCode => {
+                if (errorCode != null) {
+                    this.deleteResourceDialog.showError();
+                    return;
+                }
 
-            $(`#resource-list option[value=${resourceId}]`).remove();
-            this.toggleElementsVisibility(false, null);
-            
-            this.deleteResourceDialog.hide();
-        });
+                this.toggleElementsVisibility(false, null);
+
+                this.deleteResourceDialog.hide();
+            });
     }
 
     private renameResource() {
         var resourceId = this.currentResourceId;
         var newName = $("#rename-resource-new").val();
-        this.projectClient.renameResource(resourceId, newName, errorCode => {
-            if (errorCode != null) {
-                this.renameResourceDialog.showError();
-                return;
-            }
+        this.projectClient.renameResource(resourceId,
+            newName,
+            errorCode => {
+                if (errorCode != null) {
+                    this.renameResourceDialog.showError();
+                    return;
+                }
 
-            $(`#resource-list option[value=${resourceId}]`).text(newName);
-
-            this.renameResourceDialog.hide();
-        });
+                this.renameResourceDialog.hide();
+            });
     }
 
     private duplicateResource() {
         var resourceId = this.currentResourceId;
         var resourceName = $("#duplicate-resource-name").text();
-        this.projectClient.duplicateResource(resourceId, (newResourceId, errorCode) => {
-            if (errorCode != null) {
-                this.duplicateResourceDialog.showError();
-                return;
-            }
+        this.projectClient.duplicateResource(resourceId,
+            (newResourceId, errorCode) => {
+                if (errorCode != null) {
+                    this.duplicateResourceDialog.showError();
+                    return;
+                }
 
-            this.toggleElementsVisibility(false, null);
-            this.loadResourceList(() => {
-                this.selectResource(resourceId);
+                this.toggleElementsVisibility(false, null);
+
+                this.duplicateResourceDialog.hide();
             });
-
-            this.duplicateResourceDialog.hide();
-        });
     }
 }
 
@@ -501,13 +534,16 @@ class ProjectResourceVersionModule {
         $resourceVersionPanel
             .slideToggle()
             .append("<div class=\"loading\"></div>")
-            .load(url, null, (responseText, textStatus, xmlHttpRequest) => {
-                if (xmlHttpRequest.status !== HttpStatusCode.Success) {
-                    var error = new AlertComponentBuilder(AlertType.Error).addContent("Chyba při načítání seznamu verzí");
-                    $resourceVersionPanel.empty().append(error.buildElement());
-                }
-            });
-        
+            .load(url,
+                null,
+                (responseText, textStatus, xmlHttpRequest) => {
+                    if (xmlHttpRequest.status !== HttpStatusCode.Success) {
+                        var error = new AlertComponentBuilder(AlertType.Error).addContent(
+                            "Chyba při načítání seznamu verzí");
+                        $resourceVersionPanel.empty().append(error.buildElement());
+                    }
+                });
+
         $resourceTabContent.animate({
             height: "-=" + this.versionPanelHeight + "px"
         });
@@ -560,6 +596,7 @@ abstract class ProjectMetadataTabBase extends ProjectModuleTabBase {
     }
 
     protected enabledEdit() {
+        $(".keywords-textarea").tokenfield("enable");
         var config = this.getConfiguration();
         var $inputs = $("input", config.$panel);
         var $selects = $("select", config.$panel);
@@ -572,6 +609,7 @@ abstract class ProjectMetadataTabBase extends ProjectModuleTabBase {
     }
 
     protected disableEdit() {
+        $(".keywords-textarea").tokenfield("disable");
         var config = this.getConfiguration();
         var $inputs = $("input", config.$panel);
         var $selects = $("select", config.$panel);
@@ -595,9 +633,11 @@ enum ProjectModuleTabType {
     WorkCooperation = 2,
     WorkMetadata = 3,
     WorkHistory = 4,
+    WorkNote = 5,
     ResourcePreview = 101,
     ResourceDiscussion = 102,
     ResourceMetadata = 103,
+    ResourceImages = 104
 }
 
 interface IProjectResource {
