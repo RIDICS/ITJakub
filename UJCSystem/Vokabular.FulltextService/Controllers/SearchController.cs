@@ -26,6 +26,11 @@ namespace Vokabular.FulltextService.Controllers
             m_textConverter = textConverter;
         }
 
+        /// <summary>
+        /// Search books, return count
+        /// </summary>
+        /// <param name="searchRequest"></param>
+        /// <returns></returns>
         [HttpPost("snapshot/count")]
         public FulltextSearchResultContract SearchByCriteriaCount([FromBody] SearchRequestContractBase searchRequest)
         {
@@ -36,6 +41,23 @@ namespace Vokabular.FulltextService.Controllers
             return m_searchManager.SearchByCriteriaCount(searchRequest);
         }
 
+        /// <summary>
+        /// Search books
+        /// </summary>
+        /// <remarks>
+        /// Search book. Supported search criteria (key property - data type):
+        /// - Fulltext - WordListCriteriaContract
+        /// - Heading - WordListCriteriaContract
+        /// - Sentence - WordListCriteriaContract
+        /// - Headword - WordListCriteriaContract
+        /// - HeadwordDescription - WordListCriteriaContract
+        /// - TokenDistance - TokenDistanceListCriteriaContract
+        /// - HeadwordDescriptionTokenDistance - TokenDistanceListCriteriaContract
+        /// </remarks>
+        /// <param name="searchRequest">
+        /// Request contains list of search criteria with different data types described in method description
+        /// </param>
+        /// <returns></returns>
         [HttpPost("snapshot")]
         public FulltextSearchResultContract SearchByCriteria([FromBody] SearchRequestContractBase searchRequest)
         {
@@ -46,6 +68,11 @@ namespace Vokabular.FulltextService.Controllers
             return m_searchManager.SearchByCriteria(searchRequest);
         }
 
+        /// <summary>
+        /// Search in corpus, return count
+        /// </summary>
+        /// <param name="searchRequest"></param>
+        /// <returns></returns>
         [HttpPost("snapshot/corpus/count")]
         public FulltextSearchCorpusResultContract SearchCorpusByCriteriaCount([FromBody] SearchRequestContractBase searchRequest)
         {
@@ -56,6 +83,23 @@ namespace Vokabular.FulltextService.Controllers
             return m_searchManager.SearchCorpusByCriteriaCount(searchRequest);
         }
 
+        /// <summary>
+        /// Search in corpus
+        /// </summary>
+        /// <remarks>
+        /// Search in corpus. Supported search criteria (key property - data type):
+        /// - Fulltext - WordListCriteriaContract
+        /// - Heading - WordListCriteriaContract
+        /// - Sentence - WordListCriteriaContract
+        /// - Headword - WordListCriteriaContract
+        /// - HeadwordDescription - WordListCriteriaContract
+        /// - TokenDistance - TokenDistanceListCriteriaContract
+        /// - HeadwordDescriptionTokenDistance - TokenDistanceListCriteriaContract
+        /// </remarks>
+        /// <param name="searchRequest">
+        /// Request contains list of search criteria with different data types described in method description
+        /// </param>
+        /// <returns></returns>
         [HttpPost("snapshot/corpus")]
         public CorpusSearchResultDataList SearchCorpusByCriteria([FromBody] CorpusSearchRequestContract searchRequest)
         {
