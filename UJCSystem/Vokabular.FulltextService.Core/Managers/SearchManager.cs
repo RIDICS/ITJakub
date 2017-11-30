@@ -20,12 +20,14 @@ namespace Vokabular.FulltextService.Core.Managers
 {
     public class SearchManager : ElasticsearchManagerBase
     {
-        private const int FragmentSize = 50;
+        private const int FragmentSize = 200;
         private const int FragmentNumber = 1000000;
         private const int DefaultStart = 0;
         private const int DefaultSize = 10;
         private const string HighlightTag = "$";
         private const string ReservedChars = ".?+*|{}[]()\"\\#@&<>~";
+        private const string RegexpQueryFlags = "ALL";
+        private const HighlighterType HighlighterType = Nest.HighlighterType.Fvh;
 
         private readonly SearchResultProcessor m_searchResultProcessor;
 
@@ -42,7 +44,7 @@ namespace Vokabular.FulltextService.Core.Managers
             var client = CommunicationProvider.GetElasticClient();
 
             var response = client.Count<SnapshotResourceContract>(s => s
-                .Index(Index)
+                .Index(SnapshotIndex)
                 .Type(SnapshotType)
                 .Query(q => q
                     .Bool(b => b
@@ -63,7 +65,7 @@ namespace Vokabular.FulltextService.Core.Managers
             var client = CommunicationProvider.GetElasticClient();
 
             var response = client.Search<SnapshotResourceContract>(s => s
-                .Index(Index)
+                .Index(SnapshotIndex)
                 .Type(SnapshotType)
                 .From(searchRequest.Start ?? DefaultStart)
                 .Size(searchRequest.Count ?? DefaultSize)
@@ -93,7 +95,7 @@ namespace Vokabular.FulltextService.Core.Managers
             var client = CommunicationProvider.GetElasticClient();
 
             var response = client.Search<SnapshotResourceContract>(s => s
-                .Index(Index)
+                .Index(SnapshotIndex)
                 .Type(SnapshotType)
                 .Source(sf => sf
                     .Includes(i => i
@@ -115,8 +117,9 @@ namespace Vokabular.FulltextService.Core.Managers
                         .Field(SnapshotTextField)
                         .NumberOfFragments(FragmentNumber)
                         .FragmentSize(FragmentSize)
-                        .Type(HighlighterType.Fvh)
+                        .Type(HighlighterType)
                     )
+                    .BoundaryCharacters(".,!? <")
                 )
             );
 
@@ -131,7 +134,7 @@ namespace Vokabular.FulltextService.Core.Managers
             var client = CommunicationProvider.GetElasticClient();
 
             var response = client.Search<SnapshotResourceContract>(s => s
-                .Index(Index)
+                .Index(SnapshotIndex)
                 .Type(SnapshotType)
                 .Source(sf => sf
                     .IncludeAll()
@@ -154,8 +157,9 @@ namespace Vokabular.FulltextService.Core.Managers
                         .Field(SnapshotTextField)
                         .NumberOfFragments(FragmentNumber)
                         .FragmentSize(FragmentSize)
-                        .Type(HighlighterType.Fvh)
+                        .Type(HighlighterType)
                     )
+                    .BoundaryCharacters(".,!? <")
                 )
             );
 

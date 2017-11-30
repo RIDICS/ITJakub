@@ -12,7 +12,7 @@ namespace Vokabular.FulltextService.Core.Managers
         public TextResourceContract GetTextResource(string textResourceId)
         {
             var client = CommunicationProvider.GetElasticClient();
-            var response = client.Get<TextResourceContract>(textResourceId, idx => idx.Index(Index).Type(PageType));
+            var response = client.Get<TextResourceContract>(textResourceId, idx => idx.Index(PageIndex).Type(PageType));
             if (!response.IsValid)
             {
                 throw new Exception(response.DebugInformation);
@@ -23,7 +23,7 @@ namespace Vokabular.FulltextService.Core.Managers
         public ResultContract CreateTextResource(TextResourceContract textResource)
         {
             var client = CommunicationProvider.GetElasticClient();
-            var response = client.Index(textResource, idx => idx.Index(Index).Type(PageType));
+            var response = client.Index(textResource, idx => idx.Index(PageIndex).Type(PageType));
 
             if (!response.IsValid)
             {

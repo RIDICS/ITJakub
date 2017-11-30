@@ -1,11 +1,13 @@
-﻿using Vokabular.FulltextService.Core.Communication;
+﻿using Nest;
+using Vokabular.FulltextService.Core.Communication;
 
 namespace Vokabular.FulltextService.Core.Managers
 {
     public abstract class ElasticsearchManagerBase
     {
         protected readonly CommunicationProvider CommunicationProvider;
-        protected const string Index = "module"; //TODO rename index and type
+        protected const string SnapshotIndex = "snapshotindex"; 
+        protected const string PageIndex = "pageindex"; 
         protected const string PageType = "page";
         protected const string SnapshotType = "snapshot";
         protected const string SnapshotIdField = "snapshotId";
@@ -13,8 +15,7 @@ namespace Vokabular.FulltextService.Core.Managers
         protected const string PageTextField = "pageText";
         protected const string SnapshotTextField = "snapshotText";
         protected const string IdField = "_id";
-        protected const string RegexpQueryFlags = "ALL";
-
+        
         protected ElasticsearchManagerBase(CommunicationProvider communicationProvider)
         {
             CommunicationProvider = communicationProvider;

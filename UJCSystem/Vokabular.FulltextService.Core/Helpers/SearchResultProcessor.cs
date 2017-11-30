@@ -124,7 +124,12 @@ namespace Vokabular.FulltextService.Core.Helpers
                 var pageId = GetPageIdFromIndex(Int32.Parse(snapshotIndex), sourcePages);
                 searchResultData.PageResultContext.TextExternalId = pageId;
                 searchResultData.PageResultContext.ContextStructure.After = Regex.Replace(searchResultData.PageResultContext.ContextStructure.After, @"<[^>]*>", "");
+                searchResultData.PageResultContext.ContextStructure.After = Regex.Replace(searchResultData.PageResultContext.ContextStructure.After, @"<[^>]*", "");
                 searchResultData.PageResultContext.ContextStructure.Before = Regex.Replace(searchResultData.PageResultContext.ContextStructure.Before, @"<[^>]*>", "");
+                searchResultData.PageResultContext.ContextStructure.Before = Regex.Replace(searchResultData.PageResultContext.ContextStructure.Before, @"[^>]*>", "");
+                searchResultData.PageResultContext.ContextStructure.Match = Regex.Replace(searchResultData.PageResultContext.ContextStructure.Match, @"[^>]*>", "");
+                searchResultData.PageResultContext.ContextStructure.Match = Regex.Replace(searchResultData.PageResultContext.ContextStructure.Match, @"<[^>]*>", "");
+                searchResultData.PageResultContext.ContextStructure.Match = Regex.Replace(searchResultData.PageResultContext.ContextStructure.Match, @"<[^>]*", "");
             }
         }
 

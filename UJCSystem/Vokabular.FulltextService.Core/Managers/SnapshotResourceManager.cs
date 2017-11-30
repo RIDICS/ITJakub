@@ -13,7 +13,7 @@ namespace Vokabular.FulltextService.Core.Managers
         {
             var client = CommunicationProvider.GetElasticClient();
             
-            var response = client.Index(snapshotResourceContract, idx => idx.Index(Index).Type(SnapshotType));
+            var response = client.Index(snapshotResourceContract, idx => idx.Index(SnapshotIndex).Type(SnapshotType));
 
             if (!response.IsValid)
             {
