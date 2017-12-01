@@ -43,6 +43,7 @@ namespace Vokabular.MainService.Core
             container.AddSingleton<Profile, BookProfile>();
             container.AddSingleton<Profile, CategoryProfile>();
             container.AddSingleton<Profile, ChapterProfile>();
+            container.AddSingleton<Profile, EditionNoteProfile>();
             container.AddSingleton<Profile, FavoriteLabelProfile>();
             container.AddSingleton<Profile, FavoriteProfile>();
             container.AddSingleton<Profile, FeedbackProfile>();

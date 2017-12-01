@@ -28,15 +28,18 @@ namespace Vokabular.MainService.Core.Managers
         private readonly CriteriaKey[] m_supportedSearchPageCriteria = {CriteriaKey.Fulltext, CriteriaKey.Heading, CriteriaKey.Sentence, CriteriaKey.Term, CriteriaKey.TokenDistance };
         private readonly MetadataRepository m_metadataRepository;
         private readonly BookRepository m_bookRepository;
+        private readonly ResourceRepository m_resourceRepository;
         private readonly FileSystemManager m_fileSystemManager;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
         private readonly CategoryRepository m_categoryRepository;
 
         public BookManager(MetadataRepository metadataRepository, CategoryRepository categoryRepository,
-            BookRepository bookRepository, FileSystemManager fileSystemManager, FulltextStorageProvider fulltextStorageProvider)
+            BookRepository bookRepository, ResourceRepository resourceRepository, FileSystemManager fileSystemManager,
+            FulltextStorageProvider fulltextStorageProvider)
         {
             m_metadataRepository = metadataRepository;
             m_bookRepository = bookRepository;
+            m_resourceRepository = resourceRepository;
             m_fileSystemManager = fileSystemManager;
             m_fulltextStorageProvider = fulltextStorageProvider;
             m_categoryRepository = categoryRepository;
@@ -313,12 +316,12 @@ namespace Vokabular.MainService.Core.Managers
 
         public string GetEditionNote(long projectId, TextFormatEnumContract format)
         {
-            var projectIdentification = m_bookRepository.InvokeUnitOfWork(x => x.GetProjectIdentification(projectId));
-            if (projectIdentification == null)
+            var editionNoteResource = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestEditionNote(projectId));
+            if (editionNoteResource == null)
                 return null;
 
             var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
-            var resultText = fulltextStorage.GetEditionNote(projectIdentification, format);
+            var resultText = fulltextStorage.GetEditionNote(editionNoteResource, format);
 
             return resultText;
         }

@@ -3,9 +3,11 @@ using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.ProjectItem;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -14,12 +16,14 @@ namespace Vokabular.MainService.Core.Managers
         private readonly UserManager m_userManager;
         private readonly ResourceRepository m_resourceRepository;
         private readonly BookRepository m_bookRepository;
+        private readonly FulltextStorageProvider m_fulltextStorageProvider;
 
-        public ProjectItemManager(UserManager userManager, ResourceRepository resourceRepository, BookRepository bookRepository)
+        public ProjectItemManager(UserManager userManager, ResourceRepository resourceRepository, BookRepository bookRepository, FulltextStorageProvider fulltextStorageProvider)
         {
             m_userManager = userManager;
             m_resourceRepository = resourceRepository;
             m_bookRepository = bookRepository;
+            m_fulltextStorageProvider = fulltextStorageProvider;
         }
 
         public List<PageContract> GetPageList(long projectId)
@@ -120,6 +124,26 @@ namespace Vokabular.MainService.Core.Managers
         {
             var userId = m_userManager.GetCurrentUserId();
             new CreateOrUpdateTrackWork(m_resourceRepository, trackData, null, trackId, userId).Execute();
+        }
+
+        public EditionNoteContract GetEditionNote(long projectId, TextFormatEnumContract format)
+        {
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestEditionNote(projectId));
+            var result = Mapper.Map<EditionNoteContract>(dbResult);
+
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            var editionNoteText = fulltextStorage.GetEditionNote(dbResult, format);
+
+            result.Text = editionNoteText;
+            return result;
+        }
+
+        public long CreateEditionNoteVersion(long projectId, CreateEditionNoteContract data)
+        {
+            var userId = m_userManager.GetCurrentUserId();
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            var resourceVersionId = new CreateEditionNoteVersionWork(m_resourceRepository, projectId, data, userId, fulltextStorage).Execute();
+            return resourceVersionId;
         }
     }
 }

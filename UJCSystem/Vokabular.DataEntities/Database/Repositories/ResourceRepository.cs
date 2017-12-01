@@ -247,5 +247,21 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             return query.List();
         }
+
+        public virtual EditionNoteResource GetLatestEditionNote(long projectId)
+        {
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+
+            var result = GetSession().QueryOver<EditionNoteResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && projectAlias.Id == projectId)
+                .OrderBy(x => x.CreateTime).Desc
+                .Fetch(x => x.BookVersion).Eager
+                .Take(1)
+                .SingleOrDefault();
+            return result;
+        }
     }
 }
