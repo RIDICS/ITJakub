@@ -45,6 +45,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
             m_importedResourceVersionIds = new List<long>();
 
             m_bookVersionId = new UpdateBookVersionSubtask(m_resourceRepository).UpdateBookVersion(m_projectId, m_userId, m_message, m_bookData);
+            new UpdateEditionNoteSubtask(m_resourceRepository).UpdateEditionNote(m_projectId, m_bookVersionId, m_userId, m_message, m_bookData);
             
             //TODO update: transformations
 

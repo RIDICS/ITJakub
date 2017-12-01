@@ -757,5 +757,34 @@ namespace ITJakub.FileProcessing.Service.Test
             Assert.AreEqual(1, bookVersion1?.VersionNumber);
             Assert.AreEqual(2, bookVersion2?.VersionNumber);
         }
+
+        [TestMethod]
+        public void TestUpdateEditionNote()
+        {
+            var unitOfWork = new MockUnitOfWork();
+            var resourceRepository = new MockResourceRepository(unitOfWork);
+            var bookData = new BookData
+            {
+                ContainsEditionNote = true
+            };
+
+            var subtask = new UpdateEditionNoteSubtask(resourceRepository);
+            subtask.UpdateEditionNote(0, 155, 1, "comment", bookData);
+            subtask.UpdateEditionNote(40, 155, 1, "comment", bookData);
+
+            var createdEditionNotes = resourceRepository.CreatedObjects.OfType<EditionNoteResource>().ToList();
+            var updatedEditionNotes = resourceRepository.UpdatedObjects.OfType<EditionNoteResource>().ToList();
+
+            Assert.AreEqual(0, updatedEditionNotes.Count);
+            Assert.AreEqual(2, createdEditionNotes.Count);
+
+            var editionNote1 = createdEditionNotes.First(x => x.Resource.Project.Id == 0);
+            var editionNote2 = createdEditionNotes.First(x => x.Resource.Project.Id == 40);
+
+            Assert.AreEqual(1, editionNote1?.VersionNumber);
+            Assert.AreEqual(2, editionNote2?.VersionNumber);
+
+            Assert.IsNotNull(editionNote1?.BookVersion);
+        }
     }
 }
