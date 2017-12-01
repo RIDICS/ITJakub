@@ -30,11 +30,12 @@ namespace Vokabular.MainService.Core.Managers
         private readonly CorpusSearchManager m_corpusSearchManager;
         private readonly HeadwordSearchManager m_headwordSearchManager;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
+        private readonly AuthorizationManager m_authorizationManager;
 
         public BookSearchManager(MetadataRepository metadataRepository,
             MetadataSearchCriteriaProcessor metadataSearchCriteriaProcessor, BookRepository bookRepository,
             CorpusSearchManager corpusSearchManager, HeadwordSearchManager headwordSearchManager,
-            FulltextStorageProvider fulltextStorageProvider)
+            FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager)
         {
             m_metadataRepository = metadataRepository;
             m_metadataSearchCriteriaProcessor = metadataSearchCriteriaProcessor;
@@ -42,6 +43,7 @@ namespace Vokabular.MainService.Core.Managers
             m_corpusSearchManager = corpusSearchManager;
             m_headwordSearchManager = headwordSearchManager;
             m_fulltextStorageProvider = fulltextStorageProvider;
+            m_authorizationManager = authorizationManager;
         }
 
         private List<SearchResultContract> MapToSearchResult(IList<MetadataResource> dbResult,
@@ -91,12 +93,10 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<SearchResultContract> SearchByCriteria(SearchRequestContract request)
         {
-            // TODO add authorization
-            //m_authorizationManager.AuthorizeCriteria(searchCriteriaContracts);
+            m_authorizationManager.AddAuthorizationCriteria(request.ConditionConjunction);
 
             var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
-            var resultCriteria = processedCriterias.ResultCriteria;
 
             var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters)
             {
@@ -141,8 +141,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<AudioBookSearchResultContract> SearchAudioByCriteria(SearchRequestContract request)
         {
-            // TODO add authorization
-            //m_authorizationManager.AuthorizeCriteria(searchCriteriaContracts);
+            m_authorizationManager.AddAuthorizationCriteria(request.ConditionConjunction);
 
             var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
 
@@ -181,8 +180,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public long SearchByCriteriaCount(SearchRequestContract request)
         {
-            // TODO add authorization
-            //m_authorizationManager.AuthorizeCriteria(searchCriteriaContracts);
+            m_authorizationManager.AddAuthorizationCriteria(request.ConditionConjunction);
 
             var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
 
@@ -217,8 +215,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<HeadwordContract> SearchHeadwordByCriteria(HeadwordSearchRequestContract request)
         {
-            // TODO add authorization
-            //m_authorizationManager.AuthorizeCriteria(searchCriteriaContracts);
+            m_authorizationManager.AddAuthorizationCriteria(request.ConditionConjunction);
 
             var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
@@ -265,8 +262,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public long SearchHeadwordByCriteriaCount(HeadwordSearchRequestContract request)
         {
-            // TODO add authorization
-            //m_authorizationManager.AuthorizeCriteria(searchCriteriaContracts);
+            m_authorizationManager.AddAuthorizationCriteria(request.ConditionConjunction);
 
             var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
 
@@ -299,8 +295,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<CorpusSearchResultContract> SearchCorpusByCriteria(CorpusSearchRequestContract request)
         {
-            // TODO add authorization
-            //m_authorizationManager.AuthorizeCriteria(searchCriteriaContracts);
+            m_authorizationManager.AddAuthorizationCriteria(request.ConditionConjunction);
 
             var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
@@ -334,8 +329,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public long SearchCorpusByCriteriaCount(CorpusSearchRequestContract request)
         {
-            // TODO add authorization
-            //m_authorizationManager.AuthorizeCriteria(searchCriteriaContracts);
+            m_authorizationManager.AddAuthorizationCriteria(request.ConditionConjunction);
 
             var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;

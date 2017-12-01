@@ -10,6 +10,5 @@ namespace Vokabular.Core.Data
         public List<SearchCriteriaContract> NonMetadataCriterias { get; set; }
         public List<SearchCriteriaContract> MetadataCriterias { get; set; }
         public Dictionary<string, object> MetadataParameters { get; set; }
-        public ResultCriteriaContract ResultCriteria { get; set; } // TODO probably remove this property
     }
 }

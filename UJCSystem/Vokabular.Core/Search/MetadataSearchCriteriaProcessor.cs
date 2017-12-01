@@ -21,7 +21,6 @@ namespace Vokabular.Core.Search
         {
             ValidateSearchCriterias(searchCriterias);
 
-            ResultCriteriaContract resultCriteria = null;
             var nonMetadataCriterias = new List<SearchCriteriaContract>();
             var metadataCriterias = new List<SearchCriteriaContract>();
             var conjunction = new List<SearchCriteriaQuery>();
@@ -39,15 +38,11 @@ namespace Vokabular.Core.Search
                 else
                 {
                     nonMetadataCriterias.Add(searchCriteriaContract);
-
-                    if (searchCriteriaContract.Key == CriteriaKey.Result)
-                        resultCriteria = (ResultCriteriaContract)searchCriteriaContract;
                 }
             }
 
             return new FilteredCriterias
             {
-                ResultCriteria = resultCriteria,
                 NonMetadataCriterias = nonMetadataCriterias,
                 MetadataCriterias = metadataCriterias,
                 MetadataParameters = metadataParameters,
@@ -69,11 +64,14 @@ namespace Vokabular.Core.Search
             if (countDictionary[CriteriaKey.Authorization] > 1)
                 throw new ArgumentException("Only one Authorization criteria is allowed.");
 
-            if (countDictionary[CriteriaKey.Result] > 1)
-                throw new ArgumentException("Only one Result criteria is allowed.");
+            if (countDictionary[CriteriaKey.Result] > 0)
+                throw new ArgumentException("Result criteria is not allowed.");
 
-            if (countDictionary[CriteriaKey.ResultRestriction] > 1)
-                throw new ArgumentException("Only one ResultRestriction criteria is allowed.");
+            if (countDictionary[CriteriaKey.ResultRestriction] > 0)
+                throw new ArgumentException("ResultRestriction criteria is not allowed.");
+
+            if (countDictionary[CriteriaKey.SnapshotResultRestriction] > 0)
+                throw new ArgumentException("SnapshotResultRestriction criteria is not allowed.");
 
             if (countDictionary[CriteriaKey.SelectedCategory] > 1)
                 throw new ArgumentException("Only one SelectedCategory criteria is allowed.");

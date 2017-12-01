@@ -12,6 +12,7 @@ namespace Vokabular.MainService.Core
     {
         public void Install(IIocContainer container)
         {
+            container.AddPerWebRequest<AuthorizationManager>();
             container.AddPerWebRequest<BookManager>();
             container.AddPerWebRequest<BookSearchManager>();
             container.AddPerWebRequest<CatalogValueManager>();

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
@@ -56,11 +57,19 @@ namespace Vokabular.MainService.Controllers
         /// </param>
         /// <returns></returns>
         [HttpPost("search")]
-        public List<SearchResultContract> SearchBook([FromBody] SearchRequestContract request)
+        [ProducesResponseType(typeof(List<SearchResultContract>), StatusCodes.Status200OK)]
+        public IActionResult SearchBook([FromBody] SearchRequestContract request)
             // TODO possible switch SearchResultContract to BookContract
         {
-            var result = m_bookSearchManager.SearchByCriteria(request);
-            return result;
+            try
+            {
+                var result = m_bookSearchManager.SearchByCriteria(request);
+                return Ok(result);
+            }
+            catch (ArgumentException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         /// <summary>
@@ -69,10 +78,18 @@ namespace Vokabular.MainService.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost("search-count")]
-        public long SearchBookResultCount([FromBody] SearchRequestContract request)
+        [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
+        public IActionResult SearchBookResultCount([FromBody] SearchRequestContract request)
         {
-            var result = m_bookSearchManager.SearchByCriteriaCount(request);
-            return result;
+            try
+            {
+                var result = m_bookSearchManager.SearchByCriteriaCount(request);
+                return Ok(result);
+            }
+            catch (ArgumentException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         /// <summary>
@@ -100,10 +117,18 @@ namespace Vokabular.MainService.Controllers
         /// </param>
         /// <returns></returns>
         [HttpPost("{projectId}/page/search")]
-        public List<PageContract> SearchPage(long projectId, [FromBody] SearchPageRequestContract request)
+        [ProducesResponseType(typeof(List<PageContract>), StatusCodes.Status200OK)]
+        public IActionResult SearchPage(long projectId, [FromBody] SearchPageRequestContract request)
         {
-            var result = m_bookManager.SearchPage(projectId, request);
-            return result;
+            try
+            {
+                var result = m_bookManager.SearchPage(projectId, request);
+                return Ok(result);
+            }
+            catch (ArgumentException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         [HttpGet("{projectId}")]
@@ -205,12 +230,19 @@ namespace Vokabular.MainService.Controllers
         [HttpPost("page/{pageId}/text/search")]
         public IActionResult GetPageTextFromSearch(long pageId, [FromQuery] TextFormatEnumContract? format, [FromBody] SearchPageRequestContract request)
         {
-            var formatValue = format ?? TextFormatEnumContract.Html;
-            var result = m_bookManager.GetPageText(pageId, formatValue, request);
-            if (result == null)
-                return NotFound();
+            try
+            {
+                var formatValue = format ?? TextFormatEnumContract.Html;
+                var result = m_bookManager.GetPageText(pageId, formatValue, request);
+                if (result == null)
+                    return NotFound();
 
-            return Ok(result);
+                return Ok(result);
+            }
+            catch (ArgumentException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         [HttpHead("page/{pageId}/image")]
@@ -285,12 +317,19 @@ namespace Vokabular.MainService.Controllers
         [HttpPost("headword/{headwordId}/text/search")]
         public IActionResult GetHeadwordTextFromSearch(long headwordId, [FromQuery] TextFormatEnumContract? format, [FromBody] SearchPageRequestContract request)
         {
-            var formatValue = format ?? TextFormatEnumContract.Html;
-            var result = m_bookManager.GetHeadwordText(headwordId, formatValue, request);
-            if (result == null)
-                return NotFound();
+            try
+            {
+                var formatValue = format ?? TextFormatEnumContract.Html;
+                var result = m_bookManager.GetHeadwordText(headwordId, formatValue, request);
+                if (result == null)
+                    return NotFound();
 
-            return Ok(result);
+                return Ok(result);
+            }
+            catch (ArgumentException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         [HttpGet("{projectId}/edition-note")]
