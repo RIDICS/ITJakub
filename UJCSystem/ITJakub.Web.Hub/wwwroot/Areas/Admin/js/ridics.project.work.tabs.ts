@@ -46,15 +46,6 @@
             submitCallback: this.addEditor.bind(this)
         });
 
-        const suggestEl = $(".typeahead-fill-suggestions");
-        this.authorTypeahead = new SingleSetTypeaheadSearchBox<IOriginalAuthor>("#add-author-search",
-            "Admin/Project",
-            x => `${x.lastName}, ${x.firstName}`,
-            (item) => {
-                return `<div class="row border-between"><div class="col-xs-6 existing-original-author-name">${item.firstName}</div><div class="col-xs-6 existing-original-author-surname">${item.lastName}</div></div>`;
-            }, suggestEl);
-        this.authorTypeahead.setDataSet("OriginalAuthor");
-
         this.editorTypeahead = new SingleSetTypeaheadSearchBox<IResponsiblePerson>("#add-editor-search",
             "Admin/Project",
             x => `${x.lastName} ${x.firstName}`,
@@ -130,6 +121,17 @@
         return array.filter(item => seen.hasOwnProperty(item) ? false : (seen[item] = true));
     }
 
+    private createListStructure(authorList: IOriginalAuthor[], jEl: JQuery):JQuery {
+        var elm = "";
+        jEl.children(".author-list-item").remove();
+        authorList.forEach((item:IOriginalAuthor) => {
+            elm += `<div class="row border-between author-list-item" data-author-id="${item.id}"><div class="col-xs-6 existing-original-author-name">${item.firstName
+                }</div><div class="col-xs-6 existing-original-author-surname">${item.lastName}</div></div>`;
+        });
+        jEl.append(elm);
+        return jEl;
+    }
+
     initTab(): void {
         super.initTab();
         this.initKeywords();
@@ -182,29 +184,52 @@
             newAuthorButtonEl.prop("disabled", false);
         });
 
-        this.authorTypeahead.create((selectedExists, selectConfirmed) => {
-            var $authorId = $("#add-author-id-preview");
-            const newAuthorNameEl = $(".add-author-first-name");
-            const newAuthorSurnameEl = $(".add-author-last-name");
-            const newAuthorButtonEl = $(".new-original-author-button");
-            if (selectedExists) {
-                newAuthorButtonEl.prop("disabled", true);
-                newAuthorNameEl.prop("disabled", true);
-                newAuthorSurnameEl.prop("disabled", true);
-                $(".name-input-row").hide();
-                $(".existing-original-author-selected").removeClass("existing-original-author-selected");
-                var author = this.authorTypeahead.getValue();
-                const selectedEl = $(".typeahead-fill-suggestions").children(".tt-dataset").children(`:contains(${author.lastName}):contains(${author.firstName})`);
-                selectedEl.addClass("existing-original-author-selected");
-                $authorId.val(author.id);
-                this.selectedAuthorId = author.id;
-            } else {
-                newAuthorButtonEl.prop("disabled", false);
-                newAuthorNameEl.prop("disabled", false);
-                newAuthorSurnameEl.prop("disabled", false);
-                $authorId.val("");
-                this.selectedAuthorId = null;
+        //this.authorTypeahead.create((selectedExists, selectConfirmed) => { TODO remove when simplified search is finished
+        //    var $authorId = $("#add-author-id-preview");
+        //    const newAuthorNameEl = $(".add-author-first-name");
+        //    const newAuthorSurnameEl = $(".add-author-last-name");
+        //    const newAuthorButtonEl = $(".new-original-author-button");
+        //    if (selectedExists) {
+        //        newAuthorButtonEl.prop("disabled", true);
+        //        newAuthorNameEl.prop("disabled", true);
+        //        newAuthorSurnameEl.prop("disabled", true);
+        //        $(".name-input-row").hide();
+        //        $(".existing-original-author-selected").removeClass("existing-original-author-selected");
+        //        var author = this.authorTypeahead.getValue();
+        //        const selectedEl = $(".typeahead-fill-suggestions").children(".tt-dataset").children(`:contains(${author.lastName}):contains(${author.firstName})`);
+        //        selectedEl.addClass("existing-original-author-selected");
+        //        $authorId.val(author.id);
+        //        this.selectedAuthorId = author.id;
+        //    } else {
+        //        newAuthorButtonEl.prop("disabled", false);
+        //        newAuthorNameEl.prop("disabled", false);
+        //        newAuthorSurnameEl.prop("disabled", false);
+        //        $authorId.val("");
+        //        this.selectedAuthorId = null;
+        //    }
+        //});
+
+        $(".author-table-content").on("click", ".author-list-item", (event: Event) => {
+            var targetEl = $(event.target);
+            if (!targetEl.hasClass("author-list-item")) {
+                targetEl = targetEl.parents(".author-list-item");
             }
+            $(".existing-original-author-selected").removeClass("existing-original-author-selected");
+            targetEl.addClass("existing-original-author-selected");
+        });
+
+        $("#add-author-search").on("input", (event: Event) => {
+            const textAreaEl = $(event.target);
+            const enteredText = textAreaEl.val();
+            if (enteredText === "") {
+                $(".author-list-item").remove();
+                return;
+            }
+            $.get(`${getBaseUrl()}Admin/Project/GetTypeaheadOriginalAuthor?query=${enteredText}`).done(
+                (data: IOriginalAuthor[]) => {
+                    console.log(data);
+                    this.createListStructure(data, $(".author-table-content"));
+                });
         });
 
         this.editorTypeahead.create((selectedExists, selectConfirmed) => {

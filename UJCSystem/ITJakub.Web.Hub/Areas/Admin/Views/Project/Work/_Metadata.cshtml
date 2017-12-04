@@ -159,7 +159,7 @@
                 <label class="col-md-4 control-label">Authors (from book)</label>
                 <div class="col-md-7">
                     <div id="work-metadata-authors">
-                        <input type="hidden" id="add-author-id-preview" />
+                        <input type="hidden" id="add-author-id-preview"/>
                         @foreach (var author in Model.Authors)
                         {
                             <div class="author-item" data-id="@author.Id">
@@ -392,36 +392,39 @@
                         <div class="col-xs-5">
                         </div>
                     </div>
-                        <div class="row table-row">
-                            <div class="col-xs-7 name-surname-typeahead">
-                                <div class="typeahead-fill-suggestions">
-                                    <div class="row table-header border-between">
-                                        <div class="col-xs-6">Name</div>
-                                        <div class="col-xs-6">Surname</div>
-                                    </div>
+                    <div class="row table-row">
+                        <div class="col-xs-7 name-surname-typeahead">
+                            <div class="typeahead-fill-suggestions">
+                                <div class="row table-header border-between">
+                                    <div class="col-xs-6">Name</div>
+                                    <div class="col-xs-6">Surname</div>
                                 </div>
-                                    <div class="row">
-                                        <div class="col-xs-12 new-original-author">
-                                                <div class="row name-input-row border-between">
-                                                    <div class="col-xs-6">
-                                                        <input class="form-control" id="add-author-first-name" type="text" placeholder="Name">
-                                                    </div>
-                                                    <div class="col-xs-6">
-                                                        <input class="form-control" id="add-author-last-name" type="text" placeholder="Surname">
-                                                    </div>
-                                                </div>
-                                                <div class="row new-author-button-row">
-                                                    <div class="col-xs-12 col-no-padding">
-                                                        <button class="new-original-author-button btn btn-default">Add new author</button>
-                                                    </div>
-                                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 author-table-content"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 new-original-author">
+                                    <div class="row name-input-row border-between">
+                                        <div class="col-xs-6">
+                                            <input class="form-control" id="add-author-first-name" type="text" placeholder="Name">
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <input class="form-control" id="add-author-last-name" type="text" placeholder="Surname">
                                         </div>
                                     </div>
-                            </div>
-                            <div class="col-xs-offset-1 col-xs-4 works-produced table-header">
-                                Works
+                                    <div class="row new-author-button-row">
+                                        <div class="col-xs-12 col-no-padding">
+                                            <button class="new-original-author-button btn btn-default">Add new author</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        <div class="col-xs-offset-1 col-xs-4 works-produced table-header">
+                            Works
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
