@@ -49,7 +49,7 @@
         const suggestEl = $(".typeahead-fill-suggestions");
         this.authorTypeahead = new SingleSetTypeaheadSearchBox<IOriginalAuthor>("#add-author-search",
             "Admin/Project",
-            x => `${x.lastName} ${x.firstName}`,
+            x => `${x.lastName}, ${x.firstName}`,
             (item) => {
                 return `<div class="row border-between"><div class="col-xs-6 existing-original-author-name">${item.firstName}</div><div class="col-xs-6 existing-original-author-surname">${item.lastName}</div></div>`;
             }, suggestEl);
@@ -312,7 +312,10 @@
             var element = MetadataUiHelper.addPerson($("#work-metadata-authors"), firstName + " " + lastName, id);
             $(element).addClass("author-item");
             this.addRemovePersonEvent($(".remove-button", element));
-
+            this.authorTypeahead.setValue("");
+            const newAuthorButtonEl = $(".new-original-author-button");
+            newAuthorButtonEl.prop("disabled", false);
+            $(".name-input-row").hide();
             this.addAuthorDialog.hide();
         };
 
@@ -327,17 +330,15 @@
             firstName = $("#add-author-first-name").val();
             lastName = $("#add-author-last-name").val();
 
-            this.projectClient.createAuthor(firstName,
-                lastName,
-                (newAuthorId, errorCode) => {
-                    if (errorCode != null) {
-                        this.addAuthorDialog.showError();
-                        return;
-                    }
+            const createAuthorAjax = this.projectClient.createAuthor(firstName,
+                lastName);
+            createAuthorAjax.done((data: number) => {
+                id = data;
+                finishAddingAuthor();
+            }).fail(() => {
+                this.addAuthorDialog.showError();
+            });
 
-                    id = newAuthorId;
-                    finishAddingAuthor();
-                });
         }
     }
 
@@ -420,6 +421,7 @@
         var selectedResponsibleIds = new Array<ISaveProjectResponsiblePerson>();
         var selectedKindIds = new Array<number>();
         var selectedGenreIds = new Array<number>();
+        var keywordIdList = new Array<number>();
 
         $("#work-metadata-authors .author-item").each((index, elem) => {
             selectedAuthorIds.push($(elem).data("id"));
@@ -441,7 +443,6 @@
         const keywordsInputEl = $(".keywords-container").children(".tokenfield").children(".keywords-textarea");
         const keywordsArray = $.map(keywordsInputEl.val().split(","), $.trim);
         const uniqueKeywordArray = this.returnUniqueElsArray(keywordsArray);
-        var keywordIdList: number[] = [];
         var keywordNonIdList: string[] = [];
         const onlyNumbersRegex = new RegExp(/^[0-9]*$/);
         for (let i = 0; i < uniqueKeywordArray.length; i++) {
@@ -487,23 +488,18 @@
             $successAlert.finish().hide();
             $errorAlert.hide();
 
-            this.projectClient.saveMetadata(this.projectId,
-                data,
-                (resultData, errorCode) => {
-                    $loadingGlyph.hide();
-                    $buttons.prop("disabled", false);
-
-                    if (errorCode != null) {
-                        $errorAlert.show();
-                        return;
-                    }
-
-                    $successAlert.show().delay(3000).fadeOut(2000);
-                    $("#work-metadata-last-modification").text(resultData.lastModificationText);
-                    $("#work-metadata-literary-original").text(resultData.literaryOriginalText);
-                });
+            this.projectClient.saveMetadata(this.projectId,data).done((data) => {
+                $successAlert.show().delay(3000).fadeOut(2000);
+                $("#work-metadata-last-modification").text(data.lastModificationText);
+                $("#work-metadata-literary-original").text(data.literaryOriginalText);
+            }).fail(() => {
+                $errorAlert.show();
+            }).always(() => {
+                $loadingGlyph.hide();
+                $buttons.prop("disabled", false);
+            });
         }).fail(() => {
-            //TODO show that some keyword failed to save, posiible duplicates
+            //TODO show that some keyword failed to save, possible duplicates
         });
     }
 }

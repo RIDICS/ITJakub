@@ -96,12 +96,13 @@
         this.postAjax("Admin/Project/CreateLiteraryGenre", data, callback);
     }
 
-    public createAuthor(firstName: string, lastName: string, callback: (newAuthorId: number, errorCode: HttpStatusCode) => void) {
-        var data = {
+    createAuthor(firstName: string, lastName: string):JQueryXHR {
+        const data: IOriginalAuthor = {
+            id:0,
             firstName: firstName,
             lastName: lastName
         };
-        this.postAjax("Admin/Project/CreateAuthor", data, callback);
+        return $.post(`${getBaseUrl()}Admin/KeyTable/CreateAuthor`, { request:data });
     }
 
     public createResponsiblePerson(firstName: string, lastName: string, responsibleTypeId: number, callback: (newResponsibleId: number, errorCode: HttpStatusCode) => void) {
@@ -122,7 +123,13 @@
         this.postAjax("Admin/Project/CreateResponsibleType", data, callback);
     }
 
-    public saveMetadata(projectId: number, data: ISaveMetadataResource, callback: (resultData: IMetadataSaveResult, errorCode: HttpStatusCode) => void) {
-        this.postAjax(`Admin/Project/SaveMetadata?projectId=${projectId}`, data, callback);
+    saveMetadata(projectId: number, data: ISaveMetadataResource):JQueryXHR {
+        return $.ajax({
+            url: `${getBaseUrl()}Admin/Project/SaveMetadata?projectId=${projectId}`,
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json"
+        });
     }
 }
