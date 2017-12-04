@@ -440,7 +440,6 @@
 
         const keywordsInputEl = $(".keywords-container").children(".tokenfield").children(".keywords-textarea");
         const keywordsArray = $.map(keywordsInputEl.val().split(","), $.trim);
-        console.log(keywordsArray);
         const uniqueKeywordArray = this.returnUniqueElsArray(keywordsArray);
         var keywordIdList: number[] = [];
         var keywordNonIdList: string[] = [];
