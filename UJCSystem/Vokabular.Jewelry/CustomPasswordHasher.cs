@@ -1,7 +1,7 @@
 using System;
 using System.Security.Cryptography;
 
-namespace Jewelery
+namespace Vokabular.Jewelry
 {
     /* 
  * Password Hashing With PBKDF2 (http://crackstation.net/hashing-security.htm).

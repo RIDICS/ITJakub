@@ -1,9 +1,9 @@
 ﻿using System.Runtime.Serialization;
 
-namespace ITJakub.ITJakubService.DataContracts.Contracts
+namespace Vokabular.MainService.DataContracts.Contracts.CardFile
 {
     [DataContract]
-    public class ImageContract
+    public class CardImageContract
     {
         [DataMember]
         public string Id { get; set; }

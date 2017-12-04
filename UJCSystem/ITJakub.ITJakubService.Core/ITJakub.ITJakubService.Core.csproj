@@ -149,13 +149,17 @@
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
       <Name>ITJakub.Shared.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Jewelery\Jewelery.csproj">
-      <Project>{246eadf4-905a-4fbd-b939-c88bdefdc4a7}</Project>
-      <Name>Jewelery</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Vokabular.Core\Vokabular.Core.csproj">
       <Project>{88ef00d2-ce46-4054-a764-9093ba9dde4e}</Project>
       <Name>Vokabular.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vokabular.Jewelry\Vokabular.Jewelry.csproj">
+      <Project>{de548409-d147-4a8c-904f-cf21c1e7456a}</Project>
+      <Name>Vokabular.Jewelry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vokabular.MainService.DataContracts\Vokabular.MainService.DataContracts.csproj">
+      <Project>{5527ba9b-aa14-4872-bacf-40adebfd966d}</Project>
+      <Name>Vokabular.MainService.DataContracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj">
       <Project>{d172f949-ae59-4029-bf5c-40b633362034}</Project>

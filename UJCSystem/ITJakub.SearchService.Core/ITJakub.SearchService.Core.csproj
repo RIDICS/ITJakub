@@ -98,10 +98,6 @@
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
       <Name>ITJakub.Shared.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Jewelery\Jewelery.csproj">
-      <Project>{246EADF4-905A-4FBD-B939-C88BDEFDC4A7}</Project>
-      <Name>Jewelery</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj">
       <Project>{130f3c52-e563-4b9b-a70f-e7e5bbab4296}</Project>
       <Name>Vokabular.Shared</Name>

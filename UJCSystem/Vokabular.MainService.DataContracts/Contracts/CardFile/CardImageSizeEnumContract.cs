@@ -1,10 +1,10 @@
 ﻿using System.Runtime.Serialization;
-using Jewelery;
+using Vokabular.Shared.DataContracts.Attribute;
 
-namespace ITJakub.ITJakubService.DataContracts.Contracts
+namespace Vokabular.MainService.DataContracts.Contracts.CardFile
 {
     [DataContract]
-    public enum ImageSizeEnum
+    public enum CardImageSizeEnumContract
     {
         [EnumMember] [StringValue("full")] Full,
 

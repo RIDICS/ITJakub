@@ -10,6 +10,7 @@ using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.DataContracts.Contracts.CardFile;
 using Vokabular.Shared.DataContracts.Search.Old;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -155,7 +156,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 
         public ActionResult Image(string cardFileId, string bucketId, string cardId, string imageId, string imageSize)
         {
-            ImageSizeEnum imageSizeEnum;
+            CardImageSizeEnumContract imageSizeEnum;
             var parsingSucceeded = Enum.TryParse(imageSize, true, out imageSizeEnum);
 
             if (!parsingSucceeded)

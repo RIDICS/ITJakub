@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using ITJakub.SearchService.Core.Exist.Attributes;
-using Jewelery;
+using Vokabular.Shared.DataContracts.Attribute;
 
 namespace ITJakub.SearchService.Core.Exist
 {

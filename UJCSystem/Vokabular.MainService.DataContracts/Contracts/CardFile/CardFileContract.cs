@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace ITJakub.ITJakubService.DataContracts.Contracts
+namespace Vokabular.MainService.DataContracts.Contracts.CardFile
 {
     [DataContract]
     public class CardFileContract

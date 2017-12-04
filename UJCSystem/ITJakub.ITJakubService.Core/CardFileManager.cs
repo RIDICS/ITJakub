@@ -4,8 +4,8 @@ using System.Linq;
 using AutoMapper;
 using ITJakub.CardFile.Core;
 using ITJakub.CardFile.Core.DataContractEntities;
-using ITJakub.ITJakubService.DataContracts.Contracts;
-using Jewelery;
+using Vokabular.MainService.DataContracts.Contracts.CardFile;
+using Vokabular.Shared.DataContracts.Attribute;
 
 namespace ITJakub.ITJakubService.Core
 {
@@ -66,7 +66,7 @@ namespace ITJakub.ITJakubService.Core
             return Mapper.Map<card, CardContract>(card); ;
         }
 
-        public Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId, ImageSizeEnum imageSize)
+        public Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId, CardImageSizeEnumContract imageSize)
         {
             m_authorizationManager.CheckUserCanViewCardFile(cardFileId);
             return m_cardFileClient.GetImageForCard(cardFileId, bucketId, cardId, imageId, imageSize.GetStringValue());

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace ITJakub.ITJakubService.DataContracts.Contracts
+namespace Vokabular.MainService.DataContracts.Contracts.CardFile
 {
     [DataContract]
-    public class BucketShortContract
+    public class BucketContract
     {
         [DataMember]
         public string Id { get; set; }
@@ -16,6 +16,6 @@ namespace ITJakub.ITJakubService.DataContracts.Contracts
         public int CardsCount { get; set; }
 
         [DataMember]
-        public IList<CardShortContract> Cards { get; set; }
+        public IList<CardContract> Cards { get; set; }
     }
 }

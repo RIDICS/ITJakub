@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace ITJakub.ITJakubService.DataContracts.Contracts
+namespace Vokabular.MainService.DataContracts.Contracts.CardFile
 {
     [DataContract]
     public class CardContract
@@ -16,7 +16,7 @@ namespace ITJakub.ITJakubService.DataContracts.Contracts
         public IEnumerable<string> Headwords { get; set; }
 
         [DataMember]
-        public IEnumerable<ImageContract> Images { get; set; }
+        public IEnumerable<CardImageContract> Images { get; set; }
 
         [DataMember]
         public IEnumerable<string> Warnings { get; set; }

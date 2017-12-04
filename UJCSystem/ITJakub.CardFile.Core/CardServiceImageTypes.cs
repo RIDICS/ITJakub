@@ -1,4 +1,4 @@
-﻿using Jewelery;
+﻿using Vokabular.Shared.DataContracts.Attribute;
 
 namespace ITJakub.CardFile.Core
 {
