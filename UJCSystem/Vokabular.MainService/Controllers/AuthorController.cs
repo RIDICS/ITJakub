@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
@@ -79,6 +80,12 @@ namespace Vokabular.MainService.Controllers
 
             SetTotalCountHeader(result.TotalCount);
             return result.List;
+        }
+
+        [HttpGet("{authorId}/project")]
+        public ProjectDetailContract GetProjectByAuthor(int authorId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

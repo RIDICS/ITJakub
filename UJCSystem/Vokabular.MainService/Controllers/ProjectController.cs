@@ -26,9 +26,12 @@ namespace Vokabular.MainService.Controllers
         
         [HttpGet]
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total records count")]
-        public List<ProjectDetailContract> GetProjectList([FromQuery] int? start, [FromQuery] int? count, [FromQuery] bool? fetchPageCount)
+        public List<ProjectDetailContract> GetProjectList([FromQuery] int? start, [FromQuery] int? count, [FromQuery] bool? fetchPageCount, [FromQuery] bool? fetchAuthors, [FromQuery] bool? fetchResponsiblePersons)
         {
-            var result = m_projectManager.GetProjectList(start, count, fetchPageCount ?? false);
+            var isFetchPageCount = fetchPageCount ?? false;
+            var isFetchAuthors = fetchAuthors ?? false;
+            var isFetchResponsiblePersons = fetchResponsiblePersons ?? false;
+            var result = m_projectManager.GetProjectList(start, count, isFetchPageCount, isFetchAuthors, isFetchResponsiblePersons);
 
             SetTotalCountHeader(result.TotalCount);
 
@@ -37,9 +40,13 @@ namespace Vokabular.MainService.Controllers
 
         [HttpGet("{projectId}")]
         [ProducesResponseType(typeof(ProjectDetailContract), StatusCodes.Status200OK)]
-        public IActionResult GetProject(long projectId, [FromQuery] bool? fetchPageCount)
+        public IActionResult GetProject(long projectId, [FromQuery] bool? fetchPageCount, [FromQuery] bool? fetchAuthors, [FromQuery] bool? fetchResponsiblePersons)
         {
-            var projectData = m_projectManager.GetProject(projectId, fetchPageCount ?? false);
+            var isFetchPageCount = fetchPageCount ?? false;
+            var isFetchAuthors = fetchAuthors ?? false;
+            var isFetchResponsiblePersons = fetchResponsiblePersons ?? false;
+
+            var projectData = m_projectManager.GetProject(projectId, isFetchPageCount, isFetchAuthors, isFetchResponsiblePersons);
             if (projectData == null)
                 return NotFound();
 

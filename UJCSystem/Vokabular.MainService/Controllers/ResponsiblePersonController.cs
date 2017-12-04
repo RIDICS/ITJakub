@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
@@ -131,6 +132,12 @@ namespace Vokabular.MainService.Controllers
         public List<ResponsibleTypeContract> GetResponsibleTypeList()
         {
             return m_catalogValueManager.GetResponsibleTypeList();
+        }
+
+        [HttpGet("{responsiblePersonId}/project")]
+        public ProjectDetailContract GetProjectByResponsiblePerson(int responsiblePersonId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

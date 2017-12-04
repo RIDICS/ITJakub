@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
@@ -366,17 +367,43 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List<string>();
         }
 
-        public virtual IList<MetadataResource> GetMetadataByProjectIds(IEnumerable<long> projectIds)
+        public virtual IList<MetadataResource> GetMetadataByProjectIds(IList<long> projectIds, bool fetchAuthors, bool fetchResponsiblePersons)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;
+            ProjectOriginalAuthor projectOriginalAuthorAlias = null;
 
-            return GetSession().QueryOver<MetadataResource>()
+            var metadataListFuture = GetSession().QueryOver<MetadataResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .WhereRestrictionOn(() => projectAlias.Id).IsInG(projectIds)
+                .Fetch(x => x.Resource).Eager
+                .Fetch(x => x.Resource.Project).Eager
                 .And(x => x.Id == resourceAlias.LatestVersion.Id)
-                .List();
+                .Future();
+
+            if (fetchAuthors)
+            {
+                GetSession().QueryOver<Project>()
+                    .WhereRestrictionOn(x => x.Id).IsInG(projectIds)
+                    .JoinAlias(x => x.Authors, () => projectOriginalAuthorAlias, JoinType.LeftOuterJoin)
+                    .Fetch(x => x.Authors).Eager
+                    .Fetch(x => x.Authors[0].OriginalAuthor).Eager
+                    .OrderBy(() => projectOriginalAuthorAlias.Sequence).Asc
+                    .Future();
+            }
+
+            if (fetchResponsiblePersons)
+            {
+                GetSession().QueryOver<Project>()
+                    .WhereRestrictionOn(x => x.Id).IsInG(projectIds)
+                    .Fetch(x => x.ResponsiblePersons).Eager
+                    .Fetch(x => x.ResponsiblePersons[0].ResponsiblePerson).Eager
+                    .Fetch(x => x.ResponsiblePersons[0].ResponsibleType).Eager
+                    .Future();
+            }
+
+            return metadataListFuture.ToList();
         }
 
         public virtual IList<MetadataResource> GetMetadataByProjectExternalIds(IEnumerable<string> projectExternalIds)
