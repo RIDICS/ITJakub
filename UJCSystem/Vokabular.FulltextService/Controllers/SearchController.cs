@@ -46,6 +46,7 @@ namespace Vokabular.FulltextService.Controllers
         /// </summary>
         /// <remarks>
         /// Search book. Supported search criteria (key property - data type):
+        /// - SnapshotResultRestriction - SnapshotResultRestrictionCriteriaContract
         /// - Fulltext - WordListCriteriaContract
         /// - Heading - WordListCriteriaContract
         /// - Sentence - WordListCriteriaContract
@@ -88,6 +89,7 @@ namespace Vokabular.FulltextService.Controllers
         /// </summary>
         /// <remarks>
         /// Search in corpus. Supported search criteria (key property - data type):
+        /// - SnapshotResultRestriction - SnapshotResultRestrictionCriteriaContract
         /// - Fulltext - WordListCriteriaContract
         /// - Heading - WordListCriteriaContract
         /// - Sentence - WordListCriteriaContract
