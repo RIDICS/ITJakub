@@ -53,20 +53,25 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
                 };
             }
 
-            //TODO save text to external database
-
             var newEditionNote = new EditionNoteResource
             {
                 Resource = latestEditionNote.Resource,
                 CreateTime = now,
                 CreatedByUser = user,
                 Comment = m_data.Comment,
-                ExternalId = "TODO", //todo,
+                ExternalId = null, // Temporary value
                 VersionNumber = latestEditionNote.VersionNumber + 1,
             };
             newEditionNote.Resource.LatestVersion = newEditionNote;
 
             var resourceVersionId = (long) m_resourceRepository.Create(newEditionNote);
+
+            // Save text to external database
+            var newExternalId = m_fulltextStorage.CreateNewEditionNoteVersion(newEditionNote);
+
+            newEditionNote.ExternalId = newExternalId;
+            m_resourceRepository.Update(newEditionNote);
+
             return resourceVersionId;
         }
     }

@@ -23,5 +23,8 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         long SearchHeadwordByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects);
         HeadwordSearchResultDataList SearchHeadwordByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects);
         string GetEditionNote(EditionNoteResource editionNoteResource, TextFormatEnumContract format);
+        string CreateNewTextVersion(TextResource textResource);
+        string CreateNewHeadwordVersion(HeadwordResource headwordResource);
+        string CreateNewEditionNoteVersion(EditionNoteResource editionNoteResource);
     }
 }

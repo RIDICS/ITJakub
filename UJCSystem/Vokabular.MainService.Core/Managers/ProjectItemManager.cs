@@ -131,6 +131,11 @@ namespace Vokabular.MainService.Core.Managers
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestEditionNote(projectId));
             var result = Mapper.Map<EditionNoteContract>(dbResult);
 
+            if (result == null)
+            {
+                return null;
+            }
+
             var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
             var editionNoteText = fulltextStorage.GetEditionNote(dbResult, format);
 

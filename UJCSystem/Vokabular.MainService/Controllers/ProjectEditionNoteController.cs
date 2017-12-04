@@ -18,11 +18,15 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("{projectId}")]
-        public EditionNoteContract GetEditionNote(long projectId, TextFormatEnumContract? format)
+        [ProducesResponseType(typeof(EditionNoteContract), StatusCodes.Status200OK)]
+        public IActionResult GetEditionNote(long projectId, TextFormatEnumContract? format)
         {
             var formatValue = format ?? TextFormatEnumContract.Html;
             var result = m_projectItemManager.GetEditionNote(projectId, formatValue);
-            return result;
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
         }
 
         [HttpPost("{projectId}")]

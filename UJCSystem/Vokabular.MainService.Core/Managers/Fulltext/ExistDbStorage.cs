@@ -292,5 +292,20 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
                 return result;
             }
         }
+
+        public string CreateNewTextVersion(TextResource textResource)
+        {
+            throw new NotSupportedException("Saving resources to eXist-db isn't supported. eXist-db storage supports only full book import.");
+        }
+
+        public string CreateNewHeadwordVersion(HeadwordResource headwordResource)
+        {
+            throw new NotSupportedException("Saving resources to eXist-db isn't supported. eXist-db storage supports only full book import.");
+        }
+
+        public string CreateNewEditionNoteVersion(EditionNoteResource editionNoteResource)
+        {
+            throw new NotSupportedException("Saving resources to eXist-db isn't supported. eXist-db storage supports only full book import.");
+        }
     }
 }
