@@ -223,7 +223,7 @@ namespace Vokabular.MainService.Core.Managers
                 var allCategoryIds = selectedCategoryIds.Count > 0
                     ? m_categoryRepository.GetAllSubcategoryIds(selectedCategoryIds)
                     : selectedCategoryIds;
-                return x.GetHeadwordAutocomplete(query, bookTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteMaxCount);
+                return x.GetHeadwordAutocomplete(query, bookTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteCount);
             });
             return result.ToList();
         }

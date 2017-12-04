@@ -77,9 +77,9 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("autocomplete")]
-        public List<ResponsiblePersonContract> GetAutocomplete([FromQuery] string query)
+        public List<ResponsiblePersonContract> GetAutocomplete([FromQuery] string query, [FromQuery] int? count)
         {
-            return m_personManager.GetResponsiblePersonAutocomplete(query);
+            return m_personManager.GetResponsiblePersonAutocomplete(query, count);
         }
 
         [HttpPost("type")]

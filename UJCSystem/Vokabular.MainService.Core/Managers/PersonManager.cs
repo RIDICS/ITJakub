@@ -77,22 +77,26 @@ namespace Vokabular.MainService.Core.Managers
         #endregion
 
 
-        public List<OriginalAuthorContract> GetAuthorAutocomplete(string query, BookTypeEnumContract? bookType)
+        public List<OriginalAuthorContract> GetAuthorAutocomplete(string query, BookTypeEnumContract? bookType, int? count)
         {
             if (query == null)
                 query = string.Empty;
 
+            var countValue = PagingHelper.GetAutocompleteCount(count);
             var bookTypeEnum = Mapper.Map<BookTypeEnum?>(bookType);
-            var result = m_personRepository.InvokeUnitOfWork(x => x.GetAuthorAutocomplete(query, bookTypeEnum, DefaultValues.AutocompleteMaxCount));
+
+            var result = m_personRepository.InvokeUnitOfWork(x => x.GetAuthorAutocomplete(query, bookTypeEnum, countValue));
             return Mapper.Map<List<OriginalAuthorContract>>(result);
         }
 
-        public List<ResponsiblePersonContract> GetResponsiblePersonAutocomplete(string query)
+        public List<ResponsiblePersonContract> GetResponsiblePersonAutocomplete(string query, int? count)
         {
             if (query == null)
                 query = string.Empty;
 
-            var result = m_personRepository.InvokeUnitOfWork(x => x.GetResponsiblePersonAutocomplete(query, DefaultValues.AutocompleteMaxCount));
+            var countValue = PagingHelper.GetAutocompleteCount(count);
+
+            var result = m_personRepository.InvokeUnitOfWork(x => x.GetResponsiblePersonAutocomplete(query, countValue));
             return Mapper.Map<List<ResponsiblePersonContract>>(result);
         }
 

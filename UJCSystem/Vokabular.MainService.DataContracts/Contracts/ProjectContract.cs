@@ -20,10 +20,4 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public ProjectMetadataContract LatestMetadata { get; set; }
         public int? PageCount { get; set; }
     }
-
-    public class EditionNote//TODO find correct place
-    {
-        public long ProjectId { get; set; }
-        public string Content { get; set; }
-    }
 }

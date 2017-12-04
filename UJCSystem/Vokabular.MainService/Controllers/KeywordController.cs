@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
@@ -74,6 +75,12 @@ namespace Vokabular.MainService.Controllers
             SetTotalCountHeader(result.TotalCount);
 
             return result.List;
+        }
+
+        [HttpGet("autocomplete")]
+        public List<KeywordContract> GetKeywordAutocomplete([FromQuery] string query, [FromQuery] int? count)
+        {
+            throw new NotImplementedException();
         }
     }
 }

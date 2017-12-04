@@ -27,9 +27,9 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("autocomplete")]
-        public List<OriginalAuthorContract> GetAutocomplete([FromQuery] string query, [FromQuery] BookTypeEnumContract? bookType)
+        public List<OriginalAuthorContract> GetAutocomplete([FromQuery] string query, [FromQuery] BookTypeEnumContract? bookType, [FromQuery] int? count)
         {
-            return m_personManager.GetAuthorAutocomplete(query, bookType);
+            return m_personManager.GetAuthorAutocomplete(query, bookType, count);
         }
 
         [HttpGet("{authorId}")]
