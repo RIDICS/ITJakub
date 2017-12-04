@@ -305,10 +305,6 @@ class ProjectResourceModule extends ProjectModuleBase {
         switch (tabPanelType) {
         case ProjectModuleTabType.ResourceMetadata:
             return new ProjectResourceMetadataTab(this.currentResourceId);
-        case ProjectModuleTabType.ResourcePreview:
-            return new ProjectResourcePreviewTab(this.currentResourceId, this.projectId);
-        case ProjectModuleTabType.ResourceImages:
-            return new ProjectResourceImagesTab(this.currentResourceId, this.projectId);
         case ProjectModuleTabType.ResourceDiscussion:
             return new ProjectResourceDiscussionTab(this.currentResourceId);
         default:
@@ -634,10 +630,8 @@ enum ProjectModuleTabType {
     WorkMetadata = 3,
     WorkHistory = 4,
     WorkNote = 5,
-    ResourcePreview = 101,
     ResourceDiscussion = 102,
     ResourceMetadata = 103,
-    ResourceImages = 104
 }
 
 interface IProjectResource {
