@@ -6,7 +6,6 @@
     private addAuthorDialog: BootstrapDialogWrapper;
     private addEditorDialog: BootstrapDialogWrapper;
     private projectClient: ProjectClient;
-    private authorTypeahead: SingleSetTypeaheadSearchBox<IOriginalAuthor>;
     private editorTypeahead: SingleSetTypeaheadSearchBox<IResponsiblePerson>;
     private selectedAuthorId: number;
     private selectedResponsiblePersonId: number;
@@ -125,8 +124,7 @@
         var elm = "";
         jEl.children(".author-list-item").remove();
         authorList.forEach((item:IOriginalAuthor) => {
-            elm += `<div class="row border-between author-list-item" data-author-id="${item.id}"><div class="col-xs-6 existing-original-author-name">${item.firstName
-                }</div><div class="col-xs-6 existing-original-author-surname">${item.lastName}</div></div>`;
+            elm += `<div class="author-list-item clearfix" data-author-id="${item.id}"><div class="list-group-item col-xs-6 border-right existing-original-author-name">${item.firstName}</div><div class="list-group-item existing-original-author-surname border-left col-xs-6">${item.lastName}</div></div>`;
         });
         jEl.append(elm);
         return jEl;
@@ -169,7 +167,7 @@
         });
 
         $(".new-original-author-button").on("click", () => {
-            this.authorTypeahead.setValue("");
+            $(".author-list-items").empty();
             $("#add-author-search").prop("disabled", true);
             $(".name-input-row").show();
         });
@@ -178,44 +176,39 @@
         addAuthorDialogCancelButton.on("click", () => {
             $(".name-input-row").hide();
             $("#add-author-search").prop("disabled", false);
-            this.authorTypeahead.setValue("");
+            $(".author-list-items").empty();
             $(".existing-original-author-selected").removeClass("existing-original-author-selected");
             const newAuthorButtonEl = $(".new-original-author-button");
             newAuthorButtonEl.prop("disabled", false);
         });
 
-        //this.authorTypeahead.create((selectedExists, selectConfirmed) => { TODO remove when simplified search is finished
-        //    var $authorId = $("#add-author-id-preview");
-        //    const newAuthorNameEl = $(".add-author-first-name");
-        //    const newAuthorSurnameEl = $(".add-author-last-name");
-        //    const newAuthorButtonEl = $(".new-original-author-button");
-        //    if (selectedExists) {
-        //        newAuthorButtonEl.prop("disabled", true);
-        //        newAuthorNameEl.prop("disabled", true);
-        //        newAuthorSurnameEl.prop("disabled", true);
-        //        $(".name-input-row").hide();
-        //        $(".existing-original-author-selected").removeClass("existing-original-author-selected");
-        //        var author = this.authorTypeahead.getValue();
-        //        const selectedEl = $(".typeahead-fill-suggestions").children(".tt-dataset").children(`:contains(${author.lastName}):contains(${author.firstName})`);
-        //        selectedEl.addClass("existing-original-author-selected");
-        //        $authorId.val(author.id);
-        //        this.selectedAuthorId = author.id;
-        //    } else {
-        //        newAuthorButtonEl.prop("disabled", false);
-        //        newAuthorNameEl.prop("disabled", false);
-        //        newAuthorSurnameEl.prop("disabled", false);
-        //        $authorId.val("");
-        //        this.selectedAuthorId = null;
-        //    }
-        //});
+        const newAuthorNameEl = $(".add-author-first-name");
+        const newAuthorSurnameEl = $(".add-author-last-name");
+        const newAuthorButtonEl = $(".new-original-author-button");
+        const $authorId = $("#add-author-id-preview");
+        var isAuthorSelected = false;
 
-        $(".author-table-content").on("click", ".author-list-item", (event: Event) => {
+        $(".author-list-items").on("click", ".author-list-item", (event: Event) => {
             var targetEl = $(event.target);
             if (!targetEl.hasClass("author-list-item")) {
                 targetEl = targetEl.parents(".author-list-item");
             }
-            $(".existing-original-author-selected").removeClass("existing-original-author-selected");
-            targetEl.addClass("existing-original-author-selected");
+            $(".existing-original-author-selected").not(targetEl).removeClass("existing-original-author-selected");
+            targetEl.toggleClass("existing-original-author-selected");
+            var authorId = null;
+            if ($(".existing-original-author-selected").length) {
+                isAuthorSelected = true;
+                authorId = $(".existing-original-author-selected").data("author-id");
+                $authorId.val(authorId);
+                this.selectedAuthorId = authorId;
+            } else {
+                isAuthorSelected = false;
+                $authorId.val("");
+                this.selectedAuthorId = null;
+            }
+            newAuthorButtonEl.prop("disabled", isAuthorSelected);
+            newAuthorNameEl.prop("disabled", isAuthorSelected);
+            newAuthorSurnameEl.prop("disabled", isAuthorSelected);
         });
 
         $("#add-author-search").on("input", (event: Event) => {
@@ -223,12 +216,24 @@
             const enteredText = textAreaEl.val();
             if (enteredText === "") {
                 $(".author-list-item").remove();
+                newAuthorButtonEl.prop("disabled", false);
+                newAuthorNameEl.prop("disabled", false);
+                newAuthorSurnameEl.prop("disabled", false);
+                $authorId.val("");
+                this.selectedAuthorId = null;
                 return;
             }
             $.get(`${getBaseUrl()}Admin/Project/GetTypeaheadOriginalAuthor?query=${enteredText}`).done(
                 (data: IOriginalAuthor[]) => {
-                    console.log(data);
-                    this.createListStructure(data, $(".author-table-content"));
+                    if (data.length) {
+                        $authorId.val("");
+                        this.selectedAuthorId = null;
+                        this.createListStructure(data, $(".author-list-items"));
+                    } else {
+                        $(".author-list-item").remove();
+                        $authorId.val("");
+                        this.selectedAuthorId = null;
+                    }
                 });
         });
 
@@ -337,9 +342,10 @@
             var element = MetadataUiHelper.addPerson($("#work-metadata-authors"), firstName + " " + lastName, id);
             $(element).addClass("author-item");
             this.addRemovePersonEvent($(".remove-button", element));
-            this.authorTypeahead.setValue("");
             const newAuthorButtonEl = $(".new-original-author-button");
             newAuthorButtonEl.prop("disabled", false);
+            $("#add-author-search").prop("disabled", false);
+            $(".author-list-items").empty();
             $(".name-input-row").hide();
             this.addAuthorDialog.hide();
         };
@@ -354,7 +360,10 @@
         } else {
             firstName = $("#add-author-first-name").val();
             lastName = $("#add-author-last-name").val();
-
+            if (firstName === "" || lastName === "") {
+                this.addAuthorDialog.showError("Please enter a name or choose existing author");
+                return;
+            }
             const createAuthorAjax = this.projectClient.createAuthor(firstName,
                 lastName);
             createAuthorAjax.done((data: number) => {

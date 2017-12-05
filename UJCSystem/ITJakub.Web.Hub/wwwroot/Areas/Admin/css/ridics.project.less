@@ -575,33 +575,63 @@ table {
             }
 
             .table-row {
-                .table-header {
-                    border: solid 1px;
-                    line-height: 1.5em;
+
+                .list-group-item {
+                    //border-top:none;
+                    //border-bottom: solid 1px gray;
+                    //border-left: none;
+                    //border-right: none;
+                    border: none;
                 }
 
-                .author-table-content {
-                    height: 200px;
+                .works-list-items {
+                    border: solid 1px gray;
+                    border-top: none;
+                    min-height: 175px;
+                    max-height: 200px;
                     overflow-y: auto;
                 }
 
-                .name-surname-typeahead {
+                .border-left {
+                    border-left: solid 1px gray;
+                }
 
-                    .typeahead-fill-suggestions {
-                        height: 11.5em;
+                .border-right {
+                    border-right: solid 1px gray;
+                }
 
-                        .author-list-item {
-                            padding: 0;
-                            border: solid 1px;
-                            border-top: none;
-                            line-height: 2em;
-                        }
+                .author-list-items {
+                    border: solid 1px gray;
+                    border-top: none;
+                    min-height: 175px;
+                    max-height: 200px;
+                    overflow-y: auto;
+
+                    .author-list-item {
+                        border-bottom: solid 1px gray;
+
+                    }
+
+                    .existing-original-author-selected {
+                        background-color: orange;
+                    }
+
+                    .existing-original-author-name {
+                        background-color: inherit;
+                    }
+
+                    .existing-original-author-surname {
+                        background-color: inherit;
                     }
                 }
-            }
 
-            .works-produced {
-                border: solid 1px;
+                .author-table-header {
+                    border: solid 1px gray;
+                }
+
+                .works-table-header {
+                    border: solid 1px gray;
+                }
             }
         }
     }
