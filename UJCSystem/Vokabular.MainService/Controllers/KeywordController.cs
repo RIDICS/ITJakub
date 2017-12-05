@@ -80,7 +80,8 @@ namespace Vokabular.MainService.Controllers
         [HttpGet("autocomplete")]
         public List<KeywordContract> GetKeywordAutocomplete([FromQuery] string query, [FromQuery] int? count)
         {
-            throw new NotImplementedException();
+            var result = m_catalogValueManager.GetKeywordAutocomplete(query, count);
+            return result;
         }
     }
 }

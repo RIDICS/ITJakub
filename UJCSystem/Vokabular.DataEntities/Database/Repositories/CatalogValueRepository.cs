@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
 using Vokabular.DataEntities.Database.Daos;
@@ -105,6 +106,17 @@ namespace Vokabular.DataEntities.Database.Repositories
             return GetSession().QueryOver<BookType>()
                 .Where(x => x.Type == bookTypeEnum)
                 .SingleOrDefault();
+        }
+
+        public virtual IList<Keyword> GetKeywordAutocomplete(string queryString, int count)
+        {
+            queryString = EscapeQuery(queryString);
+
+            return GetSession().QueryOver<Keyword>()
+                .WhereRestrictionOn(x => x.Text).IsLike(queryString, MatchMode.Start)
+                .OrderBy(x => x.Text).Asc
+                .Take(count)
+                .List();
         }
     }
 }

@@ -202,7 +202,10 @@ namespace Vokabular.DataEntities.Database.Repositories
                 query.And(x => x.FavoriteType == GetFavoriteTypeDiscriminatorValue(filterByType.Value));
 
             if (!string.IsNullOrWhiteSpace(filterByTitle))
+            {
+                filterByTitle = EscapeQuery(filterByTitle);
                 query.AndRestrictionOn(x => x.Title).IsLike(filterByTitle, MatchMode.Anywhere);
+            }
 
             return query;
         }
@@ -266,6 +269,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             if (!string.IsNullOrEmpty(filterByTitle))
             {
+                filterByTitle = EscapeQuery(filterByTitle);
                 query.AndRestrictionOn(() => favoriteQueryAlias.Title).IsLike(filterByTitle, MatchMode.Anywhere);
             }
 
