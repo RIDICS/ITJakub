@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.Utils.Documentation;
 using Vokabular.RestClient.Headers;
@@ -11,10 +12,18 @@ namespace Vokabular.MainService.Controllers
     [Route("api/[controller]")]
     public class UserController : BaseController
     {
+        private readonly UserManager m_userManager;
+
+        public UserController(UserManager userManager)
+        {
+            m_userManager = userManager;
+        }
+
         [HttpPost("")]
         public int CreateNewUser([FromBody] CreateUserContract data)
         {
-            throw new NotImplementedException();
+            var userId = m_userManager.CreateNewUser(data);
+            return userId;
         }
 
         [HttpGet("current")]

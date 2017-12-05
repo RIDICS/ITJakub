@@ -1,5 +1,7 @@
 ﻿using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.Core.Works.Users;
+using Vokabular.MainService.DataContracts.Contracts;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -23,6 +25,12 @@ namespace Vokabular.MainService.Core.Managers
         public int GetCurrentUserId()
         {
             return GetCurrentUser().Id;
+        }
+
+        public int CreateNewUser(CreateUserContract data)
+        {
+            var userId = new CreateNewUserWork(m_userRepository, data).Execute();
+            return userId;
         }
     }
 }
