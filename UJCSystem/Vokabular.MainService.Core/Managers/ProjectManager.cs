@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -102,6 +104,39 @@ namespace Vokabular.MainService.Core.Managers
                 result.ResponsiblePersons = Mapper.Map<List<ProjectResponsiblePersonContract>>(metadataResource.Resource.Project.ResponsiblePersons);
 
             return result;
+        }
+
+        private List<ProjectDetailContract> MapProjectsToContractList(IEnumerable<MetadataResource> dbMetadataList)
+        {
+            var resultList = new List<ProjectDetailContract>();
+            foreach (var metadataResource in dbMetadataList)
+            {
+                var project = metadataResource.Resource.Project;
+                var resultItem = Mapper.Map<ProjectDetailContract>(project);
+                resultItem.LatestMetadata = Mapper.Map<ProjectMetadataContract>(metadataResource);
+                resultItem.Authors = Mapper.Map<List<OriginalAuthorContract>>(project.Authors);
+                resultItem.ResponsiblePersons = Mapper.Map<List<ProjectResponsiblePersonContract>>(project.ResponsiblePersons);
+
+                resultList.Add(resultItem);
+            }
+
+            return resultList;
+        }
+
+        public List<ProjectDetailContract> GetProjectsByAuthor(int authorId)
+        {
+            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByAuthor(authorId));
+            var resultList = MapProjectsToContractList(dbMetadataList);
+            
+            return resultList;
+        }
+
+        public List<ProjectDetailContract> GetProjectsByResponsiblePerson(int responsiblePersonId)
+        {
+            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByResponsiblePerson(responsiblePersonId));
+            var resultList = MapProjectsToContractList(dbMetadataList);
+
+            return resultList;
         }
     }
 }

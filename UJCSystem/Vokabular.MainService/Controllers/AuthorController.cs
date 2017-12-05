@@ -15,10 +15,12 @@ namespace Vokabular.MainService.Controllers
     public class AuthorController : BaseController
     {
         private readonly PersonManager m_personManager;
+        private readonly ProjectManager m_projectManager;
 
-        public AuthorController(PersonManager personManager)
+        public AuthorController(PersonManager personManager, ProjectManager projectManager)
         {
             m_personManager = personManager;
+            m_projectManager = projectManager;
         }
 
         [HttpPost("")]
@@ -83,9 +85,10 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("{authorId}/project")]
-        public ProjectDetailContract GetProjectByAuthor(int authorId)
+        public List<ProjectDetailContract> GetProjectsByAuthor(int authorId)
         {
-            throw new NotImplementedException();
+            var result = m_projectManager.GetProjectsByAuthor(authorId);
+            return result;
         }
     }
 }

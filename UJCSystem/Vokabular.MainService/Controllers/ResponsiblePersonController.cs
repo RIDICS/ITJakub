@@ -15,11 +15,13 @@ namespace Vokabular.MainService.Controllers
     {
         private readonly PersonManager m_personManager;
         private readonly CatalogValueManager m_catalogValueManager;
+        private readonly ProjectManager m_projectManager;
 
-        public ResponsiblePersonController(PersonManager personManager, CatalogValueManager catalogValueManager)
+        public ResponsiblePersonController(PersonManager personManager, CatalogValueManager catalogValueManager, ProjectManager projectManager)
         {
             m_personManager = personManager;
             m_catalogValueManager = catalogValueManager;
+            m_projectManager = projectManager;
         }
 
         [HttpPost("")]
@@ -135,9 +137,10 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("{responsiblePersonId}/project")]
-        public ProjectDetailContract GetProjectByResponsiblePerson(int responsiblePersonId)
+        public List<ProjectDetailContract> GetProjectsByResponsiblePerson(int responsiblePersonId)
         {
-            throw new NotImplementedException();
+            var result = m_projectManager.GetProjectsByResponsiblePerson(responsiblePersonId);
+            return result;
         }
     }
 }
