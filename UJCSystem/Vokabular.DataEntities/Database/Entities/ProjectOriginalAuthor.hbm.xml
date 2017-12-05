@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <hibernate-mapping assembly="Vokabular.DataEntities" namespace="Vokabular.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
   <class name="ProjectOriginalAuthor" table="[Project_OriginalAuthor]">
-    <composite-id>
-      <key-many-to-one name="Project" class="Project" column="Project" lazy="proxy" />
-      <key-many-to-one name="OriginalAuthor" class="OriginalAuthor" column="Author" lazy="proxy" />
+    <composite-id name="ProjectOriginalAuthorId" class="ProjectOriginalAuthorId">
+      <key-property name="ProjectId" column="Project" />
+      <key-property name="OriginalAuthorId" column="Author" />
     </composite-id>
+
+    <many-to-one name="Project" class="Project" column="Project" lazy="proxy" insert="false" update="false" access="field.camelcase-m-underscore" />
+    
+    <many-to-one name="OriginalAuthor" class="OriginalAuthor" column="Author" lazy="proxy" insert="false" update="false" access="field.camelcase-m-underscore" />
 
     <property name="Sequence" not-null="true" />
     
