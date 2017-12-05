@@ -115,12 +115,14 @@
         //this.postAjax("Admin/Project/CreateResponsiblePerson", data, callback);
     }
 
-    public createResponsibleType(type: ResponsibleTypeEnum, text: string, callback: (newResponsibleTypeId: number, errorCode: HttpStatusCode) => void) {
-        var data = {
+    createResponsibleType(type: ResponsibleTypeEnum, text: string):JQueryXHR {
+        const data:IResponsibleType = {
+            id: 0,
             type: type,
             text: text
         };
-        this.postAjax("Admin/Project/CreateResponsibleType", data, callback);
+        //this.postAjax("Admin/Project/CreateResponsibleType", data, callback);
+        return $.post(`${getBaseUrl()}Admin/KeyTable/CreateResponsibleType`, { request: data });
     }
 
     saveMetadata(projectId: number, data: ISaveMetadataResource):JQueryXHR {
