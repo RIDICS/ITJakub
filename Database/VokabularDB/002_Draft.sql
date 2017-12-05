@@ -15,8 +15,8 @@ BEGIN TRAN
 	   [BookVersion] bigint NULL CONSTRAINT [FK_EditionNoteResource(BookVersion)_BookVersionResource(ResourceVersionId)] FOREIGN KEY REFERENCES [dbo].[BookVersionResource](ResourceVersionId)
 	)
 
---TODO remove this user insert (used only for development)
-INSERT INTO [dbo].[User]
+
+	INSERT INTO [dbo].[User]
            ([FirstName]
            ,[LastName]
            ,[Email]
@@ -28,16 +28,16 @@ INSERT INTO [dbo].[User]
            ,[CreateTime]
            ,[AvatarUrl])
      VALUES
-           ('Josef'
-           ,'Novák'
-           ,'test@example.com'
-           ,'test'
-           ,1
-           ,'not'
-           ,NULL
-           ,'not'
-           ,'2017-08-21 00:00:00.000'
-           ,NULL)
+           ('Admin' -- FirstName
+           ,'Admin' -- LastName
+           ,'admin@example.com' -- Email
+           ,'Admin' -- UserName
+           ,0 -- AuthenticationProvider
+           ,'' -- CommunicationToken
+           ,NULL -- CommunicationTokenCreateTime
+           ,'PW:sha1:1000:FhLySoxcL/5CA0RqlRBZMiqblj4sZ0zV:Vocj0I6bhs9bF4p9Nh+Rk7vbCoToulg9' -- PasswordHash (password is 'Administrator')
+           ,'2017-08-21 00:00:00.000' -- CreateTime
+           ,NULL) -- AvatarUrl
 
 --ROLLBACK
 COMMIT 

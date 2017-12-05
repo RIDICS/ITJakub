@@ -17,7 +17,7 @@ namespace Vokabular.MainService.Core.Managers
             // TODO get correct current user
 
             m_userRepository.UnitOfWork.BeginTransaction();
-            return m_userRepository.GetUserByUsername("test");
+            return m_userRepository.GetUserByUsername("Admin");
         }
 
         public int GetCurrentUserId()
