@@ -85,10 +85,14 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("{authorId}/project")]
-        public List<ProjectDetailContract> GetProjectsByAuthor(int authorId)
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
+        public List<ProjectDetailContract> GetProjectsByAuthor(int authorId, [FromQuery] int? start, [FromQuery] int? count)
         {
-            var result = m_projectManager.GetProjectsByAuthor(authorId);
-            return result;
+            var result = m_projectManager.GetProjectsByAuthor(authorId, start, count);
+
+            SetTotalCountHeader(result.TotalCount);
+
+            return result.List;
         }
     }
 }

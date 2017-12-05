@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Utils;
@@ -123,20 +124,35 @@ namespace Vokabular.MainService.Core.Managers
             return resultList;
         }
 
-        public List<ProjectDetailContract> GetProjectsByAuthor(int authorId)
+        private PagedResultList<ProjectDetailContract> MapPagedProjectsToContractList(ListWithTotalCountResult<MetadataResource> dbResult)
         {
-            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByAuthor(authorId));
-            var resultList = MapProjectsToContractList(dbMetadataList);
-            
-            return resultList;
+            var resultContractList = MapProjectsToContractList(dbResult.List);
+
+            return new PagedResultList<ProjectDetailContract>
+            {
+                List = resultContractList,
+                TotalCount = dbResult.Count,
+            };
         }
 
-        public List<ProjectDetailContract> GetProjectsByResponsiblePerson(int responsiblePersonId)
+        public PagedResultList<ProjectDetailContract> GetProjectsByAuthor(int authorId, int? start, int? count)
         {
-            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByResponsiblePerson(responsiblePersonId));
-            var resultList = MapProjectsToContractList(dbMetadataList);
+            var startValue = PagingHelper.GetStart(start);
+            var countValue = PagingHelper.GetCount(count);
+            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByAuthor(authorId, startValue, countValue));
+            var result = MapPagedProjectsToContractList(dbMetadataList);
 
-            return resultList;
+            return result;
+        }
+
+        public PagedResultList<ProjectDetailContract> GetProjectsByResponsiblePerson(int responsiblePersonId, int? start, int? count)
+        {
+            var startValue = PagingHelper.GetStart(start);
+            var countValue = PagingHelper.GetCount(count);
+            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByResponsiblePerson(responsiblePersonId, startValue, countValue));
+            var result = MapPagedProjectsToContractList(dbMetadataList);
+
+            return result;
         }
     }
 }
