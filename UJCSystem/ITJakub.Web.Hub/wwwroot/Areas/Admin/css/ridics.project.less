@@ -622,10 +622,12 @@ table {
 
                 .author-table-header {
                     border: solid 1px gray;
+                    font-weight: bold;
                 }
 
                 .works-table-header {
                     border: solid 1px gray;
+                    font-weight: bold;
                 }
             }
         }
@@ -651,16 +653,23 @@ table {
                 padding: 0;
             }
 
-            .border-left {
-                border-left: solid 1px gray;
-            }
-
-            .border-right {
-                border-right: solid 1px gray;
-            }
-
             .list-group-item {
                 border: none;
+            }
+
+            .responsible-people-table {
+                .responsible-person-table-header {
+                    border: solid 1px gray;
+                    font-weight: bold;
+                }
+
+                .border-left {
+                    border-left: solid 1px gray;
+                }
+
+                .border-right {
+                    border-right: solid 1px gray;
+                }
             }
 
             .responsible-person-list-items {
@@ -687,10 +696,6 @@ table {
                 }
             }
 
-            .responsible-person-table-header {
-                border: solid 1px gray;
-            }
-
             .responsible-person-name-input-row {
                 display: none;
                 border: solid 1px;
@@ -704,6 +709,33 @@ table {
 
             .new-responsible-person-button-row {
                 margin-top: 4px;
+
+                .new-responsible-person-finish-button {
+                    display: none;
+                }
+            }
+
+            .new-responsibility-type-row {
+                margin-top: 5px;
+
+                #add-responsible-type-type {
+                    padding: 0;
+                }
+            }
+
+            .works-participated {
+                .works-table-header {
+                    border: solid 1px gray;
+                    font-weight: bold;
+                }
+
+                .works-list-items {
+                    border: solid 1px gray;
+                    border-top: none;
+                    min-height: 175px;
+                    max-height: 200px;
+                    overflow-y: auto;
+                }
             }
         }
     }

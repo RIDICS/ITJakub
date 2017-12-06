@@ -125,7 +125,6 @@
 
     private createResponsiblePersonListStructure(responsiblePersonList: IResponsiblePerson[], jEl: JQuery): JQuery {
         var elm = "";
-        jEl.children(".responsible-person-list-item").remove();
         responsiblePersonList.forEach((item: IResponsiblePerson) => {
             elm += `<div class="responsible-person-list-item clearfix" data-responsible-person-id="${item.id}"><div class="list-group-item col-xs-6 border-right existing-responsible-person-name">${item.firstName}</div><div class="list-group-item existing-responsible-person-surname border-left col-xs-6">${item.lastName}</div></div>`;
         });
@@ -176,9 +175,49 @@
         });
 
         $(".new-responsible-person-button").on("click", () => {
-            $(".responsible-person-list-items").empty();
+            const finishAddingResponsiblePersonButton = $(".new-responsible-person-finish-button");
+            $(".new-responsible-person-button").prop("disabled", true);
             $("#add-editor-search").prop("disabled", true);
             $(".responsible-person-name-input-row").show();
+            finishAddingResponsiblePersonButton.show();
+
+        });
+
+        $(".new-responsible-person-finish-button").on("click", () => {
+            const listItemsEl = $(".responsible-person-list-items");
+            const firstNameEl = $("#add-responsible-person-first-name");
+            const lastNameEl = $("#add-responsible-person-last-name");
+            const firstName = firstNameEl.val();
+            const lastName = lastNameEl.val();
+            var id: number;
+            this.projectClient.createResponsiblePerson(firstName, lastName).done((newResponsiblePersonId: number) => {
+                id = newResponsiblePersonId;
+                const createdResponsiblePersonArray: IResponsiblePerson[] = [];
+                const createdResponsiblePerson: IResponsiblePerson = {
+                    id: id,
+                    lastName: lastName,
+                    firstName:firstName
+                };
+                if (firstName === "" || lastName === "") {
+                    this.addEditorDialog.showError("Please enter a name and surname");
+                    return;
+                }
+                createdResponsiblePersonArray.push(createdResponsiblePerson);
+                this.createResponsiblePersonListStructure(createdResponsiblePersonArray, listItemsEl);
+                const newlyCreatedResponsiblePerson = $(`[data-responsible-person-id=${id}]`);
+                $(".existing-responsible-person-selected").not(newlyCreatedResponsiblePerson)
+                    .removeClass("existing-responsible-person-selected");
+                newlyCreatedResponsiblePerson.addClass("existing-responsible-person-selected");
+                $("#add-editor-id-preview").val(id);
+                $(".new-responsible-person-button").prop("disabled", false);
+                $("#add-editor-search").prop("disabled", false);
+                firstNameEl.val("");
+                lastNameEl.val("");
+                $(".responsible-person-name-input-row").hide();
+                $(".new-responsible-person-finish-button").hide();
+            }).fail(() => {
+                this.addEditorDialog.showError();
+            });
         });
 
         const addAuthorDialogCancelButton = $("#add-author-dialog").find(`[data-dismiss="modal"]`);
@@ -269,6 +308,7 @@
                     if (data.length) {
                         $editorId.val("");
                         this.selectedResponsiblePersonId = null;
+                        $(".responsible-person-list-items").children(".responsible-person-list-item").remove();
                         this.createResponsiblePersonListStructure(data, $(".responsible-person-list-items"));
                     } else {
                         $(".responsible-person-list-item").remove();
@@ -308,10 +348,12 @@
             $(".responsible-person-list-items").empty();
             const newResponsiblePersonButtonEl = $(".new-responsible-person-button");
             newResponsiblePersonButtonEl.prop("disabled", false);
+            $(".new-responsible-person-finish-button").hide();
         });
 
         $addResponsibleTypeButton.click(() => {
             $addResponsibleTypeButton.prop("disabled", true);
+            $("#responsibility-type-input-elements").hide();
             $addResponsibleTypeContainer.show();
             $("#add-responsible-type-saving-icon").hide();
         });
@@ -432,6 +474,7 @@
     }
 
     private createResponsibleType() {
+        $("#responsibility-type-input-elements").show();
         var text = $("#add-responsible-type-text").val();
         var type = $("#add-responsible-type-type").val();
         var typeLabel = $("#add-responsible-type-type option:selected").text();
@@ -476,20 +519,10 @@
             responsibilityTypeId = $("#add-editor-type").find(":selected").val();
             const responsibilityTextWithParenthesis = $("#add-editor-type").find(":selected").text();
             responsibilityText = responsibilityTextWithParenthesis.replace(/ *\([^)]*\) */g, "");
+            $(".responsible-person-list-items").children(".responsible-person-list-item").remove();
             finishAddingEditor();
         } else {
-            firstName = $("#add-responsible-person-first-name").val();
-            lastName = $("#add-responsible-person-last-name").val();
-            responsibilityTypeId = $("#add-editor-type").val();
-            const responsibilityTextWithParenthesis = $("#add-editor-type").find(":selected").text();
-            responsibilityText = responsibilityTextWithParenthesis.replace(/ *\([^)]*\) */g, "");
-
-            this.projectClient.createResponsiblePerson(firstName, lastName).done((newResponsiblePersonId: number) => {
-                id = newResponsiblePersonId;
-                finishAddingEditor();
-            }).fail(() => {
-                this.addEditorDialog.showError();
-            });
+            this.addEditorDialog.showError("Please select one responsible person from list");
         }
     }
 

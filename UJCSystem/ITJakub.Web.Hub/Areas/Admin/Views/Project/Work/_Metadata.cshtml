@@ -544,7 +544,7 @@
                         </div>
                     </div>
                     <div class="row table-row">
-                        <div class="col-xs-7">
+                        <div class="col-xs-7 responsible-people-table">
                             <div class="list-unstyled row responsible-person-table-header">
                                 <div class="list-group-item border-right col-xs-6">Name</div>
                                 <div class="list-group-item border-left col-xs-6">Surname</div>
@@ -562,34 +562,39 @@
                                         </div>
                                     </div>
                                     <div class="row new-responsible-person-button-row">
-                                        <div class="col-xs-12 col-no-padding">
+                                        <div class="col-xs-9 col-no-padding">
                                             <button class="new-responsible-person-button btn btn-default">Add new responsible person</button>
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <button class="new-responsible-person-finish-button btn btn-default">Done</button>
                                         </div>
                                     </div>
                                     <div class="row type-input-row">
-                                        <div class="col-xs-3">
-                                            Type
-                                        </div>
-                                        <div class="col-xs-9">
-                                            <select class="form-control" id="add-editor-type">
-                                                @foreach (var responsibleType in Model.AllResponsibleTypeList)
-                                                {
-                                                    <option value="@responsibleType.Id">@responsibleType.Text (@responsibleType.Type.GetDisplayAttributeValue())</option>
-                                                }
-                                            </select>
+                                        <div class="form-group">
+                                            <label for="responsibility-type-input-elements" class="col-xs-9 control-label">Type</label>
+                                            <div id="responsibility-type-input-elements">
+                                                <div class="form-group">
+                                                    <div class="col-xs-8 col-no-padding">
+                                                        <select size="1" class="form-control" id="add-editor-type">
+                                                            @foreach (var responsibleType in Model.AllResponsibleTypeList)
+                                                            {
+                                                                <option value="@responsibleType.Id">@responsibleType.Text (@responsibleType.Type.GetDisplayAttributeValue())</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                <div class="col-xs-4">
+                                                    <button class="btn btn-default" id="add-responsible-type-button">Add new type</button>
+                                                </div>
+                                            </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                    <div class="form-group">
-                                        <div class="col-md-offset-3 col-md-7">
-                                            <button class="btn btn-default" id="add-responsible-type-button">Přidat typ</button>
-                                        </div>
-                                    </div>
+                                    <div class="row new-responsibility-type-row">
                                         <div class="form-group" id="add-responsible-type-container">
-                                            <div class="col-md-3">
+                                            <div class="col-md-3 col-no-padding">
                                                 @Html.DropDownListFor(x => x.ResponsibleTypeEnumEmpty, Html.GetEnumSelectList<ResponsibleTypeEnumViewModel>(), htmlAttributes: new {@class = "form-control", id = "add-responsible-type-type"})
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <input class="form-control" id="add-responsible-type-text" type="text" placeholder="Nový typ"/>
                                             </div>
                                             <div class="col-md-3">
@@ -602,7 +607,7 @@
                         </div>
                         <div class="col-xs-offset-1 col-xs-4 works-participated">
                             <div class="list-unstyled row">
-                                <div class="list-group-item works-table-header">Types</div>
+                                <div class="list-group-item works-table-header">Types/works participated</div>
                             </div>
                             <div class="list-unstyled row">
 
