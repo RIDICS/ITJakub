@@ -152,7 +152,7 @@
     }
     //responsible person type section end
     //responsible person section start
-    getResponsiblePersonList(start?: number, count?: number): JQueryXHR {
+    getResponsiblePersonList(start: number, count: number): JQueryXHR {
         const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetResponsiblePersonList`,
             {
                 start: start,

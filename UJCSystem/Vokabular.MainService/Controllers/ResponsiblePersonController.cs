@@ -68,7 +68,6 @@ namespace Vokabular.MainService.Controllers
         public List<ResponsiblePersonContract> GetResponsiblePersonList([FromQuery] int? start, [FromQuery] int? count)
         {
             var result = m_personManager.GetResponsiblePersonList(start, count);
-
             SetTotalCountHeader(result.TotalCount);
             return result.List;
         }

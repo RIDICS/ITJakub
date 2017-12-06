@@ -627,7 +627,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = GetPagedList<ResponsiblePersonContract>($"responsibleperson/?start={start}?count={count}");
+                var result = GetPagedList<ResponsiblePersonContract>($"responsibleperson/?start={start}&count={count}");
                 return result;
             }
             catch (HttpRequestException e)
@@ -812,7 +812,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = GetPagedList<OriginalAuthorContract>($"author/?start={start}?count={count}");
+                var result = GetPagedList<OriginalAuthorContract>($"author/?start={start}&count={count}");
                 return result;
             }
             catch (HttpRequestException e)
