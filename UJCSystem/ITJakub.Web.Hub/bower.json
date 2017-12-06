@@ -19,7 +19,8 @@
     "font-awesome": "4.7.0",
     "bootstrap-colorpicker-plus": "#0fdd970",
     "s-pagination": "1.1.1",
-    "bootstrap-tokenfield": "0.12.1"
+    "bootstrap-tokenfield": "0.12.1",
+    "gijgo": "1.6.1"
   },
   "resolutions": {
     "jquery": "2.2.4",
