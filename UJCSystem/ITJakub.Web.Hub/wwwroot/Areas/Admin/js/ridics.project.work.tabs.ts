@@ -131,11 +131,20 @@
         return jEl;
     }
 
+    private categoryTree:any;//TODO investigate d ts
+
     initTab(): void {
         super.initTab();
         this.initKeywords();
         var $addResponsibleTypeButton = $("#add-responsible-type-button");
         var $addResponsibleTypeContainer = $("#add-responsible-type-container");
+
+        this.categoryTree = $("#category-tree").tree({
+            primaryKey: "id",
+            uiLibrary: "bootstrap",
+            dataSource: [{ text: "cat1" , id: "catId", children: [{ text: "cat2", id: "catId" }] }],//TODO
+            checkboxes: true
+        });
 
         $("#work-metadata-edit-button").click(() => {
             this.enabledEdit();
@@ -549,17 +558,20 @@
     }
 
     private saveMetadata() {
+        var selectedCategoryIds = new Array<number>();//TODO
         var selectedAuthorIds = new Array<number>();
         var selectedResponsibleIds = new Array<ISaveProjectResponsiblePerson>();
         var selectedKindIds = new Array<number>();
         var selectedGenreIds = new Array<number>();
         var keywordIdList = new Array<number>();
 
+        console.log(this.categoryTree.getCheckedNodes());//TODO
+
         $("#work-metadata-authors .author-item").each((index, elem) => {
             selectedAuthorIds.push($(elem).data("id"));
         });
         $("#work-metadata-editors .editor-item").each((index, elem) => {
-            var projectResponsible: ISaveProjectResponsiblePerson = {//TODO investigate new responsible person addition
+            var projectResponsible: ISaveProjectResponsiblePerson = {
                 responsiblePersonId: $(elem).data("id"),
                 responsibleTypeId: $(elem).data("responsible-type-id")
             };
