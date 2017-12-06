@@ -20,14 +20,14 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly ResourceRepository m_resourceRepository;
         private readonly FileSystemManager m_fileSystemManager;
-        private readonly UserManager m_userManager;
+        private readonly AuthenticationManager m_authenticationManager;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
 
-        public ProjectContentManager(ResourceRepository resourceRepository, FileSystemManager fileSystemManager, UserManager userManager, FulltextStorageProvider fulltextStorageProvider)
+        public ProjectContentManager(ResourceRepository resourceRepository, FileSystemManager fileSystemManager, AuthenticationManager authenticationManager, FulltextStorageProvider fulltextStorageProvider)
         {
             m_resourceRepository = resourceRepository;
             m_fileSystemManager = fileSystemManager;
-            m_userManager = userManager;
+            m_authenticationManager = authenticationManager;
             m_fulltextStorageProvider = fulltextStorageProvider;
         }
 
@@ -69,7 +69,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public long CreateNewComment(long textId, CreateTextCommentContract newComment)
         {
-            var userId = m_userManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             var createNewCommentWork = new CreateNewTextCommentWork(m_resourceRepository, textId, newComment, userId);
             var resultId = createNewCommentWork.Execute();
             return resultId;
@@ -77,7 +77,7 @@ namespace Vokabular.MainService.Core.Managers
         
         public void UpdateComment(long commentId, UpdateTextCommentContract data)
         {
-            var userId = m_userManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             new UpdateTextCommentWork(m_resourceRepository, commentId, data, userId).Execute();
         }
 
@@ -108,7 +108,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var fileInfo = m_fileSystemManager.SaveResource(ResourceType.Image, projectId, stream);
 
-            var userId = m_userManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             var resultVersionId = new CreateNewImageResourceVersionWork(m_resourceRepository, imageId,
                 data, fileInfo, userId).Execute();
 
@@ -122,7 +122,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var fileInfo = m_fileSystemManager.SaveResource(ResourceType.Audio, projectId, stream);
 
-            var userId = m_userManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             var resultVersionId = new CreateNewAudioResourceVersionWork(m_resourceRepository, audioId,
                 data, fileInfo, userId).Execute();
 

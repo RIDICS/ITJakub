@@ -18,16 +18,16 @@ namespace Vokabular.MainService.Core.Managers
 {
     public class FavoriteManager
     {
-        private readonly UserManager m_userManager;
+        private readonly AuthenticationManager m_authenticationManager;
         private readonly CatalogValueRepository m_catalogValueRepository;
         private readonly FavoritesRepository m_favoritesRepository;
         private readonly ResourceRepository m_resourceRepository;
 
         //private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public FavoriteManager(UserManager userManager, CatalogValueRepository catalogValueRepository, ResourceRepository resourceRepository, FavoritesRepository favoritesRepository)
+        public FavoriteManager(AuthenticationManager authenticationManager, CatalogValueRepository catalogValueRepository, ResourceRepository resourceRepository, FavoritesRepository favoritesRepository)
         {
-            m_userManager = userManager;
+            m_authenticationManager = authenticationManager;
             m_catalogValueRepository = catalogValueRepository;
             m_favoritesRepository = favoritesRepository;
             m_resourceRepository = resourceRepository;
@@ -35,12 +35,12 @@ namespace Vokabular.MainService.Core.Managers
 
         private User TryGetUser()
         {
-            return m_userManager.GetCurrentUser();
+            return m_authenticationManager.GetCurrentUser();
         }
 
         public long CreateFavoritePage(CreateFavoritePageContract data)
         {
-            var userId = m_userManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             var work = new CreateFavoritePageWork(m_favoritesRepository, m_resourceRepository, data, userId);
             var resultId = work.Execute();
             return resultId;
@@ -123,7 +123,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public long CreateFavoriteProject(CreateFavoriteProjectContract data)
         {
-            var userId = m_userManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             var work = new CreateFavoriteProjectWork(m_favoritesRepository, data, userId);
             var resultId = work.Execute();
             return resultId;
@@ -131,7 +131,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public long CreateFavoriteCategory(CreateFavoriteCategoryContract data)
         {
-            var userId = m_userManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             var work = new CreateFavoriteCategoryWork(m_favoritesRepository, data, userId);
             var resultId = work.Execute();
             return resultId;
@@ -139,7 +139,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public long CreateFavoriteQuery(CreateFavoriteQueryContract data)
         {
-            var userId = m_userManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             var work = new CreateFavoriteQueryWork(m_favoritesRepository, m_catalogValueRepository, data, userId);
             var resultId = work.Execute();
             return resultId;
@@ -258,32 +258,32 @@ namespace Vokabular.MainService.Core.Managers
 
         public long CreateFavoriteLabel(FavoriteLabelContractBase data, bool isDefault = false)
         {
-            var userId = m_userManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             var resultId = new CreateOrUpdateFavoriteLabelWork(m_favoritesRepository, data, userId, null, isDefault).Execute();
             return resultId;
         }
 
         public void UpdateFavoriteLabel(long labelId, FavoriteLabelContractBase data)
         {
-            var userId = m_userManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             new CreateOrUpdateFavoriteLabelWork(m_favoritesRepository, data, userId, labelId).Execute();
         }
 
         public void DeleteFavoriteLabel(long labelId)
         {
-            var userId = m_userManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             new DeleteFavoriteLabelWork(m_favoritesRepository, labelId, userId).Execute();
         }
 
         public void UpdateFavoriteItem(long id, UpdateFavoriteContract data)
         {
-            var userId = m_userManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             new UpdateFavoriteItemWork(m_favoritesRepository, id, data, userId).Execute();
         }
 
         public void DeleteFavoriteItem(long id)
         {
-            var userId = m_userManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             new DeleteFavoriteItemWork(m_favoritesRepository, id, userId).Execute();
         }
 

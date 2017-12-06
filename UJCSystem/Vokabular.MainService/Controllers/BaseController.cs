@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.RestClient.Headers;
 
@@ -15,6 +16,11 @@ namespace Vokabular.MainService.Controllers
         {
             Response.ContentLength = fileSize;
             return base.File(fileStream, contentType, fileDownloadName);
+        }
+
+        protected ObjectResult StatusCode(HttpStatusCode statusCode, object value)
+        {
+            return base.StatusCode((int) statusCode, value);
         }
     }
 }

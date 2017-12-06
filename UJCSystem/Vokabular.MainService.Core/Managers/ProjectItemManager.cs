@@ -13,14 +13,14 @@ namespace Vokabular.MainService.Core.Managers
 {
     public class ProjectItemManager
     {
-        private readonly UserManager m_userManager;
+        private readonly AuthenticationManager m_authenticationManager;
         private readonly ResourceRepository m_resourceRepository;
         private readonly BookRepository m_bookRepository;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
 
-        public ProjectItemManager(UserManager userManager, ResourceRepository resourceRepository, BookRepository bookRepository, FulltextStorageProvider fulltextStorageProvider)
+        public ProjectItemManager(AuthenticationManager authenticationManager, ResourceRepository resourceRepository, BookRepository bookRepository, FulltextStorageProvider fulltextStorageProvider)
         {
-            m_userManager = userManager;
+            m_authenticationManager = authenticationManager;
             m_resourceRepository = resourceRepository;
             m_bookRepository = bookRepository;
             m_fulltextStorageProvider = fulltextStorageProvider;
@@ -42,7 +42,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public long CreatePage(long projectId, CreatePageContract pageData)
         {
-            var userId = m_userManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             var work = new CreateOrUpdatePageWork(m_resourceRepository, pageData, projectId, null, userId);
             work.Execute();
 
@@ -51,7 +51,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public void UpdatePage(long pageId, CreatePageContract pageData)
         {
-            var userId = m_userManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             var work = new CreateOrUpdatePageWork(m_resourceRepository, pageData, null, pageId, userId);
             work.Execute();
         }
@@ -84,7 +84,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public long CreateChapterResource(long projectId, CreateChapterContract chapterData)
         {
-            var userId = m_userManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             var work = new CreateOrUpdateChapterWork(m_resourceRepository, chapterData, projectId, null, userId);
             work.Execute();
 
@@ -93,7 +93,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public void UpdateChapterResource(long chapterId, CreateChapterContract chapterData)
         {
-            var userId = m_userManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             new CreateOrUpdateChapterWork(m_resourceRepository, chapterData, null, chapterId, userId).Execute();
         }
 
@@ -113,7 +113,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public long CreateTrackResource(long projectId, CreateTrackContract trackData)
         {
-            var userId = m_userManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             var work = new CreateOrUpdateTrackWork(m_resourceRepository, trackData, projectId, null, userId);
             work.Execute();
 
@@ -122,7 +122,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public void UpdateTrackResource(long trackId, CreateTrackContract trackData)
         {
-            var userId = m_userManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             new CreateOrUpdateTrackWork(m_resourceRepository, trackData, null, trackId, userId).Execute();
         }
 
@@ -145,7 +145,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public long CreateEditionNoteVersion(long projectId, CreateEditionNoteContract data)
         {
-            var userId = m_userManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
             var resourceVersionId = new CreateEditionNoteVersionWork(m_resourceRepository, projectId, data, userId, fulltextStorage).Execute();
             return resourceVersionId;

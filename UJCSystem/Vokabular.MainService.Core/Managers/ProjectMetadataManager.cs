@@ -15,13 +15,13 @@ namespace Vokabular.MainService.Core.Managers
     public class ProjectMetadataManager
     {
         private readonly MetadataRepository m_metadataRepository;
-        private readonly UserManager m_userManager;
+        private readonly AuthenticationManager m_authenticationManager;
         private readonly CategoryRepository m_categoryRepository;
 
-        public ProjectMetadataManager(MetadataRepository metadataRepository, UserManager userManager, CategoryRepository categoryRepository)
+        public ProjectMetadataManager(MetadataRepository metadataRepository, AuthenticationManager authenticationManager, CategoryRepository categoryRepository)
         {
             m_metadataRepository = metadataRepository;
-            m_userManager = userManager;
+            m_authenticationManager = authenticationManager;
             m_categoryRepository = categoryRepository;
         }
 
@@ -68,7 +68,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public long CreateNewProjectMetadataVersion(long projectId, ProjectMetadataContract data)
         {
-            var resultId = new CreateNewMetadataVersionWork(m_metadataRepository, projectId, data, m_userManager.GetCurrentUserId()).Execute();
+            var resultId = new CreateNewMetadataVersionWork(m_metadataRepository, projectId, data, m_authenticationManager.GetCurrentUserId()).Execute();
             return resultId;
         }
 

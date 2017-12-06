@@ -16,17 +16,17 @@ namespace Vokabular.MainService.Core.Managers
     public class FeedbackManager
     {
         private readonly PortalRepository m_portalRepository;
-        private readonly UserManager m_userManager;
+        private readonly AuthenticationManager m_authenticationManager;
 
-        public FeedbackManager(PortalRepository portalRepository, UserManager userManager)
+        public FeedbackManager(PortalRepository portalRepository, AuthenticationManager authenticationManager)
         {
             m_portalRepository = portalRepository;
-            m_userManager = userManager;
+            m_authenticationManager = authenticationManager;
         }
 
         public long CreateFeedback(CreateFeedbackContract data)
         {
-            var userId = m_userManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             var resultId = new CreateFeedbackWork(m_portalRepository, data, FeedbackType.Generic, userId).Execute();
             return resultId;
         }
@@ -39,7 +39,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public long CreateHeadwordFeedback(long resourceVersionId, CreateFeedbackContract data)
         {
-            var userId = m_userManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             var resultId = new CreateFeedbackWork(m_portalRepository, data, FeedbackType.Headword, userId, resourceVersionId).Execute();
             return resultId;
         }

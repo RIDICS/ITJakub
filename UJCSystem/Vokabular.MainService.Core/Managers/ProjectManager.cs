@@ -17,18 +17,18 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly ProjectRepository m_projectRepository;
         private readonly MetadataRepository m_metadataRepository;
-        private readonly UserManager m_userManager;
+        private readonly AuthenticationManager m_authenticationManager;
 
-        public ProjectManager(ProjectRepository projectRepository, MetadataRepository metadataRepository, UserManager userManager)
+        public ProjectManager(ProjectRepository projectRepository, MetadataRepository metadataRepository, AuthenticationManager authenticationManager)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
-            m_userManager = userManager;
+            m_authenticationManager = authenticationManager;
         }
 
         public long CreateProject(ProjectContract projectData)
         {
-            var currentUserId = m_userManager.GetCurrentUserId();
+            var currentUserId = m_authenticationManager.GetCurrentUserId();
             var work = new CreateProjectWork(m_projectRepository, projectData, currentUserId);
 
             var resultId = work.Execute();
@@ -37,7 +37,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public void UpdateProject(long projectId, ProjectContract data)
         {
-            var currentUserId = m_userManager.GetCurrentUserId();
+            var currentUserId = m_authenticationManager.GetCurrentUserId();
             var work = new UpdateProjectWork(m_projectRepository, projectId, data, currentUserId);
             work.Execute();
         }

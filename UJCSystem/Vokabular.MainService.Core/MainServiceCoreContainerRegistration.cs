@@ -3,6 +3,7 @@ using Vokabular.Core;
 using Vokabular.MainService.Core.AutoMapperProfiles;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers;
+using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.Shared.Container;
 
@@ -12,6 +13,7 @@ namespace Vokabular.MainService.Core
     {
         public void Install(IIocContainer container)
         {
+            container.AddPerWebRequest<AuthenticationManager>();
             container.AddPerWebRequest<AuthorizationManager>();
             container.AddPerWebRequest<BookManager>();
             container.AddPerWebRequest<BookSearchManager>();
@@ -32,6 +34,8 @@ namespace Vokabular.MainService.Core
             container.AddPerWebRequest<ProjectResourceManager>();
             container.AddPerWebRequest<TermManager>();
             container.AddPerWebRequest<UserManager>();
+
+            container.AddPerWebRequest<ICommunicationTokenGenerator, GuidCommunicationTokenGenerator>();
 
             container.AddPerWebRequest<CommunicationConfigurationProvider>();
             container.AddPerWebRequest<CommunicationProvider>();

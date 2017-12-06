@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.Utils.Documentation;
+using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Headers;
 
 namespace Vokabular.MainService.Controllers
@@ -20,10 +21,18 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPost("")]
-        public int CreateNewUser([FromBody] CreateUserContract data)
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        public IActionResult CreateNewUser([FromBody] CreateUserContract data)
         {
-            var userId = m_userManager.CreateNewUser(data);
-            return userId;
+            try
+            {
+                var userId = m_userManager.CreateNewUser(data);
+                return Ok(userId);
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Message);
+            }
         }
 
         [HttpGet("current")]
@@ -59,10 +68,26 @@ namespace Vokabular.MainService.Controllers
     [Route("api/[controller]")]
     public class AuthTokenController : BaseController
     {
-        [HttpPost("")]
-        public void SignIn([FromBody] SignInContract data)
+        private readonly AuthenticationManager m_authenticationManager;
+
+        public AuthTokenController(AuthenticationManager authenticationManager)
         {
-            throw new NotImplementedException();
+            m_authenticationManager = authenticationManager;
+        }
+
+        [HttpPost("")]
+        [ProducesResponseType(typeof(SignInResultContract), StatusCodes.Status200OK)]
+        public IActionResult SignIn([FromBody] SignInContract data)
+        {
+            try
+            {
+                var result = m_authenticationManager.SignIn(data);
+                return Ok(result);
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Message);
+            }
         }
 
         [HttpDelete("")]

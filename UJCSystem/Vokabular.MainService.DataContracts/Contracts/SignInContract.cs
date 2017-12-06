@@ -6,4 +6,9 @@
 
         public string Password { get; set; }
     }
+
+    public class SignInResultContract
+    {
+        public string CommunicationToken { get; set; }
+    }
 }
