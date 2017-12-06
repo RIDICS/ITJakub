@@ -123,10 +123,10 @@
         return jEl;
     }
 
-    private createResponsiblePersonListStructure(authorList: IResponsiblePerson[], jEl: JQuery): JQuery {
+    private createResponsiblePersonListStructure(responsiblePersonList: IResponsiblePerson[], jEl: JQuery): JQuery {
         var elm = "";
         jEl.children(".responsible-person-list-item").remove();
-        authorList.forEach((item: IOriginalAuthor) => {
+        responsiblePersonList.forEach((item: IResponsiblePerson) => {
             elm += `<div class="responsible-person-list-item clearfix" data-responsible-person-id="${item.id}"><div class="list-group-item col-xs-6 border-right existing-responsible-person-name">${item.firstName}</div><div class="list-group-item existing-responsible-person-surname border-left col-xs-6">${item.lastName}</div></div>`;
         });
         jEl.append(elm);
@@ -455,11 +455,13 @@
 
     private addEditor() {
         var id: number;
+        var responsibilityText: string;
+        var responsibilityTypeId: number;
         var firstName: string;
         var lastName: string;
 
         var finishAddingEditor = () => {
-            var element = MetadataUiHelper.addPerson($("#work-metadata-editors"), firstName + " " + lastName, id);
+            var element = MetadataUiHelper.addPerson($("#work-metadata-editors"), `${firstName} ${lastName} - ${responsibilityText}`, id, responsibilityTypeId);
             $(element).addClass("editor-item");
             this.addRemovePersonEvent($(".remove-button", element));
 
@@ -471,24 +473,23 @@
             id = $("#add-editor-id-preview").val();
             firstName = selectedExistingResponsiblePersonEl.children(".existing-responsible-person-name").text();
             lastName = selectedExistingResponsiblePersonEl.children(".existing-responsible-person-surname").text();
+            responsibilityTypeId = $("#add-editor-type").find(":selected").val();
+            const responsibilityTextWithParenthesis = $("#add-editor-type").find(":selected").text();
+            responsibilityText = responsibilityTextWithParenthesis.replace(/ *\([^)]*\) */g, "");
             finishAddingEditor();
         } else {
             firstName = $("#add-responsible-person-first-name").val();
             lastName = $("#add-responsible-person-last-name").val();
-            var responsibleTypeId = $("#add-editor-type").val();
+            responsibilityTypeId = $("#add-editor-type").val();
+            const responsibilityTextWithParenthesis = $("#add-editor-type").find(":selected").text();
+            responsibilityText = responsibilityTextWithParenthesis.replace(/ *\([^)]*\) */g, "");
 
-            this.projectClient.createResponsiblePerson(firstName,
-                lastName,
-                responsibleTypeId,
-                (newResponsiblePersonId, errorCode) => {
-                    if (errorCode != null) {
-                        this.addEditorDialog.showError();
-                        return;
-                    }
-
-                    id = newResponsiblePersonId;
-                    finishAddingEditor();
-                });
+            this.projectClient.createResponsiblePerson(firstName, lastName).done((newResponsiblePersonId: number) => {
+                id = newResponsiblePersonId;
+                finishAddingEditor();
+            }).fail(() => {
+                this.addEditorDialog.showError();
+            });
         }
     }
 
@@ -510,7 +511,7 @@
         });
         $("#work-metadata-editors .editor-item").each((index, elem) => {
             var projectResponsible: ISaveProjectResponsiblePerson = {//TODO investigate new responsible person addition
-                responsiblePersonId: $(elem).data("person-id"),
+                responsiblePersonId: $(elem).data("id"),
                 responsibleTypeId: $(elem).data("responsible-type-id")
             };
             selectedResponsibleIds.push(projectResponsible);
@@ -725,7 +726,7 @@ class ProjectWorkNoteTab extends ProjectModuleTabBase {
 }
 
 class MetadataUiHelper {
-    public static addPerson($container: JQuery, label: string, idValue: string | number): HTMLDivElement {
+    public static addPerson($container: JQuery, label: string, idValue: string | number, responsibilityTypeId?: number | string): HTMLDivElement {
         var rootElement = document.createElement("div");
         var deleteButton = document.createElement("button");
         var deleteGlyphSpan = document.createElement("span");
@@ -742,9 +743,12 @@ class MetadataUiHelper {
         $(labelSpan)
             .addClass("text-as-form-control")
             .text(label);
+        if (responsibilityTypeId != null) {
+            $(rootElement).attr("data-responsible-type-id", responsibilityTypeId);
+        }
         $(rootElement)
             .attr("data-id", idValue)
-            .append(deleteButton)
+        .append(deleteButton)
             .append(labelSpan)
             .appendTo($container);
 

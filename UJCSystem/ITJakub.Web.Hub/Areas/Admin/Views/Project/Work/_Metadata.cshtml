@@ -77,11 +77,11 @@
                         <input type="hidden" id="add-editor-id-preview" />
                         @foreach (var editor in Model.ResponsiblePersons)
                         {
-                            <div class="editor-item" data-person-id="@editor.Id" data-responsible-type-id="@editor.ResponsibleType.Id">
+                            <div class="editor-item" data-id="@editor.Id" data-responsible-type-id="@editor.ResponsibleType.Id">
                                 <button class="btn btn-default remove-button">
                                     <span class="glyphicon glyphicon-remove"></span>
                                 </button>
-                                <span class="text-as-form-control">@editor.FirstName @editor.LastName - @editor.ResponsibleType.Text </span>
+                                <span class="text-as-form-control">@editor.FirstName @editor.LastName - @editor.ResponsibleType.Text</span>
                             </div>
                         }
                     </div>

@@ -105,14 +105,13 @@
         return $.post(`${getBaseUrl()}Admin/KeyTable/CreateAuthor`, { request:data });
     }
 
-    public createResponsiblePerson(firstName: string, lastName: string, responsibleTypeId: number, callback: (newResponsibleId: number, errorCode: HttpStatusCode) => void) {
-        var data = {
+    createResponsiblePerson(firstName: string, lastName: string):JQueryXHR {
+        const data: IResponsiblePerson = {
+            id:0,
             firstName: firstName,
-            lastName: lastName,
-            responsibleTypeIdList: [responsibleTypeId]
-        }
-        throw "TODO update UI required, because DB model changed.";
-        //this.postAjax("Admin/Project/CreateResponsiblePerson", data, callback);
+            lastName: lastName
+        };
+        return $.post(`${getBaseUrl()}Admin/KeyTable/CreateResponsiblePerson`, { request: data });
     }
 
     createResponsibleType(type: ResponsibleTypeEnum, text: string):JQueryXHR {
