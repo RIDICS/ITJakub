@@ -412,8 +412,11 @@
                                         </div>
                                     </div>
                                     <div class="row new-author-button-row">
-                                        <div class="col-xs-12 col-no-padding">
+                                        <div class="col-xs-9 col-no-padding">
                                             <button class="new-original-author-button btn btn-default">Add new author</button>
+                                        </div>
+                                        <div class="col-xs-3 col-no-padding">
+                                            <button class="new-original-author-finish-button btn btn-default">Done</button>
                                         </div>
                                     </div>
                                 </div>
@@ -447,90 +450,6 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Add new responsible person</h4>
             </div>
-            @*<div class="modal-body"> TODO remove when new ui is done
-                <div class="panel panel-warning">
-                    <div class="panel-heading">
-                        TODO: GUI neodpovídá novému databázovému modelu. Nutno předělat včetně TypeScriptu.
-                    </div>
-                </div>
-                <ul class="nav nav-tabs">
-                    <li class="active">
-                        <a href="#tab-select-existing-editor" data-toggle="tab">Výběr existujícího</a>
-                    </li>
-                    <li>
-                        <a href="#tab-create-new-editor" data-toggle="tab">Vytvoření nového</a>
-                    </li>
-                </ul>
-
-                <div class="tab-content">
-                    <div id="tab-select-existing-editor" class="tab-pane active">
-                        <div class="form-horizontal">
-                            <div class="form-group">
-                                <label for="add-editor-search" class="col-md-3 control-label">Vyhledat editora</label>
-                                <div class="col-md-7">
-                                    <input class="form-control" id="add-editor-search" type="text">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Jméno</label>
-                                <div class="col-md-7">
-                                    <input class="form-control" id="add-editor-first-name-preview" type="text" disabled="disabled">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Příjmení</label>
-                                <div class="col-md-7">
-                                    <input class="form-control" id="add-editor-last-name-preview" type="text" disabled="disabled">
-                                </div>
-                            </div>
-                            <input type="hidden" id="add-editor-id-preview"/>
-                        </div>
-                    </div>
-                    <div id="tab-create-new-editor" class="tab-pane">
-                        <div class="form-horizontal">
-                            <div class="form-group">
-                                <label for="add-editor-first-name" class="col-md-3 control-label">Jméno</label>
-                                <div class="col-md-7">
-                                    <input class="form-control" id="add-editor-first-name" type="text">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="add-editor-last-name" class="col-md-3 control-label">Příjmení</label>
-                                <div class="col-md-7">
-                                    <input class="form-control" id="add-editor-last-name" type="text">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="add-editor-type" class="col-md-3 control-label">Typ</label>
-                                <div class="col-md-7">
-                                    <select class="form-control" id="add-editor-type">
-                                        @foreach (var responsibleType in Model.AllResponsibleTypeList)
-                                        {
-                                            <option value="@responsibleType.Id">@responsibleType.Text (@responsibleType.Type.GetDisplayAttributeValue())</option>
-                                        }
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-offset-3 col-md-7">
-                                    <button class="btn btn-default" id="add-responsible-type-button">Přidat typ</button>
-                                </div>
-                            </div>
-                            <div class="form-group" id="add-responsible-type-container">
-                                <div class="col-md-3">
-                                    @Html.DropDownListFor(x => x.ResponsibleTypeEnumEmpty, Html.GetEnumSelectList<ResponsibleTypeEnumViewModel>(), htmlAttributes: new {@class = "form-control", id = "add-responsible-type-type"})
-                                </div>
-                                <div class="col-md-4">
-                                    <input class="form-control" id="add-responsible-type-text" type="text" placeholder="Nový typ"/>
-                                </div>
-                                <div class="col-md-3">
-                                    <button class="btn btn-default" id="add-responsible-type-save"><span id="add-responsible-type-saving-icon" class="loading-small-button"></span>Vytvořit</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>*@
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row">

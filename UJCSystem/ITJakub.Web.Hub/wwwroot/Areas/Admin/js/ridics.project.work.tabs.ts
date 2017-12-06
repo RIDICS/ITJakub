@@ -115,7 +115,6 @@
 
     private createAuthorListStructure(authorList: IOriginalAuthor[], jEl: JQuery):JQuery {
         var elm = "";
-        jEl.children(".author-list-item").remove();
         authorList.forEach((item:IOriginalAuthor) => {
             elm += `<div class="author-list-item clearfix" data-author-id="${item.id}"><div class="list-group-item col-xs-6 border-right existing-original-author-name">${item.firstName}</div><div class="list-group-item existing-original-author-surname border-left col-xs-6">${item.lastName}</div></div>`;
         });
@@ -169,9 +168,51 @@
         });
 
         $(".new-original-author-button").on("click", () => {
-            $(".author-list-items").empty();
+            const finishAddingResponsiblePersonButton = $(".new-original-author-finish-button");
             $("#add-author-search").prop("disabled", true);
+            $(".new-original-author-button").prop("disabled", true);
             $(".author-name-input-row").show();
+            finishAddingResponsiblePersonButton.show();
+        });
+
+        $(".new-original-author-finish-button").on("click", () => {
+            const firstNameEl = $("#add-author-first-name");
+            const lastNameEl = $("#add-author-last-name");
+            const listItemsEl = $(".author-list-items");
+            var firstName = firstNameEl.val();
+            var lastName = lastNameEl.val();
+            var id: number;
+            if (firstName === "" || lastName === "") {
+                this.addAuthorDialog.showError("Please enter a name and surname");
+                return;
+            }
+            const createAuthorAjax = this.projectClient.createAuthor(firstName,
+                lastName);
+            createAuthorAjax.done((data: number) => {
+                id = data;
+                const newlyCreatedAuthorArray: IOriginalAuthor[] = [];
+                const newlyCreatedAuthor: IOriginalAuthor = {
+                    id: id,
+                    lastName: lastName,
+                    firstName: firstName
+                };
+                newlyCreatedAuthorArray.push(newlyCreatedAuthor);
+                this.createAuthorListStructure(newlyCreatedAuthorArray, listItemsEl);
+                
+                const newlyCreatedOriginalAuthorEl = $(`[data-author-id=${id}]`);
+                $(".existing-original-author-selected").not(newlyCreatedOriginalAuthorEl)
+                    .removeClass("existing-original-author-selected");
+                newlyCreatedOriginalAuthorEl.addClass("existing-original-author-selected");
+                $("#add-author-id-preview").val(id);
+                $(".new-original-author-button").prop("disabled", false);
+                $("#add-author-search").prop("disabled", false);
+                firstNameEl.val("");
+                lastNameEl.val("");
+                $(".author-name-input-row").hide();
+                $(".new-original-author-finish-button").hide();
+            }).fail(() => {
+                this.addAuthorDialog.showError();
+            });
         });
 
         $(".new-responsible-person-button").on("click", () => {
@@ -190,6 +231,10 @@
             const firstName = firstNameEl.val();
             const lastName = lastNameEl.val();
             var id: number;
+            if (firstName === "" || lastName === "") {
+                this.addEditorDialog.showError("Please enter a name and surname");
+                return;
+            }
             this.projectClient.createResponsiblePerson(firstName, lastName).done((newResponsiblePersonId: number) => {
                 id = newResponsiblePersonId;
                 const createdResponsiblePersonArray: IResponsiblePerson[] = [];
@@ -198,10 +243,6 @@
                     lastName: lastName,
                     firstName:firstName
                 };
-                if (firstName === "" || lastName === "") {
-                    this.addEditorDialog.showError("Please enter a name and surname");
-                    return;
-                }
                 createdResponsiblePersonArray.push(createdResponsiblePerson);
                 this.createResponsiblePersonListStructure(createdResponsiblePersonArray, listItemsEl);
                 const newlyCreatedResponsiblePerson = $(`[data-responsible-person-id=${id}]`);
@@ -228,13 +269,10 @@
             $(".existing-original-author-selected").removeClass("existing-original-author-selected");
             const newAuthorButtonEl = $(".new-original-author-button");
             newAuthorButtonEl.prop("disabled", false);
+            $(".new-original-author-finish-button").hide();
         });
 
-        const newAuthorNameEl = $(".add-author-first-name");
-        const newAuthorSurnameEl = $(".add-author-last-name");
-        const newAuthorButtonEl = $(".new-original-author-button");
         const $authorId = $("#add-author-id-preview");
-        var isAuthorSelected = false;
 
         $(".author-list-items").on("click", ".author-list-item", (event: Event) => {
             var targetEl = $(event.target);
@@ -245,18 +283,13 @@
             targetEl.toggleClass("existing-original-author-selected");
             var authorId = null;
             if ($(".existing-original-author-selected").length) {
-                isAuthorSelected = true;
                 authorId = $(".existing-original-author-selected").data("author-id");
                 $authorId.val(authorId);
                 this.selectedAuthorId = authorId;
             } else {
-                isAuthorSelected = false;
                 $authorId.val("");
                 this.selectedAuthorId = null;
             }
-            newAuthorButtonEl.prop("disabled", isAuthorSelected);
-            newAuthorNameEl.prop("disabled", isAuthorSelected);
-            newAuthorSurnameEl.prop("disabled", isAuthorSelected);
         });
 
         $("#add-author-search").on("input", (event: Event) => {
@@ -264,9 +297,6 @@
             const enteredText = textAreaEl.val();
             if (enteredText === "") {
                 $(".author-list-item").remove();
-                newAuthorButtonEl.prop("disabled", false);
-                newAuthorNameEl.prop("disabled", false);
-                newAuthorSurnameEl.prop("disabled", false);
                 $authorId.val("");
                 this.selectedAuthorId = null;
                 return;
@@ -275,8 +305,10 @@
                 (data: IOriginalAuthor[]) => {
                     if (data.length) {
                         $authorId.val("");
+                        const listItemsEl = $(".author-list-items");
                         this.selectedAuthorId = null;
-                        this.createAuthorListStructure(data, $(".author-list-items"));
+                        listItemsEl.children(".author-list-item").remove();
+                        this.createAuthorListStructure(data, listItemsEl);
                     } else {
                         $(".author-list-item").remove();
                         $authorId.val("");
@@ -336,9 +368,6 @@
                 $editorId.val("");
                 this.selectedResponsiblePersonId = null;
             }
-            newResponsiblePersonButtonEl.prop("disabled", isAuthorSelected);
-            newResponsiblePersonNameEl.prop("disabled", isAuthorSelected);
-            newResponsiblePersonSurnameEl.prop("disabled", isAuthorSelected);
         });
         const addResponsiblePersonDialogCancelButton = $("#add-editor-dialog").find(`[data-dismiss="modal"]`);
         addResponsiblePersonDialogCancelButton.on("click", () => {
@@ -455,20 +484,7 @@
 
             finishAddingAuthor();
         } else {
-            firstName = $("#add-author-first-name").val();
-            lastName = $("#add-author-last-name").val();
-            if (firstName === "" || lastName === "") {
-                this.addAuthorDialog.showError("Please enter a name or choose existing author");
-                return;
-            }
-            const createAuthorAjax = this.projectClient.createAuthor(firstName,
-                lastName);
-            createAuthorAjax.done((data: number) => {
-                id = data;
-                finishAddingAuthor();
-            }).fail(() => {
-                this.addAuthorDialog.showError();
-            });
+            this.addAuthorDialog.showError("Please select one author from list");
 
         }
     }
