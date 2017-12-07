@@ -217,6 +217,18 @@
             }
         });
 
+        $(".move-person-up").on("click", (event) => {
+            const targetEl = $(event.target);
+            const personEl = targetEl.parents(".editor-item, .author-item");
+            //TODO
+        });
+
+        $(".move-person-down").on("click", (event) => {
+            const targetEl = $(event.target);
+            const personEl = targetEl.parents(".editor-item, .author-item");
+            //TODO
+        });
+
         $("#category-tree").find("input").prop("disabled", true);
 
         $("#work-metadata-edit-button").click(() => {

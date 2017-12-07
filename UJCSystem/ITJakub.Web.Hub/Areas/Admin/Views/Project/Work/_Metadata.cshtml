@@ -78,9 +78,18 @@
                         @foreach (var editor in Model.ResponsiblePersons)
                         {
                             <div class="editor-item" data-id="@editor.Id" data-responsible-type-id="@editor.ResponsibleType.Id">
-                                <button class="btn btn-default remove-button">
-                                    <span class="glyphicon glyphicon-remove"></span>
-                                </button>
+                                <span class="person-list-manipuulate">
+                                    <div class="btn-group-vertical move-button">
+                                        <button type="button" class="btn btn-default move-person-up">
+                                            <i class="fa fa-chevron-up" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-default move-person-down">
+                                            <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                    <button class="btn btn-default remove-button">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button></span>
                                 <span class="text-as-form-control">@editor.FirstName @editor.LastName - @editor.ResponsibleType.Text</span>
                             </div>
                         }
@@ -166,9 +175,16 @@
                         @foreach (var author in Model.Authors)
                         {
                             <div class="author-item" data-id="@author.Id">
+                                <span class="person-list-manipuulate">
+                                <div class="btn-group-vertical move-button">
+                                    <button type="button" class="btn btn-default move-person-up"><i class="fa fa-chevron-up" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default move-person-down"><i class="fa fa-chevron-down" aria-hidden="true"></i>
+                                    </button>
+                                </div> 
                                 <button class="btn btn-default remove-button">
                                     <span class="glyphicon glyphicon-remove"></span>
-                                </button>
+                                </button></span>
                                 <span class="text-as-form-control">@author.FirstName @author.LastName</span>
                             </div>
                         }

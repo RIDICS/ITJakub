@@ -448,8 +448,9 @@ table {
 
 .editor-item,
 .author-item {
+    margin: 2px 0;
+
     button {
-        float: right;
     }
 
     &::after {
@@ -535,6 +536,19 @@ table {
 #project-work-metadata {
     #work-metadata-invalid-email {
         display: none;
+    }
+
+    .person-list-manipuulate {
+        float: right;
+    }
+
+    .move-button {
+        margin-right: 5px;
+
+        .btn {
+            padding: 0px 4px;
+            max-height:18px;
+        }
     }
 
     .category-container {
