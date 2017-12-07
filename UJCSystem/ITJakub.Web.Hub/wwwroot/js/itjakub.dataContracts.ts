@@ -220,6 +220,7 @@ interface IChapterHieararchyContract {
 
 interface ISaveMetadataResource extends IMetadataResource {
     keywordIdList: Array<number>;
+    categoryIdList: Array<number>;
     literaryKindIdList: Array<number>;
     literaryGenreIdList: Array<number>;
     authorIdList: Array<number>;
@@ -228,6 +229,7 @@ interface ISaveMetadataResource extends IMetadataResource {
 
 interface IGetMetadataResource extends IMetadataResource {
     keywordList?: Array<IKeywordContract>;
+    categoryList?: Array<ICategoryContract>;
     literaryKindList?: Array<ILiteraryKindContract>;
     literaryGenreList?: Array<ILiteraryGenreContract>;
     authorIdList?: Array<IOriginalAuthor>;

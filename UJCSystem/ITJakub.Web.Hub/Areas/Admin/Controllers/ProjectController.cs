@@ -111,12 +111,14 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                         var literaryOriginals = client.GetLiteraryOriginalList();
                         var responsibleTypes = client.GetResponsibleTypeList();
                         var keywords = client.GetKeywordList();
-                        var projectMetadata = client.GetProjectMetadata(projectId.Value, true, true, true, true, true, true);
+                        var categories = client.GetCategoryList();
+                        var projectMetadata = client.GetProjectMetadata(projectId.Value, true, true, true, true, true, true, true);
                         var workMetadaViewModel = Mapper.Map<ProjectWorkMetadataViewModel>(projectMetadata);
                         workMetadaViewModel.AllLiteraryKindList = literaryKinds;
                         workMetadaViewModel.AllLiteraryGenreList = literaryGenres;
                         workMetadaViewModel.AllKeywordsList = keywords;
                         workMetadaViewModel.AllLiteraryOriginalList = literaryOriginals;
+                        workMetadaViewModel.AllCategoryList = categories;
                         workMetadaViewModel.AllResponsibleTypeList =
                             Mapper.Map<List<ResponsibleTypeViewModel>>(responsibleTypes);
                         return PartialView("Work/_Metadata", workMetadaViewModel);
@@ -382,12 +384,12 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         [HttpGet]
         public IActionResult GetProjectMetadata([FromQuery] long projectId, [FromQuery] bool includeAuthor, [FromQuery] bool includeResponsiblePerson,
-            [FromQuery] bool includeKind, [FromQuery] bool includeGenre, [FromQuery] bool includeOriginal, [FromQuery] bool includeKeyword)
+            [FromQuery] bool includeKind, [FromQuery] bool includeGenre, [FromQuery] bool includeOriginal, [FromQuery] bool includeKeyword, [FromQuery] bool includeCategory)
         {
             using (var client = GetRestClient())
             {
                 var response = client.GetProjectMetadata(projectId, includeAuthor,
-                includeResponsiblePerson, includeKind, includeGenre, includeOriginal, includeKeyword);
+                includeResponsiblePerson, includeKind, includeGenre, includeOriginal, includeKeyword, includeCategory);
                 return Json(response);
             }
         }
