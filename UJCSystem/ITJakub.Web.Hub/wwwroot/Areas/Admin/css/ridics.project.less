@@ -533,16 +533,16 @@ table {
 }
 
 #project-work-metadata {
-    #work-metadata-invalid-email{
+    #work-metadata-invalid-email {
         display: none;
     }
-    
+
     .category-container {
         height: 300px;
         overflow-y: scroll;
     }
 
-    .email-group{
+    .email-group {
         .email-validity-icon {
             &-ok {
                 color: green;
@@ -641,6 +641,7 @@ table {
                 }
 
                 .author-list-items {
+                    overflow-y: scroll;
                     border: solid 1px gray;
                     border-top: none;
                     min-height: 175px;
@@ -649,6 +650,10 @@ table {
 
                     .author-list-item {
                         border-bottom: solid 1px gray;
+
+                        .list-group-item {
+                            padding: 4px;
+                        }
                     }
 
                     .existing-original-author-selected {
@@ -665,6 +670,7 @@ table {
                 }
 
                 .author-table-header {
+                    overflow-y: scroll;
                     border: solid 1px gray;
                     font-weight: bold;
                 }
@@ -703,6 +709,7 @@ table {
 
             .responsible-people-table {
                 .responsible-person-table-header {
+                    overflow-y: scroll;
                     border: solid 1px gray;
                     font-weight: bold;
                 }
@@ -721,10 +728,14 @@ table {
                 border-top: none;
                 min-height: 175px;
                 max-height: 200px;
-                overflow-y: auto;
+                overflow-y: scroll;
 
                 .responsible-person-list-item {
                     border-bottom: solid 1px gray;
+
+                    .list-group-item {
+                        padding: 4px;
+                    }
                 }
 
                 .existing-responsible-person-selected {
