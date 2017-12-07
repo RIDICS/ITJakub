@@ -470,6 +470,16 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
                 try
                 {
+                    client.SetProjectCategories(projectId,
+                        new IntegerIdListContract { IdList = request.CategoryIdList });
+                }
+                catch (HttpRequestException)
+                {
+                    unsuccessRequestCount++;
+                }
+
+                try
+                {
                     client.SetProjectLiteraryGenres(projectId,
                         new IntegerIdListContract {IdList = request.LiteraryGenreIdList});
                 }

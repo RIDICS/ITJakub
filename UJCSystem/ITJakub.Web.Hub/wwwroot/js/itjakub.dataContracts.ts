@@ -363,6 +363,12 @@ interface ICategoryContract {
     description: string;
 }
 
+interface ICategoryTreeContract {
+    text: string;
+    id: number;
+    children?: ICategoryTreeContract[];
+}
+
 interface IEditionNote { //TODO expand after server functionality is done
     projectId: number;
     content: string;

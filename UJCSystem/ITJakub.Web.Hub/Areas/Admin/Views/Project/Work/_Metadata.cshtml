@@ -72,7 +72,7 @@
             </div>
             <div class="form-group">
                 <label class="col-md-4 control-label">Responsible people</label>
-                <div class="col-md-7">
+                <div class="col-md-8">
                     <div id="work-metadata-editors">
                         <input type="hidden" id="add-editor-id-preview" />
                         @foreach (var editor in Model.ResponsiblePersons)
@@ -158,7 +158,7 @@
             </div>
             <div class="form-group">
                 <label class="col-md-4 control-label">Authors (from book)</label>
-                <div class="col-md-7">
+                <div class="col-md-8">
                     <div id="work-metadata-authors">
                         <input type="hidden" id="add-author-id-preview"/>
                         @foreach (var author in Model.Authors)
@@ -243,9 +243,23 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-4 control-label" for="work-metadata-category">Kategorie</label>
-                <div class="col-md-7">
+                <label class="col-md-4 control-label">Kategorie</label>
+                <div class="col-md-8 category-container">
                     <div id="category-tree"></div>
+                </div>
+                <div class="all-category-list hidden">
+                    @foreach (var category in Model.AllCategoryList)
+                    {
+                        <div class="existing-category-list-item" data-category-id="@category.Id" data-category-description="@category.Description" data-parent-category-id="@category.ParentCategoryId" data-external-id="@category.ExternalId">
+                        </div>
+                    }
+                </div>
+                <div class="selected-category-list hidden">
+                    @foreach (var categoryId in Model.SelectedCategoryIds)
+                    {
+                        <div class="selected-category-list-item" data-category-id="@categoryId">
+                        </div>
+                    }
                 </div>
             </div>
             <div class="form-group">

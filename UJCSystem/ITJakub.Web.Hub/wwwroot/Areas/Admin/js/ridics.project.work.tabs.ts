@@ -133,25 +133,88 @@
 
     private categoryTree:any;//TODO investigate d ts
 
+    private createCategoriesNestedStructure() {
+        const existingCategoriesEl = $(".all-category-list");
+        const existingCategoriesElList = existingCategoriesEl.children(".existing-category-list-item");
+        existingCategoriesElList.each((index, elem) => {
+            const categoryEl = $(elem);
+            const id = categoryEl.data("category-id");
+            const childCategories = $(`[data-parent-category-id=${id}]`);
+            if (childCategories.length) {
+                childCategories.addClass("child-category").detach();
+                categoryEl.addClass("parent-category").append(childCategories);
+            }
+        });
+    }
+
+    private checkSelectedCategoriesInTree(categoryTree: any) {
+        const selectedCategoriesEl = $(".selected-category-list");
+        const selectedCategoriesElList = selectedCategoriesEl.children(".selected-category-list-item");
+        selectedCategoriesElList.each((index, elem) => {
+            const categoryEl = $(elem);
+            const catId = categoryEl.data("category-id");
+            const catChechbox = categoryTree.getNodeById(catId);
+            categoryTree.check(catChechbox);
+        });
+        console.log(selectedCategoriesEl);
+    }
+
+    private convertCategoryArrayToCategoryTreeObject() {
+        const categoryTreeObject = new Array<ICategoryTreeContract>();
+        const existingCategoriesEl = $(".all-category-list");
+        const existingCategoriesElList = existingCategoriesEl.children(".existing-category-list-item");
+        existingCategoriesElList.each((index, elem) => {
+            const catEl = $(elem);
+            var categoryTreeEl = this.convertCateroryElToCategoryTreeEl(catEl);
+            categoryTreeObject.push(categoryTreeEl);
+        });
+        return categoryTreeObject;
+    }
+
+    private convertCateroryElToCategoryTreeEl(categoryEl: JQuery) {
+        var categoryTreeEl = <ICategoryTreeContract>{};
+        categoryTreeEl.id = categoryEl.data("category-id");
+        categoryTreeEl.text = categoryEl.data("category-description");
+        if (categoryEl.hasClass("parent-category")) {
+            const childrenCats = categoryEl.children(".child-category");
+            categoryTreeEl.children = Array<ICategoryTreeContract>();
+            childrenCats.each((index, elem) => {
+                const childCat = $(elem);
+                categoryTreeEl.children.push(this.convertCateroryElToCategoryTreeEl(childCat));
+            });        
+        }
+        return categoryTreeEl;
+    }
+
     initTab(): void {
         super.initTab();
         this.initKeywords();
         var $addResponsibleTypeButton = $("#add-responsible-type-button");
         var $addResponsibleTypeContainer = $("#add-responsible-type-container");
 
+        this.createCategoriesNestedStructure();
+
         this.categoryTree = $("#category-tree").tree({
             primaryKey: "id",
             uiLibrary: "bootstrap",
-            dataSource: [{ text: "cat1" , id: "catId", children: [{ text: "cat2", id: "catId" }] }],//TODO
-            checkboxes: true
+            checkedField: "categorySelected",
+            dataSource: this.convertCategoryArrayToCategoryTreeObject(),//TODO
+            checkboxes: true,
+            cascadeCheck: false
         });
+
+        this.checkSelectedCategoriesInTree(this.categoryTree);
+
+        $("#category-tree").find("input").prop("disabled", true);
 
         $("#work-metadata-edit-button").click(() => {
             this.enabledEdit();
+            $("#category-tree").children("input").prop("disabled", false);
         });
 
         $("#work-metadata-cancel-button").click(() => {
             this.disableEdit();
+            $("#category-tree").children("input").prop("disabled", true);
         });
 
         $("#add-publisher-button").click(() => {
@@ -558,14 +621,11 @@
     }
 
     private saveMetadata() {
-        var selectedCategoryIds = new Array<number>();//TODO
         var selectedAuthorIds = new Array<number>();
         var selectedResponsibleIds = new Array<ISaveProjectResponsiblePerson>();
         var selectedKindIds = new Array<number>();
         var selectedGenreIds = new Array<number>();
         var keywordIdList = new Array<number>();
-
-        console.log(this.categoryTree.getCheckedNodes());//TODO
 
         $("#work-metadata-authors .author-item").each((index, elem) => {
             selectedAuthorIds.push($(elem).data("id"));
@@ -600,6 +660,7 @@
         createNewKeywordAjax.done((newIds: number[]) => {
             const allKeywordIds = keywordIdList.concat(newIds);
             var data: ISaveMetadataResource = {
+                categoryIdList: this.categoryTree.getCheckedNodes(),
                 keywordIdList: allKeywordIds,
                 biblText: $("#work-metadata-bibl-text").val(),
                 copyright: $("#work-metadata-copyright").val(),

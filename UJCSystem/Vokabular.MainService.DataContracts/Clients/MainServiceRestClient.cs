@@ -148,6 +148,21 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public void SetProjectCategories(long projectId, IntegerIdListContract request)
+        {
+            try
+            {
+                Put<object>($"project/{projectId}/category", request);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public void SetProjectKeywords(long projectId, IntegerIdListContract request)
         {
             try
