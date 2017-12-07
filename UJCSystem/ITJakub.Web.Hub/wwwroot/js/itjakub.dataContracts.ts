@@ -130,6 +130,7 @@ interface IMetadataResource {
     publisherId: number;
     publishPlace: string;
     publishDate: string;
+    publisherEmail: string;
     copyright: string;
     biblText: string;
     originDate: string;

@@ -91,11 +91,13 @@
                     </button>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group email-group">
                 <label class="col-md-4 control-label" for="work-metadata-publisher-email">E-mail</label>
                 <div class="col-md-7">
-                    <input type="text" id="work-metadata-publisher-email" class="form-control" value="@Model.PublisherEmail"/>
-                </div>
+                    <input type="text" id="work-metadata-publisher-email" class="form-control" value="@Model.PublisherEmail" />
+                </div><div class="col-md-1"><span class="email-validity-icon-bad"><i class="fa fa-lg fa-times" aria-hidden="true"></i>
+                </span><span class="email-validity-icon-ok"><i class="fa fa-lg fa-check" aria-hidden="true"></i>
+                </span></div>
             </div>
             <div class="form-group">
                 <label class="col-md-4 control-label" for="work-metadata-copyright">Copyright</label>
@@ -298,6 +300,7 @@
     <div id="work-metadata-editor-button-panel">
         <div class="alert alert-success" id="work-metadata-save-success">Metadata uložena</div>
         <div class="alert alert-danger" id="work-metadata-save-error">Některá metadata se nepodařilo uložit</div>
+        <div class="alert alert-danger" id="work-metadata-invalid-email">Invalid publisher's email</div>
         <button class="btn btn-default" id="work-metadata-cancel-button">Zrušit</button>
         <button class="btn btn-default" id="work-metadata-save-button"><span class="saving-icon loading-small-button"></span> Uložit</button>
     </div>

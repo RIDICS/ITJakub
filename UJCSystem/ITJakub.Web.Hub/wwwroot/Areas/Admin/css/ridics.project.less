@@ -533,9 +533,32 @@ table {
 }
 
 #project-work-metadata {
+    #work-metadata-invalid-email{
+        display: none;
+    }
+    
     .category-container {
         height: 300px;
         overflow-y: scroll;
+    }
+
+    .email-group{
+        .email-validity-icon {
+            &-ok {
+                color: green;
+                display: none;
+            }
+
+            &-bad {
+                color: red;
+                display: none;
+            }
+        }
+
+        .email-input-col {
+            padding-left: 0;
+            padding-right: 0;
+        }
     }
 
     #work-metadata-editors {

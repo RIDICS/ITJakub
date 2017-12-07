@@ -205,6 +205,18 @@
 
         this.checkSelectedCategoriesInTree(this.categoryTree);
 
+        $("#work-metadata-publisher-email").on("input", () => {
+            const enteredText = $("#work-metadata-publisher-email").val();
+            const emailIsValid = this.validateEmail(enteredText);
+            if (emailIsValid) {
+                $(".email-validity-icon-ok").show();
+                $(".email-validity-icon-bad").hide();
+            } else {
+                $(".email-validity-icon-ok").hide();
+                $(".email-validity-icon-bad").show();
+            }
+        });
+
         $("#category-tree").find("input").prop("disabled", true);
 
         $("#work-metadata-edit-button").click(() => {
@@ -620,7 +632,23 @@
         });
     }
 
+    private validateEmail(mail: string) {
+        const emailRegex = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
+        if (emailRegex.test(mail)) {
+            return true;
+        }
+        return false;
+    }
+
     private saveMetadata() {
+        const enteredEmailText = $("#work-metadata-publisher-email").val();
+        const emailIsValid = this.validateEmail(enteredEmailText);
+        const invalidEmailAlertEl = $("#work-metadata-invalid-email");
+        invalidEmailAlertEl.hide();
+        if (!emailIsValid) {
+            invalidEmailAlertEl.show();
+            return;
+        }
         var selectedAuthorIds = new Array<number>();
         var selectedResponsibleIds = new Array<ISaveProjectResponsiblePerson>();
         var selectedKindIds = new Array<number>();
@@ -674,6 +702,7 @@
                 originDate: $("#work-metadata-origin-date").val(),
                 publishDate: $("#work-metadata-publish-date").val(),
                 publishPlace: $("#work-metadata-publish-place").val(),
+                publisherEmail: $("#work-metadata-publisher-email").val(),
                 publisherId: $("#work-metadata-publisher").val(),
                 relicAbbreviation: $("#work-metadata-relic-abbreviation").val(),
                 sourceAbbreviation: $("#work-metadata-source-abbreviation").val(),
