@@ -1,11 +1,12 @@
 ﻿@model ITJakub.Web.Hub.Models.StaticTextViewModel
+@inject ILocalization Localizer
 
 @section styles{
     <link href="~/Areas/BohemianTextBank/css/itjakub.bohemiantextbank.css" rel="stylesheet" />
 }
 
 @{
-    ViewBag.Title = "Korpusy - Nápověda";
+    ViewBag.Title = @Localizer.Translate("BohemianTextBankHelp", "BohemianTextBank");
 }
 
 <div class="content-container">
