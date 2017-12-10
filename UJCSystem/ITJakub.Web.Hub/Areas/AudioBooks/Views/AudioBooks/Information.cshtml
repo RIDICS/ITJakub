@@ -1,12 +1,12 @@
 ﻿@model ITJakub.Web.Hub.Models.StaticTextViewModel
+@inject ILocalization Localizer
 
 @section styles{
     <link href="~/Areas/AudioBooks/css/itjakub.audiobooks.css" rel="stylesheet" />
 }
 
 @{
-    ViewBag.Title = "Audioknihy - Informace";
-}
+    ViewBag.Title = @Localizer.Translate("AudioBooksInformation", "AudioBooks");
 
 <div class="content-container">
     @Html.Partial("_StaticText", Model)

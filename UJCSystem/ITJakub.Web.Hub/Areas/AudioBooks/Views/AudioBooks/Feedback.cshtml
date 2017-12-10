@@ -1,10 +1,12 @@
 ﻿@model ITJakub.Web.Hub.Models.FeedbackViewModel
+@inject ILocalization Localizer
+
 @section styles{
     <link href="~/Areas/AudioBooks/css/itjakub.audiobooks.css" rel="stylesheet" />
 }
 
 @{
-    ViewBag.Title = "Audioknihy - Připomínky";
+    ViewBag.Title = @Localizer.Translate("AudioBooksFeedback", "AudioBooks");
 }
 
 <div class="content-container">
