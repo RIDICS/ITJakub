@@ -1,10 +1,12 @@
 ﻿@using ITJakub.Web.Hub.Areas.Admin.Models
 @using ITJakub.Web.Hub.Areas.Admin.Models.Type
+@inject ILocalization Localizer
+
 <div>
     <ul class="nav nav-tabs" role="tablist" id="project-resource-tabs">
-        <li role="presentation" class="active"><a href="#project-resource-discussion" aria-controls="project-resource-publications" role="tab">Diskuze</a></li>
-        <li role="presentation"><a href="#project-resource-preview" aria-controls="project-resource-preview" role="tab">Náhled</a></li>
-        <li role="presentation"><a href="#project-resource-metadata" aria-controls="project-resource-metadata" role="tab">Metadata</a></li>
+        <li role="presentation" class="active"><a href="#project-resource-discussion" aria-controls="project-resource-publications" role="tab">@Localizer.Translate("Discussion", "Admin")</a></li>
+        <li role="presentation"><a href="#project-resource-preview" aria-controls="project-resource-preview" role="tab">@Localizer.Translate("Preview", "Admin")</a></li>
+        <li role="presentation"><a href="#project-resource-metadata" aria-controls="project-resource-metadata" role="tab">@Localizer.Translate("Metadata", "Admin")</a></li>
     </ul>
     
     <div class="tab-content" id="resource-tab-content">
@@ -21,7 +23,7 @@
                 <span class="glyphicon glyphicon-menu-up" id="project-resource-version-icon-up"></span>
                 <span class="glyphicon glyphicon-menu-down" id="project-resource-version-icon-down"></span>
             </div>
-            <div>Verze zdroje</div>
+            <div>@Localizer.Translate("SourceVersion", "Admin")</div>
         </button>
     </div>
 </div>

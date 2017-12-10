@@ -1,4 +1,6 @@
-﻿<div id="resource-discussion-container">
+﻿@inject ILocalization Localizer
+
+<div id="resource-discussion-container">
 <div class="discussion-thread">
     <div class="panel panel-default discussion-post">
         <div class="panel-heading">
@@ -23,10 +25,10 @@
                                 <span class="glyphicon glyphicon-cog"></span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a href="#">Upravit</a></li>
-                                <li><a href="#">Uzavřít</a></li>
+                                <li><a href="#">@Localizer.Translate("Edit", "Admin")</a></li>
+                                <li><a href="#">@Localizer.Translate("Close", "Admin")</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a href="#">Smazat</a></li>
+                                <li><a href="#">@Localizer.Translate("Delete", "Admin")</a></li>
                             </ul>
                         </div>
                     </div>
@@ -60,10 +62,10 @@
                                     <span class="glyphicon glyphicon-cog"></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-right">
-                                    <li><a href="#">Upravit</a></li>
-                                    <li><a href="#">Uzavřít</a></li>
+                                    <li><a href="#">@Localizer.Translate("Edit", "Admin")</a></li>
+                                    <li><a href="#">@Localizer.Translate("Close", "Admin")</a></li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="#">Smazat</a></li>
+                                    <li><a href="#">@Localizer.Translate("Delete", "Admin")</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -96,10 +98,10 @@
                                         <span class="glyphicon glyphicon-cog"></span>
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-right">
-                                        <li><a href="#">Upravit</a></li>
-                                        <li><a href="#">Uzavřít</a></li>
+                                        <li><a href="#">@Localizer.Translate("Edit", "Admin")</a></li>
+                                        <li><a href="#">@Localizer.Translate("Close", "Admin")</a></li>
                                         <li role="separator" class="divider"></li>
-                                        <li><a href="#">Smazat</a></li>
+                                        <li><a href="#">@Localizer.Translate("Delete", "Admin")</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -139,10 +141,10 @@
                                     <span class="glyphicon glyphicon-cog"></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-right">
-                                    <li><a href="#">Upravit</a></li>
-                                    <li><a href="#">Uzavřít</a></li>
+                                    <li><a href="#">@Localizer.Translate("Edit", "Admin")</a></li>
+                                    <li><a href="#">@Localizer.Translate("Close", "Admin")</a></li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="#">Smazat</a></li>
+                                    <li><a href="#">@Localizer.Translate("Delete", "Admin")</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -158,6 +160,6 @@
         <textarea class="form-control"></textarea>
     </div>
     <div class="col-md-2">
-        <button class="btn btn-default form-control">Nový příspěvek</button>
+        <button class="btn btn-default form-control">@Localizer.Translate("NewPost", "Admin")</button>
     </div>
 </div>

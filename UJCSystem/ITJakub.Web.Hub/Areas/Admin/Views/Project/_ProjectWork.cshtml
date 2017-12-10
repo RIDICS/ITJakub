@@ -1,13 +1,15 @@
 ﻿@using System.Threading.Tasks
 @using ITJakub.Web.Hub.Areas.Admin.Models
 @using ITJakub.Web.Hub.Areas.Admin.Models.Type
+@inject ILocalization Localizer
+
 <div>
     <ul class="nav nav-tabs" role="tablist" id="project-work-tabs">
-        <li role="presentation" class="active"><a href="#project-work-publications" aria-controls="project-work-publications" role="tab">Publikace</a></li>
-        <li role="presentation"><a href="#project-work-page-list" aria-controls="project-work-page-list" role="tab">Seznam stránek</a></li>
-        <li role="presentation"><a href="#project-work-cooperation" aria-controls="project-work-cooperation" role="tab">Spolupráce</a></li>
-        <li role="presentation"><a href="#project-work-metadata" aria-controls="project-work-metadata" role="tab">Metadata</a></li>
-        <li role="presentation"><a href="#project-work-history" aria-controls="project-work-history" role="tab">Historie</a></li>
+        <li role="presentation" class="active"><a href="#project-work-publications" aria-controls="project-work-publications" role="tab">@Localizer.Translate("Publication", "Admin")</a></li>
+        <li role="presentation"><a href="#project-work-page-list" aria-controls="project-work-page-list" role="tab">@Localizer.Translate("PageList", "Admin")</a></li>
+        <li role="presentation"><a href="#project-work-cooperation" aria-controls="project-work-cooperation" role="tab">@Localizer.Translate("Cooperation", "Admin")</a></li>
+        <li role="presentation"><a href="#project-work-metadata" aria-controls="project-work-metadata" role="tab">@Localizer.Translate("Metadata", "Admin")</a></li>
+        <li role="presentation"><a href="#project-work-history" aria-controls="project-work-history" role="tab">@Localizer.Translate("History", "Admin")</a></li>
     </ul>
     
     <div class="tab-content">

@@ -1,8 +1,10 @@
-﻿<div class="row resource-tab-row-fix">
+﻿@inject ILocalization Localizer
+
+<div class="row resource-tab-row-fix">
     <div class="col-md-2">
         <div class="checkbox">
             <label>
-                <input type="checkbox" id="history-discussion-checkbox" /> Příspěvky v diskuzi
+                <input type="checkbox" id="history-discussion-checkbox" /> @Localizer.Translate("DiscussionPosts", "Admin")
             </label>
         </div>
     </div>
@@ -10,7 +12,7 @@
     <div class="col-md-2">
         <div class="checkbox">
             <label>
-                <input type="checkbox" id="history-snapshot-checkbox" /> Snapshoty
+                <input type="checkbox" id="history-snapshot-checkbox" /> @Localizer.Translate("Snapshots", "Admin")
             </label>
         </div>
     </div>
@@ -18,7 +20,7 @@
     <div class="col-md-2">
         <div class="checkbox">
             <label>
-                <input type="checkbox" id="history-resources-checkbox" /> Změny zdrojů
+                <input type="checkbox" id="history-resources-checkbox" /> @Localizer.Translate("Změny zdrojů", "Admin")
             </label>
         </div>
     </div>

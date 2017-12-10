@@ -1,42 +1,43 @@
 ﻿@using ITJakub.Web.Hub.Areas.Admin.Models.Type
 @using ITJakub.Web.Hub.Helpers
 @model ITJakub.Web.Hub.Areas.Admin.Models.ProjectWorkMetadataViewModel
+@inject ILocalization Localizer
 
 <div class="row resource-tab-row-fix">
     <div class="project-layout-box project-layout-box-500">
         <div class="panel-group" id="work-metadata-container">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Obecné informace
+                    @Localizer.Translate("CommonInformations", "Admin")
                 </div>
                 <div class="panel-body">
                     <div class="form-horizontal">
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-name">Název projektu</label>
+                            <label class="col-md-4 control-label" for="work-metadata-name">@Localizer.Translate("ProjectName", "Admin")</label>
                             <div class="col-md-7">
                                 <input type="text" id="work-metadata-name" class="form-control" value="NULL" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-title">Titul</label>
+                            <label class="col-md-4 control-label" for="work-metadata-title">@Localizer.Translate("Title", "Admin")</label>
                             <div class="col-md-7">
                                 <input type="text" id="work-metadata-title" class="form-control" value="@Model.Title" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-subtitle">Podtitul</label>
+                            <label class="col-md-4 control-label" for="work-metadata-subtitle">@Localizer.Translate("Subtitle", "Admin")</label>
                             <div class="col-md-7">
                                 <input type="text" id="work-metadata-subtitle" class="form-control" value="@Model.Subtitle" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-relic-abbreviation">Zkratka památky</label>
+                            <label class="col-md-4 control-label" for="work-metadata-relic-abbreviation">@Localizer.Translate("RelicAbbr", "Admin")</label>
                             <div class="col-md-7">
                                 <input type="text" id="work-metadata-relic-abbreviation" class="form-control" value="@Model.RelicAbbreviation" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-source-abbreviation">Zkratka pramene</label>
+                            <label class="col-md-4 control-label" for="work-metadata-source-abbreviation">@Localizer.Translate("SourceAbbr", "Admin")</label>
                             <div class="col-md-7">
                                 <input type="text" id="work-metadata-source-abbreviation" class="form-control" value="@Model.SourceAbbreviation" />
                             </div>
@@ -47,12 +48,12 @@
 
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Publikace
+                    @Localizer.Translate("Publications", "Admin")
                 </div>
                 <div class="panel-body">
                     <div class="form-horizontal">
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-publisher">Nakladatel</label>
+                            <label class="col-md-4 control-label" for="work-metadata-publisher">@Localizer.Translate("Publisher", "Admin")</label>
                             <div class="col-md-6">
                                 <select id="work-metadata-publisher" class="form-control">
                                     <option disabled selected value="" class="hidden"></option>
@@ -69,31 +70,31 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-publish-place">Místo publikace</label>
+                            <label class="col-md-4 control-label" for="work-metadata-publish-place">@Localizer.Translate("PublishPlace", "Admin")</label>
                             <div class="col-md-7">
                                 <input type="text" id="work-metadata-publish-place" class="form-control" value="@Model.PublishPlace" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-publish-date">Rok/roky publikace</label>
+                            <label class="col-md-4 control-label" for="work-metadata-publish-date">@Localizer.Translate("PublishDate", "Admin")</label>
                             <div class="col-md-7">
                                 <input type="text" id="work-metadata-publish-date" class="form-control" value="@Model.PublishDate" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-bibl-text">Bibliografie</label>
+                            <label class="col-md-4 control-label" for="work-metadata-bibl-text">@Localizer.Translate("Bibliography", "Admin")</label>
                             <div class="col-md-7">
                                 <input type="text" id="work-metadata-bibl-text" class="form-control" value="@Model.BiblText" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-copyright">Copyright</label>
+                            <label class="col-md-4 control-label" for="work-metadata-copyright">@Localizer.Translate("Copyrright", "Admin")</label>
                             <div class="col-md-7">
                                 <input type="text" id="work-metadata-copyright" class="form-control" value="@Model.Copyright" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-4 control-label">Editoři</label>
+                            <label class="col-md-4 control-label">@Localizer.Translate("Editors", "Admin")</label>
                             <div class="col-md-7">
                                 <div id="work-metadata-editors">
                                     @foreach (var editor in Model.ResponsiblePersons)
@@ -105,7 +106,7 @@
                                     }
                                 </div>
                                 
-                                <button class="btn btn-default" id="add-editor-button">Přidat</button>
+                                <button class="btn btn-default" id="add-editor-button">@Localizer.Translate("Add", "Admin")</button>
                             </div>
                         </div>
                     </div>
@@ -114,50 +115,50 @@
 
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Předloha/rukopis
+                    @Localizer.Translate("Original/Handwriting", "Admin")
                 </div>
                 <div class="panel-body">
                     <div class="form-horizontal">
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-literary-original">Předloha</label>
+                            <label class="col-md-4 control-label" for="work-metadata-literary-original">@Localizer.Translate("LiteraryOriginal", "Admin")</label>
                             <div class="col-md-7">
                                 <span class="text-as-form-control" id="work-metadata-literary-original">@Model.LiteraryOriginalText</span>
                             </div>
                         </div>
                         <div>
                             <div class="form-group">
-                                <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-country">Země</label>
+                                <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-country">@Localizer.Translate("Country", "Admin")</label>
                                 <div class="col-md-7">
                                     <input type="text" id="work-metadata-original-country" class="form-control" value="@Model.ManuscriptCountry" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-settlement">Město</label>
+                                <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-settlement">@Localizer.Translate("City", "Admin")</label>
                                 <div class="col-md-7">
                                     <input type="text" id="work-metadata-original-settlement" class="form-control" value="@Model.ManuscriptSettlement" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-repository">Instituce</label>
+                                <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-repository">@Localizer.Translate("Institution", "Admin")</label>
                                 <div class="col-md-7">
                                     <input type="text" id="work-metadata-original-repository" class="form-control" value="@Model.ManuscriptRepository" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-idno">Signatura</label>
+                                <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-idno">@Localizer.Translate("Signature", "Admin")</label>
                                 <div class="col-md-7">
                                     <input type="text" id="work-metadata-original-idno" class="form-control" value="@Model.ManuscriptIdno" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-extent">Rozsah</label>
+                                <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-extent">@Localizer.Translate("Extent", "Admin")</label>
                                 <div class="col-md-7">
                                     <input type="text" id="work-metadata-original-extent" class="form-control" value="@Model.ManuscriptExtent" />
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-4 control-label">Autoři</label>
+                            <label class="col-md-4 control-label">@Localizer.Translate("Authors", "Admin")</label>
                             <div class="col-md-7">
                                 <div id="work-metadata-authors">
                                     @foreach (var author in Model.Authors)
@@ -169,24 +170,24 @@
                                     }
                                 </div>
 
-                                <button class="btn btn-default" id="add-author-button">Přidat</button>
+                                <button class="btn btn-default" id="add-author-button">@Localizer.Translate("Add", "Admin")</button>
                             </div>
                         </div>
                         
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-origin-date">Vydáno (slovní popis)</label>
+                            <label class="col-md-4 control-label" for="work-metadata-origin-date">@Localizer.Translate("OriginDate", "Admin")</label>
                             <div class="col-md-7">
                                 <input type="text" id="work-metadata-origin-date" class="form-control" value="@Model.OriginDate" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-not-before">Nevydáno před rokem</label>
+                            <label class="col-md-4 control-label" for="work-metadata-not-before">@Localizer.Translate("NotBefore", "Admin")</label>
                             <div class="col-md-7">
                                 <input type="text" id="work-metadata-not-before" class="form-control" value="@Model.NotBefore" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-not-after">Nevydáno po roce</label>
+                            <label class="col-md-4 control-label" for="work-metadata-not-after">@Localizer.Translate("NotAfter", "Admin")</label>
                             <div class="col-md-7">
                                 <input type="text" id="work-metadata-not-after" class="form-control" value="@Model.NotAfter" />
                             </div>
@@ -197,18 +198,18 @@
 
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Kategorizace
+                    @Localizer.Translate("Categorization", "Admin")
                 </div>
                 <div class="panel-body">
                     <div class="form-horizontal">
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-category">Kategorie</label>
+                            <label class="col-md-4 control-label" for="work-metadata-category">@Localizer.Translate("Category", "Admin")</label>
                             <div class="col-md-7">
                                 <input type="text" id="work-metadata-category" class="form-control" value="TODO kategorie" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-4 control-label">Literární druh</label>
+                            <label class="col-md-4 control-label">@Localizer.Translate("LiteraryKind", "Admin")</label>
                             <div class="col-md-7">
                                 <div id="work-metadata-literary-kind">
                                     @foreach (var kind in Model.AllLiteraryKindList)
@@ -222,12 +223,12 @@
                                 </div>
 
                                 <div class="add-button">
-                                    <button class="btn btn-default" id="add-literary-kind-button">Přidat</button>
+                                    <button class="btn btn-default" id="add-literary-kind-button">@Localizer.Translate("Add", "Admin")</button>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-4 control-label">Literární žánr</label>
+                            <label class="col-md-4 control-label">@Localizer.Translate("LiteraryGenre", "Admin")</label>
                             <div class="col-md-6">
                                 <div id="work-metadata-literary-genre">
                                     @foreach (var genre in Model.AllLiteraryGenreList)
@@ -241,7 +242,7 @@
                                 </div>
 
                                 <div class="add-button">
-                                    <button class="btn btn-default" id="add-literary-genre-button">Přidat</button>
+                                    <button class="btn btn-default" id="add-literary-genre-button">@Localizer.Translate("Add", "Admin")</button>
                                 </div>
                             </div>
                         </div>
@@ -253,7 +254,7 @@
                 <div class="panel-body">
                     <div class="form-horizontal">
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="work-metadata-last-modification">Poslední úprava</label>
+                            <label class="col-md-4 control-label" for="work-metadata-last-modification">@Localizer.Translate("LastModification", "Admin")</label>
                             <div class="col-md-7">
                                 <span class="text-as-form-control" id="work-metadata-last-modification">@Model.LastModification</span>
                             </div>
@@ -264,13 +265,13 @@
         </div>
         <div class="project-form-bottom-buttons" style="margin-top: 10px;">
             <div id="work-metadata-view-button-panel">
-                <button class="btn btn-default" id="work-metadata-edit-button">Upravit</button>
+                <button class="btn btn-default" id="work-metadata-edit-button">@Localizer.Translate("Edit", "Admin")</button>
             </div>
             <div id="work-metadata-editor-button-panel">
-                <div class="alert alert-success" id="work-metadata-save-success">Metadata uložena</div>
-                <div class="alert alert-danger" id="work-metadata-save-error">Některá metadata se nepodařilo uložit</div>
-                <button class="btn btn-default" id="work-metadata-cancel-button">Zrušit</button>
-                <button class="btn btn-default" id="work-metadata-save-button"><span class="saving-icon loading-small-button"></span> Uložit</button>
+                <div class="alert alert-success" id="work-metadata-save-success">@Localizer.Translate("MetadataSaveSuccess", "Admin")</div>
+                <div class="alert alert-danger" id="work-metadata-save-error">@Localizer.Translate("MetadataSaveError", "Admin")</div>
+                <button class="btn btn-default" id="work-metadata-cancel-button">@Localizer.Translate("Cancel", "Admin")</button>
+                <button class="btn btn-default" id="work-metadata-save-button"><span class="saving-icon loading-small-button"></span> @Localizer.Translate("Save", "Admin")</button>
             </div>
         </div>
     </div>
@@ -278,10 +279,10 @@
         <div class="light-border">
             <h4>Kategorie</h4>
             <div>
-                <label><input type="checkbox" /><span> Staročeský</span></label>
+                <label><input type="checkbox" /><span> @Localizer.Translate("OldBohemian", "Admin")</span></label>
             </div>
             <div>
-                <label><input type="checkbox" /><span> Středněčeský</span></label>
+                <label><input type="checkbox" /><span> @Localizer.Translate("MiddleBohemian", "Admin")</span></label>
             </div>
         </div>
     </div>
@@ -292,18 +293,18 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Přidat nového nakladatele</h4>
+                <h4 class="modal-title">@Localizer.Translate("AddNewPublisher", "Admin")</h4>
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <label class="col-md-3 control-label" for="add-publisher-name">Název</label>
+                        <label class="col-md-3 control-label" for="add-publisher-name">@Localizer.Translate("Name", "Admin")</label>
                         <div class="col-md-7">
                             <input type="text" id="add-publisher-name" class="form-control" />
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-3 control-label" for="add-publisher-email">E-mail</label>
+                        <label class="col-md-3 control-label" for="add-publisher-email">@Localizer.Translate("Email", "Admin")</label>
                         <div class="col-md-7">
                             <input type="text" id="add-publisher-email" class="form-control" />
                         </div>
@@ -311,9 +312,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="dialog-error alert alert-danger true-inline-alert">Chyba při ukládání</div>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
-                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>Uložit</button>
+                <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("SaveError", "Admin")</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Cancel", "Admin")</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>@Localizer.Translate("Save", "Admin")</button>
             </div>
         </div>
     </div>
@@ -324,12 +325,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Přidat nový literární druh</h4>
+                <h4 class="modal-title">@Localizer.Translate("AddNewLiteraryKind", "Admin")</h4>
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <label class="col-md-3 control-label" for="add-literary-kind-name">Název</label>
+                        <label class="col-md-3 control-label" for="add-literary-kind-name">@Localizer.Translate("Name", "Admin")</label>
                         <div class="col-md-7">
                             <input type="text" id="add-literary-kind-name" class="form-control" />
                         </div>
@@ -337,9 +338,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="dialog-error alert alert-danger true-inline-alert">Chyba při ukládání</div>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
-                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>Uložit</button>
+                <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("SaveError", "Admin")</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Cancel", "Admin")</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>@Localizer.Translate("Save", "Admin")</button>
             </div>
         </div>
     </div>
@@ -350,12 +351,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Přidat nový literární žánr</h4>
+                <h4 class="modal-title">@Localizer.Translate("AddNewLiteraryGenre", "Admin")</h4>
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <label class="col-md-3 control-label" for="add-literary-genre-name">Název</label>
+                        <label class="col-md-3 control-label" for="add-literary-genre-name">@Localizer.Translate("Name", "Admin")</label>
                         <div class="col-md-7">
                             <input type="text" id="add-literary-genre-name" class="form-control" />
                         </div>
@@ -363,9 +364,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="dialog-error alert alert-danger true-inline-alert">Chyba při ukládání</div>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
-                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>Uložit</button>
+                <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("SaveError", "Admin")</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Cancel", "Admin")</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>@Localizer.Translate("Save", "Admin")</button>
             </div>
         </div>
     </div>
@@ -376,15 +377,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Přidat nového autora</h4>
+                <h4 class="modal-title">@Localizer.Translate("AddNewAuthor", "Admin")</h4>
             </div>
             <div class="modal-body">
                 <ul class="nav nav-tabs">
                     <li class="active">
-                        <a href="#tab-select-existing-author" data-toggle="tab">Výběr existujícího</a>
+                        <a href="#tab-select-existing-author" data-toggle="tab">@Localizer.Translate("SelectExisting", "Admin")</a>
                     </li>
                     <li>
-                        <a href="#tab-create-new-author" data-toggle="tab">Vytvoření nového</a>
+                        <a href="#tab-create-new-author" data-toggle="tab">@Localizer.Translate("CreateNew", "Admin")</a>
                     </li>
                 </ul>
 
@@ -392,19 +393,19 @@
                     <div id="tab-select-existing-author" class="tab-pane active">
                         <div class="form-horizontal">
                             <div class="form-group">
-                                <label for="add-author-search" class="col-md-3 control-label">Vyhledat autora</label>
+                                <label for="add-author-search" class="col-md-3 control-label">@Localizer.Translate("FindAuthor", "Admin")</label>
                                 <div class="col-md-7">
                                     <input class="form-control" id="add-author-search" type="text">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Jméno</label>
+                                <label class="col-md-3 control-label">@Localizer.Translate("FirstName", "Admin")</label>
                                 <div class="col-md-7">
                                     <input class="form-control" id="add-author-first-name-preview" type="text" disabled="disabled">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Příjmení</label>
+                                <label class="col-md-3 control-label">@Localizer.Translate("LastName", "Admin")</label>
                                 <div class="col-md-7">
                                     <input class="form-control" id="add-author-last-name-preview" type="text" disabled="disabled">
                                 </div>
@@ -415,13 +416,13 @@
                     <div id="tab-create-new-author" class="tab-pane">
                         <div class="form-horizontal">
                             <div class="form-group">
-                                <label for="add-author-first-name" class="col-md-3 control-label">Jméno</label>
+                                <label for="add-author-first-name" class="col-md-3 control-label">@Localizer.Translate("FirstName", "Admin")</label>
                                 <div class="col-md-7">
                                     <input class="form-control" id="add-author-first-name" type="text">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="add-author-last-name" class="col-md-3 control-label">Příjmení</label>
+                                <label for="add-author-last-name" class="col-md-3 control-label">@Localizer.Translate("LastName", "Admin")</label>
                                 <div class="col-md-7">
                                     <input class="form-control" id="add-author-last-name" type="text">
                                 </div>
@@ -431,9 +432,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="dialog-error alert alert-danger true-inline-alert">Chyba při ukládání</div>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
-                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>Přidat</button>
+                <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("SaveError", "Admin")</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Cancel", "Admin")</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>@Localizer.Translate("Add", "Admin")</button>
             </div>
         </div>
     </div>
@@ -444,15 +445,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Přidat nového editora</h4>
+                <h4 class="modal-title">@Localizer.Translate("AddNewEditor", "Admin")</h4>
             </div>
             <div class="modal-body">
                 <ul class="nav nav-tabs">
                     <li class="active">
-                        <a href="#tab-select-existing-editor" data-toggle="tab">Výběr existujícího</a>
+                        <a href="#tab-select-existing-editor" data-toggle="tab">@Localizer.Translate("SelectExisting", "Admin")</a>
                     </li>
                     <li>
-                        <a href="#tab-create-new-editor" data-toggle="tab">Vytvoření nového</a>
+                        <a href="#tab-create-new-editor" data-toggle="tab">@Localizer.Translate("CreateNew", "Admin")</a>
                     </li>
                 </ul>
 
@@ -460,19 +461,19 @@
                     <div id="tab-select-existing-editor" class="tab-pane active">
                         <div class="form-horizontal">
                             <div class="form-group">
-                                <label for="add-editor-search" class="col-md-3 control-label">Vyhledat editora</label>
+                                <label for="add-editor-search" class="col-md-3 control-label">@Localizer.Translate("FindEditor", "Admin")</label>
                                 <div class="col-md-7">
                                     <input class="form-control" id="add-editor-search" type="text">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Jméno</label>
+                                <label class="col-md-3 control-label">@Localizer.Translate("FirstName", "Admin")</label>
                                 <div class="col-md-7">
                                     <input class="form-control" id="add-editor-first-name-preview" type="text" disabled="disabled">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Příjmení</label>
+                                <label class="col-md-3 control-label">@Localizer.Translate("LastName", "Admin")</label>
                                 <div class="col-md-7">
                                     <input class="form-control" id="add-editor-last-name-preview" type="text" disabled="disabled">
                                 </div>
@@ -483,19 +484,19 @@
                     <div id="tab-create-new-editor" class="tab-pane">
                         <div class="form-horizontal">
                             <div class="form-group">
-                                <label for="add-editor-first-name" class="col-md-3 control-label">Jméno</label>
+                                <label for="add-editor-first-name" class="col-md-3 control-label">@Localizer.Translate("FirstName", "Admin")</label>
                                 <div class="col-md-7">
                                     <input class="form-control" id="add-editor-first-name" type="text">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="add-editor-last-name" class="col-md-3 control-label">Příjmení</label>
+                                <label for="add-editor-last-name" class="col-md-3 control-label">@Localizer.Translate("LastName", "Admin")</label>
                                 <div class="col-md-7">
                                     <input class="form-control" id="add-editor-last-name" type="text">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="add-editor-type" class="col-md-3 control-label">Typ</label>
+                                <label for="add-editor-type" class="col-md-3 control-label">@Localizer.Translate("Type", "Admin")</label>
                                 <div class="col-md-7">
                                     <select class="form-control" id="add-editor-type">
                                         @foreach (var responsibleType in Model.AllResponsibleTypeList)
@@ -507,7 +508,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-md-offset-3 col-md-7">
-                                    <button class="btn btn-default" id="add-responsible-type-button">Přidat typ</button>
+                                    <button class="btn btn-default" id="add-responsible-type-button">@Localizer.Translate("AddType", "Admin")</button>
                                 </div>
                             </div>
                             <div class="form-group" id="add-responsible-type-container">
@@ -518,7 +519,7 @@
                                     <input class="form-control" id="add-responsible-type-text" type="text" placeholder="Nový typ"/>
                                 </div>
                                 <div class="col-md-3">
-                                    <button class="btn btn-default" id="add-responsible-type-save"><span id="add-responsible-type-saving-icon" class="loading-small-button"></span>Vytvořit</button>
+                                    <button class="btn btn-default" id="add-responsible-type-save"><span id="add-responsible-type-saving-icon" class="loading-small-button"></span>@Localizer.Translate("Create", "Admin")</button>
                                 </div>
                             </div>
                         </div>
@@ -526,9 +527,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="dialog-error alert alert-danger true-inline-alert">Chyba při ukládání</div>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
-                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>Přidat</button>
+                <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("SaveError", "Admin")</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Cancel", "Admin")</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>@Localizer.Translate("Add", "Admin")</button>
             </div>
         </div>
     </div>

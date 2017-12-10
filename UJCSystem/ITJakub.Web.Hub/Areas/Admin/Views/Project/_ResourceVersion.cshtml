@@ -1,13 +1,14 @@
 ﻿@model List<ITJakub.Web.Hub.Areas.Admin.Models.ResourceVersionViewModel>
+@inject ILocalization Localizer
 
 <div>
     <div class="resource-version-table">
         <table>
             <tr>
-                <th>Číslo verze</th>
-                <th>Komentář</th>
-                <th>Datum vložení</th>
-                <th>Autor</th>
+                <th>@Localizer.Translate("VersionNumber", "Admin")</th>
+                <th>@Localizer.Translate("Commment", "Admin")</th>
+                <th>@Localizer.Translate("CreateDate", "Admin")</th>
+                <th>@Localizer.Translate("Author", "Admin")</th>
             </tr>
             @foreach (var versionViewModel in Model)
             {
@@ -22,8 +23,8 @@
     </div>
 
     <div class="resource-version-control">
-        <button type="button" class="btn btn-default">Vytvořit novou verzi</button>
-        <button type="button" class="btn btn-default">Smazat</button>
-        <button type="button" class="btn btn-default">Duplikovat</button>
+        <button type="button" class="btn btn-default">@Localizer.Translate("CreateNewVersion", "Admin")</button>
+        <button type="button" class="btn btn-default">@Localizer.Translate("Delete", "Admin")</button>
+        <button type="button" class="btn btn-default">@Localizer.Translate("Duplicate", "Admin")</button>
     </div>
 </div>
