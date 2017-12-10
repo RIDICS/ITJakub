@@ -178,6 +178,9 @@
 		"DeleteProjectAraYouSure" : "Opravdu chcete smazat dílo",
 		"Close2" : "Zavřít",
 
-		"RenameSource" : "Přejmenovat zdroj"
+		"RenameSource" : "Přejmenovat zdroj",
+
+		"Group" : "Skupina {0}",
+		"Page" : "Strana {0}"
 	}
 }
