@@ -180,6 +180,9 @@
 		"DeleteProjectAraYouSure" : "translate[Opravdu chcete smazat dílo]",
 		"Close2" : "translate[Zavřít]",
 
-		"RenameSource" : "translate[Přejmenovat zdroj]"
+		"RenameSource" : "translate[Přejmenovat zdroj]",
+
+		"Group" : "trnaslate[Skupina {0}]",
+		"Page" : "translate[Strana {0}]"
 	}
 }

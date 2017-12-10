@@ -23,9 +23,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
     public class ProjectController : BaseController
     {
         private const int ProjectListPageSize = 5;
+        private readonly ILocalization m_localizer;
 
-        public ProjectController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        public ProjectController(CommunicationProvider communicationProvider, ILocalization localizer) : base(communicationProvider)
         {
+            this.m_Localizer = localizer;
         }
 
         private ProjectListViewModel CreateProjectListViewModel(ProjectListData data, int start)
@@ -531,7 +533,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return new GroupInfoViewModel
             {
                 GroupId = id,
-                Name = string.Format("Skupina {0}", id)
+                //Name = string.Format("Skupina {0}", id)
+                Name = m_localizer.TranslateFormat("Group", new object[]{id}, "Admin");
             };
         }
 
@@ -540,7 +543,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return new ResourceViewModel
             {
                 Id = id,
-                Name = string.Format("Strana {0}", id),
+                //Name = string.Format("Strana {0}", id),
+                Name = m_localizer.TranslateFormat("Page", new object[]{id}, "Admin");
                 VersionList = new List<VersionNumberViewModel>
                 {
                     GetVersionNumber(1),
