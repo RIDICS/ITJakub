@@ -1,10 +1,12 @@
 ﻿@model ITJakub.Web.Hub.Models.FeedbackViewModel
+@inject ILocalization Localizer
+
 @section styles{
     <link href="~/Areas/Bibliographies/css/itjakub.bibliographies.css" rel="stylesheet" />
 }
 
 @{
-    ViewBag.Title = "Bibliografie - Připomínky";
+    ViewBag.Title = @Localizer.Translate("BibliographiesFeedback", "Bibliographies");
 }
 
 <div class="content-container">

@@ -3,6 +3,9 @@
 	"scope":"Bibliographies",
 	"dictionary": {
 		"Titles" : "Titles",
-		"Authors" : "Authors"
+		"Authors" : "Authors",
+		"BibliographiesFeedback" : "translate[Bibliografie - Připomínky]",
+		"BibliographiesInformation" : "translate[Bibliografie - Informace]",
+		"BibliographiesSearch" : "translate[Bibliografie - Vyhledávání]"
 		}
 }
