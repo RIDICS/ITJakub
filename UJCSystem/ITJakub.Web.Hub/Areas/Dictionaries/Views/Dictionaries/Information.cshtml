@@ -1,9 +1,11 @@
-﻿@model ITJakub.Web.Hub.Models.StaticTextViewModel
+﻿@inject ILocalization Localizer
+
+@model ITJakub.Web.Hub.Models.StaticTextViewModel
 @section styles{
     <link href="~/Areas/Dictionaries/css/itjakub.dictionaries.css" rel="stylesheet" />
 }
 @{
-    ViewBag.Title = "Slovníky - Informace";
+    ViewBag.Title = @Localizer.Translate("DictionariesInformation", "Dictionaries");
 }
 
 <div class="content-container">

@@ -2,10 +2,32 @@
 	"culture":"en",
 	"scope":"Dictionaries",
 	"dictionary": {
-		"DictionaryTerms" : "...",
-		"NoEntryFound" : "...",
-		"Feedback" : "...",
-		"ImageTermLoadError" : "...",
-		"TermLoadError" : "..."	
+		"DictionaryTerms" : "translate[Slovníková hesla]",
+		"NoEntryFound" : "translate[Žádné výsledky k zobrazení]",
+		"Feedback" : "translate[Připomínky]",
+		"ImageTermLoadError" : "translate[Chyba při načítání obrázku k heslu '{0}'.]",
+		"TermLoadError" : "translate[Chyba při náčítání hesla '{0}'.]",
+
+		"DictionariesFeedback" : "translate[Slovníky - Připomínky]",
+		"Send" : "translate[Odeslat]",
+		"DictionariesHelp" : "translate[Slovníky - Nápověda]",
+		"DictionariesInformation" : "translate[Slovníky - Informace]",
+		"DictionariesList" : "translate[Slovníky - Seznam]",
+		"DictionariesListing" : "translate[Slovníky - Listování]",
+		"Search" : "translate[Vyhledat]",
+		"Find" : "translate[Hledat]",
+		"SavedKeywords" : "translate[Uložená hesla]",
+		"KeywordList" : "translate[Seznam hesel]",
+		"KeywordStates" : "translate[Heslové stati]",
+		"CancelFilter" : "translate[Zrušit filtr]",
+		"LoadingKeywordStates" : "translate[Načítání heslových statí]",
+		"LoadingKeywordStatesPrint" : "translate[Probíhá načítání heslových statí pro tisk]",
+
+		"DictionariesSearch" : "translate[Slovníky - Vyhledávání]",
+		"Keywords" : "translate[Hesla]",
+		"Fulltext" : "translate[Fulltext]",
+		"AdvancedSearch" : "translate[Pokročilé vyhledávání]",
+
+		"Print" : "translate[Tisk]"
 		}
 }

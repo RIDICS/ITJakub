@@ -1,4 +1,6 @@
-﻿@model ITJakub.Web.Hub.Areas.Dictionaries.Models.HeadwordFeedbackViewModel
+﻿@inject ILocalization Localizer
+
+@model ITJakub.Web.Hub.Areas.Dictionaries.Models.HeadwordFeedbackViewModel
 @section styles{
     <link href="~/Areas/Dictionaries/css/itjakub.dictionaries.css" rel="stylesheet" />
 }
@@ -7,7 +9,7 @@
 }
 
 @{
-    ViewBag.Title = "Slovníky - Připomínky";
+    ViewBag.Title = @Localizer.Translate("DictionariesFeedback", "Dictionaries");
 }
 
 
@@ -65,7 +67,7 @@
 
             <div class="form-group">
                 <div class="col-md-offset-9 col-md-2">
-                    <input type="submit" value="Odeslat" class="btn btn-default">
+                    <input type="submit" value="@Localizer.Translate("Send", "Dictionaries")" class="btn btn-default">
                 </div>
             </div>
         }

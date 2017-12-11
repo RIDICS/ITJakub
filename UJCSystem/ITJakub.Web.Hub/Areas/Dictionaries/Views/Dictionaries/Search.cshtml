@@ -1,4 +1,6 @@
-﻿@section styles{
+﻿@inject ILocalization Localizer
+
+@section styles{
     <link href="~/Areas/Dictionaries/css/itjakub.dictionaries.css" rel="stylesheet" />
 }
 @section scripts{
@@ -6,7 +8,7 @@
 }
 
 @{
-    ViewBag.Title = "Slovníky - Vyhledávání";
+    ViewBag.Title = @Localizer.Translate("DictionariesSearch", "Dictionaries");
 }
 
 <div class="transparent-content-container">
@@ -32,13 +34,13 @@
                 </div>
                 <ul class="nav nav-pills" id="search-tabs">
                     <li id="tab-headwords">
-                        <a href="#headwords">Hesla <span class="badge" id="search-headword-count"></span></a>
+                        <a href="#headwords">@Localizer.Translate("Keywords", "Dictionaries") <span class="badge" id="search-headword-count"></span></a>
                     </li>
                     <li id="tab-fulltext">
-                        <a href="#fulltext">Fulltext <span class="badge" id="search-fulltext-count"></span></a>
+                        <a href="#fulltext">@Localizer.Translate("Fulltext", "Dictionaries") <span class="badge" id="search-fulltext-count"></span></a>
                     </li>
                     <li id="tab-advanced">
-                        <a href="#advanced">Pokročilé vyhledávání <span class="badge" id="search-advanced-count"></span></a>
+                        <a href="#advanced">@Localizer.Translate("AdvancedSearch", "Dictionaries") <span class="badge" id="search-advanced-count"></span></a>
                     </li>
                 </ul>
             </div>
@@ -64,13 +66,13 @@
         </div>
         <div class="dictionary-result-word-search-description hidden">
             <div class="dictionary-header">
-                <span>Heslové stati</span>
+                <span>@Localizer.Translate("KeywordStates", "Dictionaries")</span>
                 <div class="dictionary-header-buttons">
                     <a href="#" id="cancelFilter" class="hidden">
                         <span class="glyphicon glyphicon-remove"></span>
-                        <span>Zrušit filtr</span>
+                        <span>@Localizer.Translate("CancelFilter", "Dictionaries")</span>
                     </a>
-                    <a href="#" title="Tisk" id="printDescription">
+                    <a href="#" title="@Localizer.Translate("Print", "Dictionaries")" id="printDescription">
                         <span class="glyphicon glyphicon-print"></span>
                     </a>
                 </div>
@@ -88,10 +90,10 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Načítání heslových statí</h4>
+                    <h4 class="modal-title">@Localizer.Translate("LoadingKeywordStates", "Dictionaries")</h4>
                 </div>
                 <div class="modal-body">
-                    <span>Probíhá načítání heslových statí pro tisk</span>
+                    <span>@Localizer.Translate("LoadingKeywordStatesPrint", "Dictionaries")</span>
                     <div class="loading loading-modal"></div>
                 </div>
             </div>
