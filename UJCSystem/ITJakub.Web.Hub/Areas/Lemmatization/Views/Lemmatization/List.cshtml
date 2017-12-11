@@ -1,4 +1,6 @@
-﻿@{
+﻿@inject ILocalization Localizer
+
+@{
     ViewBag.Title = @Localizer.Translate("LemmatizationList", "Lemmatization");
 }
 @section styles{

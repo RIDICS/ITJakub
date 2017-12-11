@@ -229,6 +229,9 @@
 		"ExistingSelectionF" : "translate[Výběr existující]",
 		"RemoveHyperCannonicalForm" : "translate[Odebrat hyperkanonickou formu]",
 		"ModifyHyperCannonicalForm" : "translate[Úprava hyperkanonické formy]",
-		"WarningHyperCannonicalForm" : "translate[Varování: Změna se projeví u všech kanonických forem, které mají tuto hyperkanonickou formu]"
+		"WarningHyperCannonicalForm" : "translate[Varování: Změna se projeví u všech kanonických forem, které mají tuto hyperkanonickou formu]",
+		
+		
+		"LemmatizationList" : "Lemmatizace - procházení"
 		}
 }
