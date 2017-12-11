@@ -226,16 +226,16 @@
                     <div id="work-metadata-literary-genre">
                         @foreach (var genreSelected in Model.SelectedLiteraryGenreIds)
                         {
-                            <div class="genre-item">
-                            <div class="col-xs-7">
-                                <select>
+                            <div class="genre-item clearfix">
+                            <div class="col-xs-9">
+                                <select class="item-select-box">
                                     @foreach (var genre in Model.AllLiteraryGenreList)
                                     {
                                         <option value="@genre.Id" @(genre.Id == genreSelected ? "selected" : null)>@genre.Name</option>
                                     }
                                 </select>
                             </div>
-                                <div class="col-xs-5">
+                                <div class="button-float-right">
                                     <button class="btn btn-default remove-button"><span class="glyphicon glyphicon-remove"></span></button>
                                 </div>
                                 </div>
@@ -243,7 +243,7 @@
                             </div>
 
                 </div>
-                <div class="add-button">
+                <div class="add-button col-md-12 text-center">
                     <button class="btn btn-default" id="add-literary-genre-button">Přidat</button>
                 </div>
             </div>
@@ -259,23 +259,23 @@
                     <div id="work-metadata-literary-kind">
                         @foreach (var kindSelected in Model.SelectedLiteraryKindIds)
                         {
-                            <div class="lit-kind-item">
-                                <div class="col-xs-7">
-                                    <select>
+                            <div class="lit-kind-item clearfix">
+                                <div class="col-xs-9">
+                                    <select class="item-select-box">
                                         @foreach (var kind in Model.AllLiteraryKindList)
                                         {
                                             <option value="@kind.Id" @(kind.Id == kindSelected ? "selected" : null)>@kind.Name</option>
                                         }
                                     </select>
                                 </div>
-                                <div class="col-xs-5">
+                                <div class="button-float-right">
                                     <button class="btn btn-default remove-button"><span class="glyphicon glyphicon-remove"></span></button>
                                 </div>
                             </div>
                         }
                     </div>
                 </div>
-                <div class="add-button">
+                <div class="add-button col-md-12 text-center">
                     <button class="btn btn-default" id="add-literary-kind-button">Přidat</button>
                 </div>
                 </div>

@@ -141,19 +141,19 @@
     private createGenreKindSelectBoxEl(items: JQuery, isGenre: boolean) {
         var elm = "";
         if (isGenre) {
-            elm += `<div class="genre-item">`;
+            elm += `<div class="genre-item clearfix">`;
         } else {
-            elm += `<div class="lit-kind-item">`;
+            elm += `<div class="lit-kind-item clearfix">`;
         }
-        elm += `<div class="col-xs-7">`;
-        elm += "<select>";
+        elm += `<div class="col-xs-9">`;
+        elm += `<select class="item-select-box">`;
         items.each((index, elem) => {
             const genreEl = $(elem);
             elm += `<option value="${genreEl.data("id")}">${genreEl.data("name")}</option>`;
         });
         elm += "</select>";
         elm += "</div>";
-        elm += `<div class="col-xs-5">`;
+        elm += `<div class="button-float-right">`;
         elm +=
             `<button class="btn btn-default remove-button"><span class="glyphicon glyphicon-remove"></span></button>`;
         elm += "</div>";
@@ -184,7 +184,6 @@
             const catChechbox = categoryTree.getNodeById(catId);
             categoryTree.check(catChechbox);
         });
-        console.log(selectedCategoriesEl);
     }
 
     private convertCategoryArrayToCategoryTreeObject() {
