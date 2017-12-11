@@ -594,26 +594,28 @@ abstract class ProjectMetadataTabBase extends ProjectModuleTabBase {
     protected enabledEdit() {
         $(".keywords-textarea").tokenfield("enable");
         var config = this.getConfiguration();
+        const copyrightTextarea = $("#work-metadata-copyright");
         var $inputs = $("input", config.$panel);
         var $selects = $("select", config.$panel);
         var $buttons = $("button", config.$panel);
 
         config.$viewButtonPanel.hide();
         config.$editorButtonPanel.show();
-        $inputs.add($selects).prop("disabled", false);
+        $inputs.add($selects).add(copyrightTextarea).prop("disabled", false);
         $buttons.show();
     }
 
     protected disableEdit() {
         $(".keywords-textarea").tokenfield("disable");
         var config = this.getConfiguration();
+        const copyrightTextarea = $("#work-metadata-copyright");
         var $inputs = $("input", config.$panel);
         var $selects = $("select", config.$panel);
         var $buttons = $("button", config.$panel);
 
         config.$viewButtonPanel.show();
         config.$editorButtonPanel.hide();
-        $inputs.add($selects).prop("disabled", true);
+        $inputs.add($selects).add(copyrightTextarea).prop("disabled", true);
         $buttons.hide();
     }
 }
