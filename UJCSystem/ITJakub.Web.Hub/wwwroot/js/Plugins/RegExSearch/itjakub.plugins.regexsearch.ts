@@ -51,6 +51,8 @@ class Search {
 
     private favoriteQueriesConfig: IModulInicializatorConfigurationSearchFavorites;
 
+
+
     constructor(container: HTMLDivElement, processSearchJsonCallback: (jsonData: string) => void, processSearchTextCallback: (text: string) => void, favoriteQueriesConfig: IModulInicializatorConfigurationSearchFavorites) {
         this.favoriteQueriesConfig = favoriteQueriesConfig;
         this.container = container;
@@ -89,7 +91,7 @@ class Search {
         
         var searchButton = document.createElement("button");
         searchButton.type = "button";
-        searchButton.innerHTML = "Vyhledat";
+        searchButton.innerHTML = localization.translate("Search", "Home").value;
         searchButton.classList.add("btn");
         searchButton.classList.add("btn-default");
         searchButton.classList.add("searchbar-button");
