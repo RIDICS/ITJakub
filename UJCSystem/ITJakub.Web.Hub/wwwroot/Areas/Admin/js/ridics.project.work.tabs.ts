@@ -220,13 +220,21 @@
         $(".move-person-up").on("click", (event) => {
             const targetEl = $(event.target);
             const personEl = targetEl.parents(".editor-item, .author-item");
-            //TODO
+            const prevPersonEl = personEl.prev(".editor-item, .author-item");
+            if (prevPersonEl.length) {
+                personEl.detach();
+                prevPersonEl.before(personEl);
+            }
         });
 
         $(".move-person-down").on("click", (event) => {
             const targetEl = $(event.target);
             const personEl = targetEl.parents(".editor-item, .author-item");
-            //TODO
+            const nextPersonEl = personEl.next(".editor-item, .author-item");
+            if (nextPersonEl.length) {
+                personEl.detach();
+                nextPersonEl.after(personEl);
+            }
         });
 
         $("#category-tree").find("input").prop("disabled", true);

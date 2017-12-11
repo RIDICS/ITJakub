@@ -120,16 +120,18 @@
             type: type,
             text: text
         };
-        //this.postAjax("Admin/Project/CreateResponsibleType", data, callback);
         return $.post(`${getBaseUrl()}Admin/KeyTable/CreateResponsibleType`, { request: data });
     }
 
-    saveMetadata(projectId: number, data: ISaveMetadataResource):JQueryXHR {
+    saveMetadata(projectId: number, data: ISaveMetadataResource): JQueryXHR {
+        console.log(JSON.stringify({ request: data }));
         return $.ajax({
             url: `${getBaseUrl()}Admin/Project/SaveMetadata?projectId=${projectId}`,
             type: "POST",
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
+            cache: false,
+            async: true,
             dataType: "json"
         });
     }
