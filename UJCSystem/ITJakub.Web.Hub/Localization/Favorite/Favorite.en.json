@@ -49,6 +49,8 @@
 		"RemoveError":"Chyba při mazání",
 		"EditFavoriteItem":"Upravit oblíbenou položku",
 		"FavoriteItemName":"Název oblíbené položky",
-		"FavoriteItemSaveError":"Chyba při ukládání oblíbené položky"
+		"FavoriteItemSaveError":"Chyba při ukládání oblíbené položky",
+		"FilterLabels" : "Filter labels",
+		"FilterByType" : "Filter labels by name"
 	}
 }

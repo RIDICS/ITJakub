@@ -3,7 +3,7 @@
 	"scope":"AudioBooks",
 	"dictionary": {
 		"AudioBooksFeedback" : "Audioknihy - Připomínky",
-		"AudioBooksInforamtion" : "Audioknihy - Informace",
+		"AudioBooksInformation" : "Audioknihy - Informace",
 		"AudioBooksList" : "Audioknihy - Seznam"
 	}
 }
