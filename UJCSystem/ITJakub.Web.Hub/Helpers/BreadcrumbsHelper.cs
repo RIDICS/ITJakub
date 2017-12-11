@@ -1,13 +1,20 @@
-﻿using System.Linq;
+﻿using System.Globalization;
+using System.Linq;
 using System.Text;
+using Localization.AspNetCore.Service;
+using Localization.CoreLibrary.Manager;
+using Localization.CoreLibrary.Util;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Http;
 
 namespace ITJakub.Web.Hub.Helpers
 {
     public static class BreadcrumbsHelper
     {
-        public static HtmlString Create(params string[] path, string cultureName = null)
+        public static HtmlString Create(HttpContext httpContext, params string[] path)
         {
+            string cultureName = httpContext.Request.Cookies[ServiceBase.CultureCookieName];
+
             IAutoLocalizationManager localizer = Localization.CoreLibrary.Localization.Translator;
             if (string.IsNullOrEmpty(cultureName))
             {
