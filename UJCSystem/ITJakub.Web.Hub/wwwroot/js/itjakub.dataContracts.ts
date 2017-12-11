@@ -127,7 +127,7 @@ interface IMetadataResource {
     subTitle: string;
     relicAbbreviation: string;
     sourceAbbreviation: string;
-    publisherId: number;
+    publisherText: string;
     publishPlace: string;
     publishDate: string;
     publisherEmail: string;

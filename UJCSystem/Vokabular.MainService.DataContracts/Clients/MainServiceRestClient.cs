@@ -117,6 +117,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public List<string> GetPublisherAutoComplete(string query)
+        {
+            try
+            {
+                var publishers = Get<List<string>>($"metadata/publisher/autocomplete?query={query}");
+                return publishers;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public long CreateNewProjectMetadataVersion(long projectId, ProjectMetadataContract metadata)
         {
             try

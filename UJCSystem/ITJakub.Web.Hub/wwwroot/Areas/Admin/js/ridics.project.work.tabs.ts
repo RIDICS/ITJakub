@@ -1,6 +1,5 @@
 ﻿class ProjectWorkMetadataTab extends ProjectMetadataTabBase {
     private projectId: number;
-    private addPublisherDialog: BootstrapDialogWrapper;
     private addLiteraryKindDialog: BootstrapDialogWrapper;
     private addLiteraryGenreDialog: BootstrapDialogWrapper;
     private addAuthorDialog: BootstrapDialogWrapper;
@@ -8,17 +7,16 @@
     private projectClient: ProjectClient;
     private selectedAuthorId: number;
     private selectedResponsiblePersonId: number;
+    private publisherTypeahead: SingleSetTypeaheadSearchBox<string>;
+    private publisherName : string = null;
 
     constructor(projectId: number) {
         super();
         this.projectId = projectId;
         this.projectClient = new ProjectClient();
 
-        this.addPublisherDialog = new BootstrapDialogWrapper({
-            element: $("#add-publisher-dialog"),
-            autoClearInputs: true,
-            submitCallback: this.createNewPublisher.bind(this)
-        });
+        this.publisherTypeahead = new SingleSetTypeaheadSearchBox<string>("#work-metadata-publisher", "Admin/Project", x => `${x}`, null);
+        this.publisherTypeahead.setDataSet("Publisher");
 
         this.addLiteraryKindDialog = new BootstrapDialogWrapper({
             element: $("#add-literary-kind-dialog"),
@@ -239,18 +237,23 @@
 
         $("#category-tree").find("input").prop("disabled", true);
 
-        $("#work-metadata-edit-button").click(() => {
+        $("#work-metadata-edit-button").click(() => {//TODO
             this.enabledEdit();
+            this.publisherTypeahead.create((selectedExists, selectConfirmed) => {
+                if (selectedExists) {
+                    const publisher = this.publisherTypeahead.getValue();
+                    this.publisherName = publisher;
+                } else {
+                    this.publisherName = null;
+                }
+            });
             $("#category-tree").children("input").prop("disabled", false);
         });
 
         $("#work-metadata-cancel-button").click(() => {
             this.disableEdit();
+            this.publisherTypeahead.destroy();
             $("#category-tree").children("input").prop("disabled", true);
-        });
-
-        $("#add-publisher-button").click(() => {
-            this.addPublisherDialog.show();
         });
 
         $("#add-literary-kind-button").click(() => {
@@ -504,27 +507,6 @@
         $("#work-metadata-save-error, #work-metadata-save-success").hide();
     }
 
-    private createNewPublisher() {
-        var name = $("#add-publisher-name").val();
-        var email = $("#add-publisher-email").val();
-
-        if (!name) {
-            this.addPublisherDialog.showError("Nebyl vyplněn název nakladatele");
-        }
-
-        this.projectClient.createPublisher(name,
-            email,
-            (newPublisherId, errorCode) => {
-                if (errorCode !== null) {
-                    this.addPublisherDialog.showError("Chyba při vytváření nového nakladatele");
-                    return;
-                }
-
-                UiHelper.addSelectOptionAndSetDefault($("#work-metadata-publisher"), name, newPublisherId);
-                this.addPublisherDialog.hide();
-            });
-    }
-
     private createNewLiteraryKind() {
         var name = $("#add-literary-kind-name").val();
 
@@ -705,6 +687,12 @@
             }
         }
         const createNewKeywordAjax = this.createNewKeywordsByArray(keywordNonIdList);
+        var publisherText = "";
+        if (this.publisherName == null) {
+            publisherText = $("#work-metadata-publisher").val();
+        } else {
+            publisherText = this.publisherTypeahead.getInputValue();
+        }
         createNewKeywordAjax.done((newIds: number[]) => {
             const allKeywordIds = keywordIdList.concat(newIds);
             var data: ISaveMetadataResource = {
@@ -723,7 +711,7 @@
                 publishDate: $("#work-metadata-publish-date").val(),
                 publishPlace: $("#work-metadata-publish-place").val(),
                 publisherEmail: $("#work-metadata-publisher-email").val(),
-                publisherId: $("#work-metadata-publisher").val(),
+                publisherText: publisherText,
                 relicAbbreviation: $("#work-metadata-relic-abbreviation").val(),
                 sourceAbbreviation: $("#work-metadata-source-abbreviation").val(),
                 subTitle: $("#work-metadata-subtitle").val(),

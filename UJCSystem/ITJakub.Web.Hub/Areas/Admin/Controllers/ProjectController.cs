@@ -536,6 +536,15 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
+        public IActionResult GetTypeaheadPublisher(string query)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetPublisherAutoComplete(query);
+                return Json(result);
+            }
+        }
+
         #endregion
     }
 
