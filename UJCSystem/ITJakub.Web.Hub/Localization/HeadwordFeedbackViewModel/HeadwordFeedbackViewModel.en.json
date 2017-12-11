@@ -1,0 +1,8 @@
+{
+  "culture": "en",
+  "scope": "HeadwordFeedbackViewModel",
+  "dictionary": {
+    "Headword": "translate[Heslo: ]",
+	"Dictionary": "translate[Slovník: ]"	
+  }
+}

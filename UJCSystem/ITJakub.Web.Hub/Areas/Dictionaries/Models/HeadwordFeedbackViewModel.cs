@@ -15,11 +15,11 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Models
         public string EntryXmlId { get; set; }
 
         [DataType(DataType.Text)]
-        [Display(Name = "Heslo: ")]
+        [Display(Name = "Headword")]
         public string Headword { get; set; }
 
         [DataType(DataType.Text)]
-        [Display(Name = "Slovník: ")]
+        [Display(Name = "Dictionary")]
         public string Dictionary { get; set; }
     }
 }

@@ -1,0 +1,8 @@
+{
+  "culture": "cs-CZ",
+  "scope": "HeadwordFeedbackViewModel",
+  "dictionary": {
+    "Headword": "Heslo: ",
+	"Dictionary": "Slovník: "	
+  }
+}
