@@ -304,7 +304,7 @@ class CardFileViewer {
 
         var cardFileDescDiv: HTMLDivElement = document.createElement("div");
         $(cardFileDescDiv).addClass("cardfile-description");
-        cardFileDescDiv.innerHTML = this.localization.translate("CardFile", "CardFiles").value;
+        cardFileDescDiv.innerHTML = this.localization.translate("CardFile", "CardFiles").value + ": ";
 
         var cardFileNameSpan: HTMLSpanElement = document.createElement("span");
         $(cardFileNameSpan).addClass("cardfile-name");
@@ -315,7 +315,7 @@ class CardFileViewer {
         
         var cardFileDrawerDescDiv: HTMLDivElement = document.createElement("div");
         $(cardFileDrawerDescDiv).addClass("cardfile-drawer-description");
-        cardFileDrawerDescDiv.innerHTML = this.localization.translate("Drawer", "CardFiles").value;
+        cardFileDrawerDescDiv.innerHTML = this.localization.translate("Drawer", "CardFiles").value + ": ";
 
         var cardFileDrawerNameSpan: HTMLSpanElement = document.createElement("span");
         $(cardFileDrawerNameSpan).addClass("cardfile-drawer-name");

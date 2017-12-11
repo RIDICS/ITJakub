@@ -1,4 +1,6 @@
-﻿@section styles{
+﻿@inject ILocalization Localizer
+
+@section styles{
     <link href="~/Areas/CardFiles/css/itjakub.cardfiles.bundle.css" rel="stylesheet" />
 }
 @section scripts{
@@ -6,7 +8,7 @@
 }
 
 @{
-    ViewBag.Title = "Kartotéky - Seznam";
+    ViewBag.Title = @Localizer.Translate("CardFilesList", "CardFiles");
 }
 
 
@@ -17,17 +19,17 @@
                 <div class="form-group searchbar">
                     <div class="searchbar-buttons">
                         <button id="searchButton" type="button" class="btn btn-default searchbar-button">
-                            Vyhledat
+                            @Localizer.Translate("Search", "CardFiles")
                         </button>
                     </div>
                     <div class="searchbar-inputs">
-                        <input type="text" class="form-control searchbar-input" id="searchbox" placeholder="Hledat..." style="max-width: 100%;" />
+                        <input type="text" class="form-control searchbar-input" id="searchbox" placeholder="@Localizer.Translate("Find", "CardFiles")..." style="max-width: 100%;" />
                     </div>
                 </div>
             </form>
         </div>
         <div class="cardFilesResultsHeaderWrapper list-results-header">
-            Řadit podle
+            @Localizer.Translate("SortBy", "CardFiles")
             <div id="cardFilesResultsHeader" class="list-results-header-div">
             </div>
         </div>

@@ -1,11 +1,12 @@
 ﻿@model ITJakub.Web.Hub.Models.StaticTextViewModel
+@inject ILocalization Localizer
 
 @section styles{
     <link href="~/Areas/CardFiles/css/itjakub.cardfiles.bundle.css" rel="stylesheet" />
 }
 
 @{
-    ViewBag.Title = "Kartotéky - Informace";
+    ViewBag.Title = @Localizer.Translate("CardFilesInformation", "CardFiles");
 }
 
 
