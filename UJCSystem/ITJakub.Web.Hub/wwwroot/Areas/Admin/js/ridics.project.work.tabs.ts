@@ -1,34 +1,23 @@
 ﻿class ProjectWorkMetadataTab extends ProjectMetadataTabBase {
     private projectId: number;
-    private addLiteraryKindDialog: BootstrapDialogWrapper;
-    private addLiteraryGenreDialog: BootstrapDialogWrapper;
     private addAuthorDialog: BootstrapDialogWrapper;
     private addEditorDialog: BootstrapDialogWrapper;
     private projectClient: ProjectClient;
     private selectedAuthorId: number;
     private selectedResponsiblePersonId: number;
     private publisherTypeahead: SingleSetTypeaheadSearchBox<string>;
-    private publisherName : string = null;
+    private publisherName: string = null;
+    private existingGenres: JQuery = null;
+    private existingLitKinds: JQuery = null;
 
     constructor(projectId: number) {
         super();
         this.projectId = projectId;
         this.projectClient = new ProjectClient();
 
-        this.publisherTypeahead = new SingleSetTypeaheadSearchBox<string>("#work-metadata-publisher", "Admin/Project", x => `${x}`, null);
+        this.publisherTypeahead =
+            new SingleSetTypeaheadSearchBox<string>("#work-metadata-publisher", "Admin/Project", x => `${x}`, null);
         this.publisherTypeahead.setDataSet("Publisher");
-
-        this.addLiteraryKindDialog = new BootstrapDialogWrapper({
-            element: $("#add-literary-kind-dialog"),
-            autoClearInputs: true,
-            submitCallback: this.createNewLiteraryKind.bind(this)
-        });
-
-        this.addLiteraryGenreDialog = new BootstrapDialogWrapper({
-            element: $("#add-literary-genre-dialog"),
-            autoClearInputs: true,
-            submitCallback: this.createNewLiteraryGenre.bind(this)
-        });
 
         this.addAuthorDialog = new BootstrapDialogWrapper({
             element: $("#add-author-dialog"),
@@ -111,10 +100,13 @@
         return array.filter(item => seen.hasOwnProperty(item) ? false : (seen[item] = true));
     }
 
-    private createAuthorListStructure(authorList: IOriginalAuthor[], jEl: JQuery):JQuery {
+    private createAuthorListStructure(authorList: IOriginalAuthor[], jEl: JQuery): JQuery {
         var elm = "";
-        authorList.forEach((item:IOriginalAuthor) => {
-            elm += `<div class="author-list-item clearfix" data-author-id="${item.id}"><div class="list-group-item col-xs-6 border-right existing-original-author-name">${item.firstName}</div><div class="list-group-item existing-original-author-surname border-left col-xs-6">${item.lastName}</div></div>`;
+        authorList.forEach((item: IOriginalAuthor) => {
+            elm += `<div class="author-list-item clearfix" data-author-id="${item.id
+                }"><div class="list-group-item col-xs-6 border-right existing-original-author-name">${item.firstName
+                }</div><div class="list-group-item existing-original-author-surname border-left col-xs-6">${
+                item.lastName}</div></div>`;
         });
         jEl.append(elm);
         return jEl;
@@ -123,13 +115,51 @@
     private createResponsiblePersonListStructure(responsiblePersonList: IResponsiblePerson[], jEl: JQuery): JQuery {
         var elm = "";
         responsiblePersonList.forEach((item: IResponsiblePerson) => {
-            elm += `<div class="responsible-person-list-item clearfix" data-responsible-person-id="${item.id}"><div class="list-group-item col-xs-6 border-right existing-responsible-person-name">${item.firstName}</div><div class="list-group-item existing-responsible-person-surname border-left col-xs-6">${item.lastName}</div></div>`;
+            elm += `<div class="responsible-person-list-item clearfix" data-responsible-person-id="${item.id
+                }"><div class="list-group-item col-xs-6 border-right existing-responsible-person-name">${item.firstName
+                }</div><div class="list-group-item existing-responsible-person-surname border-left col-xs-6">${
+                item.lastName}</div></div>`;
         });
         jEl.append(elm);
         return jEl;
     }
 
-    private categoryTree:any;//TODO investigate d ts
+    private categoryTree: any; //TODO investigate d ts
+
+    private parseExistingGenres() {
+        const genresEl = $("#all-existing-genres");
+        const genreEls = genresEl.children(".existing-genre");
+        this.existingGenres = genreEls;
+    }
+
+    private parseExistingKinds() {
+        const kindsEl = $("#all-existing-lit-kinds");
+        const kindEls = kindsEl.children(".existing-kind");
+        this.existingLitKinds = kindEls;
+    }
+
+    private createGenreKindSelectBoxEl(items: JQuery, isGenre: boolean) {
+        var elm = "";
+        if (isGenre) {
+            elm += `<div class="genre-item">`;
+        } else {
+            elm += `<div class="lit-kind-item">`;
+        }
+        elm += `<div class="col-xs-7">`;
+        elm += "<select>";
+        items.each((index, elem) => {
+            const genreEl = $(elem);
+            elm += `<option value="${genreEl.data("id")}">${genreEl.data("name")}</option>`;
+        });
+        elm += "</select>";
+        elm += "</div>";
+        elm += `<div class="col-xs-5">`;
+        elm +=
+            `<button class="btn btn-default remove-button"><span class="glyphicon glyphicon-remove"></span></button>`;
+        elm += "</div>";
+        elm += "</div>";
+        return $.parseHTML(elm);
+    }
 
     private createCategoriesNestedStructure() {
         const existingCategoriesEl = $(".all-category-list");
@@ -179,7 +209,7 @@
             childrenCats.each((index, elem) => {
                 const childCat = $(elem);
                 categoryTreeEl.children.push(this.convertCateroryElToCategoryTreeEl(childCat));
-            });        
+            });
         }
         return categoryTreeEl;
     }
@@ -196,48 +226,51 @@
             primaryKey: "id",
             uiLibrary: "bootstrap",
             checkedField: "categorySelected",
-            dataSource: this.convertCategoryArrayToCategoryTreeObject(),//TODO
+            dataSource: this.convertCategoryArrayToCategoryTreeObject(),
             checkboxes: true,
             cascadeCheck: false
         });
 
         this.checkSelectedCategoriesInTree(this.categoryTree);
 
-        $("#work-metadata-publisher-email").on("input", () => {
-            const enteredText = $("#work-metadata-publisher-email").val();
-            const emailIsValid = this.validateEmail(enteredText);
-            if (emailIsValid) {
-                $(".email-validity-icon-ok").show();
-                $(".email-validity-icon-bad").hide();
-            } else {
-                $(".email-validity-icon-ok").hide();
-                $(".email-validity-icon-bad").show();
-            }
-        });
+        $("#work-metadata-publisher-email").on("input",
+            () => {
+                const enteredText = $("#work-metadata-publisher-email").val();
+                const emailIsValid = this.validateEmail(enteredText);
+                if (emailIsValid) {
+                    $(".email-validity-icon-ok").show();
+                    $(".email-validity-icon-bad").hide();
+                } else {
+                    $(".email-validity-icon-ok").hide();
+                    $(".email-validity-icon-bad").show();
+                }
+            });
 
-        $(".move-person-up").on("click", (event) => {
-            const targetEl = $(event.target);
-            const personEl = targetEl.parents(".editor-item, .author-item");
-            const prevPersonEl = personEl.prev(".editor-item, .author-item");
-            if (prevPersonEl.length) {
-                personEl.detach();
-                prevPersonEl.before(personEl);
-            }
-        });
+        $(".move-person-up").on("click",
+            (event) => {
+                const targetEl = $(event.target);
+                const personEl = targetEl.parents(".editor-item, .author-item");
+                const prevPersonEl = personEl.prev(".editor-item, .author-item");
+                if (prevPersonEl.length) {
+                    personEl.detach();
+                    prevPersonEl.before(personEl);
+                }
+            });
 
-        $(".move-person-down").on("click", (event) => {
-            const targetEl = $(event.target);
-            const personEl = targetEl.parents(".editor-item, .author-item");
-            const nextPersonEl = personEl.next(".editor-item, .author-item");
-            if (nextPersonEl.length) {
-                personEl.detach();
-                nextPersonEl.after(personEl);
-            }
-        });
+        $(".move-person-down").on("click",
+            (event) => {
+                const targetEl = $(event.target);
+                const personEl = targetEl.parents(".editor-item, .author-item");
+                const nextPersonEl = personEl.next(".editor-item, .author-item");
+                if (nextPersonEl.length) {
+                    personEl.detach();
+                    nextPersonEl.after(personEl);
+                }
+            });
 
         $("#category-tree").find("input").prop("disabled", true);
 
-        $("#work-metadata-edit-button").click(() => {//TODO
+        $("#work-metadata-edit-button").click(() => { //TODO
             this.enabledEdit();
             this.publisherTypeahead.create((selectedExists, selectConfirmed) => {
                 if (selectedExists) {
@@ -257,11 +290,23 @@
         });
 
         $("#add-literary-kind-button").click(() => {
-            this.addLiteraryKindDialog.show();
+            const kindSelectsEl = $("#work-metadata-literary-kind");
+            if (this.existingLitKinds == null) {
+                this.parseExistingKinds();
+            }
+            const isGenre = false;
+            const selectBox = this.createGenreKindSelectBoxEl(this.existingLitKinds, isGenre);
+            kindSelectsEl.append(selectBox);
         });
 
         $("#add-literary-genre-button").click(() => {
-            this.addLiteraryGenreDialog.show();
+            const genreSelectsEl = $("#work-metadata-literary-genre");
+            if (this.existingGenres == null) {
+                this.parseExistingGenres();
+            }
+            const isGenre = true;
+            const selectBox = this.createGenreKindSelectBoxEl(this.existingGenres, isGenre);
+            genreSelectsEl.append(selectBox);
         });
 
         $("#add-author-button").click(() => {
@@ -274,155 +319,164 @@
             this.addEditorDialog.show();
         });
 
-        $(".new-original-author-button").on("click", () => {
-            const finishAddingResponsiblePersonButton = $(".new-original-author-finish-button");
-            $("#add-author-search").prop("disabled", true);
-            $(".new-original-author-button").prop("disabled", true);
-            $(".author-name-input-row").show();
-            finishAddingResponsiblePersonButton.show();
-        });
-
-        $(".new-original-author-finish-button").on("click", () => {
-            const firstNameEl = $("#add-author-first-name");
-            const lastNameEl = $("#add-author-last-name");
-            const listItemsEl = $(".author-list-items");
-            var firstName = firstNameEl.val();
-            var lastName = lastNameEl.val();
-            var id: number;
-            if (firstName === "" || lastName === "") {
-                this.addAuthorDialog.showError("Please enter a name and surname");
-                return;
-            }
-            const createAuthorAjax = this.projectClient.createAuthor(firstName,
-                lastName);
-            createAuthorAjax.done((data: number) => {
-                id = data;
-                const newlyCreatedAuthorArray: IOriginalAuthor[] = [];
-                const newlyCreatedAuthor: IOriginalAuthor = {
-                    id: id,
-                    lastName: lastName,
-                    firstName: firstName
-                };
-                newlyCreatedAuthorArray.push(newlyCreatedAuthor);
-                this.createAuthorListStructure(newlyCreatedAuthorArray, listItemsEl);
-                
-                const newlyCreatedOriginalAuthorEl = $(`[data-author-id=${id}]`);
-                $(".existing-original-author-selected").not(newlyCreatedOriginalAuthorEl)
-                    .removeClass("existing-original-author-selected");
-                newlyCreatedOriginalAuthorEl.addClass("existing-original-author-selected");
-                $("#add-author-id-preview").val(id);
-                $(".new-original-author-button").prop("disabled", false);
-                $("#add-author-search").prop("disabled", false);
-                firstNameEl.val("");
-                lastNameEl.val("");
-                $(".author-name-input-row").hide();
-                $(".new-original-author-finish-button").hide();
-            }).fail(() => {
-                this.addAuthorDialog.showError();
+        $(".new-original-author-button").on("click",
+            () => {
+                const finishAddingResponsiblePersonButton = $(".new-original-author-finish-button");
+                $("#add-author-search").prop("disabled", true);
+                $(".new-original-author-button").prop("disabled", true);
+                $(".author-name-input-row").show();
+                finishAddingResponsiblePersonButton.show();
             });
-        });
 
-        $(".new-responsible-person-button").on("click", () => {
-            const finishAddingResponsiblePersonButton = $(".new-responsible-person-finish-button");
-            $(".new-responsible-person-button").prop("disabled", true);
-            $("#add-editor-search").prop("disabled", true);
-            $(".responsible-person-name-input-row").show();
-            finishAddingResponsiblePersonButton.show();
+        $(".new-original-author-finish-button").on("click",
+            () => {
+                const firstNameEl = $("#add-author-first-name");
+                const lastNameEl = $("#add-author-last-name");
+                const listItemsEl = $(".author-list-items");
+                var firstName = firstNameEl.val();
+                var lastName = lastNameEl.val();
+                var id: number;
+                if (firstName === "" || lastName === "") {
+                    this.addAuthorDialog.showError("Please enter a name and surname");
+                    return;
+                }
+                const createAuthorAjax = this.projectClient.createAuthor(firstName,
+                    lastName);
+                createAuthorAjax.done((data: number) => {
+                    id = data;
+                    const newlyCreatedAuthorArray: IOriginalAuthor[] = [];
+                    const newlyCreatedAuthor: IOriginalAuthor = {
+                        id: id,
+                        lastName: lastName,
+                        firstName: firstName
+                    };
+                    newlyCreatedAuthorArray.push(newlyCreatedAuthor);
+                    this.createAuthorListStructure(newlyCreatedAuthorArray, listItemsEl);
 
-        });
-
-        $(".new-responsible-person-finish-button").on("click", () => {
-            const listItemsEl = $(".responsible-person-list-items");
-            const firstNameEl = $("#add-responsible-person-first-name");
-            const lastNameEl = $("#add-responsible-person-last-name");
-            const firstName = firstNameEl.val();
-            const lastName = lastNameEl.val();
-            var id: number;
-            if (firstName === "" || lastName === "") {
-                this.addEditorDialog.showError("Please enter a name and surname");
-                return;
-            }
-            this.projectClient.createResponsiblePerson(firstName, lastName).done((newResponsiblePersonId: number) => {
-                id = newResponsiblePersonId;
-                const createdResponsiblePersonArray: IResponsiblePerson[] = [];
-                const createdResponsiblePerson: IResponsiblePerson = {
-                    id: id,
-                    lastName: lastName,
-                    firstName:firstName
-                };
-                createdResponsiblePersonArray.push(createdResponsiblePerson);
-                this.createResponsiblePersonListStructure(createdResponsiblePersonArray, listItemsEl);
-                const newlyCreatedResponsiblePerson = $(`[data-responsible-person-id=${id}]`);
-                $(".existing-responsible-person-selected").not(newlyCreatedResponsiblePerson)
-                    .removeClass("existing-responsible-person-selected");
-                newlyCreatedResponsiblePerson.addClass("existing-responsible-person-selected");
-                $("#add-editor-id-preview").val(id);
-                $(".new-responsible-person-button").prop("disabled", false);
-                $("#add-editor-search").prop("disabled", false);
-                firstNameEl.val("");
-                lastNameEl.val("");
-                $(".responsible-person-name-input-row").hide();
-                $(".new-responsible-person-finish-button").hide();
-            }).fail(() => {
-                this.addEditorDialog.showError();
+                    const newlyCreatedOriginalAuthorEl = $(`[data-author-id=${id}]`);
+                    $(".existing-original-author-selected").not(newlyCreatedOriginalAuthorEl)
+                        .removeClass("existing-original-author-selected");
+                    newlyCreatedOriginalAuthorEl.addClass("existing-original-author-selected");
+                    $("#add-author-id-preview").val(id);
+                    $(".new-original-author-button").prop("disabled", false);
+                    $("#add-author-search").prop("disabled", false);
+                    firstNameEl.val("");
+                    lastNameEl.val("");
+                    $(".author-name-input-row").hide();
+                    $(".new-original-author-finish-button").hide();
+                }).fail(() => {
+                    this.addAuthorDialog.showError();
+                });
             });
-        });
+
+        $(".new-responsible-person-button").on("click",
+            () => {
+                const finishAddingResponsiblePersonButton = $(".new-responsible-person-finish-button");
+                $(".new-responsible-person-button").prop("disabled", true);
+                $("#add-editor-search").prop("disabled", true);
+                $(".responsible-person-name-input-row").show();
+                finishAddingResponsiblePersonButton.show();
+
+            });
+
+        $(".new-responsible-person-finish-button").on("click",
+            () => {
+                const listItemsEl = $(".responsible-person-list-items");
+                const firstNameEl = $("#add-responsible-person-first-name");
+                const lastNameEl = $("#add-responsible-person-last-name");
+                const firstName = firstNameEl.val();
+                const lastName = lastNameEl.val();
+                var id: number;
+                if (firstName === "" || lastName === "") {
+                    this.addEditorDialog.showError("Please enter a name and surname");
+                    return;
+                }
+                this.projectClient.createResponsiblePerson(firstName, lastName).done(
+                    (newResponsiblePersonId: number) => {
+                        id = newResponsiblePersonId;
+                        const createdResponsiblePersonArray: IResponsiblePerson[] = [];
+                        const createdResponsiblePerson: IResponsiblePerson = {
+                            id: id,
+                            lastName: lastName,
+                            firstName: firstName
+                        };
+                        createdResponsiblePersonArray.push(createdResponsiblePerson);
+                        this.createResponsiblePersonListStructure(createdResponsiblePersonArray, listItemsEl);
+                        const newlyCreatedResponsiblePerson = $(`[data-responsible-person-id=${id}]`);
+                        $(".existing-responsible-person-selected").not(newlyCreatedResponsiblePerson)
+                            .removeClass("existing-responsible-person-selected");
+                        newlyCreatedResponsiblePerson.addClass("existing-responsible-person-selected");
+                        $("#add-editor-id-preview").val(id);
+                        $(".new-responsible-person-button").prop("disabled", false);
+                        $("#add-editor-search").prop("disabled", false);
+                        firstNameEl.val("");
+                        lastNameEl.val("");
+                        $(".responsible-person-name-input-row").hide();
+                        $(".new-responsible-person-finish-button").hide();
+                    }).fail(() => {
+                    this.addEditorDialog.showError();
+                });
+            });
 
         const addAuthorDialogCancelButton = $("#add-author-dialog").find(`[data-dismiss="modal"]`);
-        addAuthorDialogCancelButton.on("click", () => {
-            $(".author-name-input-row").hide();
-            $("#add-author-search").prop("disabled", false);
-            $(".author-list-items").empty();
-            $(".existing-original-author-selected").removeClass("existing-original-author-selected");
-            const newAuthorButtonEl = $(".new-original-author-button");
-            newAuthorButtonEl.prop("disabled", false);
-            $(".new-original-author-finish-button").hide();
-        });
+        addAuthorDialogCancelButton.on("click",
+            () => {
+                $(".author-name-input-row").hide();
+                $("#add-author-search").prop("disabled", false);
+                $(".author-list-items").empty();
+                $(".existing-original-author-selected").removeClass("existing-original-author-selected");
+                const newAuthorButtonEl = $(".new-original-author-button");
+                newAuthorButtonEl.prop("disabled", false);
+                $(".new-original-author-finish-button").hide();
+            });
 
         const $authorId = $("#add-author-id-preview");
 
-        $(".author-list-items").on("click", ".author-list-item", (event: Event) => {
-            var targetEl = $(event.target);
-            if (!targetEl.hasClass("author-list-item")) {
-                targetEl = targetEl.parents(".author-list-item");
-            }
-            $(".existing-original-author-selected").not(targetEl).removeClass("existing-original-author-selected");
-            targetEl.toggleClass("existing-original-author-selected");
-            var authorId = null;
-            if ($(".existing-original-author-selected").length) {
-                authorId = $(".existing-original-author-selected").data("author-id");
-                $authorId.val(authorId);
-                this.selectedAuthorId = authorId;
-            } else {
-                $authorId.val("");
-                this.selectedAuthorId = null;
-            }
-        });
+        $(".author-list-items").on("click",
+            ".author-list-item",
+            (event: Event) => {
+                var targetEl = $(event.target);
+                if (!targetEl.hasClass("author-list-item")) {
+                    targetEl = targetEl.parents(".author-list-item");
+                }
+                $(".existing-original-author-selected").not(targetEl).removeClass("existing-original-author-selected");
+                targetEl.toggleClass("existing-original-author-selected");
+                var authorId = null;
+                if ($(".existing-original-author-selected").length) {
+                    authorId = $(".existing-original-author-selected").data("author-id");
+                    $authorId.val(authorId);
+                    this.selectedAuthorId = authorId;
+                } else {
+                    $authorId.val("");
+                    this.selectedAuthorId = null;
+                }
+            });
 
-        $("#add-author-search").on("input", (event: Event) => {
-            const textAreaEl = $(event.target);
-            const enteredText = textAreaEl.val();
-            if (enteredText === "") {
-                $(".author-list-item").remove();
-                $authorId.val("");
-                this.selectedAuthorId = null;
-                return;
-            }
-            $.get(`${getBaseUrl()}Admin/Project/GetTypeaheadOriginalAuthor?query=${enteredText}`).done(
-                (data: IOriginalAuthor[]) => {
-                    if (data.length) {
-                        $authorId.val("");
-                        const listItemsEl = $(".author-list-items");
-                        this.selectedAuthorId = null;
-                        listItemsEl.children(".author-list-item").remove();
-                        this.createAuthorListStructure(data, listItemsEl);
-                    } else {
-                        $(".author-list-item").remove();
-                        $authorId.val("");
-                        this.selectedAuthorId = null;
-                    }
-                });
-        });
+        $("#add-author-search").on("input",
+            (event: Event) => {
+                const textAreaEl = $(event.target);
+                const enteredText = textAreaEl.val();
+                if (enteredText === "") {
+                    $(".author-list-item").remove();
+                    $authorId.val("");
+                    this.selectedAuthorId = null;
+                    return;
+                }
+                $.get(`${getBaseUrl()}Admin/Project/GetTypeaheadOriginalAuthor?query=${enteredText}`).done(
+                    (data: IOriginalAuthor[]) => {
+                        if (data.length) {
+                            $authorId.val("");
+                            const listItemsEl = $(".author-list-items");
+                            this.selectedAuthorId = null;
+                            listItemsEl.children(".author-list-item").remove();
+                            this.createAuthorListStructure(data, listItemsEl);
+                        } else {
+                            $(".author-list-item").remove();
+                            $authorId.val("");
+                            this.selectedAuthorId = null;
+                        }
+                    });
+            });
 
         const newResponsiblePersonNameEl = $(".add-responsible-person-first-name");
         const newResponsiblePersonSurnameEl = $(".add-responsible-person-last-name");
@@ -430,62 +484,67 @@
         var isResponsiblePersonSelected = false;
 
         const $editorId = $("#add-editor-id-preview");
-        $("#add-editor-search").on("input", (event: Event) => {
-            const textAreaEl = $(event.target);
-            const enteredText = textAreaEl.val();
-            if (enteredText === "") {
-                $(".responsible-person-list-item").remove();
-                newResponsiblePersonButtonEl.prop("disabled", false);
-                newResponsiblePersonNameEl.prop("disabled", false);
-                newResponsiblePersonSurnameEl.prop("disabled", false);
-                $editorId.val("");
-                this.selectedResponsiblePersonId = null;
-                return;
-            }
-            $.get(`${getBaseUrl()}Admin/Project/GetTypeaheadResponsiblePerson?query=${enteredText}`).done(
-                (data: IResponsiblePerson[]) => {
-                    if (data.length) {
-                        $editorId.val("");
-                        this.selectedResponsiblePersonId = null;
-                        $(".responsible-person-list-items").children(".responsible-person-list-item").remove();
-                        this.createResponsiblePersonListStructure(data, $(".responsible-person-list-items"));
-                    } else {
-                        $(".responsible-person-list-item").remove();
-                        $editorId.val("");
-                        this.selectedResponsiblePersonId = null;
-                    }
-                });
-        });
+        $("#add-editor-search").on("input",
+            (event: Event) => {
+                const textAreaEl = $(event.target);
+                const enteredText = textAreaEl.val();
+                if (enteredText === "") {
+                    $(".responsible-person-list-item").remove();
+                    newResponsiblePersonButtonEl.prop("disabled", false);
+                    newResponsiblePersonNameEl.prop("disabled", false);
+                    newResponsiblePersonSurnameEl.prop("disabled", false);
+                    $editorId.val("");
+                    this.selectedResponsiblePersonId = null;
+                    return;
+                }
+                $.get(`${getBaseUrl()}Admin/Project/GetTypeaheadResponsiblePerson?query=${enteredText}`).done(
+                    (data: IResponsiblePerson[]) => {
+                        if (data.length) {
+                            $editorId.val("");
+                            this.selectedResponsiblePersonId = null;
+                            $(".responsible-person-list-items").children(".responsible-person-list-item").remove();
+                            this.createResponsiblePersonListStructure(data, $(".responsible-person-list-items"));
+                        } else {
+                            $(".responsible-person-list-item").remove();
+                            $editorId.val("");
+                            this.selectedResponsiblePersonId = null;
+                        }
+                    });
+            });
 
-        $(".responsible-person-list-items").on("click", ".responsible-person-list-item", (event: Event) => {
-            var targetEl = $(event.target);
-            if (!targetEl.hasClass("responsible-person-list-item")) {
-                targetEl = targetEl.parents(".responsible-person-list-item");
-            }
-            $(".existing-responsible-person-selected").not(targetEl).removeClass("existing-responsible-person-selected");
-            targetEl.toggleClass("existing-responsible-person-selected");
-            var responsiblePersonId = null;
-            if ($(".existing-responsible-person-selected").length) {
-                isResponsiblePersonSelected = true;
-                responsiblePersonId = $(".existing-responsible-person-selected").data("responsible-person-id");
-                $editorId.val(responsiblePersonId);
-                this.selectedResponsiblePersonId = responsiblePersonId;
-            } else {
-                isResponsiblePersonSelected = false;
-                $editorId.val("");
-                this.selectedResponsiblePersonId = null;
-            }
-        });
+        $(".responsible-person-list-items").on("click",
+            ".responsible-person-list-item",
+            (event: Event) => {
+                var targetEl = $(event.target);
+                if (!targetEl.hasClass("responsible-person-list-item")) {
+                    targetEl = targetEl.parents(".responsible-person-list-item");
+                }
+                $(".existing-responsible-person-selected").not(targetEl)
+                    .removeClass("existing-responsible-person-selected");
+                targetEl.toggleClass("existing-responsible-person-selected");
+                var responsiblePersonId = null;
+                if ($(".existing-responsible-person-selected").length) {
+                    isResponsiblePersonSelected = true;
+                    responsiblePersonId = $(".existing-responsible-person-selected").data("responsible-person-id");
+                    $editorId.val(responsiblePersonId);
+                    this.selectedResponsiblePersonId = responsiblePersonId;
+                } else {
+                    isResponsiblePersonSelected = false;
+                    $editorId.val("");
+                    this.selectedResponsiblePersonId = null;
+                }
+            });
         const addResponsiblePersonDialogCancelButton = $("#add-editor-dialog").find(`[data-dismiss="modal"]`);
-        addResponsiblePersonDialogCancelButton.on("click", () => {
-            $(".responsible-person-name-input-row").hide();
-            $("#add-editor-search").prop("disabled", false);
-            $(".existing-responsible-person-selected").removeClass("existing-original-author-selected");
-            $(".responsible-person-list-items").empty();
-            const newResponsiblePersonButtonEl = $(".new-responsible-person-button");
-            newResponsiblePersonButtonEl.prop("disabled", false);
-            $(".new-responsible-person-finish-button").hide();
-        });
+        addResponsiblePersonDialogCancelButton.on("click",
+            () => {
+                $(".responsible-person-name-input-row").hide();
+                $("#add-editor-search").prop("disabled", false);
+                $(".existing-responsible-person-selected").removeClass("existing-original-author-selected");
+                $(".responsible-person-list-items").empty();
+                const newResponsiblePersonButtonEl = $(".new-responsible-person-button");
+                newResponsiblePersonButtonEl.prop("disabled", false);
+                $(".new-responsible-person-finish-button").hide();
+            });
 
         $addResponsibleTypeButton.click(() => {
             $addResponsibleTypeButton.prop("disabled", true);
@@ -498,6 +557,10 @@
 
         this.addRemovePersonEvent($("#work-metadata-authors .remove-button, #work-metadata-editors .remove-button"));
 
+        this.addRemoveGenreEvent();
+
+        this.addRemoveLiteraryKindEvent();
+
         var $saveButton = $("#work-metadata-save-button");
         $saveButton.click(() => {
             this.saveMetadata();
@@ -505,44 +568,6 @@
         $(".saving-icon", $saveButton).hide();
 
         $("#work-metadata-save-error, #work-metadata-save-success").hide();
-    }
-
-    private createNewLiteraryKind() {
-        var name = $("#add-literary-kind-name").val();
-
-        if (!name) {
-            this.addLiteraryKindDialog.showError("Nebyl vyplněn název");
-        }
-
-        this.projectClient.createLiteraryKind(name,
-            (newId, errorCode) => {
-                if (errorCode !== null) {
-                    this.addLiteraryKindDialog.showError("Chyba při vytváření nového literárního druhu");
-                    return;
-                }
-
-                UiHelper.addCheckboxAndSetChecked($("#work-metadata-literary-kind"), name, newId);
-                this.addLiteraryKindDialog.hide();
-            });
-    }
-
-    private createNewLiteraryGenre() {
-        var name = $("#add-literary-genre-name").val();
-
-        if (!name) {
-            this.addLiteraryGenreDialog.showError("Nebyl vyplněn název");
-        }
-
-        this.projectClient.createLiteraryGenre(name,
-            (newId, errorCode) => {
-                if (errorCode !== null) {
-                    this.addLiteraryGenreDialog.showError("Chyba při vytváření nového literárního žánru");
-                    return;
-                }
-
-                UiHelper.addCheckboxAndSetChecked($("#work-metadata-literary-genre"), name, newId);
-                this.addLiteraryGenreDialog.hide();
-            });
     }
 
     private addAuthor() {
@@ -606,7 +631,10 @@
         var lastName: string;
 
         var finishAddingEditor = () => {
-            var element = MetadataUiHelper.addPerson($("#work-metadata-editors"), `${firstName} ${lastName} - ${responsibilityText}`, id, responsibilityTypeId);
+            var element = MetadataUiHelper.addPerson($("#work-metadata-editors"),
+                `${firstName} ${lastName} - ${responsibilityText}`,
+                id,
+                responsibilityTypeId);
             $(element).addClass("editor-item");
             this.addRemovePersonEvent($(".remove-button", element));
 
@@ -634,6 +662,22 @@
         });
     }
 
+    private addRemoveGenreEvent() {
+        $("#work-metadata-literary-genre").on("click",
+            ".remove-button",
+            (event) => {
+                $(event.currentTarget).closest(".genre-item").remove();
+            });
+    }
+
+    private addRemoveLiteraryKindEvent() {
+        $("#work-metadata-literary-kind").on("click",
+            ".remove-button",
+            (event) => {
+                $(event.currentTarget).closest(".lit-kind-item").remove();
+            });
+    }
+
     private validateEmail(mail: string) {
         const emailRegex = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
         if (emailRegex.test(mail)) {
@@ -646,9 +690,8 @@
         const enteredEmailText = $("#work-metadata-publisher-email").val();
         const emailIsValid = this.validateEmail(enteredEmailText);
         const invalidEmailAlertEl = $("#work-metadata-invalid-email");
-        invalidEmailAlertEl.hide();
         if (!emailIsValid) {
-            invalidEmailAlertEl.show();
+            invalidEmailAlertEl.show().delay(3000).fadeOut(2000);;
             return;
         }
         var selectedAuthorIds = new Array<number>();
@@ -667,10 +710,10 @@
             };
             selectedResponsibleIds.push(projectResponsible);
         });
-        $("#work-metadata-literary-kind input:checked").each((index, elem) => {
+        $(".lit-kind-item").find("select").each((index, elem) => {
             selectedKindIds.push($(elem).val());
         });
-        $("#work-metadata-literary-genre input:checked").each((index, elem) => {
+        $(".genre-item").find("select").each((index, elem) => {
             selectedGenreIds.push($(elem).val());
         });
 
@@ -730,7 +773,7 @@
             $successAlert.finish().hide();
             $errorAlert.hide();
 
-            this.projectClient.saveMetadata(this.projectId,data).done((data) => {
+            this.projectClient.saveMetadata(this.projectId, data).done((data) => {
                 $successAlert.show().delay(3000).fadeOut(2000);
                 $("#work-metadata-last-modification").text(data.lastModificationText);
                 $("#work-metadata-literary-original").text(data.literaryOriginalText);
@@ -885,7 +928,10 @@ class ProjectWorkNoteTab extends ProjectModuleTabBase {
 }
 
 class MetadataUiHelper {
-    public static addPerson($container: JQuery, label: string, idValue: string | number, responsibilityTypeId?: number | string): HTMLDivElement {
+    public static addPerson($container: JQuery,
+        label: string,
+        idValue: string | number,
+        responsibilityTypeId?: number | string): HTMLDivElement {
         var rootElement = document.createElement("div");
         var deleteButton = document.createElement("button");
         var deleteGlyphSpan = document.createElement("span");
@@ -907,7 +953,7 @@ class MetadataUiHelper {
         }
         $(rootElement)
             .attr("data-id", idValue)
-        .append(deleteButton)
+            .append(deleteButton)
             .append(labelSpan)
             .appendTo($container);
 
