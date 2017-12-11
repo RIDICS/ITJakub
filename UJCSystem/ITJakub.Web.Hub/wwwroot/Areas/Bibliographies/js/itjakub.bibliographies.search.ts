@@ -44,8 +44,8 @@ class BibliographiesSearch {
         this.search.setOverrideQueryCallback(newQuery => this.typeaheadSearchBox.value(newQuery));
 
         this.typeaheadSearchBox = new SearchBox(".searchbar-input", "Bibliographies/Bibliographies");
-        this.typeaheadSearchBox.addDataSet("Title", this.localization.translate("Titles", "Bibliography").value);
-        this.typeaheadSearchBox.addDataSet("Author", this.localization.translate("Authors", "Bibliography").value);
+        this.typeaheadSearchBox.addDataSet("Title", this.localization.translate("Titles", "Bibliographies").value);
+        this.typeaheadSearchBox.addDataSet("Author", this.localization.translate("Authors", "Bibliographies").value);
         this.typeaheadSearchBox.create();
         this.typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
 

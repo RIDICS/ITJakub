@@ -5,7 +5,7 @@
 		"LoadingError" : "translate[Nepodařilo se načíst výsledek ze zásuvky '{0}' z kartotétky '{1}']",
 		"NotFilled" : "translate[&lt;Nezadáno&gt;]",
 		"SmallPreview" : "translate[Malý náhled]",
-		"List" : "Lístek: ]",
+		"List" : "translate[Lístek: ]",
 		"Preview" : "translate[Náhled]",
 		"Pages" : "translate[Stránky: ]",
 		"Keywords" : "translate[Hesla: ]",
