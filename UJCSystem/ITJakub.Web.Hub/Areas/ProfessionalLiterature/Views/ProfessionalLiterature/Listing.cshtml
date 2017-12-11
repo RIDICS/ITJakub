@@ -1,6 +1,9 @@
-﻿@model ITJakub.Web.Hub.Models.BookListingModel
+﻿@using Localization.AspNetCore.Service
+@model ITJakub.Web.Hub.Models.BookListingModel
+@inject ILocalization Localizer
+
 @{
-    ViewBag.Title = "Odborná literatura - Čtečka děl";
+    ViewBag.Title = @Localizer.Translate("ProfessionalLiteratureListing", "ProfessionalLiterature");
 }
 
 @section styles{

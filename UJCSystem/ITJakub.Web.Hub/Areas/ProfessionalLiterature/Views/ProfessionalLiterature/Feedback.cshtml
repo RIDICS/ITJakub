@@ -1,10 +1,13 @@
-﻿@model ITJakub.Web.Hub.Models.FeedbackViewModel
+﻿@using Localization.AspNetCore.Service
+@model ITJakub.Web.Hub.Models.FeedbackViewModel
+@inject ILocalization Localizer
+
 @section styles{
     <link href="~/Areas/ProfessionalLiterature/css/itjakub.professionalliterature.css" rel="stylesheet" />
 }
 
 @{
-    ViewBag.Title = "Odborná literatura - Připomínky";
+    ViewBag.Title =  @Localizer.Translate("ProfessionalLiteratureFeedback", "ProfessionalLiterature");
 }
 
 <div class="content-container">
