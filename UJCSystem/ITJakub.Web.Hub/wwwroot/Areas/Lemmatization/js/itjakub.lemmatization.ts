@@ -430,7 +430,7 @@ class LemmatizationCharacteristicTable {
         $(morphologicalLabelDiv)
             .addClass("lemmatization-label")
             .addClass("lemmatization-big-label-width")
-            .text(this.localization.translate("MorfologicCharacteristic", "Lemmatization").value);
+            .text(this.localization.translate("MorfologicCharacteristic:", "Lemmatization").value);
         $(morphologicalContentSpan)
             .addClass("lemmatization-label-content-big")
             .text(this.item.morphologicalCharacteristic);
