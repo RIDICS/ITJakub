@@ -1,4 +1,5 @@
-﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ProjectListViewModel
+﻿@using Localization.AspNetCore.Service
+@model ITJakub.Web.Hub.Areas.Admin.Models.ProjectListViewModel
 @inject ILocalization Localizer
 
 <div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>
