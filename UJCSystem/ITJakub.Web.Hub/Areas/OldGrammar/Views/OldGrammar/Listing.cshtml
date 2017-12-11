@@ -1,6 +1,8 @@
 ﻿@model ITJakub.Web.Hub.Models.BookListingModel
+@inject ILocalization Localizer
+
 @{
-    ViewBag.Title = "Mluvnice - Čtečka děl";
+    ViewBag.Title = @Localizer.Translate("OldGrammarListing", "OldGrammar");
 }
 
 @section styles{

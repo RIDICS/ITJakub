@@ -1,0 +1,14 @@
+{
+	"culture":"en",
+	"scope":"OldGrammar",
+	"dictionary": {
+		"OldGrammarFeedback" : "translate[Mluvnice - Připomínky]",
+		"OldGrammarHelp" : "translate[Mluvnice - Nápověda]",
+		"OldGrammarInformation" : "translate[Mluvnice - Informace]",
+		"OldGrammarList" : "translate[Mluvnice - Seznam]",
+		"OldGrammarListing" : "translate[Mluvnice - Čtečka děl]",
+		"OldGrammarListTerms" : "translate[Mluvnice - Seznam termínů]",
+		"ListTerms" : "translate[Seznam termínů]",
+		"OldGrammarSearch" : "translate[Mluvnice - Vyhledávání]"
+	}
+}

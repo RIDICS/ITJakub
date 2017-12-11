@@ -1,10 +1,12 @@
 ﻿@model ITJakub.Web.Hub.Areas.OldGrammar.Models.TermCategoriesWithTermsModel
+@inject ILocalization Localizer
+
 @section styles{
     <link href="~/Areas/OldGrammar/css/itjakub.oldgrammar.css" rel="stylesheet" />
 }
 
 @{
-    ViewBag.Title = "Mluvnice - Seznam termínů";
+    ViewBag.Title = @Localizer.Translate("OldGrammarListTerms", "OldGrammar");
 }
 
 <div>

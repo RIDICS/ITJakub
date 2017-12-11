@@ -1,10 +1,12 @@
 ﻿@model ITJakub.Web.Hub.Models.FeedbackViewModel
+@inject ILocalization Localizer
+
 @section styles{
     <link href="~/Areas/OldGrammar/css/itjakub.oldgrammar.css" rel="stylesheet" />
 }
 
 @{
-    ViewBag.Title = "Mluvnice - Připomínky";
+    ViewBag.Title = @Localizer.Translate("OldGrammarFeedback", "OldGrammar");
 }
 
 <div class="content-container">

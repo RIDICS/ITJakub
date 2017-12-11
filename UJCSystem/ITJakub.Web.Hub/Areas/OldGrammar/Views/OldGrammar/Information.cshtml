@@ -1,11 +1,12 @@
 ﻿@model ITJakub.Web.Hub.Models.StaticTextViewModel
+@inject ILocalization Localizer
 
 @section styles{
     <link href="~/Areas/OldGrammar/css/itjakub.oldgrammar.css" rel="stylesheet" />
 }
 
 @{
-    ViewBag.Title = "Mluvnice - Informace";
+    ViewBag.Title = @Localizer.Translate("OldGrammarInformation", "OldGrammar");
 }
 
 <div class="content-container">

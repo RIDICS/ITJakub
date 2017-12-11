@@ -1,4 +1,6 @@
-﻿@section styles{
+﻿@inject ILocalization Localizer
+
+@section styles{
     <link href="~/Areas/OldGrammar/css/itjakub.oldgrammar.css" rel="stylesheet" />
 }
 @section scripts{
@@ -7,7 +9,7 @@
 }
 
 @{
-    ViewBag.Title = "Mluvnice - Vyhledávání";
+    ViewBag.Title = @Localizer.Translate("OldGrammarSearch", "OldGrammar");
 }
 
 @Html.Partial("_BibliographySearch")
