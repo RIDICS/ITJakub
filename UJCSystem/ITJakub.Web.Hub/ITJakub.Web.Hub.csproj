@@ -46,6 +46,7 @@
     <ProjectReference Include="..\ITJakub.SearchService.DataContracts\ITJakub.SearchService.DataContracts.csproj" />
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj" />
     <ProjectReference Include="..\ITJakub.Web.DataEntities\ITJakub.Web.DataEntities.csproj" />
+    <ProjectReference Include="..\Vokabular.Jewelry\Vokabular.Jewelry.csproj" />
     <ProjectReference Include="..\Vokabular.MainService.DataContracts\Vokabular.MainService.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj" />
@@ -62,22 +63,23 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="1.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="1.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="1.1.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="2.0.3" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.0.2" />
-    <PackageReference Include="AutoMapper" Version="6.1.1" />
+    <PackageReference Include="AutoMapper" Version="6.2.1" />
     <PackageReference Include="Castle.Windsor" Version="3.4.0" />
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="1.3.3" />
     <PackageReference Include="log4net" Version="2.0.8" />
-    <PackageReference Include="Markdig" Version="0.13.2" />
+    <PackageReference Include="Markdig" Version="0.14.7" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="System.Runtime.Serialization.Xml" Version="4.3.0" />
     <PackageReference Include="System.ServiceModel.Http" Version="4.4.0" />
     <PackageReference Include="System.ServiceModel.Primitives" Version="4.4.0" />
-    <PackageReference Include="DryIoc.dll" Version="2.11.6" />
-    <PackageReference Include="DryIoc.Microsoft.DependencyInjection" Version="1.2.2" />
+    <PackageReference Include="DryIoc.dll" Version="2.12.5" />
+    <PackageReference Include="DryIoc.Microsoft.DependencyInjection" Version="1.3.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.1.0" />
   </ItemGroup>
   

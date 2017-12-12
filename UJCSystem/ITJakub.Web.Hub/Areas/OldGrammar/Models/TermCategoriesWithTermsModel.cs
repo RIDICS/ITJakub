@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using ITJakub.ITJakubService.DataContracts;
+using Vokabular.MainService.DataContracts.Contracts;
 
 namespace ITJakub.Web.Hub.Areas.OldGrammar.Models
 {
     public class TermCategoriesWithTermsModel
     {
-        public IList<TermCategoryContract> TermCategories { get; set; }
+        public IList<TermCategoryDetailContract> TermCategories { get; set; }
     }
 }

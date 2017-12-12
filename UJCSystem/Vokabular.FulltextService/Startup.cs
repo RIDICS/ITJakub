@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
 using Vokabular.FulltextService.Containers;
 using Vokabular.FulltextService.Containers.Extensions;
+using Vokabular.FulltextService.Utils.Documentation;
 using Vokabular.Shared;
 using Vokabular.Shared.Container;
+using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.Options;
 
 namespace Vokabular.FulltextService
@@ -44,6 +48,11 @@ namespace Vokabular.FulltextService
                     Version = "v1",
                 });
                 options.DescribeAllEnumsAsStrings();
+                options.IncludeXmlComments(GetXmlCommentsPath());
+
+                //TODO enable this DocumentFilter and SchemaFilter after merge with branch with ElasticSearch usage
+                //options.DocumentFilter<PolymorphismDocumentFilter<SearchCriteriaContract>>();
+                //options.SchemaFilter<PolymorphismSchemaFilter<SearchCriteriaContract>>();
             });
 
             // IoC
@@ -74,7 +83,7 @@ namespace Vokabular.FulltextService
             // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Vokabular FulltextService API v1");
+                c.SwaggerEndpoint("v1/swagger.json", "Vokabular FulltextService API v1"); // using relative address to Swagger UI
             });
 
             applicationLifetime.ApplicationStopped.Register(OnShutdown);
@@ -83,6 +92,12 @@ namespace Vokabular.FulltextService
         private void OnShutdown()
         {
             Container.Dispose();
+        }
+
+        private string GetXmlCommentsPath()
+        {
+            var app = PlatformServices.Default.Application;
+            return Path.Combine(app.ApplicationBasePath, $"{app.ApplicationName}.xml");
         }
     }
 }

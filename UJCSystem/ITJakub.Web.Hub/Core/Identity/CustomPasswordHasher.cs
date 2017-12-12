@@ -6,12 +6,12 @@ namespace ITJakub.Web.Hub.Core.Identity
     {
         public string HashPassword(ApplicationUser user, string password)
         {
-            return Jewelery.CustomPasswordHasher.CreateHash(password);
+            return Vokabular.Jewelry.CustomPasswordHasher.CreateHash(password);
         }
 
         public PasswordVerificationResult VerifyHashedPassword(ApplicationUser user, string hashedPassword, string providedPassword)
         {
-           var result =  Jewelery.CustomPasswordHasher.ValidatePassword(providedPassword, hashedPassword);
+            var result = Vokabular.Jewelry.CustomPasswordHasher.ValidatePassword(providedPassword, hashedPassword);
             if(result)
                 return PasswordVerificationResult.Success;
 

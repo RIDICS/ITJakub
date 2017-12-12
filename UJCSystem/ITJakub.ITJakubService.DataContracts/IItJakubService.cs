@@ -11,6 +11,7 @@ using ITJakub.Shared.Contracts.Favorites;
 using ITJakub.Shared.Contracts.News;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Criteria;
+using Vokabular.MainService.DataContracts.Contracts.CardFile;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.Old;
 using Vokabular.Shared.DataContracts.Types;
@@ -131,7 +132,7 @@ namespace ITJakub.ITJakubService.DataContracts
         CardContract GetCard(string cardFileId, string bucketId, string cardId);
 
         [OperationContract]
-        Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId, ImageSizeEnum imageSize);
+        Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId, CardImageSizeEnumContract imageSize);
 
         #endregion
 

@@ -38,6 +38,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 bookData.FileNameMapping.Add(fileResource.FileName, fileResource);
             }
 
+            bookData.ContainsEditionNote = true; //HACK always create new EditionNoteResource, TODO determine if edition note exists
+
             var saveNewBookDataWork = new SaveNewBookDataWork(m_projectRepository, m_metadataRepository, m_resourceRepository, m_catalogValueRepository, m_personRepository, resourceDirector);
             saveNewBookDataWork.Execute();
 

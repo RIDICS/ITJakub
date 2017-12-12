@@ -13,5 +13,6 @@ namespace Vokabular.DataEntities.Database.Entities.Enums
         Audio = 8,
         AudioTrack = 9,
         BookVersion = 10,
+        EditionNote = 11,
     }
 }

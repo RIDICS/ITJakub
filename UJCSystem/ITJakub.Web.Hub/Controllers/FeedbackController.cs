@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Identity;
 using ITJakub.Web.Hub.Models.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -21,44 +21,30 @@ namespace ITJakub.Web.Hub.Controllers
             return View("FeedbackManagement");
         }
 
-        public ActionResult GetFeedbacksCount(IEnumerable<byte> categories)
+        public ActionResult GetFeedbacksCount(IList<FeedbackCategoryEnumContract> categories)
         {
-            var feedbackCriteria = new FeedbackCriteriaContract
+            using (var client = GetRestClient())
             {
-                Categories = categories?.Select(x => (FeedbackCategoryEnumContract) x).ToList()
-            };
-
-            using (var client = GetMainServiceClient())
-            {
-                var count = client.GetFeedbacksCount(feedbackCriteria);
-                return Json(count);
+                var feedbacks = client.GetFeedbackList(0, 0, FeedbackSortEnumContract.Date, SortDirectionEnumContract.Desc, categories);
+                return Json(feedbacks.TotalCount);
             }
         }
 
-        public ActionResult GetFeedbacks(IEnumerable<byte> categories, int? start, int? count, byte sortCriteria, bool sortAsc)
+        public ActionResult GetFeedbacks(IList<FeedbackCategoryEnumContract> categories, int start, int count, byte sortCriteria, bool sortAsc)
         {
-            var feedbackCriteria = new FeedbackCriteriaContract
+            var sortValue = (FeedbackSortEnumContract) sortCriteria;
+            var sortDirection = sortAsc ? SortDirectionEnumContract.Asc : SortDirectionEnumContract.Desc;
+            using (var client = GetRestClient())
             {
-                Start = start,
-                Count = count,
-                Categories = categories?.Select(x => (FeedbackCategoryEnumContract) x).ToList(),
-                SortCriteria = new FeedbackSortCriteriaContract
-                {
-                    SortAsc = sortAsc,
-                    SortByField = (FeedbackSortEnum) sortCriteria
-                }
-            };
-            using (var client = GetMainServiceClient())
-            {
-                var results = client.GetFeedbacks(feedbackCriteria);
-                return Json(results);
+                var feedbacks = client.GetFeedbackList(start, count, sortValue, sortDirection, categories);
+                return Json(feedbacks.List);
             }
         }
 
         [HttpPost]
         public ActionResult DeleteFeedback([FromBody] DeleteFeedbackRequest request)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
                 client.DeleteFeedback(request.FeedbackId);
                 return Json(new {});

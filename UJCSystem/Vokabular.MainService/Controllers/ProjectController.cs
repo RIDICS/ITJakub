@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Parameter;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.MainService.Utils.Documentation;
+using Vokabular.RestClient.Headers;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -15,20 +15,23 @@ namespace Vokabular.MainService.Controllers
         private readonly ProjectManager m_projectManager;
         private readonly ProjectMetadataManager m_projectMetadataManager;
         private readonly ProjectInfoManager m_projectInfoManager;
-        private readonly PageManager m_pageManager;
 
-        public ProjectController(ProjectManager projectManager, ProjectMetadataManager projectMetadataManager, ProjectInfoManager projectInfoManager, PageManager pageManager)
+        public ProjectController(ProjectManager projectManager, ProjectMetadataManager projectMetadataManager,
+            ProjectInfoManager projectInfoManager)
         {
             m_projectManager = projectManager;
             m_projectMetadataManager = projectMetadataManager;
             m_projectInfoManager = projectInfoManager;
-            m_pageManager = pageManager;
         }
         
         [HttpGet]
-        public List<ProjectDetailContract> GetProjectList([FromQuery] int? start, [FromQuery] int? count, [FromQuery] bool? fetchPageCount)
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total records count")]
+        public List<ProjectDetailContract> GetProjectList([FromQuery] int? start, [FromQuery] int? count, [FromQuery] bool? fetchPageCount, [FromQuery] bool? fetchAuthors, [FromQuery] bool? fetchResponsiblePersons)
         {
-            var result = m_projectManager.GetProjectList(start, count, fetchPageCount ?? false);
+            var isFetchPageCount = fetchPageCount ?? false;
+            var isFetchAuthors = fetchAuthors ?? false;
+            var isFetchResponsiblePersons = fetchResponsiblePersons ?? false;
+            var result = m_projectManager.GetProjectList(start, count, isFetchPageCount, isFetchAuthors, isFetchResponsiblePersons);
 
             SetTotalCountHeader(result.TotalCount);
 
@@ -37,9 +40,13 @@ namespace Vokabular.MainService.Controllers
 
         [HttpGet("{projectId}")]
         [ProducesResponseType(typeof(ProjectDetailContract), StatusCodes.Status200OK)]
-        public IActionResult GetProject(long projectId, [FromQuery] bool? fetchPageCount)
+        public IActionResult GetProject(long projectId, [FromQuery] bool? fetchPageCount, [FromQuery] bool? fetchAuthors, [FromQuery] bool? fetchResponsiblePersons)
         {
-            var projectData = m_projectManager.GetProject(projectId, fetchPageCount ?? false);
+            var isFetchPageCount = fetchPageCount ?? false;
+            var isFetchAuthors = fetchAuthors ?? false;
+            var isFetchResponsiblePersons = fetchResponsiblePersons ?? false;
+
+            var projectData = m_projectManager.GetProject(projectId, isFetchPageCount, isFetchAuthors, isFetchResponsiblePersons);
             if (projectData == null)
                 return NotFound();
 
@@ -135,81 +142,46 @@ namespace Vokabular.MainService.Controllers
             m_projectInfoManager.SetResponsiblePersons(projectId, projectResposibleIdList);
         }
 
-        [HttpGet("{projectId}/page")]
-        public List<PageContract> GetPageList(long projectId)
+        [HttpGet("{projectId}/literary-kind")]
+        public List<LiteraryKindContract> GetLiteraryKinds(long projectId)
         {
-            var result = m_pageManager.GetPageList(projectId);
-            return result;
+            return m_projectInfoManager.GetLiteraryKinds(projectId);
         }
 
-        [HttpGet("{projectId}/text")]
-        public List<TextWithPageContract> GetTextResourceList(long projectId, [FromQuery] long? resourceGroupId)
+        [HttpGet("{projectId}/literary-genre")]
+        public List<LiteraryGenreContract> GetLiteraryGenres(long projectId)
         {
-            var result = m_pageManager.GetTextResourceList(projectId, resourceGroupId);
-            return result;
+            return m_projectInfoManager.GetLiteraryGenres(projectId);
         }
 
-        [HttpGet("{projectId}/image")]
-        public List<ImageWithPageContract> GetImageList(long projectId)
+        [HttpGet("{projectId}/literary-original")]
+        public List<LiteraryOriginalContract> GetLiteraryOriginal(long projectId)
         {
-            var result = m_pageManager.GetImageResourceList(projectId);
-            return result;
-        }
-        
-        [HttpGet("text/{textId}")]
-        public FullTextContract GetTextResource(long textId, [FromQuery] TextFormatEnumContract? format)
-        {
-            if (format == null)
-                format = TextFormatEnumContract.Html;
-
-            var result = m_pageManager.GetTextResource(textId, format.Value);
-            return result;
+            return m_projectInfoManager.GetLiteraryOriginals(projectId);
         }
 
-        [HttpPost("text/{textId}")]
-        [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-        public IActionResult CreateNewTextResourceVersion([FromBody] CreateTextRequestContract request)
+        [HttpGet("{projectId}/keyword")]
+        public List<KeywordContract> GetKeywords(long projectId)
         {
-            //TODO add logic
-            return StatusCode(StatusCodes.Status409Conflict); // Version conflict
+            return m_projectInfoManager.GetKeywords(projectId);
         }
 
-        [HttpGet("text/{textId}/comment")]
-        public List<GetTextCommentContract> GetCommentsForText(long textId)
+        [HttpGet("{projectId}/category")]
+        public List<CategoryContract> GetCategories(long projectId)
         {
-            var result = m_pageManager.GetCommentsForText(textId);
-            return result;
+            return m_projectInfoManager.GetCategories(projectId);
         }
 
-        [HttpPost("text/{textId}/comment")]
-        public long CreateComment(long textId, [FromBody] CreateTextCommentContract request)
+        [HttpGet("{projectId}/author")]
+        public List<OriginalAuthorContract> GetAuthors(long projectId)
         {
-            var resultId = m_pageManager.CreateNewComment(textId, request);
-            return resultId;
+            return m_projectInfoManager.GetAuthors(projectId);
         }
 
-        [HttpPut("text/{textId}/comment")]
-        public long UpdateComment(long textId, [FromBody] CreateTextCommentContract request)
+        [HttpGet("{projectId}/responsible-person")]
+        public List<ProjectResponsiblePersonContract> GetProjectResponsiblePersons(long projectId)
         {
-            //TODO add logic
-            throw new NotImplementedException();
-        }
-
-        [HttpDelete("text/comment/{commentId}")]
-        public void DeleteComment(long commentId)
-        {
-            m_pageManager.DeleteComment(commentId);
-        }
-
-        [HttpGet("image/{imageId}")]
-        public IActionResult GetImage(long imageId)
-        {
-            var result = m_pageManager.GetImageResource(imageId);
-            if (result == null)
-                return NotFound();
-
-            Response.ContentLength = result.FileSize;
-            return File(result.Stream, result.MimeType, result.FileName);
+            return m_projectInfoManager.GetProjectResponsiblePersons(projectId);
         }
     }
 }

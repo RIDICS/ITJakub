@@ -58,11 +58,14 @@ namespace ITJakub.ITJakubService.Core.Test
         private void ConfigureAutoMapper()
         {
             var profiles = ResolveAll<Profile>();
-            Mapper.Reset();
-            foreach (var profile in profiles)
+
+            Mapper.Initialize(cfg =>
             {
-                Mapper.AddProfile(profile);
-            }
+                foreach (var profile in profiles)
+                {
+                    cfg.AddProfile(profile);
+                }
+            });
         }
 
         private void AddSubresolvers()

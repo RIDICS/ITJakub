@@ -62,6 +62,21 @@ namespace Vokabular.RestClient
             return this;
         }
 
+        public UrlQueryBuilder AddParameter(string name, object value)
+        {
+            if (value == null)
+                return this;
+
+            AddParameter(name, value.ToString());
+            return this;
+        }
+
+        public UrlQueryBuilder AddParameter(string name, long value)
+        {
+            AppendParameter(name, value.ToString());
+            return this;
+        }
+
         public string ToQuery()
         {
             return m_stringBuilder.ToString();

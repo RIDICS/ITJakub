@@ -19,7 +19,7 @@
                  class="User"
                  lazy="proxy" />
 
-    <bag name="FavoriteItems" cascade="all-delete-orphan">
+    <bag name="FavoriteItems" cascade="all-delete-orphan" inverse="true">
       <key column="FavoriteLabel" />
       <one-to-many class="FavoriteBase" />
     </bag>

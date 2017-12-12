@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
-using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Web.Hub.Areas.OldGrammar.Models;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
@@ -14,9 +12,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Criteria;
-using Vokabular.Shared.DataContracts.Search.CriteriaItem;
-using Vokabular.Shared.DataContracts.Search.OldCriteriaItem;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
@@ -57,7 +54,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 
         public ActionResult ListTerms()
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
                 var termCategories = client.GetTermCategoriesWithTerms();
                 return View(new TermCategoriesWithTermsModel
@@ -75,7 +72,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 
         public ActionResult Feedback()
         {
-            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, GetEncryptedClient(), GetUserName());
+            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, GetUserName());
             return View(viewModel);
         }
 
@@ -90,7 +87,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                 return View(model);
             }
 
-            m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.OldGrammar, GetMainServiceClient(), IsUserLoggedIn(), GetUserName());
+            m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.OldGrammar, IsUserLoggedIn());
             return View("Feedback/FeedbackSuccess");
         }
 

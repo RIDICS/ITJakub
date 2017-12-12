@@ -7,13 +7,16 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
 using Vokabular.Core;
 using Vokabular.MainService.Containers.Extensions;
 using Vokabular.MainService.Containers;
 using Vokabular.MainService.Containers.Installers;
+using Vokabular.MainService.Utils.Documentation;
 using Vokabular.Shared;
 using Vokabular.Shared.Container;
+using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.Options;
 
 namespace Vokabular.MainService
@@ -67,6 +70,11 @@ namespace Vokabular.MainService
                     Version = "v1",
                 });
                 options.DescribeAllEnumsAsStrings();
+                options.IncludeXmlComments(GetXmlCommentsPath());
+                options.OperationFilter<AddResponseHeadersFilter>();
+
+                options.DocumentFilter<PolymorphismDocumentFilter<SearchCriteriaContract>>();
+                options.SchemaFilter<PolymorphismSchemaFilter<SearchCriteriaContract>>();
             });
 
             // IoC
@@ -97,7 +105,7 @@ namespace Vokabular.MainService
             // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Vokabular MainService API v1");
+                c.SwaggerEndpoint("v1/swagger.json", "Vokabular MainService API v1"); // using relative address to Swagger UI
                 c.SupportedSubmitMethods(new[] {"get", "post", "put", "delete", "head"});
             });
 
@@ -107,6 +115,12 @@ namespace Vokabular.MainService
         private void OnShutdown()
         {
             Container.Dispose();
+        }
+
+        private string GetXmlCommentsPath()
+        {
+            var app = PlatformServices.Default.Application;
+            return Path.Combine(app.ApplicationBasePath, $"{app.ApplicationName}.xml");
         }
     }
 }

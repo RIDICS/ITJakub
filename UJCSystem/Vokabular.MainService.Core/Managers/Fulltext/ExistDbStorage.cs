@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using ITJakub.SearchService.DataContracts.Types;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
+using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
 using Vokabular.MainService.DataContracts.Contracts.Search;
@@ -11,44 +15,63 @@ using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Search.OldCriteriaItem;
-using HitSettingsContract = Vokabular.Shared.DataContracts.Search.OldCriteriaItem.HitSettingsContract;
 
 namespace Vokabular.MainService.Core.Managers.Fulltext
 {
     public class ExistDbStorage : IFulltextStorage
     {
         private readonly CommunicationProvider m_communicationProvider;
+        private readonly BookRepository m_bookRepository;
 
-        public ExistDbStorage(CommunicationProvider communicationProvider)
+        public ExistDbStorage(CommunicationProvider communicationProvider, BookRepository bookRepository)
         {
             m_communicationProvider = communicationProvider;
+            m_bookRepository = bookRepository;
         }
 
-        private OutputFormatEnumContract ConvertOutputTextFormat(TextFormatEnumContract format)
+        private OutputFormatEnum ConvertOutputTextFormat(TextFormatEnumContract format)
         {
             switch (format)
             {
                 case TextFormatEnumContract.Raw:
-                    return OutputFormatEnumContract.Xml;
+                    return OutputFormatEnum.Xml;
                 case TextFormatEnumContract.Html:
-                    return OutputFormatEnumContract.Html;
+                    return OutputFormatEnum.Html;
                 case TextFormatEnumContract.Rtf:
-                    return OutputFormatEnumContract.Rtf;
+                    return OutputFormatEnum.Rtf;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(format), format, null);
             }
+        }
+
+        private TransformationData GetTransformationOrDefault(TextFormatEnumContract format, BookTypeEnum bookType)
+        {
+            var outputFormat = ConvertOutputTextFormat(format);
+            var dbTtransformation = m_bookRepository.InvokeUnitOfWork(x => x.GetDefaultTransformation(outputFormat, bookType));
+            var transformation = Mapper.Map<TransformationData>(dbTtransformation);
+            if (transformation == null)
+            {
+                transformation = new TransformationData
+                {
+                    Name = "pageToHtml.xsl",
+                    OutputFormat = OutputFormatEnumContract.Html,
+                    ResourceLevel = ResourceLevelEnumContract.Shared,
+                };
+            }
+            return transformation;
         }
 
         public ProjectType ProjectType => ProjectType.Research;
 
         public string GetPageText(TextResource textResource, TextFormatEnumContract format)
         {
-            var outputFormat = ConvertOutputTextFormat(format);
+            var transformation = GetTransformationOrDefault(format, BookTypeEnum.Edition);
             using (var ssc = m_communicationProvider.GetSearchServiceClient())
             {
                 var project = textResource.Resource.Project;
                 var bookVersion = textResource.BookVersion;
-                var result = ssc.GetBookPageByXmlId(project.ExternalId, bookVersion.ExternalId, textResource.ExternalId, "pageToHtml.xsl", outputFormat, ResourceLevelEnumContract.Shared); // TODO dynamically resolve transformation type
+                //var result = ssc.GetBookPageByXmlId(project.ExternalId, bookVersion.ExternalId, textResource.ExternalId, "pageToHtml.xsl", outputFormat, ResourceLevelEnumContract.Shared); // TODO dynamically resolve transformation type
+                var result = ssc.GetBookPageByXmlId(project.ExternalId, bookVersion.ExternalId, textResource.ExternalId, transformation.Name, transformation.OutputFormat, transformation.ResourceLevel);
                 return result;
             }
         }
@@ -56,24 +79,24 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         public string GetPageTextFromSearch(TextResource textResource, TextFormatEnumContract format,
             SearchPageRequestContract searchRequest)
         {
-            var outputFormat = ConvertOutputTextFormat(format);
+            var transformation = GetTransformationOrDefault(format, BookTypeEnum.Edition);
             using (var ssc = m_communicationProvider.GetSearchServiceClient())
             {
                 var project = textResource.Resource.Project;
                 var bookVersion = textResource.BookVersion;
-                var result = ssc.GetEditionPageFromSearch(searchRequest.ConditionConjunction, project.ExternalId, bookVersion.ExternalId, textResource.ExternalId, "pageToHtml.xsl", outputFormat, ResourceLevelEnumContract.Shared); // TODO dynamically resolve transformation type
+                var result = ssc.GetEditionPageFromSearch(searchRequest.ConditionConjunction, project.ExternalId, bookVersion.ExternalId, textResource.ExternalId, transformation.Name, transformation.OutputFormat, transformation.ResourceLevel);
                 return result;
             }
         }
 
         public string GetHeadwordText(HeadwordResource headwordResource, TextFormatEnumContract format)
         {
-            var outputFormat = ConvertOutputTextFormat(format);
+            var transformation = GetTransformationOrDefault(format, BookTypeEnum.Dictionary);
             using (var ssc = m_communicationProvider.GetSearchServiceClient())
             {
                 var project = headwordResource.Resource.Project;
                 var bookVersion = headwordResource.BookVersion;
-                var result = ssc.GetDictionaryEntryByXmlId(project.ExternalId, bookVersion.ExternalId, headwordResource.ExternalId, "dictionaryToHtml.xsl", outputFormat, ResourceLevelEnumContract.Shared); // TODO dynamically resolve transformation type
+                var result = ssc.GetDictionaryEntryByXmlId(project.ExternalId, bookVersion.ExternalId, headwordResource.ExternalId, transformation.Name, transformation.OutputFormat, transformation.ResourceLevel);
                 return result;
             }
         }
@@ -81,12 +104,12 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         public string GetHeadwordTextFromSearch(HeadwordResource headwordResource, TextFormatEnumContract format,
             SearchPageRequestContract searchRequest)
         {
-            var outputFormat = ConvertOutputTextFormat(format);
+            var transformation = GetTransformationOrDefault(format, BookTypeEnum.Dictionary);
             using (var ssc = m_communicationProvider.GetSearchServiceClient())
             {
                 var project = headwordResource.Resource.Project;
                 var bookVersion = headwordResource.BookVersion;
-                var result = ssc.GetDictionaryEntryFromSearch(searchRequest.ConditionConjunction, project.ExternalId, bookVersion.ExternalId, headwordResource.ExternalId, "dictionaryToHtml.xsl", outputFormat, ResourceLevelEnumContract.Shared); // TODO dynamically resolve transformation type
+                var result = ssc.GetDictionaryEntryFromSearch(searchRequest.ConditionConjunction, project.ExternalId, bookVersion.ExternalId, headwordResource.ExternalId, transformation.Name, transformation.OutputFormat, transformation.ResourceLevel);
                 return result;
             }
         }
@@ -257,15 +280,32 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             }
         }
 
-        public string GetEditionNote(ProjectIdentificationResult project, TextFormatEnumContract format)
+        public string GetEditionNote(EditionNoteResource editionNoteResource, TextFormatEnumContract format)
         {
-            var outputFormat = ConvertOutputTextFormat(format);
+            var projectExternalId = editionNoteResource.Resource.Project.ExternalId;
+            var bookVersionExternalId = editionNoteResource.BookVersion.ExternalId;
+            var transformation = GetTransformationOrDefault(format, BookTypeEnum.Edition);
 
             using (var ssc = m_communicationProvider.GetSearchServiceClient())
             {
-                var result = ssc.GetBookEditionNote(project.ProjectExternalId, project.BookVersionExternalId, "pageToHtml.xsl", outputFormat, ResourceLevelEnumContract.Shared); // TODO dynamically resolve transformation type
+                var result = ssc.GetBookEditionNote(projectExternalId, bookVersionExternalId, transformation.Name, transformation.OutputFormat, transformation.ResourceLevel);
                 return result;
             }
+        }
+
+        public string CreateNewTextVersion(TextResource textResource)
+        {
+            throw new NotSupportedException("Saving resources to eXist-db isn't supported. eXist-db storage supports only full book import.");
+        }
+
+        public string CreateNewHeadwordVersion(HeadwordResource headwordResource)
+        {
+            throw new NotSupportedException("Saving resources to eXist-db isn't supported. eXist-db storage supports only full book import.");
+        }
+
+        public string CreateNewEditionNoteVersion(EditionNoteResource editionNoteResource)
+        {
+            throw new NotSupportedException("Saving resources to eXist-db isn't supported. eXist-db storage supports only full book import.");
         }
     }
 }

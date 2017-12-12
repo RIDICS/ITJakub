@@ -1,5 +1,4 @@
 using System;
-using Jewelery;
 
 namespace ITJakub.DataEntities.Database.Entities
 {

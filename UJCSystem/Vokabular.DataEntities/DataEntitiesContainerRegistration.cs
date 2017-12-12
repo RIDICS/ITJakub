@@ -15,8 +15,10 @@ namespace Vokabular.DataEntities
             container.AddPerWebRequest<BookRepository>();
             container.AddPerWebRequest<CatalogValueRepository>();
             container.AddPerWebRequest<CategoryRepository>();
+            container.AddPerWebRequest<FavoritesRepository>();
             container.AddPerWebRequest<MetadataRepository>();
             container.AddPerWebRequest<PersonRepository>();
+            container.AddPerWebRequest<PortalRepository>();
             container.AddPerWebRequest<ProjectRepository>();
             container.AddPerWebRequest<ResourceRepository>();
             container.AddPerWebRequest<UserRepository>();

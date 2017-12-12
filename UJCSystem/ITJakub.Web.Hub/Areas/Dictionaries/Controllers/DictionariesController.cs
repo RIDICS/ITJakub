@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Web.Hub.Areas.Dictionaries.Models;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
@@ -14,13 +13,12 @@ using ITJakub.Web.Hub.Models.Requests.Dictionary;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Types;
-using BookContract = Vokabular.MainService.DataContracts.Contracts.BookContract;
-using HeadwordBookInfoContract = ITJakub.Web.Hub.DataContracts.HeadwordBookInfoContract;
 
 namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 {
@@ -129,7 +127,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
             if (model.BookXmlId == null || model.BookVersionXmlId == null || model.EntryXmlId == null)
             {
-                m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.Dictionaries, GetMainServiceClient(), IsUserLoggedIn(), GetUserName());
+                m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.Dictionaries, IsUserLoggedIn());
             }
             else
             {
@@ -273,7 +271,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             }
         }
 
-        private List<HeadwordWithDictionariesContract> MapHeadwordsToGroupedList(List<Vokabular.MainService.DataContracts.Contracts.HeadwordContract> headwords)
+        private List<HeadwordWithDictionariesContract> MapHeadwordsToGroupedList(List<HeadwordContract> headwords)
         {
             var resultList = new List<HeadwordWithDictionariesContract>();
             HeadwordWithDictionariesContract lastHeadword = null;

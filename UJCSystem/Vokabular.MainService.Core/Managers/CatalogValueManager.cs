@@ -3,8 +3,10 @@ using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.CatalogValues;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.RestClient.Results;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -42,6 +44,11 @@ namespace Vokabular.MainService.Core.Managers
             return new CreateOrUpdateResponsibleTypeWork(m_catalogValueRepository, null, responsibleTypeData).Execute();
         }
 
+        public int CreateTermCategory(TermCategoryContract data)
+        {
+            return new CreateOrUpdateTermCategoryWork(m_catalogValueRepository, null, data).Execute();
+        }
+
         public List<LiteraryGenreContract> GetLiteraryGenreList()
         {
             var result = m_catalogValueRepository.InvokeUnitOfWork(x => x.GetLiteraryGenreList());
@@ -60,16 +67,28 @@ namespace Vokabular.MainService.Core.Managers
             return Mapper.Map<List<LiteraryOriginalContract>>(result);
         }
 
-        public List<KeywordContract> GetKeywordList()
+        public PagedResultList<KeywordContract> GetKeywordList(int? start, int? count)
         {
-            var resultList = m_catalogValueRepository.InvokeUnitOfWork(x => x.GetKeywordList());
-            return Mapper.Map<List<KeywordContract>>(resultList);
+            var startValue = PagingHelper.GetStart(start);
+            var countValue = PagingHelper.GetCount(count);
+            var dbResult = m_catalogValueRepository.InvokeUnitOfWork(x => x.GetKeywordList(startValue, countValue));
+            return new PagedResultList<KeywordContract>
+            {
+                List = Mapper.Map<List<KeywordContract>>(dbResult.List),
+                TotalCount = dbResult.Count,
+            };
         }
 
         public List<ResponsibleTypeContract> GetResponsibleTypeList()
         {
             var resultList = m_catalogValueRepository.InvokeUnitOfWork(x => x.GetResponsibleTypeList());
             return Mapper.Map<List<ResponsibleTypeContract>>(resultList);
+        }
+        
+        public List<TermCategoryContract> GetTermCategoryList()
+        {
+            var resultList = m_catalogValueRepository.InvokeUnitOfWork(x => x.GetTermCategoryList());
+            return Mapper.Map<List<TermCategoryContract>>(resultList);
         }
 
         public void UpdateLiteraryGenre(int literaryGenreId, LiteraryGenreContract data)
@@ -97,6 +116,11 @@ namespace Vokabular.MainService.Core.Managers
             new CreateOrUpdateResponsibleTypeWork(m_catalogValueRepository, responsibleTypeId, data).Execute();
         }
 
+        public void UpdateTermCategory(int termCategoryId, TermCategoryContract data)
+        {
+            new CreateOrUpdateTermCategoryWork(m_catalogValueRepository, termCategoryId, data).Execute();
+        }
+
         public void DeleteLiteraryGenre(int literaryGenreId)
         {
             new DeleteCatalogValueWork<LiteraryGenre>(m_catalogValueRepository, literaryGenreId).Execute();
@@ -120,6 +144,11 @@ namespace Vokabular.MainService.Core.Managers
         public void DeleteResponsibleType(int responsibleTypeId)
         {
             new DeleteCatalogValueWork<ResponsibleType>(m_catalogValueRepository, responsibleTypeId).Execute();
+        }
+
+        public void DeleteTermCategory(int termCategoryId)
+        {
+            new DeleteCatalogValueWork<TermCategory>(m_catalogValueRepository, termCategoryId).Execute();
         }
 
         public LiteraryGenreContract GetLiteraryGenre(int literaryGenreId)
@@ -150,6 +179,25 @@ namespace Vokabular.MainService.Core.Managers
         {
             var result = m_catalogValueRepository.InvokeUnitOfWork(x => x.FindById<ResponsibleType>(responsibleTypeId));
             return Mapper.Map<ResponsibleTypeContract>(result);
+        }
+        
+        public TermCategoryContract GetTermCategory(int termCategoryId)
+        {
+            var result = m_catalogValueRepository.InvokeUnitOfWork(x => x.FindById<TermCategory>(termCategoryId));
+            return Mapper.Map<TermCategoryContract>(result);
+        }
+
+        public List<TermCategoryDetailContract> GetTermCategoriesWithTerms()
+        {
+            var result = m_catalogValueRepository.InvokeUnitOfWork(x => x.GetTermCategoriesWithTerms());
+            return Mapper.Map<List<TermCategoryDetailContract>>(result);
+        }
+
+        public List<KeywordContract> GetKeywordAutocomplete(string query, int? count)
+        {
+            var countValue = PagingHelper.GetAutocompleteCount(count);
+            var result = m_catalogValueRepository.InvokeUnitOfWork(x => x.GetKeywordAutocomplete(query, countValue));
+            return Mapper.Map<List<KeywordContract>>(result);
         }
     }
 }

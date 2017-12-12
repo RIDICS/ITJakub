@@ -30,7 +30,7 @@
         return span;
     }
 
-    public addFavoriteItems(items: Array<IFavoriteBaseInfo>) {
+    public addFavoriteItems(items: Array<IFavoriteBaseInfoWithLabel>) {
         for (var i = 0; i < items.length; i++) {
             this.popoverBuilder.addFavoriteItem(items[i]);
         }
@@ -99,7 +99,7 @@
         $("[data-toggle=tooltip]").tooltip();
     }
 
-    private createFavoriteItemObject(id: number, favoriteTitle: string, labelId: number, labelName: string, labelColor: string): IFavoriteBaseInfo {
+    private createFavoriteItemObject(id: number, favoriteTitle: string, labelId: number, labelName: string, labelColor: string): IFavoriteBaseInfoWithLabel {
         var favoriteLabel: IFavoriteLabel = {
             id: labelId,
             name: labelName,
@@ -107,7 +107,7 @@
             isDefault: null,
             lastUseTime: null
         };
-        var favoriteItem: IFavoriteBaseInfo = {
+        var favoriteItem: IFavoriteBaseInfoWithLabel = {
             id: id,
             favoriteType: this.favoriteItemType,
             title: favoriteTitle,
@@ -203,7 +203,7 @@ class FavoritePopoverBuilder {
     private templateMiddle = '</div><hr></div></div><div class="row"><div class="col-md-12"><h6>Přidat štítek z naposledy použitých:</h6>';
     private templateEnd = '<hr></div></div><div class="row"><div class="col-md-12"><button type="button" class="btn btn-default btn-block btn-sm show-all-favorite-button">Pokročilé možnosti</button></div></div>';
 
-    private favoriteItems: Array<IFavoriteBaseInfo>;
+    private favoriteItems: Array<IFavoriteBaseInfoWithLabel>;
     private favoriteLabels: Array<IFavoriteLabel>;
 
     constructor() {
@@ -211,7 +211,7 @@ class FavoritePopoverBuilder {
         this.favoriteLabels = [];
     }
 
-    private getFavoriteItemHtml(item: IFavoriteBaseInfo): string {
+    private getFavoriteItemHtml(item: IFavoriteBaseInfoWithLabel): string {
         var color = new HexColor(item.favoriteLabel.color);
         var fontColor = FavoriteHelper.getDefaultFontColor(color);
         var borderColor = FavoriteHelper.getDefaultBorderColor(color);
@@ -257,7 +257,7 @@ class FavoritePopoverBuilder {
         return this.favoriteItems.length;
     }
 
-    public addFavoriteItem(item: IFavoriteBaseInfo) {
+    public addFavoriteItem(item: IFavoriteBaseInfoWithLabel) {
         
         this.favoriteItems.push(item);
     }

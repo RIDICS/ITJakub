@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
@@ -212,7 +213,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        public IList<PageResource> GetPagesWithTerms(TermCriteriaPageConditionCreator creator)
+        public virtual IList<PageResource> GetPagesWithTerms(TermCriteriaPageConditionCreator creator)
         {
             var query = GetSession().CreateQuery(creator.GetQueryString())
                 .SetParameters(creator)
@@ -373,20 +374,46 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List<string>();
         }
 
-        public IList<MetadataResource> GetMetadataByProjectIds(IEnumerable<long> projectIds)
+        public virtual IList<MetadataResource> GetMetadataByProjectIds(IList<long> projectIds, bool fetchAuthors, bool fetchResponsiblePersons)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;
+            ProjectOriginalAuthor projectOriginalAuthorAlias = null;
 
-            return GetSession().QueryOver<MetadataResource>()
+            var metadataListFuture = GetSession().QueryOver<MetadataResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .WhereRestrictionOn(() => projectAlias.Id).IsInG(projectIds)
+                .Fetch(x => x.Resource).Eager
+                .Fetch(x => x.Resource.Project).Eager
                 .And(x => x.Id == resourceAlias.LatestVersion.Id)
-                .List();
+                .Future();
+
+            if (fetchAuthors)
+            {
+                GetSession().QueryOver<Project>()
+                    .WhereRestrictionOn(x => x.Id).IsInG(projectIds)
+                    .JoinAlias(x => x.Authors, () => projectOriginalAuthorAlias, JoinType.LeftOuterJoin)
+                    .Fetch(x => x.Authors).Eager
+                    .Fetch(x => x.Authors[0].OriginalAuthor).Eager
+                    .OrderBy(() => projectOriginalAuthorAlias.Sequence).Asc
+                    .Future();
+            }
+
+            if (fetchResponsiblePersons)
+            {
+                GetSession().QueryOver<Project>()
+                    .WhereRestrictionOn(x => x.Id).IsInG(projectIds)
+                    .Fetch(x => x.ResponsiblePersons).Eager
+                    .Fetch(x => x.ResponsiblePersons[0].ResponsiblePerson).Eager
+                    .Fetch(x => x.ResponsiblePersons[0].ResponsibleType).Eager
+                    .Future();
+            }
+
+            return metadataListFuture.ToList();
         }
 
-        public IList<MetadataResource> GetMetadataByProjectExternalIds(IEnumerable<string> projectExternalIds)
+        public virtual IList<MetadataResource> GetMetadataByProjectExternalIds(IEnumerable<string> projectExternalIds)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;
@@ -397,6 +424,94 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .WhereRestrictionOn(() => projectAlias.ExternalId).IsInG(projectExternalIds)
                 .And(x => x.Id == resourceAlias.LatestVersion.Id)
                 .List();
+        }
+
+        public virtual ListWithTotalCountResult<MetadataResource> GetMetadataByAuthor(int authorId, int start, int count)
+        {
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+            ProjectOriginalAuthor projectOriginalAuthorAlias = null;
+            User userAlias = null;
+            
+            var query = GetSession().QueryOver<MetadataResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .JoinAlias(() => projectAlias.Authors, () => projectOriginalAuthorAlias)
+                .JoinAlias(() => projectAlias.CreatedByUser, () => userAlias) // fetch user
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && projectOriginalAuthorAlias.OriginalAuthor.Id == authorId)
+                .OrderBy(x => x.Title).Asc
+                .Take(count)
+                .Skip(start);
+
+            var countFuture = query.ToRowCountQuery()
+                .FutureValue<int>();
+
+            var metadata = query.Future()
+                .ToList();
+
+            var projectIds = metadata.Select(x => x.Resource.Project.Id).ToList();
+            FetchAuthorsAndResponsibles(projectIds);
+
+            return new ListWithTotalCountResult<MetadataResource>
+            {
+                List = metadata,
+                Count = countFuture.Value,
+            };
+        }
+
+        public virtual ListWithTotalCountResult<MetadataResource> GetMetadataByResponsiblePerson(int responsiblePersonId, int start, int count)
+        {
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+            ProjectResponsiblePerson projectResponsiblePersonAlias = null;
+            User userAlias = null;
+
+            var query = GetSession().QueryOver<MetadataResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .JoinAlias(() => projectAlias.ResponsiblePersons, () => projectResponsiblePersonAlias)
+                .JoinAlias(() => projectAlias.CreatedByUser, () => userAlias) // fetch user
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && projectResponsiblePersonAlias.ResponsiblePerson.Id == responsiblePersonId)
+                .OrderBy(x => x.Title).Asc
+                .Take(count)
+                .Skip(start);
+
+            var countFuture = query.ToRowCountQuery()
+                .FutureValue<int>();
+
+            var metadata = query.Future()
+                .ToList();
+
+            var projectIds = metadata.Select(x => x.Resource.Project.Id).ToList();
+            FetchAuthorsAndResponsibles(projectIds);
+
+            return new ListWithTotalCountResult<MetadataResource>
+            {
+                List = metadata,
+                Count = countFuture.Value,
+            };
+        }
+
+        public virtual IList<Project> FetchAuthorsAndResponsibles(IList<long> projectIds)
+        {
+            ProjectOriginalAuthor projectOriginalAuthorAlias = null;
+
+            GetSession().QueryOver<Project>()
+                .WhereRestrictionOn(x => x.Id).IsInG(projectIds)
+                .JoinAlias(x => x.Authors, () => projectOriginalAuthorAlias, JoinType.LeftOuterJoin)
+                .Fetch(x => x.Authors).Eager
+                .Fetch(x => x.Authors[0].OriginalAuthor).Eager
+                .OrderBy(x => x.Id).Asc
+                .ThenBy(() => projectOriginalAuthorAlias.Sequence).Asc
+                .Future();
+
+            return GetSession().QueryOver<Project>()
+                .WhereRestrictionOn(x => x.Id).IsInG(projectIds)
+                .Fetch(x => x.ResponsiblePersons).Eager
+                .Fetch(x => x.ResponsiblePersons[0].ResponsiblePerson).Eager
+                .Fetch(x => x.ResponsiblePersons[0].ResponsibleType).Eager
+                .OrderBy(x => x.Id).Asc
+                .Future().ToList();
         }
     }
 }

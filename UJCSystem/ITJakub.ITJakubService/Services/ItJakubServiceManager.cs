@@ -13,6 +13,7 @@ using ITJakub.Shared.Contracts.Favorites;
 using ITJakub.Shared.Contracts.News;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Criteria;
+using Vokabular.MainService.DataContracts.Contracts.CardFile;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.Old;
 using Vokabular.Shared.DataContracts.Types;
@@ -438,7 +439,7 @@ namespace ITJakub.ITJakubService.Services
             return m_cardFileManager.GetCard(cardFileId, bucketId, cardId);
         }
 
-        public Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId, ImageSizeEnum imageSize)
+        public Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId, CardImageSizeEnumContract imageSize)
         {
             return m_cardFileManager.GetImage(cardFileId, bucketId, cardId, imageId, imageSize);
         }

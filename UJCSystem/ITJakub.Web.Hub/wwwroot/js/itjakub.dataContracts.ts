@@ -1,13 +1,19 @@
-﻿interface IFeedback {
+﻿interface IPagedResultArray<T> {
+    list: Array<T>;
+    totalCount: number;
+}
+
+interface IFeedback {
     id: number;
     text: string;
-    createDate: string;
-    user: IUser;
-    filledName: string;
-    filledEmail: string;
-    category: FeedbackCategoryEnum;
+    createTime: string;
+    authorUser: IUserDetail;
+    authorName: string;
+    authorEmail: string;
+    feedbackCategory: FeedbackCategoryEnum;
     feedbackType: FeedbackTypeEnum;
-    headwordInfo: IFeedbackHeadwordInfo;
+    headwordInfo: IHeadwordContract;
+    projectInfo: IProject;
 }
 
 interface IFeedbackHeadwordInfo {
@@ -18,30 +24,37 @@ interface IFeedbackHeadwordInfo {
 }
 
 interface IUser {
-    id: Number;
-    email: string;
+    id: number;
     userName: string;
     firstName: string;
     lastName: string;
+    avatarUrl: string;
+}
+
+interface IUserDetail extends IUser {
+    email: string;
     createTime: string;
 }
 
 interface INewsSyndicationItemContract {
+    id: number;
     title: string;
     text: string;
     url: string;
-    userEmail: string;
-    createDate: string;
-    userFirstName: string;
-    userLastName: string;
+    createTime: string;
+    createdByUser: IUser;
 }
 
 interface IFavoriteBaseInfo {
     id: number;
     title: string;
+    favoriteLabelId?: number;
+    createTime?: string;
+    favoriteType?: FavoriteType;
+}
+
+interface IFavoriteBaseInfoWithLabel extends IFavoriteBaseInfo {
     favoriteLabel: IFavoriteLabel;
-    createTime: string;
-    favoriteType: FavoriteType;
 }
 
 interface IFavoriteLabel {
@@ -56,35 +69,30 @@ interface IFavoriteLabelsWithBooksAndCategories {
     id: number;
     name: string;
     color: string;
-    bookIdList: number[];
+    projectIdList: number[];
     categoryIdList: number[];
 }
 
 interface IFavoriteLabeledBook {
     id: number;
-    favoriteInfo: Array<IFavoriteBaseInfo>;
+    favoriteInfo: Array<IFavoriteBaseInfoWithLabel>;
 }
 
 interface IFavoriteLabeledCategory {
     id: number;
-    favoriteInfo: Array<IFavoriteBaseInfo>;
+    favoriteInfo: Array<IFavoriteBaseInfoWithLabel>;
 }
 
-interface IFavoriteQuery {
-    id: number;
-    title: string;
-    createTime: string;
+interface IFavoriteQuery extends IFavoriteBaseInfo {
     query: string;
     favoriteLabel: IFavoriteLabel;
     bookType?: BookTypeEnum;
     queryType?: QueryTypeEnum;
 }
 
-interface IBookPageBookmark {
-    id: number;
-    pageXmlId: string;
-    pagePosition: number;
-    title: string;
+interface IBookPageBookmark extends IFavoriteBaseInfo {
+    pageId: number;
+    //pagePosition: number;
     favoriteLabel: IFavoriteLabel;
 }
 
@@ -120,6 +128,11 @@ interface IPage {
 
 interface IPageWithContext extends IPage {
     contextStructure: IKwicStructure;
+}
+
+interface IProject {
+    id: number;
+    name: string;
 }
 
 interface IMetadataResource {
@@ -254,19 +267,19 @@ interface IMetadataSaveResult {
 }
 
 enum FavoriteType {
-    Unknown = 0,
-    Book = 1,
-    Category = 2,
-    PageBookmark = 3,
-    Query = 4,
-    BookVersion = 5,
-    HeadwordBookmark = 6,
+    Unknown = "Unknown",
+    Project = "Project",
+    Category = "Category",
+    Page = "Page",
+    Query = "Query",
+    Snapshot = "Snapshot",
+    Headword = "Headword",
 }
 
 enum QueryTypeEnum {
-    Search = 0,
-    List = 1,
-    Reader = 2,
+    Search = "Search",
+    List = "List",
+    Reader = "Reader",
 }
 
 enum ResourceType {

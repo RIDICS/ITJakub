@@ -198,6 +198,8 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .Where(x => x.Id == resourceAlias.LatestVersion.Id && resourceAlias.Id == resourceId)
                 .Fetch(x => x.BookVersion).Eager
+                .Fetch(x => x.Resource).Eager
+                .Fetch(x => x.Resource.Project).Eager
                 .SingleOrDefault();
         }
 
@@ -244,6 +246,22 @@ namespace Vokabular.DataEntities.Database.Repositories
             }
 
             return query.List();
+        }
+
+        public virtual EditionNoteResource GetLatestEditionNote(long projectId)
+        {
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+
+            var result = GetSession().QueryOver<EditionNoteResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && projectAlias.Id == projectId)
+                .OrderBy(x => x.CreateTime).Desc
+                .Fetch(x => x.BookVersion).Eager
+                .Take(1)
+                .SingleOrDefault();
+            return result;
         }
     }
 }

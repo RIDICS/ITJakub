@@ -19,8 +19,9 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.CreatedByUser, opt => opt.MapFrom(src => src.CreatedByUser));
 
             CreateMap<Project, ProjectDetailContract>()
-                .IncludeBase<Project, ProjectContract>();
-
+                .IncludeBase<Project, ProjectContract>()
+                .ForMember(dest => dest.Authors, opt => opt.Ignore())
+                .ForMember(dest => dest.ResponsiblePersons, opt => opt.Ignore());
         }
     }
 }

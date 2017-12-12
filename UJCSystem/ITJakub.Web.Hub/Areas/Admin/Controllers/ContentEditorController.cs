@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using ITJakub.Web.Hub.Areas.Admin.Models.Request;
 using ITJakub.Web.Hub.Areas.Admin.Models.Response;
-using ITJakub.Web.Hub.Areas.Admin.Models.Type;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
 using Microsoft.AspNetCore.Mvc;
@@ -172,7 +172,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult SetEditionNote(EditionNote request)
+        public IActionResult SetEditionNote([FromBody] CreateEditionNoteRequest request)
         {
             using (var client = GetRestClient())
             {

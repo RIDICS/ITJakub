@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.Utils.Documentation;
 using Vokabular.RestClient.Errors;
+using Vokabular.RestClient.Headers;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -12,11 +14,13 @@ namespace Vokabular.MainService.Controllers
     {
         private readonly PersonManager m_personManager;
         private readonly CatalogValueManager m_catalogValueManager;
+        private readonly ProjectManager m_projectManager;
 
-        public ResponsiblePersonController(PersonManager personManager, CatalogValueManager catalogValueManager)
+        public ResponsiblePersonController(PersonManager personManager, CatalogValueManager catalogValueManager, ProjectManager projectManager)
         {
             m_personManager = personManager;
             m_catalogValueManager = catalogValueManager;
+            m_projectManager = projectManager;
         }
 
         [HttpPost("")]
@@ -65,6 +69,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("")]
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total records count")]
         public List<ResponsiblePersonContract> GetResponsiblePersonList([FromQuery] int? start, [FromQuery] int? count)
         {
             var result = m_personManager.GetResponsiblePersonList(start, count);
@@ -73,9 +78,9 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("autocomplete")]
-        public List<ResponsiblePersonContract> GetAutocomplete([FromQuery] string query)
+        public List<ResponsiblePersonContract> GetAutocomplete([FromQuery] string query, [FromQuery] int? count)
         {
-            return m_personManager.GetResponsiblePersonAutocomplete(query);
+            return m_personManager.GetResponsiblePersonAutocomplete(query, count);
         }
 
         [HttpPost("type")]
@@ -127,6 +132,17 @@ namespace Vokabular.MainService.Controllers
         public List<ResponsibleTypeContract> GetResponsibleTypeList()
         {
             return m_catalogValueManager.GetResponsibleTypeList();
+        }
+
+        [HttpGet("{responsiblePersonId}/project")]
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
+        public List<ProjectDetailContract> GetProjectsByResponsiblePerson(int responsiblePersonId, [FromQuery] int? start, [FromQuery] int? count)
+        {
+            var result = m_projectManager.GetProjectsByResponsiblePerson(responsiblePersonId, start, count);
+
+            SetTotalCountHeader(result.TotalCount);
+
+            return result.List;
         }
     }
 }

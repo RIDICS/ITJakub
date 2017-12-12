@@ -135,4 +135,10 @@ namespace Vokabular.DataEntities.Database.Entities
     {
         public virtual string ExternalId { get; set; }
     }
+
+    public class EditionNoteResource : ResourceVersion
+    {
+        public virtual string ExternalId { get; set; }
+        public virtual BookVersionResource BookVersion { get; set; }
+    }
 }

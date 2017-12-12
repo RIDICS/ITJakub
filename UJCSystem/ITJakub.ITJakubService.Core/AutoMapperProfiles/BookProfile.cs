@@ -7,7 +7,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
     public class BookProfile : Profile
     {
-        protected override void Configure()
+        public BookProfile()
         {
             CreateMap<Book, BookContract>()
                 .ForMember(m => m.Title, opt => opt.MapFrom(src => src.LastVersion.Title))

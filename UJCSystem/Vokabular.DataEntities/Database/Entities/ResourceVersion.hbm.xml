@@ -134,6 +134,13 @@
       <property name="ExternalId" />
     </joined-subclass>
 
+    <joined-subclass table="EditionNoteResource" name="EditionNoteResource" >
+      <key column="ResourceVersionId" />
+
+      <property name="ExternalId" />
+      <many-to-one name="BookVersion" class="BookVersionResource" lazy="proxy" />
+    </joined-subclass>
+
   </class>
 
   <sql-query name="GetHeadwordRowNumberByProject">

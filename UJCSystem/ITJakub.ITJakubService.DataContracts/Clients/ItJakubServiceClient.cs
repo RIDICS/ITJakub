@@ -15,6 +15,7 @@ using ITJakub.Shared.Contracts.News;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using log4net;
+using Vokabular.MainService.DataContracts.Contracts.CardFile;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.Old;
 using Vokabular.Shared.DataContracts.Types;
@@ -531,7 +532,7 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
         }
 
         public Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId,
-            ImageSizeEnum imageSize)
+            CardImageSizeEnumContract imageSize)
         {
             try
             {

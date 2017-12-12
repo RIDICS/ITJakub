@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 using ITJakub.CardFile.Core.DataContractEntities;
-using ITJakub.ITJakubService.DataContracts;
-using ITJakub.ITJakubService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.CardFile;
 
 namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
     public class BucketContractProfile : Profile
     {
-        protected override void Configure()
+        public BucketContractProfile()
         {
             CreateMap<bucket, BucketContract>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.id))
