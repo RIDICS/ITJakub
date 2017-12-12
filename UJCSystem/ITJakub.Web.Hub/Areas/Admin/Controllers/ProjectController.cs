@@ -340,11 +340,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult KeywordTypeahead([FromQuery] string keyword)
+        public IActionResult KeywordTypeahead([FromQuery] string keyword, [FromQuery] int? count)
         {
             using (var client = GetRestClient())
             {
-                var result = client.GetKeywordList();//TODO temporary until backend function implementation
+                var result = client.GetKeywordAutocomplete(keyword, count);
                 return Json(result);
             }
         }

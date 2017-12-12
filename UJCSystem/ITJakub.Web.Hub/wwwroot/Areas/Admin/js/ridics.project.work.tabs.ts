@@ -63,13 +63,13 @@
     }
 
     private initKeywords() {
+        const count = 10; 
         const selectedKeywordEls = $(".keywords-list-selected").children();
         const engine = new Bloodhound({
-            //TODO preparation for ajax autocomplete function
             datumTokenizer: (d: any) => Bloodhound.tokenizers.whitespace(d.label),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             remote: {
-                url: `${getBaseUrl()}Admin/Project/KeywordTypeahead?keyword=%QUERY`,
+                url: `${getBaseUrl()}Admin/Project/KeywordTypeahead?keyword=%QUERY&count=${count}`,
                 wildcard: "%QUERY",
                 transform: (response: IKeywordContract[]) =>
                     $.map(response,

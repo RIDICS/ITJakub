@@ -909,6 +909,22 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         #region Keyword
 
+        public List<KeywordContract> GetKeywordAutocomplete(string query, int? count)
+        {
+            try
+            {
+                var result = Get<List<KeywordContract>>($"keyword/autocomplete?query={query}&count={count}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+        
         public List<KeywordContract> GetKeywordList()
         {
             try
