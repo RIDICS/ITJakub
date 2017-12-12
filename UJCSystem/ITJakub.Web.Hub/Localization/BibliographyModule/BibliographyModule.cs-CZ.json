@@ -1,0 +1,24 @@
+{
+	"culture":"cs-CZ",
+	"scope":"BibliographyModule",
+	"dictionary": {
+		"NumberOfPages" : "Počet stran",
+		"Century" : "století",
+		"EditionNote" : "Ediční poznámka",
+		"NotFilled" : "Nezadáno",
+		"Pattern" : "Předloha",
+		"RelicAbbrevitation" : "Zkratka památky",
+		"SourceAbbrevitation" : "Zkratka pramene",
+		"LiteraryType" : "Literární druh",
+		"LiteraryGenre" : "Literární žánr",
+		"EditionLastModification" : "Poslední úprava edice",
+		"LinkedDictionary" : "zapojený slovník",
+		"UnlinkedDictionary" : "nezapojený slovník",
+		"Copyright" : "Copyright",
+		"Editor" : "Editor",
+		"DownloadFullAudioBook" : "Stáhnout celou audioknihu",
+		"BrowserDoesNotSupportHtmlAudio" : "Váš prohlížeč nepodporuje html audio",
+		"Length" : "Délka",
+		"DownloadChapter" : "Stáhnout kapitolu"
+		}
+}
