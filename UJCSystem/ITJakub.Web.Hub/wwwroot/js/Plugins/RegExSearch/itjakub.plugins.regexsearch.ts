@@ -875,7 +875,7 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
     private decadesSlider: HTMLDivElement;
 
     public makeRangeView(container : HTMLDivElement) {
-        var precisionInpuDiv = container;
+        var precisionInputDiv = container;
         var centurySliderDiv: HTMLDivElement = window.document.createElement("div");
         $(centurySliderDiv).addClass("regex-dating-century-div regex-slider-div");
 
@@ -886,7 +886,7 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
         centuryNameSpan.innerHTML = "Století";
         centuryCheckboxDiv.appendChild(centuryNameSpan);
         centurySliderDiv.appendChild(centuryCheckboxDiv);
-        precisionInpuDiv.appendChild(centurySliderDiv);
+        precisionInputDiv.appendChild(centurySliderDiv);
 
         var centuryArray = new Array<DatingSliderValue>();
         for (var century = this.minCenturyValue; century <= this.maxCenturyValue; century++) {
@@ -930,9 +930,9 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
         periodCheckboxDiv.appendChild(periodValueCheckbox);
         periodCheckboxDiv.appendChild(periodNameSpan);
         periodSliderDiv.appendChild(periodCheckboxDiv);
-        precisionInpuDiv.appendChild(periodSliderDiv);
+        precisionInputDiv.appendChild(periodSliderDiv);
 
-        this.periodSliderValues = new Array<DatingSliderValue>(new DatingSliderValue("začátek", 0, -85), new DatingSliderValue("čtvrtina", 0, -75), new DatingSliderValue("třetina", 0, -66), new DatingSliderValue("polovina", 0, -50), new DatingSliderValue("konec", 85, 0));
+        this.periodSliderValues = new Array<DatingSliderValue>(new DatingSliderValue("začátek", 0, -85), new DatingSliderValue("1. čtvrtina", 0, -75), new DatingSliderValue("1. třetina", 0, -66), new DatingSliderValue("polovina", 0, -50), new DatingSliderValue("3. třetina", 66, 0), new DatingSliderValue("4. čtvrtina", 75, 0), new DatingSliderValue("konec", 85, 0));
 
         var sliderPeriod = this.makeSlider(this.periodSliderValues, "",(selectedValue: DatingSliderValue) => { this.periodChanged(selectedValue) });
         $(sliderPeriod).slider("option", "disabled", true);
@@ -972,7 +972,7 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
         decadeCheckboxDiv.appendChild(decadesCheckbox);
         decadeCheckboxDiv.appendChild(decadesNameSpan);
         decadesSliderDiv.appendChild(decadeCheckboxDiv);
-        precisionInpuDiv.appendChild(decadesSliderDiv);
+        precisionInputDiv.appendChild(decadesSliderDiv);
 
         var decadesArray = new Array<DatingSliderValue>();
         for (var decades = 0; decades <= 90; decades += 10) {
@@ -992,7 +992,7 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
         var datingDisplayedValueDiv = document.createElement('div');
         $(datingDisplayedValueDiv).addClass("regex-dating-condition-displayed-value");
         this.dateDisplayDiv = datingDisplayedValueDiv;
-        precisionInpuDiv.appendChild(datingDisplayedValueDiv);
+        precisionInputDiv.appendChild(datingDisplayedValueDiv);
 
         this.changedValue();
     }
