@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -20,14 +21,15 @@ namespace Vokabular.FulltextService.Core.Managers
 {
     public class SearchManager : ElasticsearchManagerBase
     {
-        private const int FragmentSize = 200;
+        private const int FragmentSize = 50;
         private const int FragmentNumber = 1000000;
         private const int DefaultStart = 0;
-        private const int DefaultSize = 10;
+        private const int DefaultSize = 10000;
         private const string HighlightTag = "$";
         private const string ReservedChars = ".?+*|{}[]()\"\\#@&<>~";
         private const string RegexpQueryFlags = "ALL";
-        private const HighlighterType HighlighterType = Nest.HighlighterType.Fvh;
+        private const string HighlighterType = "experimental";
+
 
         private readonly SearchResultProcessor m_searchResultProcessor;
 
@@ -94,16 +96,24 @@ namespace Vokabular.FulltextService.Core.Managers
 
             var client = CommunicationProvider.GetElasticClient();
 
-            var response = client.Search<SnapshotResourceContract>(s => s
+            var responseCount = client.Search<SnapshotResourceContract>(s => s
                 .Index(SnapshotIndex)
                 .Type(SnapshotType)
-                .Source(sf => sf
-                    .Includes(i => i
-                        .Fields(
-                            f => null
-                        )
+                .From(0)
+                .Size(0)
+                .Query(q => q
+                    .Bool(b => b
+                        .Filter(filterQuery)
+                        .Must(mustQuery)
                     )
                 )
+            ).Total;
+            return new FulltextSearchCorpusResultContract { Count = responseCount * 30 }; //TODO HACK pagination on books
+            /*var response = client.Search<SnapshotResourceContract>(s => s
+                .Index(SnapshotIndex)
+                .Type(SnapshotType)
+                .Source(false)
+                .Size((int)responseCount)
                 .Query(q => q
                     .Bool(b => b
                         .Filter(filterQuery)
@@ -119,11 +129,10 @@ namespace Vokabular.FulltextService.Core.Managers
                         .FragmentSize(FragmentSize)
                         .Type(HighlighterType)
                     )
-                    .BoundaryCharacters(".,!? <")
                 )
             );
-
-            return m_searchResultProcessor.ProcessSearchCorpusByCriteriaCount(response, HighlightTag);
+            
+            return m_searchResultProcessor.ProcessSearchCorpusByCriteriaCount(response, HighlightTag);*/
         }
 
         public CorpusSearchResultDataList SearchCorpusByCriteria(CorpusSearchRequestContract searchRequest)
@@ -132,7 +141,21 @@ namespace Vokabular.FulltextService.Core.Managers
             var mustQuery = GetSearchQueryFromRequest(searchRequest);
 
             var client = CommunicationProvider.GetElasticClient();
-
+            /*
+            var responseCount = client.Search<SnapshotResourceContract>(s => s
+                .Index(SnapshotIndex)
+                .Type(SnapshotType)
+                .From(0)
+                .Size(0)
+                .Query(q => q
+                    .Bool(b => b
+                        .Filter(filterQuery)
+                        .Must(mustQuery)
+                    )
+                )
+            );
+            */
+            var index = searchRequest.Start / searchRequest.Count;
             var response = client.Search<SnapshotResourceContract>(s => s
                 .Index(SnapshotIndex)
                 .Type(SnapshotType)
@@ -150,6 +173,8 @@ namespace Vokabular.FulltextService.Core.Managers
                         .Must(mustQuery)
                     )
                 )
+                .From(index.HasValue ? index.Value : DefaultStart)
+                .Size(1)
                 .Highlight(h => h
                     .PreTags(HighlightTag)
                     .PostTags(HighlightTag)
@@ -159,11 +184,10 @@ namespace Vokabular.FulltextService.Core.Managers
                         .FragmentSize(FragmentSize)
                         .Type(HighlighterType)
                     )
-                    .BoundaryCharacters(".,!? <")
-                )
+               )
             );
 
-            return m_searchResultProcessor.ProcessSearchCorpusByCriteria(response, HighlightTag, searchRequest.Start ?? 0, searchRequest.Count ?? 10);
+            return m_searchResultProcessor.ProcessSearchCorpusByCriteria(response, HighlightTag);
         }
 
         

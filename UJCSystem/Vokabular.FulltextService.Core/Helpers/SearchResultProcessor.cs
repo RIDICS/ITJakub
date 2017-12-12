@@ -112,6 +112,37 @@ namespace Vokabular.FulltextService.Core.Helpers
             return result;
         }
 
+        public CorpusSearchResultDataList ProcessSearchCorpusByCriteria(ISearchResponse<SnapshotResourceContract> response, string highlightTag)
+        {
+            if (!response.IsValid)
+            {
+                throw new Exception(response.DebugInformation);
+            }
+
+            var startCounter = 0;
+
+            var result = new CorpusSearchResultDataList
+            {
+                List = new List<CorpusSearchResultData>(),
+                SearchResultType = FulltextSearchResultType.ProjectId
+            };
+            foreach (var hit in response.Hits)
+            {
+                foreach (var value in hit.Highlights.Values)
+                {
+                    foreach (var highlight in value.Highlights)
+                    {
+                        var resultData = GetCorpusSearchResultDataList(highlight, hit.Source.ProjectId, highlightTag);
+                        AddPageIdsToResult(resultData, hit.Source.Pages);
+
+                        result.List.AddRange(resultData);
+                    }
+                }
+            }
+            result.List = result.List.Count > 100 ? result.List.GetRange(0, 100) : result.List; //TODO 
+            return result;
+        }
+
         private void AddPageIdsToResult(List<CorpusSearchResultData> resultData, List<SnapshotPageResourceContract> sourcePages)
         {
             foreach (var searchResultData in resultData)
@@ -120,6 +151,10 @@ namespace Vokabular.FulltextService.Core.Helpers
                 if (string.IsNullOrWhiteSpace(snapshotIndex))
                 {
                     snapshotIndex = Regex.Match(searchResultData.PageResultContext.ContextStructure.Before, @"<([^>]*)>").Groups[1].Value;
+                    if (string.IsNullOrWhiteSpace(snapshotIndex))
+                    {
+                        snapshotIndex = Regex.Match(searchResultData.PageResultContext.ContextStructure.Match, @"<([^>]*)>").Groups[1].Value;
+                    }
                 }
                 var pageId = GetPageIdFromIndex(Int32.Parse(snapshotIndex), sourcePages);
                 searchResultData.PageResultContext.TextExternalId = pageId;
@@ -127,8 +162,8 @@ namespace Vokabular.FulltextService.Core.Helpers
                 searchResultData.PageResultContext.ContextStructure.After = Regex.Replace(searchResultData.PageResultContext.ContextStructure.After, @"<[^>]*", "");
                 searchResultData.PageResultContext.ContextStructure.Before = Regex.Replace(searchResultData.PageResultContext.ContextStructure.Before, @"<[^>]*>", "");
                 searchResultData.PageResultContext.ContextStructure.Before = Regex.Replace(searchResultData.PageResultContext.ContextStructure.Before, @"[^>]*>", "");
-                searchResultData.PageResultContext.ContextStructure.Match = Regex.Replace(searchResultData.PageResultContext.ContextStructure.Match, @"[^>]*>", "");
                 searchResultData.PageResultContext.ContextStructure.Match = Regex.Replace(searchResultData.PageResultContext.ContextStructure.Match, @"<[^>]*>", "");
+                searchResultData.PageResultContext.ContextStructure.Match = Regex.Replace(searchResultData.PageResultContext.ContextStructure.Match, @"[^>]*>", "");
                 searchResultData.PageResultContext.ContextStructure.Match = Regex.Replace(searchResultData.PageResultContext.ContextStructure.Match, @"<[^>]*", "");
             }
         }

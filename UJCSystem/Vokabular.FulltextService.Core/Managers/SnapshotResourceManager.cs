@@ -20,11 +20,7 @@ namespace Vokabular.FulltextService.Core.Managers
                 throw new Exception(response.DebugInformation);
             }
 
-            if (response.Created)
-            {
-                return new ResultContract { Id = response.Id };
-            }
-            return new ResultContract { Id = null };
+            return new ResultContract { Id = response.Id };
         }
     }
 }
