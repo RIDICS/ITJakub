@@ -61,6 +61,13 @@
                 <div class="col-md-7">
                     <input type="text" id="work-metadata-publish-date" class="form-control" value="@Model.PublishDate"/>
                 </div>
+                <div class="col-md-1">
+                    <span class="year-validity-icon-invalid">
+                        <i class="fa fa-lg fa-times" aria-hidden="true"></i>
+                    </span><span class="year-validity-icon-valid">
+                        <i class="fa fa-lg fa-check" aria-hidden="true"></i>
+                    </span>
+                </div>
             </div>
             <div class="form-group">
                 <label class="col-md-4 control-label">Responsible people</label>
@@ -70,7 +77,7 @@
                         @foreach (var editor in Model.ResponsiblePersons)
                         {
                             <div class="editor-item" data-id="@editor.Id" data-responsible-type-id="@editor.ResponsibleType.Id">
-                                <span class="person-list-manipuulate">
+                                <span class="person-list-manipulate">
                                     <div class="btn-group-vertical move-button">
                                         <button type="button" class="btn btn-default move-person-up">
                                             <i class="fa fa-chevron-up" aria-hidden="true"></i>
@@ -96,8 +103,8 @@
                 <label class="col-md-4 control-label" for="work-metadata-publisher-email">E-mail</label>
                 <div class="col-md-7">
                     <input type="text" id="work-metadata-publisher-email" class="form-control" value="@Model.PublisherEmail" />
-                </div><div class="col-md-1"><span class="email-validity-icon-bad"><i class="fa fa-lg fa-times" aria-hidden="true"></i>
-                </span><span class="email-validity-icon-ok"><i class="fa fa-lg fa-check" aria-hidden="true"></i>
+                </div><div class="col-md-1"><span class="email-validity-icon-invalid"><i class="fa fa-lg fa-times" aria-hidden="true"></i>
+                </span><span class="email-validity-icon-valid"><i class="fa fa-lg fa-check" aria-hidden="true"></i>
                 </span></div>
             </div>
             <div class="form-group">
@@ -111,6 +118,7 @@
                 <div class="col-md-7">
                     <input type="text" id="work-metadata-bibl-text" class="form-control" value="@Model.BiblText"/>
                 </div>
+                <div class="col-md-12 text-center generate-bibliography-row"><button class="btn btn-default generate-bibliography-button">Generate</button></div>
             </div>
         </div>
     </div>
@@ -167,7 +175,7 @@
                         @foreach (var author in Model.Authors)
                         {
                             <div class="author-item" data-id="@author.Id">
-                                <span class="person-list-manipuulate">
+                                <span class="person-list-manipulate">
                                 <div class="btn-group-vertical move-button">
                                     <button type="button" class="btn btn-default move-person-up"><i class="fa fa-chevron-up" aria-hidden="true"></i>
                                     </button>
@@ -177,7 +185,7 @@
                                 <button class="btn btn-default remove-button">
                                     <span class="glyphicon glyphicon-remove"></span>
                                 </button></span>
-                                <span class="text-as-form-control">@author.FirstName @author.LastName</span>
+                                <span class="text-as-form-control"><span class="author-name">@author.FirstName</span> <span class="author-surname">@author.LastName</span></span>
                             </div>
                         }
                     </div>
@@ -195,14 +203,20 @@
             </div>
             <div class="form-group">
                 <label class="col-md-4 control-label" for="work-metadata-not-before">Nevydáno před rokem</label>
-                <div class="col-md-7">
-                    <input type="text" id="work-metadata-not-before" class="form-control" value="@Model.NotBefore"/>
+                <div class="col-md-5">
+                    <input type="text" id="work-metadata-not-before" class="form-control" value="@Model.NotBefore?.ToString("yyyy")"/>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-default edit-date-range">Edit</button>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-4 control-label" for="work-metadata-not-after">Nevydáno po roce</label>
-                <div class="col-md-7">
-                    <input type="text" id="work-metadata-not-after" class="form-control" value="@Model.NotAfter"/>
+                <div class="col-md-5">
+                    <input type="text" id="work-metadata-not-after" class="form-control" value="@Model.NotAfter?.ToString("yyyy")"/>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-default edit-date-range">Edit</button>
                 </div>
             </div>
         </div>
@@ -335,12 +349,33 @@
     <div id="work-metadata-editor-button-panel">
         <div class="alert alert-success" id="work-metadata-save-success">Metadata uložena</div>
         <div class="alert alert-danger" id="work-metadata-save-error">Některá metadata se nepodařilo uložit</div>
-        <div class="alert alert-danger" id="work-metadata-invalid-email">Invalid publisher's email</div>
+        <div class="alert alert-danger" id="work-metadata-invalid-keyword-fail">Failed to save keywords. Please check for duplicates.</div>
         <button class="btn btn-default" id="work-metadata-cancel-button">Zrušit</button>
         <button class="btn btn-default" id="work-metadata-save-button"><span class="saving-icon loading-small-button"></span> Uložit</button>
     </div>
 </div>
 </div>
+
+    <div class="modal fade" role="dialog" id="select-range-dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Select time period</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="regex-dating-condition">
+                        <div class="regex-dating-precision-div">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
+                    <button type="button" class="btn btn-default save-button">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <div class="modal fade" role="dialog" id="add-author-dialog">
     <div class="modal-dialog">

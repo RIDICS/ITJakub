@@ -540,8 +540,8 @@ table {
     }
 
     #work-metadata-literary-genre, #work-metadata-literary-kind {
-        .button-float-right{
-            float:right;
+        .button-float-right {
+            float: right;
         }
 
         .genre-item, .lit-kind-item {
@@ -553,12 +553,29 @@ table {
         }
     }
 
-    #work-metadata-invalid-email {
+    .regex-slider-div {
+        .slider {
+            width: 65%;
+        }
+
+        .regex-dating-checkbox-div{
+            width:25%;
+            span{
+                margin-left:3px;
+            }
+        }
+    }
+
+    #work-metadata-invalid-keyword-fail {
         display: none;
     }
 
-    .person-list-manipuulate {
+    .person-list-manipulate {
         float: right;
+    }
+
+    .generate-bibliography-row {
+        margin: 6px 0;
     }
 
     .move-button {
@@ -575,14 +592,26 @@ table {
         overflow-y: scroll;
     }
 
+    .year-validity-icon {
+        &-valid {
+            color: green;
+            display: none;
+        }
+
+        &-invalid {
+            color: red;
+            display: none;
+        }
+    }
+
     .email-group {
         .email-validity-icon {
-            &-ok {
+            &-valid {
                 color: green;
                 display: none;
             }
 
-            &-bad {
+            &-invalid {
                 color: red;
                 display: none;
             }

@@ -2,6 +2,8 @@
     private projectId: number;
     private addAuthorDialog: BootstrapDialogWrapper;
     private addEditorDialog: BootstrapDialogWrapper;
+    private selectRangeDialog: BootstrapDialogWrapper;
+    private rangePeriodViewSliderClass: RegExDatingConditionRangePeriodView;
     private projectClient: ProjectClient;
     private selectedAuthorId: number;
     private selectedResponsiblePersonId: number;
@@ -29,6 +31,12 @@
             element: $("#add-editor-dialog"),
             autoClearInputs: true,
             submitCallback: this.addEditor.bind(this)
+        });
+
+        this.selectRangeDialog = new BootstrapDialogWrapper({
+            element: $("#select-range-dialog"),
+            autoClearInputs: true,
+            submitCallback: this.dateRangeSelected.bind(this)
         });
     }
 
@@ -219,6 +227,9 @@
         var $addResponsibleTypeButton = $("#add-responsible-type-button");
         var $addResponsibleTypeContainer = $("#add-responsible-type-container");
 
+        this.rangePeriodViewSliderClass = new RegExDatingConditionRangePeriodView();
+        this.rangePeriodViewSliderClass.makeRangeView($("#select-range-dialog").find(".regex-dating-precision-div")[0] as HTMLDivElement);
+
         this.createCategoriesNestedStructure();
 
         this.categoryTree = $("#category-tree").tree({
@@ -237,11 +248,24 @@
                 const enteredText = $("#work-metadata-publisher-email").val();
                 const emailIsValid = this.validateEmail(enteredText);
                 if (emailIsValid) {
-                    $(".email-validity-icon-ok").show();
-                    $(".email-validity-icon-bad").hide();
+                    $(".email-validity-icon-valid").show();
+                    $(".email-validity-icon-invalid").hide();
                 } else {
-                    $(".email-validity-icon-ok").hide();
-                    $(".email-validity-icon-bad").show();
+                    $(".email-validity-icon-valid").hide();
+                    $(".email-validity-icon-invalid").show();
+                }
+            });
+
+        $("#work-metadata-publish-date").on("input",
+            () => {
+                const enteredText = $("#work-metadata-publish-date").val();
+                const yearIsValid = this.publicationYearsValid(enteredText);
+                if (yearIsValid) {
+                    $(".year-validity-icon-valid").show();
+                    $(".year-validity-icon-invalid").hide();
+                } else {
+                    $(".year-validity-icon-valid").hide();
+                    $(".year-validity-icon-invalid").show();
                 }
             });
 
@@ -312,10 +336,18 @@
             this.addAuthorDialog.show();
         });
 
+        $(".edit-date-range").click(() => {
+            this.selectRangeDialog.show();
+        });
+
         $("#add-editor-button").click(() => {
             $addResponsibleTypeButton.prop("disabled", false);
             $addResponsibleTypeContainer.hide();
             this.addEditorDialog.show();
+        });
+
+        $(".generate-bibliography-button").on("click", () => {
+            this.generateBibliography();
         });
 
         $(".new-original-author-button").on("click",
@@ -569,6 +601,48 @@
         $("#work-metadata-save-error, #work-metadata-save-success").hide();
     }
 
+    private capitalize(string:string) {
+        return string.replace(/(?:^|\s)\S/g, a => a.toLocaleUpperCase());
+    };
+
+    private dateRangeSelected() {
+        const notBeforeEl = $("#work-metadata-not-before");
+        const notAfterEl = $("#work-metadata-not-after");
+        const notBefore = this.rangePeriodViewSliderClass.getLowerValue();
+        const notAfter = this.rangePeriodViewSliderClass.getHigherValue();
+        notBeforeEl.val(notBefore);
+        notAfterEl.val(notAfter);
+        this.selectRangeDialog.hide();
+    }
+
+    private publicationYearsValid(string: string) {
+        const yearsRegex = new RegExp(/(^\d{1,4}$)|(^\d{1,4}-\d{1,4}$)/);
+        return yearsRegex.test(string);
+    }
+
+    private generateBibliography() {
+        const bibliographyInputEl = $("#work-metadata-bibl-text");
+        const authorEls = $(".author-item");
+        const projectTitleEl = $("#work-metadata-title");
+        const publishYearsEl = $("#work-metadata-publish-date");
+        const publishPlaceEl = $("#work-metadata-publish-place");
+        const publisherNameEl = $("#work-metadata-publisher");
+        const publishYearsString = publishYearsEl.val();
+        const publishPlaceString = publishPlaceEl.val();
+        const publisherNameString = publisherNameEl.val();
+        const projectTitleString = projectTitleEl.val();
+        var authorsStringArray = new Array<string>();
+        authorEls.each((index, elem) => {
+            const author = $(elem);
+            const name = author.find(".author-name").text();
+            const surname = author.find(".author-surname").text();
+            authorsStringArray.push(`${surname.toLocaleUpperCase()}, ${this.capitalize(name)}`);
+        });
+        const authorsString = authorsStringArray.join(", ");//TODO check correct bibliography format
+        const bibliographyString = `${authorsString}. ${projectTitleString}. ${publishPlaceString}: ${publisherNameString}, ${publishYearsString}.`;
+        bibliographyInputEl.val(bibliographyString);
+    }
+
     private addAuthor() {
         var id: number;
         var firstName: string;
@@ -686,13 +760,7 @@
     }
 
     private saveMetadata() {
-        const enteredEmailText = $("#work-metadata-publisher-email").val();
-        const emailIsValid = this.validateEmail(enteredEmailText);
-        const invalidEmailAlertEl = $("#work-metadata-invalid-email");
-        if (!emailIsValid) {
-            invalidEmailAlertEl.show().delay(3000).fadeOut(2000);;
-            return;
-        }
+        const keywordFailAlertEl = $("#work-metadata-keyword-fail");
         var selectedAuthorIds = new Array<number>();
         var selectedResponsibleIds = new Array<ISaveProjectResponsiblePerson>();
         var selectedKindIds = new Array<number>();
@@ -737,53 +805,74 @@
         }
         createNewKeywordAjax.done((newIds: number[]) => {
             const allKeywordIds = keywordIdList.concat(newIds);
-            var data: ISaveMetadataResource = {
-                categoryIdList: this.categoryTree.getCheckedNodes(),
+            const data: IOnlySaveMetadataResource = {
                 keywordIdList: allKeywordIds,
-                biblText: $("#work-metadata-bibl-text").val(),
-                copyright: $("#work-metadata-copyright").val(),
-                manuscriptCountry: $("#work-metadata-original-country").val(),
-                manuscriptExtent: $("#work-metadata-original-extent").val(),
-                manuscriptIdno: $("#work-metadata-original-idno").val(),
-                manuscriptRepository: $("#work-metadata-original-repository").val(),
-                manuscriptSettlement: $("#work-metadata-original-settlement").val(),
-                notAfter: $("#work-metadata-not-after").val(),
-                notBefore: $("#work-metadata-not-before").val(),
-                originDate: $("#work-metadata-origin-date").val(),
-                publishDate: $("#work-metadata-publish-date").val(),
-                publishPlace: $("#work-metadata-publish-place").val(),
-                publisherEmail: $("#work-metadata-publisher-email").val(),
-                publisherText: publisherText,
-                relicAbbreviation: $("#work-metadata-relic-abbreviation").val(),
-                sourceAbbreviation: $("#work-metadata-source-abbreviation").val(),
-                subTitle: $("#work-metadata-subtitle").val(),
-                title: $("#work-metadata-title").val(),
-                authorIdList: selectedAuthorIds,
-                literaryGenreIdList: selectedGenreIds,
+                categoryIdList: this.categoryTree.getCheckedNodes(),
                 literaryKindIdList: selectedKindIds,
+                literaryGenreIdList: selectedGenreIds,
+                authorIdList: selectedAuthorIds,
+                projectResponsiblePersonIdList: selectedResponsibleIds  
+            };
+            this.formMetadataObjectAndSendRequest(data, publisherText);
+        }).fail(() => {
+            keywordFailAlertEl.show().delay(3000).fadeOut(2000);
+            const data: IOnlySaveMetadataResource = {
+                keywordIdList: keywordIdList,
+                categoryIdList: this.categoryTree.getCheckedNodes(),
+                literaryKindIdList: selectedKindIds,
+                literaryGenreIdList: selectedGenreIds,
+                authorIdList: selectedAuthorIds,
                 projectResponsiblePersonIdList: selectedResponsibleIds
             };
-            var $loadingGlyph = $("#work-metadata-save-button .saving-icon");
-            var $buttons = $("#work-metadata-editor-button-panel button");
-            var $successAlert = $("#work-metadata-save-success");
-            var $errorAlert = $("#work-metadata-save-error");
-            $loadingGlyph.show();
-            $buttons.prop("disabled", true);
-            $successAlert.finish().hide();
-            $errorAlert.hide();
+            this.formMetadataObjectAndSendRequest(data, publisherText);
+        });
+    }
 
-            this.projectClient.saveMetadata(this.projectId, data).done((data) => {
-                $successAlert.show().delay(3000).fadeOut(2000);
-                $("#work-metadata-last-modification").text(data.lastModificationText);
-                $("#work-metadata-literary-original").text(data.literaryOriginalText);
-            }).fail(() => {
-                $errorAlert.show();
-            }).always(() => {
-                $loadingGlyph.hide();
-                $buttons.prop("disabled", false);
-            });
+    private formMetadataObjectAndSendRequest(contract: IOnlySaveMetadataResource, publisherText: string) {
+        var data: ISaveMetadataResource = {
+            categoryIdList: contract.categoryIdList,
+            keywordIdList: contract.keywordIdList,
+            biblText: $("#work-metadata-bibl-text").val(),
+            copyright: $("#work-metadata-copyright").val(),
+            manuscriptCountry: $("#work-metadata-original-country").val(),
+            manuscriptExtent: $("#work-metadata-original-extent").val(),
+            manuscriptIdno: $("#work-metadata-original-idno").val(),
+            manuscriptRepository: $("#work-metadata-original-repository").val(),
+            manuscriptSettlement: $("#work-metadata-original-settlement").val(),
+            notAfter: $("#work-metadata-not-after").val(),
+            notBefore: $("#work-metadata-not-before").val(),
+            originDate: $("#work-metadata-origin-date").val(),
+            publishDate: $("#work-metadata-publish-date").val(),
+            publishPlace: $("#work-metadata-publish-place").val(),
+            publisherEmail: $("#work-metadata-publisher-email").val(),
+            publisherText: publisherText,
+            relicAbbreviation: $("#work-metadata-relic-abbreviation").val(),
+            sourceAbbreviation: $("#work-metadata-source-abbreviation").val(),
+            subTitle: $("#work-metadata-subtitle").val(),
+            title: $("#work-metadata-title").val(),
+            authorIdList: contract.authorIdList,
+            literaryGenreIdList: contract.literaryGenreIdList,
+            literaryKindIdList: contract.literaryKindIdList,
+            projectResponsiblePersonIdList: contract.projectResponsiblePersonIdList
+        };
+        var $loadingGlyph = $("#work-metadata-save-button .saving-icon");
+        var $buttons = $("#work-metadata-editor-button-panel button");
+        var $successAlert = $("#work-metadata-save-success");
+        var $errorAlert = $("#work-metadata-save-error");
+        $loadingGlyph.show();
+        $buttons.prop("disabled", true);
+        $successAlert.finish().hide();
+        $errorAlert.hide();
+
+        this.projectClient.saveMetadata(this.projectId, data).done((data) => {
+            $successAlert.show().delay(3000).fadeOut(2000);
+            $("#work-metadata-last-modification").text(data.lastModificationText);
+            $("#work-metadata-literary-original").text(data.literaryOriginalText);
         }).fail(() => {
-            //TODO show that some keyword failed to save, possible duplicates
+            $errorAlert.show();
+        }).always(() => {
+            $loadingGlyph.hide();
+            $buttons.prop("disabled", false);
         });
     }
 }

@@ -219,6 +219,15 @@ interface IChapterHieararchyContract {
     subChapters: Array<IChapterHieararchyContract>;
 }
 
+interface IOnlySaveMetadataResource {
+    keywordIdList: Array<number>;
+    categoryIdList: Array<number>;
+    literaryKindIdList: Array<number>;
+    literaryGenreIdList: Array<number>;
+    authorIdList: Array<number>;
+    projectResponsiblePersonIdList: Array<ISaveProjectResponsiblePerson>;
+}
+
 interface ISaveMetadataResource extends IMetadataResource {
     keywordIdList: Array<number>;
     categoryIdList: Array<number>;
