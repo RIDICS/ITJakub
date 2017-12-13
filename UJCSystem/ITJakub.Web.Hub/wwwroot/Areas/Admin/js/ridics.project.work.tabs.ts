@@ -63,7 +63,7 @@
     }
 
     private initKeywords() {
-        const count = 10; 
+        const count = 10;
         const selectedKeywordEls = $(".keywords-list-selected").children();
         const engine = new Bloodhound({
             datumTokenizer: (d: any) => Bloodhound.tokenizers.whitespace(d.label),
@@ -228,7 +228,8 @@
         var $addResponsibleTypeContainer = $("#add-responsible-type-container");
 
         this.rangePeriodViewSliderClass = new RegExDatingConditionRangePeriodView();
-        this.rangePeriodViewSliderClass.makeRangeView($("#select-range-dialog").find(".regex-dating-precision-div")[0] as HTMLDivElement);
+        this.rangePeriodViewSliderClass.makeRangeView(
+            $("#select-range-dialog").find(".regex-dating-precision-div")[0] as HTMLDivElement);
 
         this.createCategoriesNestedStructure();
 
@@ -269,7 +270,7 @@
                 }
             });
 
-        $(".move-person-up").on("click",
+        $(document).on("click", ".move-person-up",
             (event) => {
                 const targetEl = $(event.target);
                 const personEl = targetEl.parents(".editor-item, .author-item");
@@ -280,7 +281,7 @@
                 }
             });
 
-        $(".move-person-down").on("click",
+        $(document).on("click", ".move-person-down", 
             (event) => {
                 const targetEl = $(event.target);
                 const personEl = targetEl.parents(".editor-item, .author-item");
@@ -346,9 +347,10 @@
             this.addEditorDialog.show();
         });
 
-        $(".generate-bibliography-button").on("click", () => {
-            this.generateBibliography();
-        });
+        $(".generate-bibliography-button").on("click",
+            () => {
+                this.generateBibliography();
+            });
 
         $(".new-original-author-button").on("click",
             () => {
@@ -560,6 +562,7 @@
                     responsiblePersonId = $(".existing-responsible-person-selected").data("responsible-person-id");
                     $editorId.val(responsiblePersonId);
                     this.selectedResponsiblePersonId = responsiblePersonId;
+                    this.loadProjectsByResponsiblePerson(responsiblePersonId);
                 } else {
                     isResponsiblePersonSelected = false;
                     $editorId.val("");
@@ -603,14 +606,14 @@
     }
 
     private loadProjectsByAuthor(authorId: number) {
-        const start = 0;//TODO debug
-        const count = 10;//TODO debug
+        const start = 0; //TODO debug
+        const count = 10; //TODO debug
         const projectInfoAjax = this.projectClient.getProjectsByAuthor(authorId, start, count);
-        const tableBodyEl = $(".works-list-items");
+        const tableBodyEl = $(".works-produced").find(".works-list-items");
         tableBodyEl.empty();
         tableBodyEl.addClass("loading");
         projectInfoAjax.done((data: IProjectDetailContract[]) => {
-            this.generateWorkTableItem(data);
+            this.generateWorkAuthorTableItem(data);
         }).fail(() => {
             tableBodyEl.text("Error loading works");
         }).always(() => {
@@ -618,21 +621,55 @@
         });
     }
 
-    private generateWorkTableItem(projects: IProjectDetailContract[]) {
+    private generateWorkAuthorTableItem(projects: IProjectDetailContract[]) {
         var elm = "";
         projects.forEach((project) => {
             elm += `<div class="col-xs-12 works-list-item">${project.latestMetadata.title}</div>`;
         });
         const html = $.parseHTML(elm);
-        this.populateWorkListItemsTable($(html));
+        this.populateAuthorWorkListItemsTable($(html));
     }
 
-    private populateWorkListItemsTable(tableItems: JQuery) {
-        const authorWorkListEl = $(".works-list-items");
+    private generateWorkResponsiblePersonItem(projects: IProjectDetailContract[], responsiblePersonId: number) {
+        var elm = "";
+        projects.forEach((project) => {
+            const responsiblePeople = project.responsiblePersons;
+            const index = responsiblePeople.map((o: IResponsiblePerson) => o.id).indexOf(responsiblePersonId);
+            const responsibilityType = responsiblePeople[index].responsibleType.text;
+            elm += `<div class="col-xs-12 works-list-item">${project.latestMetadata.title} - ${responsibilityType
+                }</div>`;
+        });
+        const html = $.parseHTML(elm);
+        this.populateResponsiblePersonWorkListItemsTable($(html));
+    }
+
+    private populateAuthorWorkListItemsTable(tableItems: JQuery) {
+        const authorWorkListEl = $(".works-produced").find(".works-list-items");
         authorWorkListEl.append(tableItems);
     }
 
-    private capitalize(string:string) {
+    private populateResponsiblePersonWorkListItemsTable(tableItems: JQuery) { //TODO
+        const authorWorkListEl = $(".works-participated").find(".works-list-items");
+        authorWorkListEl.append(tableItems);
+    }
+
+    private loadProjectsByResponsiblePerson(responsiblePersonId: number) {
+        const start = 0; //TODO debug
+        const count = 10; //TODO debug
+        const projectInfoAjax = this.projectClient.getProjectsByResponsiblePerson(responsiblePersonId, start, count);
+        const tableBodyEl = $(".works-participated").find(".works-list-items");
+        tableBodyEl.empty();
+        tableBodyEl.addClass("loading");
+        projectInfoAjax.done((data: IProjectDetailContract[]) => {
+            this.generateWorkResponsiblePersonItem(data, responsiblePersonId);
+        }).fail(() => {
+            tableBodyEl.text("Error loading works");
+        }).always(() => {
+            tableBodyEl.removeClass("loading");
+        });
+    }
+
+    private capitalize(string: string) {
         return string.replace(/(?:^|\s)\S/g, a => a.toLocaleUpperCase());
     };
 
@@ -665,12 +702,14 @@
         var authorsStringArray = new Array<string>();
         authorEls.each((index, elem) => {
             const author = $(elem);
-            const name = author.find(".author-name").text();
-            const surname = author.find(".author-surname").text();
+            const name = author.find(".person-name").text();
+            const surname = author.find(".person-surname").text();
             authorsStringArray.push(`${surname.toLocaleUpperCase()}, ${this.capitalize(name)}`);
         });
-        const authorsString = authorsStringArray.join(", ");//TODO check correct bibliography format
-        const bibliographyString = `${authorsString}. ${projectTitleString}. ${publishPlaceString}: ${publisherNameString}, ${publishYearsString}.`;
+        const authorsString = authorsStringArray.join(", "); //TODO check correct bibliography format
+        const bibliographyString =
+            `${authorsString}. ${projectTitleString}. ${publishPlaceString}: ${publisherNameString}, ${
+                publishYearsString}.`;
         bibliographyInputEl.val(bibliographyString);
     }
 
@@ -679,9 +718,9 @@
         var firstName: string;
         var lastName: string;
 
-        var finishAddingAuthor = () => {
-            var element = MetadataUiHelper.addPerson($("#work-metadata-authors"), firstName + " " + lastName, id);
-            $(element).addClass("author-item");
+        const finishAddingAuthor = () => {
+            var element = MetadataUiHelper.addPerson($("#work-metadata-authors"), firstName, lastName, id);
+            element.addClass("author-item");
             this.addRemovePersonEvent($(".remove-button", element));
             const newAuthorButtonEl = $(".new-original-author-button");
             newAuthorButtonEl.prop("disabled", false);
@@ -736,10 +775,10 @@
 
         const finishAddingEditor = () => {
             var element = MetadataUiHelper.addPerson($("#work-metadata-editors"),
-                `${firstName} ${lastName} - ${responsibilityText}`,
+                firstName, `${lastName} - ${responsibilityText}`,
                 id,
                 responsibilityTypeId);
-            $(element).addClass("editor-item");
+            element.addClass("editor-item");
             this.addRemovePersonEvent($(".remove-button", element));
 
             this.addEditorDialog.hide();
@@ -842,7 +881,7 @@
                 literaryKindIdList: selectedKindIds,
                 literaryGenreIdList: selectedGenreIds,
                 authorIdList: selectedAuthorIds,
-                projectResponsiblePersonIdList: selectedResponsibleIds  
+                projectResponsiblePersonIdList: selectedResponsibleIds
             };
             this.formMetadataObjectAndSendRequest(data, publisherText);
         }).fail(() => {
@@ -1047,32 +1086,39 @@ class ProjectWorkNoteTab extends ProjectModuleTabBase {
 }
 
 class MetadataUiHelper {
-    public static addPerson($container: JQuery,
-        label: string,
+    static addPerson($container: JQuery,
+        name: string, surname: string,
         idValue: string | number,
-        responsibilityTypeId?: number | string): HTMLDivElement {
-        var rootElement = document.createElement("div");
-        var deleteButton = document.createElement("button");
-        var deleteGlyphSpan = document.createElement("span");
-        var labelSpan = document.createElement("span");
+        responsibilityTypeId?: number | string): JQuery {
+        const rootElement = $(document.createElement("div"));
+        const deleteButton = $(document.createElement("button"));
+        const movePersonArrows = $(document.createElement("span"));
+        const listControls = $(document.createElement("span"));
+        const deleteGlyphSpan = $(document.createElement("span"));
+        const labelSpan = $(document.createElement("span"));
 
-        $(deleteButton)
-            .addClass("btn")
-            .addClass("btn-default")
-            .addClass("remove-button")
+        deleteButton
+            .addClass("btn btn-default remove-button")
             .append(deleteGlyphSpan);
-        $(deleteGlyphSpan)
-            .addClass("glyphicon")
-            .addClass("glyphicon-remove");
-        $(labelSpan)
+        deleteGlyphSpan
+            .addClass("glyphicon glyphicon-remove");
+        movePersonArrows.addClass("btn-group-vertical move-button").append(
+            `<button type="button" class="btn btn-default move-person-up">
+                 <i class="fa fa-chevron-up" aria-hidden="true"></i>
+             </button><button type="button" class="btn btn-default move-person-down">
+                          <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                      </button>`);
+        listControls.addClass("person-list-manipulate").append(movePersonArrows).append(deleteButton);
+        labelSpan
             .addClass("text-as-form-control")
-            .text(label);
+            .append(`<span class="person-name">${name}</span>`)
+            .append(`<span class="person-surname">${surname}</span>`);
         if (responsibilityTypeId != null) {
-            $(rootElement).attr("data-responsible-type-id", responsibilityTypeId);
+            rootElement.attr("data-responsible-type-id", responsibilityTypeId);
         }
-        $(rootElement)
+        rootElement
             .attr("data-id", idValue)
-            .append(deleteButton)
+            .append(listControls)
             .append(labelSpan)
             .appendTo($container);
 

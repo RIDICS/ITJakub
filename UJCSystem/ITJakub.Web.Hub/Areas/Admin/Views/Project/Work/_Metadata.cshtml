@@ -73,23 +73,23 @@
                 <label class="col-md-4 control-label">Responsible people</label>
                 <div class="col-md-8">
                     <div id="work-metadata-editors">
-                        <input type="hidden" id="add-editor-id-preview" />
+                        <input type="hidden" id="add-editor-id-preview"/>
                         @foreach (var editor in Model.ResponsiblePersons)
                         {
                             <div class="editor-item" data-id="@editor.Id" data-responsible-type-id="@editor.ResponsibleType.Id">
                                 <span class="person-list-manipulate">
-                                    <div class="btn-group-vertical move-button">
+                                    <span class="btn-group-vertical move-button">
                                         <button type="button" class="btn btn-default move-person-up">
                                             <i class="fa fa-chevron-up" aria-hidden="true"></i>
                                         </button>
                                         <button type="button" class="btn btn-default move-person-down">
                                             <i class="fa fa-chevron-down" aria-hidden="true"></i>
                                         </button>
-                                    </div>
-                                    <button class="btn btn-default remove-button">
-                                        <span class="glyphicon glyphicon-remove"></span>
-                                    </button></span>
-                                <span class="text-as-form-control">@editor.FirstName @editor.LastName - @editor.ResponsibleType.Text</span>
+                                    </span><button class="btn btn-default remove-button"><span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span><span class="text-as-form-control">
+                                    <span class="person-name">@editor.FirstName</span><span class="person-surname">@editor.LastName - @editor.ResponsibleType.Text</span>
+                                </span>
                             </div>
                         }
                     </div>
@@ -102,10 +102,15 @@
             <div class="form-group email-group">
                 <label class="col-md-4 control-label" for="work-metadata-publisher-email">E-mail</label>
                 <div class="col-md-7">
-                    <input type="text" id="work-metadata-publisher-email" class="form-control" value="@Model.PublisherEmail" />
-                </div><div class="col-md-1"><span class="email-validity-icon-invalid"><i class="fa fa-lg fa-times" aria-hidden="true"></i>
-                </span><span class="email-validity-icon-valid"><i class="fa fa-lg fa-check" aria-hidden="true"></i>
-                </span></div>
+                    <input type="text" id="work-metadata-publisher-email" class="form-control" value="@Model.PublisherEmail"/>
+                </div>
+                <div class="col-md-1">
+                    <span class="email-validity-icon-invalid">
+                        <i class="fa fa-lg fa-times" aria-hidden="true"></i>
+                    </span><span class="email-validity-icon-valid">
+                        <i class="fa fa-lg fa-check" aria-hidden="true"></i>
+                    </span>
+                </div>
             </div>
             <div class="form-group">
                 <label class="col-md-4 control-label" for="work-metadata-copyright">Copyright</label>
@@ -118,7 +123,9 @@
                 <div class="col-md-7">
                     <input type="text" id="work-metadata-bibl-text" class="form-control" value="@Model.BiblText"/>
                 </div>
-                <div class="col-md-12 text-center generate-bibliography-row"><button class="btn btn-default generate-bibliography-button">Generate</button></div>
+                <div class="col-md-12 text-center generate-bibliography-row">
+                    <button class="btn btn-default generate-bibliography-button">Generate</button>
+                </div>
             </div>
         </div>
     </div>
@@ -176,16 +183,17 @@
                         {
                             <div class="author-item" data-id="@author.Id">
                                 <span class="person-list-manipulate">
-                                <div class="btn-group-vertical move-button">
-                                    <button type="button" class="btn btn-default move-person-up"><i class="fa fa-chevron-up" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-default move-person-down"><i class="fa fa-chevron-down" aria-hidden="true"></i>
-                                    </button>
-                                </div> 
-                                <button class="btn btn-default remove-button">
-                                    <span class="glyphicon glyphicon-remove"></span>
-                                </button></span>
-                                <span class="text-as-form-control"><span class="author-name">@author.FirstName</span> <span class="author-surname">@author.LastName</span></span>
+                                    <span class="btn-group-vertical move-button">
+                                        <button type="button" class="btn btn-default move-person-up">
+                                            <i class="fa fa-chevron-up" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-default move-person-down">
+                                            <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                                        </button>
+                                    </span><button class="btn btn-default remove-button"><span class="glyphicon glyphicon-remove"></span></button>
+                                </span><span class="text-as-form-control">
+                                    <span class="person-name">@author.FirstName</span><span class="person-surname">@author.LastName</span>
+                                </span>
                             </div>
                         }
                     </div>
@@ -241,20 +249,22 @@
                         @foreach (var genreSelected in Model.SelectedLiteraryGenreIds)
                         {
                             <div class="genre-item clearfix">
-                            <div class="col-xs-9">
-                                <select class="item-select-box">
-                                    @foreach (var genre in Model.AllLiteraryGenreList)
-                                    {
-                                        <option value="@genre.Id" @(genre.Id == genreSelected ? "selected" : null)>@genre.Name</option>
-                                    }
-                                </select>
-                            </div>
+                                <div class="col-xs-9">
+                                    <select class="item-select-box">
+                                        @foreach (var genre in Model.AllLiteraryGenreList)
+                                        {
+                                            <option value="@genre.Id" @(genre.Id == genreSelected ? "selected" : null)>@genre.Name</option>
+                                        }
+                                    </select>
+                                </div>
                                 <div class="button-float-right">
-                                    <button class="btn btn-default remove-button"><span class="glyphicon glyphicon-remove"></span></button>
+                                    <button class="btn btn-default remove-button">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
                                 </div>
-                                </div>
-                                }
                             </div>
+                        }
+                    </div>
 
                 </div>
                 <div class="add-button col-md-12 text-center">
@@ -283,7 +293,9 @@
                                     </select>
                                 </div>
                                 <div class="button-float-right">
-                                    <button class="btn btn-default remove-button"><span class="glyphicon glyphicon-remove"></span></button>
+                                    <button class="btn btn-default remove-button">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
                                 </div>
                             </div>
                         }
@@ -292,43 +304,43 @@
                 <div class="add-button col-md-12 text-center">
                     <button class="btn btn-default" id="add-literary-kind-button">Přidat</button>
                 </div>
-                </div>
             </div>
-            <div class="form-group">
-                <label class="col-md-4 control-label">Kategorie</label>
-                <div class="col-md-8 category-container">
-                    <div id="category-tree"></div>
-                </div>
-                <div class="all-category-list hidden">
-                    @foreach (var category in Model.AllCategoryList)
-                    {
-                        <div class="existing-category-list-item" data-category-id="@category.Id" data-category-description="@category.Description" data-parent-category-id="@category.ParentCategoryId" data-external-id="@category.ExternalId">
-                        </div>
-                    }
-                </div>
-                <div class="selected-category-list hidden">
-                    @foreach (var categoryId in Model.SelectedCategoryIds)
-                    {
-                        <div class="selected-category-list-item" data-category-id="@categoryId">
-                        </div>
-                    }
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label">Kategorie</label>
+            <div class="col-md-8 category-container">
+                <div id="category-tree"></div>
             </div>
-            <div class="form-group">
-                <label class="col-md-4 control-label">Keywords</label>
-                <div class="col-md-7 keywords-container">
-                    <div class="keywords-list-selected hidden">
-                        @foreach (var selectedKeyword in Model.SelectedKeywords)
-                        {
-                            <div data-id="@selectedKeyword.Id" data-name="@selectedKeyword.Name"></div>
-                        }
+            <div class="all-category-list hidden">
+                @foreach (var category in Model.AllCategoryList)
+                {
+                    <div class="existing-category-list-item" data-category-id="@category.Id" data-category-description="@category.Description" data-parent-category-id="@category.ParentCategoryId" data-external-id="@category.ExternalId">
                     </div>
-
-                    <input class="keywords-textarea form-control" type="text"/>
+                }
+            </div>
+            <div class="selected-category-list hidden">
+                @foreach (var categoryId in Model.SelectedCategoryIds)
+                {
+                    <div class="selected-category-list-item" data-category-id="@categoryId">
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label">Keywords</label>
+            <div class="col-md-7 keywords-container">
+                <div class="keywords-list-selected hidden">
+                    @foreach (var selectedKeyword in Model.SelectedKeywords)
+                    {
+                        <div data-id="@selectedKeyword.Id" data-name="@selectedKeyword.Name"></div>
+                    }
                 </div>
+
+                <input class="keywords-textarea form-control" type="text"/>
             </div>
         </div>
     </div>
+</div>
 </div>
 <div class="panel panel-default">
     <div class="panel-body">
@@ -356,26 +368,26 @@
 </div>
 </div>
 
-    <div class="modal fade" role="dialog" id="select-range-dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Select time period</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="regex-dating-condition">
-                        <div class="regex-dating-precision-div">
-                        </div>
+<div class="modal fade" role="dialog" id="select-range-dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Select time period</h4>
+            </div>
+            <div class="modal-body">
+                <div class="regex-dating-condition">
+                    <div class="regex-dating-precision-div">
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
-                    <button type="button" class="btn btn-default save-button">Ok</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
+                <button type="button" class="btn btn-default save-button">Ok</button>
             </div>
         </div>
     </div>
+</div>
 
 <div class="modal fade" role="dialog" id="add-author-dialog">
     <div class="modal-dialog">
@@ -425,15 +437,15 @@
                                 </div>
                             </div>
                         </div>
-                            <div class="col-xs-offset-1 col-xs-4 works-produced">
-                                <div class="list-unstyled row">
-                                    <div class="list-group-item works-table-header">Works</div>
-                                </div>
-                                <div class="list-unstyled row">
-
-                                    <div class="list-group-item works-list-items"></div>
-                                </div>
+                        <div class="col-xs-offset-1 col-xs-4 works-produced">
+                            <div class="list-unstyled row">
+                                <div class="list-group-item works-table-header">Works</div>
                             </div>
+                            <div class="list-unstyled row">
+
+                                <div class="list-group-item works-list-items"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -504,10 +516,10 @@
                                                             }
                                                         </select>
                                                     </div>
-                                                <div class="col-xs-4">
-                                                    <button class="btn btn-default" id="add-responsible-type-button">Add new type</button>
+                                                    <div class="col-xs-4">
+                                                        <button class="btn btn-default" id="add-responsible-type-button">Add new type</button>
+                                                    </div>
                                                 </div>
-                                            </div>
                                             </div>
                                         </div>
                                     </div>
@@ -523,17 +535,17 @@
                                                 <button class="btn btn-default" id="add-responsible-type-save"><span id="add-responsible-type-saving-icon" class="loading-small-button"></span>Vytvořit</button>
                                             </div>
                                         </div>
-                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xs-offset-1 col-xs-4 works-participated">
                             <div class="list-unstyled row">
-                                <div class="list-group-item works-table-header">Types/works participated</div>
+                                <div class="list-group-item works-table-header">Works participated - role/</div>
                             </div>
                             <div class="list-unstyled row">
 
-                                <div class="list-group-item works-list-items">TODO content</div>
+                                <div class="list-group-item works-list-items"></div>
                             </div>
                         </div>
                     </div>

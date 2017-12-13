@@ -450,9 +450,6 @@ table {
 .author-item {
     margin: 2px 0;
 
-    button {
-    }
-
     &::after {
         display: block;
         clear: both;
@@ -534,6 +531,10 @@ table {
 }
 
 #project-work-metadata {
+    .person-surname{
+        margin: 0 3px;
+    }
+
     #work-metadata-copyright {
         resize: none;
         width: 100%;
@@ -688,8 +689,8 @@ table {
                 }
 
                 .loading {
-                    width:initial;
-                    height:initial;
+                    width: initial;
+                    height: initial;
                 }
 
                 .works-list-items {
@@ -855,6 +856,12 @@ table {
             }
 
             .works-participated {
+
+                .loading {
+                    width: initial;
+                    height: initial;
+                }
+
                 .works-table-header {
                     border: solid 1px gray;
                     font-weight: bold;
