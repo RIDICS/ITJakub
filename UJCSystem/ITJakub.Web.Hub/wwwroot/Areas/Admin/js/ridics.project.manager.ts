@@ -124,7 +124,6 @@
     }
 
     saveMetadata(projectId: number, data: ISaveMetadataResource): JQueryXHR {
-        console.log(JSON.stringify({ request: data }));
         return $.ajax({
             url: `${getBaseUrl()}Admin/Project/SaveMetadata?projectId=${projectId}`,
             type: "POST",
@@ -134,5 +133,9 @@
             async: true,
             dataType: "json"
         });
+    }
+
+    getProjectsByAuthor(authorId: number, start?: number, count?: number): JQueryXHR {
+        return $.get(`${getBaseUrl()}Admin/Project/GetProjectsByAuthor?authorId=${authorId}&start=${start}&count=${count}`);
     }
 }

@@ -477,6 +477,7 @@
                     authorId = $(".existing-original-author-selected").data("author-id");
                     $authorId.val(authorId);
                     this.selectedAuthorId = authorId;
+                    this.loadProjectsByAuthor(authorId);
                 } else {
                     $authorId.val("");
                     this.selectedAuthorId = null;
@@ -601,6 +602,36 @@
         $("#work-metadata-save-error, #work-metadata-save-success").hide();
     }
 
+    private loadProjectsByAuthor(authorId: number) {
+        const start = 0;//TODO debug
+        const count = 10;//TODO debug
+        const projectInfoAjax = this.projectClient.getProjectsByAuthor(authorId, start, count);
+        const tableBodyEl = $(".works-list-items");
+        tableBodyEl.empty();
+        tableBodyEl.addClass("loading");
+        projectInfoAjax.done((data: IProjectDetailContract[]) => {
+            this.generateWorkTableItem(data);
+        }).fail(() => {
+            tableBodyEl.text("Error loading works");
+        }).always(() => {
+            tableBodyEl.removeClass("loading");
+        });
+    }
+
+    private generateWorkTableItem(projects: IProjectDetailContract[]) {
+        var elm = "";
+        projects.forEach((project) => {
+            elm += `<div class="col-xs-12 works-list-item">${project.latestMetadata.title}</div>`;
+        });
+        const html = $.parseHTML(elm);
+        this.populateWorkListItemsTable($(html));
+    }
+
+    private populateWorkListItemsTable(tableItems: JQuery) {
+        const authorWorkListEl = $(".works-list-items");
+        authorWorkListEl.append(tableItems);
+    }
+
     private capitalize(string:string) {
         return string.replace(/(?:^|\s)\S/g, a => a.toLocaleUpperCase());
     };
@@ -703,7 +734,7 @@
         var firstName: string;
         var lastName: string;
 
-        var finishAddingEditor = () => {
+        const finishAddingEditor = () => {
             var element = MetadataUiHelper.addPerson($("#work-metadata-editors"),
                 `${firstName} ${lastName} - ${responsibilityText}`,
                 id,

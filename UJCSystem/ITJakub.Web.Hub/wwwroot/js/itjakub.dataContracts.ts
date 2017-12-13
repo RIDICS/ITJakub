@@ -114,6 +114,10 @@ interface IResponsibleType {
     type: ResponsibleTypeEnum;
 }
 
+interface IProjectResponsiblePersonContract extends IResponsiblePerson{
+    responsibleType: IResponsibleType;
+}
+
 interface ISaveProjectResponsiblePerson {
     responsiblePersonId: number;
     responsibleTypeId: number;
@@ -133,6 +137,18 @@ interface IPageWithContext extends IPage {
 interface IProject {
     id: number;
     name: string;
+}
+
+interface IGetProjectContract extends IProject {
+    createdByUser: IUser;
+    createTime: string;//DateTime
+}
+
+interface IProjectDetailContract extends IGetProjectContract {
+    latestMetadata: IMetadataResource;
+    pageCount?: number;
+    authors: IOriginalAuthor[];
+    responsiblePersons: IProjectResponsiblePersonContract[];
 }
 
 interface IMetadataResource {

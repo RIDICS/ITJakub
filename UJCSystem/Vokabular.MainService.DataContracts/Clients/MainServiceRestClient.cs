@@ -842,11 +842,27 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         #region Original author
 
+        public List<ProjectDetailContract> GetProjectsByAuthor(int authorId, int? start, int? count)
+        {
+            try
+            {
+                var result = Get<List<ProjectDetailContract>>($"author/{authorId}/project?start={start}&count={count}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public PagedResultList<OriginalAuthorContract> GetOriginalAuthorList(int start, int count)
         {
             try
             {
-                var result = GetPagedList<OriginalAuthorContract>($"author/?start={start}&count={count}");
+                var result = GetPagedList<OriginalAuthorContract>($"author?start={start}&count={count}");
                 return result;
             }
             catch (HttpRequestException e)

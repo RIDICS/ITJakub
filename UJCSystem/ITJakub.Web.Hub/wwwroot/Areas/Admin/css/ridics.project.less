@@ -558,10 +558,11 @@ table {
             width: 65%;
         }
 
-        .regex-dating-checkbox-div{
-            width:25%;
-            span{
-                margin-left:3px;
+        .regex-dating-checkbox-div {
+            width: 25%;
+
+            span {
+                margin-left: 3px;
             }
         }
     }
@@ -686,12 +687,26 @@ table {
                     border: none;
                 }
 
+                .loading {
+                    width:initial;
+                    height:initial;
+                }
+
                 .works-list-items {
                     border: solid 1px gray;
                     border-top: none;
                     min-height: 175px;
                     max-height: 200px;
                     overflow-y: auto;
+                    padding: 0;
+
+                    .works-list-item {
+                        border-bottom: solid 1px gray;
+
+                        &:last-child {
+                            border-bottom: none;
+                        }
+                    }
                 }
 
                 .border-left {
@@ -708,7 +723,6 @@ table {
                     border-top: none;
                     min-height: 175px;
                     max-height: 200px;
-                    overflow-y: auto;
 
                     .author-list-item {
                         border-bottom: solid 1px gray;
