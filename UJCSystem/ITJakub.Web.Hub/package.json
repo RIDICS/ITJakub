@@ -10,6 +10,7 @@
     "@types/jqueryui": "^1.11.35",
     "@types/typeahead": "^0.11.30",
     "@types/gijgo": "0.6.6",
+    "@types/simplemde": "1.11.7",
     "bower": "1.7.9",
     "gulp": "3.9.1",
     "gulp-concat": "2.6.0",

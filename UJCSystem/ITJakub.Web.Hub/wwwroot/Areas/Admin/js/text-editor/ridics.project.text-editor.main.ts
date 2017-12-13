@@ -1,6 +1,4 @@
-﻿///<reference path="../../../../../wwwroot/lib-custom/@types/simplemde/index.d.ts" />
-///<reference path="../../../../../node_modules/@types/jquery/index.d.ts" />
-///<reference path="./ridics.project.text-editor.connections.ts" />
+﻿///<reference path="./ridics.project.text-editor.connections.ts" />
 ///<reference path="./ridics.project.text-editor.editor.ts" />
 ///<reference path="../editors-common-base/ridics.project.editors.util.ts" />
 ///<reference path="./ridics.project.text-editor.comment-area.ts" />

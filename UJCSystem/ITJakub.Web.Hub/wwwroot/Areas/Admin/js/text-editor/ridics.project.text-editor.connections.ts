@@ -1,6 +1,4 @@
-﻿declare var jqSimpleConnect: any;
-
-class Connections {
+﻿class Connections {
     private interval: number;
 
     /**

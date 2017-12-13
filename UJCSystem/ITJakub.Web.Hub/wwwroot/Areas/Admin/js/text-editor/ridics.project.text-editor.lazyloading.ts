@@ -1,6 +1,4 @@
-﻿declare var lazySizes: any;
-
-class PageLazyLoading {
+﻿class PageLazyLoading {
     private readonly pageStructure: PageStructure;
 
     constructor(pageStructure: PageStructure) {
