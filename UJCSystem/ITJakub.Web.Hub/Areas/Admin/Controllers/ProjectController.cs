@@ -350,6 +350,16 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        public IActionResult GetProjectsByResponsiblePerson(int responsiblePersonId, int? start, int? count)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetProjectsByResponsiblePerson(responsiblePersonId, start, count);
+                return Json(result);
+            }
+        }
+
+        [HttpGet]
         public IActionResult KeywordTypeahead([FromQuery] string keyword, [FromQuery] int? count)
         {
             using (var client = GetRestClient())

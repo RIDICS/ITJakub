@@ -641,6 +641,22 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         #region Responsible person
 
+        public List<ProjectDetailContract> GetProjectsByResponsiblePerson(int responsiblePersonId, int? start, int? count)
+        {
+            try
+            {
+                var result = Get<List<ProjectDetailContract>>($"responsibleperson/{responsiblePersonId}/project?start={start}&count={count}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public int CreateResponsiblePerson(ResponsiblePersonContract responsiblePerson)
         {
             try
@@ -661,7 +677,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = GetPagedList<ResponsiblePersonContract>($"responsibleperson/?start={start}&count={count}");
+                var result = GetPagedList<ResponsiblePersonContract>($"responsibleperson?start={start}&count={count}");
                 return result;
             }
             catch (HttpRequestException e)

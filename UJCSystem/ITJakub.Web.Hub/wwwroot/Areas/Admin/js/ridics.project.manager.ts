@@ -138,4 +138,8 @@
     getProjectsByAuthor(authorId: number, start?: number, count?: number): JQueryXHR {
         return $.get(`${getBaseUrl()}Admin/Project/GetProjectsByAuthor?authorId=${authorId}&start=${start}&count=${count}`);
     }
+
+    getProjectsByResponsiblePerson(responsiblePersonId: number, start?: number, count?: number): JQueryXHR {
+        return $.get(`${getBaseUrl()}Admin/Project/GetProjectsByResponsiblePerson?responsiblePersonId=${responsiblePersonId}&start=${start}&count=${count}`);
+    }
 }
