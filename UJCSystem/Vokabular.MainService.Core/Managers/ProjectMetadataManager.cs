@@ -43,7 +43,7 @@ namespace Vokabular.MainService.Core.Managers
                 }
                 if (parameters.IncludeResponsiblePerson)
                 {
-                    resultContract.ResponsiblePersonList = null; //Mapper.Map<List<ProjectResponsiblePersonContract>>(project.ResponsiblePersons);TODO temporary while broken
+                    resultContract.ResponsiblePersonList = Mapper.Map<List<ProjectResponsiblePersonContract>>(project.ResponsiblePersons);
                 }
                 if (parameters.IncludeKind)
                 {
