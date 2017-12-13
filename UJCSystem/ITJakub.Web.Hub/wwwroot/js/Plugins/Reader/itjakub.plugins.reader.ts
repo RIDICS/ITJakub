@@ -533,7 +533,7 @@
 
             var settingsSpanText = document.createElement("span");
             $(settingsSpanText).addClass("button-text");
-            $(settingsSpanText).append(localization.translate("View", "PluginsJs"));
+            $(settingsSpanText).append(localization.translate("View", "PluginsJs").value);
             $(settingsButton).append(settingsSpanText);
 
             $(settingsButton).click((event: Event) => {
@@ -561,7 +561,7 @@
 
             var searchSpanText = document.createElement("span");
             $(searchSpanText).addClass("button-text");
-            $(searchSpanText).append(localization.translate("Search", "PluginsJs"));
+            $(searchSpanText).append(localization.translate("Search", "PluginsJs").value);
             $(searchResultButton).append(searchSpanText);
 
             $(searchResultButton).click((event: Event) => {
