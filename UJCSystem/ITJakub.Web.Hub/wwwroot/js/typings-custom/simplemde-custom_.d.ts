@@ -1,6 +1,6 @@
-﻿declare class SimpleMDEExtended extends SimpleMDE {
-    defineMode(name: string, token: any): void;
-}
+﻿//declare class SimpleMDE {TODO
+//    defineMode(name: string, token: any): void;
+//}
 
 declare namespace SimpleMDE {
     interface Options {
