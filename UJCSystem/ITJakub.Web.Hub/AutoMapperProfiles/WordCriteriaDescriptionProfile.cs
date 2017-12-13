@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 
