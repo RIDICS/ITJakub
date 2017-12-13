@@ -2,7 +2,7 @@
     private currentTextId = 0; //default initialisation
     private editingMode = false;
     private originalContent = "";
-    private simplemde: SimpleMDE;
+    private simplemde: SimpleMDEExtended;
     private readonly commentInput: CommentInput;
     private readonly util: EditorsUtil;
     private readonly gui: TextEditorGui;
@@ -213,7 +213,7 @@
                 }
             ]
         };
-        this.simplemde = new SimpleMDE(simpleMdeOptions);
+        this.simplemde = new SimpleMDEExtended(simpleMdeOptions);
         this.simplemde.defineMode("comment",
             () => ({
                 token(stream: any) {

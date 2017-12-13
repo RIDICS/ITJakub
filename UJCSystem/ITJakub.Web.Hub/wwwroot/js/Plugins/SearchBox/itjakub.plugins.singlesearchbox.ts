@@ -1,4 +1,4 @@
-﻿///<reference path="../../../lib-custom/@types/typeahead-menu/index.d.ts" />
+﻿///<reference path="../../../js/typings-custom/typeahead-custom_.d.ts" />
 
 class SingleSetTypeaheadSearchBox<T> {
     private displayPath: (item: T) => string;
