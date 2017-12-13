@@ -1,21 +1,22 @@
 using System.Linq;
 using System.Text;
+using Vokabular.DataEntities.Database.Daos;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 
 namespace Vokabular.DataEntities.Database.Search
 {
     public static class CriteriaConditionBuilder
     {
-        private const string AnyStringWildcard = "%";
+        private const string AnyStringWildcard = NHibernateDao.WildcardAny;
 
         public static string Create(WordCriteriaContract word)
         {
-            var stringBuilder = new StringBuilder();
-
             if (!string.IsNullOrEmpty(word.ExactMatch))
             {
-                stringBuilder.Append(word.ExactMatch);
+                return NHibernateDao.EscapeQuery(word.ExactMatch);
             }
+
+            var stringBuilder = new StringBuilder();
 
             if (!string.IsNullOrEmpty(word.StartsWith))
             {
@@ -34,11 +35,9 @@ namespace Vokabular.DataEntities.Database.Search
             {
                 stringBuilder.Append(AnyStringWildcard).Append(word.EndsWith);
             }
-
-            // Escape unwanted characters
-            stringBuilder.Replace("[", "[[]");
-
-            return stringBuilder.ToString();
+            
+            var escapedValue = NHibernateDao.EscapeQuery(stringBuilder.ToString());
+            return escapedValue;
         }
     }
 }

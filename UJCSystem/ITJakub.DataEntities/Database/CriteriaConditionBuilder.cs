@@ -15,6 +15,8 @@ namespace ITJakub.DataEntities.Database
             if (!string.IsNullOrEmpty(word.ExactMatch))
             {
                 stringBuilder.Append(word.ExactMatch);
+                stringBuilder.Replace("[", "[[]"); // Escape unwanted characters
+                return stringBuilder.ToString();
             }
 
             if (!string.IsNullOrEmpty(word.StartsWith))

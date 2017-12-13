@@ -11,8 +11,8 @@ namespace Vokabular.DataEntities.Database.Daos
 {
     public class NHibernateDao : IDao
     {
-        protected const string WildcardAny = "%";
-        protected const string WildcardSingle = "_";
+        public const string WildcardAny = "%";
+        public const string WildcardSingle = "_";
 
         private readonly IUnitOfWork m_unitOfWork;
 
@@ -33,7 +33,7 @@ namespace Vokabular.DataEntities.Database.Daos
             return m_unitOfWork.CurrentSession;
         }
 
-        protected string EscapeQuery(string query)
+        public static string EscapeQuery(string query)
         {
             return query?.Replace("[", "[[]");
         }
