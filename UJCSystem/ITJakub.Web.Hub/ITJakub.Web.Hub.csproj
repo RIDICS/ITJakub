@@ -33,7 +33,7 @@
     <Content Remove="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.list-structure.ts" />
     <Content Remove="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.util.ts" />
     <Content Remove="wwwroot\Areas\Admin\js\text-editor\ridics.project.text-editor.gui.ts" />
-    <Content Remove="wwwroot\lib-custom\%40types\typeahead-menu\index.d.ts" />
+    <Content Remove="wwwroot\js\typings-custom\lazysizes_.d.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -116,7 +116,10 @@
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.main.ts" />
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\editors-common-base\ridics.project.editors.util.ts" />
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\text-editor\ridics.project.text-editor.gui.ts" />
-    <TypeScriptCompile Include="wwwroot\lib-custom\@types\typeahead-menu\index.d.ts" />
+    <TypeScriptCompile Include="wwwroot\js\typings-custom\jq-simple-connect_.d.ts" />
+    <TypeScriptCompile Include="wwwroot\js\typings-custom\lazysizes_.d.ts" />
+    <TypeScriptCompile Include="wwwroot\js\typings-custom\simplemde-custom_.d.ts" />
+    <TypeScriptCompile Include="wwwroot\js\typings-custom\typeahead-custom_.d.ts" />
   </ItemGroup>
 
   <Target Name="ApplyXdtConfigTransform" BeforeTargets="MSDeployPublish">
