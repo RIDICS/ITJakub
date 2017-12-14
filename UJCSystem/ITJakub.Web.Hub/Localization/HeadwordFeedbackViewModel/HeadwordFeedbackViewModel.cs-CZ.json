@@ -2,7 +2,14 @@
   "culture": "cs-CZ",
   "scope": "HeadwordFeedbackViewModel",
   "dictionary": {
+    "Name:": "Jméno: ",
+    "NameNotFilled": "{0} uživatele nebylo vyplněno.",
+    "NameNotFilled1": "{0} uživatele nebyl vyplněn.",
+    "Email:": "Email: ",
+    "EmailWrongFormatError": "Nesprávný formát zadaného e-mailu.",
+    "Text": "Text",
+    "FeedbackNotFilled": "{0} připomínky nebyl vyplněn.",
     "Headword": "Heslo: ",
-	"Dictionary": "Slovník: "	
+    "Dictionary": "Slovník: "
   }
 }
