@@ -78,7 +78,10 @@ class VariableInterpreter {
                 } else {
                     result = this.interpretConfigurationVariable(varName, variables, actualScopeObject);
                 }
-            } else {
+            } else if (varName.indexOf("@") === 0) {
+                result = localization.translate(varName.substring(1), "BibliographyModule").value;
+            }
+            else {
                 result = actualScopeObject[varName];
                 var tmpScope = actualScopeObject;
                 while (typeof result === 'undefined' && this.getParentScope(tmpScope) !== tmpScope) { //if result is undefined bubble up to outer scope 
@@ -212,7 +215,7 @@ class VariableInterpreter {
         var tableBuilder = new TableBuilder();
 
         $.each(rows, (index, item) => {
-            var label: string = item["label"];
+            var label: string = localization.translate(item["label"].substring(1), "BibliographyModule").value;
             var pattern: string = item["pattern"];
             var value: string = this.interpretPattern(varName, pattern, variables, actualScopedObject, true, "");
             if (typeof value !== 'undefined' && value !== null && value.length > 0) {

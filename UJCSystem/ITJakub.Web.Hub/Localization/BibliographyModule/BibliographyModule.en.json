@@ -2,7 +2,7 @@
 	"culture":"en",
 	"scope":"BibliographyModule",
 	"dictionary": {
-		"NumberOfPages" : "Počet stran]",
+		"NumberOfPages" : "translate[Počet stran]",
 		"Century" : "translate[století]",
 		"EditionNote" : "translate[Ediční poznámka]",
 		"NotFilled" : "translate[Nezadáno]",
