@@ -16,7 +16,15 @@
     public translate(text: string, scope?: string, cultureName?: string): ILocalizedString {
         let dictionary = this.getDictionary(scope, cultureName);
 
-        return dictionary.translate(text);
+        var result = dictionary.translate(text);
+        if (result == null) {
+            console.log("Localized string with key=" + text + " was not found in dictionary=" + scope + " with culture=" + cultureName);
+            var localizedString: ILocalizedString = { name: text, value: "X{undefined}", resourceNotFound: true };
+
+            return localizedString;
+        } 
+
+        return result;
     }
 
     public translateFormat(text: string, parameters: string[], scope?: string, cultureName?: string): ILocalizedString {
@@ -133,7 +141,7 @@ class LocalizationDictionary {
 
     public translate(text: string): ILocalizedString {
         let result = this.mDictionary[text];
-        if (typeof result === "undefined") {
+        if (typeof result === "undefined") {           
             return null;
         }
 
