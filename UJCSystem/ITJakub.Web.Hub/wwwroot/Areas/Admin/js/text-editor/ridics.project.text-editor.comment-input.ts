@@ -26,8 +26,7 @@
         textId: number,
         textReferenceId: string,
         id: number,
-        parentCommentId: number,
-        dialogEl: JQuery) {
+        parentCommentId: number) {
         const serverAddress = this.util.getServerAddress();
         var commentTextArea = $("#commentInput");
         const commentText = commentTextArea.val() as string;
@@ -47,7 +46,6 @@
                 }
             );
             sendAjax.done(() => {
-                dialogEl.dialog("close");
                 this.gui.showMessageDialog("Success", "Successfully sent");
                 commentTextArea.val("");
                 this.commentArea.reloadCommentArea(textId);

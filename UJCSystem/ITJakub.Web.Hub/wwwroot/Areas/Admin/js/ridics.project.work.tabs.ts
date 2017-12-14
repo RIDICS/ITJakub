@@ -294,7 +294,7 @@
 
         $("#category-tree").find("input").prop("disabled", true);
 
-        $("#work-metadata-edit-button").click(() => { //TODO
+        $("#work-metadata-edit-button").click(() => {
             this.enabledEdit();
             this.publisherTypeahead.create((selectedExists, selectConfirmed) => {
                 if (selectedExists) {

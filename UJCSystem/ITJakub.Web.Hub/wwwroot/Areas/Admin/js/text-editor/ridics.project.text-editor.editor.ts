@@ -7,12 +7,33 @@
     private readonly util: EditorsUtil;
     private readonly gui: TextEditorGui;
     private readonly commentArea: CommentArea;
+    private commentInputDialog: BootstrapDialogWrapper;
 
     constructor(commentInput: CommentInput, util: EditorsUtil, gui: TextEditorGui, commentArea: CommentArea) {
         this.commentInput = commentInput;
         this.util = util;
         this.gui = gui;
         this.commentArea = commentArea;
+
+        this.commentInputDialog = new BootstrapDialogWrapper({
+            element: $("#comment-input-dialog"),
+            autoClearInputs: true,
+            submitCallback: this.onSendButtonClick.bind(this)
+        });
+    }
+
+    private showMessage(title: string, message: string) {
+        const titleEl = $("#status-dialog").find(".modal-title");
+        const bodyEl = $("#status-dialog").find(".modal-body");
+        titleEl.text(title);
+        bodyEl.text(message);
+        var statusDialog = new BootstrapDialogWrapper({
+            element: $("#status-dialog"),
+            autoClearInputs: true,
+            submitCallback: (() => { statusDialog = null; })
+        });
+        console.log(statusDialog);
+        statusDialog.show();
     }
 
     private userIsEnteringText = false;
@@ -27,27 +48,27 @@
 
     init() {
         this.processAreaSwitch();
+        const commentInputDialogCancelButton = $("#comment-input-dialog").find(`[data-dismiss="modal"]`);
+        commentInputDialogCancelButton.on("click", () => {
+            this.userIsEnteringText = !this.userIsEnteringText;
+            this.commentInput.toggleCommentSignsAndReturnCommentNumber(this.simplemde, false);
+        });
     }
 
+    private onSendButtonClick() {
+        const textId = this.getCurrentTextId();
+        const textReferenceId = (this.commentInput).toggleCommentSignsAndReturnCommentNumber(this.simplemde, true);
+        const id = 0; //creating comment
+        const parentComment = null; //creating comment
+        this.commentInput.processCommentSendClick(textId, textReferenceId, id, parentComment);
+        this.commentInputDialog.hide();
+    }
     private toggleCommentFromEditor = (editor: SimpleMDE, userIsEnteringText: boolean) => {
         if (userIsEnteringText) {
-            $(".preloading-pages-spinner").show();
-            const textId = this.getCurrentTextId();
-            const textReferenceId = (this.commentInput).toggleCommentSignsAndReturnCommentNumber(editor, true);
-                $(".preloading-pages-spinner").hide();
-                const id = 0; //creating comment
-                const parentComment = null; //creating comment
-                const dialog = this.gui.showCommentInputDialog(() => {
-                        this.commentInput.processCommentSendClick(textId, textReferenceId, id, parentComment, dialog);
-                    },
-                    () => {
-                        this.userIsEnteringText = !this.userIsEnteringText;
-                        this.commentInput.toggleCommentSignsAndReturnCommentNumber(editor, false);
-                    });
+            this.commentInputDialog.show();
         } else {
-            const commentInputDialogEl = $(".comment-input-dialog");
+            this.commentInputDialog.hide();
             (this.commentInput).toggleCommentSignsAndReturnCommentNumber(editor, false);
-            commentInputDialogEl.dialog("close");
         }
     }
 
@@ -164,14 +185,14 @@
         };
         const saveAjax = this.util.savePlainText(textId, request);
         saveAjax.done(() => {
-            this.gui.showMessageDialog("Success!", "Your changes have been successfully saved.");
+            this.showMessage("Success!", "Your changes have been successfully saved.");
             this.originalContent = contents;
         });
         saveAjax.fail(() => {
             if (saveAjax.status === 409) {
-                this.gui.showMessageDialog("Fail", "Failed to save your changes due to version conflict.");
+                this.showMessage("Fail", "Failed to save your changes due to version conflict.");
             } else {
-                this.gui.showMessageDialog("Fail", "There was an error while saving your changes.");
+                this.showMessage("Fail", "There was an error while saving your changes.");
             }
         });
     }
