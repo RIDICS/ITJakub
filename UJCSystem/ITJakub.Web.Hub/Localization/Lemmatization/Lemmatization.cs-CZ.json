@@ -118,8 +118,8 @@
 		"WordKindDetail/u" : "u - číslovka tázací násobná \"kolikrát\"",
 		"WordKindDetail/v" : "v - číslovka násobná (\"-krát\": \"pětkrát\", \"poprvé\"...)",
 		"WordKindDetail/w" : "w - číslovka neurčitá s adjektivním skloňováním (\"nejeden\", \"tolikátý\", \"několikátý\"...)",
-		"WordKindDetail/z" : "x - zkratka, neznámý nebo neurčený slovní druh",
-		"WordKindDetail/t" : "y - zlomek zakončený na \"-ina\" (značkováno jako číslovka)",
+		"WordKindDetail/x" : "x - zkratka, neznámý nebo neurčený slovní druh",
+		"WordKindDetail/y" : "y - zlomek zakončený na \"-ina\" (značkováno jako číslovka)",
 		"WordKindDetail/z" : "z - číslovka tázací řadová \"kolikátý\"",
 		"WordKindDetail/$" : "$ – slovesný tvar: supinum (tvar po slovesech pohybu, např. šel spat)",
 		
@@ -159,14 +159,14 @@
 		"PrivlastnovaciRod/X" : "X - libovolný rod (F/M/I/N)",
 		
 		"PrivlastnovaciCislo" : "Přivlastňovací číslo",
-		"PrivlastnovaciCislo/" : "S - singulár (jednotné číslo)",
-		"PrivlastnovaciCislo/" : "P - plurál (množné číslo)",
+		"PrivlastnovaciCislo/S" : "S - singulár (jednotné číslo)",
+		"PrivlastnovaciCislo/P" : "P - plurál (množné číslo)",
 		
 		"Osoba" : "Osoba",
 		"Osoba/1" : "1 - 1. osoba",
 		"Osoba/2" : "2 - 2. osoba",
 		"Osoba/3" : "3 - 3. osoba",
-		"Osoba/4" : "X – libovolná osoba (1/2/3)",
+		"Osoba/X" : "X – libovolná osoba (1/2/3)",
 		
 		"Cas" : "Čas",
 		"Cas/R" : "R - minulý čas",

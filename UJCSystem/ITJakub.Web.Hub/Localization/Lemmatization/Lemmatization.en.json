@@ -118,8 +118,8 @@
 		"WordKindDetail/u" : "translate[u - číslovka tázací násobná \"kolikrát\"]",
 		"WordKindDetail/v" : "translate[v - číslovka násobná (\"-krát\": \"pětkrát\", \"poprvé\"...)]",
 		"WordKindDetail/w" : "translate[w - číslovka neurčitá s adjektivním skloňováním (\"nejeden\", \"tolikátý\", \"několikátý\"...)]",
-		"WordKindDetail/z" : "translate[x - zkratka, neznámý nebo neurčený slovní druh]",
-		"WordKindDetail/t" : "translate[y - zlomek zakončený na \"-ina\" (značkováno jako číslovka)]",
+		"WordKindDetail/x" : "translate[x - zkratka, neznámý nebo neurčený slovní druh]",
+		"WordKindDetail/y" : "translate[y - zlomek zakončený na \"-ina\" (značkováno jako číslovka)]",
 		"WordKindDetail/z" : "translate[z - číslovka tázací řadová \"kolikátý\"]",
 		"WordKindDetail/$" : "translate[$ – slovesný tvar: supinum (tvar po slovesech pohybu, např. šel spat)]",
 		
@@ -159,14 +159,14 @@
 		"PrivlastnovaciRod/X" : "translate[X - libovolný rod (F/M/I/N)]",
 		
 		"PrivlastnovaciCislo" : "translate[Přivlastňovací číslo]",
-		"PrivlastnovaciCislo/" : "translate[S - singulár (jednotné číslo)]",
-		"PrivlastnovaciCislo/" : "translate[P - plurál (množné číslo)]",
+		"PrivlastnovaciCislo/S" : "translate[S - singulár (jednotné číslo)]",
+		"PrivlastnovaciCislo/P" : "translate[P - plurál (množné číslo)]",
 		
 		"Osoba" : "translate[Osoba]",
 		"Osoba/1" : "translate[1 - 1. osoba]",
 		"Osoba/2" : "translate[2 - 2. osoba]",
 		"Osoba/3" : "translate[3 - 3. osoba]",
-		"Osoba/4" : "translate[X – libovolná osoba (1/2/3)]",
+		"Osoba/X" : "translate[X – libovolná osoba (1/2/3)]",
 		
 		"Cas" : "translate[Čas]",
 		"Cas/R" : "translate[R - minulý čas]",
@@ -180,13 +180,13 @@
 		"Cas/Q" : "translate[Q – plusquamperfektum]",
 		
 		"Stupen" : "translate[Stupeň]",
-		"Stupen" : "translate[1 - 1. stupeň]",
-		"Stupen" : "translate[2 - 2. stupeň]",
-		"Stupen" : "translate[3 - 3. stupeň]",
+		"Stupen/1" : "translate[1 - 1. stupeň]",
+		"Stupen/2" : "translate[2 - 2. stupeň]",
+		"Stupen/3" : "translate[3 - 3. stupeň]",
 		
-		"Neagce" : "translate[Negace]",
-		"Neagce/A" : "translate[A - afirmativ (bez negativní předpony \"ne-\")]",
-		"Neagce/N" : "translate[N - negace (tvar s negativní předponou \"ne-\")]",
+		"Negace" : "translate[Negace]",
+		"Negace/A" : "translate[A - afirmativ (bez negativní předpony \"ne-\")]",
+		"Negace/N" : "translate[N - negace (tvar s negativní předponou \"ne-\")]",
 
 		"AktivumPasivum" : "translate[Aktivum/pasivum]",
 		"AktivumPasivum/A" : "translate[A - aktivum nebo 'nikoli pasivum']",
