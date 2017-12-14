@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using AutoMapper;
 using ITJakub.Web.DataEntities.Database.Entities.Enums;
 using ITJakub.Web.Hub.Core.Markdown;
 using ITJakub.Web.Hub.Models;
@@ -23,9 +22,8 @@ namespace ITJakub.Web.Hub.Core.Managers
         
         public StaticTextViewModel GetText(string name, string scope)
         {
-            var staticText = m_localizationService.GetDynamicText(name, scope);
+            DynamicText staticText = m_localizationService.GetDynamicText(name, scope);           
 
-            //var staticText = new GetStaticTextWork(m_staticTextRepository, name).Execute();
             if (staticText == null)
             {
                 return new StaticTextViewModel
@@ -37,14 +35,25 @@ namespace ITJakub.Web.Hub.Core.Managers
 
             StaticTextViewModel staticTextViewModel = new StaticTextViewModel()
             {
-                Format = (StaticTextFormatType)staticText.Format,
-                IsRecordExists = true,
-                LastModificationAuthor = staticText.ModificationUser,
-                LastModificationTime = staticText.ModificationTime,
+                Format = (StaticTextFormatType) staticText.Format,
                 Name = staticText.Name,
-                Text = staticText.Text,
                 Scope = staticText.DictionaryScope
             };
+
+            if (staticText.FallBack)
+            {
+                staticTextViewModel.IsRecordExists = false;
+                staticTextViewModel.LastModificationTime = new DateTime();
+                staticTextViewModel.Text = string.Empty;
+                staticTextViewModel.LastModificationAuthor = string.Empty;
+            }
+            else
+            {
+                staticTextViewModel.IsRecordExists = true;
+                staticTextViewModel.LastModificationAuthor = staticText.ModificationUser;
+                staticTextViewModel.LastModificationTime = staticText.ModificationTime;
+                staticTextViewModel.Text = staticText.Text;
+            }
 
             return staticTextViewModel;
         }
@@ -52,9 +61,7 @@ namespace ITJakub.Web.Hub.Core.Managers
         //TODO #Localization
         public StaticTextViewModel GetRenderedHtmlText(string name, string scope)
         {
-            var staticText = m_localizationService.GetDynamicText(name, scope);
-
-            //var staticTextEntity = new GetStaticTextWork(m_staticTextRepository, name).Execute();
+            DynamicText staticText = m_localizationService.GetDynamicText(name, scope);
             if (staticText == null)
             {
                 return new StaticTextViewModel

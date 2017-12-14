@@ -1,7 +1,7 @@
 ﻿/// <reference path="Plugins/Bibliography/itjakub.plugins.bibliography.ts"/>
 /// <reference path="Plugins/DropdownSelect/itjakub.plugins.dropdownselect.ts"/>
 
-var localization;
+var localization: Localization;
 
 //sets state to main plugins menu
 $(document).ready(() => {
