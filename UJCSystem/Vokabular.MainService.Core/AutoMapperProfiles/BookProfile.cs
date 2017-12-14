@@ -29,7 +29,7 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.BiblText, opt => opt.MapFrom(src => src.BiblText))
                 .ForMember(dest => dest.Copyright, opt => opt.MapFrom(src => src.Copyright))
                 .ForMember(dest => dest.CreateTime, opt => opt.MapFrom(src => src.CreateTime))
-                .ForMember(dest => dest.CreateTimeString, opt => opt.MapFrom(src => src.CreateTime.ToString(CultureInfo.InvariantCulture)))
+                .ForMember(dest => dest.CreateTimeString, opt => opt.MapFrom(src => src.CreateTime.ToString(CultureInfo.GetCultureInfo("cs")))) // Czech is the main language
                 .ForMember(dest => dest.ManuscriptCountry, opt => opt.MapFrom(src => src.ManuscriptCountry))
                 .ForMember(dest => dest.ManuscriptTitle, opt => opt.MapFrom(src => src.ManuscriptTitle))
                 .ForMember(dest => dest.ManuscriptExtent, opt => opt.MapFrom(src => src.ManuscriptExtent))

@@ -53,6 +53,8 @@ namespace Vokabular.DataEntities.Database.Repositories
                 session.QueryOver<Project>()
                     .Where(x => x.Id == projectId)
                     .Fetch(x => x.ResponsiblePersons).Eager
+                    .Fetch(x => x.ResponsiblePersons[0].ResponsiblePerson).Eager
+                    .Fetch(x => x.ResponsiblePersons[0].ResponsibleType).Eager
                     .FutureValue();
             }
             if (includeKind)
