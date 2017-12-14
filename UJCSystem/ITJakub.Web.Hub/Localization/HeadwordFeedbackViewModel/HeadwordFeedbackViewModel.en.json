@@ -2,7 +2,14 @@
   "culture": "en",
   "scope": "HeadwordFeedbackViewModel",
   "dictionary": {
+    "Name:": "translate[Jméno: ]",
+    "NameNotFilled": "translate[{0} uživatele nebylo vyplněno.]",
+    "NameNotFilled1": "translate[{0} uživatele nebyl vyplněn.]",
+    "Email:": "translate[Email: ]",
+    "EmailWrongFormatError": "translate[Nesprávný formát zadaného e-mailu.]",
+    "Text": "translate[Text]",
+    "FeedbackNotFilled": "translate[{0} připomínky nebyl vyplněn.]",
     "Headword": "translate[Heslo: ]",
-	"Dictionary": "translate[Slovník: ]"	
+    "Dictionary": "translate[Slovník: ]"
   }
 }
