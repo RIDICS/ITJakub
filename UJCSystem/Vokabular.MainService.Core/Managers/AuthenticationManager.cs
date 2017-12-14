@@ -1,5 +1,7 @@
-﻿using Vokabular.DataEntities.Database.Entities;
+﻿using AutoMapper;
+using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.Core.Works.Users;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -52,6 +54,11 @@ namespace Vokabular.MainService.Core.Managers
                 CommunicationToken = work.CommunicationToken
             };
         }
+
+        public void SignOut(string authorizationToken)
+        {
+            new SignOutWork(m_userRepository, authorizationToken).Execute();
+        }
     }
 
     public class UserManager
@@ -71,6 +78,25 @@ namespace Vokabular.MainService.Core.Managers
 
             var userId = new CreateNewUserWork(m_userRepository, m_communicationTokenGenerator, data).Execute();
             return userId;
+        }
+
+        public UserDetailContract GetUserByToken(string authorizationToken)
+        {
+            var dbUser = m_userRepository.InvokeUnitOfWork(x => x.GetUserByToken(authorizationToken));
+            var result = Mapper.Map<UserDetailContract>(dbUser);
+            return result;
+        }
+
+        public void UpdateUser(string authorizationToken, UpdateUserContract data)
+        {
+            // TODO add data validation
+            throw new System.NotImplementedException();
+        }
+
+        public void UpdateUserPassword(string authorizationToken, UpdateUserPasswordContract data)
+        {
+            // TODO add data validation
+            throw new System.NotImplementedException();
         }
     }
 }

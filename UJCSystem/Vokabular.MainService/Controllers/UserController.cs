@@ -39,21 +39,38 @@ namespace Vokabular.MainService.Controllers
         public UserDetailContract GetCurrentUser(
             [FromHeader(Name = CustomHttpHeaders.Authorization)] string authorizationToken)
         {
-            throw new NotImplementedException();
+            var result = m_userManager.GetUserByToken(authorizationToken);
+            return result;
         }
 
         [HttpPut("current")]
-        public void UpdateUser([FromBody] UpdateUserContract data,
+        public IActionResult UpdateUser([FromBody] UpdateUserContract data,
             [FromHeader(Name = CustomHttpHeaders.Authorization)] string authorizationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                m_userManager.UpdateUser(authorizationToken, data);
+                return Ok();
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Message);
+            }
         }
 
         [HttpPut("current/password")]
-        public void UpdatePassword([FromBody] UpdateUserPasswordContract data,
+        public IActionResult UpdatePassword([FromBody] UpdateUserPasswordContract data,
             [FromHeader(Name = CustomHttpHeaders.Authorization)] string authorizationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                m_userManager.UpdateUserPassword(authorizationToken, data);
+                return Ok();
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Message);
+            }
         }
 
         [HttpGet("")]
@@ -91,9 +108,17 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpDelete("")]
-        public void SignOut([FromHeader(Name = CustomHttpHeaders.Authorization)] string authorizationToken)
+        public IActionResult SignOut([FromHeader(Name = CustomHttpHeaders.Authorization)] string authorizationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                m_authenticationManager.SignOut(authorizationToken);
+                return Ok();
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Message);
+            }
         }
     }
 }

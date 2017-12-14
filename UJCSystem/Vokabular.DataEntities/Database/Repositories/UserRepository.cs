@@ -16,5 +16,12 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => x.UserName == username)
                 .SingleOrDefault();
         }
+
+        public User GetUserByToken(string authorizationToken)
+        {
+            return GetSession().QueryOver<User>()
+                .Where(x => x.CommunicationToken == authorizationToken)
+                .SingleOrDefault();
+        }
     }
 }
