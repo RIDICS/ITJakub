@@ -1,0 +1,24 @@
+{
+	"culture":"en",
+	"scope":"BibliographyModule",
+	"dictionary": {
+		"NumberOfPages" : "Počet stran]",
+		"Century" : "translate[století]",
+		"EditionNote" : "translate[Ediční poznámka]",
+		"NotFilled" : "translate[Nezadáno]",
+		"Pattern" : "translate[Předloha]",
+		"RelicAbbrevitation" : "translate[Zkratka památky]",
+		"SourceAbbrevitation" : "translate[Zkratka pramene]",
+		"LiteraryType" : "translate[Literární druh]",
+		"LiteraryGenre" : "translate[Literární žánr]",
+		"EditionLastModification" : "translate[Poslední úprava edice]",
+		"LinkedDictionary" : "translate[zapojený slovník]",
+		"UnlinkedDictionary" : "translate[nezapojený slovník]",
+		"Copyright" : "translate[Copyright]",
+		"Editor" : "translate[Editor]",
+		"DownloadFullAudioBook" : "translate[Stáhnout celou audioknihu]",
+		"BrowserDoesNotSupportHtmlAudio" : "translate[Váš prohlížeč nepodporuje html audio]",
+		"Length" : "translate[Délka]",
+		"DownloadChapter" : "translate[Stáhnout kapitolu]"
+		}
+}
