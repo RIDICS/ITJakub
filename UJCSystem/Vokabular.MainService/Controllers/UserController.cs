@@ -44,7 +44,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPut("current")]
-        public IActionResult UpdateUser([FromBody] UpdateUserContract data,
+        public IActionResult UpdateCurrentUser([FromBody] UpdateUserContract data,
             [FromHeader(Name = CustomHttpHeaders.Authorization)] string authorizationToken)
         {
             try
@@ -59,7 +59,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPut("current/password")]
-        public IActionResult UpdatePassword([FromBody] UpdateUserPasswordContract data,
+        public IActionResult UpdateCurrentPassword([FromBody] UpdateUserPasswordContract data,
             [FromHeader(Name = CustomHttpHeaders.Authorization)] string authorizationToken)
         {
             try

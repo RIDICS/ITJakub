@@ -90,13 +90,15 @@ namespace Vokabular.MainService.Core.Managers
         public void UpdateUser(string authorizationToken, UpdateUserContract data)
         {
             // TODO add data validation
-            throw new System.NotImplementedException();
+
+            new UpdateUserWork(m_userRepository, authorizationToken, data).Execute();
         }
 
         public void UpdateUserPassword(string authorizationToken, UpdateUserPasswordContract data)
         {
             // TODO add data validation
-            throw new System.NotImplementedException();
+
+            new UpdateUserPasswordWork(m_userRepository, authorizationToken, data).Execute();
         }
     }
 }

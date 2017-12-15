@@ -36,6 +36,8 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
         }
 
+        #region Project
+
         public PagedResultList<ProjectDetailContract> GetProjectList(int start, int count, bool fetchPageCount = false)
         {
             try
@@ -136,6 +138,10 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        #endregion
+
+        #region Configure project relationships
+
         public void SetProjectLiteraryKinds(long projectId, IntegerIdListContract request)
         {
             try
@@ -210,6 +216,9 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+
+        #endregion
+
 
         public void UploadResource(string sessionId, Stream data, string fileName)
         {
@@ -1047,6 +1056,8 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        #region Searching
+
         public List<SearchResultContract> SearchBook(SearchRequestContract request)
         {
             try
@@ -1190,6 +1201,8 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+
+        #endregion
 
         public BookContract GetBookInfo(long projectId)
         {
@@ -2049,6 +2062,109 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 Delete($"feedback/{feedbackId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region Authentication and users
+
+        public int CreateNewUser(CreateUserContract data)
+        {
+            try
+            {
+                EnsureSecuredClient();
+                var result = Post<int>("user", data);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public UserDetailContract GetCurrentUserInfo()
+        {
+            try
+            {
+                EnsureSecuredClient();
+                var result = Get<UserDetailContract>("user/current");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void UpdateCurrentUser(UpdateUserContract data)
+        {
+            try
+            {
+                EnsureSecuredClient();
+                Put<object>("user/current", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void UpdateCurrentPassword(UpdateUserPasswordContract data)
+        {
+            try
+            {
+                EnsureSecuredClient();
+                Put<object>("user/current/password", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public SignInResultContract SignIn(SignInContract data)
+        {
+            try
+            {
+                EnsureSecuredClient();
+                var result = Post<SignInResultContract>("authtoken", data);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void SignOut()
+        {
+            try
+            {
+                EnsureSecuredClient();
+                Delete("authtoken");
             }
             catch (HttpRequestException e)
             {

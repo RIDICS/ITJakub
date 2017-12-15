@@ -337,6 +337,14 @@ namespace Vokabular.RestClient
             });
         }
 
+        protected void EnsureSecuredClient()
+        {
+            if (m_client.BaseAddress.Scheme != "https")
+            {
+                throw new InvalidOperationException($"The client is not configured to use secured channel (HTTPS), current scheme is {m_client.BaseAddress.Scheme}");
+            }
+        }
+
         private void EnsureSuccessStatusCode(HttpResponseMessage response)
         {
             if (!response.IsSuccessStatusCode)
