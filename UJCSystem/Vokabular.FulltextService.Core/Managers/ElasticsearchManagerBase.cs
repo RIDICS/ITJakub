@@ -1,5 +1,4 @@
-﻿using Nest;
-using Vokabular.FulltextService.Core.Communication;
+﻿using Vokabular.FulltextService.Core.Communication;
 
 namespace Vokabular.FulltextService.Core.Managers
 {
