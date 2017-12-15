@@ -1,23 +1,22 @@
 ﻿using System.Threading.Tasks;
 using ITJakub.Web.Hub.Core.Communication;
-using ITJakub.Web.Hub.Core.Identity;
+using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.DataContracts.Contracts;
 
 namespace ITJakub.Web.Hub.Controllers
 {
     [Authorize]
     public class AccountController : BaseController
     {
-        private readonly ApplicationUserManager m_userManager;
-        private readonly SignInManager<ApplicationUser> m_signInManager;
+        private readonly AuthenticationManager m_authenticationManager;
 
-        public AccountController(CommunicationProvider communicationProvider, ApplicationUserManager userManager, SignInManager<ApplicationUser> signInManager) : base(communicationProvider)
+        public AccountController(CommunicationProvider communicationProvider, AuthenticationManager authenticationManager) : base(communicationProvider)
         {
-            m_userManager = userManager;
-            m_signInManager = signInManager;
+            m_authenticationManager = authenticationManager;
         }
 
         //
@@ -44,18 +43,22 @@ namespace ITJakub.Web.Hub.Controllers
                 return View(model);
             }
 
-            var result =
-                await m_signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
+            //var result =
+            //    await m_signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
+            await m_authenticationManager.SignInAsync(model);
+            // TODO handling errors
 
-            if (result.Succeeded)
-            {
-                return RedirectToLocal(returnUrl);
-            }
-            else
-            {
-                ModelState.AddModelError("", "Přihlášení se nezdařilo.");
-                return View(model);
-            }
+            return RedirectToLocal(returnUrl);
+
+            //if (result.Succeeded)
+            //{
+            //    return RedirectToLocal(returnUrl);
+            //}
+            //else
+            //{
+            //    ModelState.AddModelError("", "Přihlášení se nezdařilo.");
+            //    return View(model);
+            //}
         }
 
         //
@@ -75,22 +78,36 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            // TODO add data validation
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser
+                var user = new CreateUserContract
                 {
                     UserName = model.UserName,
                     Email = model.Email,
                     FirstName = model.FirstName,
-                    LastName = model.LastName
+                    LastName = model.LastName,
+                    NewPassword = model.Password,
                 };
-                var result = await m_userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+
+                using (var client = GetRestClient())
                 {
-                    await m_signInManager.SignInAsync(user, false);
-                    return RedirectToLocal("");
+                    client.CreateNewUser(user);
                 }
-                AddErrors(result);
+
+                await m_authenticationManager.SignInAsync(new LoginViewModel
+                {
+                    UserName = model.UserName,
+                    Password = model.Password,
+                });
+
+                //var result = await m_userManager.CreateAsync(user, model.Password);
+                //if (result.Succeeded)
+                //{
+                //    await m_signInManager.SignInAsync(user, false);
+                //    return RedirectToLocal("");
+                //}
+                //AddErrors(result);
             }
 
             // If we got this far, something failed, redisplay form
@@ -103,14 +120,15 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> LogOut()
         {
-
-            using (var client = GetEncryptedClient())
-            {
-                client.RenewCommToken(User.Identity.Name);
-            }
-
-            await m_signInManager.SignOutAsync();
+            await m_authenticationManager.SignOutAsync();
+            
             return RedirectToLocal("");
+        }
+
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
 
         private void AddErrors(IdentityResult result)

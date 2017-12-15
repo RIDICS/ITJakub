@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using ITJakub.Web.Hub.AppStart;
 using ITJakub.Web.Hub.AppStart.Containers;
 using ITJakub.Web.Hub.AppStart.Extensions;
 using ITJakub.Web.Hub.AppStart.Middleware;
 using Log4net.Extensions.Logging;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -57,9 +58,6 @@ namespace ITJakub.Web.Hub
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            // Authorization
-            services.AddCustomAuthServices();
-            
             // Configuration options
             services.AddOptions();
             services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
@@ -70,6 +68,8 @@ namespace ITJakub.Web.Hub
             });
 
             services.AddMvc();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // IoC
             IIocContainer container = new DryIocContainer();
@@ -100,7 +100,17 @@ namespace ITJakub.Web.Hub
 
             app.UseStatusCodePages();
 
-            app.ConfigureAuth();
+            //app.ConfigureAuth(); // Old authentication configuration
+            app.UseCookieAuthentication(new CookieAuthenticationOptions //TODO move to specific class?
+            {
+                AccessDeniedPath = "/Account/AccessDenied/",
+                AuthenticationScheme = CookieAuthenticationDefaults.AuthenticationScheme,
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
+                LoginPath = "/Account/Login",
+                //Events = new CookieAuthenticationEvents{} // TODO maybe useful events
+                //CookiePath = "" // TODO maybe useful for Development deployment
+            });
 
             app.ConfigureAutoMapper();
 
