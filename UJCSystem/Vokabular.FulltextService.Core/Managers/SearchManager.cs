@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using Nest;
 using Vokabular.FulltextService.Core.Communication;
 using Vokabular.FulltextService.Core.Helpers;
 using Vokabular.FulltextService.DataContracts.Contracts;
-using Vokabular.MainService.Core.Managers.Fulltext.Data;
 using Vokabular.Shared.DataContracts;
 using Vokabular.Shared.DataContracts.Search;
-using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Search.ResultContracts;
@@ -22,26 +18,26 @@ namespace Vokabular.FulltextService.Core.Managers
     public class SearchManager : ElasticsearchManagerBase
     {
         private const int FragmentSize = 50;
-        private const int FragmentNumber = 1000000;
+        private const int FragmentsCount = 1000000;
         private const int DefaultStart = 0;
         private const int DefaultSize = 10000;
         private const string HighlightTag = "$";
-        private const string ReservedChars = ".?+*|{}[]()\"\\#@&<>~";
-        private const string RegexpQueryFlags = "ALL";
+        
         private const string HighlighterType = "experimental";
 
-
+        private readonly QueriesBuilder m_queriesBuilder;
         private readonly SearchResultProcessor m_searchResultProcessor;
 
-        public SearchManager(CommunicationProvider communicationProvider, SearchResultProcessor searchResultProcessor) : base(communicationProvider)
+        public SearchManager(CommunicationProvider communicationProvider, SearchResultProcessor searchResultProcessor, QueriesBuilder queriesBuilder) : base(communicationProvider)
         {
             m_searchResultProcessor = searchResultProcessor;
+            m_queriesBuilder = queriesBuilder;
         }
         
         public FulltextSearchResultContract SearchByCriteriaCount(SearchRequestContractBase searchRequest)
         {
-            var filterQuery = GetFilterSearchQueryFromRequest(searchRequest);
-            var mustQuery = GetSearchQueryFromRequest(searchRequest);
+            var filterQuery = m_queriesBuilder.GetFilterSearchQueryFromRequest(searchRequest, SnapshotIdField);
+            var mustQuery = m_queriesBuilder.GetSearchQueryFromRequest(searchRequest, SnapshotTextField);
 
             var client = CommunicationProvider.GetElasticClient();
 
@@ -61,8 +57,9 @@ namespace Vokabular.FulltextService.Core.Managers
 
         public FulltextSearchResultContract SearchByCriteria(SearchRequestContractBase searchRequest)
         {
-            var filterQuery = GetFilterSearchQueryFromRequest(searchRequest);
-            var mustQuery = GetSearchQueryFromRequest(searchRequest);
+            var filterQuery = m_queriesBuilder.GetFilterSearchQueryFromRequest(searchRequest, SnapshotIdField);
+            var mustQuery = m_queriesBuilder.GetSearchQueryFromRequest(searchRequest, SnapshotTextField);
+
 
             var client = CommunicationProvider.GetElasticClient();
 
@@ -91,8 +88,9 @@ namespace Vokabular.FulltextService.Core.Managers
 
         public FulltextSearchCorpusResultContract SearchCorpusByCriteriaCount(SearchRequestContractBase searchRequest)
         {
-            var filterQuery = GetFilterSearchQueryFromRequest(searchRequest);
-            var mustQuery = GetSearchQueryFromRequest(searchRequest);
+            var filterQuery = m_queriesBuilder.GetFilterSearchQueryFromRequest(searchRequest, SnapshotIdField);
+            var mustQuery = m_queriesBuilder.GetSearchQueryFromRequest(searchRequest, SnapshotTextField);
+
 
             var client = CommunicationProvider.GetElasticClient();
 
@@ -125,7 +123,7 @@ namespace Vokabular.FulltextService.Core.Managers
                     .PostTags(HighlightTag)
                     .Fields(f => f
                         .Field(SnapshotTextField)
-                        .NumberOfFragments(FragmentNumber)
+                        .NumberOfFragments(FragmentsCount)
                         .FragmentSize(FragmentSize)
                         .Type(HighlighterType)
                     )
@@ -137,8 +135,8 @@ namespace Vokabular.FulltextService.Core.Managers
 
         public CorpusSearchResultDataList SearchCorpusByCriteria(CorpusSearchRequestContract searchRequest)
         {
-            var filterQuery = GetFilterSearchQueryFromRequest(searchRequest);
-            var mustQuery = GetSearchQueryFromRequest(searchRequest);
+            var filterQuery = m_queriesBuilder.GetFilterSearchQueryFromRequest(searchRequest, SnapshotIdField);
+            var mustQuery = m_queriesBuilder.GetSearchQueryFromRequest(searchRequest, SnapshotTextField);
 
             var client = CommunicationProvider.GetElasticClient();
             /*
@@ -173,14 +171,14 @@ namespace Vokabular.FulltextService.Core.Managers
                         .Must(mustQuery)
                     )
                 )
-                .From(index.HasValue ? index.Value : DefaultStart)
+                .From(index ?? DefaultStart)
                 .Size(1)
                 .Highlight(h => h
                     .PreTags(HighlightTag)
                     .PostTags(HighlightTag)
                     .Fields(f => f
                         .Field(SnapshotTextField)
-                        .NumberOfFragments(FragmentNumber)
+                        .NumberOfFragments(FragmentsCount)
                         .FragmentSize(FragmentSize)
                         .Type(HighlighterType)
                     )
@@ -231,124 +229,8 @@ namespace Vokabular.FulltextService.Core.Managers
             return null;*/
         }
 
-        private QueryContainer GetFilterSearchQueryFromRequest(SearchRequestContractBase searchRequest)
-        {
-            var snapshotRestrictions = new List<SnapshotResultRestrictionCriteriaContract>();
-            foreach (var conjunction in searchRequest.ConditionConjunction)
-            {
-                if (conjunction.Key == CriteriaKey.SnapshotResultRestriction)
-                {
-                    snapshotRestrictions.Add(conjunction as SnapshotResultRestrictionCriteriaContract);
-                }
-            }
-            return GetSnapshotIdFilterQuery(snapshotRestrictions);
-        }
-
-        private QueryContainer GetSearchQueryFromRequest(SearchRequestContractBase searchRequest)
-        {
-            StringBuilder regexBuilder = new StringBuilder();
-
-            foreach (var conjunction in searchRequest.ConditionConjunction)
-            {
-                if (conjunction.Key == CriteriaKey.Fulltext)
-                {
-                    var regex = GetRegexFromWordList(conjunction as WordListCriteriaContract);
-
-                    regexBuilder.Append("(");
-                    regexBuilder.Append(regex);
-                    regexBuilder.Append(")&");
-                }
-            }
-
-            regexBuilder.Length--;
-            return new RegexpQuery
-            {
-                Field = SnapshotTextField,
-                Value = regexBuilder.ToString(),
-                Flags = RegexpQueryFlags
-            };
-        }
-
-        private string GetRegexFromWordList(WordListCriteriaContract wordListCriteriaContract)
-        {
-            if (wordListCriteriaContract == null)
-            {
-                return null;
-            }
-
-            StringBuilder regexBuilder = new StringBuilder();
-
-            foreach (var disjunction in wordListCriteriaContract.Disjunctions)
-            {
-                regexBuilder.Append("(");
-                regexBuilder.Append(GetRegexFromDisjunction(disjunction));
-                regexBuilder.Append(")|");
-            }
-
-            regexBuilder.Length--;
-            return regexBuilder.ToString();
-        }
         
-        private QueryContainer GetSnapshotIdFilterQuery(List<SnapshotResultRestrictionCriteriaContract> snapshotRestrictions)
-        {
-            var idList = new List<object>();
-            foreach (var restriction in snapshotRestrictions)
-            {
-                if (restriction != null && restriction.SnapshotIds != null)
-                {
-                    idList.AddRange(restriction.SnapshotIds.Select(id => (object) id)); //HACK long to object
-                }
-            }
-            return new QueryContainer(new TermsQuery
-            {
-                Field = SnapshotIdField,
-                Terms = idList,
-            });
-        }
-
-        private string GetRegexFromDisjunction(WordCriteriaContract disjunction)
-        {
-            if (!string.IsNullOrWhiteSpace(disjunction.ExactMatch))
-                return EscapeChars(disjunction.ExactMatch);
-
-            var regexBuilder = new StringBuilder();
-
-            if (!string.IsNullOrWhiteSpace(disjunction.StartsWith))
-            {
-                regexBuilder.Append(disjunction.StartsWith.ToLower());
-            }
-
-            regexBuilder.Append(".*");
-
-            foreach (var contain in disjunction.Contains)
-            {
-                if (!string.IsNullOrWhiteSpace(contain))
-                {
-                    var escapedText = EscapeChars(contain.ToLower());
-                    regexBuilder.Append(escapedText);
-                    regexBuilder.Append(".*");
-                }
-            }
-
-            if (!string.IsNullOrWhiteSpace(disjunction.EndsWith))
-            {
-                regexBuilder.Append(disjunction.EndsWith.ToLower());
-            }
-
-            return regexBuilder.ToString();
-        }
-
-        private string EscapeChars(string text)
-        {
-            return text; //TODO 
-            foreach (var reservedChar in ReservedChars)
-            {
-                text = text.Replace(reservedChar.ToString(), $"\\{reservedChar}");
-            }
-
-            return text;
-        }
-
+        
         
     }
 }

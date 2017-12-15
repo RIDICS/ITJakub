@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Vokabular.FulltextService.Core.Managers;
 using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.Shared;
+using Vokabular.Shared.DataContracts.Search;
 
 namespace Vokabular.FulltextService.Controllers
 {
@@ -15,62 +16,58 @@ namespace Vokabular.FulltextService.Controllers
         private static readonly ILogger Logger = ApplicationLogging.CreateLogger<TextController>();
 
         private readonly SnapshotResourceManager m_snapshotResourceManager;
-        private readonly TextResourceManager m_textResourceManager;
+        
+        private readonly SearchManager m_searchManager;
 
-        public SnapshotController(SnapshotResourceManager snapshotResourceManager, TextResourceManager textResourceManager)
+        public SnapshotController(SnapshotResourceManager snapshotResourceManager, TextResourceManager textResourceManager, SearchManager searchManager)
         {
             m_snapshotResourceManager = snapshotResourceManager;
-            m_textResourceManager = textResourceManager;
+            m_searchManager = searchManager;
         }
 
         [HttpPost]
         public ResultContract CreateSnapshot([FromBody] SnapshotPageIdsResourceContract snapshotPageIdsResourceContract)
         {
-            StringBuilder snapshotBuilder = new StringBuilder();
-            StringBuilder pageBuilder = new StringBuilder();
-
-            var pages = new List<SnapshotPageResourceContract>();
-            int indexInSnapshot = 0;
-
-            foreach (var pageId in snapshotPageIdsResourceContract.PageIds)
-            {
-                var textResource = m_textResourceManager.GetTextResource(pageId);
-
-                var pageText = textResource.PageText;
-                pageBuilder.Append($"<{indexInSnapshot}>");
-
-                var page = new SnapshotPageResourceContract {Id = pageId, indexFrom = indexInSnapshot};
-
-                int indexInPage = 0;
-                while (indexInPage < pageText.Length - 20)
-                {
-                    var indexOf = pageText.IndexOf(" ", indexInPage + 20, StringComparison.Ordinal);
-                    if (indexOf == -1)
-                    {
-                        break;
-                    }
-                    pageBuilder.Append(pageText.Substring(indexInPage, indexOf - indexInPage));
-                    indexInPage = indexOf;
-                    pageBuilder.Append($"<{indexInSnapshot + indexInPage}>");
-                }
-
-                int size = pageText.Length - indexInPage - 1;
-                if (size > 0)
-                {
-                    pageBuilder.Append(pageText.Substring(indexInPage, size));
-                    indexInPage += size;
-                }
-                indexInSnapshot += indexInPage;
-                pageBuilder.Append($"<{indexInSnapshot}>");
-                page.indexTo = indexInSnapshot++;
-                pages.Add(page);
-                snapshotBuilder.Append(pageBuilder);
-                pageBuilder.Clear();
-            }
-            var snapShotResource = new SnapshotResourceContract{SnapshotId = snapshotPageIdsResourceContract.SnapshotId, ProjectId = snapshotPageIdsResourceContract.ProjectId, SnapshotText = snapshotBuilder.ToString(), Pages = pages};
-            var result = m_snapshotResourceManager.CreateSnapshotResource(snapShotResource);
+            var result = m_snapshotResourceManager.CreateSnapshotResource(snapshotPageIdsResourceContract);
             return result;
+            
+        }
 
+        /// <summary>
+        /// Search books
+        /// </summary>
+        /// <remarks>
+        /// Search book. Supported search criteria (key property - data type):
+        /// - SnapshotResultRestriction - SnapshotResultRestrictionCriteriaContract
+        /// - Fulltext - WordListCriteriaContract
+        /// - Heading - WordListCriteriaContract
+        /// - Sentence - WordListCriteriaContract
+        /// - Headword - WordListCriteriaContract
+        /// - HeadwordDescription - WordListCriteriaContract
+        /// - TokenDistance - TokenDistanceListCriteriaContract
+        /// - HeadwordDescriptionTokenDistance - TokenDistanceListCriteriaContract
+        /// </remarks>
+        /// <param name="searchRequest">
+        /// Request contains list of search criteria with different data types described in method description
+        /// </param>
+        /// <returns></returns>
+        [HttpPost("search")]
+        public FulltextSearchResultContract SearchByCriteria([FromBody] SearchRequestContractBase searchRequest)
+        {
+            var result = m_searchManager.SearchByCriteria(searchRequest);
+            return result;
+        }
+
+        /// <summary>
+        /// Search books, return count
+        /// </summary>
+        /// <param name="searchRequest"></param>
+        /// <returns></returns>
+        [HttpPost("search-count")]
+        public FulltextSearchResultContract SearchByCriteriaCount([FromBody] SearchRequestContractBase searchRequest)
+        {
+            var result = m_searchManager.SearchByCriteriaCount(searchRequest);
+            return result;
         }
     }
 }

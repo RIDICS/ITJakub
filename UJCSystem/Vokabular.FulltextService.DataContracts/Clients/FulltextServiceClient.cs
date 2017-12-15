@@ -90,7 +90,7 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             var searchRequest = new SearchRequestContractBase { Start = start, Count = count, ConditionConjunction = searchCriterias};
             try
             {
-                var result = Post<FulltextSearchResultContract>($"search/snapshot", searchRequest);
+                var result = Post<FulltextSearchResultContract>($"snapshot/search", searchRequest);
                 return result;
 
             }
@@ -108,7 +108,7 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             var searchRequest = new SearchRequestContractBase {ConditionConjunction = searchCriterias};
             try
             {
-                var result = Post<FulltextSearchResultContract>($"search/snapshot/count", searchRequest);
+                var result = Post<FulltextSearchResultContract>($"snapshot/search-count", searchRequest);
                 return result;
 
             }
@@ -138,12 +138,12 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             }
         }
 
-        public FulltextSearchCorpusResultContract SearchCorpusByCriteriaCount(List<SearchCriteriaContract> searchCriterias)
+        public long SearchCorpusByCriteriaCount(List<SearchCriteriaContract> searchCriterias)
         {
             var searchRequest = new SearchRequestContractBase { ConditionConjunction = searchCriterias };
             try
             {
-                var result = Post<FulltextSearchCorpusResultContract>($"search/snapshot/corpus/count", searchRequest);
+                var result = Post<long>($"corpus/search-count", searchRequest);
                 return result;
 
             }
@@ -161,7 +161,7 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             var searchRequest = new CorpusSearchRequestContract { Start = start, Count = count, ContextLength = contextLength, ConditionConjunction = searchCriterias };
             try
             {
-                var result = Post<CorpusSearchResultDataList>($"search/snapshot/corpus/", searchRequest);
+                var result = Post<CorpusSearchResultDataList>($"corpus/search", searchRequest);
                 return result;
 
             }

@@ -97,7 +97,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient())
             {
                 var result = fulltextServiceClient.SearchCorpusByCriteriaCount(criteria);
-                return result.Count;
+                return result;
             }
         }
 

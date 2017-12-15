@@ -34,6 +34,7 @@ namespace Vokabular.FulltextService.Core.Helpers
             return new FulltextSearchResultContract{ ProjectIds = response.Documents.Select(d => d.ProjectId).ToList() };
         }
 
+        //TODO Obsolete method
         public FulltextSearchCorpusResultContract ProcessSearchCorpusByCriteriaCount(ISearchResponse<SnapshotResourceContract> response, string highlightTag)
         {
             if (!response.IsValid)
@@ -62,6 +63,7 @@ namespace Vokabular.FulltextService.Core.Helpers
             return highlightedText.Split(new[] { highlightTag }, StringSplitOptions.None).Length / 2;
         }
 
+        //TODO Obsolete method
         public CorpusSearchResultDataList ProcessSearchCorpusByCriteria(ISearchResponse<SnapshotResourceContract> response, string highlightTag, int start, int count)
         {
             if (!response.IsValid)
@@ -119,8 +121,6 @@ namespace Vokabular.FulltextService.Core.Helpers
                 throw new Exception(response.DebugInformation);
             }
 
-            var startCounter = 0;
-
             var result = new CorpusSearchResultDataList
             {
                 List = new List<CorpusSearchResultData>(),
@@ -139,7 +139,7 @@ namespace Vokabular.FulltextService.Core.Helpers
                     }
                 }
             }
-            result.List = result.List.Count > 100 ? result.List.GetRange(0, 100) : result.List; //TODO 
+            result.List = result.List.Count > 100 ? result.List.GetRange(0, 100) : result.List; //TODO temporary returns only first 100 results
             return result;
         }
 
@@ -158,19 +158,27 @@ namespace Vokabular.FulltextService.Core.Helpers
                 }
                 var pageId = GetPageIdFromIndex(Int32.Parse(snapshotIndex), sourcePages);
                 searchResultData.PageResultContext.TextExternalId = pageId;
-                searchResultData.PageResultContext.ContextStructure.After = Regex.Replace(searchResultData.PageResultContext.ContextStructure.After, @"<[^>]*>", "");
-                searchResultData.PageResultContext.ContextStructure.After = Regex.Replace(searchResultData.PageResultContext.ContextStructure.After, @"<[^>]*", "");
-                searchResultData.PageResultContext.ContextStructure.Before = Regex.Replace(searchResultData.PageResultContext.ContextStructure.Before, @"<[^>]*>", "");
-                searchResultData.PageResultContext.ContextStructure.Before = Regex.Replace(searchResultData.PageResultContext.ContextStructure.Before, @"[^>]*>", "");
-                searchResultData.PageResultContext.ContextStructure.Match = Regex.Replace(searchResultData.PageResultContext.ContextStructure.Match, @"<[^>]*>", "");
-                searchResultData.PageResultContext.ContextStructure.Match = Regex.Replace(searchResultData.PageResultContext.ContextStructure.Match, @"[^>]*>", "");
-                searchResultData.PageResultContext.ContextStructure.Match = Regex.Replace(searchResultData.PageResultContext.ContextStructure.Match, @"<[^>]*", "");
+
+                RemovePageIds(searchResultData.PageResultContext.ContextStructure);
             }
         }
 
-        private string GetPageIdFromIndex(int snapshotIndex, List<SnapshotPageResourceContract> sourcePages)
+        private string GetPageIdFromIndex(int pageIndex, List<SnapshotPageResourceContract> sourcePages)
         {
-            return sourcePages.Where(page => page.indexFrom <= snapshotIndex && snapshotIndex <= page.indexTo).Select(page => page.Id).FirstOrDefault();
+            return sourcePages.Where(page => page.PageIndex == pageIndex).Select(page => page.Id).FirstOrDefault();
+        }
+
+        private void RemovePageIds(KwicStructure contextStructure)
+        {
+            contextStructure.After = Regex.Replace(contextStructure.After, @"<[0-9]*>", "");
+            contextStructure.After = Regex.Replace(contextStructure.After, @"<[0-9]*", "");
+
+            contextStructure.Before = Regex.Replace(contextStructure.Before, @"<[0-9]*>", "");
+            contextStructure.Before = Regex.Replace(contextStructure.Before, @"[0-9]*>", "");
+
+            contextStructure.Match = Regex.Replace(contextStructure.Match, @"<[0-9]*>", "");
+            contextStructure.Match = Regex.Replace(contextStructure.Match, @"[0-9]*>", "");
+            contextStructure.Match = Regex.Replace(contextStructure.Match, @"<[0-9]*", "");
         }
 
         private List<CorpusSearchResultData> GetCorpusSearchResultDataList(string highlightedText, long projectId, string highlightTag)

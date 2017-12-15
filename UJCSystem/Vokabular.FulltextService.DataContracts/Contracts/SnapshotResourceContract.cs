@@ -13,6 +13,7 @@ namespace Vokabular.FulltextService.DataContracts.Contracts
     public class SnapshotPageResourceContract
     {
         public string Id { get; set; }
+        public int PageIndex { get; set; }
         public int indexFrom { get; set; }
         public int indexTo { get; set; }
         
