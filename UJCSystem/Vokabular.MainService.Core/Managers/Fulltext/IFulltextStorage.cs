@@ -7,6 +7,7 @@ using Vokabular.MainService.Core.Managers.Fulltext.Data;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Search.RequestContracts;
 using Vokabular.Shared.DataContracts.Search.ResultContracts;
 
 namespace Vokabular.MainService.Core.Managers.Fulltext

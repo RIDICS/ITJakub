@@ -10,7 +10,6 @@ using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Managers.Fulltext;
-using Vokabular.MainService.Core.Managers.Fulltext.Data;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Search;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -19,7 +18,8 @@ using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Types;
-using Vokabular.Shared.DataContracts.Search;
+using Vokabular.Shared.DataContracts.Search.RequestContracts;
+using Vokabular.Shared.DataContracts.Search.ResultContracts;
 
 namespace Vokabular.MainService.Core.Managers
 {

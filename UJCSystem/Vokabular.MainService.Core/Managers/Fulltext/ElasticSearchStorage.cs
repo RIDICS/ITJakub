@@ -8,6 +8,7 @@ using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Search.RequestContracts;
 using Vokabular.Shared.DataContracts.Search.ResultContracts;
 
 namespace Vokabular.MainService.Core.Managers.Fulltext
@@ -87,7 +88,12 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
 
         public PageSearchResultData SearchPageByCriteria(List<SearchCriteriaContract> criteria, ProjectIdentificationResult project)
         {
-            throw new System.NotImplementedException();
+            using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient())
+            {
+                var result = fulltextServiceClient.SearchPageByCriteria(project.SnapshotId, criteria);
+                return result;
+            }
+            return new PageSearchResultData{SearchResultType = PageSearchResultType.TextExternalId, StringList = new List<string>{ "AWBalit_qiAGOWkAUgOB" } };
         }
 
         public long SearchCorpusByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)

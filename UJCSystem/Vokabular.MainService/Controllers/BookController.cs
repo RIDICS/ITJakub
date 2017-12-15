@@ -5,6 +5,7 @@ using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.Shared.DataContracts.Search;
+using Vokabular.Shared.DataContracts.Search.RequestContracts;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers

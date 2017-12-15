@@ -143,6 +143,42 @@ namespace Vokabular.FulltextService.Core.Helpers
             return result;
         }
 
+        public TextResourceContract ProcessSearchPageByCriteria(ISearchResponse<TextResourceContract> response)
+        {
+            if (!response.IsValid)
+            {
+                throw new Exception(response.DebugInformation);
+            }
+            foreach (var hit in response.Hits)
+            {
+                foreach (var value in hit.Highlights.Values)
+                {
+                    foreach (var highlight in value.Highlights)
+                    {
+                        hit.Source.PageText = highlight;
+                        return hit.Source;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public PageSearchResultData ProcessSearchPageResult(ISearchResponse<TextResourceContract> response)
+        {
+            if (!response.IsValid)
+            {
+                throw new Exception(response.DebugInformation);
+            }
+
+            var result = new PageSearchResultData
+            {
+                SearchResultType = PageSearchResultType.TextExternalId,
+                StringList = response.Hits.Select(hit => hit.Id).ToList()
+            };
+
+            return result;
+        }
+
         private void AddPageIdsToResult(List<CorpusSearchResultData> resultData, List<SnapshotPageResourceContract> sourcePages)
         {
             foreach (var searchResultData in resultData)
@@ -218,7 +254,5 @@ namespace Vokabular.FulltextService.Core.Helpers
                 }
             };
         }
-
-
     }
 }

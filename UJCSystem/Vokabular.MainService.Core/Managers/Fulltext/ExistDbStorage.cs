@@ -11,10 +11,10 @@ using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
-using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Search.OldCriteriaItem;
+using Vokabular.Shared.DataContracts.Search.RequestContracts;
 using Vokabular.Shared.DataContracts.Search.ResultContracts;
 namespace Vokabular.MainService.Core.Managers.Fulltext
 {

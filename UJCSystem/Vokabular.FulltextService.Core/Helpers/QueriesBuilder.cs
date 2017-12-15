@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Nest;
+using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
@@ -13,11 +15,12 @@ namespace Vokabular.FulltextService.Core.Helpers
     {
         private const string ReservedChars = ".?+*|{}[]()\"\\#@&<>~";
         private const string RegexpQueryFlags = "ALL";
+        private const string IdField = "_id";
 
-        public QueryContainer GetFilterSearchQueryFromRequest(SearchRequestContractBase searchRequest, string fieldName)
+        public QueryContainer GetFilterSearchQuery(IList<SearchCriteriaContract> conditionConjunction, string fieldName)
         {
             var snapshotRestrictions = new List<SnapshotResultRestrictionCriteriaContract>();
-            foreach (var conjunction in searchRequest.ConditionConjunction)
+            foreach (var conjunction in conditionConjunction)
             {
                 if (conjunction.Key == CriteriaKey.SnapshotResultRestriction)
                 {
@@ -27,11 +30,11 @@ namespace Vokabular.FulltextService.Core.Helpers
             return GetSnapshotIdFilterQuery(snapshotRestrictions, fieldName);
         }
 
-        public QueryContainer GetSearchQueryFromRequest(SearchRequestContractBase searchRequest, string fieldName)
+        public QueryContainer GetSearchQuery(IList<SearchCriteriaContract> conditionConjunction, string fieldName)
         {
             StringBuilder regexBuilder = new StringBuilder();
 
-            foreach (var conjunction in searchRequest.ConditionConjunction)
+            foreach (var conjunction in conditionConjunction)
             {
                 if (conjunction.Key == CriteriaKey.Fulltext)
                 {
@@ -49,6 +52,33 @@ namespace Vokabular.FulltextService.Core.Helpers
                 Field = fieldName,
                 Value = regexBuilder.ToString(),
                 Flags = RegexpQueryFlags
+            };
+        }
+
+        public QueryContainer GetFilterByIdSearchQuery(string textResourceId)
+        {
+            return new TermQuery
+            {
+                Field = IdField,
+                Value = textResourceId,
+            };
+        }
+
+        public QueryContainer GetFilterByIdSearchQuery(List<string> textResourceId)
+        {
+            return new TermsQuery
+            {
+                Field = IdField,
+                Terms = textResourceId,
+            };
+        }
+
+        public QueryContainer GetFilterByFieldSearchQuery(string field, string value)
+        {
+            return new TermQuery
+            {
+                Field = field,
+                Value = value,
             };
         }
 
@@ -133,7 +163,5 @@ namespace Vokabular.FulltextService.Core.Helpers
 
             return text;
         }
-
-
     }
 }

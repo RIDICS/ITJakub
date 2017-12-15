@@ -10,6 +10,7 @@ using Vokabular.Shared;
 using Vokabular.Shared.DataContracts;
 using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Search.RequestContracts;
 using Vokabular.Shared.DataContracts.Search.ResultContracts;
 using Vokabular.Shared.Extensions;
 using Vokabular.Shared.DataContracts.Types;
@@ -121,11 +122,28 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             }
         }
 
+        public PageSearchResultData SearchPageByCriteria(long snapshotId, List<SearchCriteriaContract> criteria)
+        {
+            try
+            {
+                var result = Post<PageSearchResultData>($"text/search?snapshotId={snapshotId}", new SearchRequestContractBase{ConditionConjunction = criteria});
+                return result;
+
+            }
+            catch (HttpRequestException e)
+            {
+                if (Logger.IsErrorEnabled())
+                    Logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public TextResourceContract GetTextResourceFromSearch(string resourceId, TextFormatEnumContract format, SearchPageRequestContract searchRequest)
         {
             try
             {
-                var result = Post<TextResourceContract>($"search/page/{resourceId}?formatValue={format}", searchRequest);
+                var result = Post<TextResourceContract>($"text/search/{resourceId}?formatValue={format}", searchRequest);
                 return result;
 
             }
@@ -173,6 +191,8 @@ namespace Vokabular.FulltextService.DataContracts.Clients
                 throw;
             }
         }
+
+        
     }
     
 }

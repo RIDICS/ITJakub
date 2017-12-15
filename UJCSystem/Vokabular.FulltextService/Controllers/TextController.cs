@@ -1,9 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Vokabular.FulltextService.Core.Helpers;
 using Vokabular.FulltextService.Core.Managers;
 using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.Shared;
+using Vokabular.Shared.DataContracts.Search;
+using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Search.RequestContracts;
+using Vokabular.Shared.DataContracts.Search.ResultContracts;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.FulltextService.Controllers
@@ -14,11 +19,12 @@ namespace Vokabular.FulltextService.Controllers
         private static readonly ILogger Logger = ApplicationLogging.CreateLogger<TextController>();
         private readonly TextResourceManager m_textResourceManager;
         private readonly ITextConverter m_textConverter;
-
-        public TextController(TextResourceManager textResourceManager, ITextConverter textConverter)
+        private readonly SearchManager m_searchManager;
+        public TextController(TextResourceManager textResourceManager, ITextConverter textConverter, SearchManager searchManager)
         {
             m_textResourceManager = textResourceManager;
             m_textConverter = textConverter;
+            m_searchManager = searchManager;
         }
 
         [HttpGet("{textResourceId}")]
@@ -34,6 +40,22 @@ namespace Vokabular.FulltextService.Controllers
         public ResultContract CreateTextResource([FromBody] TextResourceContract textResource)
         {
             var result = m_textResourceManager.CreateTextResource(textResource);
+            return result;
+        }
+
+        [HttpPost("search/{textResourceId}")]
+        public TextResourceContract GetSearchTextResource(string textResourceId, [FromQuery] TextFormatEnumContract formatValue, [FromBody] SearchPageRequestContract searchPageRequestContract )
+        {
+            var textResource = m_searchManager.SearchPageByCriteria(textResourceId, searchPageRequestContract);
+            textResource.PageText = m_textConverter.Convert(textResource.PageText, formatValue);
+
+            return textResource;
+        }
+
+        [HttpPost("search")]
+        public PageSearchResultData SearchPageByCriteria([FromQuery] long snapshotId, [FromBody] SearchRequestContractBase criteria)
+        {
+            var result = m_searchManager.SearchPageByCriteria(snapshotId, criteria);
             return result;
         }
     }
