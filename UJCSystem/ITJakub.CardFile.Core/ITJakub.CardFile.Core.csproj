@@ -62,12 +62,7 @@
     <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CardFilesCommunicationManager.cs" />
-    <Compile Include="CardServiceImageTypes.cs" />
-    <Compile Include="ICardFilesService.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DataContractEntities\CardFileXmlDataContract.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

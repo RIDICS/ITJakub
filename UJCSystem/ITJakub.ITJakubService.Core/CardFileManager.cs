@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using AutoMapper;
-using ITJakub.CardFile.Core;
-using ITJakub.CardFile.Core.DataContractEntities;
+using Vokabular.CardFile.Core;
+using Vokabular.CardFile.Core.DataContractEntities;
 using Vokabular.MainService.DataContracts.Contracts.CardFile;
 using Vokabular.Shared.DataContracts.Attribute;
+using Vokabular.Shared.Options;
 
 namespace ITJakub.ITJakubService.Core
 {
@@ -17,8 +20,14 @@ namespace ITJakub.ITJakubService.Core
         public CardFileManager(AuthorizationManager authorizationManager)
         {
             m_authorizationManager = authorizationManager;
-            m_cardFileClient = new CardFilesCommunicationManager(); //TODO load from container
+            m_cardFileClient = new CardFilesCommunicationManager(UserName, UserPassword); //TODO load from container
         }
+
+        private string UserName => ConfigurationManager.AppSettings[SettingKeys.CardFilesUser] ??
+                                   throw new ArgumentException("Card files username not found");
+
+        private string UserPassword => ConfigurationManager.AppSettings[SettingKeys.CardFilesPassword] ??
+                                       throw new ArgumentException("Card files password not found");
 
         public IList<CardFileContract> GetCardFiles()
         {
@@ -63,7 +72,7 @@ namespace ITJakub.ITJakubService.Core
         {
             m_authorizationManager.CheckUserCanViewCardFile(cardFileId);
             var card = m_cardFileClient.GetCardFromBucket(cardFileId, bucketId,cardId);
-            return Mapper.Map<card, CardContract>(card); ;
+            return Mapper.Map<card, CardContract>(card);
         }
 
         public Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId, CardImageSizeEnumContract imageSize)

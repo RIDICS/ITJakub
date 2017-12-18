@@ -54,6 +54,7 @@
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.Runtime.Serialization" />
@@ -149,6 +150,10 @@
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
       <Name>ITJakub.Shared.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vokabular.CardFile.Core\Vokabular.CardFile.Core.csproj">
+      <Project>{dd3ea4c0-3500-4576-adbe-3c187ab018b1}</Project>
+      <Name>Vokabular.CardFile.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vokabular.Core\Vokabular.Core.csproj">
       <Project>{88ef00d2-ce46-4054-a764-9093ba9dde4e}</Project>
       <Name>Vokabular.Core</Name>
@@ -164,6 +169,10 @@
     <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj">
       <Project>{d172f949-ae59-4029-bf5c-40b633362034}</Project>
       <Name>Vokabular.Shared.DataContracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj">
+      <Project>{130f3c52-e563-4b9b-a70f-e7e5bbab4296}</Project>
+      <Name>Vokabular.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
