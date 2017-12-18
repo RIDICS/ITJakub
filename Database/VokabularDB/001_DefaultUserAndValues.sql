@@ -61,6 +61,29 @@ BEGIN TRAN
 	  ('pageToRtf.xsl', 'def for paged', 2, @ProfessionalLiteratureTypeId , 1, 2)
 
 
+	INSERT INTO [dbo].[User]
+           ([FirstName]
+           ,[LastName]
+           ,[Email]
+           ,[UserName]
+           ,[AuthenticationProvider]
+           ,[CommunicationToken]
+           ,[CommunicationTokenCreateTime]
+           ,[PasswordHash]
+           ,[CreateTime]
+           ,[AvatarUrl])
+     VALUES
+           ('Admin' -- FirstName
+           ,'Admin' -- LastName
+           ,'admin@example.com' -- Email
+           ,'Admin' -- UserName
+           ,0 -- AuthenticationProvider
+           ,'' -- CommunicationToken
+           ,NULL -- CommunicationTokenCreateTime
+           ,'PW:sha1:1000:FhLySoxcL/5CA0RqlRBZMiqblj4sZ0zV:Vocj0I6bhs9bF4p9Nh+Rk7vbCoToulg9' -- PasswordHash (password is 'Administrator')
+           ,'2017-08-21 00:00:00.000' -- CreateTime
+           ,NULL) -- AvatarUrl
+
 
 	INSERT INTO [dbo].[DatabaseVersion]
 		(DatabaseVersion)

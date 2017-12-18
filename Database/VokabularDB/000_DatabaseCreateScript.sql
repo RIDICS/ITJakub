@@ -274,6 +274,13 @@ BEGIN TRAN
 	   [FileId] varchar(100) NULL
 	)
 
+	CREATE TABLE [dbo].[EditionNoteResource]
+	(
+	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_EditionNoteResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
+	   [ExternalId] varchar(100) NULL,
+	   [BookVersion] bigint NULL CONSTRAINT [FK_EditionNoteResource(BookVersion)_BookVersionResource(ResourceVersionId)] FOREIGN KEY REFERENCES [dbo].[BookVersionResource](ResourceVersionId)
+	)
+
 	
 -- Other tables
 	
