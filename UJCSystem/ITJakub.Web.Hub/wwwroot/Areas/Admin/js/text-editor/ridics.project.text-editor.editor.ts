@@ -2,17 +2,15 @@
     private currentTextId = 0; //default initialisation
     private editingMode = false;
     private originalContent = "";
-    private simplemde: any;//TODO temporary
+    private simplemde: any; //TODO temporary
     private readonly commentInput: CommentInput;
     private readonly util: EditorsUtil;
-    private readonly gui: TextEditorGui;
     private readonly commentArea: CommentArea;
     private commentInputDialog: BootstrapDialogWrapper;
 
-    constructor(commentInput: CommentInput, util: EditorsUtil, gui: TextEditorGui, commentArea: CommentArea) {
+    constructor(commentInput: CommentInput, util: EditorsUtil, commentArea: CommentArea) {
         this.commentInput = commentInput;
         this.util = util;
-        this.gui = gui;
         this.commentArea = commentArea;
 
         this.commentInputDialog = new BootstrapDialogWrapper({
@@ -20,20 +18,8 @@
             autoClearInputs: true,
             submitCallback: this.onSendButtonClick.bind(this)
         });
-    }
 
-    private showMessage(title: string, message: string) {
-        const titleEl = $("#status-dialog").find(".modal-title");
-        const bodyEl = $("#status-dialog").find(".modal-body");
-        titleEl.text(title);
-        bodyEl.text(message);
-        var statusDialog = new BootstrapDialogWrapper({
-            element: $("#status-dialog"),
-            autoClearInputs: true,
-            submitCallback: (() => { statusDialog = null; })
-        });
-        console.log(statusDialog);
-        statusDialog.show();
+        bootbox.setLocale("cs"); //TODO get actual locale 
     }
 
     private userIsEnteringText = false;
@@ -48,26 +34,40 @@
 
     init() {
         this.processAreaSwitch();
-        const commentInputDialogCancelButton = $("#comment-input-dialog").find(`[data-dismiss="modal"]`);
-        commentInputDialogCancelButton.on("click", () => {
-            this.userIsEnteringText = !this.userIsEnteringText;
-            this.commentInput.toggleCommentSignsAndReturnCommentNumber(this.simplemde, false);
-        });
     }
 
-    private onSendButtonClick() {
+    private onSendButtonClick(text: string) {
         const textId = this.getCurrentTextId();
         const textReferenceId = (this.commentInput).toggleCommentSignsAndReturnCommentNumber(this.simplemde, true);
         const id = 0; //creating comment
         const parentComment = null; //creating comment
-        this.commentInput.processCommentSendClick(textId, textReferenceId, id, parentComment);
-        this.commentInputDialog.hide();
+        this.commentInput.processCommentSendClick(textId, textReferenceId, id, parentComment, text);
     }
+
     private toggleCommentFromEditor = (editor: SimpleMDE, userIsEnteringText: boolean) => {
         if (userIsEnteringText) {
-            this.commentInputDialog.show();
+            bootbox.prompt({
+                title: "Please enter your comment here:",
+                inputType: "textarea",
+                buttons: {
+                    confirm: {
+                        className: "btn-default"
+                    },
+                    cancel: {
+                        className: "btn-default",
+                        callback: () => {
+                        }
+                    }
+                },
+                callback: (result) => {
+                    if (result === null) {
+                        this.userIsEnteringText = !this.userIsEnteringText;
+                    } else {
+                        this.onSendButtonClick(result);
+                    }
+                }
+            });
         } else {
-            this.commentInputDialog.hide();
             (this.commentInput).toggleCommentSignsAndReturnCommentNumber(editor, false);
         }
     }
@@ -99,22 +99,38 @@
                         const previousPageEl = $(`*[data-page="${this.currentTextId}"]`);
                         const contentBeforeClose = this.simplemde.value();
                         if (contentBeforeClose !== this.originalContent) {
-                            const dialogEl = $("#save-confirmation-dialog");
                             const editorPageName = editorEl.parents(".page-row").data("page-name");
-                            dialogEl.text(
-                                `There's an open editor in page ${editorPageName
-                                }. Are you sure you want to close it without saving?`);
-                            this.gui.createConfirmationDialog(() => {
-                                    this.editorChangePage(previousPageEl, jElSelected);
-                                },
-                                () => {
-                                    const textareaEl = jElSelected.find(".editor").children(".textarea-plain-text");
-                                    textareaEl.trigger("blur");
-                                    this.simplemde.codemirror.focus();
-                                },
-                                () => {
-                                    this.saveContents(this.currentTextId, contentBeforeClose);
-                                });
+                            bootbox.dialog({
+                                title: "Warning",
+                                message: `There's an open editor in page ${editorPageName
+                                    }. Are you sure you want to close it without saving?`,
+                                buttons: {
+                                    confirm: {
+                                        label: "Close",
+                                        className: "btn-default",
+                                        callback: () => {
+                                            this.editorChangePage(previousPageEl, jElSelected);
+                                        }
+                                    },
+                                    cancel: {
+                                        label: "Cancel",
+                                        className: "btn-default",
+                                        callback: () => {
+                                            const textareaEl = jElSelected.find(".editor")
+                                                .children(".textarea-plain-text");
+                                            textareaEl.trigger("blur");
+                                            this.simplemde.codemirror.focus();
+                                        }
+                                    },
+                                    save: {
+                                        label: "Save and close",
+                                        className: "btn-default",
+                                        callback: () => {
+                                            this.saveContents(this.currentTextId, contentBeforeClose);
+                                        }
+                                    }
+                                }
+                            });
                         } else if (contentBeforeClose === this.originalContent) {
                             this.editorChangePage(previousPageEl, jElSelected);
                         }
@@ -133,27 +149,41 @@
                 if (typeof this.simplemde !== "undefined" && !this.editingMode && this.simplemde !== null) {
                     const contentBeforeClose = this.simplemde.value();
                     if (contentBeforeClose !== this.originalContent) {
-                        const dialogEl = $("#save-confirmation-dialog");
                         const editorEl = $(".CodeMirror");
                         const editorPageName = editorEl.parents(".page-row").data("page-name");
-                        dialogEl.text(
-                            `There's an open editor in page ${editorPageName
-                            }. Are you sure you want to close it without saving?`);
-                        this.gui.createConfirmationDialog(
-                            () => {
-                                this.simplemde.toTextArea();
-                                this.simplemde = null;
-                                this.toggleDivAndTextarea();
-                            },
-                            () => {
-                                this.editingMode = !this.editingMode; //Switch back to editing mode on cancel
-                            },
-                            () => {
-                                this.saveContents(this.currentTextId, contentBeforeClose);
-                                thisClass.simplemde.toTextArea();
-                                thisClass.simplemde = null;
-                                thisClass.toggleDivAndTextarea();
-                            });
+                        bootbox.dialog({
+                            title: "Warning",
+                            message: `There's an open editor in page ${editorPageName
+                                }. Are you sure you want to close it without saving?`,
+                            buttons: {
+                                confirm: {
+                                    label: "Close",
+                                    className: "btn-default",
+                                    callback: () => {
+                                        this.simplemde.toTextArea();
+                                        this.simplemde = null;
+                                        this.toggleDivAndTextarea();
+                                    }
+                                },
+                                cancel: {
+                                    label: "Cancel",
+                                    className: "btn-default",
+                                    callback: () => {
+                                        this.editingMode = !this.editingMode; //Switch back to editing mode on cancel
+                                    }
+                                },
+                                save: {
+                                    label: "Save and close",
+                                    className: "btn-default",
+                                    callback: () => {
+                                        this.saveContents(this.currentTextId, contentBeforeClose);
+                                        thisClass.simplemde.toTextArea();
+                                        thisClass.simplemde = null;
+                                        thisClass.toggleDivAndTextarea();
+                                    }
+                                }
+                            }
+                        });
                     } else if (contentBeforeClose === this.originalContent) {
                         thisClass.simplemde.toTextArea();
                         thisClass.simplemde = null;
@@ -185,20 +215,44 @@
         };
         const saveAjax = this.util.savePlainText(textId, request);
         saveAjax.done(() => {
-            this.showMessage("Success!", "Your changes have been successfully saved.");
+            bootbox.alert({
+                title: "Success!",
+                message: "Your changes have been successfully saved.",
+                buttons: {
+                    ok: {
+                        className: "btn-default"
+                    }
+                }
+            });
             this.originalContent = contents;
         });
         saveAjax.fail(() => {
             if (saveAjax.status === 409) {
-                this.showMessage("Fail", "Failed to save your changes due to version conflict.");
+                bootbox.alert({
+                    title: "Fail",
+                    message: "Failed to save your changes due to version conflict.",
+                    buttons: {
+                        ok: {
+                            className: "btn-default"
+                        }
+                    }
+                });
             } else {
-                this.showMessage("Fail", "There was an error while saving your changes.");
+                bootbox.alert({
+                    title: "Fail",
+                    message: "There was an error while saving your changes.",
+                    buttons: {
+                        ok: {
+                            className: "btn-default"
+                        }
+                    }
+                });
             }
         });
     }
 
     private openMarkdownHelp() {
-        const url = "#";//TODO add link to actual markdown help
+        const url = "#"; //TODO add link to actual markdown help
         window.open(url, "_blank");
     }
 
@@ -213,7 +267,8 @@
             spellChecker: false,
             mode: "gfm",
             toolbar: [
-                "bold", "italic", "|", "unordered-list", "ordered-list", "|", "heading-1", "heading-2", "heading-3", "|", "quote", "preview","horizontal-rule", "|", {
+                "bold", "italic", "|", "unordered-list", "ordered-list", "|", "heading-1", "heading-2", "heading-3",
+                "|", "quote", "preview", "horizontal-rule", "|", {
                     name: "comment",
                     action: ((editor) => {
                         this.userIsEnteringText = !this.userIsEnteringText;
@@ -225,7 +280,7 @@
                     name: "help",
                     action: (() => { this.openMarkdownHelp(); }),
                     className: "fa fa-question-circle",
-                    title:"Markdown help"
+                    title: "Markdown help"
                 }, "|", {
                     name: "save",
                     action: (editor) => { this.saveContents(textId, editor.value()) },

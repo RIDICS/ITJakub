@@ -1,10 +1,8 @@
 ﻿class CommentArea {
     private readonly util: EditorsUtil;
-    private readonly gui: TextEditorGui;
 
-    constructor(util: EditorsUtil, gui: TextEditorGui) {
+    constructor(util: EditorsUtil) {
         this.util = util;
-        this.gui = gui;
     }
 
     init() {
@@ -255,7 +253,15 @@
                 }
             });
         ajax.fail(() => {
-            this.gui.showMessageDialog("Error", `Failed to construct comment area for page ${pageName}`);
+            bootbox.alert({
+                title: "Error",
+                message: `Failed to construct comment area for page ${pageName}`,
+                buttons: {
+                    ok: {
+                        className: "btn-default"
+                    }
+                }
+            });
         });
         return ajax;
     }
@@ -307,17 +313,46 @@
             const target = $(event.target);
             const commentActionsRowEl = target.parents(".comment-actions-row");
             const commentId = parseInt(commentActionsRowEl.siblings(".media-body").attr("data-comment-id"));
-            console.log(commentId);
-            this.gui.createDeleteConfirmationDialog(() => {
-                const deleteAjax = this.util.deleteComment(commentId);
-                deleteAjax.done(() => {
-                    const textId = commentActionsRowEl.parents(".page-row").data("page");
-                    this.gui.showMessageDialog("Success", "Comment successfully deleted.");
-                    this.reloadCommentArea(textId);
-                });
-                deleteAjax.fail(() => {
-                    this.gui.showMessageDialog("Fail", "Failed to delete this comment.");
-                });
+            bootbox.confirm({
+                message:"Do you want to delete this comment?",
+                title: "Please confirm",
+                buttons: {
+                    confirm: {
+                        className: "btn-default"
+                    },
+                    cancel: {
+                        className: "btn-default"
+                    }
+                },
+                callback: (result) => {
+                    if (result) {
+                        const deleteAjax = this.util.deleteComment(commentId);
+                        deleteAjax.done(() => {
+                            const textId = commentActionsRowEl.parents(".page-row").data("page");
+                            bootbox.alert({
+                                title: "Success",
+                                message: "Comment successfully deleted.",
+                                buttons: {
+                                    ok: {
+                                        className: "btn-default"
+                                    }
+                                }
+                            });
+                            this.reloadCommentArea(textId);
+                        });
+                        deleteAjax.fail(() => {
+                            bootbox.alert({
+                                title: "Fail",
+                                message: "Failed to delete this comment.",
+                                buttons: {
+                                    ok: {
+                                        className: "btn-default"
+                                    }
+                                }
+                            });
+                        });
+                    }
+                }
             });
         });
     }

@@ -1,12 +1,10 @@
 ﻿class CommentInput {
     private readonly commentArea: CommentArea;
     private readonly util: EditorsUtil;
-    private readonly gui: TextEditorGui;
 
-    constructor(commentArea: CommentArea, util: EditorsUtil, gui: TextEditorGui) {
+    constructor(commentArea: CommentArea, util: EditorsUtil) {
         this.commentArea = commentArea;
         this.util = util;
-        this.gui = gui;
     }
 
     init() {
@@ -21,17 +19,24 @@
 * @param {Number} id - Unique comment id 
 * @param {Number} parentCommentId - Unique id of parent comment
 * @param {JQuery} dialogEl - Dialog element to display result message about send
+* @param {string} text - Comment body
 */
     processCommentSendClick(
         textId: number,
         textReferenceId: string,
         id: number,
-        parentCommentId: number) {
+        parentCommentId: number, commentText: string) {
         const serverAddress = this.util.getServerAddress();
-        var commentTextArea = $("#commentInput");
-        const commentText = commentTextArea.val() as string;
-        if (commentText === "") {
-            this.gui.showMessageDialog("Warning", "Comment is empty. Please fill it");
+        if (!commentText) {
+            bootbox.alert({
+                title: "Warning",
+                message: "Comment is empty. Please fill it",
+                buttons: {
+                    ok: {
+                        className: "btn-default"
+                    }
+                }
+            });
         } else {
             const comment: ICommentStructureReply = {
                 id: id,
@@ -46,12 +51,27 @@
                 }
             );
             sendAjax.done(() => {
-                this.gui.showMessageDialog("Success", "Successfully sent");
-                commentTextArea.val("");
+                bootbox.alert({
+                    title: "Success",
+                    message: "Successfully sent",
+                    buttons: {
+                        ok: {
+                            className: "btn-default"
+                        }
+                    }
+                });
                 this.commentArea.reloadCommentArea(textId);
             });
             sendAjax.fail(() => {
-                this.gui.showMessageDialog("Error", "Sending failed. Server error.");
+                bootbox.alert({
+                    title: "Error",
+                    message: "Sending failed. Server error.",
+                    buttons: {
+                        ok: {
+                            className: "btn-default"
+                        }
+                    }
+                });
             });
         }
     }
@@ -199,13 +219,29 @@
 
     private onCommentSendRequest(sendAjax:JQueryXHR, textAreaEl:JQuery, textId:number) {
         sendAjax.done(() => {
-            this.gui.showMessageDialog("Success", "Successfully sent");
+            bootbox.alert({
+                title: "Success",
+                message: "Successfully sent",
+                buttons: {
+                    ok: {
+                        className: "btn-default"
+                    }
+                }
+            });
             textAreaEl.val("");
             textAreaEl.off();
             this.commentArea.reloadCommentArea(textId);
         });
         sendAjax.fail(() => {
-            this.gui.showMessageDialog("Error", "Sending failed. Server error.");
+            bootbox.alert({
+                title: "Error",
+                message: "Sending failed. Server error.",
+                buttons: {
+                    ok: {
+                        className: "btn-default"
+                    }
+                }
+            });
         });
     }
 }

@@ -3,14 +3,12 @@
     private readonly util: EditorsUtil;
     private readonly main: TextEditorMain;
     private readonly editor: Editor;
-    private readonly gui: TextEditorGui;
 
-    constructor(commentArea: CommentArea, util: EditorsUtil, main: TextEditorMain, editor: Editor, gui: TextEditorGui) {
+    constructor(commentArea: CommentArea, util: EditorsUtil, main: TextEditorMain, editor: Editor) {
         this.commentArea = commentArea;
         this.util = util;
         this.main = main;
         this.editor = editor;
-        this.gui = gui;
     }
 
     loadSection(targetEl: JQuery) {
@@ -65,7 +63,15 @@
         });
         renderedText.fail(() => {
             const pageName = pageEl.data("page-name");
-            this.gui.showMessageDialog("Fail", `Failed to load page ${pageName}`);
+            bootbox.alert({
+                title: "Fail",
+                message: `Failed to load page ${pageName}`,
+                buttons: {
+                    ok: {
+                        className: "btn-default"
+                    }
+                }
+            });
             $(compositionAreaDiv).text();
             pageEl.css("min-height", "0");
         });

@@ -1159,49 +1159,10 @@ table {
         visibility: hidden;
     }
 
-    #save-confirmation-dialog {
-        display: none;
-    }
-
-    #delete-confirmation-dialog {
-        display: none;
-    }
-
-    #comment-input-dialog {
-        display: none;
-    }
-
     .textarea-no-resize {
         resize: none;
     }
 
     .jqSimpleConnect {
         opacity: 0.4;
-    }
-
-    .save-confirmation-dialog, .delete-confirmation-dialog, .status-dialog, .comment-input-dialog {
-        .ui-dialog-titlebar {
-            background-color: @confirmation-dialogue-color;
-            color: white;
-            font-family: "PT Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; //from ITjakubStyle
-        }
-
-        .ui-dialog-content {
-            margin: 5px;
-            font-size: 1.1em;
-        }
-
-        &-button {
-            margin: 0.5em 0.8em !important; //to override jquery-ui
-        }
-
-        &-close-button {
-            color: white;
-            background-color: @button-color;
-            border: none;
-
-            &:hover {
-                background-color: @button-color-active;
-            }
-        }
     }
