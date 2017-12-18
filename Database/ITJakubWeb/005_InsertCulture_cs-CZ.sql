@@ -13,7 +13,7 @@ INSERT INTO [CultureHierarchy] ([Culture], [ParentCulture], [LevelProperty])
 INSERT INTO [DatabaseVersion]
 	(DatabaseVersion)
 VALUES
-	('002' )
+	('005' )
 
 --ROLLBACK
 COMMIT

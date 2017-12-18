@@ -38,7 +38,7 @@ INSERT INTO [DictionaryScope] ([Id], [Name])
 INSERT INTO [DatabaseVersion]
 	(DatabaseVersion)
 VALUES
-	('001' )
+	('004' )
 
 --ROLLBACK
 COMMIT
