@@ -12,6 +12,7 @@ using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Extensions;
+using Vokabular.RestClient.Headers;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared;
 using Vokabular.Shared.DataContracts.Types;
@@ -23,13 +24,16 @@ namespace Vokabular.MainService.DataContracts.Clients
     public class MainServiceRestClient : FullRestClientBase
     {
         private static readonly ILogger m_logger = ApplicationLogging.CreateLogger<MainServiceRestClient>();
-
-        public MainServiceRestClient(Uri baseAddress) : base(baseAddress)
+        private readonly string m_authenticationToken;
+        
+        public MainServiceRestClient(Uri baseAddress, string authenticationToken) : base(baseAddress)
         {
+            m_authenticationToken = authenticationToken;
         }
 
         protected override void FillRequestMessage(HttpRequestMessage requestMessage)
         {
+            requestMessage.Headers.TryAddWithoutValidation(CustomHttpHeaders.Authorization, m_authenticationToken);
         }
 
         protected override void ProcessResponse(HttpResponseMessage response)

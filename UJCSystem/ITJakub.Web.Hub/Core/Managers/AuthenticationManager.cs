@@ -57,8 +57,6 @@ namespace ITJakub.Web.Hub.Core.Managers
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity), authenticationProperties);
             }
-            
-            // var test = await m_httpContextAccessor.HttpContext.Authentication.GetTokenAsync(AuthenticationTokenName); // Getting token (in next request)
         }
 
         public async Task SignOutAsync()
