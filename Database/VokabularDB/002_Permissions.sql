@@ -2,25 +2,25 @@
 
 BEGIN TRAN;
 
-	CREATE TABLE [dbo].[Group](
-		[Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Group(Id)] PRIMARY KEY,
+	CREATE TABLE [dbo].[UserGroup](
+		[Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_UserGroup(Id)] PRIMARY KEY,
 		[Name] varchar(255) NOT NULL UNIQUE,
 		[Description] varchar(500) NULL,
 		[CreateTime] datetime NOT NULL,
-		[CreatedBy] int NULL CONSTRAINT [FK_Group(CreatedBy)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id)
+		[CreatedBy] int NULL CONSTRAINT [FK_UserGroup(CreatedBy)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id)
 	);
 
-	CREATE TABLE [dbo].[User_Group](
-		[User] int NOT NULL CONSTRAINT [FK_User_Group(User)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User] (Id),
-		[Group] int NOT NULL CONSTRAINT [FK_User_Group(Group)_Group(Id)] FOREIGN KEY REFERENCES [dbo].[Group](Id),
-		CONSTRAINT [PK_User_Group(User)_User_Group(Group)] PRIMARY KEY ([User], [Group])
+	CREATE TABLE [dbo].[User_UserGroup](
+		[User] int NOT NULL CONSTRAINT [FK_User_UserGroup(User)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User] (Id),
+		[UserGroup] int NOT NULL CONSTRAINT [FK_User_UserGroup(UserGroup)_UserGroup(Id)] FOREIGN KEY REFERENCES [dbo].[UserGroup](Id),
+		CONSTRAINT [PK_User_UserGroup(User)_User_UserGroup(UserGroup)] PRIMARY KEY ([User], [UserGroup])
 	);
 
 	CREATE TABLE [dbo].[Permission](
 		[Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Permission(Id)] PRIMARY KEY,
-		[Group] int NOT NULL CONSTRAINT [FK_Permission(Group)_Group(Id)] FOREIGN KEY REFERENCES [dbo].[Group](Id),
+		[UserGroup] int NOT NULL CONSTRAINT [FK_Permission(UserGroup)_UserGroup(Id)] FOREIGN KEY REFERENCES [dbo].[UserGroup](Id),
 		[Project] bigint NOT NULL CONSTRAINT [FK_Permission(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project](Id),
-		CONSTRAINT [UQ_Permission(Group_Book)] UNIQUE ([Group],[Project])
+		CONSTRAINT [UQ_Permission(UserGroup_Project)] UNIQUE ([UserGroup],[Project])
 	);
 	
 	CREATE TABLE [dbo].[SpecialPermission](
@@ -35,19 +35,19 @@ BEGIN TRAN;
 		[CardFileId] varchar(100) NULL,
 		[CardFileName] varchar(100) NULL,
 		[AutoimportAllowed] bit NULL,
-		[AutoimportCategory] int NULL CONSTRAINT [FK_SpecialPermission(AutoimportCategory)_Category(Id)] FOREIGN KEY REFERENCES [dbo].[Category] (Id),
+		[AutoimportBookType] int NULL CONSTRAINT [FK_SpecialPermission(AutoimportBookType)_BookType(Id)] FOREIGN KEY REFERENCES [dbo].[BookType] (Id),
 		[CanEditLemmatization] bit NULL,
 		[CanReadLemmatization] bit NULL,
 		[CanDerivateLemmatization] bit NULL,
 		[CanEditionPrintText] bit NULL,
 		[CanEditStaticText] bit NULL,
-		CONSTRAINT [UQ_SpecialPermission(All)] UNIQUE ([PermissionType],[CanUploadBook],[CanManagePermissions],[CanAddNews],[CanManageFeedbacks],[CanReadCardFile],[CardFileId],[CardFileName],[AutoImportAllowed],[AutoimportCategory],[CanEditLemmatization],[CanReadLemmatization],[CanDerivateLemmatization],[CanEditionPrintText],[CanEditStaticText])
+		CONSTRAINT [UQ_SpecialPermission(All)] UNIQUE ([PermissionType],[CanUploadBook],[CanManagePermissions],[CanAddNews],[CanManageFeedbacks],[CanReadCardFile],[CardFileId],[CardFileName],[AutoImportAllowed],[AutoimportBookType],[CanEditLemmatization],[CanReadLemmatization],[CanDerivateLemmatization],[CanEditionPrintText],[CanEditStaticText])
 	);
 
-	CREATE TABLE [dbo].[SpecialPermission_Group](
-		[SpecialPermission] int NOT NULL CONSTRAINT [FK_SpecialPermission_Group(SpecialPermission)_SpecialPermission(Id)] FOREIGN KEY REFERENCES [dbo].[SpecialPermission] (Id),
-		[Group] int NOT NULL CONSTRAINT [FK_SpecialPermission_Group(Group)_Group(Id)] FOREIGN KEY REFERENCES [dbo].[Group](Id),
-		CONSTRAINT [PK_SpecialPermission_Group(SpecialPermission)_SpecialPermission_Group(Group)] PRIMARY KEY ([SpecialPermission], [Group])
+	CREATE TABLE [dbo].[SpecialPermission_UserGroup](
+		[SpecialPermission] int NOT NULL CONSTRAINT [FK_SpecialPermission_UserGroup(SpecialPermission)_SpecialPermission(Id)] FOREIGN KEY REFERENCES [dbo].[SpecialPermission] (Id),
+		[UserGroup] int NOT NULL CONSTRAINT [FK_SpecialPermission_UserGroup(UserGroup)_UserGroup(Id)] FOREIGN KEY REFERENCES [dbo].[UserGroup](Id),
+		CONSTRAINT [PK_SpecialPermission_UserGroup(SpecialPermission)_SpecialPermission_UserGroup(UserGroup)] PRIMARY KEY ([SpecialPermission], [UserGroup])
 	);
 
 
@@ -198,9 +198,9 @@ BEGIN TRAN;
 	    PermissionType,
 	    PermissionCategorization,
 	    AutoimportAllowed,
-		AutoimportCategory
+		AutoimportBookType
 	)
-	SELECT 'Autoimport', 1, 1, c.Id FROM dbo.Category c
+	SELECT 'Autoimport', 1, 1, bt.Id FROM dbo.BookType bt
 
 	--cardfiles permissions
 	INSERT INTO dbo.SpecialPermission
@@ -391,7 +391,7 @@ BEGIN TRAN;
 
 	SELECT @AdminUserId = [Id] FROM [dbo].[User] WHERE [dbo].[User].[UserName]= 'Admin'
 
-	INSERT INTO dbo.[Group]
+	INSERT INTO dbo.[UserGroup]
 	(
 	    --Id - this column value is auto-generated
 	    Name,
@@ -410,12 +410,12 @@ BEGIN TRAN;
 
 	DECLARE @AdminGroupId INT
 
-	SELECT @AdminGroupId = [Id] FROM [dbo].[Group] WHERE [dbo].[Group].[Name]= 'AdminGroup'
+	SELECT @AdminGroupId = [Id] FROM [dbo].[UserGroup] WHERE [dbo].[UserGroup].[Name]= 'AdminGroup'
 
-	INSERT INTO dbo.User_Group
+	INSERT INTO dbo.User_UserGroup
 	(
 	    [User],
-	    [Group]
+	    [UserGroup]
 	)
 	VALUES
 	(
@@ -423,15 +423,13 @@ BEGIN TRAN;
 	    @AdminGroupId -- Group - int
 	)
 
-	INSERT INTO dbo.SpecialPermission_Group
+	INSERT INTO dbo.SpecialPermission_UserGroup
 	(
 	    SpecialPermission,
-	    [Group]
+	    [UserGroup]
 	)
 	SELECT sp.Id, @AdminGroupId FROM dbo.SpecialPermission sp
 
-
-	ALTER TABLE dbo.[User] DROP COLUMN [Salt]
 
     INSERT INTO [dbo].[DatabaseVersion]
 		 ( DatabaseVersion )

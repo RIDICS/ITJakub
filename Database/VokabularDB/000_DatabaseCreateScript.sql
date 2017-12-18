@@ -185,10 +185,10 @@ BEGIN TRAN
 	   [OriginDate] varchar(50) NULL,
 	   [NotBefore] date NULL,
 	   [NotAfter] date NULL,
-	   [ManuscriptIdno] nvarchar (50) NULL,
+	   [ManuscriptIdno] nvarchar (100) NULL,
 	   [ManuscriptSettlement] nvarchar (100) NULL,
 	   [ManuscriptCountry] nvarchar (100) NULL,
-	   [ManuscriptRepository] nvarchar (100) NULL,
+	   [ManuscriptRepository] nvarchar (200) NULL,
 	   [ManuscriptExtent] nvarchar(2000) NULL,
 	   [ManuscriptTitle] nvarchar(2000) NULL
     )
