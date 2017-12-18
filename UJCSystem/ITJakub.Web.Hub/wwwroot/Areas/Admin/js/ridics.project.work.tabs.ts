@@ -248,8 +248,9 @@
             () => {
                 const enteredText = $("#work-metadata-publisher-email").val();
                 const emailIsValid = this.validateEmail(enteredText);
-                const emailGroupEl = $(".email-group");
-                const iconEl = emailGroupEl.find(".form-control-feedback");
+                const emailGroupEl = $(".email-group");//TODO optimise , optionally use jquery validate
+                const emailToValidateEl = emailGroupEl.children(".email-to-validate");
+                const iconEl = emailToValidateEl.children(".form-control-feedback");
                 iconEl.show();
                 emailGroupEl.addClass("has-feedback");
                 if (emailIsValid) {
