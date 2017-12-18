@@ -149,8 +149,10 @@ $(document).ready(() => {
 
                     var feedbackCategorySpan = document.createElement("span");
                     $(feedbackCategorySpan).addClass("feedback-category");
-                    feedbackCategorySpan.innerHTML = 
-                        localization.translateFormat("Category:", new Array<string>(categoryTranslation[category]), "ItJakubJs").value;
+                    var categoryParams = [categoryTranslation[category]];
+                    var translation = localization.translateFormat("Category:", categoryParams, "ItJakubJs").value;
+                        feedbackCategorySpan.innerHTML = translation;
+                        
 
                     feedbackHeaderInfosDiv.appendChild(feedbackCategorySpan);
 
