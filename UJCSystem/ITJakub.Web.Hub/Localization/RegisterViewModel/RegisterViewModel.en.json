@@ -11,6 +11,8 @@
 		"ConfirmPassword":"Confirm password",
 		"PasswordsNotEqual":"Passwords are not equal.",	
 		"NotEmpty":"The {0} can not be empty.",
-		"MustBeFilled":"The {0} can not be empty."
+		"MustBeFilled":"The {0} can not be empty.",
+		"The {0} field is not a valid e-mail address": "The {0} field is not a valid e-mail address",
+		"The {0} field is not a valid e-mail address.": "The {0} field is not a valid e-mail address"
 	  }
 }

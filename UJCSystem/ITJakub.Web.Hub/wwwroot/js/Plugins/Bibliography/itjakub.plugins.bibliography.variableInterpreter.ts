@@ -1,5 +1,4 @@
-﻿
-class VariableInterpreter {
+﻿class VariableInterpreter {
     private static _instance: VariableInterpreter = null;
 
     constructor() {
@@ -149,7 +148,7 @@ class VariableInterpreter {
 
     private interpretBasic(varName: string, interpretedVariable: Object, variables: Object, scopedObject: Object): string {
         var printIfNull: boolean = interpretedVariable["printIfNullValue"];
-        var replacementForNullValue: string = interpretedVariable["replaceNullValueBy"];
+        var replacementForNullValue: string = localization.translate(interpretedVariable["replaceNullValueBy"], "BibliographyModule").value;
         var pattern: string = interpretedVariable["pattern"];
         var actualScopedObject = this.resolveScope(interpretedVariable, scopedObject);
         var value: string = this.interpretPattern(varName, pattern, variables, actualScopedObject, printIfNull, replacementForNullValue);
@@ -209,13 +208,13 @@ class VariableInterpreter {
 
     private interpretTable(varName: string, interpretedVariable: Object, variables: Object, scopedObject: Object): string {
         var printRowIfNullValue: boolean = interpretedVariable["printRowIfNullValue"];
-        var replaceNullValueBy: string = interpretedVariable["replaceNullValueBy"];
+        var replaceNullValueBy: string = localization.translate(interpretedVariable["replaceNullValueBy"], "BibliographyModule").value;
         var rows: Array<Object> = interpretedVariable["rows"];
         var actualScopedObject = this.resolveScope(interpretedVariable, scopedObject);
         var tableBuilder = new TableBuilder();
 
         $.each(rows, (index, item) => {
-            var label: string = localization.translate(item["label"].substring(1), "BibliographyModule").value;
+            var label: string = localization.translate(item["label"], "BibliographyModule").value;
             var pattern: string = item["pattern"];
             var value: string = this.interpretPattern(varName, pattern, variables, actualScopedObject, true, "");
             if (typeof value !== 'undefined' && value !== null && value.length > 0) {
@@ -232,7 +231,7 @@ class VariableInterpreter {
 
     private interpretScript(varName: string, interpretedVariable: Object, variables: Object, scopedObject: Object): string {
         var printIfNull: boolean = interpretedVariable["printIfNullValue"];
-        var replaceNullValueBy: string = interpretedVariable["replaceNullValueBy"];
+        var replaceNullValueBy: string = localization.translate(interpretedVariable["replaceNullValueBy"], "BibliographyModule").value;
         var pattern: string = interpretedVariable["pattern"];
         var actualScopedObject = this.resolveScope(interpretedVariable, scopedObject);
         var interpretedScript = this.interpretPattern(varName, pattern, variables, actualScopedObject, false, "");

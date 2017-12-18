@@ -85,34 +85,34 @@
         "$editionTable": {
           "type": "table",
           "printRowIfNullValue": true,
-          "replaceNullValueBy": "&lt;{@NotFilled}&gt;",
+          "replaceNullValueBy": "NotFilled",
           "rows": [
             {
-              "label": "{@Editor}",
+              "label": "Editor",
               "pattern": "{$editor}"
             },
             {
-              "label": "{@Pattern}",
+              "label": "Pattern",
               "pattern": "{Pattern}"
             },
             {
-              "label": "{@RelicAbbrevitation}",
+              "label": "RelicAbbrevitation",
               "pattern": "{RelicAbbreviation}"
             },
             {
-              "label": "{@SourceAbbrevitation}",
+              "label": "SourceAbbrevitation",
               "pattern": "{SourceAbbreviation}"
             },
             {
-              "label": "{@LiteraryType}",
+              "label": "LiteraryType",
               "pattern": "{LiteraryType}"
             },
             {
-              "label": "{@LiteraryGenre}",
+              "label": "LiteraryGenre",
               "pattern": "{LiteraryGenre}"
             },
             {
-              "label": "{@EditionLastModification}",
+              "label": "EditionLastModification",
               "pattern": "{CreateTimeString}"
             }
           ]
@@ -180,8 +180,8 @@
         "$linked": {
           "type": "if",
           "pattern": "{Linked}",
-          "onTrue": "{@LinkedDictionary}",
-          "onFalse": "{@UnlinkedDictionary}"
+          "onTrue": "LinkedDictionary",
+          "onFalse": "UnlinkedDictionary"
         },
         "$authors": {
           "type": "array",
@@ -299,34 +299,34 @@
         "$editionTable": {
           "type": "table",
           "printRowIfNullValue": true,
-          "replaceNullValueBy": "&lt;{@NotFilled}&gt;",
+          "replaceNullValueBy": "NotFilled",
           "rows": [
             {
-              "label": "{@Editor}",
+              "label": "Editor",
               "pattern": "{$editor}"
             },
             {
-              "label": "{@Pattern}",
+              "label": "Pattern",
               "pattern": "{Pattern}"
             },
             {
-              "label": "{@RelicAbbreviation}",
+              "label": "RelicAbbreviation",
               "pattern": "{RelicAbbreviation}"
             },
             {
-              "label": "{@SourceAbbreviation}",
+              "label": "SourceAbbreviation",
               "pattern": "{SourceAbbreviation}"
             },
             {
-              "label": "{@LiteraryType}",
+              "label": "LiteraryType",
               "pattern": "{LiteraryType}"
             },
             {
-              "label": "{@LiteraryGenre}",
+              "label": "LiteraryGenre",
               "pattern": "{LiteraryGenre}"
             },
             {
-              "label": "{@EditionLastModification}",
+              "label": "EditionLastModification",
               "pattern": "{CreateTimeString}"
             }
           ]
@@ -624,34 +624,34 @@
         "$editionTable": {
           "type": "table",
           "printRowIfNullValue": true,
-          "replaceNullValueBy": "&lt;{@NotFilled}&gt;",
+          "replaceNullValueBy": "NotFilled",
           "rows": [
             {
-              "label": "{Editor}",
+              "label": "Editor",
               "pattern": "{$editor}"
             },
             {
-              "label": "{@Pattern}",
+              "label": "Pattern",
               "pattern": "{Pattern}"
             },
             {
-              "label": "{@RelicAbbreviation}",
+              "label": "RelicAbbreviation",
               "pattern": "{RelicAbbreviation}"
             },
             {
-              "label": "{@SourceAbbreviation}",
+              "label": "SourceAbbreviation",
               "pattern": "{SourceAbbreviation}"
             },
             {
-              "label": "{@LiteraryType}",
+              "label": "LiteraryType",
               "pattern": "{LiteraryType}"
             },
             {
-              "label": "{@LiteraryGenre}",
+              "label": "LiteraryGenre",
               "pattern": "{LiteraryGenre}"
             },
             {
-              "label": "{@EditionLastModification}",
+              "label": "EditionLastModification",
               "pattern": "{CreateTimeString}"
             }
           ]
@@ -793,7 +793,7 @@
         "$editionTable": {
           "type": "table",
           "printRowIfNullValue": true,
-          "replaceNullValueBy": "&lt;{@NotFilled}&gt;",
+          "replaceNullValueBy": "NotFilled",
           "rows": [
             {
               "label": "Editor",
@@ -962,7 +962,7 @@
         "$editionTable": {
           "type": "table",
           "printRowIfNullValue": true,
-          "replaceNullValueBy": "&lt;{@Notfilled}&gt;",
+          "replaceNullValueBy": "NotFilled",
           "rows": [
             {
               "label": "Editor",

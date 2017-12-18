@@ -23,7 +23,7 @@ namespace ITJakub.Web.Hub.Models
         
         [EnumDataType(typeof(NewsTypeContractViewEnum))]
         [Required]
-        [Display(Name="Type:")]
+        [Display(Name="Type")]
         public NewsTypeContractViewEnum ItemType { get; set; }
     }
 

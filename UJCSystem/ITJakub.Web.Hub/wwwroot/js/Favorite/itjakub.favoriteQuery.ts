@@ -156,7 +156,7 @@
             .data("id", 0)
             .data("name", localization.translate("AllShowed", this.localizationScope).value)
             .data("color", "#0000DD")
-            .text("Zobrazit vše");
+            .text(localization.translate("ShowAll", this.localizationScope).value);
         this.displayAllLink = displayAllLink;
 
         $(noFilteredLabel)

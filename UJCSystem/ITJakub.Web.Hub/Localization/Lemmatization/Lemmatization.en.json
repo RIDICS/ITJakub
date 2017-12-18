@@ -214,8 +214,6 @@
 		"TypSlovesa/S" : "translate[S – plnovýznamové]",
 		"TypSlovesa/H" : "translate[H – pomocné]",
 		
-		"Close" : "translate[Zavřít]",
-		"Save" : "translate[Uložit]",
 		"NewCannonicalForm" : "translate[Nová kanonická forma]",
 		"ExistingSelection" : "translate[Výběr existujícího]",
 		"NewCreation" : "translate[Vytvoření nového]",

@@ -27,9 +27,9 @@
                     <input type="text" class="form-control" id="name" disabled="disabled" value="@Model.Name">
                 </div>
                 
-                <label for="scope" class="col-md-2 control-label">Kategorie</label>
+                <label for="scope" class="col-md-2 control-label">@Localizer.Translate("Category", "Text")</label>
                 <div class="col-md-3">
-                    <input type="text" class="form-control" id="scope" value="@Model.Scope">
+                    <input type="text" class="form-control" id="scope"  disabled="disabled" value="@Model.Scope">
                 </div>
             </div>
 

@@ -1913,14 +1913,14 @@ class RegExWordInput {
         var regexButtonsDiv = document.createElement("div");
         $(regexButtonsDiv).addClass("regexsearch-regex-buttons-div");
 
-        var anythingButton = HtmlItemsFactory.createButton("Cokoliv");
+        var anythingButton = HtmlItemsFactory.createButton(localization.translate("Anything", "PluginsJs").value);
         regexButtonsDiv.appendChild(anythingButton);
         $(anythingButton).addClass("regexsearch-editor-button");
         $(anythingButton).click(() => {
             this.conditionInput.value += "%";
         });
 
-        var oneCharButton = HtmlItemsFactory.createButton("Jeden znak");
+        var oneCharButton = HtmlItemsFactory.createButton(localization.translate("OneCharacter", "PluginsJs").value);
         regexButtonsDiv.appendChild(oneCharButton);
         $(oneCharButton).addClass("regexsearch-editor-button");
         $(oneCharButton).click(() => {

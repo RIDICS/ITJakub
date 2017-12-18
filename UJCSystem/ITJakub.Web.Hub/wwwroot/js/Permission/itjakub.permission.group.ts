@@ -556,7 +556,7 @@ class GroupPermissionEditor {
 
 class SpecialPermissionTextResolver {
     private localization : Localization;
-    private localizationScope = "FavoriteJs";
+    private localizationScope = "PermissionJs";
     
     constructor() {
         this.localization = new Localization();

@@ -5,10 +5,9 @@
 		"NumberOfPages" : "Počet stran",
 		"Century" : "století",
 		"EditionNote" : "Ediční poznámka",
-		"NotFilled" : "Nezadáno",
 		"Pattern" : "Předloha",
-		"RelicAbbrevitation" : "Zkratka památky",
-		"SourceAbbrevitation" : "Zkratka pramene",
+		"RelicAbbreviation" : "Zkratka památky",
+		"SourceAbbreviation" : "Zkratka pramene",
 		"LiteraryType" : "Literární druh",
 		"LiteraryGenre" : "Literární žánr",
 		"EditionLastModification" : "Poslední úprava edice",
@@ -19,6 +18,8 @@
 		"DownloadFullAudioBook" : "Stáhnout celou audioknihu",
 		"BrowserDoesNotSupportHtmlAudio" : "Váš prohlížeč nepodporuje html audio",
 		"Length" : "Délka",
-		"DownloadChapter" : "Stáhnout kapitolu"
+		"DownloadChapter" : "Stáhnout kapitolu",
+		
+		"NotFilled" : "&lt;Nezadáno&gt;"
 		}
 }

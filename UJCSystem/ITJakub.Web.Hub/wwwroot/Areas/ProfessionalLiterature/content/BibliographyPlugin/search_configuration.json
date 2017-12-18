@@ -85,7 +85,7 @@
         "$editionTable": {
           "type": "table",
           "printRowIfNullValue": true,
-          "replaceNullValueBy": "&lt;{@NotFilled}&gt;",
+          "replaceNullValueBy": "NotFilled",
           "rows": [
             {
               "label": "Editor",

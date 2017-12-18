@@ -313,7 +313,7 @@
         var pageInputText = document.createElement("input");
         pageInputText.setAttribute("type", "text");
         pageInputText.setAttribute("id", "pageInputText");
-        pageInputText.setAttribute("placeholder", "Přejít na stranu...");
+        pageInputText.setAttribute("placeholder", localization.translate("GotoPage", "PluginsJs").value + "...");
         pageInputText.classList.add("page-input-text");
         pageInputDiv.appendChild(pageInputText);
 

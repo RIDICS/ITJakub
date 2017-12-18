@@ -413,7 +413,7 @@ class LemmatizationCharacteristicTable {
         $(editCharacteristicButton)
             .addClass("lemmatization-edit")
             .addClass("lemmatization-big-left-space")
-            .text(this.localization.translate("Modify", "Dictionary").value)
+            .text(this.localization.translate("Modify", "Lemmatization").value)
             .click(() => {
                 this.characteristicEditor.showEdit(this.item, this.updateUiAfterSave.bind(this));
             });

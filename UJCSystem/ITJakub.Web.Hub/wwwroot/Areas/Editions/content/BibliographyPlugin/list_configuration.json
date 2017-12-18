@@ -85,34 +85,34 @@
         "$editionTable": {
           "type": "table",
           "printRowIfNullValue": true,
-          "replaceNullValueBy": "&lt;{@NotFilled}&gt;",
+          "replaceNullValueBy": "NotFilled",
           "rows": [
             {
-              "label": "{@Editor}",
+              "label": "Editor",
               "pattern": "{$editor}"
             },
             {
-              "label": "{@Pattern}",
+              "label": "Pattern",
               "pattern": "{$literaryOriginal}"
             },
             {
-              "label": "{@RelicAbbreviation}",
+              "label": "RelicAbbreviation",
               "pattern": "{RelicAbbreviation}"
             },
             {
-              "label": "{@SourceAbbreviation}",
+              "label": "SourceAbbreviation",
               "pattern": "{SourceAbbreviation}"
             },
             {
-              "label": "{@LiteraryType}",
+              "label": "LiteraryType",
               "pattern": "{$literaryType}"
             },
             {
-              "label": "{@LiteraryGenre}",
+              "label": "LiteraryGenre",
               "pattern": "{$literaryGenre}"
             },
             {
-              "label": "{@EditionLastModification}",
+              "label": "EditionLastModification",
               "pattern": "{CreateTimeString}"
             }
           ]

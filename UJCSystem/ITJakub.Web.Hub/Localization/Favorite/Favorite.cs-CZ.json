@@ -51,6 +51,16 @@
 		"FavoriteItemName":"Název oblíbené položky",
 		"FavoriteItemSaveError":"Chyba při ukládání oblíbené položky",
 		"FilterLabels" : "Filtrovat štítky",
-		"FilterByType" : "Filtrovat štítky podle názvu"
+		"FilterByType" : "Filtrovat štítky podle názvu",
+		
+		"TitleAsc" : "Název vzestupně",
+		"TitleDesc" : "Název sestupně",
+		"CreateTimeAsc" : "Čas vytvoření vzestupně",
+		"CreateTimeDesc" : "Čas vytvoření sestupně",
+		"All" : "Vše",
+		"Books" : "Knihy",
+		"Category" : "Kategorie",
+		"PageBookmark" : "Záložky na stránky",
+		"Query" : "Vyhledávací dotazy"
 	}
 }

@@ -12,16 +12,16 @@
 }
 
 var categoryTranslation = [
-    "Žádná",
-    "Slovníky",
-    "Edice",
-    "Korpusy",
-    "Mluvnice",
-    "Odborná literatura",
-    "Bibliografie",
-    "Kartotéky",
-    "Audioknihy",
-    "Pomůcky"
+    "None",
+    "Dictionaries",
+    "Editions",
+    "BohemianTextBank",
+    "OldGrammar",
+    "ProfessionalLiterature",
+    "Bibliographies",
+    "CardFiles",
+    "AudioBooks",
+    "Tools"
 ];
 
 enum FeedbackSortEnum {
@@ -30,10 +30,10 @@ enum FeedbackSortEnum {
 }
 
 var sortEnumTranslation = [
-    "Autor",
-    "E-mail",
-    "Kategorie",
-    "Datum"
+    "Author",
+    "Email",
+    "Category",
+    "Date"
 ];
 
 enum FeedbackTypeEnum {
@@ -111,11 +111,11 @@ $(document).ready(() => {
                     if (typeof user !== "undefined" && user !== null) {
                         name = user.firstName + " " + user.lastName;
                         email = user.email;
-                        signed = localization.translate("yes", "ItJakub").value;
+                        signed = localization.translate("Yes", "ItJakubJs").value;
                     } else {
                         name = actualFeedback.filledName;
                         email = actualFeedback.filledEmail;
-                        signed = localization.translate("no", "ItJakub").value;
+                        signed = localization.translate("No", "ItJakubJs").value;
                     }
 
                     if (typeof name === "undefined" || name === null || name === "") {

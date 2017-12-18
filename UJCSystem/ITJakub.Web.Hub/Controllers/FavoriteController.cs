@@ -6,6 +6,7 @@ using ITJakub.Shared.Contracts.Favorites;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models.Favorite;
 using ITJakub.Web.Hub.Models.Requests.Favorite;
+using Localization.AspNetCore.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITJakub.Web.Hub.Controllers
@@ -14,9 +15,11 @@ namespace ITJakub.Web.Hub.Controllers
     {
         private const int AllFavoriteCount = 0;
         private const int LatestFavoriteCount = 5;
+        private readonly ILocalization m_localizer;
 
-        public FavoriteController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        public FavoriteController(CommunicationProvider communicationProvider, ILocalization localizer) : base(communicationProvider)
         {
+            m_localizer = localizer;
         }
         
         public ActionResult Management()
@@ -29,18 +32,18 @@ namespace ITJakub.Web.Hub.Controllers
                     FavoriteLabels = Mapper.Map<IList<FavoriteLabelViewModel>>(favoriteLabels),
                     SortList = new List<FavoriteSortViewModel>
                     {
-                        new FavoriteSortViewModel(FavoriteSortContract.TitleAsc, "Název vzestupně"),
-                        new FavoriteSortViewModel(FavoriteSortContract.TitleDesc, "Název sestupně"),
-                        new FavoriteSortViewModel(FavoriteSortContract.CreateTimeAsc, "Čas vytvoření vzestupně"),
-                        new FavoriteSortViewModel(FavoriteSortContract.CreateTimeDesc, "Čas vytvoření sestupně")
+                        new FavoriteSortViewModel(FavoriteSortContract.TitleAsc, m_localizer.Translate("TitleAsc", "Favorite")),
+                        new FavoriteSortViewModel(FavoriteSortContract.TitleDesc, m_localizer.Translate("TitleDesc", "Favorite")),
+                        new FavoriteSortViewModel(FavoriteSortContract.CreateTimeAsc, m_localizer.Translate("CreateTimeAsc", "Favorite")),
+                        new FavoriteSortViewModel(FavoriteSortContract.CreateTimeDesc, m_localizer.Translate("CreateTimeDesc", "Favorite"))
                     },
                     FilterList = new List<FavoriteFilterViewModel>
                     {
-                        new FavoriteFilterViewModel(FavoriteTypeContract.Unknown, "Vše"),
-                        new FavoriteFilterViewModel(FavoriteTypeContract.Book, "Knihy"),
-                        new FavoriteFilterViewModel(FavoriteTypeContract.Category, "Kategorie"),
-                        new FavoriteFilterViewModel(FavoriteTypeContract.PageBookmark, "Záložky na stránky"),
-                        new FavoriteFilterViewModel(FavoriteTypeContract.Query, "Vyhledávací dotazy")
+                        new FavoriteFilterViewModel(FavoriteTypeContract.Unknown, m_localizer.Translate("All", "Favorite")),
+                        new FavoriteFilterViewModel(FavoriteTypeContract.Book, m_localizer.Translate("Books", "Favorite")),
+                        new FavoriteFilterViewModel(FavoriteTypeContract.Category, m_localizer.Translate("Category", "Favorite")),
+                        new FavoriteFilterViewModel(FavoriteTypeContract.PageBookmark, m_localizer.Translate("PageBookmark", "Favorite")),
+                        new FavoriteFilterViewModel(FavoriteTypeContract.Query, m_localizer.Translate("Query", "Favorite"))
                     }
                 };
                 return View("FavoriteManagement", viewModel);

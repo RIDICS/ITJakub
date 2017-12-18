@@ -5,7 +5,7 @@
     "Name:": "Název: ",
 	"Text:": "Text: ",
 	"Url:": "Url: ",
-	"Type:": "Typ: ",
+	"Type": "Typ: ",
     "NameNotEmpty": "Název nemůže být prázdný",
 	"TextNotEmpty": "Text nemůže být prázdný",
 	"UrlNotEmpty": "URL nemůže být prázdná",

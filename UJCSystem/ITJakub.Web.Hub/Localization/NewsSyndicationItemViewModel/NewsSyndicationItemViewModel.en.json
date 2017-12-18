@@ -5,7 +5,7 @@
     "Name:": "Name: ",
 	"Text:": "Text: ",
 	"Url:": "Url: ",
-	"Type:": "Type: ",
+	"Type": "Type: ",
     "NameNotEmpty": "The Name cannot be empty.",
 	"TextNotEmpty": "The Text cannot be empty.",
 	"UrlNotEmpty": "The URL cannot be empty.",

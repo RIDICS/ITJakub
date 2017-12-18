@@ -358,7 +358,8 @@ class DropDownSelect {
         var rootCategory = this.getRootCategory(categories);
 
         var selectHeader = $(dropDownItemsDiv).parent().children(".dropdown-select-header");
-        $(selectHeader).children(".dropdown-select-text").append(this.getCategoryName(rootCategory));
+        var localizedCategoryName = localization.translate(this.getCategoryName(rootCategory), "PluginsJs").value;
+        $(selectHeader).children(".dropdown-select-text").append(localizedCategoryName);
         $(selectHeader).children(".dropdown-select-text-loading").hide();
 
         $(selectHeader).data("id", this.getCategoryId(rootCategory));
@@ -572,7 +573,7 @@ class DropDownSelect {
 
         var nameSpan = document.createElement("span");
         $(nameSpan).addClass("concrete-item-name");
-        $(nameSpan).text(this.getCategoryName(currentCategory));
+        $(nameSpan).text(localization.translate(this.getCategoryName(currentCategory), "PluginsJs").value);
         itemDiv.appendChild(nameSpan);
 
         var childsDiv = document.createElement("div");

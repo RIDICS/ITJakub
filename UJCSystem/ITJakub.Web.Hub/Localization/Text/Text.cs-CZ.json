@@ -23,6 +23,7 @@
 		"TextSaved":"Text uložen",
 		"Save":"Uložit",
 		"CloseEditor":"Zavřít editor",
-		"NoTextSelected":"Nebyl zvolen žádný text pro editaci."
+		"NoTextSelected":"Nebyl zvolen žádný text pro editaci.",
+		"Category" : "Kategorie"
 	}
 }

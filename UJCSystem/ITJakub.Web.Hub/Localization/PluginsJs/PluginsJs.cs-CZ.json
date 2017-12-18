@@ -30,13 +30,11 @@
 		"WrapPages" : "Zalamovat stránky",
 		"ViewComments" : "Zobrazit komentáře",
 		"ViewOptions" : "Možnosti zobrazení",
-		"Bookmarks" : "Záložky",
 		"AllBookmarks" : "Všechny záložky",
 		"NoTitle" : "{0}bez názvu{1}",
 		
 		"LoadingContentError" : "Chyba při načítání obsahu",
 		"Pictures" : "Obrázky",
-		"Text" : "Text",
 		"PageLoadingError" : "Chyba při načítání stránky '{0}'",
 		"PageLoadingErrorWithSearchResults" : "Chyba při načítání stránky '{0}' s výsledky vyhledávání",
 		"PreparingPrint" : "Probíhá příprava díla pro tisk",
@@ -124,7 +122,27 @@
 		
 		"TitleSearchBox" : "Název",
 		
-		"ChooseSearchFiled" : "Zvolte oblast vyhledávání"
-
+		"ChooseSearchFiled" : "Zvolte oblast vyhledávání",
+		
+		"edice" : "edice",
+		"slovníky" : "slovníky",
+		"textová banka" : "textová banka",
+		"odborná literatura" : "odborná literatura",
+		"digitalizované mluvnice" : "digitalizované mluvnice",
+		"Bibliograficky zaznam" : "Bibliografický záznam",
+		"Audioknihy" : "Audioknihy",
+		"staroceská textová banka" : "staročeská textová banka",
+		"stredneceská textová banka" : "středněčeská textová banka",
+		"kartoteky" : "kartotéky",
+		
+		"OneCharacter" : "Jeden znak",
+		"Anything" : "Cokoliv",
+		
+		"Stabilní katastr" : "Stabilní katastr",
+		"Sajtl" : "Sajtl",
+		"Dodatky PSJC" : "Dodatky PSJC",
+		"Grepl" : "Grepl",
+		
+		"GotoPage" : "Přejít na stranu",
 		}
 }

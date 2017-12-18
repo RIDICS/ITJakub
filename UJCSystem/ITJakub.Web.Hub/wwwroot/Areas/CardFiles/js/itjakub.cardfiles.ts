@@ -114,7 +114,7 @@ function createDelegate() {
 
     callbackDelegate.getRootCategoryCallback = (categories): any => {
         var rootCategory = new Object();
-        rootCategory["Name"] = localization.translate("CardFiles", "CardFiles").value;
+        rootCategory["Name"] = "kartoteky";
         return rootCategory;
     };
 

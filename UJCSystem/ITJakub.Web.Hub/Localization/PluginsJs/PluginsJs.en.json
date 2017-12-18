@@ -30,7 +30,6 @@
 		"WrapPages" : "translate[Zalamovat stránky]",
 		"ViewComments" : "translate[Zobrazit komentáře]",
 		"ViewOptions" : "translate[Možnosti zobrazení]",
-		"Bookmarks" : "translate[Záložky]",
 		"AllBookmarks" : "translate[Všechny záložky]",
 		"NoTitle" : "translate[{0}bez názvu{1}]",
 		
@@ -63,7 +62,6 @@
 		"Editor" : "translate[Editor]",
 		"Dating" : "translate[Období vzniku]",
 		"Term" : "translate[Téma]",
-		"Text" : "translate[Text]",
 		"Fulltext" : "translate[Fulltext]",
 		"TokenDistance" : "translate[X tokenů od sebe]",
 		"InSentence" : "translate[Ve větě]",
@@ -124,7 +122,25 @@
 		
 		"TitleSearchBox" : "translate[Název]",
 		
-		"ChooseSearchFiled" : "translate[Zvolte oblast vyhledávání]"
-
-		}
+		"ChooseSearchFiled" : "translate[Zvolte oblast vyhledávání]",
+		
+		"edice" : "translate[edice]",
+		"slovníky" : "translate[slovníky]",
+		"textová banka" : "translate[textová banka]",
+		"odborná literatura" : "translate[odborná literatura]",
+		"digitalizované mluvnice" : "translate[digitalizované mluvnice]",
+		"Bibliograficky zaznam" : "translate[Bibliografický záznam]",
+		"Audioknihy" : "translate[Audioknihy]",
+		"staroceská textová banka" : "translate[staročeská textová banka]",
+		"stredneceská textová banka" : "translate[středněčeská textová banka]",
+		"kartoteky" : "translate[kartotéky]",
+		
+		"OneCharacter" : "Single character",
+		"Anything" : "Anything",
+		
+		"Stabilní katastr" : "translate[Stabilní katastr]",
+		"Sajtl" : "translate[Sajtl]",
+		"Dodatky PSJC" : "translate[Dodatky PSJC]",
+		"Grepl" : "translate[Grepl]",
+	}
 }

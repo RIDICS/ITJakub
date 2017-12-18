@@ -9,17 +9,17 @@
             parallelUploads: 5,
             acceptedFiles: this.acceptedFiles,
 
-            dictInvalidFileType: localization.translate("FormatNotSupported").value + this.acceptedFiles,
-            dictDefaultMessage: localization.translate("DropFilesForUpload").value,
-            dictFallbackMessage: localization.translate("BrowserDoesntSupportDragNDrop").value,
-            dictFallbackText: localization.translate("UseBackupForm").value,
-            dictFileTooBig: localization.translate("FileTooBig").value,
-            dictResponseError: localization.translate("UploadFileError").value,
-            dictCancelUpload: localization.translate("CancelUpload").value,
-            dictCancelUploadConfirmation: localization.translate("CancelUploadModalConfirm").value,
-            dictRemoveFile: localization.translate("DeleteFile").value,
+            dictInvalidFileType: localization.translate("FormatNotSupported", "PluginsJs").value + this.acceptedFiles,
+            dictDefaultMessage: localization.translate("DropFilesForUpload", "PluginsJs").value,
+            dictFallbackMessage: localization.translate("BrowserDoesntSupportDragNDrop", "PluginsJs").value,
+            dictFallbackText: localization.translate("UseBackupForm", "PluginsJs").value,
+            dictFileTooBig: localization.translate("FileTooBig", "PluginsJs").value,
+            dictResponseError: localization.translate("UploadFileError", "PluginsJs").value,
+            dictCancelUpload: localization.translate("CancelUpload", "PluginsJs").value,
+            dictCancelUploadConfirmation: localization.translate("CancelUploadModalConfirm", "PluginsJs").value,
+            dictRemoveFile: localization.translate("DeleteFile", "PluginsJs").value,
             dictRemoveFileConfirmation: null,
-            dictMaxFilesExceeded: localization.translate("CannotUploadMoreFiles").value
+            dictMaxFilesExceeded: localization.translate("CannotUploadMoreFiles", "PluginsJs").value
         };
         return options;
     }

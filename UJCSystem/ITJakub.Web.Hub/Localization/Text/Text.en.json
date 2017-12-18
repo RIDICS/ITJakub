@@ -23,6 +23,7 @@
 		"TextSaved":"Text saved",
 		"Save":"Save",
 		"CloseEditor":"Close editor",
-		"NoTextSelected":"No text selected for editing."
+		"NoTextSelected":"No text selected for editing.",
+		"Category" : "translate[Kategorie]"
 	}
 }
