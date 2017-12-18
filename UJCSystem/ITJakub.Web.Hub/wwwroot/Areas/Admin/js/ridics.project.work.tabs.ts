@@ -248,12 +248,20 @@
             () => {
                 const enteredText = $("#work-metadata-publisher-email").val();
                 const emailIsValid = this.validateEmail(enteredText);
+                const emailGroupEl = $(".email-group");
+                const iconEl = emailGroupEl.find(".form-control-feedback");
+                iconEl.show();
+                emailGroupEl.addClass("has-feedback");
                 if (emailIsValid) {
-                    $(".email-validity-icon-valid").show();
-                    $(".email-validity-icon-invalid").hide();
+                    emailGroupEl.addClass("has-success");
+                    emailGroupEl.removeClass("has-error");
+                    iconEl.addClass("glyphicon-ok");
+                    iconEl.removeClass("glyphicon-remove");
                 } else {
-                    $(".email-validity-icon-valid").hide();
-                    $(".email-validity-icon-invalid").show();
+                    emailGroupEl.addClass("has-error");
+                    emailGroupEl.removeClass("has-success");
+                    iconEl.addClass("glyphicon-remove");
+                    iconEl.removeClass("glyphicon-ok");
                 }
             });
 
@@ -261,12 +269,20 @@
             () => {
                 const enteredText = $("#work-metadata-publish-date").val();
                 const yearIsValid = this.publicationYearsValid(enteredText);
+                const publishYearsGroupEl = $(".publication-years-group");
+                const iconEl = publishYearsGroupEl.find(".form-control-feedback");
+                iconEl.show();
+                publishYearsGroupEl.addClass("has-feedback");
                 if (yearIsValid) {
-                    $(".year-validity-icon-valid").show();
-                    $(".year-validity-icon-invalid").hide();
+                    publishYearsGroupEl.addClass("has-success");
+                    publishYearsGroupEl.removeClass("has-error");
+                    iconEl.addClass("glyphicon-ok");
+                    iconEl.removeClass("glyphicon-remove");
                 } else {
-                    $(".year-validity-icon-valid").hide();
-                    $(".year-validity-icon-invalid").show();
+                    publishYearsGroupEl.addClass("has-error");
+                    publishYearsGroupEl.removeClass("has-success");
+                    iconEl.addClass("glyphicon-remove");
+                    iconEl.removeClass("glyphicon-ok");
                 }
             });
 
