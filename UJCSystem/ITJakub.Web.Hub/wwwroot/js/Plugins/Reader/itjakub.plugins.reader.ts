@@ -1670,7 +1670,7 @@ class BookmarksPanel extends LeftSidePanel {
         }
 
         var bookmarksHead = document.createElement("h2");
-        bookmarksHead.innerHTML = "Všechny záložky";
+        bookmarksHead.innerHTML = localization.translate("AllBookmarks", "PluginsJs").value;
         bookmarksHead.classList.add("reader-bookmarks-head");
         bookmarksContainer.appendChild(bookmarksHead);
 

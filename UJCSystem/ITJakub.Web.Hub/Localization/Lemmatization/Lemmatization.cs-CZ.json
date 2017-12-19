@@ -180,13 +180,13 @@
 		"Cas/Q" : "Q – plusquamperfektum",
 		
 		"Stupen" : "Stupeň",
-		"Stupen" : "1 - 1. stupeň",
-		"Stupen" : "2 - 2. stupeň",
-		"Stupen" : "3 - 3. stupeň",
+		"Stupen/1" : "1 - 1. stupeň",
+		"Stupen/2" : "2 - 2. stupeň",
+		"Stupen/3" : "3 - 3. stupeň",
 		
-		"Neagce" : "Negace",
-		"Neagce/A" : "A - afirmativ (bez negativní předpony \"ne-\")",
-		"Neagce/N" : "N - negace (tvar s negativní předponou \"ne-\")",
+		"Negace" : "Negace",
+		"Negace/A" : "A - afirmativ (bez negativní předpony \"ne-\")",
+		"Negace/N" : "N - negace (tvar s negativní předponou \"ne-\")",
 
 		"AktivumPasivum" : "Aktivum/pasivum",
 		"AktivumPasivum/A" : "A - aktivum nebo 'nikoli pasivum'",
