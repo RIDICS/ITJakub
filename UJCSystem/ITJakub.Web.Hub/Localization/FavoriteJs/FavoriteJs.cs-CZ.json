@@ -48,9 +48,9 @@
 		"ThisItemLabels" : "Štítky této položky",
 		"CreateFavItemError" : "Chyba při vytváření oblíbené položky",
 		"NoItem" : "Žádná položka",
-		"AttachedTagList" : "{0}Seznam přiřazených štítků:{1}",
-		"AddTagFromLastUsed" : "{0}Přidat štítek z naposledy použitých:{1}",
-		"AdvancedOptions" : "{0}Pokročilé možnosti{1}",
+		"AttachedTagList" : "Seznam přiřazených štítků:",
+		"AddTagFromLastUsed" : "Přidat štítek z naposledy použitých:",
+		"AdvancedOptions" : "Pokročilé možnosti",
 		"SavedAs" : "Uloženo jako: ",	
 		"AddFromAllTagList" : "Přidat ze seznamu všech štítků",
 		

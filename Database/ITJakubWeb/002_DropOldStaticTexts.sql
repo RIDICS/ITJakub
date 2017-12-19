@@ -13,9 +13,7 @@ SET XACT_ABORT ON
 BEGIN TRAN
 
 
-	DROP TABLE [dbo].[DatabaseVersion];
-
-    DROP TABLE [dbo].[StaticText];
+	DROP TABLE [dbo].[StaticText];
         
     INSERT INTO [dbo].[DatabaseVersion]
 		(DatabaseVersion)

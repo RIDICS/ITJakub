@@ -204,18 +204,11 @@
 }
 
 class FavoritePopoverBuilder {
-    //private localization : Localization;
-	private localizationScope = "FavoriteJs";
+    private localizationScope = "FavoriteJs";
 
-    //private templateStart = '<div class="row"><div class="col-md-12"><h6>Seznam přiřazených štítků:</h6><div class="favorite-label-popover-container">';
-    private templateStart = localization.translateFormat("AttachedTagList", new Array<string>('<div class="row"><div class="col-md-12"><h6>', '</h6><div class="favorite-label-popover-container'), this.localizationScope).value;
-
-    //private templateMiddle = '</div><hr></div></div><div class="row"><div class="col-md-12"><h6>Přidat štítek z naposledy použitých:</h6>';
-    private templateMiddle = localization.translateFormat("AddTagFromLastUsed", new Array<string>('</div><hr></div></div><div class="row"><div class="col-md-12"><h6>', '</h6>'), this.localizationScope).value;
-
-    //private templateEnd = '<hr></div></div><div class="row"><div class="col-md-12"><button type="button" class="btn btn-default btn-block btn-sm show-all-favorite-button">Pokročilé možnosti</button></div></div>';
-    private templateEnd = localization.translateFormat("AdvancedOptions", new Array<string>('<hr></div></div><div class="row"><div class="col-md-12"><button type="button" class="btn btn-default btn-block btn-sm show-all-favorite-button">', '</button></div></div>'), this.localizationScope).value;
-
+    private templateStart: string;
+    private templateMiddle: string;
+    private templateEnd: string;
     private favoriteItems: Array<IFavoriteBaseInfo>;
     private favoriteLabels: Array<IFavoriteLabel>;
 
@@ -223,7 +216,13 @@ class FavoritePopoverBuilder {
         this.favoriteItems = [];
         this.favoriteLabels = [];
 
-        //this.localization = new Localization();
+        var attachedTagList = localization.translate("AttachedTagList", this.localizationScope).value;
+        var addTagFromLastUsed = localization.translate("AddTagFromLastUsed", this.localizationScope).value;
+        var advancedOptions = localization.translate("AdvancedOptions", this.localizationScope).value;
+
+        this.templateStart = `<div class="row"><div class="col-md-12"><h6>${attachedTagList}</h6><div class="favorite-label-popover-container">`;
+        this.templateMiddle = `</div><hr></div></div><div class="row"><div class="col-md-12"><h6>${addTagFromLastUsed}</h6>`;
+        this.templateEnd = `<hr></div></div><div class="row"><div class="col-md-12"><button type="button" class="btn btn-default btn-block btn-sm show-all-favorite-button">${advancedOptions}</button></div></div>`;
     }
 
     private getFavoriteItemHtml(item: IFavoriteBaseInfo): string {
@@ -298,10 +297,10 @@ class FavoritePopoverBuilder {
 
     public getHtmlString(): string {
         var favoriteItemsString = this.favoriteItems.length === 0
-            ? "<div>" + localization.translate("NoItem", this.localizationScope) + "</div>"
+            ? "<div>" + localization.translate("NoItem", this.localizationScope).value + "</div>"
             : this.getFavoriteItemsHtml();
         var favoriteLabelsString = this.favoriteLabels.length === 0
-            ? "<div>" + localization.translate("NoItem", this.localizationScope) + "</div>"
+            ? "<div>" + localization.translate("NoItem", this.localizationScope).value + "</div>"
             : this.getFavoriteLabelsHtml();
 
         return this.templateStart +

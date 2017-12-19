@@ -48,9 +48,9 @@
 		"ThisItemLabels" : "translate[Štítky této položky]",
 		"CreateFavItemError" : "translate[Chyba při vytváření oblíbené položky]",
 		"NoItem" : "{translate[Žádná položka]",
-		"AttachedTagList" : "translate[{0}Seznam přiřazených štítků:{1}]",
-		"AddTagFromLastUsed" : "translate[{0}Přidat štítek z naposledy použitých:{1}]",
-		"AdvancedOptions" : "translate[{0}Pokročilé možnosti{1}]",
+		"AttachedTagList" : "translate[Seznam přiřazených štítků:]",
+		"AddTagFromLastUsed" : "translate[Přidat štítek z naposledy použitých:]",
+		"AdvancedOptions" : "translate[Pokročilé možnosti]",
 		"SavedAs" : "translate[Uloženo jako: ]",	
 		"AddFromAllTagList" : "translate[Přidat ze seznamu všech štítků]",
 		
