@@ -246,24 +246,30 @@
 
         $("#work-metadata-publisher-email").on("input",
             () => {
-                const enteredText = $("#work-metadata-publisher-email").val();
-                const emailIsValid = this.validateEmail(enteredText);
-                const emailGroupEl = $(".email-group");//TODO optimise , optionally use jquery validate
+                const emailGroupEl = $(".email-group");
                 const emailToValidateEl = emailGroupEl.children(".email-to-validate");
                 const iconEl = emailToValidateEl.children(".form-control-feedback");
                 iconEl.show();
                 emailGroupEl.addClass("has-feedback");
-                if (emailIsValid) {
-                    emailGroupEl.addClass("has-success");
-                    emailGroupEl.removeClass("has-error");
-                    iconEl.addClass("glyphicon-ok");
-                    iconEl.removeClass("glyphicon-remove");
-                } else {
-                    emailGroupEl.addClass("has-error");
-                    emailGroupEl.removeClass("has-success");
-                    iconEl.addClass("glyphicon-remove");
-                    iconEl.removeClass("glyphicon-ok");
-                }
+                $("#email-form").validate({
+                    rules: {
+                        "email": {
+                            required: true,
+                            email: true,
+                            minlength: 5,
+                            maxlength: 100
+                        }
+                    },
+                    highlight: () => {
+                        emailGroupEl.removeClass("has-success").addClass("has-error");
+                        iconEl.addClass("glyphicon-remove").removeClass("glyphicon-ok");
+                    },
+                    unhighlight: () => {
+                        emailGroupEl.removeClass("has-error").addClass("has-success");
+                        iconEl.removeClass("glyphicon-remove").addClass("glyphicon-ok");
+                    },
+                    errorPlacement: (error, element) => true //disable error messages
+                }).form();
             });
 
         $("#work-metadata-publish-date").on("input",
@@ -836,14 +842,6 @@
             (event) => {
                 $(event.currentTarget).closest(".lit-kind-item").remove();
             });
-    }
-
-    private validateEmail(mail: string) {
-        const emailRegex = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
-        if (emailRegex.test(mail)) {
-            return true;
-        }
-        return false;
     }
 
     private saveMetadata() {
