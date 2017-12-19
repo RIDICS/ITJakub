@@ -19,14 +19,14 @@ BEGIN TRAN
 	--DROP TABLE IF EXISTS [DictionaryScope]
 
 
-	CREATE TABLE [DatabaseVersion] 
-	(
-	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_DatabaseVersion(Id)] PRIMARY KEY CLUSTERED,
-	   [DatabaseVersion] varchar(50) NOT NULL,
-	   [SolutionVersion] varchar(50) NULL,
-	   [UpgradeDate] datetime NOT NULL DEFAULT GETDATE(),
-	   [UpgradeUser] varchar(150) NOT NULL default SYSTEM_USER,		
-	)
+	--CREATE TABLE [DatabaseVersion] 
+	--(
+	--   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_DatabaseVersion(Id)] PRIMARY KEY CLUSTERED,
+	--   [DatabaseVersion] varchar(50) NOT NULL,
+	--   [SolutionVersion] varchar(50) NULL,
+	--   [UpgradeDate] datetime NOT NULL DEFAULT GETDATE(),
+	--   [UpgradeUser] varchar(150) NOT NULL default SYSTEM_USER,		
+	--)
 	
 	CREATE TABLE [DictionaryScope]
 	(
