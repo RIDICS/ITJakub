@@ -461,6 +461,7 @@ function initSearch() {
     }
     var search = new Search(<any>$("#listSearchDiv")[0], corpusAdvancedSearchCount, corpusBasicSearchCount, favoritesQueriesConfig);
     search.makeSearch(enabledOptions);
+    search.limitFullTextSearchToOne();
     
     const callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = (state: State) => {

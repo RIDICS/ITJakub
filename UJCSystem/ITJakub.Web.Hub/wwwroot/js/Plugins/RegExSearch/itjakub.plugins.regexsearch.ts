@@ -1,11 +1,11 @@
 ﻿class HtmlItemsFactory {
 
-    public static createOption(label: string, value: string): HTMLOptionElement {
-        var conditionOption = document.createElement("option");
-        conditionOption.innerHTML = label;
-        conditionOption.value = value;
-
-        return conditionOption;
+    public static createOption(label: string, value: string, disabled?: boolean): HTMLOptionElement {
+        const optionEl = $(`<option value="${value}">${label}</option>`);
+        if (disabled) {
+            optionEl.prop("disabled", true);
+        }
+        return <HTMLOptionElement>optionEl[0];//TODO rewrite to JQuery
     }
 
     public static createOptionGroup(label: string): HTMLOptionElement {
@@ -27,6 +27,8 @@
 }
 
 class Search {
+    private fulltextIsLimited = false;
+    private numberOfFullTextConditions = 0;
     private speedAnimation: number = 200; //200=fast, 600=slow
     private advancedRegexEditor: RegExAdvancedSearchEditor;
     private favoriteQueryComponent: FavoriteQuery;
@@ -64,6 +66,10 @@ class Search {
         if (this.favoriteQueryComponent) {
             this.favoriteQueryComponent.setOverrideQueryCallback(callback);
         }
+    }
+
+    limitFullTextSearchToOne() {
+        this.fulltextIsLimited = true;
     }
 
     makeSearch(enabledOptions: Array<SearchTypeEnum>) {
@@ -210,6 +216,12 @@ class Search {
 
             this.advancedRegexEditor = new RegExAdvancedSearchEditor(this.searchbarAdvancedEditorContainer, (json: string) => this.closeAdvancedSearchEditorWithImport(json), (json: string) => this.closeAdvancedSearchEditor());
             this.advancedRegexEditor.setEnabledOptions(enabledOptions);
+            if (this.fulltextIsLimited) {
+                this.numberOfFullTextConditions++;
+            }
+            if (this.numberOfFullTextConditions>1) {
+                this.advancedRegexEditor.limitFullTextOptions();
+            }//TODO
             this.advancedRegexEditor.makeRegExSearch();
             $(this.searchbarAdvancedEditorContainer).hide();
         } else {
@@ -322,6 +334,7 @@ class Search {
 }
 
 class RegExAdvancedSearchEditor {
+    private fulltextIsLimited = false;
     private regexDoneCallback: (jsonData: string) => void;
     private regexCancelledCallback: (jsonData: string) => void;
     private container: HTMLDivElement;
@@ -337,6 +350,10 @@ class RegExAdvancedSearchEditor {
 
     setEnabledOptions(enabledOptions: Array<SearchTypeEnum>) {
         this.enabledOptionsArray = enabledOptions;
+    }
+
+    limitFullTextOptions() {
+        this.fulltextIsLimited = true;
     }
 
     makeRegExSearch() {
@@ -363,7 +380,7 @@ class RegExAdvancedSearchEditor {
         });
 
         this.innerContainer = document.createElement("div");
-        this.addNewCondition(true);
+        this.addNewCondition(true, this.fulltextIsLimited);
         $(this.container).append(this.innerContainer);
         $(this.container).append(commandsDiv);
     }
@@ -376,18 +393,22 @@ class RegExAdvancedSearchEditor {
         for (var i = 0; i < jsonDataArray.length; i++) {
             var conditionData = jsonDataArray[i];
             if (typeof this.enabledOptionsArray !== "undefined" && this.enabledOptionsArray !== null && $.inArray(conditionData.searchType, this.enabledOptionsArray) >= 0) {
-                this.addNewCondition();
+                this.addNewCondition(null, this.fulltextIsLimited);
                 this.getLastCondition().importData(conditionData);
             }
         }
     }
 
-    addNewCondition(useDelimiter: boolean = true) {
+    addNewCondition(useDelimiter: boolean = true, fulltextIsLimited?: boolean) {
+        var disableOptions = false;
         if (this.regExConditions.length > 0) {
             this.getLastCondition().setTextDelimeter();
         }
+        if (this.regExConditions.length > 1 && fulltextIsLimited) {
+            disableOptions = true;
+        }
         var newRegExConditions = new RegExConditionListItem(this);
-        newRegExConditions.makeRegExCondition(this.enabledOptionsArray);
+        newRegExConditions.makeRegExCondition(this.enabledOptionsArray, disableOptions);
         newRegExConditions.setClickableDelimeter();
         if (!useDelimiter) {
             newRegExConditions.removeDelimeter();
@@ -415,7 +436,7 @@ class RegExAdvancedSearchEditor {
         }
 
         if (this.regExConditions.length === 0) {
-            this.addNewCondition(true);
+            this.addNewCondition(true, this.fulltextIsLimited);
         } else {
             this.getLastCondition().setClickableDelimeter();
         }
@@ -499,7 +520,7 @@ class RegExConditionListItem {
         $(addWordSpan).addClass("regex-clickable-text");
         addWordSpan.innerHTML = "+ A zároveň";
         $(addWordSpan).click(() => {
-            this.parent.addNewCondition();
+            this.parent.addNewCondition();//TODO
         });
 
         delimeterDiv.appendChild(addWordSpan);
@@ -561,7 +582,7 @@ class RegExConditionListItem {
         }
     }
 
-    makeRegExCondition(enabledOptions?: Array<SearchTypeEnum>) {
+    makeRegExCondition(enabledOptions?: Array<SearchTypeEnum>, fullTextLimited?: boolean) {
 
         var conditionsDiv = document.createElement("div");
         $(conditionsDiv).addClass("regexsearch-condition-main-div");
@@ -593,10 +614,10 @@ class RegExConditionListItem {
         var textOptGroup = HtmlItemsFactory.createOptionGroup("Text");
         searchDestinationSelect.appendChild(textOptGroup);
 
-        textOptGroup.appendChild(HtmlItemsFactory.createOption("Fulltext", SearchTypeEnum.Fulltext.toString()));
-        textOptGroup.appendChild(HtmlItemsFactory.createOption("X tokenů od sebe", SearchTypeEnum.TokenDistance.toString()));
-        textOptGroup.appendChild(HtmlItemsFactory.createOption("Ve větě", SearchTypeEnum.Sentence.toString()));
-        textOptGroup.appendChild(HtmlItemsFactory.createOption("V nadpisu", SearchTypeEnum.Heading.toString()));
+        textOptGroup.appendChild(HtmlItemsFactory.createOption("Fulltext", SearchTypeEnum.Fulltext.toString(), fullTextLimited));
+        textOptGroup.appendChild(HtmlItemsFactory.createOption("X tokenů od sebe", SearchTypeEnum.TokenDistance.toString(), fullTextLimited));
+        textOptGroup.appendChild(HtmlItemsFactory.createOption("Ve větě", SearchTypeEnum.Sentence.toString(), fullTextLimited));
+        textOptGroup.appendChild(HtmlItemsFactory.createOption("V nadpisu", SearchTypeEnum.Heading.toString(), fullTextLimited));
 
         var headwordsOptGroup = HtmlItemsFactory.createOptionGroup("Hesla");
         searchDestinationSelect.appendChild(headwordsOptGroup);
@@ -2299,7 +2320,7 @@ enum SearchTypeEnum {
     HeadwordDescription = 11,
     HeadwordDescriptionTokenDistance = 12,
     SelectedCategory = 13,
-    Term = 14,
+    Term = 14
 }
 
 /*
