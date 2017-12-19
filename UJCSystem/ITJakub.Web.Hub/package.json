@@ -12,6 +12,7 @@
     "@types/gijgo": "0.6.6",
     "@types/simplemde": "1.11.5",
     "@types/jquery.validation": "1.16.4",
+    "@types/jquery-validation-unobtrusive": "3.2.32",
     "bower": "1.7.9",
     "gulp": "3.9.1",
     "gulp-concat": "2.6.0",
