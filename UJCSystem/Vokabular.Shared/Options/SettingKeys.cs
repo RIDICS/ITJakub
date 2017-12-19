@@ -10,5 +10,6 @@
         public const string ExistDbPassword = "ExistDbPassword";
         public const string CardFilesUser = "CardFilesUser";
         public const string CardFilesPassword = "CardFilesPassword";
+        public const string CardFiles = "CardFiles";
     }
 }

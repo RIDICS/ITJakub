@@ -17,13 +17,21 @@ namespace Vokabular.RestClient
     {
         private const int StreamBufferSize = 64 * 1024;
         private readonly HttpClient m_client;
+        private readonly HttpClientHandler m_httpClientHandler;
 
-        public RestClientBase(Uri baseAddress)
+        public RestClientBase(Uri baseAddress, bool createCustomHandler = false)
         {
-            m_client = new HttpClient
+            if (createCustomHandler)
             {
-                BaseAddress = baseAddress
-            };
+                m_httpClientHandler = new HttpClientHandler();
+                m_client = new HttpClient(m_httpClientHandler);
+            }
+            else
+            {
+                m_client = new HttpClient();
+            }
+            
+            m_client.BaseAddress = baseAddress;
             m_client.DefaultRequestHeaders.Accept.Clear();
             m_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
@@ -37,10 +45,9 @@ namespace Vokabular.RestClient
             m_client.Dispose();
         }
 
-        protected HttpClient HttpClient
-        {
-            get { return m_client; }
-        }
+        protected HttpClient HttpClient => m_client;
+
+        protected HttpClientHandler HttpClientHandler => m_httpClientHandler;
 
         private HttpRequestMessage CreateRequestMessage(HttpMethod method, string requestUri, IEnumerable<Tuple<string, string>> headers = null)
         {

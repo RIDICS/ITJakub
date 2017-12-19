@@ -7,7 +7,7 @@ namespace Vokabular.RestClient
 {
     public abstract class FullRestClientBase : RestClientBase
     {
-        protected FullRestClientBase(Uri baseAddress) : base(baseAddress)
+        protected FullRestClientBase(Uri baseAddress, bool createCustomHandler = false) : base(baseAddress, createCustomHandler)
         {
         }
 

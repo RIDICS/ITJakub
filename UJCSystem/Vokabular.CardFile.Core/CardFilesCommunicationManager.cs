@@ -25,7 +25,7 @@ namespace Vokabular.CardFile.Core
             {
                 m_serviceClient.ClientCredentials.HttpDigest.ClientCredential = new NetworkCredential(username, userPassword);
 
-                m_serviceClient.ClientCredentials.HttpDigest.AllowedImpersonationLevel = TokenImpersonationLevel.Impersonation;
+                //m_serviceClient.ClientCredentials.HttpDigest.AllowedImpersonationLevel = TokenImpersonationLevel.Impersonation;
             }
             else
             {
@@ -95,7 +95,7 @@ namespace Vokabular.CardFile.Core
                     }
                     else
                     {
-                        m_serviceClient.Close();
+                        //m_serviceClient.Close();
                     }
                     m_serviceClient = null;
                 }
