@@ -167,14 +167,23 @@ function createListing() {
             var cardFileId = getQueryStringParameterByName("cardFileId");
             if(cardFileId){
             $(cardFileSelector).find("option:selected").removeAttr("selected");
-            $(cardFileSelector).find("option[value =" + cardFileId + "]").prop("selected", "selected");
+            $(cardFileSelector).find(`option[value = ${cardFileId}]`).prop("selected", "selected");
             }
 
             $(cardFileSelector).show();
             $(cardFileSelector).change();
         },
         error: (response) => {
-            //TODO resolve error
+            $(cardFileLoadingDiv).hide();
+            bootbox.alert({
+                title: "Error",
+                message: "Not enough permissions to access card files",
+                buttons:{
+                    ok: {
+                        className: "btn-default"
+            }
+            }
+            });
         }
     });
 
@@ -211,7 +220,16 @@ function createListing() {
                 $(bucketSelector).change();
             },
             error: (response) => {
-                //TODO resolve error
+                $(bucketLoadingDiv).hide();
+                bootbox.alert({
+                    title: "Error",
+                    message: "Not enough permissions to access card files",
+                    buttons: {
+                        ok: {
+                            className: "btn-default"
+                        }
+                    }
+                });
             }
         });
     });
