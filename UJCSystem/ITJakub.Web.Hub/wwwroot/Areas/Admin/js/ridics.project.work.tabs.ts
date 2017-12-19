@@ -707,7 +707,7 @@
     }
 
     private publicationYearsValid(string: string) {
-        const yearsRegex = new RegExp(/(^\d{1,4}$)|(^\d{1,4}-\d{1,4}$)|(^(\d{1,4},)*\d{1,4}$)/);
+        const yearsRegex = new RegExp(/(^\d{1,4}$)|(^\d{1,4}(-|–)\d{1,4}$)|(^(\d{1,4},)*\d{1,4}$)/);
         return yearsRegex.test(string);
     }
 
