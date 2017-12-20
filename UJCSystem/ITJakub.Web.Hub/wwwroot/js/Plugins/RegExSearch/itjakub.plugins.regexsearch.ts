@@ -1692,31 +1692,29 @@ class RegExWordCondition implements IRegExConditionItemBase{
     }
 
     makeRegExItemCondition() {
-        var mainDiv = document.createElement("div");
-        $(mainDiv).addClass("reg-ex-word-condition");
+        var mainDiv = $("<div></div>");
+        mainDiv.addClass("reg-ex-word-condition");
 
-        this.inputsContainerDiv = document.createElement("div");
-        $(this.inputsContainerDiv).addClass("regexsearch-word-input-list-div");
-        mainDiv.appendChild(this.inputsContainerDiv);
+        const inputsContainerEl = $("<div></div>");
+        inputsContainerEl.addClass("regexsearch-word-input-list-div");
+        this.inputsContainerDiv = inputsContainerEl[0] as HTMLDivElement;
+        mainDiv.append(inputsContainerEl);
 
-        var commandsDiv = document.createElement("div");
-        $(commandsDiv).addClass("regexsearch-conditions-commands");
-        mainDiv.appendChild(commandsDiv);
+        var commandsDiv = $("<div></div>");
+        commandsDiv.addClass("regexsearch-conditions-commands");
+        mainDiv.append(commandsDiv);
 
-        var addConditionButton = document.createElement("button");
-        addConditionButton.type = "button";
-        addConditionButton.innerHTML = "+";
-        $(addConditionButton).addClass("btn");
-        $(addConditionButton).addClass("btn-default");
-        $(addConditionButton).addClass("regexsearch-button");
-        $(addConditionButton).addClass("regexsearch-add-input-button");
-        $(addConditionButton).click(() => {
+        var addConditionButton = $("<button></button>");
+        addConditionButton.prop("type", "button");
+        addConditionButton.text("+");
+        addConditionButton.addClass("btn btn-default regexsearch-button regexsearch-add-input-button");
+        addConditionButton.click(() => {
             this.addInput();
         });
-        commandsDiv.appendChild(addConditionButton);
-        mainDiv.appendChild(this.createTextDelimeter());
+        commandsDiv.append(addConditionButton[0]);
+        mainDiv.append(this.createTextDelimeter());
         this.resetInputs();
-        this.html = mainDiv;
+        this.html = mainDiv[0] as HTMLDivElement;
     }
 
     resetInputs() {
@@ -1724,6 +1722,7 @@ class RegExWordCondition implements IRegExConditionItemBase{
         $(this.inputsContainerDiv).empty();
         this.inputsArray = new Array<RegExWordInput>();
         this.addInput();
+        $(this.inputsContainerDiv).find("select").trigger("change");
     }
 
     addInput() {
@@ -1735,7 +1734,9 @@ class RegExWordCondition implements IRegExConditionItemBase{
         if (!(newInput.getConditionType() === WordInputTypeEnum.Contains)) {
             this.hiddenWordInputSelects.push(newInput.getConditionType());
         }
-
+        if (!(newInput.getConditionType() === WordInputTypeEnum.ExactMatch)) {
+            this.hiddenWordInputSelects.push(WordInputTypeEnum.ExactMatch);
+        }
         this.inputsArray.push(newInput);
         this.inputsContainerDiv.appendChild(newInput.getHtml());
     }
@@ -1869,11 +1870,33 @@ class RegExWordInput {
         //conditionSelect.appendChild(this.createOption("Neobsahuje", this.conditionType.NotContains));
         conditionSelect.appendChild(HtmlItemsFactory.createOption("Končí na", WordInputTypeEnum.EndsWith.toString()));
         //conditionSelect.appendChild(this.createOption("Nekončí na", this.conditionType.NotEndsWith));
-
+        conditionSelect.appendChild(HtmlItemsFactory.createOption("Přesně shoduje", WordInputTypeEnum.ExactMatch.toString()));
 
         $(conditionSelect).change((eventData: Event) => {
             var oldConditonType = this.conditionInputType;
-            this.conditionInputType = parseInt($(eventData.target).val());
+            const selectEl = $(eventData.target);
+            this.conditionInputType = parseInt(selectEl.val());
+            if (this.conditionInputType === WordInputTypeEnum.ExactMatch) {
+                const regexWordConditionEl = selectEl.parents(".reg-ex-word-condition");
+                const wordInputEl = selectEl.parents(".reg-ex-word-input");
+                const otherWordInputs = wordInputEl.siblings(".reg-ex-word-input");
+                if (otherWordInputs) {
+                    otherWordInputs.find(".regexsearch-condition-input").prop("disabled", true);
+                    otherWordInputs.find(".regexsearch-condition-input-button").prop("disabled", true);
+                }
+                const regexAddInputButton = regexWordConditionEl.find(".regexsearch-add-input-button");
+                regexAddInputButton.prop("disabled", true);
+            } else {
+                const regexWordConditionEl = selectEl.parents(".reg-ex-word-condition");
+                const wordInputEl = selectEl.parents(".reg-ex-word-input");
+                const otherWordInputs = wordInputEl.siblings(".reg-ex-word-input");
+                if (otherWordInputs) {
+                    otherWordInputs.find(".regexsearch-condition-input").prop("disabled", false);
+                    otherWordInputs.find(".regexsearch-condition-input-button").prop("disabled", false);
+                }
+                const regexAddInputButton = regexWordConditionEl.find(".regexsearch-add-input-button");
+                regexAddInputButton.prop("disabled", false);
+            }
             this.parentRegExWordCondition.wordInputConditionChanged(this, oldConditonType);
         });
 
@@ -1901,19 +1924,18 @@ class RegExWordInput {
         var keyboardComponent = KeyboardManager.getKeyboard("0");
         keyboardComponent.registerButton(keyboardButton, this.conditionInput, null);
 
-        var regExButton = document.createElement("button");
-        $(regExButton).text("R");
-        $(regExButton).attr("type", "button");
-        $(regExButton).addClass("btn");
-        $(regExButton).addClass("regexsearch-condition-input-button");
-        $(regExButton).click(() => {
+        var regExButton = $("<button></button>");
+        regExButton.text("R");
+        regExButton.attr("type", "button");
+        regExButton.addClass("btn regexsearch-condition-input-button");
+        regExButton.click(() => {
             if ($(this.regexButtonsDiv).is(":hidden")) {
                 $(this.regexButtonsDiv).slideDown("fast");
             } else {
                 $(this.regexButtonsDiv).slideUp("fast");
             }
         });
-        lineDiv.appendChild(regExButton);
+        lineDiv.appendChild(regExButton[0]);
 
         var removeButton = HtmlItemsFactory.createButton("");
         var removeGlyph = document.createElement("span");
@@ -1921,8 +1943,28 @@ class RegExWordInput {
         $(removeGlyph).addClass("glyphicon-trash");
         removeButton.appendChild(removeGlyph);
         $(removeButton).css("margin-left", "3px");
-        $(removeButton).click(() => {
+        $(removeButton).click((event) => {
+            const eventTargetEl = $(event.target);
+            const conditionList = eventTargetEl.parents(".reg-ex-word-condition");
+
             this.parentRegExWordCondition.removeInput(this);
+
+            const regexWordInputEls = conditionList.find(".reg-ex-word-input");
+            var numberOfExactMatchSeachTypes = 0;
+            regexWordInputEls.each((index, element) => {
+                const wordInputEl = $(element);
+                const selectEl = wordInputEl.find("select");
+                const searchType: WordInputTypeEnum = parseInt(selectEl.val());
+                if (searchType === WordInputTypeEnum.ExactMatch) {
+                    numberOfExactMatchSeachTypes++;
+                }
+            });
+            if (numberOfExactMatchSeachTypes === 0) {
+                const plusButtonEl = conditionList.find(".regexsearch-add-input-button");
+                plusButtonEl.prop("disabled", false);
+                regexWordInputEls.find(".regexsearch-condition-input").prop("disabled", false);
+                regexWordInputEls.find(".regexsearch-condition-input-button").prop("disabled", false);
+            }
         });
 
         lineDiv.appendChild(removeButton);
@@ -2294,7 +2336,8 @@ class TokenDistanceCriteriaDescription extends ConditionItemResult{
 enum WordInputTypeEnum {
     StartsWith = 0,
     Contains = 1,
-    EndsWith = 2
+    EndsWith = 2,
+    ExactMatch = 3
 }
 
 /*
