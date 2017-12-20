@@ -459,9 +459,9 @@ function initSearch() {
         bookType: BookTypeEnum.TextBank,
         queryType: QueryTypeEnum.Search
     }
-    var search = new Search(<any>$("#listSearchDiv")[0], corpusAdvancedSearchCount, corpusBasicSearchCount, favoritesQueriesConfig);
-    search.makeSearch(enabledOptions);
+    var search = new Search($("#listSearchDiv")[0] as HTMLDivElement, corpusAdvancedSearchCount, corpusBasicSearchCount, favoritesQueriesConfig);
     search.limitFullTextSearchToOne();
+    search.makeSearch(enabledOptions);
     
     const callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = (state: State) => {
