@@ -477,29 +477,31 @@ function initSearch() {
     function printDetailInfo(tableRow: HTMLElement) {
         var undefinedReplaceString = "&lt;Nezadáno&gt;";
 
-        document.getElementById("detail-author").innerHTML = typeof $(tableRow).data("author") !== "undefined" && $(tableRow).data("author") !== null ? $(tableRow).data("author") : undefinedReplaceString;
-        document.getElementById("detail-title").innerHTML = typeof $(tableRow).data("title") !== "undefined" && $(tableRow).data("title") !== null ? $(tableRow).data("title") : undefinedReplaceString;
-        document.getElementById("detail-dating").innerHTML = typeof $(tableRow).data("dating") !== "undefined" && $(tableRow).data("dating") !== null ? $(tableRow).data("dating") : undefinedReplaceString;
+        const tableRowEl = $(tableRow);
+
+        document.getElementById("detail-author").innerHTML = typeof tableRowEl.data("author") !== "undefined" && tableRowEl.data("author") !== null ? tableRowEl.data("author") : undefinedReplaceString;
+        document.getElementById("detail-title").innerHTML = typeof tableRowEl.data("title") !== "undefined" && tableRowEl.data("title") !== null ? tableRowEl.data("title") : undefinedReplaceString;
+        document.getElementById("detail-dating").innerHTML = typeof tableRowEl.data("dating") !== "undefined" && tableRowEl.data("dating") !== null ? tableRowEl.data("dating") : undefinedReplaceString;
         document.getElementById("detail-dating-century").innerHTML = undefinedReplaceString; //TODO ask where is this info stored
-        document.getElementById("detail-abbrev").innerHTML = typeof $(tableRow).data("acronym") !== "undefined" && $(tableRow).data("acronym") !== null ? $(tableRow).data("acronym") : undefinedReplaceString;
+        document.getElementById("detail-abbrev").innerHTML = typeof tableRowEl.data("acronym") !== "undefined" && tableRowEl.data("acronym") !== null ? tableRowEl.data("acronym") : undefinedReplaceString;
 
         //Edition note
         var editionNoteAnchor: HTMLAnchorElement = <HTMLAnchorElement>(document.getElementById("detail-edition-note-href"));
-        editionNoteAnchor.href = '/EditionNote/EditionNote?bookId=' + $(tableRow).data("bookId");
+        editionNoteAnchor.href = '/EditionNote/EditionNote?bookId=' + tableRowEl.data("bookId");
 
         var folioHref = document.createElement("a");
-        folioHref.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + $(tableRow).data("bookId") + "&searchText=" + search.getLastQuery() + "&page=" + $(tableRow).data("pageId");
-        folioHref.innerHTML = typeof $(tableRow).data("pageName") !== "undefined" && $(tableRow).data("pageName") !== null ? $(tableRow).data("pageName") : undefinedReplaceString;
+        folioHref.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + tableRowEl.data("bookId") + "&searchText=" + search.getLastQuery() + "&page=" + tableRowEl.data("pageId");
+        folioHref.innerHTML = typeof tableRowEl.data("pageName") !== "undefined" && tableRowEl.data("pageName") !== null ? tableRowEl.data("pageName") : undefinedReplaceString;
 
         $("#detail-folio").empty();
         $("#detail-folio").append(folioHref);
 
 
-        document.getElementById("detail-vers").innerHTML = typeof $(tableRow).data("verseName") !== "undefined" && $(tableRow).data("verseName") !== null ? $(tableRow).data("verseName") : undefinedReplaceString;
+        document.getElementById("detail-vers").innerHTML = typeof tableRowEl.data("verseName") !== "undefined" && tableRowEl.data("verseName") !== null ? tableRowEl.data("verseName") : undefinedReplaceString;
 
-        document.getElementById("detail-bible-vers-book").innerHTML = typeof $(tableRow).data("bibleBook") !== "undefined" && $(tableRow).data("bibleBook") !== null ? $(tableRow).data("bibleBook") : undefinedReplaceString;
-        document.getElementById("detail-bible-vers-chapter").innerHTML = typeof $(tableRow).data("bibleChapter") !== "undefined" && $(tableRow).data("bibleChapter") !== null ? $(tableRow).data("bibleChapter") : undefinedReplaceString;
-        document.getElementById("detail-bible-vers-vers").innerHTML = typeof $(tableRow).data("bibleVerse") !== "undefined" && $(tableRow).data("bibleVerse") !== null ? $(tableRow).data("bibleVerse") : undefinedReplaceString;
+        document.getElementById("detail-bible-vers-book").innerHTML = typeof tableRowEl.data("bibleBook") !== "undefined" && tableRowEl.data("bibleBook") !== null ? tableRowEl.data("bibleBook") : undefinedReplaceString;
+        document.getElementById("detail-bible-vers-chapter").innerHTML = typeof tableRowEl.data("bibleChapter") !== "undefined" && tableRowEl.data("bibleChapter") !== null ? tableRowEl.data("bibleChapter") : undefinedReplaceString;
+        document.getElementById("detail-bible-vers-vers").innerHTML = typeof tableRowEl.data("bibleVerse") !== "undefined" && tableRowEl.data("bibleVerse") !== null ? tableRowEl.data("bibleVerse") : undefinedReplaceString;
     }
 
     $("#resultsTableBody").click((event: Event) => {
