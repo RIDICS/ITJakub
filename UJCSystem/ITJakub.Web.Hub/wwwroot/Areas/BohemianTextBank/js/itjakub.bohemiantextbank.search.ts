@@ -475,33 +475,30 @@ function initSearch() {
     booksSelector.makeDropdown();
 
     function printDetailInfo(tableRow: HTMLElement) {
-        var undefinedReplaceString = "&lt;Nezadáno&gt;";
+        const undefinedReplaceString = "<Nezadáno>";
 
         const tableRowEl = $(tableRow);
 
-        document.getElementById("detail-author").innerHTML = typeof tableRowEl.data("author") !== "undefined" && tableRowEl.data("author") !== null ? tableRowEl.data("author") : undefinedReplaceString;
-        document.getElementById("detail-title").innerHTML = typeof tableRowEl.data("title") !== "undefined" && tableRowEl.data("title") !== null ? tableRowEl.data("title") : undefinedReplaceString;
-        document.getElementById("detail-dating").innerHTML = typeof tableRowEl.data("dating") !== "undefined" && tableRowEl.data("dating") !== null ? tableRowEl.data("dating") : undefinedReplaceString;
-        document.getElementById("detail-dating-century").innerHTML = undefinedReplaceString; //TODO ask where is this info stored
-        document.getElementById("detail-abbrev").innerHTML = typeof tableRowEl.data("acronym") !== "undefined" && tableRowEl.data("acronym") !== null ? tableRowEl.data("acronym") : undefinedReplaceString;
+        $("#detail-author").text(tableRowEl.data("author") ? tableRowEl.data("author") : undefinedReplaceString);
+        $("#detail-title").text(tableRowEl.data("title") ? tableRowEl.data("title") : undefinedReplaceString);
+        $("#detail-dating").text(tableRowEl.data("dating") ? tableRowEl.data("dating") : undefinedReplaceString);
+        $("#detail-dating-century").text(undefinedReplaceString); //TODO ask where is this info stored
+        $("#detail-abbrev").text(tableRowEl.data("acronym") ? tableRowEl.data("acronym") : undefinedReplaceString);
 
         //Edition note
-        var editionNoteAnchor: HTMLAnchorElement = <HTMLAnchorElement>(document.getElementById("detail-edition-note-href"));
-        editionNoteAnchor.href = '/EditionNote/EditionNote?bookId=' + tableRowEl.data("bookId");
+        var editionNoteAnchor = $("#detail-edition-note-href");
+        editionNoteAnchor.prop("href", `/EditionNote/EditionNote?bookId=${tableRowEl.data("bookId")}`);
 
-        var folioHref = document.createElement("a");
-        folioHref.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + tableRowEl.data("bookId") + "&searchText=" + search.getLastQuery() + "&page=" + tableRowEl.data("pageId");
-        folioHref.innerHTML = typeof tableRowEl.data("pageName") !== "undefined" && tableRowEl.data("pageName") !== null ? tableRowEl.data("pageName") : undefinedReplaceString;
+        var folioHref = $("<a></a>");
+        folioHref.prop("href", `${getBaseUrl()}Editions/Editions/Listing?bookId=${tableRowEl.data("bookId")}&searchText=${search.getLastQuery()}&page=${tableRowEl.data("pageId")}`);
+        folioHref.text(tableRowEl.data("pageName") ? tableRowEl.data("pageName") : undefinedReplaceString);
 
-        $("#detail-folio").empty();
-        $("#detail-folio").append(folioHref);
+        $("#detail-folio").empty().append(folioHref);
 
-
-        document.getElementById("detail-vers").innerHTML = typeof tableRowEl.data("verseName") !== "undefined" && tableRowEl.data("verseName") !== null ? tableRowEl.data("verseName") : undefinedReplaceString;
-
-        document.getElementById("detail-bible-vers-book").innerHTML = typeof tableRowEl.data("bibleBook") !== "undefined" && tableRowEl.data("bibleBook") !== null ? tableRowEl.data("bibleBook") : undefinedReplaceString;
-        document.getElementById("detail-bible-vers-chapter").innerHTML = typeof tableRowEl.data("bibleChapter") !== "undefined" && tableRowEl.data("bibleChapter") !== null ? tableRowEl.data("bibleChapter") : undefinedReplaceString;
-        document.getElementById("detail-bible-vers-vers").innerHTML = typeof tableRowEl.data("bibleVerse") !== "undefined" && tableRowEl.data("bibleVerse") !== null ? tableRowEl.data("bibleVerse") : undefinedReplaceString;
+        $("#detail-vers").text(tableRowEl.data("verseName") ? tableRowEl.data("verseName") : undefinedReplaceString);
+        $("#detail-bible-vers-book").text(tableRowEl.data("bibleBook") ? tableRowEl.data("bibleBook") : undefinedReplaceString);
+        $("#detail-bible-vers-chapter").text(tableRowEl.data("bibleChapter") ? tableRowEl.data("bibleChapter") : undefinedReplaceString);
+        $("#detail-bible-vers-vers").text(tableRowEl.data("bibleVerse") ? tableRowEl.data("bibleVerse") : undefinedReplaceString);
     }
 
     $("#resultsTableBody").click((event: Event) => {
