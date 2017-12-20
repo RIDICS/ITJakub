@@ -217,11 +217,8 @@ class Search {
             this.advancedRegexEditor = new RegExAdvancedSearchEditor(this.searchbarAdvancedEditorContainer, (json: string) => this.closeAdvancedSearchEditorWithImport(json), (json: string) => this.closeAdvancedSearchEditor());
             this.advancedRegexEditor.setEnabledOptions(enabledOptions);
             if (this.fulltextIsLimited) {
-                this.numberOfFullTextConditions++;
-            }
-            if (this.numberOfFullTextConditions>1) {
                 this.advancedRegexEditor.limitFullTextOptions();
-            }//TODO
+            }
             this.advancedRegexEditor.makeRegExSearch();
             $(this.searchbarAdvancedEditorContainer).hide();
         } else {
@@ -380,7 +377,7 @@ class RegExAdvancedSearchEditor {
         });
 
         this.innerContainer = document.createElement("div");
-        this.addNewCondition(true, this.fulltextIsLimited);
+        this.addNewCondition(true);
         $(this.container).append(this.innerContainer);
         $(this.container).append(commandsDiv);
     }
@@ -393,20 +390,29 @@ class RegExAdvancedSearchEditor {
         for (var i = 0; i < jsonDataArray.length; i++) {
             var conditionData = jsonDataArray[i];
             if (typeof this.enabledOptionsArray !== "undefined" && this.enabledOptionsArray !== null && $.inArray(conditionData.searchType, this.enabledOptionsArray) >= 0) {
-                this.addNewCondition(null, this.fulltextIsLimited);
+                this.addNewCondition();
                 this.getLastCondition().importData(conditionData);
             }
         }
     }
 
-    addNewCondition(useDelimiter: boolean = true, fulltextIsLimited?: boolean) {
+    addNewCondition(useDelimiter: boolean = true) {
         var disableOptions = false;
         if (this.regExConditions.length > 0) {
             this.getLastCondition().setTextDelimeter();
+            if (this.fulltextIsLimited) {
+                this.regExConditions.forEach((condition) => {
+                    switch (condition.getSearchType()) {
+                    case SearchTypeEnum.Fulltext:
+                    case SearchTypeEnum.TokenDistance:
+                    case SearchTypeEnum.Sentence:
+                    case SearchTypeEnum.Heading:
+                        disableOptions = true;
+                    } 
+                });
+            }
         }
-        if (this.regExConditions.length > 1 && fulltextIsLimited) {
-            disableOptions = true;
-        }
+
         var newRegExConditions = new RegExConditionListItem(this);
         newRegExConditions.makeRegExCondition(this.enabledOptionsArray, disableOptions);
         newRegExConditions.setClickableDelimeter();
@@ -436,7 +442,7 @@ class RegExAdvancedSearchEditor {
         }
 
         if (this.regExConditions.length === 0) {
-            this.addNewCondition(true, this.fulltextIsLimited);
+            this.addNewCondition(true);
         } else {
             this.getLastCondition().setClickableDelimeter();
         }
@@ -515,28 +521,28 @@ class RegExConditionListItem {
     }
 
     private createClickableDelimeter(): HTMLDivElement {
-        var delimeterDiv = document.createElement("div");
-        var addWordSpan = document.createElement("span");
-        $(addWordSpan).addClass("regex-clickable-text");
-        addWordSpan.innerHTML = "+ A zároveň";
-        $(addWordSpan).click(() => {
+        const delimeterDiv = $("<div></div>");
+        const addWordSpan = $("<span></span>");
+        addWordSpan.addClass("regex-clickable-text");
+        addWordSpan.text("+ A zároveň");
+        addWordSpan.click(() => {
             this.parent.addNewCondition();//TODO
         });
 
-        delimeterDiv.appendChild(addWordSpan);
+        delimeterDiv.append(addWordSpan);
 
-        var trashButton = document.createElement("button");
-        $(trashButton).addClass("regexsearch-delimiter-remove-button");
-        var removeGlyph = document.createElement("span");
-        $(removeGlyph).addClass("glyphicon glyphicon-trash regex-clickable-text");
-        trashButton.appendChild(removeGlyph);
-        $(trashButton).click(() => {
+        const trashButton = $("<button></button>");
+        trashButton.addClass("regexsearch-delimiter-remove-button");
+        const removeGlyph = $("<span></span>");
+        removeGlyph.addClass("glyphicon glyphicon-trash regex-clickable-text");
+        trashButton.append(removeGlyph);
+        trashButton.click(() => {
             this.parent.removeCondition(this);
         });
 
-        delimeterDiv.appendChild(trashButton);
+        delimeterDiv.append(trashButton);
 
-        return delimeterDiv;
+        return delimeterDiv[0] as HTMLDivElement;
     }
 
     private createTextDelimeter(): HTMLDivElement {
