@@ -11,8 +11,8 @@
     <script src="~/Areas/Admin/js/ridics.project.composition-key-table-editor.bundle.js"></script>
 }
 <div class="content-container">
-    <div class="row project-layout">
-        <div class="left-menu" id="left-menu">
+    <div class="row">
+        <div class="col-xs-12 col-md-2 left-menu left-menu" id="left-menu">
             <div class="project-title">Název díla</div>
             <div class="list-group list-group-root" id="project-navigation">
                     <a href="#" class="list-group-item key-table-editor-selection active" data-editor-type="@{@((int)KeyTableEditorType.Category)}">Category</a>
@@ -26,21 +26,19 @@
             </div>
         </div>
 
-        <div class="vertical-splitter"></div>
-
-        <div class="vertical-splitter-control">
+        <div class="hidden-xs hidden-sm col-md-1 vertical-splitter-control">
             <button id="splitter-button" class="btn btn-default">
                 <span class="glyphicon glyphicon-menu-left"></span>
             </button>
         </div>
 
-        <div class="content" id="project-layout-content">
+        <div class="col-xs-12 col-md-8" id="project-layout-content">
             <div class="table-of-keys-content">
                 <div class="container-fluid table-of-keys-container">
                     <div class="row table-of-keys">
                         <div class="table-of-keys-title">Table of keys title</div>
-                        <div class="col-xs-9 selectable-list-div"></div>
-                        <div class="col-xs-3 crud-buttons-div">
+                        <div class="col-xs-12 col-md-9 selectable-list-div"></div>
+                        <div class="hidden-xs hidden-sm col-md-3 crud-buttons-div">
                             <div class="btn-group-vertical">
                                 <button type="button" class="btn btn-default create-key-table-entry"><i class="fa fa-plus-square-o" aria-hidden="true"></i>
                                     <span class="create-key-table-entry-description">Create table of keys entry</span></button>
