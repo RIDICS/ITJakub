@@ -1,4 +1,8 @@
-﻿class ImageViewerUpload {
+﻿interface JQuery {//hack, interface extension form d ts doesn't work, check why
+    dropzone(options: Dropzone.DropzoneOptions): Dropzone;
+}
+
+class ImageViewerUpload {
     private addImageDropzoneDialog: BootstrapDialogWrapper;
     private readonly projectClient: ProjectClient;
     private readonly projectId: number;
@@ -23,7 +27,7 @@
     }
 
     private initDropzone(){
-
+        
         const dropzoneOptions = DropzoneHelper.getFullConfiguration({
             url: `${getBaseUrl()}Admin/Project/UploadResource`,//TODO check whether it's an actual address
             error: DropzoneHelper.getErrorFunction()

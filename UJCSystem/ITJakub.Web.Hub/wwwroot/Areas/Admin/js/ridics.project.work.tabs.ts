@@ -81,7 +81,7 @@
             }
         });
         engine.initialize();
-        $(".keywords-textarea").tokenfield({
+        ($(".keywords-textarea")as any).tokenfield({
             typeahead: [
                 {
                     hint: true,
@@ -100,7 +100,7 @@
             const jEl = $(element);
             tags.push({ value: jEl.data("id"), label: jEl.data("name") });
         });
-        $(".keywords-textarea").tokenfield("setTokens", tags);
+        ($(".keywords-textarea") as any).tokenfield("setTokens", tags);
     }
 
     private returnUniqueElsArray(array: any[]) {
@@ -233,7 +233,7 @@
 
         this.createCategoriesNestedStructure();
 
-        this.categoryTree = $("#category-tree").tree({
+        this.categoryTree = ($("#category-tree")as any).tree({
             primaryKey: "id",
             uiLibrary: "bootstrap",
             checkedField: "categorySelected",

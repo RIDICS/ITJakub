@@ -592,7 +592,7 @@ abstract class ProjectMetadataTabBase extends ProjectModuleTabBase {
     }
 
     protected enabledEdit() {
-        $(".keywords-textarea").tokenfield("enable");
+        ($(".keywords-textarea")as any).tokenfield("enable");
         var config = this.getConfiguration();
         const copyrightTextarea = $("#work-metadata-copyright");
         var $inputs = $("input", config.$panel);
@@ -606,7 +606,7 @@ abstract class ProjectMetadataTabBase extends ProjectModuleTabBase {
     }
 
     protected disableEdit() {
-        $(".keywords-textarea").tokenfield("disable");
+        ($(".keywords-textarea")as any).tokenfield("disable");
         var config = this.getConfiguration();
         const copyrightTextarea = $("#work-metadata-copyright");
         var $inputs = $("input", config.$panel);
