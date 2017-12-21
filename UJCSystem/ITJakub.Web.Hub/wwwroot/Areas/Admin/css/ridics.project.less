@@ -49,16 +49,35 @@
     }
 }
 
-.vertical-splitter-control {
-    height: 340px; //TODO
+.row.display-flex {
     display: flex;
-    align-items: center;
-    padding:0;
+    flex-wrap: wrap;
 
-    button {
-        padding: 10px 2px;
-        margin-right: 3px;
-        transform: scaleY(2);
+    & > [class*='col-'] {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.keytable-container {
+    .keytable-row {
+        min-height: 16em;
+    }
+
+    .vertical-splitter-control {
+        display: flex;
+        position: relative;
+        padding: 0;
+        border-left: solid gray 2px;
+
+        button {
+            padding: 10px 2px;
+            margin-right: 3px;
+            position: absolute;
+            top: 50%;
+            height: 6em;
+            margin-top: -3em;
+        }
     }
 }
 
