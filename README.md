@@ -11,10 +11,12 @@ Required software:
 * TypeScript 2.4 SDK
 * Altova XML 2013 Community Edition (installer is in repository)
 * Internet Information Services (installed from Windows features dialog)
+* Yarn package manager
 
 Recommended software:
 * JetBrains ReSharper
 * SQL Management Studio
+* Yarn Installer Visual Studio Extension
 
 Environment configuration
 * Checkout repository to C:\Pool\itjakub\
@@ -27,10 +29,13 @@ Environment configuration
 * Prepare eXist-db collection (it's possible use script ExistDB-Recreate.cmd or copy ExistDB folder content manually - instructions are in Deploy_readme.txt)
 * Install certificates and allow SSL in IIS (instructions are in Deploy_readme.txt)
 
-All dependencies are automatically restored by Visual Studio:
+Dependencies automatically restored by Visual Studio:
 * NuGet
-* NPM
-* Bower
+
+Dependencies manually restored:
+* Yarn
+
+It is recommended that You install Yarn Installer Extension and configure it to automatically restore yarn dependencies and disable automatic package restore for npm.
 
 Services to deploy:
 * ITJakub.Web.Hub - web portal (ASP.NET Core)
