@@ -1,4 +1,4 @@
-﻿$(document).ready(() => {
+﻿$(document as Node as Element).ready(() => {
     var staticTextEditor = new StaticTextEditor();
     staticTextEditor.init();
 });
@@ -17,7 +17,7 @@ class StaticTextEditor {
     }
 
     private saveText() {
-        var textName = $("#name").val();
+        var textName = $("#name").val() as string;
         var markdownText = this.textEditor.getValue();
 
         var data: IStaticTextViewModel = {

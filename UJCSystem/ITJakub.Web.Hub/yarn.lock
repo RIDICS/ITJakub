@@ -34,15 +34,19 @@
   dependencies:
     "@types/jquery" "*"
 
-"@types/jquery@*", "@types/jquery@2.0.48":
-  version "2.0.48"
-  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-2.0.48.tgz#3e90d8cde2d29015e5583017f7830cb3975b2eef"
+"@types/jquery@*", "@types/jquery@3.2.17":
+  version "3.2.17"
+  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.2.17.tgz#01df9805dd5cf83a14cf5bfd81adced7d4fbd970"
 
 "@types/jqueryui@^1.11.35":
   version "1.11.37"
   resolved "https://registry.yarnpkg.com/@types/jqueryui/-/jqueryui-1.11.37.tgz#baf66986ae3d57be7f0df631806e3faafe90b131"
   dependencies:
     "@types/jquery" "*"
+
+"@types/node@8.5.2":
+  version "8.5.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.5.2.tgz#83b8103fa9a2c2e83d78f701a9aa7c9539739aa5"
 
 "@types/simplemde@1.11.5":
   version "1.11.5"
@@ -279,9 +283,9 @@ bootbox@4.4.0:
   version "0.1.1"
   resolved "https://github.com/Scalesoft/bootstrap-colorpicker-plus.git#0fdd970967ad47210d29dece08a4b4f8d28adbc7"
 
-"bootstrap-tokenfield@https://github.com/sliptree/bootstrap-tokenfield.git#e73c035577191457392b82e6e075390dbdd873d5":
-  version "0.12.0"
-  resolved "https://github.com/sliptree/bootstrap-tokenfield.git#e73c035577191457392b82e6e075390dbdd873d5"
+"bootstrap-tokenfield@https://github.com/tilonet/bootstrap-tokenfield.git#a9e9e703f4d54c743bc78b83c87f0eaa6cbbe6e9":
+  version "0.12.1"
+  resolved "https://github.com/tilonet/bootstrap-tokenfield.git#a9e9e703f4d54c743bc78b83c87f0eaa6cbbe6e9"
   dependencies:
     jquery "^2.1.0"
 
@@ -1579,13 +1583,13 @@ jquery-zoom@1.7.20:
   dependencies:
     jquery ">=1.7"
 
-jquery@2.2.4, jquery@^2.1.0:
-  version "2.2.4"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-2.2.4.tgz#2c89d6889b5eac522a7eea32c14521559c6cbf02"
-
-jquery@>=1.7, jquery@>=1.8, jquery@>=1.9.1, "jquery@^1.7 || ^2.0 || ^3.1":
+jquery@3.2.1, jquery@>=1.7, jquery@>=1.8, jquery@>=1.9.1, "jquery@^1.7 || ^2.0 || ^3.1":
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
+
+jquery@^2.1.0:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-2.2.4.tgz#2c89d6889b5eac522a7eea32c14521559c6cbf02"
 
 jsbn@~0.1.0:
   version "0.1.1"

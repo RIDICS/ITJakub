@@ -156,7 +156,7 @@
                 }
                 okButtonEl.on("click",
                     () => {
-                        const categoryString = descriptionTextareaEl.val();
+                        const categoryString = descriptionTextareaEl.val() as string;
                         if (!categoryString) {
                             this.gui.showInfoDialog("Warning", "You haven't entered anything.");
                         } else {
@@ -197,7 +197,7 @@
                     const okButtonEl = dialogEl.find(".info-dialog-ok-button");
                     okButtonEl.on("click",
                         () => {
-                            const categoryString = textareaEl.val();
+                            const categoryString = textareaEl.val() as string;
                             const newParentCategory = parentCategoryIdSelectEl.val() as number;
                             if (!categoryString) {
                                 this.gui.showInfoDialog("Warning", "You haven't entered anything.");

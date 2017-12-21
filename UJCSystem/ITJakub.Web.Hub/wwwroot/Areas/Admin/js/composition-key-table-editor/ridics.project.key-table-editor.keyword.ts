@@ -66,7 +66,7 @@
                 $(".info-dialog-ok-button").on("click",
                     () => {
                         const textareaEl = $(".input-dialog-textarea");
-                        const keywordString = textareaEl.val();
+                        const keywordString = textareaEl.val() as string;
                         const newKeywordAjax = this.util.createNewKeyword(keywordString);
                         newKeywordAjax.done(() => {
                             textareaEl.val("");
@@ -94,7 +94,7 @@
                     textareaEl.val(originalText);
                 $(".info-dialog-ok-button").on("click",
                     () => {
-                        const keywordName = textareaEl.val();
+                        const keywordName = textareaEl.val() as string;
                             const keywordId = selectedPageEl.data("key-id") as number;
                             const renameAjax = this.util.renameKeyword(keywordId, keywordName);
                             renameAjax.done(() => {

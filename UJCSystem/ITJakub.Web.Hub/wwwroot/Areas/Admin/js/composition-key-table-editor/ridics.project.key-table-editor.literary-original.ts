@@ -66,7 +66,7 @@
                 $(".info-dialog-ok-button").on("click",
                     () => {
                         const textareaEl = $(".input-dialog-textarea");
-                        const nameString = textareaEl.val();
+                        const nameString = textareaEl.val() as string;
                         const newLiteraryOriginalAjax = this.util.createNewLiteraryOriginal(nameString);
                         newLiteraryOriginalAjax.done(() => {
                             textareaEl.val("");
@@ -94,7 +94,7 @@
                     textareaEl.val(originalText);
                     $(".info-dialog-ok-button").on("click",
                         () => {
-                            const literaryOriginalName = textareaEl.val();
+                            const literaryOriginalName = textareaEl.val() as string;
                                 const literaryOriginalId = selectedPageEl.data("key-id") as number;
                                 const renameAjax =
                                     this.util.renameLiteraryOriginal(literaryOriginalId, literaryOriginalName);

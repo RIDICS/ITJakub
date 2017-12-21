@@ -1875,7 +1875,7 @@ class RegExWordInput {
         $(conditionSelect).change((eventData: Event) => {
             var oldConditonType = this.conditionInputType;
             const selectEl = $(eventData.target);
-            this.conditionInputType = parseInt(selectEl.val());
+            this.conditionInputType = parseInt(selectEl.val() as string);
             if (this.conditionInputType === WordInputTypeEnum.ExactMatch) {
                 const regexWordConditionEl = selectEl.parents(".reg-ex-word-condition");
                 const wordInputEl = selectEl.parents(".reg-ex-word-input");

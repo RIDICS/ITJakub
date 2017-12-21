@@ -299,7 +299,7 @@ class Keyboard {
 
                 if (layout.shiftUsed) {
                     layout.resizeAction(layout.keyboardLowerCase, layout, cell);
-                    $(`#${this.componentPrefix}content-${componentId} .shift`).css("background-color", "#ffffff");
+                    $(`#${layout.componentPrefix}content-${componentId} .shift`).css("background-color", "#ffffff");
                     layout.shiftUsed = !layout.shiftUsed;
                 }
 

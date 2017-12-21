@@ -179,8 +179,8 @@ class Lemmatization {
     }
 
     private saveNewToken() {
-        var token = $("#new-token").val();
-        var description = $("#new-token-description").val();
+        var token = $("#new-token").val() as string;
+        var description = $("#new-token-description").val() as string;
 
         if (!token) {
             return;

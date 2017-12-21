@@ -408,8 +408,8 @@ class ProjectResourceModule extends ProjectModuleBase {
     }
 
     private addResource() {
-        var sessionId = $("#new-resource-session-id").val();
-        var comment = $("#new-resource-comment").val();
+        var sessionId = $("#new-resource-session-id").val() as string;
+        var comment = $("#new-resource-comment").val() as string;
         this.projectClient.processUploadedResources(this.projectId,
             sessionId,
             comment,
@@ -427,8 +427,8 @@ class ProjectResourceModule extends ProjectModuleBase {
 
     private createResourceVersion() {
         var resourceId = this.currentResourceId;
-        var sessionId = $("#new-resource-version-session-id").val();
-        var comment = $("#new-resource-version-comment").val();
+        var sessionId = $("#new-resource-version-session-id").val() as string;
+        var comment = $("#new-resource-version-comment").val() as string;
         this.projectClient.processUploadedResourceVersion(resourceId,
             sessionId,
             comment,
@@ -461,7 +461,7 @@ class ProjectResourceModule extends ProjectModuleBase {
 
     private renameResource() {
         var resourceId = this.currentResourceId;
-        var newName = $("#rename-resource-new").val();
+        var newName = $("#rename-resource-new").val() as string;
         this.projectClient.renameResource(resourceId,
             newName,
             errorCode => {

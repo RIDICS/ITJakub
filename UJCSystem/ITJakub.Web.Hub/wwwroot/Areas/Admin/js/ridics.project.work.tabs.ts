@@ -274,7 +274,7 @@
 
         $("#work-metadata-publish-date").on("input",
             () => {
-                const enteredText = $("#work-metadata-publish-date").val();
+                const enteredText = $("#work-metadata-publish-date").val() as string;
                 const yearIsValid = this.publicationYearsValid(enteredText);
                 const publishYearsGroupEl = $(".publication-years-group");
                 const iconEl = publishYearsGroupEl.find(".form-control-feedback");
@@ -389,8 +389,8 @@
                 const firstNameEl = $("#add-author-first-name");
                 const lastNameEl = $("#add-author-last-name");
                 const listItemsEl = $(".author-list-items");
-                var firstName = firstNameEl.val();
-                var lastName = lastNameEl.val();
+                var firstName = firstNameEl.val() as string;
+                var lastName = lastNameEl.val() as string;
                 var id: number;
                 if (firstName === "" || lastName === "") {
                     this.addAuthorDialog.showError("Please enter a name and surname");
@@ -440,8 +440,8 @@
                 const listItemsEl = $(".responsible-person-list-items");
                 const firstNameEl = $("#add-responsible-person-first-name");
                 const lastNameEl = $("#add-responsible-person-last-name");
-                const firstName = firstNameEl.val();
-                const lastName = lastNameEl.val();
+                const firstName = firstNameEl.val() as string;
+                const lastName = lastNameEl.val() as string;
                 var id: number;
                 if (firstName === "" || lastName === "") {
                     this.addEditorDialog.showError("Please enter a name and surname");
@@ -663,7 +663,7 @@
                 }</div>`;
         });
         const html = $.parseHTML(elm);
-        this.populateResponsiblePersonWorkListItemsTable($(html));
+        this.populateResponsiblePersonWorkListItemsTable($(html as Element[]));
     }
 
     private populateAuthorWorkListItemsTable(tableItems: JQuery) {
@@ -755,7 +755,7 @@
 
         const selectedExistingAuthorEl = $(".existing-original-author-selected");
         if (selectedExistingAuthorEl.length) {
-            id = $("#add-author-id-preview").val();
+            id = parseInt($("#add-author-id-preview").val() as string);
             firstName = selectedExistingAuthorEl.children(".existing-original-author-name").text();
             lastName = selectedExistingAuthorEl.children(".existing-original-author-surname").text();
 
@@ -768,8 +768,8 @@
 
     private createResponsibleType() {
         $("#responsibility-type-input-elements").show();
-        var text = $("#add-responsible-type-text").val();
-        var type = $("#add-responsible-type-type").val();
+        var text = $("#add-responsible-type-text").val() as string;
+        const type = $("#add-responsible-type-type").val() as ResponsibleTypeEnum;
         var typeLabel = $("#add-responsible-type-type option:selected").text();
 
         var $savingIcon = $("#add-responsible-type-saving-icon");
@@ -783,14 +783,17 @@
             var optionName = `${text} (${typeLabel})`;
             UiHelper.addSelectOptionAndSetDefault($("#add-editor-type"), optionName, newResponsibleTypeId);
         }).fail(() => {
-            //TODO handle error
+            bootbox.alert({
+                title: "Fail",
+                message: "Failed to create reponbility type"
+            });
         }).always(() => {
             $savingIcon.hide();
         });
     }
 
     private addEditor() {
-        var id: number;
+        var id: string;
         var responsibilityText: string;
         var responsibilityTypeId: number;
         var firstName: string;
@@ -809,10 +812,10 @@
 
         const selectedExistingResponsiblePersonEl = $(".existing-responsible-person-selected");
         if (selectedExistingResponsiblePersonEl.length) {
-            id = $("#add-editor-id-preview").val();
+            id = $("#add-editor-id-preview").val() as string;
             firstName = selectedExistingResponsiblePersonEl.children(".existing-responsible-person-name").text();
             lastName = selectedExistingResponsiblePersonEl.children(".existing-responsible-person-surname").text();
-            responsibilityTypeId = $("#add-editor-type").find(":selected").val();
+            responsibilityTypeId = $("#add-editor-type").find(":selected").val() as number;
             const responsibilityTextWithParenthesis = $("#add-editor-type").find(":selected").text();
             responsibilityText = responsibilityTextWithParenthesis.replace(/ *\([^)]*\) */g, "");
             $(".responsible-person-list-items").children(".responsible-person-list-item").remove();
@@ -852,25 +855,25 @@
         var selectedGenreIds = new Array<number>();
         var keywordIdList = new Array<number>();
 
-        $("#work-metadata-authors .author-item").each((index, elem) => {
-            selectedAuthorIds.push($(elem).data("id"));
+        $("#work-metadata-authors .author-item").each((index, elem:Node) => {
+            selectedAuthorIds.push($(elem as Element).data("id"));
         });
-        $("#work-metadata-editors .editor-item").each((index, elem) => {
+        $("#work-metadata-editors .editor-item").each((index, elem: Node) => {
             var projectResponsible: ISaveProjectResponsiblePerson = {
-                responsiblePersonId: $(elem).data("id"),
-                responsibleTypeId: $(elem).data("responsible-type-id")
+                responsiblePersonId: $(elem as Element).data("id"),
+                responsibleTypeId: $(elem as Element).data("responsible-type-id")
             };
             selectedResponsibleIds.push(projectResponsible);
         });
-        $(".lit-kind-item").find("select").each((index, elem) => {
-            selectedKindIds.push($(elem).val());
+        $(".lit-kind-item").find("select").each((index, elem: Node) => {
+            selectedKindIds.push(parseInt($(elem as Element).val() as string));
         });
-        $(".genre-item").find("select").each((index, elem) => {
-            selectedGenreIds.push($(elem).val());
+        $(".genre-item").find("select").each((index, elem: Node) => {
+            selectedGenreIds.push(parseInt($(elem as Element).val() as string));
         });
 
         const keywordsInputEl = $(".keywords-container").children(".tokenfield").children(".keywords-textarea");
-        const keywordsArray = $.map(keywordsInputEl.val().split(","), $.trim);
+        const keywordsArray = $.map((keywordsInputEl.val() as string).split(","), $.trim);
         const uniqueKeywordArray = this.returnUniqueElsArray(keywordsArray);
         var keywordNonIdList: string[] = [];
         const onlyNumbersRegex = new RegExp(/^[0-9]*$/);
@@ -884,7 +887,7 @@
         const createNewKeywordAjax = this.createNewKeywordsByArray(keywordNonIdList);
         var publisherText = "";
         if (this.publisherName == null) {
-            publisherText = $("#work-metadata-publisher").val();
+            publisherText = $("#work-metadata-publisher").val() as string;
         } else {
             publisherText = this.publisherTypeahead.getInputValue();
         }
@@ -917,24 +920,24 @@
         var data: ISaveMetadataResource = {
             categoryIdList: contract.categoryIdList,
             keywordIdList: contract.keywordIdList,
-            biblText: $("#work-metadata-bibl-text").val(),
-            copyright: $("#work-metadata-copyright").val(),
-            manuscriptCountry: $("#work-metadata-original-country").val(),
-            manuscriptExtent: $("#work-metadata-original-extent").val(),
-            manuscriptIdno: $("#work-metadata-original-idno").val(),
-            manuscriptRepository: $("#work-metadata-original-repository").val(),
-            manuscriptSettlement: $("#work-metadata-original-settlement").val(),
-            notAfter: $("#work-metadata-not-after").val(),
-            notBefore: $("#work-metadata-not-before").val(),
-            originDate: $("#work-metadata-origin-date").val(),
-            publishDate: $("#work-metadata-publish-date").val(),
-            publishPlace: $("#work-metadata-publish-place").val(),
-            publisherEmail: $("#work-metadata-publisher-email").val(),
+            biblText: $("#work-metadata-bibl-text").val() as string,
+            copyright: $("#work-metadata-copyright").val() as string,
+            manuscriptCountry: $("#work-metadata-original-country").val() as string,
+            manuscriptExtent: $("#work-metadata-original-extent").val() as string,
+            manuscriptIdno: $("#work-metadata-original-idno").val() as string,
+            manuscriptRepository: $("#work-metadata-original-repository").val() as string,
+            manuscriptSettlement: $("#work-metadata-original-settlement").val() as string,
+            notAfter: $("#work-metadata-not-after").val() as string,
+            notBefore: $("#work-metadata-not-before").val() as string,
+            originDate: $("#work-metadata-origin-date").val() as string,
+            publishDate: $("#work-metadata-publish-date").val() as string,
+            publishPlace: $("#work-metadata-publish-place").val() as string,
+            publisherEmail: $("#work-metadata-publisher-email").val() as string,
             publisherText: publisherText,
-            relicAbbreviation: $("#work-metadata-relic-abbreviation").val(),
-            sourceAbbreviation: $("#work-metadata-source-abbreviation").val(),
-            subTitle: $("#work-metadata-subtitle").val(),
-            title: $("#work-metadata-title").val(),
+            relicAbbreviation: $("#work-metadata-relic-abbreviation").val() as string,
+            sourceAbbreviation: $("#work-metadata-source-abbreviation").val() as string,
+            subTitle: $("#work-metadata-subtitle").val() as string,
+            title: $("#work-metadata-title").val() as string,
             authorIdList: contract.authorIdList,
             literaryGenreIdList: contract.literaryGenreIdList,
             literaryKindIdList: contract.literaryKindIdList,

@@ -59,7 +59,7 @@ class ProjectList {
     }
 
     private createNewProject() {
-        var projectName = $("#new-project-name").val();
+        const projectName = $("#new-project-name").val() as string;
         this.projectClient.createProject(projectName, (newId, error) => {
             if (error != null) {
                 this.newProjectDialog.showError();

@@ -309,11 +309,21 @@ function initSearch() {
 
         showLoading();
 
+        const payload: JQuery.PlainObject = {
+            json: json,
+            start: start,
+            count: resultsCountOnPage,
+            contextLength: contextLength,
+            sortingEnum: sortingEnum,
+            sortAsc: sortAsc,
+            selectedBookIds: bookIdsInQuery,
+            selectedCategoryIds: categoryIdsInQuery
+        };
         $.ajax({
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/AdvancedSearchCorpusPaged",
-            data: { json: json, start: start, count: resultsCountOnPage, contextLength: contextLength, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: bookIdsInQuery, selectedCategoryIds: categoryIdsInQuery },
+            data: payload,
             dataType: "json",
             contentType: "application/json",
             success: response => {
@@ -339,11 +349,21 @@ function initSearch() {
 
         showLoading();
 
+        const payload: JQuery.PlainObject = {
+            text: text,
+            start: start,
+            count: resultsCountOnPage,
+            contextLength: contextLength,
+            sortingEnum: sortingEnum,
+            sortAsc: sortAsc,
+            selectedBookIds: bookIdsInQuery,
+            selectedCategoryIds: categoryIdsInQuery
+        };
         $.ajax({
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/TextSearchFulltextPaged",
-            data: { text: text, start: start, count: resultsCountOnPage, contextLength: contextLength, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: bookIdsInQuery, selectedCategoryIds: categoryIdsInQuery },
+            data: payload,
             dataType: "json",
             contentType: "application/json",
             success: response => {
@@ -362,7 +382,7 @@ function initSearch() {
 
     function searchForPageNumber(pageNumber: number) {
         actualPage = pageNumber;
-        var contextLength = $("#contextPositionsSelect").val();
+        var contextLength = parseInt($("#contextPositionsSelect").val() as string);
         if (search.isLastQueryJson()) {
             corpusAdvancedSearchPaged(search.getLastQuery(), pageNumber, contextLength);
         } else {
@@ -398,11 +418,16 @@ function initSearch() {
 
         showLoading();
 
+        const payload: JQuery.PlainObject = {
+            text: text,
+            selectedBookIds: bookIdsInQuery,
+            selectedCategoryIds: categoryIdsInQuery
+        };
         $.ajax({
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/TextSearchFulltextCount",
-            data: { text: text, selectedBookIds: bookIdsInQuery, selectedCategoryIds: categoryIdsInQuery },
+            data: payload,
             dataType: "json",
             contentType: "application/json",
             success: response => {
@@ -424,11 +449,13 @@ function initSearch() {
         actualizeSelectedBooksAndCategoriesInQuery();
         showLoading();
 
+        const payload: JQuery.PlainObject =
+            { json: json, selectedBookIds: bookIdsInQuery, selectedCategoryIds: categoryIdsInQuery };
         $.ajax({
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/AdvancedSearchCorpusResultsCount",
-            data: { json: json, selectedBookIds: bookIdsInQuery, selectedCategoryIds: categoryIdsInQuery },
+            data: payload,
             dataType: "json",
             contentType: "application/json",
             success: response => {
@@ -459,7 +486,7 @@ function initSearch() {
         bookType: BookTypeEnum.TextBank,
         queryType: QueryTypeEnum.Search
     }
-    var search = new Search($("#listSearchDiv")[0] as HTMLDivElement, corpusAdvancedSearchCount, corpusBasicSearchCount, favoritesQueriesConfig);
+    var search = new Search($("#listSearchDiv")[0] as Node as HTMLDivElement, corpusAdvancedSearchCount, corpusBasicSearchCount, favoritesQueriesConfig);
     search.limitFullTextSearchToOne();
     search.makeSearch(enabledOptions);
     
@@ -501,8 +528,8 @@ function initSearch() {
         $("#detail-bible-vers-vers").text(tableRowEl.data("bibleVerse") ? tableRowEl.data("bibleVerse") : undefinedReplaceString);
     }
 
-    $("#resultsTableBody").click((event: Event) => {
-        var clickedRow = $(event.target).parents("tr");
+    $("#resultsTableBody").click((event) => {
+        var clickedRow = $(event.target as Node as Element).parents("tr");
 
         if ($(clickedRow).hasClass("notes")) {
             return;
@@ -511,19 +538,19 @@ function initSearch() {
         $("#resultsTableBody").find("tr").removeClass("clicked");
         $(clickedRow).addClass("clicked");
 
-        printDetailInfo(clickedRow[0]);
+        printDetailInfo(clickedRow[0] as Node as HTMLElement);
     });
 
-    $("#contextPositionsSelect").change((evnet: Event) => {
+    $("#contextPositionsSelect").change(() => {
         searchForPageNumber(actualPage);
     });
 
-    $("#corpus-search-results-table-div").scroll((event: Event) => {
-        $("#corpus-search-results-abbrev-table-div").scrollTop($(event.target).scrollTop());
+    $("#corpus-search-results-table-div").scroll((event) => {
+        $("#corpus-search-results-abbrev-table-div").scrollTop($(event.target as Node as Element).scrollTop());
     });
 
-    $("#corpus-search-results-abbrev-table-div").scroll((event: Event) => {
-        $("#corpus-search-results-table-div").scrollTop($(event.target).scrollTop());
+    $("#corpus-search-results-abbrev-table-div").scroll((event) => {
+        $("#corpus-search-results-table-div").scrollTop($(event.target as Node as Element).scrollTop());
     });
 
     initializeFromUrlParams();

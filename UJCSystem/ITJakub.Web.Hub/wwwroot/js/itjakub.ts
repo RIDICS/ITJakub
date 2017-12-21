@@ -3,7 +3,7 @@
 
 
 //sets state to main plugins menu
-$(document).ready(() => {
+$(document as Node as Element).ready(() => {
     $('#main-plugins-menu').find('li').removeClass('active');
     var href = window.location.pathname;
     var liTargetingActualPage = $('#main-plugins-menu').find("a[href='" + href.toString() + "']").parent('li');
@@ -13,15 +13,15 @@ $(document).ready(() => {
     // Fix navigation menu behavior for touch devices
     $("#main-plugins-menu > ul > li > a").on("touchstart", (event) => {
         event.preventDefault();
-        var $liElement = $(event.currentTarget).closest(".has-sub");
+        var $liElement = $(event.currentTarget as Node as Element).closest(".has-sub");
         $liElement.siblings().removeClass("hover");
         $liElement.toggleClass("hover");
     });
     $(".secondary-navbar-toggle").on("touchstart", (event) => {
-        if ($(event.target).is("a")) {
+        if ($(event.target as Node as Element).is("a")) {
             return;
         }
-        var $buttonElement = $(event.currentTarget);
+        var $buttonElement = $(event.currentTarget as Node as Element);
         $buttonElement.siblings(".secondary-navbar-toggle").removeClass("hover");
         $buttonElement.toggleClass("hover");
     });
@@ -116,12 +116,12 @@ function getImageResourcePath(): string {
 }
 
 // Automatic popover close, fix 2 clicks for reopening problem
-$(document).on('click', (e) => {
+$(document as Node as Element).on("click", (e) => {
     $('[data-toggle="popover"],[data-original-title]').each(function () {
         //the 'is' for buttons that trigger popups
         //the 'has' for icons within a button that triggers a popup
-        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-            (($(this).popover('hide').data('bs.popover') || {}).inState || {}).click = false; // fix for BS 3.3.6
+        if (!$(this as Node as Element).is(e.target as Node as Element) && $(this as Node as Element).has(e.target as Node as Element).length === 0 && $('.popover').has(e.target as Node as Element).length === 0) {
+            (($(this as Node as Element).popover("hide").data("bs.popover") || {}).inState || {}).click = false; // fix for BS 3.3.6
         }
     });
 });

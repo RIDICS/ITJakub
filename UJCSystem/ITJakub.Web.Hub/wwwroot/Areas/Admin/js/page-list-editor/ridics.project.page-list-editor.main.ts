@@ -72,7 +72,7 @@
                     const textAreaEl = $(".page-list-edit-textarea");
                     const pageListDivEl = $(".page-list");
                     if (textAreaEl.length) {
-                        const pageListString = textAreaEl.val();
+                        const pageListString = textAreaEl.val() as string;
                         const pageListStringArray = pageListString.split("\n");
                         //util.savePageList(pageLingStringArray); TODO use after server functions are done
                     }
@@ -229,8 +229,8 @@
         projectId: number,
         util: EditorsUtil,
         listStructure: PageListStructure, doublePage:boolean) {
-            const fromFieldValue = $("#project-pages-generate-from").val();
-            const toFieldValue = $("#project-pages-generate-to").val();
+            const fromFieldValue = $("#project-pages-generate-from").val() as string;
+            const toFieldValue = $("#project-pages-generate-to").val() as string;
             if (/\d+/.test(fromFieldValue) && /\d+/.test(toFieldValue)) {
                 const from = parseInt(fromFieldValue);
                 const to = parseInt(toFieldValue);

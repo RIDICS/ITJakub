@@ -104,11 +104,11 @@ class BookUploader {
     }
 
     public getSessionIdFromPage(): string {
-        return $("#sessionId").val();
+        return $("#sessionId").val() as string;
     }
 
     public getUploadMessage(): string {
-        return $("#uploadMessage").val();
+        return $("#uploadMessage").val() as string;
     }
 }
 
