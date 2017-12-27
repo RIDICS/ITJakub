@@ -32,9 +32,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Localization.AspNetCore.Service" Version="0.0.1" />
-    <PackageReference Include="Localization.CoreLibrary" Version="0.0.1" />
-    <PackageReference Include="Localization.Database.EFCore" Version="0.0.4" />
+    <PackageReference Include="Scalesoft.Localization.AspNetCore.Service" Version="1.0.0" />
+    <PackageReference Include="Scalesoft.Localization.CoreLibrary" Version="1.0.0" />
+    <PackageReference Include="Scalesoft.Localization.Database.EFCore" Version="1.0.0" />
     <PackageReference Include="Log4net.Extensions.Logging" Version="1.0.0-beta11" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="1.1.2" />
