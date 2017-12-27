@@ -1,4 +1,4 @@
-﻿interface JQuery {//hack, interface extension form d ts doesn't work, check why
+﻿interface JQuery {//hack, interface extension form d ts doesn't work, check the reason why
     dropzone(options: Dropzone.DropzoneOptions): Dropzone;
 }
 
@@ -43,8 +43,8 @@ class ImageViewerUpload {
     }
 
     private addResource() {
-        const sessionId = $("#new-image-resource-session-id").val();
-        const comment = $("#new-image-resource-comment").val();
+        const sessionId = $("#new-image-resource-session-id").val() as string;
+        const comment = $("#new-image-resource-comment").val() as string;
         //this.projectClient.processUploadedResources(this.projectId, sessionId, comment, errorCode => {//TODO check correct way to upload
         //    if (errorCode != null) {
         //        this.addImageDropzoneDialog.showError();

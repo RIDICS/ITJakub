@@ -1,4 +1,4 @@
-﻿$(document).ready(() => {
+﻿$(document.documentElement).ready(() => {
     var projectList = new ProjectList();
     projectList.init();
 });
@@ -41,7 +41,7 @@ class ProjectList {
         });
 
         $(".project-item .delete-button").click((event) => {
-            var $projectItem = $(event.currentTarget).closest(".project-item");
+            var $projectItem = $(event.currentTarget as Node as Element).closest(".project-item");
             this.projectIdForDelete = Number($projectItem.data("project-id"));
             var projectName = $projectItem.data("project-name");
 

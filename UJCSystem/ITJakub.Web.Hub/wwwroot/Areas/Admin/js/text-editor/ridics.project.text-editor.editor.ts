@@ -76,7 +76,7 @@
         var editorExistsInTab = false;
         $("#project-resource-preview").on("click",
             ".editor",
-            (e: JQueryEventObject) => { //dynamically instantiating SimpleMDE editor on textarea
+            (e: JQuery.Event) => { //dynamically instantiating SimpleMDE editor on textarea
                 if (this.editingMode) {
                     let pageDiffers = false;
                     const elSelected = e.target as HTMLElement;
@@ -330,8 +330,8 @@
             lazyloadedCompositionEl.addClass("lazyload");
         }
         if (this.editingMode) { // changing div to textarea here
-            pageRow.each((index: number, child: Element) => {
-                const pageEl = $(child);
+            pageRow.each((index: number, child: Node) => {
+                const pageEl = $(child as Element);
                 const compositionAreaEl = pageEl.children(".composition-area");
                 this.commentArea.updateCommentAreaHeight(pageEl);
                 const placeholderSpinner = pageEl.find(".loading");
@@ -339,8 +339,8 @@
                 this.createEditorAreaBody(compositionAreaEl);
             });
         } else { // changing textarea to div here
-            pageRow.each((index: number, child: Element) => {
-                const pageEl = $(child);
+            pageRow.each((index: number, child: Node) => {
+                const pageEl = $(child as Element);
                 const compositionAreaEl = pageEl.children(".composition-area");
                 this.commentArea.updateCommentAreaHeight(pageEl);
                 const placeholderSpinner = pageEl.find(".loading");

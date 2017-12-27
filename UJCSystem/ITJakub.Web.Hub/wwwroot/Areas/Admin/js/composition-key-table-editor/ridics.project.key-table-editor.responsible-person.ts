@@ -73,9 +73,9 @@
                 $(".info-dialog-ok-button").on("click",
                     () => {
                         const nameTextareaEl = $(".primary-input-author-textarea");
-                        const nameString = nameTextareaEl.val();
+                        const nameString = nameTextareaEl.val() as string;
                         const surnameTextareaEl = $(".secondary-input-author-textarea");
-                        const surnameString = surnameTextareaEl.val();
+                        const surnameString = surnameTextareaEl.val() as string;
                         const newResponsiblePersonAjax = this.util.createResponsiblePerson(nameString, surnameString);
                         newResponsiblePersonAjax.done(() => {
                             nameTextareaEl.val("");
@@ -109,8 +109,8 @@
                         "Responsible person's surname:");
                     $(".info-dialog-ok-button").on("click",
                         () => {
-                            const nameString = nameTextareaEl.val();
-                            const surnameString = surnameTextareaEl.val();
+                            const nameString = nameTextareaEl.val() as string;
+                            const surnameString = surnameTextareaEl.val() as string;
                                 const responsiblePersonId = selectedPageEl.data("key-id") as number;
                                 const renameAjax = this.util.renameResponsiblePerson(responsiblePersonId,
                                     nameString,

@@ -5,7 +5,7 @@
     $(".text-area-remaining-chars").html(maxChars);
 
     $(".feedback-text-area").keyup(function () {
-        var text = $(this).val();
+        var text = $(this).val() as string;
         var actualCharsRemaining = maxCharsNumber - text.length;
         if (actualCharsRemaining < 0) {
             actualCharsRemaining = 0;

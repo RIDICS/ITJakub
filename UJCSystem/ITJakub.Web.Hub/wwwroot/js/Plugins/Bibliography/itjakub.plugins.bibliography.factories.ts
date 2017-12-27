@@ -51,7 +51,7 @@ class BibliographyFactory {
         return leftPanel;
     }
 
-    protected runEvalResponse(event: JQueryEventObject, callback: (context:Object)=>any) {
+    protected runEvalResponse(event: JQuery.Event, callback: (context:Object)=>any) {
         callback({ search: this.modulInicializator.getSearch(), event: event });
     }
     
@@ -72,7 +72,7 @@ class BibliographyFactory {
             $(spanBook).addClass('glyphicon glyphicon-book');
             bookButton.appendChild(spanBook);
             $bookButton.attr("href", "#");
-            $bookButton.click((event: JQueryEventObject) => {
+            $bookButton.click((event: JQuery.Event) => {
                 var buttonScript = config.getReadButtonOnClick(bookInfo);
                 var buttonScriptCallable = config.getReadButtonOnClickCallable(bookInfo);
                 if (typeof buttonScript !== "undefined" && buttonScript != null && buttonScript !== "") {
@@ -97,7 +97,7 @@ class BibliographyFactory {
             $(spanInfo).addClass('glyphicon glyphicon-info-sign');
             infoButton.appendChild(spanInfo);
             $infoButton.attr("href", "#");
-            $infoButton.click((event: JQueryEventObject) => {
+            $infoButton.click((event: JQuery.Event) => {
                 var buttonScript = config.getInfoButtonOnClick(bookInfo);
                 var buttonScriptCallable = config.getInfoButtonOnClickCallable(bookInfo);
                 if (typeof buttonScript !== "undefined" && buttonScript != null && buttonScript !== "") {

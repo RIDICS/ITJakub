@@ -418,7 +418,7 @@
 
     private bindEvents() {
         $(".favorite-query-label", this.renderContainer).click((event) => {
-            var elementJquery = $(event.currentTarget);
+            var elementJquery = $(event.currentTarget as Node as Element);
             var labelId = elementJquery.data("id");
             var labelName = elementJquery.data("name");
             var labelColor = elementJquery.data("color");
@@ -456,7 +456,7 @@
         });
 
         this.filterQuerySearchBox.submit(() => {
-            var value = this.filterQuerySearchBox.val();
+            var value = this.filterQuerySearchBox.val() as string;
             this.selectedFilterName = value.toLocaleLowerCase();
             this.loadQueries();
         });
@@ -473,7 +473,7 @@
 
     private bindLabelEvents() {
         $(".favorite-query-item", this.renderContainer).click((event) => {
-            var elementJquery = $(event.currentTarget);
+            var elementJquery = $(event.currentTarget as Node as Element);
             var query = elementJquery.data("query");
 
             this.insertQueryToSearchField(query);
@@ -482,7 +482,7 @@
         $(".favorite-query-remove", this.renderContainer).click((event) => {
             event.stopPropagation();
 
-            var elementJQuery = $(event.currentTarget);
+            var elementJQuery = $(event.currentTarget as Node as Element);
             var favoriteId = elementJQuery.data("id");
             this.favoriteManager.deleteFavoriteItem(favoriteId, () => {
                 //elementJQuery.closest(".favorite-query-item").remove();
@@ -492,7 +492,7 @@
     }
 
     private insertQueryToSearchField(newQuery: string) {
-        var originalQuery = this.inputTextbox.val();
+        var originalQuery = this.inputTextbox.val() as string;
         
         if (originalQuery) {
             this.insertDialog.show(() => {
@@ -516,15 +516,15 @@
     private filterLabels(filter: string) {
         filter = filter.toLocaleLowerCase();
         var anyVisible = false;
-        $(".favorite-query-label", this.renderContainer).each((index, element) => {
+        $(".favorite-query-label", this.renderContainer).each((index, element:Node) => {
             if (index === 0) return;
 
-            var labelName = String($(element).data("name")).toLocaleLowerCase();
+            var labelName = String($(element as Element).data("name")).toLocaleLowerCase();
             if (labelName.indexOf(filter) !== -1) {
-                $(element).show();
+                $(element as Element).show();
                 anyVisible = true;
             } else {
-                $(element).hide();
+                $(element as Element).hide();
             }
         });
 
@@ -547,7 +547,7 @@
     }
     
     private saveFavoriteQuery(itemName: string, labelIds: number[]) {
-        var query = this.inputTextbox.val();
+        var query = this.inputTextbox.val() as string;
         this.favoriteManager.createFavoriteQuery(this.bookType, this.queryType, query, itemName, labelIds, (id, error) => {
             if (error) {
                 this.favoriteDialog.showError("Chyba při vytváření oblíbeného dotazu");
@@ -691,11 +691,11 @@ class FilterSearchBox{
         return this.groupContainer;
     }
 
-    public change(handler: (eventObject: JQueryEventObject) => any) {
+    public change(handler: (eventObject: JQuery.Event) => any) {
         return $(this.input).change(handler);
     }
 
-    public submit(handler: (eventObject: JQueryEventObject) => any) {
+    public submit(handler: (eventObject: JQuery.Event) => any) {
         $(this.input).keypress(event => {
             if (event.keyCode === 13) {
                 handler(null);
@@ -705,7 +705,7 @@ class FilterSearchBox{
     }
 
     public val(): string {
-        return $(this.input).val();
+        return $(this.input).val() as string;
     }
 
     public clear() {

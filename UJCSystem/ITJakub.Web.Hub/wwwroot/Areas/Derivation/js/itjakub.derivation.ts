@@ -41,7 +41,7 @@
         this.searchBox.create(selectedChangedCallback);
 
         $("#type-select").on("change", (e) => {
-            var value = $(e.target).val();
+            var value = $(e.target as Node as HTMLElement).val() as string;
             this.searchBox.setDataSet("HyperCanonicalForm", "type=" + value);
             this.searchBox.create(selectedChangedCallback);
             this.searchBox.reload();
@@ -62,7 +62,7 @@
             url: getBaseUrl() + "Derivation/Derivation/GetCanonicalFormIdList",
             data: {
                 hyperCanonicalFormId: value.id
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (idList) => {
@@ -119,8 +119,8 @@
         $(this.container).append(table);
     }
 
-    private onTableRowAppear(event: JQueryEventObject) {
-        var tr = event.target;
+    private onTableRowAppear(event: JQuery.Event) {
+        var tr = event.target as HTMLElement;
         var id = $(tr).data("id");
         $(tr).unbind("appearing")
             .removeClass("lazy-loading");
@@ -134,7 +134,7 @@
             url: getBaseUrl() + "Derivation/Derivation/GetCanonicalFormDetail",
             data: {
                 canonicalFormId: id
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (canonicalForm: IInverseCanonicalForm) => {

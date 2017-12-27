@@ -26,7 +26,7 @@
 
         cardFileManager.clearContainer();
         var selectedCardFiles = cardfileSelector.getState().SelectedItems;
-        var searchedHeadword = $("#searchbox").val();
+        var searchedHeadword = $("#searchbox").val() as string;
 
         if (selectedCardFiles.length === 0) {
             $(nothingSelectedDiv).show();
@@ -189,7 +189,7 @@ function createListing() {
 
     $(cardFileSelector).change(function() {
         var optionSelected = $("option:selected", this);
-        cardFileIdListed = optionSelected.val();
+        cardFileIdListed = optionSelected.val() as string;
         cardFileNameListed = optionSelected.text();
         $(bucketSelector).empty();
         $(bucketSelector).hide();
@@ -236,7 +236,7 @@ function createListing() {
 
     $(bucketSelector).change(function() {
         var optionSelected = $("option:selected", this);
-        var bucketId = optionSelected.val();
+        var bucketId = optionSelected.val() as string;
         var bucketText = optionSelected.text();
         cardFileManager.clearContainer();
         cardFileManager.makeCardFile(cardFileIdListed, cardFileNameListed, bucketId, bucketText);
@@ -252,7 +252,7 @@ function initCardList() {
     var bibliographyModule = new BibliographyModule("#cardFilesListResults", "#cardFilesResultsHeader", sortOrderChanged);
 
     $("#searchButton").click(() => {
-        var text = $("#searchbox").val();
+        var text = $("#searchbox").val() as string;
         bibliographyModule.clearBooks();
         bibliographyModule.showLoading();
         $.ajax({

@@ -292,7 +292,7 @@ class Keyboard {
                 }
 
                 let cursorPosition = keyboardComponent.getCursorPosition();
-                let originalVal = <string>keyboardInput.val();
+                let originalVal = <string>keyboardInput.val() as string;
                 let newVal = originalVal.slice(0, cursorPosition) + newChar + originalVal.slice(cursorPosition);
                 keyboardComponent.setInputValue(newVal);
                 keyboardComponent.setCursorPosition(cursorPosition + 1);
@@ -312,7 +312,7 @@ class Keyboard {
                         let cursorPosition = keyboardComponent.getCursorPosition();
                         if (cursorPosition === 0) break;
 
-                        let originalVal = <string>keyboardInput.val();
+                        let originalVal = <string>keyboardInput.val() as string;
                         let newVal = originalVal.slice(0, cursorPosition - 1) + originalVal.slice(cursorPosition);
                         keyboardComponent.setInputValue(newVal);
                         keyboardComponent.setCursorPosition(cursorPosition - 1);

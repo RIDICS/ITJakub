@@ -67,7 +67,7 @@
         this.leftSidePanels = new Array<SidePanel>();
         this.rightSidePanels = new Array<SidePanel>();
 
-        $(window).on("beforeunload", (event: Event) => {
+        $(window).on("beforeunload", (event: JQuery.Event) => {
             for (var k = 0; k < this.leftSidePanels.length; k++) {
                 if (this.leftSidePanels && this.leftSidePanels[k].childwindow) {
                     this.leftSidePanels[k].childwindow.close();    
@@ -329,8 +329,8 @@
         $(pageInputButtonSpan).addClass("glyphicon glyphicon-arrow-right");
         $(pageInputButton).append(pageInputButtonSpan);
 
-        $(pageInputButton).click((event: Event) => {
-            var pageName = $("#pageInputText").val();
+        $(pageInputButton).click((event: JQuery.Event) => {
+            var pageName = $("#pageInputText").val() as string;
             var pageIndex: number = -1;
             for (var i = 0; i < this.pages.length; i++) {
                 if (this.pages[i].text === pageName) {
@@ -373,7 +373,7 @@
         var anchor: HTMLAnchorElement = document.createElement("a");
         anchor.href = "#";
         anchor.innerHTML = "|<";
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.moveToPageNumber(0, true);
             return false;
@@ -386,7 +386,7 @@
         anchor = document.createElement("a");
         anchor.href = "#";
         anchor.innerHTML = "<<";
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.moveToPageNumber(this.actualPageIndex - 5, true);
             return false;
@@ -399,7 +399,7 @@
         anchor = document.createElement("a");
         anchor.href = "#";
         anchor.innerHTML = "<";
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.moveToPageNumber(this.actualPageIndex - 1, true);
             return false;
@@ -415,7 +415,7 @@
         anchor = document.createElement("a");
         anchor.href = "#";
         anchor.innerHTML = ">";
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.moveToPageNumber(this.actualPageIndex + 1, true);
             return false;
@@ -428,7 +428,7 @@
         anchor = document.createElement("a");
         anchor.href = "#";
         anchor.innerHTML = ">>";
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.moveToPageNumber(this.actualPageIndex + 5, true);
             return false;
@@ -441,7 +441,7 @@
         anchor = document.createElement("a");
         anchor.href = "#";
         anchor.innerHTML = ">|";
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.moveToPageNumber(this.pages.length - 1, true);
             return false;
@@ -461,7 +461,7 @@
             anchor = document.createElement("a");
             anchor.href = "#";
             anchor.innerHTML = page.text;
-            $(anchor).click((event: Event) => {
+            $(anchor).click((event: JQuery.Event) => {
                 event.stopPropagation();
                 this.moveToPage(page.pageId, true);
                 return false;
@@ -496,7 +496,7 @@
         $(addBookmarkSpanText).append("Přidat záložku");
         $(addBookmarkButton).append(addBookmarkSpanText);
 
-        $(addBookmarkButton).click((event: Event) => {
+        $(addBookmarkButton).click((event: JQuery.Event) => {
             var actualPageName = this.getActualPage().text;
             this.newFavoriteDialog.show(actualPageName);
         });
@@ -513,7 +513,7 @@
         $(bookmarkSpanText).append("Záložky");
         $(bookmarkButton).append(bookmarkSpanText);
 
-        $(bookmarkButton).click((event: Event) => {
+        $(bookmarkButton).click((event: JQuery.Event) => {
             var panelId = this.bookmarksPanelIdentificator;
             if (!this.existSidePanel(panelId)) {
                 var bookmarksPanel: BookmarksPanel = new BookmarksPanel(panelId, this, this.showLeftSidePanelsButtonList);
@@ -541,7 +541,7 @@
             $(settingsSpanText).append("Zobrazení");
             $(settingsButton).append(settingsSpanText);
 
-            $(settingsButton).click((event: Event) => {
+            $(settingsButton).click((event: JQuery.Event) => {
                 var panelId = this.settingsPanelIdentificator;
                 if (!this.existSidePanel(panelId)) {
                     var settingsPanel: SettingsPanel = new SettingsPanel(panelId, this, this.showLeftSidePanelsButtonList);
@@ -569,7 +569,7 @@
             $(searchSpanText).append("Vyhledávání");
             $(searchResultButton).append(searchSpanText);
 
-            $(searchResultButton).click((event: Event) => {
+            $(searchResultButton).click((event: JQuery.Event) => {
                 var panelId = this.searchPanelIdentificator;
                 if (!this.existSidePanel(panelId)) {
                     var searchPanel = new SearchResultPanel(panelId, this, this.showLeftSidePanelsButtonList);
@@ -597,7 +597,7 @@
             $(termsSpanText).append("Témata");
             $(termsButton).append(termsSpanText);
 
-            $(termsButton).click((event: Event) => {
+            $(termsButton).click((event: JQuery.Event) => {
                 var panelId = this.termsPanelIdentificator;
                 if (!this.existSidePanel(panelId)) {
                     var termsPanel = new TermsPanel(panelId, this, this.showLeftSidePanelsButtonList);
@@ -626,7 +626,7 @@
                 $(contentSpanText).append("Obsah");
                 $(contentButton).append(contentSpanText);
 
-                $(contentButton).click((event: Event) => {
+                $(contentButton).click((event: JQuery.Event) => {
                     var panelId = this.contentPanelIdentificator;
                     if (!this.existSidePanel(panelId)) {
                         var contentPanel: ContentPanel = new ContentPanel(panelId, this, this.showLeftSidePanelsButtonList);
@@ -1345,7 +1345,7 @@ class SidePanel {
         if (showPanelButtonList.indexOf(PanelButtonEnum.Close) >= 0) {
             var sidePanelCloseButton = document.createElement("button");
             $(sidePanelCloseButton).addClass("close-button");
-            $(sidePanelCloseButton).click((event: Event) => {
+            $(sidePanelCloseButton).click((event: JQuery.Event) => {
                 this.onCloseButtonClick(sidePanelDiv);
             });
 
@@ -1362,7 +1362,7 @@ class SidePanel {
         {
             var panelPinButton = document.createElement("button");
             $(panelPinButton).addClass("pin-button");
-            $(panelPinButton).click((event: Event) => {
+            $(panelPinButton).click((event: JQuery.Event) => {
                 this.onPinButtonClick(sidePanelDiv);
             });
 
@@ -1378,7 +1378,7 @@ class SidePanel {
         if (showPanelButtonList.indexOf(PanelButtonEnum.ToNewWindow) >= 0) {
             var newWindowButton = document.createElement("button");
             $(newWindowButton).addClass("new-window-button");
-            $(newWindowButton).click((event: Event) => {
+            $(newWindowButton).click((event: JQuery.Event) => {
                 this.onNewWindowButtonClick(sidePanelDiv);
             });
 
@@ -1398,7 +1398,7 @@ class SidePanel {
         
         sidePanelDiv.appendChild(panelBodyDiv);
 
-        $(sidePanelDiv).mousedown((event: Event) => {
+        $(sidePanelDiv).mousedown((event: JQuery.Event) => {
             this.parentReader.populatePanelOnTop(this);
         });
 
@@ -1444,7 +1444,7 @@ class SidePanel {
         newWindow.document.open();
         newWindow.document.close();
 
-        $(newWindow).on("beforeunload", (event: Event) => {
+        $(newWindow).on("beforeunload", (event: JQuery.Event) => {
             this.onUnloadWindowMode();
         });
 
@@ -1531,7 +1531,7 @@ class SettingsPanel extends LeftSidePanel {
         $textButton.addClass("reader-settings-button");
         $textButton.append(textButtonSpan);
 
-        $(textButton).click((event: Event) => {
+        $(textButton).click((event: JQuery.Event) => {
             rootReference.parentReader.changeSidePanelVisibility(rootReference.parentReader.textPanelIdentificator, "");
             rootReference.parentReader.setRightPanelsLayout();
         });
@@ -1543,7 +1543,7 @@ class SettingsPanel extends LeftSidePanel {
         $imageButton.addClass("reader-settings-button");
         $imageButton.append(imageButtonSpan);
 
-        $(imageButton).click((event: Event) => {
+        $(imageButton).click((event: JQuery.Event) => {
             rootReference.parentReader.changeSidePanelVisibility(rootReference.parentReader.imagePanelIdentificator, "");
             rootReference.parentReader.setRightPanelsLayout();
         });
@@ -1561,7 +1561,7 @@ class SettingsPanel extends LeftSidePanel {
         var showPageNameCheckbox: HTMLInputElement = window.document.createElement("input");
         showPageNameCheckbox.type = "checkbox";
 
-        $(showPageNameCheckbox).change((eventData: Event) => {
+        $(showPageNameCheckbox).change((eventData: JQuery.Event) => {
             var readerText:JQuery = $("#" + this.parentReader.textPanelIdentificator).find(".reader-text");
             var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
             if (currentTarget.checked) {
@@ -1582,7 +1582,7 @@ class SettingsPanel extends LeftSidePanel {
         var showPageOnNewLineCheckbox: HTMLInputElement = window.document.createElement("input");
         showPageOnNewLineCheckbox.type = "checkbox";
 
-        $(showPageOnNewLineCheckbox).change((eventData: Event) => {
+        $(showPageOnNewLineCheckbox).change((eventData: JQuery.Event) => {
             var readerText = $("#" + this.parentReader.textPanelIdentificator).find(".reader-text");
             var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
             if (currentTarget.checked) {
@@ -1603,7 +1603,7 @@ class SettingsPanel extends LeftSidePanel {
         var showCommentCheckbox: HTMLInputElement = window.document.createElement("input");
         showCommentCheckbox.type = "checkbox";
 
-        $(showCommentCheckbox).change((eventData: Event) => {
+        $(showCommentCheckbox).change((eventData: JQuery.Event) => {
             var readerText = $("#" + this.parentReader.textPanelIdentificator).find(".reader-text");
             var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
             if (currentTarget.checked) {
@@ -2184,7 +2184,7 @@ class TextPanel extends RightSidePanel {
         var textContainerDiv: HTMLDivElement = window.document.createElement("div");
         $(textContainerDiv).addClass("reader-text-container");
 
-        $(textContainerDiv).scroll((event: Event) => {
+        $(textContainerDiv).scroll((event: JQuery.Event) => {
             this.parentReader.clickedMoveToPage = false;
 
             var pages = $(event.target).find(".page");

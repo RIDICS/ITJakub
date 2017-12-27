@@ -61,7 +61,7 @@
     });
 
     $("#searchButton").click(() => {
-        var query = $("#searchbox").val();
+        var query = $("#searchbox").val() as string;
         var selectedIds = dictionarySelector.getSelectedIds();
         $.ajax({
             type: "GET",

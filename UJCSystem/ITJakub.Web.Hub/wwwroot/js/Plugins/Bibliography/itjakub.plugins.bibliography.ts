@@ -2,7 +2,7 @@
 /// <reference path="itjakub.plugins.bibliography.factories.ts" />
 /// <reference path="itjakub.plugins.bibliography.configuration.ts" />
 /// <reference path="../Sort/itjakub.plugins.sort.ts" />
-/// <reference path="../../../../node_modules/s-pagination/dist/pagination.d.ts" />
+/// <reference path="../../../../wwwroot/lib/s-pagination/dist/pagination.d.ts" />
 
 class BibliographyModule {
 

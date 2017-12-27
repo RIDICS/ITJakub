@@ -77,8 +77,8 @@
     }
 
     private processEditCommentClick() {
-        $("#project-resource-preview").on("click", ".edit-comment", (event: JQueryEventObject) => {
-            const target = $(event.target);
+        $("#project-resource-preview").on("click", ".edit-comment", (event: JQuery.Event) => {
+            const target = $(event.target as HTMLElement);
             const commentActionsRowEl = target.parents(".comment-actions-row");
             const commentBody = commentActionsRowEl.siblings(".media-body");
             const mainCommentContentEl = commentBody.parents(".media-body");
@@ -101,8 +101,8 @@
     private processRespondToCommentClick() {
         $("#project-resource-preview").on("click",
             "button.respond-to-comment",
-            (event: JQueryEventObject) => { // Process click on "Respond" button
-                const target = $(event.target);
+            (event: JQuery.Event) => { // Process click on "Respond" button
+                const target = $(event.target as HTMLElement);
                 const pageRow =
                     target.parents(".comment-area").parent(".page-row");
                 var textId = $(pageRow).data("page") as number;
@@ -183,7 +183,7 @@
         var serverAddress = this.util.getServerAddress();
         var commentTextOriginal = textAreaEl.val() as string;
         textAreaEl.on("focusout",
-            (event: JQueryEventObject) => {
+            (event: JQuery.Event) => {
                 event.stopImmediatePropagation();
                 var commentText = textAreaEl.val() as string;
                 if (commentText === commentTextOriginal) {

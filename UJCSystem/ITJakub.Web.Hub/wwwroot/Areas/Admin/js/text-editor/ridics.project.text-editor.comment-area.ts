@@ -309,8 +309,8 @@
     }
 
     private processDeleteCommentClick() {
-        $("#project-resource-preview").on("click", ".delete-comment", (event: JQueryEventObject) => {
-            const target = $(event.target);
+        $("#project-resource-preview").on("click", ".delete-comment", (event: JQuery.Event) => {
+            const target = $(event.target as Node as Element);
             const commentActionsRowEl = target.parents(".comment-actions-row");
             const commentId = parseInt(commentActionsRowEl.siblings(".media-body").attr("data-comment-id"));
             bootbox.confirm({
@@ -360,7 +360,7 @@
     private processToggleNestedCommentClick() {
         $("#project-resource-preview").on("click",
             ".toggle-nested-comments",
-            (event: JQueryEventObject) => {
+            (event: JQuery.Event) => {
                 event.stopImmediatePropagation();
                 const editorPageContainer = ".pages-start";
                 var target = $(event.target as HTMLElement);
@@ -388,7 +388,7 @@
                         if (scrollToMainComment < container.scrollTop()) {
                             container.animate({
                                 scrollTop: scrollToMainComment
-                            });
+                            } as JQuery.PlainObject);
                         }
                     } else {
                         const scrollToMainCommentWhileExpanded = $(parentComment).offset().top -
@@ -410,7 +410,7 @@
     private processToggleCommentAresSizeClick() {
         $("#project-resource-preview").on("click",
             ".toggleCommentViewAreaSize",
-            (event: JQueryEventObject) => {
+            (event: JQuery.Event) => {
                 event.stopImmediatePropagation();
                 const target = $(event.target as HTMLElement);
                 const commentArea = target.parents(".comment-area");

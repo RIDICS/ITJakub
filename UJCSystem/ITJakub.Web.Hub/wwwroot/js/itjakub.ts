@@ -1,6 +1,8 @@
 ﻿/// <reference path="Plugins/Bibliography/itjakub.plugins.bibliography.ts"/>
 /// <reference path="Plugins/DropdownSelect/itjakub.plugins.dropdownselect.ts"/>
 
+// Disable Dropzone auto-initializing
+Dropzone.autoDiscover = false;
 
 //sets state to main plugins menu
 $(document as Node as Element).ready(() => {
@@ -25,9 +27,6 @@ $(document as Node as Element).ready(() => {
         $buttonElement.siblings(".secondary-navbar-toggle").removeClass("hover");
         $buttonElement.toggleClass("hover");
     });
-
-    // Disable Dropzone auto-initializing
-    Dropzone.autoDiscover = false;
 });
 
 function getQueryStringParameterByName(name) {
@@ -95,8 +94,8 @@ function isUserInRole(role: RoleEnum) {
     return rolesString.indexOf(paramRoleString) >= 0;
 }
 
-function onClickHref(event:JQueryEventObject, targetUrl) {
-    if (event.ctrlKey || event.which == 2) {
+function onClickHref(event:JQuery.Event, targetUrl) {
+    if (event.ctrlKey || event.which === 2) {
         event.preventDefault();
 
         window.open(targetUrl, '_blank');
@@ -107,9 +106,28 @@ function onClickHref(event:JQueryEventObject, targetUrl) {
     }
 }
 
-// jQuery case-insensitive contains
-jQuery.expr[':'].containsCI = (a, i, m) => (jQuery(a).text().toLowerCase()
-    .indexOf(m[3].toLowerCase()) >= 0);
+interface JQueryStatic {
+    expr: any;
+}
+
+// An implementation of a case-insensitive contains pseudo
+// made for all versions of jQuery
+($ => {//TODO requires testing
+
+    function icontains(elem, text) {
+        return (
+            elem.textContent ||
+                elem.innerText ||
+                $(elem).text() ||
+                ""
+        ).toLowerCase().indexOf((text || "").toLowerCase()) > -1;
+    }
+
+    $.expr.pseudos.containsCI = $.expr.createPseudo ?
+        $.expr.createPseudo(text => elem => icontains(elem, text)) :
+        (elem, i, match) => icontains(elem, match[3]);
+
+})(jQuery);
 
 function getImageResourcePath(): string {
     return getBaseUrl() + "images/";

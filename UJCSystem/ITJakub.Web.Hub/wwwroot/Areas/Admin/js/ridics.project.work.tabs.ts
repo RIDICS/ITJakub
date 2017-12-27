@@ -97,7 +97,7 @@
         });
         var tags = [];
         selectedKeywordEls.each((index, element) => {
-            const jEl = $(element);
+            const jEl = $(element as Node as Element);
             tags.push({ value: jEl.data("id"), label: jEl.data("name") });
         });
         ($(".keywords-textarea") as any).tokenfield("setTokens", tags);
@@ -173,7 +173,7 @@
         const existingCategoriesEl = $(".all-category-list");
         const existingCategoriesElList = existingCategoriesEl.children(".existing-category-list-item");
         existingCategoriesElList.each((index, elem) => {
-            const categoryEl = $(elem);
+            const categoryEl = $(elem as Node as Element);
             const id = categoryEl.data("category-id");
             const childCategories = $(`[data-parent-category-id=${id}]`);
             if (childCategories.length) {
@@ -187,7 +187,7 @@
         const selectedCategoriesEl = $(".selected-category-list");
         const selectedCategoriesElList = selectedCategoriesEl.children(".selected-category-list-item");
         selectedCategoriesElList.each((index, elem) => {
-            const categoryEl = $(elem);
+            const categoryEl = $(elem as Node as Element);
             const catId = categoryEl.data("category-id");
             const catChechbox = categoryTree.getNodeById(catId);
             categoryTree.check(catChechbox);
@@ -199,7 +199,7 @@
         const existingCategoriesEl = $(".all-category-list");
         const existingCategoriesElList = existingCategoriesEl.children(".existing-category-list-item");
         existingCategoriesElList.each((index, elem) => {
-            const catEl = $(elem);
+            const catEl = $(elem as Node as Element);
             var categoryTreeEl = this.convertCateroryElToCategoryTreeEl(catEl);
             categoryTreeObject.push(categoryTreeEl);
         });
@@ -229,7 +229,7 @@
 
         this.rangePeriodViewSliderClass = new RegExDatingConditionRangePeriodView();
         this.rangePeriodViewSliderClass.makeRangeView(
-            $("#select-range-dialog").find(".regex-dating-precision-div")[0] as HTMLDivElement);
+            $("#select-range-dialog").find(".regex-dating-precision-div")[0] as Node as HTMLDivElement);
 
         this.createCategoriesNestedStructure();
 
@@ -293,9 +293,10 @@
                 }
             });
 
-        $(document).on("click", ".move-person-up",
+        $(document.documentElement).on("click",
+            ".move-person-up",
             (event) => {
-                const targetEl = $(event.target);
+                const targetEl = $(event.target as Node as Element);
                 const personEl = targetEl.parents(".editor-item, .author-item");
                 const prevPersonEl = personEl.prev(".editor-item, .author-item");
                 if (prevPersonEl.length) {
@@ -304,9 +305,10 @@
                 }
             });
 
-        $(document).on("click", ".move-person-down", 
+        $(document.documentElement).on("click",
+            ".move-person-down",
             (event) => {
-                const targetEl = $(event.target);
+                const targetEl = $(event.target as Node as Element);
                 const personEl = targetEl.parents(".editor-item, .author-item");
                 const nextPersonEl = personEl.next(".editor-item, .author-item");
                 if (nextPersonEl.length) {
@@ -490,8 +492,8 @@
 
         $(".author-list-items").on("click",
             ".author-list-item",
-            (event: Event) => {
-                var targetEl = $(event.target);
+            (event: JQuery.Event) => {
+                var targetEl = $(event.target as HTMLElement);
                 if (!targetEl.hasClass("author-list-item")) {
                     targetEl = targetEl.parents(".author-list-item");
                 }
@@ -510,9 +512,9 @@
             });
 
         $("#add-author-search").on("input",
-            (event: Event) => {
-                const textAreaEl = $(event.target);
-                const enteredText = textAreaEl.val();
+            (event: JQuery.Event) => {
+                const textAreaEl = $(event.target as HTMLElement);
+                const enteredText = textAreaEl.val() as string;
                 if (enteredText === "") {
                     $(".author-list-item").remove();
                     $authorId.val("");
@@ -542,9 +544,9 @@
 
         const $editorId = $("#add-editor-id-preview");
         $("#add-editor-search").on("input",
-            (event: Event) => {
-                const textAreaEl = $(event.target);
-                const enteredText = textAreaEl.val();
+            (event: JQuery.Event) => {
+                const textAreaEl = $(event.target as HTMLElement);
+                const enteredText = textAreaEl.val() as string;
                 if (enteredText === "") {
                     $(".responsible-person-list-item").remove();
                     newResponsiblePersonButtonEl.prop("disabled", false);
@@ -571,8 +573,8 @@
 
         $(".responsible-person-list-items").on("click",
             ".responsible-person-list-item",
-            (event: Event) => {
-                var targetEl = $(event.target);
+            (event: JQuery.Event) => {
+                var targetEl = $(event.target as Node as Element);
                 if (!targetEl.hasClass("responsible-person-list-item")) {
                     targetEl = targetEl.parents(".responsible-person-list-item");
                 }
@@ -650,7 +652,7 @@
             elm += `<div class="col-xs-12 works-list-item">${project.latestMetadata.title}</div>`;
         });
         const html = $.parseHTML(elm);
-        this.populateAuthorWorkListItemsTable($(html));
+        this.populateAuthorWorkListItemsTable($(html as Element[]));
     }
 
     private generateWorkResponsiblePersonItem(projects: IProjectDetailContract[], responsiblePersonId: number) {
@@ -718,13 +720,13 @@
         const publishYearsEl = $("#work-metadata-publish-date");
         const publishPlaceEl = $("#work-metadata-publish-place");
         const publisherNameEl = $("#work-metadata-publisher");
-        const publishYearsString = publishYearsEl.val();
-        const publishPlaceString = publishPlaceEl.val();
-        const publisherNameString = publisherNameEl.val();
-        const projectTitleString = projectTitleEl.val();
+        const publishYearsString = publishYearsEl.val() as string;
+        const publishPlaceString = publishPlaceEl.val() as string;
+        const publisherNameString = publisherNameEl.val() as string;
+        const projectTitleString = projectTitleEl.val() as string;
         var authorsStringArray = new Array<string>();
         authorEls.each((index, elem) => {
-            const author = $(elem);
+            const author = $(elem as Node as Element);
             const name = author.find(".person-name").text();
             const surname = author.find(".person-surname").text();
             authorsStringArray.push(`${surname.toLocaleUpperCase()}, ${this.capitalize(name)}`);
@@ -801,7 +803,8 @@
 
         const finishAddingEditor = () => {
             var element = MetadataUiHelper.addPerson($("#work-metadata-editors"),
-                firstName, `${lastName} - ${responsibilityText}`,
+                firstName,
+                `${lastName} - ${responsibilityText}`,
                 id,
                 responsibilityTypeId);
             element.addClass("editor-item");
@@ -835,7 +838,7 @@
         $("#work-metadata-literary-genre").on("click",
             ".remove-button",
             (event) => {
-                $(event.currentTarget).closest(".genre-item").remove();
+                $(event.currentTarget as Node as Element).closest(".genre-item").remove();
             });
     }
 
@@ -843,7 +846,7 @@
         $("#work-metadata-literary-kind").on("click",
             ".remove-button",
             (event) => {
-                $(event.currentTarget).closest(".lit-kind-item").remove();
+                $(event.currentTarget as Node as Element).closest(".lit-kind-item").remove();
             });
     }
 
@@ -855,7 +858,7 @@
         var selectedGenreIds = new Array<number>();
         var keywordIdList = new Array<number>();
 
-        $("#work-metadata-authors .author-item").each((index, elem:Node) => {
+        $("#work-metadata-authors .author-item").each((index, elem: Node) => {
             selectedAuthorIds.push($(elem as Element).data("id"));
         });
         $("#work-metadata-editors .editor-item").each((index, elem: Node) => {
@@ -994,7 +997,7 @@ class ProjectWorkPublicationsTab extends ProjectModuleTabBase {
         $("#work-snapshots-new-button").click((event) => {
             $(".edit-column, .remove-column").hide();
             $(".duplicate-column", $table).show();
-            $(event.currentTarget).hide();
+            $(event.currentTarget as Node as Element).hide();
 
             this.openNewSnapshotPanel();
         });
@@ -1033,35 +1036,35 @@ class ProjectWorkPublicationsResource {
 
     public init() {
         $(".subheader", this.$container).children().each((index, elem) => {
-            var $checkbox = $("input[type=checkbox]", elem);
+            var $checkbox = $("input[type=checkbox]", elem as Node as Element);
             if ($checkbox.length === 0) return;
 
             $checkbox.change((event) => {
-                var checkbox = <HTMLInputElement>event.currentTarget;
+                var checkbox = event.currentTarget as Node as HTMLInputElement;
                 var isChecked = checkbox.checked;
 
                 $(`td:nth-child(${index + 1}) input[type=checkbox]`, this.$container).each((index, elem) => {
-                    var checkbox2 = <HTMLInputElement>elem;
+                    var checkbox2 = elem as Node as HTMLInputElement;
                     checkbox2.checked = isChecked;
                 });
             });
         });
 
         $("td input[type=checkbox]", this.$container).change((event) => {
-            var $parentTd = $(event.currentTarget).closest("td");
+            var $parentTd = $(event.currentTarget as Node as Element).closest("td");
             var $parentTr = $parentTd.closest("tr");
             var position = $parentTr.children().index($parentTd) + 1;
 
             var isAllChecked = true;
             $(`td:nth-child(${position}) input[type=checkbox]`, this.$container).each((index, elem) => {
-                if (!(<HTMLInputElement>elem).checked) {
+                if (!(elem as Node as HTMLInputElement).checked) {
                     isAllChecked = false;
                 }
             });
 
             var allCheckBox =
-                <HTMLInputElement>$(`.subheader th:nth-child(${position}) input[type=checkbox]`, this.$container)
-                .get(0);
+                $(`.subheader th:nth-child(${position}) input[type=checkbox]`, this.$container)
+                    .get(0) as Node as HTMLInputElement;
             allCheckBox.checked = isAllChecked;
         });
     }
@@ -1105,7 +1108,8 @@ class ProjectWorkNoteTab extends ProjectModuleTabBase {
 
 class MetadataUiHelper {
     static addPerson($container: JQuery,
-        name: string, surname: string,
+        name: string,
+        surname: string,
         idValue: string | number,
         responsibilityTypeId?: number | string): JQuery {
         const rootElement = $(document.createElement("div"));

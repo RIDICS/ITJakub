@@ -23,7 +23,7 @@
         var select: HTMLSelectElement = document.createElement('select');
 
         $(select).change(() => {
-            var selectedOptionValue: string = this.sortBarContainer.find('div.bib-sortbar').find('select').find("option:selected").val();
+            var selectedOptionValue: string = this.sortBarContainer.find('div.bib-sortbar').find('select').find("option:selected").val() as string;
             this.changeSortCriteria(parseInt(selectedOptionValue));
         });
 

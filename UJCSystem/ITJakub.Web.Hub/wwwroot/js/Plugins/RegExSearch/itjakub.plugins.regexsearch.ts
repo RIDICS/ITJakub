@@ -5,7 +5,7 @@
         if (disabled) {
             optionEl.prop("disabled", true);
         }
-        return <HTMLOptionElement>optionEl[0];//TODO rewrite to JQuery
+        return optionEl[0] as Node as HTMLOptionElement;//TODO rewrite to JQuery
     }
 
     public static createOptionGroup(label: string): HTMLOptionElement {
@@ -126,7 +126,7 @@ class Search {
 
                 if ($(this.searchbarAdvancedEditorContainer).is(":hidden")) {       //show advanced search
                     var $searchInputTextbox = $(this.searchInputTextbox);
-                    var textboxValue = $searchInputTextbox.val();
+                    var textboxValue = $searchInputTextbox.val() as string;
                     if (this.isValidJson(textboxValue)) {
                         this.advancedRegexEditor.importJson(textboxValue);
                     }
@@ -230,7 +230,7 @@ class Search {
         
         $(this.container).append(searchAreaDiv);
 
-        $(this.searchButton).click((event: Event) => {
+        $(this.searchButton).click(() => {
             this.processSearch();
         });
 
@@ -273,7 +273,7 @@ class Search {
     }
 
     public getTextFromTextField(): string {
-        return $(this.searchInputTextbox).val();
+        return $(this.searchInputTextbox).val() as string;
     }
 
     public processSearchQuery(query: string) {
@@ -291,7 +291,7 @@ class Search {
     }
 
     processSearch() {
-        var searchboxValue = $(this.searchInputTextbox).val();
+        var searchboxValue = $(this.searchInputTextbox).val() as string;
         this.lastQuery = searchboxValue;
         if (this.isValidJson(searchboxValue)) {
             this.lastQueryWasJson = true;
@@ -542,7 +542,7 @@ class RegExConditionListItem {
 
         delimeterDiv.append(trashButton);
 
-        return delimeterDiv[0] as HTMLDivElement;
+        return delimeterDiv[0] as Node as HTMLDivElement;
     }
 
     private createTextDelimeter(): HTMLDivElement {
@@ -582,8 +582,8 @@ class RegExConditionListItem {
             var optGroups = $(this.searchDestinationSelect).find("optgroup");
             for (var j = 0; j < optGroups.length; j++) {
                 var optGroup = optGroups[j];
-                var visibleChilds = $(optGroup).children(":not(.hidden)");
-                if (visibleChilds.length === 0) $(optGroup).hide();
+                var visibleChilds = $(optGroup as Node as Element).children(":not(.hidden)");
+                if (visibleChilds.length === 0) $(optGroup as Node as Element).hide();
             }
         }
     }
@@ -632,9 +632,9 @@ class RegExConditionListItem {
         headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("Hesla", SearchTypeEnum.Headword.toString()));
         headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("Heslová stať", SearchTypeEnum.HeadwordDescription.toString()));
 
-        $(searchDestinationSelect).change((eventData: Event) => {
+        $(searchDestinationSelect).change((eventData: JQuery.Event) => {
             var oldSelectedSearchType = this.selectedSearchType;
-            this.selectedSearchType = parseInt($(eventData.target).val());
+            this.selectedSearchType = parseInt($(eventData.target as HTMLElement).val() as string);
 
             if (this.selectedSearchType !== oldSelectedSearchType) {
                 this.changeConditionType(this.selectedSearchType, oldSelectedSearchType);
@@ -664,7 +664,7 @@ class RegExConditionListItem {
         this.setClickableDelimeter();
         this.html = conditionsDiv;
 
-        var defaultValue = $(this.searchDestinationSelect).find("option:not(.hidden)").first().val();
+        var defaultValue = $(this.searchDestinationSelect).find("option:not(.hidden)").first().val() as string;
         $(searchDestinationSelect).val(defaultValue);
         $(searchDestinationSelect).change();
     }
@@ -799,8 +799,8 @@ class RegExWordConditionList implements IRegExConditionListBase {
 
         this.selectedWordFormType = this.wordFormType.Lemma;
 
-        $(wordFormSelect).change((eventData: Event) => {
-            this.selectedWordFormType = $(eventData.target).val();
+        $(wordFormSelect).change((eventData: JQuery.Event) => {
+            this.selectedWordFormType = $(eventData.target as HTMLElement).val() as string;
         });
 
         this.wordListContainerDiv = document.createElement("div");
@@ -935,17 +935,18 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
         $(periodCheckboxDiv).addClass("regex-dating-checkbox-div");
         var periodValueCheckbox: HTMLInputElement = window.document.createElement("input");
         periodValueCheckbox.type = "checkbox";
-        $(periodValueCheckbox).change((eventData: Event) => {
+        $(periodValueCheckbox).change((eventData: JQuery.Event) => {
             var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
+            const targetEl = $(eventData.target as HTMLElement);
             if (currentTarget.checked) {
-                $(eventData.target).parent().siblings(".slider").slider("option", "disabled", false);
-                $(eventData.target).parent().siblings(".slider").find(".slider-tip").show();
+                targetEl.parent().siblings(".slider").slider("option", "disabled", false);
+                targetEl.parent().siblings(".slider").find(".slider-tip").show();
                 this.periodEnabled = true;
 
-                $(eventData.target).parents(".regex-slider-div").siblings(".regex-slider-div").find(".regex-dating-checkbox-div").find("input").prop('checked', false).change();//uncheck other checboxes 
+                targetEl.parents(".regex-slider-div").siblings(".regex-slider-div").find(".regex-dating-checkbox-div").find("input").prop('checked', false).change();//uncheck other checboxes 
             } else {
-                $(eventData.target).parent().siblings(".slider").slider("option", "disabled", true);
-                $(eventData.target).parent().siblings(".slider").find(".slider-tip").hide();
+                targetEl.parent().siblings(".slider").slider("option", "disabled", true);
+                targetEl.parent().siblings(".slider").find(".slider-tip").hide();
                 this.periodEnabled = false;
             }
 
@@ -977,17 +978,18 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
 
         var decadesCheckbox: HTMLInputElement = window.document.createElement("input");
         decadesCheckbox.type = "checkbox";
-        $(decadesCheckbox).change((eventData: Event) => {
+        $(decadesCheckbox).change((eventData: JQuery.Event) => {
             var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
+            const targetEl = $(eventData.target as HTMLElement);
             if (currentTarget.checked) {
-                $(eventData.target).parent().siblings(".slider").slider("option", "disabled", false);
-                $(eventData.target).parent().siblings(".slider").find(".slider-tip").show();
+                targetEl.parent().siblings(".slider").slider("option", "disabled", false);
+                targetEl.parent().siblings(".slider").find(".slider-tip").show();
                 this.decadeEnabled = true;
 
-                $(eventData.target).parents(".regex-slider-div").siblings(".regex-slider-div").find(".regex-dating-checkbox-div").find("input").prop('checked', false).change();//uncheck other checboxes 
+                targetEl.parents(".regex-slider-div").siblings(".regex-slider-div").find(".regex-dating-checkbox-div").find("input").prop('checked', false).change();//uncheck other checboxes 
             } else {
-                $(eventData.target).parent().siblings(".slider").slider("option", "disabled", true);
-                $(eventData.target).parent().siblings(".slider").find(".slider-tip").hide();
+                targetEl.parent().siblings(".slider").slider("option", "disabled", true);
+                targetEl.parent().siblings(".slider").find(".slider-tip").hide();
                 this.decadeEnabled = false;
             }
 
@@ -1070,12 +1072,12 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
             max: valuesArray.length - 1,
             value: 0,
             slide: (event, ui) => {
-                $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html(valuesArray[ui.value].name + nameEnding);
+                $(event.target as HTMLElement).find('.ui-slider-handle').find('.tooltip-inner').html(valuesArray[ui.value].name + nameEnding);
 
             },
             change: (event: Event, ui: JQueryUI.SliderUIParams) => {
                 callbackFunction(valuesArray[ui.value]);
-                $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html(valuesArray[ui.value].name + nameEnding);
+                $(event.target as HTMLElement).find('.ui-slider-handle').find('.tooltip-inner').html(valuesArray[ui.value].name + nameEnding);
             }
         });
 
@@ -1157,17 +1159,18 @@ class RegExDatingConditionRangeYearView implements IRegExDatingConditionView {
         this.actualValue = this.initValue;
 
         // allows only digits input
-        $(textInput).keyup((e: Event)=> {
-            var value = $(e.target).val();
+        $(textInput).keyup((e: JQuery.Event) => {
+            const targetEl = $(e.target as HTMLElement);
+            var value = targetEl.val() as string;
             value.replace(/[^0-9]/g, '');
-            $(e.target).val(value);
-            $(e.target).text(value);
+            targetEl.val(value);
+            targetEl.text(value);
 
             this.actualValue = parseInt(value);
         });
 
-        $(textInput).change((e: Event) => {
-            var value = $(e.target).val();
+        $(textInput).change((e: JQuery.Event) => {
+            var value = $(e.target as HTMLElement).val() as string;
             this.actualValue = parseInt(value);
         });
 
@@ -1456,9 +1459,9 @@ class RegExDatingCondition implements IRegExConditionItemBase{
 
         this.datingRange = DatingRangeEnum.OlderThen;
 
-        $(datingFormSelect).change((eventData: Event) => {
+        $(datingFormSelect).change((eventData: JQuery.Event) => {
             var oldRange = this.datingRange;
-            this.datingRange = parseInt($(eventData.target).val());
+            this.datingRange = parseInt($(eventData.target as HTMLElement).val() as string);
 
             if (oldRange !== this.datingRange) {
                 this.changeViews();
@@ -1484,9 +1487,9 @@ class RegExDatingCondition implements IRegExConditionItemBase{
 
         this.datingPrecision = DatingPrecisionEnum.Period;
 
-        $(precisionFormSelect).change((eventData: Event) => {
+        $(precisionFormSelect).change((eventData: JQuery.Event) => {
             var oldPrecision = this.datingPrecision;
-            this.datingPrecision = parseInt($(eventData.target).val());
+            this.datingPrecision = parseInt($(eventData.target as HTMLElement).val() as string);
 
             if (oldPrecision !== this.datingPrecision) {
                 this.changeViews();
@@ -1697,7 +1700,7 @@ class RegExWordCondition implements IRegExConditionItemBase{
 
         const inputsContainerEl = $("<div></div>");
         inputsContainerEl.addClass("regexsearch-word-input-list-div");
-        this.inputsContainerDiv = inputsContainerEl[0] as HTMLDivElement;
+        this.inputsContainerDiv = inputsContainerEl[0] as Node as HTMLDivElement;
         mainDiv.append(inputsContainerEl);
 
         var commandsDiv = $("<div></div>");
@@ -1711,10 +1714,10 @@ class RegExWordCondition implements IRegExConditionItemBase{
         addConditionButton.click(() => {
             this.addInput();
         });
-        commandsDiv.append(addConditionButton[0]);
+        commandsDiv.append(addConditionButton[0] as Node as HTMLElement);
         mainDiv.append(this.createTextDelimeter());
         this.resetInputs();
-        this.html = mainDiv[0] as HTMLDivElement;
+        this.html = mainDiv[0] as Node as HTMLDivElement;
     }
 
     resetInputs() {
@@ -1872,9 +1875,9 @@ class RegExWordInput {
         //conditionSelect.appendChild(this.createOption("Nekončí na", this.conditionType.NotEndsWith));
         conditionSelect.appendChild(HtmlItemsFactory.createOption("Přesně shoduje", WordInputTypeEnum.ExactMatch.toString()));
 
-        $(conditionSelect).change((eventData: Event) => {
+        $(conditionSelect).change((eventData: JQuery.Event) => {
             var oldConditonType = this.conditionInputType;
-            const selectEl = $(eventData.target);
+            const selectEl = $(eventData.target as HTMLElement);
             this.conditionInputType = parseInt(selectEl.val() as string);
             if (this.conditionInputType === WordInputTypeEnum.ExactMatch) {
                 const regexWordConditionEl = selectEl.parents(".reg-ex-word-condition");
@@ -1944,7 +1947,7 @@ class RegExWordInput {
         removeButton.appendChild(removeGlyph);
         $(removeButton).css("margin-left", "3px");
         $(removeButton).click((event) => {
-            const eventTargetEl = $(event.target);
+            const eventTargetEl = $(event.target as Node as Element);
             const conditionList = eventTargetEl.parents(".reg-ex-word-condition");
 
             this.parentRegExWordCondition.removeInput(this);
@@ -1952,9 +1955,9 @@ class RegExWordInput {
             const regexWordInputEls = conditionList.find(".reg-ex-word-input");
             var numberOfExactMatchSeachTypes = 0;
             regexWordInputEls.each((index, element) => {
-                const wordInputEl = $(element);
+                const wordInputEl = $(element as Node as Element);
                 const selectEl = wordInputEl.find("select");
-                const searchType: WordInputTypeEnum = parseInt(selectEl.val());
+                const searchType: WordInputTypeEnum = parseInt(selectEl.val() as string);
                 if (searchType === WordInputTypeEnum.ExactMatch) {
                     numberOfExactMatchSeachTypes++;
                 }
@@ -2239,17 +2242,18 @@ class RegExTokenDistanceCondition implements IRegExConditionItemBase {
         $(tokenDistanceInput).addClass("regexsearch-condition-input");
         inputTextDiv.appendChild(tokenDistanceInput);
 
-        $(tokenDistanceInput).keyup((e: Event) => {
-            var value = $(e.target).val();
+        $(tokenDistanceInput).keyup((e : JQuery.Event) => {
+            const targetEl = $(e.target as Node as Element);
+            var value = targetEl.val() as string;
             value.replace(/[^0-9]/g, '');
-            $(e.target).val(value);
-            $(e.target).text(value);
+            targetEl.val(value);
+            targetEl.text(value);
 
             this.actualTokenDistanceValue = parseInt(value);
         });
 
-        $(tokenDistanceInput).change((e: Event) => {
-            var value = $(e.target).val();
+        $(tokenDistanceInput).change((e: JQuery.Event) => {
+            var value = $(e.target as Node as Element).val() as string;
             this.actualTokenDistanceValue = parseInt(value);
         });
 
