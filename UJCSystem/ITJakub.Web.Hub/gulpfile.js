@@ -12,7 +12,8 @@ var gulp = require("gulp"),
   watch = require("gulp-watch"),
   sourcemaps = require('gulp-sourcemaps'),
   uglify = require("gulp-uglify"),
-  ts = require("gulp-typescript");
+  ts = require("gulp-typescript"),
+  yarn = require("gulp-yarn");
 var tsProject = ts.createProject("tsconfig.json");
 
 var paths = {
@@ -359,7 +360,13 @@ gulp.task("bundlejs_areas",
     "bundle:ridics_admin_composition-key-table-editor"
 ]);
 
+//Download yarn dependencies
+
+gulp.task("yarn-runtime", function () {
+    return gulp.src(["./wwwroot/package.json", , "./wwwroot/yarn.lock"])
+        .pipe(yarn());
+});
 
 // Main build
 
-gulp.task("default", ["build:less", "bundlejs", "bundlejs_areas"]);
+gulp.task("default", ["build:less", "bundlejs", "bundlejs_areas", "yarn-runtime"]);
