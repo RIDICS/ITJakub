@@ -236,7 +236,7 @@ class BibliographyFactory {
                 .attr("href", "#")
                 .append(showAllSpan)
                 .click(event => {
-                    var $item = $(event.currentTarget);
+                    var $item = $(event.currentTarget as Node as Element);
                     $item.siblings().show();
                     $item.hide();
                 });
@@ -288,7 +288,7 @@ class BibliographyFactory {
             .height(height)
             .animate({
                 height: newHeight
-            }, null, null, () => {
+            } as JQuery.PlainObject, null, null, () => {
                 $container.css("height", "");
             });
     }
