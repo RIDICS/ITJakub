@@ -49,7 +49,7 @@
                 $.ajax({
                     type: "GET",
                     traditional: true,
-                    data: { cardFileId: selectedCardFileItem.Id, headword: searchedHeadword },
+                    data: { cardFileId: selectedCardFileItem.Id, headword: searchedHeadword } as JQuery.PlainObject,
                     url: getBaseUrl()+"CardFiles/CardFiles/Buckets",
                     dataType: "json",
                     contentType: "application/json",
@@ -198,7 +198,7 @@ function createListing() {
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { cardFileId: cardFileIdListed},
+            data: { cardFileId: cardFileIdListed } as JQuery.PlainObject,
             url: getBaseUrl()+"CardFiles/CardFiles/Buckets",
             dataType: "json",
             contentType: "application/json",
@@ -259,7 +259,7 @@ function initCardList() {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "CardFiles/CardFiles/SearchList",
-            data: { term: text },
+            data: { term: text } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success(response) {

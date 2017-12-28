@@ -61,7 +61,7 @@
         }
         elm += listEnd;
         const html = $.parseHTML(elm);
-        const jListEl = $(html);
+        const jListEl = $(html as Element[]);
         return jListEl;
     }
 

@@ -82,15 +82,15 @@
         });
 
         $(".fast-add-favorite-label").click((event) => {
-            var labelId = $(event.currentTarget).data("id");
-            var labelName = $(event.currentTarget).data("name");
-            var labelColor = $(event.currentTarget).data("color");
+            var labelId = $(event.currentTarget as Node as Element).data("id");
+            var labelName = $(event.currentTarget as Node as Element).data("name");
+            var labelColor = $(event.currentTarget as Node as Element).data("color");
             
             this.createFavoriteItemFast(labelId, this.favoriteDefaultTitle, labelName, labelColor);
         });
 
         $(".favorite-book-remove").click((event) => {
-            var elementJQuery = $(event.currentTarget);
+            var elementJQuery = $(event.currentTarget as Node as Element);
             var id = <number>elementJQuery.data("id");
 
             this.deleteFavoriteItem(id, elementJQuery);

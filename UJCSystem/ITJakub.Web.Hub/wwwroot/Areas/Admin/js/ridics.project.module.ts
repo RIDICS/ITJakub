@@ -1,4 +1,4 @@
-﻿$(document).ready(() => {
+﻿$(document.documentElement).ready(() => {
     var projectModule = new ProjectModule();
     projectModule.init();
 });
@@ -31,7 +31,7 @@ class ProjectModule {
             e.preventDefault();
             $projectNavigationLinks.removeClass("active");
             $(this).addClass("active");
-            self.showModule(e.currentTarget.id);
+            self.showModule($(e.currentTarget as Node as Element).attr("id"));
         });
 
 
@@ -542,7 +542,7 @@ class ProjectResourceVersionModule {
 
         $resourceTabContent.animate({
             height: "-=" + this.versionPanelHeight + "px"
-        });
+        } as JQuery.PlainObject);
 
 
         this.$iconUp.hide();
@@ -558,7 +558,7 @@ class ProjectResourceVersionModule {
 
             $resourceTabContent.animate({
                 height: "+=" + this.versionPanelHeight + "px"
-            });
+            } as JQuery.PlainObject);
         } else {
             $resourceVersionPanel.hide().empty();
             $resourceTabContent.height("");

@@ -55,7 +55,7 @@
             const pageBody = data.text;
             const id = data.id;
             const versionNumber = data.versionNumber;
-            compositionAreaEl.attr({ "data-id": id, "data-version-number": versionNumber });
+            compositionAreaEl.attr({ "data-id": id, "data-version-number": versionNumber } as JQuery.PlainObject);
             compositionAreaDiv.append(pageBody);
             pageEl.css("min-height", "0");
             var event = $.Event("pageConstructed", { page: textId });
@@ -90,7 +90,7 @@
             const compositionAreaEl = pageEl.children(".composition-area");
             const id = data.id;
             const versionNumber = data.versionNumber;
-            compositionAreaEl.attr({ "data-id": id, "data-version-number": versionNumber });
+            compositionAreaEl.attr({ "data-id": id, "data-version-number": versionNumber } as JQuery.PlainObject);
             var event = $.Event("pageConstructed", { page: textId });
             textAreaEl.trigger(event);
         });

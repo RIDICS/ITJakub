@@ -40,7 +40,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/AdvancedSearchInBookPaged",
-            data: { json: json, start: start, count: count, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            data: { json: json, start: start, count: count, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() } as JQuery.PlainObject,
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
@@ -62,7 +62,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/TextSearchInBookPaged",
-            data: { text: text, start: start, count: count, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            data: { text: text, start: start, count: count, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() } as JQuery.PlainObject,
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
@@ -93,7 +93,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/TextSearchInBookCount",
-            data: { text: text, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            data: { text: text, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() } as JQuery.PlainObject,
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
@@ -106,7 +106,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/TextSearchInBookPagesWithMatchHit",
-            data: { text: text, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            data: { text: text, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() } as JQuery.PlainObject,
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
@@ -122,7 +122,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/AdvancedSearchInBookCount",
-            data: { json: json, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            data: { json: json, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() } as JQuery.PlainObject,
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
@@ -136,7 +136,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/AdvancedSearchInBookPagesWithMatchHit",
-            data: { json: json, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            data: { json: json, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() } as JQuery.PlainObject,
             dataType: 'json',
             contentType: 'application/json',
             success: response => {

@@ -67,7 +67,7 @@
         this.leftSidePanels = new Array<SidePanel>();
         this.rightSidePanels = new Array<SidePanel>();
 
-        $(window).on("beforeunload", (event: JQuery.Event) => {
+        $(window.document.documentElement).on("beforeunload", (event: JQuery.Event) => {
             for (var k = 0; k < this.leftSidePanels.length; k++) {
                 if (this.leftSidePanels && this.leftSidePanels[k].childwindow) {
                     this.leftSidePanels[k].childwindow.close();    
@@ -160,7 +160,7 @@
             $.ajax({
                 type: "GET",
                 traditional: true,
-                data: { bookId: bookId, snapshotId: bookVersionId },
+                data: { bookId: bookId, snapshotId: bookVersionId } as JQuery.PlainObject,
                 url: document.getElementsByTagName("body")[0].getAttribute("data-has-book-text-url"),
                 dataType: "json",
                 contentType: "application/json",
@@ -199,7 +199,7 @@
             $.ajax({
                 type: "GET",
                 traditional: true,
-                data: { bookId: bookId, snapshotId: bookVersionId },
+                data: { bookId: bookId, snapshotId: bookVersionId } as JQuery.PlainObject,
                 url: this.readerContainer.getAttribute("data-has-image-url"),
                 dataType: "json",
                 contentType: "application/json",
@@ -260,16 +260,17 @@
             max: this.pages.length - 1,
             value: 0,
             start: (event, ui) => {
-                $(event.target).find(".ui-slider-handle").find(".slider-tip").show();
+                $(event.target as Node as Element).find(".ui-slider-handle").find(".slider-tip").show();
             },
             stop: (event, ui) => {
-                $(event.target).find(".ui-slider-handle").find(".slider-tip").fadeOut(1000);
+                $(event.target as Node as Element).find(".ui-slider-handle").find(".slider-tip").fadeOut(1000);
             },
             slide: (event, ui) => {
-                $(event.target).find(".ui-slider-handle").find(".slider-tip").stop(true, true);
-                $(event.target).find(".ui-slider-handle").find(".slider-tip").show();
+                const targetEl = $(event.target as Node as Element);
+                targetEl.find(".ui-slider-handle").find(".slider-tip").stop(true, true);
+                targetEl.find(".ui-slider-handle").find(".slider-tip").show();
                 if (this.pages[ui.value] !== undefined) {
-                    $(event.target).find(".ui-slider-handle").find(".tooltip-inner").html("Strana: " + this.pages[ui.value].text);
+                    targetEl.find(".ui-slider-handle").find(".tooltip-inner").html("Strana: " + this.pages[ui.value].text);
                 } else {
                     console.error("missing page "+ui.value);
                 }
@@ -662,7 +663,7 @@
 
         var pages = new Bloodhound({ datumTokenizer: Bloodhound.tokenizers.whitespace, queryTokenizer: Bloodhound.tokenizers.whitespace, local: (): string[] => { return pagesTexts; } });
 
-        $(input).typeahead({ hint: true, highlight: true, minLength: 1 },{ name: "pages", source: pages });
+        $(input as Node as Element).typeahead({ hint: true, highlight: true, minLength: 1 },{ name: "pages", source: pages });
     }
 
     private loadBookmarks() {
@@ -1071,7 +1072,7 @@
             const $bookmarksContainer = $(".reader-bookmarks-container");
             if (this.bookmarksPanel !== undefined && $bookmarksContainer.length > 0) {
                 this.bookmarksPanel.createBookmarkList(
-                    $bookmarksContainer.parent().get(0),
+                    $bookmarksContainer.parent().get(0) as Node as HTMLElement,
                     this.bookmarksPanel
                 );
             }
@@ -1123,7 +1124,7 @@
             const $bookmarksContainer = $(".reader-bookmarks-container");
             if (this.bookmarksPanel !== undefined && $bookmarksContainer.length > 0) {
                 this.bookmarksPanel.createBookmarkList(
-                    $bookmarksContainer.parent().get(0),
+                    $bookmarksContainer.parent().get(0) as Node as HTMLElement,
                     this.bookmarksPanel
                 );
             }
@@ -1144,18 +1145,18 @@
         });
     }
 
-    repaint() {
+    repaint() {//no usages found
         for (var i = 0; i < this.leftSidePanels.length; i++) {
-            if ($(this.leftSidePanels[i]).is(":visible")) {
-                $(this.leftSidePanels[i]).hide();
-                $(this.leftSidePanels[i]).show();
+            if ($(this.leftSidePanels[i].panelHtml).is(":visible")) {
+                $(this.leftSidePanels[i].panelHtml).hide();
+                $(this.leftSidePanels[i].panelHtml).show();
             }
         }
 
         for (var i = 0; i < this.rightSidePanels.length; i++) {
-            if ($(this.rightSidePanels[i]).is(":visible")) {
-                $(this.rightSidePanels[i]).hide();
-                $(this.rightSidePanels[i]).show();
+            if ($(this.rightSidePanels[i].panelHtml).is(":visible")) {
+                $(this.rightSidePanels[i].panelHtml).hide();
+                $(this.rightSidePanels[i].panelHtml).show();
             }
         }
     }
@@ -1444,7 +1445,7 @@ class SidePanel {
         newWindow.document.open();
         newWindow.document.close();
 
-        $(newWindow).on("beforeunload", (event: JQuery.Event) => {
+        $(newWindow.document.documentElement).on("beforeunload", (event: JQuery.Event) => {
             this.onUnloadWindowMode();
         });
 
@@ -1465,7 +1466,7 @@ class SidePanel {
     onUnloadWindowMode() {
         $(document.getElementById(this.identificator)).removeClass("windowed");
         $(this.windowBody).val("");
-        $(this.childwindow).val("");
+        $(this.childwindow.document.documentElement).val("");
     }
 
     onPinButtonClick(sidePanelDiv: HTMLDivElement) { throw new Error("Not implemented"); }
@@ -1952,7 +1953,7 @@ class ContentPanel extends LeftSidePanel {
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { bookId: this.parentReader.bookId },
+            data: { bookId: this.parentReader.bookId } as JQuery.PlainObject,
             url: getBaseUrl() + "Reader/GetBookContent",
             dataType: "json",
             contentType: "application/json",
@@ -2127,7 +2128,7 @@ class ImagePanel extends RightSidePanel {
 
                 var lastWidth = $innerContent.width();
                 var lastHeight = $innerContent.height();
-                $(window).resize(() => {
+                $(window.document.documentElement).resize(() => {
                     var newWidth = $innerContent.width();
                     var newHeight = $innerContent.height();
 
@@ -2187,11 +2188,11 @@ class TextPanel extends RightSidePanel {
         $(textContainerDiv).scroll((event: JQuery.Event) => {
             this.parentReader.clickedMoveToPage = false;
 
-            var pages = $(event.target).find(".page");
+            var pages = $(event.target as Node as Element).find(".page");
             var minOffset = Number.MAX_VALUE;
             var pageWithMinOffset;
             $.each(pages, (index, page) => {
-                var pageOfsset = Math.abs($(page).offset().top - $(event.target).offset().top);
+                var pageOfsset = Math.abs($(page as Node as Element).offset().top - $(event.target as Node as Element).offset().top);
                 if (minOffset > pageOfsset) {
                     minOffset = pageOfsset;
                     pageWithMinOffset = page;
@@ -2287,7 +2288,7 @@ class TextPanel extends RightSidePanel {
     onNewWindowButtonClick(sidePanelDiv: HTMLDivElement) {
         super.onNewWindowButtonClick(sidePanelDiv);
         var pageIndex = this.parentReader.actualPageIndex;
-        $(this.childwindow.document).ready(() => {
+        $(this.childwindow.document.documentElement).ready(() => {
             this.parentReader.moveToPageNumber(pageIndex, true);
         });
     }
@@ -2307,7 +2308,7 @@ class TextPanel extends RightSidePanel {
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { snapshotId: this.parentReader.versionId, pageId: page.pageId },
+            data: { snapshotId: this.parentReader.versionId, pageId: page.pageId } as JQuery.PlainObject,
             url: getBaseUrl() + "Reader/GetBookPage",
             dataType: "json",
             contentType: "application/json",
@@ -2351,7 +2352,7 @@ class TextPanel extends RightSidePanel {
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { query: query, isQueryJson: queryIsJson, snapshotId: this.parentReader.versionId, pageId: page.pageId },
+            data: { query: query, isQueryJson: queryIsJson, snapshotId: this.parentReader.versionId, pageId: page.pageId } as JQuery.PlainObject,
             url: getBaseUrl() + "Reader/GetBookSearchPageByXmlId",
             dataType: "json",
             contentType: "application/json",
@@ -2623,7 +2624,7 @@ class TermsPanel extends LeftSidePanel {
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { snapshotId: this.parentReader.bookId, pageId: page.pageId },
+            data: { snapshotId: this.parentReader.bookId, pageId: page.pageId } as JQuery.PlainObject,
             url: getBaseUrl() + "Reader/GetTermsOnPage",
             dataType: "json",
             contentType: "application/json",

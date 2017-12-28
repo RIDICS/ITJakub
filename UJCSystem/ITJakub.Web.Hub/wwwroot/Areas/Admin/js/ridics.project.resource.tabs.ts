@@ -38,16 +38,16 @@ class ProjectResourceDiscussionTab extends ProjectModuleTabBase {
         $(".icon-close", $container).hide();
 
         $container.children(".discussion-thread").each((index, elem) => {
-            var $directSubcontainer = $(elem).children(".discussion-thread");
+            var $directSubcontainer = $(elem as Node as Element).children(".discussion-thread");
 
             if ($directSubcontainer.length === 0) {
-                $(".discussion-open-thread-link", elem).hide();
+                $(".discussion-open-thread-link", elem as Node as Element).hide();
             } else {
                 $directSubcontainer.hide();
 
-                $(".discussion-open-thread-link", elem).click((event) => {
-                    var $openIcon = $(".icon-open", event.currentTarget);
-                    var $closeIcon = $(".icon-close", event.currentTarget);
+                $(".discussion-open-thread-link", elem as Node as Element).click((event) => {
+                    var $openIcon = $(".icon-open", event.currentTarget as Node as Element);
+                    var $closeIcon = $(".icon-close", event.currentTarget as Node as Element);
 
                     if ($directSubcontainer.is(":visible")) {
                         $directSubcontainer.hide();

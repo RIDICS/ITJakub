@@ -55,12 +55,12 @@
         }
         elm += listEnd;
         const html = $.parseHTML(elm);
-        return $(html);
+        return $(html as Element[]);
     }
 
     protected unbindEventsDialog() {
         $("#project-layout-content").on("hidden.bs.modal", event => {
-            const targetDialogEl = $(event.target);
+            const targetDialogEl = $(event.target as Node as Element);
             targetDialogEl.find("*").off();
         });
     }

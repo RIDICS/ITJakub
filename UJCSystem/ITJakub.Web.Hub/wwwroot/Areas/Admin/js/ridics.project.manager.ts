@@ -4,7 +4,7 @@
             type: type,
             traditional: true,
             url: getBaseUrl() + urlPath,
-            data: data,
+            data: data as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: response => {

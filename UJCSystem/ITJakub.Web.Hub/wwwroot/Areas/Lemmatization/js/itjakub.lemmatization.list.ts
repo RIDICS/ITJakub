@@ -64,7 +64,7 @@
             data: {
                 start: pageNumber - 1,
                 count: this.tokenPerPage
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (tokenList: Array<IToken>) => {

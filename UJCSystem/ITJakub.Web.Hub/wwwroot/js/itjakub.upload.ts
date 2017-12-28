@@ -1,4 +1,4 @@
-﻿$(document).ready(() => {
+﻿$(document.documentElement).ready(() => {
     var bookUploader = new BookUploader();
     bookUploader.init();
 });

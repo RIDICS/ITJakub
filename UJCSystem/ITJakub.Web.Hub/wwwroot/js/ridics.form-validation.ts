@@ -1,6 +1,6 @@
-﻿$(document).ready(() => {
+﻿$(document.documentElement).ready(() => {
     $("input[type=submit]").click((event) => {
-        const targetEl = $(event.target);
+        const targetEl = $(event.target as Node as Element);
         const formEl = targetEl.closest("form");
         if (formEl.length) {
             const validator: JQueryValidation.Validator = formEl.data("validator");

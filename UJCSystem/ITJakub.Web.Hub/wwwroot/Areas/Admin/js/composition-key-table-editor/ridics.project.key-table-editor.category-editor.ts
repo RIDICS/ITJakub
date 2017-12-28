@@ -82,7 +82,7 @@
         }
         elm += listEnd;
         const html = $.parseHTML(elm);
-        const jListEl = $(html);
+        const jListEl = $(html as Element[]);
         const hierarchicallySortedList = this.hierarchicallySortCategories(jListEl);
         return hierarchicallySortedList;
     }
@@ -95,7 +95,7 @@
             elm += listItemStart;
         }
         const html = $.parseHTML(elm);
-        const jListEl = $(html);
+        const jListEl = $(html as Element[]);
         return jListEl;
     }
 
@@ -116,8 +116,8 @@
 
     private collapseCategories() {
         const mainCategoriesEls = $(".list-group").children(".page-list-item");
-        mainCategoriesEls.each((index, element) => {
-            const mainCategoryEl = $(element);
+        mainCategoriesEls.each((index, element:Node) => {
+            const mainCategoryEl = $(element as Element);
             const childrenCategories = mainCategoryEl.children(".child-category");
             if (childrenCategories.length) {
                 childrenCategories.hide();

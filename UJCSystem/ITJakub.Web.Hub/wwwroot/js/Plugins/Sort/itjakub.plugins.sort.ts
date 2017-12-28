@@ -43,7 +43,7 @@
 
         $(sortOrderButton).click((event) => {
             this.changeSortOrder();
-            $(event.currentTarget).children('span').toggleClass('glyphicon-arrow-up glyphicon-arrow-down');
+            $(event.currentTarget as Node as Element).children('span').toggleClass('glyphicon-arrow-up glyphicon-arrow-down');
         });
 
         sortBarDiv.appendChild(sortOrderButton);

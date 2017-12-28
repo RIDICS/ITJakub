@@ -1,4 +1,4 @@
-﻿$(document).ready(() => {
+﻿$(document.documentElement).ready(() => {
     var maxChars = $(".feedback-text-area").attr("data-val-maxlength-max");
     var maxCharsNumber = Number(maxChars);
     $(".text-area-max-chars").html(maxChars);

@@ -1,4 +1,4 @@
-﻿$(document).ready(() => {
+﻿$(document.documentElement).ready(() => {
     const modulInicializator = new AudioBooksModulInicializator({
         bibliographyModule: {
             forcedBookType: BookTypeEnum.AudioBook

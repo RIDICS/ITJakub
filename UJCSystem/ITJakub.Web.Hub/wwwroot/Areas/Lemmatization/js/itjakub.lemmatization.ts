@@ -3,8 +3,8 @@
     var lemmatization = new Lemmatization("#mainContainer", canEdit);
     lemmatization.make();
 
-    var inputElement = <HTMLInputElement>$("#mainSearchInput").get(0);
-    var keyboardButton = <HTMLButtonElement>$("#keyboard-button").get(0);
+    var inputElement = $("#mainSearchInput").get(0) as Node as HTMLInputElement;
+    var keyboardButton = $("#keyboard-button").get(0) as Node as HTMLButtonElement;
     var keyboardComponent = KeyboardManager.getKeyboard("0");
     keyboardComponent.registerButton(keyboardButton, inputElement, (newQuery) => lemmatization.setMainSearchBoxValue(newQuery));
 
@@ -107,7 +107,7 @@ class Lemmatization {
             url: getBaseUrl() + "Lemmatization/Lemmatization/GetToken",
             data: {
                 tokenId: tokenId
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (token) => {
@@ -137,7 +137,7 @@ class Lemmatization {
             url: getBaseUrl() + "Lemmatization/Lemmatization/GetTokenCharacteristic",
             data: {
                 tokenId: this.currentTokenItem.id
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (list) => {
@@ -270,8 +270,8 @@ class LemmatizationCharacteristicEditor {
     }
 
     private clear() {
-        $("#newTokenCharacteristic select").each((index: number, element: HTMLSelectElement) => {
-            element.selectedIndex = 0;
+        $("#newTokenCharacteristic select").each((index: number, element: Node) => {
+            (element as HTMLSelectElement).selectedIndex = 0;
         });
         $("#new-token-text-description").val("");
         this.updateTag();
@@ -280,14 +280,14 @@ class LemmatizationCharacteristicEditor {
     private loadData(tokenCharacteristic: ITokenCharacteristic) {
         var characteristic = tokenCharacteristic.morphologicalCharacteristic;
         $("#new-token-text-description").val(tokenCharacteristic.description);
-        $("#newTokenCharacteristic select").each((index: number, element: HTMLSelectElement) => {
-            element.selectedIndex = 0;
+        $("#newTokenCharacteristic select").each((index: number, element: Node) => {
+            (element as HTMLSelectElement).selectedIndex = 0;
             var charValue = characteristic.charAt(index);
-            for (var i = 0; i < element.children.length; i++) {
-                var option = element.children[i];
+            for (var i = 0; i < (element as HTMLSelectElement).children.length; i++) {
+                var option = (element as HTMLSelectElement).children[i];
                 var value = $(option).attr("value");
                 if (value === charValue) {
-                    element.selectedIndex = i;
+                    (element as HTMLSelectElement).selectedIndex = i;
                     break;
                 }
             }
@@ -1106,13 +1106,13 @@ class LemmatizationCanonicalForm {
         hyperSearchBox.create(hyperSelectedChangedCallback);
 
         $("#new-form-existing-type").on("change", (e) => {
-            var value = $(e.target).val() as string;
+            var value = $(e.target as Node as Element).val() as string;
             searchBox.setDataSet("CanonicalForm", "type=" + value);
             searchBox.create(selectedChangedCallback);
             searchBox.reload();
         });
         $("#new-hyper-existing-type").on("change", (e) => {
-            var value = $(e.target).val() as string;
+            var value = $(e.target as Node as Element).val() as string;
             hyperSearchBox.setDataSet("HyperCanonicalForm", "type=" + value);
             hyperSearchBox.create(hyperSelectedChangedCallback);
             hyperSearchBox.reload();

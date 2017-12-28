@@ -47,7 +47,7 @@
                     const selectedPageEl = $(".page-list").children(".ui-selected");
                     if (selectedPageEl.length) {
                         selectedPageEl.each((index, element) => {
-                            const selectedItemJEl = $(element);
+                            const selectedItemJEl = $(element as Node as Element);
                             listStructure.movePageUp(selectedItemJEl);
                         });
                     }
@@ -59,7 +59,7 @@
                     const selectedPageEl = $(".page-list").children(".ui-selected");
                     if (selectedPageEl.length) {
                         $(selectedPageEl.get().reverse()).each((index, element) => {
-                            const selectedItemJEl = $(element);
+                            const selectedItemJEl = $(element as Node as Element);
                             listStructure.movePageDown(selectedItemJEl);
                         });
                     }
@@ -80,7 +80,7 @@
                         const pageItemsEl = pageListDivEl.children(".page-list-item");
                         var pageListStringArray: string[] = [];
                         pageItemsEl.each((index, element) => {
-                            const pageEl = $(element);
+                            const pageEl = $(element as Node as Element);
                             pageListStringArray.push(pageEl.text());
                         });
                         //util.savePageList(pageLingStringArray); TODO use after server functions are done
@@ -125,7 +125,7 @@
         if (pageListEl.length) {
             const listItems = pageListEl.children(".page-list-item");
             listItems.each((index, element) => {
-                const listItemEl = $(element);
+                const listItemEl = $(element as Node as Element);
                 if (listItemEl.text().toLocaleLowerCase() === "fs") {
                     listItemEl.remove();
                 }
@@ -138,7 +138,7 @@
         if (pageListEl.length) {
             const listItems = pageListEl.children(".page-list-item");
             listItems.each((index, element) => {
-                const listItemEl = $(element);
+                const listItemEl = $(element as Node as Element);
                 if (listItemEl.text().toLocaleLowerCase() === "fc") {
                     listItemEl.remove();
                 }
