@@ -4,6 +4,7 @@ using Vokabular.MainService.Core.AutoMapperProfiles;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Managers.Authentication;
+using Vokabular.MainService.Core.Managers.CardFile;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.Shared.Container;
 
@@ -17,6 +18,7 @@ namespace Vokabular.MainService.Core
             container.AddPerWebRequest<AuthorizationManager>();
             container.AddPerWebRequest<BookManager>();
             container.AddPerWebRequest<BookSearchManager>();
+            container.AddPerWebRequest<CardFileManager>();
             container.AddPerWebRequest<CatalogValueManager>();
             container.AddPerWebRequest<CategoryManager>();
             container.AddPerWebRequest<CorpusSearchManager>();
@@ -71,6 +73,12 @@ namespace Vokabular.MainService.Core
             container.AddSingleton<Profile, TrackProfile>();
             container.AddSingleton<Profile, TransformationProfile>();
             container.AddSingleton<Profile, UserProfile>();
+
+            container.AddSingleton<Profile, BucketContractProfile>();
+            container.AddSingleton<Profile, BucketShortContractProfile>();
+            container.AddSingleton<Profile, CardContractProfile>();
+            container.AddSingleton<Profile, CardFileContractProfile>();
+            container.AddSingleton<Profile, CardShortContractProfile>();
 
             container.Install<CoreContainerRegistration>();
         }

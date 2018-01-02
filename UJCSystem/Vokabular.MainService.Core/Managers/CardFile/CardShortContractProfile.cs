@@ -3,7 +3,7 @@ using AutoMapper;
 using Vokabular.CardFile.Core.DataContractEntities;
 using Vokabular.MainService.DataContracts.Contracts.CardFile;
 
-namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
+namespace Vokabular.MainService.Core.Managers.CardFile
 {
     public class CardShortContractProfile : Profile
     {

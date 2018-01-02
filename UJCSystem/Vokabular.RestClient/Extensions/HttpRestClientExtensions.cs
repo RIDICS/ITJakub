@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -41,6 +42,17 @@ namespace Vokabular.RestClient.Extensions
 
                     return item;
                 }
+            }
+        }
+
+        public static async Task<T> ReadXmlAsAsync<T>(this HttpContent content)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
+
+            using (var stream = await content.ReadAsStreamAsync())
+            {
+                var item = serializer.Deserialize(stream);
+                return (T) item;
             }
         }
 

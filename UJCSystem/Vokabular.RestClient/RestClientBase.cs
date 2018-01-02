@@ -34,6 +34,7 @@ namespace Vokabular.RestClient
             m_client.BaseAddress = baseAddress;
             m_client.DefaultRequestHeaders.Accept.Clear();
             m_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            DeserializationType = DeserializationType.Json;
         }
 
         protected abstract void FillRequestMessage(HttpRequestMessage requestMessage);
@@ -48,6 +49,8 @@ namespace Vokabular.RestClient
         protected HttpClient HttpClient => m_client;
 
         protected HttpClientHandler HttpClientHandler => m_httpClientHandler;
+
+        public DeserializationType DeserializationType { get; set; }
 
         private HttpRequestMessage CreateRequestMessage(HttpMethod method, string requestUri, IEnumerable<Tuple<string, string>> headers = null)
         {
@@ -75,7 +78,19 @@ namespace Vokabular.RestClient
         {
             try
             {
-                var result = response.Content.ReadAsAsync<T>().GetAwaiter().GetResult();
+                T result;
+                switch (DeserializationType)
+                {
+                    case DeserializationType.Json:
+                        result = response.Content.ReadAsAsync<T>().GetAwaiter().GetResult();
+                        break;
+                    case DeserializationType.Xml:
+                        result = response.Content.ReadXmlAsAsync<T>().GetAwaiter().GetResult();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
                 return result;
             }
             catch (JsonSerializationException exception)
@@ -85,6 +100,10 @@ namespace Vokabular.RestClient
             catch (JsonReaderException exception)
             {
                 throw new HttpErrorCodeException("Invalid response JSON format", exception, HttpStatusCode.BadGateway);
+            }
+            catch (InvalidOperationException exception)
+            {
+                throw new HttpErrorCodeException("Invalid response XML format", exception, HttpStatusCode.BadGateway);
             }
         }
 
@@ -184,7 +203,7 @@ namespace Vokabular.RestClient
                     ProcessResponseInternal(response);
                     var contentHeaders = response.Content.Headers;
                     var contentType = contentHeaders.ContentType;
-                    var fileName = contentHeaders.ContentDisposition.FileName;
+                    var fileName = contentHeaders.ContentDisposition?.FileName;
                     var fileSize = contentHeaders.ContentLength;
                     var resultStream = await response.Content.ReadAsStreamAsync();
 
