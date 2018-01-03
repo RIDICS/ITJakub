@@ -1,10 +1,15 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using System.Net;
+using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.Core.Works.Users;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.RestClient.Errors;
+using Vokabular.RestClient.Headers;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -12,19 +17,25 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly UserRepository m_userRepository;
         private readonly ICommunicationTokenGenerator m_communicationTokenGenerator;
+        private readonly IHttpContextAccessor m_httpContextAccessor;
 
-        public AuthenticationManager(UserRepository userRepository, ICommunicationTokenGenerator communicationTokenGenerator)
+        public AuthenticationManager(UserRepository userRepository, ICommunicationTokenGenerator communicationTokenGenerator, IHttpContextAccessor httpContextAccessor)
         {
             m_userRepository = userRepository;
             m_communicationTokenGenerator = communicationTokenGenerator;
+            m_httpContextAccessor = httpContextAccessor;
         }
 
         public User GetCurrentUser()
         {
-            // TODO get correct current user
+            if (!m_httpContextAccessor.HttpContext.Request.Headers.TryGetValue(CustomHttpHeaders.Authorization, out var communicationTokens))
+            {
+                throw new HttpErrorCodeException("User not signed in", HttpStatusCode.Unauthorized);
+            }
 
-            m_userRepository.UnitOfWork.BeginTransaction();
-            return m_userRepository.GetUserByUsername("Admin");
+            var communicationToken = communicationTokens.First();
+            var user = m_userRepository.InvokeUnitOfWork(x => x.GetUserByToken(communicationToken));
+            return user;
         }
 
         public int GetCurrentUserId()
