@@ -15,6 +15,7 @@ using Vokabular.MainService.Containers.Extensions;
 using Vokabular.MainService.Containers;
 using Vokabular.MainService.Containers.Installers;
 using Vokabular.MainService.Utils.Documentation;
+using Vokabular.MainService.Utils.Middleware;
 using Vokabular.Shared;
 using Vokabular.Shared.Container;
 using Vokabular.Shared.DataContracts.Search.Criteria;
@@ -99,6 +100,8 @@ namespace Vokabular.MainService
             ApplicationLogging.LoggerFactory = loggerFactory;
 
             app.ConfigureAutoMapper();
+
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseMvc();
 

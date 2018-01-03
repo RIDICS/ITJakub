@@ -8,6 +8,13 @@ namespace Vokabular.MainService.Core.Managers
 {
     public class AuthorizationManager
     {
+        private readonly AuthenticationManager m_authenticationManager;
+
+        public AuthorizationManager(AuthenticationManager authenticationManager)
+        {
+            m_authenticationManager = authenticationManager;
+        }
+
         public void AddAuthorizationCriteria(IList<SearchCriteriaContract> searchCriteriaConjuction)
         {
             if (searchCriteriaConjuction.Any(x => x.Key == CriteriaKey.Authorization))
