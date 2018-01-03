@@ -36,10 +36,10 @@
       <one-to-many class="FavoriteLabel" />
     </bag>-->
 
-    <!--<bag name="Groups" table="User_Group" cascade="all">
+    <bag name="Groups" table="User_UserGroup" cascade="all" lazy="true">
       <key column="[User]" />
-      <many-to-many class="Group" column="[Group]" />
-    </bag>-->
+      <many-to-many class="UserGroup" column="[UserGroup]" />
+    </bag>
     
   </class>
 </hibernate-mapping>

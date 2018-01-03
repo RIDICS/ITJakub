@@ -16,18 +16,25 @@ namespace Vokabular.MainService.Core.Managers
         private readonly UserRepository m_userRepository;
         private readonly ICommunicationTokenGenerator m_communicationTokenGenerator;
         private readonly IHttpContextAccessor m_httpContextAccessor;
+        private readonly DefaultUserProvider m_defaultUserProvider;
 
-        public AuthenticationManager(UserRepository userRepository, ICommunicationTokenGenerator communicationTokenGenerator, IHttpContextAccessor httpContextAccessor)
+        public AuthenticationManager(UserRepository userRepository, ICommunicationTokenGenerator communicationTokenGenerator, IHttpContextAccessor httpContextAccessor, DefaultUserProvider defaultUserProvider)
         {
             m_userRepository = userRepository;
             m_communicationTokenGenerator = communicationTokenGenerator;
             m_httpContextAccessor = httpContextAccessor;
+            m_defaultUserProvider = defaultUserProvider;
         }
 
-        public User GetCurrentUser()
+        public User GetCurrentUser(bool returnDefaultIfNull)
         {
             if (!m_httpContextAccessor.HttpContext.Request.Headers.TryGetValue(CustomHttpHeaders.Authorization, out var communicationTokens))
             {
+                if (returnDefaultIfNull)
+                {
+                    return m_defaultUserProvider.GetDefaultUser();
+                }
+
                 throw new AuthenticationException("User not signed in");
             }
 
@@ -38,7 +45,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public int GetCurrentUserId()
         {
-            return GetCurrentUser().Id;
+            return GetCurrentUser(false).Id;
         }
         
         public SignInResultContract RenewCommunicationToken()

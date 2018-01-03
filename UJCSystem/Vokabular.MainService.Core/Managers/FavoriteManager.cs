@@ -35,7 +35,7 @@ namespace Vokabular.MainService.Core.Managers
 
         private User TryGetUser()
         {
-            return m_authenticationManager.GetCurrentUser();
+            return m_authenticationManager.GetCurrentUser(false);
         }
 
         public long CreateFavoritePage(CreateFavoritePageContract data)

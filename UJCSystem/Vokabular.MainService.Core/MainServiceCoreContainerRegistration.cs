@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Vokabular.Core;
 using Vokabular.MainService.Core.AutoMapperProfiles;
+using Vokabular.MainService.Core.AutoMapperProfiles.CardFile;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Managers.Authentication;
-using Vokabular.MainService.Core.Managers.CardFile;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.Shared.Container;
 
@@ -41,6 +41,7 @@ namespace Vokabular.MainService.Core
 
             container.AddPerWebRequest<CommunicationConfigurationProvider>();
             container.AddPerWebRequest<CommunicationProvider>();
+            container.AddPerWebRequest<DefaultUserProvider>();
             container.AddPerWebRequest<FulltextStorageProvider>();
             container.AddPerWebRequest<IFulltextStorage, ExistDbStorage>();
             container.AddPerWebRequest<IFulltextStorage, ElasticSearchStorage>();
