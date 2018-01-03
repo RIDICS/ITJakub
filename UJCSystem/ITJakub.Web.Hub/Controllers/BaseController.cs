@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Clients;
@@ -82,6 +83,12 @@ namespace ITJakub.Web.Hub.Controllers
                 ContractResolver = new DefaultContractResolver(),
                 DateFormatHandling = DateFormatHandling.MicrosoftDateFormat
             };
+        }
+
+        protected FileStreamResult File(Stream fileStream, string contentType, string fileDownloadName, long? fileSize)
+        {
+            Response.ContentLength = fileSize;
+            return base.File(fileStream, contentType, fileDownloadName);
         }
     }
 }

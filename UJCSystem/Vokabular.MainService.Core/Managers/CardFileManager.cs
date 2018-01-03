@@ -40,7 +40,9 @@ namespace Vokabular.MainService.Core.Managers
         {
             //m_authorizationManager.CheckUserCanViewCardFile(cardFileId);
             var buckets = m_cardFileClient.GetBucketsByHeadword(cardFileId, headword);
-            return Mapper.Map<bucket[], IList<BucketShortContract>>(buckets.bucket);
+            return buckets.bucket != null
+                ? Mapper.Map<bucket[], IList<BucketShortContract>>(buckets.bucket)
+                : null;
         }
 
         public IList<CardContract> GetCards(string cardFileId, string bucketId)
