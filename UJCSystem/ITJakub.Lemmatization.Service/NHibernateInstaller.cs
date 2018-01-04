@@ -15,7 +15,7 @@ namespace ITJakub.Lemmatization.Service
     {
         public void Install(IIocContainer container)
         {
-            var connectionString = ConfigurationManager.AppSettings[SettingKeys.DefaultConnectionString] ?? throw new ArgumentException("Connection string not found");
+            var connectionString = ConfigurationManager.AppSettings[SettingKeys.MainConnectionString] ?? throw new ArgumentException("Connection string not found");
 
             var cfg = new Configuration()
                 .DataBaseIntegration(db =>
