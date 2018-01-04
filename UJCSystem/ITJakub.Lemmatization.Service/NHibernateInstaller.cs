@@ -1,83 +1,41 @@
 ﻿using System;
 using System.Configuration;
-using Castle.Facilities.NHibernate;
-using Castle.Transactions;
-using ITJakub.Lemmatization.DataEntities;
-using NHibernate;
+using ITJakub.Lemmatization.DataEntities.Entities;
 using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
+using Vokabular.Shared.Container;
 using Vokabular.Shared.Options;
 using Configuration = NHibernate.Cfg.Configuration;
 
 namespace ITJakub.Lemmatization.Service
 {
-    public class NHibernateInstaller : INHibernateInstaller
+    public class NHibernateInstaller : IContainerInstaller
     {
-        private readonly IConfigurationPersister m_persister;
-
-        public NHibernateInstaller(IConfigurationPersister persister)
+        public void Install(IIocContainer container)
         {
-            m_persister = persister;
-        }
+            var connectionString = ConfigurationManager.AppSettings[SettingKeys.DefaultConnectionString] ?? throw new ArgumentException("Connection string not found");
 
-        public bool IsDefault
-        {
-            get { return true; }
-        }
+            var cfg = new Configuration()
+                .DataBaseIntegration(db =>
+                {
+                    db.ConnectionString = connectionString;
+                    db.Dialect<MsSql2008Dialect>();
+                    db.Driver<SqlClientDriver>();
+                    db.ConnectionProvider<DriverConnectionProvider>();
+                    db.BatchSize = 5000;
+                    db.Timeout = byte.MaxValue;
+                    //db.LogFormattedSql = true;
+                    //db.LogSqlInConsole = true;
+                })
+                .AddAssembly(typeof(Token).Assembly);
 
-        public string SessionFactoryKey
-        {
-            get { return "nhibernate.default"; }
-        }
+            var sessionFactory = cfg.BuildSessionFactory();
 
-        public Maybe<IInterceptor> Interceptor
-        {
-            get { return Maybe.None<IInterceptor>(); }
-        }
+            container.AddInstance(cfg);
 
-        public Configuration Config
-        {
-            get
-            {
-                var cfg = new Configuration()
-                    .DataBaseIntegration(db =>
-                    {
-                        db.ConnectionString = ConfigurationManager.AppSettings[SettingKeys.DefaultConnectionString] ?? throw new ArgumentException("Connection string not found");
-                        db.Dialect<MsSql2008Dialect>();
-                        db.Driver<SqlClientDriver>();
-                        db.ConnectionProvider<DriverConnectionProvider>();
-                        db.BatchSize = 5000;
-                        db.Timeout = byte.MaxValue;
-                        //db.LogFormattedSql = true;
-                        //db.LogSqlInConsole = true;
-                    })
-                    .AddAssembly(typeof(Token).Assembly);
-                return cfg;
-            }
-        }
-
-        public void Registered(ISessionFactory factory)
-        {
-        }
-
-        public Configuration Deserialize()
-        {
-            //if (File.Exists("serialized.dat"))
-            //{
-            //    return m_persister.ReadConfiguration("serialized.dat");
-            //}
-            return null;
-        }
-
-        public void Serialize(Configuration configuration)
-        {
-            //m_persister.WriteConfiguration("serialized.dat", configuration);
-        }
-
-        public void AfterDeserialize(Configuration configuration)
-        {
+            container.AddInstance(sessionFactory);
         }
     }
 }

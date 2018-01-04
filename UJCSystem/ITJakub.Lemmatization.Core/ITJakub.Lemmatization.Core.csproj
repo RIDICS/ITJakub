@@ -60,6 +60,19 @@
     <Compile Include="AutoMapperProfiles\TokenProfile.cs" />
     <Compile Include="LemmatizationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Works\AddCanonicalFormWork.cs" />
+    <Compile Include="Works\AddTokenCharacteristicWork.cs" />
+    <Compile Include="Works\CreateCanonicalFormWork.cs" />
+    <Compile Include="Works\CreateHyperCanonicalFormWork.cs" />
+    <Compile Include="Works\CreateTokenWork.cs" />
+    <Compile Include="Works\DeleteTokenCharacteristicWork.cs" />
+    <Compile Include="Works\EditCanonicalFormWork.cs" />
+    <Compile Include="Works\EditHyperCanonicalFormWork.cs" />
+    <Compile Include="Works\EditTokenCharacteristicWork.cs" />
+    <Compile Include="Works\EditTokenWork.cs" />
+    <Compile Include="Works\RemoveCanonicalFormWork.cs" />
+    <Compile Include="Works\RemoveHyperCanonicalFormWork.cs" />
+    <Compile Include="Works\SetHyperCanonicalFormWork.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ITJakub.Lemmatization.Core.Container.Config" />
@@ -76,6 +89,10 @@
     <ProjectReference Include="..\ITJakub.Lemmatization.Shared.Contracts\ITJakub.Lemmatization.Shared.Contracts.csproj">
       <Project>{ADCE48CE-05C9-494A-A848-1C681DAD5FD9}</Project>
       <Name>ITJakub.Lemmatization.Shared.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj">
+      <Project>{7ff7fb5d-4eff-46dd-9682-21dd476abcb0}</Project>
+      <Name>Vokabular.DataEntities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

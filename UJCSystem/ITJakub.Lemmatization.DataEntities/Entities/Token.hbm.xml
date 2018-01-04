@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<hibernate-mapping assembly="ITJakub.Lemmatization.DataEntities" namespace="ITJakub.Lemmatization.DataEntities" xmlns="urn:nhibernate-mapping-2.2">
+<hibernate-mapping assembly="ITJakub.Lemmatization.DataEntities" namespace="ITJakub.Lemmatization.DataEntities.Entities" xmlns="urn:nhibernate-mapping-2.2">
   <class name="Token" table="[Token]">
     
     <id name="Id" column="Id">

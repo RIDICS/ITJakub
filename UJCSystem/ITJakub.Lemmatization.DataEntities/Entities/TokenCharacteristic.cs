@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ITJakub.Lemmatization.DataEntities
+namespace ITJakub.Lemmatization.DataEntities.Entities
 {
     public class TokenCharacteristic : IEquatable<TokenCharacteristic>
     {

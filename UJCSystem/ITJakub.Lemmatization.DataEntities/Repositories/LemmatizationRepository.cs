@@ -1,158 +1,122 @@
 using System.Collections.Generic;
-using System.Transactions;
-using Castle.Facilities.NHibernate;
-using Castle.Transactions;
-using ITJakub.DataEntities.Database.Daos;
+using ITJakub.Lemmatization.DataEntities.Entities;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
+using Vokabular.DataEntities.Database.Daos;
+using Vokabular.DataEntities.Database.UnitOfWork;
 
 namespace ITJakub.Lemmatization.DataEntities.Repositories
 {
-    public class LemmatizationRepository : NHibernateTransactionalDao {
-        public LemmatizationRepository(ISessionManager sessManager) : base(sessManager)
+    public class LemmatizationRepository : NHibernateDao
+    {
+        public LemmatizationRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
 
-        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<Token> GetTypeaheadToken(string query, int recordCount)
         {
-            using (var session = GetSession())
-            {
-                var result = session.QueryOver<Token>()
-                    .WhereRestrictionOn(x => x.Text).IsLike(query, MatchMode.Start)
-                    .OrderBy(x => x.Text).Asc
-                    .Take(recordCount)
-                    .List();
-                return result;
-            }
+            var result = GetSession().QueryOver<Token>()
+                .WhereRestrictionOn(x => x.Text).IsLike(query, MatchMode.Start)
+                .OrderBy(x => x.Text).Asc
+                .Take(recordCount)
+                .List();
+            return result;
         }
 
-        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<CanonicalForm> GetTypeaheadCannonicalForm(CanonicalFormType type, string query, int recordCount)
         {
-            using (var session = GetSession())
-            {
-                var result = session.QueryOver<CanonicalForm>()
-                    .WhereRestrictionOn(x => x.Text).IsLike(query, MatchMode.Start)
-                    .And(x => x.Type == type)
-                    .OrderBy(x => x.Text).Asc
-                    .Fetch(x => x.HyperCanonicalForm).Eager
-                    .Take(recordCount)
-                    .List();
-                return result;
-            }
+            var result = GetSession().QueryOver<CanonicalForm>()
+                .WhereRestrictionOn(x => x.Text).IsLike(query, MatchMode.Start)
+                .And(x => x.Type == type)
+                .OrderBy(x => x.Text).Asc
+                .Fetch(x => x.HyperCanonicalForm).Eager
+                .Take(recordCount)
+                .List();
+            return result;
         }
 
-        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<HyperCanonicalForm> GetTypeaheadHyperCannonicalForm(HyperCanonicalFormType type, string query, int recordCount)
         {
-            using (var session = GetSession())
-            {
-                var result = session.QueryOver<HyperCanonicalForm>()
-                    .WhereRestrictionOn(x => x.Text).IsLike(query, MatchMode.Start)
-                    .And(x => x.Type == type)
-                    .OrderBy(x => x.Text).Asc
-                    .Take(recordCount)
-                    .List();
-                return result;
-            }
+            var result = GetSession().QueryOver<HyperCanonicalForm>()
+                .WhereRestrictionOn(x => x.Text).IsLike(query, MatchMode.Start)
+                .And(x => x.Type == type)
+                .OrderBy(x => x.Text).Asc
+                .Take(recordCount)
+                .List();
+            return result;
         }
 
-        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<TokenCharacteristic> GetTokenCharacteristicDetail(long tokenId)
         {
-            using (var session = GetSession())
-            {
-                TokenCharacteristic tokenCharacteristicAlias = null;
-                CanonicalForm canonicalFormAlias = null;
-                HyperCanonicalForm hyperCanonicalFormAlias = null;
+            TokenCharacteristic tokenCharacteristicAlias = null;
+            CanonicalForm canonicalFormAlias = null;
+            HyperCanonicalForm hyperCanonicalFormAlias = null;
 
-                var result = session.QueryOver(() => tokenCharacteristicAlias)
-                    .JoinQueryOver(x => x.CanonicalForms, () => canonicalFormAlias, JoinType.LeftOuterJoin)
-                    .JoinQueryOver(x => x.HyperCanonicalForm, () => hyperCanonicalFormAlias, JoinType.LeftOuterJoin)
-                    .Fetch(x => x.CanonicalForms).Eager
-                    .Where(() => tokenCharacteristicAlias.Token.Id == tokenId)
-                    .TransformUsing(Transformers.DistinctRootEntity)
-                    .List();
+            var result = GetSession().QueryOver(() => tokenCharacteristicAlias)
+                .JoinQueryOver(x => x.CanonicalForms, () => canonicalFormAlias, JoinType.LeftOuterJoin)
+                .JoinQueryOver(x => x.HyperCanonicalForm, () => hyperCanonicalFormAlias, JoinType.LeftOuterJoin)
+                .Fetch(x => x.CanonicalForms).Eager
+                .Where(() => tokenCharacteristicAlias.Token.Id == tokenId)
+                .TransformUsing(Transformers.DistinctRootEntity)
+                .List();
 
-                return result;
-            }
+            return result;
         }
 
-        [Transaction(TransactionScopeOption.Required)]
         public virtual TokenCharacteristic GetTokenCharacteristicWithCanonicalForms(long tokenCharacteristicId)
         {
-            using (var session = GetSession())
-            {
-                var result = session.QueryOver<TokenCharacteristic>()
-                    .Where(x => x.Id == tokenCharacteristicId)
-                    .Fetch(x => x.CanonicalForms).Eager
-                    .SingleOrDefault();
+            var result = GetSession().QueryOver<TokenCharacteristic>()
+                .Where(x => x.Id == tokenCharacteristicId)
+                .Fetch(x => x.CanonicalForms).Eager
+                .SingleOrDefault();
 
-                return result;
-            }
+            return result;
         }
 
-        [Transaction(TransactionScopeOption.Required)]
         public virtual int GetTokenCount()
         {
-            using (var session = GetSession())
-            {
-                var result = session.QueryOver<Token>()
-                    .RowCount();
+            var result = GetSession().QueryOver<Token>()
+                .RowCount();
 
-                return result;
-            }
+            return result;
         }
 
-        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<Token> GetTokenList(int start, int count)
         {
-            using (var session = GetSession())
-            {
-                var result = session.QueryOver<Token>()
-                    .OrderBy(x => x.Text).Asc
-                    .Take(count)
-                    .Skip(start)
-                    .List();
+            var result = GetSession().QueryOver<Token>()
+                .OrderBy(x => x.Text).Asc
+                .Take(count)
+                .Skip(start)
+                .List();
 
-                return result;
-            }
+            return result;
         }
 
-        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<long> GetCanonicalFormIdList(long hyperCanonicalFormId)
         {
-            using (var session = GetSession())
-            {
-                var result = session.QueryOver<CanonicalForm>()
-                    .Where(x => x.HyperCanonicalForm.Id == hyperCanonicalFormId)
-                    .Select(x => x.Id)
-                    .OrderBy(x => x.Text).Asc
-                    .List<long>();
+            var result = GetSession().QueryOver<CanonicalForm>()
+                .Where(x => x.HyperCanonicalForm.Id == hyperCanonicalFormId)
+                .Select(x => x.Id)
+                .OrderBy(x => x.Text).Asc
+                .List<long>();
 
-                return result;
-            }
+            return result;
         }
 
-        [Transaction(TransactionScopeOption.Required)]
         public virtual CanonicalForm GetCanonicalFormDetail(long canonicalFormId)
         {
-            using (var session = GetSession())
-            {
-                Token tokenAlias = null;
-                TokenCharacteristic tokenCharacteristicAlias = null;
+            Token tokenAlias = null;
+            TokenCharacteristic tokenCharacteristicAlias = null;
 
-                var result = session.QueryOver<CanonicalForm>()
-                    .Where(x => x.Id == canonicalFormId)
-                    .Fetch(x => x.CanonicalFormFor).Eager
-                    .JoinAlias(x => x.CanonicalFormFor, () => tokenCharacteristicAlias, JoinType.LeftOuterJoin)
-                    .JoinAlias(x => tokenCharacteristicAlias.Token, () => tokenAlias, JoinType.LeftOuterJoin)
-                    .SingleOrDefault();
+            var result = GetSession().QueryOver<CanonicalForm>()
+                .Where(x => x.Id == canonicalFormId)
+                .Fetch(x => x.CanonicalFormFor).Eager
+                .JoinAlias(x => x.CanonicalFormFor, () => tokenCharacteristicAlias, JoinType.LeftOuterJoin)
+                .JoinAlias(x => tokenCharacteristicAlias.Token, () => tokenAlias, JoinType.LeftOuterJoin)
+                .SingleOrDefault();
 
-                return result;
-            }
+            return result;
         }
     }
 }

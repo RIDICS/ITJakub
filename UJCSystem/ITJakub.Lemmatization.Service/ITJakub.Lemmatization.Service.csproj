@@ -52,24 +52,6 @@
       <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Castle.Facilities.AutoTx, Version=3.3.0.8214, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Facilities.AutoTx.3.3.0.08214\lib\net40\Castle.Facilities.AutoTx.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Castle.Facilities.FactorySupport, Version=3.4.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.FactorySupportFacility.3.4.0\lib\net45\Castle.Facilities.FactorySupport.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Facilities.Logging, Version=3.4.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.LoggingFacility.3.4.0\lib\net45\Castle.Facilities.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Facilities.NHibernate, Version=1.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Facilities.NHibernate.1.1.0\lib\net40\Castle.Facilities.NHibernate.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Castle.Transactions, Version=3.3.0.8214, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Transactions.3.3.0.08214\lib\net40\Castle.Transactions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Castle.Windsor, Version=3.4.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Windsor.3.4.0\lib\net45\Castle.Windsor.dll</HintPath>
     </Reference>
@@ -80,10 +62,20 @@
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=1.0.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.1.0.2\lib\netstandard1.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate, Version=4.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\packages\NHibernate.4.1.1.4000\lib\net40\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Runtime.Serialization.Primitives, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.Serialization.Primitives.4.3.0\lib\net46\System.Runtime.Serialization.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ServiceModel.Primitives, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ServiceModel.Primitives.4.4.0\lib\net461\System.ServiceModel.Primitives.dll</HintPath>
+    </Reference>
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -110,7 +102,6 @@
   <ItemGroup>
     <Compile Include="NHibernateInstaller.cs" />
     <Compile Include="Container.cs" />
-    <Compile Include="FacilitiesInstaller.cs" />
     <Compile Include="LemmatizationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
