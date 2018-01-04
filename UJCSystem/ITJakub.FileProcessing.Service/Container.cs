@@ -57,6 +57,7 @@ namespace ITJakub.FileProcessing.Service
             Install(Configuration.FromAppConfig());
             //Install(Configuration.FromXml(GetConfigResource()));
 
+            Install<NHibernateInstaller>();
             Install<CoreContainerRegistration>();
             Install<DataEntitiesContainerRegistration>();
 

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using ITJakub.Shared.Contracts.Resources;
+using ITJakub.FileProcessing.DataContracts;
 using Vokabular.MainService.Core.Communication;
 
 namespace Vokabular.MainService.Core.Managers

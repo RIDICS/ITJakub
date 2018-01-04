@@ -79,7 +79,6 @@
     <Compile Include="Categories\KeyWordsResponse.cs" />
     <Compile Include="Categories\SelectionBase.cs" />
     <Compile Include="CategoryContract.cs" />
-    <Compile Include="Resources\UploadResourceContract.cs" />
     <Compile Include="Searching\Criteria\DictionarySearchTarget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpecialPermissionCategorizationEnumContract.cs" />

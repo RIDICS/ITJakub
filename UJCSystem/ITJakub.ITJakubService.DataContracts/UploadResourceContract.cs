@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.ServiceModel;
 
-namespace ITJakub.Shared.Contracts.Resources
+namespace ITJakub.ITJakubService.DataContracts
 {
     [MessageContract]
     public class UploadResourceContract
