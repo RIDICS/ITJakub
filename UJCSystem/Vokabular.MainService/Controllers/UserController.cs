@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.MainService.Utils.Documentation;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Headers;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -80,45 +82,17 @@ namespace Vokabular.MainService.Controllers
             SetTotalCountHeader(0);
             throw new NotImplementedException();
         }
-    }
-
-    [Route("api/[controller]")]
-    public class AuthTokenController : BaseController
-    {
-        private readonly AuthenticationManager m_authenticationManager;
-
-        public AuthTokenController(AuthenticationManager authenticationManager)
+        
+        [HttpGet("{userId}/group")]
+        public List<GroupContract> GetGroupsByUser(int userId)
         {
-            m_authenticationManager = authenticationManager;
+            throw new NotImplementedException();
         }
 
-        [HttpPost("")]
-        [ProducesResponseType(typeof(SignInResultContract), StatusCodes.Status200OK)]
-        public IActionResult SignIn([FromBody] SignInContract data)
+        [HttpGet("current/permission/special")]
+        public IList<SpecialPermissionContract> GetSpecialPermissionsForUser(SpecialPermissionCategorizationEnumContract? filterByType)
         {
-            try
-            {
-                var result = m_authenticationManager.SignIn(data);
-                return Ok(result);
-            }
-            catch (HttpErrorCodeException exception)
-            {
-                return StatusCode(exception.StatusCode, exception.Message);
-            }
-        }
-
-        [HttpDelete("")]
-        public IActionResult SignOut([FromHeader(Name = CustomHttpHeaders.Authorization)] string authorizationToken)
-        {
-            try
-            {
-                m_authenticationManager.SignOut(authorizationToken);
-                return Ok();
-            }
-            catch (HttpErrorCodeException exception)
-            {
-                return StatusCode(exception.StatusCode, exception.Message);
-            }
+            throw new NotImplementedException();
         }
     }
 }
