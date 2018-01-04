@@ -13,7 +13,7 @@ namespace ITJakub.Web.Hub.Core.Managers
 {
     public class AuthenticationManager
     {
-        public const string AuthenticationTokenName = "AuthorizationToken";
+        public const string AuthenticationTokenName = "CommunicationToken";
         private readonly IHttpContextAccessor m_httpContextAccessor;
         private readonly CommunicationProvider m_communicationProvider;
 
@@ -38,6 +38,11 @@ namespace ITJakub.Web.Hub.Core.Managers
                     new Claim(ClaimTypes.Name, model.UserName),
                     //new Claim("LastChanged", {Database Value})
                 };
+
+                foreach (var userRole in signInResult.Roles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, userRole));
+                }
 
                 var claimsIdentity = new ClaimsIdentity(
                     claims,

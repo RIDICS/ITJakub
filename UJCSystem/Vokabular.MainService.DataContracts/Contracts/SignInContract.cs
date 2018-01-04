@@ -1,4 +1,6 @@
-﻿namespace Vokabular.MainService.DataContracts.Contracts
+﻿using System.Collections.Generic;
+
+namespace Vokabular.MainService.DataContracts.Contracts
 {
     public class SignInContract
     {
@@ -10,5 +12,7 @@
     public class SignInResultContract
     {
         public string CommunicationToken { get; set; }
+
+        public List<string> Roles { get; set; }
     }
 }

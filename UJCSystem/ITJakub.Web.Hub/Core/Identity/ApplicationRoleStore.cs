@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Vokabular.Shared.Const;
 
 namespace ITJakub.Web.Hub.Core.Identity
 {

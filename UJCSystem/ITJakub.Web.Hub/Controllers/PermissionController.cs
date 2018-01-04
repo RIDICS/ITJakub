@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using ITJakub.Web.Hub.Core.Communication;
-using ITJakub.Web.Hub.Core.Identity;
 using ITJakub.Web.Hub.Models.Requests.Permission;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.Shared.Const;
 
 namespace ITJakub.Web.Hub.Controllers
 {

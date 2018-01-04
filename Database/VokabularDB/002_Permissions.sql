@@ -179,7 +179,7 @@ BEGIN TRAN;
 	),
 	(
 		-- Id - int
-	    'CanEditStaticText', -- PermissionType - varchar
+	    'EditStaticText', -- PermissionType - varchar
 		0, -- PermissionCategorization - tinyint
 	    NULL, -- CanUploadBook - bit
 	    NULL, -- CanManagePermissions - bit

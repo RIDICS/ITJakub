@@ -1,4 +1,4 @@
-namespace ITJakub.Web.Hub.Core.Identity
+namespace Vokabular.Shared.Const
 {
     public class CustomRole
     {

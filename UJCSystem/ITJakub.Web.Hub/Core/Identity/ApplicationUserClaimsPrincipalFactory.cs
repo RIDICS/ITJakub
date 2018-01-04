@@ -7,6 +7,7 @@ using ITJakub.Web.Hub.Core.Communication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Core.Identity

@@ -1,5 +1,4 @@
 ﻿using ITJakub.Web.Hub.Core.Communication;
-using ITJakub.Web.Hub.Core.Identity;
 using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Core.Markdown;
 using ITJakub.Web.Hub.Models;
@@ -7,6 +6,7 @@ using ITJakub.Web.Hub.Models.Requests;
 using ITJakub.Web.Hub.Models.Type;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.Shared.Const;
 
 namespace ITJakub.Web.Hub.Controllers
 {
