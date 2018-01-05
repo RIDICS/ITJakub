@@ -80,17 +80,14 @@ namespace Vokabular.DataEntities.Database.Repositories
             return users;
         }
 
-        public virtual IList<UserGroup> GetGroupsByUser(int userId)
+        public virtual User GetUserWithGroups(int userId)
         {
-            User userAlias = null;
-            UserGroup groupAlias = null;
+            var user = GetSession().QueryOver<User>()
+                .Fetch(x => x.Groups).Eager
+                .Where(x => x.Id == userId)
+                .SingleOrDefault();
 
-            var groups = GetSession().QueryOver(() => groupAlias)
-                .JoinQueryOver(x => x.Users, () => userAlias)
-                .Where(x => userAlias.Id == userId)
-                .List<UserGroup>();
-
-            return groups;
+            return user;
         }
 
         public virtual int CreateGroup(UserGroup group)

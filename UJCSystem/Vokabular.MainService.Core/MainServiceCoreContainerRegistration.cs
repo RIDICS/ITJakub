@@ -27,6 +27,7 @@ namespace Vokabular.MainService.Core
             container.AddPerWebRequest<HeadwordSearchManager>();
             container.AddPerWebRequest<NamedResourceGroupManager>();
             container.AddPerWebRequest<NewsManager>();
+            container.AddPerWebRequest<PermissionManager>();
             container.AddPerWebRequest<PersonManager>();
             container.AddPerWebRequest<ProjectContentManager>();
             container.AddPerWebRequest<ProjectInfoManager>();
@@ -35,6 +36,7 @@ namespace Vokabular.MainService.Core
             container.AddPerWebRequest<ProjectMetadataManager>();
             container.AddPerWebRequest<ProjectResourceManager>();
             container.AddPerWebRequest<TermManager>();
+            container.AddPerWebRequest<UserGroupManager>();
             container.AddPerWebRequest<UserManager>();
 
             container.AddPerWebRequest<ICommunicationTokenGenerator, GuidCommunicationTokenGenerator>();
@@ -68,11 +70,13 @@ namespace Vokabular.MainService.Core
             container.AddSingleton<Profile, ProjectProfile>();
             container.AddSingleton<Profile, ResourceProfile>();
             container.AddSingleton<Profile, ResponsiblePersonProfile>();
+            container.AddSingleton<Profile, SpecialPermissionProfile>();
             container.AddSingleton<Profile, TermProfile>();
             container.AddSingleton<Profile, TextCommentProfile>();
             container.AddSingleton<Profile, TextProfile>();
             container.AddSingleton<Profile, TrackProfile>();
             container.AddSingleton<Profile, TransformationProfile>();
+            container.AddSingleton<Profile, UserGroupProfile>();
             container.AddSingleton<Profile, UserProfile>();
 
             container.AddSingleton<Profile, BucketContractProfile>();

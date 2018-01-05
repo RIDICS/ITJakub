@@ -80,7 +80,7 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
-        public void CheckUserCanManagePermissions()
+        public PermissionResult CheckUserCanManagePermissions()
         {
             var user = m_authenticationManager.GetCurrentUser(true);
             var specialPermissions = m_permissionRepository.InvokeUnitOfWork(x => x.GetSpecialPermissionsByUserAndType(user.Id,
@@ -92,6 +92,11 @@ namespace Vokabular.MainService.Core.Managers
                     string.Format("User with username '{0}' does not have permission to manage permissions",
                         user.UserName));
             }
+
+            return new PermissionResult
+            {
+                UserId = user.Id,
+            };
         }
 
         public PermissionResult CheckUserCanUploadBook()

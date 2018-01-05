@@ -1,9 +1,12 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Managers.Authentication;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Users;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.RestClient.Results;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -11,11 +14,13 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly UserRepository m_userRepository;
         private readonly ICommunicationTokenGenerator m_communicationTokenGenerator;
+        private readonly AuthorizationManager m_authorizationManager;
 
-        public UserManager(UserRepository userRepository, ICommunicationTokenGenerator communicationTokenGenerator)
+        public UserManager(UserRepository userRepository, ICommunicationTokenGenerator communicationTokenGenerator, AuthorizationManager authorizationManager)
         {
             m_userRepository = userRepository;
             m_communicationTokenGenerator = communicationTokenGenerator;
+            m_authorizationManager = authorizationManager;
         }
 
         public int CreateNewUser(CreateUserContract data)
@@ -45,6 +50,21 @@ namespace Vokabular.MainService.Core.Managers
             // TODO add data validation
 
             new UpdateUserPasswordWork(m_userRepository, authorizationToken, data).Execute();
+        }
+
+        public PagedResultList<UserDetailContract> GetUserList(int? start, int? count, string filterByName)
+        {
+            m_authorizationManager.CheckUserCanManagePermissions();
+
+            var startValue = PagingHelper.GetStart(start);
+            var countValue = PagingHelper.GetCount(count);
+
+            var dbResult = m_userRepository.InvokeUnitOfWork(x => x.GetUserList(startValue, countValue, filterByName));
+            return new PagedResultList<UserDetailContract>
+            {
+                List = Mapper.Map<List<UserDetailContract>>(dbResult.List),
+                TotalCount = dbResult.Count,
+            };
         }
     }
 }

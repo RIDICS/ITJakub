@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
@@ -16,10 +15,14 @@ namespace Vokabular.MainService.Controllers
     public class UserController : BaseController
     {
         private readonly UserManager m_userManager;
+        private readonly PermissionManager m_permissionManager;
+        private readonly UserGroupManager m_userGroupManager;
 
-        public UserController(UserManager userManager)
+        public UserController(UserManager userManager, PermissionManager permissionManager, UserGroupManager userGroupManager)
         {
             m_userManager = userManager;
+            m_permissionManager = permissionManager;
+            m_userGroupManager = userGroupManager;
         }
 
         [HttpPost("")]
@@ -79,20 +82,24 @@ namespace Vokabular.MainService.Controllers
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
         public List<UserDetailContract> GetUserList([FromQuery] int? start, [FromQuery] int? count, [FromQuery] string filterByName)
         {
-            SetTotalCountHeader(0);
-            throw new NotImplementedException();
+            var result = m_userManager.GetUserList(start, count, filterByName);
+
+            SetTotalCountHeader(result.TotalCount);
+            return result.List;
         }
         
         [HttpGet("{userId}/group")]
-        public List<GroupContract> GetGroupsByUser(int userId)
+        public List<UserGroupContract> GetGroupsByUser(int userId)
         {
-            throw new NotImplementedException();
+            var result = m_userGroupManager.GetGroupsByUser(userId);
+            return result;
         }
 
         [HttpGet("current/permission/special")]
         public IList<SpecialPermissionContract> GetSpecialPermissionsForUser(SpecialPermissionCategorizationEnumContract? filterByType)
         {
-            throw new NotImplementedException();
+            var result = m_permissionManager.GetSpecialPermissionsForUser(filterByType);
+            return result;
         }
     }
 }

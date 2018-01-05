@@ -1,4 +1,6 @@
-﻿namespace Vokabular.MainService.DataContracts.Contracts.Permission
+﻿using Vokabular.Shared.DataContracts.Types;
+
+namespace Vokabular.MainService.DataContracts.Contracts.Permission
 {
     public class SpecialPermissionContract
     {
@@ -38,7 +40,7 @@
     {
         public bool AutoImportIsAllowed { get; set; }
         
-        public CategoryContract Category { get; set; }
+        public BookTypeEnumContract BookType { get; set; }
     }
 
     public class ReadLemmatizationPermissionContract : SpecialPermissionContract

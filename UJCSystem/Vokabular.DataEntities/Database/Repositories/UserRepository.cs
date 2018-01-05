@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using NHibernate.Criterion;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
+using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
@@ -25,6 +28,27 @@ namespace Vokabular.DataEntities.Database.Repositories
             return GetSession().QueryOver<User>()
                 .Where(x => x.CommunicationToken == authorizationToken)
                 .SingleOrDefault();
+        }
+
+        public virtual ListWithTotalCountResult<User> GetUserList(int start, int count, string filterByName)
+        {
+            var query = GetSession().QueryOver<User>()
+                .WhereRestrictionOn(x => x.UserName).IsLike(filterByName, MatchMode.Start) // TODO determine correct type of filter value
+                .OrderBy(x => x.LastName).Asc
+                .ThenBy(x => x.FirstName).Asc;
+
+            var list = query.Skip(start)
+                .Take(count)
+                .Future();
+
+            var totalCount = query.ToRowCountQuery()
+                .FutureValue<int>();
+
+            return new ListWithTotalCountResult<User>
+            {
+                List = list.ToList(),
+                Count = totalCount.Value,
+            };
         }
 
         public virtual User GetVirtualUserForUnregisteredUsersOrCreate(string unregisteredUserName, UserGroup unregisteredUserGroup)

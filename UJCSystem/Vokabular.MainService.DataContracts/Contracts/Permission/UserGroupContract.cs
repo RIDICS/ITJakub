@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Vokabular.MainService.DataContracts.Contracts.Permission
 {
-    public class GroupContract
+    public class UserGroupContract
     {
         public int Id { get; set; }
         
@@ -12,7 +12,7 @@ namespace Vokabular.MainService.DataContracts.Contracts.Permission
         public string Description { get; set; }
     }
 
-    public class GroupDetailContract : GroupContract
+    public class UserGroupDetailContract : UserGroupContract
     {
         public DateTime CreateTime { get; set; }
 
