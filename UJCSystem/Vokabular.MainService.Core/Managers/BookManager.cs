@@ -31,24 +31,27 @@ namespace Vokabular.MainService.Core.Managers
         private readonly ResourceRepository m_resourceRepository;
         private readonly FileSystemManager m_fileSystemManager;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
+        private readonly AuthorizationManager m_authorizationManager;
         private readonly CategoryRepository m_categoryRepository;
 
         public BookManager(MetadataRepository metadataRepository, CategoryRepository categoryRepository,
             BookRepository bookRepository, ResourceRepository resourceRepository, FileSystemManager fileSystemManager,
-            FulltextStorageProvider fulltextStorageProvider)
+            FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager)
         {
             m_metadataRepository = metadataRepository;
             m_bookRepository = bookRepository;
             m_resourceRepository = resourceRepository;
             m_fileSystemManager = fileSystemManager;
             m_fulltextStorageProvider = fulltextStorageProvider;
+            m_authorizationManager = authorizationManager;
             m_categoryRepository = categoryRepository;
         }
         
         public List<BookWithCategoriesContract> GetBooksByType(BookTypeEnumContract bookType)
         {
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
-            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByBookType(bookTypeEnum));
+            var userId = m_authorizationManager.GetCurrentUserId();
+            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByBookType(bookTypeEnum, userId));
             var resultList = Mapper.Map<List<BookWithCategoriesContract>>(dbMetadataList);
             return resultList;
         }

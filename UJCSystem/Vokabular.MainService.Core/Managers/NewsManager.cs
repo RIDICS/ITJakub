@@ -14,12 +14,12 @@ namespace Vokabular.MainService.Core.Managers
     public class NewsManager
     {
         private readonly PortalRepository m_portalRepository;
-        private readonly AuthenticationManager m_authenticationManager;
+        private readonly AuthorizationManager m_authorizationManager;
 
-        public NewsManager(PortalRepository portalRepository, AuthenticationManager authenticationManager)
+        public NewsManager(PortalRepository portalRepository, AuthorizationManager authorizationManager)
         {
             m_portalRepository = portalRepository;
-            m_authenticationManager = authenticationManager;
+            m_authorizationManager = authorizationManager;
         }
 
         public PagedResultList<NewsSyndicationItemContract> GetNewsSyndicationItems(int? start, int? count, NewsTypeEnumContract? itemType)
@@ -40,8 +40,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public long CreateNewsSyndicationItem(CreateNewsSyndicationItemContract data)
         {
-            var userId = m_authenticationManager.GetCurrentUserId();
-            var work = new CreateNewsWork(m_portalRepository, data, userId);
+            var permissionResult = m_authorizationManager.CheckUserCanAddNews();
+            var work = new CreateNewsWork(m_portalRepository, data, permissionResult.UserId);
             var resultId = work.Execute();
             return resultId;
         }
