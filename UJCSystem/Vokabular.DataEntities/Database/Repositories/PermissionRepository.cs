@@ -44,10 +44,13 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List<UserGroup>();
         }
 
-        public virtual IList<UserGroup> GetTypeaheadGroups(string query, int recordCount)
+        public virtual IList<UserGroup> GetGroupsAutocomplete(string queryString, int recordCount)
         {
+            queryString = EscapeQuery(queryString);
+
             return GetSession().QueryOver<UserGroup>()
-                .Where(Restrictions.On<UserGroup>(x => x.Name).IsInsensitiveLike(query))
+                .Where(Restrictions.On<UserGroup>(x => x.Name).IsInsensitiveLike(queryString, MatchMode.Anywhere))
+                .OrderBy(x => x.Name).Asc
                 .Take(recordCount)
                 .List<UserGroup>();
         }

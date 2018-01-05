@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
+using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Managers.Authentication;
@@ -65,6 +66,29 @@ namespace Vokabular.MainService.Core.Managers
                 List = Mapper.Map<List<UserDetailContract>>(dbResult.List),
                 TotalCount = dbResult.Count,
             };
+        }
+
+        public List<UserContract> GetUserAutocomplete(string query, int? count)
+        {
+            m_authorizationManager.CheckUserCanManagePermissions();
+
+            if (query == null)
+                query = string.Empty;
+
+            var countValue = PagingHelper.GetAutocompleteCount(count);
+
+            var result = m_userRepository.InvokeUnitOfWork(x => x.GetUserAutocomplete(query, countValue));
+            return Mapper.Map<List<UserContract>>(result);
+        }
+
+        public UserDetailContract GetUserDetail(int userId)
+        {
+            m_authorizationManager.CheckUserCanManagePermissions();
+
+            var dbResult = m_userRepository.InvokeUnitOfWork(x => x.FindById<User>(userId));
+            var result = Mapper.Map<UserDetailContract>(dbResult);
+
+            return result;
         }
     }
 }

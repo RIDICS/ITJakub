@@ -6,6 +6,7 @@ using log4net;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
@@ -126,7 +127,7 @@ namespace Vokabular.MainService.Core.Managers
             return Mapper.Map<List<UserContract>>(users);
         }
 
-        public long CreateGroup(string groupName, string description)
+        public int CreateGroup(string groupName, string description)
         {
             var permissionResult = m_authorizationManager.CheckUserCanManagePermissions();
             var userId = permissionResult.UserId;
@@ -158,6 +159,19 @@ namespace Vokabular.MainService.Core.Managers
         {
             m_authorizationManager.CheckUserCanManagePermissions();
             new AddUserToGroupWork(m_permissionRepository, userId, groupId).Execute();
+        }
+
+        public List<UserGroupContract> GetUserGroupAutocomplete(string query, int? count)
+        {
+            m_authorizationManager.CheckUserCanManagePermissions();
+
+            if (query == null)
+                query = string.Empty;
+
+            var countValue = PagingHelper.GetAutocompleteCount(count);
+
+            var result = m_permissionRepository.InvokeUnitOfWork(x => x.GetGroupsAutocomplete(query, countValue));
+            return Mapper.Map<List<UserGroupContract>>(result);
         }
     }
 }

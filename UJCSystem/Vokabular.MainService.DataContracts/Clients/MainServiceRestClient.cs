@@ -8,6 +8,7 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.CardFile;
 using Vokabular.MainService.DataContracts.Contracts.Favorite;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
+using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient;
@@ -2272,6 +2273,90 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 var result = GetStream($"cardfile/{cardFileId}/bucket/{bucketId}/card/{cardId}/image/{imageId}?imageSize={imageSize}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region Permissions
+
+        public List<CardShortContract> GetUserAutocomplete(string query)
+        {
+            try
+            {
+                var result = Get<List<CardShortContract>>("user/autocomplete".AddQueryString("query", query));
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<CardShortContract> GetUserGroupAutocomplete(string query)
+        {
+            try
+            {
+                var result = Get<List<CardShortContract>>("usergroup/autocomplete".AddQueryString("query", query));
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public UserDetailContract GetUserDetail(int userId)
+        {
+            try
+            {
+                var result = Get<UserDetailContract>($"user/{userId}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public UserGroupDetailContract GetUserGroupDetail(int groupId)
+        {
+            try
+            {
+                var result = Get<UserGroupDetailContract>($"usergroup/{groupId}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public int CreateGroup(UserGroupContract request)
+        {
+            try
+            {
+                var result = Post<int>("usergroup", request);
                 return result;
             }
             catch (HttpRequestException e)

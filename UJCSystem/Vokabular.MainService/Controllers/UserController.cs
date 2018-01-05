@@ -87,6 +87,13 @@ namespace Vokabular.MainService.Controllers
             SetTotalCountHeader(result.TotalCount);
             return result.List;
         }
+
+        [HttpGet("{userId}/detail")]
+        public UserDetailContract GetUserDetail(int userId)
+        {
+            var result = m_userManager.GetUserDetail(userId);
+            return result;
+        }
         
         [HttpGet("{userId}/group")]
         public List<UserGroupContract> GetGroupsByUser(int userId)
@@ -99,6 +106,13 @@ namespace Vokabular.MainService.Controllers
         public IList<SpecialPermissionContract> GetSpecialPermissionsForUser(SpecialPermissionCategorizationEnumContract? filterByType)
         {
             var result = m_permissionManager.GetSpecialPermissionsForUser(filterByType);
+            return result;
+        }
+
+        [HttpGet("autocomplete")]
+        public List<UserContract> GetAutocomplete([FromQuery] string query, [FromQuery] int? count)
+        {
+            var result = m_userManager.GetUserAutocomplete(query, count);
             return result;
         }
     }

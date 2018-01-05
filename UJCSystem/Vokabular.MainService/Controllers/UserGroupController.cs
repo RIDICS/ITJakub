@@ -27,7 +27,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPost("")]
-        public long CreateGroup([FromBody] UserGroupContract data)
+        public int CreateGroup([FromBody] UserGroupContract data)
         {
             var resultId = m_userGroupManager.CreateGroup(data.Name, data.Description);
             return resultId;
@@ -108,6 +108,13 @@ namespace Vokabular.MainService.Controllers
         public void RemoveSpecialPermissionsFromGroup(int groupId, [FromBody] IntegerIdListContract specialPermissionsIds)
         {
             m_permissionManager.RemoveSpecialPermissionsFromGroup(groupId, specialPermissionsIds.IdList);
+        }
+
+        [HttpGet("autocomplete")]
+        public List<UserGroupContract> GetAutocomplete([FromQuery] string query, [FromQuery] int? count)
+        {
+            var result = m_userGroupManager.GetUserGroupAutocomplete(query, count);
+            return result;
         }
     }
 }

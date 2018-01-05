@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
 using NHibernate.Criterion;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
@@ -33,9 +34,19 @@ namespace Vokabular.DataEntities.Database.Repositories
         public virtual ListWithTotalCountResult<User> GetUserList(int start, int count, string filterByName)
         {
             var query = GetSession().QueryOver<User>()
-                .WhereRestrictionOn(x => x.UserName).IsLike(filterByName, MatchMode.Start) // TODO determine correct type of filter value
                 .OrderBy(x => x.LastName).Asc
                 .ThenBy(x => x.FirstName).Asc;
+
+            if (filterByName != null)
+            {
+                filterByName = EscapeQuery(filterByName);
+
+                query = query.Where(Restrictions.Disjunction()
+                    .Add(Restrictions.On<User>(u => u.UserName).IsLike(filterByName, MatchMode.Anywhere))
+                    .Add(Restrictions.On<User>(u => u.FirstName).IsLike(filterByName, MatchMode.Anywhere))
+                    .Add(Restrictions.On<User>(u => u.LastName).IsLike(filterByName, MatchMode.Anywhere))
+                );
+            }
 
             var list = query.Skip(start)
                 .Take(count)
@@ -49,6 +60,26 @@ namespace Vokabular.DataEntities.Database.Repositories
                 List = list.ToList(),
                 Count = totalCount.Value,
             };
+        }
+
+        public virtual IList<User> GetUserAutocomplete(string queryString, int count)
+        {
+            queryString = EscapeQuery(queryString);
+
+            var query = GetSession().QueryOver<User>()
+                .Where(Restrictions.Disjunction()
+                    .Add(Restrictions.On<User>(u => u.UserName).IsLike(queryString, MatchMode.Start))
+                    .Add(Restrictions.Like(Projections.SqlFunction("concat", NHibernateUtil.String, Projections.Property<User>(u => u.LastName),
+                        Projections.Constant(" "), Projections.Property<User>(u => u.FirstName)), queryString, MatchMode.Start))
+                    .Add(Restrictions.Like(Projections.SqlFunction("concat", NHibernateUtil.String, Projections.Property<User>(u => u.FirstName),
+                        Projections.Constant(" "), Projections.Property<User>(u => u.LastName)), queryString, MatchMode.Start))
+                    .Add(Restrictions.On<User>(u => u.Email).IsLike(queryString, MatchMode.Start))
+                )
+                .OrderBy(x => x.LastName).Asc
+                .ThenBy(x => x.FirstName).Asc
+                .Take(count);
+
+            return query.List();
         }
 
         public virtual User GetVirtualUserForUnregisteredUsersOrCreate(string unregisteredUserName, UserGroup unregisteredUserGroup)
