@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.DataContracts;
 using ITJakub.Web.Hub.Helpers;
 using ITJakub.Web.Hub.Models.Requests.Permission;
 using Microsoft.AspNetCore.Authorization;
@@ -7,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.Shared.Const;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -127,28 +130,49 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetRestClient())
             {
                 var result = client.GetBookTypeList();
-                var convertedResult = result.Select(x => new CategoryContract
+                var convertedResult = result.Select(x => new CategoryOrBookTypeContract
                 {
+                    BookType = x.Type,
                     Description = BookTypeHelper.GetCategoryName(x.Type),
                 });
                 return Json(convertedResult);
             }
         }
 
-        public ActionResult GetCategoryContent(int groupId, int categoryId)
+        public ActionResult GetCategoryContent(int groupId, BookTypeEnumContract? bookType)
         {
-            using (var client = GetMainServiceClient())
+            if (bookType == null)
             {
-                var result = client.GetCategoryContentForGroup(groupId, categoryId);
+                return BadRequest("BookType parameter is required");
+            }
+
+            using (var client = GetRestClient())
+            {
+                var books = client.GetBooksForUserGroup(groupId, bookType.Value);
+                var result = new CategoryContentContract
+                {
+                    Categories = new List<CategoryContract>(), // Categories are currently not used after migration to new MainService
+                    Books = books,
+                };
                 return Json(result);
             }
         }
 
-        public ActionResult GetAllCategoryContent(int categoryId)
+        public ActionResult GetAllCategoryContent(BookTypeEnumContract? bookType)
         {
-            using (var client = GetMainServiceClient())
+            if (bookType == null)
             {
-                var result = client.GetAllCategoryContent(categoryId);
+                return BadRequest("BookType parameter is required");
+            }
+
+            using (var client = GetRestClient())
+            {
+                var books = client.GetAllBooksByType(bookType.Value);
+                var result = new CategoryContentContract
+                {
+                    Categories = new List<CategoryContract>(), // Categories are currently not used after migration to new MainService
+                    Books = books,
+                };
                 return Json(result);
             }
         }
@@ -166,9 +190,10 @@ namespace ITJakub.Web.Hub.Controllers
         [HttpPost]
         public ActionResult AddBooksAndCategoriesToGroup([FromBody] AddBooksAndCategoriesToGroupRequest request)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                client.AddBooksAndCategoriesToGroup(request.GroupId, request.BookIds, request.CategoryIds);
+                client.AddBooksToGroup(request.GroupId, request.BookIds);
+                //client.AddBooksAndCategoriesToGroup(request.GroupId, request.BookIds, request.CategoryIds);
                 return Json(new {});
             }
         }
@@ -176,9 +201,10 @@ namespace ITJakub.Web.Hub.Controllers
         [HttpPost]
         public ActionResult RemoveBooksAndCategoriesFromGroup([FromBody] RemoveBooksAndCategoriesFromGroupRequest request)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                client.RemoveBooksAndCategoriesFromGroup(request.GroupId, request.BookIds, request.CategoryIds);
+                client.RemoveBooksFromGroup(request.GroupId, request.BookIds);
+                //client.RemoveBooksAndCategoriesFromGroup(request.GroupId, request.BookIds, request.CategoryIds);
                 return Json(new {});
             }
         }

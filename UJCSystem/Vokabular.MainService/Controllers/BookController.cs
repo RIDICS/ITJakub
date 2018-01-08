@@ -33,6 +33,17 @@ namespace Vokabular.MainService.Controllers
             return Ok(result);
         }
 
+        [HttpGet("type/{bookType}/all")]
+        [ProducesResponseType(typeof(List<BookContract>), StatusCodes.Status200OK)]
+        public IActionResult GetAllBooksByType(BookTypeEnumContract? bookType)
+        {
+            if (bookType == null)
+                return NotFound();
+
+            var result = m_bookManager.GetAllBooksByType(bookType.Value);
+            return Ok(result);
+        }
+
         [HttpGet("type")]
         public List<BookTypeContract> GetBookTypeList()
         {

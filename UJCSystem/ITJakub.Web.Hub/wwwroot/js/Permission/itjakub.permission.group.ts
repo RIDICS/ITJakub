@@ -242,13 +242,13 @@ class GroupPermissionEditor {
         });
     }
 
-    private loadCategoryContent(targetDiv, categoryId: number) {
+    private loadCategoryContent(targetDiv, categoryId: number, bookType: BookTypeEnum) {
         
         $.ajax({
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Permission/GetCategoryContent",
-            data: { groupId: this.currentGroupSelectedItem.id, categoryId: categoryId },
+            data: { groupId: this.currentGroupSelectedItem.id, categoryId: categoryId, bookType: bookType },
             dataType: "json",
             contentType: "application/json",
             success: (response: ICategoryContent) => {
@@ -277,7 +277,7 @@ class GroupPermissionEditor {
     }
 
 
-    private createCategoryListItem(category: ICategory): HTMLLIElement {
+    private createCategoryListItem(category: ICategoryOrBookType): HTMLLIElement {
         var groupLi = document.createElement("li");
         $(groupLi).addClass("list-item non-leaf");
 
@@ -336,7 +336,7 @@ class GroupPermissionEditor {
                 $(target).addClass("glyphicon-chevron-up");
 
                 if (!detailsDiv.hasClass("loaded")) {
-                    this.loadCategoryContent(detailsDiv, category.id);
+                    this.loadCategoryContent(detailsDiv, category.id, category.bookType);
                 }
 
                 detailsDiv.slideDown();
@@ -885,10 +885,11 @@ class BooksSelector {
         return this.selectedCategoriesIds;
     }
 
-    private createCategoryListItem(category: ICategory): HTMLLIElement {
+    private createCategoryListItem(category: ICategoryOrBookType): HTMLLIElement {
         var groupLi = document.createElement("li");
         $(groupLi).addClass("list-item non-leaf");
         $(groupLi).data("id", category.id);
+        $(groupLi).data("bookType", category.bookType);
 
         var buttonsSpan = document.createElement("span");
         $(buttonsSpan).addClass("list-item-buttons");
@@ -942,7 +943,7 @@ class BooksSelector {
                 $(target).addClass("glyphicon-chevron-up");
 
                 if (!detailsDiv.hasClass("loaded")) {
-                    this.loadCategoryContent(detailsDiv, category.id);
+                    this.loadCategoryContent(detailsDiv, category.id, category.bookType);
                 }
 
                 detailsDiv.slideDown();
@@ -1057,13 +1058,13 @@ class BooksSelector {
         this.changeStateOfCategoryItemCheckboxIfNeeded(parentCategoryItem);
     }
 
-    private loadCategoryContent(targetDiv, categoryId: number) {
+    private loadCategoryContent(targetDiv, categoryId: number, bookType: BookTypeEnum) {
 
         $.ajax({
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Permission/GetAllCategoryContent",
-            data: { categoryId: categoryId },
+            data: { categoryId: categoryId, bookType: bookType },
             dataType: "json",
             contentType: "application/json",
             success: (response: ICategoryContent) => {

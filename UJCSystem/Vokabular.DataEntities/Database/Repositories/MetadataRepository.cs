@@ -89,7 +89,25 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => x.Id == projectId)
                 .FutureValue().Value;
         }
-        
+
+        public virtual IList<MetadataResource> GetAllMetadataByBookType(BookTypeEnum bookTypeEnum)
+        {
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+            Snapshot snapshotAlias = null;
+            BookType bookTypeAlias = null;
+
+            return GetSession().QueryOver<MetadataResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .JoinAlias(() => projectAlias.LatestPublishedSnapshot, () => snapshotAlias)
+                .JoinAlias(() => snapshotAlias.BookTypes, () => bookTypeAlias)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && bookTypeAlias.Type == bookTypeEnum)
+                .OrderBy(x => x.Title).Asc
+                //.Fetch(x => x.Resource.Project.Categories).Eager
+                .List();
+        }
+
         public virtual IList<MetadataResource> GetMetadataByBookType(BookTypeEnum bookTypeEnum, int userId)
         {
             Resource resourceAlias = null;
@@ -112,6 +130,28 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .And(() => userAlias.Id == userId)
                 .OrderBy(x => x.Title).Asc
                 .Fetch(x => x.Resource.Project.Categories).Eager
+                .List();
+        }
+
+
+        public virtual IList<MetadataResource> GetMetadataForUserGroup(BookTypeEnum bookTypeEnum, int userGroupId)
+        {
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+            Snapshot snapshotAlias = null;
+            BookType bookTypeAlias = null;
+            Permission permissionAlias = null;
+
+            return GetSession().QueryOver<MetadataResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .JoinAlias(() => projectAlias.LatestPublishedSnapshot, () => snapshotAlias)
+                .JoinAlias(() => snapshotAlias.BookTypes, () => bookTypeAlias)
+                .JoinAlias(() => projectAlias.Permissions, () => permissionAlias)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && bookTypeAlias.Type == bookTypeEnum)
+                .And(() => permissionAlias.UserGroup.Id == userGroupId)
+                .OrderBy(x => x.Title).Asc
+                //.Fetch(x => x.Resource.Project.Categories).Eager
                 .List();
         }
 

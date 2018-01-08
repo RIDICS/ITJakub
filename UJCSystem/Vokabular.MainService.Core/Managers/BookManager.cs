@@ -57,12 +57,29 @@ namespace Vokabular.MainService.Core.Managers
             var resultList = Mapper.Map<List<BookWithCategoriesContract>>(dbMetadataList);
             return resultList;
         }
-        
+
+        public List<BookContract> GetAllBooksByType(BookTypeEnumContract bookType)
+        {
+            //TODO add authorization
+            var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
+            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetAllMetadataByBookType(bookTypeEnum));
+            var resultList = Mapper.Map<List<BookContract>>(dbMetadataList);
+            return resultList;
+        }
+
         public List<BookTypeContract> GetBookTypeList()
         {
             var dbResult = m_bookRepository.InvokeUnitOfWork(x => x.GetBookTypes());
             var filteredResult = dbResult.Where(x => !m_filterBookType.Contains(x.Type));
             var result = Mapper.Map<List<BookTypeContract>>(filteredResult);
+            return result;
+        }
+        
+        public List<BookContract> GetBooksForUserGroup(int groupId, BookTypeEnumContract bookType)
+        {
+            var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
+            var dbResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataForUserGroup(bookTypeEnum, groupId));
+            var result = Mapper.Map<List<BookContract>>(dbResult);
             return result;
         }
 

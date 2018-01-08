@@ -10,6 +10,10 @@ interface ICategory {
     description: string;
 }
 
+interface ICategoryOrBookType extends ICategory {
+    bookType: BookTypeEnum;
+}
+
 interface IBook {
     id: number;
     guid: string;
@@ -36,6 +40,6 @@ interface IBookCategory {
 }
 
 interface ICategoryContent {
-    categories: ICategory[];
+    categories: ICategoryOrBookType[];
     books: IBook[];
 }

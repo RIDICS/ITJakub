@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -12,11 +13,13 @@ namespace Vokabular.MainService.Controllers
     {
         private readonly UserGroupManager m_userGroupManager;
         private readonly PermissionManager m_permissionManager;
+        private readonly BookManager m_bookManager;
 
-        public UserGroupController(UserGroupManager userGroupManager, PermissionManager permissionManager)
+        public UserGroupController(UserGroupManager userGroupManager, PermissionManager permissionManager, BookManager bookManager)
         {
             m_userGroupManager = userGroupManager;
             m_permissionManager = permissionManager;
+            m_bookManager = bookManager;
         }
 
         [HttpGet("{groupId}/user")]
@@ -81,10 +84,15 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("{groupId}/book")] //TODO categoryId -> bookTypeId as filtering query parameter
-        public object GetCategoryContentForGroup(int groupId, [FromQuery] int categoryId)
+        [ProducesResponseType(typeof(List<BookContract>), StatusCodes.Status200OK)]
+        public IActionResult GetBooksForGroup(int groupId, [FromQuery] BookTypeEnumContract? filterByBookType)
         //public CategoryContentContract GetCategoryContentForGroup(int groupId, int categoryId) // TODO use correct return type
         {
-            throw new NotImplementedException();
+            if (filterByBookType == null)
+                return BadRequest();
+
+            var result = m_bookManager.GetBooksForUserGroup(groupId, filterByBookType.Value);
+            return Ok(result);
         }
 
         //public CategoryContentContract GetAllCategoryContent(int categoryId) // TODO this method belongs to different controller

@@ -2429,6 +2429,38 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public List<BookContract> GetAllBooksByType(BookTypeEnumContract bookType)
+        {
+            try
+            {
+                var result = Get<List<BookContract>>($"book/type/{bookType}/all");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<BookContract> GetBooksForUserGroup(int groupId, BookTypeEnumContract bookType)
+        {
+            try
+            {
+                var result = Get<List<BookContract>>($"usergroup/{groupId}/book?filterByBookType={bookType}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public void AddBooksToGroup(int groupId, IList<long> bookIds)
         {
             try
