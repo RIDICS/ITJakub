@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Vokabular.FulltextService.Core.Managers;
 using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.Shared;
 using Vokabular.Shared.DataContracts.Search;
+using Vokabular.Shared.DataContracts.Search.RequestContracts;
 
 namespace Vokabular.FulltextService.Controllers
 {
@@ -52,7 +50,7 @@ namespace Vokabular.FulltextService.Controllers
         /// </param>
         /// <returns></returns>
         [HttpPost("search")]
-        public FulltextSearchResultContract SearchByCriteria([FromBody] SearchRequestContractBase searchRequest)
+        public FulltextSearchResultContract SearchByCriteria([FromBody] SearchRequestContract searchRequest)
         {
             var result = m_searchManager.SearchByCriteria(searchRequest);
             return result;

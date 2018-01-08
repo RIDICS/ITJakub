@@ -12,13 +12,12 @@ using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.Search;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Managers.Fulltext;
-using Vokabular.MainService.Core.Managers.Fulltext.Data;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Search;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.RestClient.Errors;
-using Vokabular.Shared.DataContracts.Search;
+using Vokabular.Shared.DataContracts.Search.RequestContracts;
 using Vokabular.Shared.DataContracts.Search.ResultContracts;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -117,7 +116,7 @@ namespace Vokabular.MainService.Core.Managers
 
                 // 2) search in fulltext
                 var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
-                var fulltextSearchResultData = fulltextStorage.SearchProjectIdByCriteria(queryCreator.GetStart(), queryCreator.GetCount(), nonMetadataCriterias, projectIdentificatorList);
+                var fulltextSearchResultData = fulltextStorage.SearchProjectIdByCriteria(queryCreator.GetBaseRequest(), nonMetadataCriterias, projectIdentificatorList);
                 // TODO add sorting parameter for fulltext search
 
                 // 3) load paged result

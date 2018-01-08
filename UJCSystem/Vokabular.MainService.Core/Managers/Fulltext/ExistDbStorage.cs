@@ -11,6 +11,7 @@ using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
+using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Search.OldCriteriaItem;
@@ -141,14 +142,14 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             }
         }
 
-        public FulltextSearchResultData SearchProjectIdByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        public FulltextSearchResultData SearchProjectIdByCriteria(SearchRequestContract searchRequestContract, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
             UpdateCriteriaWithBookVersionRestriction(criteria, projects);
 
             criteria.Add(new ResultCriteriaContract
             {
-                Start = start,
-                Count = count,
+                Start = searchRequestContract.Start,
+                Count = searchRequestContract.Count,
                 Sorting = SortEnum.Title, // TODO use sorting from method parameter
                 Direction = ListSortDirection.Ascending,
             });

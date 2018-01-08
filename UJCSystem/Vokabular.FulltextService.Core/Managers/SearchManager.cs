@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Vokabular.FulltextService.Core.Communication;
 using Vokabular.FulltextService.Core.Helpers;
 using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.Shared.DataContracts;
 using Vokabular.Shared.DataContracts.Search;
-using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.RequestContracts;
 using Vokabular.Shared.DataContracts.Search.ResultContracts;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.FulltextService.Core.Managers
 {
@@ -25,15 +24,17 @@ namespace Vokabular.FulltextService.Core.Managers
         private readonly QueriesBuilder m_queriesBuilder;
         private readonly SearchResultProcessor m_searchResultProcessor;
 
-        public SearchManager(CommunicationProvider communicationProvider, SearchResultProcessor searchResultProcessor, QueriesBuilder queriesBuilder) : base(communicationProvider)
+        public SearchManager(CommunicationProvider communicationProvider, SearchResultProcessor searchResultProcessor,
+            QueriesBuilder queriesBuilder) : base(communicationProvider)
         {
             m_searchResultProcessor = searchResultProcessor;
             m_queriesBuilder = queriesBuilder;
         }
-        
+
         public FulltextSearchResultContract SearchByCriteriaCount(SearchRequestContractBase searchRequest)
         {
-            var filterQuery = m_queriesBuilder.GetFilterSearchQuery(searchRequest.ConditionConjunction, SnapshotIdField);
+            var filterQuery =
+                m_queriesBuilder.GetFilterSearchQuery(searchRequest.ConditionConjunction, SnapshotIdField);
             var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, SnapshotTextField);
 
             var client = CommunicationProvider.GetElasticClient();
@@ -52,9 +53,10 @@ namespace Vokabular.FulltextService.Core.Managers
             return m_searchResultProcessor.ProcessSearchByCriteriaCount(response);
         }
 
-        public FulltextSearchResultContract SearchByCriteria(SearchRequestContractBase searchRequest)
+        public FulltextSearchResultContract SearchByCriteria(SearchRequestContract searchRequest)
         {
-            var filterQuery = m_queriesBuilder.GetFilterSearchQuery(searchRequest.ConditionConjunction, SnapshotIdField);
+            var filterQuery =
+                m_queriesBuilder.GetFilterSearchQuery(searchRequest.ConditionConjunction, SnapshotIdField);
             var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, SnapshotTextField);
 
 
@@ -78,6 +80,21 @@ namespace Vokabular.FulltextService.Core.Managers
                         .Must(mustQuery)
                     )
                 )
+                .Sort(so =>
+                {
+                    if (searchRequest.SortDirection.HasValue && searchRequest.Sort.HasValue)
+                    {
+                        if (searchRequest.SortDirection.Value == SortDirectionEnumContract.Asc)
+                        {
+                            return so.Ascending(GetElasticFieldName(searchRequest.Sort.Value));
+                        }
+                    
+                        return so.Descending(GetElasticFieldName(searchRequest.Sort.Value));
+                    }
+
+                    return so.Ascending(GetElasticFieldName(SortTypeEnumContract.Title));
+                    
+                })
             );
 
             return m_searchResultProcessor.ProcessSearchByCriteria(response);
@@ -85,7 +102,8 @@ namespace Vokabular.FulltextService.Core.Managers
 
         public FulltextSearchCorpusResultContract SearchCorpusByCriteriaCount(SearchRequestContractBase searchRequest)
         {
-            var filterQuery = m_queriesBuilder.GetFilterSearchQuery(searchRequest.ConditionConjunction, SnapshotIdField);
+            var filterQuery =
+                m_queriesBuilder.GetFilterSearchQuery(searchRequest.ConditionConjunction, SnapshotIdField);
             var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, SnapshotTextField);
 
 
@@ -103,7 +121,7 @@ namespace Vokabular.FulltextService.Core.Managers
                     )
                 )
             ).Total;
-            return new FulltextSearchCorpusResultContract { Count = responseCount * 30 }; //TODO HACK pagination on books
+            return new FulltextSearchCorpusResultContract {Count = responseCount * 30}; //TODO HACK pagination on books
             /*var response = client.Search<SnapshotResourceContract>(s => s
                 .Index(SnapshotIndex)
                 .Type(SnapshotType)
@@ -132,7 +150,8 @@ namespace Vokabular.FulltextService.Core.Managers
 
         public CorpusSearchResultDataList SearchCorpusByCriteria(CorpusSearchRequestContract searchRequest)
         {
-            var filterQuery = m_queriesBuilder.GetFilterSearchQuery(searchRequest.ConditionConjunction, SnapshotIdField);
+            var filterQuery =
+                m_queriesBuilder.GetFilterSearchQuery(searchRequest.ConditionConjunction, SnapshotIdField);
             var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, SnapshotTextField);
 
             var client = CommunicationProvider.GetElasticClient();
@@ -179,13 +198,13 @@ namespace Vokabular.FulltextService.Core.Managers
                         .FragmentSize(FragmentSize)
                         .Type(HighlighterType)
                     )
-               )
+                )
             );
 
             return m_searchResultProcessor.ProcessSearchCorpusByCriteria(response, HighlightTag);
         }
 
-        
+
         public TextResourceContract SearchPageByCriteria(string textResourceId, SearchPageRequestContract searchRequest)
         {
             var filterQuery = m_queriesBuilder.GetFilterByIdSearchQuery(textResourceId);
@@ -210,7 +229,7 @@ namespace Vokabular.FulltextService.Core.Managers
                         .Field(PageTextField)
                         .NumberOfFragments(0)
                         .Type(HighlighterType)
-                        )
+                    )
                 )
             );
 
@@ -235,26 +254,24 @@ namespace Vokabular.FulltextService.Core.Managers
             );
 
             if (!response.IsValid)
-            {
                 throw new Exception(response.DebugInformation);
-            }
-            
-            List<string> pageIdList = response.Documents.SelectMany(document => document.Pages).Select(page => page.Id).ToList();
+
+            var pageIdList = response.Documents.SelectMany(document => document.Pages).Select(page => page.Id).ToList();
 
             var filterQuery = m_queriesBuilder.GetFilterByIdSearchQuery(pageIdList);
             var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, PageTextField);
 
             var pageResponse = client.Search<TextResourceContract>(s => s
-                .Index(PageIndex)
-                .Type(PageType)
-                .Source(sf => sf.Excludes(i => i.Field(f => f.PageText)))
-                .Query(q => q
-                    .Bool(b => b
-                        .Filter(filterQuery)
-                        .Must(mustQuery)
+                    .Index(PageIndex)
+                    .Type(PageType)
+                    .Source(sf => sf.Excludes(i => i.Field(f => f.PageText)))
+                    .Query(q => q
+                        .Bool(b => b
+                            .Filter(filterQuery)
+                            .Must(mustQuery)
+                        )
                     )
-                )
-                .Size(1000) //TODO add pagination
+                    .Size(1000) //TODO add pagination
             );
             return m_searchResultProcessor.ProcessSearchPageResult(pageResponse);
         }

@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using ITJakub.Shared.Contracts;
 using Microsoft.Extensions.Logging;
 using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.RestClient;
 using Vokabular.Shared;
-using Vokabular.Shared.DataContracts;
 using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.RequestContracts;
@@ -86,12 +83,11 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             }
         }
 
-        public FulltextSearchResultContract SearchByCriteria(int start, int count, List<SearchCriteriaContract> searchCriterias)
+        public FulltextSearchResultContract SearchByCriteria(SearchRequestContract searchRequestContract)
         {
-            var searchRequest = new SearchRequestContractBase { Start = start, Count = count, ConditionConjunction = searchCriterias};
             try
             {
-                var result = Post<FulltextSearchResultContract>($"snapshot/search", searchRequest);
+                var result = Post<FulltextSearchResultContract>($"snapshot/search", searchRequestContract);
                 return result;
 
             }

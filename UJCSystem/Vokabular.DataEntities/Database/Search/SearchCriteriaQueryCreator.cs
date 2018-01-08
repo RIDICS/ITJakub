@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NHibernate.Criterion;
 using Vokabular.Shared.DataContracts.Search.QueryBuilder;
+using Vokabular.Shared.DataContracts.Search.RequestContracts;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.DataEntities.Database.Search
@@ -134,6 +135,17 @@ namespace Vokabular.DataEntities.Database.Search
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        public SearchRequestContract GetBaseRequest()
+        {
+            return new SearchRequestContract
+            {
+                Count = Count,
+                Start = Start,
+                Sort = Sort,
+                SortDirection = SortDirection,
+            };
         }
     }
 }

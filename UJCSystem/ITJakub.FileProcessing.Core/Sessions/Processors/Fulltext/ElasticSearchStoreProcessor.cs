@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Text;
 using ITJakub.FileProcessing.Core.Communication;
 using ITJakub.SearchService.DataContracts.Contracts;
 using Vokabular.Shared.Converters;
-using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
 {

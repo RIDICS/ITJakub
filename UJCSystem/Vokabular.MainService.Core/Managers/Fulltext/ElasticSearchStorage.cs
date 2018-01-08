@@ -4,8 +4,6 @@ using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
-using Vokabular.MainService.DataContracts.Contracts.Search;
-using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.RequestContracts;
@@ -75,13 +73,13 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             }
         }
 
-        public FulltextSearchResultData SearchProjectIdByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        public FulltextSearchResultData SearchProjectIdByCriteria(SearchRequestContract searchRequestContract, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
             UpdateCriteriaWithSnapshotRestriction(criteria, projects);
-
+            searchRequestContract.ConditionConjunction = criteria;
             using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient())
             {
-               var result = fulltextServiceClient.SearchByCriteria(start, count, criteria);
+               var result = fulltextServiceClient.SearchByCriteria(searchRequestContract);
                return new FulltextSearchResultData{LongList = result.ProjectIds, SearchResultType = FulltextSearchResultType.ProjectId};
             }
         }
@@ -93,7 +91,6 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
                 var result = fulltextServiceClient.SearchPageByCriteria(project.SnapshotId, criteria);
                 return result;
             }
-            return new PageSearchResultData{SearchResultType = PageSearchResultType.TextExternalId, StringList = new List<string>{ "AWBalit_qiAGOWkAUgOB" } };
         }
 
         public long SearchCorpusByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)

@@ -1,4 +1,7 @@
-﻿using Vokabular.FulltextService.Core.Communication;
+﻿using System;
+using Elasticsearch.Net;
+using Vokabular.FulltextService.Core.Communication;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.FulltextService.Core.Managers
 {
@@ -14,10 +17,33 @@ namespace Vokabular.FulltextService.Core.Managers
         protected const string PageTextField = "pageText";
         protected const string SnapshotTextField = "snapshotText";
         protected const string IdField = "_id";
-        
+        protected const string TitleField = "title";
+        protected const string AuthorField = "author";
+        protected const string DatingField = "dating";
+
+        private const string BadSortValueErrorMessage = "Bad sorting value";
+
         protected ElasticsearchManagerBase(CommunicationProvider communicationProvider)
         {
             CommunicationProvider = communicationProvider;
         }
+
+        protected string GetElasticFieldName(SortTypeEnumContract sortValue)
+        {
+            switch (sortValue)
+            {
+                case SortTypeEnumContract.Title:
+                    return TitleField;
+                case SortTypeEnumContract.Author:
+                    return AuthorField;
+                case SortTypeEnumContract.Dating:
+                    return DatingField;
+                default:
+                    return TitleField; //TODO throw exception or set default sorting
+                    throw new ArgumentException(BadSortValueErrorMessage);
+            }
+        }
+
+        
     }
 }

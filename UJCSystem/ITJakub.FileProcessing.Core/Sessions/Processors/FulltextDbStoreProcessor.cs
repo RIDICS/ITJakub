@@ -4,8 +4,6 @@ using System.Linq;
 using System.Reflection;
 using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext;
-using ITJakub.Shared.Contracts;
-using ITJakub.SearchService.DataContracts;
 using ITJakub.SearchService.DataContracts.Contracts;
 using log4net;
 using Vokabular.Core.Storage.Resources;

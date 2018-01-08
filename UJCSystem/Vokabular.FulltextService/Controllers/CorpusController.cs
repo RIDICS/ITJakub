@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Vokabular.FulltextService.Core.Managers;
 using Vokabular.Shared.DataContracts.Search;
+using Vokabular.Shared.DataContracts.Search.RequestContracts;
 using Vokabular.Shared.DataContracts.Search.ResultContracts;
 
 namespace Vokabular.FulltextService.Controllers
