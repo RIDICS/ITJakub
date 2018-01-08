@@ -66,7 +66,7 @@ namespace Vokabular.RestClient
             return PutAsync<T>(uriPath, data).GetAwaiter().GetResult();
         }
 
-        protected void Delete(string uriPath)
+        protected void Delete(string uriPath, object data = null)
         {
             DeleteAsync(uriPath).GetAwaiter().GetResult();
         }

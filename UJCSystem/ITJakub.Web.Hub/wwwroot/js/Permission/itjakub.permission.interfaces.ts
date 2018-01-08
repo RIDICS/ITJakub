@@ -27,7 +27,7 @@ interface ICardFilePermission extends ISpecialPermission {
 }
 
 interface IAutoImportPermission extends ISpecialPermission {
-    category: IBookCategory;
+    bookType: BookTypeEnum;
 }
 
 interface IBookCategory {

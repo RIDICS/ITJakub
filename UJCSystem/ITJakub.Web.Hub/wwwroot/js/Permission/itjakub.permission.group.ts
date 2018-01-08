@@ -553,17 +553,17 @@ class GroupPermissionEditor {
 
 class SpecialPermissionTextResolver {
     
-    private static newsPermission: string = "ITJakub.Shared.Contracts.NewsPermissionContract";
-    private static uploadBookPermission: string = "ITJakub.Shared.Contracts.UploadBookPermissionContract";
-    private static managePermission: string = "ITJakub.Shared.Contracts.ManagePermissionsPermissionContract";
-    private static feedbackPermission: string = "ITJakub.Shared.Contracts.FeedbackPermissionContract";
-    private static cardFilePermission: string = "ITJakub.Shared.Contracts.CardFilePermissionContract";
-    private static autoimportPermission: string = "ITJakub.Shared.Contracts.AutoImportCategoryPermissionContract";
-    private static readLemmatizationPermission: string = "ITJakub.Shared.Contracts.ReadLemmatizationPermissionContract";
-    private static editLemmatizationPermission: string = "ITJakub.Shared.Contracts.EditLemmatizationPermissionContract";
-    private static derivateLemmatizationPermission: string = "ITJakub.Shared.Contracts.DerivateLemmatizationPermissionContract";
-    private static editionPrintPermission: string = "ITJakub.Shared.Contracts.EditionPrintPermissionContract";
-    private static editStaticTextPermission: string = "ITJakub.Shared.Contracts.EditStaticTextPermissionContract";
+    private static newsPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.NewsPermissionContract";
+    private static uploadBookPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.UploadBookPermissionContract";
+    private static managePermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.ManagePermissionsPermissionContract";
+    private static feedbackPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.FeedbackPermissionContract";
+    private static cardFilePermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.CardFilePermissionContract";
+    private static autoimportPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.AutoImportCategoryPermissionContract";
+    private static readLemmatizationPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.ReadLemmatizationPermissionContract";
+    private static editLemmatizationPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.EditLemmatizationPermissionContract";
+    private static derivateLemmatizationPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.DerivateLemmatizationPermissionContract";
+    private static editionPrintPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.EditionPrintPermissionContract";
+    private static editStaticTextPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.EditStaticTextPermissionContract";
     
     static resolveSpecialPermissionCategoryText(type: string, specialPermissions: ISpecialPermission[]): string {
 
@@ -631,7 +631,8 @@ class SpecialPermissionTextResolver {
     }
 
     private static resolveAutoImportText(autoimportPermission: IAutoImportPermission): string {
-        return autoimportPermission.category.description;
+        var label = BookTypeHelper.getText(autoimportPermission.bookType);
+        return label;
     }
 
 }

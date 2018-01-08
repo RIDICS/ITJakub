@@ -33,6 +33,13 @@ namespace Vokabular.MainService.Controllers
             return Ok(result);
         }
 
+        [HttpGet("type")]
+        public List<BookTypeContract> GetBookTypeList()
+        {
+            var result = m_bookManager.GetBookTypeList();
+            return result;
+        }
+
         /// <summary>
         /// Search books
         /// </summary>

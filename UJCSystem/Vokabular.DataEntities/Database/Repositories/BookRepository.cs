@@ -423,5 +423,12 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => x.OutputFormat == outputFormat && x.IsDefaultForBookType && bookTypeAlias.Type == requestedBookType)
                 .SingleOrDefault();
         }
+
+        public virtual IList<BookType> GetBookTypes()
+        {
+            return GetSession().QueryOver<BookType>()
+                .OrderBy(x => x.Id).Asc
+                .List();
+        }
     }
 }

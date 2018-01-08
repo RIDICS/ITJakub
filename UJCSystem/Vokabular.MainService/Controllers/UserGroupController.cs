@@ -57,15 +57,15 @@ namespace Vokabular.MainService.Controllers
         //}
 
         [HttpPost("{groupId}/permission/book")]
-        public void AddBooksToGroup(int groupId, IList<long> bookIds/*, IList<int> categoryIds*/)
+        public void AddBooksToGroup(int groupId, [FromBody] AddBookToUserGroupRequestContract request)
         {
-            m_permissionManager.AddBooksAndCategoriesToGroup(groupId, bookIds);
+            m_permissionManager.AddBooksAndCategoriesToGroup(groupId, request.BookIdList);
         }
 
         [HttpDelete("{groupId}/permission/book")]
-        public void RemoveBooksFromGroup(int groupId, IList<long> bookIds/*, IList<int> categoryIds*/)
+        public void RemoveBooksFromGroup(int groupId, [FromBody] AddBookToUserGroupRequestContract request)
         {
-            m_permissionManager.RemoveBooksAndCategoriesFromGroup(groupId, bookIds);
+            m_permissionManager.RemoveBooksAndCategoriesFromGroup(groupId, request.BookIdList);
         }
 
         [HttpDelete("{groupId}/user/{userId}")]

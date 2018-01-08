@@ -345,14 +345,16 @@ namespace Vokabular.RestClient
             });
         }
 
-        protected Task DeleteAsync(string uriPath)
+        protected Task DeleteAsync(string uriPath, object data = null)
         {
             return Task.Run(async () =>
             {
                 try
                 {
                     var request = CreateRequestMessage(HttpMethod.Delete, uriPath);
-                    var response = await m_client.SendAsync(request);
+                    var response = data == null
+                        ? await m_client.SendAsync(request)
+                        : await m_client.SendAsJsonAsync(request, data);
 
                     ProcessResponseInternal(response);
                 }

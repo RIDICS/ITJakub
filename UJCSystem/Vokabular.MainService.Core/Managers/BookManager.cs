@@ -33,6 +33,7 @@ namespace Vokabular.MainService.Core.Managers
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
         private readonly AuthorizationManager m_authorizationManager;
         private readonly CategoryRepository m_categoryRepository;
+        private readonly BookTypeEnum[] m_filterBookType;
 
         public BookManager(MetadataRepository metadataRepository, CategoryRepository categoryRepository,
             BookRepository bookRepository, ResourceRepository resourceRepository, FileSystemManager fileSystemManager,
@@ -45,6 +46,7 @@ namespace Vokabular.MainService.Core.Managers
             m_fulltextStorageProvider = fulltextStorageProvider;
             m_authorizationManager = authorizationManager;
             m_categoryRepository = categoryRepository;
+            m_filterBookType = new[] {BookTypeEnum.CardFile};
         }
         
         public List<BookWithCategoriesContract> GetBooksByType(BookTypeEnumContract bookType)
@@ -54,6 +56,14 @@ namespace Vokabular.MainService.Core.Managers
             var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByBookType(bookTypeEnum, userId));
             var resultList = Mapper.Map<List<BookWithCategoriesContract>>(dbMetadataList);
             return resultList;
+        }
+        
+        public List<BookTypeContract> GetBookTypeList()
+        {
+            var dbResult = m_bookRepository.InvokeUnitOfWork(x => x.GetBookTypes());
+            var filteredResult = dbResult.Where(x => !m_filterBookType.Contains(x.Type));
+            var result = Mapper.Map<List<BookTypeContract>>(filteredResult);
+            return result;
         }
 
         public BookContract GetBookInfo(long projectId)

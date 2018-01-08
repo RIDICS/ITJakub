@@ -68,7 +68,7 @@ namespace Vokabular.MainService.Core.Managers
             };
         }
 
-        public List<UserContract> GetUserAutocomplete(string query, int? count)
+        public List<UserDetailContract> GetUserAutocomplete(string query, int? count)
         {
             m_authorizationManager.CheckUserCanManagePermissions();
 
@@ -78,7 +78,7 @@ namespace Vokabular.MainService.Core.Managers
             var countValue = PagingHelper.GetAutocompleteCount(count);
 
             var result = m_userRepository.InvokeUnitOfWork(x => x.GetUserAutocomplete(query, countValue));
-            return Mapper.Map<List<UserContract>>(result);
+            return Mapper.Map<List<UserDetailContract>>(result);
         }
 
         public UserDetailContract GetUserDetail(int userId)

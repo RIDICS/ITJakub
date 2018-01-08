@@ -110,7 +110,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("autocomplete")]
-        public List<UserContract> GetAutocomplete([FromQuery] string query, [FromQuery] int? count)
+        public List<UserDetailContract> GetAutocomplete([FromQuery] string query, [FromQuery] int? count)
         {
             var result = m_userManager.GetUserAutocomplete(query, count);
             return result;

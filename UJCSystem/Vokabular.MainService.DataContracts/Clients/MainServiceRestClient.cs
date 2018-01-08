@@ -2288,11 +2288,11 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         #region Permissions
 
-        public List<CardShortContract> GetUserAutocomplete(string query)
+        public List<UserDetailContract> GetUserAutocomplete(string query)
         {
             try
             {
-                var result = Get<List<CardShortContract>>("user/autocomplete".AddQueryString("query", query));
+                var result = Get<List<UserDetailContract>>("user/autocomplete".AddQueryString("query", query));
                 return result;
             }
             catch (HttpRequestException e)
@@ -2304,11 +2304,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<CardShortContract> GetUserGroupAutocomplete(string query)
+        public List<UserGroupContract> GetUserGroupAutocomplete(string query)
         {
             try
             {
-                var result = Get<List<CardShortContract>>("usergroup/autocomplete".AddQueryString("query", query));
+                var result = Get<List<UserGroupContract>>("usergroup/autocomplete".AddQueryString("query", query));
                 return result;
             }
             catch (HttpRequestException e)
@@ -2340,7 +2340,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = Get<UserGroupDetailContract>($"usergroup/{groupId}");
+                var result = Get<UserGroupDetailContract>($"usergroup/{groupId}/detail");
                 return result;
             }
             catch (HttpRequestException e)
@@ -2368,6 +2368,187 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public void DeleteGroup(int groupId)
+        {
+            try
+            {
+                Delete("usergroup");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void AddUserToGroup(int userId, int groupId)
+        {
+            try
+            {
+                Post<object>($"usergroup/{groupId}/user/{userId}", null);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void RemoveUserFromGroup(int userId, int groupId)
+        {
+            try
+            {
+                Delete($"usergroup/{groupId}/user/{userId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<UserGroupContract> GetGroupsByUser(int userId)
+        {
+            try
+            {
+                var result = Get<List<UserGroupContract>>($"user/{userId}/group");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void AddBooksToGroup(int groupId, IList<long> bookIds)
+        {
+            try
+            {
+                Post<object>($"usergroup/{groupId}/permission/book", new AddBookToUserGroupRequestContract
+                {
+                    BookIdList = bookIds
+                });
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void RemoveBooksFromGroup(int groupId, IList<long> bookIds)
+        {
+            try
+            {
+                Delete($"usergroup/{groupId}/permission/book", new AddBookToUserGroupRequestContract
+                {
+                    BookIdList = bookIds
+                });
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<SpecialPermissionContract> GetSpecialPermissions()
+        {
+            try
+            {
+                var result = Get<List<SpecialPermissionContract>>("permission/special");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<SpecialPermissionContract> GetSpecialPermissionsForGroup(int groupId)
+        {
+            try
+            {
+                var result = Get<List<SpecialPermissionContract>>($"usergroup/{groupId}/permission/special");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void AddSpecialPermissionsToGroup(int groupId, IList<int> specialPermissionsIds)
+        {
+            try
+            {
+                Post<object>($"usergroup/{groupId}/permission/special", new IntegerIdListContract
+                {
+                    IdList = specialPermissionsIds
+                });
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void RemoveSpecialPermissionsFromGroup(int groupId, IList<int> specialPermissionsIds)
+        {
+            try
+            {
+                Delete($"usergroup/{groupId}/permission/special", new IntegerIdListContract
+                {
+                    IdList = specialPermissionsIds
+                });
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         #endregion
+
+        public List<BookTypeContract> GetBookTypeList()
+        {
+            try
+            {
+                var result = Get<List<BookTypeContract>>("book/type");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
     }
 }

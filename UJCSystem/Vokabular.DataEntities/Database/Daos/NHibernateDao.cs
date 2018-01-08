@@ -30,6 +30,9 @@ namespace Vokabular.DataEntities.Database.Daos
 
         protected ISession GetSession()
         {
+            if (m_unitOfWork.CurrentSession == null)
+                throw new InvalidOperationException("Unit of work is not running");
+
             return m_unitOfWork.CurrentSession;
         }
 
