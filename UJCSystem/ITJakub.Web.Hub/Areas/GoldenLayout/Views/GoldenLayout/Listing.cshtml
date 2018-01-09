@@ -1,0 +1,30 @@
+﻿@model ITJakub.Web.Hub.Models.BookListingModel
+@{
+    ViewBag.Title = "Edice - Čtečka děl pokusná";
+}
+@section styles{
+    <link href="~/Areas/Editions/css/itjakub.editions.css" rel="stylesheet" />
+    <link href="~/lib/golden-layout/src/css/goldenlayout-base.css" rel="stylesheet" />
+    <link href="~/lib/golden-layout/src/css/goldenlayout-light-theme.css" rel="stylesheet" />
+    <link href="~/Areas/GoldenLayout/css/readerStyle.css" rel="stylesheet" />
+}
+@section scripts{
+    @*<script src="~/Areas/GoldenLayout/js/test.js"></script>*@
+    <script src="~/lib/golden-layout/dist/goldenlayout.js"></script>
+    <script src="~/Areas/GoldenLayout/js/itjakub.goldenlayout.js"></script>
+}
+
+<div id="SearchDiv">
+
+</div>
+
+<div id="ReaderDiv" data-bookid="@Model.BookXmlId" data-versionid="@Model.VersionXmlId" data-has-image-url="@Url.Action("HasBookImage", "Reader", new {Area = ""})" data-can-print="@Model.CanPrintEdition">
+
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        @*testFunction(@Json.Serialize(Model.BookXmlId), @Json.Serialize(Model.VersionXmlId), @Json.Serialize(Model.BookTitle), @Json.Serialize(Model.BookPages), @Json.Serialize(Model.SearchText, Model.JsonSerializerSettingsForBiblModule), @Json.Serialize(Model.InitPageXmlId));*@
+        initGoldenReader(@Json.Serialize(Model.BookXmlId), @Json.Serialize(Model.VersionXmlId), @Json.Serialize(Model.BookTitle), @Json.Serialize(Model.BookPages), @Json.Serialize(Model.SearchText, Model.JsonSerializerSettingsForBiblModule), @Json.Serialize(Model.InitPageXmlId));
+    });
+</script>
