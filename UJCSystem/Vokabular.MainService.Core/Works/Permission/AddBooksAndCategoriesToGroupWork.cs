@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Reflection;
 using log4net;
 using Vokabular.DataEntities.Database.Entities;
@@ -44,6 +44,10 @@ namespace Vokabular.MainService.Core.Works.Permission
 
             foreach (var bookId in allBookIds)
             {
+                var dbPermission = m_permissionRepository.FindPermissionByBookAndGroup(bookId, m_groupId);
+                if (dbPermission != null)
+                    continue; // Permission already exists
+
                 var book = m_permissionRepository.Load<Project>(bookId);
                 permissionsList.Add(new DataEntities.Database.Entities.Permission
                 {
@@ -56,12 +60,13 @@ namespace Vokabular.MainService.Core.Works.Permission
             {
                 try
                 {
-                    m_permissionRepository.CreatePermission(permission);
+                    m_permissionRepository.Create(permission);
                 }
-                catch (Exception ex)
+                catch (DataException ex)
                 {
                     if (m_log.IsWarnEnabled)
                         m_log.WarnFormat("Cannot save permission for group witd id '{0}' on book with id '{1}' for reason '{2}'", permission.UserGroup.Id, permission.Project.Id, ex.InnerException);
+                    throw;
                 }
             }
         }

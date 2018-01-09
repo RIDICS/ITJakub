@@ -153,11 +153,6 @@ namespace Vokabular.DataEntities.Database.Repositories
             return filteredBookIds;
         }
 
-        public virtual void CreatePermission(Permission permission)
-        {
-            GetSession().Save(permission);
-        }
-
         public virtual void CreateSpecialPermission(SpecialPermission permission)
         {
             GetSession().Save(permission);
