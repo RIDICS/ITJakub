@@ -316,7 +316,7 @@ class GroupPermissionEditor {
             });
         });
 
-        buttonsSpan.appendChild(removeSpan);
+        //buttonsSpan.appendChild(removeSpan); // removing whole permission group is currently not supported
 
         groupLi.appendChild(buttonsSpan);
 
@@ -921,7 +921,7 @@ class BooksSelector {
             }
         });
 
-        checkSpan.appendChild(checkInput);
+        //checkSpan.appendChild(checkInput);
 
         buttonsSpan.appendChild(checkSpan);
 
@@ -1002,7 +1002,7 @@ class BooksSelector {
 
             if (typeof data === "undefined" || data === null || data.propagate === true) {
                 var parentCategoryItem: HTMLLIElement = <HTMLLIElement>$(bookLi).parents("li.list-item.non-leaf").first()[0];
-                this.changeStateOfCategoryItemCheckboxIfNeeded(parentCategoryItem);
+                //this.changeStateOfCategoryItemCheckboxIfNeeded(parentCategoryItem); // parent checkbox is currently disabled
             }
         });
 

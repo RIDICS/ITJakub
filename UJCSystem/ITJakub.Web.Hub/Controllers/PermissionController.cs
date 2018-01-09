@@ -86,7 +86,8 @@ namespace ITJakub.Web.Hub.Controllers
                     Name = request.GroupName,
                     Description = request.GroupDescription,
                 };
-                var group = client.CreateGroup(newUserGroupRequest);
+                var groupId = client.CreateGroup(newUserGroupRequest);
+                var group = client.GetUserGroupDetail(groupId);
                 return Json(group);
             }
         }

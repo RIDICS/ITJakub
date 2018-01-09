@@ -2324,7 +2324,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = Get<UserDetailContract>($"user/{userId}");
+                var result = Get<UserDetailContract>($"user/{userId}/detail");
                 return result;
             }
             catch (HttpRequestException e)
@@ -2372,7 +2372,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Delete("usergroup");
+                Delete($"usergroup/{groupId}");
             }
             catch (HttpRequestException e)
             {
