@@ -25,9 +25,8 @@
                 </div>
             }
 
-            @Html.HiddenFor(m => m.BookXmlId)
-            @Html.HiddenFor(m => m.BookVersionXmlId)
-            @Html.HiddenFor(m => m.EntryXmlId)
+            @Html.HiddenFor(m => m.BookId)
+            @Html.HiddenFor(m => m.HeadwordVersionId)
 
             <div class="form-group optional">
                 @Html.LabelFor(m => m.Dictionary, new {@class = "col-md-1 control-label"})

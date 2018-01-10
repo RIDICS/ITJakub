@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.Feedback;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Criteria;
@@ -85,28 +86,26 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return View(pageStaticText);
         }
 
-        public ActionResult Feedback(string bookId, string versionId, string entryId, string headword, string dictionary)
+        public ActionResult Feedback(long? bookId, long? headwordVersionId, string headword, string dictionary)
         {
             var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
             var viewModel = new HeadwordFeedbackViewModel
             {
-                BookXmlId = bookId,
-                BookVersionXmlId = versionId,
-                EntryXmlId = entryId,
+                BookId = bookId,
+                HeadwordVersionId = headwordVersionId,
                 Dictionary = dictionary,
                 Headword = headword,
                 PageStaticText = pageStaticText
             };
 
-            var username = GetUserName();
-            if (string.IsNullOrWhiteSpace(username))
+            if (!IsUserLoggedIn())
             {
                 return View(viewModel);
             }
 
-            using (var client = GetEncryptedClient())
+            using (var client = GetRestClient())
             {
-                var user = client.FindUserByUserName(username);
+                var user = client.GetCurrentUserInfo();
                 viewModel.Name = string.Format("{0} {1}", user.FirstName, user.LastName);
                 viewModel.Email = user.Email;
 
@@ -125,13 +124,13 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                 return View(model);
             }
 
-            if (model.BookXmlId == null || model.BookVersionXmlId == null || model.EntryXmlId == null)
+            if (model.BookId == null || model.HeadwordVersionId == null)
             {
                 m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.Dictionaries, IsUserLoggedIn());
             }
             else
             {
-                AddHeadwordFeedback(model.Text, model.BookXmlId, model.BookVersionXmlId, model.EntryXmlId, model.Name, model.Email);
+                AddHeadwordFeedback(model.Text, model.HeadwordVersionId.Value, model.Name, model.Email);
             }
                 
             return View("Feedback/FeedbackSuccess");
@@ -444,18 +443,27 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             //}
         }
 
-        private void AddHeadwordFeedback(string content, string bookXmlId, string bookVersionXmlId, string entryXmlId, string name, string email)
+        private void AddHeadwordFeedback(string content, long headwordVersionId, string name, string email)
         {
-            var username = HttpContext.User.Identity.Name;
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                if (string.IsNullOrWhiteSpace(username))
+                if (IsUserLoggedIn())
                 {
-                    client.CreateAnonymousFeedbackForHeadword(content, bookXmlId, bookVersionXmlId, entryXmlId, name, email);
+                    client.CreateHeadwordFeedback(headwordVersionId, new CreateFeedbackContract
+                    {
+                        FeedbackCategory = FeedbackCategoryEnumContract.Dictionaries,
+                        Text = content,
+                    });
                 }
                 else
                 {
-                    client.CreateFeedbackForHeadword(content, bookXmlId, bookVersionXmlId, entryXmlId, username);
+                    client.CreateAnonymousHeadwordFeedback(headwordVersionId, new CreateAnonymousFeedbackContract
+                    {
+                        FeedbackCategory = FeedbackCategoryEnumContract.Dictionaries,
+                        Text = content,
+                        AuthorEmail = email,
+                        AuthorName = name,
+                    });
                 }
             }
         }
