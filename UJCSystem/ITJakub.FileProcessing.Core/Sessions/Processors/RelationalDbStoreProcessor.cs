@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using ITJakub.FileProcessing.Core.Data;
+using ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext;
 using ITJakub.FileProcessing.Core.Sessions.Works;
 using log4net;
 using Vokabular.Core.Storage.Resources;
@@ -16,15 +17,17 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
         private readonly ProjectRepository m_projectRepository;
         private readonly MetadataRepository m_metadataRepository;
         private readonly ResourceRepository m_resourceRepository;
+        private readonly IFulltextResourceProcessor m_fulltextResourceProcessor;
         private readonly CatalogValueRepository m_catalogValueRepository;
         private readonly PersonRepository m_personRepository;
 
         public RelationalDbStoreProcessor(ProjectRepository projectRepository, MetadataRepository metadataRepository,
-            ResourceRepository resourceRepository, CatalogValueRepository catalogValueRepository, PersonRepository personRepository)
+            ResourceRepository resourceRepository, IFulltextResourceProcessor fulltextResourceProcessor, CatalogValueRepository catalogValueRepository, PersonRepository personRepository)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
             m_resourceRepository = resourceRepository;
+            m_fulltextResourceProcessor = fulltextResourceProcessor;
             m_catalogValueRepository = catalogValueRepository;
             m_personRepository = personRepository;
         }
@@ -51,6 +54,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
             var createNewSnapshot = new CreateSnapshotForImportedDataWork(m_projectRepository, projectId, userId, resourceVersionIds, bookData, message, bookVersionId);
             createNewSnapshot.Execute();
+
+            PublishSnapshotToExternalDatabase(createNewSnapshot.SnapshotId, projectId, bookData.Pages);
 
             //var bookVersionId = m_bookVersionRepository.Create(bookData);
             //var bookVersion = m_bookVersionRepository.FindById<BookVersion>(bookVersionId);
@@ -87,6 +92,12 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             //{
             //     m_permissionRepository.CreatePermissionIfNotExist(newPermission);
             //}
+        }
+
+        private void PublishSnapshotToExternalDatabase(long snapshotId, long projectId, List<BookPageData> bookDataPages)
+        {
+            var externalIds = bookDataPages.Select(x => x.XmlId).ToList();
+            m_fulltextResourceProcessor.PublishSnapshot(snapshotId, projectId, externalIds);
         }
     }
 }

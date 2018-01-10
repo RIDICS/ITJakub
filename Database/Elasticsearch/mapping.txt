@@ -1,0 +1,71 @@
+PUT snapshotindex 
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "snapshot_analyzer": {
+          "type": "custom",
+          "char_filter": "escaped_chars",
+          "tokenizer": "lowercase"
+        }
+      },
+      "char_filter": {
+        "escaped_chars": { 
+          "type": "pattern_replace",
+          "pattern": "\\[a-zA-Z]*|<[0-9]*?>",
+          "replacement": ""
+        }
+      }
+    }
+  },
+  "mappings": {
+    "snapshot": { 
+      "properties": { 
+        "snapshotId":    { "type": "long"  }, 
+        "projectId":    { "type": "long"  }, 
+        "snapshotText":     { 
+          "type": "text", 
+          "term_vector": "with_positions_offsets", 
+          "analyzer": "snapshot_analyzer" 
+        }
+      }
+    }
+  }
+}
+
+
+PUT pageindex 
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "page_analyzer": {
+          "type": "custom",
+          "char_filter": "escaped_chars",
+          "tokenizer": "lowercase"
+          
+        }
+      },
+      "char_filter": {
+        "escaped_chars": { 
+          "type": "pattern_replace",
+          "pattern": "\\[a-zA-Z]*|<[0-9]*?>",
+          "replacement": ""
+        }
+      }
+    }
+  },
+  "mappings": {
+    "page": { 
+      "properties": { 
+        "pageText":    { 
+          "type": "text", 
+          "term_vector": "with_positions_offsets", 
+          "analyzer": "page_analyzer" 
+        }, 
+        "versionNumber":     { "type": "integer"  }
+        
+      }
+    }
+  }
+}

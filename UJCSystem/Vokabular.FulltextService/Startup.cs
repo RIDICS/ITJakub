@@ -50,9 +50,8 @@ namespace Vokabular.FulltextService
                 options.DescribeAllEnumsAsStrings();
                 options.IncludeXmlComments(GetXmlCommentsPath());
 
-                //TODO enable this DocumentFilter and SchemaFilter after merge with branch with ElasticSearch usage
-                //options.DocumentFilter<PolymorphismDocumentFilter<SearchCriteriaContract>>();
-                //options.SchemaFilter<PolymorphismSchemaFilter<SearchCriteriaContract>>();
+                options.DocumentFilter<PolymorphismDocumentFilter<SearchCriteriaContract>>();
+                options.SchemaFilter<PolymorphismSchemaFilter<SearchCriteriaContract>>();
             });
 
             // IoC

@@ -1,4 +1,4 @@
-﻿namespace Vokabular.MainService.Core.Managers.Fulltext.Data
+﻿namespace Vokabular.Shared.DataContracts.Search.ResultContracts
 {
     public enum FulltextSearchResultType
     {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Vokabular.Shared.DataContracts.Search.ResultContracts;
 
 namespace Vokabular.MainService.Core.Managers.Fulltext.Data
 {

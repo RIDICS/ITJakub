@@ -2,7 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using ITJakub.SearchService.DataContracts;
+using ITJakub.FileProcessing.Core.Data;
+using ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext;
 using ITJakub.SearchService.DataContracts.Contracts;
 using log4net;
 using Vokabular.Core.Storage.Resources;
@@ -10,10 +11,16 @@ using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
-    public class ExistDbStoreProcessor : IResourceProcessor
+    public class FulltextDbStoreProcessor : IResourceProcessor
     {
-        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);        
-        
+        private readonly IFulltextResourceProcessor m_fulltextResourceProcessor;
+
+        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+        public FulltextDbStoreProcessor(IFulltextResourceProcessor fulltextResourceProcessor)
+        {
+            m_fulltextResourceProcessor = fulltextResourceProcessor;
+        }
 
         public void Process(ResourceSessionDirector resourceDirector)
         {
@@ -25,12 +32,15 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                         resource.ResourceType == ResourceType.BibliographyDocument ||
                         resource.ResourceType == ResourceType.Transformation);
 
+            var bookData = resourceDirector.GetSessionInfoValue<BookData>(SessionInfo.BookData);
+
             foreach (var resource in existFileResources)
             {
-                if (string.IsNullOrEmpty(resource.FileName) && m_log.IsFatalEnabled)
+                if (string.IsNullOrEmpty(resource.FileName))
                 {
-                    m_log.ErrorFormat("Resource of type {0} and path {1} does not have fileName", resource.ResourceType,
-                        resource.FullPath);
+                    if (m_log.IsErrorEnabled)
+                        m_log.ErrorFormat("Resource of type {0} and path {1} does not have fileName", resource.ResourceType, resource.FullPath);
+
                     continue;
                 }
 
@@ -41,51 +51,33 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                     switch (resource.ResourceType)
                     {
                         case ResourceType.BibliographyDocument:
-                            UploadBibliographyFile(resourceUploadContract);
+                            m_fulltextResourceProcessor.UploadBibliographyFile(resourceUploadContract);
                             break;
 
                         case ResourceType.Book:
-                            UploadResourceToBookVersion(resourceUploadContract);
+                            m_fulltextResourceProcessor.UploadFullbookToBookVersion(resourceUploadContract);
                             break;
 
                         case ResourceType.Page:
-                            UploadResourceToBookVersion(resourceUploadContract);
+                            var pageId = m_fulltextResourceProcessor.UploadPageToBookVersion(resourceUploadContract);
+                            if (pageId != null)
+                            {
+                                var bookPageData = bookData.Pages.FirstOrDefault(x => x.XmlResource == resource.FileName);
+                                if (bookPageData != null)
+                                {
+                                    bookPageData.XmlId = pageId;
+                                }
+                            }
                             break;
 
                         case ResourceType.Transformation:
-                            UploadTransformationResource(resourceUploadContract);
+                            m_fulltextResourceProcessor.UploadTransformationResource(resourceUploadContract);
                             break;
-
-                        
-
+                            
                         default:
                             throw new ArgumentException($"ResourceType: '{resource.ResourceType}' not meant for ExistDb upload");
                     }
                 }
-            }
-        }
-
-        private void UploadTransformationResource(VersionResourceUploadContract resourceUploadContract)
-        {
-            using (var ssc = new SearchServiceClient())
-            {
-                ssc.UploadBookFile(resourceUploadContract);
-            }
-        }
-
-        private void UploadBibliographyFile(VersionResourceUploadContract resourceUploadContract)
-        {
-            using (var ssc = new SearchServiceClient())
-            {
-                ssc.UploadBibliographyFile(resourceUploadContract);
-            }
-        }
-
-        private void UploadResourceToBookVersion(VersionResourceUploadContract resourceUploadContract)
-        {
-            using (var ssc = new SearchServiceClient())
-            {
-                ssc.UploadVersionFile(resourceUploadContract);
             }
         }
 

@@ -6,11 +6,11 @@ using Vokabular.Core.Storage;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Works.Content;
 using Vokabular.MainService.Core.Works.Text;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -22,13 +22,15 @@ namespace Vokabular.MainService.Core.Managers
         private readonly FileSystemManager m_fileSystemManager;
         private readonly UserManager m_userManager;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
+        private readonly CommunicationProvider m_communicationProvider;
 
-        public ProjectContentManager(ResourceRepository resourceRepository, FileSystemManager fileSystemManager, UserManager userManager, FulltextStorageProvider fulltextStorageProvider)
+        public ProjectContentManager(ResourceRepository resourceRepository, FileSystemManager fileSystemManager, UserManager userManager, FulltextStorageProvider fulltextStorageProvider, CommunicationProvider communicationProvider)
         {
             m_resourceRepository = resourceRepository;
             m_fileSystemManager = fileSystemManager;
             m_userManager = userManager;
             m_fulltextStorageProvider = fulltextStorageProvider;
+            m_communicationProvider = communicationProvider;
         }
 
         public List<TextWithPageContract> GetTextResourceList(long projectId, long? resourceGroupId)
@@ -127,6 +129,14 @@ namespace Vokabular.MainService.Core.Managers
                 data, fileInfo, userId).Execute();
 
             return resultVersionId;
+        }
+		
+		public long CreateNewTextResourceVersion(CreateTextRequestContract request)
+        {
+            var userId = m_userManager.GetCurrentUserId();
+            var createNewTextResourceWork = new CreateNewTextResourceWork(m_resourceRepository, request, userId, m_communicationProvider);
+            var resultId = createNewTextResourceWork.Execute();
+            return resultId;
         }
     }
 }

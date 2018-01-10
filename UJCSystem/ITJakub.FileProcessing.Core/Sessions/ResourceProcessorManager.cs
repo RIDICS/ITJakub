@@ -13,8 +13,8 @@ namespace ITJakub.FileProcessing.Core.Sessions
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly AudioBookArchiveProcessor m_audiobookArchiveProcessor;
+        private readonly FulltextDbStoreProcessor m_fulltextDbStoreProcessor;
         private readonly BasicProjectDataRelationalDbStoreProcessor m_basicProjectDataRelationalDbStoreProcessor;
-        private readonly ExistDbStoreProcessor m_existDbStoreProcessor;
         private readonly ExtractableArchiveProcessor m_extractableArchiveProcessor;
         private readonly FileDbStoreProcessor m_fileDbStoreProcessor;
         private readonly MetadataProcessor m_metadataProcessor;
@@ -24,7 +24,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
 
         public ResourceProcessorManager(XmlConversionProcessor xmlConversionProcessor,
             MetadataProcessor metadataProcessor, RelationalDbStoreProcessor relationalDbStoreProcessor,
-            FileDbStoreProcessor fileDbStoreProcessor, ExistDbStoreProcessor existDbStoreProcessor,
+            FileDbStoreProcessor fileDbStoreProcessor, FulltextDbStoreProcessor fulltextDbStoreProcessor,
             ExtractableArchiveProcessor extractableArchiveProcessor, TransformationsProcessor transformationsProcessor,
             AudioBookArchiveProcessor audiobookArchiveProcessor,
             BasicProjectDataRelationalDbStoreProcessor basicProjectDataRelationalDbStoreProcessor)
@@ -33,7 +33,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
             m_metadataProcessor = metadataProcessor;
             m_relationalDbStoreProcessor = relationalDbStoreProcessor;
             m_fileDbStoreProcessor = fileDbStoreProcessor;
-            m_existDbStoreProcessor = existDbStoreProcessor;
+            m_fulltextDbStoreProcessor = fulltextDbStoreProcessor;
             m_extractableArchiveProcessor = extractableArchiveProcessor;
             m_transformationsProcessor = transformationsProcessor;
             m_audiobookArchiveProcessor = audiobookArchiveProcessor;
@@ -99,12 +99,12 @@ namespace ITJakub.FileProcessing.Core.Sessions
         {
             try
             {
-                m_existDbStoreProcessor.Process(resourceDirector);
+                m_fulltextDbStoreProcessor.Process(resourceDirector);
             }
             catch (Exception e)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.Error("Error storing data to eXist-db", e);
+                    m_log.Error("Error storing data to fulltext database", e);
                 throw;
             }
         }
