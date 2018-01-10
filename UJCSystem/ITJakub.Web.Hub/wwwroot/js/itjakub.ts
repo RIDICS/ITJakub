@@ -8,6 +8,7 @@
 /// <reference path="../../node_modules/@types/typeahead/index.d.ts" />
 /// <reference path="../../node_modules/@types/simplemde/index.d.ts" />
 /// <reference path="../../node_modules/@types/codemirror/index.d.ts" />
+/// <reference path="../lib/s-pagination/dist/pagination.d.ts" />
 
 // Disable Dropzone auto-initializing
 Dropzone.autoDiscover = false;
