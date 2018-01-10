@@ -147,14 +147,38 @@ namespace Vokabular.MainService.Core.Managers
             cardFilesContracts = cardFilesContracts.Where(x => allowedCardFileIds.Contains(x.Id)).ToList();
         }
 
-        public void AuthorizeBook(long bookId)
+        public void FilterProjectIdList(ref IList<long> projectIds)
         {
             var user = m_authenticationManager.GetCurrentUser(true);
-            var filtered = m_permissionRepository.GetFilteredBookIdListByUserPermissions(user.Id, new List<long> { bookId });
+
+            if (projectIds == null || projectIds.Count == 0)
+            {
+                return;
+            }
+
+            var filtered = m_permissionRepository.GetFilteredBookIdListByUserPermissions(user.Id, projectIds);
+            projectIds = filtered;
+        }
+
+        public void AuthorizeBook(long projectId)
+        {
+            var user = m_authenticationManager.GetCurrentUser(true);
+            var filtered = m_permissionRepository.InvokeUnitOfWork(x => x.GetFilteredBookIdListByUserPermissions(user.Id, new List<long> { projectId }));
 
             if (filtered == null || filtered.Count == 0)
             {
-                throw new UnauthorizedException($"User with username '{user.UserName}' does not have permission on book with id '{bookId}'");
+                throw new UnauthorizedException($"User with username '{user.UserName}' does not have permission on book with id '{projectId}'");
+            }
+        }
+
+        public void AuthorizeResource(long resourceId)
+        {
+            var user = m_authenticationManager.GetCurrentUser(true);
+            var filtered = m_permissionRepository.InvokeUnitOfWork(x => x.GetResourceByUserPermissions(user.Id, resourceId));
+
+            if (filtered == null)
+            {
+                throw new UnauthorizedException($"User with username '{user.UserName}' does not have permission on book with resource with id '{resourceId}'");
             }
         }
     }

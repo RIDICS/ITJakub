@@ -82,13 +82,13 @@ namespace Vokabular.MainService.Core.Managers
         public void AddBooksAndCategoriesToGroup(int groupId, IList<long> bookIds)
         {
             m_authorizationManager.CheckUserCanManagePermissions();
-            new AddBooksAndCategoriesToGroupWork(m_permissionRepository, groupId, bookIds).Execute();
+            new AddProjectsToUserGroupWork(m_permissionRepository, groupId, bookIds).Execute();
         }
 
         public void RemoveBooksAndCategoriesFromGroup(int groupId, IList<long> bookIds)
         {
             m_authorizationManager.CheckUserCanManagePermissions();
-            new RemoveBooksAndCategoriesFromGroupWork(m_permissionRepository, groupId, bookIds).Execute();
+            new RemoveProjectsFromUserGroupWork(m_permissionRepository, groupId, bookIds).Execute();
         }
     }
 

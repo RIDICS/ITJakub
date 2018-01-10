@@ -16,12 +16,16 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly MetadataRepository m_metadataRepository;
         private readonly AuthenticationManager m_authenticationManager;
+        private readonly AuthorizationManager m_authorizationManager;
         private readonly CategoryRepository m_categoryRepository;
 
-        public ProjectMetadataManager(MetadataRepository metadataRepository, AuthenticationManager authenticationManager, CategoryRepository categoryRepository)
+        public ProjectMetadataManager(MetadataRepository metadataRepository,
+            AuthenticationManager authenticationManager, AuthorizationManager authorizationManager,
+            CategoryRepository categoryRepository)
         {
             m_metadataRepository = metadataRepository;
             m_authenticationManager = authenticationManager;
+            m_authorizationManager = authorizationManager;
             m_categoryRepository = categoryRepository;
         }
 
@@ -92,13 +96,14 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<string> GetTitleAutocomplete(string query, BookTypeEnumContract? bookType, List<int> selectedCategoryIds, List<long> selectedProjectIds)
         {
+            var userId = m_authorizationManager.GetCurrentUserId();
             var bookTypeEnum = Mapper.Map<BookTypeEnum?>(bookType);
             var result = m_metadataRepository.InvokeUnitOfWork(x =>
             {
                 var allCategoryIds = selectedCategoryIds.Count > 0
                     ? m_categoryRepository.GetAllSubcategoryIds(selectedCategoryIds)
                     : selectedCategoryIds;
-                return x.GetTitleAutocomplete(query, bookTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteCount);
+                return x.GetTitleAutocomplete(query, bookTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteCount, userId);
             });
             return result.ToList();
         }

@@ -377,13 +377,16 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List<string>();
         }
 
-        public virtual IList<string> GetTitleAutocomplete(string queryString, BookTypeEnum? bookType, IList<int> selectedCategoryIds, IList<long> selectedProjectIds, int count)
+        public virtual IList<string> GetTitleAutocomplete(string queryString, BookTypeEnum? bookType, IList<int> selectedCategoryIds, IList<long> selectedProjectIds, int count, int userId)
         {
             queryString = EscapeQuery(queryString);
 
             Resource resourceAlias = null;
             Project projectAlias = null;
             Snapshot snapshotAlias = null;
+            Permission permissionAlias = null;
+            UserGroup userGroupAlias = null;
+            User userAlias = null;
             BookType bookTypeAlias = null;
             Category categoryAlias = null;
 
@@ -391,7 +394,10 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .JoinAlias(() => projectAlias.LatestPublishedSnapshot, () => snapshotAlias)
-                .Where(x => x.Id == resourceAlias.LatestVersion.Id)
+                .JoinAlias(() => projectAlias.Permissions, () => permissionAlias)
+                .JoinAlias(() => permissionAlias.UserGroup, () => userGroupAlias)
+                .JoinAlias(() => userGroupAlias.Users, () => userAlias)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && userAlias.Id == userId)
                 .AndRestrictionOn(x => x.Title).IsLike(queryString, MatchMode.Anywhere)
                 .Select(Projections.Distinct(Projections.Property<MetadataResource>(x => x.Title)))
                 .OrderBy(x => x.Title).Asc;

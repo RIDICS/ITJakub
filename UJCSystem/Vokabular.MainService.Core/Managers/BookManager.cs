@@ -49,7 +49,7 @@ namespace Vokabular.MainService.Core.Managers
             m_filterBookType = new[] {BookTypeEnum.CardFile};
         }
         
-        public List<BookWithCategoriesContract> GetBooksByType(BookTypeEnumContract bookType)
+        public List<BookWithCategoriesContract> GetBooksByTypeForUser(BookTypeEnumContract bookType)
         {
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
             var userId = m_authorizationManager.GetCurrentUserId();
@@ -60,7 +60,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<BookContract> GetAllBooksByType(BookTypeEnumContract bookType)
         {
-            //TODO add authorization
+            m_authorizationManager.CheckUserCanManagePermissions();
+            
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
             var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetAllMetadataByBookType(bookTypeEnum));
             var resultList = Mapper.Map<List<BookContract>>(dbMetadataList);
@@ -85,6 +86,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public BookContract GetBookInfo(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId);
+
             var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetLatestMetadataResource(projectId));
             var result = Mapper.Map<BookContract>(metadataResult);
             return result;
@@ -92,6 +95,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public SearchResultDetailContract GetBookDetail(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId);
+
             var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataWithDetail(projectId));
             var result = Mapper.Map<SearchResultDetailContract>(metadataResult);
             return result;
@@ -99,6 +104,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public AudioBookSearchResultContract GetAudioBookDetail(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId);
+
             var audioBookDetailWork = new GetAudioBookDetailWork(m_metadataRepository, m_bookRepository, projectId);
             var dbResult = audioBookDetailWork.Execute();
 
@@ -127,6 +134,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<PageContract> GetBookPageList(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId);
+
             var listResult = m_bookRepository.InvokeUnitOfWork(x => x.GetPageList(projectId));
             var result = Mapper.Map<List<PageContract>>(listResult);
             return result;
@@ -134,6 +143,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<ChapterHierarchyContract> GetBookChapterList(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId);
+
             var dbResult = m_bookRepository.InvokeUnitOfWork(x => x.GetChapterList(projectId));
             var resultList = ChaptersHelper.ChapterToHierarchyContracts(dbResult);
             
@@ -142,6 +153,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<TermContract> GetPageTermList(long resourcePageId)
         {
+            m_authorizationManager.AuthorizeResource(resourcePageId);
+
             var listResult = m_bookRepository.InvokeUnitOfWork(x => x.GetPageTermList(resourcePageId));
             var result = Mapper.Map<List<TermContract>>(listResult);
             return result;
@@ -149,6 +162,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public bool HasBookAnyText(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId);
+
             var bookTextCount =
                 m_bookRepository.InvokeUnitOfWork(x => x.GetPublishedResourceCount<TextResource>(projectId));
             return bookTextCount > 0;
@@ -156,6 +171,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public bool HasBookAnyImage(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId);
+
             var bookImageCount =
                 m_bookRepository.InvokeUnitOfWork(x => x.GetPublishedResourceCount<ImageResource>(projectId));
             return bookImageCount > 0;
@@ -163,18 +180,24 @@ namespace Vokabular.MainService.Core.Managers
 
         public bool HasBookPageText(long resourcePageId)
         {
+            m_authorizationManager.AuthorizeResource(resourcePageId);
+
             var textResourceList = m_bookRepository.InvokeUnitOfWork(x => x.GetPageText(resourcePageId));
             return textResourceList.Count > 0;
         }
 
         public bool HasBookPageImage(long resourcePageId)
         {
+            m_authorizationManager.AuthorizeResource(resourcePageId);
+
             var imageResourceList = m_bookRepository.InvokeUnitOfWork(x => x.GetPageImage(resourcePageId));
             return imageResourceList.Count > 0;
         }
 
         public string GetPageText(long resourcePageId, TextFormatEnumContract format, SearchPageRequestContract searchRequest = null)
         {
+            m_authorizationManager.AuthorizeResource(resourcePageId);
+
             var textResourceList = m_bookRepository.InvokeUnitOfWork(x => x.GetPageText(resourcePageId));
             var textResource = textResourceList.FirstOrDefault();
             if (textResource == null)
@@ -193,6 +216,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public FileResultData GetPageImage(long resourcePageId)
         {
+            m_authorizationManager.AuthorizeResource(resourcePageId);
+
             var imageResourceList = m_bookRepository.InvokeUnitOfWork(x => x.GetPageImage(resourcePageId));
             var imageResource = imageResourceList.FirstOrDefault();
             if (imageResource == null)
@@ -212,6 +237,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public FileResultData GetAudio(long audioId)
         {
+            m_authorizationManager.AuthorizeResource(audioId);
+
             var audioResource = m_bookRepository.InvokeUnitOfWork(x => x.GetPublishedResourceVersion<AudioResource>(audioId));
             if (audioResource == null)
             {
@@ -231,6 +258,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public string GetHeadwordText(long headwordId, TextFormatEnumContract format, SearchPageRequestContract request = null)
         {
+            m_authorizationManager.AuthorizeResource(headwordId);
+
             var headwordResource = m_bookRepository.InvokeUnitOfWork(x => x.GetHeadwordResource(headwordId, false));
             if (headwordResource == null)
             {
@@ -247,23 +276,26 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<string> GetHeadwordAutocomplete(string query, BookTypeEnumContract? bookType, IList<int> selectedCategoryIds, IList<long> selectedProjectIds)
         {
+            var userId = m_authorizationManager.GetCurrentUserId();
             var bookTypeEnum = Mapper.Map<BookTypeEnum?>(bookType);
             var result = m_bookRepository.InvokeUnitOfWork(x =>
             {
                 var allCategoryIds = selectedCategoryIds.Count > 0
                     ? m_categoryRepository.GetAllSubcategoryIds(selectedCategoryIds)
                     : selectedCategoryIds;
-                return x.GetHeadwordAutocomplete(query, bookTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteCount);
+                return x.GetHeadwordAutocomplete(query, bookTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteCount, userId);
             });
             return result.ToList();
         }
 
         public long SearchHeadwordRowNumber(HeadwordRowNumberSearchRequestContract request)
         {
+            var userId = m_authorizationManager.GetCurrentUserId();
+
             if (request.Category.BookType == null)
                 throw new ArgumentException("Null value of BookType is not supported");
 
-            var searchHeadwordRowNumberWork = new SearchHeadwordRowNumberWork(m_bookRepository, m_categoryRepository, request);
+            var searchHeadwordRowNumberWork = new SearchHeadwordRowNumberWork(m_bookRepository, m_categoryRepository, request, userId);
             var result = searchHeadwordRowNumberWork.Execute();
 
             return result;
@@ -271,6 +303,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<PageContract> SearchPage(long projectId, SearchPageRequestContract request)
         {
+            // TODO add restriction to current user (to the query)
+
             var termConditions = new List<SearchCriteriaContract>();
             var fulltextConditions = new List<SearchCriteriaContract>();
             foreach (var searchCriteriaContract in request.ConditionConjunction)
@@ -346,6 +380,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public string GetEditionNote(long projectId, TextFormatEnumContract format)
         {
+            m_authorizationManager.AuthorizeBook(projectId);
+
             var editionNoteResource = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestEditionNote(projectId));
             if (editionNoteResource == null)
                 return null;

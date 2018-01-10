@@ -4,13 +4,13 @@ using Vokabular.DataEntities.Database.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Permission
 {
-    public class RemoveBooksAndCategoriesFromGroupWork : UnitOfWorkBase
+    public class RemoveProjectsFromUserGroupWork : UnitOfWorkBase
     {
         private readonly PermissionRepository m_permissionRepository;
         private readonly int m_groupId;
         private readonly IList<long> m_bookIds;
 
-        public RemoveBooksAndCategoriesFromGroupWork(PermissionRepository permissionRepository, int groupId, IList<long> bookIds) : base(permissionRepository)
+        public RemoveProjectsFromUserGroupWork(PermissionRepository permissionRepository, int groupId, IList<long> bookIds) : base(permissionRepository)
         {
             m_permissionRepository = permissionRepository;
             m_groupId = groupId;
@@ -33,7 +33,7 @@ namespace Vokabular.MainService.Core.Works.Permission
             }
 
             var permissions = m_permissionRepository.FindPermissionsByGroupAndBooks(m_groupId, allBookIds);
-            m_permissionRepository.DeletePermissions(permissions);
+            m_permissionRepository.DeleteAll(permissions);
         }
     }
 }

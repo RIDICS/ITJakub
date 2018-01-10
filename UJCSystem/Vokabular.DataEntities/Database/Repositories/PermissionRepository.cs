@@ -153,6 +153,25 @@ namespace Vokabular.DataEntities.Database.Repositories
             return filteredBookIds;
         }
 
+        public virtual Resource GetResourceByUserPermissions(int userId, long resourceId)
+        {
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+            Permission permissionAlias = null;
+            UserGroup groupAlias = null;
+            User userAlias = null;
+
+            var filteredResource = GetSession().QueryOver(() => resourceAlias)
+                .JoinQueryOver(x => x.Project, () => projectAlias)
+                .JoinQueryOver(x => x.Permissions, () => permissionAlias)
+                .JoinQueryOver(x => x.UserGroup, () => groupAlias)
+                .JoinQueryOver(x => x.Users, () => userAlias)
+                .Where(() => userAlias.Id == userId && resourceAlias.Id == resourceId)
+                .SingleOrDefault();
+
+            return filteredResource;
+        }
+
         public virtual void CreateSpecialPermission(SpecialPermission permission)
         {
             GetSession().Save(permission);
@@ -173,15 +192,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             return permissions;
         }
-
-        public virtual void DeletePermissions(IList<Permission> permissionsList)
-        {
-            foreach (var permission in permissionsList)
-            {
-                GetSession().Delete(permission);
-            }
-        }
-
+        
         public virtual IList<SpecialPermission> GetSpecialPermissionsByUser(int userId)
         {
             SpecialPermission specPermissionAlias = null;

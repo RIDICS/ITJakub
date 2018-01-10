@@ -29,7 +29,7 @@ namespace Vokabular.MainService.Controllers
             if (bookType == null)
                 return NotFound();
 
-            var result = m_bookManager.GetBooksByType(bookType.Value);
+            var result = m_bookManager.GetBooksByTypeForUser(bookType.Value);
             return Ok(result);
         }
 

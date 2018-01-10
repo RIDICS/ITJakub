@@ -207,7 +207,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SingleOrDefault();
         }
 
-        public virtual IList<string> GetHeadwordAutocomplete(string queryString, BookTypeEnum? bookType, IList<int> selectedCategoryIds, IList<long> selectedProjectIds, int count)
+        public virtual IList<string> GetHeadwordAutocomplete(string queryString, BookTypeEnum? bookType, IList<int> selectedCategoryIds, IList<long> selectedProjectIds, int count, int userId)
         {
             queryString = EscapeQuery(queryString);
 
@@ -215,6 +215,9 @@ namespace Vokabular.DataEntities.Database.Repositories
             Resource resourceAlias = null;
             Project projectAlias = null;
             Snapshot snapshotAlias = null;
+            Permission permissionAlias = null;
+            UserGroup userGroupAlias = null;
+            User userAlias = null;
             BookType bookTypeAlias = null;
             Category categoryAlias = null;
 
@@ -223,7 +226,10 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => headwordResourceAlias.Resource, () => resourceAlias)
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .JoinAlias(() => projectAlias.LatestPublishedSnapshot, () => snapshotAlias)
-                .Where(() => headwordResourceAlias.Id == resourceAlias.LatestVersion.Id)
+                .JoinAlias(() => projectAlias.Permissions, () => permissionAlias)
+                .JoinAlias(() => permissionAlias.UserGroup, () => userGroupAlias)
+                .JoinAlias(() => userGroupAlias.Users, () => userAlias)
+                .Where(() => headwordResourceAlias.Id == resourceAlias.LatestVersion.Id && userAlias.Id == userId)
                 .AndRestrictionOn(x => x.Headword).IsLike(queryString, MatchMode.Start)
                 .Select(Projections.Distinct(Projections.Property<HeadwordItem>(x => x.Headword)))
                 .OrderBy(x => x.Headword).Asc;
@@ -344,23 +350,34 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        public virtual IList<long> GetProjectIds(IList<long> projectIds, IList<int> categoryIds, BookTypeEnum bookType)
+        public virtual IList<long> GetProjectIds(BookTypeEnum bookType, int userId, IList<long> projectIds, IList<int> categoryIds)
         {
             Project projectAlias = null;
             BookType bookTypeAlias = null;
             Category categoryAlias = null;
+            Permission permissionAlias = null;
+            UserGroup userGroupAlias = null;
+            User userAlias = null;
 
-            return GetSession().QueryOver<Snapshot>()
+            var query = GetSession().QueryOver<Snapshot>()
                 .JoinAlias(x => x.Project, () => projectAlias)
                 .JoinAlias(x => x.BookTypes, () => bookTypeAlias)
                 .JoinAlias(() => projectAlias.Categories, () => categoryAlias, JoinType.LeftOuterJoin)
-                .Where(Restrictions.Or(
+                .JoinAlias(() => projectAlias.Permissions, () => permissionAlias)
+                .JoinAlias(() => permissionAlias.UserGroup, () => userGroupAlias)
+                .JoinAlias(() => userGroupAlias.Users, () => userAlias)
+                .And(() => bookTypeAlias.Type == bookType && userAlias.Id == userId)
+                .Select(Projections.Distinct(Projections.Property(() => projectAlias.Id)));
+
+            if (projectIds != null && categoryIds != null)
+            {
+                query = query.Where(Restrictions.Or(
                     Restrictions.InG(Projections.Property(() => projectAlias.Id), projectIds),
                     Restrictions.InG(Projections.Property(() => categoryAlias.Id), categoryIds)
-                ))
-                .And(() => bookTypeAlias.Type == bookType)
-                .Select(Projections.Distinct(Projections.Property(() => projectAlias.Id)))
-                .List<long>();
+                ));
+            }
+
+            return query.List<long>();
         }
 
         public virtual IList<PageResource> GetPagesByTextVersionId(IList<long> textVersionIds)
