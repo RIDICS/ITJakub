@@ -61,16 +61,13 @@ class GoldenLayoutReader extends ReaderModule {
         //readerHeadDiv.appendChild(controls);
         //readerDiv.appendChild(readerHeadDiv);
         
-        var goldenDiv = document.createElement("div");
-        goldenDiv.id = "GoldenReaderDiv";
-        readerDiv.appendChild(goldenDiv);
         this.makeGoldenReader();
     }
 
     private makeGoldenReader() {
         var config = this.createConfig();
         //var bookText = this.getBookText();
-        this.readerLayout = new GoldenLayout(config, $('#GoldenReaderDiv'));
+        this.readerLayout = new GoldenLayout(config, $('#ReaderBodyDiv'));
         this.readerLayout.registerComponent('readerTab', function (container, state) {
             if (state.label === 'text') {
                 //$(container.getElement()).html(this.getBookText());
@@ -91,7 +88,7 @@ class GoldenLayoutReader extends ReaderModule {
     private createConfig() {
         var layoutConfig = {
             dimensions: {
-                headerHeight: 36
+                headerHeight: 26
             },
             content: [{
                 type: 'row',
@@ -156,7 +153,7 @@ function initGoldenReader(bookXmlId: string,
         ReaderPanelEnum.SearchPanel, ReaderPanelEnum.SettingsPanel
     ];
     var panelButtons = [PanelButtonEnum.Close, PanelButtonEnum.Pin, PanelButtonEnum.ToNewWindow];
-    var readerPlugin = new GoldenLayoutReader(<any>$("#ReaderDiv")[0],
+    var readerPlugin = new GoldenLayoutReader(<any>$("#ControlDiv")[0],
         readerPageChangedCallback,
         readerPanels,
         panelButtons,
