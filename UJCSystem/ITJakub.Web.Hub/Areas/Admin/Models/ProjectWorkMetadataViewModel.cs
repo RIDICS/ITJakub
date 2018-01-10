@@ -14,7 +14,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
         public string RelicAbbreviation { get; set; }
         public string SourceAbbreviation { get; set; }
 
-        public List<KeywordContract> AllKeywordsList { get; set; }
         public List<CategoryContract> AllCategoryList { get; set; }
         public List<LiteraryKindContract> AllLiteraryKindList { get; set; }
         public List<LiteraryGenreContract> AllLiteraryGenreList { get; set; }

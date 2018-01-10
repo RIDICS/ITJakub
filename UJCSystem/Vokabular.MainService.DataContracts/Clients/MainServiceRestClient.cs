@@ -957,11 +957,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
         
-        public List<KeywordContract> GetKeywordList()
+        public PagedResultList<KeywordContract> GetKeywordList(int? start, int? count)
         {
             try
             {
-                var result = Get<List<KeywordContract>>("keyword");
+                var result = GetPagedList<KeywordContract>($"keyword?start={start}&count={count}");
                 return result;
             }
             catch (HttpRequestException e)

@@ -413,6 +413,11 @@ interface IEditionNote { //TODO expand after server functionality is done
     content: string;
 }
 
+interface IKeywordPagedResult {
+    totalCount: number;
+    list: IKeywordContract[];
+}
+
 interface IResponsiblePersonPagedResult {
     totalCount: number;
     list: IResponsiblePerson[];

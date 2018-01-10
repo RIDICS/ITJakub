@@ -284,11 +284,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         #endregion
         #region Keyword
         [HttpGet]
-        public IActionResult GetKeywordList()
+        public IActionResult GetKeywordList(int start, int count)
         {
             using (var client = GetRestClient())
             {
-                var result = client.GetKeywordList();
+                var result = client.GetKeywordList(start, count);
                 return Json(result);
             }
         }
