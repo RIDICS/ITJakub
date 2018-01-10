@@ -363,7 +363,7 @@ gulp.task("bundlejs_areas",
 //Download yarn dependencies
 
 gulp.task("yarn-runtime", function () {
-    return gulp.src(["./wwwroot/package.json", , "./wwwroot/yarn.lock"])
+    return gulp.src(["./wwwroot/package.json", "./wwwroot/yarn.lock"])
         .pipe(yarn());
 });
 

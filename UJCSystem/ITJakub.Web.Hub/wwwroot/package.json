@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "name": "asp.net",
   "private": true,
-  "devDependencies": {
+  "dependencies": {
     "jquery": "3.2.1",
     "jquery-ui-dist": "1.12.1",
     "jquery-validation": "1.17.0",
