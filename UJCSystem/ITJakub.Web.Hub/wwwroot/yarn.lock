@@ -109,9 +109,9 @@ respond.js@1.4.2:
   version "1.4.2"
   resolved "https://registry.yarnpkg.com/respond.js/-/respond.js-1.4.2.tgz#fd5c07450acce6090916d8d090b86b672dd9748b"
 
-"s-pagination@https://github.com/Scalesoft/s-pagination.git#bf5428f1d0330f519c25660f7bed7153d80a2a30":
-  version "1.1.0"
-  resolved "https://github.com/Scalesoft/s-pagination.git#bf5428f1d0330f519c25660f7bed7153d80a2a30"
+s-pagination@1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/s-pagination/-/s-pagination-1.1.1.tgz#0e632418ed854c57801a1fe299ea61e9ae82e870"
 
 "simplemde-custom-markdown-mode@https://github.com/RIDICS/simplemde-markdown-editor.git#71b7a583e230b967116c99141291d94276ba1433":
   version "1.11.2"
