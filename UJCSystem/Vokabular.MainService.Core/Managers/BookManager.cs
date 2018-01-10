@@ -303,7 +303,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<PageContract> SearchPage(long projectId, SearchPageRequestContract request)
         {
-            // TODO add restriction to current user (to the query)
+            m_authorizationManager.AuthorizeBook(projectId);
 
             var termConditions = new List<SearchCriteriaContract>();
             var fulltextConditions = new List<SearchCriteriaContract>();
