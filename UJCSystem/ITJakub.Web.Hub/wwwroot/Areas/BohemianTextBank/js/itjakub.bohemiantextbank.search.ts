@@ -1,150 +1,226 @@
-﻿var actualPage: number;
+﻿function initSearch() {
+    const searchClass = new BohemianTextbankSearch();
+    searchClass.initSearch();
+}
 
-function initSearch() {
+class BohemianTextbankSearch {
+    private actualPage: number;
 
-    var resultsCountOnPage = 30;
-    var paginationMaxVisibleElements = 5;
+    private resultsCountOnPage = 30;
+    private paginationMaxVisibleElements = 5;
 
-    var defaultErrorMessage = "Vyhledávání se nezdařilo. Ujistěte se, zda máte zadáno alespoň jedno kritérium na vyhledávání v textu.";
+    private defaultErrorMessage =
+        "Vyhledávání se nezdařilo. Ujistěte se, zda máte zadáno alespoň jedno kritérium na vyhledávání v textu.";
 
-    const urlSearchKey = "search";
-    const urlPageKey = "page";
-    const urlSelectionKey = "selected";
-    const urlSortAscKey = "sortAsc";
-    const urlSortCriteriaKey = "sortCriteria";
-    const urlContextSizeKey = "contextSize";
+    private urlSearchKey = "search";
+    private urlPageKey = "page";
+    private urlSelectionKey = "selected";
+    private urlSortAscKey = "sortAsc";
+    private urlSortCriteriaKey = "sortCriteria";
+    private urlContextSizeKey = "contextSize";
 
-    var readyForInit = false;
-    var notInitialized = true;
+    private readyForInit = false;
+    private notInitialized = true;
 
-    var bookIdsInQuery = new Array();
-    var categoryIdsInQuery = new Array();
-    
-    var booksSelector: DropDownSelect2;
-    var sortBar: SortBar;
-    var paginator: Pagination;
+    private bookIdsInQuery = new Array();
+    private categoryIdsInQuery = new Array();
 
-    var initPage: number = null;
+    private booksSelector: DropDownSelect2;
+    private sortBar: SortBar;
+    private paginator: Pagination;
 
-    $("#wordCheckbox").change(() => {
-        var checkbox = $("#wordCheckbox");
-        var mainDiv = $("#corpus-search-div");
+    private initPage: number = null;
 
-        if ($(checkbox).is(":checked")) {
-            $(mainDiv).addClass("show-word");
-        } else {
-            $(mainDiv).removeClass("show-word");
-        }
-    });
+    private enabledOptions = new Array<SearchTypeEnum>();
 
-    $("#commentCheckbox").change(() => {
-        var checkbox = $("#commentCheckbox");
-        var mainDiv = $("#corpus-search-div");
+    private search: Search;
 
-        if ($(checkbox).is(":checked")) {
-            $(mainDiv).addClass("show-notes");
-        } else {
-            $(mainDiv).removeClass("show-notes");
-        }
-    });
+    initSearch() {
 
+        $("#wordCheckbox").change(() => {
+            var checkbox = $("#wordCheckbox");
+            var mainDiv = $("#corpus-search-div");
 
-    $("#languageCheckbox").change(() => {
-        var checkbox = $("#languageCheckbox");
-        var mainDiv = $("#corpus-search-div");
+            if (checkbox.is(":checked")) {
+                mainDiv.addClass("show-word");
+            } else {
+                mainDiv.removeClass("show-word");
+            }
+        });
 
-        if ($(checkbox).is(":checked")) {
-            $(mainDiv).addClass("show-language");
-        } else {
-            $(mainDiv).removeClass("show-language");
-        }
-    });
+        $("#commentCheckbox").change(() => {
+            var checkbox = $("#commentCheckbox");
+            var mainDiv = $("#corpus-search-div");
 
-
-    $("#structureCheckbox").change(() => {
-        var checkbox = $("#structureCheckbox");
-        var mainDiv = $("#corpus-search-div");
-
-        if ($(checkbox).is(":checked")) {
-            $(mainDiv).addClass("show-structure");
-        } else {
-            $(mainDiv).removeClass("show-structure");
-        }
-    });
+            if (checkbox.is(":checked")) {
+                mainDiv.addClass("show-notes");
+            } else {
+                mainDiv.removeClass("show-notes");
+            }
+        });
 
 
-    $("#paragraphCheckbox").change(() => {
-        var checkbox = $("#paragraphCheckbox");
-        var mainDiv = $("#corpus-search-div");
+        $("#languageCheckbox").change(() => {
+            var checkbox = $("#languageCheckbox");
+            var mainDiv = $("#corpus-search-div");
 
-        if ($(checkbox).is(":checked")) {
-            $(mainDiv).addClass("show-paragraph");
-        } else {
-            $(mainDiv).removeClass("show-paragraph");
-        }
-    });
+            if (checkbox.is(":checked")) {
+                mainDiv.addClass("show-language");
+            } else {
+                mainDiv.removeClass("show-language");
+            }
+        });
 
-    function initializeFromUrlParams() {
-        if (readyForInit && notInitialized) {
 
-            notInitialized = false;
+        $("#structureCheckbox").change(() => {
+            var checkbox = $("#structureCheckbox");
+            var mainDiv = $("#corpus-search-div");
 
-            var page = getQueryStringParameterByName(urlPageKey);
+            if (checkbox.is(":checked")) {
+                mainDiv.addClass("show-structure");
+            } else {
+                mainDiv.removeClass("show-structure");
+            }
+        });
 
-            if (page) {
-                initPage = parseInt(page);
+
+        $("#paragraphCheckbox").change(() => {
+            var checkbox = $("#paragraphCheckbox");
+            var mainDiv = $("#corpus-search-div");
+
+            if (checkbox.is(":checked")) {
+                mainDiv.addClass("show-paragraph");
+            } else {
+                mainDiv.removeClass("show-paragraph");
+            }
+        });
+
+        $("#resultsTableBody").click((event) => {
+            var clickedRow = $(event.target as Node as Element).parents("tr");
+
+            if (clickedRow.hasClass("notes")) {
+                return;
             }
 
-            var contextSize = getQueryStringParameterByName(urlContextSizeKey);
+            $("#resultsTableBody").find("tr").removeClass("clicked");
+            clickedRow.addClass("clicked");
+
+            this.printDetailInfo(clickedRow);
+        });
+
+        $("#contextPositionsSelect").change(() => {
+            this.searchForPageNumber(this.actualPage);
+        });
+
+        $("#corpus-search-results-table-div").scroll((event) => {
+            $("#corpus-search-results-abbrev-table-div").scrollTop($(event.target as Node as Element).scrollTop());
+        });
+
+        $("#corpus-search-results-abbrev-table-div").scroll((event) => {
+            $("#corpus-search-results-table-div").scrollTop($(event.target as Node as Element).scrollTop());
+        });
+
+        this.initializeFromUrlParams();
+
+        const sortBarContainer = "#listResultsHeader";
+
+        const sortBarContainerEl = $(sortBarContainer);
+        sortBarContainerEl.empty();
+        this.sortBar = new SortBar(this.sortOrderChanged);
+        const sortBarHtml = this.sortBar.makeSortBar(sortBarContainer);
+        sortBarContainerEl.append(sortBarHtml);
+
+        this.enabledOptions.push(SearchTypeEnum.Title);
+        this.enabledOptions.push(SearchTypeEnum.Author);
+        this.enabledOptions.push(SearchTypeEnum.Editor);
+        this.enabledOptions.push(SearchTypeEnum.Dating);
+        this.enabledOptions.push(SearchTypeEnum.Fulltext);
+        this.enabledOptions.push(SearchTypeEnum.Heading);
+        this.enabledOptions.push(SearchTypeEnum.Sentence);
+        this.enabledOptions.push(SearchTypeEnum.Term);
+        this.enabledOptions.push(SearchTypeEnum.TokenDistance);
+
+        const favoritesQueriesConfig: IModulInicializatorConfigurationSearchFavorites = {
+            bookType: BookTypeEnum.TextBank,
+            queryType: QueryTypeEnum.Search
+        };
+        this.search = new Search($("#listSearchDiv")[0] as Node as HTMLDivElement,
+            this.corpusAdvancedSearchCount.bind(this),
+            this.corpusBasicSearchCount.bind(this),
+            favoritesQueriesConfig);
+        this.search.limitFullTextSearchToOne();
+        this.search.makeSearch(this.enabledOptions);
+
+        const callbackDelegate = new DropDownSelectCallbackDelegate();
+        callbackDelegate.selectedChangedCallback = (state: State) => {
+
+        };
+        callbackDelegate.dataLoadedCallback = () => {
+            this.initializeFromUrlParams();
+        };
+
+        this.booksSelector = new DropDownSelect2("#dropdownSelectDiv",
+            getBaseUrl() + "BohemianTextBank/BohemianTextBank/GetCorpusWithCategories",
+            BookTypeEnum.TextBank,
+            true,
+            callbackDelegate);
+        this.booksSelector.makeDropdown();
+    }
+
+    private initializeFromUrlParams() {
+        if (this.readyForInit && this.notInitialized) {
+
+            this.notInitialized = false;
+
+            const page = getQueryStringParameterByName(this.urlPageKey);
+
+            if (page) {
+                this.initPage = parseInt(page);
+            }
+
+            const contextSize = getQueryStringParameterByName(this.urlContextSizeKey);
             if (contextSize) {
                 $("#contextPositionsSelect").val(contextSize);
             }
 
-            var sortedAsc = getQueryStringParameterByName(urlSortAscKey);
-            var sortCriteria = getQueryStringParameterByName(urlSortCriteriaKey);
+            const sortedAsc = getQueryStringParameterByName(this.urlSortAscKey);
+            const sortCriteria = getQueryStringParameterByName(this.urlSortCriteriaKey);
 
             if (sortedAsc && sortCriteria) {
-                sortBar.setSortedAsc(sortedAsc === "true");
-                sortBar.setSortCriteria(<SortEnum>(<any>(sortCriteria)));
+                this.sortBar.setSortedAsc(sortedAsc === "true");
+                this.sortBar.setSortCriteria(((sortCriteria) as any) as SortEnum);
             }
 
-            var selected = getQueryStringParameterByName(urlSelectionKey);
+            const selected = getQueryStringParameterByName(this.urlSelectionKey);
 
-            var searched = getQueryStringParameterByName(urlSearchKey);
-            search.writeTextToTextField(searched);
+            const searched = getQueryStringParameterByName(this.urlSearchKey);
+            this.search.writeTextToTextField(searched);
 
             if (selected) {
-                booksSelector.restoreFromSerializedState(selected);
+                this.booksSelector.restoreFromSerializedState(selected);
             }
 
-        } else if (!notInitialized) {
-            search.processSearch();
+        } else if (!this.notInitialized) {
+            this.search.processSearch();
         } else {
-            readyForInit = true;
+            this.readyForInit = true;
         }
 
     }
 
-    function actualizeSelectedBooksAndCategoriesInQuery() {
-        var selectedIds = booksSelector.getSelectedIds();
-        bookIdsInQuery = selectedIds.selectedBookIds;
-        categoryIdsInQuery = selectedIds.selectedCategoryIds;
+    private actualizeSelectedBooksAndCategoriesInQuery() {
+        const selectedIds = this.booksSelector.getSelectedIds();
+        this.bookIdsInQuery = selectedIds.selectedBookIds;
+        this.categoryIdsInQuery = selectedIds.selectedCategoryIds;
     }
 
-    function sortOrderChanged() {
+    private sortOrderChanged() {
         if (paginator) {
-            paginator.goToPage(1);    
+            paginator.goToPage(1);
         }
     }
 
-    var sortBarContainer = "#listResultsHeader";
-
-    $(sortBarContainer).empty();
-    sortBar = new SortBar(sortOrderChanged);
-    var sortBarHtml = sortBar.makeSortBar(sortBarContainer);
-    $(sortBarContainer).append(sortBarHtml);
-
-    function showLoading() {
+    private showLoading() {
         $("#result-table").hide();
         $("#result-abbrev-table").hide();
         $("#corpus-search-results-table-div-loader").empty();
@@ -153,26 +229,26 @@ function initSearch() {
     }
 
 
-    function hideLoading() {
+    private hideLoading() {
         $("#corpus-search-results-table-div-loader").removeClass("loader");
         $("#corpus-search-results-table-div-loader").hide();
         $("#result-abbrev-table").show();
         $("#result-table").show();
     }
 
-    function printErrorMessage(message: string) {
-        hideLoading();
-        var corpusErrorDiv = $("#corpus-search-results-table-div-loader");
-        $(corpusErrorDiv).empty();
-        $(corpusErrorDiv).html(message);
-        $(corpusErrorDiv).show();
+    private printErrorMessage(message: string) {
+        this.hideLoading();
+        const corpusErrorDiv = $("#corpus-search-results-table-div-loader");
+        corpusErrorDiv.empty();
+        corpusErrorDiv.html(message);
+        corpusErrorDiv.show();
     }
 
-    function fillResultsIntoTable(results: Array<ICorpusSearchResult>) {
-        var tableBody = document.getElementById("resultsTableBody");
-        var abbrevTableBody = document.getElementById("resultsAbbrevTableBody");
-        $(tableBody).empty();
-        $(abbrevTableBody).empty();
+    private fillResultsIntoTable(results: Array<ICorpusSearchResult>) {
+        var tableBody = $("#resultsTableBody");
+        const abbrevTableBody = $("#resultsAbbrevTableBody");
+        tableBody.empty();
+        abbrevTableBody.empty();
         for (var i = 0; i < results.length; i++) {
             var result = results[i];
             var pageContext = result.pageResultContext;
@@ -184,48 +260,48 @@ function initSearch() {
             var acronym = result.sourceAbbreviation;
             var notes = result.notes;
 
-            var tr = document.createElement("tr");
-            $(tr).addClass("search-result");
-            $(tr).data("bookId", bookId);
-            $(tr).data("author", result.author);
-            $(tr).data("title", result.title);
-            $(tr).data("dating", result.originDate);
-            $(tr).data("pageId", pageId);
-            $(tr).data("pageName", pageContext.name);
-            $(tr).data("acronym", acronym);
+            var tr = $("<tr></tr>");
+            tr.addClass("search-result");
+            tr.data("bookId", bookId);
+            tr.data("author", result.author);
+            tr.data("title", result.title);
+            tr.data("dating", result.originDate);
+            tr.data("pageId", pageId);
+            tr.data("pageName", pageContext.name);
+            tr.data("acronym", acronym);
 
 
             if (verseContext !== null && typeof verseContext !== "undefined") {
-                $(tr).data("verseXmlId", verseContext.verseXmlId);
-                $(tr).data("verseName", verseContext.verseName);
+                tr.data("verseXmlId", verseContext.verseXmlId);
+                tr.data("verseName", verseContext.verseName);
             }
 
             if (bibleVerseContext !== null && typeof bibleVerseContext !== "undefined") {
-                $(tr).data("bibleBook", bibleVerseContext.bibleBook);
-                $(tr).data("bibleChapter", bibleVerseContext.bibleChapter);
-                $(tr).data("bibleVerse", bibleVerseContext.bibleVerse);
+                tr.data("bibleBook", bibleVerseContext.bibleBook);
+                tr.data("bibleChapter", bibleVerseContext.bibleChapter);
+                tr.data("bibleVerse", bibleVerseContext.bibleVerse);
             }
 
             var tdBefore = document.createElement("td");
             tdBefore.innerHTML = contextStructure.before;
 
-            var tdMatch = document.createElement("td");
-            $(tdMatch).addClass("match");
-            tdMatch.innerHTML = contextStructure.match;
+            var tdMatch = $("<td></td>");
+            tdMatch.addClass("match");
+            tdMatch.html(contextStructure.match);
 
             var tdAfter = document.createElement("td");
             tdAfter.innerHTML = contextStructure.after;
 
-            tr.appendChild(tdBefore);
-            tr.appendChild(tdMatch);
-            tr.appendChild(tdAfter);
+            tr.append(tdBefore);
+            tr.append(tdMatch);
+            tr.append(tdAfter);
 
-            tableBody.appendChild(tr);
+            tableBody.append(tr);
 
             if (notes !== null && typeof notes !== "undefined") {
 
-                var notesTr = document.createElement("tr");
-                $(notesTr).addClass("notes");
+                var notesTr = $("<tr></tr>");
+                notesTr.addClass("notes");
 
                 var tdNotes = document.createElement("td");
                 tdNotes.colSpan = 2;
@@ -239,7 +315,7 @@ function initSearch() {
                 }
 
 
-                notesTr.appendChild(tdNotes);
+                notesTr.append(tdNotes);
 
                 var beforeNotesTr = document.createElement("tr");
                 $(beforeNotesTr).addClass("notes spacer");
@@ -247,9 +323,9 @@ function initSearch() {
                 var afterNotesTr = document.createElement("tr");
                 $(afterNotesTr).addClass("notes spacer");
 
-                tableBody.appendChild(beforeNotesTr);
-                tableBody.appendChild(notesTr);
-                tableBody.appendChild(afterNotesTr);
+                tableBody.append(beforeNotesTr);
+                tableBody.append(notesTr);
+                tableBody.append(afterNotesTr);
 
             }
 
@@ -261,32 +337,39 @@ function initSearch() {
             var abbrevTd = document.createElement("td");
 
             var abbrevHref = document.createElement("a");
-            abbrevHref.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId + "&searchText=" + search.getLastQuery() + "&page=" + pageId;
+            abbrevHref.href =
+                getBaseUrl() +
+                "Editions/Editions/Listing?bookId=" +
+                bookId +
+                "&searchText=" +
+                this.search.getLastQuery() +
+                "&page=" +
+                pageId;
             abbrevHref.innerHTML = acronym;
 
             abbrevTd.appendChild(abbrevHref);
 
             abbrevTr.appendChild(abbrevTd);
-            abbrevTableBody.appendChild(abbrevTr);
+            abbrevTableBody.append(abbrevTr);
 
             if (notes !== null && typeof notes !== "undefined") {
 
-                var abbRevNotesTr = document.createElement("tr");
-                $(abbRevNotesTr).addClass("notes");
+                var abbRevNotesTr = $("<tr></tr>");
+                abbRevNotesTr.addClass("notes");
 
-                var abbrevTdNotes = document.createElement("td");
+                var abbrevTdNotes = $("<td></td>");
 
-                abbRevNotesTr.appendChild(abbrevTdNotes);
+                abbRevNotesTr.append(abbrevTdNotes);
 
-                var beforeAbbrevNotesTr = document.createElement("tr");
-                $(beforeAbbrevNotesTr).addClass("notes spacer");
+                var beforeAbbrevNotesTr = $("<tr></tr>");
+                beforeAbbrevNotesTr.addClass("notes spacer");
 
-                var afterAbbrevNotesTr = document.createElement("tr");
-                $(afterAbbrevNotesTr).addClass("notes spacer");
+                var afterAbbrevNotesTr = $("<tr></tr>");
+                afterAbbrevNotesTr.addClass("notes spacer");
 
-                abbrevTableBody.appendChild(beforeAbbrevNotesTr);
-                abbrevTableBody.appendChild(abbRevNotesTr);
-                abbrevTableBody.appendChild(afterAbbrevNotesTr);
+                abbrevTableBody.append(beforeAbbrevNotesTr);
+                abbrevTableBody.append(abbRevNotesTr);
+                abbrevTableBody.append(afterAbbrevNotesTr);
 
             }
         }
@@ -295,29 +378,29 @@ function initSearch() {
         //scroll from left to center match column in table
         var firstChildTdWidth = $(tableBody).children("tr").first().children("td").first().width();
         var tableContainer = $(tableBody).parents("#corpus-search-results-table-div");
-        var tableContainerWidth = $(tableContainer).width();
+        var tableContainerWidth = tableContainer.width();
         var scrollOffset = firstChildTdWidth - tableContainerWidth / 2;
-        $(tableContainer).scrollLeft(scrollOffset);
+        tableContainer.scrollLeft(scrollOffset);
     }
 
-    function corpusAdvancedSearchPaged(json: string, pageNumber: number, contextLength: number) {
+    private corpusAdvancedSearchPaged(json: string, pageNumber: number, contextLength: number) {
 
         if (typeof json === "undefined" || json === null || json === "") return;
-        const start = (pageNumber - 1) * resultsCountOnPage;
-        var sortingEnum = sortBar.getSortCriteria();
-        var sortAsc = sortBar.isSortedAsc();
+        const start = (pageNumber - 1) * this.resultsCountOnPage;
+        const sortingEnum = this.sortBar.getSortCriteria();
+        const sortAsc = this.sortBar.isSortedAsc();
 
-        showLoading();
+        this.showLoading();
 
         const payload: JQuery.PlainObject = {
             json: json,
             start: start,
-            count: resultsCountOnPage,
+            count: this.resultsCountOnPage,
             contextLength: contextLength,
             sortingEnum: sortingEnum,
             sortAsc: sortAsc,
-            selectedBookIds: bookIdsInQuery,
-            selectedCategoryIds: categoryIdsInQuery
+            selectedBookIds: this.bookIdsInQuery,
+            selectedCategoryIds: this.categoryIdsInQuery
         };
         $.ajax({
             type: "GET",
@@ -327,38 +410,39 @@ function initSearch() {
             dataType: "json",
             contentType: "application/json",
             success: response => {
-                hideLoading();
-                fillResultsIntoTable(response["results"]);
-                updateQueryStringParameter(urlSearchKey, json);
-                updateQueryStringParameter(urlPageKey, pageNumber);
-                updateQueryStringParameter(urlSortAscKey, sortBar.isSortedAsc());
-                updateQueryStringParameter(urlSortCriteriaKey, sortBar.getSortCriteria());
-                updateQueryStringParameter(urlContextSizeKey, contextLength);
-            },error: response => {
-                printErrorMessage(defaultErrorMessage);
+                this.hideLoading();
+                this.fillResultsIntoTable(response["results"]);
+                updateQueryStringParameter(this.urlSearchKey, json);
+                updateQueryStringParameter(this.urlPageKey, pageNumber);
+                updateQueryStringParameter(this.urlSortAscKey, this.sortBar.isSortedAsc());
+                updateQueryStringParameter(this.urlSortCriteriaKey, this.sortBar.getSortCriteria());
+                updateQueryStringParameter(this.urlContextSizeKey, contextLength);
+            },
+            error: response => {
+                this.printErrorMessage(this.defaultErrorMessage);
             }
         });
     }
 
-    function corpusBasicSearchPaged(text: string, pageNumber: number, contextLength: number) {
-
+    private corpusBasicSearchPaged(text: string, pageNumber: number, contextLength: number) {
         if (typeof text === "undefined" || text === null || text === "") return;
-        const start = (pageNumber - 1) * resultsCountOnPage;
-        var sortingEnum = sortBar.getSortCriteria();
-        var sortAsc = sortBar.isSortedAsc();
+        const start = (pageNumber - 1) * this.resultsCountOnPage;
+        const sortingEnum = this.sortBar.getSortCriteria();
+        const sortAsc = this.sortBar.isSortedAsc();
 
-        showLoading();
+        this.showLoading();
 
         const payload: JQuery.PlainObject = {
             text: text,
             start: start,
-            count: resultsCountOnPage,
+            count: this.resultsCountOnPage,
             contextLength: contextLength,
             sortingEnum: sortingEnum,
             sortAsc: sortAsc,
-            selectedBookIds: bookIdsInQuery,
-            selectedCategoryIds: categoryIdsInQuery
+            selectedBookIds: this.bookIdsInQuery,
+            selectedCategoryIds: this.categoryIdsInQuery
         };
+
         $.ajax({
             type: "GET",
             traditional: true,
@@ -367,62 +451,63 @@ function initSearch() {
             dataType: "json",
             contentType: "application/json",
             success: response => {
-                hideLoading();
-                fillResultsIntoTable(response["results"]);
-                updateQueryStringParameter(urlSearchKey, text);
-                updateQueryStringParameter(urlPageKey, pageNumber);
-                updateQueryStringParameter(urlSortAscKey, sortBar.isSortedAsc());
-                updateQueryStringParameter(urlSortCriteriaKey, sortBar.getSortCriteria());
-                updateQueryStringParameter(urlContextSizeKey, contextLength);
-            }, error: response => {
-                printErrorMessage(defaultErrorMessage);
+                this.hideLoading();
+                this.fillResultsIntoTable(response["results"]);
+                updateQueryStringParameter(this.urlSearchKey, text);
+                updateQueryStringParameter(this.urlPageKey, pageNumber);
+                updateQueryStringParameter(this.urlSortAscKey, this.sortBar.isSortedAsc());
+                updateQueryStringParameter(this.urlSortCriteriaKey, this.sortBar.getSortCriteria());
+                updateQueryStringParameter(this.urlContextSizeKey, contextLength);
+            },
+            error: response => {
+                this.printErrorMessage(this.defaultErrorMessage);
             }
         });
     }
 
-    function searchForPageNumber(pageNumber: number) {
-        actualPage = pageNumber;
-        var contextLength = parseInt($("#contextPositionsSelect").val() as string);
-        if (search.isLastQueryJson()) {
-            corpusAdvancedSearchPaged(search.getLastQuery(), pageNumber, contextLength);
+    private searchForPageNumber(pageNumber: number) {
+        this.actualPage = pageNumber;
+        const contextLength = parseInt($("#contextPositionsSelect").val() as string);
+        if (this.search.isLastQueryJson()) {
+            this.corpusAdvancedSearchPaged(this.search.getLastQuery(), pageNumber, contextLength);
         } else {
-            corpusBasicSearchPaged(search.getLastQuery(), pageNumber, contextLength);
+            this.corpusBasicSearchPaged(this.search.getLastQuery(), pageNumber, contextLength);
         }
     }
 
-    function createPagination(resultsCount: number) {
-        var paginatorContainer = document.getElementById("paginationContainer");
-        paginator = new Pagination({
-            container: <HTMLDivElement>paginatorContainer,
-            maxVisibleElements: paginationMaxVisibleElements,
-            pageClickCallback: searchForPageNumber,
+    private createPagination(resultsCount: number) {
+        const paginatorContainer = document.getElementById("paginationContainer");
+        this.paginator = new Pagination({
+            container: paginatorContainer as HTMLDivElement,
+            maxVisibleElements: this.paginationMaxVisibleElements,
+            pageClickCallback: this.searchForPageNumber.bind(this),
             callPageClickCallbackOnInit: true
         });
 
-        var pages = Math.ceil(resultsCount / resultsCountOnPage);
-
-        if (initPage && initPage <= pages) {
-            paginator.make(resultsCount, resultsCountOnPage, initPage);
+        const pages = Math.ceil(resultsCount / this.resultsCountOnPage);
+        if (this.initPage && this.initPage <= pages) {
+            this.paginator.make(resultsCount, this.resultsCountOnPage, this.initPage);
         } else {
-            paginator.make(resultsCount, resultsCountOnPage);
+            this.paginator.make(resultsCount, this.resultsCountOnPage);
         }
 
         const totalResultsDiv = document.getElementById("totalResultCountDiv");
         totalResultsDiv.innerHTML = resultsCount.toString();
     }
 
-    function corpusBasicSearchCount(text: string) {
+    private corpusBasicSearchCount(text: string) {
 
         if (typeof text === "undefined" || text === null || text === "") return;
-        actualizeSelectedBooksAndCategoriesInQuery();
+        this.actualizeSelectedBooksAndCategoriesInQuery();
 
-        showLoading();
+        this.showLoading();
 
         const payload: JQuery.PlainObject = {
             text: text,
-            selectedBookIds: bookIdsInQuery,
-            selectedCategoryIds: categoryIdsInQuery
+            selectedBookIds: this.bookIdsInQuery,
+            selectedCategoryIds: this.categoryIdsInQuery
         };
+
         $.ajax({
             type: "GET",
             traditional: true,
@@ -432,25 +517,26 @@ function initSearch() {
             contentType: "application/json",
             success: response => {
                 var count = response["count"];
-                createPagination(count);
-                updateQueryStringParameter(urlSearchKey, text);
-                updateQueryStringParameter(urlSelectionKey, booksSelector.getSerializedState());
-                updateQueryStringParameter(urlSortAscKey, sortBar.isSortedAsc());
-                updateQueryStringParameter(urlSortCriteriaKey, sortBar.getSortCriteria());
-            }, error: response => {
-                printErrorMessage(defaultErrorMessage);
+                this.createPagination(count);
+                updateQueryStringParameter(this.urlSearchKey, text);
+                updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
+                updateQueryStringParameter(this.urlSortAscKey, this.sortBar.isSortedAsc());
+                updateQueryStringParameter(this.urlSortCriteriaKey, this.sortBar.getSortCriteria());
+            },
+            error: response => {
+                this.printErrorMessage(this.defaultErrorMessage);
             }
         });
     }
 
-    function corpusAdvancedSearchCount(json: string) {
+    private corpusAdvancedSearchCount(json: string) {
 
         if (typeof json === "undefined" || json === null || json === "") return;
-        actualizeSelectedBooksAndCategoriesInQuery();
-        showLoading();
+        this.actualizeSelectedBooksAndCategoriesInQuery();
+        this.showLoading();
 
         const payload: JQuery.PlainObject =
-            { json: json, selectedBookIds: bookIdsInQuery, selectedCategoryIds: categoryIdsInQuery };
+            { json: json, selectedBookIds: this.bookIdsInQuery, selectedCategoryIds: this.categoryIdsInQuery };
         $.ajax({
             type: "GET",
             traditional: true,
@@ -460,51 +546,20 @@ function initSearch() {
             contentType: "application/json",
             success: response => {
                 var count = response["count"];
-                createPagination(count);
-                updateQueryStringParameter(urlSearchKey, json);
-                updateQueryStringParameter(urlSelectionKey, booksSelector.getSerializedState());
-                updateQueryStringParameter(urlSortAscKey, sortBar.isSortedAsc());
-                updateQueryStringParameter(urlSortCriteriaKey, sortBar.getSortCriteria());
-            }, error: response => {
-                printErrorMessage(defaultErrorMessage);
+                this.createPagination(count);
+                updateQueryStringParameter(this.urlSearchKey, json);
+                updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
+                updateQueryStringParameter(this.urlSortAscKey, this.sortBar.isSortedAsc());
+                updateQueryStringParameter(this.urlSortCriteriaKey, this.sortBar.getSortCriteria());
+            },
+            error: response => {
+                this.printErrorMessage(this.defaultErrorMessage);
             }
         });
     }
 
-    const enabledOptions = new Array<SearchTypeEnum>();
-    enabledOptions.push(SearchTypeEnum.Title);
-    enabledOptions.push(SearchTypeEnum.Author);
-    enabledOptions.push(SearchTypeEnum.Editor);
-    enabledOptions.push(SearchTypeEnum.Dating);
-    enabledOptions.push(SearchTypeEnum.Fulltext);
-    enabledOptions.push(SearchTypeEnum.Heading);
-    enabledOptions.push(SearchTypeEnum.Sentence);
-    enabledOptions.push(SearchTypeEnum.Term);
-    enabledOptions.push(SearchTypeEnum.TokenDistance);
-
-    var favoritesQueriesConfig: IModulInicializatorConfigurationSearchFavorites = {
-        bookType: BookTypeEnum.TextBank,
-        queryType: QueryTypeEnum.Search
-    }
-    var search = new Search($("#listSearchDiv")[0] as Node as HTMLDivElement, corpusAdvancedSearchCount, corpusBasicSearchCount, favoritesQueriesConfig);
-    search.limitFullTextSearchToOne();
-    search.makeSearch(enabledOptions);
-    
-    const callbackDelegate = new DropDownSelectCallbackDelegate();
-    callbackDelegate.selectedChangedCallback = (state: State) => {
-        
-    };
-    callbackDelegate.dataLoadedCallback = () => {
-        initializeFromUrlParams();
-    };
-
-    booksSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "BohemianTextBank/BohemianTextBank/GetCorpusWithCategories", BookTypeEnum.TextBank, true, callbackDelegate);
-    booksSelector.makeDropdown();
-
-    function printDetailInfo(tableRow: HTMLElement) {
+    private printDetailInfo(tableRowEl: JQuery) {
         const undefinedReplaceString = "<Nezadáno>";
-
-        const tableRowEl = $(tableRow);
 
         $("#detail-author").text(tableRowEl.data("author") ? tableRowEl.data("author") : undefinedReplaceString);
         $("#detail-title").text(tableRowEl.data("title") ? tableRowEl.data("title") : undefinedReplaceString);
@@ -513,45 +568,23 @@ function initSearch() {
         $("#detail-abbrev").text(tableRowEl.data("acronym") ? tableRowEl.data("acronym") : undefinedReplaceString);
 
         //Edition note
-        var editionNoteAnchor = $("#detail-edition-note-href");
+        const editionNoteAnchor = $("#detail-edition-note-href");
         editionNoteAnchor.prop("href", `/EditionNote/EditionNote?bookId=${tableRowEl.data("bookId")}`);
 
-        var folioHref = $("<a></a>");
-        folioHref.prop("href", `${getBaseUrl()}Editions/Editions/Listing?bookId=${tableRowEl.data("bookId")}&searchText=${search.getLastQuery()}&page=${tableRowEl.data("pageId")}`);
+        const folioHref = $("<a></a>");
+        folioHref.prop("href",
+            `${getBaseUrl()}Editions/Editions/Listing?bookId=${tableRowEl.data("bookId")}&searchText=${
+            this.search.getLastQuery()}&page=${tableRowEl.data("pageId")}`);
         folioHref.text(tableRowEl.data("pageName") ? tableRowEl.data("pageName") : undefinedReplaceString);
 
         $("#detail-folio").empty().append(folioHref);
 
         $("#detail-vers").text(tableRowEl.data("verseName") ? tableRowEl.data("verseName") : undefinedReplaceString);
-        $("#detail-bible-vers-book").text(tableRowEl.data("bibleBook") ? tableRowEl.data("bibleBook") : undefinedReplaceString);
-        $("#detail-bible-vers-chapter").text(tableRowEl.data("bibleChapter") ? tableRowEl.data("bibleChapter") : undefinedReplaceString);
-        $("#detail-bible-vers-vers").text(tableRowEl.data("bibleVerse") ? tableRowEl.data("bibleVerse") : undefinedReplaceString);
+        $("#detail-bible-vers-book")
+            .text(tableRowEl.data("bibleBook") ? tableRowEl.data("bibleBook") : undefinedReplaceString);
+        $("#detail-bible-vers-chapter")
+            .text(tableRowEl.data("bibleChapter") ? tableRowEl.data("bibleChapter") : undefinedReplaceString);
+        $("#detail-bible-vers-vers")
+            .text(tableRowEl.data("bibleVerse") ? tableRowEl.data("bibleVerse") : undefinedReplaceString);
     }
-
-    $("#resultsTableBody").click((event) => {
-        var clickedRow = $(event.target as Node as Element).parents("tr");
-
-        if ($(clickedRow).hasClass("notes")) {
-            return;
-        }
-
-        $("#resultsTableBody").find("tr").removeClass("clicked");
-        $(clickedRow).addClass("clicked");
-
-        printDetailInfo(clickedRow[0] as Node as HTMLElement);
-    });
-
-    $("#contextPositionsSelect").change(() => {
-        searchForPageNumber(actualPage);
-    });
-
-    $("#corpus-search-results-table-div").scroll((event) => {
-        $("#corpus-search-results-abbrev-table-div").scrollTop($(event.target as Node as Element).scrollTop());
-    });
-
-    $("#corpus-search-results-abbrev-table-div").scroll((event) => {
-        $("#corpus-search-results-table-div").scrollTop($(event.target as Node as Element).scrollTop());
-    });
-
-    initializeFromUrlParams();
 }
