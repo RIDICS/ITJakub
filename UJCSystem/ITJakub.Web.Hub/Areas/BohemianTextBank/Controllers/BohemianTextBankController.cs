@@ -49,6 +49,11 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             return View();
         }
 
+        public ActionResult Searchnew()
+        {
+            return View();
+        }
+
         public ActionResult List()
         {
             return View();
@@ -144,6 +149,31 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                     ConditionConjunction = listSearchCriteriaContracts
                 });
                 return Json(new {count});
+            }
+        }
+
+        [HttpGet]
+        public ActionResult GetHitBookIds(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            using (var client = GetRestClient())
+            {
+                var random = new Random();//TODO mock, replace with actual logic
+                var ids = new List<long>();
+                for (var i = 0; i<random.Next(1,10); i++) {
+                    ids.Add(random.Next(200, 2000));
+                }
+
+                return Json(ids);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult GetBookHitResultsByPage(string text, long bookId, int start, int count, int contextLength)
+        {
+            using (var client = GetRestClient())
+            {
+                var hits = new List<CorpusSearchResultContract>();//TODO mock, replace with actual logic
+                return Json(hits);
             }
         }
 

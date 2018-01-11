@@ -32,6 +32,7 @@
     <Content Remove="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.generator.ts" />
     <Content Remove="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.list-structure.ts" />
     <Content Remove="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.util.ts" />
+    <Content Remove="wwwroot\Areas\BohemianTextBank\js\ridics.bohemiantextbank.newsearch.ts" />
     <Content Remove="wwwroot\js\typings-custom\bootbox_.d.ts" />
     <Content Remove="wwwroot\js\typings-custom\jquery-xhr-deferred_.d.ts" />
     <Content Remove="wwwroot\js\typings-custom\lazysizes_.d.ts" />
@@ -117,6 +118,7 @@
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.list-structure.ts" />
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.main.ts" />
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\editors-common-base\ridics.project.editors.util.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\BohemianTextBank\js\ridics.bohemiantextbank.newsearch.ts" />
     <TypeScriptCompile Include="wwwroot\js\typings-custom\bootbox_.d.ts" />
     <TypeScriptCompile Include="wwwroot\js\typings-custom\jq-simple-connect_.d.ts" />
     <TypeScriptCompile Include="wwwroot\js\typings-custom\jquery-xhr-deferred_.d.ts" />
