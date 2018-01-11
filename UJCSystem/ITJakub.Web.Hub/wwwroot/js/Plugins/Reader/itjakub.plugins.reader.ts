@@ -789,6 +789,16 @@
         return textPanel;
     }
 
+    protected appendContentPanel(bodyContainerDiv: HTMLDivElement): ContentPanel {
+        var contentPanel: ContentPanel = new ContentPanel(this.contentPanelIdentificator, this, this.showMainPanelsButtonList);
+        this.leftSidePanels.push(contentPanel);
+        this.contentPanel = contentPanel;
+
+        bodyContainerDiv.appendChild(contentPanel.panelHtml);
+
+        return contentPanel;
+    }
+
     protected appendImagePanel(bodyContainerDiv: HTMLDivElement): ImagePanel {
         var imagePanel: ImagePanel = new ImagePanel(this.imagePanelIdentificator, this, this.showMainPanelsButtonList);
         this.rightSidePanels.push(imagePanel);
@@ -1477,11 +1487,7 @@ class SidePanel {
 class LeftSidePanel extends SidePanel {
     decorateSidePanel(sidePanelDiv: HTMLDivElement) {
         $(sidePanelDiv).addClass("reader-left-panel");
-        $(sidePanelDiv).resizable({
-            handles: "e",
-            maxWidth: 250,
-            minWidth: 100
-        });
+        
     }
 
     onPinButtonClick(sidePanelDiv: HTMLDivElement) {

@@ -22,56 +22,20 @@ class GoldenLayoutReader extends ReaderModule {
             this.pages.push(bookPageItem);
             this.pagesById[bookPageItem.pageId] = bookPageItem;
         }
-
-        $(this.readerContainer).empty();
-        var readerDiv: HTMLDivElement = document.createElement("div");
-        $(readerDiv).addClass("reader");
-
-        var readerHeadDiv: HTMLDivElement = document.createElement("div");
-        $(readerHeadDiv).addClass("reader-head content-container");
-
-        var fullscreenButton = document.createElement("button");
-        $(fullscreenButton).addClass("fullscreen-button");
-
-        var fullscreenSpan = document.createElement("span");
-        $(fullscreenSpan).addClass("glyphicon glyphicon-fullscreen");
-        $(fullscreenButton).append(fullscreenSpan);
-        $(fullscreenButton).click((event) => {
-            $(this.readerContainer).find(".reader").addClass("fullscreen");
-        });
-        readerHeadDiv.appendChild(fullscreenButton);
-
-        var fullscreenCloseButton = document.createElement("button");
-        $(fullscreenCloseButton).addClass("fullscreen-close-button");
-
-        var closeSpan = document.createElement("span");
-        $(closeSpan).addClass("glyphicon glyphicon-remove");
-        $(fullscreenCloseButton).append(closeSpan);
-        $(fullscreenCloseButton).click((event) => {
-            $(this.readerContainer).find(".reader").removeClass("fullscreen");
-        });
-        readerHeadDiv.appendChild(fullscreenCloseButton);
-
-
-        //var title = this.makeTitle(bookTitle);
-        //readerHeadDiv.appendChild(title);
-
-
-        //var controls = this.makeControls();
-        //readerHeadDiv.appendChild(controls);
-        //readerDiv.appendChild(readerHeadDiv);
-        
         this.makeGoldenReader();
+        document.getElementById("BookText").appendChild(this.getBookText());
+        document.getElementById("BookContent").appendChild(this.getBookContent());
+        $(document).ready(function() {
+            $(".reader-text-container").scroll();
+        });
     }
 
     private makeGoldenReader() {
         var config = this.createConfig();
-        //var bookText = this.getBookText();
         this.readerLayout = new GoldenLayout(config, $('#ReaderBodyDiv'));
         this.readerLayout.registerComponent('readerTab', function (container, state) {
-            if (state.label === 'text') {
-                //$(container.getElement()).html(this.getBookText());
-            }
+           
+            $(container.getElement()).html("<div id='Book"+state.label+ "'></div>");
         });
         this.readerLayout.init();
     }
@@ -85,8 +49,20 @@ class GoldenLayoutReader extends ReaderModule {
         return returnDiv;
     }
 
+    private getBookContent(): HTMLDivElement {
+        var returnDiv: HTMLDivElement = document.createElement("div");
+        var contentPanel: ContentPanel = null;
+        if (this.showPanelList.indexOf(ReaderPanelEnum.ContentPanel) >= 0) {
+            contentPanel = this.appendContentPanel(returnDiv);
+        }
+        return returnDiv;
+    }
+
     private createConfig() {
         var layoutConfig = {
+            settings: {
+                selectionEnabled: true
+            },
             dimensions: {
                 headerHeight: 26
             },
@@ -98,14 +74,20 @@ class GoldenLayoutReader extends ReaderModule {
                     width: 18,
                     content: [{
                         type: 'component',
+                        id: 'content',
+                        componentState: { label: 'Content' },
+                        componentName: 'readerTab',
+                        title: 'Obsah'
+                    }, {
+                        type: 'component',
                         id: 'bookmarks',
-                        componentState: { label: 'bookmarks' },
+                        componentState: { label: 'Bookmarks' },
                         componentName: 'readerTab',
                         title: 'Záložky'
                     }, {
                         type: 'component',
                         id: 'view',
-                        componentState: { label: 'view' },
+                        componentState: { label: 'View' },
                         componentName: 'readerTab',
                         title: 'Zobrazení'
                     }, {
@@ -118,14 +100,14 @@ class GoldenLayoutReader extends ReaderModule {
                 }, {
                     type: 'component',
                     id: 'text',
-                    componentState: { label: 'text' },
+                    componentState: { label: 'Text' },
                     componentName: 'readerTab',
                     isClosable: false,
                     title: 'Text'
                 }, {
                     type: 'component',
                     id: 'img',
-                    componentState: { label: 'img' },
+                    componentState: { label: 'Img' },
                     componentName: 'readerTab',
                     title: 'Náhled'
                 }]
@@ -134,7 +116,6 @@ class GoldenLayoutReader extends ReaderModule {
         return layoutConfig;
     }
 }
-
 
 function initGoldenReader(bookXmlId: string,
     versionXmlId: string,
