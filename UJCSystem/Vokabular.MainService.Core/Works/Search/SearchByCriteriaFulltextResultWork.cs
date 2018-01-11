@@ -7,7 +7,6 @@ using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
-using Vokabular.Shared.DataContracts.Search.ResultContracts;
 
 namespace Vokabular.MainService.Core.Works.Search
 {

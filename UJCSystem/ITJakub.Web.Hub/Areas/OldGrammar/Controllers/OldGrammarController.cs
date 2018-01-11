@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Vokabular.Shared.DataContracts.Search.Criteria;
-using Vokabular.Shared.DataContracts.Search.RequestContracts;
+using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers

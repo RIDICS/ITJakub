@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts.Search;
-using Vokabular.Shared.DataContracts.Search.RequestContracts;
+using Vokabular.Shared.DataContracts.Search.Request;
 
 namespace Vokabular.MainService.Controllers
 {

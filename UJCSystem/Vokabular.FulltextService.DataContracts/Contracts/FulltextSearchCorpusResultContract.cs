@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Vokabular.Shared.DataContracts
+namespace Vokabular.FulltextService.DataContracts.Contracts
 {
     public class FulltextSearchCorpusResultContract
     {

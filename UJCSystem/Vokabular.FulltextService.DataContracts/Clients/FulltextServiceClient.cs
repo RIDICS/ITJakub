@@ -5,10 +5,8 @@ using Microsoft.Extensions.Logging;
 using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.RestClient;
 using Vokabular.Shared;
-using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Search.Criteria;
-using Vokabular.Shared.DataContracts.Search.RequestContracts;
-using Vokabular.Shared.DataContracts.Search.ResultContracts;
+using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.Extensions;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -53,7 +51,7 @@ namespace Vokabular.FulltextService.DataContracts.Clients
 
             try
             {
-                var result = Post<ResultContract>($"text", textResource);
+                var result = Post<ResultContract>("text", textResource);
                 return result.Id;
             }
             catch (HttpRequestException e)
@@ -71,8 +69,7 @@ namespace Vokabular.FulltextService.DataContracts.Clients
 
             try
             {
-                var result = Post<ResultContract>($"snapshot", snapshotResource);
-                
+                var result = Post<ResultContract>("snapshot", snapshotResource);
             }
             catch (HttpRequestException e)
             {
@@ -87,9 +84,8 @@ namespace Vokabular.FulltextService.DataContracts.Clients
         {
             try
             {
-                var result = Post<FulltextSearchResultContract>($"snapshot/search", searchRequestContract);
+                var result = Post<FulltextSearchResultContract>("snapshot/search", searchRequestContract);
                 return result;
-
             }
             catch (HttpRequestException e)
             {
@@ -105,9 +101,8 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             var searchRequest = new SearchRequestContractBase {ConditionConjunction = searchCriterias};
             try
             {
-                var result = Post<FulltextSearchResultContract>($"snapshot/search-count", searchRequest);
+                var result = Post<FulltextSearchResultContract>("snapshot/search-count", searchRequest);
                 return result;
-
             }
             catch (HttpRequestException e)
             {
@@ -118,13 +113,12 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             }
         }
 
-        public PageSearchResultData SearchPageByCriteria(long snapshotId, List<SearchCriteriaContract> criteria)
+        public PageSearchResultContract SearchPageByCriteria(long snapshotId, List<SearchCriteriaContract> criteria)
         {
             try
             {
-                var result = Post<PageSearchResultData>($"text/search?snapshotId={snapshotId}", new SearchRequestContractBase{ConditionConjunction = criteria});
+                var result = Post<PageSearchResultContract>($"text/search?snapshotId={snapshotId}", new SearchRequestContractBase{ConditionConjunction = criteria});
                 return result;
-
             }
             catch (HttpRequestException e)
             {
@@ -141,7 +135,6 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             {
                 var result = Post<TextResourceContract>($"text/search/{resourceId}?formatValue={format}", searchRequest);
                 return result;
-
             }
             catch (HttpRequestException e)
             {
@@ -157,9 +150,8 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             var searchRequest = new SearchRequestContractBase { ConditionConjunction = searchCriterias };
             try
             {
-                var result = Post<long>($"corpus/search-count", searchRequest);
+                var result = Post<long>("corpus/search-count", searchRequest);
                 return result;
-
             }
             catch (HttpRequestException e)
             {
@@ -170,14 +162,13 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             }
         }
 
-        public CorpusSearchResultDataList SearchCorpusByCriteria(int start, int count, int contextLength, List<SearchCriteriaContract> searchCriterias)
+        public List<CorpusSearchResultContract> SearchCorpusByCriteria(int start, int count, int contextLength, List<SearchCriteriaContract> searchCriterias)
         {
             var searchRequest = new CorpusSearchRequestContract { Start = start, Count = count, ContextLength = contextLength, ConditionConjunction = searchCriterias };
             try
             {
-                var result = Post<CorpusSearchResultDataList>($"corpus/search", searchRequest);
+                var result = Post<List<CorpusSearchResultContract>>("corpus/search", searchRequest);
                 return result;
-
             }
             catch (HttpRequestException e)
             {
@@ -187,8 +178,5 @@ namespace Vokabular.FulltextService.DataContracts.Clients
                 throw;
             }
         }
-
-        
     }
-    
 }

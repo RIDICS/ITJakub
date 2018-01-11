@@ -6,8 +6,7 @@ using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataContracts.Search.Criteria;
-using Vokabular.Shared.DataContracts.Search.RequestContracts;
-using Vokabular.Shared.DataContracts.Search.ResultContracts;
+using Vokabular.Shared.DataContracts.Search.Request;
 
 namespace Vokabular.MainService.Core.Managers.Fulltext
 {
@@ -73,14 +72,28 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             }
         }
 
-        public FulltextSearchResultData SearchProjectIdByCriteria(SearchRequestContract searchRequestContract, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        public FulltextSearchResultData SearchProjectIdByCriteria(int start, int count, SortTypeEnumContract? sort,
+            SortDirectionEnumContract? sortDirection, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
             UpdateCriteriaWithSnapshotRestriction(criteria, projects);
-            searchRequestContract.ConditionConjunction = criteria;
+            
             using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient())
             {
-               var result = fulltextServiceClient.SearchByCriteria(searchRequestContract);
-               return new FulltextSearchResultData{LongList = result.ProjectIds, SearchResultType = FulltextSearchResultType.ProjectId};
+                var searchRequest = new SearchRequestContract
+                {
+                    Start = start,
+                    Count = count,
+                    Sort = sort,
+                    SortDirection = sortDirection,
+                    ConditionConjunction = criteria,
+                };
+                var result = fulltextServiceClient.SearchByCriteria(searchRequest);
+
+                return new FulltextSearchResultData
+                {
+                    LongList = result.ProjectIds,
+                    SearchResultType = FulltextSearchResultType.ProjectId
+                };
             }
         }
 
@@ -89,7 +102,11 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient())
             {
                 var result = fulltextServiceClient.SearchPageByCriteria(project.SnapshotId, criteria);
-                return result;
+                return new PageSearchResultData
+                {
+                    SearchResultType = PageSearchResultType.TextExternalId,
+                    StringList = result.TextIdList,
+                };
             }
         }
 
@@ -110,7 +127,26 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             
             using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient())
             {
-                return fulltextServiceClient.SearchCorpusByCriteria(start, count, contextLength, criteria);
+                var result = fulltextServiceClient.SearchCorpusByCriteria(start, count, contextLength, criteria);
+
+                var resultList = result.Select(x => new CorpusSearchResultData
+                {
+                    ProjectId = x.ProjectId,
+                    Notes = x.Notes,
+                    PageResultContext = new CorpusSearchPageResultData
+                    {
+                        TextExternalId = x.PageResultContext?.TextExternalId,
+                        ContextStructure = x.PageResultContext?.ContextStructure,
+                    },
+                    VerseResultContext = x.VerseResultContext,
+                    BibleVerseResultContext = x.BibleVerseResultContext,
+                }).ToList();
+
+                return new CorpusSearchResultDataList
+                {
+                    SearchResultType = FulltextSearchResultType.ProjectId,
+                    List = resultList
+                };
             }
         }
 

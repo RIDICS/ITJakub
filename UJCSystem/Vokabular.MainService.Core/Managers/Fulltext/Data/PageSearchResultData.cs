@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Vokabular.Shared.DataContracts.Search.ResultContracts
+namespace Vokabular.MainService.Core.Managers.Fulltext.Data
 {
     public class PageSearchResultData
     {

@@ -1,12 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Vokabular.FulltextService.Core.Communication;
 using Vokabular.FulltextService.Core.Helpers;
 using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.Shared.DataContracts;
-using Vokabular.Shared.DataContracts.Search;
-using Vokabular.Shared.DataContracts.Search.RequestContracts;
-using Vokabular.Shared.DataContracts.Search.ResultContracts;
+using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.FulltextService.Core.Managers
@@ -148,7 +147,7 @@ namespace Vokabular.FulltextService.Core.Managers
             return m_searchResultProcessor.ProcessSearchCorpusByCriteriaCount(response, HighlightTag);*/
         }
 
-        public CorpusSearchResultDataList SearchCorpusByCriteria(CorpusSearchRequestContract searchRequest)
+        public List<CorpusSearchResultContract> SearchCorpusByCriteria(CorpusSearchRequestContract searchRequest)
         {
             var filterQuery =
                 m_queriesBuilder.GetFilterSearchQuery(searchRequest.ConditionConjunction, SnapshotIdField);
@@ -237,7 +236,7 @@ namespace Vokabular.FulltextService.Core.Managers
         }
 
 
-        public PageSearchResultData SearchPageByCriteria(long snapshotId, SearchRequestContractBase searchRequest)
+        public PageSearchResultContract SearchPageByCriteria(long snapshotId, SearchRequestContractBase searchRequest)
         {
             var client = CommunicationProvider.GetElasticClient();
 
