@@ -10,6 +10,7 @@ using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
 using Vokabular.FulltextService.Containers;
 using Vokabular.FulltextService.Containers.Extensions;
+using Vokabular.FulltextService.Core.Options;
 using Vokabular.FulltextService.Utils.Documentation;
 using Vokabular.Shared;
 using Vokabular.Shared.Container;
@@ -35,6 +36,7 @@ namespace Vokabular.FulltextService
             // Configuration options
             services.AddOptions();
             services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
+            services.Configure<IndicesOption>(Configuration.GetSection("ElasticsearchIndices"));
 
             // Add framework services
             services.AddMvc();

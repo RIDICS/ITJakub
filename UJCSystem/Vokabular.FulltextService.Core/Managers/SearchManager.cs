@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Options;
 using Vokabular.FulltextService.Core.Communication;
 using Vokabular.FulltextService.Core.Helpers;
+using Vokabular.FulltextService.Core.Options;
 using Vokabular.FulltextService.DataContracts.Contracts;
-using Vokabular.Shared.DataContracts;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -24,7 +25,7 @@ namespace Vokabular.FulltextService.Core.Managers
         private readonly SearchResultProcessor m_searchResultProcessor;
 
         public SearchManager(CommunicationProvider communicationProvider, SearchResultProcessor searchResultProcessor,
-            QueriesBuilder queriesBuilder) : base(communicationProvider)
+            QueriesBuilder queriesBuilder, IOptions<IndicesOption> indicesOptions) : base(communicationProvider, indicesOptions)
         {
             m_searchResultProcessor = searchResultProcessor;
             m_queriesBuilder = queriesBuilder;

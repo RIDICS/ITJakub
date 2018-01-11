@@ -1,6 +1,8 @@
 ﻿using System;
+using Microsoft.Extensions.Options;
 using Vokabular.FulltextService.Core.Communication;
 using Vokabular.FulltextService.Core.Helpers;
+using Vokabular.FulltextService.Core.Options;
 using Vokabular.FulltextService.DataContracts.Contracts;
 
 namespace Vokabular.FulltextService.Core.Managers
@@ -9,12 +11,11 @@ namespace Vokabular.FulltextService.Core.Managers
     {
         private readonly SnapshotResourceBuilder m_snapshotResourceBuilder;
 
-        public SnapshotResourceManager(CommunicationProvider communicationProvider, SnapshotResourceBuilder snapshotResourceBuilder) : base(communicationProvider)
+        public SnapshotResourceManager(CommunicationProvider communicationProvider, SnapshotResourceBuilder snapshotResourceBuilder, IOptions<IndicesOption> indicesOptions) : base(communicationProvider, indicesOptions)
         {
             m_snapshotResourceBuilder = snapshotResourceBuilder;
         }
         
-
         public ResultContract CreateSnapshotResource(SnapshotResourceContract snapshotResourceContract)
         {
             var client = CommunicationProvider.GetElasticClient();

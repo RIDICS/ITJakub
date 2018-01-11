@@ -1,13 +1,17 @@
 ﻿using System;
+using Microsoft.Extensions.Options;
 using Vokabular.FulltextService.Core.Communication;
+using Vokabular.FulltextService.Core.Options;
 using Vokabular.FulltextService.DataContracts.Contracts;
 
 namespace Vokabular.FulltextService.Core.Managers
 {
     public class TextResourceManager : ElasticsearchManagerBase
     {
-        public TextResourceManager(CommunicationProvider communicationProvider) : base(communicationProvider)
-        {}
+        public TextResourceManager(CommunicationProvider communicationProvider, IOptions<IndicesOption> indicesOptions)
+            : base(communicationProvider, indicesOptions)
+        {
+        }
 
         public TextResourceContract GetTextResource(string textResourceId)
         {
