@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NHibernate.Criterion;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
@@ -36,14 +35,6 @@ namespace Vokabular.DataEntities.Database.Repositories
             return group;
         }
 
-        public virtual IList<UserGroup> GetLastGroups(int recordCount)
-        {
-            return GetSession().QueryOver<UserGroup>()
-                .OrderBy(x => x.CreateTime).Desc
-                .Take(recordCount)
-                .List<UserGroup>();
-        }
-
         public virtual IList<UserGroup> GetGroupsAutocomplete(string queryString, int recordCount)
         {
             queryString = EscapeQuery(queryString);
@@ -53,21 +44,6 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .OrderBy(x => x.Name).Asc
                 .Take(recordCount)
                 .List<UserGroup>();
-        }
-
-        public virtual IList<Project> GetAllowedBooksByGroup(int groupId)
-        {
-            Project projectAlias = null;
-            Permission permissionAlias = null;
-            UserGroup groupAlias = null;
-
-            var books = GetSession().QueryOver(() => projectAlias)
-                .JoinQueryOver(x => x.Permissions, () => permissionAlias)
-                .JoinQueryOver(x => permissionAlias.UserGroup, () => groupAlias)
-                .Where(x => groupAlias.Id == groupId)
-                .List<Project>();
-
-            return books;
         }
 
         public virtual IList<User> GetUsersByGroup(int groupId)
@@ -171,12 +147,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             return filteredResource;
         }
-
-        public virtual void CreateSpecialPermission(SpecialPermission permission)
-        {
-            GetSession().Save(permission);
-        }
-
+        
         public virtual IList<Permission> FindPermissionsByGroupAndBooks(int groupId, IList<long> bookIds)
         {
             Project projectAlias = null;
@@ -258,18 +229,17 @@ namespace Vokabular.DataEntities.Database.Repositories
             return permissions;
         }
 
-        public virtual IList<AutoImportBookTypePermission> GetAutoimportPermissionsByCategoryIdList(IEnumerable<int> categoryIds)
+        public virtual IList<AutoImportBookTypePermission> GetAutoimportPermissionsByBookTypeList(IEnumerable<BookTypeEnum> bookTypes)
         {
-            throw new NotImplementedException("This method is currently outdated");
-            //AutoImportBookTypePermission autoimportPermissionAlias = null;
-            //Category categoryAlias = null;
+            AutoImportBookTypePermission autoimportPermissionAlias = null;
+            BookType bookTypeAlias = null;
 
-            //var permissions = GetSession().QueryOver(() => autoimportPermissionAlias)
-            //    .JoinQueryOver(x => autoimportPermissionAlias.Category, () => categoryAlias)
-            //    .AndRestrictionOn(() => categoryAlias.Id).IsInG(categoryIds)
-            //    .List<AutoImportBookTypePermission>();
+            var permissions = GetSession().QueryOver(() => autoimportPermissionAlias)
+                .JoinQueryOver(x => autoimportPermissionAlias.BookType, () => bookTypeAlias)
+                .AndRestrictionOn(() => bookTypeAlias.Type).IsInG(bookTypes)
+                .List<AutoImportBookTypePermission>();
 
-            //return permissions;
+            return permissions;
         }
 
         public virtual IList<UserGroup> GetGroupsBySpecialPermissionIds(IEnumerable<int> specialPermissionIds)

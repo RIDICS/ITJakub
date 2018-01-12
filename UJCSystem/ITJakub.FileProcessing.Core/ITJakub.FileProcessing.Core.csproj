@@ -110,6 +110,7 @@
     <Compile Include="Sessions\Works\Helpers\CollectionExtensions.cs" />
     <Compile Include="Sessions\Works\Helpers\PersonHelper.cs" />
     <Compile Include="Sessions\Works\Helpers\ProjectResponsibleNameEqualityComparer.cs" />
+    <Compile Include="Sessions\Works\ProcessAutoImportPermissionWork.cs" />
     <Compile Include="Sessions\Works\SaveNewBookDataWork.cs" />
     <Compile Include="Sessions\Works\CreateOrUpdateProjectBasicDataWork.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateAuthorsSubtask.cs" />
