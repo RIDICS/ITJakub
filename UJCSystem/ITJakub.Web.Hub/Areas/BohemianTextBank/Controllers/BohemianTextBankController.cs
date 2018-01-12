@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.RequestContracts;
 using Vokabular.Shared.DataContracts.Types;
@@ -153,27 +154,13 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetHitBookIds(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        public ActionResult GetHitBookIds(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)//TODO mock, should return array of ids of books where results ocurred
         {
             using (var client = GetRestClient())
             {
-                var random = new Random();//TODO mock, replace with actual logic
-                var ids = new List<long>();
-                for (var i = 0; i<random.Next(1,10); i++) {
-                    ids.Add(random.Next(200, 2000));
-                }
+                var ids = new List<long> {8, 4, 6};
 
                 return Json(ids);
-            }
-        }
-
-        [HttpGet]
-        public ActionResult GetBookHitResultsByPage(string text, long bookId, int start, int count, int contextLength)
-        {
-            using (var client = GetRestClient())
-            {
-                var hits = new List<CorpusSearchResultContract>();//TODO mock, replace with actual logic
-                return Json(hits);
             }
         }
 
@@ -200,6 +187,44 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                     // TODO is sorting required? is sorting possible?
                 });
                 return Json(new {results = resultList});
+            }
+        }
+
+        public ActionResult TextSearchFulltextPagedMock(string text, int start, int count, int contextLength, short sortingEnum, bool sortAsc,
+            IList<long> selectedBookIds, IList<int> selectedCategoryIds)//TODO should return page with a certain amount of search results from a selected book id
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                throw new ArgumentException("text can't be null in fulltext search");
+            }
+
+            using (var client = GetRestClient())
+            {
+                var resultList = new List<CorpusSearchResultContract>();
+                var random = new Random();
+                var randomNumber = random.Next(0, 3);
+                for (var i = 0; i < randomNumber; i++)
+                {
+                    var result = new CorpusSearchResultContract
+                    {
+                        Author = "Autor",
+                        Title = "Title " + selectedBookIds[0],
+                        RelicAbbreviation = "TIT",
+                        BookId = selectedBookIds[0],
+                        OriginDate = "first half of 8th century",
+                        PageResultContext = new PageWithContextContract
+                        {
+                            ContextStructure = new KwicStructure
+                            {
+                                Before = "before ",
+                                Match = "match",
+                                After = " after"
+                            }
+                        }
+                    };
+                    resultList.Add(result);
+                }
+                return Json(new { results = resultList });
             }
         }
 
