@@ -116,8 +116,6 @@ namespace ITJakub.Web.Hub
 
             app.UseStaticFiles();
 
-            app.UseMiddleware<ErrorHandlingMiddleware>();
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

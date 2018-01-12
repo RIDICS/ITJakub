@@ -2,12 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.Utils;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Headers;
 
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
+    [CustomRequireHttps]
     public class AuthTokenController : BaseController
     {
         private readonly AuthenticationManager m_authenticationManager;
