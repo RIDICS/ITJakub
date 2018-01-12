@@ -1,4 +1,6 @@
-﻿class CommentInput {
+﻿/// <reference path="../../../../../node_modules/@types/codemirror/index.d.ts" />
+
+class CommentInput {
     private readonly commentArea: CommentArea;
     private readonly util: EditorsUtil;
     private readonly gui: TextEditorGui;
