@@ -3,6 +3,7 @@
 }
 @section scripts{
     <script src="~/Areas/BohemianTextBank/js/itjakub.bohemiantextbank.bundle.js"></script>
+    <script src="~/lib/bootbox/bootbox.min.js"></script>
 }
 
 @{
@@ -41,25 +42,26 @@
             </select>
         </div>
         <div class="corpus-search-setting-div-results-count">
-            <div>Počet výsledků: </div>
+            <div>Počet děl: </div>
             <div id="totalResultCountDiv"></div>
         </div>
         <div class="corpus-search-setting-div-pagination pagination-extra-small" id="paginationContainer">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default search-result-prev-page" disabled><i class="fa fa-chevron-left" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="btn btn-default search-result-next-page"><i class="fa fa-chevron-right" aria-hidden="true"></i>
+                </button>
+            </div> 
         </div>
     </div>
     <div class="corpus-search-results-div">
-        <div id="corpus-search-results-abbrev-table-div" class="corpus-search-results-abbrev-table-div">
-            <table id="result-abbrev-table">
-                <tbody id="resultsAbbrevTableBody"></tbody>
-            </table>
-        </div>
         <div id="corpus-search-results-table-div" class="corpus-search-results-table-div">
             <div id="corpus-search-results-table-div-loader">
                 Pro zobrazení výsledků použijte vyhledávání
             </div>
-            <table id="result-table">
-                <tbody id="resultsTableBody"></tbody>
-            </table>
+            <div class="list-group container-fluid">
+                <div id="search-results-div"></div>
+            </div>
         </div>
         <div class="corpus-search-result-detail-div">
             <div class="corpus-search-detail">

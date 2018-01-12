@@ -4,20 +4,25 @@
 }
 
 class BohemainTextBankNew {
-    private approximateNumberOfResultsPerPage = 20;
+    private approximateNumberOfResultsPerPage = 4;
     private hitBookIds = [];
 
-    private currentPage: number;
+    private currentBookId = -1;
+    private currentBookIndex = 0;
+    private currentResultStart = -1;
+    private currentAmountOfResultsInPage = 0;
 
-    private resultsCountOnPage = 30;
+    private contextLength = -1;
+
+    private resultsCountOnPage = 20;
 
     private paginationMaxVisibleElements = 5;
 
     private defaultErrorMessage =
-    "Vyhledávání se nezdařilo. Ujistěte se, zda máte zadáno alespoň jedno kritérium na vyhledávání v textu.";
+        "Vyhledávání se nezdařilo. Ujistěte se, zda máte zadáno alespoň jedno kritérium na vyhledávání v textu.";
 
     private urlSearchKey = "search";
-    private urlPageKey = "page";
+    private urlStartKey = "start"; //TODO in process of cahging to start
     private urlSelectionKey = "selected";
     private urlSortAscKey = "sortAsc";
     private urlSortCriteriaKey = "sortCriteria";
@@ -33,13 +38,16 @@ class BohemainTextBankNew {
     private sortBar: SortBar;
     private paginator: Pagination;
 
-    private initPage: number = null;
-
     private enabledOptions = new Array<SearchTypeEnum>();
 
     private search: Search;
 
     initSearch() {
+
+        $(".search-result-next-page").on("click",
+            () => {
+                this.loadNextPage();
+            });
 
         $("#wordCheckbox").change(() => {
             var checkbox = $("#wordCheckbox");
@@ -99,21 +107,22 @@ class BohemainTextBankNew {
             }
         });
 
-        $("#resultsTableBody").click((event) => {
-            var clickedRow = $(event.target as Node as Element).parents("tr");
+        $("#search-results-div").on("click",
+            ".search-result-item",
+            (event: JQuery.Event) => {
+                var clickedRow = $(event.target as Node as Element).closest(".search-result-item");
+                if (clickedRow.hasClass("notes")) {
+                    return;
+                }
 
-            if (clickedRow.hasClass("notes")) {
-                return;
-            }
+                $(".search-result-item").not(clickedRow).removeClass("clicked");
+                clickedRow.addClass("clicked");
 
-            $("#resultsTableBody").find("tr").removeClass("clicked");
-            clickedRow.addClass("clicked");
-
-            this.printDetailInfo(clickedRow);
-        });
+                this.printDetailInfo(clickedRow);
+            });
 
         $("#contextPositionsSelect").change(() => {
-            this.searchForBook(this.currentPage);
+            //this.searchForBook(this.currentPage);TODO reload page on context change?
         });
 
         $("#corpus-search-results-table-div").scroll((event) => {
@@ -150,7 +159,7 @@ class BohemainTextBankNew {
         };
         this.search = new Search($("#listSearchDiv")[0] as Node as HTMLDivElement,
             this.corpusAdvancedSearchCount.bind(this),
-            this.corpusBasicSearchCount.bind(this),
+            this.corpusBasicSearchBookHits.bind(this),
             favoritesQueriesConfig);
         this.search.limitFullTextSearchToOne();
         this.search.makeSearch(this.enabledOptions);
@@ -175,12 +184,6 @@ class BohemainTextBankNew {
         if (this.readyForInit && this.notInitialized) {
 
             this.notInitialized = false;
-
-            const page = getQueryStringParameterByName(this.urlPageKey);
-
-            if (page) {
-                this.initPage = parseInt(page);
-            }
 
             const contextSize = getQueryStringParameterByName(this.urlContextSizeKey);
             if (contextSize) {
@@ -219,14 +222,13 @@ class BohemainTextBankNew {
     }
 
     private sortOrderChanged() {
-        if (paginator) {
-            paginator.goToPage(1);
-        }
+        //if (paginator) {TODO
+        //    paginator.goToPage(1);
+        //}
     }
 
     private showLoading() {
-        $("#result-table").hide();
-        $("#result-abbrev-table").hide();
+        $("#search-results-div").hide();
         $("#corpus-search-results-table-div-loader").empty();
         $("#corpus-search-results-table-div-loader").show();
         $("#corpus-search-results-table-div-loader").addClass("loader");
@@ -236,8 +238,7 @@ class BohemainTextBankNew {
     private hideLoading() {
         $("#corpus-search-results-table-div-loader").removeClass("loader");
         $("#corpus-search-results-table-div-loader").hide();
-        $("#result-abbrev-table").show();
-        $("#result-table").show();
+        $("#search-results-div").show();
     }
 
     private printErrorMessage(message: string) {
@@ -248,7 +249,8 @@ class BohemainTextBankNew {
         corpusErrorDiv.show();
     }
 
-    private fillResultsIntoTable(results: Array<ICorpusSearchResult>) {
+    private
+        fillResultsIntoTable(results: Array<ICorpusSearchResult>) { //TODO remove after all functionality has been preserved
         var tableBody = $("#resultsTableBody");
         const abbrevTableBody = $("#resultsAbbrevTableBody");
         tableBody.empty();
@@ -417,7 +419,7 @@ class BohemainTextBankNew {
                 this.hideLoading();
                 this.fillResultsIntoTable(response["results"]);
                 updateQueryStringParameter(this.urlSearchKey, json);
-                updateQueryStringParameter(this.urlPageKey, pageNumber);
+                //updateQueryStringParameter(this.urlPageKey, pageNumber);TODO change to start
                 updateQueryStringParameter(this.urlSortAscKey, this.sortBar.isSortedAsc());
                 updateQueryStringParameter(this.urlSortCriteriaKey, this.sortBar.getSortCriteria());
                 updateQueryStringParameter(this.urlContextSizeKey, contextLength);
@@ -428,11 +430,72 @@ class BohemainTextBankNew {
         });
     }
 
-    private subpagesLoaded = 0;
+    private fillResultTable(results: ICorpusSearchResult[]) {
+        const tableBody = $("#search-results-div");
+        $(".search-result-item").off("lazybeforeunveil");
+        for (let i = 0; i < results.length; i++) {
+            const result = results[i];
+            const pageContext = result.pageResultContext;
+            const verseContext = result.verseResultContext;
+            const bibleVerseContext = result.bibleVerseResultContext;
+            const contextStructure = pageContext.contextStructure;
+            const bookId = result.bookId;
+            const pageId = pageContext.id;
+            const acronym = result.sourceAbbreviation;
+            const notes = result.notes;
 
-    private corpusBasicSearchPaged(text: string, bookId: number, contextLength: number) {
-        if (typeof text === "undefined" || text === null || text === "") return;
-        const start = this.subpagesLoaded * this.resultsCountOnPage;//TODO lazyloading
+            const tableRow = $(`<div class="search-result-item list-group-item row"></div>`);
+            const abbrevColumn = $(`<div class="col-xs-2"></div>`);
+            const resultColumn = $(`<div class="col-xs-10 text-center"></div>`);
+            tableRow.attr("data-bookId", bookId);
+            tableRow.attr("data-author", result.author);
+            tableRow.attr("data-title", result.title);
+            tableRow.attr("data-dating", result.originDate);
+            tableRow.attr("data-pageId", pageId);
+            tableRow.attr("data-pageName", pageContext.name);
+            tableRow.attr("data-acronym", acronym);
+
+            if (verseContext) {
+                tableRow.attr("data-verseXmlId", verseContext.verseXmlId);
+                tableRow.attr("data-verseName", verseContext.verseName);
+            }
+
+            if (bibleVerseContext) {
+                tableRow.attr("data-bibleBook", bibleVerseContext.bibleBook);
+                tableRow.attr("data-bibleChapter", bibleVerseContext.bibleChapter);
+                tableRow.attr("data-bibleVerse", bibleVerseContext.bibleVerse);
+            }
+
+            const contextBefore = $(`<span class="context-before"></span>`);
+            contextBefore.text(contextStructure.before);
+
+            const contextMatch = $(`<span class="match"></span>`);
+            contextMatch.text(contextStructure.match);
+
+            const contextAfter = $(`<span class="context-after"></span>`);
+            contextAfter.text(contextStructure.after);
+
+            const abbrevHref = $("<a></a>");
+            abbrevHref.prop("href",
+                `${getBaseUrl()}Editions/Editions/Listing?bookId=${bookId}&searchText=${this.search.getLastQuery()
+                }&page=${pageId}`);
+            abbrevHref.text(acronym);
+            abbrevColumn.append(abbrevHref);
+
+            //TODO notes
+
+            resultColumn.append(contextBefore);
+            resultColumn.append(contextMatch);
+            resultColumn.append(contextAfter);
+
+            tableRow.append(abbrevColumn);
+            tableRow.append(resultColumn);
+            tableBody.append(tableRow);
+        }
+    }
+
+    private corpusBasicSearchPaged(text: string, start: number, contextLength: number, bookId: number) {
+        if (!text) return;
         const sortingEnum = this.sortBar.getSortCriteria();
         const sortAsc = this.sortBar.isSortedAsc();
 
@@ -441,58 +504,83 @@ class BohemainTextBankNew {
         const payload: JQuery.PlainObject = {
             text: text,
             start: start,
-            count: this.resultsCountOnPage,
+            count: this.approximateNumberOfResultsPerPage,
             contextLength: contextLength,
-            bookId: bookId
+            sortingEnum: sortingEnum,
+            sortAsc: sortAsc,
+            selectedBookIds: bookId,
+            selectedCategoryIds: this.categoryIdsInQuery
         };
 
-        $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetBookHitResultsByPage`, payload)//TODO sorting?
-            .done((response: ICorpusSearchResult[]) => {
-            this.subpagesLoaded++;
+        const getPageAjax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/TextSearchFulltextPagedMock`,
+            payload);
+
+        getPageAjax.done((response) => {
             this.hideLoading();
-            this.fillResultsIntoTable(response);
+            const results: ICorpusSearchResult[] = response["results"];
+            const numberOfResults = results.length;
+            if (numberOfResults === 0) {
+                this.switchToNextBook();
+                return;
+            }
+            console.log(`Results: ${numberOfResults}`);
+            console.log(`Book: ${bookId}`);
+            console.log(`Start: ${start}`);
+            this.currentResultStart += numberOfResults;
+            this.currentAmountOfResultsInPage += numberOfResults;
+            this.fillResultTable(results);
             updateQueryStringParameter(this.urlSearchKey, text);
-            updateQueryStringParameter(this.urlPageKey, bookId);
-            updateQueryStringParameter(this.urlSortAscKey, this.sortBar.isSortedAsc());
-            updateQueryStringParameter(this.urlSortCriteriaKey, this.sortBar.getSortCriteria());
+            updateQueryStringParameter(this.currentResultStart, start);
+            updateQueryStringParameter(this.urlSortAscKey, sortAsc);
+            updateQueryStringParameter(this.urlSortCriteriaKey, sortingEnum);
             updateQueryStringParameter(this.urlContextSizeKey, contextLength);
-        }).fail(() => {
+            this.optionallyLoadMoreResultsForPage();
+        });
+
+        getPageAjax.fail(() => {
             this.printErrorMessage(this.defaultErrorMessage);
         });
     }
 
-    private searchForBook(pageNumber: number) {
-        this.currentPage = pageNumber;
-        const currentBookId = this.hitBookIds[pageNumber - 1];
+    private optionallyLoadMoreResultsForPage() {
+        if (this.currentAmountOfResultsInPage < this.approximateNumberOfResultsPerPage) {
+            this.loadBookResultPage(this.currentResultStart, this.currentBookId);
+        } else {
+            this.currentAmountOfResultsInPage = 0;
+        }
+    }
+
+    private switchToNextBook() {
+        this.currentResultStart = 0;
+        this.currentBookIndex++;
+        if (this.currentBookIndex > (this.hitBookIds.length - 1)) {
+            bootbox.alert({
+                title: "Attention",
+                message: "No more pages",
+                buttons: {
+                    ok: {
+                        className: "btn-default"
+                    }
+                }
+            });
+            $(".search-result-next-page").prop("disabled", true);
+            return;
+        }
+        this.currentBookId = this.hitBookIds[this.currentBookIndex];
+        this.loadBookResultPage(this.currentResultStart, this.currentBookId);
+    }
+
+    private loadBookResultPage(start: number, bookId: number) {
+        console.log("load");
         const contextLength = parseInt($("#contextPositionsSelect").val() as string);
         if (this.search.isLastQueryJson()) {
-            this.corpusAdvancedSearchPaged(this.search.getLastQuery(), pageNumber, contextLength);
+            this.corpusAdvancedSearchPaged(this.search.getLastQuery(), start, contextLength);
         } else {
-            console.log(contextLength);
-            this.corpusBasicSearchPaged(this.search.getLastQuery(), currentBookId, contextLength);
+            this.corpusBasicSearchPaged(this.search.getLastQuery(), start, contextLength, bookId);
         }
     }
 
-    private createPagination(numberOfBooks: number) {
-        const paginatorContainer = $("#paginationContainer");
-        this.paginator = new Pagination({
-            container: paginatorContainer,
-            maxVisibleElements: this.paginationMaxVisibleElements,
-            pageClickCallback: this.searchForBook.bind(this),
-            callPageClickCallbackOnInit: true
-        });
-        const itemsOnPage = 1;
-        if (this.initPage) {
-            this.paginator.make(numberOfBooks, itemsOnPage, this.initPage);
-        } else {
-            this.paginator.make(numberOfBooks, itemsOnPage);
-        }
-
-        const totalResultsDiv = $("#totalResultCountDiv");
-        totalResultsDiv.html(numberOfBooks.toString());
-    }
-
-    private corpusBasicSearchCount(text: string) {
+    private corpusBasicSearchBookHits(text: string) {
 
         if (typeof text === "undefined" || text === null || text === "") return;
         this.actualizeSelectedBooksAndCategoriesInQuery();
@@ -507,16 +595,29 @@ class BohemainTextBankNew {
 
         $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetHitBookIds`, payload)
             .done((bookIds: number[]) => {
-            const count = bookIds.length;
-            this.hitBookIds = bookIds;
-            this.createPagination(count);
-            updateQueryStringParameter(this.urlSearchKey, text);
-            updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
-            updateQueryStringParameter(this.urlSortAscKey, this.sortBar.isSortedAsc());
-            updateQueryStringParameter(this.urlSortCriteriaKey, this.sortBar.getSortCriteria());
-        }).fail(() => {
-            this.printErrorMessage(this.defaultErrorMessage);
-        });
+                const count = bookIds.length;
+                $("#totalResultCountDiv").text(count);
+                this.hitBookIds = bookIds;
+                this.loadNextPage();
+                updateQueryStringParameter(this.urlSearchKey, text);
+                updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
+                updateQueryStringParameter(this.urlSortAscKey, this.sortBar.isSortedAsc());
+                updateQueryStringParameter(this.urlSortCriteriaKey, this.sortBar.getSortCriteria());
+            }).fail(() => {
+                this.printErrorMessage(this.defaultErrorMessage);
+            });
+    }
+
+    private loadNextPage() {
+        if (this.currentBookId === -1) {
+            this.currentBookId = this.hitBookIds[this.currentBookIndex];
+        }
+        if (this.currentResultStart === -1) {
+            this.currentResultStart = 0;
+        }
+        const tableBody = $("#search-results-div");
+        tableBody.empty();
+        this.loadBookResultPage(this.currentResultStart, this.currentBookId);
     }
 
     private corpusAdvancedSearchCount(json: string) {
@@ -536,7 +637,6 @@ class BohemainTextBankNew {
             contentType: "application/json",
             success: response => {
                 var count = response["count"];
-                this.createPagination(count);
                 updateQueryStringParameter(this.urlSearchKey, json);
                 updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
                 updateQueryStringParameter(this.urlSortAscKey, this.sortBar.isSortedAsc());
@@ -578,32 +678,42 @@ class BohemainTextBankNew {
             .text(tableRowEl.data("bibleVerse") ? tableRowEl.data("bibleVerse") : undefinedReplaceString);
     }
 
-    private calculateNumberOfPages() {//TODO remove if not corresponds to logic
+    private calculateNumberOfPages() { //TODO not used yet
         var pageStructure = [];
-        const hitBookIdsAjax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetHitBookIds`, { text: "", selectedBookIds: null, selectedCategoryIds: null } as JQuery.PlainObject);
+        const hitBookIdsAjax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetHitBookIds`,
+            { text: "", selectedBookIds: null, selectedCategoryIds: null } as JQuery.PlainObject);
         hitBookIdsAjax.done((bookIds: number[]) => {
             bookIds.forEach((bookId: number) => {
-                const bookHitPagesAjax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetNumberOfPagesByBook`, { bookId: bookId } as JQuery.PlainObject);
+                const bookHitPagesAjax =
+                    $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetNumberOfPagesByBook`,
+                        { bookId: bookId } as JQuery.PlainObject);
                 bookHitPagesAjax.done((pages: number[]) => {
                     var transientResults = [];
                     var numberOfTransientPages = 0;
                     pages.forEach((page: number) => {
-                        const numberOfHitsPerPageAjax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetResultNumberByBookByPage`, { bookId: bookId } as JQuery.PlainObject);
+                        const numberOfHitsPerPageAjax =
+                            $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetResultNumberByBookByPage`,
+                                { bookId: bookId } as JQuery.PlainObject);
                         numberOfHitsPerPageAjax.done((resultNumber: number) => {
-                            if (resultNumber < (this.approximateNumberOfResultsPerPage - 5)) {//if page has less than minimum results, hold in temporary array
+                            if (resultNumber < (this.approximateNumberOfResultsPerPage - 5)
+                            ) { //if page has less than minimum results, hold in temporary array
                                 transientResults.push({ bookId: bookId, page: page });
                                 numberOfTransientPages += resultNumber;
-                            } else {//more than minimum pages
+                            } else { //more than minimum pages
                                 if (transientResults) {
-                                    transientResults.push({ bookId: bookId, page: page });//if more than min number of pages and temp array exist, flush them
+                                    transientResults.push({
+                                        bookId: bookId,
+                                        page: page
+                                    }); //if more than min number of pages and temp array exist, flush them
                                     pageStructure.push(transientResults);
                                     transientResults.length = 0;
                                     numberOfTransientPages = 0;
-                                } else {//more than min number of pages, no temp array
+                                } else { //more than min number of pages, no temp array
                                     pageStructure.push([{ bookId: bookId, page: page }]);
                                 }
                             }
-                            if (numberOfTransientPages >= (this.approximateNumberOfResultsPerPage - 5)) {//no page with more than min number of hits, but temp array is too big
+                            if (numberOfTransientPages >= (this.approximateNumberOfResultsPerPage - 5)
+                            ) { //no page with more than min number of hits, but temp array is too big
                                 pageStructure.push(transientResults);
                                 transientResults.length = 0;
                                 numberOfTransientPages = 0;
