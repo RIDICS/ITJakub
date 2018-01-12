@@ -9,5 +9,10 @@ namespace Vokabular.MainService.Core.Managers.Authentication
         {
             return string.Format("CT:{0}", Guid.NewGuid());
         }
+
+        public bool ValidateTokenFormat(string token)
+        {
+            return token.StartsWith("CT:");
+        }
     }
 }

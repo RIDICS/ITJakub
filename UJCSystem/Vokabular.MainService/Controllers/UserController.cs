@@ -44,7 +44,7 @@ namespace Vokabular.MainService.Controllers
         public UserDetailContract GetCurrentUser(
             [FromHeader(Name = CustomHttpHeaders.Authorization)] string authorizationToken)
         {
-            var result = m_userManager.GetUserByToken(authorizationToken);
+            var result = m_userManager.GetCurrentUserByToken();
             return result;
         }
 
@@ -54,7 +54,7 @@ namespace Vokabular.MainService.Controllers
         {
             try
             {
-                m_userManager.UpdateUser(authorizationToken, data);
+                m_userManager.UpdateUser(data);
                 return Ok();
             }
             catch (HttpErrorCodeException exception)
@@ -69,7 +69,7 @@ namespace Vokabular.MainService.Controllers
         {
             try
             {
-                m_userManager.UpdateUserPassword(authorizationToken, data);
+                m_userManager.UpdateUserPassword(data);
                 return Ok();
             }
             catch (HttpErrorCodeException exception)

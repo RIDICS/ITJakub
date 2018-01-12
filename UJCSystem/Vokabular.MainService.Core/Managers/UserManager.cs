@@ -16,12 +16,14 @@ namespace Vokabular.MainService.Core.Managers
         private readonly UserRepository m_userRepository;
         private readonly ICommunicationTokenGenerator m_communicationTokenGenerator;
         private readonly AuthorizationManager m_authorizationManager;
+        private readonly AuthenticationManager m_authenticationManager;
 
-        public UserManager(UserRepository userRepository, ICommunicationTokenGenerator communicationTokenGenerator, AuthorizationManager authorizationManager)
+        public UserManager(UserRepository userRepository, ICommunicationTokenGenerator communicationTokenGenerator, AuthorizationManager authorizationManager, AuthenticationManager authenticationManager)
         {
             m_userRepository = userRepository;
             m_communicationTokenGenerator = communicationTokenGenerator;
             m_authorizationManager = authorizationManager;
+            m_authenticationManager = authenticationManager;
         }
 
         public int CreateNewUser(CreateUserContract data)
@@ -32,25 +34,29 @@ namespace Vokabular.MainService.Core.Managers
             return userId;
         }
 
-        public UserDetailContract GetUserByToken(string authorizationToken)
+        public UserDetailContract GetCurrentUserByToken()
         {
-            var dbUser = m_userRepository.InvokeUnitOfWork(x => x.GetUserByToken(authorizationToken));
+            var dbUser = m_authenticationManager.GetCurrentUser(false);
             var result = Mapper.Map<UserDetailContract>(dbUser);
             return result;
         }
 
-        public void UpdateUser(string authorizationToken, UpdateUserContract data)
+        public void UpdateUser(UpdateUserContract data)
         {
+            var userId = m_authenticationManager.GetCurrentUserId();
+
             // TODO add data validation
 
-            new UpdateUserWork(m_userRepository, authorizationToken, data).Execute();
+            new UpdateUserWork(m_userRepository, userId, data).Execute();
         }
 
-        public void UpdateUserPassword(string authorizationToken, UpdateUserPasswordContract data)
+        public void UpdateUserPassword(UpdateUserPasswordContract data)
         {
+            var userId = m_authenticationManager.GetCurrentUserId();
+
             // TODO add data validation
 
-            new UpdateUserPasswordWork(m_userRepository, authorizationToken, data).Execute();
+            new UpdateUserPasswordWork(m_userRepository, userId, data).Execute();
         }
 
         public PagedResultList<UserDetailContract> GetUserList(int? start, int? count, string filterByName)

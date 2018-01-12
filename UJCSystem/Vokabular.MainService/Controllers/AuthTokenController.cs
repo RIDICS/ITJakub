@@ -37,7 +37,7 @@ namespace Vokabular.MainService.Controllers
         {
             try
             {
-                m_authenticationManager.SignOut(authorizationToken);
+                m_authenticationManager.SignOut();
                 return Ok();
             }
             catch (HttpErrorCodeException exception)

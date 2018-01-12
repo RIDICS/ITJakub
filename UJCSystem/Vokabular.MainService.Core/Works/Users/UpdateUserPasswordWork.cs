@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.Jewelry;
@@ -10,19 +11,19 @@ namespace Vokabular.MainService.Core.Works.Users
     public class UpdateUserPasswordWork : UnitOfWorkBase
     {
         private readonly UserRepository m_userRepository;
-        private readonly string m_authenticationToken;
+        private readonly int m_userId;
         private readonly UpdateUserPasswordContract m_data;
 
-        public UpdateUserPasswordWork(UserRepository userRepository, string authenticationToken, UpdateUserPasswordContract data) : base(userRepository)
+        public UpdateUserPasswordWork(UserRepository userRepository, int userId, UpdateUserPasswordContract data) : base(userRepository)
         {
             m_userRepository = userRepository;
-            m_authenticationToken = authenticationToken;
+            m_userId = userId;
             m_data = data;
         }
 
         protected override void ExecuteWorkImplementation()
         {
-            var user = m_userRepository.GetUserByToken(m_authenticationToken);
+            var user = m_userRepository.FindById<User>(m_userId);
 
             if (user == null || !CustomPasswordHasher.ValidatePassword(m_data.OldPassword, user.PasswordHash))
             {

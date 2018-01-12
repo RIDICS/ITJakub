@@ -78,8 +78,8 @@ BEGIN TRAN
            ,'admin@example.com' -- Email
            ,'Admin' -- UserName
            ,0 -- AuthenticationProvider
-           ,'' -- CommunicationToken
-           ,NULL -- CommunicationTokenCreateTime
+           ,'admin-token' -- CommunicationToken
+           ,'2017-08-21 00:00:00.000' -- CommunicationTokenCreateTime
            ,'PW:sha1:1000:FhLySoxcL/5CA0RqlRBZMiqblj4sZ0zV:Vocj0I6bhs9bF4p9Nh+Rk7vbCoToulg9' -- PasswordHash (password is 'Administrator')
            ,'2017-08-21 00:00:00.000' -- CreateTime
            ,NULL) -- AvatarUrl

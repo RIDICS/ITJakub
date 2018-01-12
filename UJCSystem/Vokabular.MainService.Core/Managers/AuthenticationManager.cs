@@ -46,6 +46,12 @@ namespace Vokabular.MainService.Core.Managers
 
             var communicationToken = communicationTokens.First();
             var user = m_userRepository.InvokeUnitOfWork(x => x.GetUserByToken(communicationToken));
+
+            if (user == null || !m_communicationTokenGenerator.ValidateTokenFormat(communicationToken))
+            {
+                throw new AuthenticationException("Invalid communication token");
+            }
+
             return user;
         }
 
@@ -80,9 +86,10 @@ namespace Vokabular.MainService.Core.Managers
             };
         }
 
-        public void SignOut(string authorizationToken)
+        public void SignOut()
         {
-            new SignOutWork(m_userRepository, authorizationToken).Execute();
+            var userId = GetCurrentUserId();
+            new SignOutWork(m_userRepository, userId).Execute();
         }
 
         private List<string> ConvertActionSpecialPermissionsToRoles(List<SpecialPermission> actionSpecialPermissions)
