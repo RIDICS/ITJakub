@@ -241,7 +241,7 @@
         return this.pages[pageIndex];
     }
 
-    private makeTitle(bookTitle: string): HTMLDivElement {
+    public makeTitle(bookTitle: string): HTMLDivElement {
         var titleDiv: HTMLDivElement = document.createElement("div");
         $(titleDiv).addClass("title");
         titleDiv.innerHTML = bookTitle;
@@ -653,7 +653,7 @@
         return controlsDiv;
     }
 
-    private activateTypeahead(input: HTMLInputElement) {
+    public activateTypeahead(input: HTMLInputElement) {
 
         var pagesTexts = new Array<string>();
         $.each(this.pages, (index, page: BookPage) => {

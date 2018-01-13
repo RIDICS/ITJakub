@@ -3,12 +3,25 @@
 }
 
 @tabHeight: 20px;
+@color1: #e1e1e1; 
+@color2: #777777; 
+@color3: #fafafa; 
+@color4: #888888;
 
 .lm_tab {
     height: @tabHeight !important;
     line-height: @tabHeight;
+    background: @color1 !important;
+    color: @color2 !important;
 }
 
+.lm_tab {
+    &:hover, 
+    &.lm_active {
+        color:@color4 !important;
+        background:@color3 !important;
+    }
+}
 .lm_close_tab {
     height: @tabHeight - 5px !important;
 }
@@ -24,4 +37,11 @@
 
 .reader-left-panel {
     width: 100% !important;
+}
+
+.content-container {
+    min-height:unset !important;
+}
+.twitter-typeahead {
+    width:unset !important;
 }
