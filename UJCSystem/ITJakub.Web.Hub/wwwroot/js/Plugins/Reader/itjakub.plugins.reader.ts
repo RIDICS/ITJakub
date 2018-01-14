@@ -1401,7 +1401,7 @@ class SidePanel {
             this.panelHeaderDiv.appendChild(newWindowButton);
         }
 
-        sidePanelDiv.appendChild(this.panelHeaderDiv);
+        //sidePanelDiv.appendChild(this.panelHeaderDiv);
 
         this.innerContent = this.makeBody(this, window);
         var panelBodyDiv = this.makePanelBody(this.innerContent, this, window);
