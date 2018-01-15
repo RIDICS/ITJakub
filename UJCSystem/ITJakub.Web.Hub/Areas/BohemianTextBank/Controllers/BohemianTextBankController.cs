@@ -154,11 +154,52 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         }
 
         [HttpGet]
+        public ActionResult GetHitBookIdsPaged(string text, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds)//TODO mock, should return array of ids of books where results ocurred
+        {
+            using (var client = GetRestClient())
+            {
+                var ids = new List<long> { 8, 4, 6 };
+                var totalCount = 3;
+                if (start<35)
+                {
+                    return Json(new { list = ids, totalCount = totalCount });
+                }
+
+                ids = null;
+                totalCount = 0;
+                    return Json(new { list = ids, totalCount = totalCount });
+
+            }
+        }
+
+        [HttpGet]
         public ActionResult GetHitBookIds(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)//TODO mock, should return array of ids of books where results ocurred
         {
             using (var client = GetRestClient())
             {
                 var ids = new List<long> {8, 4, 6};
+
+                return Json(ids);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult AdvancedSearchGetHitBookIdsPaged(string json, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds)//TODO mock, should return array of ids of books where results ocurred
+        {
+            using (var client = GetRestClient())
+            {
+                var ids = new List<long> { 8, 4, 6 };
+                var totalCount = 3;
+
+                return Json(new { list = ids, totalCount = totalCount });
+            }
+        }
+
+        public ActionResult AdvancedSearchGetHitBookIds(string json, IList<long> selectedBookIds,IList<int> selectedCategoryIds)//TODO mock, should return array of ids of books where results ocurred, search by json
+        {
+            using (var client = GetRestClient())
+            {
+                var ids = new List<long> { 8, 4, 6 };
 
                 return Json(ids);
             }
@@ -190,13 +231,15 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             }
         }
 
-        public ActionResult TextSearchFulltextPagedMock(string text, int start, int count, int contextLength, short sortingEnum, bool sortAsc,
-            IList<long> selectedBookIds, IList<int> selectedCategoryIds)//TODO should return page with a certain amount of search results from a selected book id
+        public ActionResult TextSearchFulltextGetBookPage(string text, int start, int count, int contextLength, short sortingEnum, bool sortAsc,
+            long bookId)//TODO should return page with a certain amount of search results from a selected book id
         {
             if (string.IsNullOrEmpty(text))
             {
                 throw new ArgumentException("text can't be null in fulltext search");
             }
+
+            var selectedBookIds = new List<long> {bookId};//TODO mock
 
             using (var client = GetRestClient())
             {
@@ -246,7 +289,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 {
                     ConditionConjunction = listSearchCriteriaContracts,
                 });
-                return Json(new {count});
+                return Json(new { count });
             }
         }
 
@@ -274,6 +317,36 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                     // TODO is sorting required? is sorting possible?
                 });
                 return Json(new {results = resultList});
+            }
+        }
+
+        public ActionResult AdvancedSearchCorpusGetPage(string json, int start, int count, int contextLength, short sortingEnum, bool sortAsc,
+            long bookId)//TODO should return page with a certain amount of search results from a selected book id, search by json
+        {
+            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
+            var listSearchCriteriaContracts = Mapper.Map<List<SearchCriteriaContract>>(deserialized);
+
+            if (listSearchCriteriaContracts.FirstOrDefault(x => x.Key == CriteriaKey.Fulltext || x.Key == CriteriaKey.Heading || x.Key == CriteriaKey.Sentence || x.Key == CriteriaKey.TokenDistance) == null) //TODO add check on string values empty
+            {
+                throw new ArgumentException("search in text can't be ommited");
+            }
+
+            var selectedBookIds = new List<long> {bookId};//TODO mock
+            var selectedCategoryIds = new List<int>();//TODO mock
+
+            AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
+
+            using (var client = GetRestClient())
+            {
+                var resultList = client.SearchCorpus(new CorpusSearchRequestContract
+                {
+                    Start = start,
+                    Count = count,
+                    ContextLength = contextLength,
+                    ConditionConjunction = listSearchCriteriaContracts,
+                    // TODO is sorting required? is sorting possible?
+                });
+                return Json(new { results = resultList });
             }
         }
 
