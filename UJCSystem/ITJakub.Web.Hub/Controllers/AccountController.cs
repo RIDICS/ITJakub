@@ -23,7 +23,7 @@ namespace ITJakub.Web.Hub.Controllers
         //
         // GET: /Account/Login
         [AllowAnonymous]
-        //[RequireHttps]
+        [RequireHttps]
         public ActionResult Login(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
@@ -33,7 +33,7 @@ namespace ITJakub.Web.Hub.Controllers
         //
         // POST: /Account/Login
         [HttpPost]
-        //[RequireHttps]
+        [RequireHttps]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl = null)
@@ -69,7 +69,7 @@ namespace ITJakub.Web.Hub.Controllers
         //
         // GET: /Account/Register
         [AllowAnonymous]
-        //[RequireHttps]
+        [RequireHttps]
         public ActionResult Register()
         {
             return View();
@@ -78,7 +78,7 @@ namespace ITJakub.Web.Hub.Controllers
         //
         // POST: /Account/Register
         [HttpPost]
-        //[RequireHttps]
+        [RequireHttps]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
