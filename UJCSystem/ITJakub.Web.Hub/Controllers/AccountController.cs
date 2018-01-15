@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Errors;
@@ -84,7 +83,6 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
-            // TODO add data validation
             if (ModelState.IsValid)
             {
                 var user = new CreateUserContract
@@ -96,24 +94,25 @@ namespace ITJakub.Web.Hub.Controllers
                     NewPassword = model.Password,
                 };
 
-                using (var client = GetRestClient())
+                try
                 {
-                    client.CreateNewUser(user);
+                    using (var client = GetRestClient())
+                    {
+                        client.CreateNewUser(user);
+                    }
+
+                    await m_authenticationManager.SignInAsync(new LoginViewModel
+                    {
+                        UserName = model.UserName,
+                        Password = model.Password,
+                    });
+
+                    return RedirectToLocal("");
                 }
-
-                await m_authenticationManager.SignInAsync(new LoginViewModel
+                catch (HttpErrorCodeException e)
                 {
-                    UserName = model.UserName,
-                    Password = model.Password,
-                });
-
-                //var result = await m_userManager.CreateAsync(user, model.Password);
-                //if (result.Succeeded)
-                //{
-                //    await m_signInManager.SignInAsync(user, false);
-                //    return RedirectToLocal("");
-                //}
-                //AddErrors(result);
+                    AddErrors(e);
+                }
             }
 
             // If we got this far, something failed, redisplay form
@@ -137,11 +136,16 @@ namespace ITJakub.Web.Hub.Controllers
             return View();
         }
 
-        private void AddErrors(IdentityResult result)
+        private void AddErrors(HttpErrorCodeException exception)
         {
-            foreach (var error in result.Errors)
+            if (exception.ValidationErrors == null)
             {
-                ModelState.AddModelError("", string.Format("{0}: {1}", error.Code, error.Description));
+                ModelState.AddModelError(string.Empty, exception.Message);
+                return;
+            }
+            foreach (var error in exception.ValidationErrors)
+            {
+                ModelState.AddModelError(string.Empty, error.Message);
             }
         }
 
