@@ -15,15 +15,20 @@ namespace Vokabular.RestClient.Extensions
         private static string JsonContentType = "application/json";
         private static string WwwFormUrlEncodedContentType = "application/x-www-form-urlencoded";
 
-        private static JsonSerializer CreateJsonSerializer()
+        private static JsonSerializerSettings CreateJsonSerializerSettings()
         {
-            var settings = new JsonSerializerSettings
+            return new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 DateTimeZoneHandling = DateTimeZoneHandling.Utc,
                 NullValueHandling = NullValueHandling.Ignore,
                 MissingMemberHandling = MissingMemberHandling.Ignore,
             };
+        }
+
+        private static JsonSerializer CreateJsonSerializer()
+        {
+            var settings = CreateJsonSerializerSettings();
             return JsonSerializer.Create(settings);
         }
 
@@ -43,6 +48,13 @@ namespace Vokabular.RestClient.Extensions
                     return item;
                 }
             }
+        }
+
+        public static T Deserialize<T>(this string content)
+        {
+            var settings = CreateJsonSerializerSettings();
+            var item = JsonConvert.DeserializeObject<T>(content, settings);
+            return item;
         }
 
         public static async Task<T> ReadXmlAsAsync<T>(this HttpContent content)

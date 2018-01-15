@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using FluentValidation.AspNetCore;
 using Log4net.Extensions.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,6 +15,7 @@ using Vokabular.Core;
 using Vokabular.MainService.Containers.Extensions;
 using Vokabular.MainService.Containers;
 using Vokabular.MainService.Containers.Installers;
+using Vokabular.MainService.Core;
 using Vokabular.MainService.Utils.Documentation;
 using Vokabular.MainService.Utils.Middleware;
 using Vokabular.Shared;
@@ -62,9 +64,10 @@ namespace Vokabular.MainService
             services.Configure<PathConfiguration>(Configuration.GetSection("PathConfiguration"));
 
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<MainServiceCoreContainerRegistration>());
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
+            
             // Inject an implementation of ISwaggerProvider with defaulted settings applied
             services.AddSwaggerGen(options =>
             {

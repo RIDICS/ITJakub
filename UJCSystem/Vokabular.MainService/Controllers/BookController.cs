@@ -6,6 +6,7 @@ using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
@@ -88,6 +89,10 @@ namespace Vokabular.MainService.Controllers
             {
                 return BadRequest(exception.Message);
             }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode((int)exception.StatusCode, exception.Message);
+            }
         }
 
         /// <summary>
@@ -107,6 +112,10 @@ namespace Vokabular.MainService.Controllers
             catch (ArgumentException exception)
             {
                 return BadRequest(exception.Message);
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode((int)exception.StatusCode, exception.Message);
             }
         }
 
@@ -146,6 +155,10 @@ namespace Vokabular.MainService.Controllers
             catch (ArgumentException exception)
             {
                 return BadRequest(exception.Message);
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode((int)exception.StatusCode, exception.Message);
             }
         }
 
@@ -261,6 +274,10 @@ namespace Vokabular.MainService.Controllers
             {
                 return BadRequest(exception.Message);
             }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode((int)exception.StatusCode, exception.Message);
+            }
         }
 
         [HttpHead("page/{pageId}/image")]
@@ -347,6 +364,10 @@ namespace Vokabular.MainService.Controllers
             catch (ArgumentException exception)
             {
                 return BadRequest(exception.Message);
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode((int)exception.StatusCode, exception.Message);
             }
         }
 

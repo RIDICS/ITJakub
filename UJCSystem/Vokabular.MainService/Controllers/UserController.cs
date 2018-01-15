@@ -14,6 +14,7 @@ namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
     [CustomRequireHttps]
+    [ValidateModel]
     public class UserController : BaseController
     {
         private readonly UserManager m_userManager;

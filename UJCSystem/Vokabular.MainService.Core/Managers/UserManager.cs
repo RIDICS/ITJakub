@@ -28,8 +28,6 @@ namespace Vokabular.MainService.Core.Managers
 
         public int CreateNewUser(CreateUserContract data)
         {
-            // TODO add data validation (min lenght, e-mail is valid, etc.)
-
             var userId = new CreateNewUserWork(m_userRepository, m_communicationTokenGenerator, data).Execute();
             return userId;
         }

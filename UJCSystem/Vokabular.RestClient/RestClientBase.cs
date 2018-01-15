@@ -7,6 +7,7 @@ using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Vokabular.RestClient.Contracts;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Extensions;
 using Vokabular.RestClient.Results;
@@ -375,16 +376,50 @@ namespace Vokabular.RestClient
 
         private void EnsureSuccessStatusCode(HttpResponseMessage response)
         {
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
-                throw new HttpErrorCodeException(GetExceptionMessageFromResponse(response), response.StatusCode);
+                return;
+            }
+
+            var responseStatusCode = response.StatusCode;
+            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            if (responseStatusCode == HttpStatusCode.BadRequest && TryDeserializeValidationResult(responseContent, out var validationResult))
+            {
+                throw new HttpErrorCodeException(validationResult.Message, responseStatusCode, validationResult.Errors);
+            }
+
+            var exceptionMessage = GetExceptionMessage(responseContent, responseStatusCode);
+            throw new HttpErrorCodeException(exceptionMessage, response.StatusCode);
+        }
+
+        private bool TryDeserializeValidationResult(string responseContent, out ValidationResultContract validationResult)
+        {
+            validationResult = null;
+            if (!(responseContent.StartsWith("{") && responseContent.EndsWith("}")))
+            {
+                return false;
+            }
+
+            try
+            {
+                var result = responseContent.Deserialize<ValidationResultContract>();
+                validationResult = result;
+                return true;
+            }
+            catch (JsonSerializationException)
+            {
+                return false;
+            }
+            catch (JsonReaderException)
+            {
+                return false;
             }
         }
 
-        private string GetExceptionMessageFromResponse(HttpResponseMessage response)
+        private string GetExceptionMessage(string message, HttpStatusCode statusCode)
         {
-            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-            return string.Format("{0} ({1})", responseContent, (int)response.StatusCode);
+            return $"({(int) statusCode}) {message}";
         }
 
         protected string GetCurrentMethod([CallerMemberName] string methodName = null)
