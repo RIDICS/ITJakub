@@ -7,9 +7,9 @@ using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
 using Castle.Windsor.MsDependencyInjection;
-using Log4net.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Vokabular.Log4Net;
 using Vokabular.Shared.Container;
 using Vokabular.Shared.Extensions;
 
@@ -27,7 +27,7 @@ namespace Vokabular.MainService.Containers
 
         public WindsorContainerImplementation()
         {
-            m_log = new Log4NetAdapter(MethodBase.GetCurrentMethod().DeclaringType.FullName);
+            m_log = new Log4NetAdapter(Assembly.GetEntryAssembly(), MethodBase.GetCurrentMethod().DeclaringType.FullName);
 
             AddSubresolvers();
 
