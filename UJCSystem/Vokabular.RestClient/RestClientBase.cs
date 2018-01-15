@@ -383,7 +383,8 @@ namespace Vokabular.RestClient
 
         private string GetExceptionMessageFromResponse(HttpResponseMessage response)
         {
-            return string.Format("{0} ({1})", response.ReasonPhrase, (int)response.StatusCode);
+            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            return string.Format("{0} ({1})", responseContent, (int)response.StatusCode);
         }
 
         protected string GetCurrentMethod([CallerMemberName] string methodName = null)

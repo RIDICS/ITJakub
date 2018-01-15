@@ -1,11 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
 using ITJakub.Web.Hub.Core.Communication;
-using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.RestClient.Errors;
+using AuthenticationManager = ITJakub.Web.Hub.Core.Managers.AuthenticationManager;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -43,22 +45,26 @@ namespace ITJakub.Web.Hub.Controllers
                 return View(model);
             }
 
-            //var result =
-            //    await m_signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
-            await m_authenticationManager.SignInAsync(model);
-            // TODO handling errors
+            try
+            {
+                await m_authenticationManager.SignInAsync(model);
 
-            return RedirectToLocal(returnUrl);
+                return RedirectToLocal(returnUrl);
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                switch (exception.StatusCode)
+                {
+                    case HttpStatusCode.Unauthorized:
+                        ModelState.AddModelError("", "Přihlášení se nezdařilo.");
+                        break;
+                    default:
+                        ModelState.AddModelError("", exception.Message);
+                        break;
+                }
 
-            //if (result.Succeeded)
-            //{
-            //    return RedirectToLocal(returnUrl);
-            //}
-            //else
-            //{
-            //    ModelState.AddModelError("", "Přihlášení se nezdařilo.");
-            //    return View(model);
-            //}
+                return View(model);
+            }
         }
 
         //
