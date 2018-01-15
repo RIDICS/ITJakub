@@ -1,11 +1,14 @@
 ﻿function initSearchNew() {
-    const searchClass = new BohemainTextBankNew();
+    const searchClass = new BohemianTextBankNew();
     searchClass.initSearch();
 }
 
-class BohemainTextBankNew {
-    private approximateNumberOfResultsPerPage = 4;
+class BohemianTextBankNew {
+    private approximateNumberOfResultsPerPage = 3;
     private hitBookIds = [];
+
+    private compositionResultListStart = -1;
+    private compositionsPerPage = 10;
 
     private currentBookId = -1;
     private currentBookIndex = 0;
@@ -22,7 +25,7 @@ class BohemainTextBankNew {
         "Vyhledávání se nezdařilo. Ujistěte se, zda máte zadáno alespoň jedno kritérium na vyhledávání v textu.";
 
     private urlSearchKey = "search";
-    private urlStartKey = "start"; //TODO in process of cahging to start
+    private urlStartKey = "start"; //TODO in process of changing to start
     private urlSelectionKey = "selected";
     private urlSortAscKey = "sortAsc";
     private urlSortCriteriaKey = "sortCriteria";
@@ -158,7 +161,7 @@ class BohemainTextBankNew {
             queryType: QueryTypeEnum.Search
         };
         this.search = new Search($("#listSearchDiv")[0] as Node as HTMLDivElement,
-            this.corpusAdvancedSearchCount.bind(this),
+            this.corpusAdvancedSearchBookHits.bind(this),
             this.corpusBasicSearchBookHits.bind(this),
             favoritesQueriesConfig);
         this.search.limitFullTextSearchToOne();
@@ -389,10 +392,9 @@ class BohemainTextBankNew {
         tableContainer.scrollLeft(scrollOffset);
     }
 
-    private corpusAdvancedSearchPaged(json: string, pageNumber: number, contextLength: number) {
+    private corpusAdvancedSearchPaged(json: string, start: number, contextLength: number, bookId: number) {
+        if (!json) return;
 
-        if (typeof json === "undefined" || json === null || json === "") return;
-        const start = (pageNumber - 1) * this.resultsCountOnPage;
         const sortingEnum = this.sortBar.getSortCriteria();
         const sortAsc = this.sortBar.isSortedAsc();
 
@@ -401,38 +403,45 @@ class BohemainTextBankNew {
         const payload: JQuery.PlainObject = {
             json: json,
             start: start,
-            count: this.resultsCountOnPage,
+            count: this.approximateNumberOfResultsPerPage,
             contextLength: contextLength,
             sortingEnum: sortingEnum,
             sortAsc: sortAsc,
-            selectedBookIds: this.bookIdsInQuery,
+            bookId: bookId,
             selectedCategoryIds: this.categoryIdsInQuery
         };
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/AdvancedSearchCorpusPaged",
-            data: payload,
-            dataType: "json",
-            contentType: "application/json",
-            success: response => {
-                this.hideLoading();
-                this.fillResultsIntoTable(response["results"]);
-                updateQueryStringParameter(this.urlSearchKey, json);
-                //updateQueryStringParameter(this.urlPageKey, pageNumber);TODO change to start
-                updateQueryStringParameter(this.urlSortAscKey, this.sortBar.isSortedAsc());
-                updateQueryStringParameter(this.urlSortCriteriaKey, this.sortBar.getSortCriteria());
-                updateQueryStringParameter(this.urlContextSizeKey, contextLength);
-            },
-            error: response => {
-                this.printErrorMessage(this.defaultErrorMessage);
+
+        const advancedSearchPageAjax =
+            $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchCorpusGetPage`, payload);
+
+        advancedSearchPageAjax.done((response) => {
+            this.hideLoading();
+            const results: ICorpusSearchResult[] = response["results"];
+            const numberOfResults = results.length;
+            if (numberOfResults === 0) {
+                this.switchToNextBook();
+                return;
             }
+            console.log(`Results: ${numberOfResults}`);
+            console.log(`Book: ${bookId}`);
+            console.log(`Start: ${start}`);
+            this.currentResultStart += numberOfResults;
+            this.currentAmountOfResultsInPage += numberOfResults;
+            this.fillResultTable(results);
+            updateQueryStringParameter(this.urlSearchKey, json);
+            //updateQueryStringParameter(this.urlPageKey, pageNumber);TODO change to start
+            updateQueryStringParameter(this.urlSortAscKey, this.sortBar.isSortedAsc());
+            updateQueryStringParameter(this.urlSortCriteriaKey, this.sortBar.getSortCriteria());
+            updateQueryStringParameter(this.urlContextSizeKey, contextLength);
+            this.optionallyLoadMoreResultsForPage();
+        });
+        advancedSearchPageAjax.fail(() => {
+            this.printErrorMessage(this.defaultErrorMessage);
         });
     }
 
     private fillResultTable(results: ICorpusSearchResult[]) {
         const tableBody = $("#search-results-div");
-        $(".search-result-item").off("lazybeforeunveil");
         for (let i = 0; i < results.length; i++) {
             const result = results[i];
             const pageContext = result.pageResultContext;
@@ -508,11 +517,10 @@ class BohemainTextBankNew {
             contextLength: contextLength,
             sortingEnum: sortingEnum,
             sortAsc: sortAsc,
-            selectedBookIds: bookId,
-            selectedCategoryIds: this.categoryIdsInQuery
+            bookId: bookId
         };
 
-        const getPageAjax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/TextSearchFulltextPagedMock`,
+        const getPageAjax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/TextSearchFulltextGetBookPage`,
             payload);
 
         getPageAjax.done((response) => {
@@ -526,6 +534,7 @@ class BohemainTextBankNew {
             console.log(`Results: ${numberOfResults}`);
             console.log(`Book: ${bookId}`);
             console.log(`Start: ${start}`);
+            console.log(`Count: ${this.approximateNumberOfResultsPerPage}`);
             this.currentResultStart += numberOfResults;
             this.currentAmountOfResultsInPage += numberOfResults;
             this.fillResultTable(results);
@@ -551,19 +560,15 @@ class BohemainTextBankNew {
     }
 
     private switchToNextBook() {
-        this.currentResultStart = 0;
-        this.currentBookIndex++;
+        this.currentResultStart = 0;//internal list index reset
+        this.currentBookIndex++;//external list index shift
         if (this.currentBookIndex > (this.hitBookIds.length - 1)) {
-            bootbox.alert({
-                title: "Attention",
-                message: "No more pages",
-                buttons: {
-                    ok: {
-                        className: "btn-default"
-                    }
-                }
-            });
-            $(".search-result-next-page").prop("disabled", true);
+            const search = getQueryStringParameterByName(this.urlSearchKey);
+            if (this.search.isLastQueryJson()) {
+                this.loadNextCompositionAdvancedResultPage(search);
+            } else {
+                this.loadNextCompositionResultPage(search);
+            }
             return;
         }
         this.currentBookId = this.hitBookIds[this.currentBookIndex];
@@ -574,40 +579,27 @@ class BohemainTextBankNew {
         console.log("load");
         const contextLength = parseInt($("#contextPositionsSelect").val() as string);
         if (this.search.isLastQueryJson()) {
-            this.corpusAdvancedSearchPaged(this.search.getLastQuery(), start, contextLength);
+            this.corpusAdvancedSearchPaged(this.search.getLastQuery(), start, contextLength, bookId);
         } else {
             this.corpusBasicSearchPaged(this.search.getLastQuery(), start, contextLength, bookId);
         }
     }
 
     private corpusBasicSearchBookHits(text: string) {
-
-        if (typeof text === "undefined" || text === null || text === "") return;
+        if (!text) return;
+        const nextPageEl = $(".search-result-next-page");
+        nextPageEl.prop("disabled", false);
+        this.compositionResultListStart = -1;
         this.actualizeSelectedBooksAndCategoriesInQuery();
 
         this.showLoading();
 
-        const payload: JQuery.PlainObject = {
-            text: text,
-            selectedBookIds: this.bookIdsInQuery,
-            selectedCategoryIds: this.categoryIdsInQuery
-        };
-
-        $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetHitBookIds`, payload)
-            .done((bookIds: number[]) => {
-                const count = bookIds.length;
-                $("#totalResultCountDiv").text(count);
-                this.hitBookIds = bookIds;
-                this.loadNextPage();
-                updateQueryStringParameter(this.urlSearchKey, text);
-                updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
-                updateQueryStringParameter(this.urlSortAscKey, this.sortBar.isSortedAsc());
-                updateQueryStringParameter(this.urlSortCriteriaKey, this.sortBar.getSortCriteria());
-            }).fail(() => {
-                this.printErrorMessage(this.defaultErrorMessage);
-            });
+        this.loadNextCompositionResultPage(text);
     }
 
+    /**
+     * Generates viewing page
+     */
     private loadNextPage() {
         if (this.currentBookId === -1) {
             this.currentBookId = this.hitBookIds[this.currentBookIndex];
@@ -620,32 +612,114 @@ class BohemainTextBankNew {
         this.loadBookResultPage(this.currentResultStart, this.currentBookId);
     }
 
-    private corpusAdvancedSearchCount(json: string) {
+    private corpusAdvancedSearchBookHits(json: string) {
+        if (!json) return;
+        const nextPageEl = $(".search-result-next-page");
+        nextPageEl.prop("disabled", false);
+        this.compositionResultListStart = -1;
 
-        if (typeof json === "undefined" || json === null || json === "") return;
         this.actualizeSelectedBooksAndCategoriesInQuery();
         this.showLoading();
 
-        const payload: JQuery.PlainObject =
-            { json: json, selectedBookIds: this.bookIdsInQuery, selectedCategoryIds: this.categoryIdsInQuery };
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/AdvancedSearchCorpusResultsCount",
-            data: payload,
-            dataType: "json",
-            contentType: "application/json",
-            success: response => {
-                var count = response["count"];
-                updateQueryStringParameter(this.urlSearchKey, json);
-                updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
-                updateQueryStringParameter(this.urlSortAscKey, this.sortBar.isSortedAsc());
-                updateQueryStringParameter(this.urlSortCriteriaKey, this.sortBar.getSortCriteria());
-            },
-            error: response => {
+        this.loadNextCompositionAdvancedResultPage(json);
+    }
+
+    /**
+    * Pagination of external list - list of compositions with hits, basic search
+    * @param text
+    */
+    private loadNextCompositionResultPage(text: string) {
+        if (this.compositionResultListStart === -1) {
+            this.compositionResultListStart = 0;
+        }
+        const payload: JQuery.PlainObject = {
+            text: text,
+            start: this.compositionResultListStart,
+            count: this.compositionsPerPage,
+            selectedBookIds: this.bookIdsInQuery,
+            selectedCategoryIds: this.categoryIdsInQuery
+        };
+
+        console.log(`External composition list start: ${this.compositionResultListStart}`);
+        console.log(`External composition list count: ${this.compositionsPerPage}`);
+
+        $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetHitBookIdsPaged`, payload)
+            .done((bookIds: IPagedResultArray<number>) => {
+                console.log(bookIds);
+                const count = bookIds.totalCount;
+                $("#totalResultCountDiv").text(count);
+                this.hitBookIds = bookIds.list;
+                if (!this.hitBookIds) {
+                    bootbox.alert({
+                        title: "Attention",
+                        message: "No more pages",
+                        buttons: {
+                            ok: {
+                                className: "btn-default"
+                            }
+                        }
+                    });
+                    $(".search-result-next-page").prop("disabled", true);
+                } else {
+                    const bookIdsInPage = this.hitBookIds.length;
+                    this.compositionResultListStart += bookIdsInPage;
+                    this.loadNextPage();
+                    updateQueryStringParameter(this.urlSearchKey, text);
+                    updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
+                    updateQueryStringParameter(this.urlSortAscKey, this.sortBar.isSortedAsc());
+                    updateQueryStringParameter(this.urlSortCriteriaKey, this.sortBar.getSortCriteria());
+                }
+            }).fail(() => {
                 this.printErrorMessage(this.defaultErrorMessage);
-            }
-        });
+            });
+    }
+    /**
+     * Pagination of external list - list of compositions with hits, advanced search
+     * @param json Json request with search request
+     */
+    private loadNextCompositionAdvancedResultPage(json: string) {
+        if (this.compositionResultListStart === -1) {
+            this.compositionResultListStart = 0;
+        }
+        const payload: JQuery.PlainObject = {
+            json: json,
+            start: this.compositionResultListStart,
+            count: this.compositionsPerPage,
+            selectedBookIds: this.bookIdsInQuery,
+            selectedCategoryIds: this.categoryIdsInQuery
+        };
+
+        $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchGetHitBookIdsPaged`, payload)
+            .done((bookIds: IPagedResultArray<number>) => {
+                console.log(`Composition list start: ${this.compositionResultListStart}`);
+                console.log(`Composition list count: ${this.compositionsPerPage}`);
+                console.log(`Book ids in page: ${bookIds}`);
+                const count = bookIds.totalCount;
+                $("#totalResultCountDiv").text(count);
+                this.hitBookIds = bookIds.list;
+                const bookIdsInPage = this.hitBookIds.length;
+                if (!bookIdsInPage) {
+                    bootbox.alert({
+                        title: "Attention",
+                        message: "No more pages",
+                        buttons: {
+                            ok: {
+                                className: "btn-default"
+                            }
+                        }
+                    });
+                    $(".search-result-next-page").prop("disabled", true);
+                } else {
+                    this.compositionResultListStart += bookIdsInPage;
+                    this.loadNextPage();
+                    //updateQueryStringParameter(this.urlSearchKey, text);TODO
+                    updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
+                    updateQueryStringParameter(this.urlSortAscKey, this.sortBar.isSortedAsc());
+                    updateQueryStringParameter(this.urlSortCriteriaKey, this.sortBar.getSortCriteria());
+                }
+            }).fail(() => {
+                this.printErrorMessage(this.defaultErrorMessage);
+            });
     }
 
     private printDetailInfo(tableRowEl: JQuery) {
