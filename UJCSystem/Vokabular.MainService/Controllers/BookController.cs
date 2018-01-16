@@ -232,7 +232,7 @@ namespace Vokabular.MainService.Controllers
             if (result == null)
                 return NotFound();
             
-            return Ok(result);
+            return Content(result);
         }
 
         /// <summary>
@@ -268,7 +268,7 @@ namespace Vokabular.MainService.Controllers
                 if (result == null)
                     return NotFound();
 
-                return Ok(result);
+                return Content(result);
             }
             catch (ArgumentException exception)
             {
@@ -323,7 +323,7 @@ namespace Vokabular.MainService.Controllers
             if (result == null)
                 return NotFound();
 
-            return Ok(result);
+            return Content(result);
         }
 
         /// <summary>
@@ -359,7 +359,7 @@ namespace Vokabular.MainService.Controllers
                 if (result == null)
                     return NotFound();
 
-                return Ok(result);
+                return Content(result);
             }
             catch (ArgumentException exception)
             {
@@ -379,7 +379,7 @@ namespace Vokabular.MainService.Controllers
             if (result == null)
                 return NotFound();
 
-            return Ok(result);
+            return Content(result);
         }
     }
 }
