@@ -4,7 +4,8 @@
 }
 
 class BohemianTextBankNew {
-    private approximateNumberOfResultsPerPage = 3;
+    private approximateNumberOfResultsPerPage = 4; //preferred number of results to be displayed in page
+    private resultsPerPage = 3; //corresponds to amount of results per page that server can return
     private hitBookIds = [];
 
     private compositionResultListStart = -1;
@@ -14,6 +15,9 @@ class BohemianTextBankNew {
     private currentBookIndex = 0;
     private currentResultStart = -1;
     private currentAmountOfResultsInPage = 0;
+    private currentViewPage = 1;
+
+    private pageTable = [];
 
     private contextLength = -1;
 
@@ -49,6 +53,9 @@ class BohemianTextBankNew {
 
         $(".search-result-next-page").on("click",
             () => {
+                this.emptyResultsTable();
+                this.currentViewPage++;
+                console.log(`Current view page ${this.currentViewPage}`);
                 this.loadNextPage();
             });
 
@@ -252,146 +259,6 @@ class BohemianTextBankNew {
         corpusErrorDiv.show();
     }
 
-    private
-        fillResultsIntoTable(results: Array<ICorpusSearchResult>) { //TODO remove after all functionality has been preserved
-        var tableBody = $("#resultsTableBody");
-        const abbrevTableBody = $("#resultsAbbrevTableBody");
-        tableBody.empty();
-        abbrevTableBody.empty();
-        for (var i = 0; i < results.length; i++) {
-            var result = results[i];
-            var pageContext = result.pageResultContext;
-            var verseContext = result.verseResultContext;
-            var bibleVerseContext = result.bibleVerseResultContext;
-            var contextStructure = pageContext.contextStructure;
-            var bookId = result.bookId;
-            var pageId = pageContext.id;
-            var acronym = result.sourceAbbreviation;
-            var notes = result.notes;
-
-            var tr = $("<tr></tr>");
-            tr.addClass("search-result");
-            tr.data("bookId", bookId);
-            tr.data("author", result.author);
-            tr.data("title", result.title);
-            tr.data("dating", result.originDate);
-            tr.data("pageId", pageId);
-            tr.data("pageName", pageContext.name);
-            tr.data("acronym", acronym);
-
-
-            if (verseContext !== null && typeof verseContext !== "undefined") {
-                tr.data("verseXmlId", verseContext.verseXmlId);
-                tr.data("verseName", verseContext.verseName);
-            }
-
-            if (bibleVerseContext !== null && typeof bibleVerseContext !== "undefined") {
-                tr.data("bibleBook", bibleVerseContext.bibleBook);
-                tr.data("bibleChapter", bibleVerseContext.bibleChapter);
-                tr.data("bibleVerse", bibleVerseContext.bibleVerse);
-            }
-
-            var tdBefore = document.createElement("td");
-            tdBefore.innerHTML = contextStructure.before;
-
-            var tdMatch = $("<td></td>");
-            tdMatch.addClass("match");
-            tdMatch.html(contextStructure.match);
-
-            var tdAfter = document.createElement("td");
-            tdAfter.innerHTML = contextStructure.after;
-
-            tr.append(tdBefore);
-            tr.append(tdMatch);
-            tr.append(tdAfter);
-
-            tableBody.append(tr);
-
-            if (notes !== null && typeof notes !== "undefined") {
-
-                var notesTr = $("<tr></tr>");
-                notesTr.addClass("notes");
-
-                var tdNotes = document.createElement("td");
-                tdNotes.colSpan = 2;
-
-
-                for (var j = 0; j < notes.length; j++) {
-                    var noteSpan = document.createElement("span");
-                    noteSpan.innerHTML = notes[j];
-                    $(noteSpan).addClass("note");
-                    tdNotes.appendChild(noteSpan);
-                }
-
-
-                notesTr.append(tdNotes);
-
-                var beforeNotesTr = document.createElement("tr");
-                $(beforeNotesTr).addClass("notes spacer");
-
-                var afterNotesTr = document.createElement("tr");
-                $(afterNotesTr).addClass("notes spacer");
-
-                tableBody.append(beforeNotesTr);
-                tableBody.append(notesTr);
-                tableBody.append(afterNotesTr);
-
-            }
-
-            //fill left table with abbrev of corpus name
-            var abbrevTr = document.createElement("tr");
-            //$(abbrevTr).data("bookXmlId", bookXmlId);
-            //$(abbrevTr).data("pageXmlId", pageXmlId);
-
-            var abbrevTd = document.createElement("td");
-
-            var abbrevHref = document.createElement("a");
-            abbrevHref.href =
-                getBaseUrl() +
-                "Editions/Editions/Listing?bookId=" +
-                bookId +
-                "&searchText=" +
-                this.search.getLastQuery() +
-                "&page=" +
-                pageId;
-            abbrevHref.innerHTML = acronym;
-
-            abbrevTd.appendChild(abbrevHref);
-
-            abbrevTr.appendChild(abbrevTd);
-            abbrevTableBody.append(abbrevTr);
-
-            if (notes !== null && typeof notes !== "undefined") {
-
-                var abbRevNotesTr = $("<tr></tr>");
-                abbRevNotesTr.addClass("notes");
-
-                var abbrevTdNotes = $("<td></td>");
-
-                abbRevNotesTr.append(abbrevTdNotes);
-
-                var beforeAbbrevNotesTr = $("<tr></tr>");
-                beforeAbbrevNotesTr.addClass("notes spacer");
-
-                var afterAbbrevNotesTr = $("<tr></tr>");
-                afterAbbrevNotesTr.addClass("notes spacer");
-
-                abbrevTableBody.append(beforeAbbrevNotesTr);
-                abbrevTableBody.append(abbRevNotesTr);
-                abbrevTableBody.append(afterAbbrevNotesTr);
-
-            }
-        }
-
-
-        //scroll from left to center match column in table
-        var firstChildTdWidth = $(tableBody).children("tr").first().children("td").first().width();
-        var tableContainer = $(tableBody).parents("#corpus-search-results-table-div");
-        var tableContainerWidth = tableContainer.width();
-        var scrollOffset = firstChildTdWidth - tableContainerWidth / 2;
-        tableContainer.scrollLeft(scrollOffset);
-    }
-
     private corpusAdvancedSearchPaged(json: string, start: number, contextLength: number, bookId: number) {
         if (!json) return;
 
@@ -403,7 +270,7 @@ class BohemianTextBankNew {
         const payload: JQuery.PlainObject = {
             json: json,
             start: start,
-            count: this.approximateNumberOfResultsPerPage,
+            count: this.resultsPerPage,
             contextLength: contextLength,
             sortingEnum: sortingEnum,
             sortAsc: sortAsc,
@@ -425,7 +292,7 @@ class BohemianTextBankNew {
             console.log(`Results: ${numberOfResults}`);
             console.log(`Book: ${bookId}`);
             console.log(`Start: ${start}`);
-            this.currentResultStart += numberOfResults;
+            this.currentResultStart += this.resultsPerPage;
             this.currentAmountOfResultsInPage += numberOfResults;
             this.fillResultTable(results);
             updateQueryStringParameter(this.urlSearchKey, json);
@@ -456,6 +323,9 @@ class BohemianTextBankNew {
             const tableRow = $(`<div class="search-result-item list-group-item row"></div>`);
             const abbrevColumn = $(`<div class="col-xs-2"></div>`);
             const resultColumn = $(`<div class="col-xs-10 text-center"></div>`);
+            const notesSpacerEl = $(`<div class="col-xs-12 notes spacer list-group-item row"></div>`);
+            const notesEl = $(`<div class="col-xs-12 notes list-group-item row"></div>`);
+
             tableRow.attr("data-bookId", bookId);
             tableRow.attr("data-author", result.author);
             tableRow.attr("data-title", result.title);
@@ -490,16 +360,26 @@ class BohemianTextBankNew {
                 }&page=${pageId}`);
             abbrevHref.text(acronym);
             abbrevColumn.append(abbrevHref);
-
-            //TODO notes
-
+            
             resultColumn.append(contextBefore);
             resultColumn.append(contextMatch);
             resultColumn.append(contextAfter);
 
             tableRow.append(abbrevColumn);
             tableRow.append(resultColumn);
+
+            if (notes) {
+                for (var j = 0; j < notes.length; j++) {
+                    var noteSpan = $(`<span class="note">${notes[j]}</span>`);
+                    notesEl.append(noteSpan);
+                }
+                tableRow.append(notesSpacerEl);//TODO finish note placement
+                tableRow.append(notesEl);
+                tableRow.append(notesSpacerEl);
+            }
+
             tableBody.append(tableRow);
+
         }
     }
 
@@ -513,7 +393,7 @@ class BohemianTextBankNew {
         const payload: JQuery.PlainObject = {
             text: text,
             start: start,
-            count: this.approximateNumberOfResultsPerPage,
+            count: this.resultsPerPage,
             contextLength: contextLength,
             sortingEnum: sortingEnum,
             sortAsc: sortAsc,
@@ -534,8 +414,8 @@ class BohemianTextBankNew {
             console.log(`Results: ${numberOfResults}`);
             console.log(`Book: ${bookId}`);
             console.log(`Start: ${start}`);
-            console.log(`Count: ${this.approximateNumberOfResultsPerPage}`);
-            this.currentResultStart += numberOfResults;
+            console.log(`Count: ${this.resultsPerPage}`);
+            this.currentResultStart += this.resultsPerPage;
             this.currentAmountOfResultsInPage += numberOfResults;
             this.fillResultTable(results);
             updateQueryStringParameter(this.urlSearchKey, text);
@@ -590,11 +470,18 @@ class BohemianTextBankNew {
         const nextPageEl = $(".search-result-next-page");
         nextPageEl.prop("disabled", false);
         this.compositionResultListStart = -1;
+        this.emptyResultsTable();
+        this.resetHistory();
         this.actualizeSelectedBooksAndCategoriesInQuery();
 
         this.showLoading();
 
         this.loadNextCompositionResultPage(text);
+    }
+
+    private emptyResultsTable() {
+        const tableBody = $("#search-results-div");
+        tableBody.empty();
     }
 
     /**
@@ -607,9 +494,17 @@ class BohemianTextBankNew {
         if (this.currentResultStart === -1) {
             this.currentResultStart = 0;
         }
-        const tableBody = $("#search-results-div");
-        tableBody.empty();
         this.loadBookResultPage(this.currentResultStart, this.currentBookId);
+    }
+
+    private resetHistory() {
+        this.currentViewPage = 1;
+        //TODO reset generated history here
+    }
+
+    private makePageTableList(bookId: number, page: number, viewingPage: number) {
+        this.pageTable = [];
+        //TODO implement logic
     }
 
     private corpusAdvancedSearchBookHits(json: string) {
@@ -617,6 +512,8 @@ class BohemianTextBankNew {
         const nextPageEl = $(".search-result-next-page");
         nextPageEl.prop("disabled", false);
         this.compositionResultListStart = -1;
+        this.emptyResultsTable();
+        this.resetHistory();
 
         this.actualizeSelectedBooksAndCategoriesInQuery();
         this.showLoading();
@@ -661,8 +558,9 @@ class BohemianTextBankNew {
                     });
                     $(".search-result-next-page").prop("disabled", true);
                 } else {
-                    const bookIdsInPage = this.hitBookIds.length;
-                    this.compositionResultListStart += bookIdsInPage;
+                    this.currentBookId = -1;//reset book id to get new
+                    this.currentBookIndex = 0;//reset book index as book array is new
+                    this.compositionResultListStart += this.compositionsPerPage;
                     this.loadNextPage();
                     updateQueryStringParameter(this.urlSearchKey, text);
                     updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
@@ -697,8 +595,7 @@ class BohemianTextBankNew {
                 const count = bookIds.totalCount;
                 $("#totalResultCountDiv").text(count);
                 this.hitBookIds = bookIds.list;
-                const bookIdsInPage = this.hitBookIds.length;
-                if (!bookIdsInPage) {
+                if (!this.hitBookIds) {
                     bootbox.alert({
                         title: "Attention",
                         message: "No more pages",
@@ -710,7 +607,9 @@ class BohemianTextBankNew {
                     });
                     $(".search-result-next-page").prop("disabled", true);
                 } else {
-                    this.compositionResultListStart += bookIdsInPage;
+                    this.currentBookId = -1;//reset book id to get new
+                    this.currentBookIndex = 0;//reset book index as book array is new
+                    this.compositionResultListStart += this.compositionsPerPage;
                     this.loadNextPage();
                     //updateQueryStringParameter(this.urlSearchKey, text);TODO
                     updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());

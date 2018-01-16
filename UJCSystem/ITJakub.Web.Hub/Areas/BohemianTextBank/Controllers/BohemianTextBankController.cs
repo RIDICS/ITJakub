@@ -158,28 +158,28 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         {
             using (var client = GetRestClient())
             {
-                var ids = new List<long> { 8, 4, 6 };
+                var ids = new List<long> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+                var ids2 = new List<long> { 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
+                var ids3 = new List<long> { 21, 22, 23, 24 };
                 var totalCount = 3;
-                if (start<35)
+                if (start<10)
                 {
+                    totalCount = 24;
                     return Json(new { list = ids, totalCount = totalCount });
                 }
-
+                if (start >= 10 && start <20)
+                {
+                    totalCount = 24;
+                    return Json(new { list = ids2, totalCount = totalCount });
+                }
+                if (start >= 20 && start < 30)
+                {
+                    totalCount = 24;
+                    return Json(new { list = ids3, totalCount = totalCount });
+                }
                 ids = null;
-                totalCount = 0;
-                    return Json(new { list = ids, totalCount = totalCount });
-
-            }
-        }
-
-        [HttpGet]
-        public ActionResult GetHitBookIds(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)//TODO mock, should return array of ids of books where results ocurred
-        {
-            using (var client = GetRestClient())
-            {
-                var ids = new List<long> {8, 4, 6};
-
-                return Json(ids);
+                totalCount = 24;
+                return Json(new { list = ids, totalCount = totalCount });
             }
         }
 
@@ -188,20 +188,28 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         {
             using (var client = GetRestClient())
             {
-                var ids = new List<long> { 8, 4, 6 };
+                var ids = new List<long> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+                var ids2 = new List<long> { 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
+                var ids3 = new List<long> { 21, 22, 23, 24 };
                 var totalCount = 3;
-
+                if (start < 10)
+                {
+                    totalCount = 24;
+                    return Json(new { list = ids, totalCount = totalCount });
+                }
+                if (start >= 10 && start < 20)
+                {
+                    totalCount = 24;
+                    return Json(new { list = ids2, totalCount = totalCount });
+                }
+                if (start >= 20 && start < 30)
+                {
+                    totalCount = 24;
+                    return Json(new { list = ids3, totalCount = totalCount });
+                }
+                ids = null;
+                totalCount = 24;
                 return Json(new { list = ids, totalCount = totalCount });
-            }
-        }
-
-        public ActionResult AdvancedSearchGetHitBookIds(string json, IList<long> selectedBookIds,IList<int> selectedCategoryIds)//TODO mock, should return array of ids of books where results ocurred, search by json
-        {
-            using (var client = GetRestClient())
-            {
-                var ids = new List<long> { 8, 4, 6 };
-
-                return Json(ids);
             }
         }
 
@@ -240,33 +248,69 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             }
 
             var selectedBookIds = new List<long> {bookId};//TODO mock
+            var notes = new List<string>();
+            notes.Add("note1");
+            notes.Add("note2");
+            notes.Add("note3");
 
             using (var client = GetRestClient())
             {
                 var resultList = new List<CorpusSearchResultContract>();
-                var random = new Random();
-                var randomNumber = random.Next(0, 3);
-                for (var i = 0; i < randomNumber; i++)
+                if (start<12)
                 {
-                    var result = new CorpusSearchResultContract
+                    for (var i = 0; i < 3; i++)
                     {
-                        Author = "Autor",
-                        Title = "Title " + selectedBookIds[0],
-                        RelicAbbreviation = "TIT",
-                        BookId = selectedBookIds[0],
-                        OriginDate = "first half of 8th century",
-                        PageResultContext = new PageWithContextContract
+                        var result = new CorpusSearchResultContract
                         {
-                            ContextStructure = new KwicStructure
+                            Author = "Autor",
+                            Title = "Title " + selectedBookIds[0],
+                            SourceAbbreviation = "Book" + bookId,
+                            RelicAbbreviation = "TIT",
+                            BookId = selectedBookIds[0],
+                            OriginDate = "first half of 8th century",
+                            Notes = notes,
+                            PageResultContext = new PageWithContextContract
                             {
-                                Before = "before ",
-                                Match = "match",
-                                After = " after"
+                                ContextStructure = new KwicStructure
+                                {
+                                    Before = "before ",
+                                    Match = "match",
+                                    After = " after"
+                                }
                             }
-                        }
-                    };
-                    resultList.Add(result);
+                        };
+                        resultList.Add(result);
+                    }
                 }
+                if(start>=12 && start<=15)
+                {
+                    var random = new Random();
+                    var randomNumber = random.Next(0, 4);
+                    for (var i = 0; i < randomNumber; i++)
+                    {
+                        var result = new CorpusSearchResultContract
+                        {
+                            Author = "Autor",
+                            Title = "Title " + selectedBookIds[0],
+                            SourceAbbreviation = "Book" + bookId,
+                            RelicAbbreviation = "TIT",
+                            BookId = selectedBookIds[0],
+                            OriginDate = "first half of 8th century",
+                            Notes = notes,
+                            PageResultContext = new PageWithContextContract
+                            {
+                                ContextStructure = new KwicStructure
+                                {
+                                    Before = "before ",
+                                    Match = "match",
+                                    After = " after"
+                                }
+                            }
+                        };
+                        resultList.Add(result);
+                    }
+                }
+
                 return Json(new { results = resultList });
             }
         }
@@ -338,14 +382,60 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 
             using (var client = GetRestClient())
             {
-                var resultList = client.SearchCorpus(new CorpusSearchRequestContract
+                var resultList = new List<CorpusSearchResultContract>();
+                if (start < 12)
                 {
-                    Start = start,
-                    Count = count,
-                    ContextLength = contextLength,
-                    ConditionConjunction = listSearchCriteriaContracts,
-                    // TODO is sorting required? is sorting possible?
-                });
+                    for (var i = 0; i < 3; i++)
+                    {
+                        var result = new CorpusSearchResultContract
+                        {
+                            Author = "Autor",
+                            Title = "Title " + selectedBookIds[0],
+                            RelicAbbreviation = "TIT",
+                            SourceAbbreviation = "Book"+ bookId,
+                            BookId = selectedBookIds[0],
+                            OriginDate = "first half of 8th century",
+                            PageResultContext = new PageWithContextContract
+                            {
+                                ContextStructure = new KwicStructure
+                                {
+                                    Before = "before ",
+                                    Match = "match",
+                                    After = " after"
+                                }
+                            }
+                        };
+                        resultList.Add(result);
+                    }
+                }
+                if (start >= 12 && start <= 15)
+                {
+                    var random = new Random();
+                    var randomNumber = random.Next(0, 4);
+                    for (var i = 0; i < randomNumber; i++)
+                    {
+                        var result = new CorpusSearchResultContract
+                        {
+                            Author = "Autor",
+                            Title = "Title " + selectedBookIds[0],
+                            RelicAbbreviation = "TIT",
+                            SourceAbbreviation = "Book" + bookId,
+                            BookId = selectedBookIds[0],
+                            OriginDate = "first half of 8th century",
+                            PageResultContext = new PageWithContextContract
+                            {
+                                ContextStructure = new KwicStructure
+                                {
+                                    Before = "before ",
+                                    Match = "match",
+                                    After = " after"
+                                }
+                            }
+                        };
+                        resultList.Add(result);
+                    }
+                }
+
                 return Json(new { results = resultList });
             }
         }
