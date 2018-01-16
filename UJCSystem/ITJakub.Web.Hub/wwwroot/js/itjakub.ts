@@ -74,6 +74,9 @@ function updateQueryStringParameter(key, value) {
 
 function getBaseUrl() {
     var baseUrl = $("#baseUrl").data("path");
+    if (typeof baseUrl === "undefined") {
+        baseUrl = "/";
+    }
     return baseUrl;
 }
 

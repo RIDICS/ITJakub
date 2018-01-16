@@ -24,8 +24,6 @@ class GoldenLayoutReader extends ReaderModule {
         }
         this.makeHeader(bookTitle);
         this.makeGoldenReader();
-        //document.getElementById("BookText").appendChild(this.getBookText());
-        //document.getElementById("BookContent").appendChild(this.getBookContent());
         
     }
 
@@ -184,7 +182,7 @@ class GoldenLayoutReader extends ReaderModule {
 
 
         $(addBookmarksButton).click((event: Event) => {
-            throw new Error("Not implemented");
+            throw new Error("Not implemented");    
         });
         toolButtons.appendChild(addBookmarksButton);
 
@@ -201,26 +199,66 @@ class GoldenLayoutReader extends ReaderModule {
         $(bookmarksButton).append(bookmarksSpanText);
 
         $(bookmarksButton).click((event: Event) => {
-            throw new Error("Not implemented");
+            if (this.readerLayout.root.getItemsById('tools').length === 0) {
+                var toolStackConfig = {
+                    type: 'stack',
+                    width: 18,
+                    id: 'tools',
+                    componentName: 'readerTab'
+                };
+                this.readerLayout.root.contentItems[0].addChild(toolStackConfig, 0);
+                this.readerLayout.root.getItemsById('tools')[0].config.width = 15;
+                this.readerLayout.updateSize();
+            }
+            if(this.readerLayout.root.getItemsById('bookmarks').length === 0) {
+                var bookmarksItemConfig = {
+                    type: 'component',
+                    id: 'bookmarks',
+                    componentState: { label: 'Bookmarks' },
+                    componentName: 'readerTab',
+                    title: 'Záložky'
+                };
+                this.readerLayout.root.getItemsById('tools')[0].addChild(bookmarksItemConfig);    
+            }
         });
         toolButtons.appendChild(bookmarksButton);
 
 
-        var commentButton: HTMLButtonElement = document.createElement("button");
-        $(commentButton).addClass("comment-button");
-        var commentSpan = document.createElement("span");
-        $(commentSpan).addClass("glyphicon glyphicon-cog");
-        $(commentButton).append(commentSpan);
+        var settingsButton: HTMLButtonElement = document.createElement("button");
+        $(settingsButton).addClass("settings-button");
+        var settingsSpan = document.createElement("span");
+        $(settingsSpan).addClass("glyphicon glyphicon-cog");
+        $(settingsButton).append(settingsSpan);
 
-        var commentSpanText = document.createElement("span");
-        $(commentSpanText).addClass("button-text");
-        $(commentSpanText).append("Zobrazení");
-        $(commentButton).append(commentSpanText);
+        var settingsSpanText = document.createElement("span");
+        $(settingsSpanText).addClass("button-text");
+        $(settingsSpanText).append("Zobrazení");
+        $(settingsButton).append(settingsSpanText);
 
-        $(commentButton).click((event: Event) => {
-            throw new Error("Not implemented");
+        $(settingsButton).click((event: Event) => {
+            if (this.readerLayout.root.getItemsById('tools').length === 0) {
+                var toolStackConfig = {
+                    type: 'stack',
+                    width: 18,
+                    id: 'tools',
+                    componentName: 'readerTab'
+                };
+                this.readerLayout.root.contentItems[0].addChild(toolStackConfig, 0);
+                this.readerLayout.root.getItemsById('tools')[0].config.width = 15;
+                this.readerLayout.updateSize();
+            }
+            if (this.readerLayout.root.getItemsById('settings').length === 0) {
+                var settingsItemConfig = {
+                    type: 'component',
+                    id: 'settings',
+                    componentState: { label: 'Settings' },
+                    componentName: 'readerTab',
+                    title: 'Zobrazení'
+                };
+                this.readerLayout.root.getItemsById('tools')[0].addChild(settingsItemConfig);
+            }
         });
-        toolButtons.appendChild(commentButton);
+        toolButtons.appendChild(settingsButton);
 
 
         var searchButton: HTMLButtonElement = document.createElement("button");
@@ -235,11 +273,68 @@ class GoldenLayoutReader extends ReaderModule {
         $(searchButton).append(searchSpanText);
 
         $(searchButton).click((event: Event) => {
-            throw new Error("Not implemented");
+            if (this.readerLayout.root.getItemsById('tools').length === 0) {
+                var toolStackConfig = {
+                    type: 'stack',
+                    width: 18,
+                    id: 'tools',
+                    componentName: 'readerTab'
+                };
+                this.readerLayout.root.contentItems[0].addChild(toolStackConfig, 0);
+                this.readerLayout.root.getItemsById('tools')[0].config.width = 15;
+                this.readerLayout.updateSize();
+            }
+            if (this.readerLayout.root.getItemsById('search').length === 0) {
+                var searchItemConfig = {
+                    type: 'component',
+                    id: 'search',
+                    componentState: { label: 'Search' },
+                    componentName: 'readerTab',
+                    title: 'Vyhledávání'
+                };
+                this.readerLayout.root.getItemsById('tools')[0].addChild(searchItemConfig);
+            }
         });
 
 
         toolButtons.appendChild(searchButton);
+
+        
+        var contentButton: HTMLButtonElement = document.createElement("button");
+        $(contentButton).addClass("content-button");
+        var contentSpan = document.createElement("span");
+        $(contentSpan).addClass("glyphicon glyphicon-book");
+        $(contentButton).append(contentSpan);
+
+        var contentSpanText = document.createElement("span");
+        $(contentSpanText).addClass("button-text");
+        $(contentSpanText).append("Obsah");
+        $(contentButton).append(contentSpanText);
+
+        $(contentButton).click((event: Event) => {
+            if (this.readerLayout.root.getItemsById('tools').length === 0) {
+                var toolStackConfig = {
+                    type: 'stack',
+                    width: 18,
+                    id: 'tools',
+                    componentName: 'readerTab'
+                };
+                this.readerLayout.root.contentItems[0].addChild(toolStackConfig, 0);
+                this.readerLayout.root.getItemsById('tools')[0].config.width = 15;
+                this.readerLayout.updateSize();
+            }
+            if (this.readerLayout.root.getItemsById('content').length === 0) {
+                var contentItemConfig = {
+                    type: 'component',
+                    id: 'content',
+                    componentState: { label: 'Content' },
+                    componentName: 'readerTab',
+                    title: 'Obsah'
+                };
+                this.readerLayout.root.getItemsById('tools')[0].addChild(contentItemConfig);
+            }
+        });
+        toolButtons.appendChild(contentButton);
         return toolButtons;
     }
 
@@ -377,16 +472,32 @@ class GoldenLayoutReader extends ReaderModule {
             if (state.label === "Content") {
                 $(container.getElement()).append(module.getBookContent());
             }
+            if (state.label === "Settings") {
+                $(container.getElement()).append(module.getBookSettings());
+            }
+            if (state.label === "Bookmarks") {
+                $(container.getElement()).append(module.getBookBookmarks());
+            }
+            if (state.label === "Img") {
+                $(container.getElement()).append(module.getBookImage());
+            }
+
+            if (state.label === "Search") {
+                $(container.getElement()).append(module.getBookSearch());
+            }
         });
         this.readerLayout.init();
-        $(".reader-text-container").scroll();
+        
+        this.readerLayout.on("stateChanged", function() {
+            $(".reader-text-container").scroll();
+        });
+        
     }
+
+    private setSize() {}
 
     private createConfig() {
         var layoutConfig = {
-            settings: {
-                showPopoutIcon: false    
-            },
             dimensions: {
                 headerHeight: 26
             },
@@ -394,35 +505,6 @@ class GoldenLayoutReader extends ReaderModule {
                 type: 'row',
                 isClosable: false,
                 content: [{
-                    type: 'stack',
-                    width: 18,
-                    content: [{
-                        type: 'component',
-                        id: 'content',
-                        componentState: { label: 'Content' },
-                        componentName: 'readerTab',
-                        title: 'Obsah',
-                        isClosable: false
-                    }, {
-                        type: 'component',
-                        id: 'bookmarks',
-                        componentState: { label: 'Bookmarks' },
-                        componentName: 'readerTab',
-                        title: 'Záložky'
-                    }, {
-                        type: 'component',
-                        id: 'view',
-                        componentState: { label: 'View' },
-                        componentName: 'readerTab',
-                        title: 'Zobrazení'
-                    }, {
-                        type: 'component',
-                        id: 'search',
-                        componentState: { label: 'search' },
-                        componentName: 'readerTab',
-                        title: 'Vyhledávání'
-                    }]
-                }, {
                     type: 'component',
                     id: 'text',
                     componentState: { label: 'Text' },
@@ -442,22 +524,64 @@ class GoldenLayoutReader extends ReaderModule {
     }
 
     private getBookText(): HTMLDivElement {
-        var returnDiv: HTMLDivElement = document.createElement("div");
         var textPanel: TextPanel = null;
         if (this.showPanelList.indexOf(ReaderPanelEnum.TextPanel) >= 0) {
-            textPanel = this.appendTextPanel(returnDiv);
+            textPanel = new TextPanel(this.textPanelIdentificator, this, this.showMainPanelsButtonList);
+            this.rightSidePanels.push(textPanel);
+            this.textPanel = textPanel;
         }
-        return returnDiv;
+        return textPanel.panelHtml;
+    }
+
+    private getBookImage(): HTMLDivElement {
+        var imagePanel: ImagePanel = null;
+        if (this.showPanelList.indexOf(ReaderPanelEnum.TextPanel) >= 0) {
+            imagePanel = new ImagePanel(this.imagePanelIdentificator, this, this.showMainPanelsButtonList);
+            this.rightSidePanels.push(imagePanel);
+            this.imagePanel = imagePanel;
+        }
+        return imagePanel.panelHtml;
+    }
+
+    private getBookBookmarks(): HTMLDivElement {
+        var bookmarksPanel: BookmarksPanel = null;
+        if (this.showPanelList.indexOf(ReaderPanelEnum.TextPanel) >= 0) {
+            bookmarksPanel = new BookmarksPanel(this.bookmarksPanelIdentificator, this, this.showMainPanelsButtonList);
+            this.leftSidePanels.push(bookmarksPanel);
+            this.bookmarksPanel = bookmarksPanel;
+        }
+        return bookmarksPanel.panelHtml;
+    }
+
+    private getBookSettings(): HTMLDivElement {
+        var settingsPanel: SettingsPanel = null;
+        if (this.showPanelList.indexOf(ReaderPanelEnum.TextPanel) >= 0) {
+            settingsPanel = new SettingsPanel(this.settingsPanelIdentificator, this, this.showMainPanelsButtonList);
+            this.leftSidePanels.push(settingsPanel);
+            this.settingsPanel = settingsPanel;
+        }
+        return settingsPanel.panelHtml;
     }
 
     private getBookContent(): HTMLDivElement {
-        var returnDiv: HTMLDivElement = document.createElement("div");
         var contentPanel: ContentPanel = null;
         if (this.showPanelList.indexOf(ReaderPanelEnum.ContentPanel) >= 0) {
-            contentPanel = this.appendContentPanel(returnDiv);
+            contentPanel = new ContentPanel(this.contentPanelIdentificator, this, this.showMainPanelsButtonList);
+            this.leftSidePanels.push(contentPanel);
+            this.contentPanel = contentPanel;
         }
-        return returnDiv;
+        return contentPanel.panelHtml;
     }   
+
+    private getBookSearch(): HTMLDivElement {
+        var searchPanel: SearchResultPanel = null;
+        if (this.showPanelList.indexOf(ReaderPanelEnum.SearchPanel) >= 0) {
+            searchPanel = new SearchResultPanel(this.searchPanelIdentificator, this, this.showMainPanelsButtonList);
+            this.leftSidePanels.push(searchPanel);
+            this.searchPanel = searchPanel;
+        }
+        return searchPanel.panelHtml;
+    } 
 }
 
 function initGoldenReader(bookXmlId: string,
