@@ -1208,6 +1208,38 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public List<PageResultContextContract> SearchHitsWithPageContext(long projectId, SearchHitsRequestContract request)
+        {
+            try
+            {
+                var result = Post<List<PageResultContextContract>>($"book/{projectId}/hit/search", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public long SearchHitsResultCount(long projectId, SearchHitsRequestContract request)
+        {
+            try
+            {
+                var result = Post<long>($"book/{projectId}/hit/search-count", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         #endregion
 
         public BookContract GetBookInfo(long projectId)

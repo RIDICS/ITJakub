@@ -7,6 +7,7 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Errors;
+using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
@@ -160,6 +161,35 @@ namespace Vokabular.MainService.Controllers
             {
                 return StatusCode((int)exception.StatusCode, exception.Message);
             }
+        }
+
+        [HttpPost("{projectId}/hit/search")]
+        [ProducesResponseType(typeof(List<PageResultContextContract>), StatusCodes.Status200OK)]
+        public IActionResult SearchHitsWithPageContext(long projectId, [FromBody] SearchHitsRequestContract request)
+        {
+            // TODO remove this mock and implement
+            return Ok(new List<PageResultContextContract>
+            {
+                new PageResultContextContract
+                {
+                    PageName = "STR1",
+                    PageId = 400,
+                    ContextStructure = new KwicStructure
+                    {
+                        Before = "before text",
+                        After = "after text",
+                        Match = "text",
+                    }
+                }
+            });
+        }
+
+        [HttpPost("{projectId}/hit/search-count")]
+        [ProducesResponseType(typeof(List<PageResultContextContract>), StatusCodes.Status200OK)]
+        public IActionResult SearchHitsResultCount(long projectId, [FromBody] SearchHitsRequestContract request)
+        {
+            // TODO remove this mock and implement
+            return Ok(20);
         }
 
         [HttpGet("{projectId}")]
