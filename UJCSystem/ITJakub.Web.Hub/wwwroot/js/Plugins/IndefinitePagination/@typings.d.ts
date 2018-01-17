@@ -1,13 +1,18 @@
 ﻿declare namespace IndefinitePagination {
     interface Options {
         container: HTMLDivElement | JQuery;
-        loadAllPagesButton?: boolean;
-        loadAllPagesCallback: Function;
-        showSlider?: boolean;
-        showInput?: boolean;
         previousPageCallback?: Function;
         nextPageCallback: Function;
+
         initialCallback?: Function;
         executeInitialCallbackOnInit?: boolean;
+
+        buttonClass?: string;
+
+        loadAllPagesButton?: boolean;
+        loadAllPagesCallback?: () => JQuery.Promise<any>;
+        loadPageCallBack?: (pageNumber: number) => void;
+        showSlider?: boolean;
+        showInput?: boolean;
     }
 }
