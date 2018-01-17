@@ -3,9 +3,9 @@
     private readonly paginationContainer: JQuery;
     private buttonClass = "btn-default";
     private goToPageInput: JQuery;
-    private currentPage: number;
     private totalNumberOfPages: number;
     private firstPage = 1;
+    private currentPage = this.firstPage;
 
     constructor(options: IndefinitePagination.Options) {
         this.options = options;
@@ -155,16 +155,26 @@
         this.paginationContainer.on("click",
             ".indefinite-pagination-next-page",
             () => {
+                this.currentPage++;
                 if (this.totalNumberOfPages) {
-                    this.updatePage(this.currentPage);
+                    if (this.currentPage > this.totalNumberOfPages) {
+                        this.currentPage = this.totalNumberOfPages;
+                    }else{
+                        this.updatePage(this.currentPage);
+                    }
                 }
                 this.options.nextPageCallback();
             });
         this.paginationContainer.on("click",
             ".indefinite-pagination-prev-page",
             () => {
+                this.currentPage--;
                 if (this.totalNumberOfPages) {
-                    this.updatePage(this.currentPage);
+                    if (this.currentPage < this.firstPage) {
+                        this.currentPage = this.firstPage;
+                    } else {
+                        this.updatePage(this.currentPage);
+                    }
                 }
                 this.options.previousPageCallback();
             });

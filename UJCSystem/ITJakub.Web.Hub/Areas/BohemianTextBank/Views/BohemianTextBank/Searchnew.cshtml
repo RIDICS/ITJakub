@@ -1,10 +1,12 @@
 ﻿@section styles{
     <link href="~/Areas/BohemianTextBank/css/itjakub.bohemiantextbank.css" rel="stylesheet" />
     <link href="~/Areas/BohemianTextBank/css/ridics.bohemiantextbank-search-viewer.css" rel="stylesheet" />
+    <link href="~/css/Plugins/ridics.indefinite-pagination.css" rel="stylesheet" />
 }
 @section scripts{
     <script src="~/Areas/BohemianTextBank/js/itjakub.bohemiantextbank.bundle.js"></script>
     <script src="~/lib/bootbox/bootbox.min.js"></script>
+    <script src="~/js/Plugins/IndefinitePagination/ridics.indefinite-pagination.js"></script>
 }
 
 @{
@@ -47,12 +49,6 @@
             <div id="totalResultCountDiv"></div>
         </div>
         <div class="corpus-search-setting-div-pagination pagination-extra-small" id="paginationContainer">
-            <div class="btn-group">
-                <button type="button" class="btn btn-default search-result-prev-page" disabled><i class="fa fa-chevron-left" aria-hidden="true"></i>
-                </button>
-                <button type="button" class="btn btn-default search-result-next-page"><i class="fa fa-chevron-right" aria-hidden="true"></i>
-                </button>
-            </div> 
         </div>
     </div>
     <div class="corpus-search-results-div">
