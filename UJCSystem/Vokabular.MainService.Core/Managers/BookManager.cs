@@ -1,31 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using AutoMapper;
 using Vokabular.Core.Storage;
-using Vokabular.DataEntities.Database.ConditionCriteria;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Managers.Fulltext;
-using Vokabular.MainService.Core.Managers.Fulltext.Data;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Search;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
-using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Results;
-using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Core.Managers
 {
     public class BookManager
     {
-        private readonly CriteriaKey[] m_supportedSearchPageCriteria = {CriteriaKey.Fulltext, CriteriaKey.Heading, CriteriaKey.Sentence, CriteriaKey.Term, CriteriaKey.TokenDistance };
         private readonly MetadataRepository m_metadataRepository;
         private readonly BookRepository m_bookRepository;
         private readonly ResourceRepository m_resourceRepository;
@@ -298,83 +292,6 @@ namespace Vokabular.MainService.Core.Managers
             var searchHeadwordRowNumberWork = new SearchHeadwordRowNumberWork(m_bookRepository, m_categoryRepository, request, userId);
             var result = searchHeadwordRowNumberWork.Execute();
 
-            return result;
-        }
-
-        public List<PageContract> SearchPage(long projectId, SearchPageRequestContract request)
-        {
-            m_authorizationManager.AuthorizeBook(projectId);
-
-            var termConditions = new List<SearchCriteriaContract>();
-            var fulltextConditions = new List<SearchCriteriaContract>();
-            foreach (var searchCriteriaContract in request.ConditionConjunction)
-            {
-                if (searchCriteriaContract.Key == CriteriaKey.Term)
-                {
-                    termConditions.Add(searchCriteriaContract);
-                }
-                else if (m_supportedSearchPageCriteria.Contains(searchCriteriaContract.Key))
-                {
-                    fulltextConditions.Add(searchCriteriaContract);
-                }
-                else
-                {
-                    throw new HttpErrorCodeException($"Not supported criteria key: {searchCriteriaContract.Key}", HttpStatusCode.BadRequest);
-                }
-            }
-
-            IList<PageResource> pagesByMetadata = null;
-            if (termConditions.Count > 0)
-            {
-                var termConditionCreator = new TermCriteriaPageConditionCreator();
-                termConditionCreator.AddCriteria(termConditions);
-                termConditionCreator.SetProjectIds(new[] { projectId });
-
-                pagesByMetadata = m_metadataRepository.InvokeUnitOfWork(x => x.GetPagesWithTerms(termConditionCreator));
-            }
-
-            IList<PageResource> pagesByFulltext = null;
-            if (fulltextConditions.Count > 0)
-            {
-                var projectIdentification = m_bookRepository.InvokeUnitOfWork(x => x.GetProjectIdentification(projectId));
-                
-                var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
-                var fulltextResult = fulltextStorage.SearchPageByCriteria(fulltextConditions, projectIdentification);
-
-                switch (fulltextResult.SearchResultType)
-                {
-                    case PageSearchResultType.TextId:
-                        pagesByFulltext = m_bookRepository.InvokeUnitOfWork(x => x.GetPagesByTextVersionId(fulltextResult.LongList));
-                        break;
-                    case PageSearchResultType.TextExternalId:
-                        pagesByFulltext = m_bookRepository.InvokeUnitOfWork(x => x.GetPagesByTextExternalId(fulltextResult.StringList, projectId));
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
-
-            IList<PageResource> resultPages;
-            if (pagesByMetadata != null && pagesByFulltext != null)
-            {
-                resultPages = pagesByMetadata.Intersect(pagesByFulltext)
-                    .OrderBy(x => x.Position)
-                    .ToList();
-            }
-            else if (pagesByFulltext != null)
-            {
-                resultPages = pagesByFulltext;
-            }
-            else if (pagesByMetadata != null)
-            {
-                resultPages = pagesByMetadata;
-            }
-            else
-            {
-                throw new ArgumentException("No supported search criteria was specified");
-            }
-
-            var result = Mapper.Map<List<PageContract>>(resultPages);
             return result;
         }
 

@@ -380,7 +380,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return query.List<long>();
         }
 
-        public virtual IList<PageResource> GetPagesByTextVersionId(IList<long> textVersionIds)
+        public virtual IList<PageResource> GetPagesByTextVersionId(IEnumerable<long> textVersionIds)
         {
             Resource resourceAlias = null;
 
@@ -400,7 +400,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return pageResourceIds;
         }
 
-        public virtual IList<PageResource> GetPagesByTextExternalId(IList<string> textExternalIds, long? projectId, string projectExternalId = null)
+        public virtual IList<PageResource> GetPagesByTextExternalId(IEnumerable<string> textExternalIds, long? projectId, string projectExternalId = null)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;

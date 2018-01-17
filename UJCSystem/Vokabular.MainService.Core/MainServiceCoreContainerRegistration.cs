@@ -16,6 +16,7 @@ namespace Vokabular.MainService.Core
         {
             container.AddPerWebRequest<AuthenticationManager>();
             container.AddPerWebRequest<AuthorizationManager>();
+            container.AddPerWebRequest<BookHitSearchManager>();
             container.AddPerWebRequest<BookManager>();
             container.AddPerWebRequest<BookSearchManager>();
             container.AddPerWebRequest<CardFileManager>();

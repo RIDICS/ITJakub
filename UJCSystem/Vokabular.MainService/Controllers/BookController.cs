@@ -7,7 +7,6 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Errors;
-using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
@@ -17,11 +16,13 @@ namespace Vokabular.MainService.Controllers
     {
         private readonly BookManager m_bookManager;
         private readonly BookSearchManager m_bookSearchManager;
+        private readonly BookHitSearchManager m_bookHitSearchManager;
 
-        public BookController(BookManager bookManager, BookSearchManager bookSearchManager)
+        public BookController(BookManager bookManager, BookSearchManager bookSearchManager, BookHitSearchManager bookHitSearchManager)
         {
             m_bookManager = bookManager;
             m_bookSearchManager = bookSearchManager;
+            m_bookHitSearchManager = bookHitSearchManager;
         }
 
         [HttpGet("type/{bookType}")]
@@ -150,7 +151,7 @@ namespace Vokabular.MainService.Controllers
         {
             try
             {
-                var result = m_bookManager.SearchPage(projectId, request);
+                var result = m_bookHitSearchManager.SearchPage(projectId, request);
                 return Ok(result);
             }
             catch (ArgumentException exception)
@@ -167,29 +168,38 @@ namespace Vokabular.MainService.Controllers
         [ProducesResponseType(typeof(List<PageResultContextContract>), StatusCodes.Status200OK)]
         public IActionResult SearchHitsWithPageContext(long projectId, [FromBody] SearchHitsRequestContract request)
         {
-            // TODO remove this mock and implement
-            return Ok(new List<PageResultContextContract>
+            try
             {
-                new PageResultContextContract
-                {
-                    PageName = "STR1",
-                    PageId = 400,
-                    ContextStructure = new KwicStructure
-                    {
-                        Before = "before text",
-                        After = "after text",
-                        Match = "text",
-                    }
-                }
-            });
+                var result = m_bookHitSearchManager.SearchHitsWithPageContext(projectId, request);
+                return Ok(result);
+            }
+            catch (ArgumentException exception)
+            {
+                return BadRequest(exception.Message);
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode((int)exception.StatusCode, exception.Message);
+            }
         }
 
         [HttpPost("{projectId}/hit/search-count")]
-        [ProducesResponseType(typeof(List<PageResultContextContract>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
         public IActionResult SearchHitsResultCount(long projectId, [FromBody] SearchHitsRequestContract request)
         {
-            // TODO remove this mock and implement
-            return Ok(20);
+            try
+            {
+                var resultCount = m_bookHitSearchManager.SearchHitsResultCount(projectId, request);
+                return Ok(resultCount);
+            }
+            catch (ArgumentException exception)
+            {
+                return BadRequest(exception.Message);
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode((int)exception.StatusCode, exception.Message);
+            }
         }
 
         [HttpGet("{projectId}")]
