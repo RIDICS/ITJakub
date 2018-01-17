@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
@@ -13,11 +12,8 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
-using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Criteria;
-using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Types;
-using HitSettingsContract = Vokabular.Shared.DataContracts.Search.OldCriteriaItem.HitSettingsContract;
 
 namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 {
@@ -102,7 +98,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
         public ActionResult Feedback()
         {
-            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, GetUserName());
+            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, IsUserLoggedIn());
             return View(viewModel);
         }
 
@@ -187,64 +183,38 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
         #region Search in book
 
-        public ActionResult AdvancedSearchInBookPaged(string json, int start, int count, string bookXmlId, string versionXmlId)
+        public ActionResult AdvancedSearchInBookPaged(string json, int start, int count, long projectId, long? snapshotId)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
 
-            listSearchCriteriaContracts.Add(new ResultCriteriaContract
+            using (var client = GetRestClient())
             {
-                Start = 0,
-                Count = 1,
-                HitSettingsContract = new HitSettingsContract
+                var result = client.SearchHitsWithPageContext(projectId, new SearchHitsRequestContract
                 {
+                    ConditionConjunction = listSearchCriteriaContracts,
                     ContextLength = 45,
                     Count = count,
-                    Start = start
-                }
-            });
-
-            listSearchCriteriaContracts.Add(new ResultRestrictionCriteriaContract
-            {
-                ResultBooks = new List<BookVersionPairContract> {new BookVersionPairContract {Guid = bookXmlId, VersionId = versionXmlId}}
-            });
-            using (var client = GetMainServiceClient())
-            {
-                var result = client.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
-                if (result != null)
-                {
-                    return Json(new {results = result.Results}, GetJsonSerializerSettingsForBiblModule());
-                }
-
-                return Json(new {results = new PageResultContext[0]}, GetJsonSerializerSettingsForBiblModule());
+                    Start = start,
+                });
+                
+                return Json(new {results = result}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
-        public ActionResult AdvancedSearchInBookCount(string json, string bookXmlId, string versionXmlId)
+        public ActionResult AdvancedSearchInBookCount(string json, long projectId, long? snapshotId)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
 
-            listSearchCriteriaContracts.Add(new ResultCriteriaContract
+            using (var client = GetRestClient())
             {
-                Start = 0,
-                Count = 1
-            });
-
-            listSearchCriteriaContracts.Add(new ResultRestrictionCriteriaContract
-            {
-                ResultBooks = new List<BookVersionPairContract> {new BookVersionPairContract {Guid = bookXmlId, VersionId = versionXmlId}}
-            });
-            using (var client = GetMainServiceClient())
-            {
-                var result = client.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
-                if (result != null)
+                var resultCount = client.SearchHitsResultCount(projectId, new SearchHitsRequestContract
                 {
-                    var count = result.TotalHitCount;
-                    return Json(new {count});
-                }
-
-                return Json(new {count = 0});
+                    ConditionConjunction = listSearchCriteriaContracts
+                });
+                
+                return Json(new {count = resultCount});
             }
         }
 
@@ -265,70 +235,36 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             }
         }
 
-        public ActionResult TextSearchInBookPaged(string text, int start, int count, string bookXmlId, string versionXmlId)
+        public ActionResult TextSearchInBookPaged(string text, int start, int count, long projectId, long? snapshotId)
         {
             var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
-
-            listSearchCriteriaContracts.Add(new ResultCriteriaContract
+            
+            using (var client = GetRestClient())
             {
-                Start = 0,
-                Count = 1,
-                HitSettingsContract = new HitSettingsContract
+                var result = client.SearchHitsWithPageContext(projectId, new SearchHitsRequestContract
                 {
+                    ConditionConjunction = listSearchCriteriaContracts,
                     ContextLength = 45,
                     Count = count,
-                    Start = start
-                }
-            });
-            listSearchCriteriaContracts.Add(new ResultRestrictionCriteriaContract
-            {
-                ResultBooks =
-                    new List<BookVersionPairContract>
-                    {
-                        new BookVersionPairContract {Guid = bookXmlId, VersionId = versionXmlId}
-                    }
-            });
-
-            using (var client = GetMainServiceClient())
-            {
-                var result = client.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
-                if (result != null)
-                {
-                    return Json(new {results = result.Results}, GetJsonSerializerSettingsForBiblModule());
-                }
-
-                return Json(new {results = new PageResultContext[0]}, GetJsonSerializerSettingsForBiblModule());
+                    Start = start,
+                });
+                
+                return Json(new { results = result }, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
-        public ActionResult TextSearchInBookCount(string text, string bookXmlId, string versionXmlId)
+        public ActionResult TextSearchInBookCount(string text, long projectId, long? snapshotId)
         {
             var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
 
-            listSearchCriteriaContracts.Add(new ResultCriteriaContract
+            using (var client = GetRestClient())
             {
-                Start = 0,
-                Count = 1
-            });
-            listSearchCriteriaContracts.Add(new ResultRestrictionCriteriaContract
-            {
-                ResultBooks =
-                    new List<BookVersionPairContract>
-                    {
-                        new BookVersionPairContract {Guid = bookXmlId, VersionId = versionXmlId}
-                    }
-            });
-            
-            using (var client = GetMainServiceClient())
-            {
-                var result = client.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
-                if (result != null)
+                var resultCount = client.SearchHitsResultCount(projectId, new SearchHitsRequestContract
                 {
-                    var count = result.TotalHitCount;
-                    return Json(new {count});
-                }
+                    ConditionConjunction = listSearchCriteriaContracts
+                });
 
-                return Json(new {count = 0});
+                return Json(new { count = resultCount });
             }
         }
 

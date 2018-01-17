@@ -4,6 +4,7 @@ using AutoMapper;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.DataContracts;
+using ITJakub.Web.Hub.Helpers;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -55,7 +56,7 @@ namespace ITJakub.Web.Hub.Controllers
                 var rootBookTypeCategory = new CategoryContract
                 {
                     Id = rootCategoryId,
-                    Description = GetCategoryName(),
+                    Description = BookTypeHelper.GetCategoryName(AreaBookType),
                     ParentCategoryId = null,
                 };
 
@@ -94,31 +95,6 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        private string GetCategoryName()
-        {
-            switch (AreaBookType)
-            {
-                case BookTypeEnumContract.Edition:
-                    return "Edice";
-                case BookTypeEnumContract.Dictionary:
-                    return "Slovníky";
-                case BookTypeEnumContract.Grammar:
-                    return "Digitalizované mluvnice";
-                case BookTypeEnumContract.ProfessionalLiterature:
-                    return "Odborná literatura";
-                case BookTypeEnumContract.TextBank:
-                    return "Textová banka";
-                case BookTypeEnumContract.BibliographicalItem:
-                    return "Bibliografie";
-                case BookTypeEnumContract.CardFile:
-                    return "Kartotéky";
-                case BookTypeEnumContract.AudioBook:
-                    return "Audio knihy";
-                default:
-                    return null;
-            }
-        }
-        
         protected List<SearchCriteriaContract> CreateTextCriteriaList(CriteriaKey key, string text)
         {
             var listSearchCriteriaContracts = new List<SearchCriteriaContract>();

@@ -192,10 +192,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ITJakub.CardFile.Core\ITJakub.CardFile.Core.csproj">
-      <Project>{f00801bf-d6b2-4f6c-b808-68babf177055}</Project>
-      <Name>ITJakub.CardFile.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ITJakub.ITJakubService.Core\ITJakub.ITJakubService.Core.csproj">
       <Project>{904E449B-6F51-46C7-A730-4F4C992BDDC8}</Project>
       <Name>ITJakub.ITJakubService.Core</Name>
@@ -219,6 +215,10 @@
     <ProjectReference Include="..\ITJakub.DataEntities\ITJakub.DataEntities.csproj">
       <Project>{36a4ca21-a99d-48d3-9dff-76878cf1de0c}</Project>
       <Name>ITJakub.DataEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vokabular.CardFile.Core\Vokabular.CardFile.Core.csproj">
+      <Project>{dd3ea4c0-3500-4576-adbe-3c187ab018b1}</Project>
+      <Name>Vokabular.CardFile.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vokabular.Core\Vokabular.Core.csproj">
       <Project>{88ef00d2-ce46-4054-a764-9093ba9dde4e}</Project>

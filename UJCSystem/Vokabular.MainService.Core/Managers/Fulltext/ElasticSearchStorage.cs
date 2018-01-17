@@ -64,6 +64,17 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             throw new System.NotImplementedException();
         }
 
+        public long SearchHitsResultCount(List<SearchCriteriaContract> criteria, ProjectIdentificationResult project)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public SearchHitsResultData SearchHitsWithPageContext(int start, int count, int contextLength, List<SearchCriteriaContract> criteria,
+            ProjectIdentificationResult project)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public long SearchCorpusByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
             throw new System.NotImplementedException();

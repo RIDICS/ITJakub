@@ -16,17 +16,19 @@ namespace Vokabular.MainService.Core.Managers
     public class FeedbackManager
     {
         private readonly PortalRepository m_portalRepository;
-        private readonly UserManager m_userManager;
+        private readonly AuthenticationManager m_authenticationManager;
+        private readonly AuthorizationManager m_authorizationManager;
 
-        public FeedbackManager(PortalRepository portalRepository, UserManager userManager)
+        public FeedbackManager(PortalRepository portalRepository, AuthenticationManager authenticationManager, AuthorizationManager authorizationManager)
         {
             m_portalRepository = portalRepository;
-            m_userManager = userManager;
+            m_authenticationManager = authenticationManager;
+            m_authorizationManager = authorizationManager;
         }
 
         public long CreateFeedback(CreateFeedbackContract data)
         {
-            var userId = m_userManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             var resultId = new CreateFeedbackWork(m_portalRepository, data, FeedbackType.Generic, userId).Execute();
             return resultId;
         }
@@ -39,7 +41,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public long CreateHeadwordFeedback(long resourceVersionId, CreateFeedbackContract data)
         {
-            var userId = m_userManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             var resultId = new CreateFeedbackWork(m_portalRepository, data, FeedbackType.Headword, userId, resourceVersionId).Execute();
             return resultId;
         }
@@ -52,6 +54,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public PagedResultList<FeedbackContract> GetFeedbackList(int? start, int? count, FeedbackSortEnumContract sort, SortDirectionEnumContract sortDirection, IList<FeedbackCategoryEnumContract> filterCategories)
         {
+            m_authorizationManager.CheckUserCanManageFeedbacks();
+
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
             var sortValue = Mapper.Map<FeedbackSortEnum>(sort);
@@ -77,6 +81,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public void DeleteFeedback(long feedbackId)
         {
+            m_authorizationManager.CheckUserCanManageFeedbacks();
+
             new DeleteFeedbackWork(m_portalRepository, feedbackId).Execute();
         }
     }

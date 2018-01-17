@@ -1,5 +1,4 @@
 ﻿using ITJakub.FileProcessing.DataContracts;
-using ITJakub.Shared.Contracts.Resources;
 
 namespace ITJakub.ITJakubService.Core.Resources
 {
@@ -16,10 +15,15 @@ namespace ITJakub.ITJakubService.Core.Resources
             m_userManager = userManager;
         }
 
-        public void AddResource(UploadResourceContract resourceInfoSkeleton)
+        public void AddResource(DataContracts.UploadResourceContract resourceInfoSkeleton)
         {
             m_authorizationManager.CheckUserCanUploadBook();
-            m_resourceClient.AddResource(resourceInfoSkeleton);
+            m_resourceClient.AddResource(new UploadResourceContract
+            {
+                SessionId = resourceInfoSkeleton.SessionId,
+                FileName = resourceInfoSkeleton.FileName,
+                Data = resourceInfoSkeleton.Data,
+            });
         }
 
         public bool ProcessSession(string resourceSessionId, long? projectId, string uploadMessage)

@@ -110,6 +110,7 @@
     <Compile Include="Sessions\Works\Helpers\CollectionExtensions.cs" />
     <Compile Include="Sessions\Works\Helpers\PersonHelper.cs" />
     <Compile Include="Sessions\Works\Helpers\ProjectResponsibleNameEqualityComparer.cs" />
+    <Compile Include="Sessions\Works\ProcessAutoImportPermissionWork.cs" />
     <Compile Include="Sessions\Works\SaveNewBookDataWork.cs" />
     <Compile Include="Sessions\Works\CreateOrUpdateProjectBasicDataWork.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateAuthorsSubtask.cs" />
@@ -207,10 +208,6 @@
     <ProjectReference Include="..\ITJakub.SearchService.DataContracts\ITJakub.SearchService.DataContracts.csproj">
       <Project>{ba58bca2-f98a-4dda-934c-b78c10bc0cad}</Project>
       <Name>ITJakub.SearchService.DataContracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
-      <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
-      <Name>ITJakub.Shared.Contracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\ITJakub.Xml.Conversion\Ujc.Ovj.Ooxml.Conversion\Ujc.Ovj.Ooxml.Conversion.csproj">
       <Project>{c1753d1a-9d38-4a6f-aa01-bdadecb2eac8}</Project>

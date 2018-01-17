@@ -1,5 +1,4 @@
 ﻿using System.ServiceModel;
-using ITJakub.Shared.Contracts.Resources;
 
 namespace ITJakub.FileProcessing.DataContracts
 {

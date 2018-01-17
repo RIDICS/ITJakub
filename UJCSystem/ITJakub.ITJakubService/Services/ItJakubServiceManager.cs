@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Castle.Windsor;
 using ITJakub.ITJakubService.Core;
@@ -25,7 +26,6 @@ namespace ITJakub.ITJakubService.Services
         private readonly AuthorManager m_authorManager;
 
         private readonly BookManager m_bookManager;
-        private readonly CardFileManager m_cardFileManager;
         private readonly WindsorContainer m_container = Container.Current;
         private readonly FavoriteManager m_favoriteManager;
         private readonly FeedbackManager m_feedbackManager;
@@ -42,7 +42,6 @@ namespace ITJakub.ITJakubService.Services
             m_resourceManager = m_container.Resolve<ResourceManager>();
             m_searchManager = m_container.Resolve<SearchManager>();
             m_feedbackManager = m_container.Resolve<FeedbackManager>();
-            m_cardFileManager = m_container.Resolve<CardFileManager>();
             m_permissionManager = m_container.Resolve<PermissionManager>();
             m_userManager = m_container.Resolve<UserManager>();
             m_newsManager = m_container.Resolve<NewsManager>();
@@ -411,37 +410,37 @@ namespace ITJakub.ITJakubService.Services
 
         public IEnumerable<CardFileContract> GetCardFiles()
         {
-            return m_cardFileManager.GetCardFiles();
+            throw new InvalidOperationException("obsolete service");
         }
 
         public IEnumerable<BucketShortContract> GetBuckets(string cardFileId)
         {
-            return m_cardFileManager.GetBuckets(cardFileId);
+            throw new InvalidOperationException("obsolete service");
         }
 
         public IEnumerable<BucketShortContract> GetBucketsWithHeadword(string cardFileId, string headword)
         {
-            return m_cardFileManager.GetBucketsByHeadword(cardFileId, headword);
+            throw new InvalidOperationException("obsolete service");
         }
 
         public IEnumerable<CardContract> GetCards(string cardFileId, string bucketId)
         {
-            return m_cardFileManager.GetCards(cardFileId, bucketId);
+            throw new InvalidOperationException("obsolete service");
         }
 
         public IEnumerable<CardShortContract> GetCardsShort(string cardFileId, string bucketId)
         {
-            return m_cardFileManager.GetCardsShort(cardFileId, bucketId);
+            throw new InvalidOperationException("obsolete service");
         }
 
         public CardContract GetCard(string cardFileId, string bucketId, string cardId)
         {
-            return m_cardFileManager.GetCard(cardFileId, bucketId, cardId);
+            throw new InvalidOperationException("obsolete service");
         }
 
         public Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId, CardImageSizeEnumContract imageSize)
         {
-            return m_cardFileManager.GetImage(cardFileId, bucketId, cardId, imageId, imageSize);
+            throw new InvalidOperationException("obsolete service");
         }
 
         #endregion

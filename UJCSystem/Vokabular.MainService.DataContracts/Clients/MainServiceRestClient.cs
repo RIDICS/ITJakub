@@ -5,13 +5,16 @@ using System.Net;
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.CardFile;
 using Vokabular.MainService.DataContracts.Contracts.Favorite;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
+using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Extensions;
+using Vokabular.RestClient.Headers;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared;
 using Vokabular.Shared.DataContracts.Types;
@@ -23,18 +26,23 @@ namespace Vokabular.MainService.DataContracts.Clients
     public class MainServiceRestClient : FullRestClientBase
     {
         private static readonly ILogger m_logger = ApplicationLogging.CreateLogger<MainServiceRestClient>();
-
-        public MainServiceRestClient(Uri baseAddress) : base(baseAddress)
+        private readonly string m_authenticationToken;
+        
+        public MainServiceRestClient(Uri baseAddress, string authenticationToken) : base(baseAddress)
         {
+            m_authenticationToken = authenticationToken;
         }
 
         protected override void FillRequestMessage(HttpRequestMessage requestMessage)
         {
+            requestMessage.Headers.TryAddWithoutValidation(CustomHttpHeaders.Authorization, m_authenticationToken);
         }
 
         protected override void ProcessResponse(HttpResponseMessage response)
         {
         }
+
+        #region Project
 
         public PagedResultList<ProjectDetailContract> GetProjectList(int start, int count, bool fetchPageCount = false)
         {
@@ -136,6 +144,10 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        #endregion
+
+        #region Configure project relationships
+
         public void SetProjectLiteraryKinds(long projectId, IntegerIdListContract request)
         {
             try
@@ -210,6 +222,9 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+
+        #endregion
+
 
         public void UploadResource(string sessionId, Stream data, string fileName)
         {
@@ -1047,6 +1062,8 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        #region Searching
+
         public List<SearchResultContract> SearchBook(SearchRequestContract request)
         {
             try
@@ -1190,6 +1207,40 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+
+        public List<PageResultContextContract> SearchHitsWithPageContext(long projectId, SearchHitsRequestContract request)
+        {
+            try
+            {
+                var result = Post<List<PageResultContextContract>>($"book/{projectId}/hit/search", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public long SearchHitsResultCount(long projectId, SearchHitsRequestContract request)
+        {
+            try
+            {
+                var result = Post<long>($"book/{projectId}/hit/search-count", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
 
         public BookContract GetBookInfo(long projectId)
         {
@@ -2060,5 +2111,508 @@ namespace Vokabular.MainService.DataContracts.Clients
         }
 
         #endregion
+
+        #region Authentication and users
+
+        public int CreateNewUser(CreateUserContract data)
+        {
+            try
+            {
+                EnsureSecuredClient();
+                var result = Post<int>("user", data);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public UserDetailContract GetCurrentUserInfo()
+        {
+            try
+            {
+                EnsureSecuredClient();
+                var result = Get<UserDetailContract>("user/current");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void UpdateCurrentUser(UpdateUserContract data)
+        {
+            try
+            {
+                EnsureSecuredClient();
+                Put<object>("user/current", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void UpdateCurrentPassword(UpdateUserPasswordContract data)
+        {
+            try
+            {
+                EnsureSecuredClient();
+                Put<object>("user/current/password", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public SignInResultContract SignIn(SignInContract data)
+        {
+            try
+            {
+                EnsureSecuredClient();
+                var result = Post<SignInResultContract>("authtoken", data);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void SignOut()
+        {
+            try
+            {
+                EnsureSecuredClient();
+                Delete("authtoken");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region Card files
+
+        public List<CardFileContract> GetCardFiles()
+        {
+            try
+            {
+                var result = Get<List<CardFileContract>>("cardfile");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<BucketShortContract> GetBuckets(string cardFileId, string headword = null)
+        {
+            try
+            {
+                var url = UrlQueryBuilder.Create($"cardfile/{cardFileId}/bucket")
+                    .AddParameter("headword", headword)
+                    .ToQuery();
+                var result = Get<List<BucketShortContract>>(url);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<CardContract> GetCards(string cardFileId, string bucketId)
+        {
+            try
+            {
+                var result = Get<List<CardContract>>($"cardfile/{cardFileId}/bucket/{bucketId}/card");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<CardShortContract> GetCardsShort(string cardFileId, string bucketId)
+        {
+            try
+            {
+                var result = Get<List<CardShortContract>>($"cardfile/{cardFileId}/bucket/{bucketId}/card/short");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public CardContract GetCard(string cardFileId, string bucketId, string cardId)
+        {
+            try
+            {
+                var result = Get<CardContract>($"cardfile/{cardFileId}/bucket/{bucketId}/card/{cardId}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public FileResultData GetCardImage(string cardFileId, string bucketId, string cardId, string imageId, CardImageSizeEnumContract imageSize)
+        {
+            try
+            {
+                var result = GetStream($"cardfile/{cardFileId}/bucket/{bucketId}/card/{cardId}/image/{imageId}?imageSize={imageSize}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region Permissions
+
+        public List<UserDetailContract> GetUserAutocomplete(string query)
+        {
+            try
+            {
+                var result = Get<List<UserDetailContract>>("user/autocomplete".AddQueryString("query", query));
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<UserGroupContract> GetUserGroupAutocomplete(string query)
+        {
+            try
+            {
+                var result = Get<List<UserGroupContract>>("usergroup/autocomplete".AddQueryString("query", query));
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public UserDetailContract GetUserDetail(int userId)
+        {
+            try
+            {
+                var result = Get<UserDetailContract>($"user/{userId}/detail");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public UserGroupDetailContract GetUserGroupDetail(int groupId)
+        {
+            try
+            {
+                var result = Get<UserGroupDetailContract>($"usergroup/{groupId}/detail");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public int CreateGroup(UserGroupContract request)
+        {
+            try
+            {
+                var result = Post<int>("usergroup", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void DeleteGroup(int groupId)
+        {
+            try
+            {
+                Delete($"usergroup/{groupId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void AddUserToGroup(int userId, int groupId)
+        {
+            try
+            {
+                Post<object>($"usergroup/{groupId}/user/{userId}", null);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void RemoveUserFromGroup(int userId, int groupId)
+        {
+            try
+            {
+                Delete($"usergroup/{groupId}/user/{userId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<UserGroupContract> GetGroupsByUser(int userId)
+        {
+            try
+            {
+                var result = Get<List<UserGroupContract>>($"user/{userId}/group");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<BookContract> GetAllBooksByType(BookTypeEnumContract bookType)
+        {
+            try
+            {
+                var result = Get<List<BookContract>>($"book/type/{bookType}/all");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<BookContract> GetBooksForUserGroup(int groupId, BookTypeEnumContract bookType)
+        {
+            try
+            {
+                var result = Get<List<BookContract>>($"usergroup/{groupId}/book?filterByBookType={bookType}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void AddBooksToGroup(int groupId, IList<long> bookIds)
+        {
+            try
+            {
+                Post<object>($"usergroup/{groupId}/permission/book", new AddBookToUserGroupRequestContract
+                {
+                    BookIdList = bookIds
+                });
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void RemoveBooksFromGroup(int groupId, IList<long> bookIds)
+        {
+            try
+            {
+                Delete($"usergroup/{groupId}/permission/book", new AddBookToUserGroupRequestContract
+                {
+                    BookIdList = bookIds
+                });
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<SpecialPermissionContract> GetSpecialPermissions()
+        {
+            try
+            {
+                var result = Get<List<SpecialPermissionContract>>("permission/special");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<SpecialPermissionContract> GetSpecialPermissionsForGroup(int groupId)
+        {
+            try
+            {
+                var result = Get<List<SpecialPermissionContract>>($"usergroup/{groupId}/permission/special");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void AddSpecialPermissionsToGroup(int groupId, IList<int> specialPermissionsIds)
+        {
+            try
+            {
+                Post<object>($"usergroup/{groupId}/permission/special", new IntegerIdListContract
+                {
+                    IdList = specialPermissionsIds
+                });
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void RemoveSpecialPermissionsFromGroup(int groupId, IList<int> specialPermissionsIds)
+        {
+            try
+            {
+                Delete($"usergroup/{groupId}/permission/special", new IntegerIdListContract
+                {
+                    IdList = specialPermissionsIds
+                });
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
+
+        public List<BookTypeContract> GetBookTypeList()
+        {
+            try
+            {
+                var result = Get<List<BookTypeContract>>("book/type");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
     }
 }

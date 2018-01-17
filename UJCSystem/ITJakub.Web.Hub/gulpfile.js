@@ -131,7 +131,8 @@ gulp.task("bundle:itjakub_plugins", function () {
             paths.webroot + "js/Plugins/DropdownSelect/itjakub.plugins.dropdownselect2.js",
             paths.webroot + "js/Plugins/RegExSearch/itjakub.plugins.regexsearch.js",
             paths.webroot + "js/Plugins/SearchBox/itjakub.plugins.searchbox.js",
-            paths.webroot + "js/Plugins/SearchBox/itjakub.plugins.singlesearchbox.js"
+            paths.webroot + "js/Plugins/SearchBox/itjakub.plugins.singlesearchbox.js",
+            paths.webroot + "js/Plugins/itjakub.helper.js"
         ])
         .pipe(sourcemaps.init())
         .pipe(concat("itjakub.plugins.bundle.js"))

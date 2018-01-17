@@ -1,6 +1,5 @@
 using System.ServiceModel;
 using ITJakub.ITJakubService.DataContracts.Contracts.AudioBooks;
-using ITJakub.Shared.Contracts.Resources;
 
 namespace ITJakub.ITJakubService.DataContracts
 {

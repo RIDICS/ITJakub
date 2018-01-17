@@ -1,19 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Log4net.Extensions.Logging;
+using System.Reflection;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
 using Vokabular.Core;
+using Vokabular.Log4Net;
 using Vokabular.MainService.Containers.Extensions;
 using Vokabular.MainService.Containers;
 using Vokabular.MainService.Containers.Installers;
+using Vokabular.MainService.Core;
 using Vokabular.MainService.Utils.Documentation;
+using Vokabular.MainService.Utils.Middleware;
 using Vokabular.Shared;
 using Vokabular.Shared.Container;
 using Vokabular.Shared.DataContracts.Search.Criteria;
@@ -56,11 +60,14 @@ namespace Vokabular.MainService
             // Configuration options
             services.AddOptions();
             services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
+            services.Configure<List<CredentialsOption>>(Configuration.GetSection("Credentials"));
             services.Configure<PathConfiguration>(Configuration.GetSection("PathConfiguration"));
 
             // Add framework services.
-            services.AddMvc();
-
+            services.AddMvc()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<MainServiceCoreContainerRegistration>());
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            
             // Inject an implementation of ISwaggerProvider with defaulted settings applied
             services.AddSwaggerGen(options =>
             {
@@ -97,6 +104,8 @@ namespace Vokabular.MainService
 
             app.ConfigureAutoMapper();
 
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+
             app.UseMvc();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint
@@ -119,8 +128,9 @@ namespace Vokabular.MainService
 
         private string GetXmlCommentsPath()
         {
-            var app = PlatformServices.Default.Application;
-            return Path.Combine(app.ApplicationBasePath, $"{app.ApplicationName}.xml");
+            var appBasePath = AppContext.BaseDirectory;
+            var appName = Assembly.GetEntryAssembly().GetName().Name;
+            return Path.Combine(appBasePath, $"{appName}.xml");
         }
     }
 }

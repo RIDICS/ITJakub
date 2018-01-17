@@ -30,6 +30,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
             m_bookVersionId = bookVersionId;
         }
 
+        public List<BookTypeEnum> BookTypes { get; private set; }
+
         protected override void ExecuteWorkImplementation()
         {
             var now = DateTime.UtcNow;
@@ -92,7 +94,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
 
                 resultList.Add(dbBookType);
             }
-            
+
+            BookTypes = bookTypes;
             return resultList;
         }
 

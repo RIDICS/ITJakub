@@ -35,6 +35,8 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual IList<Snapshot> Snapshots { get; set; }
 
+        public virtual IList<Permission> Permissions { get; set; }
+
 
         public virtual bool Equals(Project other)
         {

@@ -12,13 +12,13 @@
     readerPlugin.makeReader(bookXmlId, versionXmlId, bookTitle, pageList);
     var search: Search;
 
-    function convertSearchResults(responseResults: Array<Object>): SearchResult[] {
-        var searchResults = new Array<SearchResult>();
+    function convertSearchResults(responseResults: Array<Object>): SearchHitResult[] {
+        var searchResults = new Array<SearchHitResult>();
         for (var i = 0; i < responseResults.length; i++) {
             var result = responseResults[i];
             var resultContextStructure = result["ContextStructure"];
-            var searchResult = new SearchResult();
-            searchResult.pageXmlId = result["PageXmlId"];
+            var searchResult = new SearchHitResult();
+            searchResult.pageId = result["PageId"];
             searchResult.pageName = result["PageName"];
             searchResult.before = resultContextStructure["Before"];
             searchResult.match = resultContextStructure["Match"];
@@ -40,7 +40,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Editions/Editions/AdvancedSearchInBookPaged",
-            data: { json: json, start: start, count: count, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            data: { json: json, start: start, count: count, projectId: readerPlugin.getBookXmlId(), snapshotId: readerPlugin.getVersionXmlId() },
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
@@ -62,7 +62,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Editions/Editions/TextSearchInBookPaged",
-            data: { text: text, start: start, count: count, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            data: { text: text, start: start, count: count, projectId: readerPlugin.getBookXmlId(), snapshotId: readerPlugin.getVersionXmlId() },
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
@@ -93,7 +93,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Editions/Editions/TextSearchInBookCount",
-            data: { text: text, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId()  },
+            data: { text: text, projectId: readerPlugin.getBookXmlId(), snapshotId: readerPlugin.getVersionXmlId()  },
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
@@ -122,7 +122,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Editions/Editions/AdvancedSearchInBookCount",
-            data: { json: json, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId()  },
+            data: { json: json, projectId: readerPlugin.getBookXmlId(), snapshotId: readerPlugin.getVersionXmlId()  },
             dataType: 'json',
             contentType: 'application/json',
             success: response => {

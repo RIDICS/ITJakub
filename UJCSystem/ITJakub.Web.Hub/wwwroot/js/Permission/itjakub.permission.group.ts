@@ -242,13 +242,13 @@ class GroupPermissionEditor {
         });
     }
 
-    private loadCategoryContent(targetDiv, categoryId: number) {
+    private loadCategoryContent(targetDiv, categoryId: number, bookType: BookTypeEnum) {
         
         $.ajax({
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Permission/GetCategoryContent",
-            data: { groupId: this.currentGroupSelectedItem.id, categoryId: categoryId },
+            data: { groupId: this.currentGroupSelectedItem.id, categoryId: categoryId, bookType: bookType },
             dataType: "json",
             contentType: "application/json",
             success: (response: ICategoryContent) => {
@@ -277,7 +277,7 @@ class GroupPermissionEditor {
     }
 
 
-    private createCategoryListItem(category: ICategory): HTMLLIElement {
+    private createCategoryListItem(category: ICategoryOrBookType): HTMLLIElement {
         var groupLi = document.createElement("li");
         $(groupLi).addClass("list-item non-leaf");
 
@@ -316,7 +316,7 @@ class GroupPermissionEditor {
             });
         });
 
-        buttonsSpan.appendChild(removeSpan);
+        //buttonsSpan.appendChild(removeSpan); // removing whole permission group is currently not supported
 
         groupLi.appendChild(buttonsSpan);
 
@@ -336,7 +336,7 @@ class GroupPermissionEditor {
                 $(target).addClass("glyphicon-chevron-up");
 
                 if (!detailsDiv.hasClass("loaded")) {
-                    this.loadCategoryContent(detailsDiv, category.id);
+                    this.loadCategoryContent(detailsDiv, category.id, category.bookType);
                 }
 
                 detailsDiv.slideDown();
@@ -553,17 +553,17 @@ class GroupPermissionEditor {
 
 class SpecialPermissionTextResolver {
     
-    private static newsPermission: string = "ITJakub.Shared.Contracts.NewsPermissionContract";
-    private static uploadBookPermission: string = "ITJakub.Shared.Contracts.UploadBookPermissionContract";
-    private static managePermission: string = "ITJakub.Shared.Contracts.ManagePermissionsPermissionContract";
-    private static feedbackPermission: string = "ITJakub.Shared.Contracts.FeedbackPermissionContract";
-    private static cardFilePermission: string = "ITJakub.Shared.Contracts.CardFilePermissionContract";
-    private static autoimportPermission: string = "ITJakub.Shared.Contracts.AutoImportCategoryPermissionContract";
-    private static readLemmatizationPermission: string = "ITJakub.Shared.Contracts.ReadLemmatizationPermissionContract";
-    private static editLemmatizationPermission: string = "ITJakub.Shared.Contracts.EditLemmatizationPermissionContract";
-    private static derivateLemmatizationPermission: string = "ITJakub.Shared.Contracts.DerivateLemmatizationPermissionContract";
-    private static editionPrintPermission: string = "ITJakub.Shared.Contracts.EditionPrintPermissionContract";
-    private static editStaticTextPermission: string = "ITJakub.Shared.Contracts.EditStaticTextPermissionContract";
+    private static newsPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.NewsPermissionContract";
+    private static uploadBookPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.UploadBookPermissionContract";
+    private static managePermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.ManagePermissionsPermissionContract";
+    private static feedbackPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.FeedbackPermissionContract";
+    private static cardFilePermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.CardFilePermissionContract";
+    private static autoimportPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.AutoImportCategoryPermissionContract";
+    private static readLemmatizationPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.ReadLemmatizationPermissionContract";
+    private static editLemmatizationPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.EditLemmatizationPermissionContract";
+    private static derivateLemmatizationPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.DerivateLemmatizationPermissionContract";
+    private static editionPrintPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.EditionPrintPermissionContract";
+    private static editStaticTextPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.EditStaticTextPermissionContract";
     
     static resolveSpecialPermissionCategoryText(type: string, specialPermissions: ISpecialPermission[]): string {
 
@@ -631,7 +631,8 @@ class SpecialPermissionTextResolver {
     }
 
     private static resolveAutoImportText(autoimportPermission: IAutoImportPermission): string {
-        return autoimportPermission.category.description;
+        var label = BookTypeHelper.getText(autoimportPermission.bookType);
+        return label;
     }
 
 }
@@ -884,10 +885,11 @@ class BooksSelector {
         return this.selectedCategoriesIds;
     }
 
-    private createCategoryListItem(category: ICategory): HTMLLIElement {
+    private createCategoryListItem(category: ICategoryOrBookType): HTMLLIElement {
         var groupLi = document.createElement("li");
         $(groupLi).addClass("list-item non-leaf");
         $(groupLi).data("id", category.id);
+        $(groupLi).data("bookType", category.bookType);
 
         var buttonsSpan = document.createElement("span");
         $(buttonsSpan).addClass("list-item-buttons");
@@ -919,7 +921,7 @@ class BooksSelector {
             }
         });
 
-        checkSpan.appendChild(checkInput);
+        //checkSpan.appendChild(checkInput);
 
         buttonsSpan.appendChild(checkSpan);
 
@@ -941,7 +943,7 @@ class BooksSelector {
                 $(target).addClass("glyphicon-chevron-up");
 
                 if (!detailsDiv.hasClass("loaded")) {
-                    this.loadCategoryContent(detailsDiv, category.id);
+                    this.loadCategoryContent(detailsDiv, category.id, category.bookType);
                 }
 
                 detailsDiv.slideDown();
@@ -1000,7 +1002,7 @@ class BooksSelector {
 
             if (typeof data === "undefined" || data === null || data.propagate === true) {
                 var parentCategoryItem: HTMLLIElement = <HTMLLIElement>$(bookLi).parents("li.list-item.non-leaf").first()[0];
-                this.changeStateOfCategoryItemCheckboxIfNeeded(parentCategoryItem);
+                //this.changeStateOfCategoryItemCheckboxIfNeeded(parentCategoryItem); // parent checkbox is currently disabled
             }
         });
 
@@ -1056,13 +1058,13 @@ class BooksSelector {
         this.changeStateOfCategoryItemCheckboxIfNeeded(parentCategoryItem);
     }
 
-    private loadCategoryContent(targetDiv, categoryId: number) {
+    private loadCategoryContent(targetDiv, categoryId: number, bookType: BookTypeEnum) {
 
         $.ajax({
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Permission/GetAllCategoryContent",
-            data: { categoryId: categoryId },
+            data: { categoryId: categoryId, bookType: bookType },
             dataType: "json",
             contentType: "application/json",
             success: (response: ICategoryContent) => {

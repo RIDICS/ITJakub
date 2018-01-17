@@ -1,4 +1,7 @@
-﻿class ReaderModule {
+﻿/// <reference path="../../../../node_modules/@types/typeahead/index.d.ts" />
+/// <reference path="../../../../node_modules/@types/jqueryui/index.d.ts" />
+
+class ReaderModule {
 
     private favoriteManager: FavoriteManager;
     private newFavoriteDialog: NewFavoriteDialog;
@@ -1214,7 +1217,7 @@
 
     //******** Reader search panel start ************
     
-    showSearchInPanel(searchResults: Array<SearchResult>) {
+    showSearchInPanel(searchResults: Array<SearchHitResult>) {
         this.getSearchPanel().showResults(searchResults);
     }
 
@@ -1889,7 +1892,7 @@ class SearchResultPanel extends LeftSidePanel {
         return this.resultsOnPage;
     }
 
-    showResults(searchResults: SearchResult[]) {
+    showResults(searchResults: SearchHitResult[]) {
         $(this.searchResultItemsDiv).empty();
         for (var i = 0; i < searchResults.length; i++) {
             var result = searchResults[i];
@@ -1898,11 +1901,11 @@ class SearchResultPanel extends LeftSidePanel {
         }
     }
 
-    private createResultItem(result: SearchResult): HTMLDivElement {
+    private createResultItem(result: SearchHitResult): HTMLDivElement {
         var resultItemDiv = document.createElement("div");
         $(resultItemDiv).addClass("reader-search-result-item");
         $(resultItemDiv).click(() => {
-            var pageId = Number(result.pageXmlId);
+            var pageId = Number(result.pageId);
             this.parentReader.moveToPage(pageId, true);
         });
 
@@ -2715,8 +2718,8 @@ class ContentItem {
 }
 
 
-class SearchResult {
-    pageXmlId: string;
+class SearchHitResult {
+    pageId: string;
     pageName: string;
     before: string;
     after: string;

@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -14,15 +15,20 @@ namespace Vokabular.RestClient.Extensions
         private static string JsonContentType = "application/json";
         private static string WwwFormUrlEncodedContentType = "application/x-www-form-urlencoded";
 
-        private static JsonSerializer CreateJsonSerializer()
+        private static JsonSerializerSettings CreateJsonSerializerSettings()
         {
-            var settings = new JsonSerializerSettings
+            return new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 DateTimeZoneHandling = DateTimeZoneHandling.Utc,
                 NullValueHandling = NullValueHandling.Ignore,
                 MissingMemberHandling = MissingMemberHandling.Ignore,
             };
+        }
+
+        private static JsonSerializer CreateJsonSerializer()
+        {
+            var settings = CreateJsonSerializerSettings();
             return JsonSerializer.Create(settings);
         }
 
@@ -41,6 +47,24 @@ namespace Vokabular.RestClient.Extensions
 
                     return item;
                 }
+            }
+        }
+
+        public static T Deserialize<T>(this string content)
+        {
+            var settings = CreateJsonSerializerSettings();
+            var item = JsonConvert.DeserializeObject<T>(content, settings);
+            return item;
+        }
+
+        public static async Task<T> ReadXmlAsAsync<T>(this HttpContent content)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
+
+            using (var stream = await content.ReadAsStreamAsync())
+            {
+                var item = serializer.Deserialize(stream);
+                return (T) item;
             }
         }
 
