@@ -10,7 +10,7 @@
         buttonClass?: string;
 
         loadAllPagesButton?: boolean;
-        loadAllPagesCallback?: () => JQuery.Promise<any>;
+        loadAllPagesCallback?: () => JQuery.Deferred<any>;
         loadPageCallBack?: (pageNumber: number) => void;
         showSlider?: boolean;
         showInput?: boolean;

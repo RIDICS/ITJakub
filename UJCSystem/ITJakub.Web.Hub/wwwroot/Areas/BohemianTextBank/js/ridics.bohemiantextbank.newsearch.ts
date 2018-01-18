@@ -56,7 +56,12 @@ class BohemianTextBankNew {
         const paginationContainerEl = $("#paginationContainer");
         const paginator = new IndefinitePagination({
             container: paginationContainerEl,
-            nextPageCallback: this.formNextPage.bind(this)
+            nextPageCallback: this.formNextPage.bind(this),
+            loadAllPagesButton: true,
+            loadAllPagesCallback: this.loadAllPages.bind(this),
+            loadPageCallBack: this.goToPage.bind(this),
+            showSlider: true,
+            showInput: true
         });
         this.paginator = paginator;
         paginator.make();
@@ -476,8 +481,10 @@ class BohemianTextBankNew {
         const nextPageEl = $(".indefinite-pagination-next-page");
         nextPageEl.prop("disabled", false);
         this.compositionResultListStart = -1;
+        this.currentViewPage = 1;
         this.emptyResultsTable();
         this.resetHistory();
+        this.paginator.updatePage(this.currentViewPage);
         this.actualizeSelectedBooksAndCategoriesInQuery();
 
         this.showLoading();
@@ -514,13 +521,21 @@ class BohemianTextBankNew {
         //TODO implement logic
     }
 
+    private goToPage(pageNumber: number) {
+        //TODO add logic
+        this.paginator.updatePage(pageNumber);
+        console.log(pageNumber);
+    }
+
     private corpusAdvancedSearchBookHits(json: string) {
         if (!json) return;
         const nextPageEl = $(".indefinite-pagination-next-page");
         nextPageEl.prop("disabled", false);
         this.compositionResultListStart = -1;
+        this.currentViewPage = 1;
         this.emptyResultsTable();
         this.resetHistory();
+        this.paginator.updatePage(this.currentViewPage);
 
         this.actualizeSelectedBooksAndCategoriesInQuery();
         this.showLoading();
@@ -666,6 +681,36 @@ class BohemianTextBankNew {
             .text(tableRowEl.data("bibleChapter") ? tableRowEl.data("bibleChapter") : undefinedReplaceString);
         $("#detail-bible-vers-vers")
             .text(tableRowEl.data("bibleVerse") ? tableRowEl.data("bibleVerse") : undefinedReplaceString);
+    }
+
+    private loadAllPages() : JQuery.Deferred<any>{
+        const searchText = this.search.getLastQuery();
+        var ajax: JQuery.jqXHR;
+        if (this.search.isLastQueryJson()) {
+            ajax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedGetAllPages`,
+                {
+                    text: searchText,
+                    selectedBookIds: this.bookIdsInQuery,
+                    selectedCategoryIds: this.categoryIdsInQuery
+                });
+        } else {
+            ajax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetAllPages`,
+                {
+                    text: searchText,
+                    selectedBookIds: this.bookIdsInQuery,
+                    selectedCategoryIds: this.categoryIdsInQuery
+                });
+        }
+        const deferred = $.Deferred();
+        ajax.done((allPages) => {//TODO make interface
+            const totalNumberOfPages = allPages.totalCount;
+            const pages = allPages.pages;//TODO
+            deferred.resolve(totalNumberOfPages);
+        });
+        ajax.fail(() => {
+            deferred.reject();
+        });
+        return deferred;
     }
 
     private calculateNumberOfPages() { //TODO not used yet
