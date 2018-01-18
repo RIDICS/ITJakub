@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;//TODO remove
 using AutoMapper;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
@@ -211,6 +212,22 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 totalCount = 24;
                 return Json(new { list = ids, totalCount = totalCount });
             }
+        }
+
+        public ActionResult GetAllPages(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)//TODO mock
+        {
+            Thread.Sleep(3000);
+            return Json(new
+            {
+                totalCount = 20,
+                pages = new { }
+            });
+            //return BadRequest();
+        }
+
+        public ActionResult AdvancedGetAllPages(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)//TODO mock
+        {
+            return Json(new {});
         }
 
         public ActionResult TextSearchFulltextPaged(string text, int start, int count, int contextLength, short sortingEnum, bool sortAsc,
