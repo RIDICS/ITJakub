@@ -6,6 +6,7 @@
     private totalNumberOfPages: number;
     private firstPage = 1;
     private currentPage = this.firstPage;
+    private slider: JQuery;
 
     constructor(options: IndefinitePagination.Options) {
         this.options = options;
@@ -70,14 +71,45 @@
     }
 
     private makeSlider(currentPage: number, totalNumberOfPages: number): JQuery {
-        const slider = $(`<div classs="indefinite-pagination-navigation-slider"></div>`);
+        const slider = $(`<div class="indefinite-pagination-navigation-slider"></div>`);
+        const handle = $(`<div class="ui-slider-handle"></div>`);
+        const tooltip = $(`<div class="tooltip top indefinite-pagination-tooltip"></div>`);
+        const tooltipArrow = $(`<div class="tooltip-arrow"></div>`);
+        const tooltipInner = $(`<div class="tooltip-inner"></div>`);
+        tooltip.append(tooltipArrow).append(tooltipInner).hide();
+        handle.append(tooltip);
+        slider.append(handle);
+
+        const showSliderTooltip = () => {
+            tooltip.stop(true, true).show();
+        };
+        const hideSliderTooltip = () => {
+            tooltip.fadeOut(600);
+        };
+
         slider.slider({
-            range: true,
             min: this.firstPage,
             max: totalNumberOfPages,
             value: currentPage,
-            change: this.onSliderChange
+            change: this.onSliderChange.bind(this),
+            create: () => {
+                tooltipInner.text(slider.slider("value"));
+            },
+            start: showSliderTooltip,
+            stop: hideSliderTooltip,
+            slide(event, ui) {
+                showSliderTooltip();
+                tooltipInner.text(ui.value);
+            }
         });
+
+        handle.hover((event) => {
+            showSliderTooltip();
+        });
+        handle.mouseout((event) => {
+            hideSliderTooltip();
+        });
+
         return slider;
     }
 
@@ -90,7 +122,7 @@
 
     private createElements() {
         const controlElements = $(`<div class="indefinite-pagination-button-group-elements"></div>`);
-        const buttonGroupContainerEl = $(`<div class="btn-group"></div>`);
+        const buttonGroupContainerEl = $(`<div class="btn-group full-width-btn-group"></div>`);
         const previousButtonEl = $(`<button class="btn indefinite-pagination-prev-page ${this.buttonClass
             }"><span class="glyphicon glyphicon-chevron-left"></span></button>`);
         if (!this.options.previousPageCallback) {
@@ -111,13 +143,13 @@
     }
 
     private createPageInput() {
-        const inputGroup = $(`<div class="input-group"></div>`);
+        const inputGroup = $(`<div class="input-group indefinite-pagination-go-to-page"></div>`);
         const placeholderText = ""; //TODO
         const inputEl = $(`<input type="text" class="form-control" placeholder=${placeholderText}>`);
         inputGroup.append(inputEl);
         const buttonContainer = $(`<div class="input-group-btn"></div>`);
         const buttonEl =
-            $(`<button class="btn indefinite-pagination-go-to-page ${this.buttonClass
+            $(`<button class="btn indefinite-pagination-go-to-page-button ${this.buttonClass
                 }"><i class="glyphicon glyphicon-arrow-right"></i></button>`);
         buttonContainer.append(buttonEl);
         inputGroup.append(buttonContainer);
@@ -140,15 +172,24 @@
     }
 
     private onGoToPageButton() {
-        const pageNumberString = this.goToPageInput.val();
-        const pageNumber = Number(pageNumberString);
-        this.goToPage(pageNumber);
+        const pageNumberString = this.goToPageInput.val() as string;
+        const pageNumber = parseInt(pageNumberString);
+        if (!isNaN(pageNumber)) {
+            this.goToPage(pageNumber);
+            this.goToPageInput.val("");
+        }
     }
 
-    private updatePage(pageNumber: number) {
-        const indicatorEl = this.paginationContainer.find(".indefinite-pagination-load-all-indicator");
-        const text = `${pageNumber} / ${this.totalNumberOfPages}`;
-        indicatorEl.text(text);
+    updatePage(pageNumber: number) {
+        this.currentPage = pageNumber;
+        if (this.totalNumberOfPages) {
+            const indicatorEl = this.paginationContainer.find(".indefinite-pagination-load-all-indicator");
+            const text = `${pageNumber} / ${this.totalNumberOfPages}`;
+            indicatorEl.text(text);
+            if (this.slider) {
+                this.slider.slider("option", "value", pageNumber);
+            }
+        }
     }
 
     private trackClicks() {
@@ -159,9 +200,8 @@
                 if (this.totalNumberOfPages) {
                     if (this.currentPage > this.totalNumberOfPages) {
                         this.currentPage = this.totalNumberOfPages;
-                    }else{
-                        this.updatePage(this.currentPage);
                     }
+                    this.updatePage(this.currentPage);
                 }
                 this.options.nextPageCallback();
             });
@@ -169,13 +209,10 @@
             ".indefinite-pagination-prev-page",
             () => {
                 this.currentPage--;
-                if (this.totalNumberOfPages) {
-                    if (this.currentPage < this.firstPage) {
-                        this.currentPage = this.firstPage;
-                    } else {
-                        this.updatePage(this.currentPage);
-                    }
+                if (this.currentPage < this.firstPage) {
+                    this.currentPage = this.firstPage;
                 }
+                this.updatePage(this.currentPage);
                 this.options.previousPageCallback();
             });
         if (this.options.loadAllPagesButton) {
@@ -195,21 +232,23 @@
     }
 
     private showFullPageListLoadingError() {
-        const loadAllPagesButtonEl = this.paginationContainer.find(".indefinite-pagination-load-all");
-        loadAllPagesButtonEl.empty().html(
-            `<button class="btn indefinite-pagination-load-all-error ${this.buttonClass
-            }"><span class="glyphicon glyphicon-warning-sign"></span></button>`);
+        const loadAllPagesButtonEl = this.paginationContainer.find(".indefinite-pagination-load");
+        loadAllPagesButtonEl.replaceWith(
+            `<div class="btn indefinite-pagination-load-all-error ${this.buttonClass
+            }"><span class="glyphicon glyphicon-warning-sign"></span></div>`);
     }
 
     private makePageIndicator(totalNumberOfPages: number) {
-        const loadAllPagesButtonEl = this.paginationContainer.find(".indefinite-pagination-load-all");
+        const loadAllPagesButtonEl = this.paginationContainer.find(".indefinite-pagination-load");
         const text = `${this.currentPage} / ${this.totalNumberOfPages}`;
-        loadAllPagesButtonEl.empty().html(
-            `<button class="btn indefinite-pagination-load-all-indicator ${this.buttonClass}">${text}</button>`);
+        loadAllPagesButtonEl.replaceWith(
+            `<div class="btn indefinite-pagination-load-all-indicator ${this.buttonClass}">${text}</div>`);
         const innerContainer =
             this.paginationContainer.find(".indefinite-pagination-button-group-elements");
         if (this.options.showSlider) {
-            innerContainer.before(this.makeSlider(this.currentPage, totalNumberOfPages));
+            const slider = this.makeSlider(this.currentPage, totalNumberOfPages);
+            this.slider = slider;
+            innerContainer.before(slider);
         }
         if (this.options.showInput) {
             innerContainer.after(this.createPageInput());
@@ -218,8 +257,8 @@
 
     private showLoadingSpinner() {
         const loadAllPagesButtonEl = this.paginationContainer.find(".indefinite-pagination-load-all");
-        loadAllPagesButtonEl.empty().html(
-            `<button class="btn indefinite-pagination-load-all-loading ${this.buttonClass
-            }"><span class="glyphicon glyphicon-spin glyphicon-refresh"></span></button>`);
+        loadAllPagesButtonEl.replaceWith(
+            `<div class="btn indefinite-pagination-load indefinite-pagination-load-all-loading ${this.buttonClass
+            }"><span class="glyphicon glyphicon-spin glyphicon-refresh"></span></div>`);
     }
 }

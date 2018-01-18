@@ -2,6 +2,40 @@
     .glyphicon-spin {
         animation: glyph-spin 2s infinite linear;
     }
+
+    &-load-all-error {
+        color: red;
+    }
+
+    &-navigation-slider {
+        margin-bottom: 5px;
+    }
+
+    &-go-to-page {
+        margin-top: 5px;
+    }
+
+    .btn-group {
+        &.full-width-btn-group {
+            display: flex;
+
+            .btn {
+                flex: 1
+            }
+        }
+    }
+
+    .ui-slider-handle {
+        outline-style: none;
+        outline-width: 0;
+    }
+
+    .indefinite-pagination-tooltip {
+        opacity: 1;
+        width: 60px;
+        bottom: 120%;
+        margin-left: -23px;
+    }
 }
 
 @keyframes glyph-spin {
