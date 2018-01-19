@@ -2118,7 +2118,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                EnsureSecuredClient();
+                //EnsureSecuredClient();
                 var result = Post<int>("user", data);
                 return result;
             }
@@ -2135,7 +2135,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                EnsureSecuredClient();
+                //EnsureSecuredClient();
                 var result = Get<UserDetailContract>("user/current");
                 return result;
             }
@@ -2152,7 +2152,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                EnsureSecuredClient();
+                //EnsureSecuredClient();
                 Put<object>("user/current", data);
             }
             catch (HttpRequestException e)
@@ -2168,7 +2168,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                EnsureSecuredClient();
+                //EnsureSecuredClient();
                 Put<object>("user/current/password", data);
             }
             catch (HttpRequestException e)
@@ -2184,7 +2184,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                EnsureSecuredClient();
+                //EnsureSecuredClient();
                 var result = Post<SignInResultContract>("authtoken", data);
                 return result;
             }
@@ -2201,7 +2201,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                EnsureSecuredClient();
+                //EnsureSecuredClient();
                 Delete("authtoken");
             }
             catch (HttpRequestException e)
