@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.Net.Http.Headers;
 
-namespace ITJakub.Web.Hub.Helpers
+namespace Vokabular.Shared.AspNetCore.Helpers
 {
     public static class UploadHelper
     {

@@ -1,4 +1,7 @@
 using System;
+using System.Data.SqlClient;
+using System.Reflection;
+using log4net;
 using Microsoft.Extensions.Configuration;
 using NHibernate.Cfg;
 using NHibernate.Connection;
@@ -13,6 +16,8 @@ namespace Vokabular.MainService.Containers.Installers
 {
     public class NHibernateInstaller : IContainerInstaller
     {
+        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         public void Install(IIocContainer container)
         {
             var connectionString =
@@ -33,11 +38,21 @@ namespace Vokabular.MainService.Containers.Installers
                 })
                 .AddAssembly(typeof(NHibernateDao).Assembly);
 
-            var sessionFactory = cfg.BuildSessionFactory();
-            
-            container.AddInstance(cfg);
+            try
+            {
+                var sessionFactory = cfg.BuildSessionFactory();
 
-            container.AddInstance(sessionFactory);
+                container.AddInstance(cfg);
+
+                container.AddInstance(sessionFactory);
+            }
+            catch (SqlException e)
+            {
+                if (m_log.IsFatalEnabled)
+                    m_log.Fatal("Error init relational database connection", e);
+
+                throw;
+            }
         }
     }
 }

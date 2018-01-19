@@ -7,14 +7,12 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Vokabular.RestClient.Headers;
 
 namespace Vokabular.RestClient.Extensions
 {
     internal static class HttpRestClientExtensions
     {
-        private static string JsonContentType = "application/json";
-        private static string WwwFormUrlEncodedContentType = "application/x-www-form-urlencoded";
-
         private static JsonSerializerSettings CreateJsonSerializerSettings()
         {
             return new JsonSerializerSettings
@@ -81,7 +79,7 @@ namespace Vokabular.RestClient.Extensions
             stream.Seek(0, SeekOrigin.Begin);
 
             requestMessage.Content = new StreamContent(stream);
-            requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(JsonContentType);
+            requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(ContentTypes.JsonContentType);
 
             var result = await httpClient.SendAsync(requestMessage);
             return result;
@@ -101,7 +99,7 @@ namespace Vokabular.RestClient.Extensions
                 sb.AppendFormat("{0}={1}", dataItem.Key.EncodeQueryString(), dataItem.Value?.EncodeQueryString());
             }
 
-            requestMessage.Content = new StringContent(sb.ToString(), Encoding.UTF8, WwwFormUrlEncodedContentType);
+            requestMessage.Content = new StringContent(sb.ToString(), Encoding.UTF8, ContentTypes.WwwFormUrlEncodedContentType);
 
             var result = await httpClient.SendAsync(requestMessage);
             return result;

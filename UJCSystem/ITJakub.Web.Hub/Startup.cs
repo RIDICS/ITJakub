@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using ITJakub.Web.Hub.AppStart.Containers;
 using ITJakub.Web.Hub.AppStart.Extensions;
-using ITJakub.Web.Hub.AppStart.Middleware;
 using Log4net.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;

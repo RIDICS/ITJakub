@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Vokabular.RestClient.Contracts;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Extensions;
+using Vokabular.RestClient.Headers;
 using Vokabular.RestClient.Results;
 
 namespace Vokabular.RestClient
@@ -33,6 +34,7 @@ namespace Vokabular.RestClient
             }
             
             m_client.BaseAddress = baseAddress;
+            m_client.DefaultRequestHeaders.ExpectContinue = false;
             m_client.DefaultRequestHeaders.Accept.Clear();
             m_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             DeserializationType = DeserializationType.Json;
@@ -267,8 +269,11 @@ namespace Vokabular.RestClient
             {
                 try
                 {
+                    var fileStreamContent = new StreamContent(data, StreamBufferSize);
+                    fileStreamContent.Headers.ContentType = new MediaTypeHeaderValue(ContentTypes.ApplicationOctetStream);
+
                     var content = new MultipartFormDataContent();
-                    content.Add(new StreamContent(data, StreamBufferSize), "file");
+                    content.Add(fileStreamContent, "file");
 
                     var request = CreateRequestMessage(HttpMethod.Post, uriPath, headers);
                     request.Content = content;
@@ -292,10 +297,11 @@ namespace Vokabular.RestClient
                 try
                 {
                     var content = new StreamContent(data, StreamBufferSize);
+                    content.Headers.ContentType = new MediaTypeHeaderValue(ContentTypes.ApplicationOctetStream);
 
                     var request = CreateRequestMessage(HttpMethod.Post, uriPath, headers);
                     request.Content = content;
-
+                    
                     var response = await m_client.SendAsync(request);
 
                     ProcessResponseInternal(response);
