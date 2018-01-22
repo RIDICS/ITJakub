@@ -2,12 +2,12 @@
 using System.Configuration;
 using Castle.Facilities.NHibernate;
 using Castle.Transactions;
-using ITJakub.DataEntities.Database.Daos;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
+using Vokabular.DataEntities.Database.Daos;
 using Vokabular.Shared.Options;
 using Configuration = NHibernate.Cfg.Configuration;
 
@@ -53,7 +53,7 @@ namespace ITJakub.ITJakubService.Core.Test
                         //db.LogFormattedSql = true;
                         //db.LogSqlInConsole = true;                     
                     })
-                    .AddAssembly(typeof(NHibernateTransactionalDao).Assembly);
+                    .AddAssembly(typeof(NHibernateDao).Assembly);
                 return cfg;
             }
         }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Http;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
@@ -8,7 +7,6 @@ using Vokabular.MainService.Core.Errors;
 using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.Core.Works.Users;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.RestClient.Headers;
 using Vokabular.Shared.Const;
 
 namespace Vokabular.MainService.Core.Managers
@@ -18,23 +16,24 @@ namespace Vokabular.MainService.Core.Managers
         private readonly UserRepository m_userRepository;
         private readonly PermissionRepository m_permissionRepository;
         private readonly ICommunicationTokenGenerator m_communicationTokenGenerator;
-        private readonly IHttpContextAccessor m_httpContextAccessor;
         private readonly DefaultUserProvider m_defaultUserProvider;
+        private readonly ICommunicationTokenProvider m_communicationTokenProvider;
 
         public AuthenticationManager(UserRepository userRepository, PermissionRepository permissionRepository,
-            ICommunicationTokenGenerator communicationTokenGenerator, IHttpContextAccessor httpContextAccessor,
-            DefaultUserProvider defaultUserProvider)
+            ICommunicationTokenGenerator communicationTokenGenerator, DefaultUserProvider defaultUserProvider,
+            ICommunicationTokenProvider communicationTokenProvider)
         {
             m_userRepository = userRepository;
             m_permissionRepository = permissionRepository;
             m_communicationTokenGenerator = communicationTokenGenerator;
-            m_httpContextAccessor = httpContextAccessor;
             m_defaultUserProvider = defaultUserProvider;
+            m_communicationTokenProvider = communicationTokenProvider;
         }
 
         public User GetCurrentUser(bool returnDefaultIfNull)
         {
-            if (!m_httpContextAccessor.HttpContext.Request.Headers.TryGetValue(CustomHttpHeaders.Authorization, out var communicationTokens))
+            var communicationToken = m_communicationTokenProvider.GetCommunicationToken();
+            if (communicationToken == null)
             {
                 if (returnDefaultIfNull)
                 {
@@ -44,7 +43,6 @@ namespace Vokabular.MainService.Core.Managers
                 throw new AuthenticationException("User not signed in");
             }
 
-            var communicationToken = communicationTokens.First();
             var user = m_userRepository.InvokeUnitOfWork(x => x.GetUserByToken(communicationToken));
 
             if (user == null || !m_communicationTokenGenerator.ValidateTokenFormat(communicationToken))

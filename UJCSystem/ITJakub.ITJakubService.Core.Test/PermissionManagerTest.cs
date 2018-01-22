@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Linq;
 using Castle.Facilities.AutoTx;
-using ITJakub.DataEntities.Database.Repositories;
-using ITJakub.Shared.Contracts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.Core.Managers;
+using Vokabular.MainService.DataContracts.Contracts;
 
 namespace ITJakub.ITJakubService.Core.Test
 {
@@ -12,9 +13,9 @@ namespace ITJakub.ITJakubService.Core.Test
     [DeploymentItem("log4net.config")]
     public class PermissionManagerTest
     {
-        private PermissionManager m_permissionManager;
         private UserManager m_userManager;
         private MockPermissionRepository m_mockRepository;
+        private UserGroupManager m_userGroupManager;
 
         public PermissionManagerTest()
         {
@@ -25,8 +26,8 @@ namespace ITJakub.ITJakubService.Core.Test
         public void Init()
         {
             var container = Container.Current;
-            m_permissionManager = container.Resolve<PermissionManager>();
             m_userManager = container.Resolve<UserManager>();
+            m_userGroupManager = container.Resolve<UserGroupManager>();
             m_mockRepository = (MockPermissionRepository)container.Resolve<PermissionRepository>();
             m_mockRepository.IsAdmin = true;
         }
@@ -35,75 +36,80 @@ namespace ITJakub.ITJakubService.Core.Test
         public void CreateUserTest()
         {
             var guid = Guid.NewGuid();
-            var newUserContract = new PrivateUserContract
+            var newUserContract = new CreateUserContract
             {
                 FirstName = "Test",
                 LastName = "User",
                 Email = string.Format("test@{0}.test", guid),
+                NewPassword = "123456",
                 UserName = string.Format("user{0}", guid)
             };
 
-            var user = m_userManager.CreateLocalUser(newUserContract);
+            var user = m_userManager.CreateNewUser(newUserContract);
             Assert.IsNotNull(user);
         }
 
         [TestMethod]
         public void CreateGroupTest()
         {
-            var newUserContract = new PrivateUserContract
+            var newUserContract = new CreateUserContract
             {
                 FirstName = "Test",
                 LastName = "User",
                 Email = string.Format("test@{0}.test", Guid.NewGuid()),
+                NewPassword = "123456",
                 UserName = Guid.NewGuid().ToString()
             };
 
-            var user = m_userManager.CreateLocalUser(newUserContract);
+            var user = m_userManager.CreateNewUser(newUserContract);
             var groupName = string.Format("TestGroup{0}", Guid.NewGuid());
-            var group = m_permissionManager.CreateGroup(groupName, "Just testing creating group");
+            var group = m_userGroupManager.CreateGroup(groupName, "Just testing creating group");
             Assert.IsNotNull(group);
         }
 
         [TestMethod]
         public void AddMemberToGroupTest()
         {
-            var newUserContract = new PrivateUserContract
+            var newUserContract = new CreateUserContract
             {
                 FirstName = "Test",
                 LastName = "User",
                 Email = string.Format("test@{0}.test", Guid.NewGuid()),
+                NewPassword = "123456",
                 UserName = Guid.NewGuid().ToString()
             };
 
-            var user = m_userManager.CreateLocalUser(newUserContract);
+            var user = m_userManager.CreateNewUser(newUserContract);
             var groupName = string.Format("TestGroup{0}", Guid.NewGuid());
-            var group = m_permissionManager.CreateGroup(groupName, "Just testing group with member");
+            var groupId = m_userGroupManager.CreateGroup(groupName, "Just testing group with member");
 
-            var firstMemberContract = new PrivateUserContract
+            var firstMemberContract = new CreateUserContract
             {
                 FirstName = "First",
                 LastName = "Member",
                 Email = string.Format("first@{0}.member", Guid.NewGuid()),
+                NewPassword = "123456",
                 UserName = Guid.NewGuid().ToString()
             };
 
-            var firstMember = m_userManager.CreateLocalUser(firstMemberContract);
+            var firstMemberId = m_userManager.CreateNewUser(firstMemberContract);
 
-            var secondMemberContract = new PrivateUserContract
+            var secondMemberContract = new CreateUserContract
             {
                 FirstName = "Second",
                 LastName = "Member",
                 Email = string.Format("second@{0}.member", Guid.NewGuid()),
+                NewPassword = "123456",
                 UserName = Guid.NewGuid().ToString()
             };
 
-            var secondMember = m_userManager.CreateLocalUser(secondMemberContract);
+            var secondMemberId = m_userManager.CreateNewUser(secondMemberContract);
 
-            m_permissionManager.AddUserToGroup(firstMember.Id, group.Id);
+            m_userGroupManager.AddUserToGroup(firstMemberId, groupId);
 
-            m_permissionManager.AddUserToGroup(secondMember.Id, group.Id);
+            m_userGroupManager.AddUserToGroup(secondMemberId, groupId);
 
-            var groupDetails = m_permissionManager.GetGroupDetail(group.Id);
+            var groupDetails = m_userGroupManager.GetGroupDetail(groupId);
 
             Assert.IsNotNull(groupDetails);
             Assert.IsNotNull(groupDetails.Members);
@@ -113,92 +119,98 @@ namespace ITJakub.ITJakubService.Core.Test
         [TestMethod]
         public void RemoveMemberFromGroupTest()
         {
-            var newUserContract = new PrivateUserContract
+            var newUserContract = new CreateUserContract
             {
                 FirstName = "Test",
                 LastName = "User",
                 Email = string.Format("test@{0}.test", Guid.NewGuid()),
+                NewPassword = "123456",
                 UserName = Guid.NewGuid().ToString()
             };
 
-            var user = m_userManager.CreateLocalUser(newUserContract);
+            var user = m_userManager.CreateNewUser(newUserContract);
             var groupName = string.Format("TestGroup{0}", Guid.NewGuid());
-            var group = m_permissionManager.CreateGroup(groupName, "Just testing group with member");
+            var groupId = m_userGroupManager.CreateGroup(groupName, "Just testing group with member");
 
-            var firstMemberContract = new PrivateUserContract
+            var firstMemberContract = new CreateUserContract
             {
                 FirstName = "First",
                 LastName = "Member",
                 Email = string.Format("first@{0}.member", Guid.NewGuid()),
+                NewPassword = "123456",
                 UserName = Guid.NewGuid().ToString()
             };
 
-            var firstMember = m_userManager.CreateLocalUser(firstMemberContract);
+            var firstMemberId = m_userManager.CreateNewUser(firstMemberContract);
 
-            var secondMemberContract = new PrivateUserContract
+            var secondMemberContract = new CreateUserContract
             {
                 FirstName = "Second",
                 LastName = "Member",
                 Email = string.Format("second@{0}.member", Guid.NewGuid()),
+                NewPassword = "123456",
                 UserName = Guid.NewGuid().ToString()
             };
 
-            var secondMember = m_userManager.CreateLocalUser(secondMemberContract);
+            var secondMemberId = m_userManager.CreateNewUser(secondMemberContract);
 
-            m_permissionManager.AddUserToGroup(firstMember.Id, group.Id);
+            m_userGroupManager.AddUserToGroup(firstMemberId, groupId);
 
-            m_permissionManager.AddUserToGroup(secondMember.Id, group.Id);
+            m_userGroupManager.AddUserToGroup(secondMemberId, groupId);
 
-            m_permissionManager.RemoveUserFromGroup(firstMember.Id, group.Id);
+            m_userGroupManager.RemoveUserFromGroup(firstMemberId, groupId);
 
-            var groupDetails = m_permissionManager.GetGroupDetail(group.Id);
+            var groupDetails = m_userGroupManager.GetGroupDetail(groupId);
 
             Assert.IsNotNull(groupDetails);
             Assert.IsNotNull(groupDetails.Members);
             Assert.AreEqual(1, groupDetails.Members.Count);
-            Assert.AreEqual(secondMember.Id, groupDetails.Members.First().Id);
+            Assert.AreEqual(secondMemberId, groupDetails.Members.First().Id);
         }
 
         [TestMethod]
         public void GetUsersByGroupTest()
         {
-            var newUserContract = new PrivateUserContract
+            var newUserContract = new CreateUserContract
             {
                 FirstName = "Test",
                 LastName = "User",
                 Email = string.Format("test@{0}.test", Guid.NewGuid()),
+                NewPassword = "123456",
                 UserName = Guid.NewGuid().ToString()
             };
 
-            var user = m_userManager.CreateLocalUser(newUserContract);
+            var user = m_userManager.CreateNewUser(newUserContract);
             var groupName = string.Format("TestGroup{0}", Guid.NewGuid());
-            var group = m_permissionManager.CreateGroup(groupName, "Just testing group with member");
+            var groupId = m_userGroupManager.CreateGroup(groupName, "Just testing group with member");
 
-            var firstMemberContract = new PrivateUserContract
+            var firstMemberContract = new CreateUserContract
             {
                 FirstName = "First",
                 LastName = "Member",
                 Email = string.Format("first@{0}.member", Guid.NewGuid()),
+                NewPassword = "123456",
                 UserName = Guid.NewGuid().ToString()
             };
 
-            var firstMember = m_userManager.CreateLocalUser(firstMemberContract);
+            var firstMemberId = m_userManager.CreateNewUser(firstMemberContract);
 
-            var secondMemberContract = new PrivateUserContract
+            var secondMemberContract = new CreateUserContract
             {
                 FirstName = "Second",
                 LastName = "Member",
                 Email = string.Format("second@{0}.member", Guid.NewGuid()),
+                NewPassword = "123456",
                 UserName = Guid.NewGuid().ToString()
             };
 
-            var secondMember = m_userManager.CreateLocalUser(secondMemberContract);
+            var secondMemberId = m_userManager.CreateNewUser(secondMemberContract);
 
-            m_permissionManager.AddUserToGroup(firstMember.Id, group.Id);
+            m_userGroupManager.AddUserToGroup(firstMemberId, groupId);
 
-            m_permissionManager.AddUserToGroup(secondMember.Id, group.Id);
+            m_userGroupManager.AddUserToGroup(secondMemberId, groupId);
 
-            var users = m_permissionManager.GetUsersByGroup(group.Id);
+            var users = m_userGroupManager.GetUsersByGroup(groupId);
 
             Assert.IsNotNull(users);
             Assert.AreEqual(2, users.Count);
@@ -207,50 +219,53 @@ namespace ITJakub.ITJakubService.Core.Test
         [TestMethod]
         public void GetGroupsByUserTest()
         {
-            var newUserContract = new PrivateUserContract
+            var newUserContract = new CreateUserContract
             {
                 FirstName = "Test",
                 LastName = "User",
                 Email = string.Format("test@{0}.test", Guid.NewGuid()),
+                NewPassword = "123456",
                 UserName = Guid.NewGuid().ToString()
             };
 
-            var user = m_userManager.CreateLocalUser(newUserContract);
+            var user = m_userManager.CreateNewUser(newUserContract);
             var groupName = string.Format("TestGroup{0}", Guid.NewGuid());
             var groupName2 = string.Format("TestGroup{0}", Guid.NewGuid());
-            var group = m_permissionManager.CreateGroup(groupName, "Just testing group with member");
-            var group2 = m_permissionManager.CreateGroup(groupName2, "Just testing group with member");
+            var groupId = m_userGroupManager.CreateGroup(groupName, "Just testing group with member");
+            var group2Id = m_userGroupManager.CreateGroup(groupName2, "Just testing group with member");
 
-            var firstMemberContract = new PrivateUserContract
+            var firstMemberContract = new CreateUserContract
             {
                 FirstName = "First",
                 LastName = "Member",
                 Email = string.Format("first@{0}.member", Guid.NewGuid()),
+                NewPassword = "123456",
                 UserName = Guid.NewGuid().ToString()
             };
 
-            var firstMember = m_userManager.CreateLocalUser(firstMemberContract);
+            var firstMemberId = m_userManager.CreateNewUser(firstMemberContract);
 
-            var secondMemberContract = new PrivateUserContract
+            var secondMemberContract = new CreateUserContract
             {
                 FirstName = "Second",
                 LastName = "Member",
                 Email = string.Format("second@{0}.member", Guid.NewGuid()),
+                NewPassword = "123456",
                 UserName = Guid.NewGuid().ToString()
             };
 
-            var secondMember = m_userManager.CreateLocalUser(secondMemberContract);
+            var secondMemberId = m_userManager.CreateNewUser(secondMemberContract);
 
-            m_permissionManager.AddUserToGroup(firstMember.Id, group.Id);
+            m_userGroupManager.AddUserToGroup(firstMemberId, groupId);
 
-            m_permissionManager.AddUserToGroup(firstMember.Id, group2.Id);
+            m_userGroupManager.AddUserToGroup(firstMemberId, group2Id);
 
-            m_permissionManager.AddUserToGroup(secondMember.Id, group.Id);
+            m_userGroupManager.AddUserToGroup(secondMemberId, groupId);
 
-            var groupsForFirstMember = m_permissionManager.GetGroupsByUser(firstMember.Id)
+            var groupsForFirstMember = m_userGroupManager.GetGroupsByUser(firstMemberId)
                 .Where(x => x.Description != "Default user group");
 
-            var groupsForSecondMember = m_permissionManager.GetGroupsByUser(secondMember.Id)
+            var groupsForSecondMember = m_userGroupManager.GetGroupsByUser(secondMemberId)
                 .Where(x => x.Description != "Default user group");
 
             Assert.IsNotNull(groupsForFirstMember);

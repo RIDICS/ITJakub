@@ -17,14 +17,14 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
         }
 
-        public User GetUserByUsername(string username)
+        public virtual User GetUserByUsername(string username)
         {
             return GetSession().QueryOver<User>()
                 .Where(x => x.UserName == username)
                 .SingleOrDefault();
         }
 
-        public User GetUserByToken(string authorizationToken)
+        public virtual User GetUserByToken(string authorizationToken)
         {
             return GetSession().QueryOver<User>()
                 .Where(x => x.CommunicationToken == authorizationToken)

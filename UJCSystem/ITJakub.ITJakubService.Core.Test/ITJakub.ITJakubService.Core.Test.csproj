@@ -79,11 +79,24 @@
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNetCore.Http.Abstractions, Version=1.0.3.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Http.Abstractions.1.0.3\lib\net451\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Http.Features, Version=1.0.3.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Http.Features.1.0.3\lib\net451\Microsoft.AspNetCore.Http.Features.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=1.0.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.1.0.2\lib\netstandard1.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=1.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Primitives.1.0.1\lib\netstandard1.0\Microsoft.Extensions.Primitives.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate, Version=4.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\packages\NHibernate.4.1.1.4000\lib\net40\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.Runtime.Serialization" />
@@ -93,6 +106,9 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Primitives, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ServiceModel.Primitives.4.4.0\lib\net461\System.ServiceModel.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Encodings.Web, Version=4.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encodings.Web.4.0.1\lib\netstandard1.0\System.Text.Encodings.Web.dll</HintPath>
     </Reference>
     <Reference Include="System.Transactions" />
     <Reference Include="System.XML" />
@@ -111,6 +127,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="FacilitiesInstaller.cs" />
+    <Compile Include="MockHttpContextAccessor.cs" />
+    <Compile Include="MockUserRepository.cs" />
     <Compile Include="NHibernateInstaller.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="MockPermissionRepository.cs" />
@@ -123,17 +141,21 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ITJakub.DataEntities\ITJakub.DataEntities.csproj">
-      <Project>{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}</Project>
-      <Name>ITJakub.DataEntities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ITJakub.ITJakubService.Core\ITJakub.ITJakubService.Core.csproj">
-      <Project>{904E449B-6F51-46C7-A730-4F4C992BDDC8}</Project>
-      <Name>ITJakub.ITJakubService.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
       <Name>ITJakub.Shared.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj">
+      <Project>{7ff7fb5d-4eff-46dd-9682-21dd476abcb0}</Project>
+      <Name>Vokabular.DataEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vokabular.MainService.Core\Vokabular.MainService.Core.csproj">
+      <Project>{6c22da45-1130-4427-8d2b-a0248e58ff0e}</Project>
+      <Name>Vokabular.MainService.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vokabular.MainService.DataContracts\Vokabular.MainService.DataContracts.csproj">
+      <Project>{5527ba9b-aa14-4872-bacf-40adebfd966d}</Project>
+      <Name>Vokabular.MainService.DataContracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj">
       <Project>{130f3c52-e563-4b9b-a70f-e7e5bbab4296}</Project>

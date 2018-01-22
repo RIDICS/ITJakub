@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
-using Castle.Facilities.NHibernate;
-using ITJakub.DataEntities.Database.Entities;
-using ITJakub.DataEntities.Database.Entities.Enums;
-using ITJakub.DataEntities.Database.Repositories;
+using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
+using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.DataEntities.Database.UnitOfWork;
 
 namespace ITJakub.ITJakubService.Core.Test
 {
     public class MockPermissionRepository : PermissionRepository
     {
-        public MockPermissionRepository(ISessionManager sessManager) : base(sessManager)
+        public MockPermissionRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
 
