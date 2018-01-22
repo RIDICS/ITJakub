@@ -277,6 +277,7 @@ namespace Vokabular.RestClient
 
                     var request = CreateRequestMessage(HttpMethod.Post, uriPath, headers);
                     request.Content = content;
+                    request.Headers.TransferEncodingChunked = true;
 
                     var response = await m_client.SendAsync(request);
 
@@ -301,6 +302,7 @@ namespace Vokabular.RestClient
 
                     var request = CreateRequestMessage(HttpMethod.Post, uriPath, headers);
                     request.Content = content;
+                    request.Headers.TransferEncodingChunked = true;
                     
                     var response = await m_client.SendAsync(request);
 
