@@ -7,6 +7,7 @@
     private firstPage = 1;
     private currentPage = this.firstPage;
     private slider: JQuery;
+    private wrapped = false;
 
     constructor(options: IndefinitePagination.Options) {
         this.options = options;
@@ -53,7 +54,9 @@
 
     goToPage(pageNumber: number) {
         if (this.totalNumberOfPages) {
-            this.options.loadPageCallBack(pageNumber);
+            if (pageNumber <= this.totalNumberOfPages && pageNumber >= this.firstPage){
+                this.options.loadPageCallBack(pageNumber);
+            }
         }
     }
 
@@ -68,6 +71,10 @@
 
     getCurrentPage(): number {
         return this.currentPage;
+    }
+
+    hasBeenWrapped(): boolean {
+        return this.wrapped;
     }
 
     private makeSlider(currentPage: number, totalNumberOfPages: number): JQuery {
@@ -91,13 +98,15 @@
             min: this.firstPage,
             max: totalNumberOfPages,
             value: currentPage,
-            change: this.onSliderChange.bind(this),
+            change: (event, ui) => {
+                this.onSliderChange.bind(this, event, ui);//TODO investigate why not being called
+            },
             create: () => {
                 tooltipInner.text(slider.slider("value"));
             },
             start: showSliderTooltip,
             stop: hideSliderTooltip,
-            slide(event, ui) {
+            slide: (event, ui) => {
                 showSliderTooltip();
                 tooltipInner.text(ui.value);
             }
@@ -115,8 +124,12 @@
 
     private onSliderChange(event: Event, ui: JQueryUI.SliderUIParams) {
         if (ui.value !== this.currentPage) {
-            const pageGoingTo = ui.value;
-            this.goToPage(pageGoingTo);
+            const newPage = ui.value;
+            const indicatorEl = $(event.target as Node as Element).closest(".indefinite-pagination-load-all-indicator");
+            console.log(indicatorEl);
+            const text = `${newPage} / ${this.totalNumberOfPages}`;
+            indicatorEl.text(text);
+            this.goToPage(newPage);
         }
     }
 
@@ -144,8 +157,8 @@
 
     private createPageInput() {
         const inputGroup = $(`<div class="input-group indefinite-pagination-go-to-page"></div>`);
-        const placeholderText = ""; //TODO
-        const inputEl = $(`<input type="text" class="form-control" placeholder=${placeholderText}>`);
+        const placeholderText = "Go to page..."; //TODO localisation
+        const inputEl = $(`<input type="text" class="form-control" placeholder="${placeholderText}">`);
         inputGroup.append(inputEl);
         const buttonContainer = $(`<div class="input-group-btn"></div>`);
         const buttonEl =
@@ -188,6 +201,7 @@
             indicatorEl.text(text);
             if (this.slider) {
                 this.slider.slider("option", "value", pageNumber);
+                this.slider.find(".tooltip-inner").text(pageNumber);
             }
         }
     }
@@ -197,9 +211,11 @@
             ".indefinite-pagination-next-page",
             () => {
                 this.currentPage++;
+                this.wrapped = false;
                 if (this.totalNumberOfPages) {
                     if (this.currentPage > this.totalNumberOfPages) {
                         this.currentPage = this.totalNumberOfPages;
+                        this.wrapped = true;
                     }
                     this.updatePage(this.currentPage);
                 }
@@ -209,8 +225,10 @@
             ".indefinite-pagination-prev-page",
             () => {
                 this.currentPage--;
+                this.wrapped = false;
                 if (this.currentPage < this.firstPage) {
                     this.currentPage = this.firstPage;
+                    this.wrapped = true;
                 }
                 this.updatePage(this.currentPage);
                 this.options.previousPageCallback();
