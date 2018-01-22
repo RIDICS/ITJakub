@@ -21,8 +21,6 @@ class BohemianTextBankNew {
     private currentAmountOfResultsInPage = 0;
     private currentViewPage = 1;
 
-    private pageTable = [];
-
     private contextLength = -1;
 
     private resultsCountOnPage = 20;
@@ -57,6 +55,7 @@ class BohemianTextBankNew {
         const paginator = new IndefinitePagination({
             container: paginationContainerEl,
             nextPageCallback: this.formNextPage.bind(this),
+            previousPageCallback: this.loadPreviousPage.bind(this),
             loadAllPagesButton: true,
             loadAllPagesCallback: this.loadAllPages.bind(this),
             loadPageCallBack: this.goToPage.bind(this),
@@ -199,7 +198,6 @@ class BohemianTextBankNew {
 
     private formNextPage() {
         this.currentViewPage=this.paginator.getCurrentPage();
-        console.log(`Current view page ${this.currentViewPage}`);
         this.loadNextPage();
     }
 
@@ -277,7 +275,7 @@ class BohemianTextBankNew {
 
         const sortingEnum = this.sortBar.getSortCriteria();
         const sortAsc = this.sortBar.isSortedAsc();
-
+        const count = this.resultsPerPage;
         this.showLoading();
 
         const payload: JQuery.PlainObject = {
@@ -298,11 +296,12 @@ class BohemianTextBankNew {
             this.hideLoading();
             const results: ICorpusSearchResult[] = response["results"];
             const numberOfResults = results.length;
-            console.log(`Results: ${numberOfResults}`);
-            console.log(`Book: ${bookId}`);
-            console.log(`Start: ${start}`);
             this.currentResultStart += this.resultsPerPage;
             this.currentAmountOfResultsInPage += numberOfResults;
+                const resultPage = (start / count) + 1;
+                const compositionPage = (this.compositionResultListStart / this.compositionsPerPage);
+                const viewingPage = this.paginator.getCurrentPage();
+                this.makeHistoryEntry(bookId, resultPage, compositionPage, viewingPage);
             updateQueryStringParameter(this.urlSearchKey, json);
             //updateQueryStringParameter(this.urlPageKey, pageNumber);TODO change to start
             updateQueryStringParameter(this.urlSortAscKey, this.sortBar.isSortedAsc());
@@ -392,18 +391,26 @@ class BohemianTextBankNew {
         if (!text) return;
         const sortingEnum = this.sortBar.getSortCriteria();
         const sortAsc = this.sortBar.isSortedAsc();
+        const count = this.resultsPerPage;
 
         this.showLoading();
 
         const payload: JQuery.PlainObject = {
             text: text,
             start: start,
-            count: this.resultsPerPage,
+            count: count,
             contextLength: contextLength,
             sortingEnum: sortingEnum,
             sortAsc: sortAsc,
             bookId: bookId
         };
+
+        console.log(`---PAGE ${this.paginator.getCurrentPage()} INDEX---`);
+        console.log(`composition list start: ${this.compositionResultListStart - this.compositionsPerPage}`);
+        console.log(`result list start: ${this.currentResultStart}`);
+        console.log(`current bookID: ${this.currentBookId}`);
+        console.log(`current viewing page: ${this.paginator.getCurrentPage()}`);
+        console.log(`---PAGE INDEX END---`);
 
         const getPageAjax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/TextSearchFulltextGetBookPage`,
             payload);
@@ -412,11 +419,11 @@ class BohemianTextBankNew {
             this.hideLoading();
             const results: ICorpusSearchResult[] = response["results"];
             const numberOfResults = results.length;
-            console.log(`Results: ${numberOfResults}`);
-            console.log(`Book: ${bookId}`);
-            console.log(`Start: ${start}`);
-            console.log(`Count: ${this.resultsPerPage}`);
             this.currentResultStart += this.resultsPerPage;
+            const resultPage = (this.currentResultStart / count) + 1;
+            const compositionPage = (this.compositionResultListStart / this.compositionsPerPage);
+            const viewingPage = this.paginator.getCurrentPage();
+            this.makeHistoryEntry(bookId, resultPage, compositionPage, viewingPage);
             this.currentAmountOfResultsInPage += numberOfResults;
             updateQueryStringParameter(this.urlSearchKey, text);
             updateQueryStringParameter(this.currentResultStart, start);
@@ -447,6 +454,7 @@ class BohemianTextBankNew {
             }
             this.fillResultTable(results);
             this.currentAmountOfResultsInPage = 0;
+            const count = this.resultsPerPage;
         }
     }
 
@@ -467,7 +475,6 @@ class BohemianTextBankNew {
     }
 
     private loadBookResultPage(start: number, bookId: number) {
-        console.log("load");
         const contextLength = parseInt($("#contextPositionsSelect").val() as string);
         if (this.search.isLastQueryJson()) {
             this.corpusAdvancedSearchPaged(this.search.getLastQuery(), start, contextLength, bookId);
@@ -481,7 +488,8 @@ class BohemianTextBankNew {
         const nextPageEl = $(".indefinite-pagination-next-page");
         nextPageEl.prop("disabled", false);
         this.compositionResultListStart = -1;
-        this.currentViewPage = 1;
+        const firstPage = 1;
+        this.currentViewPage = firstPage;
         this.emptyResultsTable();
         this.resetHistory();
         this.paginator.updatePage(this.currentViewPage);
@@ -511,14 +519,64 @@ class BohemianTextBankNew {
     }
 
     private resetHistory() {
-        const firstPage = 1;
-        this.currentViewPage = firstPage;
-        //TODO reset generated history here
+        const historyContainerEl = $(".page-history-constainer");
+        historyContainerEl.empty();
     }
 
-    private makePageTableList(bookId: number, page: number, viewingPage: number) {
-        this.pageTable = [];
-        //TODO implement logic
+    private loadPreviousPage() {
+        const previousPage = this.paginator.getCurrentPage();
+        const beforePreviousPage = previousPage - 1;
+        if (beforePreviousPage === 0) {//to load page 1 it's needed to reset indexes
+            this.compositionResultListStart = -1;
+            this.currentResultStart = -1;
+            this.currentBookIndex = 0;
+            this.currentBookId = -1;
+            this.loadNextCompositionResultPage("a");//TODO advanced, get search text
+            return;
+        }
+
+        const pageHasBeenWrapped = this.paginator.hasBeenWrapped();
+        const historyContainerEl = $(".page-history-constainer");
+        //const prevPageButtonEl = $(".indefinite-pagination-prev-page");
+        const viewingPageEl = historyContainerEl.children(`[data-viewing-page-number=${beforePreviousPage}]`);
+        if (viewingPageEl.length && !pageHasBeenWrapped) {
+            const entry: ICorpusSearchViewingPageHistoryEntry = JSON.parse(viewingPageEl.attr("data-viewing-page-structure"));
+            this.compositionResultListStart = (entry.compositionPage - 1) * this.compositionsPerPage;
+            this.currentResultStart = (entry.hitResultPage - 1) * this.resultsPerPage;
+            this.currentBookIndex = entry.bookIndex;
+            console.log(`---PAGE ${beforePreviousPage} LAST INDEX---`);
+            console.log(`comosition list start: ${this.compositionResultListStart}`);
+            console.log(`result list start: ${this.currentResultStart}`);
+            console.log(`current bookID: ${this.hitBookIds[this.currentBookIndex]}`);
+            console.log(`current viewing page: ${previousPage}`);
+            console.log(`---PAGE INDEX END---`);
+            this.loadNextCompositionResultPage("a", true);//TODO advanced, get search text
+        } else {
+            //TODO make alert, deactivate button
+        }
+    }
+
+    private makeHistoryEntry(bookId: number, resultPage: number, compositionPage: number, viewingPage: number) {
+        const historyContainerEl = $(".page-history-constainer");
+        const viewingPageEl = historyContainerEl.children(`[data-viewing-page-number=${viewingPage}]`);
+        if (viewingPageEl.length) {
+            const pageStructure: ICorpusSearchViewingPageHistoryEntry = {
+                compositionPage: compositionPage,
+                bookIndex: this.currentBookIndex,
+                hitResultPage: resultPage
+            };
+            viewingPageEl.attr("data-viewing-page-structure", JSON.stringify(pageStructure));
+        } else {
+            const historyNewEntryEl = $(`<li></li>`);
+            historyNewEntryEl.attr("data-viewing-page-number", viewingPage);
+            const pageStructure: ICorpusSearchViewingPageHistoryEntry = {
+                compositionPage: compositionPage,
+                bookIndex: this.currentBookIndex,
+                hitResultPage: resultPage
+            };
+            historyNewEntryEl.attr("data-viewing-page-structure", JSON.stringify(pageStructure));
+            historyContainerEl.append(historyNewEntryEl);
+        }
     }
 
     private goToPage(pageNumber: number) {
@@ -547,24 +605,22 @@ class BohemianTextBankNew {
     * Pagination of external list - list of compositions with hits, basic search
     * @param text
     */
-    private loadNextCompositionResultPage(text: string) {
+    private loadNextCompositionResultPage(text: string, noResetIndexes?: boolean) {
         if (this.compositionResultListStart === -1) {
             this.compositionResultListStart = 0;
         }
+        const start = this.compositionResultListStart;
+        const count = this.compositionsPerPage;
         const payload: JQuery.PlainObject = {
             text: text,
-            start: this.compositionResultListStart,
-            count: this.compositionsPerPage,
+            start: start,
+            count: count,
             selectedBookIds: this.bookIdsInQuery,
             selectedCategoryIds: this.categoryIdsInQuery
         };
 
-        console.log(`External composition list start: ${this.compositionResultListStart}`);
-        console.log(`External composition list count: ${this.compositionsPerPage}`);
-
         $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetHitBookIdsPaged`, payload)
             .done((bookIds: IPagedResultArray<number>) => {
-                console.log(bookIds);
                 const count = bookIds.totalCount;
                 $("#totalResultCountDiv").text(count);
                 this.hitBookIds = bookIds.list;
@@ -586,7 +642,9 @@ class BohemianTextBankNew {
                     $(".indefinite-pagination-next-page").prop("disabled", true);
                 } else {
                     this.currentBookId = -1;//reset book id to get new
+                    if(!noResetIndexes){//Do not reset book index when loading a page from history
                     this.currentBookIndex = 0;//reset book index as book array is new
+                    }
                     this.compositionResultListStart += this.compositionsPerPage;
                     this.loadNextPage();
                     updateQueryStringParameter(this.urlSearchKey, text);
@@ -616,9 +674,6 @@ class BohemianTextBankNew {
 
         $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchGetHitBookIdsPaged`, payload)
             .done((bookIds: IPagedResultArray<number>) => {
-                console.log(`Composition list start: ${this.compositionResultListStart}`);
-                console.log(`Composition list count: ${this.compositionsPerPage}`);
-                console.log(`Book ids in page: ${bookIds}`);
                 const count = bookIds.totalCount;
                 $("#totalResultCountDiv").text(count);
                 this.hitBookIds = bookIds.list;

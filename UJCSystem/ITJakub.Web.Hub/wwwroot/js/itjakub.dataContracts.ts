@@ -428,6 +428,12 @@ interface IOriginalAuthorPagedResult {
     list: IOriginalAuthor[];
 }
 
+interface ICorpusSearchViewingPageHistoryEntry {
+    compositionPage: number;
+    bookIndex: number;
+    hitResultPage: number;
+}
+
 enum AudioType {
     Unknown = "Unknown",
     Mp3 = "Mp3",
@@ -439,7 +445,6 @@ enum TextFormatEnumContract {
     Raw = 0,
     Html = 1
 }
-
 
 //TODO Switch TypeScript to version 2.4 and use enums with String values
 //enum ResourceType {
