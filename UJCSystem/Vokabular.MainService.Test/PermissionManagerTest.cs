@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Linq;
-using Castle.Facilities.AutoTx;
+using Microsoft.AspNetCore.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Vokabular.DataEntities;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.Core;
 using Vokabular.MainService.Core.Managers;
+using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.Test.Containers;
+using Vokabular.MainService.Test.LiveMock;
+using Vokabular.MainService.Test.Mock;
 
-namespace ITJakub.ITJakubService.Core.Test
+namespace Vokabular.MainService.Test
 {
     [TestClass]
     [DeploymentItem("ITJakub.ITJakubService.Core.Test.Container.Config")]
@@ -17,15 +23,22 @@ namespace ITJakub.ITJakubService.Core.Test
         private MockPermissionRepository m_mockRepository;
         private UserGroupManager m_userGroupManager;
 
-        public PermissionManagerTest()
-        {
-            new AutoTxFacility(); // todo hack for deploying Unit test (copy dll to output directory)
-        }
-
         [TestInitialize]
         public void Init()
         {
-            var container = Container.Current;
+            var container = new DryIocContainer();
+            container.Install<MainServiceCoreContainerRegistration>();
+            container.Install<DataEntitiesContainerRegistration>();
+
+            container.AddPerWebRequest<IHttpContextAccessor, MockHttpContextAccessor>();
+            container.ReplacePerWebRequest<PermissionRepository, MockPermissionRepository>();
+            container.ReplacePerWebRequest<UserRepository, MockUserRepository>();
+            container.ReplacePerWebRequest<ICommunicationTokenProvider, MockCommunicationTokenProvider>();
+            container.ReplacePerWebRequest<ICommunicationTokenGenerator, MockCommunicationTokenGenerator>();
+            
+            container.InitAutoMapper();
+            container.InitNHibernate();
+
             m_userManager = container.Resolve<UserManager>();
             m_userGroupManager = container.Resolve<UserGroupManager>();
             m_mockRepository = (MockPermissionRepository)container.Resolve<PermissionRepository>();

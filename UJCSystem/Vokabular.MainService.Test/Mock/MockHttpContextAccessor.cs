@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.MainService.Core.Managers.Authentication;
 
-namespace ITJakub.ITJakubService.Core.Test
+namespace Vokabular.MainService.Test.Mock
 {
     internal class MockHttpContextAccessor : IHttpContextAccessor
     {

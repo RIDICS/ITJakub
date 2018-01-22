@@ -6,7 +6,7 @@ using Vokabular.Shared.DataContracts.Search.Old;
 namespace ITJakub.Shared.Contracts.Test
 {
     [TestClass]
-    public class UnitTest1
+    public class SerializationTest
     {
         [TestMethod]
         public void SearchResultContractSerializationTest()
