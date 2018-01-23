@@ -1,10 +1,79 @@
-﻿#search-results-div{
-    .search-result-item {
-        margin-bottom:0;
-        margin-top:0;
-        &.clicked {
-        border-bottom: solid 1px;
-        border-top: solid 1px;
+﻿.search-result-section {
+
+    #search-results-div {
+        .search-result-item {
+            margin-bottom: 0;
+            margin-top: 0;
+
+            &.clicked {
+                border-bottom: solid 1px;
+                border-top: solid 1px;
+                background-color: #eee;
+            }
+        }
+    }
+
+    .corpus-result-and-settings-row {
+        height: 450px;
+
+        .corpus-search-results-div {
+            height: inherit;
+
+            .corpus-search-results-table-container {
+                background-color: white;
+                overflow-x: scroll;
+                overflow-y: auto;
+                height: inherit;
+            }
+        }
+
+        .corpus-search-result-controls-container {
+            .corpus-search-settings-label {
+                color: white;
+                font-size: larger;
+                text-align: center;
+                margin-bottom: 25px;
+            }
+
+            .corpus-search-settings-checkboxes {
+                margin-bottom: 30px;
+            }
+
+            background-color: #388E3C;
+            color: white;
+            line-height: 1.1;
+            padding: 15px;
+            height: inherit;
+        }
+    }
+
+    .corpus-search-result-detail-row {//TODO search result overflow
+        .label {
+            font-weight: bolder;
+            font-size: 100%;
+            color: grey;
+            text-align: left;
+        }
+
+        .result-info-section {
+            margin: 0.8em 0;
+
+            .col-no-padding {
+                padding-left: 0;
+            }
+
+            .table-row {
+                .label {
+                    font-weight: bold;
+                    font-size: 100%;
+                    color: black;
+                    padding-left: 0;
+                }
+
+                .break-word {
+                    word-break: break-word;
+                }
+            }
         }
     }
 }
