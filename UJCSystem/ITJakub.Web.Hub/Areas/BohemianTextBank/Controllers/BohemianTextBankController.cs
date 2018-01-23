@@ -291,7 +291,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                                 ContextStructure = new KwicStructure
                                 {
                                     Before = "before ",
-                                    Match = "match",
+                                    Match = "match"+start,
                                     After = " after"
                                 }
                             }
@@ -319,7 +319,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                                 ContextStructure = new KwicStructure
                                 {
                                     Before = "before ",
-                                    Match = "match",
+                                    Match = "match"+start,
                                     After = " after"
                                 }
                             }

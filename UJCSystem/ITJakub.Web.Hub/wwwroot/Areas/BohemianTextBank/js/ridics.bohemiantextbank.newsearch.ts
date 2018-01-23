@@ -197,8 +197,28 @@ class BohemianTextBankNew {
     }
 
     private formNextPage() {
-        this.currentViewPage=this.paginator.getCurrentPage();
-        this.loadNextPage();
+        this.currentViewPage = this.paginator.getCurrentPage();
+        const hasBeenWrapped = this.paginator.hasBeenWrapped();
+        if (hasBeenWrapped) {
+            bootbox.alert({
+                title: "Attention",
+                message: "Page does not exist",
+                buttons: {
+                    ok: {
+                        className: "btn-default"
+                    }
+                }
+            });
+            return;
+        }
+        const historyContainerEl = $(".page-history-constainer");
+        const previousPage = this.currentViewPage - 1;
+        const viewingPageEl = historyContainerEl.children(`[data-viewing-page-number=${previousPage}]`);
+        if (viewingPageEl.length) {
+            this.goToPage(this.currentViewPage);
+        }else{
+            this.generateViewingPage();
+        }//TODO test
     }
 
     private initializeFromUrlParams() {
@@ -483,11 +503,18 @@ class BohemianTextBankNew {
         }
     }
 
+    private resetIds() {
+        this.compositionResultListStart = -1;
+        this.currentResultStart = -1;
+        this.currentBookIndex = 0;
+        this.currentBookId = -1;
+    }
+
     private corpusBasicSearchBookHits(text: string) {
         if (!text) return;
         const nextPageEl = $(".indefinite-pagination-next-page");
         nextPageEl.prop("disabled", false);
-        this.compositionResultListStart = -1;
+        this.resetIds();
         const firstPage = 1;
         this.currentViewPage = firstPage;
         this.emptyResultsTable();
@@ -508,7 +535,7 @@ class BohemianTextBankNew {
     /**
      * Generates viewing page
      */
-    private loadNextPage() {
+    private generateViewingPage() {
         if (this.currentBookId === -1) {
             this.currentBookId = this.hitBookIds[this.currentBookIndex];
         }
@@ -523,28 +550,35 @@ class BohemianTextBankNew {
         historyContainerEl.empty();
     }
 
+    private goToPage(pageNumber: number) {
+        this.loadPage(pageNumber);
+        this.paginator.updatePage(pageNumber);
+        console.log(pageNumber);
+    }
+
     private loadPreviousPage() {
         const previousPage = this.paginator.getCurrentPage();
-        const beforePreviousPage = previousPage - 1;
-        if (beforePreviousPage === 0) {//to load page 1 it's needed to reset indexes
-            this.compositionResultListStart = -1;
-            this.currentResultStart = -1;
-            this.currentBookIndex = 0;
-            this.currentBookId = -1;
+        this.loadPage(previousPage);
+    }
+
+    private loadPage(pageNumber: number) {
+        const pageHasBeenWrapped = this.paginator.hasBeenWrapped();
+        const previousPage = pageNumber - 1;
+        if (previousPage === 0 && !pageHasBeenWrapped) {//to load page 1 it's needed to reset indexes
+            this.resetIds();
             this.loadNextCompositionResultPage("a");//TODO advanced, get search text
             return;
         }
 
-        const pageHasBeenWrapped = this.paginator.hasBeenWrapped();
         const historyContainerEl = $(".page-history-constainer");
         //const prevPageButtonEl = $(".indefinite-pagination-prev-page");
-        const viewingPageEl = historyContainerEl.children(`[data-viewing-page-number=${beforePreviousPage}]`);
+        const viewingPageEl = historyContainerEl.children(`[data-viewing-page-number=${previousPage}]`);
         if (viewingPageEl.length && !pageHasBeenWrapped) {
             const entry: ICorpusSearchViewingPageHistoryEntry = JSON.parse(viewingPageEl.attr("data-viewing-page-structure"));
             this.compositionResultListStart = (entry.compositionPage - 1) * this.compositionsPerPage;
             this.currentResultStart = (entry.hitResultPage - 1) * this.resultsPerPage;
             this.currentBookIndex = entry.bookIndex;
-            console.log(`---PAGE ${beforePreviousPage} LAST INDEX---`);
+            console.log(`---PAGE ${previousPage} LAST INDEX---`);
             console.log(`comosition list start: ${this.compositionResultListStart}`);
             console.log(`result list start: ${this.currentResultStart}`);
             console.log(`current bookID: ${this.hitBookIds[this.currentBookIndex]}`);
@@ -552,7 +586,15 @@ class BohemianTextBankNew {
             console.log(`---PAGE INDEX END---`);
             this.loadNextCompositionResultPage("a", true);//TODO advanced, get search text
         } else {
-            //TODO make alert, deactivate button
+            bootbox.alert({
+                title: "Attention",
+                message: "Page does not exist",
+                buttons: {
+                    ok: {
+                        className: "btn-default"
+                    }
+                }
+            });
         }
     }
 
@@ -577,12 +619,6 @@ class BohemianTextBankNew {
             historyNewEntryEl.attr("data-viewing-page-structure", JSON.stringify(pageStructure));
             historyContainerEl.append(historyNewEntryEl);
         }
-    }
-
-    private goToPage(pageNumber: number) {
-        //TODO add logic
-        this.paginator.updatePage(pageNumber);
-        console.log(pageNumber);
     }
 
     private corpusAdvancedSearchBookHits(json: string) {
@@ -632,7 +668,7 @@ class BohemianTextBankNew {
                     }
                     bootbox.alert({
                         title: "Attention",
-                        message: "No more pages",
+                        message: "Page does not exist",
                         buttons: {
                             ok: {
                                 className: "btn-default"
@@ -646,7 +682,7 @@ class BohemianTextBankNew {
                     this.currentBookIndex = 0;//reset book index as book array is new
                     }
                     this.compositionResultListStart += this.compositionsPerPage;
-                    this.loadNextPage();
+                    this.generateViewingPage();
                     updateQueryStringParameter(this.urlSearchKey, text);
                     updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
                     updateQueryStringParameter(this.urlSortAscKey, this.sortBar.isSortedAsc());
@@ -660,7 +696,7 @@ class BohemianTextBankNew {
      * Pagination of external list - list of compositions with hits, advanced search
      * @param json Json request with search request
      */
-    private loadNextCompositionAdvancedResultPage(json: string) {
+    private loadNextCompositionAdvancedResultPage(json: string, noResetIndexes?: boolean) {
         if (this.compositionResultListStart === -1) {
             this.compositionResultListStart = 0;
         }
@@ -685,7 +721,7 @@ class BohemianTextBankNew {
                     }
                     bootbox.alert({
                         title: "Attention",
-                        message: "No more pages",
+                        message: "Page does not exist",
                         buttons: {
                             ok: {
                                 className: "btn-default"
@@ -695,9 +731,11 @@ class BohemianTextBankNew {
                     $(".indefinite-pagination-next-page").prop("disabled", true);
                 } else {
                     this.currentBookId = -1;//reset book id to get new
-                    this.currentBookIndex = 0;//reset book index as book array is new
+                    if (!noResetIndexes) { //Do not reset book index when loading a page from history
+                        this.currentBookIndex = 0; //reset book index as book array is new
+                    }
                     this.compositionResultListStart += this.compositionsPerPage;
-                    this.loadNextPage();
+                    this.generateViewingPage();
                     //updateQueryStringParameter(this.urlSearchKey, text);TODO
                     updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
                     updateQueryStringParameter(this.urlSortAscKey, this.sortBar.isSortedAsc());
