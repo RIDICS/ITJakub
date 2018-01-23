@@ -6,7 +6,7 @@ using DryIoc.Microsoft.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Vokabular.Shared.Container;
 
-namespace Vokabular.FulltextService.Containers
+namespace Vokabular.Shared.AspNetCore.Container
 {
     public class DryIocContainer : IIocContainer
     {
@@ -14,7 +14,7 @@ namespace Vokabular.FulltextService.Containers
 
         public DryIocContainer()
         {
-            m_container = new Container().WithDependencyInjectionAdapter();
+            m_container = new DryIoc.Container().WithDependencyInjectionAdapter();
         }
         
         public void Dispose()

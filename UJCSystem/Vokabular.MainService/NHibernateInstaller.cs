@@ -1,22 +1,27 @@
 using System;
-using ITJakub.Web.DataEntities.Database.Daos;
+using System.Data.SqlClient;
+using System.Reflection;
+using log4net;
 using Microsoft.Extensions.Configuration;
 using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
+using Vokabular.DataEntities.Database.Daos;
 using Vokabular.Shared;
 using Vokabular.Shared.Container;
 using Vokabular.Shared.Options;
 
-namespace ITJakub.Web.Hub.AppStart.Installers
+namespace Vokabular.MainService
 {
     public class NHibernateInstaller : IContainerInstaller
     {
+        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         public void Install(IIocContainer container)
         {
             var connectionString =
-                ApplicationConfig.Configuration.GetConnectionString(SettingKeys.WebConnectionString) ??
+                ApplicationConfig.Configuration.GetConnectionString(SettingKeys.MainConnectionString) ??
                 throw new ArgumentException("Connection string not found");
 
             var cfg = new Configuration()
@@ -33,11 +38,21 @@ namespace ITJakub.Web.Hub.AppStart.Installers
                 })
                 .AddAssembly(typeof(NHibernateDao).Assembly);
 
-            var sessionFactory = cfg.BuildSessionFactory();
-            
-            container.AddInstance(cfg);
+            try
+            {
+                var sessionFactory = cfg.BuildSessionFactory();
 
-            container.AddInstance(sessionFactory);
+                container.AddInstance(cfg);
+
+                container.AddInstance(sessionFactory);
+            }
+            catch (SqlException e)
+            {
+                if (m_log.IsFatalEnabled)
+                    m_log.Fatal("Error init relational database connection", e);
+
+                throw;
+            }
         }
     }
 }

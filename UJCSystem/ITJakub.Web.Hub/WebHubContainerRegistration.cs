@@ -1,5 +1,8 @@
-﻿using ITJakub.Web.DataEntities;
-using ITJakub.Web.Hub.AppStart.Installers;
+﻿using AutoMapper;
+using ITJakub.Web.DataEntities;
+using ITJakub.Web.Hub.AppStart;
+using ITJakub.Web.Hub.Areas.Admin.AutomapperProfiles;
+using ITJakub.Web.Hub.AutoMapperProfiles;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Core.Markdown;
@@ -19,7 +22,28 @@ namespace ITJakub.Web.Hub
 
             container.AddPerWebRequest<IMarkdownToHtmlConverter, MarkdigMarkdownToHtmlConverter>();
 
-            container.Install(new AutoMapperInstaller(), new NHibernateInstaller(), new WebDataEntitiesContainerRegistration());
+            // AutoMapper profiles
+            container.AddSingleton<Profile, ConditionCriteriaDescriptionProfile>();
+            container.AddSingleton<Profile, DatingCriteriaDescriptionProfile>();
+            container.AddSingleton<Profile, DatingListCriteriaDescriptionProfile>();
+            container.AddSingleton<Profile, FavoriteProfile>();
+            container.AddSingleton<Profile, StaticTextProfile>();
+            container.AddSingleton<Profile, TokenDistanceCriteriaDescriptionProfile>();
+            container.AddSingleton<Profile, TokenDistanceListCriteriaDescriptionProfile>();
+            container.AddSingleton<Profile, WordCriteriaDescriptionProfile>();
+            container.AddSingleton<Profile, WordListCriteriaDescriptionProfile>();
+
+            // AutoMapper profiles - Admin area
+            container.AddSingleton<Profile, LiteraryGenreProfile>();
+            container.AddSingleton<Profile, LiteraryKindProfile>();
+            container.AddSingleton<Profile, LiteraryOriginalProfile>();
+            container.AddSingleton<Profile, ProjectProfile>();
+            container.AddSingleton<Profile, ResourceProfile>();
+            container.AddSingleton<Profile, ResponsibleTypeProfile>();
+            container.AddSingleton<Profile, SnapshotProfile>();
+            container.AddSingleton<Profile, UserProfile>();
+
+            container.Install(new NHibernateInstaller(), new WebDataEntitiesContainerRegistration());
         }
     }
 }

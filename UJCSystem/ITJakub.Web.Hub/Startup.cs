@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using ITJakub.Web.Hub.AppStart.Containers;
-using ITJakub.Web.Hub.AppStart.Extensions;
 using Log4net.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -13,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Vokabular.Shared;
+using Vokabular.Shared.AspNetCore.Container;
+using Vokabular.Shared.AspNetCore.Container.Extensions;
 using Vokabular.Shared.Container;
 using Vokabular.Shared.Options;
 
