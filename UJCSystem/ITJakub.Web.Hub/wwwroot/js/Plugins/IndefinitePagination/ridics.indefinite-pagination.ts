@@ -54,8 +54,11 @@
 
     goToPage(pageNumber: number) {
         if (this.totalNumberOfPages) {
-            if (pageNumber <= this.totalNumberOfPages && pageNumber >= this.firstPage){
+            if (pageNumber <= this.totalNumberOfPages && pageNumber >= this.firstPage) {
+                this.wrapped = false;
                 this.options.loadPageCallBack(pageNumber);
+            } else {
+                this.wrapped = true;
             }
         }
     }
@@ -74,7 +77,9 @@
     }
 
     hasBeenWrapped(): boolean {
-        return this.wrapped;
+        const result = this.wrapped;
+        this.wrapped = false;
+        return result;
     }
 
     private makeSlider(currentPage: number, totalNumberOfPages: number): JQuery {
@@ -99,7 +104,7 @@
             max: totalNumberOfPages,
             value: currentPage,
             change: (event, ui) => {
-                this.onSliderChange.bind(this, event, ui);//TODO investigate why not being called
+                this.onSliderChange(event, ui);
             },
             create: () => {
                 tooltipInner.text(slider.slider("value"));
