@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="6.2.1" />
+    <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="FluentValidation" Version="7.3.4" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="1.0.3" />
     <PackageReference Include="MimeMapping" Version="1.0.1.12" />
