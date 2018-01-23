@@ -15,8 +15,6 @@ using Vokabular.MainService.Test.Mock;
 namespace Vokabular.MainService.Test
 {
     [TestClass]
-    [DeploymentItem("ITJakub.ITJakubService.Core.Test.Container.Config")]
-    [DeploymentItem("log4net.config")]
     public class PermissionManagerTest
     {
         private UserManager m_userManager;
@@ -53,54 +51,58 @@ namespace Vokabular.MainService.Test
             {
                 FirstName = "Test",
                 LastName = "User",
-                Email = string.Format("test@{0}.test", guid),
+                Email = $"test@{guid}.test",
                 NewPassword = "123456",
-                UserName = string.Format("user{0}", guid)
+                UserName = $"user{guid}"
             };
 
-            var user = m_userManager.CreateNewUser(newUserContract);
-            Assert.IsNotNull(user);
+            var userId = m_userManager.CreateNewUser(newUserContract);
+            Assert.IsNotNull(userId);
+            Assert.AreNotEqual(0, userId);
         }
 
         [TestMethod]
         public void CreateGroupTest()
         {
+            var guid = Guid.NewGuid();
             var newUserContract = new CreateUserContract
             {
                 FirstName = "Test",
                 LastName = "User",
-                Email = string.Format("test@{0}.test", Guid.NewGuid()),
+                Email = $"test@{guid}.test",
                 NewPassword = "123456",
-                UserName = Guid.NewGuid().ToString()
+                UserName = guid.ToString()
             };
 
-            var user = m_userManager.CreateNewUser(newUserContract);
-            var groupName = string.Format("TestGroup{0}", Guid.NewGuid());
-            var group = m_userGroupManager.CreateGroup(groupName, "Just testing creating group");
-            Assert.IsNotNull(group);
+            m_userManager.CreateNewUser(newUserContract);
+            var groupName = $"TestGroup{Guid.NewGuid()}";
+            var groupId = m_userGroupManager.CreateGroup(groupName, "Just testing creating group");
+            Assert.IsNotNull(groupId);
+            Assert.AreNotEqual(0, groupId);
         }
 
         [TestMethod]
         public void AddMemberToGroupTest()
         {
+            var guid = Guid.NewGuid();
             var newUserContract = new CreateUserContract
             {
                 FirstName = "Test",
                 LastName = "User",
-                Email = string.Format("test@{0}.test", Guid.NewGuid()),
+                Email = $"test@{guid}.test",
                 NewPassword = "123456",
-                UserName = Guid.NewGuid().ToString()
+                UserName = guid.ToString()
             };
 
-            var user = m_userManager.CreateNewUser(newUserContract);
-            var groupName = string.Format("TestGroup{0}", Guid.NewGuid());
+            m_userManager.CreateNewUser(newUserContract);
+            var groupName = $"TestGroup{Guid.NewGuid()}";
             var groupId = m_userGroupManager.CreateGroup(groupName, "Just testing group with member");
 
             var firstMemberContract = new CreateUserContract
             {
                 FirstName = "First",
                 LastName = "Member",
-                Email = string.Format("first@{0}.member", Guid.NewGuid()),
+                Email = $"first@{Guid.NewGuid()}.member",
                 NewPassword = "123456",
                 UserName = Guid.NewGuid().ToString()
             };
@@ -111,7 +113,7 @@ namespace Vokabular.MainService.Test
             {
                 FirstName = "Second",
                 LastName = "Member",
-                Email = string.Format("second@{0}.member", Guid.NewGuid()),
+                Email = $"second@{Guid.NewGuid()}.member",
                 NewPassword = "123456",
                 UserName = Guid.NewGuid().ToString()
             };
@@ -132,24 +134,25 @@ namespace Vokabular.MainService.Test
         [TestMethod]
         public void RemoveMemberFromGroupTest()
         {
+            var guid = Guid.NewGuid();
             var newUserContract = new CreateUserContract
             {
                 FirstName = "Test",
                 LastName = "User",
-                Email = string.Format("test@{0}.test", Guid.NewGuid()),
+                Email = $"test@{guid}.test",
                 NewPassword = "123456",
-                UserName = Guid.NewGuid().ToString()
+                UserName = guid.ToString()
             };
 
-            var user = m_userManager.CreateNewUser(newUserContract);
-            var groupName = string.Format("TestGroup{0}", Guid.NewGuid());
+            m_userManager.CreateNewUser(newUserContract);
+            var groupName = $"TestGroup{Guid.NewGuid()}";
             var groupId = m_userGroupManager.CreateGroup(groupName, "Just testing group with member");
 
             var firstMemberContract = new CreateUserContract
             {
                 FirstName = "First",
                 LastName = "Member",
-                Email = string.Format("first@{0}.member", Guid.NewGuid()),
+                Email = $"first@{Guid.NewGuid()}.member",
                 NewPassword = "123456",
                 UserName = Guid.NewGuid().ToString()
             };
@@ -160,7 +163,7 @@ namespace Vokabular.MainService.Test
             {
                 FirstName = "Second",
                 LastName = "Member",
-                Email = string.Format("second@{0}.member", Guid.NewGuid()),
+                Email = $"second@{Guid.NewGuid()}.member",
                 NewPassword = "123456",
                 UserName = Guid.NewGuid().ToString()
             };
@@ -184,24 +187,25 @@ namespace Vokabular.MainService.Test
         [TestMethod]
         public void GetUsersByGroupTest()
         {
+            var guid = Guid.NewGuid();
             var newUserContract = new CreateUserContract
             {
                 FirstName = "Test",
                 LastName = "User",
-                Email = string.Format("test@{0}.test", Guid.NewGuid()),
+                Email = $"test@{guid}.test",
                 NewPassword = "123456",
-                UserName = Guid.NewGuid().ToString()
+                UserName = guid.ToString()
             };
 
-            var user = m_userManager.CreateNewUser(newUserContract);
-            var groupName = string.Format("TestGroup{0}", Guid.NewGuid());
+            m_userManager.CreateNewUser(newUserContract);
+            var groupName = $"TestGroup{Guid.NewGuid()}";
             var groupId = m_userGroupManager.CreateGroup(groupName, "Just testing group with member");
 
             var firstMemberContract = new CreateUserContract
             {
                 FirstName = "First",
                 LastName = "Member",
-                Email = string.Format("first@{0}.member", Guid.NewGuid()),
+                Email = $"first@{Guid.NewGuid()}.member",
                 NewPassword = "123456",
                 UserName = Guid.NewGuid().ToString()
             };
@@ -212,7 +216,7 @@ namespace Vokabular.MainService.Test
             {
                 FirstName = "Second",
                 LastName = "Member",
-                Email = string.Format("second@{0}.member", Guid.NewGuid()),
+                Email = $"second@{Guid.NewGuid()}.member",
                 NewPassword = "123456",
                 UserName = Guid.NewGuid().ToString()
             };
@@ -232,18 +236,19 @@ namespace Vokabular.MainService.Test
         [TestMethod]
         public void GetGroupsByUserTest()
         {
+            var guid = Guid.NewGuid();
             var newUserContract = new CreateUserContract
             {
                 FirstName = "Test",
                 LastName = "User",
-                Email = string.Format("test@{0}.test", Guid.NewGuid()),
+                Email = $"test@{guid}.test",
                 NewPassword = "123456",
-                UserName = Guid.NewGuid().ToString()
+                UserName = guid.ToString()
             };
 
-            var user = m_userManager.CreateNewUser(newUserContract);
-            var groupName = string.Format("TestGroup{0}", Guid.NewGuid());
-            var groupName2 = string.Format("TestGroup{0}", Guid.NewGuid());
+            m_userManager.CreateNewUser(newUserContract);
+            var groupName = $"TestGroup{Guid.NewGuid()}";
+            var groupName2 = $"TestGroup{Guid.NewGuid()}";
             var groupId = m_userGroupManager.CreateGroup(groupName, "Just testing group with member");
             var group2Id = m_userGroupManager.CreateGroup(groupName2, "Just testing group with member");
 
@@ -251,7 +256,7 @@ namespace Vokabular.MainService.Test
             {
                 FirstName = "First",
                 LastName = "Member",
-                Email = string.Format("first@{0}.member", Guid.NewGuid()),
+                Email = $"first@{Guid.NewGuid()}.member",
                 NewPassword = "123456",
                 UserName = Guid.NewGuid().ToString()
             };
@@ -262,7 +267,7 @@ namespace Vokabular.MainService.Test
             {
                 FirstName = "Second",
                 LastName = "Member",
-                Email = string.Format("second@{0}.member", Guid.NewGuid()),
+                Email = $"second@{Guid.NewGuid()}.member",
                 NewPassword = "123456",
                 UserName = Guid.NewGuid().ToString()
             };
