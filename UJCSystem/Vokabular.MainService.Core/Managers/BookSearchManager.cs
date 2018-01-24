@@ -18,6 +18,7 @@ using Vokabular.MainService.Core.Works.Search;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.RestClient.Errors;
+using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -293,6 +294,52 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
+        public CorpusSearchSnapshotsResultContract SearchCorpusSnapshotsByCriteria(CorpusSearchRequestContract request)
+        {
+            m_authorizationManager.AddAuthorizationCriteria(request.ConditionConjunction);
+
+            var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
+            var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
+
+            if (processedCriterias.NonMetadataCriterias.Count == 0)
+            {
+                throw new HttpErrorCodeException("Missing any fulltext criteria", HttpStatusCode.BadRequest);
+            }
+
+            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters);
+
+            // Search in fulltext DB
+
+            var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
+
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            var start = m_corpusSearchManager.GetCorpusStart(request.Start);
+            var count = m_corpusSearchManager.GetCorpusCount(request.Count);
+            var result = fulltextStorage.SearchCorpusSnapshotsByCriteria(start, count, nonMetadataCriterias, projectIdentificatorList);
+
+            return result;
+        }
+
+        public List<CorpusSearchResultContract> SearchCorpusSnapshotByCriteria(long snapshotId, CorpusSearchRequestContract request)
+        {
+            m_authorizationManager.AddAuthorizationCriteria(request.ConditionConjunction);
+
+            var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
+            var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
+
+            if (processedCriterias.NonMetadataCriterias.Count == 0)
+            {
+                throw new HttpErrorCodeException("Missing any fulltext criteria", HttpStatusCode.BadRequest);
+            }
+            // Search in fulltext DB
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            var start = m_corpusSearchManager.GetCorpusStart(request.Start);
+            var count = m_corpusSearchManager.GetCorpusCount(request.Count);
+            var result = fulltextStorage.SearchCorpusSnapshotByCriteria(snapshotId, start, count, request.ContextLength, nonMetadataCriterias);
+
+            return m_corpusSearchManager.GetCorpusSearchResultByStandardIds(result);
+        }
+
         public List<CorpusSearchResultContract> SearchCorpusByCriteria(CorpusSearchRequestContract request)
         {
             m_authorizationManager.AddAuthorizationCriteria(request.ConditionConjunction);
@@ -350,5 +397,8 @@ namespace Vokabular.MainService.Core.Managers
 
             return resultCount;
         }
+
+
+        
     }
 }

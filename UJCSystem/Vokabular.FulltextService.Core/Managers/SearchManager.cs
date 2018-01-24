@@ -6,6 +6,7 @@ using Vokabular.FulltextService.Core.Communication;
 using Vokabular.FulltextService.Core.Helpers;
 using Vokabular.FulltextService.Core.Options;
 using Vokabular.FulltextService.DataContracts.Contracts;
+using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -274,6 +275,72 @@ namespace Vokabular.FulltextService.Core.Managers
                     .Size(1000) //TODO add pagination
             );
             return m_searchResultProcessor.ProcessSearchPageResult(pageResponse);
+        }
+
+        public CorpusSearchSnapshotsResultContract SearchCorpusSnapshotsByCriteria(CorpusSearchRequestContract searchRequest)
+        {
+            var filterQuery = m_queriesBuilder.GetFilterSearchQuery(searchRequest.ConditionConjunction, SnapshotIdField);
+            var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, SnapshotTextField);
+
+            var client = CommunicationProvider.GetElasticClient();
+            
+     
+            var response = client.Search<SnapshotResourceContract>(s => s
+                .Index(SnapshotIndex)
+                .Type(SnapshotType)
+                .Source(sf => sf.Includes(i => i.Field(f => f.SnapshotId)))
+                .Query(q => q
+                    .Bool(b => b
+                        .Filter(filterQuery)
+                        .Must(mustQuery)
+                    )
+                )
+                .From(searchRequest.Start ?? DefaultStart)
+                .Size(searchRequest.Count ?? DefaultSize)
+                
+            );
+
+            return  m_searchResultProcessor.ProcessSearchCorpusSnapshotsByCriteria(response);
+        }
+
+        public List<CorpusSearchResultContract> SearchCorpusSnapshotByCriteria(long snapshotId, CorpusSearchRequestContract searchRequest)
+        {
+            var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, SnapshotTextField);
+            var filterQuery = m_queriesBuilder.GetFilterByFieldSearchQuery(SnapshotIdField, snapshotId.ToString());
+
+            var client = CommunicationProvider.GetElasticClient();
+
+
+            var response = client.Search<SnapshotResourceContract>(s => s
+                .Index(SnapshotIndex)
+                .Type(SnapshotType)
+                .Source(sf => sf
+                    .IncludeAll()
+                    .Excludes(i => i
+                        .Fields(
+                            f => f.SnapshotText
+                        )
+                    )
+                )
+                .Query(q => q
+                    .Bool(b => b
+                        .Filter(filterQuery)
+                        .Must(mustQuery)
+                    )
+                )
+                .Highlight(h => h
+                    .PreTags(HighlightTag)
+                    .PostTags(HighlightTag)
+                    .Fields(f => f
+                        .Field(SnapshotTextField)
+                        .NumberOfFragments(FragmentsCount)
+                        .FragmentSize(FragmentSize)
+                        .Type(HighlighterType)
+                    )
+                )
+            );
+
+            return m_searchResultProcessor.ProccessSearchCorpusSnapshotByCriteria(response, HighlightTag, searchRequest.Start ?? DefaultStart, searchRequest.Count ?? DefaultSize);
         }
     }
 }

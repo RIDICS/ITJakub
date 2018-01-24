@@ -8,11 +8,11 @@ using Vokabular.Shared.DataContracts.Search.Request;
 namespace Vokabular.FulltextService.Controllers
 {
     [Route("api/[controller]")]
-    public class CorpusController : Controller
+    public class PagedCorpusController : Controller
     {
         private readonly SearchManager m_searchManager;
 
-        public CorpusController(SearchManager searchManager)
+        public PagedCorpusController(SearchManager searchManager)
         {
             m_searchManager = searchManager;
         }
@@ -36,22 +36,17 @@ namespace Vokabular.FulltextService.Controllers
         /// </param>
         /// <returns></returns>
         [HttpPost("search")]
-        public List<CorpusSearchResultContract> SearchCorpus([FromBody] CorpusSearchRequestContract searchRequest)
+        public CorpusSearchSnapshotsResultContract SearchCorpusSnapshots([FromBody] CorpusSearchRequestContract searchRequest)
         {
-            var result = m_searchManager.SearchCorpusByCriteria(searchRequest);
+            var result = m_searchManager.SearchCorpusSnapshotsByCriteria(searchRequest);
             return result;
         }
 
-        /// <summary>
-        /// Search in corpus, return count
-        /// </summary>
-        /// <param name="searchRequest"></param>
-        /// <returns></returns>
-        [HttpPost("search-count")]
-        public long SearchCorpusResultCount([FromBody] CorpusSearchRequestContract searchRequest)
+        [HttpPost("{snapshotId}/search")]
+        public List<CorpusSearchResultContract> SearchCorpus(long snapshotId,[FromBody] CorpusSearchRequestContract searchRequest)
         {
-            var result = m_searchManager.SearchCorpusByCriteriaCount(searchRequest);
-            return result.Count;
+            var result = m_searchManager.SearchCorpusSnapshotByCriteria(snapshotId, searchRequest);
+            return result;
         }
     }
 }

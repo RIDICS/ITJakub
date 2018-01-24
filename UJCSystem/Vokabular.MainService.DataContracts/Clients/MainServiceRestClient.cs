@@ -18,6 +18,7 @@ using Vokabular.RestClient.Headers;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared;
 using Vokabular.Shared.DataContracts.Search;
+using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataContracts.Types.Favorite;
@@ -1278,6 +1279,38 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 var result = Post<long>("corpus/search-count", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public CorpusSearchSnapshotsResultContract SearchCorpusSnapshots(CorpusSearchRequestContract request)
+        {
+            try
+            {
+                var result = Post<CorpusSearchSnapshotsResultContract>("pagedcorpus/search", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<CorpusSearchResultContract> SearchCorpusSnapshot(long snapshotId, CorpusSearchRequestContract request)
+        {
+            try
+            {
+                var result = Post<List<CorpusSearchResultContract>>($"pagedcorpus/{snapshotId}/search", request);
                 return result;
             }
             catch (HttpRequestException e)
@@ -2695,5 +2728,8 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+
+
+        
     }
 }

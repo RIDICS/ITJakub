@@ -11,6 +11,8 @@ using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
+using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Search.OldCriteriaItem;
@@ -400,6 +402,16 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         public string CreateNewEditionNoteVersion(EditionNoteResource editionNoteResource)
         {
             throw new NotSupportedException("Saving resources to eXist-db isn't supported. eXist-db storage supports only full book import.");
+        }
+
+        public CorpusSearchSnapshotsResultContract SearchCorpusSnapshotsByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        {
+            throw new NotSupportedException("Paged search in corpus in eXist-db isn't supported.");
+        }
+
+        public List<CorpusSearchResultData> SearchCorpusSnapshotByCriteria(long projectId, int start, int count, int contextLength, List<SearchCriteriaContract> criteria)
+        {
+            throw new NotSupportedException("Paged search in corpus in eXist-db isn't supported.");
         }
     }
 }

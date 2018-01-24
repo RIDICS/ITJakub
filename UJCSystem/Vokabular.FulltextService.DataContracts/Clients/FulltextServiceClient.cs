@@ -7,6 +7,7 @@ using Vokabular.RestClient;
 using Vokabular.Shared;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.Request;
+using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.Extensions;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -166,6 +167,40 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             try
             {
                 var result = Post<List<CorpusSearchResultContract>>("corpus/search", searchRequest);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (Logger.IsErrorEnabled())
+                    Logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public CorpusSearchSnapshotsResultContract SearchCorpusSnapshotsByCriteria(int start, int count, List<SearchCriteriaContract> searchCriterias)
+        {
+            var searchRequest = new CorpusSearchRequestContract { Start = start, Count = count, ConditionConjunction = searchCriterias };
+            try
+            {
+                var result = Post<CorpusSearchSnapshotsResultContract>("pagedcorpus/search", searchRequest);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (Logger.IsErrorEnabled())
+                    Logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<CorpusSearchResultContract> SearchCorpusSnapshotByCriteria(long snapshotId, int start, int count, int contextLength, List<SearchCriteriaContract> searchCriterias)
+        {
+            var searchRequest = new CorpusSearchRequestContract { Start = start, Count = count, ContextLength = contextLength, ConditionConjunction = searchCriterias };
+            try
+            {
+                var result = Post<List<CorpusSearchResultContract>>($"pagedcorpus/{snapshotId}/search", searchRequest);
                 return result;
             }
             catch (HttpRequestException e)

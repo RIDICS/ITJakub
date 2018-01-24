@@ -155,32 +155,28 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetHitBookIdsPaged(string text, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds)//TODO mock, should return array of ids of books where results ocurred
+        public ActionResult GetHitBookIdsPaged(string text, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
+            if (string.IsNullOrEmpty(text))
+            {
+                throw new ArgumentException("text can't be null in fulltext search");
+            }
+
+            var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
+
+            AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
+
+
             using (var client = GetRestClient())
             {
-                var ids = new List<long> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-                var ids2 = new List<long> { 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
-                var ids3 = new List<long> { 21, 22, 23, 24 };
-                var totalCount = 3;
-                if (start<10)
+                var result = client.SearchCorpusSnapshots(new CorpusSearchRequestContract
                 {
-                    totalCount = 24;
-                    return Json(new { list = ids, totalCount = totalCount });
-                }
-                if (start >= 10 && start <20)
-                {
-                    totalCount = 24;
-                    return Json(new { list = ids2, totalCount = totalCount });
-                }
-                if (start >= 20 && start < 30)
-                {
-                    totalCount = 24;
-                    return Json(new { list = ids3, totalCount = totalCount });
-                }
-                ids = null;
-                totalCount = 24;
-                return Json(new { list = ids, totalCount = totalCount });
+                    Start = start,
+                    Count = count,
+                    ConditionConjunction = listSearchCriteriaContracts,
+                });
+
+                return Json(new {list = result.SnapshotIds, totalCount = result.TotalCount});
             }
         }
 
@@ -256,78 +252,25 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             }
         }
 
-        public ActionResult TextSearchFulltextGetBookPage(string text, int start, int count, int contextLength, short sortingEnum, bool sortAsc,
-            long bookId)//TODO should return page with a certain amount of search results from a selected book id
+        public ActionResult TextSearchFulltextGetBookPage(string text, int start, int count, int contextLength, short sortingEnum, bool sortAsc, long snapshotId)
         {
             if (string.IsNullOrEmpty(text))
             {
                 throw new ArgumentException("text can't be null in fulltext search");
             }
-
-            var selectedBookIds = new List<long> {bookId};//TODO mock
-            var notes = new List<string>();
-            notes.Add("note1");
-            notes.Add("note2");
-            notes.Add("note3");
-
+            
+            var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
+            
             using (var client = GetRestClient())
             {
-                var resultList = new List<CorpusSearchResultContract>();
-                if (start<12)
+                var resultList = client.SearchCorpusSnapshot(snapshotId, new CorpusSearchRequestContract
                 {
-                    for (var i = 0; i < 3; i++)
-                    {
-                        var result = new CorpusSearchResultContract
-                        {
-                            Author = "Autor",
-                            Title = "Title " + selectedBookIds[0],
-                            SourceAbbreviation = "Book" + bookId,
-                            RelicAbbreviation = "TIT",
-                            BookId = selectedBookIds[0],
-                            OriginDate = "first half of 8th century",
-                            Notes = notes,
-                            PageResultContext = new PageWithContextContract
-                            {
-                                ContextStructure = new KwicStructure
-                                {
-                                    Before = "before ",
-                                    Match = "match"+start,
-                                    After = " after"
-                                }
-                            }
-                        };
-                        resultList.Add(result);
-                    }
-                }
-                if(start>=12 && start<=15)
-                {
-                    var random = new Random();
-                    var randomNumber = random.Next(0, 4);
-                    for (var i = 0; i < randomNumber; i++)
-                    {
-                        var result = new CorpusSearchResultContract
-                        {
-                            Author = "Autor",
-                            Title = "Title " + selectedBookIds[0],
-                            SourceAbbreviation = "Book" + bookId,
-                            RelicAbbreviation = "TIT",
-                            BookId = selectedBookIds[0],
-                            OriginDate = "first half of 8th century",
-                            Notes = notes,
-                            PageResultContext = new PageWithContextContract
-                            {
-                                ContextStructure = new KwicStructure
-                                {
-                                    Before = "before ",
-                                    Match = "match"+start,
-                                    After = " after"
-                                }
-                            }
-                        };
-                        resultList.Add(result);
-                    }
-                }
-
+                    Start = start,
+                    Count = count,
+                    ContextLength = contextLength,
+                    ConditionConjunction = listSearchCriteriaContracts,
+                    // TODO is sorting required? is sorting possible?
+                });
                 return Json(new { results = resultList });
             }
         }

@@ -4,6 +4,8 @@ using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
+using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.Request;
@@ -161,6 +163,37 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             }
         }
 
+        public CorpusSearchSnapshotsResultContract SearchCorpusSnapshotsByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        {
+            UpdateCriteriaWithSnapshotRestriction(criteria, projects);
+
+            using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient())
+            {
+                var result = fulltextServiceClient.SearchCorpusSnapshotsByCriteria(start, count, criteria);
+                return result;
+            }
+        }
+
+        public List<CorpusSearchResultData> SearchCorpusSnapshotByCriteria(long snapshotId, int start, int count, int contextLength, List<SearchCriteriaContract> criteria)
+        {
+            using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient())
+            {
+                var result = fulltextServiceClient.SearchCorpusSnapshotByCriteria(snapshotId, start, count, contextLength, criteria);
+                return result.Select(x => new CorpusSearchResultData
+                {
+                    ProjectId = x.ProjectId,
+                    Notes = x.Notes,
+                    PageResultContext = new CorpusSearchPageResultData
+                    {
+                        TextExternalId = x.PageResultContext?.TextExternalId,
+                        ContextStructure = x.PageResultContext?.ContextStructure,
+                    },
+                    VerseResultContext = x.VerseResultContext,
+                    BibleVerseResultContext = x.BibleVerseResultContext,
+                }).ToList();
+            }
+        }
+
         public long SearchHeadwordByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
             throw new System.NotImplementedException();
@@ -191,5 +224,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         {
             throw new System.NotImplementedException();
         }
+
+        
     }
 }

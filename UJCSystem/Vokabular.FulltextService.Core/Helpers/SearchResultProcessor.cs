@@ -242,5 +242,56 @@ namespace Vokabular.FulltextService.Core.Helpers
                 }
             };
         }
+
+        public CorpusSearchSnapshotsResultContract ProcessSearchCorpusSnapshotsByCriteria(ISearchResponse<SnapshotResourceContract> response)
+        {
+            if (!response.IsValid)
+            {
+                throw new Exception(response.DebugInformation);
+            }
+
+            return new CorpusSearchSnapshotsResultContract
+            {
+                TotalCount = response.Total,
+                SnapshotIds = response.Documents.Select(x => x.SnapshotId).ToList()
+            };
+        }
+
+
+        public List<CorpusSearchResultContract> ProccessSearchCorpusSnapshotByCriteria( ISearchResponse<SnapshotResourceContract> response, string highlightTag, int start, int count)
+        {
+            if (!response.IsValid)
+            {
+                throw new Exception(response.DebugInformation);
+            }
+
+            int index = 0;
+            
+            var resultList = new List<CorpusSearchResultContract>();
+            foreach (var hit in response.Hits)
+            {
+                foreach (var value in hit.Highlights.Values)
+                {
+                    foreach (var highlight in value.Highlights)
+                    {
+                        if (index++ < start)
+                        {
+                            continue;
+                        }
+                        var resultData = GetCorpusSearchResultDataList(highlight, hit.Source.ProjectId, highlightTag);
+                        AddPageIdsToResult(resultData, hit.Source.Pages);
+
+                        resultList.AddRange(resultData);
+
+                        if (index - start >= count)
+                        {
+                            return resultList;
+                        }
+                    }
+                }
+            }
+            
+            return resultList;
+        }
     }
 }
