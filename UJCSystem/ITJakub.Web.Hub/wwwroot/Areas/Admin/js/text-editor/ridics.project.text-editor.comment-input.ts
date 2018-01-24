@@ -139,16 +139,18 @@
                 new RegExp(
                     `\\$${guidRegExpString}\\%`)); //searching on one side only because of the same amount of characters.
         if (!addSigns) {
-            output = selectedText.replace(
-                new RegExp(`\\$${guidRegExpString}\\%`),
-                "");
-            output = output.replace(
-                new RegExp(`\\%${guidRegExpString}\\$`),
-                "");
-            markSize = customCommentarySign[0].length;
-            cm.replaceSelection(output);
-            cm.setSelection({ line: selectionStartLine, ch: selectionStartChar },
-                { line: selectionEndLine, ch: selectionEndChar - markSize });
+            if (customCommentarySign) {
+                output = selectedText.replace(
+                    new RegExp(`\\$${guidRegExpString}\\%`),
+                    "");
+                output = output.replace(
+                    new RegExp(`\\%${guidRegExpString}\\$`),
+                    "");
+                markSize = customCommentarySign[0].length;
+                cm.replaceSelection(output);
+                cm.setSelection({ line: selectionStartLine, ch: selectionStartChar },
+                    { line: selectionEndLine, ch: selectionEndChar - markSize });
+            }
             return null;
         } else {
             const textReferenceId = this.util.createTextRefereceId();
