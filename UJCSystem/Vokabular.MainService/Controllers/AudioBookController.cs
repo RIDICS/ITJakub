@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts.Search;
@@ -42,10 +44,18 @@ namespace Vokabular.MainService.Controllers
         /// </param>
         /// <returns></returns>
         [HttpPost("search")]
-        public List<AudioBookSearchResultContract> SearchBook([FromBody] SearchRequestContract request)
+        [ProducesResponseType(typeof(List<AudioBookSearchResultContract>), StatusCodes.Status200OK)]
+        public IActionResult SearchBook([FromBody] SearchRequestContract request)
         {
-            var result = m_bookSearchManager.SearchAudioByCriteria(request);
-            return result;
+            try
+            {
+                var result = m_bookSearchManager.SearchAudioByCriteria(request);
+                return Ok(result);
+            }
+            catch (ArgumentException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         /// <summary>
@@ -54,10 +64,18 @@ namespace Vokabular.MainService.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost("search-count")]
-        public long SearchBookResultCount([FromBody] SearchRequestContract request)
+        [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
+        public IActionResult SearchBookResultCount([FromBody] SearchRequestContract request)
         {
-            var result = m_bookSearchManager.SearchByCriteriaCount(request);
-            return result;
+            try
+            {
+                var result = m_bookSearchManager.SearchByCriteriaCount(request);
+                return Ok(result);
+            }
+            catch (ArgumentException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         /// <summary>

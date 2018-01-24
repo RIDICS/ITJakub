@@ -2,8 +2,8 @@ using System;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
-using ITJakub.Shared.Contracts;
 using log4net;
 
 namespace ITJakub.SearchService.Core.Exist
@@ -11,6 +11,7 @@ namespace ITJakub.SearchService.Core.Exist
     public class ExistCommunicationManager : IExistCommunicationManager
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         private readonly ExistClient m_existClient;
         private readonly UriCache m_uriCache;
 
@@ -27,7 +28,16 @@ namespace ITJakub.SearchService.Core.Exist
             var uri = SetParamsToUri(commInfo.UriTemplate, bookId, fileName);
             var content = new StreamContent(dataStream);
 
-            m_existClient.SendRequestGetResponseAsString(commInfo, uri, content).Wait();
+            try
+            {
+                m_existClient.SendRequestGetResponseAsStringAsync(commInfo, uri, content).Wait();
+            }
+            catch (AggregateException exception)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error($"{GetCurrentMethodName()} failed with {exception.GetType().Name}", exception);
+                throw;
+            }
         }
 
         public void UploadVersionFile(string bookId, string bookVersionId, string fileName, Stream dataStream)
@@ -41,7 +51,16 @@ namespace ITJakub.SearchService.Core.Exist
             var uri = SetParamsToUri(commInfo.UriTemplate, bookId, bookVersionId, fileName);
             var content = new StreamContent(dataStream);
 
-            m_existClient.SendRequestGetResponseAsString(commInfo, uri, content).Wait();
+            try
+            {
+                m_existClient.SendRequestGetResponseAsStringAsync(commInfo, uri, content).Wait();
+            }
+            catch (AggregateException exception)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error($"{GetCurrentMethodName()} failed with {exception.GetType().Name}", exception);
+                throw;
+            }
 
             if (m_log.IsDebugEnabled)
                 m_log.DebugFormat("End upload file '{0}' of book '{1}' and version '{2}'", fileName, bookId,
@@ -53,7 +72,17 @@ namespace ITJakub.SearchService.Core.Exist
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
             var uri = SetParamsToUri(commInfo.UriTemplate, fileName);
             var content = new StreamContent(dataStream);
-            m_existClient.SendRequestGetResponseAsString(commInfo, uri, content).Wait();
+
+            try
+            {
+                m_existClient.SendRequestGetResponseAsStringAsync(commInfo, uri, content).Wait();
+            }
+            catch (AggregateException exception)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error($"{GetCurrentMethodName()} failed with {exception.GetType().Name}", exception);
+                throw;
+            }
         }
 
         public void UploadBibliographyFile(string bookId, string bookVersionId, string fileName, Stream dataStream)
@@ -61,7 +90,17 @@ namespace ITJakub.SearchService.Core.Exist
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
             var uri = SetParamsToUri(commInfo.UriTemplate, bookId, bookVersionId, fileName);
             var content = new StreamContent(dataStream);
-            m_existClient.SendRequestGetResponseAsString(commInfo, uri, content).Wait();
+
+            try
+            {
+                m_existClient.SendRequestGetResponseAsStringAsync(commInfo, uri, content).Wait();
+            }
+            catch (AggregateException exception)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error($"{GetCurrentMethodName()} failed with {exception.GetType().Name}", exception);
+                throw;
+            }
         }
 
         public string GetDictionaryEntryByXmlId(string bookId, string versionId, string xmlEntryId, string outputFormat)
@@ -105,9 +144,18 @@ namespace ITJakub.SearchService.Core.Exist
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
             var uri = GetCompleteUri(commInfo, null);
             var content = GetContentKeyValuePairs(commInfo, null, serializedSearchCriteria);
-            var result = m_existClient.SendRequestGetResponseAsString(commInfo, uri, content).Result;
 
-            return result;
+            try
+            {
+                var result = m_existClient.SendRequestGetResponseAsStringAsync(commInfo, uri, content).Result;
+                return result;
+            }
+            catch (AggregateException exception)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error($"{GetCurrentMethodName()} failed with {exception.GetType().Name}", exception);
+                throw;
+            }
         }
 
         public string ListSearchDictionariesResults(string serializedSearchCriteria)
@@ -115,9 +163,18 @@ namespace ITJakub.SearchService.Core.Exist
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
             var uri = GetCompleteUri(commInfo, null);
             var content = GetContentKeyValuePairs(commInfo, null, serializedSearchCriteria);
-            var result = m_existClient.SendRequestGetResponseAsString(commInfo, uri, content).Result;
 
-            return result;
+            try
+            {
+                var result = m_existClient.SendRequestGetResponseAsStringAsync(commInfo, uri, content).Result;
+                return result;
+            }
+            catch (AggregateException exception)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error($"{GetCurrentMethodName()} failed with {exception.GetType().Name}", exception);
+                throw;
+            }
         }
 
         public int ListSearchDictionariesResultsCount(string serializedSearchCriteria)
@@ -125,9 +182,18 @@ namespace ITJakub.SearchService.Core.Exist
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
             var uri = GetCompleteUri(commInfo, null);
             var content = GetContentKeyValuePairs(commInfo, null, serializedSearchCriteria);
-            var result = m_existClient.SendRequestGetResponseAsString(commInfo, uri, content).Result;
 
-            return int.Parse(result);
+            try
+            {
+                var result = m_existClient.SendRequestGetResponseAsStringAsync(commInfo, uri, content).Result;
+                return int.Parse(result);
+            }
+            catch (AggregateException exception)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error($"{GetCurrentMethodName()} failed with {exception.GetType().Name}", exception);
+                throw;
+            }
         }
 
         public int GetSearchCriteriaResultsCount(string serializedSearchCriterias)
@@ -135,9 +201,18 @@ namespace ITJakub.SearchService.Core.Exist
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
             var uri = GetCompleteUri(commInfo, null);
             var content = GetContentKeyValuePairs(commInfo, null, serializedSearchCriterias);
-            var result = m_existClient.SendRequestGetResponseAsString(commInfo, uri, content).Result;
 
-            return int.Parse(result);
+            try
+            {
+                var result = m_existClient.SendRequestGetResponseAsStringAsync(commInfo, uri, content).Result;
+                return int.Parse(result);
+            }
+            catch (AggregateException exception)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error($"{GetCurrentMethodName()} failed with {exception.GetType().Name}", exception);
+                throw;
+            }
         }
 
         public string GetSearchEditionsPageList(string serializedSearchCriteria)
@@ -145,9 +220,18 @@ namespace ITJakub.SearchService.Core.Exist
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
             var uri = GetCompleteUri(commInfo, null);
             var content = GetContentKeyValuePairs(commInfo, null, serializedSearchCriteria);
-            var result = m_existClient.SendRequestGetResponseAsString(commInfo, uri, content).Result;
 
-            return result;
+            try
+            {
+                var result = m_existClient.SendRequestGetResponseAsStringAsync(commInfo, uri, content).Result;
+                return result;
+            }
+            catch (AggregateException exception)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error($"{GetCurrentMethodName()} failed with {exception.GetType().Name}", exception);
+                throw;
+            }
         }
 
         public string GetEditionPageFromSearch(string serializedSearchCriteria, string bookId, string versionId, string pageXmlId, string outputFormat)
@@ -160,9 +244,18 @@ namespace ITJakub.SearchService.Core.Exist
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
             var uri = GetCompleteUri(commInfo, null);
             var content = GetContentKeyValuePairs(commInfo, null, serializedSearchCriteria);
-            var result = m_existClient.SendRequestGetResponseAsString(commInfo, uri, content).Result;
 
-            return result;
+            try
+            {
+                var result = m_existClient.SendRequestGetResponseAsStringAsync(commInfo, uri, content).Result;
+                return result;
+            }
+            catch (AggregateException exception)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error($"{GetCurrentMethodName()} failed with {exception.GetType().Name}", exception);
+                throw;
+            }
         }
 
         public int GetSearchCorpusCount(string serializedSearchCriteria)
@@ -170,9 +263,18 @@ namespace ITJakub.SearchService.Core.Exist
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
             var uri = GetCompleteUri(commInfo, null);
             var content = GetContentKeyValuePairs(commInfo, null, serializedSearchCriteria);
-            var result = m_existClient.SendRequestGetResponseAsString(commInfo, uri, content).Result;
 
-            return int.Parse(result);
+            try
+            {
+                var result = m_existClient.SendRequestGetResponseAsStringAsync(commInfo, uri, content).Result;
+                return int.Parse(result);
+            }
+            catch (AggregateException exception)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error($"{GetCurrentMethodName()} failed with {exception.GetType().Name}", exception);
+                throw;
+            }
         }
 
         public string GetBookEditionNote(string bookId, string versionId, string outputFormat, string xslPath)
@@ -180,8 +282,18 @@ namespace ITJakub.SearchService.Core.Exist
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
             var uri = GetCompleteUri(commInfo, null);
             var content = GetContentKeyValuePairs(commInfo, xslPath, bookId, versionId, outputFormat);
-            var noteText = m_existClient.SendRequestGetResponseAsString(commInfo, uri, content).Result;
-            return noteText;
+
+            try
+            {
+                var noteText = m_existClient.SendRequestGetResponseAsStringAsync(commInfo, uri, content).Result;
+                return noteText;
+            }
+            catch (AggregateException exception)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error($"{GetCurrentMethodName()} failed with {exception.GetType().Name}", exception);
+                throw;
+            }
         }
 
         public string GetPageByPositionFromStart(string bookId, string versionId, int pagePosition, string outputFormat, string xslPath)
@@ -189,7 +301,17 @@ namespace ITJakub.SearchService.Core.Exist
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
             var uri = GetCompleteUri(commInfo, null);
             var content = GetContentKeyValuePairs(commInfo, xslPath, bookId, versionId, pagePosition, outputFormat);
-            return m_existClient.SendRequestGetResponseAsString(commInfo, uri, content).Result;
+
+            try
+            {
+                return m_existClient.SendRequestGetResponseAsStringAsync(commInfo, uri, content).Result;
+            }
+            catch (AggregateException exception)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error($"{GetCurrentMethodName()} failed with {exception.GetType().Name}", exception);
+                throw;
+            }
         }
 
         public string GetPageByName(string bookId, string versionId, string start, string outputFormat, string xslPath)
@@ -201,12 +323,21 @@ namespace ITJakub.SearchService.Core.Exist
             if (m_log.IsDebugEnabled)
                 m_log.DebugFormat("Start HTTPclient get page name '{0}' of book '{1}' and version '{2}'", start, bookId, versionId);
 
-            var pageText = m_existClient.SendRequestGetResponseAsString(commInfo, uri, content).Result;
+            try
+            {
+                var pageText = m_existClient.SendRequestGetResponseAsStringAsync(commInfo, uri, content).Result;
 
-            if (m_log.IsDebugEnabled)
-                m_log.DebugFormat("End HTTPclient get page name '{0}' of book '{1}' and version '{2}'", start, bookId, versionId);
+                if (m_log.IsDebugEnabled)
+                    m_log.DebugFormat("End HTTPclient get page name '{0}' of book '{1}' and version '{2}'", start, bookId, versionId);
 
-            return pageText;
+                return pageText;
+            }
+            catch (AggregateException exception)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error($"{GetCurrentMethodName()} failed with {exception.GetType().Name}", exception);
+                throw;
+            }
         }
 
         public string GetPagesByName(string bookId, string versionId, string start, string end, string outputFormat, string xslPath)
@@ -214,7 +345,17 @@ namespace ITJakub.SearchService.Core.Exist
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
             var uri = GetCompleteUri(commInfo, null);
             var content = GetContentKeyValuePairs(commInfo, xslPath, bookId, versionId, start, end, outputFormat);
-            return m_existClient.SendRequestGetResponseAsString(commInfo, uri, content).Result;
+
+            try
+            {
+                return m_existClient.SendRequestGetResponseAsStringAsync(commInfo, uri, content).Result;
+            }
+            catch (AggregateException exception)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error($"{GetCurrentMethodName()} failed with {exception.GetType().Name}", exception);
+                throw;
+            }
         }
 
         public string GetPageByXmlId(string bookId, string versionId, string pageXmlId, string outputFormat, string xslPath)
@@ -226,13 +367,22 @@ namespace ITJakub.SearchService.Core.Exist
             if (m_log.IsDebugEnabled)
                 m_log.DebugFormat("Start HTTPclient get page xmlId '{0}' of book '{1}' and version '{2}' and outputFormat '{3}'", pageXmlId, bookId,
                     versionId, outputFormat);
-            
-            var pageText = m_existClient.SendRequestGetResponseAsString(commInfo, uri, content).Result;
-            if (m_log.IsDebugEnabled)
-                m_log.DebugFormat("End HTTPclient get page xmlId '{0}' of book '{1}' and version '{2}' and outputFormat '{3}'", pageXmlId, bookId, versionId,
-                    outputFormat);
 
-            return pageText;
+            try
+            {
+                var pageText = m_existClient.SendRequestGetResponseAsStringAsync(commInfo, uri, content).Result;
+                if (m_log.IsDebugEnabled)
+                    m_log.DebugFormat("End HTTPclient get page xmlId '{0}' of book '{1}' and version '{2}' and outputFormat '{3}'", pageXmlId, bookId, versionId,
+                        outputFormat);
+
+                return pageText;
+            }
+            catch (AggregateException exception)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error($"{GetCurrentMethodName()} failed with {exception.GetType().Name}", exception);
+                throw;
+            }
         }
 
         public string GetDictionaryEntryByXmlId(string bookId, string versionId, string xmlEntryId, string outputFormat, string xslPath)
@@ -240,9 +390,18 @@ namespace ITJakub.SearchService.Core.Exist
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
             var uri = GetCompleteUri(commInfo, null);
             var content = GetContentKeyValuePairs(commInfo, xslPath, bookId, versionId, xmlEntryId, outputFormat);
-            var entryResult = m_existClient.SendRequestGetResponseAsString(commInfo, uri, content).Result;
 
-            return entryResult;
+            try
+            {
+                var entryResult = m_existClient.SendRequestGetResponseAsStringAsync(commInfo, uri, content).Result;
+                return entryResult;
+            }
+            catch (AggregateException exception)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error($"{GetCurrentMethodName()} failed with {exception.GetType().Name}", exception);
+                throw;
+            }
         }
 
         public string GetDictionaryEntryFromSearch(string serializedSearchCriteria, string bookId, string versionId, string xmlEntryId, string outputFormat,
@@ -251,9 +410,18 @@ namespace ITJakub.SearchService.Core.Exist
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
             var uri = GetCompleteUri(commInfo, null);
             var content = GetContentKeyValuePairs(commInfo, xslPath, serializedSearchCriteria, bookId, versionId, xmlEntryId, outputFormat);
-            var entryResult = m_existClient.SendRequestGetResponseAsString(commInfo, uri, content).Result;
 
-            return entryResult;
+            try
+            {
+                var entryResult = m_existClient.SendRequestGetResponseAsStringAsync(commInfo, uri, content).Result;
+                return entryResult;
+            }
+            catch (AggregateException exception)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error($"{GetCurrentMethodName()} failed with {exception.GetType().Name}", exception);
+                throw;
+            }
         }
 
         public string GetEditionPageFromSearch(string serializedSearchCriteria, string bookId, string versionId, string pageXmlId, string outputFormat,
@@ -262,8 +430,18 @@ namespace ITJakub.SearchService.Core.Exist
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
             var uri = GetCompleteUri(commInfo, null);
             var content = GetContentKeyValuePairs(commInfo, xslPath, serializedSearchCriteria, bookId, versionId, pageXmlId, outputFormat);
-            var pageText = m_existClient.SendRequestGetResponseAsString(commInfo, uri, content).Result;
-            return pageText;
+
+            try
+            {
+                var pageText = m_existClient.SendRequestGetResponseAsStringAsync(commInfo, uri, content).Result;
+                return pageText;
+            }
+            catch (AggregateException exception)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.Error($"{GetCurrentMethodName()} failed with {exception.GetType().Name}", exception);
+                throw;
+            }
         }
 
         #region Helpers
@@ -303,6 +481,11 @@ namespace ITJakub.SearchService.Core.Exist
             }
             var contentPairString = SetParamsToStringTemplate(contentTemplate, args);
             return new StringContent(contentPairString, Encoding.UTF8, "application/x-www-form-urlencoded");
+        }
+
+        private string GetCurrentMethodName([CallerMemberName] string methodName = null)
+        {
+            return methodName;
         }
 
         #endregion

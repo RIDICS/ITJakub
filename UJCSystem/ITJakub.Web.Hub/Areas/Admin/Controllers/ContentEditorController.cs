@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ITJakub.Web.Hub.Areas.Admin.Models.Request;
 using ITJakub.Web.Hub.Areas.Admin.Models.Response;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
@@ -92,7 +93,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public void DeleteComment(long commentId)//TODO needs response code
+        public void DeleteComment(long commentId)
         {
             using (var client = GetRestClient())
             {
@@ -171,7 +172,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult SetEditionNote(EditionNote request)
+        public IActionResult SetEditionNote([FromBody] CreateEditionNoteRequest request)
         {
             using (var client = GetRestClient())
             {

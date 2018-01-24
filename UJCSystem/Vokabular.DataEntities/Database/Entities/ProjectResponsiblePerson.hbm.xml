@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <hibernate-mapping assembly="Vokabular.DataEntities" namespace="Vokabular.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
   <class name="ProjectResponsiblePerson" table="[Project_ResponsiblePerson]">
-    <composite-id>
-      <key-many-to-one name="Project" class="Project" column="Project" lazy="proxy" />
-      <key-many-to-one name="ResponsiblePerson" class="ResponsiblePerson" column="Responsible" lazy="proxy" />
-      <key-many-to-one name="ResponsibleType" class="ResponsibleType" column="ResponsibleType" lazy="proxy" />
+    <composite-id name="ProjectResponsiblePersonId" class="ProjectResponsiblePersonId">
+      <key-property name="ProjectId" column="Project" />
+      <key-property name="ResponsiblePersonId" column="Responsible" />
+      <key-property name="ResponsibleTypeId" column="ResponsibleType" />
     </composite-id>
 
+    <many-to-one name="Project" class="Project" column="Project" lazy="proxy" insert="false" update="false" access="field.camelcase-m-underscore" />
+    
+    <many-to-one name="ResponsiblePerson" class="ResponsiblePerson" column="Responsible" lazy="proxy" insert="false" update="false" access="field.camelcase-m-underscore" />
+    
+    <many-to-one name="ResponsibleType" class="ResponsibleType" column="ResponsibleType" lazy="proxy" insert="false" update="false" access="field.camelcase-m-underscore" />
+    
   </class>
 </hibernate-mapping>

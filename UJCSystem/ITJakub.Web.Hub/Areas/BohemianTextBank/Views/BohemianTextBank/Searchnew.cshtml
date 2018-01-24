@@ -1,0 +1,140 @@
+﻿@section styles{
+    <link href="~/Areas/BohemianTextBank/css/itjakub.bohemiantextbank.css" rel="stylesheet" />
+    <link href="~/Areas/BohemianTextBank/css/ridics.bohemiantextbank-search-viewer.css" rel="stylesheet" />
+    <link href="~/css/Plugins/ridics.indefinite-pagination.css" rel="stylesheet" />
+}
+@section scripts{
+    <script src="~/Areas/BohemianTextBank/js/itjakub.bohemiantextbank.bundle.js"></script>
+    <script src="~/lib/bootbox/bootbox.min.js"></script>
+    <script src="~/js/Plugins/IndefinitePagination/ridics.indefinite-pagination.js"></script>
+}
+
+@{
+    ViewBag.Title = "Korpusy - Vyhledávání TEST";
+}
+
+@Html.Partial("_BibliographySearch")
+
+    <div class="search-result-section container-fluid" id="corpus-search-div">
+        <div class="row corpus-result-and-settings-row">
+            <div class="corpus-search-results-div col-md-10 col-sm-9 col-xs-12">
+                <div id="corpus-search-results-table-div" class="corpus-search-results-table-container">
+                    <div id="corpus-search-results-table-div-loader">
+                        Pro zobrazení výsledků použijte vyhledávání
+                    </div>
+                    <div class="list-group container-fluid">
+                        <div id="search-results-div"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="corpus-search-result-controls-container col-md-2 col-sm-3 col-xs-12">
+                <div class="corpus-search-settings-label">Možnosti zobrazení</div>
+                <div class="corpus-search-settings-checkboxes">
+                    <div class="checkbox" style="display: none;">
+                        <label><input id="wordCheckbox" type="checkbox" value="">Slovo</label>
+                    </div>
+                    <div class="checkbox">
+                        <label><input id="commentCheckbox" type="checkbox" value="">Komentář</label>
+                    </div>
+                    <div class="checkbox">
+                        <label><input id="languageCheckbox" type="checkbox" value="">Jazyk</label>
+                    </div>
+                    <div class="checkbox">
+                        <label><input id="structureCheckbox" type="checkbox" value="">Struktura textu</label>
+                    </div>
+                    <div class="checkbox">
+                        <label><input id="paragraphCheckbox" type="checkbox" value="">Odstavec</label>
+                    </div>
+                </div>
+                <div class="corpus-search-setting-div-context" style="display: none">
+                    <label for="contextPositionsSelect">Pozic v kontextu</label>
+                    <select id="contextPositionsSelect">
+                        <option value="20">20</option>
+                        <option value="50" selected="selected">50</option>
+                        <option value="70">70</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+                <div class="corpus-search-setting-div-results-count">
+                    <div>Počet děl:</div>
+                    <div id="totalResultCountDiv"></div>
+                </div>
+                <div class="corpus-search-setting-div-pagination pagination-extra-small" id="paginationContainer">
+                </div>
+            </div>
+        </div>
+        <div class="row corpus-search-result-detail-row">
+            <div class="corpus-search-result-detail-container col-xs-12">
+                <div class="corpus-search-detail">
+                    <div class="row result-info-section">
+                        <div class="col-sm-1 col-xs-12 label">Doc</div>
+                        <div class="col-sm-11 col-xs-12">
+                            <div class="corpus-search-detail">
+                                <div class="table-row row">
+                                    <div class="col-sm-1 col-xs-12 label">Autor</div>
+                                    <div id="detail-author" class="col-sm-11 col-xs-12 break-word">&lt;Nezadáno&gt;</div>
+                                </div>
+                                <div class="table-row row">
+                                    <div class="col-sm-1 col-xs-12 label">Titul</div>
+                                    <div id="detail-title" class="col-sm-11 col-xs-12 break-word">&lt;Nezadáno&gt;</div>
+                                </div>
+                                <div class="table-row row">
+                                    <div class="col-sm-1 col-xs-12 label">Datace pramene</div>
+                                    <div id="detail-dating" class="col-sm-11 col-xs-12 break-word">&lt;Nezadáno&gt;</div>
+                                </div>
+                                <div class="table-row row">
+                                    <div class="col-sm-1 col-xs-12 label">Datace století</div>
+                                    <div id="detail-dating-century" class="col-sm-11 col-xs-12 break-word">&lt;Nezadáno&gt;</div>
+                                </div>
+                                <div class="table-row row">
+                                    <div class="col-sm-1 col-xs-12 label">Zkratka památky</div>
+                                    <div id="detail-abbrev" class="col-sm-11 col-xs-12 break-word">&lt;Nezadáno&gt;</div>
+                                </div>
+                                <div class="table-row row">
+                                    <div class="col-xs-12 col-no-padding">
+                                        <a id="detail-edition-note-href" href="#">Ediční poznámka</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div></div>
+                    <div class="row result-info-section">
+                        <div class="col-sm-1 col-xs-12 label">Folio</div>
+                        <div class="col-sm-11 col-xs-12 col-no-padding">
+                            <div id="detail-folio">&lt;Nezadáno&gt;</div>
+                            </div>
+                        </div>
+                    <div class="row result-info-section">
+                        <div class="col-sm-1 col-xs-12 label">Vers</div>
+                        <div class="col-sm-11 col-xs-12 col-no-padding">
+                            <div id="detail-vers">&lt;Nezadáno&gt;</div>
+                            </div>
+                        </div>
+                    <div class="row result-info-section">
+                        <div class="col-sm-1 col-xs-12 label">Bible vers</div>
+                        <div class="col-sm-11 col-xs-12">
+                                <div class="corpus-search-detail">
+                                    <div class="table-row row">
+                                        <div class="col-sm-1 col-xs-12 label">Kniha</div>
+                                        <div id="detail-bible-vers-book" class="col-sm-11 col-xs-12 break-word">&lt;Nezadáno&gt;</div>
+                                    </div>
+                                    <div class="table-row row">
+                                        <div class="col-sm-1 col-xs-12 label">Kapitola</div>
+                                        <div id="detail-bible-vers-chapter" class="col-sm-11 col-xs-12 break-word">&lt;Nezadáno&gt;</div>
+                                    </div>
+                                    <div class="table-row row">
+                                        <div class="col-sm-1 col-xs-12 label">Verš</div>
+                                        <div id="detail-bible-vers-vers" class="col-sm-11 col-xs-12 break-word">&lt;Nezadáno&gt;</div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div></div>
+            </div>
+        </div>
+        <ul class="page-history-constainer hidden"></ul>
+    </div>
+
+<script>
+    $(document).ready(function () {
+        initSearchNew();
+    });
+</script>

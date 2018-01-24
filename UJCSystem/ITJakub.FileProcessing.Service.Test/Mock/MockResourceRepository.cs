@@ -45,8 +45,23 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                     {
                         Id = (int)id
                     };
+                case "BookVersionResource":
+                    return new BookVersionResource
+                    {
+                        Id = (long) id
+                    };
+                case "Term":
+                    return new Term
+                    {
+                        Id = (int) id
+                    };
+                case "TermCategory":
+                    return new TermCategory
+                    {
+                        Id = (int) id
+                    };
                 default:
-                    return null;
+                    throw new NotSupportedException($"Missing mock for type: {type.Name}");
             }
         }
 
@@ -524,6 +539,26 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                     FileName = "file-2.wav",
                     VersionNumber = 1
                 },
+            };
+        }
+
+        public override EditionNoteResource GetLatestEditionNote(long projectId)
+        {
+            if (projectId == 0)
+                return null;
+
+            return new EditionNoteResource
+            {
+                Resource = new Resource
+                {
+                    Id = 11,
+                    Project = new Project
+                    {
+                        Id = projectId
+                    }
+                },
+                VersionNumber = 1,
+                ExternalId = null,
             };
         }
     }

@@ -85,7 +85,7 @@
             () => {
                 this.loadNextPage();
             });
-        $(document).keypress(
+        $(document.documentElement).keypress(
             (event) => {
                 var keycode = (event.which);
                 switch (keycode) {

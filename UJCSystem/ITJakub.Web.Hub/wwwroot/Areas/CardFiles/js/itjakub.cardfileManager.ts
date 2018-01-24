@@ -209,7 +209,7 @@ class CardFileViewer {
 
         var imageAnchor: HTMLAnchorElement = document.createElement("a");
         imageAnchor.href = "#";
-        $(imageAnchor).click((event: Event) => {
+        $(imageAnchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.changeDisplayedPreviewImage(cardId, imageId);
             return false;
@@ -381,7 +381,7 @@ class CardFileViewer {
         var anchor: HTMLAnchorElement = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '|<';
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.changeViewedCard(0);
             return false;
@@ -393,7 +393,7 @@ class CardFileViewer {
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '<<';
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.changeActualCardPosition(- 10);
             return false;
@@ -405,7 +405,7 @@ class CardFileViewer {
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '<';
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.changeActualCardPosition(- 1);
             return false;
@@ -419,7 +419,7 @@ class CardFileViewer {
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = "";
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             return false;
         });
@@ -431,7 +431,7 @@ class CardFileViewer {
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '>';
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.changeActualCardPosition(+1);
             return false;
@@ -443,7 +443,7 @@ class CardFileViewer {
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '>>';
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.changeActualCardPosition(+10);
             return false;
@@ -455,7 +455,7 @@ class CardFileViewer {
         anchor = document.createElement('a');
         anchor.href = '#';
         anchor.innerHTML = '>|';
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.changeViewedCard(this.actualBucket.getCardsCount() - 1);
             return false;
@@ -475,16 +475,17 @@ class CardFileViewer {
             max: this.actualBucket.getCardsCount() - 1,
             value: actualCardPosition,
             start: (event, ui) => {
-                $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
+                $(event.target as Element).find('.ui-slider-handle').find('.slider-tip').show();
             },
             stop: (event, ui) => {
                 this.changeViewedCard(ui.value);
-                $(event.target).find('.ui-slider-handle').find('.slider-tip').fadeOut(1000);
+                $(event.target as Element).find('.ui-slider-handle').find('.slider-tip').fadeOut(1000);
             },
             slide: (event, ui) => {
-                $(event.target).find('.ui-slider-handle').find('.slider-tip').stop(true, true);
-                $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
-                $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html(this.getInnerTooltipForSlider(ui.value));
+                const targetEl = $(event.target as Element);
+                targetEl.find('.ui-slider-handle').find('.slider-tip').stop(true, true);
+                targetEl.find('.ui-slider-handle').find('.slider-tip').show();
+                targetEl.find('.ui-slider-handle').find('.tooltip-inner').html(this.getInnerTooltipForSlider(ui.value));
             }
 
         });
@@ -508,7 +509,7 @@ class CardFileViewer {
             $(event.target).find('.slider-tip').show();
         });
         $(sliderHandle).mouseout((event) => {
-            $(event.target).find('.slider-tip').fadeOut(1000);
+            $(event.target as Element).find('.slider-tip').fadeOut(1000);
         });
 
         pageControlsDiv.appendChild(sliderDiv);
@@ -598,7 +599,7 @@ class Bucket {
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { cardFileId: this.cardFileId, bucketId: this.id },
+            data: { cardFileId: this.cardFileId, bucketId: this.id } as JQuery.PlainObject,
             url: getBaseUrl()+"CardFiles/CardFiles/CardsShort",
             dataType: 'json',
             contentType: 'application/json',
@@ -651,7 +652,7 @@ class Card {
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { cardFileId: this.parentBucket.getCardFileId(), bucketId: this.parentBucket.getId(), cardId: this.getId()},
+            data: { cardFileId: this.parentBucket.getCardFileId(), bucketId: this.parentBucket.getId(), cardId: this.getId()} as JQuery.PlainObject,
             url: getBaseUrl()+"CardFiles/CardFiles/Card",
             dataType: 'json',
             contentType: 'application/json',

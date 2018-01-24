@@ -14,11 +14,13 @@ namespace Vokabular.MainService.Controllers
     {
         private readonly PersonManager m_personManager;
         private readonly CatalogValueManager m_catalogValueManager;
+        private readonly ProjectManager m_projectManager;
 
-        public ResponsiblePersonController(PersonManager personManager, CatalogValueManager catalogValueManager)
+        public ResponsiblePersonController(PersonManager personManager, CatalogValueManager catalogValueManager, ProjectManager projectManager)
         {
             m_personManager = personManager;
             m_catalogValueManager = catalogValueManager;
+            m_projectManager = projectManager;
         }
 
         [HttpPost("")]
@@ -71,15 +73,14 @@ namespace Vokabular.MainService.Controllers
         public List<ResponsiblePersonContract> GetResponsiblePersonList([FromQuery] int? start, [FromQuery] int? count)
         {
             var result = m_personManager.GetResponsiblePersonList(start, count);
-
             SetTotalCountHeader(result.TotalCount);
             return result.List;
         }
 
         [HttpGet("autocomplete")]
-        public List<ResponsiblePersonContract> GetAutocomplete([FromQuery] string query)
+        public List<ResponsiblePersonContract> GetAutocomplete([FromQuery] string query, [FromQuery] int? count)
         {
-            return m_personManager.GetResponsiblePersonAutocomplete(query);
+            return m_personManager.GetResponsiblePersonAutocomplete(query, count);
         }
 
         [HttpPost("type")]
@@ -131,6 +132,17 @@ namespace Vokabular.MainService.Controllers
         public List<ResponsibleTypeContract> GetResponsibleTypeList()
         {
             return m_catalogValueManager.GetResponsibleTypeList();
+        }
+
+        [HttpGet("{responsiblePersonId}/project")]
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
+        public List<ProjectDetailContract> GetProjectsByResponsiblePerson(int responsiblePersonId, [FromQuery] int? start, [FromQuery] int? count)
+        {
+            var result = m_projectManager.GetProjectsByResponsiblePerson(responsiblePersonId, start, count);
+
+            SetTotalCountHeader(result.TotalCount);
+
+            return result.List;
         }
     }
 }

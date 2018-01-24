@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using ITJakub.CardFile.Core.DataContractEntities;
-using ITJakub.ITJakubService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.CardFile;
 
 namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
@@ -8,7 +8,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
     {
         public ImageContractProfile()
         {
-            CreateMap<image, ImageContract>()
+            CreateMap<image, CardImageContract>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.id));
         }
     }

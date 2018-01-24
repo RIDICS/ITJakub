@@ -65,7 +65,7 @@
         }
         elm += listEnd;
         const html = $.parseHTML(elm);
-        const jListEl = $(html);
+        const jListEl = $(html as Element[]);
         return jListEl;
     }
 
@@ -79,9 +79,9 @@
                 $(".info-dialog-ok-button").on("click",
                     () => {
                         const nameTextareaEl = $(".primary-input-author-textarea");
-                        const nameString = nameTextareaEl.val();
+                        const nameString = nameTextareaEl.val() as string;
                         const surnameTextareaEl = $(".secondary-input-author-textarea");
-                        const surnameString = surnameTextareaEl.val();
+                        const surnameString = surnameTextareaEl.val() as string;
                         const newAuthorAjax = this.util.createOriginalAuthor(nameString, surnameString);
                         newAuthorAjax.done(() => {
                             nameTextareaEl.val("");
@@ -115,8 +115,8 @@
                     surnameTextareaEl.val(originalSurname);
                     $(".info-dialog-ok-button").on("click",
                         () => {
-                            const nameString = nameTextareaEl.val();
-                            const surnameString = surnameTextareaEl.val();
+                            const nameString = nameTextareaEl.val() as string;
+                            const surnameString = surnameTextareaEl.val() as string;
                             const authorId = selectedPageEl.data("key-id") as number;
                             const renameAjax = this.util.renameOriginalAuthor(authorId, nameString, surnameString);
                             renameAjax.done(() => {

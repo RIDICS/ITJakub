@@ -104,14 +104,30 @@ namespace Vokabular.MainService.DataContracts.Clients
         }
 
         public ProjectMetadataResultContract GetProjectMetadata(long projectId, bool includeAuthor,
-            bool includeResponsiblePerson, bool includeKind, bool includeGenre, bool includeOriginal, bool includeKeyword)
+            bool includeResponsiblePerson, bool includeKind, bool includeGenre, bool includeOriginal, bool includeKeyword, bool includeCategory)
         {
             try
             {
                 var metadata =
                     Get<ProjectMetadataResultContract>(
-                        $"project/{projectId}/metadata?includeAuthor={includeAuthor}&includeResponsiblePerson={includeResponsiblePerson}&includeKind={includeKind}&includeGenre={includeGenre}&includeOriginal={includeOriginal}&includeKeyword={includeKeyword}");
+                        $"project/{projectId}/metadata?includeAuthor={includeAuthor}&includeResponsiblePerson={includeResponsiblePerson}&includeKind={includeKind}&includeGenre={includeGenre}&includeOriginal={includeOriginal}&includeKeyword={includeKeyword}&includeCategory={includeCategory}");
                 return metadata;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<string> GetPublisherAutoComplete(string query)
+        {
+            try
+            {
+                var publishers = Get<List<string>>($"metadata/publisher/autocomplete?query={query}");
+                return publishers;
             }
             catch (HttpRequestException e)
             {
@@ -143,6 +159,21 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 Put<object>($"project/{projectId}/literary-kind", request);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void SetProjectCategories(long projectId, IntegerIdListContract request)
+        {
+            try
+            {
+                Put<object>($"project/{projectId}/category", request);
             }
             catch (HttpRequestException e)
             {
@@ -612,6 +643,22 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         #region Responsible person
 
+        public List<ProjectDetailContract> GetProjectsByResponsiblePerson(int responsiblePersonId, int? start, int? count)
+        {
+            try
+            {
+                var result = Get<List<ProjectDetailContract>>($"responsibleperson/{responsiblePersonId}/project?start={start}&count={count}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public int CreateResponsiblePerson(ResponsiblePersonContract responsiblePerson)
         {
             try
@@ -632,7 +679,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = GetPagedList<ResponsiblePersonContract>($"responsibleperson/?start={start}?count={count}");
+                var result = GetPagedList<ResponsiblePersonContract>($"responsibleperson?start={start}&count={count}");
                 return result;
             }
             catch (HttpRequestException e)
@@ -813,11 +860,27 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         #region Original author
 
+        public List<ProjectDetailContract> GetProjectsByAuthor(int authorId, int? start, int? count)
+        {
+            try
+            {
+                var result = Get<List<ProjectDetailContract>>($"author/{authorId}/project?start={start}&count={count}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public PagedResultList<OriginalAuthorContract> GetOriginalAuthorList(int start, int count)
         {
             try
             {
-                var result = GetPagedList<OriginalAuthorContract>($"author/?start={start}?count={count}");
+                var result = GetPagedList<OriginalAuthorContract>($"author?start={start}&count={count}");
                 return result;
             }
             catch (HttpRequestException e)
@@ -880,11 +943,27 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         #region Keyword
 
-        public List<KeywordContract> GetKeywordList()
+        public List<KeywordContract> GetKeywordAutocomplete(string query, int? count)
         {
             try
             {
-                var result = Get<List<KeywordContract>>("keyword");
+                var result = Get<List<KeywordContract>>($"keyword/autocomplete?query={query}&count={count}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+        
+        public PagedResultList<KeywordContract> GetKeywordList(int? start, int? count)
+        {
+            try
+            {
+                var result = GetPagedList<KeywordContract>($"keyword?start={start}&count={count}");
                 return result;
             }
             catch (HttpRequestException e)

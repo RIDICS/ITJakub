@@ -160,7 +160,23 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             throw new System.NotImplementedException();
         }
 
-        public string GetEditionNote(ProjectIdentificationResult project, TextFormatEnumContract format)
+        public string GetEditionNote(EditionNoteResource editionNoteResource, TextFormatEnumContract format)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public string CreateNewTextVersion(TextResource textResource)
+        {
+            // TODO implement and change usage in CreateNewTextResourceWork
+            throw new System.NotImplementedException();
+        }
+
+        public string CreateNewHeadwordVersion(HeadwordResource headwordResource)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public string CreateNewEditionNoteVersion(EditionNoteResource editionNoteResource)
         {
             throw new System.NotImplementedException();
         }

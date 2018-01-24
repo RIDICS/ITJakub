@@ -114,6 +114,10 @@ interface IResponsibleType {
     type: ResponsibleTypeEnum;
 }
 
+interface IProjectResponsiblePersonContract extends IResponsiblePerson{
+    responsibleType: IResponsibleType;
+}
+
 interface ISaveProjectResponsiblePerson {
     responsiblePersonId: number;
     responsibleTypeId: number;
@@ -135,14 +139,27 @@ interface IProject {
     name: string;
 }
 
+interface IGetProjectContract extends IProject {
+    createdByUser: IUser;
+    createTime: string;//DateTime
+}
+
+interface IProjectDetailContract extends IGetProjectContract {
+    latestMetadata: IMetadataResource;
+    pageCount?: number;
+    authors: IOriginalAuthor[];
+    responsiblePersons: IProjectResponsiblePersonContract[];
+}
+
 interface IMetadataResource {
     title: string;
     subTitle: string;
     relicAbbreviation: string;
     sourceAbbreviation: string;
-    publisherId: number;
+    publisherText: string;
     publishPlace: string;
     publishDate: string;
+    publisherEmail: string;
     copyright: string;
     biblText: string;
     originDate: string;
@@ -231,8 +248,18 @@ interface IChapterHieararchyContract {
     subChapters: Array<IChapterHieararchyContract>;
 }
 
+interface IOnlySaveMetadataResource {
+    keywordIdList: Array<number>;
+    categoryIdList: Array<number>;
+    literaryKindIdList: Array<number>;
+    literaryGenreIdList: Array<number>;
+    authorIdList: Array<number>;
+    projectResponsiblePersonIdList: Array<ISaveProjectResponsiblePerson>;
+}
+
 interface ISaveMetadataResource extends IMetadataResource {
     keywordIdList: Array<number>;
+    categoryIdList: Array<number>;
     literaryKindIdList: Array<number>;
     literaryGenreIdList: Array<number>;
     authorIdList: Array<number>;
@@ -241,6 +268,7 @@ interface ISaveMetadataResource extends IMetadataResource {
 
 interface IGetMetadataResource extends IMetadataResource {
     keywordList?: Array<IKeywordContract>;
+    categoryList?: Array<ICategoryContract>;
     literaryKindList?: Array<ILiteraryKindContract>;
     literaryGenreList?: Array<ILiteraryGenreContract>;
     authorIdList?: Array<IOriginalAuthor>;
@@ -374,9 +402,20 @@ interface ICategoryContract {
     description: string;
 }
 
+interface ICategoryTreeContract {
+    text: string;
+    id: number;
+    children?: ICategoryTreeContract[];
+}
+
 interface IEditionNote { //TODO expand after server functionality is done
     projectId: number;
     content: string;
+}
+
+interface IKeywordPagedResult {
+    totalCount: number;
+    list: IKeywordContract[];
 }
 
 interface IResponsiblePersonPagedResult {
@@ -387,6 +426,12 @@ interface IResponsiblePersonPagedResult {
 interface IOriginalAuthorPagedResult {
     totalCount: number;
     list: IOriginalAuthor[];
+}
+
+interface ICorpusSearchViewingPageHistoryEntry {
+    compositionPage: number;
+    bookIndex: number;
+    hitResultPage: number;
 }
 
 enum AudioType {
@@ -400,7 +445,6 @@ enum TextFormatEnumContract {
     Raw = 0,
     Html = 1
 }
-
 
 //TODO Switch TypeScript to version 2.4 and use enums with String values
 //enum ResourceType {

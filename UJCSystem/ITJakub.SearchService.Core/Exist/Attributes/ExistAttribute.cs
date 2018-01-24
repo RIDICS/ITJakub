@@ -1,5 +1,5 @@
 using System;
-using Jewelery;
+using Vokabular.Shared.DataContracts.Attribute;
 
 namespace ITJakub.SearchService.Core.Exist.Attributes
 {

@@ -32,7 +32,13 @@
     <Content Remove="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.generator.ts" />
     <Content Remove="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.list-structure.ts" />
     <Content Remove="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.util.ts" />
-    <Content Remove="wwwroot\Areas\Admin\js\text-editor\ridics.project.text-editor.gui.ts" />
+    <Content Remove="wwwroot\Areas\BohemianTextBank\js\ridics.bohemiantextbank.newsearch.ts" />
+    <Content Remove="wwwroot\js\Plugins\IndefinitePagination\%40typings.ts" />
+    <Content Remove="wwwroot\js\Plugins\ridics.indefinite-pagination.ts" />
+    <Content Remove="wwwroot\js\typings-custom\bootbox_.d.ts" />
+    <Content Remove="wwwroot\js\typings-custom\jquery-xhr-deferred_.d.ts" />
+    <Content Remove="wwwroot\js\typings-custom\lazysizes_.d.ts" />
+    <Content Remove="wwwroot\js\typings-custom\ridics.form-validation.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,6 +51,7 @@
     <ProjectReference Include="..\ITJakub.SearchService.DataContracts\ITJakub.SearchService.DataContracts.csproj" />
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj" />
     <ProjectReference Include="..\ITJakub.Web.DataEntities\ITJakub.Web.DataEntities.csproj" />
+    <ProjectReference Include="..\Vokabular.Jewelry\Vokabular.Jewelry.csproj" />
     <ProjectReference Include="..\Vokabular.MainService.DataContracts\Vokabular.MainService.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj" />
@@ -61,6 +68,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="1.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="1.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="1.1.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="2.0.3" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="1.0.2" />
@@ -112,7 +120,15 @@
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.list-structure.ts" />
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.main.ts" />
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\editors-common-base\ridics.project.editors.util.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\text-editor\ridics.project.text-editor.gui.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\BohemianTextBank\js\ridics.bohemiantextbank.newsearch.ts" />
+    <TypeScriptCompile Include="wwwroot\js\Plugins\IndefinitePagination\ridics.indefinite-pagination.ts" />
+    <TypeScriptCompile Include="wwwroot\js\typings-custom\bootbox_.d.ts" />
+    <TypeScriptCompile Include="wwwroot\js\typings-custom\jq-simple-connect_.d.ts" />
+    <TypeScriptCompile Include="wwwroot\js\typings-custom\jquery-xhr-deferred_.d.ts" />
+    <TypeScriptCompile Include="wwwroot\js\typings-custom\lazysizes_.d.ts" />
+    <TypeScriptCompile Include="wwwroot\js\ridics.form-validation.ts" />
+    <TypeScriptCompile Include="wwwroot\js\typings-custom\simplemde-custom_.d.ts" />
+    <TypeScriptCompile Include="wwwroot\js\typings-custom\typeahead-custom_.d.ts" />
   </ItemGroup>
 
   <Target Name="ApplyXdtConfigTransform" BeforeTargets="MSDeployPublish">

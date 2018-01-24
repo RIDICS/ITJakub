@@ -111,11 +111,13 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                         var literaryGenres = client.GetLiteraryGenreList();
                         var literaryOriginals = client.GetLiteraryOriginalList();
                         var responsibleTypes = client.GetResponsibleTypeList();
-                        var projectMetadata = client.GetProjectMetadata(projectId.Value, true, true, true, true, true, true);
+                        var categories = client.GetCategoryList();
+                        var projectMetadata = client.GetProjectMetadata(projectId.Value, true, true, true, true, true, true, true);
                         var workMetadaViewModel = Mapper.Map<ProjectWorkMetadataViewModel>(projectMetadata);
                         workMetadaViewModel.AllLiteraryKindList = literaryKinds;
                         workMetadaViewModel.AllLiteraryGenreList = literaryGenres;
                         workMetadaViewModel.AllLiteraryOriginalList = literaryOriginals;
+                        workMetadaViewModel.AllCategoryList = categories;
                         workMetadaViewModel.AllResponsibleTypeList =
                             Mapper.Map<List<ResponsibleTypeViewModel>>(responsibleTypes);
                         return PartialView("Work/_Metadata", workMetadaViewModel);
@@ -336,6 +338,36 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult GetProjectsByAuthor(int authorId, int? start, int? count)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetProjectsByAuthor(authorId, start, count);
+                return Json(result);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetProjectsByResponsiblePerson(int responsiblePersonId, int? start, int? count)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetProjectsByResponsiblePerson(responsiblePersonId, start, count);
+                return Json(result);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult KeywordTypeahead([FromQuery] string keyword, [FromQuery] int? count)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetKeywordAutocomplete(keyword, count);
+                return Json(result);
+            }
+        }
+
         [HttpPost]
         public IActionResult DeleteResource([FromBody] DeleteResourceRequest request)
         {
@@ -371,12 +403,12 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         [HttpGet]
         public IActionResult GetProjectMetadata([FromQuery] long projectId, [FromQuery] bool includeAuthor, [FromQuery] bool includeResponsiblePerson,
-            [FromQuery] bool includeKind, [FromQuery] bool includeGenre, [FromQuery] bool includeOriginal, [FromQuery] bool includeKeyword)
+            [FromQuery] bool includeKind, [FromQuery] bool includeGenre, [FromQuery] bool includeOriginal, [FromQuery] bool includeKeyword, [FromQuery] bool includeCategory)
         {
             using (var client = GetRestClient())
             {
                 var response = client.GetProjectMetadata(projectId, includeAuthor,
-                includeResponsiblePerson, includeKind, includeGenre, includeOriginal, includeKeyword);
+                includeResponsiblePerson, includeKind, includeGenre, includeOriginal, includeKeyword, includeCategory);
                 return Json(response);
             }
         }
@@ -457,6 +489,16 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
                 try
                 {
+                    client.SetProjectCategories(projectId,
+                        new IntegerIdListContract { IdList = request.CategoryIdList });
+                }
+                catch (HttpRequestException)
+                {
+                    unsuccessRequestCount++;
+                }
+
+                try
+                {
                     client.SetProjectLiteraryGenres(projectId,
                         new IntegerIdListContract {IdList = request.LiteraryGenreIdList});
                 }
@@ -509,6 +551,15 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             using (var client = GetRestClient())
             {
                 var result = client.GetResponsiblePersonAutocomplete(query);
+                return Json(result);
+            }
+        }
+
+        public IActionResult GetTypeaheadPublisher(string query)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetPublisherAutoComplete(query);
                 return Json(result);
             }
         }

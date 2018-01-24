@@ -1,4 +1,4 @@
-﻿$(document).ready(() => {
+﻿$(document.documentElement).ready(() => {
     var projectModule = new ProjectModule();
     projectModule.init();
 });
@@ -31,7 +31,7 @@ class ProjectModule {
             e.preventDefault();
             $projectNavigationLinks.removeClass("active");
             $(this).addClass("active");
-            self.showModule(e.currentTarget.id);
+            self.showModule($(e.currentTarget as Node as Element).attr("id"));
         });
 
 
@@ -305,10 +305,6 @@ class ProjectResourceModule extends ProjectModuleBase {
         switch (tabPanelType) {
         case ProjectModuleTabType.ResourceMetadata:
             return new ProjectResourceMetadataTab(this.currentResourceId);
-        case ProjectModuleTabType.ResourcePreview:
-            return new ProjectResourcePreviewTab(this.currentResourceId, this.projectId);
-        case ProjectModuleTabType.ResourceImages:
-            return new ProjectResourceImagesTab(this.currentResourceId, this.projectId);
         case ProjectModuleTabType.ResourceDiscussion:
             return new ProjectResourceDiscussionTab(this.currentResourceId);
         default:
@@ -412,8 +408,8 @@ class ProjectResourceModule extends ProjectModuleBase {
     }
 
     private addResource() {
-        var sessionId = $("#new-resource-session-id").val();
-        var comment = $("#new-resource-comment").val();
+        var sessionId = $("#new-resource-session-id").val() as string;
+        var comment = $("#new-resource-comment").val() as string;
         this.projectClient.processUploadedResources(this.projectId,
             sessionId,
             comment,
@@ -431,8 +427,8 @@ class ProjectResourceModule extends ProjectModuleBase {
 
     private createResourceVersion() {
         var resourceId = this.currentResourceId;
-        var sessionId = $("#new-resource-version-session-id").val();
-        var comment = $("#new-resource-version-comment").val();
+        var sessionId = $("#new-resource-version-session-id").val() as string;
+        var comment = $("#new-resource-version-comment").val() as string;
         this.projectClient.processUploadedResourceVersion(resourceId,
             sessionId,
             comment,
@@ -465,7 +461,7 @@ class ProjectResourceModule extends ProjectModuleBase {
 
     private renameResource() {
         var resourceId = this.currentResourceId;
-        var newName = $("#rename-resource-new").val();
+        var newName = $("#rename-resource-new").val() as string;
         this.projectClient.renameResource(resourceId,
             newName,
             errorCode => {
@@ -546,7 +542,7 @@ class ProjectResourceVersionModule {
 
         $resourceTabContent.animate({
             height: "-=" + this.versionPanelHeight + "px"
-        });
+        } as JQuery.PlainObject);
 
 
         this.$iconUp.hide();
@@ -562,7 +558,7 @@ class ProjectResourceVersionModule {
 
             $resourceTabContent.animate({
                 height: "+=" + this.versionPanelHeight + "px"
-            });
+            } as JQuery.PlainObject);
         } else {
             $resourceVersionPanel.hide().empty();
             $resourceTabContent.height("");
@@ -596,28 +592,30 @@ abstract class ProjectMetadataTabBase extends ProjectModuleTabBase {
     }
 
     protected enabledEdit() {
-        $(".keywords-textarea").tokenfield("enable");
+        ($(".keywords-textarea")as any).tokenfield("enable");
         var config = this.getConfiguration();
+        const copyrightTextarea = $("#work-metadata-copyright");
         var $inputs = $("input", config.$panel);
         var $selects = $("select", config.$panel);
         var $buttons = $("button", config.$panel);
 
         config.$viewButtonPanel.hide();
         config.$editorButtonPanel.show();
-        $inputs.add($selects).prop("disabled", false);
+        $inputs.add($selects).add(copyrightTextarea).prop("disabled", false);
         $buttons.show();
     }
 
     protected disableEdit() {
-        $(".keywords-textarea").tokenfield("disable");
+        ($(".keywords-textarea")as any).tokenfield("disable");
         var config = this.getConfiguration();
+        const copyrightTextarea = $("#work-metadata-copyright");
         var $inputs = $("input", config.$panel);
         var $selects = $("select", config.$panel);
         var $buttons = $("button", config.$panel);
 
         config.$viewButtonPanel.show();
         config.$editorButtonPanel.hide();
-        $inputs.add($selects).prop("disabled", true);
+        $inputs.add($selects).add(copyrightTextarea).prop("disabled", true);
         $buttons.hide();
     }
 }
@@ -634,10 +632,8 @@ enum ProjectModuleTabType {
     WorkMetadata = 3,
     WorkHistory = 4,
     WorkNote = 5,
-    ResourcePreview = 101,
     ResourceDiscussion = 102,
     ResourceMetadata = 103,
-    ResourceImages = 104
 }
 
 interface IProjectResource {

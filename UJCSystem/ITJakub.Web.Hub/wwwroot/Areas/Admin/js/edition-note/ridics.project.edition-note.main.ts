@@ -26,7 +26,7 @@
     private initEditorOnTextarea(note: string) {
         const textAreaEl = $(".note-editor-textarea");
         const simpleMdeOptions: SimpleMDE.Options = {
-            element: textAreaEl[0],
+            element: textAreaEl[0] as Node as HTMLElement,
             autoDownloadFontAwesome: false,
             spellChecker: false,
             mode: "gfm",

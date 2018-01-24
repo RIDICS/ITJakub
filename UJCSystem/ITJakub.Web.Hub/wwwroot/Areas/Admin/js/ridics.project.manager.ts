@@ -4,7 +4,7 @@
             type: type,
             traditional: true,
             url: getBaseUrl() + urlPath,
-            data: data,
+            data: data as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: response => {
@@ -96,33 +96,50 @@
         this.postAjax("Admin/Project/CreateLiteraryGenre", data, callback);
     }
 
-    public createAuthor(firstName: string, lastName: string, callback: (newAuthorId: number, errorCode: HttpStatusCode) => void) {
-        var data = {
+    createAuthor(firstName: string, lastName: string):JQueryXHR {
+        const data: IOriginalAuthor = {
+            id:0,
             firstName: firstName,
             lastName: lastName
         };
-        this.postAjax("Admin/Project/CreateAuthor", data, callback);
+        return $.post(`${getBaseUrl()}Admin/KeyTable/CreateAuthor`, { request:data });
     }
 
-    public createResponsiblePerson(firstName: string, lastName: string, responsibleTypeId: number, callback: (newResponsibleId: number, errorCode: HttpStatusCode) => void) {
-        var data = {
+    createResponsiblePerson(firstName: string, lastName: string):JQueryXHR {
+        const data: IResponsiblePerson = {
+            id:0,
             firstName: firstName,
-            lastName: lastName,
-            responsibleTypeIdList: [responsibleTypeId]
-        }
-        throw "TODO update UI required, because DB model changed.";
-        //this.postAjax("Admin/Project/CreateResponsiblePerson", data, callback);
+            lastName: lastName
+        };
+        return $.post(`${getBaseUrl()}Admin/KeyTable/CreateResponsiblePerson`, { request: data });
     }
 
-    public createResponsibleType(type: ResponsibleTypeEnum, text: string, callback: (newResponsibleTypeId: number, errorCode: HttpStatusCode) => void) {
-        var data = {
+    createResponsibleType(type: ResponsibleTypeEnum, text: string):JQueryXHR {
+        const data:IResponsibleType = {
+            id: 0,
             type: type,
             text: text
         };
-        this.postAjax("Admin/Project/CreateResponsibleType", data, callback);
+        return $.post(`${getBaseUrl()}Admin/KeyTable/CreateResponsibleType`, { request: data });
     }
 
-    public saveMetadata(projectId: number, data: ISaveMetadataResource, callback: (resultData: IMetadataSaveResult, errorCode: HttpStatusCode) => void) {
-        this.postAjax(`Admin/Project/SaveMetadata?projectId=${projectId}`, data, callback);
+    saveMetadata(projectId: number, data: ISaveMetadataResource): JQueryXHR {
+        return $.ajax({
+            url: `${getBaseUrl()}Admin/Project/SaveMetadata?projectId=${projectId}`,
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            cache: false,
+            async: true,
+            dataType: "json"
+        });
+    }
+
+    getProjectsByAuthor(authorId: number, start?: number, count?: number): JQueryXHR {
+        return $.get(`${getBaseUrl()}Admin/Project/GetProjectsByAuthor?authorId=${authorId}&start=${start}&count=${count}`);
+    }
+
+    getProjectsByResponsiblePerson(responsiblePersonId: number, start?: number, count?: number): JQueryXHR {
+        return $.get(`${getBaseUrl()}Admin/Project/GetProjectsByResponsiblePerson?responsiblePersonId=${responsiblePersonId}&start=${start}&count=${count}`);
     }
 }

@@ -11,21 +11,27 @@ namespace Vokabular.MainService.Core.Works
         private readonly MetadataRepository m_metadataRepository;
         private readonly long m_projectId;
         private readonly bool m_fetchPageCount;
+        private readonly bool m_fetchAuthors;
+        private readonly bool m_fetchResponsiblePersons;
         private MetadataResource m_metadata;
         private int? m_pageCount;
 
-        public GetProjectWork(ProjectRepository projectRepository, MetadataRepository metadataRepository, long projectId, bool fetchPageCount) : base(projectRepository)
+        public GetProjectWork(ProjectRepository projectRepository, MetadataRepository metadataRepository, long projectId, bool fetchPageCount, bool fetchAuthors, bool fetchResponsiblePersons) : base(projectRepository)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
             m_projectId = projectId;
             m_fetchPageCount = fetchPageCount;
+            m_fetchAuthors = fetchAuthors;
+            m_fetchResponsiblePersons = fetchResponsiblePersons;
         }
 
         protected override Project ExecuteWorkImplementation()
         {
             var dbResult = m_projectRepository.GetProject(m_projectId);
-            m_metadata = m_metadataRepository.GetLatestMetadataResource(m_projectId);
+            m_metadata = m_metadataRepository
+                .GetMetadataByProjectIds(new[] {m_projectId}, m_fetchAuthors, m_fetchResponsiblePersons)
+                .FirstOrDefault();
 
             if (m_fetchPageCount)
             {

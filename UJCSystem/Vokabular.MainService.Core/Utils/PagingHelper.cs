@@ -22,5 +22,12 @@ namespace Vokabular.MainService.Core.Utils
                 ? Math.Min(count.Value, DefaultValues.MaxProjectCount)
                 : DefaultValues.ProjectCount;
         }
+
+        public static int GetAutocompleteCount(int? count)
+        {
+            return count != null
+                ? Math.Min(count.Value, DefaultValues.MaxCount)
+                : DefaultValues.AutocompleteCount;
+        }
     }
 }

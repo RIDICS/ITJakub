@@ -292,14 +292,14 @@ class Keyboard {
                 }
 
                 let cursorPosition = keyboardComponent.getCursorPosition();
-                let originalVal = <string>keyboardInput.val();
+                let originalVal = <string>keyboardInput.val() as string;
                 let newVal = originalVal.slice(0, cursorPosition) + newChar + originalVal.slice(cursorPosition);
                 keyboardComponent.setInputValue(newVal);
                 keyboardComponent.setCursorPosition(cursorPosition + 1);
 
                 if (layout.shiftUsed) {
                     layout.resizeAction(layout.keyboardLowerCase, layout, cell);
-                    $(`#${this.componentPrefix}content-${componentId} .shift`).css("background-color", "#ffffff");
+                    $(`#${layout.componentPrefix}content-${componentId} .shift`).css("background-color", "#ffffff");
                     layout.shiftUsed = !layout.shiftUsed;
                 }
 
@@ -312,7 +312,7 @@ class Keyboard {
                         let cursorPosition = keyboardComponent.getCursorPosition();
                         if (cursorPosition === 0) break;
 
-                        let originalVal = <string>keyboardInput.val();
+                        let originalVal = <string>keyboardInput.val() as string;
                         let newVal = originalVal.slice(0, cursorPosition - 1) + originalVal.slice(cursorPosition);
                         keyboardComponent.setInputValue(newVal);
                         keyboardComponent.setCursorPosition(cursorPosition - 1);

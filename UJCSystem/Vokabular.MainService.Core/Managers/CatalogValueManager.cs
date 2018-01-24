@@ -192,5 +192,12 @@ namespace Vokabular.MainService.Core.Managers
             var result = m_catalogValueRepository.InvokeUnitOfWork(x => x.GetTermCategoriesWithTerms());
             return Mapper.Map<List<TermCategoryDetailContract>>(result);
         }
+
+        public List<KeywordContract> GetKeywordAutocomplete(string query, int? count)
+        {
+            var countValue = PagingHelper.GetAutocompleteCount(count);
+            var result = m_catalogValueRepository.InvokeUnitOfWork(x => x.GetKeywordAutocomplete(query, countValue));
+            return Mapper.Map<List<KeywordContract>>(result);
+        }
     }
 }

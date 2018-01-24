@@ -1,4 +1,4 @@
-﻿/// <binding AfterBuild='default' Clean='clean' ProjectOpened='watch:less' />
+﻿/// <binding BeforeBuild='yarn-runtime' AfterBuild='default' Clean='clean' ProjectOpened='watch:less, yarn-runtime' />
 /*
 This file in the main entry point for defining Gulp tasks and using Gulp plugins.
 Click here to learn more. http://go.microsoft.com/fwlink/?LinkId=518007
@@ -12,7 +12,8 @@ var gulp = require("gulp"),
   watch = require("gulp-watch"),
   sourcemaps = require('gulp-sourcemaps'),
   uglify = require("gulp-uglify"),
-  ts = require("gulp-typescript");
+  ts = require("gulp-typescript"),
+  yarn = require("gulp-yarn");
 var tsProject = ts.createProject("tsconfig.json");
 
 var paths = {
@@ -203,7 +204,8 @@ gulp.task("bundle:itjakub_bohemiantextbank", function () {
     return gulp.src([
             paths.webroot + "Areas/BohemianTextBank/js/itjakub.bohemiantextbank.modul.inicializator.js",
             paths.webroot + "Areas/BohemianTextBank/js/itjakub.bohemiantextbank.search.js",
-            paths.webroot + "Areas/BohemianTextBank/js/itjakub.bohemiantextbank.list.js"
+            paths.webroot + "Areas/BohemianTextBank/js/itjakub.bohemiantextbank.list.js",
+            paths.webroot + "Areas/BohemianTextBank/js/ridics.bohemiantextbank.newsearch.js"
         ])
         .pipe(sourcemaps.init())
         .pipe(concat("itjakub.bohemiantextbank.bundle.js"))
@@ -359,6 +361,12 @@ gulp.task("bundlejs_areas",
     "bundle:ridics_admin_composition-key-table-editor"
 ]);
 
+//Download yarn dependencies
+
+gulp.task("yarn-runtime", function () {
+    return gulp.src(["./wwwroot/package.json", "./wwwroot/yarn.lock"])
+        .pipe(yarn());
+});
 
 // Main build
 

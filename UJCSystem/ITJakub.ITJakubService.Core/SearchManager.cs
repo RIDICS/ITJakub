@@ -7,7 +7,6 @@ using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Entities.SelectResults;
 using ITJakub.DataEntities.Database.Repositories;
-using ITJakub.ITJakubService.DataContracts;
 using ITJakub.MobileApps.MobileContracts;
 using ITJakub.SearchService.DataContracts;
 using ITJakub.SearchService.DataContracts.Contracts.SearchResults;
@@ -85,7 +84,7 @@ namespace ITJakub.ITJakubService.Core
             return query.Replace("[", "[[]");
         }
 
-        private FilteredCriterias FilterSearchCriterias(IList<SearchCriteriaContract> searchCriterias)
+        private LegacyFilteredCriterias FilterSearchCriterias(IList<SearchCriteriaContract> searchCriterias)
         {
             ResultCriteriaContract resultCriteria = null;
             var nonMetadataCriterias = new List<SearchCriteriaContract>();
@@ -110,7 +109,7 @@ namespace ITJakub.ITJakubService.Core
                 }
             }
 
-            return new FilteredCriterias
+            return new LegacyFilteredCriterias
             {
                 ResultCriteria = resultCriteria,
                 MetadataParameters = metadataParameters,
@@ -923,6 +922,11 @@ namespace ITJakub.ITJakubService.Core
             var creator = new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery, filteredCriterias.MetadataParameters);
             var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(creator);
             return databaseSearchResult.Count;
+        }
+
+        private class LegacyFilteredCriterias : FilteredCriterias
+        {
+            public ResultCriteriaContract ResultCriteria { get; set; }
         }
     }
 }

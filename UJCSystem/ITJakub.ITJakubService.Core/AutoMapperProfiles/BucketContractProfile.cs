@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 using ITJakub.CardFile.Core.DataContractEntities;
-using ITJakub.ITJakubService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.CardFile;
 
 namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {

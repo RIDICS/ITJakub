@@ -2,7 +2,7 @@
 using System.Linq;
 using AutoMapper;
 using ITJakub.CardFile.Core.DataContractEntities;
-using ITJakub.ITJakubService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.CardFile;
 
 namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
@@ -14,7 +14,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.id))
                 .ForMember(dest => dest.Position, opts => opts.MapFrom(src => src.position))
                 .ForMember(dest => dest.Headwords, opts => opts.MapFrom(src => src.Fields.Where(x => x.id == "heslo").Select(x => x.value)))    
-                .ForMember(dest => dest.Images, opts => opts.MapFrom(src => Mapper.Map<image[], IList<ImageContract>>(src.image)))
+                .ForMember(dest => dest.Images, opts => opts.MapFrom(src => Mapper.Map<image[], IList<CardImageContract>>(src.image)))
                 .ForMember(dest => dest.Notes, opts => opts.MapFrom(src => src.Fields.Where(x => x.id == "comment").Select(x => x.value)))
                 .ForMember(dest => dest.Warnings, opts => opts.MapFrom(src => src.Fields.Where(x => x.id == "warning").Select(x => x.value))) 
                 .ForSourceMember(source => source.headword, opt => opt.Ignore())

@@ -21,6 +21,7 @@ namespace ITJakub.Web.Hub.AppStart.Installers
 
             // Admin area
             container.AddSingleton<Profile, LiteraryGenreProfile>();
+            container.AddSingleton<Profile, CategoryProfile>();
             container.AddSingleton<Profile, LiteraryKindProfile>();
             container.AddSingleton<Profile, LiteraryOriginalProfile>();
             container.AddSingleton<Profile, ProjectProfile>();

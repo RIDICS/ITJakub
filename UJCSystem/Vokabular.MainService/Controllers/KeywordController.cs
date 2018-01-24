@@ -75,5 +75,12 @@ namespace Vokabular.MainService.Controllers
 
             return result.List;
         }
+
+        [HttpGet("autocomplete")]
+        public List<KeywordContract> GetKeywordAutocomplete([FromQuery] string query, [FromQuery] int? count)
+        {
+            var result = m_catalogValueManager.GetKeywordAutocomplete(query, count);
+            return result;
+        }
     }
 }

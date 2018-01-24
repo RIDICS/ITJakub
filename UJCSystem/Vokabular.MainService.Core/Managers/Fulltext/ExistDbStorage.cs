@@ -319,15 +319,32 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             }
         }
 
-        public string GetEditionNote(ProjectIdentificationResult project, TextFormatEnumContract format)
+        public string GetEditionNote(EditionNoteResource editionNoteResource, TextFormatEnumContract format)
         {
+            var projectExternalId = editionNoteResource.Resource.Project.ExternalId;
+            var bookVersionExternalId = editionNoteResource.BookVersion.ExternalId;
             var transformation = GetTransformationOrDefault(format, BookTypeEnum.Edition);
 
             using (var ssc = m_communicationProvider.GetSearchServiceClient())
             {
-                var result = ssc.GetBookEditionNote(project.ProjectExternalId, project.BookVersionExternalId, transformation.Name, transformation.OutputFormat, transformation.ResourceLevel);
+                var result = ssc.GetBookEditionNote(projectExternalId, bookVersionExternalId, transformation.Name, transformation.OutputFormat, transformation.ResourceLevel);
                 return result;
             }
+        }
+
+        public string CreateNewTextVersion(TextResource textResource)
+        {
+            throw new NotSupportedException("Saving resources to eXist-db isn't supported. eXist-db storage supports only full book import.");
+        }
+
+        public string CreateNewHeadwordVersion(HeadwordResource headwordResource)
+        {
+            throw new NotSupportedException("Saving resources to eXist-db isn't supported. eXist-db storage supports only full book import.");
+        }
+
+        public string CreateNewEditionNoteVersion(EditionNoteResource editionNoteResource)
+        {
+            throw new NotSupportedException("Saving resources to eXist-db isn't supported. eXist-db storage supports only full book import.");
         }
     }
 }

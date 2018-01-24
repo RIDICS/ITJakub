@@ -61,6 +61,10 @@ namespace Vokabular.MainService.Core.Managers
                 {
                     resultContract.KeywordList = Mapper.Map<List<KeywordContract>>(project.Keywords);
                 }
+                if (parameters.IncludeCategory)
+                {
+                    resultContract.CategoryList = Mapper.Map<List<CategoryContract>>(project.Categories);
+                }
             }
 
             return resultContract;
@@ -74,19 +78,19 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<string> GetPublisherAutocomplete(string query)
         {
-            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetPublisherAutocomplete(query, DefaultValues.AutocompleteMaxCount));
+            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetPublisherAutocomplete(query, DefaultValues.AutocompleteCount));
             return result.ToList();
         }
 
         public List<string> GetCopyrightAutocomplete(string query)
         {
-            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetCopyrightAutocomplete(query, DefaultValues.AutocompleteMaxCount));
+            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetCopyrightAutocomplete(query, DefaultValues.AutocompleteCount));
             return result.ToList();
         }
 
         public List<string> GetManuscriptRepositoryAutocomplete(string query)
         {
-            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetManuscriptRepositoryAutocomplete(query, DefaultValues.AutocompleteMaxCount));
+            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetManuscriptRepositoryAutocomplete(query, DefaultValues.AutocompleteCount));
             return result.ToList();
         }
 
@@ -98,7 +102,7 @@ namespace Vokabular.MainService.Core.Managers
                 var allCategoryIds = selectedCategoryIds.Count > 0
                     ? m_categoryRepository.GetAllSubcategoryIds(selectedCategoryIds)
                     : selectedCategoryIds;
-                return x.GetTitleAutocomplete(query, bookTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteMaxCount);
+                return x.GetTitleAutocomplete(query, bookTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteCount);
             });
             return result.ToList();
         }
