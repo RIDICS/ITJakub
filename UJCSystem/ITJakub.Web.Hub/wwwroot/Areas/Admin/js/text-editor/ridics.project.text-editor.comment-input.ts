@@ -60,7 +60,11 @@
                         }
                     }
                 });
-                this.commentArea.reloadCommentArea(textId);
+                const deferred = this.commentArea.reloadCommentArea(textId);
+                deferred.done(() => {
+                    const pageEl = $(`[data-page="${textId}"]`);
+                    this.commentArea.collapseIfCommentAreaContentOverflows(pageEl.children(".comment-area"));//collapse section fully when updating section height initially
+                });
             });
             sendAjax.fail(() => {
                 bootbox.alert({

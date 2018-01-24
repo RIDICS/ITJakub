@@ -167,6 +167,38 @@
             commentAreaEl); //collapse section on page load, collapse nested comments on page load
     }
 
+    collapseIfCommentAreaContentOverflows = (
+        commentAreaEl: JQuery) => {
+        var areaContent = "";
+        const ellipsisStart = "<div class=\"ellipsis-container\">";
+        const ellipsisBodyStart = "<div class=\"ellipsis toggleCommentViewAreaSize\">";
+        const ellipsisIconExpand =
+            "<i class=\"fa fa-expand expand-icon fa-lg\" aria-hidden=\"true\" title=\"Expand comment area\"></i>";
+        const ellipsisIconCollapse =
+            "<i class=\"fa fa-compress collapse-icon fa-lg\" aria-hidden=\"true\" title=\"Collapse comment area\"></i>";
+        const ellipsisBodyEnd = "</div>";
+        const ellipsisEnd = "</div>";
+        areaContent += ellipsisStart;
+        areaContent += ellipsisBodyStart;
+        areaContent += ellipsisIconExpand;
+        areaContent += ellipsisIconCollapse;
+        areaContent += ellipsisBodyEnd;
+        areaContent += ellipsisEnd;
+        const html = $.parseHTML(areaContent);
+        const commentAreaHeight = commentAreaEl.height();
+        const threadsContainer = commentAreaEl.children(".threads-container");
+        const threadsHeight = threadsContainer.height();
+        if (threadsHeight > commentAreaHeight
+        ) {
+                commentAreaEl.addClass("comment-area-collapsed");
+                threadsContainer.height(commentAreaHeight);
+                this.collapseNestedComments(commentAreaEl);
+            threadsContainer.append(html);
+        }
+        this.toggleAreaSizeIconHide(
+            commentAreaEl); //collapse section on page load, collapse nested comments on page load
+    }
+
     private collapseNestedComments(commentAreaEl: JQuery) {
         const threadsContainer = commentAreaEl.children(".threads-container");
         const children = threadsContainer.children(".media-list");
@@ -439,6 +471,7 @@
 
 
     reloadCommentArea(textId: number) {
+        var deferred = $.Deferred();
         const commentAreaEl = $(`*[data-page="${textId}"]`).children(".comment-area");
         const threadsContainer = commentAreaEl.children(".threads-container");
         threadsContainer.remove();
@@ -454,11 +487,16 @@
         const commentAreaAjax = this.asyncConstructCommentArea(commentAreaEl);
         commentAreaAjax.done(() => {
             this.collapseIfCommentAreaIsTall(commentAreaEl, sectionWasCollapsed, nestedCommentsCollapsed);
+            deferred.resolve();
+        });
+        commentAreaAjax.fail(() => {
+            deferred.reject();
         });
         const buttonAreaSize = $(".toggleCommentViewAreaSize");
         buttonAreaSize.off();
         const buttonNestedComments = $(".toggle-nested-comments");
         buttonNestedComments.off();
         this.init();
+        return deferred;
     }
 }
