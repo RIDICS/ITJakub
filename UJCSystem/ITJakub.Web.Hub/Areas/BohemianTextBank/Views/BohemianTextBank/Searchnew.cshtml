@@ -18,15 +18,20 @@
     <div class="search-result-section container-fluid" id="corpus-search-div">
         <div class="row corpus-result-and-settings-row">
             <div class="corpus-search-results-div col-md-10 col-sm-9 col-xs-12">
-                <div id="corpus-search-results-table-div" class="corpus-search-results-table-container">
+                <div id="corpus-search-results-abbrev-table-div" class="corpus-search-results-abbrev-table-div">
+                    <table id="result-abbrev-table">
+                        <tbody id="resultsAbbrevTableBody">
+                        </tbody>
+                    </table>
+                </div>
+                <div id="corpus-search-results-table-div" class="corpus-search-results-table-div">
                     <div id="corpus-search-results-table-div-loader">
                         Pro zobrazení výsledků použijte vyhledávání
                     </div>
-                    <div class="list-group container-fluid">
-                        <div id="search-results-div"></div>
-                    </div>
-                </div>
-            </div>
+                    <table id="result-table">
+                        <tbody id="resultsTableBody"></tbody>
+                    </table>
+                </div></div>
             <div class="corpus-search-result-controls-container col-md-2 col-sm-3 col-xs-12">
                 <div class="corpus-search-settings-label">Možnosti zobrazení</div>
                 <div class="corpus-search-settings-checkboxes">

@@ -1,29 +1,49 @@
-﻿.search-result-section {
+﻿@import "../../../css/ITJakub.Colors.less";
 
-    #search-results-div {
-        .search-result-item {
-            margin-bottom: 0;
-            margin-top: 0;
+.search-result-section {
+    #corpus-search-results-abbrev-table-div, #corpus-search-results-table-div {
+        .abbr-result-row {
+            height: 4em;
 
-            &.clicked {
-                border-bottom: solid 1px;
-                border-top: solid 1px;
-                background-color: #eee;
+            td {
+                .match {
+                    background-color: @menu-active-background-color;
+                    color: white;
+                    margin-left: 1em;
+                    margin-right: 1em;
+                    text-align: center;
+                }
             }
+        }
+
+        tr.clicked {
+            border-bottom: solid 1px;
+            border-top: solid 1px;
+            background-color: #eee;
         }
     }
 
     .corpus-result-and-settings-row {
-        height: 450px;
+        height: 32em;
 
         .corpus-search-results-div {
             height: inherit;
 
-            .corpus-search-results-table-container {
+            #corpus-search-results-abbrev-table-div {
+                float: left;
+                width: 8em;
+                height: inherit;
+                overflow-x: scroll;
+                overflow-y: hidden;
                 background-color: white;
+                margin-right: 1px;
+            }
+
+            #corpus-search-results-table-div {
+                background-color: white;
+                height: inherit;
                 overflow-x: scroll;
                 overflow-y: auto;
-                height: inherit;
             }
         }
 
@@ -47,7 +67,7 @@
         }
     }
 
-    .corpus-search-result-detail-row {//TODO search result overflow
+    .corpus-search-result-detail-row { //TODO search result overflow
         .label {
             font-weight: bolder;
             font-size: 100%;

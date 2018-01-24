@@ -290,9 +290,9 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                             {
                                 ContextStructure = new KwicStructure
                                 {
-                                    Before = "before ",
+                                    Before = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa before ",
                                     Match = "match"+start,
-                                    After = " after"
+                                    After = " after ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
                                 }
                             }
                         };

@@ -123,15 +123,12 @@ class BohemianTextBankNew {
             }
         });
 
-        $("#search-results-div").on("click",
-            ".search-result-item",
+        $("#resultsTableBody").on("click",
+            ".search-result",
             (event: JQuery.Event) => {
-                var clickedRow = $(event.target as Node as Element).closest(".search-result-item");
-                if (clickedRow.hasClass("notes")) {
-                    return;
-                }
+                var clickedRow = $(event.target as Node as Element).closest(".search-result");
 
-                $(".search-result-item").not(clickedRow).removeClass("clicked");
+                $(".search-result").not(clickedRow).removeClass("clicked");
                 clickedRow.addClass("clicked");
 
                 this.printDetailInfo(clickedRow);
@@ -334,77 +331,136 @@ class BohemianTextBankNew {
         });
     }
 
-    private fillResultTable(results: ICorpusSearchResult[]) {
-        const tableBody = $("#search-results-div");
-        for (let i = 0; i < results.length; i++) {
-            const result = results[i];
-            const pageContext = result.pageResultContext;
-            const verseContext = result.verseResultContext;
-            const bibleVerseContext = result.bibleVerseResultContext;
-            const contextStructure = pageContext.contextStructure;
-            const bookId = result.bookId;
-            const pageId = pageContext.id;
-            const acronym = result.sourceAbbreviation;
-            const notes = result.notes;
+    private fillResultsIntoTable(results: ICorpusSearchResult[]) {
+        var tableBody = $("#resultsTableBody");
+        const abbrevTableBody = $("#resultsAbbrevTableBody");
+        for (var i = 0; i < results.length; i++) {
+            var result = results[i];
+            var pageContext = result.pageResultContext;
+            var verseContext = result.verseResultContext;
+            var bibleVerseContext = result.bibleVerseResultContext;
+            var contextStructure = pageContext.contextStructure;
+            var bookId = result.bookId;
+            var pageId = pageContext.id;
+            var acronym = result.sourceAbbreviation;
+            var notes = result.notes;
 
-            const tableRow = $(`<div class="search-result-item list-group-item row"></div>`);
-            const abbrevColumn = $(`<div class="col-xs-2"></div>`);
-            const resultColumn = $(`<div class="col-xs-10 text-center"></div>`);
-            const notesEl = $(`<div class="col-xs-12 notes list-group-item row"></div>`);
+            var tr = $("<tr></tr>");
+            tr.addClass("search-result abbr-result-row");
+            tr.attr("data-bookId", bookId);
+            tr.attr("data-author", result.author);
+            tr.attr("data-title", result.title);
+            tr.attr("data-dating", result.originDate);
+            tr.attr("data-pageId", pageId);
+            tr.attr("data-pageName", pageContext.name);
+            tr.attr("data-acronym", acronym);
 
-            tableRow.attr("data-bookId", bookId);
-            tableRow.attr("data-author", result.author);
-            tableRow.attr("data-title", result.title);
-            tableRow.attr("data-dating", result.originDate);
-            tableRow.attr("data-pageId", pageId);
-            tableRow.attr("data-pageName", pageContext.name);
-            tableRow.attr("data-acronym", acronym);
 
             if (verseContext) {
-                tableRow.attr("data-verseXmlId", verseContext.verseXmlId);
-                tableRow.attr("data-verseName", verseContext.verseName);
+                tr.attr("data-verseXmlId", verseContext.verseXmlId);
+                tr.attr("data-verseName", verseContext.verseName);
             }
 
             if (bibleVerseContext) {
-                tableRow.attr("data-bibleBook", bibleVerseContext.bibleBook);
-                tableRow.attr("data-bibleChapter", bibleVerseContext.bibleChapter);
-                tableRow.attr("data-bibleVerse", bibleVerseContext.bibleVerse);
+                tr.attr("data-bibleBook", bibleVerseContext.bibleBook);
+                tr.attr("data-bibleChapter", bibleVerseContext.bibleChapter);
+                tr.attr("data-bibleVerse", bibleVerseContext.bibleVerse);
             }
 
-            const contextBefore = $(`<span class="context-before"></span>`);
-            contextBefore.text(contextStructure.before);
+            var tdBefore = $("<td></td>");
+            tdBefore.html(contextStructure.before);
 
-            const contextMatch = $(`<span class="match"></span>`);
-            contextMatch.text(contextStructure.match);
+            var tdMatch = $("<td></td>");
+            var matchSpanEl = $(`<span></span>`);
+            matchSpanEl.addClass("match");
+            matchSpanEl.html(contextStructure.match);
+            tdMatch.append(matchSpanEl);
 
-            const contextAfter = $(`<span class="context-after"></span>`);
-            contextAfter.text(contextStructure.after);
+            var tdAfter = $("<td></td>");
+            tdAfter.html(contextStructure.after);
 
-            const abbrevHref = $("<a></a>");
-            abbrevHref.prop("href",
-                `${getBaseUrl()}Editions/Editions/Listing?bookId=${bookId}&searchText=${this.search.getLastQuery()
-                }&page=${pageId}`);
-            abbrevHref.text(acronym);
-            abbrevColumn.append(abbrevHref);
-            
-            resultColumn.append(contextBefore);
-            resultColumn.append(contextMatch);
-            resultColumn.append(contextAfter);
+            tr.append(tdBefore);
+            tr.append(tdMatch);
+            tr.append(tdAfter);
 
-            tableRow.append(abbrevColumn);
-            tableRow.append(resultColumn);
+            tableBody.append(tr);
 
             if (notes) {
+
+                var notesTr = $("<tr></tr>");
+                notesTr.addClass("notes");
+
+                var tdNotes = $("<td></td>");
+                tdNotes.attr("colSpan", 2);
+
+
                 for (var j = 0; j < notes.length; j++) {
-                    var noteSpan = $(`<span class="note">${notes[j]}</span>`);
-                    notesEl.append(noteSpan);
+                    var noteSpan = $("<span></span>");
+                    noteSpan.html(notes[j]);
+                    noteSpan.addClass("note");
+                    tdNotes.append(noteSpan);
                 }
-                tableRow.append(notesEl);
+
+
+                notesTr.append(tdNotes);
+
+                var beforeNotesTr = $("<tr></tr>");
+                beforeNotesTr.addClass("notes spacer");
+
+                var afterNotesTr = $("<tr></tr>");
+                afterNotesTr.addClass("notes spacer");
+
+                tableBody.append(beforeNotesTr);
+                tableBody.append(notesTr);
+                tableBody.append(afterNotesTr);
+
             }
 
-            tableBody.append(tableRow);
+            //fill left table with abbrev of corpus name
+            var abbrevTr = $("<tr></tr>");
+            abbrevTr.addClass("abbr-result-row");
+            //$(abbrevTr).data("bookXmlId", bookXmlId);
+            //$(abbrevTr).data("pageXmlId", pageXmlId);
+            var abbrevTd = $("<td></td>");
 
+            var abbrevHref = $("<a></a>");
+            abbrevHref.attr("href", `${getBaseUrl()}Editions/Editions/Listing?bookId=${bookId}&searchText=${this.search.getLastQuery()}&page=${pageId}`);
+            abbrevHref.html(acronym);
+
+            abbrevTd.append(abbrevHref);
+
+            abbrevTr.append(abbrevTd);
+            abbrevTableBody.append(abbrevTr);
+
+            if (notes) {
+
+                var abbRevNotesTr = $("<tr></tr>");
+                abbRevNotesTr.addClass("notes");
+
+                var abbrevTdNotes = $("<td></td>");
+
+                abbRevNotesTr.append(abbrevTdNotes);
+
+                var beforeAbbrevNotesTr = $("<tr></tr>");
+                beforeAbbrevNotesTr.addClass("notes spacer");
+
+                var afterAbbrevNotesTr = $("<tr></tr>");
+                afterAbbrevNotesTr.addClass("notes spacer");
+
+                abbrevTableBody.append(beforeAbbrevNotesTr);
+                abbrevTableBody.append(abbRevNotesTr);
+                abbrevTableBody.append(afterAbbrevNotesTr);
+
+            }
         }
+
+
+        //scroll from left to center match column in table
+        var firstChildTdWidth = tableBody.children("tr").first().children("td").first().width();
+        var tableContainer = tableBody.parents("#corpus-search-results-table-div");
+        var tableContainerWidth = tableContainer.width();
+        var scrollOffset = firstChildTdWidth - tableContainerWidth / 2;
+        tableContainer.scrollLeft(scrollOffset);
     }
 
     private corpusBasicSearchPaged(text: string, start: number, contextLength: number, bookId: number) {
@@ -469,10 +525,10 @@ class BohemianTextBankNew {
         } else {
             this.emptyResultsTable();
             if (this.transientResults) {
-                this.fillResultTable(this.transientResults);
+                this.fillResultsIntoTable(this.transientResults);
                 this.transientResults = [];
             }
-            this.fillResultTable(results);
+            this.fillResultsIntoTable(results);
             this.currentAmountOfResultsInPage = 0;
             const count = this.resultsPerPage;
         }
@@ -528,8 +584,10 @@ class BohemianTextBankNew {
     }
 
     private emptyResultsTable() {
-        const tableBody = $("#search-results-div");
+        const tableBody = $("#resultsTableBody");
+        const abbrevTableBody = $("#resultsAbbrevTableBody");
         tableBody.empty();
+        abbrevTableBody.empty();
     }
 
     /**
@@ -663,7 +721,7 @@ class BohemianTextBankNew {
                 if (!this.hitBookIds) {
                     if (this.transientResults.length) {
                         this.emptyResultsTable();
-                        this.fillResultTable(this.transientResults);
+                        this.fillResultsIntoTable(this.transientResults);
                         this.transientResults = [];
                     }
                     bootbox.alert({
@@ -716,7 +774,7 @@ class BohemianTextBankNew {
                 if (!this.hitBookIds) {
                     if (this.transientResults.length) {
                         this.emptyResultsTable();
-                        this.fillResultTable(this.transientResults);
+                        this.fillResultsIntoTable(this.transientResults);
                         this.transientResults = [];
                     }
                     bootbox.alert({
