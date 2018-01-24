@@ -88,11 +88,6 @@ Environment configuration
   1. Create new Application Pool (e.g. .NET Core) with ".NET CLR version" set to "No Managed Code"
   2. Configure ASP.NET Core services to use .NET Core Application Pool (every ASP.NET Core service run as separate process with Kestrel server)
 
-Note:
-
-> Classic ASP.NET apps supported deployment of Web.Hub as root site on address http://localhost/ and other services to subfolders on this address, e.g. http://localhost/Service1.
-> This is no longer easily possible with ASP.NET Core apps.
-
 ## Environment configuration
 
 **ASP.NET Core projects** are configured to use specific configuration files for different environments.
