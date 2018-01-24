@@ -7,6 +7,7 @@ using ITJakub.FileProcessing.Core.Sessions.Works;
 using log4net;
 using Vokabular.Core.Storage.Resources;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.DataEntities.Database.UnitOfWork;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
@@ -103,7 +104,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
         private void PublishSnapshotToExternalDatabase(long snapshotId, long projectId, List<BookPageData> bookDataPages)
         {
             var externalIds = bookDataPages.Select(x => x.XmlId).ToList();
-            m_fulltextResourceProcessor.PublishSnapshot(snapshotId, projectId, externalIds);
+            var metadata = m_metadataRepository.InvokeUnitOfWork(x => x.GetLatestMetadataResource(projectId));
+            
+            m_fulltextResourceProcessor.PublishSnapshot(snapshotId, projectId, externalIds, metadata);
         }
     }
 }

@@ -18,8 +18,8 @@ namespace Vokabular.FulltextService.Core.Managers
         protected const string SnapshotTextField = "snapshotText";
         protected const string IdField = "_id";
         protected const string TitleField = "title";
-        protected const string AuthorField = "author";
-        protected const string DatingField = "dating";
+        protected const string AuthorField = "authorsLabel";
+        protected const string DatingField = "originDate";
 
         private const string BadSortValueErrorMessage = "Bad sorting value";
 

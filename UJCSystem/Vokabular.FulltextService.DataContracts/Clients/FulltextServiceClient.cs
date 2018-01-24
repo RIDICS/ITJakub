@@ -63,10 +63,8 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             }
         }
 
-        public void CreateSnapshot(long snapshotId, long projectId, List<string> pageIds)
+        public void CreateSnapshot(SnapshotPageIdsResourceContract snapshotResource)
         {
-            var snapshotResource = new SnapshotPageIdsResourceContract { PageIds = pageIds, SnapshotId = snapshotId, ProjectId = projectId};
-
             try
             {
                 var result = Post<ResultContract>("snapshot", snapshotResource);
@@ -133,7 +131,7 @@ namespace Vokabular.FulltextService.DataContracts.Clients
         {
             try
             {
-                var result = Post<TextResourceContract>($"text/search/{resourceId}?formatValue={format}", searchRequest);
+                var result = Post<TextResourceContract>($"text/{resourceId}/search?formatValue={format}", searchRequest);
                 return result;
             }
             catch (HttpRequestException e)

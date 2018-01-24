@@ -35,10 +35,38 @@ namespace Vokabular.FulltextService.Core.Managers
             var snapshotContract = m_snapshotResourceBuilder.GetSnapshotResourceFromPageIds(snapshotPageIdsResourceContract.PageIds);
             snapshotContract.SnapshotId = snapshotPageIdsResourceContract.SnapshotId;
             snapshotContract.ProjectId = snapshotPageIdsResourceContract.ProjectId;
-            
+            snapshotContract.Metadata = MapToDatabaseMetadata(snapshotPageIdsResourceContract.MetadataResource);
+
             var result = CreateSnapshotResource(snapshotContract);
             return result;
 
+        }
+
+        private MetadataResourceContract MapToDatabaseMetadata(SnapshotMetadataResourceContract metadata)
+        {
+            return new MetadataResourceContract
+            {
+                Title = metadata.Title,
+                SubTitle = metadata.SubTitle,
+                AuthorsLabel = metadata.AuthorsLabel,
+                RelicAbbreviation = metadata.RelicAbbreviation,
+                SourceAbbreviation = metadata.SourceAbbreviation,
+                PublishPlace = metadata.PublishPlace,
+                PublishDate = metadata.PublishDate,
+                PublisherText = metadata.PublisherText,
+                PublisherEmail = metadata.PublisherEmail,
+                Copyright = metadata.Copyright,
+                BiblText = metadata.BiblText,
+                OriginDate = metadata.OriginDate,
+                NotBefore = metadata.NotBefore,
+                NotAfter = metadata.NotAfter,
+                ManuscriptIdno = metadata.ManuscriptIdno,
+                ManuscriptSettlement = metadata.ManuscriptSettlement,
+                ManuscriptCountry = metadata.ManuscriptCountry,
+                ManuscriptRepository = metadata.ManuscriptRepository,
+                ManuscriptExtent = metadata.ManuscriptExtent,
+                ManuscriptTitle = metadata.ManuscriptTitle
+            };
         }
     }
 }

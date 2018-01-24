@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ITJakub.FileProcessing.Core.Communication;
 using ITJakub.SearchService.DataContracts.Contracts;
+using Vokabular.DataEntities.Database.Entities;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
 {
@@ -46,7 +47,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
             }
         }
 
-        public void PublishSnapshot(long snapshotId, long projectId, List<string> externalPageIds)
+        public void PublishSnapshot(long snapshotId, long projectId, List<string> externalPageIds, MetadataResource metadata)
         {
             // Snapshots are not supported in eXistDB storage, uploaded book version is directly published
         }

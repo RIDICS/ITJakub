@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ITJakub.SearchService.DataContracts.Contracts;
+using Vokabular.DataEntities.Database.Entities;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
 {
@@ -13,6 +14,6 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
 
         void UploadBibliographyFile(VersionResourceUploadContract resourceUploadContract);
 
-        void PublishSnapshot(long snapshotId, long projectId, List<string> externalPageIds);
+        void PublishSnapshot(long snapshotId, long projectId, List<string> externalPageIds, MetadataResource metadata);
     }
 }

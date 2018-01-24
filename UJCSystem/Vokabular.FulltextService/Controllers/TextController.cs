@@ -40,7 +40,7 @@ namespace Vokabular.FulltextService.Controllers
             return result;
         }
 
-        [HttpPost("search/{textResourceId}")]
+        [HttpPost("{textResourceId}/search")]
         public TextResourceContract GetSearchTextResource(string textResourceId, [FromQuery] TextFormatEnumContract formatValue, [FromBody] SearchPageRequestContract searchPageRequestContract )
         {
             var textResource = m_searchManager.SearchPageByCriteria(textResourceId, searchPageRequestContract);
