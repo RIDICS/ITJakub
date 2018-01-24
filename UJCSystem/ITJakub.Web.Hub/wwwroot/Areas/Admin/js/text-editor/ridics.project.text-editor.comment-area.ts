@@ -309,7 +309,7 @@
     }
 
     private processDeleteCommentClick() {
-        $("#project-resource-preview").on("click", ".delete-comment", (event: JQuery.Event) => {
+        $(".delete-comment").on("click", (event: JQuery.Event) => {
             const target = $(event.target as Node as Element);
             const commentActionsRowEl = target.parents(".comment-actions-row");
             const commentId = parseInt(commentActionsRowEl.siblings(".media-body").attr("data-comment-id"));
