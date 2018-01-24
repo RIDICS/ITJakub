@@ -18,7 +18,6 @@ class BohemianTextBankNew {
     private currentBookId = -1;
     private currentBookIndex = 0;
     private currentResultStart = -1;
-    private currentAmountOfResultsInPage = 0;
     private currentViewPage = 1;
 
     private contextLength = -1;
@@ -215,7 +214,7 @@ class BohemianTextBankNew {
             this.goToPage(this.currentViewPage);
         }else{
             this.generateViewingPage();
-        }//TODO test
+        }
     }
 
     private initializeFromUrlParams() {
@@ -312,9 +311,7 @@ class BohemianTextBankNew {
         advancedSearchPageAjax.done((response) => {
             this.hideLoading();
             const results: ICorpusSearchResult[] = response["results"];
-            const numberOfResults = results.length;
             this.currentResultStart += this.resultsPerPage;
-            this.currentAmountOfResultsInPage += numberOfResults;
                 const resultPage = (start / count) + 1;
                 const compositionPage = (this.compositionResultListStart / this.compositionsPerPage);
                 const viewingPage = this.paginator.getCurrentPage();
@@ -324,7 +321,7 @@ class BohemianTextBankNew {
             updateQueryStringParameter(this.urlSortAscKey, this.sortBar.isSortedAsc());
             updateQueryStringParameter(this.urlSortCriteriaKey, this.sortBar.getSortCriteria());
             updateQueryStringParameter(this.urlContextSizeKey, contextLength);
-            this.optionallyLoadMoreResultsForPage(results);
+            this.calculateAndFlushNumberOfResults(results);
         });
         advancedSearchPageAjax.fail(() => {
             this.printErrorMessage(this.defaultErrorMessage);
@@ -494,19 +491,17 @@ class BohemianTextBankNew {
         getPageAjax.done((response) => {
             this.hideLoading();
             const results: ICorpusSearchResult[] = response["results"];
-            const numberOfResults = results.length;
             this.currentResultStart += this.resultsPerPage;
             const resultPage = (this.currentResultStart / count) + 1;
             const compositionPage = (this.compositionResultListStart / this.compositionsPerPage);
             const viewingPage = this.paginator.getCurrentPage();
             this.makeHistoryEntry(bookId, resultPage, compositionPage, viewingPage);
-            this.currentAmountOfResultsInPage += numberOfResults;
             updateQueryStringParameter(this.urlSearchKey, text);
             updateQueryStringParameter(this.currentResultStart, start);
             updateQueryStringParameter(this.urlSortAscKey, sortAsc);
             updateQueryStringParameter(this.urlSortCriteriaKey, sortingEnum);
             updateQueryStringParameter(this.urlContextSizeKey, contextLength);
-            this.optionallyLoadMoreResultsForPage(results);
+            this.calculateAndFlushNumberOfResults(results);
         });
 
         getPageAjax.fail(() => {
@@ -514,23 +509,21 @@ class BohemianTextBankNew {
         });
     }
 
-    private optionallyLoadMoreResultsForPage(results: ICorpusSearchResult[]) {
+    private calculateAndFlushNumberOfResults(results: ICorpusSearchResult[]) {
         if (!results.length) {
             this.switchToNextBook();
             return;
         }
-        if (this.currentAmountOfResultsInPage < this.approximateNumberOfResultsPerPage) {
-            this.transientResults = this.transientResults.concat(results);
+        this.transientResults = this.transientResults.concat(results);
+        if (results.length < this.resultsPerPage && this.transientResults.length < this.approximateNumberOfResultsPerPage) {
+            this.switchToNextBook();
+            return;
+        }
+
+        if (this.transientResults.length < this.approximateNumberOfResultsPerPage) {
             this.loadBookResultPage(this.currentResultStart, this.currentBookId);
         } else {
-            this.emptyResultsTable();
-            if (this.transientResults) {
-                this.fillResultsIntoTable(this.transientResults);
-                this.transientResults = [];
-            }
-            this.fillResultsIntoTable(results);
-            this.currentAmountOfResultsInPage = 0;
-            const count = this.resultsPerPage;
+            this.flushTransientResults();
         }
     }
 
@@ -590,6 +583,12 @@ class BohemianTextBankNew {
         abbrevTableBody.empty();
     }
 
+    private flushTransientResults() {
+        this.emptyResultsTable();
+        this.fillResultsIntoTable(this.transientResults);
+        this.transientResults = [];
+    }
+
     /**
      * Generates viewing page
      */
@@ -624,7 +623,11 @@ class BohemianTextBankNew {
         const previousPage = pageNumber - 1;
         if (previousPage === 0 && !pageHasBeenWrapped) {//to load page 1 it's needed to reset indexes
             this.resetIds();
-            this.loadNextCompositionResultPage("a");//TODO advanced, get search text
+            if (this.search.isLastQueryJson()) {
+                this.loadNextCompositionAdvancedResultPage(this.search.getLastQuery(), true);
+            } else {
+                this.loadNextCompositionResultPage(this.search.getLastQuery(), true);
+            }
             return;
         }
 
@@ -642,7 +645,11 @@ class BohemianTextBankNew {
             console.log(`current bookID: ${this.hitBookIds[this.currentBookIndex]}`);
             console.log(`current viewing page: ${previousPage}`);
             console.log(`---PAGE INDEX END---`);
-            this.loadNextCompositionResultPage("a", true);//TODO advanced, get search text
+            if (this.search.isLastQueryJson()) {
+                this.loadNextCompositionAdvancedResultPage(this.search.getLastQuery(), true);
+            } else {
+                this.loadNextCompositionResultPage(this.search.getLastQuery(), true);
+            }
         } else {
             bootbox.alert({
                 title: "Attention",
@@ -720,9 +727,7 @@ class BohemianTextBankNew {
                 this.hitBookIds = bookIds.list;
                 if (!this.hitBookIds) {
                     if (this.transientResults.length) {
-                        this.emptyResultsTable();
-                        this.fillResultsIntoTable(this.transientResults);
-                        this.transientResults = [];
+                        this.flushTransientResults();
                     }
                     bootbox.alert({
                         title: "Attention",
