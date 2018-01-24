@@ -176,7 +176,7 @@
     private processCommentReply(
         textId: number,
         textReferenceId: string,
-        id: number,
+        commentId: number,
         parentCommentId: number,
         textAreaEl: JQuery,
         jEl: JQuery) {
@@ -191,12 +191,12 @@
                     textAreaEl.remove();
                 } else {
                     const comment: ICommentStructureReply = {
-                        id: id,
+                        id: commentId,
                         text: commentText,
                         parentCommentId: parentCommentId,
                         textReferenceId: textReferenceId
                     };
-                    if (id === 0) {
+                    if (commentId === 0) {
                         const sendAjax = $.post(`${serverAddress}Admin/ContentEditor/SaveComment`,
                             {
                                 comment: comment,
@@ -208,7 +208,7 @@
                         const sendAjax = $.post(`${serverAddress}Admin/ContentEditor/UpdateComment`,
                             {
                                 comment: comment,
-                                textId: textId
+                                commentId: commentId
                             }
                         );
                         this.onCommentSendRequest(sendAjax, textAreaEl, textId);

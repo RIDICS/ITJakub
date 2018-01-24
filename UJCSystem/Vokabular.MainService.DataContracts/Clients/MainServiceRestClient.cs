@@ -1417,11 +1417,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public long UpdateComment(long textId, CreateTextCommentContract request)
+        public object UpdateComment(long commentId, CreateTextCommentContract request)
         {
             try
             {
-                var result = Put<long>($"project/text/{textId}/comment", request);
+                var result = Put<object>($"project/text/comment/{commentId}", request);
                 return result;
             }
             catch (HttpRequestException e)
