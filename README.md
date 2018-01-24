@@ -17,6 +17,7 @@ Required software:
 * Altova XML 2013 Community Edition (installer is in repository)
 * Internet Information Services (installed from Windows features dialog)
 * Yarn package manager
+* ElasticSearch 5.5.2
 
 Recommended software:
 * JetBrains ReSharper
@@ -43,6 +44,9 @@ Environment configuration
 	2. create collection with name "apps/jacob"
 	3. copy content of "Database/ExistDB" folder except "config" folder to app collection named "jacob"
 	4. copy content of "Database/ExistDB/config" folder to collection "/system/config/db/apps/jacob"
+* Prepare ElasticSearch:
+  * Install Experimental highlighter plugin "./bin/elasticsearch-plugin install org.wikimedia.search.highlighter:experimental-highlighter-elasticsearch-plugin:5.5.2"
+  * Create indices using REST calls from configuration file ("\itjakub\Database\Elasticsearch\mapping")
 * Install certificates
   1. Open Manager for computers certificates - certlm.msc
   2. Install ITJakubCA to Trusted Root Certification Authrorities for Local computer
