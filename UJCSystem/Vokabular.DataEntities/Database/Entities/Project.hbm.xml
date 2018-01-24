@@ -35,6 +35,11 @@
       <one-to-many class="ProjectResponsiblePerson" />
     </bag>
 
+    <bag name="Permissions" inverse="true" lazy="true">
+      <key column="Project" />
+      <one-to-many class="Permission" />
+    </bag>
+
     <bag name="LiteraryKinds" table="Project_LiteraryKind" cascade="save-update" lazy="true">
       <key column="Project" />
       <many-to-many class="LiteraryKind" column="LiteraryKind" />

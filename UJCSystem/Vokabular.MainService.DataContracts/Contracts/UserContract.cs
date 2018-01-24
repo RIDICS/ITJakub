@@ -17,8 +17,15 @@ namespace Vokabular.MainService.DataContracts.Contracts
 
     public class UserDetailContract : UserContract
     {
-        public virtual string Email { get; set; }
+        public string Email { get; set; }
 
-        public virtual DateTime CreateTime { get; set; }
+        public DateTime CreateTime { get; set; }
+    }
+
+    public class CreateUserContract : UserContract
+    {
+        public string Email { get; set; }
+
+        public string NewPassword { get; set; }
     }
 }

@@ -5,6 +5,9 @@ using System.ServiceModel.Description;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Lemmatization.Shared.Contracts;
+using ITJakub.Web.Hub.Core.Managers;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Vokabular.MainService.DataContracts.Clients;
 
 namespace ITJakub.Web.Hub.Core.Communication
@@ -12,6 +15,7 @@ namespace ITJakub.Web.Hub.Core.Communication
     public class CommunicationProvider
     {
         private readonly CommunicationConfigurationProvider m_configurationProvider;
+        private readonly IHttpContextAccessor m_httpContextAccessor;
 
         private const string NewMainServiceEndpointName = "MainService";
         private const string EncryptedEndpointName = "ItJakubServiceEncrypted";
@@ -22,15 +26,18 @@ namespace ITJakub.Web.Hub.Core.Communication
         
         private const string LemmatizationServiceEndpointName = "LemmatizationService";
 
-        public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider)
+        public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider, IHttpContextAccessor httpContextAccessor)
         {
             m_configurationProvider = communicationConfigurationProvider;
+            m_httpContextAccessor = httpContextAccessor;
         }
 
         public MainServiceRestClient GetMainServiceClient()
         {
             var uri = m_configurationProvider.GetEndpointUri(NewMainServiceEndpointName);
-            return new MainServiceRestClient(uri);
+            var authToken = m_httpContextAccessor.HttpContext.Authentication.GetTokenAsync(AuthenticationManager.AuthenticationTokenName)
+                .GetAwaiter().GetResult();
+            return new MainServiceRestClient(uri, authToken);
         }
 
         public IItJakubService GetAuthenticatedClient(string username, string commToken)

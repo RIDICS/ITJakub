@@ -8,6 +8,7 @@ using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.Shared.Contracts;
 using log4net;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.ITJakubService.Core
 {

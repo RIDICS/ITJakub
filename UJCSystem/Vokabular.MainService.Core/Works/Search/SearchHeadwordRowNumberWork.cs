@@ -12,12 +12,14 @@ namespace Vokabular.MainService.Core.Works.Search
         private readonly BookRepository m_bookRepository;
         private readonly CategoryRepository m_categoryRepository;
         private readonly HeadwordRowNumberSearchRequestContract m_request;
+        private readonly int m_userId;
 
-        public SearchHeadwordRowNumberWork(BookRepository bookRepository, CategoryRepository categoryRepository, HeadwordRowNumberSearchRequestContract request) : base(bookRepository)
+        public SearchHeadwordRowNumberWork(BookRepository bookRepository, CategoryRepository categoryRepository, HeadwordRowNumberSearchRequestContract request, int userId) : base(bookRepository)
         {
             m_bookRepository = bookRepository;
             m_categoryRepository = categoryRepository;
             m_request = request;
+            m_userId = userId;
         }
 
         protected override long ExecuteWorkImplementation()
@@ -26,15 +28,22 @@ namespace Vokabular.MainService.Core.Works.Search
             var categoryIds = m_request.Category.SelectedCategoryIds ?? new List<int>();
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(m_request.Category.BookType);
 
-
-            if (categoryIds.Count > 0)
+            if (projectIds.Count > 0 || categoryIds.Count > 0)
             {
-                categoryIds = m_categoryRepository.GetAllSubcategoryIds(categoryIds);
+                if (categoryIds.Count > 0)
+                {
+                    categoryIds = m_categoryRepository.GetAllSubcategoryIds(categoryIds);
+                }
+
+                projectIds = m_bookRepository.GetProjectIds(bookTypeEnum, m_userId, projectIds, categoryIds);
+            }
+            else
+            {
+                projectIds = m_bookRepository.GetProjectIds(bookTypeEnum, m_userId, null, null);
             }
 
-            projectIds = m_bookRepository.GetProjectIds(projectIds, categoryIds, bookTypeEnum);
-
             return m_bookRepository.GetHeadwordRowNumber(m_request.Query, projectIds);
+
         }
     }
 }

@@ -1,49 +1,58 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts.CardFile;
-using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
     public class CardFileController : BaseController
     {
-        [HttpGet("")]
-        public List<CardFileContract> GetCardFiles()
+        private readonly CardFileManager m_cardFileManager;
+
+        public CardFileController(CardFileManager cardFileManager)
         {
-            throw new NotImplementedException();
+            m_cardFileManager = cardFileManager;
+        }
+
+        [HttpGet("")]
+        public IList<CardFileContract> GetCardFiles()
+        {
+            return m_cardFileManager.GetCardFiles();
         }
 
         [HttpGet("{cardFileId}/bucket")]
-        public List<BucketShortContract> GetBuckets(string cardFileId, [FromQuery] string headword)
+        public IList<BucketShortContract> GetBuckets(string cardFileId, [FromQuery] string headword)
         {
-            throw new NotImplementedException();
+            return headword == null
+                ? m_cardFileManager.GetBuckets(cardFileId)
+                : m_cardFileManager.GetBucketsByHeadword(cardFileId, headword);
         }
 
         [HttpGet("{cardFileId}/bucket/{bucketId}/card")]
-        public List<CardContract> GetCards(string cardFileId, string bucketId)
+        public IList<CardContract> GetCards(string cardFileId, string bucketId)
         {
-            throw new NotImplementedException();
+            return m_cardFileManager.GetCards(cardFileId, bucketId);
         }
 
         [HttpGet("{cardFileId}/bucket/{bucketId}/card/short")]
-        public List<CardShortContract> GetCardsShort(string cardFileId, string bucketId)
+        public IList<CardShortContract> GetCardsShort(string cardFileId, string bucketId)
         {
-            throw new NotImplementedException();
+            return m_cardFileManager.GetCardsShort(cardFileId, bucketId);
         }
 
         [HttpGet("{cardFileId}/bucket/{bucketId}/card/{cardId}")]
         public CardContract GetCard(string cardFileId, string bucketId, string cardId)
         {
-            throw new NotImplementedException();
+            return m_cardFileManager.GetCard(cardFileId, bucketId, cardId);
         }
 
         [HttpGet("{cardFileId}/bucket/{bucketId}/card/{cardId}/image/{imageId}")]
-        public IActionResult GetCardImage(string cardFileId, string bucketId, string cardId, string imageId, [FromQuery] CardFileImageSizeEnumContract? imageSize)
+        public IActionResult GetCardImage(string cardFileId, string bucketId, string cardId, string imageId, [FromQuery] CardImageSizeEnumContract? imageSize)
         {
-            //var imageSizeValue = imageSize ?? CardFileImageSizeEnumContract.Full;
-            throw new NotImplementedException();
+            var imageSizeValue = imageSize ?? CardImageSizeEnumContract.Full;
+            var result = m_cardFileManager.GetImage(cardFileId, bucketId, cardId, imageId, imageSizeValue);
+            return File(result.Stream, result.MimeType, result.FileName, result.FileSize);
         }
     }
 }

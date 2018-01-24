@@ -15,13 +15,17 @@ namespace Vokabular.MainService.Core.Managers
     public class ProjectMetadataManager
     {
         private readonly MetadataRepository m_metadataRepository;
-        private readonly UserManager m_userManager;
+        private readonly AuthenticationManager m_authenticationManager;
+        private readonly AuthorizationManager m_authorizationManager;
         private readonly CategoryRepository m_categoryRepository;
 
-        public ProjectMetadataManager(MetadataRepository metadataRepository, UserManager userManager, CategoryRepository categoryRepository)
+        public ProjectMetadataManager(MetadataRepository metadataRepository,
+            AuthenticationManager authenticationManager, AuthorizationManager authorizationManager,
+            CategoryRepository categoryRepository)
         {
             m_metadataRepository = metadataRepository;
-            m_userManager = userManager;
+            m_authenticationManager = authenticationManager;
+            m_authorizationManager = authorizationManager;
             m_categoryRepository = categoryRepository;
         }
 
@@ -72,7 +76,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public long CreateNewProjectMetadataVersion(long projectId, ProjectMetadataContract data)
         {
-            var resultId = new CreateNewMetadataVersionWork(m_metadataRepository, projectId, data, m_userManager.GetCurrentUserId()).Execute();
+            var resultId = new CreateNewMetadataVersionWork(m_metadataRepository, projectId, data, m_authenticationManager.GetCurrentUserId()).Execute();
             return resultId;
         }
 
@@ -96,13 +100,14 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<string> GetTitleAutocomplete(string query, BookTypeEnumContract? bookType, List<int> selectedCategoryIds, List<long> selectedProjectIds)
         {
+            var userId = m_authorizationManager.GetCurrentUserId();
             var bookTypeEnum = Mapper.Map<BookTypeEnum?>(bookType);
             var result = m_metadataRepository.InvokeUnitOfWork(x =>
             {
                 var allCategoryIds = selectedCategoryIds.Count > 0
                     ? m_categoryRepository.GetAllSubcategoryIds(selectedCategoryIds)
                     : selectedCategoryIds;
-                return x.GetTitleAutocomplete(query, bookTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteCount);
+                return x.GetTitleAutocomplete(query, bookTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteCount, userId);
             });
             return result.ToList();
         }

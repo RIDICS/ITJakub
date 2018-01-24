@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ServiceModel.Syndication;
 using ITJakub.Web.Hub.Core.Communication;
-using ITJakub.Web.Hub.Core.Identity;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.FeedResults;
 using Microsoft.AspNetCore.Authorization;
@@ -10,6 +9,7 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.Const;
 
 namespace ITJakub.Web.Hub.Controllers
 {

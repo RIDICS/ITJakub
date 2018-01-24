@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using ITJakub.Shared.Contracts.Resources;
 
 namespace ITJakub.FileProcessing.DataContracts
 {

@@ -81,6 +81,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TermCategoryContract.cs" />
     <Compile Include="TermContract.cs" />
+    <Compile Include="UploadResourceContract.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ITJakub.MobileApps.MobileContracts\ITJakub.MobileApps.MobileContracts.csproj">

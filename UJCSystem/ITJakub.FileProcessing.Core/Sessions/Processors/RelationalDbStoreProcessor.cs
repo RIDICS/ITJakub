@@ -20,9 +20,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
         private readonly IFulltextResourceProcessor m_fulltextResourceProcessor;
         private readonly CatalogValueRepository m_catalogValueRepository;
         private readonly PersonRepository m_personRepository;
+        private readonly PermissionRepository m_permissionRepository;
 
         public RelationalDbStoreProcessor(ProjectRepository projectRepository, MetadataRepository metadataRepository,
-            ResourceRepository resourceRepository, IFulltextResourceProcessor fulltextResourceProcessor, CatalogValueRepository catalogValueRepository, PersonRepository personRepository)
+            ResourceRepository resourceRepository, IFulltextResourceProcessor fulltextResourceProcessor, CatalogValueRepository catalogValueRepository, PersonRepository personRepository, 
+            PermissionRepository permissionRepository)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
@@ -30,6 +32,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             m_fulltextResourceProcessor = fulltextResourceProcessor;
             m_catalogValueRepository = catalogValueRepository;
             m_personRepository = personRepository;
+            m_permissionRepository = permissionRepository;
         }
 
         public void Process(ResourceSessionDirector resourceDirector)
@@ -79,6 +82,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             //    }
             //}
 
+            var processAutoImportPermission = new ProcessAutoImportPermissionWork(m_permissionRepository, projectId, createNewSnapshot.BookTypes);
+            processAutoImportPermission.Execute();
+            
             //var specialPermissions = m_permissionRepository.GetAutoimportPermissionsByCategoryIdList(allBookVersionCategoryIds);
             //var groupsWithAutoimport = m_permissionRepository.GetGroupsBySpecialPermissionIds(specialPermissions.Select(x => x.Id));
 

@@ -223,6 +223,61 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             }
         }
 
+        public long SearchHitsResultCount(List<SearchCriteriaContract> criteria, ProjectIdentificationResult project)
+        {
+            UpdateCriteriaWithBookVersionRestriction(criteria, new List<ProjectIdentificationResult> { project });
+
+            using (var ssc = m_communicationProvider.GetSearchServiceClient())
+            {
+                var dbResult = ssc.ListSearchEditionsResults(criteria);
+                var bookResult = dbResult.SearchResults.FirstOrDefault();
+
+                return bookResult != null ? bookResult.TotalHitCount : 0;
+            }
+        }
+
+        public SearchHitsResultData SearchHitsWithPageContext(int start, int count, int contextLength, List<SearchCriteriaContract> criteria,
+            ProjectIdentificationResult project)
+        {
+            UpdateCriteriaWithBookVersionRestriction(criteria, new List<ProjectIdentificationResult> { project });
+
+            criteria.Add(new ResultCriteriaContract
+            {
+                //Start = 0,
+                //Count = 5, // if count == 1 then response is empty
+                //Sorting = SortEnum.Title,
+                //Direction = ListSortDirection.Ascending,
+                HitSettingsContract = new HitSettingsContract
+                {
+                    Start = start,
+                    Count = count,
+                    ContextLength = 50,
+                }
+            });
+
+            using (var ssc = m_communicationProvider.GetSearchServiceClient())
+            {
+                var dbResult = ssc.ListSearchEditionsResults(criteria);
+                var bookResult = dbResult.SearchResults.FirstOrDefault();
+                var resultList = new List<PageResultContextData>();
+
+                if (bookResult != null)
+                {
+                    resultList = bookResult.Results.Select(x => new PageResultContextData
+                    {
+                        StringId = x.PageXmlId,
+                        ContextStructure = x.ContextStructure,
+                    }).ToList();
+                }
+
+                return new SearchHitsResultData
+                {
+                    SearchResultType = PageSearchResultType.TextExternalId,
+                    ResultList = resultList
+                };
+            }
+        }
+
         public long SearchCorpusByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
             UpdateCriteriaWithBookVersionRestriction(criteria, projects);

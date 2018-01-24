@@ -20,17 +20,7 @@ namespace Vokabular.MainService.Test
         {
             var container = new DryIocContainer();
             container.Install<MainServiceCoreContainerRegistration>();
-
-            var profiles = container.ResolveAll<Profile>();
-
-            Mapper.Reset();
-            Mapper.Initialize(cfg =>
-            {
-                foreach (var profile in profiles)
-                {
-                    cfg.AddProfile(profile);
-                }
-            });
+            container.InitAutoMapper();
         }
 
         [TestMethod]

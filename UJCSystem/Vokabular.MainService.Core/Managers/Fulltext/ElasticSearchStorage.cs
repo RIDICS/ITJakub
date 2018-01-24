@@ -110,6 +110,17 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             }
         }
 
+        public long SearchHitsResultCount(List<SearchCriteriaContract> criteria, ProjectIdentificationResult project)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public SearchHitsResultData SearchHitsWithPageContext(int start, int count, int contextLength, List<SearchCriteriaContract> criteria,
+            ProjectIdentificationResult project)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public long SearchCorpusByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
             UpdateCriteriaWithSnapshotRestriction(criteria, projects);
