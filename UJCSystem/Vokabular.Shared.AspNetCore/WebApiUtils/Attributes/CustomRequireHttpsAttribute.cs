@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace Vokabular.MainService.Utils
+namespace Vokabular.Shared.AspNetCore.WebApiUtils.Attributes
 {
     public class CustomRequireHttpsAttribute : RequireHttpsAttribute
     {

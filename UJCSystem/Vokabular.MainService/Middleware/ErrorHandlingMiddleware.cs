@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Vokabular.MainService.Core.Errors;
 
-namespace Vokabular.MainService.Utils.Middleware
+namespace Vokabular.MainService.Middleware
 {
     public class ErrorHandlingMiddleware
     {

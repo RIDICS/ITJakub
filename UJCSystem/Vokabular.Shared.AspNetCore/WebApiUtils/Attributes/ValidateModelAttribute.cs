@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Vokabular.RestClient.Contracts;
 
-namespace Vokabular.MainService.Utils
+namespace Vokabular.Shared.AspNetCore.WebApiUtils.Attributes
 {
     public class ValidateModelAttribute : ActionFilterAttribute
     {

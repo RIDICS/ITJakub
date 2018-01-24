@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vokabular.MainService.Utils.Documentation
+namespace Vokabular.Shared.AspNetCore.WebApiUtils.Documentation
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class ProducesResponseTypeHeader : Attribute

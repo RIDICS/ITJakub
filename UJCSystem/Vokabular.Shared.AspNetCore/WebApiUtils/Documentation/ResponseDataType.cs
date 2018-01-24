@@ -1,4 +1,4 @@
-﻿namespace Vokabular.MainService.Utils.Documentation
+﻿namespace Vokabular.Shared.AspNetCore.WebApiUtils.Documentation
 {
     public static class ResponseDataType
     {

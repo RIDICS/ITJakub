@@ -4,7 +4,7 @@ using System.Linq;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Vokabular.FulltextService.Utils.Documentation
+namespace Vokabular.Shared.AspNetCore.WebApiUtils.Documentation
 {
     public class PolymorphismSchemaFilter<TBase> : ISchemaFilter
     {
