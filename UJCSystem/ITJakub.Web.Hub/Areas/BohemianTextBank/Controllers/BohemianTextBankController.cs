@@ -155,7 +155,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetHitBookIdsPaged(string text, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds)//TODO mock, should return array of ids of books where results ocurred
+        public ActionResult GetHitBookIdsPaged(string text, SortTypeEnumContract sortBooksBy, SortDirectionEnumContract sortDirection, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds)//TODO mock, should return array of ids of books where results ocurred
         {
             using (var client = GetRestClient())
             {
@@ -185,7 +185,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         }
 
         [HttpGet]
-        public ActionResult AdvancedSearchGetHitBookIdsPaged(string json, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds)//TODO mock, should return array of ids of books where results ocurred
+        public ActionResult AdvancedSearchGetHitBookIdsPaged(string json, SortTypeEnumContract sortBooksBy, SortDirectionEnumContract sortDirection, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds)//TODO mock, should return array of ids of books where results ocurred
         {
             using (var client = GetRestClient())
             {
@@ -256,15 +256,24 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             }
         }
 
-        public ActionResult TextSearchFulltextGetBookPage(string text, int start, int count, int contextLength, short sortingEnum, bool sortAsc,
-            long bookId)//TODO should return page with a certain amount of search results from a selected book id
+        [HttpGet]
+        public ActionResult TextSearchFulltextGetBookPage([FromQuery] CorpusLookupContractBasicSearch request)//TODO should return page with a certain amount of search results from a selected book id
         {
+            var text = request.Text;
+
             if (string.IsNullOrEmpty(text))
             {
                 throw new ArgumentException("text can't be null in fulltext search");
             }
 
-            var selectedBookIds = new List<long> {bookId};//TODO mock
+            var start = request.Start;
+            var count = request.Count;
+            var contextLength = request.ContextLength;
+            var snapshotId = request.SnapshotId;
+
+            var selectedBookIds = request.selectedBookIds;
+            var selectedCategoryIds = request.selectedCategoryIds;
+
             var notes = new List<string>();
             notes.Add("note1");
             notes.Add("note2");
@@ -280,10 +289,10 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                         var result = new CorpusSearchResultContract
                         {
                             Author = "Autor",
-                            Title = "Title " + selectedBookIds[0],
-                            SourceAbbreviation = "Book" + bookId,
+                            Title = "Title ",
+                            SourceAbbreviation = "Book" + snapshotId,
                             RelicAbbreviation = "TIT",
-                            BookId = selectedBookIds[0],
+                            BookId = 1,
                             OriginDate = "first half of 8th century",
                             Notes = notes,
                             PageResultContext = new PageWithContextContract
@@ -308,10 +317,10 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                         var result = new CorpusSearchResultContract
                         {
                             Author = "Autor",
-                            Title = "Title " + selectedBookIds[0],
-                            SourceAbbreviation = "Book" + bookId,
+                            Title = "Title ",
+                            SourceAbbreviation = "Book" + snapshotId,
                             RelicAbbreviation = "TIT",
-                            BookId = selectedBookIds[0],
+                            BookId = 2,
                             OriginDate = "first half of 8th century",
                             Notes = notes,
                             PageResultContext = new PageWithContextContract
@@ -381,9 +390,15 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             }
         }
 
-        public ActionResult AdvancedSearchCorpusGetPage(string json, int start, int count, int contextLength, short sortingEnum, bool sortAsc,
-            long bookId)//TODO should return page with a certain amount of search results from a selected book id, search by json
+        [HttpGet]
+        public ActionResult AdvancedSearchCorpusGetPage([FromQuery] CorpusLookupContractAdvancedSearch request)//TODO should return page with a certain amount of search results from a selected book id, search by json
         {
+            var json = request.Json;
+            var start = request.Start;
+            var count = request.Count;
+            var contextLength = request.ContextLength;
+            var snapshotId = request.SnapshotId;
+
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<List<SearchCriteriaContract>>(deserialized);
 
@@ -392,8 +407,8 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 throw new ArgumentException("search in text can't be ommited");
             }
 
-            var selectedBookIds = new List<long> {bookId};//TODO mock
-            var selectedCategoryIds = new List<int>();//TODO mock
+            var selectedBookIds = request.selectedBookIds;
+            var selectedCategoryIds = request.selectedCategoryIds;
 
             AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
 
@@ -409,7 +424,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                             Author = "Autor",
                             Title = "Title " + selectedBookIds[0],
                             RelicAbbreviation = "TIT",
-                            SourceAbbreviation = "Book"+ bookId,
+                            SourceAbbreviation = "Book"+ snapshotId,
                             BookId = selectedBookIds[0],
                             OriginDate = "first half of 8th century",
                             PageResultContext = new PageWithContextContract
@@ -436,7 +451,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                             Author = "Autor",
                             Title = "Title " + selectedBookIds[0],
                             RelicAbbreviation = "TIT",
-                            SourceAbbreviation = "Book" + bookId,
+                            SourceAbbreviation = "Book" + snapshotId,
                             BookId = selectedBookIds[0],
                             OriginDate = "first half of 8th century",
                             PageResultContext = new PageWithContextContract
