@@ -62,7 +62,11 @@ class CommentInput {
                         }
                     }
                 });
-                this.commentArea.reloadCommentArea(textId);
+                const deferred = this.commentArea.reloadCommentArea(textId);
+                deferred.done(() => {
+                    const pageEl = $(`[data-page="${textId}"]`);
+                    this.commentArea.collapseIfCommentAreaContentOverflows(pageEl.children(".comment-area"));//collapse section fully when updating section height initially
+                });
             });
             sendAjax.fail(() => {
                 bootbox.alert({
@@ -137,16 +141,18 @@ class CommentInput {
                 new RegExp(
                     `\\$${guidRegExpString}\\%`)); //searching on one side only because of the same amount of characters.
         if (!addSigns) {
-            output = selectedText.replace(
-                new RegExp(`\\$${guidRegExpString}\\%`),
-                "");
-            output = output.replace(
-                new RegExp(`\\%${guidRegExpString}\\$`),
-                "");
-            markSize = customCommentarySign[0].length;
-            cm.replaceSelection(output);
-            cm.setSelection({ line: selectionStartLine, ch: selectionStartChar },
-                { line: selectionEndLine, ch: selectionEndChar - markSize });
+            if (customCommentarySign) {
+                output = selectedText.replace(
+                    new RegExp(`\\$${guidRegExpString}\\%`),
+                    "");
+                output = output.replace(
+                    new RegExp(`\\%${guidRegExpString}\\$`),
+                    "");
+                markSize = customCommentarySign[0].length;
+                cm.replaceSelection(output);
+                cm.setSelection({ line: selectionStartLine, ch: selectionStartChar },
+                    { line: selectionEndLine, ch: selectionEndChar - markSize });
+            }
             return null;
         } else {
             const textReferenceId = this.util.createTextRefereceId();
@@ -178,7 +184,7 @@ class CommentInput {
     private processCommentReply(
         textId: number,
         textReferenceId: string,
-        id: number,
+        commentId: number,
         parentCommentId: number,
         textAreaEl: JQuery,
         jEl: JQuery) {
@@ -193,12 +199,12 @@ class CommentInput {
                     textAreaEl.remove();
                 } else {
                     const comment: ICommentStructureReply = {
-                        id: id,
+                        id: commentId,
                         text: commentText,
                         parentCommentId: parentCommentId,
                         textReferenceId: textReferenceId
                     };
-                    if (id === 0) {
+                    if (commentId === 0) {
                         const sendAjax = $.post(`${serverAddress}Admin/ContentEditor/SaveComment`,
                             {
                                 comment: comment,
@@ -210,7 +216,7 @@ class CommentInput {
                         const sendAjax = $.post(`${serverAddress}Admin/ContentEditor/UpdateComment`,
                             {
                                 comment: comment,
-                                textId: textId
+                                commentId: commentId
                             }
                         );
                         this.onCommentSendRequest(sendAjax, textAreaEl, textId);

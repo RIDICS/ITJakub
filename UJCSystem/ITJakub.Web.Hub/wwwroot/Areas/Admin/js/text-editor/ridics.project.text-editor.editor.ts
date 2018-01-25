@@ -45,7 +45,7 @@
     }
 
     private toggleCommentFromEditor = (editor: SimpleMDE, userIsEnteringText: boolean) => {
-        if (userIsEnteringText) {
+        if (userIsEnteringText) {//TODO detect existance of markdown signs
             bootbox.prompt({
                 title: "Please enter your comment here:",
                 inputType: "textarea",

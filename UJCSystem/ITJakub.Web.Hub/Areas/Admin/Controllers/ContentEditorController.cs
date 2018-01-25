@@ -83,11 +83,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateComment(CreateTextCommentContract comment, long textId)
+        public IActionResult UpdateComment(CreateTextCommentContract comment, long commentId)
         {
             using (var client = GetRestClient())
             {
-                var result = client.UpdateComment(textId, comment);
+                var result = client.UpdateComment(commentId, comment);
                 return Json(result);
             }
         }
