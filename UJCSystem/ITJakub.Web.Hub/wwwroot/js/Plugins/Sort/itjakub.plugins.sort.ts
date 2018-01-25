@@ -136,3 +136,8 @@ enum SortEnum {
     Title = 1,
     Dating = 2,
 }
+
+enum SortDirection {
+    Asc = 0,
+    Desc = 1,
+}

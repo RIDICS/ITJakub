@@ -434,6 +434,24 @@ interface ICorpusSearchViewingPageHistoryEntry {
     hitResultPage: number;
 }
 
+interface ICorpusLookupBase {
+        start: number;
+        count: number;
+        contextLength: number;
+        snapshotId: number;
+        selectedBookIds: number[];
+        selectedCategoryIds: number[];
+}
+
+interface ICorpusLookupBasicSearch extends ICorpusLookupBase
+{
+    text: string;
+}
+
+interface ICorpusLookupAdvancedSearch extends ICorpusLookupBase {
+    json: string;
+}
+
 enum AudioType {
     Unknown = "Unknown",
     Mp3 = "Mp3",
