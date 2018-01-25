@@ -252,7 +252,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             }
         }
 
-        public ActionResult TextSearchFulltextGetBookPage(string text, int start, int count, int contextLength, short sortingEnum, bool sortAsc, long snapshotId)
+        public ActionResult TextSearchFulltextGetBookPage(string text, int start, int count, int contextLength, short sortingEnum, bool sortAsc, long bookId)
         {
             if (string.IsNullOrEmpty(text))
             {
@@ -263,7 +263,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             
             using (var client = GetRestClient())
             {
-                var resultList = client.SearchCorpusSnapshot(snapshotId, new CorpusSearchRequestContract
+                var resultList = client.SearchCorpusSnapshot(bookId, new CorpusSearchRequestContract
                 {
                     Start = start,
                     Count = count,
