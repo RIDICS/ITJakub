@@ -237,7 +237,6 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             }
 
             var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
-
             AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
 
             return GetSearchResult(new CorpusSearchRequestContract
@@ -248,16 +247,23 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 Sort = sortBooksBy,
                 SortDirection = sortDirection,
             });
-            
         }
 
-        public ActionResult TextSearchFulltextGetBookPage(string text, int start, int count, int contextLength, long bookId)
+        [HttpGet]
+        public ActionResult TextSearchFulltextGetBookPage([FromQuery] CorpusLookupContractBasicSearch request)
         {
+            var text = request.Text;
+
             if (string.IsNullOrEmpty(text))
             {
-                throw new ArgumentException("text can't be null in fulltext search");
-            }
+                throw new ArgumentException("text can't be null in fulltext search");}
 
+           
+            var start = request.Start;
+            var count = request.Count;
+            var contextLength = request.ContextLength;
+            var snapshotId = request.SnapshotId;
+            
             var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
 
             return GetSearchResult(new CorpusSearchRequestContract
@@ -266,7 +272,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                     Count = count,
                     ContextLength = contextLength,
                     ConditionConjunction = listSearchCriteriaContracts,
-                }, bookId);
+                }, snapshotId);
         }
         
         [HttpGet]
@@ -284,18 +290,29 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             });
         }
 
-        public ActionResult AdvancedSearchCorpusGetPage(string json, int start, int count, int contextLength, long bookId)
+        [HttpGet]
+        public ActionResult AdvancedSearchCorpusGetPage([FromQuery] CorpusLookupContractAdvancedSearch request)
         {
-            
-            var listSearchCriteriaContracts = CreateTexCriteriaListFromJson(json);
+            var json = request.Json;
+            var start = request.Start;
+            var count = request.Count;
+            var contextLength = request.ContextLength;
+            var snapshotId = request.SnapshotId;
 
+            if (string.IsNullOrEmpty(json))
+            {
+                throw new ArgumentException("text can't be null in fulltext search");
+            }
+
+            var listSearchCriteriaContracts = CreateTexCriteriaListFromJson(json);
             return GetSearchResult(new CorpusSearchRequestContract
             {
                 Start = start,
                 Count = count,
-                ContextLength = contextLength,
                 ConditionConjunction = listSearchCriteriaContracts,
-            }, bookId);
+                ContextLength = contextLength,
+            }, snapshotId);
+
         }
 
         public ActionResult GetAllPages(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)

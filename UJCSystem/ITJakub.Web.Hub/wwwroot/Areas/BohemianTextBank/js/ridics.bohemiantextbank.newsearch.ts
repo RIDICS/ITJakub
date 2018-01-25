@@ -6,14 +6,15 @@
 class BohemianTextBankNew {
     private approximateNumberOfResultsPerPage = 4; //preferred number of results to be displayed in page
     private resultsPerPage = 3; //corresponds to amount of results per page that server can return
-    private hitBookIds = [];
 
+    private hitBookIds = [];
     private transientResults: ICorpusSearchResult[] = [];
 
     private paginator: IndefinitePagination;
 
     private compositionResultListStart = -1;
     private compositionsPerPage = 10;
+    private compositionPageIsLast = false;
 
     private currentBookId = -1;
     private currentBookIndex = 0;
@@ -134,6 +135,8 @@ class BohemianTextBankNew {
             });
 
         $("#contextPositionsSelect").change(() => {
+            const contextLength = parseInt($("#contextPositionsSelect").val() as string);
+            updateQueryStringParameter(this.urlContextSizeKey, contextLength);
             //this.searchForBook(this.currentPage);TODO reload page on context change?
         });
 
@@ -228,11 +231,11 @@ class BohemianTextBankNew {
             }
 
             const sortedAsc = getQueryStringParameterByName(this.urlSortAscKey);
-            const sortCriteria = getQueryStringParameterByName(this.urlSortCriteriaKey);
+            const sortCriteria = parseInt(getQueryStringParameterByName(this.urlSortCriteriaKey));
 
             if (sortedAsc && sortCriteria) {
                 this.sortBar.setSortedAsc(sortedAsc === "true");
-                this.sortBar.setSortCriteria(((sortCriteria) as any) as SortEnum);
+                this.sortBar.setSortCriteria(sortCriteria as SortEnum);
             }
 
             const selected = getQueryStringParameterByName(this.urlSelectionKey);
@@ -289,22 +292,18 @@ class BohemianTextBankNew {
     private corpusAdvancedSearchPaged(json: string, start: number, contextLength: number, bookId: number) {
         if (!json) return;
 
-        const sortingEnum = this.sortBar.getSortCriteria();
-        const sortAsc = this.sortBar.isSortedAsc();
         const count = this.resultsPerPage;
         this.showLoading();
 
-        const payload: JQuery.PlainObject = {
+        const payload: ICorpusLookupAdvancedSearch = {
             json: json,
             start: start,
             count: this.resultsPerPage,
             contextLength: contextLength,
-            sortingEnum: sortingEnum,
-            sortAsc: sortAsc,
-            bookId: bookId,
-            selectedCategoryIds: this.categoryIdsInQuery
+            snapshotId: bookId,
+            selectedCategoryIds: this.categoryIdsInQuery,
+            selectedBookIds: this.bookIdsInQuery
         };
-
         const advancedSearchPageAjax =
             $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchCorpusGetPage`, payload);
 
@@ -316,11 +315,6 @@ class BohemianTextBankNew {
                 const compositionPage = (this.compositionResultListStart / this.compositionsPerPage);
                 const viewingPage = this.paginator.getCurrentPage();
                 this.makeHistoryEntry(bookId, resultPage, compositionPage, viewingPage);
-            updateQueryStringParameter(this.urlSearchKey, json);
-            //updateQueryStringParameter(this.urlPageKey, pageNumber);TODO change to start
-            updateQueryStringParameter(this.urlSortAscKey, this.sortBar.isSortedAsc());
-            updateQueryStringParameter(this.urlSortCriteriaKey, this.sortBar.getSortCriteria());
-            updateQueryStringParameter(this.urlContextSizeKey, contextLength);
             this.calculateAndFlushNumberOfResults(results);
         });
         advancedSearchPageAjax.fail(() => {
@@ -462,20 +456,18 @@ class BohemianTextBankNew {
 
     private corpusBasicSearchPaged(text: string, start: number, contextLength: number, bookId: number) {
         if (!text) return;
-        const sortingEnum = this.sortBar.getSortCriteria();
-        const sortAsc = this.sortBar.isSortedAsc();
         const count = this.resultsPerPage;
 
         this.showLoading();
 
-        const payload: JQuery.PlainObject = {
+        const payload: ICorpusLookupBasicSearch = {
             text: text,
             start: start,
             count: count,
             contextLength: contextLength,
-            sortingEnum: sortingEnum,
-            sortAsc: sortAsc,
-            bookId: bookId
+            snapshotId: bookId,
+            selectedCategoryIds: this.categoryIdsInQuery,
+            selectedBookIds: this.bookIdsInQuery
         };
 
         console.log(`---PAGE ${this.paginator.getCurrentPage()} INDEX---`);
@@ -496,11 +488,6 @@ class BohemianTextBankNew {
             const compositionPage = (this.compositionResultListStart / this.compositionsPerPage);
             const viewingPage = this.paginator.getCurrentPage();
             this.makeHistoryEntry(bookId, resultPage, compositionPage, viewingPage);
-            updateQueryStringParameter(this.urlSearchKey, text);
-            updateQueryStringParameter(this.currentResultStart, start);
-            updateQueryStringParameter(this.urlSortAscKey, sortAsc);
-            updateQueryStringParameter(this.urlSortCriteriaKey, sortingEnum);
-            updateQueryStringParameter(this.urlContextSizeKey, contextLength);
             this.calculateAndFlushNumberOfResults(results);
         });
 
@@ -531,6 +518,20 @@ class BohemianTextBankNew {
         this.currentResultStart = 0;//internal list index reset
         this.currentBookIndex++;//external list index shift
         if (this.currentBookIndex > (this.hitBookIds.length - 1)) {
+            if (this.compositionPageIsLast) {
+                if (this.transientResults.length) {
+                    this.flushTransientResults();
+                }
+                bootbox.alert({
+                    title: "Attention",
+                    message: "This is a last page",
+                    buttons: {
+                        ok: {
+                            className: "btn-default"
+                        }
+                    }
+                });
+            }else{
             const search = getQueryStringParameterByName(this.urlSearchKey);
             if (this.search.isLastQueryJson()) {
                 this.loadNextCompositionAdvancedResultPage(search);
@@ -538,6 +539,7 @@ class BohemianTextBankNew {
                 this.loadNextCompositionResultPage(search);
             }
             return;
+            }
         }
         this.currentBookId = this.hitBookIds[this.currentBookIndex];
         this.loadBookResultPage(this.currentResultStart, this.currentBookId);
@@ -568,9 +570,9 @@ class BohemianTextBankNew {
         this.currentViewPage = firstPage;
         this.emptyResultsTable();
         this.resetHistory();
+        this.compositionPageIsLast = false;
         this.paginator.updatePage(this.currentViewPage);
         this.actualizeSelectedBooksAndCategoriesInQuery();
-
         this.showLoading();
 
         this.loadNextCompositionResultPage(text);
@@ -694,6 +696,7 @@ class BohemianTextBankNew {
         this.currentViewPage = 1;
         this.emptyResultsTable();
         this.resetHistory();
+        this.compositionPageIsLast = false;
         this.paginator.updatePage(this.currentViewPage);
 
         this.actualizeSelectedBooksAndCategoriesInQuery();
@@ -712,20 +715,36 @@ class BohemianTextBankNew {
         }
         const start = this.compositionResultListStart;
         const count = this.compositionsPerPage;
+        const sortingEnum = this.sortBar.getSortCriteria();
+        const sortAsc = this.sortBar.isSortedAsc();
+        const sortingDirection = sortAsc ? SortDirection.Asc : SortDirection.Desc;
+
         const payload: JQuery.PlainObject = {
             text: text,
             start: start,
             count: count,
             selectedBookIds: this.bookIdsInQuery,
-            selectedCategoryIds: this.categoryIdsInQuery
+            selectedCategoryIds: this.categoryIdsInQuery,
+            sortBooksBy: sortingEnum,
+            sortDirection: sortingDirection 
         };
+
+        updateQueryStringParameter(this.urlSearchKey, text);
+        updateQueryStringParameter(this.urlSortAscKey, sortAsc);
+        updateQueryStringParameter(this.urlSortCriteriaKey, sortingEnum);
+        updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
 
         $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetHitBookIdsPaged`, payload)
             .done((bookIds: IPagedResultArray<number>) => {
-                const count = bookIds.totalCount;
-                $("#totalResultCountDiv").text(count);
+                const totalCount = bookIds.totalCount;
+                const page = (start / count) + 1;
+                const totalPages = Math.ceil(totalCount / count);
+                $("#totalResultCountDiv").text(totalCount);
                 this.hitBookIds = bookIds.list;
-                if (!this.hitBookIds) {
+                if (this.hitBookIds.length < this.compositionsPerPage || page === totalPages) {
+                    this.compositionPageIsLast = true;
+                }
+                if (!this.hitBookIds.length) {//TODO requires attention
                     if (this.transientResults.length) {
                         this.flushTransientResults();
                     }
@@ -746,10 +765,6 @@ class BohemianTextBankNew {
                     }
                     this.compositionResultListStart += this.compositionsPerPage;
                     this.generateViewingPage();
-                    updateQueryStringParameter(this.urlSearchKey, text);
-                    updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
-                    updateQueryStringParameter(this.urlSortAscKey, this.sortBar.isSortedAsc());
-                    updateQueryStringParameter(this.urlSortCriteriaKey, this.sortBar.getSortCriteria());
                 }
             }).fail(() => {
                 this.printErrorMessage(this.defaultErrorMessage);
@@ -763,20 +778,38 @@ class BohemianTextBankNew {
         if (this.compositionResultListStart === -1) {
             this.compositionResultListStart = 0;
         }
+        const sortingEnum = this.sortBar.getSortCriteria();
+        const sortAsc = this.sortBar.isSortedAsc();
+        const sortingDirection = sortAsc ? SortDirection.Asc : SortDirection.Desc;
+        const start = this.compositionResultListStart;
+        const count = this.compositionsPerPage;
+
+        updateQueryStringParameter(this.urlSearchKey, json);
+        updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
+        updateQueryStringParameter(this.urlSortAscKey, sortAsc);
+        updateQueryStringParameter(this.urlSortCriteriaKey, sortingEnum);
+
         const payload: JQuery.PlainObject = {
             json: json,
-            start: this.compositionResultListStart,
-            count: this.compositionsPerPage,
+            start: start,
+            count: count,
             selectedBookIds: this.bookIdsInQuery,
-            selectedCategoryIds: this.categoryIdsInQuery
+            selectedCategoryIds: this.categoryIdsInQuery,
+            sortBooksBy: sortingEnum,
+            sortDirection: sortingDirection 
         };
 
         $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchGetHitBookIdsPaged`, payload)
             .done((bookIds: IPagedResultArray<number>) => {
-                const count = bookIds.totalCount;
-                $("#totalResultCountDiv").text(count);
+                const totalCount = bookIds.totalCount;
+                const page = (start / count) + 1;
+                const totalPages = Math.ceil(totalCount / count);
+                $("#totalResultCountDiv").text(totalCount);
                 this.hitBookIds = bookIds.list;
-                if (!this.hitBookIds) {
+                if (this.hitBookIds.length < this.compositionsPerPage || page === totalPages) {
+                    this.compositionPageIsLast = true;
+                }
+                if (!this.hitBookIds.length) {//TODO requires attention
                     if (this.transientResults.length) {
                         this.emptyResultsTable();
                         this.fillResultsIntoTable(this.transientResults);
@@ -799,10 +832,6 @@ class BohemianTextBankNew {
                     }
                     this.compositionResultListStart += this.compositionsPerPage;
                     this.generateViewingPage();
-                    //updateQueryStringParameter(this.urlSearchKey, text);TODO
-                    updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
-                    updateQueryStringParameter(this.urlSortAscKey, this.sortBar.isSortedAsc());
-                    updateQueryStringParameter(this.urlSortCriteriaKey, this.sortBar.getSortCriteria());
                 }
             }).fail(() => {
                 this.printErrorMessage(this.defaultErrorMessage);
@@ -841,7 +870,7 @@ class BohemianTextBankNew {
 
     private loadAllPages() : JQuery.Deferred<any>{
         const searchText = this.search.getLastQuery();
-        var ajax: JQuery.jqXHR;
+        let ajax: JQuery.jqXHR;
         if (this.search.isLastQueryJson()) {
             ajax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedGetAllPages`,
                 {
