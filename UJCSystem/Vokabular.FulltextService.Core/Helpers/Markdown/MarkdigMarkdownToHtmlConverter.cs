@@ -1,4 +1,5 @@
 ﻿using Markdig;
+using Vokabular.FulltextService.Core.Helpers.Markdown.Extensions;
 
 namespace Vokabular.FulltextService.Core.Helpers.Markdown
 {
@@ -20,6 +21,7 @@ namespace Vokabular.FulltextService.Core.Helpers.Markdown
                 .UsePipeTables()
                 .UseListExtras()
                 .UseTaskLists()
+                .Use<CommentExtension>()
                 .Build();
             var result = Markdig.Markdown.ToHtml(markdownText, pipeline);
             return result;
