@@ -22,8 +22,6 @@
         bootbox.setLocale("cs"); //TODO get actual locale 
     }
 
-    private userIsEnteringText = false;
-
     getCurrentTextId() {
         return this.currentTextId;
     }
@@ -45,7 +43,7 @@
     }
 
     private toggleCommentFromEditor = (editor: SimpleMDE, userIsEnteringText: boolean) => {
-        if (userIsEnteringText) {//TODO detect existance of markdown signs
+        if (userIsEnteringText) {
             bootbox.prompt({
                 title: "Please enter your comment here:",
                 inputType: "textarea",
@@ -56,12 +54,13 @@
                     cancel: {
                         className: "btn-default",
                         callback: () => {
+                            this.toggleCommentFromEditor(editor, false);
                         }
                     }
                 },
                 callback: (result) => {
-                    if (result === null) {
-                        this.userIsEnteringText = !this.userIsEnteringText;
+                    if (!result) {
+                        this.toggleCommentFromEditor(editor, false);
                     } else {
                         this.onSendButtonClick(result);
                     }
@@ -271,8 +270,7 @@
                 "|", "quote", "preview", "horizontal-rule", "|", {
                     name: "comment",
                     action: ((editor) => {
-                        this.userIsEnteringText = !this.userIsEnteringText;
-                        this.toggleCommentFromEditor(editor, this.userIsEnteringText);
+                        this.toggleCommentFromEditor(editor, true);
                     }),
                     className: "fa fa-comment",
                     title: "Add comment"
