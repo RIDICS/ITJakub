@@ -265,7 +265,7 @@ namespace Vokabular.FulltextService.Core.Helpers
                 throw new Exception(response.DebugInformation);
             }
 
-            int index = 0;
+            int startCounter = 0;
             
             var resultList = new List<CorpusSearchResultContract>();
             foreach (var hit in response.Hits)
@@ -274,19 +274,30 @@ namespace Vokabular.FulltextService.Core.Helpers
                 {
                     foreach (var highlight in value.Highlights)
                     {
-                        if (index++ < start)
+                        var numberOfOccurences = GetNumberOfHighlitOccurences(highlight, highlightTag);
+
+                        if (startCounter + numberOfOccurences <= start)
                         {
+                            startCounter += numberOfOccurences;
                             continue;
                         }
+
                         var resultData = GetCorpusSearchResultDataList(highlight, hit.Source.ProjectId, highlightTag);
                         AddPageIdsToResult(resultData, hit.Source.Pages);
 
+                        if (startCounter < start)
+                        {
+                            resultData.RemoveRange(0, start - startCounter);
+                            startCounter += resultData.Count;
+                        }
+
+                        if (resultList.Count + resultData.Count > count)
+                            resultData = resultData.GetRange(0, count - resultList.Count);
+
                         resultList.AddRange(resultData);
 
-                        if (index - start >= count)
-                        {
+                        if (resultList.Count == count)
                             return resultList;
-                        }
                     }
                 }
             }

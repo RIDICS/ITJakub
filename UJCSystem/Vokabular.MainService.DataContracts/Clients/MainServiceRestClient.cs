@@ -1322,6 +1322,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public object SearchCorpusSnapshotsCount(SearchRequestContractBase request)
+        {
+            try
+            {
+                var result = Post<long>("pagedcorpus/search-count", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public List<PageResultContextContract> SearchHitsWithPageContext(long projectId, SearchHitsRequestContract request)
         {
             try
@@ -2728,8 +2744,5 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
-
-
-        
     }
 }

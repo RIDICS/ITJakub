@@ -4,7 +4,6 @@ using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
-using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataContracts.Search.Criteria;
@@ -174,12 +173,13 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             }
         }
 
-        public List<CorpusSearchResultData> SearchCorpusSnapshotByCriteria(long snapshotId, int start, int count, int contextLength, List<SearchCriteriaContract> criteria)
+        public CorpusSearchResultDataList SearchCorpusSnapshotByCriteria(long snapshotId, int start, int count, int contextLength, List<SearchCriteriaContract> criteria)
         {
             using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient())
             {
                 var result = fulltextServiceClient.SearchCorpusSnapshotByCriteria(snapshotId, start, count, contextLength, criteria);
-                return result.Select(x => new CorpusSearchResultData
+
+                var resultList = result.Select(x => new CorpusSearchResultData
                 {
                     ProjectId = x.ProjectId,
                     Notes = x.Notes,
@@ -191,6 +191,23 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
                     VerseResultContext = x.VerseResultContext,
                     BibleVerseResultContext = x.BibleVerseResultContext,
                 }).ToList();
+
+                return new CorpusSearchResultDataList
+                {
+                    SearchResultType = FulltextSearchResultType.ProjectId,
+                    List = resultList
+                };
+            }
+        }
+
+        public long SearchCorpusSnapshotsByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        {
+            UpdateCriteriaWithSnapshotRestriction(criteria, projects);
+
+            using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient())
+            {
+                var result = fulltextServiceClient.SearchCorpusSnapshotByCriteriaCount(criteria);
+                return result;
             }
         }
 

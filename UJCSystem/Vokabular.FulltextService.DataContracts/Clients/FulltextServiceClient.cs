@@ -211,5 +211,22 @@ namespace Vokabular.FulltextService.DataContracts.Clients
                 throw;
             }
         }
+
+        public long SearchCorpusSnapshotByCriteriaCount(List<SearchCriteriaContract> searchCriterias)
+        {
+            var searchRequest = new SearchRequestContractBase { ConditionConjunction = searchCriterias };
+            try
+            {
+                var result = Post<long>("pagedcorpus/search-count", searchRequest);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (Logger.IsErrorEnabled())
+                    Logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
     }
 }

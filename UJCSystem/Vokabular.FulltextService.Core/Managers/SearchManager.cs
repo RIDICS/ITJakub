@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Vokabular.FulltextService.Core.Communication;
 using Vokabular.FulltextService.Core.Helpers;
@@ -18,12 +20,14 @@ namespace Vokabular.FulltextService.Core.Managers
         private const int FragmentsCount = 1000000;
         private const int DefaultStart = 0;
         private const int DefaultSize = 10000;
+        private const int BatchSize = 5;
         private const string HighlightTag = "$";
         private const string EmphTag = "*";
         private const string HighlighterType = "experimental";
 
         private readonly QueriesBuilder m_queriesBuilder;
         private readonly SearchResultProcessor m_searchResultProcessor;
+        
 
         public SearchManager(CommunicationProvider communicationProvider, SearchResultProcessor searchResultProcessor,
             QueriesBuilder queriesBuilder, IOptions<IndicesOption> indicesOptions) : base(communicationProvider, indicesOptions)
@@ -103,8 +107,7 @@ namespace Vokabular.FulltextService.Core.Managers
 
         public FulltextSearchCorpusResultContract SearchCorpusByCriteriaCount(SearchRequestContractBase searchRequest)
         {
-            var filterQuery =
-                m_queriesBuilder.GetFilterSearchQuery(searchRequest.ConditionConjunction, SnapshotIdField);
+            var filterQuery = m_queriesBuilder.GetFilterSearchQuery(searchRequest.ConditionConjunction, SnapshotIdField);
             var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, SnapshotTextField);
 
 
@@ -297,7 +300,20 @@ namespace Vokabular.FulltextService.Core.Managers
                 )
                 .From(searchRequest.Start ?? DefaultStart)
                 .Size(searchRequest.Count ?? DefaultSize)
-                
+                .Sort(so =>
+                {
+                    if (searchRequest.SortDirection.HasValue && searchRequest.Sort.HasValue)
+                    {
+                        if (searchRequest.SortDirection.Value == SortDirectionEnumContract.Asc)
+                        {
+                            return so.Ascending(GetElasticFieldName(searchRequest.Sort.Value));
+                        }
+
+                        return so.Descending(GetElasticFieldName(searchRequest.Sort.Value));
+                    }
+
+                    return so.Ascending(GetElasticFieldName(SortTypeEnumContract.Title));
+                })
             );
 
             return  m_searchResultProcessor.ProcessSearchCorpusSnapshotsByCriteria(response);
@@ -342,5 +358,62 @@ namespace Vokabular.FulltextService.Core.Managers
 
             return m_searchResultProcessor.ProccessSearchCorpusSnapshotByCriteria(response, HighlightTag, searchRequest.Start ?? DefaultStart, searchRequest.Count ?? DefaultSize);
         }
+
+        public async Task<long> SearchCorpusSnapshotsByCriteriaCount(CorpusSearchRequestContract searchRequest)
+        {
+            var filterQuery = m_queriesBuilder.GetFilterSearchQuery(searchRequest.ConditionConjunction, SnapshotIdField);
+            var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, SnapshotTextField);
+
+            var client = CommunicationProvider.GetElasticClient();
+            List<Task<FulltextSearchCorpusResultContract>> tasks = new List<Task<FulltextSearchCorpusResultContract>>();
+            int numberOfHits;
+            int loopCounter = 0;
+            do
+            {
+                var response = client.Search<SnapshotResourceContract>(s => s
+                    .Index(SnapshotIndex)
+                    .Type(SnapshotType)
+                    .Source(false)
+                    .Size(BatchSize)
+                    .From(loopCounter++ * BatchSize)
+                    .Query(q => q
+                        .Bool(b => b
+                            .Filter(filterQuery)
+                            .Must(mustQuery)
+                        )
+                    )
+                    .Highlight(h => h
+                        .PreTags(HighlightTag)
+                        .PostTags(HighlightTag)
+                        .Fields(f => f
+                            .Field(SnapshotTextField)
+                            .NumberOfFragments(FragmentsCount)
+                            .FragmentSize(FragmentSize)
+                            .Type(HighlighterType)
+                        )
+                    )
+                );
+
+                numberOfHits = response.Hits.Count;
+                
+                if (numberOfHits == 0)
+                {
+                    break;
+                }
+
+                tasks.Add(Task<FulltextSearchCorpusResultContract>.Factory.StartNew(() => m_searchResultProcessor.ProcessSearchCorpusByCriteriaCount(response, HighlightTag)));
+
+            } while (numberOfHits == BatchSize);
+
+            long counter = 0;
+            await Task.WhenAll(tasks).ContinueWith(newTask =>
+            {
+                foreach (var task in tasks)
+                {
+                    counter += task.Result.Count;
+                }
+            });
+
+            return counter;}
     }
 }

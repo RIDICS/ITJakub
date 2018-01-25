@@ -39,5 +39,9 @@ namespace Vokabular.Shared.DataContracts.Search.Request
         //public HitSettingsContract HitSettingsContract { get; set; } HitSettings is redundant in direct corpus search
 
         public int ContextLength { get; set; }
+
+        public SortTypeEnumContract? Sort { get; set; }
+
+        public SortDirectionEnumContract? SortDirection { get; set; }
     }
 }

@@ -58,5 +58,24 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
+        [HttpPost("search-count")]
+        [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
+        public IActionResult SearchCorpusResultCount([FromBody] SearchRequestContractBase request)
+        {
+            try
+            {
+                var result = m_bookSearchManager.SearchCorpusSnapshotsByCriteriaCount(request);
+                return Ok(result);
+            }
+            catch (ArgumentException exception)
+            {
+                return BadRequest(exception.Message);
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode((int)exception.StatusCode, exception.Message);
+            }
+        }
+
     }
 }

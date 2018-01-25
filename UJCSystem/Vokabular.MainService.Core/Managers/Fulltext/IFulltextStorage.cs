@@ -3,7 +3,6 @@ using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
-using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.Request;
@@ -31,6 +30,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         string CreateNewHeadwordVersion(HeadwordResource headwordResource);
         string CreateNewEditionNoteVersion(EditionNoteResource editionNoteResource);
         CorpusSearchSnapshotsResultContract SearchCorpusSnapshotsByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects);
-        List<CorpusSearchResultData> SearchCorpusSnapshotByCriteria(long projectId, int start, int count, int contextLength, List<SearchCriteriaContract> criteria);
+        CorpusSearchResultDataList SearchCorpusSnapshotByCriteria(long projectId, int start, int count, int contextLength, List<SearchCriteriaContract> criteria);
+        long SearchCorpusSnapshotsByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects);
     }
 }
