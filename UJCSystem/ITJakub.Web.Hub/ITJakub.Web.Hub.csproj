@@ -14,34 +14,7 @@
     <TypeScriptToolsVersion>2.4</TypeScriptToolsVersion>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Content Remove="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.category-editor.ts" />
-    <Content Remove="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.genre-editor.ts" />
-    <Content Remove="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.keyword.ts" />
-    <Content Remove="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.kind-editor.ts" />
-    <Content Remove="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.literary-original.ts" />
-    <Content Remove="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.main.ts" />
-    <Content Remove="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.original-author.ts" />
-    <Content Remove="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.table-base.ts" />
-    <Content Remove="wwwroot\Areas\Admin\js\edition-note\ridics.project.edition-note.main.ts" />
-    <Content Remove="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.gui.ts" />
-    <Content Remove="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.main.ts" />
-    <Content Remove="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.navigation.ts" />
-    <Content Remove="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.upload.ts" />
-    <Content Remove="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.editor.ts" />
-    <Content Remove="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.generator.ts" />
-    <Content Remove="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.list-structure.ts" />
-    <Content Remove="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.util.ts" />
-    <Content Remove="wwwroot\Areas\BohemianTextBank\js\ridics.bohemiantextbank.newsearch.ts" />
-    <Content Remove="wwwroot\js\Plugins\IndefinitePagination\%40typings.ts" />
-    <Content Remove="wwwroot\js\Plugins\ridics.indefinite-pagination.ts" />
-    <Content Remove="wwwroot\js\typings-custom\bootbox_.d.ts" />
-    <Content Remove="wwwroot\js\typings-custom\jquery-xhr-deferred_.d.ts" />
-    <Content Remove="wwwroot\js\typings-custom\lazysizes_.d.ts" />
-    <Content Remove="wwwroot\js\typings-custom\ridics.form-validation.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ItemGroup>
     <None Include="App.config" />
     <None Update="wwwroot\**\*;Views\**\*;Areas\**\Views\**\*.cshtml;Content\**\*;log4net.config">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -53,6 +26,7 @@
     <ProjectReference Include="..\ITJakub.Web.DataEntities\ITJakub.Web.DataEntities.csproj" />
     <ProjectReference Include="..\Vokabular.Jewelry\Vokabular.Jewelry.csproj" />
     <ProjectReference Include="..\Vokabular.MainService.DataContracts\Vokabular.MainService.DataContracts.csproj" />
+    <ProjectReference Include="..\Vokabular.Shared.AspNetCore\Vokabular.Shared.AspNetCore.csproj" />
     <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj" />
   </ItemGroup>
@@ -68,22 +42,21 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="1.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="1.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="1.1.2" />
-    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="2.0.3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="2.0.4" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.0.2" />
-    <PackageReference Include="AutoMapper" Version="6.2.1" />
-    <PackageReference Include="Castle.Windsor" Version="3.4.0" />
-    <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="1.3.3" />
+    <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Markdig" Version="0.14.7" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="System.Runtime.Serialization.Xml" Version="4.3.0" />
     <PackageReference Include="System.ServiceModel.Http" Version="4.4.0" />
     <PackageReference Include="System.ServiceModel.Primitives" Version="4.4.0" />
-    <PackageReference Include="DryIoc.dll" Version="2.12.5" />
+    <PackageReference Include="DryIoc.dll" Version="2.12.7" />
     <PackageReference Include="DryIoc.Microsoft.DependencyInjection" Version="1.3.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.1.0" />
   </ItemGroup>
@@ -95,40 +68,6 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.category-editor.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.genre-editor.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.keyword.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.kind-editor.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.literary-original.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.main.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.original-author.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.responsible-person-type.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.responsible-person.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.table-base.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\composition-key-table-editor\ridics.project.key-table-editor.util.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\edition-note\ridics.project.edition-note.main.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.content-placement.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\editors-common-base\ridics.project.editors.gui.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.main.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.navigation.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.upload.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.editor.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.generator.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.list-structure.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.main.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\editors-common-base\ridics.project.editors.util.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\BohemianTextBank\js\ridics.bohemiantextbank.newsearch.ts" />
-    <TypeScriptCompile Include="wwwroot\js\Plugins\IndefinitePagination\ridics.indefinite-pagination.ts" />
-    <TypeScriptCompile Include="wwwroot\js\typings-custom\bootbox_.d.ts" />
-    <TypeScriptCompile Include="wwwroot\js\typings-custom\jq-simple-connect_.d.ts" />
-    <TypeScriptCompile Include="wwwroot\js\typings-custom\jquery-xhr-deferred_.d.ts" />
-    <TypeScriptCompile Include="wwwroot\js\typings-custom\lazysizes_.d.ts" />
-    <TypeScriptCompile Include="wwwroot\js\ridics.form-validation.ts" />
-    <TypeScriptCompile Include="wwwroot\js\typings-custom\simplemde-custom_.d.ts" />
-    <TypeScriptCompile Include="wwwroot\js\typings-custom\typeahead-custom_.d.ts" />
   </ItemGroup>
 
   <Target Name="ApplyXdtConfigTransform" BeforeTargets="MSDeployPublish">

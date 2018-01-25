@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ITJakub.Lemmatization.DataEntities;
+using ITJakub.Lemmatization.DataEntities.Entities;
 using ITJakub.Lemmatization.Shared.Contracts;
 
 namespace ITJakub.Lemmatization.Core.AutoMapperProfiles

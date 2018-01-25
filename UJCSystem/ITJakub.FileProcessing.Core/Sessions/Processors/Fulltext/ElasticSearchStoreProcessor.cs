@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using ITJakub.FileProcessing.Core.Communication;
 using ITJakub.SearchService.DataContracts.Contracts;
+using Vokabular.DataEntities.Database.Entities;
+using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.Shared.Converters;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
@@ -11,7 +13,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
         private readonly IXmlToTextConverter m_converter;
 
 
-        public ElasticSearchStoreProcessor(FileProcessingCommunicationProvider communicationProvider, IXmlToTextConverter converter)
+        public ElasticSearchStoreProcessor(FileProcessingCommunicationProvider communicationProvider,
+            IXmlToTextConverter converter)
         {
             m_communicationProvider = communicationProvider;
             m_converter = converter;
@@ -40,11 +43,42 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
             // This data is not stored in ElasticSearch
         }
 
-        public void PublishSnapshot(long snapshotId, long projectId, List<string> externalPageIds)
+        public void PublishSnapshot(long snapshotId, long projectId, List<string> externalPageIds,
+            MetadataResource metadata)
         {
+            var snapshotResource = new SnapshotPageIdsResourceContract
+            {
+                PageIds = externalPageIds,
+                SnapshotId = snapshotId,
+                ProjectId = projectId,
+                MetadataResource = new SnapshotMetadataResourceContract
+                {
+                    Title = metadata.Title,
+                    SubTitle = metadata.SubTitle,
+                    AuthorsLabel = metadata.AuthorsLabel,
+                    RelicAbbreviation = metadata.RelicAbbreviation,
+                    SourceAbbreviation = metadata.SourceAbbreviation,
+                    PublishPlace = metadata.PublishPlace,
+                    PublishDate = metadata.PublishDate,
+                    PublisherText = metadata.PublisherText,
+                    PublisherEmail = metadata.PublisherEmail,
+                    Copyright = metadata.Copyright,
+                    BiblText = metadata.BiblText,
+                    OriginDate = metadata.OriginDate,
+                    NotBefore = metadata.NotBefore,
+                    NotAfter = metadata.NotAfter,
+                    ManuscriptIdno = metadata.ManuscriptIdno,
+                    ManuscriptSettlement = metadata.ManuscriptSettlement,
+                    ManuscriptCountry = metadata.ManuscriptCountry,
+                    ManuscriptRepository = metadata.ManuscriptRepository,
+                    ManuscriptExtent = metadata.ManuscriptExtent,
+                    ManuscriptTitle = metadata.ManuscriptTitle
+                }
+            };
+
             using (var client = m_communicationProvider.GetFulltextServiceClient())
             {
-                client.CreateSnapshot(snapshotId, projectId, externalPageIds);
+                client.CreateSnapshot(snapshotResource);
             }
         }
     }

@@ -58,7 +58,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
         {
             term = term == null ? string.Empty : term.ToLower();
 
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
                 var cardFiles = client.GetCardFiles();
                 var result = new List<SearchResultContract>();
@@ -87,7 +87,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 
         public ActionResult Feedback()
         {
-            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, GetUserName());
+            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, IsUserLoggedIn());
             return View(viewModel);
         }
 
@@ -108,7 +108,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 
         public ActionResult CardFiles()
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
                 var cardFiles = client.GetCardFiles();
                 return Json(new {cardFiles}, GetJsonSerializerSettingsForBiblModule());
@@ -117,18 +117,16 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 
         public ActionResult Buckets(string cardFileId, string headword)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var buckets = string.IsNullOrEmpty(headword)
-                    ? client.GetBuckets(cardFileId)
-                    : client.GetBucketsWithHeadword(cardFileId, headword);
+                var buckets = client.GetBuckets(cardFileId, headword);
                 return Json(new {buckets}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
         public ActionResult Cards(string cardFileId, string bucketId)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
                 var cards = client.GetCards(cardFileId, bucketId);
                 return Json(new {cards}, GetJsonSerializerSettingsForBiblModule());
@@ -137,7 +135,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 
         public ActionResult CardsShort(string cardFileId, string bucketId)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
                 var cards = client.GetCardsShort(cardFileId, bucketId);
                 return Json(new {cards}, GetJsonSerializerSettingsForBiblModule());
@@ -146,7 +144,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 
         public ActionResult Card(string cardFileId, string bucketId, string cardId)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
                 var card = client.GetCard(cardFileId, bucketId, cardId);
                 return Json(new {card}, GetJsonSerializerSettingsForBiblModule());
@@ -162,10 +160,10 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
             {
                 return StatusCode((int) HttpStatusCode.BadRequest); // invalid image size
             }
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var imageDataStream = client.GetImage(cardFileId, bucketId, cardId, imageId, imageSizeEnum);
-                return new FileStreamResult(imageDataStream, "image/jpeg");
+                var imageData = client.GetCardImage(cardFileId, bucketId, cardId, imageId, imageSizeEnum);
+                return File(imageData.Stream, imageData.MimeType, imageData.FileName, imageData.FileSize);
             }
         }
     }

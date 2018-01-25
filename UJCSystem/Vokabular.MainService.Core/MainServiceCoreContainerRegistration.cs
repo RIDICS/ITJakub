@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Vokabular.Core;
 using Vokabular.MainService.Core.AutoMapperProfiles;
+using Vokabular.MainService.Core.AutoMapperProfiles.CardFile;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers;
+using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.Shared.Container;
 
@@ -12,9 +14,12 @@ namespace Vokabular.MainService.Core
     {
         public void Install(IIocContainer container)
         {
+            container.AddPerWebRequest<AuthenticationManager>();
             container.AddPerWebRequest<AuthorizationManager>();
+            container.AddPerWebRequest<BookHitSearchManager>();
             container.AddPerWebRequest<BookManager>();
             container.AddPerWebRequest<BookSearchManager>();
+            container.AddPerWebRequest<CardFileManager>();
             container.AddPerWebRequest<CatalogValueManager>();
             container.AddPerWebRequest<CategoryManager>();
             container.AddPerWebRequest<CorpusSearchManager>();
@@ -23,6 +28,7 @@ namespace Vokabular.MainService.Core
             container.AddPerWebRequest<HeadwordSearchManager>();
             container.AddPerWebRequest<NamedResourceGroupManager>();
             container.AddPerWebRequest<NewsManager>();
+            container.AddPerWebRequest<PermissionManager>();
             container.AddPerWebRequest<PersonManager>();
             container.AddPerWebRequest<ProjectContentManager>();
             container.AddPerWebRequest<ProjectInfoManager>();
@@ -31,10 +37,15 @@ namespace Vokabular.MainService.Core
             container.AddPerWebRequest<ProjectMetadataManager>();
             container.AddPerWebRequest<ProjectResourceManager>();
             container.AddPerWebRequest<TermManager>();
+            container.AddPerWebRequest<UserGroupManager>();
             container.AddPerWebRequest<UserManager>();
+
+            container.AddPerWebRequest<ICommunicationTokenGenerator, GuidCommunicationTokenGenerator>();
+            container.AddPerWebRequest<ICommunicationTokenProvider, HttpHeaderCommunicationTokenProvider>();
 
             container.AddPerWebRequest<CommunicationConfigurationProvider>();
             container.AddPerWebRequest<CommunicationProvider>();
+            container.AddPerWebRequest<DefaultUserProvider>();
             container.AddPerWebRequest<FulltextStorageProvider>();
             container.AddPerWebRequest<IFulltextStorage, ExistDbStorage>();
             container.AddPerWebRequest<IFulltextStorage, ElasticSearchStorage>();
@@ -61,12 +72,20 @@ namespace Vokabular.MainService.Core
             container.AddSingleton<Profile, ProjectProfile>();
             container.AddSingleton<Profile, ResourceProfile>();
             container.AddSingleton<Profile, ResponsiblePersonProfile>();
+            container.AddSingleton<Profile, SpecialPermissionProfile>();
             container.AddSingleton<Profile, TermProfile>();
             container.AddSingleton<Profile, TextCommentProfile>();
             container.AddSingleton<Profile, TextProfile>();
             container.AddSingleton<Profile, TrackProfile>();
             container.AddSingleton<Profile, TransformationProfile>();
+            container.AddSingleton<Profile, UserGroupProfile>();
             container.AddSingleton<Profile, UserProfile>();
+
+            container.AddSingleton<Profile, BucketContractProfile>();
+            container.AddSingleton<Profile, BucketShortContractProfile>();
+            container.AddSingleton<Profile, CardContractProfile>();
+            container.AddSingleton<Profile, CardFileContractProfile>();
+            container.AddSingleton<Profile, CardShortContractProfile>();
 
             container.Install<CoreContainerRegistration>();
         }

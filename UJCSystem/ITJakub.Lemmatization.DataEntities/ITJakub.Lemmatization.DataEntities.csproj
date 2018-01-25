@@ -1,133 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{69076B65-4268-497A-ABF6-64D7FFA50911}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ITJakub.Lemmatization.DataEntities</RootNamespace>
-    <AssemblyName>ITJakub.Lemmatization.DataEntities</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Development|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Development\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <TargetFramework>net461</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Castle.Facilities.AutoTx, Version=3.3.0.8214, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Facilities.AutoTx.3.3.0.08214\lib\net40\Castle.Facilities.AutoTx.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Castle.Facilities.FactorySupport, Version=3.4.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.FactorySupportFacility.3.4.0\lib\net45\Castle.Facilities.FactorySupport.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Facilities.Logging, Version=3.4.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.LoggingFacility.3.4.0\lib\net45\Castle.Facilities.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Facilities.NHibernate, Version=1.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Facilities.NHibernate.1.1.0\lib\net40\Castle.Facilities.NHibernate.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Castle.Transactions, Version=3.3.0.8214, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Transactions.3.3.0.08214\lib\net40\Castle.Transactions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Castle.Windsor, Version=3.4.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Windsor.3.4.0\lib\net45\Castle.Windsor.dll</HintPath>
-    </Reference>
-    <Reference Include="Iesi.Collections, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Iesi.Collections.4.0.2\lib\net461\Iesi.Collections.dll</HintPath>
-    </Reference>
-    <Reference Include="NHibernate, Version=4.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\packages\NHibernate.4.1.1.4000\lib\net40\NHibernate.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Transactions" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <None Remove="Entities\CanonicalForm.hbm.xml" />
+    <None Remove="Entities\HyperCanonicalForm.hbm.xml" />
+    <None Remove="Entities\Token.hbm.xml" />
+    <None Remove="Entities\TokenCharacteristic.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CanonicalForm.cs" />
-    <Compile Include="HyperCanonicalForm.cs" />
-    <Compile Include="Repositories\LemmatizationRepository.cs" />
-    <Compile Include="Token.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TokenCharacteristic.cs" />
+    <EmbeddedResource Include="Entities\CanonicalForm.hbm.xml" />
+    <EmbeddedResource Include="Entities\HyperCanonicalForm.hbm.xml" />
+    <EmbeddedResource Include="Entities\Token.hbm.xml" />
+    <EmbeddedResource Include="Entities\TokenCharacteristic.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Token.hbm.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
+    <PackageReference Include="Iesi.Collections" Version="4.0.2" />
+    <PackageReference Include="NHibernate" Version="4.1.1.4000" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="TokenCharacteristic.hbm.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
+    <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj" />
+    <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="HyperCanonicalForm.hbm.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ITJakub.DataEntities\ITJakub.DataEntities.csproj">
-      <Project>{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}</Project>
-      <Name>ITJakub.DataEntities</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="ITJakub.Lemmatization.DataEntities.Container.Config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="CanonicalForm.hbm.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

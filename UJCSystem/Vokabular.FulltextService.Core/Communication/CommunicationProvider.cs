@@ -24,13 +24,13 @@ namespace Vokabular.FulltextService.Core.Communication
             var baseAdrress = m_configurationProvider.GetEndpointUri(ElasticSearchService);
             var settings = new ConnectionSettings(baseAdrress)
                 .RequestTimeout(TimeSpan.FromMinutes(2)).DisableDirectStreaming()
-                .OnRequestCompleted(details =>
+                /*.OnRequestCompleted(details =>
                 {
                     Debug.WriteLine("### REQUEST ###");
                     if (details.RequestBodyInBytes != null) Debug.WriteLine(Encoding.UTF8.GetString(details.RequestBodyInBytes));
                     Debug.WriteLine("### RESPONSE ###");
                     if (details.ResponseBodyInBytes != null) Debug.WriteLine(Encoding.UTF8.GetString(details.ResponseBodyInBytes));
-                })
+                })*/
                 .PrettyJson();
             ElasticClient client = new ElasticClient(settings);
 

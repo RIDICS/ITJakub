@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="ITJakub.Lemmatization.DataEntities" namespace="ITJakub.Lemmatization.DataEntities.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="CanonicalForm" table="[CanonicalForm]">
+    
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+    
+    <property name="Text" not-null="true"/>      
+           
+    <property name="Type" not-null="true"/>
+    
+    <property name="Description" not-null="true"/>
+    
+    <many-to-one name="HyperCanonicalForm"
+                 class="HyperCanonicalForm"
+                 cascade="all-delete-orphan"/>
+
+
+    <bag name="CanonicalFormFor" cascade="all" table="CanonicalForm_TokenCharacteristic">
+      <key column ="CanonicalForm"/>
+      <many-to-many class="TokenCharacteristic" column="TokenCharacteristic"/>
+    </bag>
+        
+  </class>
+</hibernate-mapping>

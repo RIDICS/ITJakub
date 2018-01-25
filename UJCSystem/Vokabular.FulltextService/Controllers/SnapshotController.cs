@@ -4,14 +4,14 @@ using Vokabular.FulltextService.Core.Managers;
 using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.Shared;
 using Vokabular.Shared.DataContracts.Search;
-using Vokabular.Shared.DataContracts.Search.RequestContracts;
+using Vokabular.Shared.DataContracts.Search.Request;
 
 namespace Vokabular.FulltextService.Controllers
 {
     [Route("api/[controller]")]
     public class SnapshotController : Controller
     {
-        private static readonly ILogger Logger = ApplicationLogging.CreateLogger<TextController>();
+        private static readonly ILogger m_logger = ApplicationLogging.CreateLogger<TextController>();
 
         private readonly SnapshotResourceManager m_snapshotResourceManager;
         
@@ -28,7 +28,6 @@ namespace Vokabular.FulltextService.Controllers
         {
             var result = m_snapshotResourceManager.CreateSnapshotResource(snapshotPageIdsResourceContract);
             return result;
-            
         }
 
         /// <summary>

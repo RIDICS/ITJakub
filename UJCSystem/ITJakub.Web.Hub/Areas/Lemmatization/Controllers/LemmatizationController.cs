@@ -1,10 +1,10 @@
 ﻿using ITJakub.Lemmatization.Shared.Contracts;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
-using ITJakub.Web.Hub.Core.Identity;
 using ITJakub.Web.Hub.Models.Requests.Lemmatization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.Shared.Const;
 
 namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
 {

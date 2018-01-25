@@ -7,8 +7,10 @@ using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Vokabular.RestClient.Contracts;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Extensions;
+using Vokabular.RestClient.Headers;
 using Vokabular.RestClient.Results;
 
 namespace Vokabular.RestClient
@@ -17,15 +19,25 @@ namespace Vokabular.RestClient
     {
         private const int StreamBufferSize = 64 * 1024;
         private readonly HttpClient m_client;
+        private readonly HttpClientHandler m_httpClientHandler;
 
-        public RestClientBase(Uri baseAddress)
+        public RestClientBase(Uri baseAddress, bool createCustomHandler = false)
         {
-            m_client = new HttpClient
+            if (createCustomHandler)
             {
-                BaseAddress = baseAddress
-            };
+                m_httpClientHandler = new HttpClientHandler();
+                m_client = new HttpClient(m_httpClientHandler);
+            }
+            else
+            {
+                m_client = new HttpClient();
+            }
+            
+            m_client.BaseAddress = baseAddress;
+            m_client.DefaultRequestHeaders.ExpectContinue = false;
             m_client.DefaultRequestHeaders.Accept.Clear();
             m_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            DeserializationType = DeserializationType.Json;
         }
 
         protected abstract void FillRequestMessage(HttpRequestMessage requestMessage);
@@ -37,10 +49,11 @@ namespace Vokabular.RestClient
             m_client.Dispose();
         }
 
-        protected HttpClient HttpClient
-        {
-            get { return m_client; }
-        }
+        protected HttpClient HttpClient => m_client;
+
+        protected HttpClientHandler HttpClientHandler => m_httpClientHandler;
+
+        public DeserializationType DeserializationType { get; set; }
 
         private HttpRequestMessage CreateRequestMessage(HttpMethod method, string requestUri, IEnumerable<Tuple<string, string>> headers = null)
         {
@@ -68,7 +81,19 @@ namespace Vokabular.RestClient
         {
             try
             {
-                var result = response.Content.ReadAsAsync<T>().GetAwaiter().GetResult();
+                T result;
+                switch (DeserializationType)
+                {
+                    case DeserializationType.Json:
+                        result = response.Content.ReadAsAsync<T>().GetAwaiter().GetResult();
+                        break;
+                    case DeserializationType.Xml:
+                        result = response.Content.ReadXmlAsAsync<T>().GetAwaiter().GetResult();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
                 return result;
             }
             catch (JsonSerializationException exception)
@@ -78,6 +103,10 @@ namespace Vokabular.RestClient
             catch (JsonReaderException exception)
             {
                 throw new HttpErrorCodeException("Invalid response JSON format", exception, HttpStatusCode.BadGateway);
+            }
+            catch (InvalidOperationException exception)
+            {
+                throw new HttpErrorCodeException("Invalid response XML format", exception, HttpStatusCode.BadGateway);
             }
         }
 
@@ -177,7 +206,7 @@ namespace Vokabular.RestClient
                     ProcessResponseInternal(response);
                     var contentHeaders = response.Content.Headers;
                     var contentType = contentHeaders.ContentType;
-                    var fileName = contentHeaders.ContentDisposition.FileName;
+                    var fileName = contentHeaders.ContentDisposition?.FileName;
                     var fileSize = contentHeaders.ContentLength;
                     var resultStream = await response.Content.ReadAsStreamAsync();
 
@@ -240,11 +269,15 @@ namespace Vokabular.RestClient
             {
                 try
                 {
+                    var fileStreamContent = new StreamContent(data, StreamBufferSize);
+                    fileStreamContent.Headers.ContentType = new MediaTypeHeaderValue(ContentTypes.ApplicationOctetStream);
+
                     var content = new MultipartFormDataContent();
-                    content.Add(new StreamContent(data, StreamBufferSize), "file");
+                    content.Add(fileStreamContent, "file");
 
                     var request = CreateRequestMessage(HttpMethod.Post, uriPath, headers);
                     request.Content = content;
+                    request.Headers.TransferEncodingChunked = true;
 
                     var response = await m_client.SendAsync(request);
 
@@ -265,10 +298,12 @@ namespace Vokabular.RestClient
                 try
                 {
                     var content = new StreamContent(data, StreamBufferSize);
+                    content.Headers.ContentType = new MediaTypeHeaderValue(ContentTypes.ApplicationOctetStream);
 
                     var request = CreateRequestMessage(HttpMethod.Post, uriPath, headers);
                     request.Content = content;
-
+                    request.Headers.TransferEncodingChunked = true;
+                    
                     var response = await m_client.SendAsync(request);
 
                     ProcessResponseInternal(response);
@@ -319,14 +354,16 @@ namespace Vokabular.RestClient
             });
         }
 
-        protected Task DeleteAsync(string uriPath)
+        protected Task DeleteAsync(string uriPath, object data = null)
         {
             return Task.Run(async () =>
             {
                 try
                 {
                     var request = CreateRequestMessage(HttpMethod.Delete, uriPath);
-                    var response = await m_client.SendAsync(request);
+                    var response = data == null
+                        ? await m_client.SendAsync(request)
+                        : await m_client.SendAsJsonAsync(request, data);
 
                     ProcessResponseInternal(response);
                 }
@@ -337,17 +374,60 @@ namespace Vokabular.RestClient
             });
         }
 
-        private void EnsureSuccessStatusCode(HttpResponseMessage response)
+        protected void EnsureSecuredClient()
         {
-            if (!response.IsSuccessStatusCode)
+            if (m_client.BaseAddress.Scheme != "https")
             {
-                throw new HttpErrorCodeException(GetExceptionMessageFromResponse(response), response.StatusCode);
+                throw new InvalidOperationException($"The client is not configured to use secured channel (HTTPS), current scheme is {m_client.BaseAddress.Scheme}");
             }
         }
 
-        private string GetExceptionMessageFromResponse(HttpResponseMessage response)
+        private void EnsureSuccessStatusCode(HttpResponseMessage response)
         {
-            return string.Format("{0} ({1})", response.ReasonPhrase, (int)response.StatusCode);
+            if (response.IsSuccessStatusCode)
+            {
+                return;
+            }
+
+            var responseStatusCode = response.StatusCode;
+            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            if (responseStatusCode == HttpStatusCode.BadRequest && TryDeserializeValidationResult(responseContent, out var validationResult))
+            {
+                throw new HttpErrorCodeException(validationResult.Message, responseStatusCode, validationResult.Errors);
+            }
+
+            var exceptionMessage = GetExceptionMessage(responseContent, responseStatusCode);
+            throw new HttpErrorCodeException(exceptionMessage, response.StatusCode);
+        }
+
+        private bool TryDeserializeValidationResult(string responseContent, out ValidationResultContract validationResult)
+        {
+            validationResult = null;
+            if (!(responseContent.StartsWith("{") && responseContent.EndsWith("}")))
+            {
+                return false;
+            }
+
+            try
+            {
+                var result = responseContent.Deserialize<ValidationResultContract>();
+                validationResult = result;
+                return true;
+            }
+            catch (JsonSerializationException)
+            {
+                return false;
+            }
+            catch (JsonReaderException)
+            {
+                return false;
+            }
+        }
+
+        private string GetExceptionMessage(string message, HttpStatusCode statusCode)
+        {
+            return $"({(int) statusCode}) {message}";
         }
 
         protected string GetCurrentMethod([CallerMemberName] string methodName = null)

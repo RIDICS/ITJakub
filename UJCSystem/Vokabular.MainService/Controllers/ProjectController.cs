@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Parameter;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.MainService.Utils.Documentation;
 using Vokabular.RestClient.Headers;
 using Vokabular.Shared.DataContracts.Types;
+using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
 
 namespace Vokabular.MainService.Controllers
 {

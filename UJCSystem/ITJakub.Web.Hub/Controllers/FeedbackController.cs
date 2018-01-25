@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using ITJakub.Web.Hub.Core.Communication;
-using ITJakub.Web.Hub.Core.Identity;
 using ITJakub.Web.Hub.Models.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Controllers

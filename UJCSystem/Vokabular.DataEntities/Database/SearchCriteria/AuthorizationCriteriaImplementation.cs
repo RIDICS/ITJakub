@@ -8,29 +8,25 @@ namespace Vokabular.DataEntities.Database.SearchCriteria
 {
     public class AuthorizationCriteriaImplementation : ICriteriaImplementationBase
     {
-        public CriteriaKey CriteriaKey
-        {
-            get { return CriteriaKey.Authorization; }
-        }
+        public CriteriaKey CriteriaKey => CriteriaKey.Authorization;
 
         public SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract, Dictionary<string, object> metadataParameters)
         {
-            throw new NotSupportedException("Permissions are currently not supported");
-            //var authorizationCriteria = (AuthorizationCriteriaContract)searchCriteriaContract;
+            var authorizationCriteria = (AuthorizationCriteriaContract) searchCriteriaContract;
 
-            //var bookAlias = string.Format("ba{0}", Guid.NewGuid().ToString("N"));
-            //var permissionAlias = string.Format("pa{0}", Guid.NewGuid().ToString("N"));
-            //var groupAlias = string.Format("ga{0}", Guid.NewGuid().ToString("N"));
-            //var userAlias = string.Format("ua{0}", Guid.NewGuid().ToString("N"));
+            var permissionAlias = string.Format("p{0:N}", Guid.NewGuid());
+            var userGroupAlias = string.Format("ug{0:N}", Guid.NewGuid());
+            var userAlias = string.Format("u{0:N}", Guid.NewGuid());
 
-            //var userUniqueParameterName = string.Format("up{0}", Guid.NewGuid().ToString("N"));
-            //metadataParameters.Add(userUniqueParameterName, authorizationCriteria.UserId);
-          
-            //return new SearchCriteriaQuery
-            //{
-            //    Join = string.Format("inner join bv.Book {0} inner join {0}.Permissions {1} inner join {1}.Group {2} inner join {2}.Users {3}", bookAlias, permissionAlias, groupAlias, userAlias),
-            //    Where = string.Format("{0}.Id = (:{1})", userAlias, userUniqueParameterName),
-            //};
+            var uniqueParameterName = $"param{metadataParameters.Count}";
+            metadataParameters.Add(uniqueParameterName, authorizationCriteria.UserId);
+
+            return new SearchCriteriaQuery
+            {
+                CriteriaKey = CriteriaKey,
+                Join = string.Format("inner join project.Permissions {0} inner join {0}.UserGroup {1} inner join {1}.Users {2}", permissionAlias, userGroupAlias, userAlias),
+                Where = $"{userAlias}.Id = (:{uniqueParameterName})",
+            };
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
-using Elasticsearch.Net;
+using Microsoft.Extensions.Options;
 using Vokabular.FulltextService.Core.Communication;
+using Vokabular.FulltextService.Core.Options;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.FulltextService.Core.Managers
@@ -8,8 +9,7 @@ namespace Vokabular.FulltextService.Core.Managers
     public abstract class ElasticsearchManagerBase
     {
         protected readonly CommunicationProvider CommunicationProvider;
-        protected const string SnapshotIndex = "snapshotindex"; 
-        protected const string PageIndex = "pageindex"; 
+        private readonly IOptions<IndicesOption> m_indicesOptions;
         protected const string PageType = "page";
         protected const string SnapshotType = "snapshot";
         protected const string SnapshotIdField = "snapshotId";
@@ -18,15 +18,20 @@ namespace Vokabular.FulltextService.Core.Managers
         protected const string SnapshotTextField = "snapshotText";
         protected const string IdField = "_id";
         protected const string TitleField = "title";
-        protected const string AuthorField = "author";
-        protected const string DatingField = "dating";
+        protected const string AuthorField = "authorsLabel";
+        protected const string DatingField = "originDate";
 
         private const string BadSortValueErrorMessage = "Bad sorting value";
 
-        protected ElasticsearchManagerBase(CommunicationProvider communicationProvider)
+        protected ElasticsearchManagerBase(CommunicationProvider communicationProvider, IOptions<IndicesOption> indicesOptions)
         {
             CommunicationProvider = communicationProvider;
+            m_indicesOptions = indicesOptions;
         }
+
+        protected string SnapshotIndex => m_indicesOptions.Value.SnapshotIndex;
+
+        protected string PageIndex => m_indicesOptions.Value.PageIndex;
 
         protected string GetElasticFieldName(SortTypeEnumContract sortValue)
         {
@@ -43,7 +48,5 @@ namespace Vokabular.FulltextService.Core.Managers
                     throw new ArgumentException(BadSortValueErrorMessage);
             }
         }
-
-        
     }
 }

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ITJakub.CardFile.Core.DataContractEntities;
+using Vokabular.CardFile.Core.DataContractEntities;
 using Vokabular.MainService.DataContracts.Contracts.CardFile;
 
 namespace ITJakub.ITJakubService.Core.AutoMapperProfiles

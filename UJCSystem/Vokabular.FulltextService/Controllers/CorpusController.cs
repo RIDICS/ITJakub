@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using Vokabular.FulltextService.Core.Managers;
-using Vokabular.Shared.DataContracts.Search;
-using Vokabular.Shared.DataContracts.Search.RequestContracts;
-using Vokabular.Shared.DataContracts.Search.ResultContracts;
+using Vokabular.FulltextService.DataContracts.Contracts;
+using Vokabular.Shared.DataContracts.Search.Corpus;
+using Vokabular.Shared.DataContracts.Search.Request;
 
 namespace Vokabular.FulltextService.Controllers
 {
@@ -15,6 +16,7 @@ namespace Vokabular.FulltextService.Controllers
         {
             m_searchManager = searchManager;
         }
+
         /// <summary>
         /// Search in corpus
         /// </summary>
@@ -34,7 +36,7 @@ namespace Vokabular.FulltextService.Controllers
         /// </param>
         /// <returns></returns>
         [HttpPost("search")]
-        public CorpusSearchResultDataList SearchCorpus([FromBody] CorpusSearchRequestContract searchRequest)
+        public List<CorpusSearchResultContract> SearchCorpus([FromBody] CorpusSearchRequestContract searchRequest)
         {
             var result = m_searchManager.SearchCorpusByCriteria(searchRequest);
             return result;

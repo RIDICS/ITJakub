@@ -17,7 +17,7 @@ using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Criteria;
-using Vokabular.Shared.DataContracts.Search.RequestContracts;
+using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
@@ -69,7 +69,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 
         public ActionResult Feedback()
         {
-            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, GetUserName());
+            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, IsUserLoggedIn());
             return View(viewModel);
         }
 
@@ -153,83 +153,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 return Json(new {count});
             }
         }
-
-        [HttpGet]
-        public ActionResult GetHitBookIdsPaged(string text, SortTypeEnumContract sortBooksBy, SortDirectionEnumContract sortDirection, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds)//TODO mock, should return array of ids of books where results ocurred
-        {
-            using (var client = GetRestClient())
-            {
-                var ids = new List<long> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-                var ids2 = new List<long> { 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
-                var ids3 = new List<long> { 21, 22, 23, 24 };
-                var totalCount = 3;
-                if (start<10)
-                {
-                    totalCount = 24;
-                    return Json(new { list = ids, totalCount = totalCount });
-                }
-                if (start >= 10 && start <20)
-                {
-                    totalCount = 24;
-                    return Json(new { list = ids2, totalCount = totalCount });
-                }
-                if (start >= 20 && start < 30)
-                {
-                    totalCount = 24;
-                    return Json(new { list = ids3, totalCount = totalCount });
-                }
-                ids = null;
-                totalCount = 24;
-                return Json(new { list = ids, totalCount = totalCount });
-            }
-        }
-
-        [HttpGet]
-        public ActionResult AdvancedSearchGetHitBookIdsPaged(string json, SortTypeEnumContract sortBooksBy, SortDirectionEnumContract sortDirection, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds)//TODO mock, should return array of ids of books where results ocurred
-        {
-            using (var client = GetRestClient())
-            {
-                var ids = new List<long> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-                var ids2 = new List<long> { 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
-                var ids3 = new List<long> { 21, 22, 23, 24 };
-                var totalCount = 3;
-                if (start < 10)
-                {
-                    totalCount = 24;
-                    return Json(new { list = ids, totalCount = totalCount });
-                }
-                if (start >= 10 && start < 20)
-                {
-                    totalCount = 24;
-                    return Json(new { list = ids2, totalCount = totalCount });
-                }
-                if (start >= 20 && start < 30)
-                {
-                    totalCount = 24;
-                    return Json(new { list = ids3, totalCount = totalCount });
-                }
-                ids = null;
-                totalCount = 24;
-                return Json(new { list = ids, totalCount = totalCount });
-            }
-        }
-
-        public ActionResult GetAllPages(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)//TODO mock
-        {
-            Thread.Sleep(3000);
-            return Json(new
-            {
-                totalCount = 20,
-                pages = new { }
-            });
-            //return BadRequest();
-        }
-
-        public ActionResult AdvancedGetAllPages(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)//TODO mock
-        {
-            return Json(new {});
-        }
-
+        
         public ActionResult TextSearchFulltextPaged(string text, int start, int count, int contextLength, short sortingEnum, bool sortAsc,
             IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
@@ -255,92 +179,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 return Json(new {results = resultList});
             }
         }
-
-        [HttpGet]
-        public ActionResult TextSearchFulltextGetBookPage([FromQuery] CorpusLookupContractBasicSearch request)//TODO should return page with a certain amount of search results from a selected book id
-        {
-            var text = request.Text;
-
-            if (string.IsNullOrEmpty(text))
-            {
-                throw new ArgumentException("text can't be null in fulltext search");
-            }
-
-            var start = request.Start;
-            var count = request.Count;
-            var contextLength = request.ContextLength;
-            var snapshotId = request.SnapshotId;
-
-            var selectedBookIds = request.selectedBookIds;
-            var selectedCategoryIds = request.selectedCategoryIds;
-
-            var notes = new List<string>();
-            notes.Add("note1");
-            notes.Add("note2");
-            notes.Add("note3");
-
-            using (var client = GetRestClient())
-            {
-                var resultList = new List<CorpusSearchResultContract>();
-                if (start<12)
-                {
-                    for (var i = 0; i < 3; i++)
-                    {
-                        var result = new CorpusSearchResultContract
-                        {
-                            Author = "Autor",
-                            Title = "Title ",
-                            SourceAbbreviation = "Book" + snapshotId,
-                            RelicAbbreviation = "TIT",
-                            BookId = 1,
-                            OriginDate = "first half of 8th century",
-                            Notes = notes,
-                            PageResultContext = new PageWithContextContract
-                            {
-                                ContextStructure = new KwicStructure
-                                {
-                                    Before = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa before ",
-                                    Match = "match"+start,
-                                    After = " after ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
-                                }
-                            }
-                        };
-                        resultList.Add(result);
-                    }
-                }
-                if(start>=12 && start<=15)
-                {
-                    var random = new Random();
-                    var randomNumber = random.Next(0, 4);
-                    for (var i = 0; i < randomNumber; i++)
-                    {
-                        var result = new CorpusSearchResultContract
-                        {
-                            Author = "Autor",
-                            Title = "Title ",
-                            SourceAbbreviation = "Book" + snapshotId,
-                            RelicAbbreviation = "TIT",
-                            BookId = 2,
-                            OriginDate = "first half of 8th century",
-                            Notes = notes,
-                            PageResultContext = new PageWithContextContract
-                            {
-                                ContextStructure = new KwicStructure
-                                {
-                                    Before = "before ",
-                                    Match = "match"+start,
-                                    After = " after"
-                                }
-                            }
-                        };
-                        resultList.Add(result);
-                    }
-                }
-
-                return Json(new { results = resultList });
-            }
-        }
-
+        
         public ActionResult AdvancedSearchCorpusResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
@@ -363,8 +202,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             }
         }
 
-        public ActionResult AdvancedSearchCorpusPaged(string json, int start, int count, int contextLength, short sortingEnum, bool sortAsc,
-            IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        public ActionResult AdvancedSearchCorpusPaged(string json, int start, int count, int contextLength, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<List<SearchCriteriaContract>>(deserialized);
@@ -391,87 +229,158 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         }
 
         [HttpGet]
-        public ActionResult AdvancedSearchCorpusGetPage([FromQuery] CorpusLookupContractAdvancedSearch request)//TODO should return page with a certain amount of search results from a selected book id, search by json
+        public ActionResult GetHitBookIdsPaged(string text, SortTypeEnumContract sortBooksBy, SortDirectionEnumContract sortDirection, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var json = request.Json;
+            if (string.IsNullOrEmpty(text))
+            {
+                throw new ArgumentException("text can't be null in fulltext search");
+            }
+
+            var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
+
+            AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
+
+            return GetSearchResult(new CorpusSearchRequestContract
+            {
+                Start = start,
+                Count = count,
+                ConditionConjunction = listSearchCriteriaContracts,
+                Sort = sortBooksBy,
+                SortDirection = sortDirection,
+            });
+            
+        }
+
+        [HttpGet]
+        public ActionResult TextSearchFulltextGetBookPage([FromQuery] CorpusLookupContractBasicSearch request)
+        {
+            var text = request.Text;
+            if (string.IsNullOrEmpty(text))
+            {
+                throw new ArgumentException("text can't be null in fulltext search");
+            }
+
+            var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
+
             var start = request.Start;
             var count = request.Count;
             var contextLength = request.ContextLength;
             var snapshotId = request.SnapshotId;
 
+            return GetSearchResult(new CorpusSearchRequestContract
+                {
+                    Start = start,
+                    Count = count,
+                    ContextLength = contextLength,
+                    ConditionConjunction = listSearchCriteriaContracts,
+                }, snapshotId);
+        }
+        
+        [HttpGet]
+        public ActionResult AdvancedSearchGetHitBookIdsPaged(string json, SortTypeEnumContract sortBooksBy, SortDirectionEnumContract sortDirection, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            var listSearchCriteriaContracts = CreateTexCriteriaListFromJson(json, selectedBookIds, selectedCategoryIds);
+            
+            return GetSearchResult(new CorpusSearchRequestContract
+            {
+                Start = start,
+                Count = count,
+                ConditionConjunction = listSearchCriteriaContracts,
+                Sort = sortBooksBy,
+                SortDirection = sortDirection,
+            });
+        }
+
+        [HttpGet]
+        public ActionResult AdvancedSearchCorpusGetPage([FromQuery] CorpusLookupContractAdvancedSearch request)
+        {
+            var json = request.Json;
+            var listSearchCriteriaContracts = CreateTexCriteriaListFromJson(json);
+
+            var start = request.Start;
+            var count = request.Count;
+            var contextLength = request.ContextLength;
+            var snapshotId = request.SnapshotId;
+
+            return GetSearchResult(new CorpusSearchRequestContract
+            {
+                Start = start,
+                Count = count,
+                ContextLength = contextLength,
+                ConditionConjunction = listSearchCriteriaContracts,
+            }, snapshotId);
+        }
+
+        public ActionResult GetAllPages(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                throw new ArgumentException("text can't be null in fulltext search");
+            }
+
+            var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
+
+            AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
+
+            return GetTotalNumberOfOccurances(new SearchRequestContractBase
+            {
+                ConditionConjunction = listSearchCriteriaContracts,
+            });
+        }
+
+        public ActionResult AdvancedGetAllPages(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            var listSearchCriteriaContracts = CreateTexCriteriaListFromJson(json, selectedBookIds, selectedCategoryIds);
+
+            return GetTotalNumberOfOccurances(new SearchRequestContractBase
+            {
+                ConditionConjunction = listSearchCriteriaContracts,
+            });
+        }
+
+        private List<SearchCriteriaContract> CreateTexCriteriaListFromJson(string json, IList<long> selectedBookIds = null, IList<int> selectedCategoryIds = null)
+        {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<List<SearchCriteriaContract>>(deserialized);
 
             if (listSearchCriteriaContracts.FirstOrDefault(x => x.Key == CriteriaKey.Fulltext || x.Key == CriteriaKey.Heading || x.Key == CriteriaKey.Sentence || x.Key == CriteriaKey.TokenDistance) == null) //TODO add check on string values empty
             {
-                throw new ArgumentException("search in text can't be ommited");
+                throw new ArgumentException("Search in text can't be ommited");
             }
-
-            var selectedBookIds = request.selectedBookIds;
-            var selectedCategoryIds = request.selectedCategoryIds;
 
             AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
 
+            return listSearchCriteriaContracts;
+        }
+
+
+        private ActionResult GetSearchResult(CorpusSearchRequestContract request, long? snapshotId = null)
+        {
             using (var client = GetRestClient())
             {
-                var resultList = new List<CorpusSearchResultContract>();
-                if (start < 12)
+                if (snapshotId.HasValue)
                 {
-                    for (var i = 0; i < 3; i++)
-                    {
-                        var result = new CorpusSearchResultContract
-                        {
-                            Author = "Autor",
-                            Title = "Title " + selectedBookIds[0],
-                            RelicAbbreviation = "TIT",
-                            SourceAbbreviation = "Book"+ snapshotId,
-                            BookId = selectedBookIds[0],
-                            OriginDate = "first half of 8th century",
-                            PageResultContext = new PageWithContextContract
-                            {
-                                ContextStructure = new KwicStructure
-                                {
-                                    Before = "before ",
-                                    Match = "match",
-                                    After = " after"
-                                }
-                            }
-                        };
-                        resultList.Add(result);
-                    }
+                    var result = client.SearchCorpusSnapshot(snapshotId.Value, request);
+                    return Json(new { results = result });
                 }
-                if (start >= 12 && start <= 15)
+                else
                 {
-                    var random = new Random();
-                    var randomNumber = random.Next(0, 4);
-                    for (var i = 0; i < randomNumber; i++)
-                    {
-                        var result = new CorpusSearchResultContract
-                        {
-                            Author = "Autor",
-                            Title = "Title " + selectedBookIds[0],
-                            RelicAbbreviation = "TIT",
-                            SourceAbbreviation = "Book" + snapshotId,
-                            BookId = selectedBookIds[0],
-                            OriginDate = "first half of 8th century",
-                            PageResultContext = new PageWithContextContract
-                            {
-                                ContextStructure = new KwicStructure
-                                {
-                                    Before = "before ",
-                                    Match = "match",
-                                    After = " after"
-                                }
-                            }
-                        };
-                        resultList.Add(result);
-                    }
+                    var result = client.SearchCorpusSnapshots(request);
+                    return Json(new { list = result.SnapshotIds, totalCount = result.TotalCount });
                 }
-
-                return Json(new { results = resultList });
             }
         }
 
+        private ActionResult GetTotalNumberOfOccurances(SearchRequestContractBase request)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.SearchCorpusSnapshotsCount(request);
+                return Json(new { totalCount = result });
+            }
+        }
+
+        
         #endregion
     }
 }

@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Criteria;
-using Vokabular.Shared.DataContracts.Search.RequestContracts;
+using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
@@ -50,7 +50,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
 
         public ActionResult Feedback()
         {
-            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, GetUserName());
+            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, IsUserLoggedIn());
             return View(viewModel);
         }
 

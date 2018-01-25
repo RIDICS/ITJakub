@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using AutoMapper;
 using Vokabular.Core.Storage;
-using Vokabular.DataEntities.Database.ConditionCriteria;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
@@ -14,47 +12,76 @@ using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Search;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
-using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Results;
-using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
-using Vokabular.Shared.DataContracts.Search.RequestContracts;
-using Vokabular.Shared.DataContracts.Search.ResultContracts;
 
 namespace Vokabular.MainService.Core.Managers
 {
     public class BookManager
     {
-        private readonly CriteriaKey[] m_supportedSearchPageCriteria = {CriteriaKey.Fulltext, CriteriaKey.Heading, CriteriaKey.Sentence, CriteriaKey.Term, CriteriaKey.TokenDistance };
         private readonly MetadataRepository m_metadataRepository;
         private readonly BookRepository m_bookRepository;
         private readonly ResourceRepository m_resourceRepository;
         private readonly FileSystemManager m_fileSystemManager;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
+        private readonly AuthorizationManager m_authorizationManager;
         private readonly CategoryRepository m_categoryRepository;
+        private readonly BookTypeEnum[] m_filterBookType;
 
         public BookManager(MetadataRepository metadataRepository, CategoryRepository categoryRepository,
             BookRepository bookRepository, ResourceRepository resourceRepository, FileSystemManager fileSystemManager,
-            FulltextStorageProvider fulltextStorageProvider)
+            FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager)
         {
             m_metadataRepository = metadataRepository;
             m_bookRepository = bookRepository;
             m_resourceRepository = resourceRepository;
             m_fileSystemManager = fileSystemManager;
             m_fulltextStorageProvider = fulltextStorageProvider;
+            m_authorizationManager = authorizationManager;
             m_categoryRepository = categoryRepository;
+            m_filterBookType = new[] {BookTypeEnum.CardFile};
         }
         
-        public List<BookWithCategoriesContract> GetBooksByType(BookTypeEnumContract bookType)
+        public List<BookWithCategoriesContract> GetBooksByTypeForUser(BookTypeEnumContract bookType)
         {
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
-            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByBookType(bookTypeEnum));
+            var userId = m_authorizationManager.GetCurrentUserId();
+            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByBookType(bookTypeEnum, userId));
             var resultList = Mapper.Map<List<BookWithCategoriesContract>>(dbMetadataList);
             return resultList;
         }
 
+        public List<BookContract> GetAllBooksByType(BookTypeEnumContract bookType)
+        {
+            m_authorizationManager.CheckUserCanManagePermissions();
+            
+            var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
+            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetAllMetadataByBookType(bookTypeEnum));
+            var resultList = Mapper.Map<List<BookContract>>(dbMetadataList);
+            return resultList;
+        }
+
+        public List<BookTypeContract> GetBookTypeList()
+        {
+            var dbResult = m_bookRepository.InvokeUnitOfWork(x => x.GetBookTypes());
+            var filteredResult = dbResult.Where(x => !m_filterBookType.Contains(x.Type));
+            var result = Mapper.Map<List<BookTypeContract>>(filteredResult);
+            return result;
+        }
+        
+        public List<BookContract> GetBooksForUserGroup(int groupId, BookTypeEnumContract bookType)
+        {
+            var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
+            var dbResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataForUserGroup(bookTypeEnum, groupId));
+            var result = Mapper.Map<List<BookContract>>(dbResult);
+            return result;
+        }
+
         public BookContract GetBookInfo(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId);
+
             var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetLatestMetadataResource(projectId));
             var result = Mapper.Map<BookContract>(metadataResult);
             return result;
@@ -62,6 +89,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public SearchResultDetailContract GetBookDetail(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId);
+
             var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataWithDetail(projectId));
             var result = Mapper.Map<SearchResultDetailContract>(metadataResult);
             return result;
@@ -69,6 +98,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public AudioBookSearchResultContract GetAudioBookDetail(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId);
+
             var audioBookDetailWork = new GetAudioBookDetailWork(m_metadataRepository, m_bookRepository, projectId);
             var dbResult = audioBookDetailWork.Execute();
 
@@ -97,6 +128,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<PageContract> GetBookPageList(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId);
+
             var listResult = m_bookRepository.InvokeUnitOfWork(x => x.GetPageList(projectId));
             var result = Mapper.Map<List<PageContract>>(listResult);
             return result;
@@ -104,6 +137,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<ChapterHierarchyContract> GetBookChapterList(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId);
+
             var dbResult = m_bookRepository.InvokeUnitOfWork(x => x.GetChapterList(projectId));
             var resultList = ChaptersHelper.ChapterToHierarchyContracts(dbResult);
             
@@ -112,6 +147,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<TermContract> GetPageTermList(long resourcePageId)
         {
+            m_authorizationManager.AuthorizeResource(resourcePageId);
+
             var listResult = m_bookRepository.InvokeUnitOfWork(x => x.GetPageTermList(resourcePageId));
             var result = Mapper.Map<List<TermContract>>(listResult);
             return result;
@@ -119,6 +156,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public bool HasBookAnyText(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId);
+
             var bookTextCount =
                 m_bookRepository.InvokeUnitOfWork(x => x.GetPublishedResourceCount<TextResource>(projectId));
             return bookTextCount > 0;
@@ -126,6 +165,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public bool HasBookAnyImage(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId);
+
             var bookImageCount =
                 m_bookRepository.InvokeUnitOfWork(x => x.GetPublishedResourceCount<ImageResource>(projectId));
             return bookImageCount > 0;
@@ -133,18 +174,24 @@ namespace Vokabular.MainService.Core.Managers
 
         public bool HasBookPageText(long resourcePageId)
         {
+            m_authorizationManager.AuthorizeResource(resourcePageId);
+
             var textResourceList = m_bookRepository.InvokeUnitOfWork(x => x.GetPageText(resourcePageId));
             return textResourceList.Count > 0;
         }
 
         public bool HasBookPageImage(long resourcePageId)
         {
+            m_authorizationManager.AuthorizeResource(resourcePageId);
+
             var imageResourceList = m_bookRepository.InvokeUnitOfWork(x => x.GetPageImage(resourcePageId));
             return imageResourceList.Count > 0;
         }
 
         public string GetPageText(long resourcePageId, TextFormatEnumContract format, SearchPageRequestContract searchRequest = null)
         {
+            m_authorizationManager.AuthorizeResource(resourcePageId);
+
             var textResourceList = m_bookRepository.InvokeUnitOfWork(x => x.GetPageText(resourcePageId));
             var textResource = textResourceList.FirstOrDefault();
             if (textResource == null)
@@ -163,6 +210,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public FileResultData GetPageImage(long resourcePageId)
         {
+            m_authorizationManager.AuthorizeResource(resourcePageId);
+
             var imageResourceList = m_bookRepository.InvokeUnitOfWork(x => x.GetPageImage(resourcePageId));
             var imageResource = imageResourceList.FirstOrDefault();
             if (imageResource == null)
@@ -182,6 +231,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public FileResultData GetAudio(long audioId)
         {
+            m_authorizationManager.AuthorizeResource(audioId);
+
             var audioResource = m_bookRepository.InvokeUnitOfWork(x => x.GetPublishedResourceVersion<AudioResource>(audioId));
             if (audioResource == null)
             {
@@ -201,6 +252,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public string GetHeadwordText(long headwordId, TextFormatEnumContract format, SearchPageRequestContract request = null)
         {
+            m_authorizationManager.AuthorizeResource(headwordId);
+
             var headwordResource = m_bookRepository.InvokeUnitOfWork(x => x.GetHeadwordResource(headwordId, false));
             if (headwordResource == null)
             {
@@ -217,105 +270,35 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<string> GetHeadwordAutocomplete(string query, BookTypeEnumContract? bookType, IList<int> selectedCategoryIds, IList<long> selectedProjectIds)
         {
+            var userId = m_authorizationManager.GetCurrentUserId();
             var bookTypeEnum = Mapper.Map<BookTypeEnum?>(bookType);
             var result = m_bookRepository.InvokeUnitOfWork(x =>
             {
                 var allCategoryIds = selectedCategoryIds.Count > 0
                     ? m_categoryRepository.GetAllSubcategoryIds(selectedCategoryIds)
                     : selectedCategoryIds;
-                return x.GetHeadwordAutocomplete(query, bookTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteCount);
+                return x.GetHeadwordAutocomplete(query, bookTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteCount, userId);
             });
             return result.ToList();
         }
 
         public long SearchHeadwordRowNumber(HeadwordRowNumberSearchRequestContract request)
         {
+            var userId = m_authorizationManager.GetCurrentUserId();
+
             if (request.Category.BookType == null)
                 throw new ArgumentException("Null value of BookType is not supported");
 
-            var searchHeadwordRowNumberWork = new SearchHeadwordRowNumberWork(m_bookRepository, m_categoryRepository, request);
+            var searchHeadwordRowNumberWork = new SearchHeadwordRowNumberWork(m_bookRepository, m_categoryRepository, request, userId);
             var result = searchHeadwordRowNumberWork.Execute();
 
             return result;
         }
 
-        public List<PageContract> SearchPage(long projectId, SearchPageRequestContract request)
-        {
-            var termConditions = new List<SearchCriteriaContract>();
-            var fulltextConditions = new List<SearchCriteriaContract>();
-            foreach (var searchCriteriaContract in request.ConditionConjunction)
-            {
-                if (searchCriteriaContract.Key == CriteriaKey.Term)
-                {
-                    termConditions.Add(searchCriteriaContract);
-                }
-                else if (m_supportedSearchPageCriteria.Contains(searchCriteriaContract.Key))
-                {
-                    fulltextConditions.Add(searchCriteriaContract);
-                }
-                else
-                {
-                    throw new HttpErrorCodeException($"Not supported criteria key: {searchCriteriaContract.Key}", HttpStatusCode.BadRequest);
-                }
-            }
-
-            IList<PageResource> pagesByMetadata = null;
-            if (termConditions.Count > 0)
-            {
-                var termConditionCreator = new TermCriteriaPageConditionCreator();
-                termConditionCreator.AddCriteria(termConditions);
-                termConditionCreator.SetProjectIds(new[] { projectId });
-
-                pagesByMetadata = m_metadataRepository.InvokeUnitOfWork(x => x.GetPagesWithTerms(termConditionCreator));
-            }
-
-            IList<PageResource> pagesByFulltext = null;
-            if (fulltextConditions.Count > 0)
-            {
-                var projectIdentification = m_bookRepository.InvokeUnitOfWork(x => x.GetProjectIdentification(projectId));
-                
-                var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
-                var fulltextResult = fulltextStorage.SearchPageByCriteria(fulltextConditions, projectIdentification);
-
-                switch (fulltextResult.SearchResultType)
-                {
-                    case PageSearchResultType.TextId:
-                        pagesByFulltext = m_bookRepository.InvokeUnitOfWork(x => x.GetPagesByTextVersionId(fulltextResult.LongList));
-                        break;
-                    case PageSearchResultType.TextExternalId:
-                        pagesByFulltext = m_bookRepository.InvokeUnitOfWork(x => x.GetPagesByTextExternalId(fulltextResult.StringList, projectId));
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
-
-            IList<PageResource> resultPages;
-            if (pagesByMetadata != null && pagesByFulltext != null)
-            {
-                resultPages = pagesByMetadata.Intersect(pagesByFulltext)
-                    .OrderBy(x => x.Position)
-                    .ToList();
-            }
-            else if (pagesByFulltext != null)
-            {
-                resultPages = pagesByFulltext;
-            }
-            else if (pagesByMetadata != null)
-            {
-                resultPages = pagesByMetadata;
-            }
-            else
-            {
-                throw new ArgumentException("No supported search criteria was specified");
-            }
-
-            var result = Mapper.Map<List<PageContract>>(resultPages);
-            return result;
-        }
-
         public string GetEditionNote(long projectId, TextFormatEnumContract format)
         {
+            m_authorizationManager.AuthorizeBook(projectId);
+
             var editionNoteResource = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestEditionNote(projectId));
             if (editionNoteResource == null)
                 return null;

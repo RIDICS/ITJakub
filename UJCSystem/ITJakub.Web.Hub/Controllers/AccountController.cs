@@ -1,29 +1,29 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
 using ITJakub.Web.Hub.Core.Communication;
-using ITJakub.Web.Hub.Core.Identity;
 using ITJakub.Web.Hub.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.RestClient.Errors;
+using AuthenticationManager = ITJakub.Web.Hub.Core.Managers.AuthenticationManager;
 
 namespace ITJakub.Web.Hub.Controllers
 {
     [Authorize]
     public class AccountController : BaseController
     {
-        private readonly ApplicationUserManager m_userManager;
-        private readonly SignInManager<ApplicationUser> m_signInManager;
+        private readonly AuthenticationManager m_authenticationManager;
 
-        public AccountController(CommunicationProvider communicationProvider, ApplicationUserManager userManager, SignInManager<ApplicationUser> signInManager) : base(communicationProvider)
+        public AccountController(CommunicationProvider communicationProvider, AuthenticationManager authenticationManager) : base(communicationProvider)
         {
-            m_userManager = userManager;
-            m_signInManager = signInManager;
+            m_authenticationManager = authenticationManager;
         }
 
         //
         // GET: /Account/Login
         [AllowAnonymous]
-        //[RequireHttps]
+        [RequireHttps]
         public ActionResult Login(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
@@ -33,7 +33,7 @@ namespace ITJakub.Web.Hub.Controllers
         //
         // POST: /Account/Login
         [HttpPost]
-        //[RequireHttps]
+        [RequireHttps]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl = null)
@@ -44,16 +44,24 @@ namespace ITJakub.Web.Hub.Controllers
                 return View(model);
             }
 
-            var result =
-                await m_signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
-
-            if (result.Succeeded)
+            try
             {
+                await m_authenticationManager.SignInAsync(model);
+
                 return RedirectToLocal(returnUrl);
             }
-            else
+            catch (HttpErrorCodeException exception)
             {
-                ModelState.AddModelError("", "Přihlášení se nezdařilo.");
+                switch (exception.StatusCode)
+                {
+                    case HttpStatusCode.Unauthorized:
+                        ModelState.AddModelError("", "Přihlášení se nezdařilo.");
+                        break;
+                    default:
+                        ModelState.AddModelError("", exception.Message);
+                        break;
+                }
+
                 return View(model);
             }
         }
@@ -61,7 +69,7 @@ namespace ITJakub.Web.Hub.Controllers
         //
         // GET: /Account/Register
         [AllowAnonymous]
-        //[RequireHttps]
+        [RequireHttps]
         public ActionResult Register()
         {
             return View();
@@ -70,27 +78,41 @@ namespace ITJakub.Web.Hub.Controllers
         //
         // POST: /Account/Register
         [HttpPost]
-        //[RequireHttps]
+        [RequireHttps]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser
+                var user = new CreateUserContract
                 {
                     UserName = model.UserName,
                     Email = model.Email,
                     FirstName = model.FirstName,
-                    LastName = model.LastName
+                    LastName = model.LastName,
+                    NewPassword = model.Password,
                 };
-                var result = await m_userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+
+                try
                 {
-                    await m_signInManager.SignInAsync(user, false);
+                    using (var client = GetRestClient())
+                    {
+                        client.CreateNewUser(user);
+                    }
+
+                    await m_authenticationManager.SignInAsync(new LoginViewModel
+                    {
+                        UserName = model.UserName,
+                        Password = model.Password,
+                    });
+
                     return RedirectToLocal("");
                 }
-                AddErrors(result);
+                catch (HttpErrorCodeException e)
+                {
+                    AddErrors(e);
+                }
             }
 
             // If we got this far, something failed, redisplay form
@@ -103,21 +125,27 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> LogOut()
         {
-
-            using (var client = GetEncryptedClient())
-            {
-                client.RenewCommToken(User.Identity.Name);
-            }
-
-            await m_signInManager.SignOutAsync();
+            await m_authenticationManager.SignOutAsync();
+            
             return RedirectToLocal("");
         }
 
-        private void AddErrors(IdentityResult result)
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
         {
-            foreach (var error in result.Errors)
+            return View();
+        }
+
+        private void AddErrors(HttpErrorCodeException exception)
+        {
+            if (exception.ValidationErrors == null)
             {
-                ModelState.AddModelError("", string.Format("{0}: {1}", error.Code, error.Description));
+                ModelState.AddModelError(string.Empty, exception.Message);
+                return;
+            }
+            foreach (var error in exception.ValidationErrors)
+            {
+                ModelState.AddModelError(string.Empty, error.Message);
             }
         }
 

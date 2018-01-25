@@ -44,12 +44,14 @@ namespace Vokabular.MainService.Test.Containers
 
         public void AddPerWebRequest<TService>() where TService : class
         {
-            m_container.Register<TService>(Reuse.InCurrentScope);
+            //m_container.Register<TService>(Reuse.InCurrentScope);
+            m_container.Register<TService>(Reuse.Singleton);
         }
 
         public void AddPerWebRequest<TService, TImplementation>() where TService : class where TImplementation : class, TService
         {
-            m_container.Register<TService, TImplementation>(Reuse.InCurrentScope);
+            //m_container.Register<TService, TImplementation>(Reuse.InCurrentScope);
+            m_container.Register<TService, TImplementation>(Reuse.Singleton);
         }
 
         public void AddInstance<TImplementation>(TImplementation instance) where TImplementation : class
@@ -119,6 +121,11 @@ namespace Vokabular.MainService.Test.Containers
             throw new NotSupportedException();
             //m_container.Populate(services);
             //return m_container.Resolve<IServiceProvider>();
+        }
+
+        public void ReplacePerWebRequest<TService, TImplementation>() where TService : class where TImplementation : class, TService
+        {
+            m_container.Register<TService, TImplementation>(Reuse.Singleton, ifAlreadyRegistered: IfAlreadyRegistered.Replace);
         }
     }
 }

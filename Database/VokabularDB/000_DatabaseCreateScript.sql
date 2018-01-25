@@ -185,10 +185,10 @@ BEGIN TRAN
 	   [OriginDate] varchar(50) NULL,
 	   [NotBefore] date NULL,
 	   [NotAfter] date NULL,
-	   [ManuscriptIdno] nvarchar (50) NULL,
+	   [ManuscriptIdno] nvarchar (100) NULL,
 	   [ManuscriptSettlement] nvarchar (100) NULL,
 	   [ManuscriptCountry] nvarchar (100) NULL,
-	   [ManuscriptRepository] nvarchar (100) NULL,
+	   [ManuscriptRepository] nvarchar (200) NULL,
 	   [ManuscriptExtent] nvarchar(2000) NULL,
 	   [ManuscriptTitle] nvarchar(2000) NULL
     )
@@ -272,6 +272,13 @@ BEGIN TRAN
 	   [Name] nvarchar(255) NOT NULL,
 	   [FileName] varchar(255) NOT NULL,
 	   [FileId] varchar(100) NULL
+	)
+
+	CREATE TABLE [dbo].[EditionNoteResource]
+	(
+	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_EditionNoteResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
+	   [ExternalId] varchar(100) NULL,
+	   [BookVersion] bigint NULL CONSTRAINT [FK_EditionNoteResource(BookVersion)_BookVersionResource(ResourceVersionId)] FOREIGN KEY REFERENCES [dbo].[BookVersionResource](ResourceVersionId)
 	)
 
 	
