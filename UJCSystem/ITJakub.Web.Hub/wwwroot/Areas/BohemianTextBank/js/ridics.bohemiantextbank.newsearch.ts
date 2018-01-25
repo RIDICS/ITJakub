@@ -268,7 +268,8 @@ class BohemianTextBankNew {
     }
 
     private showLoading() {
-        $("#search-results-div").hide();
+        $("#result-abbrev-table").hide();
+        $("#result-table").hide();
         $("#corpus-search-results-table-div-loader").empty();
         $("#corpus-search-results-table-div-loader").show();
         $("#corpus-search-results-table-div-loader").addClass("loader");
@@ -278,7 +279,8 @@ class BohemianTextBankNew {
     private hideLoading() {
         $("#corpus-search-results-table-div-loader").removeClass("loader");
         $("#corpus-search-results-table-div-loader").hide();
-        $("#search-results-div").show();
+        $("#result-abbrev-table").show();
+        $("#result-table").show();
     }
 
     private printErrorMessage(message: string) {
@@ -361,7 +363,7 @@ class BohemianTextBankNew {
             var tdBefore = $("<td></td>");
             tdBefore.html(contextStructure.before);
 
-            var tdMatch = $("<td></td>");
+            var tdMatch = $(`<td class="text-center"></td>`);
             var matchSpanEl = $(`<span></span>`);
             matchSpanEl.addClass("match");
             matchSpanEl.html(contextStructure.match);
@@ -531,6 +533,7 @@ class BohemianTextBankNew {
                         }
                     }
                 });
+                return;
             }else{
             const search = getQueryStringParameterByName(this.urlSearchKey);
             if (this.search.isLastQueryJson()) {
