@@ -1,10 +1,9 @@
-﻿using Markdig.Helpers;
-using Markdig.Renderers;
+﻿using Markdig.Renderers;
 using Markdig.Renderers.Html;
 
 namespace Vokabular.FulltextService.Core.Helpers.Markdown.Extensions
 {
-    public class CommentRenderer : HtmlObjectRenderer<CommentMark>
+    public class CommentMarkRenderer : HtmlObjectRenderer<CommentMark>
     {
         protected override void Write(HtmlRenderer renderer, CommentMark obj)
         {

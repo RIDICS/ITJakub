@@ -36,9 +36,9 @@ namespace Vokabular.FulltextService.Core.Helpers.Markdown.Extensions
             htmlRenderer = renderer as HtmlRenderer;
             renderers = htmlRenderer?.ObjectRenderers;
 
-            if (renderers != null && !renderers.Contains<CommentRenderer>())
+            if (renderers != null && !renderers.Contains<CommentMarkRenderer>())
             {
-                renderers.Add(new CommentRenderer());
+                renderers.Add(new CommentMarkRenderer());
             }
         }
     }
