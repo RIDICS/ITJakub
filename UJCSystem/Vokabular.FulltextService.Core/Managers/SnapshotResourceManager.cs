@@ -42,7 +42,7 @@ namespace Vokabular.FulltextService.Core.Managers
 
         }
 
-        private MetadataResourceContract MapToDatabaseMetadata(SnapshotMetadataResourceContract metadata)
+        private MetadataResourceContract MapToDatabaseMetadata(SnapshotMetadataResourceContract metadata) //TODO automapper
         {
             return new MetadataResourceContract
             {

@@ -10,7 +10,7 @@ namespace Vokabular.FulltextService.Core.Helpers.Markdown.Extensions
         {
             if (renderer.EnableHtmlForInline)
             {
-                renderer.Write("<span id=\"").Write(obj.CommentId).Write("\">").Write(obj.CommentText).Write("</span>");
+                renderer.Write("<span id=\"").Write(obj.CommentId).Write("-text\">").Write(obj.CommentText).Write("</span>");
             }
         }
     }

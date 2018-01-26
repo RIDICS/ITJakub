@@ -1,6 +1,8 @@
 ﻿using Vokabular.FulltextService.Core.Communication;
 using Vokabular.FulltextService.Core.Helpers;
+using Vokabular.FulltextService.Core.Helpers.Converters;
 using Vokabular.FulltextService.Core.Helpers.Markdown;
+using Vokabular.FulltextService.Core.Helpers.Validators;
 using Vokabular.FulltextService.Core.Managers;
 using Vokabular.Shared.Container;
 
@@ -21,6 +23,7 @@ namespace Vokabular.FulltextService.Core
 
             container.AddPerWebRequest<IMarkdownToHtmlConverter, MarkdigMarkdownToHtmlConverter>();
             container.AddPerWebRequest<ITextConverter, TextConverter>();
+            container.AddPerWebRequest<ITextValidator, TextValidator>();
         }
     }
 }
