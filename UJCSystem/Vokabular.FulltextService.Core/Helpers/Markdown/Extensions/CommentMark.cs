@@ -3,9 +3,9 @@ using Markdig.Syntax.Inlines;
 
 namespace Vokabular.FulltextService.Core.Helpers.Markdown.Extensions
 {
-    public class Comment : LeafInline
+    public class CommentMark : LeafInline
     {
         public StringSlice CommentId { get; set; }
-        public StringSlice CommentText { get; set; }
+        public StringSlice CommentContext { get; set; }
     }
 }

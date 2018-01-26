@@ -2,20 +2,29 @@
 using Markdig.Helpers;
 using Markdig.Parsers;
 using Markdig.Renderers;
+using Microsoft.Extensions.Options;
+using Vokabular.FulltextService.Core.Options;
 
 namespace Vokabular.FulltextService.Core.Helpers.Markdown.Extensions
 {
-    public class CommentExtension : IMarkdownExtension
+    public class CommentMarkExtension : IMarkdownExtension
     {
+        private readonly IOptions<SpecialCharsOption> m_options;
+
+        public CommentMarkExtension(IOptions<SpecialCharsOption> options)
+        {
+            m_options = options;
+        }
+
         public void Setup(MarkdownPipelineBuilder pipeline)
         {
             OrderedList<InlineParser> parsers;
 
             parsers = pipeline.InlineParsers;
 
-            if (!parsers.Contains<CommentParser>())
+            if (!parsers.Contains<CommentMarkParser>())
             {
-                parsers.Add(new CommentParser());
+                parsers.Add(new CommentMarkParser(m_options));
             }
         }
 

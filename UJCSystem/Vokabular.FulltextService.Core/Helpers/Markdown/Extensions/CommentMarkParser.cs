@@ -1,27 +1,29 @@
 ﻿using Markdig.Helpers;
 using Markdig.Parsers;
+using Microsoft.Extensions.Options;
 
 namespace Vokabular.FulltextService.Core.Helpers.Markdown.Extensions
 {
-    public class CommentParser : InlineParser
+    public class CommentMarkParser : InlineParser
     {
+        private readonly string m_escapeChar;
+
         private static readonly char[] m_openingCharacters =
         {
             '$'
         };
 
-        public CommentParser()
+        public CommentMarkParser(IOptions<Options.SpecialCharsOption> options)
         {
             OpeningCharacters = m_openingCharacters;
+            m_escapeChar = options.Value.EscapeCharacter;
         }
 
         public override bool Match(InlineProcessor processor, ref StringSlice slice)
         {
-            bool matchFound;
+            bool matchFound = false;
             char previous;
-
-            matchFound = false;
-
+            
             previous = slice.PeekCharExtra(-1);
 
             if (previous.IsWhiteSpaceOrZero() || previous == '(' || previous == '[')
@@ -65,7 +67,7 @@ namespace Vokabular.FulltextService.Core.Helpers.Markdown.Extensions
                     current = slice.NextChar();
                     inlineStart = processor.GetSourcePosition(slice.Start, out int line, out int column);
 
-                    processor.Inline = new Comment()
+                    processor.Inline = new CommentMark()
                     {
                         Span =
                         {
@@ -75,7 +77,7 @@ namespace Vokabular.FulltextService.Core.Helpers.Markdown.Extensions
                         Line = line,
                         Column = column,
                         CommentId = new StringSlice(slice.Text, start, endOfId - 1),
-                        CommentText = new StringSlice(slice.Text, endOfId + 1, endOfComment)
+                        CommentContext = new StringSlice(slice.Text, endOfId + 1, endOfComment)
                     };
 
                     matchFound = true;
