@@ -249,7 +249,7 @@ namespace Vokabular.FulltextService.Core.Helpers
             {
                 throw new Exception(response.DebugInformation);
             }
-
+            
             return new CorpusSearchSnapshotsResultContract
             {
                 TotalCount = response.Total,
@@ -303,6 +303,37 @@ namespace Vokabular.FulltextService.Core.Helpers
             }
             
             return resultList;
+        }
+
+        public CorpusSearchSnapshotsResultContract ProcessSearchCorpusSnapshotsByCriteriaFetchResultCount(ISearchResponse<SnapshotResourceContract> response, string highlightTag)
+        {
+            if (!response.IsValid)
+            {
+                throw new Exception(response.DebugInformation);
+            }
+
+            Dictionary<long, long> resultsCount = new Dictionary<long, long>();
+
+            foreach (var hit in response.Hits)
+            {
+                long resultsCounter = 0;
+                foreach (var value in hit.Highlights.Values)
+                {
+                    
+                    foreach (var highlight in value.Highlights)
+                    {
+                        var numberOfOccurences = GetNumberOfHighlitOccurences(highlight, highlightTag);
+                        resultsCounter += numberOfOccurences;
+                    }
+                }
+                resultsCount.Add(hit.Source.SnapshotId, resultsCounter);
+            }
+
+            return new CorpusSearchSnapshotsResultContract
+            {
+                ResultsInSnapshotsCount = resultsCount,
+                TotalCount = response.Total,
+            };
         }
     }
 }

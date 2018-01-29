@@ -229,7 +229,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetHitBookIdsPaged(string text, SortTypeEnumContract sortBooksBy, SortDirectionEnumContract sortDirection, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        public ActionResult GetHitBookIdsPaged(string text, SortTypeEnumContract sortBooksBy, SortDirectionEnumContract sortDirection, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds, bool fetchNumberOfResults = false)
         {
             if (string.IsNullOrEmpty(text))
             {
@@ -247,6 +247,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 ConditionConjunction = listSearchCriteriaContracts,
                 Sort = sortBooksBy,
                 SortDirection = sortDirection,
+                FetchNumberOfResults = fetchNumberOfResults,
             });
             
         }
@@ -277,7 +278,8 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         }
         
         [HttpGet]
-        public ActionResult AdvancedSearchGetHitBookIdsPaged(string json, SortTypeEnumContract sortBooksBy, SortDirectionEnumContract sortDirection, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        public ActionResult AdvancedSearchGetHitBookIdsPaged(string json, SortTypeEnumContract sortBooksBy, SortDirectionEnumContract sortDirection, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds, bool fetchNumberOfResults = false)
+
         {
             var listSearchCriteriaContracts = CreateTextCriteriaListFromJson(json, selectedBookIds, selectedCategoryIds);
             
@@ -288,6 +290,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 ConditionConjunction = listSearchCriteriaContracts,
                 Sort = sortBooksBy,
                 SortDirection = sortDirection,
+                FetchNumberOfResults = fetchNumberOfResults,
             });
         }
 
@@ -313,52 +316,52 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 
         public ActionResult CreatePaginatedStructure(string text, IList<long> selectedSnapshotIds, IList<int> selectedCategoryIds, int approximateNumberOfResultsPerPage)
         {
-            var allResults = GetAllPages(text, selectedSnapshotIds, selectedCategoryIds);
+            var allResults = GetTotalResultNumber(text, selectedSnapshotIds, selectedCategoryIds);
             var transientResults = 0;
             return null;//TODO
         }
 
         public ActionResult CreatePaginatedStructureAdvanced(string json, IList<long> selectedSnapshotIds, IList<int> selectedCategoryIds, int approximateNumberOfResultsPerPage)
         {
-            var allResults = AdvancedGetAllPages(json, selectedSnapshotIds, selectedCategoryIds);
+            var allResults = GetTotalResultNumberAdvanced(json, selectedSnapshotIds, selectedCategoryIds);
             var transientResults = 0;
             return null;//TODO
         }
 
-        public List<SnapshotResultsContract> GetAllPages(string text, IList<long> selectedSnapshotIds, IList<int> selectedCategoryIds)//TODO returns array of objects, that contain snapshotId and number of results in snapshotId
+        public ActionResult GetTotalResultNumber(string text, IList<long> selectedSnapshotIds, IList<int> selectedCategoryIds)
         {
             if (string.IsNullOrEmpty(text))
             {
                 throw new ArgumentException("text can't be null in fulltext search");
             }
 
-            //var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
+            var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
 
-            //AddCategoryCriteria(listSearchCriteriaContracts, selectedSnapshotIds, selectedCategoryIds);
+            AddCategoryCriteria(listSearchCriteriaContracts, selectedSnapshotIds, selectedCategoryIds);
 
-            //return GetTotalNumberOfOccurances(new SearchRequestContractBase
+            return GetTotalNumberOfResults(new SearchRequestContractBase
+            {
+                ConditionConjunction = listSearchCriteriaContracts,
+            });
+            //var allBookResults = new List<SnapshotResultsContract>();
+            //allBookResults.Add(new SnapshotResultsContract
             //{
-            //    ConditionConjunction = listSearchCriteriaContracts,
+            //    SnapshotId = 1,
+            //    ResultsInSnapshot = 2
             //});
-            var allBookResults = new List<SnapshotResultsContract>();
-            allBookResults.Add(new SnapshotResultsContract
-            {
-                SnapshotId = 1,
-                ResultsInSnapshot = 2
-            });
-            allBookResults.Add(new SnapshotResultsContract
-            {
-                SnapshotId = 2,
-                ResultsInSnapshot = 10
-            });
-            return allBookResults;
+            //allBookResults.Add(new SnapshotResultsContract
+            //{
+            //    SnapshotId = 2,
+            //    ResultsInSnapshot = 10
+            //});
+            //return allBookResults;
         }
 
-        public ActionResult AdvancedGetAllPages(string json, IList<long> selectedSnapshotIds, IList<int> selectedCategoryIds)//TODO returns array of objects, that contain snapshotId and number of results in snapshotId
+        public ActionResult GetTotalResultNumberAdvanced(string json, IList<long> selectedSnapshotIds, IList<int> selectedCategoryIds)
         {
             var listSearchCriteriaContracts = CreateTextCriteriaListFromJson(json, selectedSnapshotIds, selectedCategoryIds);
 
-            return GetTotalNumberOfOccurances(new SearchRequestContractBase
+            return GetTotalNumberOfResults(new SearchRequestContractBase
             {
                 ConditionConjunction = listSearchCriteriaContracts,
             });
@@ -392,12 +395,16 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 else
                 {
                     var result = client.SearchCorpusSnapshots(request);
+                    if (request.FetchNumberOfResults)
+                    {
+                        return Json(new {list = result.ResultsInSnapshotsCount, totalCount = result.TotalCount});
+                    }
                     return Json(new { list = result.SnapshotIds, totalCount = result.TotalCount });
                 }
             }
         }
 
-        private ActionResult GetTotalNumberOfOccurances(SearchRequestContractBase request)
+        private ActionResult GetTotalNumberOfResults(SearchRequestContractBase request)
         {
             using (var client = GetRestClient())
             {
@@ -405,7 +412,6 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 return Json(new { totalCount = result });
             }
         }
-
         
         #endregion
     }

@@ -162,13 +162,13 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             }
         }
 
-        public CorpusSearchSnapshotsResultContract SearchCorpusSnapshotsByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        public CorpusSearchSnapshotsResultContract SearchCorpusSnapshotsByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects, bool fetchNumberOfResults)
         {
             UpdateCriteriaWithSnapshotRestriction(criteria, projects);
 
             using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient())
             {
-                var result = fulltextServiceClient.SearchCorpusSnapshotsByCriteria(start, count, criteria);
+                var result = fulltextServiceClient.SearchCorpusSnapshotsByCriteria(start, count, criteria, fetchNumberOfResults);
                 return result;
             }
         }

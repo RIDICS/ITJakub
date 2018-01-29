@@ -285,37 +285,83 @@ namespace Vokabular.FulltextService.Core.Managers
             var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, SnapshotTextField);
 
             var client = CommunicationProvider.GetElasticClient();
-            
-     
-            var response = client.Search<SnapshotResourceContract>(s => s
-                .Index(SnapshotIndex)
-                .Type(SnapshotType)
-                .Source(sf => sf.Includes(i => i.Field(f => f.SnapshotId)))
-                .Query(q => q
-                    .Bool(b => b
-                        .Filter(filterQuery)
-                        .Must(mustQuery)
+
+            if (searchRequest.FetchNumberOfResults)
+            {
+                var response = client.Search<SnapshotResourceContract>(s => s
+                    .Index(SnapshotIndex)
+                    .Type(SnapshotType)
+                    .Source(sf => sf.Includes(i => i.Field(f => f.SnapshotId)))
+                    .Query(q => q
+                        .Bool(b => b
+                            .Filter(filterQuery)
+                            .Must(mustQuery)
+                        )
                     )
-                )
-                .From(searchRequest.Start ?? DefaultStart)
-                .Size(searchRequest.Count ?? DefaultSize)
-                .Sort(so =>
-                {
-                    if (searchRequest.SortDirection.HasValue && searchRequest.Sort.HasValue)
+                    .From(searchRequest.Start ?? DefaultStart)
+                    .Size(searchRequest.Count ?? DefaultSize)
+                    .Sort(so =>
                     {
-                        if (searchRequest.SortDirection.Value == SortDirectionEnumContract.Asc)
+                        if (searchRequest.SortDirection.HasValue && searchRequest.Sort.HasValue)
                         {
-                            return so.Ascending(GetElasticFieldName(searchRequest.Sort.Value));
+                            if (searchRequest.SortDirection.Value == SortDirectionEnumContract.Asc)
+                            {
+                                return so.Ascending(GetElasticFieldName(searchRequest.Sort.Value));
+                            }
+
+                            return so.Descending(GetElasticFieldName(searchRequest.Sort.Value));
                         }
 
-                        return so.Descending(GetElasticFieldName(searchRequest.Sort.Value));
-                    }
+                        return so.Ascending(GetElasticFieldName(SortTypeEnumContract.Title));
+                    })
+                    .Highlight(h => h
+                        .PreTags(HighlightTag)
+                        .PostTags(HighlightTag)
+                        .Fields(f => f
+                            .Field(SnapshotTextField)
+                            .NumberOfFragments(FragmentsCount)
+                            .FragmentSize(FragmentSize)
+                            .Type(HighlighterType)
+                        )
+                    )
+                );
 
-                    return so.Ascending(GetElasticFieldName(SortTypeEnumContract.Title));
-                })
-            );
+                return m_searchResultProcessor.ProcessSearchCorpusSnapshotsByCriteriaFetchResultCount(response, HighlightTag);
 
-            return  m_searchResultProcessor.ProcessSearchCorpusSnapshotsByCriteria(response);
+            }
+            else
+            {
+
+                var response = client.Search<SnapshotResourceContract>(s => s
+                    .Index(SnapshotIndex)
+                    .Type(SnapshotType)
+                    .Source(sf => sf.Includes(i => i.Field(f => f.SnapshotId)))
+                    .Query(q => q
+                        .Bool(b => b
+                            .Filter(filterQuery)
+                            .Must(mustQuery)
+                        )
+                    )
+                    .From(searchRequest.Start ?? DefaultStart)
+                    .Size(searchRequest.Count ?? DefaultSize)
+                    .Sort(so =>
+                    {
+                        if (searchRequest.SortDirection.HasValue && searchRequest.Sort.HasValue)
+                        {
+                            if (searchRequest.SortDirection.Value == SortDirectionEnumContract.Asc)
+                            {
+                                return so.Ascending(GetElasticFieldName(searchRequest.Sort.Value));
+                            }
+
+                            return so.Descending(GetElasticFieldName(searchRequest.Sort.Value));
+                        }
+
+                        return so.Ascending(GetElasticFieldName(SortTypeEnumContract.Title));
+                    })
+                );
+
+                return m_searchResultProcessor.ProcessSearchCorpusSnapshotsByCriteria(response);
+            }
         }
 
         public List<CorpusSearchResultContract> SearchCorpusSnapshotByCriteria(long snapshotId, CorpusSearchRequestContract searchRequest)

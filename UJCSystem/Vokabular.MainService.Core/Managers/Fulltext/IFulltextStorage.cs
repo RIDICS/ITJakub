@@ -29,7 +29,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         string CreateNewTextVersion(TextResource textResource);
         string CreateNewHeadwordVersion(HeadwordResource headwordResource);
         string CreateNewEditionNoteVersion(EditionNoteResource editionNoteResource);
-        CorpusSearchSnapshotsResultContract SearchCorpusSnapshotsByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects);
+        CorpusSearchSnapshotsResultContract SearchCorpusSnapshotsByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects, bool fetchNumberOfresults);
         CorpusSearchResultDataList SearchCorpusSnapshotByCriteria(long projectId, int start, int count, int contextLength, List<SearchCriteriaContract> criteria);
         long SearchCorpusSnapshotsByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects);
     }

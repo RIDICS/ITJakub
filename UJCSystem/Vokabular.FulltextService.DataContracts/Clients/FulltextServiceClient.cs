@@ -178,9 +178,9 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             }
         }
 
-        public CorpusSearchSnapshotsResultContract SearchCorpusSnapshotsByCriteria(int start, int count, List<SearchCriteriaContract> searchCriterias)
+        public CorpusSearchSnapshotsResultContract SearchCorpusSnapshotsByCriteria(int start, int count, List<SearchCriteriaContract> searchCriterias, bool fetchNumberOfResults)
         {
-            var searchRequest = new CorpusSearchRequestContract { Start = start, Count = count, ConditionConjunction = searchCriterias };
+            var searchRequest = new CorpusSearchRequestContract { Start = start, Count = count, ConditionConjunction = searchCriterias, FetchNumberOfResults = fetchNumberOfResults };
             try
             {
                 var result = Post<CorpusSearchSnapshotsResultContract>("pagedcorpus/search", searchRequest);
