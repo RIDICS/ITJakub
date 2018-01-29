@@ -268,7 +268,8 @@ class BohemianTextBankNew {
     }
 
     private showLoading() {
-        $("#search-results-div").hide();
+        $("#result-abbrev-table").hide();
+        $("#result-table").hide();
         $("#corpus-search-results-table-div-loader").empty();
         $("#corpus-search-results-table-div-loader").show();
         $("#corpus-search-results-table-div-loader").addClass("loader");
@@ -278,7 +279,8 @@ class BohemianTextBankNew {
     private hideLoading() {
         $("#corpus-search-results-table-div-loader").removeClass("loader");
         $("#corpus-search-results-table-div-loader").hide();
-        $("#search-results-div").show();
+        $("#result-abbrev-table").show();
+        $("#result-table").show();
     }
 
     private printErrorMessage(message: string) {
@@ -325,6 +327,8 @@ class BohemianTextBankNew {
     private fillResultsIntoTable(results: ICorpusSearchResult[]) {
         var tableBody = $("#resultsTableBody");
         const abbrevTableBody = $("#resultsAbbrevTableBody");
+        const undefinedReplaceString = "<Nezadáno>";
+
         for (var i = 0; i < results.length; i++) {
             var result = results[i];
             var pageContext = result.pageResultContext;
@@ -361,7 +365,7 @@ class BohemianTextBankNew {
             var tdBefore = $("<td></td>");
             tdBefore.html(contextStructure.before);
 
-            var tdMatch = $("<td></td>");
+            var tdMatch = $(`<td class="text-center"></td>`);
             var matchSpanEl = $(`<span></span>`);
             matchSpanEl.addClass("match");
             matchSpanEl.html(contextStructure.match);
@@ -416,7 +420,7 @@ class BohemianTextBankNew {
 
             var abbrevHref = $("<a></a>");
             abbrevHref.attr("href", `${getBaseUrl()}Editions/Editions/Listing?bookId=${bookId}&searchText=${this.search.getLastQuery()}&page=${pageId}`);
-            abbrevHref.html(acronym);
+            abbrevHref.text(acronym ? acronym : undefinedReplaceString);
 
             abbrevTd.append(abbrevHref);
 
@@ -521,16 +525,18 @@ class BohemianTextBankNew {
             if (this.compositionPageIsLast) {
                 if (this.transientResults.length) {
                     this.flushTransientResults();
-                }
-                bootbox.alert({
-                    title: "Attention",
-                    message: "This is a last page",
-                    buttons: {
-                        ok: {
-                            className: "btn-default"
+                }else {
+                    bootbox.alert({
+                        title: "Attention",
+                        message: "This is a last page",
+                        buttons: {
+                            ok: {
+                                className: "btn-default"
+                            }
                         }
-                    }
-                });
+                    });
+                }
+                return;
             }else{
             const search = getQueryStringParameterByName(this.urlSearchKey);
             if (this.search.isLastQueryJson()) {
@@ -869,21 +875,23 @@ class BohemianTextBankNew {
     }
 
     private loadAllPages() : JQuery.Deferred<any>{
-        const searchText = this.search.getLastQuery();
+        const searchQuery = this.search.getLastQuery();
         let ajax: JQuery.jqXHR;
         if (this.search.isLastQueryJson()) {
-            ajax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedGetAllPages`,
+            ajax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/CreatePaginatedStructureAdvanced`,
                 {
-                    text: searchText,
-                    selectedBookIds: this.bookIdsInQuery,
-                    selectedCategoryIds: this.categoryIdsInQuery
+                    json: searchQuery,
+                    selectedSnapshotIds: this.bookIdsInQuery,
+                    selectedCategoryIds: this.categoryIdsInQuery,
+                    approximateNumberOfResultsPerPage: this.approximateNumberOfResultsPerPage
                 });
         } else {
-            ajax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetAllPages`,
+            ajax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/CreatePaginatedStructure`,
                 {
-                    text: searchText,
-                    selectedBookIds: this.bookIdsInQuery,
-                    selectedCategoryIds: this.categoryIdsInQuery
+                    text: searchQuery,
+                    selectedSnapshotIds: this.bookIdsInQuery,
+                    selectedCategoryIds: this.categoryIdsInQuery,
+                    approximateNumberOfResultsPerPage: this.approximateNumberOfResultsPerPage
                 });
         }
         const deferred = $.Deferred();
