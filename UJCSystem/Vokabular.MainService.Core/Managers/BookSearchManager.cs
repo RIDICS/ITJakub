@@ -308,7 +308,7 @@ namespace Vokabular.MainService.Core.Managers
             var start = m_corpusSearchManager.GetCorpusStart(request.Start);
             var count = m_corpusSearchManager.GetCorpusCount(request.Count);
 
-            var result = fulltextStorage.SearchCorpusSnapshotsByCriteria(start, count, nonMetadataCriterias, projectIdentificatorList);
+            var result = fulltextStorage.SearchCorpusSnapshotsByCriteria(start, count, nonMetadataCriterias, projectIdentificatorList, request.FetchNumberOfResults);
 
             return result;
         }

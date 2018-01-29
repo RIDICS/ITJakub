@@ -7,6 +7,8 @@ namespace Vokabular.Shared.DataContracts.Search.Corpus
         public List<long> SnapshotIds { get; set; }
 
         public long TotalCount { get; set; }
+
+        public Dictionary<long, long> ResultsInSnapshotsCount { get; set; }
     
     }
 }

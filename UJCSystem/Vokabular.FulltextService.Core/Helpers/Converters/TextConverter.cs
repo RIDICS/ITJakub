@@ -2,7 +2,7 @@
 using Vokabular.FulltextService.Core.Helpers.Markdown;
 using Vokabular.Shared.DataContracts.Types;
 
-namespace Vokabular.FulltextService.Core.Helpers
+namespace Vokabular.FulltextService.Core.Helpers.Converters
 {
     public class TextConverter : ITextConverter
     {

@@ -1,6 +1,6 @@
 ﻿using Vokabular.Shared.DataContracts.Types;
 
-namespace Vokabular.FulltextService.Core.Helpers
+namespace Vokabular.FulltextService.Core.Helpers.Converters
 {
     public interface ITextConverter
     {

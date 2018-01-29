@@ -229,7 +229,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetHitBookIdsPaged(string text, SortTypeEnumContract sortBooksBy, SortDirectionEnumContract sortDirection, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        public ActionResult GetHitBookIdsPaged(string text, SortTypeEnumContract sortBooksBy, SortDirectionEnumContract sortDirection, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds, bool fetchNumberOfResults = false)
         {
             if (string.IsNullOrEmpty(text))
             {
@@ -247,6 +247,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 ConditionConjunction = listSearchCriteriaContracts,
                 Sort = sortBooksBy,
                 SortDirection = sortDirection,
+                FetchNumberOfResults = fetchNumberOfResults,
             });
             
         }
@@ -277,7 +278,8 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         }
         
         [HttpGet]
-        public ActionResult AdvancedSearchGetHitBookIdsPaged(string json, SortTypeEnumContract sortBooksBy, SortDirectionEnumContract sortDirection, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        public ActionResult AdvancedSearchGetHitBookIdsPaged(string json, SortTypeEnumContract sortBooksBy, SortDirectionEnumContract sortDirection, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds, bool fetchNumberOfResults = false)
+
         {
             var listSearchCriteriaContracts = CreateTextCriteriaListFromJson(json, selectedBookIds, selectedCategoryIds);
             
@@ -288,6 +290,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 ConditionConjunction = listSearchCriteriaContracts,
                 Sort = sortBooksBy,
                 SortDirection = sortDirection,
+                FetchNumberOfResults = fetchNumberOfResults,
             });
         }
 
@@ -322,7 +325,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 
             AddCategoryCriteria(listSearchCriteriaContracts, selectedSnapshotIds, selectedCategoryIds);
 
-            return GetTotalNumberOfOccurances(new SearchRequestContractBase
+            return GetTotalNumberOfResults(new SearchRequestContractBase
             {
                 ConditionConjunction = listSearchCriteriaContracts,
             });
@@ -332,7 +335,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         {
             var listSearchCriteriaContracts = CreateTextCriteriaListFromJson(json, selectedSnapshotIds, selectedCategoryIds);
 
-            return GetTotalNumberOfOccurances(new SearchRequestContractBase
+            return GetTotalNumberOfResults(new SearchRequestContractBase
             {
                 ConditionConjunction = listSearchCriteriaContracts,
             });
@@ -366,12 +369,16 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 else
                 {
                     var result = client.SearchCorpusSnapshots(request);
+                    if (request.FetchNumberOfResults)
+                    {
+                        return Json(new {list = result.ResultsInSnapshotsCount, totalCount = result.TotalCount});
+                    }
                     return Json(new { list = result.SnapshotIds, totalCount = result.TotalCount });
                 }
             }
         }
 
-        private ActionResult GetTotalNumberOfOccurances(SearchRequestContractBase request)
+        private ActionResult GetTotalNumberOfResults(SearchRequestContractBase request)
         {
             using (var client = GetRestClient())
             {
@@ -379,7 +386,6 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 return Json(new { totalCount = result });
             }
         }
-
         
         #endregion
     }

@@ -43,5 +43,7 @@ namespace Vokabular.Shared.DataContracts.Search.Request
         public SortTypeEnumContract? Sort { get; set; }
 
         public SortDirectionEnumContract? SortDirection { get; set; }
+
+        public bool FetchNumberOfResults { get; set; }
     }
 }
