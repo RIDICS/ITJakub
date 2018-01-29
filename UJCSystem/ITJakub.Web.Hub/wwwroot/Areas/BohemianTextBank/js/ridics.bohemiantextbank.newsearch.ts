@@ -19,6 +19,7 @@ class BohemianTextBankNew {
     private currentBookIndex = 0;
     private currentResultStart = -1;
     private currentViewPage = 1;
+    private totalViewPages = 0;
 
     private contextLength = -1;
 
@@ -561,8 +562,7 @@ class BohemianTextBankNew {
         this.currentBookId = -1;
     }
 
-    private corpusBasicSearchBookHits(text: string) {
-        if (!text) return;
+    private onSearchStart() {
         const nextPageEl = $(".indefinite-pagination-next-page");
         nextPageEl.prop("disabled", false);
         this.resetIds();
@@ -572,8 +572,15 @@ class BohemianTextBankNew {
         this.emptyResultsTable();
         this.resetHistory();
         this.compositionPageIsLast = false;
+        this.totalViewPages = 0;
         this.actualizeSelectedBooksAndCategoriesInQuery();
         this.showLoading();
+    }
+
+    private corpusBasicSearchBookHits(text: string) {
+        if (!text) return;
+
+        this.onSearchStart();
 
         this.loadNextCompositionResultPage(text);
     }
@@ -637,7 +644,7 @@ class BohemianTextBankNew {
         if (viewingPageEl.length && !pageHasBeenWrapped) {
             const entry: ICorpusSearchViewingPageHistoryEntry = JSON.parse(viewingPageEl.attr("data-viewing-page-structure"));
             this.compositionResultListStart = entry.compositionResultListStart;
-            this.currentResultStart = entry.hitResultStart;//TODO count?
+            this.currentResultStart = entry.hitResultStart;
             this.currentBookIndex = entry.bookIndex;
             console.log(`---PAGE ${previousPage} LAST INDEX---`);
             console.log(`comosition list start: ${this.compositionResultListStart}`);
@@ -651,15 +658,32 @@ class BohemianTextBankNew {
                 this.loadNextCompositionResultPage(this.search.getLastQuery(), true);
             }
         } else {
-            bootbox.alert({
-                title: "Attention",
-                message: "Page does not exist",
-                buttons: {
-                    ok: {
-                        className: "btn-default"
+            const isBasicPaginationMode = this.paginator.isBasicMode();
+            if (isBasicPaginationMode) {
+                bootbox.alert({
+                    title: "Attention",
+                    message: "Page does not exist",
+                    buttons: {
+                        ok: {
+                            className: "btn-default"
+                        }
                     }
+                });
+            } else {
+                if (pageNumber > this.totalViewPages) {
+                    bootbox.alert({
+                        title: "Attention",
+                        message: "Page does not exist",
+                        buttons: {
+                            ok: {
+                                className: "btn-default"
+                            }
+                        }
+                    });
+                } else {
+                    //TODO calculate page here
                 }
-            });
+            }
         }
     }
 
@@ -688,17 +712,8 @@ class BohemianTextBankNew {
 
     private corpusAdvancedSearchBookHits(json: string) {
         if (!json) return;
-        const nextPageEl = $(".indefinite-pagination-next-page");
-        nextPageEl.prop("disabled", false);
-        this.resetIds();
-        this.paginator.reset();//reset pagination
-        const firstPage = 1;
-        this.currentViewPage = firstPage;
-        this.emptyResultsTable();
-        this.resetHistory();
-        this.compositionPageIsLast = false;
-        this.actualizeSelectedBooksAndCategoriesInQuery();
-        this.showLoading();
+
+        this.onSearchStart();
 
         this.loadNextCompositionAdvancedResultPage(json);
     }
@@ -889,6 +904,7 @@ class BohemianTextBankNew {
         const deferred = $.Deferred();
         ajax.done((result) => {//TODO make interface
             const totalNumberOfPages = Math.ceil(result.totalCount / this.searchResultsOnPage);
+            this.totalViewPages = totalNumberOfPages;
             deferred.resolve(totalNumberOfPages);
         });
         ajax.fail(() => {
