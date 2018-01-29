@@ -90,7 +90,9 @@
     reset() {
         this.paginationContainer.off();
         if (this.slider) {
-            this.slider.slider("destroy");
+            if (this.slider.slider("instance")){
+                this.slider.slider("destroy");
+            }
         }
         if (this.goToPageInput) {
             this.goToPageInput.off();
@@ -223,8 +225,10 @@
             const text = `${pageNumber} / ${this.totalNumberOfPages}`;
             indicatorEl.text(text);
             if (this.slider) {
-                this.slider.slider("option", "value", pageNumber);
-                this.slider.find(".tooltip-inner").text(pageNumber);
+                if (this.slider.slider("instance")) {
+                    this.slider.slider("option", "value", pageNumber);
+                    this.slider.find(".tooltip-inner").text(pageNumber);    
+                }
             }
         }
     }
