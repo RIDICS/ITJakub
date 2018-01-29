@@ -36,18 +36,28 @@ namespace Vokabular.MainService.DataContracts.Contracts.Search
         public int Start { get; set; }
         public int Count { get; set; }
         public int ContextLength { get; set; }
-        public long SnapshotId { get; set; }
         public List<long> selectedBookIds { get; set; }
         public List<int> selectedCategoryIds { get; set; }
     }
 
-    public class CorpusLookupContractBasicSearch : CorpusLookupContractBase
+    public class CorpusLookupContractSearchGetPage : CorpusLookupContractBase
+    {
+        public long SnapshotId { get; set; }
+    }
+
+    public class CorpusLookupContractBasicSearch : CorpusLookupContractSearchGetPage
     {
         public string Text { get; set; }
     }
 
-    public class CorpusLookupContractAdvancedSearch : CorpusLookupContractBase
+    public class CorpusLookupContractAdvancedSearch : CorpusLookupContractSearchGetPage
     {
         public string Json { get; set; }
+    }
+
+    public class SnapshotResultsContract
+    {
+        public long SnapshotId { get; set; }
+        public long ResultsInSnapshot { get; set; }
     }
 }

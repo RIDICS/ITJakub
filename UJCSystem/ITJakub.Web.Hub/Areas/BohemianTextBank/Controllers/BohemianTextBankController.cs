@@ -279,7 +279,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         [HttpGet]
         public ActionResult AdvancedSearchGetHitBookIdsPaged(string json, SortTypeEnumContract sortBooksBy, SortDirectionEnumContract sortDirection, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var listSearchCriteriaContracts = CreateTexCriteriaListFromJson(json, selectedBookIds, selectedCategoryIds);
+            var listSearchCriteriaContracts = CreateTextCriteriaListFromJson(json, selectedBookIds, selectedCategoryIds);
             
             return GetSearchResult(new CorpusSearchRequestContract
             {
@@ -295,7 +295,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         public ActionResult AdvancedSearchCorpusGetPage([FromQuery] CorpusLookupContractAdvancedSearch request)
         {
             var json = request.Json;
-            var listSearchCriteriaContracts = CreateTexCriteriaListFromJson(json);
+            var listSearchCriteriaContracts = CreateTextCriteriaListFromJson(json);
 
             var start = request.Start;
             var count = request.Count;
@@ -311,26 +311,52 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             }, snapshotId);
         }
 
-        public ActionResult GetAllPages(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        public ActionResult CreatePaginatedStructure(string text, IList<long> selectedSnapshotIds, IList<int> selectedCategoryIds, int approximateNumberOfResultsPerPage)
+        {
+            var allResults = GetAllPages(text, selectedSnapshotIds, selectedCategoryIds);
+            var transientResults = 0;
+            return null;//TODO
+        }
+
+        public ActionResult CreatePaginatedStructureAdvanced(string json, IList<long> selectedSnapshotIds, IList<int> selectedCategoryIds, int approximateNumberOfResultsPerPage)
+        {
+            var allResults = AdvancedGetAllPages(json, selectedSnapshotIds, selectedCategoryIds);
+            var transientResults = 0;
+            return null;//TODO
+        }
+
+        public List<SnapshotResultsContract> GetAllPages(string text, IList<long> selectedSnapshotIds, IList<int> selectedCategoryIds)//TODO returns array of objects, that contain snapshotId and number of results in snapshotId
         {
             if (string.IsNullOrEmpty(text))
             {
                 throw new ArgumentException("text can't be null in fulltext search");
             }
 
-            var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
+            //var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
 
-            AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
+            //AddCategoryCriteria(listSearchCriteriaContracts, selectedSnapshotIds, selectedCategoryIds);
 
-            return GetTotalNumberOfOccurances(new SearchRequestContractBase
+            //return GetTotalNumberOfOccurances(new SearchRequestContractBase
+            //{
+            //    ConditionConjunction = listSearchCriteriaContracts,
+            //});
+            var allBookResults = new List<SnapshotResultsContract>();
+            allBookResults.Add(new SnapshotResultsContract
             {
-                ConditionConjunction = listSearchCriteriaContracts,
+                SnapshotId = 1,
+                ResultsInSnapshot = 2
             });
+            allBookResults.Add(new SnapshotResultsContract
+            {
+                SnapshotId = 2,
+                ResultsInSnapshot = 10
+            });
+            return allBookResults;
         }
 
-        public ActionResult AdvancedGetAllPages(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        public ActionResult AdvancedGetAllPages(string json, IList<long> selectedSnapshotIds, IList<int> selectedCategoryIds)//TODO returns array of objects, that contain snapshotId and number of results in snapshotId
         {
-            var listSearchCriteriaContracts = CreateTexCriteriaListFromJson(json, selectedBookIds, selectedCategoryIds);
+            var listSearchCriteriaContracts = CreateTextCriteriaListFromJson(json, selectedSnapshotIds, selectedCategoryIds);
 
             return GetTotalNumberOfOccurances(new SearchRequestContractBase
             {
@@ -338,7 +364,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             });
         }
 
-        private List<SearchCriteriaContract> CreateTexCriteriaListFromJson(string json, IList<long> selectedBookIds = null, IList<int> selectedCategoryIds = null)
+        private List<SearchCriteriaContract> CreateTextCriteriaListFromJson(string json, IList<long> selectedBookIds = null, IList<int> selectedCategoryIds = null)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<List<SearchCriteriaContract>>(deserialized);

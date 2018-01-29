@@ -878,18 +878,18 @@ class BohemianTextBankNew {
         const searchQuery = this.search.getLastQuery();
         let ajax: JQuery.jqXHR;
         if (this.search.isLastQueryJson()) {
-            ajax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedGetAllPages`,
+            ajax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/CreatePaginatedStructureAdvanced`,
                 {
                     json: searchQuery,
-                    selectedBookIds: this.bookIdsInQuery,
+                    selectedSnapshotIds: this.bookIdsInQuery,
                     selectedCategoryIds: this.categoryIdsInQuery,
                     approximateNumberOfResultsPerPage: this.approximateNumberOfResultsPerPage
                 });
         } else {
-            ajax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetAllPages`,
+            ajax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/CreatePaginatedStructure`,
                 {
                     text: searchQuery,
-                    selectedBookIds: this.bookIdsInQuery,
+                    selectedSnapshotIds: this.bookIdsInQuery,
                     selectedCategoryIds: this.categoryIdsInQuery,
                     approximateNumberOfResultsPerPage: this.approximateNumberOfResultsPerPage
                 });
