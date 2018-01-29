@@ -327,6 +327,8 @@ class BohemianTextBankNew {
     private fillResultsIntoTable(results: ICorpusSearchResult[]) {
         var tableBody = $("#resultsTableBody");
         const abbrevTableBody = $("#resultsAbbrevTableBody");
+        const undefinedReplaceString = "<Nezadáno>";
+
         for (var i = 0; i < results.length; i++) {
             var result = results[i];
             var pageContext = result.pageResultContext;
@@ -418,7 +420,7 @@ class BohemianTextBankNew {
 
             var abbrevHref = $("<a></a>");
             abbrevHref.attr("href", `${getBaseUrl()}Editions/Editions/Listing?bookId=${bookId}&searchText=${this.search.getLastQuery()}&page=${pageId}`);
-            abbrevHref.html(acronym);
+            abbrevHref.text(acronym ? acronym : undefinedReplaceString);
 
             abbrevTd.append(abbrevHref);
 
@@ -523,16 +525,17 @@ class BohemianTextBankNew {
             if (this.compositionPageIsLast) {
                 if (this.transientResults.length) {
                     this.flushTransientResults();
-                }
-                bootbox.alert({
-                    title: "Attention",
-                    message: "This is a last page",
-                    buttons: {
-                        ok: {
-                            className: "btn-default"
+                }else {
+                    bootbox.alert({
+                        title: "Attention",
+                        message: "This is a last page",
+                        buttons: {
+                            ok: {
+                                className: "btn-default"
+                            }
                         }
-                    }
-                });
+                    });
+                }
                 return;
             }else{
             const search = getQueryStringParameterByName(this.urlSearchKey);
@@ -872,21 +875,23 @@ class BohemianTextBankNew {
     }
 
     private loadAllPages() : JQuery.Deferred<any>{
-        const searchText = this.search.getLastQuery();
+        const searchQuery = this.search.getLastQuery();
         let ajax: JQuery.jqXHR;
         if (this.search.isLastQueryJson()) {
             ajax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedGetAllPages`,
                 {
-                    text: searchText,
+                    json: searchQuery,
                     selectedBookIds: this.bookIdsInQuery,
-                    selectedCategoryIds: this.categoryIdsInQuery
+                    selectedCategoryIds: this.categoryIdsInQuery,
+                    approximateNumberOfResultsPerPage: this.approximateNumberOfResultsPerPage
                 });
         } else {
             ajax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetAllPages`,
                 {
-                    text: searchText,
+                    text: searchQuery,
                     selectedBookIds: this.bookIdsInQuery,
-                    selectedCategoryIds: this.categoryIdsInQuery
+                    selectedCategoryIds: this.categoryIdsInQuery,
+                    approximateNumberOfResultsPerPage: this.approximateNumberOfResultsPerPage
                 });
         }
         const deferred = $.Deferred();
