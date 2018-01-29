@@ -7,20 +7,14 @@
       <generator class="identity" />
     </id>
     
-    <property name="Name">
-      <column name="Name" sql-type="varchar" not-null="true" unique="true" />
-    </property>    
+    <property name="Name" not-null="true" unique="true" />
     
-    <property name="Description">
-      <column name="Description" sql-type="varchar" not-null="false" />
-    </property>
+    <property name="Description" not-null="false" />
 
-    <property name="CreateTime">
-      <column name="CreateTime" sql-type="datetime" not-null="true" />
-    </property>
+    <property name="CreateTime" not-null="true" type="UtcDateTime" />
 
-    <many-to-one name="CreatedBy">
-      <column name="CreatedBy" sql-type="bigint" not-null="false" />
+    <many-to-one name="CreatedBy" not-null="false">
+      <column name="CreatedBy" sql-type="bigint" />
     </many-to-one>
     
     <bag name="Users" table="User_UserGroup" lazy="true">

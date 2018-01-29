@@ -10,11 +10,9 @@
                not-null="true"
                type="System.String" />
 
-    <property name="PermissionCategorization">
-      <column name="PermissionCategorization" sql-type="tinyint" not-null="true" />
-    </property>
+    <property name="PermissionCategorization" not-null="true" />
 
-    <bag name="UserGroups" table="SpecialPermission_UserGroup"  lazy="true">
+    <bag name="UserGroups" table="SpecialPermission_UserGroup" lazy="true">
       <key column="[SpecialPermission]" />
       <many-to-many class="UserGroup" column="[UserGroup]" />
     </bag>
@@ -22,107 +20,81 @@
     <subclass name="UploadBookPermission"
       discriminator-value="UploadBook">
 
-      <property name="CanUploadBook">
-        <column name="CanUploadBook" sql-type="bit" not-null="true" />
-      </property>
+      <property name="CanUploadBook" not-null="true" />
       
     </subclass>
     
     <subclass name="ManagePermissionsPermission"
       discriminator-value="ManagePermissions">
 
-      <property name="CanManagePermissions">
-        <column name="CanManagePermissions" sql-type="bit" not-null="true" />
-      </property>
+      <property name="CanManagePermissions" not-null="true" />
       
     </subclass>
     
     <subclass name="NewsPermission"
       discriminator-value="News">
 
-      <property name="CanAddNews">
-        <column name="CanAddNews" sql-type="bit" not-null="true" />
-      </property>
+      <property name="CanAddNews" not-null="true" />
       
     </subclass>
     
     <subclass name="FeedbackPermission"
       discriminator-value="Feedback">
 
-      <property name="CanManageFeedbacks">
-        <column name="CanManageFeedbacks" sql-type="bit" not-null="true" />
-      </property>
+      <property name="CanManageFeedbacks" not-null="true" />
       
     </subclass>
     
     <subclass name="CardFilePermission"
       discriminator-value="CardFile">
 
-      <property name="CanReadCardFile">
-        <column name="CanReadCardFile" sql-type="bit" not-null="true" />
-      </property>
+      <property name="CanReadCardFile" not-null="true" />
       
-      <property name="CardFileId">
-        <column name="CardFileId" not-null="true" />
-      </property>
+      <property name="CardFileId" not-null="true" />
       
-      <property name="CardFileName">
-        <column name="CardFileName" not-null="true" />
-      </property>
+      <property name="CardFileName" not-null="true" />
       
     </subclass>    
     
     <subclass name="AutoImportBookTypePermission"
       discriminator-value="Autoimport">
 
-      <property name="AutoImportIsAllowed">
-        <column name="AutoimportAllowed" sql-type="bit" not-null="true" />
-      </property>
+      <property name="AutoImportIsAllowed" column="AutoImportAllowed" not-null="true" />
 
-      <many-to-one name="BookType" class="BookType" column="AutoimportBookType" lazy="false"/>
+      <many-to-one name="BookType" class="BookType" column="AutoimportBookType" lazy="false" />
       
     </subclass>
     
     <subclass name="ReadLemmatizationPermission"
       discriminator-value="ReadLemmatization">
 
-      <property name="CanReadLemmatization">
-        <column name="CanReadLemmatization" sql-type="bit" not-null="true" />
-      </property>
+      <property name="CanReadLemmatization" not-null="true" />
       
     </subclass>
     
     <subclass name="EditLemmatizationPermission"
       discriminator-value="EditLemmatization">
 
-      <property name="CanEditLemmatization">
-        <column name="CanEditLemmatization" sql-type="bit" not-null="true" />
-      </property>
+      <property name="CanEditLemmatization" not-null="true" />
       
     </subclass>
     
     <subclass name="DerivateLemmatizationPermission"
       discriminator-value="DerivateLemmatization">
 
-      <property name="CanDerivateLemmatization">
-        <column name="CanDerivateLemmatization" sql-type="bit" not-null="true" />
-      </property>
+      <property name="CanDerivateLemmatization" not-null="true" />
       
     </subclass>
     
     <subclass name="EditionPrintTextPermission" discriminator-value="EditionPrintText">
 
-      <property name="CanEditionPrintText">
-        <column name="CanEditionPrintText" sql-type="bit" not-null="true" />
-      </property>
+      <property name="CanEditionPrintText" not-null="true" />
       
     </subclass>
 
     <subclass name="EditStaticTextPermission" discriminator-value="EditStaticText">
 
-      <property name="CanEditStaticText">
-        <column name="CanEditStaticText" sql-type="bit" not-null="true" />
-      </property>
+      <property name="CanEditStaticText" not-null="true" />
 
     </subclass>
     
