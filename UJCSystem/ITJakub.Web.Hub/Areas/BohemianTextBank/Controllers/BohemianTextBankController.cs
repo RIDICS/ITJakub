@@ -311,50 +311,24 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             }, snapshotId);
         }
 
-        public ActionResult CreatePaginatedStructure(string text, IList<long> selectedSnapshotIds, IList<int> selectedCategoryIds, int approximateNumberOfResultsPerPage)
-        {
-            var allResults = GetAllPages(text, selectedSnapshotIds, selectedCategoryIds);
-            var transientResults = 0;
-            return null;//TODO
-        }
-
-        public ActionResult CreatePaginatedStructureAdvanced(string json, IList<long> selectedSnapshotIds, IList<int> selectedCategoryIds, int approximateNumberOfResultsPerPage)
-        {
-            var allResults = AdvancedGetAllPages(json, selectedSnapshotIds, selectedCategoryIds);
-            var transientResults = 0;
-            return null;//TODO
-        }
-
-        public List<SnapshotResultsContract> GetAllPages(string text, IList<long> selectedSnapshotIds, IList<int> selectedCategoryIds)//TODO returns array of objects, that contain snapshotId and number of results in snapshotId
+        public ActionResult GetTotalResultNumber(string text, IList<long> selectedSnapshotIds, IList<int> selectedCategoryIds)
         {
             if (string.IsNullOrEmpty(text))
             {
                 throw new ArgumentException("text can't be null in fulltext search");
             }
 
-            //var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
+            var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
 
-            //AddCategoryCriteria(listSearchCriteriaContracts, selectedSnapshotIds, selectedCategoryIds);
+            AddCategoryCriteria(listSearchCriteriaContracts, selectedSnapshotIds, selectedCategoryIds);
 
-            //return GetTotalNumberOfOccurances(new SearchRequestContractBase
-            //{
-            //    ConditionConjunction = listSearchCriteriaContracts,
-            //});
-            var allBookResults = new List<SnapshotResultsContract>();
-            allBookResults.Add(new SnapshotResultsContract
+            return GetTotalNumberOfOccurances(new SearchRequestContractBase
             {
-                SnapshotId = 1,
-                ResultsInSnapshot = 2
+                ConditionConjunction = listSearchCriteriaContracts,
             });
-            allBookResults.Add(new SnapshotResultsContract
-            {
-                SnapshotId = 2,
-                ResultsInSnapshot = 10
-            });
-            return allBookResults;
         }
 
-        public ActionResult AdvancedGetAllPages(string json, IList<long> selectedSnapshotIds, IList<int> selectedCategoryIds)//TODO returns array of objects, that contain snapshotId and number of results in snapshotId
+        public ActionResult GetTotalResultNumberAdvanced(string json, IList<long> selectedSnapshotIds, IList<int> selectedCategoryIds)
         {
             var listSearchCriteriaContracts = CreateTextCriteriaListFromJson(json, selectedSnapshotIds, selectedCategoryIds);
 
