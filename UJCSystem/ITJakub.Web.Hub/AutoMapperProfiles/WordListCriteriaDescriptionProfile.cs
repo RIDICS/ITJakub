@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
-using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
+using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Search.CriteriaItem;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.AutoMapperProfiles
 {

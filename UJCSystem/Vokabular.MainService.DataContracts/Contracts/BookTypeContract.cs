@@ -1,4 +1,4 @@
-﻿using Vokabular.MainService.DataContracts.Contracts.Type;
+﻿using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.DataContracts.Contracts
 {

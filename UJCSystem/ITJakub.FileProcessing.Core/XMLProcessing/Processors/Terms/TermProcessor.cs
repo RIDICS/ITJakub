@@ -1,8 +1,7 @@
 ﻿using System.Reflection;
 using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
-using ITJakub.DataEntities.Database.Repositories;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 using log4net;
 
@@ -10,14 +9,10 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Terms
 {
     public class TermProcessor : ListProcessorBase
     {
-        private readonly TermRepository m_termRepository;
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public TermProcessor(TermRepository termsRepository, 
-            XsltTransformationManager xsltTransformationManager, 
-            IKernel container) : base(xsltTransformationManager, container)
+        public TermProcessor(XsltTransformationManager xsltTransformationManager, IKernel container) : base(xsltTransformationManager, container)
         {
-            m_termRepository = termsRepository;
         }
 
         protected override string NodeName
@@ -25,33 +20,23 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Terms
             get { return "term"; }
         }
 
-        protected override void ProcessAttributes(BookVersion bookVersion, XmlReader xmlReader)
+        protected override void ProcessAttributes(BookData bookData, XmlReader xmlReader)
         {
             var termXmlId = xmlReader.GetAttribute("id");
             var position = xmlReader.GetAttribute("n");
             string termCategoryName = xmlReader.GetAttribute("subtype");
 
             string text = GetInnerContentAsString(xmlReader);
-
-
-            TermCategory termCategory = null;
-            if (!string.IsNullOrWhiteSpace(termCategoryName))
-            {
-                termCategory = m_termRepository.GetTermCategoryByName(termCategoryName) ?? new TermCategory {Name = termCategoryName};
-            }
-                
             
-
-            var term = new Term
+            var term = new TermData
             {
                 XmlId = termXmlId,
                 Position = long.Parse(position),
                 Text = text,
-                TermCategory = termCategory,
+                TermCategoryName = termCategoryName
             };
 
-            m_termRepository.SaveOrUpdate(term);
-
+            bookData.Terms.Add(term);
         }
     }
 }

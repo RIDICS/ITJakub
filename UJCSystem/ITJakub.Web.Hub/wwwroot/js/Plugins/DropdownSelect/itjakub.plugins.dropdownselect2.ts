@@ -174,7 +174,7 @@
             }
         });
 
-        this.favoriteManager.getFavoritesForBooks(this.bookIdList, (favoriteBooks) => {
+        this.favoriteManager.getFavoritesForBooks(this.bookType, this.bookIdList, (favoriteBooks) => {
             loadedFavoriteBooks = favoriteBooks;
 
             if (isAllLoaded()) {
@@ -208,13 +208,13 @@
             this.categories[category.id] = category;
             this.categoryIdList.push(category.id);
 
-            if (!category.parentCategoryId)
+            if (category.parentCategoryId == null)
                 this.rootCategory = category;
         }
 
         for (let i = 0; i < result.categories.length; i++) {
             let resultCategory = result.categories[i];
-            if (!resultCategory.parentCategoryId)
+            if (resultCategory.parentCategoryId == null)
                 continue;
 
             var parentCategory = this.categories[resultCategory.parentCategoryId];

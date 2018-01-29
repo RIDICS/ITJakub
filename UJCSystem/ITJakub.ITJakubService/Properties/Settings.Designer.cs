@@ -22,5 +22,14 @@ namespace ITJakub.ITJakubService.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:/ITJLocalStorage")]
+        public string FileStorageRootFolder {
+            get {
+                return ((string)(this["FileStorageRootFolder"]));
+            }
+        }
     }
 }

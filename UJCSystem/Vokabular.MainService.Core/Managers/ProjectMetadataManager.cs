@@ -1,54 +1,32 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Parameter;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.ProjectMetadata;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Core.Managers
 {
     public class ProjectMetadataManager
     {
         private readonly MetadataRepository m_metadataRepository;
-        private readonly UserManager m_userManager;
+        private readonly AuthenticationManager m_authenticationManager;
+        private readonly AuthorizationManager m_authorizationManager;
+        private readonly CategoryRepository m_categoryRepository;
 
-        public ProjectMetadataManager(MetadataRepository metadataRepository, UserManager userManager)
+        public ProjectMetadataManager(MetadataRepository metadataRepository,
+            AuthenticationManager authenticationManager, AuthorizationManager authorizationManager,
+            CategoryRepository categoryRepository)
         {
             m_metadataRepository = metadataRepository;
-            m_userManager = userManager;
-        }
-
-        public int CreatePublisher(PublisherContract data)
-        {
-            return new CreatePublisherWork(m_metadataRepository, data).Execute();
-        }
-
-        public int CreateLiteraryKind(string name)
-        {
-            return new CreateLiteraryKindWork(m_metadataRepository, name).Execute();
-        }
-
-        public int CreateLiteraryGenre(string name)
-        {
-            return new CreateLiteraryGenreWork(m_metadataRepository, name).Execute();
-        }
-
-        public List<PublisherContract> GetPublisherList()
-        {
-            var result = new GetPublisherListWork(m_metadataRepository).Execute();
-            return Mapper.Map<List<PublisherContract>>(result);
-        }
-
-        public List<LiteraryKindContract> GetLiteraryKindList()
-        {
-            var result = new GetLiteraryKindListWork(m_metadataRepository).Execute();
-            return Mapper.Map<List<LiteraryKindContract>>(result);
-        }
-
-        public List<LiteraryGenreContract> GetLiteraryGenreList()
-        {
-            var result = new GetLiteraryGenreListWork(m_metadataRepository).Execute();
-            return Mapper.Map<List<LiteraryGenreContract>>(result);
+            m_authenticationManager = authenticationManager;
+            m_authorizationManager = authorizationManager;
+            m_categoryRepository = categoryRepository;
         }
 
         public ProjectMetadataResultContract GetProjectMetadata(long projectId, GetProjectMetadataParameter parameters)
@@ -57,7 +35,7 @@ namespace Vokabular.MainService.Core.Managers
             var result = work.Execute();
             var resultContract = result != null
                 ? Mapper.Map<ProjectMetadataResultContract>(result)
-                : new ProjectMetadataResultContract {Publisher = new PublisherContract()};
+                : new ProjectMetadataResultContract();
 
             if (result != null && parameters.IsAnyAdditionalParameter())
             {
@@ -69,7 +47,7 @@ namespace Vokabular.MainService.Core.Managers
                 }
                 if (parameters.IncludeResponsiblePerson)
                 {
-                    resultContract.ResponsiblePersonList = Mapper.Map<List<ResponsiblePersonContract>>(project.ResponsiblePersons);
+                    resultContract.ResponsiblePersonList = Mapper.Map<List<ProjectResponsiblePersonContract>>(project.ResponsiblePersons);
                 }
                 if (parameters.IncludeKind)
                 {
@@ -79,6 +57,14 @@ namespace Vokabular.MainService.Core.Managers
                 {
                     resultContract.LiteraryGenreList = Mapper.Map<List<LiteraryGenreContract>>(project.LiteraryGenres);
                 }
+                if (parameters.IncludeOriginal)
+                {
+                    resultContract.LiteraryOriginalList = Mapper.Map<List<LiteraryOriginalContract>>(project.LiteraryOriginals);
+                }
+                if (parameters.IncludeKeyword)
+                {
+                    resultContract.KeywordList = Mapper.Map<List<KeywordContract>>(project.Keywords);
+                }
             }
 
             return resultContract;
@@ -86,28 +72,40 @@ namespace Vokabular.MainService.Core.Managers
 
         public long CreateNewProjectMetadataVersion(long projectId, ProjectMetadataContract data)
         {
-            var resultId = new CreateNewMetadataVersionWork(m_metadataRepository, projectId, data, m_userManager.GetCurrentUserId()).Execute();
+            var resultId = new CreateNewMetadataVersionWork(m_metadataRepository, projectId, data, m_authenticationManager.GetCurrentUserId()).Execute();
             return resultId;
         }
 
-        public void SetLiteraryKinds(long projectId, IntegerIdListContract kindIdList)
+        public List<string> GetPublisherAutocomplete(string query)
         {
-            new SetLiteraryKindWork(m_metadataRepository, projectId, kindIdList.IdList).Execute();
+            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetPublisherAutocomplete(query, DefaultValues.AutocompleteCount));
+            return result.ToList();
         }
 
-        public void SetLiteraryGenres(long projectId, IntegerIdListContract genreIdList)
+        public List<string> GetCopyrightAutocomplete(string query)
         {
-            new SetLiteraryGenreWork(m_metadataRepository, projectId, genreIdList.IdList).Execute();
+            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetCopyrightAutocomplete(query, DefaultValues.AutocompleteCount));
+            return result.ToList();
         }
 
-        public void SetAuthors(long projectId, IntegerIdListContract authorIdList)
+        public List<string> GetManuscriptRepositoryAutocomplete(string query)
         {
-            new SetAuthorsWork(m_metadataRepository, projectId, authorIdList.IdList).Execute();
+            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetManuscriptRepositoryAutocomplete(query, DefaultValues.AutocompleteCount));
+            return result.ToList();
         }
 
-        public void SetResponsiblePersons(long projectId, IntegerIdListContract responsiblePersonIdList)
+        public List<string> GetTitleAutocomplete(string query, BookTypeEnumContract? bookType, List<int> selectedCategoryIds, List<long> selectedProjectIds)
         {
-            new SetResponsiblePersonsWork(m_metadataRepository, projectId, responsiblePersonIdList.IdList).Execute();
+            var userId = m_authorizationManager.GetCurrentUserId();
+            var bookTypeEnum = Mapper.Map<BookTypeEnum?>(bookType);
+            var result = m_metadataRepository.InvokeUnitOfWork(x =>
+            {
+                var allCategoryIds = selectedCategoryIds.Count > 0
+                    ? m_categoryRepository.GetAllSubcategoryIds(selectedCategoryIds)
+                    : selectedCategoryIds;
+                return x.GetTitleAutocomplete(query, bookTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteCount, userId);
+            });
+            return result.ToList();
         }
     }
 }

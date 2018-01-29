@@ -18,18 +18,18 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Bibliography
 
         public ActionResult GetBookDetailInfo(long bookId)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var result = client.GetBookDetailInfoById(bookId);
+                var result = client.GetBookDetail(bookId);
                 return Json(result, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
         public ActionResult GetAudioBookDetailInfo(long bookId)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var result = client.GetAudioBookDetailInfoById(bookId);
+                var result = client.GetAudioBookDetail(bookId);
                 return Json(result, GetJsonSerializerSettingsForBiblModule());
             }
         }

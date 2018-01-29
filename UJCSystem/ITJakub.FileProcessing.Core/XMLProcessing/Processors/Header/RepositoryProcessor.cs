@@ -1,11 +1,11 @@
 using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
 {
-    public class RepositoryProcessor : ConcreteInstanceListProcessorBase<ManuscriptDescription>
+    public class RepositoryProcessor : ConcreteInstanceListProcessorBase<ManuscriptDescriptionData>
     {
         public RepositoryProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
@@ -17,7 +17,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             get { return "repository"; }
         }
 
-        protected override void ProcessElement(BookVersion bookVersion, ManuscriptDescription msDesc, XmlReader xmlReader)
+        protected override void ProcessElement(BookData bookData, ManuscriptDescriptionData msDesc, XmlReader xmlReader)
         {
             xmlReader.Read();                           //read text value
             string value = xmlReader.Value;

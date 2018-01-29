@@ -10,5 +10,11 @@
     <property name="TextType" not-null="true" />
 
     <many-to-one name="Project" class="Project" lazy="proxy" not-null="true" />
+
+    <bag name="Resources">
+      <key column="NamedResourceGroup" />
+      <one-to-many class="Resource" />
+    </bag>
+    
   </class>
 </hibernate-mapping>

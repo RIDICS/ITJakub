@@ -1,12 +1,12 @@
 using System;
 using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
 {
-    public class OrigDateProcessor : ConcreteInstanceListProcessorBase<ManuscriptDescription>
+    public class OrigDateProcessor : ConcreteInstanceListProcessorBase<ManuscriptDescriptionData>
     {
         public OrigDateProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
@@ -18,7 +18,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             get { return "origDate"; }
         }
 
-        protected override void ProcessElement(BookVersion bookVersion, ManuscriptDescription msDesc, XmlReader xmlReader)
+        protected override void ProcessElement(BookData bookData, ManuscriptDescriptionData msDesc, XmlReader xmlReader)
         {
             var notBefore = xmlReader.GetAttribute("notBefore");
             var notAfter = xmlReader.GetAttribute("notAfter");

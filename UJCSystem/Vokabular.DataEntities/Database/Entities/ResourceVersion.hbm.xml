@@ -15,27 +15,40 @@
     
     <many-to-one name="Resource" class="Resource" lazy="proxy" not-null="true" cascade="save-update" />
     
-    <many-to-one name="ParentResource" class="Resource" lazy="proxy" not-null="false" />
+    <bag name="Snapshots" table="Snapshot_ResourceVersion" inverse="true" lazy="true">
+      <key column="ResourceVersion" />
+      <many-to-many class="Snapshot" column="Snapshot" />
+    </bag>
+    
 
     <joined-subclass table="PageResource" name="PageResource" >
       <key column="ResourceVersionId" />
       
       <property name="Name" not-null="true" />
       <property name="Position" not-null="true" />
+
+      <bag name="Terms" table="PageResource_Term" cascade="save-update" lazy="true">
+        <key column="PageResource" />
+        <many-to-many class="Term" column="Term" />
+      </bag>
     </joined-subclass>
 
     <joined-subclass table="TextResource" name="TextResource" >
       <key column="ResourceVersionId" />
 
       <property name="ExternalId" />
+      <many-to-one name="BookVersion" class="BookVersionResource" lazy="proxy" />
+      <many-to-one name="ResourcePage" class="Resource" lazy="proxy" not-null="false" />
     </joined-subclass>
 
     <joined-subclass table="ImageResource" name="ImageResource" >
       <key column="ResourceVersionId" />
 
       <property name="FileName" not-null="true" />
+      <property name="FileId" not-null="false" />
       <property name="MimeType" not-null="true" />
       <property name="Size" not-null="true" />
+      <many-to-one name="ResourcePage" class="Resource" lazy="proxy" not-null="false" />
     </joined-subclass>
 
     <joined-subclass table="MetadataResource" name="MetadataResource" >
@@ -43,10 +56,13 @@
 
       <property name="Title" />
       <property name="SubTitle" />
+      <property name="AuthorsLabel" />
       <property name="RelicAbbreviation" />
       <property name="SourceAbbreviation" />
       <property name="PublishPlace" />
       <property name="PublishDate" />
+      <property name="PublisherText" />
+      <property name="PublisherEmail" />
       <property name="Copyright" />
       <property name="BiblText" />
       <property name="OriginDate" />
@@ -58,7 +74,6 @@
       <property name="ManuscriptRepository" />
       <property name="ManuscriptExtent" />
       <property name="ManuscriptTitle" />
-      <many-to-one name="Publisher" class="Publisher" lazy="proxy" />
     </joined-subclass>
 
     <joined-subclass table="AudioResource" name="AudioResource" >
@@ -66,8 +81,20 @@
       
       <property name="Duration" not-null="false" />
       <property name="FileName" not-null="true" />
+      <property name="FileId" not-null="false" />
       <property name="AudioType" not-null="true" />
       <property name="MimeType" not-null="true" />
+      <many-to-one name="ResourceTrack" class="Resource" lazy="proxy" not-null="false" />
+    </joined-subclass>
+
+    <joined-subclass table="TrackResource" name="TrackResource" >
+      <key column="ResourceVersionId" />
+
+      <property name="Name" not-null="true" />
+      <property name="Text" not-null="false" />
+      <property name="Position" not-null="true" />
+      <many-to-one name="ResourceChapter" class="Resource" lazy="proxy" />
+      <many-to-one name="ResourceBeginningPage" class="Resource" lazy="proxy" />
     </joined-subclass>
 
     <joined-subclass table="ChapterResource" name="ChapterResource" >
@@ -75,36 +102,66 @@
       
       <property name="Name" not-null="true" />
       <property name="Position" not-null="true" />
-      <many-to-one name="BeginningPageResource" class="Resource" lazy="proxy" />
-    </joined-subclass>
-
-    <joined-subclass table="DefaultHeadwordResource" name="DefaultHeadwordResource" >
-      <key column="ResourceVersionId" />
-      
-      <property name="ExternalId" not-null="true" />
-      <property name="DefaultHeadword" not-null="true" />
-      <property name="Sorting" not-null="true" />
+      <many-to-one name="ResourceBeginningPage" class="Resource" lazy="proxy" />
+      <many-to-one name="ParentResource" class="Resource" lazy="proxy" not-null="false" />
     </joined-subclass>
 
     <joined-subclass table="HeadwordResource" name="HeadwordResource" >
       <key column="ResourceVersionId" />
       
-      <property name="Headword" not-null="true" />
-      <property name="HeadwordOriginal" not-null="false" />
-      <many-to-one name="PageResource" class="Resource" lazy="proxy" />
+      <property name="ExternalId" not-null="true" />
+      <property name="DefaultHeadword" not-null="true" />
+      <property name="Sorting" not-null="true" />
+      <many-to-one name="BookVersion" class="BookVersionResource" lazy="proxy" />
+
+      <bag name="HeadwordItems">
+        <key column="HeadwordResource" />
+        <one-to-many class="HeadwordItem" />
+      </bag>
     </joined-subclass>
 
-    <joined-subclass table="TermResource" name="TermResource" >
+    <joined-subclass table="BinaryResource" name="BinaryResource" >
       <key column="ResourceVersionId" />
-      
-      <many-to-one name="Term" class="Term" lazy="proxy" />
+
+      <property name="Name" not-null="true" />
+      <property name="FileName" not-null="true" />
+      <property name="FileId" not-null="false" />
     </joined-subclass>
 
-    <joined-subclass table="KeywordResource" name="KeywordResource" >
+    <joined-subclass table="BookVersionResource" name="BookVersionResource" >
       <key column="ResourceVersionId" />
-      
-      <many-to-one name="Keyword" class="Keyword" lazy="proxy" />
+
+      <property name="ExternalId" />
+    </joined-subclass>
+
+    <joined-subclass table="EditionNoteResource" name="EditionNoteResource" >
+      <key column="ResourceVersionId" />
+
+      <property name="ExternalId" />
+      <many-to-one name="BookVersion" class="BookVersionResource" lazy="proxy" />
     </joined-subclass>
 
   </class>
+
+  <sql-query name="GetHeadwordRowNumberByProject">
+    <![CDATA[
+SELECT TOP (1) __hibernate_sort_row FROM
+ (
+   select headwordre0_.ResourceVersionId as col_0_0_,
+          min(headwordre0_.Sorting) as col_1_0_,
+          min(headwordre0_.DefaultHeadword) as DefaultHeadword,
+          ROW_NUMBER() OVER(ORDER BY min(headwordre0_.Sorting)) as __hibernate_sort_row
+    from HeadwordResource headwordre0_
+      inner join [ResourceVersion] headwordre0_1_ on headwordre0_.ResourceVersionId=headwordre0_1_.Id
+      inner join Snapshot_ResourceVersion snapshots5_ on headwordre0_.ResourceVersionId=snapshots5_.ResourceVersion 
+      inner join [Snapshot] snapshotal2_ on snapshots5_.Snapshot=snapshotal2_.Id 
+      inner join [Project] projectali3_ on snapshotal2_.Project=projectali3_.Id 
+      inner join [HeadwordItem] headwordit2_ on headwordre0_.ResourceVersionId=headwordit2_.HeadwordResource
+    where snapshotal2_.Id = projectali3_.LatestPublishedSnapshot and (projectali3_.Id in (:projectIds))
+	   group by headwordre0_.ResourceVersionId
+ ) as query
+ where query.DefaultHeadword like :query 
+ ORDER BY query.__hibernate_sort_row;
+    ]]>
+  </sql-query>
 </hibernate-mapping>

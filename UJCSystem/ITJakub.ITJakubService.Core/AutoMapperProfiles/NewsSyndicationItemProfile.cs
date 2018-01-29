@@ -7,7 +7,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
     public class NewsSyndicationItemProfile : Profile
     {
-        protected override void Configure()
+        public NewsSyndicationItemProfile()
         {
             CreateMap<NewsSyndicationItem, NewsSyndicationItemContract>()
                 .ForMember(m => m.Id, opt => opt.MapFrom(src => src.Id))

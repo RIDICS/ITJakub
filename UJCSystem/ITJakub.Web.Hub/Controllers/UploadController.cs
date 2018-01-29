@@ -1,11 +1,16 @@
 ﻿using System;
-using ITJakub.Shared.Contracts.Resources;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using ITJakub.Web.Hub.Core.Communication;
-using ITJakub.Web.Hub.Core.Identity;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Net.Http.Headers;
+using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.Shared.AspNetCore.Helpers;
+using Vokabular.Shared.Const;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -23,36 +28,54 @@ namespace ITJakub.Web.Hub.Controllers
 
         //Dropzone upload method
         [HttpPost]
-        public ActionResult UploadFile(UploadFileRequest request)
+        public async Task<ActionResult> UploadFile()
         {
-            for (var i = 0; i < Request.Form.Files.Count; i++)
+            var boundary = UploadHelper.GetBoundary(Request.ContentType);
+            var reader = new MultipartReader(boundary, Request.Body, UploadHelper.MultipartReaderBufferSize);
+
+            var valuesByKey = new Dictionary<string, string>();
+            MultipartSection section;
+
+            while ((section = await reader.ReadNextSectionAsync()) != null)
             {
-                var file = Request.Form.Files[i];
-                if (file != null && file.Length != 0)
+                var contentDispo = section.GetContentDispositionHeader();
+
+                if (contentDispo.IsFileDisposition())
                 {
-                    using (var client = GetStreamingClient())
+                    if (!valuesByKey.TryGetValue("sessionId", out var sessionId))
                     {
-                        client.AddResource(
-                            new UploadResourceContract
-                            {
-                                SessionId = request.SessionId,
-                                FileName = file.FileName,
-                                Data = file.OpenReadStream()
-                            }
-                        );
+                        return BadRequest();
+                    }
+
+                    var fileSection = section.AsFileSection();
+                    
+                    using (var client = GetRestClient())
+                    {
+                        client.UploadResource(sessionId, fileSection.FileStream, fileSection.FileName);
                     }
                 }
+                else if (contentDispo.IsFormDisposition())
+                {
+                    var formSection = section.AsFormDataSection();
+                    var value = await formSection.GetValueAsync();
+                    valuesByKey.Add(formSection.Name, value);
+                }
             }
+
             return Json(new {});
         }
 
         [HttpPost]
         public ActionResult ProcessUploadedFiles([FromBody] ProcessUploadedFilesRequest request)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var success = client.ProcessSession(request.SessionId, request.UploadMessage);
-                return Json(new {success});
+                client.ProcessSessionAsImport(request.SessionId, new NewBookImportContract
+                {
+                    Comment = request.UploadMessage,
+                    ProjectId = request.ProjectId
+                });
+                return Json(new {success = true});
             }
         }
     }

@@ -1,17 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using Log4net.Extensions.Logging;
+using System.IO;
+using System.Reflection;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
-using Vokabular.MainService.Containers.Extensions;
-using Vokabular.MainService.Containers;
-using Vokabular.MainService.Containers.Installers;
+using Vokabular.Core;
+using Vokabular.Log4Net;
+using Vokabular.MainService.Core;
+using Vokabular.MainService.Middleware;
 using Vokabular.Shared;
+using Vokabular.Shared.AspNetCore.Container;
+using Vokabular.Shared.AspNetCore.Container.Extensions;
+using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
 using Vokabular.Shared.Container;
+using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.Options;
 
 namespace Vokabular.MainService
@@ -35,10 +44,19 @@ namespace Vokabular.MainService
             // Configuration options
             services.AddOptions();
             services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
+            services.Configure<List<CredentialsOption>>(Configuration.GetSection("Credentials"));
+            services.Configure<PathConfiguration>(Configuration.GetSection("PathConfiguration"));
+
+            services.Configure<FormOptions>(options =>
+            {
+                options.MultipartBodyLengthLimit = 1048576000;
+            });
 
             // Add framework services.
-            services.AddMvc();
-
+            services.AddMvc()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<MainServiceCoreContainerRegistration>());
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            
             // Inject an implementation of ISwaggerProvider with defaulted settings applied
             services.AddSwaggerGen(options =>
             {
@@ -48,6 +66,11 @@ namespace Vokabular.MainService
                     Version = "v1",
                 });
                 options.DescribeAllEnumsAsStrings();
+                options.IncludeXmlComments(GetXmlCommentsPath());
+                options.OperationFilter<AddResponseHeadersFilter>();
+
+                options.DocumentFilter<PolymorphismDocumentFilter<SearchCriteriaContract>>();
+                options.SchemaFilter<PolymorphismSchemaFilter<SearchCriteriaContract>>();
             });
 
             // IoC
@@ -70,6 +93,8 @@ namespace Vokabular.MainService
 
             app.ConfigureAutoMapper();
 
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+
             app.UseMvc();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint
@@ -78,7 +103,8 @@ namespace Vokabular.MainService
             // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Vokabular MainService API v1");
+                c.SwaggerEndpoint("v1/swagger.json", "Vokabular MainService API v1"); // using relative address to Swagger UI
+                c.SupportedSubmitMethods(new[] {"get", "post", "put", "delete", "head"});
             });
 
             applicationLifetime.ApplicationStopped.Register(OnShutdown);
@@ -87,6 +113,13 @@ namespace Vokabular.MainService
         private void OnShutdown()
         {
             Container.Dispose();
+        }
+
+        private string GetXmlCommentsPath()
+        {
+            var appBasePath = AppContext.BaseDirectory;
+            var appName = Assembly.GetEntryAssembly().GetName().Name;
+            return Path.Combine(appBasePath, $"{appName}.xml");
         }
     }
 }

@@ -10,6 +10,9 @@ namespace Vokabular.DataEntities.Database.Entities.Enums
         Headword = 5,
         Text = 6,
         Image = 7,
-        Audio = 8
+        Audio = 8,
+        AudioTrack = 9,
+        BookVersion = 10,
+        EditionNote = 11,
     }
 }

@@ -1,9 +1,7 @@
-using System.Collections.Generic;
 using System.Reflection;
 using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
-using ITJakub.DataEntities.Database.Entities.Enums;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 using log4net;
 
@@ -23,7 +21,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             get { return "bibl"; }
         }
 
-        protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
+        protected override void ProcessElement(BookData bookData, XmlReader xmlReader)
         {
             var type = xmlReader.GetAttribute("type");
             var subType = xmlReader.GetAttribute("subtype");
@@ -32,7 +30,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
 
             if (!hasAttributes)
             {
-                bookVersion.BiblText = content;
+                bookData.BiblText = content;
             }
             else
             {
@@ -41,12 +39,12 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
                     switch (subType)
                     {
                         case "original-text":
-                            bookVersion.RelicAbbreviation = content;
+                            bookData.RelicAbbreviation = content;
 
                             break;
 
                         case "source":
-                            bookVersion.SourceAbbreviation = content;
+                            bookData.SourceAbbreviation = content;
 
                             break;
 

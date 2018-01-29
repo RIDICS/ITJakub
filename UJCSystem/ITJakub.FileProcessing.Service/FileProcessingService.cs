@@ -1,6 +1,5 @@
 using ITJakub.FileProcessing.Core.Sessions;
 using ITJakub.FileProcessing.DataContracts;
-using ITJakub.Shared.Contracts.Resources;
 
 namespace ITJakub.FileProcessing.Service
 {
@@ -10,13 +9,12 @@ namespace ITJakub.FileProcessing.Service
 
         public void AddResource(UploadResourceContract resourceInfoSkeleton)
         {
-            m_sessionManager.AddResource(resourceInfoSkeleton);
-
+            m_sessionManager.AddResource(resourceInfoSkeleton.SessionId, resourceInfoSkeleton.FileName, resourceInfoSkeleton.Data);
         }
 
-        public bool ProcessSession(string sessionId, string uploadMessage)
+        public bool ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage)
         {
-            return m_sessionManager.ProcessSession(sessionId, uploadMessage);
+            return m_sessionManager.ProcessSession(sessionId, projectId, userId, uploadMessage);
         }
     }
 }

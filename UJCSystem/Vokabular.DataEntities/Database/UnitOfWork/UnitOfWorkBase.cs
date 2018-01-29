@@ -1,31 +1,33 @@
 ﻿using System;
+using Vokabular.DataEntities.Database.Daos;
 
 namespace Vokabular.DataEntities.Database.UnitOfWork
 {
     public abstract class UnitOfWorkBase
     {
-        private readonly IUnitOfWork m_unitOfWork;
+        private readonly IDao m_dao;
 
-        protected UnitOfWorkBase(IUnitOfWork unitOfWork)
+        protected UnitOfWorkBase(IDao dao)
         {
-            m_unitOfWork = unitOfWork;
+            m_dao = dao;
         }
 
         public void Execute()
         {
+            var unitOfWork = m_dao.UnitOfWork;
             try
             {
-                m_unitOfWork.BeginTransaction();
+                unitOfWork.BeginTransaction();
 
                 ExecuteWorkImplementation();
             }
             catch (Exception)
             {
-                m_unitOfWork.Rollback();
+                unitOfWork.Rollback();
                 throw;
             }
 
-            m_unitOfWork.Commit();
+            unitOfWork.Commit();
         }
 
         protected abstract void ExecuteWorkImplementation();
@@ -33,29 +35,30 @@ namespace Vokabular.DataEntities.Database.UnitOfWork
 
     public abstract class UnitOfWorkBase<T>
     {
-        private readonly IUnitOfWork m_unitOfWork;
+        private readonly IDao m_dao;
 
-        protected UnitOfWorkBase(IUnitOfWork unitOfWork)
+        protected UnitOfWorkBase(IDao dao)
         {
-            m_unitOfWork = unitOfWork;
+            m_dao = dao;
         }
 
         public T Execute()
         {
             T result;
+            var unitOfWork = m_dao.UnitOfWork;
             try
             {
-                m_unitOfWork.BeginTransaction();
+                unitOfWork.BeginTransaction();
 
                 result = ExecuteWorkImplementation();
             }
             catch (Exception)
             {
-                m_unitOfWork.Rollback();
+                unitOfWork.Rollback();
                 throw;
             }
 
-            m_unitOfWork.Commit();
+            unitOfWork.Commit();
             return result;
         }
 

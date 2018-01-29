@@ -1,22 +1,17 @@
 using System.Collections.Generic;
 using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
-using ITJakub.DataEntities.Database.Entities.Enums;
-using ITJakub.DataEntities.Database.Repositories;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
+using Vokabular.DataEntities.Database.Entities.Enums;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
 {
     public class RespStmtProcessor : ListProcessorBase
     {
-        private readonly BookVersionRepository m_bookVersionRepository;
-
-        public RespStmtProcessor(BookVersionRepository bookVersionRepository,
-            XsltTransformationManager xsltTransformationManager, IKernel container)
+        public RespStmtProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
         {
-            m_bookVersionRepository = bookVersionRepository;
         }
 
         protected override string NodeName
@@ -24,14 +19,14 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             get { return "respStmt"; }
         }
 
-        protected override void PreprocessSetup(BookVersion bookVersion)
+        protected override void PreprocessSetup(BookData bookData)
         {
-            if (bookVersion.Responsibles == null) bookVersion.Responsibles = new List<Responsible>();
+            if (bookData.Responsibles == null) bookData.Responsibles = new List<ResponsibleData>();
         }
 
-        protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
+        protected override void ProcessElement(BookData bookData, XmlReader xmlReader)
         {
-            var responsible = new Responsible();
+            var responsible = new ResponsibleData();
 
             while (xmlReader.Read())
             {
@@ -41,26 +36,19 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
                     xmlReader.Read(); //read text value
                     var responsibleTypeText = xmlReader.Value;
                     var responsibleTypeType = ParseEnum<ResponsibleTypeEnum>(responsibleTypeText);
-                    var tmpResponsibleType = new ResponsibleType
-                    {
-                        Text = responsibleTypeText,
-                        Type = responsibleTypeType
-                    };
 
-                    m_bookVersionRepository.CreateResponsibleTypeIfNotExist(tmpResponsibleType);
-                    responsible.ResponsibleType = m_bookVersionRepository.FindResponsibleType(responsibleTypeText, responsibleTypeType);
+                    responsible.TypeText = responsibleTypeText;
+                    responsible.TypeEnum = responsibleTypeType;
                 }
 
                 if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.IsStartElement() &&
                     xmlReader.LocalName.Equals("name"))
                 {
-                    responsible.Text = GetInnerContentAsString(xmlReader);
+                    responsible.NameText = GetInnerContentAsString(xmlReader);
                 }
             }
 
-            responsible = m_bookVersionRepository.FindResponsible(responsible.Text, responsible.ResponsibleType) ??
-                          responsible;
-            bookVersion.Responsibles.Add(responsible);
+            bookData.Responsibles.Add(responsible);
         }
     }
 }

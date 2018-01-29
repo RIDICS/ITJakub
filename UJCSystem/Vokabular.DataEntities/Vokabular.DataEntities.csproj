@@ -22,40 +22,53 @@
     <None Remove="Database\Entities\FavoriteBase.hbm.xml" />
     <None Remove="Database\Entities\FavoriteLabel.hbm.xml" />
     <None Remove="Database\Entities\Feedback.hbm.xml" />
+    <None Remove="Database\Entities\HeadwordItem.hbm.xml" />
+    <None Remove="Database\Entities\HistoryLogBase.hbm.xml" />
     <None Remove="Database\Entities\Keyword.hbm.xml" />
     <None Remove="Database\Entities\LiteraryGenre.hbm.xml" />
     <None Remove="Database\Entities\LiteraryKind.hbm.xml" />
     <None Remove="Database\Entities\NamedResourceGroup.hbm.xml" />
     <None Remove="Database\Entities\NewsSyndicationItem.hbm.xml" />
     <None Remove="Database\Entities\OriginalAuthor.hbm.xml" />
+    <None Remove="Database\Entities\Permission.hbm.xml" />
     <None Remove="Database\Entities\Project.hbm.xml" />
     <None Remove="Database\Entities\ProjectOriginalAuthor.hbm.xml" />
-    <None Remove="Database\Entities\Publisher.hbm.xml" />
+    <None Remove="Database\Entities\ProjectResponsiblePerson.hbm.xml" />
     <None Remove="Database\Entities\Resource.hbm.xml" />
     <None Remove="Database\Entities\ResourceVersion.hbm.xml" />
     <None Remove="Database\Entities\ResponsiblePerson.hbm.xml" />
     <None Remove="Database\Entities\ResponsibleType.hbm.xml" />
+    <None Remove="Database\Entities\SpecialPermission.hbm.xml" />
     <None Remove="Database\Entities\Term.hbm.xml" />
     <None Remove="Database\Entities\TermCategory.hbm.xml" />
     <None Remove="Database\Entities\Transformation.hbm.xml" />
     <None Remove="Database\Entities\User.hbm.xml" />
+    <None Remove="Database\Entities\UserGroup.hbm.xml" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Database\Entities\BookType.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\UserGroup.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\Permission.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\SpecialPermission.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\TextComment.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Category.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\FavoriteBase.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\FavoriteLabel.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Feedback.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\HeadwordItem.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\HistoryLogBase.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Keyword.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\LiteraryGenre.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\LiteraryOriginal.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\LiteraryKind.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\NamedResourceGroup.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\NewsSyndicationItem.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\OriginalAuthor.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\Snapshot.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Project.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\ProjectOriginalAuthor.hbm.xml" />
-    <EmbeddedResource Include="Database\Entities\Publisher.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\ProjectResponsiblePerson.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Resource.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\ResourceVersion.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\ResponsiblePerson.hbm.xml" />
@@ -67,9 +80,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Iesi.Collections" Version="4.0.2" />
+    <PackageReference Include="Iesi.Collections" Version="4.0.3" />
     <PackageReference Include="log4net" Version="2.0.8" />
-    <PackageReference Include="NHibernate" Version="4.1.0.4000" />
+    <PackageReference Include="NHibernate" Version="5.0.3" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
@@ -78,6 +91,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj" />
   </ItemGroup>
 

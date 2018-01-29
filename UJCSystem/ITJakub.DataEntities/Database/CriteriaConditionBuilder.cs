@@ -1,11 +1,13 @@
 using System.Linq;
 using System.Text;
-using ITJakub.Shared.Contracts.Searching.Criteria;
+using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 
 namespace ITJakub.DataEntities.Database
 {
     public static class CriteriaConditionBuilder
     {
+        private const string AnyStringWildcard = "%";
+
         public static string Create(WordCriteriaContract word)
         {
             var stringBuilder = new StringBuilder();
@@ -13,24 +15,26 @@ namespace ITJakub.DataEntities.Database
             if (!string.IsNullOrEmpty(word.ExactMatch))
             {
                 stringBuilder.Append(word.ExactMatch);
+                stringBuilder.Replace("[", "[[]"); // Escape unwanted characters
+                return stringBuilder.ToString();
             }
 
             if (!string.IsNullOrEmpty(word.StartsWith))
             {
-                stringBuilder.Append(word.StartsWith).Append("%");
+                stringBuilder.Append(word.StartsWith).Append(AnyStringWildcard);
             }
 
             if (word.Contains != null)
             {
                 foreach (var innerWord in word.Contains.Where(innerWord => !string.IsNullOrEmpty(innerWord)))
                 {
-                    stringBuilder.Append("%").Append(innerWord).Append("%");
+                    stringBuilder.Append(AnyStringWildcard).Append(innerWord).Append(AnyStringWildcard);
                 }
             }
 
             if (!string.IsNullOrEmpty(word.EndsWith))
             {
-                stringBuilder.Append("%").Append(word.EndsWith);
+                stringBuilder.Append(AnyStringWildcard).Append(word.EndsWith);
             }
 
             // Escape unwanted characters

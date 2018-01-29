@@ -8,8 +8,7 @@ namespace Vokabular.DataEntities.Database.Entities
         public virtual int Id { get; set; }
         public virtual string FirstName { get; set; }
         public virtual string LastName { get; set; }
-        public virtual IList<ResponsibleType> ResponsibleTypes { get; set; }
-        public virtual IList<Project> Projects { get; set; }
+        public virtual IList<ProjectResponsiblePerson> Projects { get; set; }
 
         public virtual bool Equals(ResponsiblePerson other)
         {

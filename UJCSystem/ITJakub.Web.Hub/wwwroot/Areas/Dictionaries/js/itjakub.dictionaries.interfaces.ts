@@ -1,7 +1,8 @@
 ﻿interface IHeadwordBookInfo {
-    bookXmlId: string;
-    entryXmlId: string;
-    image: string;
+    headwordId: number;
+    headwordVersionId: number;
+    bookId: number;
+    pageId?: number;
 }
 
 interface IHeadword {
@@ -14,15 +15,30 @@ interface IHeadwordList {
     headwordList: Array<IHeadword>;
 }
 
-interface IDictionaryContract {
-    bookXmlId: string;
-    bookVersionXmlId: string;
-    bookAcronym: string;
-    bookTitle: string;
-}
-
 interface IDictionaryFavoriteHeadword {
     headword: string;
     entryXmlId: string;
     bookId: string;
+
+    fakeHeadwordId?: number; // TODO update this DataContract according to new API
+    fakeBookId?: number;
+}
+
+interface IHeadwordContract {
+    id: number;
+    versionId: number;
+    versionNumber: number;
+    projectId: number;
+
+    //externalId: string;
+    defaultHeadword: string;
+    sorting: string;
+    headwordItems: Array<IHeadwordItemContract>;
+}
+
+interface IHeadwordItemContract {
+    id: number;
+    headword: string;
+    headwordOriginal: string;
+    resourcePageId?: number;
 }

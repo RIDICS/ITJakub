@@ -8,9 +8,18 @@
     <property name="Name" not-null="true" />
 
     <property name="CreateTime" not-null="true" type="UtcDateTime" />
+    
+    <property name="ExternalId" not-null="false" />
+
+    <many-to-one name="LatestPublishedSnapshot" class="Snapshot" lazy="proxy" />
 
     <many-to-one name="CreatedByUser" class="User" lazy="proxy" not-null="true" />
     
+    <bag name="Snapshots">
+      <key column="Project" />
+      <one-to-many class="Snapshot" />
+    </bag>
+
     <bag name="Resources">
       <key column="Project" />
       <one-to-many class="Resource" />
@@ -21,9 +30,14 @@
       <one-to-many class="ProjectOriginalAuthor" />
     </bag>
 
-    <bag name="ResponsiblePersons" table="Project_ResponsiblePerson" cascade="save-update" lazy="true">
+    <bag name="ResponsiblePersons" table="Project_ResponsiblePerson" cascade="all-delete-orphan" lazy="true">
       <key column="Project" />
-      <many-to-many class="ResponsiblePerson" column="Responsible" />
+      <one-to-many class="ProjectResponsiblePerson" />
+    </bag>
+
+    <bag name="Permissions" inverse="true" lazy="true">
+      <key column="Project" />
+      <one-to-many class="Permission" />
     </bag>
 
     <bag name="LiteraryKinds" table="Project_LiteraryKind" cascade="save-update" lazy="true">
@@ -36,10 +50,20 @@
       <many-to-many class="LiteraryGenre" column="LiteraryGenre" />
     </bag>
 
+    <bag name="LiteraryOriginals" table="Project_LiteraryOriginal" cascade="save-update" lazy="true">
+      <key column="Project" />
+      <many-to-many class="LiteraryOriginal" column="LiteraryOriginal" />
+    </bag>
+
     <bag name="Categories" table="Project_Category" cascade="save-update" lazy="true">
       <key column="Project" />
       <many-to-many class="Category" column="Category" />
     </bag>
-    
+
+    <bag name="Keywords" table="Project_Keyword" cascade="save-update" lazy="true">
+      <key column="Project" />
+      <many-to-many class="Keyword" column="Keyword" />
+    </bag>
+
   </class>
 </hibernate-mapping>

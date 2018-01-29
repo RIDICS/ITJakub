@@ -1,6 +1,6 @@
 using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
@@ -16,9 +16,9 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             get { return "pubPlace"; }
         }
 
-        protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
+        protected override void ProcessElement(BookData bookData, XmlReader xmlReader)
         {
-            bookVersion.PublishPlace = GetInnerContentAsString(xmlReader);
+            bookData.PublishPlace = GetInnerContentAsString(xmlReader);
         }
     }
 }

@@ -2,7 +2,7 @@
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Core.AutoMapperProfiles
 {
@@ -12,10 +12,13 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
         {
             CreateMap<Category, CategoryContract>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.BookType, opt => opt.MapFrom(src => src.BookType.Type))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.ExternalId, opt => opt.MapFrom(src => src.ExternalId))
                 .ForMember(dest => dest.ParentCategoryId, opt => opt.MapFrom(src => src.ParentCategory.Id));
+
+            CreateMap<Category, CategoryTreeContract>()
+                .IncludeBase<Category, CategoryContract>()
+                .ForMember(dest => dest.Subcategories, opt => opt.MapFrom(src => src.Categories));
 
             CreateMap<BookType, BookTypeContract>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))

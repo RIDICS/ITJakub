@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
-using ITJakub.Lemmatization.DataEntities;
+using ITJakub.Lemmatization.Core.Works;
+using ITJakub.Lemmatization.DataEntities.Entities;
 using ITJakub.Lemmatization.DataEntities.Repositories;
 using ITJakub.Lemmatization.Shared.Contracts;
+using Vokabular.DataEntities.Database.UnitOfWork;
 
 namespace ITJakub.Lemmatization.Core
 {
@@ -26,47 +28,31 @@ namespace ITJakub.Lemmatization.Core
         public IList<TokenContract> GetTypeaheadToken(string query)
         {
             query = EscapeQuery(query);
-            var result = m_repository.GetTypeaheadToken(query, PrefetchRecordCount);
+            var result = m_repository.InvokeUnitOfWork(x => x.GetTypeaheadToken(query, PrefetchRecordCount));
             return Mapper.Map<IList<TokenContract>>(result);
         }
 
         public long CreateToken(string token, string description)
         {
-            var newToken = new Token
-            {
-                Text = token,
-                Description = description
-            };
-
-            var id = m_repository.Create(newToken);
-            return (long) id;
+            return new CreateTokenWork(m_repository, token, description).Execute();
         }
 
         public IList<TokenCharacteristicDetailContract> GetTokenCharacteristic(long tokenId)
         {
-            var result = m_repository.GetTokenCharacteristicDetail(tokenId);
+            var result = m_repository.InvokeUnitOfWork(x => x.GetTokenCharacteristicDetail(tokenId));
             return Mapper.Map<IList<TokenCharacteristicDetailContract>>(result);
         }
 
         public long AddTokenCharacteristic(long tokenId, string morphologicalCharacteristic, string description)
         {
-            var tokenEntity = m_repository.Load<Token>(tokenId);
-            var newTokenCharacteristic = new TokenCharacteristic
-            {
-                MorphologicalCharakteristic = morphologicalCharacteristic,
-                Description = description,
-                Token = tokenEntity
-            };
-
-            var id = m_repository.Create(newTokenCharacteristic);
-            return (long) id;
+            return new AddTokenCharacteristicWork(m_repository, tokenId, morphologicalCharacteristic, description).Execute();
         }
 
         public IList<CanonicalFormTypeaheadContract> GetTypeaheadCannonicalForm(CanonicalFormTypeContract type, string query)
         {
             query = EscapeQuery(query);
             var canonicalFormType = Mapper.Map<CanonicalFormType>(type);
-            var result = m_repository.GetTypeaheadCannonicalForm(canonicalFormType, query, PrefetchRecordCount);
+            var result = m_repository.InvokeUnitOfWork(x => x.GetTypeaheadCannonicalForm(canonicalFormType, query, PrefetchRecordCount));
             return Mapper.Map<IList<CanonicalFormTypeaheadContract>>(result);
         }
 
@@ -74,151 +60,95 @@ namespace ITJakub.Lemmatization.Core
         {
             query = EscapeQuery(query);
             var formType = Mapper.Map<HyperCanonicalFormType>(type);
-            var result = m_repository.GetTypeaheadHyperCannonicalForm(formType, query, PrefetchRecordCount);
+            var result = m_repository.InvokeUnitOfWork(x => x.GetTypeaheadHyperCannonicalForm(formType, query, PrefetchRecordCount));
             return Mapper.Map<IList<HyperCanonicalFormContract>>(result);
         }
 
         public long CreateCanonicalForm(long tokenCharacteristicId, CanonicalFormTypeContract type, string text, string description)
         {
-            var tokenCharacteristic = m_repository.Load<TokenCharacteristic>(tokenCharacteristicId);
-            var canonicalFormType = Mapper.Map<CanonicalFormType>(type);
-            var newCanonicalForm = new CanonicalForm
-            {
-                Type = canonicalFormType,
-                Text = text,
-                Description = description,
-                CanonicalFormFor = new List<TokenCharacteristic> {tokenCharacteristic}
-            };
-
-            var id = m_repository.Create(newCanonicalForm);
-            return (long) id;
+            return new CreateCanonicalFormWork(m_repository, tokenCharacteristicId, type, text, description).Execute();
         }
 
         public void AddCanonicalForm(long tokenCharacteristicId, long canonicalFormId)
         {
-            var tokenCharacteristic = m_repository.GetTokenCharacteristicWithCanonicalForms(tokenCharacteristicId);
-            var cannonicalForm = m_repository.Load<CanonicalForm>(canonicalFormId);
-
-            tokenCharacteristic.CanonicalForms.Add(cannonicalForm);
-            m_repository.Update(tokenCharacteristic);
+            new AddCanonicalFormWork(m_repository, tokenCharacteristicId, canonicalFormId).Execute();
         }
 
         public void SetHyperCanonicalForm(long canonicalFormId, long hyperCanonicalFormId)
         {
-            var canonicalForm = m_repository.FindById<CanonicalForm>(canonicalFormId);
-            var hyperCanonicalForm = m_repository.Load<HyperCanonicalForm>(hyperCanonicalFormId);
-
-            canonicalForm.HyperCanonicalForm = hyperCanonicalForm;
-            m_repository.Update(canonicalForm);
+            new SetHyperCanonicalFormWork(m_repository, canonicalFormId, hyperCanonicalFormId).Execute();
         }
 
         public long CreateHyperCanonicalForm(long canonicalFormId, HyperCanonicalFormTypeContract type, string text, string description)
         {
-            var canonicalForm = m_repository.Load<CanonicalForm>(canonicalFormId);
-            var hyperCanonicalFormType = Mapper.Map<HyperCanonicalFormType>(type);
-            var hyperCanonicalForm = new HyperCanonicalForm
-            {
-                Type = hyperCanonicalFormType,
-                Text = text,
-                Description = description,
-                CanonicalForms = new List<CanonicalForm> { canonicalForm }
-            };
-
-            var id = m_repository.Create(hyperCanonicalForm);
-            return (long) id;
+            return new CreateHyperCanonicalFormWork(m_repository, canonicalFormId, type, text, description).Execute();
         }
 
         public void EditToken(long tokenId, string description)
         {
-            var token = m_repository.FindById<Token>(tokenId);
-            token.Description = description;
-
-            m_repository.Update(token);
+            new EditTokenWork(m_repository, tokenId, description).Execute();
         }
 
         public void EditTokenCharacteristic(long tokenCharacteristicId, string morphologicalCharacteristic, string description)
         {
-            var tokenCharacteristic = m_repository.FindById<TokenCharacteristic>(tokenCharacteristicId);
-            tokenCharacteristic.MorphologicalCharakteristic = morphologicalCharacteristic;
-            tokenCharacteristic.Description = description;
-
-            m_repository.Update(tokenCharacteristic);
+            new EditTokenCharacteristicWork(m_repository, tokenCharacteristicId, morphologicalCharacteristic, description).Execute();
         }
 
         public void EditCanonicalForm(long canonicalFormId, string text, CanonicalFormTypeContract type, string description)
         {
-            var canonicalFormType = Mapper.Map<CanonicalFormType>(type);
-            var canonicalForm = m_repository.FindById<CanonicalForm>(canonicalFormId);
-            canonicalForm.Text = text;
-            canonicalForm.Type = canonicalFormType;
-            canonicalForm.Description = description;
-
-            m_repository.Update(canonicalForm);
+            new EditCanonicalFormWork(m_repository, canonicalFormId, text, type, description).Execute();
         }
 
         public void EditHyperCanonicalForm(long hyperCanonicalFormId, string text, HyperCanonicalFormTypeContract type, string description)
         {
-            var hyperCanonicalFormType = Mapper.Map<HyperCanonicalFormType>(type);
-            var hyperCanonicalForm = m_repository.FindById<HyperCanonicalForm>(hyperCanonicalFormId);
-            hyperCanonicalForm.Text = text;
-            hyperCanonicalForm.Type = hyperCanonicalFormType;
-            hyperCanonicalForm.Description = description;
-
-            m_repository.Update(hyperCanonicalForm);
+            new EditHyperCanonicalFormWork(m_repository, hyperCanonicalFormId, text, type, description).Execute();
         }
 
         public int GetTokenCount()
         {
-            return m_repository.GetTokenCount();
+            return m_repository.InvokeUnitOfWork(x => x.GetTokenCount());
         }
 
         public IList<TokenContract> GetTokenList(int start, int count)
         {
-            var result = m_repository.GetTokenList(start, count);
+            var result = m_repository.InvokeUnitOfWork(x => x.GetTokenList(start, count));
             var resultContract = Mapper.Map<IList<TokenContract>>(result);
             return resultContract;
         }
 
         public IList<long> GetCanonicalFormIdList(long hyperCanonicalFormId)
         {
-            var result = m_repository.GetCanonicalFormIdList(hyperCanonicalFormId);
+            var result = m_repository.InvokeUnitOfWork(x => x.GetCanonicalFormIdList(hyperCanonicalFormId));
             return result;
         }
 
         public InverseCanonicalFormContract GetCanonicalFormDetail(long canonicalFormId)
         {
-            var result = m_repository.GetCanonicalFormDetail(canonicalFormId);
+            var result = m_repository.InvokeUnitOfWork(x => x.GetCanonicalFormDetail(canonicalFormId));
             var contract = Mapper.Map<InverseCanonicalFormContract>(result);
             return contract;
         }
 
         public TokenContract GetToken(long tokenId)
         {
-            var result = m_repository.FindById<Token>(tokenId);
+            var result = m_repository.InvokeUnitOfWork(x => x.FindById<Token>(tokenId));
             var contract = Mapper.Map<TokenContract>(result);
             return contract;
         }
 
         public void DeleteTokenCharacteristic(long tokenCharacteristicId)
         {
-            var tokenCharacteristic = m_repository.Load<TokenCharacteristic>(tokenCharacteristicId);
-            m_repository.Delete(tokenCharacteristic);
+            new DeleteTokenCharacteristicWork(m_repository, tokenCharacteristicId).Execute();
         }
 
         public void RemoveCanonicalForm(long tokenCharacteristicId, long canonicalFormId)
         {
-            var tokenCharacteristic = m_repository.GetTokenCharacteristicWithCanonicalForms(tokenCharacteristicId);
-            var canonicalForm = m_repository.Load<CanonicalForm>(canonicalFormId);
-
-            tokenCharacteristic.CanonicalForms.Remove(canonicalForm);
-            m_repository.Update(tokenCharacteristic);
+            new RemoveCanonicalFormWork(m_repository, tokenCharacteristicId, canonicalFormId).Execute();
         }
 
         public void RemoveHyperCanonicalForm(long canonicalFormId)
         {
-            var canonicalForm = m_repository.FindById<CanonicalForm>(canonicalFormId);
-            canonicalForm.HyperCanonicalForm = null;
-            m_repository.Update(canonicalForm);
+            new RemoveHyperCanonicalFormWork(m_repository, canonicalFormId).Execute();
         }
     }
 }

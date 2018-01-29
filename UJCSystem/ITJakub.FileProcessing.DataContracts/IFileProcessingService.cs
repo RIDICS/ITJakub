@@ -1,5 +1,4 @@
 ﻿using System.ServiceModel;
-using ITJakub.Shared.Contracts.Resources;
 
 namespace ITJakub.FileProcessing.DataContracts
 {
@@ -10,6 +9,6 @@ namespace ITJakub.FileProcessing.DataContracts
         void AddResource(UploadResourceContract resourceInfoSkeleton);
 
         [OperationContract]
-        bool ProcessSession(string sessionId, string uploadMessage);
+        bool ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage);
     }
 }

@@ -19,7 +19,7 @@
     
     <property name="AuthorEmail" />
     
-    <property name="CreateTime" />
+    <property name="CreateTime" type="UtcDateTime" />
 
     <property name="FeedbackCategory" />
     
@@ -29,7 +29,7 @@
       name="HeadwordFeedback"
       discriminator-value="Headword">
       
-      <many-to-one name="HeadwordResource" class="Resource" lazy="proxy" />
+      <many-to-one name="HeadwordResource" column="ResourceVersion" class="HeadwordResource" lazy="proxy" />
 
     </subclass>
   </class>

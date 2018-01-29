@@ -1,12 +1,12 @@
 using AutoMapper;
-using ITJakub.Lemmatization.DataEntities;
+using ITJakub.Lemmatization.DataEntities.Entities;
 using ITJakub.Lemmatization.Shared.Contracts;
 
 namespace ITJakub.Lemmatization.Core.AutoMapperProfiles
 {
     public class TokenCharacteristicProfile : Profile
     {
-        protected override void Configure()
+        public TokenCharacteristicProfile()
         {
             CreateMap<TokenCharacteristic, TokenCharacteristicContract>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))

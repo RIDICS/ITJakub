@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Vokabular.DataEntities.Database.Entities.Enums;
 
 namespace Vokabular.DataEntities.Database.Entities
@@ -9,6 +10,7 @@ namespace Vokabular.DataEntities.Database.Entities
         public virtual string Name { get; set; }
         public virtual TextTypeEnum TextType { get; set; }
         public virtual Project Project { get; set; }
+        public virtual IList<Resource> Resources { get; set; }
 
 
         public virtual bool Equals(NamedResourceGroup other)

@@ -1,5 +1,4 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.MainService.DataContracts.Contracts;
 
@@ -11,14 +10,18 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
         {
             CreateMap<Project, ProjectContract>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-                .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.CreateTime))
-                .ForMember(dest => dest.CreateUser, opt => opt.MapFrom(src => src.CreatedByUser))
-                .ForMember(dest => dest.LastEditDate, opt => opt.UseValue(new DateTime()))
-                //.ForMember(dest => dest.LastEditUser, opt => opt.UseValue(null))
-                .ForMember(dest => dest.LiteraryOriginalText, opt => opt.UseValue("NULL"))
-                .ForMember(dest => dest.PageCount, opt => opt.UseValue(-1))
-                .ForMember(dest => dest.PublisherText, opt => opt.UseValue("NULL"));
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
+                //.ForMember(dest => dest.ExternalId, opt => opt.MapFrom(src => src.ExternalId));
+
+            CreateMap<Project, GetProjectContract>()
+                .IncludeBase<Project, ProjectContract>()
+                .ForMember(dest => dest.CreateTime, opt => opt.MapFrom(src => src.CreateTime))
+                .ForMember(dest => dest.CreatedByUser, opt => opt.MapFrom(src => src.CreatedByUser));
+
+            CreateMap<Project, ProjectDetailContract>()
+                .IncludeBase<Project, ProjectContract>()
+                .ForMember(dest => dest.Authors, opt => opt.Ignore())
+                .ForMember(dest => dest.ResponsiblePersons, opt => opt.Ignore());
         }
     }
 }

@@ -11,19 +11,32 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual DateTime CreateTime { get; set; }
 
+        public virtual string ExternalId { get; set; }
+
         public virtual User CreatedByUser { get; set; }
+
+        public virtual Snapshot LatestPublishedSnapshot { get; set; }
 
         public virtual IList<Resource> Resources { get; set; }
 
         public virtual IList<ProjectOriginalAuthor> Authors { get; set; }
 
-        public virtual IList<ResponsiblePerson> ResponsiblePersons { get; set; }
+        public virtual IList<ProjectResponsiblePerson> ResponsiblePersons { get; set; }
 
         public virtual IList<LiteraryKind> LiteraryKinds { get; set; }
 
         public virtual IList<LiteraryGenre> LiteraryGenres { get; set; }
 
+        public virtual IList<LiteraryOriginal> LiteraryOriginals { get; set; }
+
         public virtual IList<Category> Categories { get; set; }
+
+        public virtual IList<Keyword> Keywords { get; set; }
+
+        public virtual IList<Snapshot> Snapshots { get; set; }
+
+        public virtual IList<Permission> Permissions { get; set; }
+
 
         public virtual bool Equals(Project other)
         {

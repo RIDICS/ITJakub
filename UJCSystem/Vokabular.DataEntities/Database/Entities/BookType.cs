@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Vokabular.DataEntities.Database.Entities.Enums;
 
 namespace Vokabular.DataEntities.Database.Entities
@@ -8,6 +9,8 @@ namespace Vokabular.DataEntities.Database.Entities
         public virtual int Id { get; set; }
 
         public virtual BookTypeEnum Type { get; set; }
+
+        public virtual IList<Snapshot> Snapshots { get; set; }
         
         public virtual bool Equals(BookType other)
         {

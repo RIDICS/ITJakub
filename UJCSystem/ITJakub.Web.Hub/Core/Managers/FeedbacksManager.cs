@@ -1,24 +1,26 @@
-using ITJakub.ITJakubService.DataContracts;
-using ITJakub.ITJakubService.DataContracts.Clients;
-using ITJakub.Shared.Contracts.Notes;
+using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models;
+using Vokabular.MainService.DataContracts.Contracts.Feedback;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace ITJakub.Web.Hub.Core.Managers
 {
     public class FeedbacksManager
     {
         private readonly StaticTextManager m_staticTextManager;
+        private readonly CommunicationProvider m_communicationProvider;
 
-        public FeedbacksManager(StaticTextManager staticTextManager)
+        public FeedbacksManager(StaticTextManager staticTextManager, CommunicationProvider communicationProvider)
         {
             m_staticTextManager = staticTextManager;
+            m_communicationProvider = communicationProvider;
         }
 
-        public FeedbackViewModel GetBasicViewModel(FeedbackFormIdentification formIdentification, string staticTextName, ItJakubServiceEncryptedClient client, string username = null)
+        public FeedbackViewModel GetBasicViewModel(FeedbackFormIdentification formIdentification, string staticTextName, bool isAuthenticated)
         {
             var pageStaticText = m_staticTextManager.GetRenderedHtmlText(staticTextName);
 
-            if (string.IsNullOrWhiteSpace(username))
+            if (!isAuthenticated)
             {
                 var viewModel = new FeedbackViewModel
                 {
@@ -29,9 +31,9 @@ namespace ITJakub.Web.Hub.Core.Managers
                 return viewModel;
             }
 
-            using (client)
+            using (var client = m_communicationProvider.GetMainServiceClient())
             {
-                var user = client.FindUserByUserName(username);
+                var user = client.GetCurrentUserInfo();
                 var viewModel = new FeedbackViewModel
                 {
                     Name = string.Format("{0} {1}", user.FirstName, user.LastName),
@@ -50,17 +52,27 @@ namespace ITJakub.Web.Hub.Core.Managers
             viewModel.FormIdentification = formIdentification;
         }
 
-        public void CreateFeedback(FeedbackViewModel model, FeedbackCategoryEnumContract category, IItJakubService client, bool isAuthenticated, string userName)
+        public void CreateFeedback(FeedbackViewModel model, FeedbackCategoryEnumContract category, bool isAuthenticated)
         {
-            using (client)
+            using (var client = m_communicationProvider.GetMainServiceClient())
             {
                 if (isAuthenticated)
                 {
-                    client.CreateFeedback(model.Text, userName, category);
+                    client.CreateFeedback(new CreateFeedbackContract
+                    {
+                        FeedbackCategory = category,
+                        Text = model.Text
+                    });
                 }
                 else
                 {
-                    client.CreateAnonymousFeedback(model.Text, model.Name, model.Email, category);
+                    client.CreateAnonymousFeedback(new CreateAnonymousFeedbackContract
+                    {
+                        FeedbackCategory = category,
+                        Text = model.Text,
+                        AuthorEmail = model.Email,
+                        AuthorName = model.Name,
+                    });
                 }
             }
         }

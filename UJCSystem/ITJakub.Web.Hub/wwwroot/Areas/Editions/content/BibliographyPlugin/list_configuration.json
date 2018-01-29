@@ -2,7 +2,7 @@
   "Edition": {
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
-      "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts} <br> Počet stran: {PageCount}",
+      "body": "{PublishPlace}, {PublishDate}, {PublisherText} <br> {$manuscript} <br> Počet stran: {PageCount}",
       "favorites": {
         "maxCount": 5
       },
@@ -13,15 +13,14 @@
           "onTrue": "{Editor}",
           "onFalse": "was false"
         },
-        "$manuscripts": {
-          "type": "array",
-          "scope": "Manuscripts",
-          "pattern": "{Settlement}, {Repository}, {OriginDate}",
-          "delimeter": " <br> "
+        "$manuscript": {
+          "type": "basic",
+          "pattern": "{ManuscriptSettlement}, {ManuscriptRepository}, {OriginDate}",
+          "printIfNullValue": false
         },
         "$printAuthors": {
           "type": "basic",
-          "pattern": "{$authors}: ",
+          "pattern": "{AuthorsLabel}: ",
           "printIfNullValue": false
         },
         "$authors": {
@@ -29,13 +28,6 @@
           "scope": "Authors",
           "pattern": "{Name}",
           "delimeter": ", "
-        },
-        "$publisher": {
-          "type": "basic",
-          "scope": "Publisher",
-          "pattern": "{Text}",
-          "printIfNullValue": false,
-          "replaceNullValueBy": ""
         },
         "$litType": {
           "type": "array",
@@ -144,7 +136,7 @@
         "$editor": {
           "type": "array",
           "scope": "Editors",
-          "pattern": "{Text}",
+          "pattern": "{FirstName} {LastName}",
           "delimeter": ", "
         },
         "$literaryOriginal": {

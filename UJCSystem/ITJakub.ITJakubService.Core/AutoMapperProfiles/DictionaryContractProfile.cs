@@ -1,12 +1,12 @@
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
-using ITJakub.ITJakubService.DataContracts;
+using Vokabular.Shared.DataContracts.Search.Old;
 
 namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
     public class DictionaryContractProfile : Profile
     {
-        protected override void Configure()
+        public DictionaryContractProfile()
         {
             CreateMap<BookVersion, DictionaryContract>()
                 .ForMember(dest => dest.BookId, opts => opts.MapFrom(src => src.Book.Id))

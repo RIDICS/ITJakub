@@ -2,9 +2,10 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 using log4net;
+using Vokabular.DataEntities.Database.Entities.Enums;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Accessories
 {
@@ -23,9 +24,9 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Accessories
 
         protected override IEnumerable<ProcessorBase> SubProcessors { get {return new List<ProcessorBase>();} }
 
-        protected override void ProcessAttributes(BookVersion bookVersion, XmlReader xmlReader)
+        protected override void ProcessAttributes(BookData bookData, XmlReader xmlReader)
         {
-            var position = bookVersion.Accessories.Count + 1;
+            var position = bookData.Accessories.Count + 1;
 
             var typeString = xmlReader.GetAttribute("type");
             var fileName = xmlReader.GetAttribute("name");
@@ -36,14 +37,13 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Accessories
             var type = GetTypeByTypeString(typeString);
 
 
-            var accessory = new BookAccessory
+            var accessory = new BookAccessoryData
             {
                 FileName = fileName,
-                BookVersion = bookVersion,
                 Type = type
             };
 
-            bookVersion.Accessories.Add(accessory);            
+            bookData.Accessories.Add(accessory);            
         }
 
         private AccessoryType GetTypeByTypeString(string typeString)

@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Favorites;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.ITJakubService.DataContracts.Contracts.Favorite
 {

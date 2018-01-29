@@ -6,9 +6,8 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
     public class UserProfile : Profile
     {
-        protected override void Configure()
+        public UserProfile()
         {
-        
             CreateMap<User, UserContract>()
                 .ForMember(m => m.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(m => m.UserName, opt => opt.MapFrom(src => src.UserName))

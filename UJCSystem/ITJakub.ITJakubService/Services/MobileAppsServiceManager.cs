@@ -4,9 +4,9 @@ using Castle.Windsor;
 using ITJakub.ITJakubService.Core;
 using ITJakub.MobileApps.MobileContracts;
 using ITJakub.MobileApps.MobileContracts.News;
-using ITJakub.Shared.Contracts;
+using ITJakub.SearchService.DataContracts.Types;
+using Vokabular.Shared.DataContracts.Types;
 using BookContract = ITJakub.MobileApps.MobileContracts.BookContract;
-using OutputFormatEnumContract = ITJakub.Shared.Contracts.OutputFormatEnumContract;
 
 namespace ITJakub.ITJakubService.Services
 {

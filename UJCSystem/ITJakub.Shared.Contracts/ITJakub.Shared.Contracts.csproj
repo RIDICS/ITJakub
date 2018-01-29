@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -11,6 +11,7 @@
     <AssemblyName>ITJakub.Shared.Contracts</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,7 +39,13 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -51,11 +58,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthorContract.cs" />
     <Compile Include="BookContract.cs" />
     <Compile Include="BookContentItemContract.cs" />
     <Compile Include="BookPageContract.cs" />
-    <Compile Include="BookTypeEnumContract.cs" />
     <Compile Include="BookTypeSearchResultContract.cs" />
     <Compile Include="CategoryContentContract.cs" />
     <Compile Include="Favorites\FavoriteSortContract.cs" />
@@ -70,56 +75,27 @@
     <Compile Include="Notes\FeedbackSortCriteriaContract.cs" />
     <Compile Include="Notes\FeedbackSortEnum.cs" />
     <Compile Include="Notes\FeedbackTypeEnumContract.cs" />
-    <Compile Include="Searching\Criteria\AuthorizationCriteriaContract.cs" />
-    <Compile Include="Searching\Criteria\TermsSettingsContract.cs" />
-    <Compile Include="Searching\Results\AudioBookSearchResultContract.cs" />
-    <Compile Include="Searching\Results\BibleVerseResultContext.cs" />
-    <Compile Include="Searching\Results\CorpusSearchResultContract.cs" />
-    <Compile Include="Searching\Results\CorpusSearchResultContractList.cs" />
-    <Compile Include="Searching\Results\HeadwordContract.cs" />
-    <Compile Include="Searching\BookVersionPairContract.cs" />
     <Compile Include="Categories\CategoryShowType.cs" />
     <Compile Include="Categories\KeyWordsResponse.cs" />
     <Compile Include="Categories\SelectionBase.cs" />
     <Compile Include="CategoryContract.cs" />
-    <Compile Include="EditorContract.cs" />
-    <Compile Include="ManuscriptContract.cs" />
-    <Compile Include="OutputFormatEnumContract.cs" />
-    <Compile Include="PublisherContract.cs" />
-    <Compile Include="ResourceLevelEnumContract.cs" />
-    <Compile Include="ResourceUploadContract.cs" />
-    <Compile Include="ISearchService.cs" />
-    <Compile Include="Resources\ResourceType.cs" />
-    <Compile Include="Resources\UploadResourceContract.cs" />
-    <Compile Include="Searching\Criteria\CriteriaKey.cs" />
-    <Compile Include="Searching\Criteria\DatingCriteriaContract.cs" />
-    <Compile Include="Searching\Criteria\DatingListCriteriaContract.cs" />
     <Compile Include="Searching\Criteria\DictionarySearchTarget.cs" />
-    <Compile Include="Searching\Criteria\HitSettingsContract.cs" />
-    <Compile Include="Searching\Criteria\RegexSearchCriteriaContract.cs" />
-    <Compile Include="Searching\Criteria\RegexTokenDistanceCriteriaContract.cs" />
-    <Compile Include="Searching\Criteria\RegexTokenListCriteriaContract.cs" />
-    <Compile Include="Searching\Criteria\ResultCriteriaContract.cs" />
-    <Compile Include="Searching\Criteria\ResultRestrictionCriteriaContract.cs" />
-    <Compile Include="Searching\Criteria\SelectedCategoryCriteriaContract.cs" />
-    <Compile Include="Searching\Criteria\SortEnum.cs" />
-    <Compile Include="Searching\Criteria\TokenDistanceCriteriaContract.cs" />
-    <Compile Include="Searching\Criteria\TokenDistanceListCriteriaContract.cs" />
-    <Compile Include="Searching\Criteria\WordCriteriaContract.cs" />
-    <Compile Include="Searching\Criteria\WordListCriteriaContract.cs" />
-    <Compile Include="Searching\Results\KwicStructure.cs" />
-    <Compile Include="Searching\Criteria\SearchCriteriaContract.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Searching\Results\PageDescriptionContract.cs" />
-    <Compile Include="Searching\Results\PageListContract.cs" />
-    <Compile Include="Searching\Results\PageResultContext.cs" />
-    <Compile Include="Searching\Results\SearchResultContract.cs" />
-    <Compile Include="Searching\Results\SearchResultContractList.cs" />
-    <Compile Include="Searching\Results\VerseResultContext.cs" />
-    <Compile Include="SpecialPermissionCategorizationEnumContract.cs" />
     <Compile Include="SpecialPermissionContract.cs" />
     <Compile Include="UserContract.cs" />
     <Compile Include="UserDetailContract.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj">
+      <Project>{d172f949-ae59-4029-bf5c-40b633362034}</Project>
+      <Name>Vokabular.Shared.DataContracts</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Searching\Results\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

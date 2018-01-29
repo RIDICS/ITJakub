@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="Vokabular.DataEntities" namespace="Vokabular.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="LiteraryOriginal" table="[LiteraryOriginal]">
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+    
+    <property name="Name" not-null="true" />
+
+    <bag name="Projects" table="Project_LiteraryOriginal" inverse="true" lazy="true">
+      <key column="LiteraryOriginal" />
+      <many-to-many class="Project" column="Project" />
+    </bag>
+
+  </class>
+</hibernate-mapping>

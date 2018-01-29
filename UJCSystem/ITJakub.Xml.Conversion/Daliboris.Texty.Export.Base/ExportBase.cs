@@ -4,9 +4,9 @@ using System.Collections.Specialized;
 using System.IO;
 using Daliboris.Texty.Evidence.Rozhrani;
 using Daliboris.Texty.Export.Rozhrani;
-using ITJakub.Shared.Contracts.Resources;
 using NLog;
 using Ujc.Ovj.Tools.Xml.XsltTransformation;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Daliboris.Texty.Export
 {

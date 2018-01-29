@@ -4,48 +4,49 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Parameter;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.MainService.DataContracts.Headers;
+using Vokabular.RestClient.Headers;
+using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
 
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
-    public class ProjectController : Controller
+    public class ProjectController : BaseController
     {
-        private const int DefaultStartItem = 0;
-        private const int DefaultProjectItemCount = 5;
-
         private readonly ProjectManager m_projectManager;
         private readonly ProjectMetadataManager m_projectMetadataManager;
+        private readonly ProjectInfoManager m_projectInfoManager;
 
-        public ProjectController(ProjectManager projectManager, ProjectMetadataManager projectMetadataManager)
+        public ProjectController(ProjectManager projectManager, ProjectMetadataManager projectMetadataManager,
+            ProjectInfoManager projectInfoManager)
         {
             m_projectManager = projectManager;
             m_projectMetadataManager = projectMetadataManager;
+            m_projectInfoManager = projectInfoManager;
         }
-
+        
         [HttpGet]
-        public List<ProjectContract> GetProjectList([FromQuery] int? start, [FromQuery] int? count)
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total records count")]
+        public List<ProjectDetailContract> GetProjectList([FromQuery] int? start, [FromQuery] int? count, [FromQuery] bool? fetchPageCount, [FromQuery] bool? fetchAuthors, [FromQuery] bool? fetchResponsiblePersons)
         {
-            if (start == null)
-            {
-                start = DefaultStartItem;
-            }
-            if (count == null)
-            {
-                count = DefaultProjectItemCount;
-            }
+            var isFetchPageCount = fetchPageCount ?? false;
+            var isFetchAuthors = fetchAuthors ?? false;
+            var isFetchResponsiblePersons = fetchResponsiblePersons ?? false;
+            var result = m_projectManager.GetProjectList(start, count, isFetchPageCount, isFetchAuthors, isFetchResponsiblePersons);
 
-            var result = m_projectManager.GetProjectList(start.Value, count.Value);
+            SetTotalCountHeader(result.TotalCount);
 
-            Response.Headers.Add(CustomHttpHeaders.TotalCount, result.TotalCount.ToString());
             return result.List;
         }
 
         [HttpGet("{projectId}")]
-        [ProducesResponseType(typeof(ProjectContract), StatusCodes.Status200OK)]
-        public IActionResult GetProject(long projectId)
+        [ProducesResponseType(typeof(ProjectDetailContract), StatusCodes.Status200OK)]
+        public IActionResult GetProject(long projectId, [FromQuery] bool? fetchPageCount, [FromQuery] bool? fetchAuthors, [FromQuery] bool? fetchResponsiblePersons)
         {
-            var projectData = m_projectManager.GetProject(projectId);
+            var isFetchPageCount = fetchPageCount ?? false;
+            var isFetchAuthors = fetchAuthors ?? false;
+            var isFetchResponsiblePersons = fetchResponsiblePersons ?? false;
+
+            var projectData = m_projectManager.GetProject(projectId, isFetchPageCount, isFetchAuthors, isFetchResponsiblePersons);
             if (projectData == null)
                 return NotFound();
 
@@ -58,23 +59,31 @@ namespace Vokabular.MainService.Controllers
             return m_projectManager.CreateProject(project);
         }
 
+        [HttpPut("{projectId}")]
+        public void UpdateProject(long projectId, [FromBody] ProjectContract data)
+        {
+            m_projectManager.UpdateProject(projectId, data);
+        }
+
         [HttpDelete("{projectId}")]
         public void DeleteProject(long projectId)
         {
-            throw new System.NotImplementedException();
+            m_projectManager.DeleteProject(projectId);
         }
 
         [HttpGet("{projectId}/metadata")]
         [ProducesResponseType(typeof(ProjectMetadataResultContract), StatusCodes.Status200OK)]
         public IActionResult GetProjectMetadata(long projectId, [FromQuery] bool includeAuthor, [FromQuery] bool includeResponsiblePerson,
-            [FromQuery] bool includeKind, [FromQuery] bool includeGenre)
+            [FromQuery] bool includeKind, [FromQuery] bool includeGenre, [FromQuery] bool includeOriginal, [FromQuery] bool includeKeyword)
         {
             var parameters = new GetProjectMetadataParameter
             {
                 IncludeKind = includeKind,
                 IncludeGenre = includeGenre,
+                IncludeOriginal = includeOriginal,
                 IncludeResponsiblePerson = includeResponsiblePerson,
-                IncludeAuthor = includeAuthor
+                IncludeAuthor = includeAuthor,
+                IncludeKeyword = includeKeyword
             };
             var resultData = m_projectMetadataManager.GetProjectMetadata(projectId, parameters);
 
@@ -90,28 +99,88 @@ namespace Vokabular.MainService.Controllers
             return m_projectMetadataManager.CreateNewProjectMetadataVersion(projectId, metadata);
         }
 
-        [HttpPut("{projectId}/literarykind")]
+        [HttpPut("{projectId}/literary-kind")]
         public void SetLiteraryKinds(long projectId, [FromBody] IntegerIdListContract kindIdList)
         {
-            m_projectMetadataManager.SetLiteraryKinds(projectId, kindIdList);
+            m_projectInfoManager.SetLiteraryKinds(projectId, kindIdList);
         }
 
-        [HttpPut("{projectId}/literarygenre")]
+        [HttpPut("{projectId}/literary-genre")]
         public void SetLiteraryGenres(long projectId, [FromBody] IntegerIdListContract genreIdList)
         {
-            m_projectMetadataManager.SetLiteraryGenres(projectId, genreIdList);
+            m_projectInfoManager.SetLiteraryGenres(projectId, genreIdList);
+        }
+
+        [HttpPut("{projectId}/literary-original")]
+        public void SetLiteraryOriginal(long projectId, [FromBody] IntegerIdListContract litOriginalIdList)
+        {
+            m_projectInfoManager.SetLiteraryOriginals(projectId, litOriginalIdList);
+        }
+
+        [HttpPut("{projectId}/keyword")]
+        public void SetKeywords(long projectId, [FromBody] IntegerIdListContract keywordIdList)
+        {
+            m_projectInfoManager.SetKeywords(projectId, keywordIdList);
+        }
+
+        [HttpPut("{projectId}/category")]
+        public void SetCategories(long projectId, [FromBody] IntegerIdListContract categoryIdList)
+        {
+            m_projectInfoManager.SetCategories(projectId, categoryIdList);
         }
 
         [HttpPut("{projectId}/author")]
         public void SetAuthors(long projectId, [FromBody] IntegerIdListContract authorIdList)
         {
-            m_projectMetadataManager.SetAuthors(projectId, authorIdList);
+            m_projectInfoManager.SetAuthors(projectId, authorIdList);
         }
 
-        [HttpPut("{projectId}/responsibleperson")]
-        public void SetResponsiblePersons(long projectId, [FromBody] IntegerIdListContract responsiblePersonIdList)
+        [HttpPut("{projectId}/responsible-person")]
+        public void SetResponsiblePersons(long projectId, [FromBody] List<ProjectResponsiblePersonIdContract> projectResposibleIdList)
         {
-            m_projectMetadataManager.SetResponsiblePersons(projectId, responsiblePersonIdList);
+            m_projectInfoManager.SetResponsiblePersons(projectId, projectResposibleIdList);
+        }
+
+        [HttpGet("{projectId}/literary-kind")]
+        public List<LiteraryKindContract> GetLiteraryKinds(long projectId)
+        {
+            return m_projectInfoManager.GetLiteraryKinds(projectId);
+        }
+
+        [HttpGet("{projectId}/literary-genre")]
+        public List<LiteraryGenreContract> GetLiteraryGenres(long projectId)
+        {
+            return m_projectInfoManager.GetLiteraryGenres(projectId);
+        }
+
+        [HttpGet("{projectId}/literary-original")]
+        public List<LiteraryOriginalContract> GetLiteraryOriginal(long projectId)
+        {
+            return m_projectInfoManager.GetLiteraryOriginals(projectId);
+        }
+
+        [HttpGet("{projectId}/keyword")]
+        public List<KeywordContract> GetKeywords(long projectId)
+        {
+            return m_projectInfoManager.GetKeywords(projectId);
+        }
+
+        [HttpGet("{projectId}/category")]
+        public List<CategoryContract> GetCategories(long projectId)
+        {
+            return m_projectInfoManager.GetCategories(projectId);
+        }
+
+        [HttpGet("{projectId}/author")]
+        public List<OriginalAuthorContract> GetAuthors(long projectId)
+        {
+            return m_projectInfoManager.GetAuthors(projectId);
+        }
+
+        [HttpGet("{projectId}/responsible-person")]
+        public List<ProjectResponsiblePersonContract> GetProjectResponsiblePersons(long projectId)
+        {
+            return m_projectInfoManager.GetProjectResponsiblePersons(projectId);
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
@@ -31,7 +31,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
 
         protected IKernel Container { get; private set; }
 
-        public void Process(BookVersion bookVersion, XmlReader xmlReader)
+        public void Process(BookData bookVersion, XmlReader xmlReader)
         {
             Init();
 
@@ -40,7 +40,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
             ProcessElement(bookVersion, xmlReader);
         }
 
-        protected virtual void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
+        protected virtual void ProcessElement(BookData bookData, XmlReader xmlReader)
         {
             Init();
 
@@ -49,12 +49,12 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
                 if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.IsStartElement() &&
                     m_processors.ContainsKey(xmlReader.LocalName))
                 {
-                    m_processors[xmlReader.LocalName].Process(bookVersion, GetSubtree(xmlReader));
+                    m_processors[xmlReader.LocalName].Process(bookData, GetSubtree(xmlReader));
                 }
             }
         }
 
-        protected virtual void PreprocessSetup(BookVersion bookVersion)
+        protected virtual void PreprocessSetup(BookData bookData)
         {
         }
 
@@ -74,7 +74,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
             m_initialized = true;
         }
 
-        protected virtual void ProcessAttributes(BookVersion bookVersion, XmlReader xmlReader)
+        protected virtual void ProcessAttributes(BookData bookData, XmlReader xmlReader)
         {
         }
 

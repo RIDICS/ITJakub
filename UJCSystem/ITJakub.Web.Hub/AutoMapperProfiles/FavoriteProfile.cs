@@ -1,6 +1,6 @@
 using AutoMapper;
-using ITJakub.ITJakubService.DataContracts.Contracts.Favorite;
 using ITJakub.Web.Hub.Models.Favorite;
+using Vokabular.MainService.DataContracts.Contracts.Favorite;
 
 namespace ITJakub.Web.Hub.AutoMapperProfiles
 {

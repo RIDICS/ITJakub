@@ -1,8 +1,8 @@
 ﻿function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList: any, searchedText?: string, initPageXmlId?: string) {
 
 
-    function readerPageChangedCallback(pageXmlId: string) {
-        updateQueryStringParameter("page", pageXmlId);
+    function readerPageChangedCallback(pageId: number) {
+        updateQueryStringParameter("page", pageId);
     }
 
     var readerPanels = [ReaderPanelEnum.TextPanel, ReaderPanelEnum.ImagePanel, ReaderPanelEnum.ContentPanel, ReaderPanelEnum.SearchPanel, ReaderPanelEnum.SettingsPanel];
@@ -12,13 +12,13 @@
     readerPlugin.makeReader(bookXmlId, versionXmlId, bookTitle, pageList);
     var search: Search;
 
-    function convertSearchResults(responseResults: Array<Object>): SearchResult[] {
-        var searchResults = new Array<SearchResult>();
+    function convertSearchResults(responseResults: Array<Object>): SearchHitResult[] {
+        var searchResults = new Array<SearchHitResult>();
         for (var i = 0; i < responseResults.length; i++) {
             var result = responseResults[i];
             var resultContextStructure = result["ContextStructure"];
-            var searchResult = new SearchResult();
-            searchResult.pageXmlId = result["PageXmlId"];
+            var searchResult = new SearchHitResult();
+            searchResult.pageId = result["PageId"];
             searchResult.pageName = result["PageName"];
             searchResult.before = resultContextStructure["Before"];
             searchResult.match = resultContextStructure["Match"];
@@ -40,7 +40,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Editions/Editions/AdvancedSearchInBookPaged",
-            data: { json: json, start: start, count: count, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            data: { json: json, start: start, count: count, projectId: readerPlugin.getBookXmlId(), snapshotId: readerPlugin.getVersionXmlId() },
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
@@ -62,7 +62,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Editions/Editions/TextSearchInBookPaged",
-            data: { text: text, start: start, count: count, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            data: { text: text, start: start, count: count, projectId: readerPlugin.getBookXmlId(), snapshotId: readerPlugin.getVersionXmlId() },
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
@@ -93,7 +93,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Editions/Editions/TextSearchInBookCount",
-            data: { text: text, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId()  },
+            data: { text: text, projectId: readerPlugin.getBookXmlId(), snapshotId: readerPlugin.getVersionXmlId()  },
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
@@ -106,7 +106,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Editions/Editions/TextSearchInBookPagesWithMatchHit",
-            data: { text: text, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            data: { text: text, projectId: readerPlugin.getBookXmlId(), snapshotId: readerPlugin.getVersionXmlId() },
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
@@ -122,7 +122,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Editions/Editions/AdvancedSearchInBookCount",
-            data: { json: json, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId()  },
+            data: { json: json, projectId: readerPlugin.getBookXmlId(), snapshotId: readerPlugin.getVersionXmlId()  },
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
@@ -136,7 +136,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Editions/Editions/AdvancedSearchInBookPagesWithMatchHit",
-            data: { json: json, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            data: { json: json, projectId: readerPlugin.getBookXmlId(), snapshotId: readerPlugin.getVersionXmlId() },
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
@@ -168,7 +168,8 @@
     if (typeof initPageXmlId !== "undefined" && initPageXmlId !== null) {
         var decodedText = decodeURIComponent(initPageXmlId);
         decodedText = replaceSpecialChars(decodedText);
-        readerPlugin.moveToPage(decodedText, true);
+        var pageId = Number(decodedText);
+        readerPlugin.moveToPage(pageId, true);
     }
 
     //label item in main menu
@@ -179,7 +180,7 @@
 
 function listBookReadClicked(target) {
     return context => {
-        var bookId = $(target).parents("li.list-item").attr("data-bookid");
+        var bookId = $(target).parents("li.list-item").attr("data-id");
         if (context.search.isLastQueryJson()) { //only text seach criteria we should propagate
             return onClickHref(context.event, getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery());
         } else {
@@ -190,7 +191,7 @@ function listBookReadClicked(target) {
 
 function searchBookReadClicked(target) {
     return context => {
-        var bookId = $(target).parents("li.list-item").attr("data-bookid");
+        var bookId = $(target).parents("li.list-item").attr("data-id");
         return onClickHref(context.event, getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery());
     };
 }

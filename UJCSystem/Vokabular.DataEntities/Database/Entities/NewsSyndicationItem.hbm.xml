@@ -14,10 +14,11 @@
     
     <property name="ItemType" />
     
-    <property name="CreateTime" />    
+    <property name="CreateTime" type="UtcDateTime" />    
     
     <many-to-one name="User"
                  class="User"
+                 column="[User]"
                  lazy="proxy" />
   </class>
 </hibernate-mapping>

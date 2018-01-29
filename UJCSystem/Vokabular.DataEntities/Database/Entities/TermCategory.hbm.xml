@@ -5,10 +5,10 @@
       <generator class="identity" />
     </id>
 
-    <property name="Name" />        
+    <property name="Name" />
 
     <bag name="Terms">
-      <key column="TermCategory" />      
+      <key column="TermCategory" />
       <one-to-many class="Term" />
     </bag>
 

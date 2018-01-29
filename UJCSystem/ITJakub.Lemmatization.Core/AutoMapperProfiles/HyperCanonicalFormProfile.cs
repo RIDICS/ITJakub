@@ -1,12 +1,12 @@
 using AutoMapper;
-using ITJakub.Lemmatization.DataEntities;
+using ITJakub.Lemmatization.DataEntities.Entities;
 using ITJakub.Lemmatization.Shared.Contracts;
 
 namespace ITJakub.Lemmatization.Core.AutoMapperProfiles
 {
     public class HyperCanonicalFormProfile : Profile
     {
-        protected override void Configure()
+        public HyperCanonicalFormProfile()
         {
             CreateMap<HyperCanonicalForm, HyperCanonicalFormContract>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))

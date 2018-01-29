@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
@@ -19,12 +19,12 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
             get { return new List<ConcreteInstanceProcessorBase<T>>(); }
         }
 
-        protected override sealed T LoadInstance(BookVersion bookVersion)
+        protected override sealed T LoadInstance(BookData bookData)
         {
            throw new NotSupportedException();
         }
 
-        protected override sealed void SaveInstance(T instance, BookVersion bookVersion)
+        protected override sealed void SaveInstance(T instance, BookData bookData)
         {
             throw new NotSupportedException();
         }

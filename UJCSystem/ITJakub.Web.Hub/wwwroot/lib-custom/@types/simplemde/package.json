@@ -1,0 +1,72 @@
+{
+  "_args": [
+    [
+      "@types/simplemde@1.11.7",
+      "c:\\Pool\\WebApplication1\\WebApplication1"
+    ]
+  ],
+  "_from": "@types/simplemde@1.11.7",
+  "_id": "@types/simplemde@1.11.7",
+  "_inCache": true,
+  "_location": "/@types/simplemde",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/simplemde-1.11.7.tgz_1500319724354_0.6442719739861786"
+  },
+  "_npmUser": {
+    "email": "ts-npm-types@microsoft.com",
+    "name": "types"
+  },
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "@types/simplemde",
+    "raw": "@types/simplemde@1.11.7",
+    "rawSpec": "1.11.7",
+    "scope": "@types",
+    "spec": "1.11.7",
+    "type": "version"
+  },
+  "_requiredBy": [
+    "#DEV:/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@types/simplemde/-/simplemde-1.11.7.tgz",
+  "_shasum": "c8bd9f54ff46db7f311a989004eb5815acedf429",
+  "_shrinkwrap": null,
+  "_spec": "@types/simplemde@1.11.7",
+  "_where": "c:\\Pool\\WebApplication1\\WebApplication1",
+  "contributors": [
+    {
+      "name": "Scalesoft",
+      "url": "https://github.com/Scalesoft"
+    }
+  ],
+  "dependencies": {},
+  "description": "TypeScript definitions for SimpleMDE",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "integrity": "sha512-b3yirBar1gqb9clgJJKpx+Or3txkOOkm5sffhRKaBUfh7+1D2Aimx2RKXGS1LK9S5KyNmug3lwpGJtaID9cOnA==",
+    "shasum": "c8bd9f54ff46db7f311a989004eb5815acedf429",
+    "tarball": "https://registry.npmjs.org/@types/simplemde/-/simplemde-1.11.7.tgz"
+  },
+  "installable": true,
+  "license": "MIT",
+  "main": "",
+  "maintainers": [
+    {
+      "name": "types",
+      "email": "ts-npm-types@microsoft.com"
+    }
+  ],
+  "name": "@types/simplemde",
+  "optionalDependencies": {},
+  "peerDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://www.github.com/DefinitelyTyped/DefinitelyTyped.git"
+  },
+  "scripts": {},
+  "typeScriptVersion": "2.0",
+  "typesPublisherContentHash": "7921000dc1bd4b12b5d8647e8c52f6b059774f873c32fd15261329b9d01987da",
+  "version": "1.11.7"
+}

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Vokabular.MainService.DataContracts.Contracts
+﻿namespace Vokabular.MainService.DataContracts.Contracts
 {
     public class ResponsiblePersonContract
     {
@@ -9,8 +7,14 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public string LastName { get; set; }
     }
 
-    public class NewResponsiblePersonContract : ResponsiblePersonContract
+    public class ProjectResponsiblePersonContract : ResponsiblePersonContract
     {
-        public IList<int> ResponsibleTypeIdList { get; set; }
+        public ResponsibleTypeContract ResponsibleType { get; set; }
+    }
+
+    public class ProjectResponsiblePersonIdContract
+    {
+        public int ResponsiblePersonId { get; set; }
+        public int ResponsibleTypeId { get; set; }
     }
 }

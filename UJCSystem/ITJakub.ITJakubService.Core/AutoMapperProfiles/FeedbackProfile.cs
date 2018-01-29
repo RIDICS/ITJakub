@@ -6,7 +6,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
     public class FeedbackProfile : Profile
     {
-        protected override void Configure()
+        public FeedbackProfile()
         {
             CreateMap<Feedback, FeedbackContract>()
                 .ForMember(m => m.Id, opt => opt.MapFrom(src => src.Id))

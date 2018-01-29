@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Castle.MicroKernel;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Terms
@@ -24,6 +25,14 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Terms
                 {
                     Container.Resolve<TermProcessor>()
                 };
+            }
+        }
+
+        protected override void PreprocessSetup(BookData bookData)
+        {
+            if (bookData.Terms == null)
+            {
+                bookData.Terms = new List<TermData>();
             }
         }
     }
