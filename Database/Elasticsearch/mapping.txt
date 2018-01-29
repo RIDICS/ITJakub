@@ -6,13 +6,14 @@ PUT snapshotindex
         "snapshot_analyzer": {
           "type": "custom",
           "char_filter": "escaped_chars",
-          "tokenizer": "lowercase"
+          "tokenizer": "whitespace",
+          "filter": "lowercase"
         }
       },
       "char_filter": {
         "escaped_chars": { 
           "type": "pattern_replace",
-          "pattern": "\\[a-zA-Z]*|<[0-9]*?>",
+          "pattern": " <[0-9]*?> ",
           "replacement": ""
         }
       }
@@ -43,6 +44,14 @@ PUT snapshotindex
         "manuscriptTitle": {"type": "keyword" },
         "notBefore": {"type": "date" },
         "notAfter": {"type": "date" },
+        "pages":{
+          "type": "nested",
+          "properties": { 
+            "id": {"type": "keyword"},
+            "pageIndex": {"type": "long"}
+          }
+        },
+        
         "snapshotText":     { 
           "type": "text", 
           "term_vector": "with_positions_offsets", 
@@ -60,16 +69,9 @@ PUT pageindex
       "analyzer": {
         "page_analyzer": {
           "type": "custom",
-          "char_filter": "escaped_chars",
-          "tokenizer": "lowercase"
+          "tokenizer": "whitespace",
+          "filter": "lowercase"
           
-        }
-      },
-      "char_filter": {
-        "escaped_chars": { 
-          "type": "pattern_replace",
-          "pattern": "\\[a-zA-Z]*|<[0-9]*?>",
-          "replacement": ""
         }
       }
     }

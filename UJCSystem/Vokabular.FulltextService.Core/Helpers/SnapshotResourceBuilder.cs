@@ -51,13 +51,13 @@ namespace Vokabular.FulltextService.Core.Helpers
                     if (counter + index == pageText.Length - 1)
                     {
                         pageBuilder.Append(pageText.Substring(index, counter));
-                        pageBuilder.Append($"<{pageIndex}>");
+                        pageBuilder.Append($" <{pageIndex}> ");
                         return pageBuilder.ToString();
                     }
 
                     if (counter > MinSnippetSize && pageText[index + counter].Equals(' '))
                     {
-                        pageBuilder.Append($"<{pageIndex}>");
+                        pageBuilder.Append($" <{pageIndex}> ");
                         pageBuilder.Append(pageText.Substring(index, counter));
                         break;
                     }
