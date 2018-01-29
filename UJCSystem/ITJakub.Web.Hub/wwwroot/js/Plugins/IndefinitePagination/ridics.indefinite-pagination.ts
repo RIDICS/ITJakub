@@ -6,6 +6,7 @@
     private totalNumberOfPages: number;
     private firstPage = 1;
     private currentPage = this.firstPage;
+    private basicMode = true;
     private slider: JQuery;
     private wrapped = false;
 
@@ -17,7 +18,7 @@
         }
     }
 
-    make() { //TODO logic
+    make() {
         const container = this.paginationContainer;
         container.addClass("indefinite-pagination");
         container.empty();
@@ -80,6 +81,23 @@
         const result = this.wrapped;
         this.wrapped = false;
         return result;
+    }
+
+    isBasicMode() {
+        return this.basicMode;
+    }
+
+    reset() {
+        this.paginationContainer.off();
+        if (this.slider) {
+            this.slider.slider("destroy");
+        }
+        if (this.goToPageInput) {
+            this.goToPageInput.off();
+        }
+        this.currentPage = this.firstPage;
+        this.basicMode = true;
+        this.make();
     }
 
     private makeSlider(currentPage: number, totalNumberOfPages: number): JQuery {
@@ -246,6 +264,7 @@
                     const deferredObject = this.options.loadAllPagesCallback();
                     deferredObject.done((totalNumberOfPages: number) => {
                         this.setTotalNumberOfPages(totalNumberOfPages);
+                        this.basicMode = false;
                     });
                     deferredObject.fail(() => {
                         this.showFullPageListLoadingError();
