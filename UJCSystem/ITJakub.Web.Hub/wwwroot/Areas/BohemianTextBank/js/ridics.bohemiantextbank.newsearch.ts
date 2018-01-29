@@ -4,8 +4,7 @@
 }
 
 class BohemianTextBankNew {
-    private approximateNumberOfResultsPerPage = 4; //preferred number of results to be displayed in page
-    private resultsPerPage = 3; //corresponds to amount of results per page that server can return
+    private searchResultsOnPage = 6;//corresponds to amount of results per page that should be on screen
 
     private hitBookIds = [];
     private transientResults: ICorpusSearchResult[] = [];
@@ -22,10 +21,6 @@ class BohemianTextBankNew {
     private currentViewPage = 1;
 
     private contextLength = -1;
-
-    private resultsCountOnPage = 20;
-
-    private paginationMaxVisibleElements = 5;
 
     private defaultErrorMessage =
         "Vyhledávání se nezdařilo. Ujistěte se, zda máte zadáno alespoň jedno kritérium na vyhledávání v textu.";
@@ -294,13 +289,13 @@ class BohemianTextBankNew {
     private corpusAdvancedSearchPaged(json: string, start: number, contextLength: number, bookId: number) {
         if (!json) return;
 
-        const count = this.resultsPerPage;
+        const count = this.searchResultsOnPage - this.transientResults.length;//TODO test
         this.showLoading();
 
         const payload: ICorpusLookupAdvancedSearch = {
             json: json,
             start: start,
-            count: this.resultsPerPage,
+            count: count,
             contextLength: contextLength,
             snapshotId: bookId,
             selectedCategoryIds: this.categoryIdsInQuery,
@@ -312,12 +307,8 @@ class BohemianTextBankNew {
         advancedSearchPageAjax.done((response) => {
             this.hideLoading();
             const results: ICorpusSearchResult[] = response["results"];
-            this.currentResultStart += this.resultsPerPage;
-                const resultPage = (start / count) + 1;
-                const compositionPage = (this.compositionResultListStart / this.compositionsPerPage);
-                const viewingPage = this.paginator.getCurrentPage();
-                this.makeHistoryEntry(bookId, resultPage, compositionPage, viewingPage);
-            this.calculateAndFlushNumberOfResults(results);
+            this.currentResultStart += count;
+            this.calculateAndFlushNumberOfResults(results, count);
         });
         advancedSearchPageAjax.fail(() => {
             this.printErrorMessage(this.defaultErrorMessage);
@@ -460,7 +451,7 @@ class BohemianTextBankNew {
 
     private corpusBasicSearchPaged(text: string, start: number, contextLength: number, bookId: number) {
         if (!text) return;
-        const count = this.resultsPerPage;
+        const count = this.searchResultsOnPage - this.transientResults.length;
 
         this.showLoading();
 
@@ -476,9 +467,9 @@ class BohemianTextBankNew {
 
         console.log(`---PAGE ${this.paginator.getCurrentPage()} INDEX---`);
         console.log(`composition list start: ${this.compositionResultListStart - this.compositionsPerPage}`);
-        console.log(`result list start: ${this.currentResultStart}`);
+        console.log(`result list start: ${start}`);
+        console.log(`result list count: ${count}`);
         console.log(`current bookID: ${this.currentBookId}`);
-        console.log(`current viewing page: ${this.paginator.getCurrentPage()}`);
         console.log(`---PAGE INDEX END---`);
 
         const getPageAjax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/TextSearchFulltextGetBookPage`,
@@ -487,12 +478,8 @@ class BohemianTextBankNew {
         getPageAjax.done((response) => {
             this.hideLoading();
             const results: ICorpusSearchResult[] = response["results"];
-            this.currentResultStart += this.resultsPerPage;
-            const resultPage = (this.currentResultStart / count) + 1;
-            const compositionPage = (this.compositionResultListStart / this.compositionsPerPage);
-            const viewingPage = this.paginator.getCurrentPage();
-            this.makeHistoryEntry(bookId, resultPage, compositionPage, viewingPage);
-            this.calculateAndFlushNumberOfResults(results);
+            this.currentResultStart += count;
+            this.calculateAndFlushNumberOfResults(results, count);
         });
 
         getPageAjax.fail(() => {
@@ -500,21 +487,23 @@ class BohemianTextBankNew {
         });
     }
 
-    private calculateAndFlushNumberOfResults(results: ICorpusSearchResult[]) {
+    private calculateAndFlushNumberOfResults(results: ICorpusSearchResult[], count: number) {
         if (!results.length) {
             this.switchToNextBook();
             return;
         }
         this.transientResults = this.transientResults.concat(results);
-        if (results.length < this.resultsPerPage && this.transientResults.length < this.approximateNumberOfResultsPerPage) {
+        if (results.length < count && this.transientResults.length < this.searchResultsOnPage) {//TODO test
             this.switchToNextBook();
             return;
         }
 
-        if (this.transientResults.length < this.approximateNumberOfResultsPerPage) {
+        if (this.transientResults.length < this.searchResultsOnPage) {//TODO test
             this.loadBookResultPage(this.currentResultStart, this.currentBookId);
         } else {
             this.flushTransientResults();
+            const viewingPage = this.paginator.getCurrentPage();
+            this.makeHistoryEntry(this.currentResultStart, this.compositionResultListStart - this.compositionsPerPage, viewingPage);
         }
     }
 
@@ -525,7 +514,12 @@ class BohemianTextBankNew {
             if (this.compositionPageIsLast) {
                 if (this.transientResults.length) {
                     this.flushTransientResults();
-                }else {
+                    const viewingPage = this.paginator.getCurrentPage();
+                    this.makeHistoryEntry(this.currentResultStart, this.compositionResultListStart - this.compositionsPerPage, viewingPage);
+                } else {
+                    if (this.paginator.isBasicMode()) {//unknown number of pages, thus page was increased by one and needs descreasing
+                        this.paginator.updatePage(this.paginator.getCurrentPage() - 1);
+                    }
                     bootbox.alert({
                         title: "Attention",
                         message: "This is a last page",
@@ -572,12 +566,12 @@ class BohemianTextBankNew {
         const nextPageEl = $(".indefinite-pagination-next-page");
         nextPageEl.prop("disabled", false);
         this.resetIds();
+        this.paginator.reset();//reset pagination
         const firstPage = 1;
         this.currentViewPage = firstPage;
         this.emptyResultsTable();
         this.resetHistory();
         this.compositionPageIsLast = false;
-        this.paginator.updatePage(this.currentViewPage);
         this.actualizeSelectedBooksAndCategoriesInQuery();
         this.showLoading();
 
@@ -618,7 +612,6 @@ class BohemianTextBankNew {
     private goToPage(pageNumber: number) {
         this.loadPage(pageNumber);
         this.paginator.updatePage(pageNumber);
-        console.log(pageNumber);
     }
 
     private loadPreviousPage() {
@@ -638,14 +631,13 @@ class BohemianTextBankNew {
             }
             return;
         }
-
         const historyContainerEl = $(".page-history-constainer");
         //const prevPageButtonEl = $(".indefinite-pagination-prev-page");
         const viewingPageEl = historyContainerEl.children(`[data-viewing-page-number=${previousPage}]`);
         if (viewingPageEl.length && !pageHasBeenWrapped) {
             const entry: ICorpusSearchViewingPageHistoryEntry = JSON.parse(viewingPageEl.attr("data-viewing-page-structure"));
-            this.compositionResultListStart = (entry.compositionPage - 1) * this.compositionsPerPage;
-            this.currentResultStart = (entry.hitResultPage - 1) * this.resultsPerPage;
+            this.compositionResultListStart = entry.compositionResultListStart;
+            this.currentResultStart = entry.hitResultStart;//TODO count?
             this.currentBookIndex = entry.bookIndex;
             console.log(`---PAGE ${previousPage} LAST INDEX---`);
             console.log(`comosition list start: ${this.compositionResultListStart}`);
@@ -671,23 +663,23 @@ class BohemianTextBankNew {
         }
     }
 
-    private makeHistoryEntry(bookId: number, resultPage: number, compositionPage: number, viewingPage: number) {
+    private makeHistoryEntry(start: number, compositionResultListStart: number, viewingPage: number) {
         const historyContainerEl = $(".page-history-constainer");
         const viewingPageEl = historyContainerEl.children(`[data-viewing-page-number=${viewingPage}]`);
         if (viewingPageEl.length) {
             const pageStructure: ICorpusSearchViewingPageHistoryEntry = {
-                compositionPage: compositionPage,
+                compositionResultListStart: compositionResultListStart,
                 bookIndex: this.currentBookIndex,
-                hitResultPage: resultPage
+                hitResultStart: start
             };
             viewingPageEl.attr("data-viewing-page-structure", JSON.stringify(pageStructure));
         } else {
             const historyNewEntryEl = $(`<li></li>`);
             historyNewEntryEl.attr("data-viewing-page-number", viewingPage);
             const pageStructure: ICorpusSearchViewingPageHistoryEntry = {
-                compositionPage: compositionPage,
+                compositionResultListStart: compositionResultListStart,
                 bookIndex: this.currentBookIndex,
-                hitResultPage: resultPage
+                hitResultStart: start
             };
             historyNewEntryEl.attr("data-viewing-page-structure", JSON.stringify(pageStructure));
             historyContainerEl.append(historyNewEntryEl);
@@ -698,13 +690,13 @@ class BohemianTextBankNew {
         if (!json) return;
         const nextPageEl = $(".indefinite-pagination-next-page");
         nextPageEl.prop("disabled", false);
-        this.compositionResultListStart = -1;
-        this.currentViewPage = 1;
+        this.resetIds();
+        this.paginator.reset();//reset pagination
+        const firstPage = 1;
+        this.currentViewPage = firstPage;
         this.emptyResultsTable();
         this.resetHistory();
         this.compositionPageIsLast = false;
-        this.paginator.updatePage(this.currentViewPage);
-
         this.actualizeSelectedBooksAndCategoriesInQuery();
         this.showLoading();
 
@@ -742,6 +734,7 @@ class BohemianTextBankNew {
 
         $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetHitBookIdsPaged`, payload)
             .done((bookIds: IPagedResultArray<number>) => {
+                this.hideLoading();
                 const totalCount = bookIds.totalCount;
                 const page = (start / count) + 1;
                 const totalPages = Math.ceil(totalCount / count);
@@ -756,7 +749,7 @@ class BohemianTextBankNew {
                     }
                     bootbox.alert({
                         title: "Attention",
-                        message: "Page does not exist",
+                        message: "No more results",
                         buttons: {
                             ok: {
                                 className: "btn-default"
@@ -807,6 +800,7 @@ class BohemianTextBankNew {
 
         $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchGetHitBookIdsPaged`, payload)
             .done((bookIds: IPagedResultArray<number>) => {
+                this.hideLoading();
                 const totalCount = bookIds.totalCount;
                 const page = (start / count) + 1;
                 const totalPages = Math.ceil(totalCount / count);
@@ -823,7 +817,7 @@ class BohemianTextBankNew {
                     }
                     bootbox.alert({
                         title: "Attention",
-                        message: "Page does not exist",
+                        message: "No more results",
                         buttons: {
                             ok: {
                                 className: "btn-default"
@@ -878,26 +872,23 @@ class BohemianTextBankNew {
         const searchQuery = this.search.getLastQuery();
         let ajax: JQuery.jqXHR;
         if (this.search.isLastQueryJson()) {
-            ajax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/CreatePaginatedStructureAdvanced`,
+            ajax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetTotalResultNumberAdvanced`,
                 {
                     json: searchQuery,
                     selectedSnapshotIds: this.bookIdsInQuery,
-                    selectedCategoryIds: this.categoryIdsInQuery,
-                    approximateNumberOfResultsPerPage: this.approximateNumberOfResultsPerPage
+                    selectedCategoryIds: this.categoryIdsInQuery
                 });
         } else {
-            ajax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/CreatePaginatedStructure`,
+            ajax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetTotalResultNumber`,
                 {
                     text: searchQuery,
                     selectedSnapshotIds: this.bookIdsInQuery,
-                    selectedCategoryIds: this.categoryIdsInQuery,
-                    approximateNumberOfResultsPerPage: this.approximateNumberOfResultsPerPage
+                    selectedCategoryIds: this.categoryIdsInQuery
                 });
         }
         const deferred = $.Deferred();
-        ajax.done((allPages) => {//TODO make interface
-            const totalNumberOfPages = allPages.totalCount;
-            const pages = allPages.pages;//TODO
+        ajax.done((result) => {//TODO make interface
+            const totalNumberOfPages = Math.ceil(result.totalCount / this.searchResultsOnPage);
             deferred.resolve(totalNumberOfPages);
         });
         ajax.fail(() => {
@@ -906,56 +897,56 @@ class BohemianTextBankNew {
         return deferred;
     }
 
-    private calculateNumberOfPages() { //TODO not used yet
-        var pageStructure = [];
-        const hitBookIdsAjax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetHitBookIds`,
-            { text: "", selectedBookIds: null, selectedCategoryIds: null } as JQuery.PlainObject);
-        hitBookIdsAjax.done((bookIds: number[]) => {
-            bookIds.forEach((bookId: number) => {
-                const bookHitPagesAjax =
-                    $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetNumberOfPagesByBook`,
-                        { bookId: bookId } as JQuery.PlainObject);
-                bookHitPagesAjax.done((pages: number[]) => {
-                    var transientResults = [];
-                    var numberOfTransientPages = 0;
-                    pages.forEach((page: number) => {
-                        const numberOfHitsPerPageAjax =
-                            $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetResultNumberByBookByPage`,
-                                { bookId: bookId } as JQuery.PlainObject);
-                        numberOfHitsPerPageAjax.done((resultNumber: number) => {
-                            if (resultNumber < (this.approximateNumberOfResultsPerPage - 5)
-                            ) { //if page has less than minimum results, hold in temporary array
-                                transientResults.push({ bookId: bookId, page: page });
-                                numberOfTransientPages += resultNumber;
-                            } else { //more than minimum pages
-                                if (transientResults) {
-                                    transientResults.push({
-                                        bookId: bookId,
-                                        page: page
-                                    }); //if more than min number of pages and temp array exist, flush them
-                                    pageStructure.push(transientResults);
-                                    transientResults.length = 0;
-                                    numberOfTransientPages = 0;
-                                } else { //more than min number of pages, no temp array
-                                    pageStructure.push([{ bookId: bookId, page: page }]);
-                                }
-                            }
-                            if (numberOfTransientPages >= (this.approximateNumberOfResultsPerPage - 5)
-                            ) { //no page with more than min number of hits, but temp array is too big
-                                pageStructure.push(transientResults);
-                                transientResults.length = 0;
-                                numberOfTransientPages = 0;
-                            }
-                        }).fail(() => {
-                            //TODO
-                        });
-                    });
-                }).fail(() => {
-                    //TODO
-                });
-            });
-        }).fail(() => {
-            //TODO
-        });
-    }
+    //private calculateNumberOfPages() { //TODO not used yet
+    //    var pageStructure = [];
+    //    const hitBookIdsAjax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetHitBookIds`,
+    //        { text: "", selectedBookIds: null, selectedCategoryIds: null } as JQuery.PlainObject);
+    //    hitBookIdsAjax.done((bookIds: number[]) => {
+    //        bookIds.forEach((bookId: number) => {
+    //            const bookHitPagesAjax =
+    //                $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetNumberOfPagesByBook`,
+    //                    { bookId: bookId } as JQuery.PlainObject);
+    //            bookHitPagesAjax.done((pages: number[]) => {
+    //                var transientResults = [];
+    //                var numberOfTransientPages = 0;
+    //                pages.forEach((page: number) => {
+    //                    const numberOfHitsPerPageAjax =
+    //                        $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetResultNumberByBookByPage`,
+    //                            { bookId: bookId } as JQuery.PlainObject);
+    //                    numberOfHitsPerPageAjax.done((resultNumber: number) => {
+    //                        if (resultNumber < (this.approximateNumberOfResultsPerPage - 5)
+    //                        ) { //if page has less than minimum results, hold in temporary array
+    //                            transientResults.push({ bookId: bookId, page: page });
+    //                            numberOfTransientPages += resultNumber;
+    //                        } else { //more than minimum pages
+    //                            if (transientResults) {
+    //                                transientResults.push({
+    //                                    bookId: bookId,
+    //                                    page: page
+    //                                }); //if more than min number of pages and temp array exist, flush them
+    //                                pageStructure.push(transientResults);
+    //                                transientResults.length = 0;
+    //                                numberOfTransientPages = 0;
+    //                            } else { //more than min number of pages, no temp array
+    //                                pageStructure.push([{ bookId: bookId, page: page }]);
+    //                            }
+    //                        }
+    //                        if (numberOfTransientPages >= (this.approximateNumberOfResultsPerPage - 5)
+    //                        ) { //no page with more than min number of hits, but temp array is too big
+    //                            pageStructure.push(transientResults);
+    //                            transientResults.length = 0;
+    //                            numberOfTransientPages = 0;
+    //                        }
+    //                    }).fail(() => {
+    //                        //TODO
+    //                    });
+    //                });
+    //            }).fail(() => {
+    //                //TODO
+    //            });
+    //        });
+    //    }).fail(() => {
+    //        //TODO
+    //    });
+    //}
 }

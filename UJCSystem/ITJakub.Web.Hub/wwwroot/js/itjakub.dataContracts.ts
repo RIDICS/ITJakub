@@ -429,9 +429,9 @@ interface IOriginalAuthorPagedResult {
 }
 
 interface ICorpusSearchViewingPageHistoryEntry {
-    compositionPage: number;
+    compositionResultListStart: number;
     bookIndex: number;
-    hitResultPage: number;
+    hitResultStart: number;
 }
 
 interface ICorpusLookupBase {
