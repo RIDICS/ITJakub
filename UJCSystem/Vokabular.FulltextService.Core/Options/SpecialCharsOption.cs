@@ -4,14 +4,14 @@
     {
         public string EscapeCharacter { get; set; }
 
-        public string CommentMarkBeginning { get; set; }
+        public string CommentMarkOpening { get; set; }
 
-        public string CommentMarkEnding { get; set; }
+        public string CommentMarkClosing { get; set; }
 
         public string EscapedEscapeCharacter { get; set; }
 
-        public string EscapedCommentMarkBeginning { get; set; }
+        public string EscapedCommentMarkOpening { get; set; }
 
-        public string EscapedCommentMarkEnding { get; set; }
+        public string EscapedCommentMarkClosing { get; set; }
     }
 }

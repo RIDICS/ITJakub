@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Options;
 using Vokabular.FulltextService.Core.Options;
@@ -19,8 +18,8 @@ namespace Vokabular.FulltextService.Core.Helpers.Validators
         public TextValidator(IOptions<SpecialCharsOption> options)
         {
             m_escapeChar = options.Value.EscapedEscapeCharacter;
-            m_commentMarkBegining = options.Value.EscapedCommentMarkBeginning;
-            m_commentMarkEnding = options.Value.EscapedCommentMarkEnding;
+            m_commentMarkBegining = options.Value.EscapedCommentMarkOpening;
+            m_commentMarkEnding = options.Value.EscapedCommentMarkClosing;
 
             CreateRegexPatterns();
         }

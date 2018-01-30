@@ -32,7 +32,7 @@ namespace Vokabular.FulltextService.Core.Managers
             var validationResult = m_textValidator.Validate(textResource.PageText);
             if (!validationResult.IsValid)
             {
-                throw new ArgumentException(validationResult.ErrorMessage);
+                //throw new ArgumentException(validationResult.ErrorMessage);
             }
 
             var client = CommunicationProvider.GetElasticClient();
