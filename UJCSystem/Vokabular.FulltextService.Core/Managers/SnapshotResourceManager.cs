@@ -15,8 +15,8 @@ namespace Vokabular.FulltextService.Core.Managers
         {
             m_snapshotResourceBuilder = snapshotResourceBuilder;
         }
-        
-        public ResultContract CreateSnapshotResource(SnapshotResourceContract snapshotResourceContract)
+
+        private ResultContract CreateSnapshotResource(SnapshotResourceContract snapshotResourceContract)
         {
             var client = CommunicationProvider.GetElasticClient();
             
@@ -36,12 +36,12 @@ namespace Vokabular.FulltextService.Core.Managers
             snapshotContract.SnapshotId = snapshotPageIdsResourceContract.SnapshotId;
             snapshotContract.ProjectId = snapshotPageIdsResourceContract.ProjectId;
             MapToDatabaseMetadata(snapshotContract, snapshotPageIdsResourceContract.MetadataResource);
-
+            
             var result = CreateSnapshotResource(snapshotContract);
             return result;
 
         }
-
+        
         private void MapToDatabaseMetadata(SnapshotResourceContract snapshotContract, SnapshotMetadataResourceContract metadata)
         {
             snapshotContract.Title = metadata.Title;

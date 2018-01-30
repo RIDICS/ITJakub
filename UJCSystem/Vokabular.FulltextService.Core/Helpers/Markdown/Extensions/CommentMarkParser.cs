@@ -22,10 +22,10 @@ namespace Vokabular.FulltextService.Core.Helpers.Markdown.Extensions
         public override bool Match(InlineProcessor processor, ref StringSlice slice)
         {
             bool matchFound = false;
-            char previous;
-            
-            previous = slice.PeekCharExtra(-1);
+            var previous = slice.PeekCharExtra(-1);
+            int counter = 0;
 
+            
             if (previous.IsWhiteSpaceOrZero() || previous == '(' || previous == '[')
             {
                 char current;

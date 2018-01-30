@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Vokabular.FulltextService.Core.Communication;
 using Vokabular.FulltextService.Core.Options;
 using Vokabular.Shared.DataContracts.Types;
@@ -10,6 +9,7 @@ namespace Vokabular.FulltextService.Core.Managers
     {
         protected readonly CommunicationProvider CommunicationProvider;
         private readonly IOptions<IndicesOption> m_indicesOptions;
+
         protected const string PageType = "page";
         protected const string SnapshotType = "snapshot";
         protected const string SnapshotIdField = "snapshotId";
@@ -17,12 +17,11 @@ namespace Vokabular.FulltextService.Core.Managers
         protected const string PageTextField = "pageText";
         protected const string SnapshotTextField = "snapshotText";
         protected const string IdField = "_id";
-        protected const string TitleField = "title";
-        protected const string AuthorField = "authorsLabel";
-        protected const string DatingField = "originDate";
 
-        private const string BadSortValueErrorMessage = "Bad sorting value";
-
+        private const string TitleField = "title";
+        private const string AuthorField = "authorsLabel";
+        private const string DatingField = "originDate";
+        
         protected ElasticsearchManagerBase(CommunicationProvider communicationProvider, IOptions<IndicesOption> indicesOptions)
         {
             CommunicationProvider = communicationProvider;
@@ -44,8 +43,7 @@ namespace Vokabular.FulltextService.Core.Managers
                 case SortTypeEnumContract.Dating:
                     return DatingField;
                 default:
-                    return TitleField; //TODO throw exception or set default sorting
-                    throw new ArgumentException(BadSortValueErrorMessage);
+                    return TitleField; 
             }
         }
     }

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Nest;
 using Vokabular.FulltextService.DataContracts.Contracts;
-using Vokabular.Shared.DataContracts;
 using Vokabular.Shared.DataContracts.Search.Corpus;
 
 namespace Vokabular.FulltextService.Core.Helpers
