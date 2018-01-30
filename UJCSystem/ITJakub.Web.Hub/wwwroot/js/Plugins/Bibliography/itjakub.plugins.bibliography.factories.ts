@@ -210,7 +210,7 @@ class BibliographyFactory {
         return bottomPanel;
     }
 
-    makeFavoriteBookInfo(bookFavorites: IFavoriteBaseInfo[]): HTMLElement[] {
+    makeFavoriteBookInfo(bookFavorites: IFavoriteBaseInfoWithLabel[]): HTMLElement[] {
         var resultList = new Array<HTMLElement>();
         var config = this.configuration.getMidllePanelConfig();
         var maxFavLabels = bookFavorites.length;

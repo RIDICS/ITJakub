@@ -1,8 +1,8 @@
 ﻿function initGrammarReader(bookId: number, bookXmlId: string, versionXmlId: string, bookTitle: string, pageList: any, searchedText?: string, initPageXmlId?: string) {
 
 
-    function readerPageChangedCallback(pageXmlId: string) {
-        updateQueryStringParameter("page", pageXmlId);
+    function readerPageChangedCallback(pageId: number) {
+        updateQueryStringParameter("page", pageId);
     }
 
     function hideTypeahead() {
@@ -15,7 +15,7 @@
     
     var readerPlugin = new ReaderModule(<HTMLDivElement>$("#ReaderDiv")[0], readerPageChangedCallback, readerPanels, leftPanelButtons, mainPanelButtons);
     readerPlugin.makeReader(bookXmlId, versionXmlId, bookTitle, pageList);
-    readerPlugin.setTermPanelCallback((xmlId: string, text: string) => {
+    readerPlugin.setTermPanelCallback((termId: number, text: string) => {
         window.location.href = getBaseUrl() + "OldGrammar/OldGrammar/Search?search=" + text;
     });
     
@@ -23,14 +23,14 @@
 
     var search: Search;
     
-    function convertSearchResults(responseResults: Array<Object>): PageDescription[]{
+    function convertSearchResults(responseResults: Array<IPage>): PageDescription[]{
 
         var searchResults = new Array<PageDescription>();
         for (var i = 0; i < responseResults.length; i++) {
             var result = responseResults[i];
             var searchResult = new PageDescription();
-            searchResult.PageXmlId = result["PageXmlId"];
-            searchResult.PageName = result["PageName"];
+            searchResult.pageId = result.id;
+            searchResult.pageName = result.name;
             searchResults.push(searchResult);
         }
 
@@ -48,7 +48,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "OldGrammar/OldGrammar/TextSearchInBook",
-            data: { text: text, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            data: { text: text, projectId: readerPlugin.getBookXmlId(), snapshotId: readerPlugin.getVersionXmlId() },
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
@@ -71,7 +71,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "OldGrammar/OldGrammar/AdvancedSearchInBook",
-            data: { json: json, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            data: { json: json, projectId: readerPlugin.getBookXmlId(), snapshotId: readerPlugin.getVersionXmlId() },
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
@@ -111,7 +111,8 @@
     if (typeof initPageXmlId !== "undefined" && initPageXmlId !== null) {
         var decodedText = decodeURIComponent(initPageXmlId);
         decodedText = replaceSpecialChars(decodedText);
-        readerPlugin.moveToPage(decodedText, true);
+        var pageId = Number(decodedText);
+        readerPlugin.moveToPage(pageId, true);
     }
 
     //label item in main menu
@@ -122,7 +123,7 @@
 
 function listGrammarBookReadClicked(target) {
     return context => {
-        var bookId = $(target).parents("li.list-item").attr("data-bookid");
+        var bookId = $(target).parents("li.list-item").attr("data-id");
         if (context.search.isLastQueryJson()) { //only text seach criteria we should propagate
             onClickHref(context.event, getBaseUrl() + "OldGrammar/OldGrammar/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery());
         } else {
@@ -133,7 +134,7 @@ function listGrammarBookReadClicked(target) {
 
 function searchGrammarBookReadClicked(target) {
     return context => {
-        var bookId = $(target).parents("li.list-item").attr("data-bookid");
+        var bookId = $(target).parents("li.list-item").attr("data-id");
         onClickHref(context.event, getBaseUrl() + "OldGrammar/OldGrammar/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery());
     }
 }

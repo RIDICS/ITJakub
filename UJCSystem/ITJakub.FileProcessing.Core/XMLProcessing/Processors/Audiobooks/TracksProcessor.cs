@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Audiobooks
@@ -22,11 +22,11 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Audiobooks
             get { return new List<ProcessorBase> {Container.Resolve<TrackProcessor>()}; }
         }
 
-        protected override void PreprocessSetup(BookVersion bookVersion)
+        protected override void PreprocessSetup(BookData bookData)
         {
-            if (bookVersion.Tracks == null)
+            if (bookData.Tracks == null)
             {
-                bookVersion.Tracks = new List<Track>();
+                bookData.Tracks = new List<TrackData>();
             }
         }
     }

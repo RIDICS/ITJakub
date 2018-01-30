@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Vokabular.DataEntities.Database.Entities.Enums;
 
 namespace Vokabular.DataEntities.Database.Entities
@@ -31,7 +32,7 @@ namespace Vokabular.DataEntities.Database.Entities
 
         //public virtual IList<FavoriteLabel> FavoriteLabels { get; set; }
 
-        //public virtual IList<Group> Groups { get; set; }
+        public virtual IList<UserGroup> Groups { get; set; }
         
 
         public virtual bool Equals(User other)

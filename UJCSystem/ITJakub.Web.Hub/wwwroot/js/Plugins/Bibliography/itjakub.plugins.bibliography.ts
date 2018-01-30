@@ -123,7 +123,7 @@ class BibliographyModule {
         if (bookIds.length === 0) return;
 
         var favoriteLabels: IFavoriteLabel[] = null;
-        var favoriteBooksDictionary: DictionaryWrapper<IFavoriteBaseInfo[]> = null;
+        var favoriteBooksDictionary: DictionaryWrapper<IFavoriteBaseInfoWithLabel[]> = null;
 
         favoriteManager.getLatestFavoriteLabels(labels => {
             favoriteLabels = labels;
@@ -133,8 +133,8 @@ class BibliographyModule {
             }
         });
 
-        favoriteManager.getFavoritesForBooks(bookIds, favoriteBooks => {
-            favoriteBooksDictionary = new DictionaryWrapper<IFavoriteBaseInfo[]>();
+        favoriteManager.getFavoritesForBooks(null, bookIds, favoriteBooks => {
+            favoriteBooksDictionary = new DictionaryWrapper<IFavoriteBaseInfoWithLabel[]>();
             $.each(favoriteBooks, (index, favoriteLabeledBook) => {
                 favoriteBooksDictionary.add(favoriteLabeledBook.id, favoriteLabeledBook.favoriteInfo); 
             });
@@ -145,7 +145,7 @@ class BibliographyModule {
         });
     }
 
-    private finishShowingFavoriteLabels(bookDataList: IBookRenderData[], favoriteBooksDictionary: DictionaryWrapper<IFavoriteBaseInfo[]>, favoriteLabels: IFavoriteLabel[]) {
+    private finishShowingFavoriteLabels(bookDataList: IBookRenderData[], favoriteBooksDictionary: DictionaryWrapper<IFavoriteBaseInfoWithLabel[]>, favoriteLabels: IFavoriteLabel[]) {
         $.each(bookDataList, (index, bookData) => {
             var bookFavorites = favoriteBooksDictionary.get(bookData.bookId);
             if (bookFavorites) {
@@ -158,7 +158,7 @@ class BibliographyModule {
                 return;
             }
             var newFavoriteDialog = NewFavoriteDialogProvider.getInstance(true);
-            var favoriteStar = new FavoriteStar(bookData.$favoriteButton, FavoriteType.Book, bookData.bookId.toString(), bookData.bookName, newFavoriteDialog, new FavoriteManager(), () => {
+            var favoriteStar = new FavoriteStar(bookData.$favoriteButton, FavoriteType.Project, bookData.bookId.toString(), bookData.bookName, newFavoriteDialog, new FavoriteManager(), () => {
                 new NewFavoriteNotification().show();
             });
             if (bookFavorites) {
@@ -340,19 +340,18 @@ class BibliographyModule {
 //}
 
 //functions used in VariableInterpreter.interpretScript
-var audioTypeTranslation = [
-    "Neznámý",
-    "Mp3",
-    "Ogg",
-    "Wav"
-];
 
-function translateAudioType(audioType: number): string {
-    if (audioType === 0) {
-        return localization.translate("Unknown", "PluginsJs").value;
+function translateAudioType(audioType: AudioType): string {
+    switch (audioType) {
+        case AudioType.Mp3:
+            return "Mp3";
+        case AudioType.Ogg:
+            return "Ogg";
+        case AudioType.Wav:
+            return "Wav";
+        default:
+            return localization.translate("Unknown", "PluginsJs").value;
     }
-
-    return audioTypeTranslation[audioType];
 }
 
 function fillLeadingZero(seconds: number): string {
@@ -400,14 +399,14 @@ interface IBookInfo {
 }
 
 enum BookTypeEnum {
-    Edition = 0, //Edice
-    Dictionary = 1, //Slovnik
-    Grammar = 2, //Mluvnice
-    ProfessionalLiterature = 3, //Odborna literatura
-    TextBank = 4, //Textova banka
-    BibliographicalItem = 5,
-    CardFile = 6,
-    AudioBook = 7
+    Edition = "Edition", //Edice
+    Dictionary = "Dictionary", //Slovnik
+    Grammar = "Grammar", //Mluvnice
+    ProfessionalLiterature = "ProfessionalLiterature", //Odborna literatura
+    TextBank = "TextBank", //Textova banka
+    BibliographicalItem = "BibliographicalItem",
+    CardFile = "CardFile",
+    AudioBook = "AudioBook"
 }
 
 interface IPage {

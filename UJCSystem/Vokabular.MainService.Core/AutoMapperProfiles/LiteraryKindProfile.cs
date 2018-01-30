@@ -11,6 +11,9 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
             CreateMap<LiteraryKind, LiteraryKindContract>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
+
+            CreateMap<LiteraryKind, string>()
+                .ConvertUsing(x => x.Name);
         }
     }
 }

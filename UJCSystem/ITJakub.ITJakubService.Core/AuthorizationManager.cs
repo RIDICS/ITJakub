@@ -5,9 +5,9 @@ using System.Reflection;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
-using ITJakub.ITJakubService.DataContracts.Contracts;
-using ITJakub.Shared.Contracts.Searching.Criteria;
 using log4net;
+using Vokabular.MainService.DataContracts.Contracts.CardFile;
+using Vokabular.Shared.DataContracts.Search.Criteria;
 
 namespace ITJakub.ITJakubService.Core
 {

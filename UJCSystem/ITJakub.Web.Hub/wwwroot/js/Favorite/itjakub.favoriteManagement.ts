@@ -606,11 +606,11 @@ class FavoriteManagementItem {
         $(icon).addClass("glyphicon");
 
         switch (this.type) {
-            case FavoriteType.Book:
+            case FavoriteType.Project:
                 $(icon).addClass("glyphicon-book")
                     .attr("title", localization.translate("Book", this.localizationScope).value);
                 break;
-            case FavoriteType.PageBookmark:
+            case FavoriteType.Page:
                 $(icon).addClass("glyphicon-bookmark")
                     .attr("title", localization.translate("PageBookmarkInBook", this.localizationScope).value);
                 break;
@@ -622,7 +622,7 @@ class FavoriteManagementItem {
                 $(icon).addClass("glyphicon-search")
                     .attr("title", localization.translate("SearchingQuery", this.localizationScope).value);
                 break;
-            case FavoriteType.BookVersion:
+            case FavoriteType.Snapshot:
                 $(icon).addClass("glyphicon-tags")
                     .attr("title", localization.translate("BookVersion", this.localizationScope).value);
                 break;

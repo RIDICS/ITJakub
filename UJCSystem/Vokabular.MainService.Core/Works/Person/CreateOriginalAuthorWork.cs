@@ -10,7 +10,7 @@ namespace Vokabular.MainService.Core.Works.Person
         private readonly PersonRepository m_personRepository;
         private readonly OriginalAuthorContract m_data;
 
-        public CreateOriginalAuthorWork(PersonRepository personRepository, OriginalAuthorContract data) : base(personRepository.UnitOfWork)
+        public CreateOriginalAuthorWork(PersonRepository personRepository, OriginalAuthorContract data) : base(personRepository)
         {
             m_personRepository = personRepository;
             m_data = data;

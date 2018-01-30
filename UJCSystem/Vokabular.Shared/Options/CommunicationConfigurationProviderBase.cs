@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace Vokabular.Shared.Options
 {
-    public class CommunicationConfigurationProviderBase
+    public abstract class CommunicationConfigurationProviderBase
     {
         private readonly Dictionary<string, EndpointOption> m_endpointsOptions;
 

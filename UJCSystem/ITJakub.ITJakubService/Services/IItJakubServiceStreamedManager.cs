@@ -3,7 +3,6 @@ using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.Core.Resources;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Contracts.AudioBooks;
-using ITJakub.Shared.Contracts.Resources;
 
 namespace ITJakub.ITJakubService.Services
 {

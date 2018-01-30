@@ -1,4 +1,6 @@
-﻿namespace Vokabular.MainService.DataContracts.Contracts
+﻿using System;
+
+namespace Vokabular.MainService.DataContracts.Contracts
 {
     public class UserContract
     {
@@ -11,5 +13,19 @@
         public string LastName { get; set; }
 
         public string AvatarUrl { get; set; }
+    }
+
+    public class UserDetailContract : UserContract
+    {
+        public string Email { get; set; }
+
+        public DateTime CreateTime { get; set; }
+    }
+
+    public class CreateUserContract : UserContract
+    {
+        public string Email { get; set; }
+
+        public string NewPassword { get; set; }
     }
 }

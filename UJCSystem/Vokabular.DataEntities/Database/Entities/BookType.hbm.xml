@@ -7,5 +7,10 @@
     
     <property name="Type" not-null="true" />
 
+    <bag name="Snapshots" table="Snapshot_BookType" inverse="true" lazy="true">
+      <key column="Snapshot" />
+      <many-to-many class="BookType" column="BookType" />
+    </bag>
+
   </class>
 </hibernate-mapping>

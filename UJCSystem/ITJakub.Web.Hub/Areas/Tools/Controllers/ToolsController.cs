@@ -1,11 +1,11 @@
-﻿using ITJakub.Shared.Contracts.Notes;
-using ITJakub.Web.Hub.Controllers;
+﻿using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace ITJakub.Web.Hub.Areas.Tools.Controllers
 {
@@ -39,7 +39,7 @@ namespace ITJakub.Web.Hub.Areas.Tools.Controllers
 
         public ActionResult Feedback()
         {
-            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, "home", GetEncryptedClient(), GetUserName());
+            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, IsUserLoggedIn(), "home");
             return View(viewModel);
         }
         
@@ -54,7 +54,7 @@ namespace ITJakub.Web.Hub.Areas.Tools.Controllers
                 return View(model);
             }
 
-            m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.Tools, GetMainServiceClient(), IsUserLoggedIn(), GetUserName());
+            m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.Tools, IsUserLoggedIn());
             return View("Feedback/FeedbackSuccess");
         }
 

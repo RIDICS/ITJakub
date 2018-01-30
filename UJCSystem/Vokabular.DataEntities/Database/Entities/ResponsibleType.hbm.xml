@@ -9,10 +9,10 @@
     
     <property name="Type" not-null="true" />
 
-    <bag name="ResponsiblePersons" cascade="none" table="ResponsiblePerson_ResponsibleType">
-      <key column="Type" />
-      <many-to-many class="ResponsiblePerson" column="Person" />
+    <bag name="ResponsiblePersons" table="ResponsiblePerson_ResponsibleType" inverse="true" lazy="true">
+      <key column="ResponsibleType" />
+      <one-to-many class="ProjectResponsiblePerson" />
     </bag>
-    
+
   </class>
 </hibernate-mapping>

@@ -8,21 +8,21 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
 {
     public class SetAuthorsWork : UnitOfWorkBase
     {
-        private readonly MetadataRepository m_metadataRepository;
+        private readonly ProjectRepository m_projectRepository;
         private readonly long m_projectId;
         private readonly IList<int> m_authorIdList;
 
-        public SetAuthorsWork(MetadataRepository metadataRepository, long projectId, IList<int> authorIdList) : base(metadataRepository.UnitOfWork)
+        public SetAuthorsWork(ProjectRepository projectRepository, long projectId, IList<int> authorIdList) : base(projectRepository)
         {
-            m_metadataRepository = metadataRepository;
+            m_projectRepository = projectRepository;
             m_projectId = projectId;
             m_authorIdList = authorIdList;
         }
 
         protected override void ExecuteWorkImplementation()
         {
-            var dbProjectAuthorList = m_metadataRepository.GetProjectOriginalAuthorList(m_projectId);
-            var project = m_metadataRepository.Load<Project>(m_projectId);
+            var dbProjectAuthorList = m_projectRepository.GetProjectOriginalAuthorList(m_projectId);
+            var project = m_projectRepository.Load<Project>(m_projectId);
 
             var itemsToDelete = new List<ProjectOriginalAuthor>();
             foreach (var projectAuthor in dbProjectAuthorList)
@@ -33,7 +33,7 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
                 }
             }
 
-            m_metadataRepository.DeleteAll(itemsToDelete);
+            m_projectRepository.DeleteAll(itemsToDelete);
 
             var order = 1;
             foreach (var newAuthorId in m_authorIdList)
@@ -44,15 +44,15 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
                     projectAuthor = new ProjectOriginalAuthor
                     {
                         Project = project,
-                        OriginalAuthor = m_metadataRepository.Load<OriginalAuthor>(newAuthorId),
+                        OriginalAuthor = m_projectRepository.Load<OriginalAuthor>(newAuthorId),
                         Sequence = order++
                     };
-                    m_metadataRepository.Create(projectAuthor);
+                    m_projectRepository.Create(projectAuthor);
                 }
                 else
                 {
                     projectAuthor.Sequence = order++;
-                    m_metadataRepository.Update(projectAuthor);
+                    m_projectRepository.Update(projectAuthor);
                 }
             }
         }

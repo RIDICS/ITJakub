@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using ITJakub.Shared.Contracts.Resources;
 
 namespace ITJakub.FileProcessing.DataContracts
 {
@@ -35,11 +34,11 @@ namespace ITJakub.FileProcessing.DataContracts
             }
         }
 
-        public bool ProcessSession(string sessionId, string uploadMessage)
+        public bool ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage)
         {
             try
             {
-                return Channel.ProcessSession(sessionId, uploadMessage);
+                return Channel.ProcessSession(sessionId, projectId, userId, uploadMessage);
             }
             catch (TimeoutException ex)
             {

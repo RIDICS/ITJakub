@@ -10,22 +10,25 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
     {
         public string Title { get; set; }
         public string Subtitle { get; set; }
+        public string AuthorsText { get; set; }
         public string RelicAbbreviation { get; set; }
         public string SourceAbbreviation { get; set; }
 
-        public List<PublisherContract> AllPublisherList { get; set; }
         public List<LiteraryKindContract> AllLiteraryKindList { get; set; }
         public List<LiteraryGenreContract> AllLiteraryGenreList { get; set; }
+        public List<LiteraryOriginalContract> AllLiteraryOriginalList { get; set; }
         public List<ResponsibleTypeViewModel> AllResponsibleTypeList { get; set; }
         
         public HashSet<int> SelectedLiteraryKindIds { get; set; }
         public HashSet<int> SelectedLiteraryGenreIds { get; set; }
+        public HashSet<int> SelectedLiteraryOriginalIds { get; set; }
         public List<OriginalAuthorContract> Authors { get; set; }
-        public List<ResponsiblePersonContract> ResponsiblePersons { get; set; }
+        public List<ProjectResponsiblePersonContract> ResponsiblePersons { get; set; }
 
-        public int PublisherId { get; set; }
         public string PublishPlace { get; set; }
         public string PublishDate { get; set; }
+        public string PublisherText { get; set; }
+        public string PublisherEmail { get; set; }
         public string Copyright { get; set; }
         public string BiblText { get; set; }
         public string OriginDate { get; set; }

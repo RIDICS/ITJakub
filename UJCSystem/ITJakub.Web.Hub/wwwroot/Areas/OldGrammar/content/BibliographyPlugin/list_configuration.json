@@ -2,7 +2,7 @@
   "Grammar": {
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
-      "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts} <br> {@NumberOfPages}: {PageCount}",
+      "body": "{PublishPlace}, {PublishDate}, {PublisherText} <br> {$manuscript} <br> {@NumberOfPages}: {PageCount}",
       "favorites": {
         "maxCount": 5
       },
@@ -13,15 +13,14 @@
           "onTrue": "{Editor}",
           "onFalse": "was false"
         },
-        "$manuscripts": {
-          "type": "array",
-          "scope": "Manuscripts",
-          "pattern": "{Settlement}, {Repository}, {OriginDate}",
-          "delimeter": " <br> "
+        "$manuscript": {
+          "type": "basic",
+          "pattern": "{ManuscriptSettlement}, {ManuscriptRepository}, {OriginDate}",
+          "printIfNullValue": false
         },
         "$printAuthors": {
           "type": "basic",
-          "pattern": "{$authors}: ",
+          "pattern": "{AuthorsLabel}: ",
           "printIfNullValue": false
         },
         "$authors": {
@@ -29,13 +28,6 @@
           "scope": "Authors",
           "pattern": "{Name}",
           "delimeter": ", "
-        },
-        "$publisher": {
-          "type": "basic",
-          "scope": "Publisher",
-          "pattern": "{Text}",
-          "printIfNullValue": false,
-          "replaceNullValueBy": ""
         },
         "$litType": {
           "type": "array",
@@ -93,7 +85,7 @@
             },
             {
               "label": "Pattern",
-              "pattern": "{Pattern}"
+              "pattern": "{$literaryOriginal}"
             },
             {
               "label": "RelicAbbreviation",
@@ -105,11 +97,11 @@
             },
             {
               "label": "LiteraryType",
-              "pattern": "{LiteraryType}"
+              "pattern": "{$literaryType}"
             },
             {
               "label": "LiteraryGenre",
-              "pattern": "{LiteraryGenre}"
+              "pattern": "{$literaryGenre}"
             },
             {
               "label": "EditionLastModification",
@@ -144,7 +136,25 @@
         "$editor": {
           "type": "array",
           "scope": "Editors",
-          "pattern": "{Text}",
+          "pattern": "{FirstName} {LastName}",
+          "delimeter": ", "
+        },
+        "$literaryOriginal": {
+          "type": "array",
+          "scope": "LiteraryOriginals",
+          "pattern": "{$this}",
+          "delimeter": ", "
+        },
+        "$literaryType": {
+          "type": "array",
+          "scope": "LiteraryKinds",
+          "pattern": "{$this}",
+          "delimeter": ", "
+        },
+        "$literaryGenre": {
+          "type": "array",
+          "scope": "LiteraryGenres",
+          "pattern": "{$this}",
           "delimeter": ", "
         }
       }

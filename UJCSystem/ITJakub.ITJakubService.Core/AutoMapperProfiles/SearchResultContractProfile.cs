@@ -3,13 +3,13 @@ using System.Linq;
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
-using ITJakub.Shared.Contracts.Searching.Results;
+using Vokabular.Shared.DataContracts.Search.Old;
 
 namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
     public class SearchResultContractProfile : Profile
     {
-        protected override void Configure()
+        public SearchResultContractProfile()
         {
             CreateMap<BookVersion, SearchResultContract>()
                 .ForMember(dest => dest.BookId, opts => opts.MapFrom(src => src.Book.Id))

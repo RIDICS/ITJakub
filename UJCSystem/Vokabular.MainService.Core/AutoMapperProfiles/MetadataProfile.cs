@@ -10,13 +10,15 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
         {
             CreateMap<MetadataResource, ProjectMetadataContract>()
                 .ForMember(dest => dest.LastModification, opt => opt.MapFrom(src => src.CreateTime))
+                .ForMember(dest => dest.Authors, opt => opt.MapFrom(src => src.AuthorsLabel))
                 .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
                 .ForMember(dest => dest.SubTitle, opt => opt.MapFrom(src => src.SubTitle))
                 .ForMember(dest => dest.RelicAbbreviation, opt => opt.MapFrom(src => src.RelicAbbreviation))
                 .ForMember(dest => dest.SourceAbbreviation, opt => opt.MapFrom(src => src.SourceAbbreviation))
-                .ForMember(dest => dest.PublisherId, opt => opt.MapFrom(src => src.Publisher.Id))
                 .ForMember(dest => dest.PublishPlace, opt => opt.MapFrom(src => src.PublishPlace))
                 .ForMember(dest => dest.PublishDate, opt => opt.MapFrom(src => src.PublishDate))
+                .ForMember(dest => dest.PublisherText, opt => opt.MapFrom(src => src.PublisherText))
+                .ForMember(dest => dest.PublisherEmail, opt => opt.MapFrom(src => src.PublisherEmail))
                 .ForMember(dest => dest.Copyright, opt => opt.MapFrom(src => src.Copyright))
                 .ForMember(dest => dest.BiblText, opt => opt.MapFrom(src => src.BiblText))
                 .ForMember(dest => dest.OriginDate, opt => opt.MapFrom(src => src.OriginDate))
@@ -27,10 +29,10 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.ManuscriptExtent, opt => opt.MapFrom(src => src.ManuscriptExtent))
                 .ForMember(dest => dest.ManuscriptRepository, opt => opt.MapFrom(src => src.ManuscriptRepository))
                 .ForMember(dest => dest.ManuscriptIdno, opt => opt.MapFrom(src => src.ManuscriptIdno))
+                .ForMember(dest => dest.ManuscriptTitle, opt => opt.MapFrom(src => src.ManuscriptTitle))
                 .Include<MetadataResource, ProjectMetadataResultContract>();
 
-            CreateMap<MetadataResource, ProjectMetadataResultContract>()
-                .ForMember(dest => dest.Publisher, opt => opt.MapFrom(src => src.Publisher));
+            CreateMap<MetadataResource, ProjectMetadataResultContract>();
         }
     }
 }

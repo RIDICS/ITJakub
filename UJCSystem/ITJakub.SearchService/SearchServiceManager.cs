@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
-using ITJakub.ITJakubService.DataContracts;
 using ITJakub.SearchService.Core.Exist;
-using ITJakub.Shared.Contracts;
-using ITJakub.Shared.Contracts.Searching.Criteria;
-using ITJakub.Shared.Contracts.Searching.Results;
+using ITJakub.SearchService.DataContracts;
+using ITJakub.SearchService.DataContracts.Contracts;
+using ITJakub.SearchService.DataContracts.Contracts.SearchResults;
+using ITJakub.SearchService.DataContracts.Types;
+using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Search.Old;
 
 namespace ITJakub.SearchService
 {

@@ -14,10 +14,10 @@
     
     <many-to-one name="TermCategory" class="TermCategory" />
 
-    <!--<bag name="ReferencedFrom" table="BookPage_Term" cascade="delete-orphan">
+    <bag name="PageResources" table="PageResource_Term" inverse="true" lazy="true">
       <key column="Term" />
-      <many-to-many class="BookPage" column="BookPage"/>
-    </bag>-->
+      <many-to-many class="PageResource" column="PageResource" />
+    </bag>
 
   </class>
 </hibernate-mapping>

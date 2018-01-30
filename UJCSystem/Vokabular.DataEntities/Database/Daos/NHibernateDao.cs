@@ -9,10 +9,10 @@ using Vokabular.DataEntities.Database.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Daos
 {
-    public class NHibernateDao
+    public class NHibernateDao : IDao
     {
-        protected const string WildcardAny = "%";
-        protected const string WildcardSingle = "_";
+        public const string WildcardAny = "%";
+        public const string WildcardSingle = "_";
 
         private readonly IUnitOfWork m_unitOfWork;
 
@@ -30,7 +30,15 @@ namespace Vokabular.DataEntities.Database.Daos
 
         protected ISession GetSession()
         {
+            if (m_unitOfWork.CurrentSession == null)
+                throw new InvalidOperationException("Unit of work is not running");
+
             return m_unitOfWork.CurrentSession;
+        }
+
+        public static string EscapeQuery(string query)
+        {
+            return query?.Replace("[", "[[]");
         }
 
         public virtual object FindById(Type type, object id)

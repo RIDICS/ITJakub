@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Vokabular.DataEntities.Database.Entities
 {
@@ -12,9 +13,9 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual long Position { get; set; }
 
-        //public virtual IList<BookPage> ReferencedFrom { get; set; }
-
         public virtual TermCategory TermCategory { get; set; }
+
+        public virtual IList<PageResource> PageResources { get; set; }
 
 
         public virtual bool Equals(Term other)

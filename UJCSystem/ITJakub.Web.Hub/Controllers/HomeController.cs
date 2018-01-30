@@ -1,10 +1,11 @@
-﻿using ITJakub.Shared.Contracts.Notes;
+﻿using System.Linq;
 using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -50,7 +51,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult Feedback()
         {
-            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, "home", GetEncryptedClient(), GetUserName());
+            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, IsUserLoggedIn(), "home");
             return View(viewModel);
         }
 
@@ -65,7 +66,7 @@ namespace ITJakub.Web.Hub.Controllers
                 return View(model);
             }
 
-            m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.None, GetMainServiceClient(), IsUserLoggedIn(), GetUserName());
+            m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.None, IsUserLoggedIn());
             return View("Feedback/FeedbackSuccess");
         }
 
@@ -89,27 +90,29 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult GetTypeaheadAuthor(string query)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var result = client.GetTypeaheadAuthors(query);
-                return Json(result);
+                var result = client.GetOriginalAuthorAutocomplete(query);
+                var response = result.Select(x => x.FirstName != null ? $"{x.FirstName} {x.LastName}" : x.LastName)
+                    .ToList();
+                return Json(response);
             }
         }
 
         public ActionResult GetTypeaheadTitle(string query)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var result = client.GetTypeaheadTitles(query);
+                var result = client.GetTitleAutocomplete(query);
                 return Json(result);
             }
         }
 
         public ActionResult GetTypeaheadDictionaryHeadword(string query)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var result = client.GetTypeaheadDictionaryHeadwords(null, null, query, null);
+                var result = client.GetHeadwordAutocomplete(query);
                 return Json(result);
             }
         }

@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ITJakub.ITJakubService.DataContracts</RootNamespace>
     <AssemblyName>ITJakub.ITJakubService.DataContracts</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -59,8 +60,6 @@
     <Compile Include="Contracts\AudioBooks\DownloadWholeBookContract.cs" />
     <Compile Include="Contracts\AuthorDetailContract.cs" />
     <Compile Include="Contracts\BookInfoWithPagesContract.cs" />
-    <Compile Include="Contracts\BucketContract.cs" />
-    <Compile Include="Contracts\CardShortContract.cs" />
     <Compile Include="Contracts\AudioBooks\FileDataContract.cs" />
     <Compile Include="Clients\ItJakubServiceClient.cs" />
     <Compile Include="Clients\ItJakubServiceEncryptedClient.cs" />
@@ -71,11 +70,6 @@
     <Compile Include="Contracts\Favorite\FavoriteLabelWithBooksAndCategories.cs" />
     <Compile Include="Contracts\Favorite\FavoriteTypeContract.cs" />
     <Compile Include="Contracts\HeadwordBookmarkContract.cs" />
-    <Compile Include="Contracts\ImageSizeEnumContract.cs" />
-    <Compile Include="Contracts\ImageContract.cs" />
-    <Compile Include="Contracts\CardContract.cs" />
-    <Compile Include="Contracts\BucketShortContract.cs" />
-    <Compile Include="Contracts\CardFileContract.cs" />
     <Compile Include="Contracts\SelectedCategoriesContract.cs" />
     <Compile Include="Contracts\Favorite\FavoriteQueryContract.cs" />
     <Compile Include="IItJakubServiceEncrypted.cs" />
@@ -87,19 +81,28 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TermCategoryContract.cs" />
     <Compile Include="TermContract.cs" />
+    <Compile Include="UploadResourceContract.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ITJakub.MobileApps.MobileContracts\ITJakub.MobileApps.MobileContracts.csproj">
       <Project>{67B4DDA0-4340-4D05-9A22-831DA43E70F8}</Project>
       <Name>ITJakub.MobileApps.MobileContracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ITJakub.SearchService.DataContracts\ITJakub.SearchService.DataContracts.csproj">
+      <Project>{ba58bca2-f98a-4dda-934c-b78c10bc0cad}</Project>
+      <Name>ITJakub.SearchService.DataContracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
       <Project>{9ad4d58f-3b7f-4d54-a8d6-170e2e32a13b}</Project>
       <Name>ITJakub.Shared.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Jewelery\Jewelery.csproj">
-      <Project>{246EADF4-905A-4FBD-B939-C88BDEFDC4A7}</Project>
-      <Name>Jewelery</Name>
+    <ProjectReference Include="..\Vokabular.MainService.DataContracts\Vokabular.MainService.DataContracts.csproj">
+      <Project>{5527ba9b-aa14-4872-bacf-40adebfd966d}</Project>
+      <Name>Vokabular.MainService.DataContracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj">
+      <Project>{d172f949-ae59-4029-bf5c-40b633362034}</Project>
+      <Name>Vokabular.Shared.DataContracts</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

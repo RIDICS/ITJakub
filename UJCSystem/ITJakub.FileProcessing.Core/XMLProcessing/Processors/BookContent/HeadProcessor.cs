@@ -1,11 +1,11 @@
 using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.BookContent
 {
-    public class HeadProcessor : ConcreteInstanceListProcessorBase<BookContentItem>
+    public class HeadProcessor : ConcreteInstanceListProcessorBase<BookContentItemData>
     {
 
         public HeadProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
@@ -18,7 +18,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.BookContent
             get { return "head"; }
         }
 
-        protected override void ProcessElement(BookVersion bookVersion, BookContentItem contentItem, XmlReader xmlReader)
+        protected override void ProcessElement(BookData bookData, BookContentItemData contentItem, XmlReader xmlReader)
         {
             contentItem.Text = GetInnerContentAsString(xmlReader);
         }

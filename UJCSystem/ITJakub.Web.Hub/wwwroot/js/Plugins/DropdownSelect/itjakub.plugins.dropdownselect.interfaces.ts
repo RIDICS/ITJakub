@@ -17,5 +17,5 @@ interface IDropDownRequestResult {
 
 interface IDropdownFavoriteItem {
     id: number;
-    favoriteInfo: Array<IFavoriteBaseInfo>;
+    favoriteInfo: Array<IFavoriteBaseInfoWithLabel>;
 }

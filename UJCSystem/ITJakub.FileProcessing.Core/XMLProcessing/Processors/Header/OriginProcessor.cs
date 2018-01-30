@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
 {
-    public class OriginProcessor : ConcreteInstanceProcessorBase<ManuscriptDescription>
+    public class OriginProcessor : ConcreteInstanceProcessorBase<ManuscriptDescriptionData>
     {
         public OriginProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
@@ -17,11 +17,11 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             get { return "origin"; }
         }
 
-        protected override IEnumerable<ConcreteInstanceProcessorBase<ManuscriptDescription>> ConcreteSubProcessors
+        protected override IEnumerable<ConcreteInstanceProcessorBase<ManuscriptDescriptionData>> ConcreteSubProcessors
         {
             get
             {
-                return new List<ConcreteInstanceProcessorBase<ManuscriptDescription>>
+                return new List<ConcreteInstanceProcessorBase<ManuscriptDescriptionData>>
                 {
                       Container.Resolve<OrigDateProcessor>(),
                 };

@@ -1,44 +1,36 @@
 ﻿enum FeedbackCategoryEnum {
-    None = 0,
-    Dictionaries = 1,
-    Editions = 2,
-    BohemianTextBank = 3,
-    OldGrammar = 4,
-    ProfessionalLiterature = 5,
-    Bibliographies = 6,
-    CardFiles = 7,
-    AudioBooks = 8,
-    Tools = 9,
+    None = "None",
+    Dictionaries = "Dictionaries",
+    Editions = "Editions",
+    BohemianTextBank = "BohemianTextBank",
+    OldGrammar = "OldGrammar",
+    ProfessionalLiterature = "ProfessionalLiterature",
+    Bibliographies = "Bibliographies",
+    CardFiles = "CardFiles",
+    AudioBooks = "AudioBooks",
+    Tools = "Tools",
 }
 
-var categoryTranslation = [
-    "None",
-    "Dictionaries",
-    "Editions",
-    "BohemianTextBank",
-    "OldGrammar",
-    "ProfessionalLiterature",
-    "Bibliographies",
-    "CardFiles",
-    "AudioBooks",
-    "Tools"
-];
+var categoryTranslation = new DictionaryWrapper<string>();
+categoryTranslation.add(FeedbackCategoryEnum.None, "None");
+categoryTranslation.add(FeedbackCategoryEnum.Dictionaries, "Dictionaries");
+categoryTranslation.add(FeedbackCategoryEnum.Editions, "Editions");
+categoryTranslation.add(FeedbackCategoryEnum.BohemianTextBank, "BohemianTextBank");
+categoryTranslation.add(FeedbackCategoryEnum.OldGrammar, "OldGrammar");
+categoryTranslation.add(FeedbackCategoryEnum.ProfessionalLiterature, "ProfessionalLiterature");
+categoryTranslation.add(FeedbackCategoryEnum.Bibliographies, "Bibliographies");
+categoryTranslation.add(FeedbackCategoryEnum.CardFiles, "CardFiles");
+categoryTranslation.add(FeedbackCategoryEnum.AudioBooks, "AudioBooks");
+categoryTranslation.add(FeedbackCategoryEnum.Tools, "Tools");
 
 enum FeedbackSortEnum {
     Date = 0,
     Category = 1,
 }
 
-var sortEnumTranslation = [
-    "Author",
-    "Email",
-    "Category",
-    "Date"
-];
-
 enum FeedbackTypeEnum {
-    Generic = 0,
-    Headword = 1,
+    Generic = "Generic",
+    Headword = "Headword",
 }
 
 var sortCriteria = FeedbackSortEnum.Date;
@@ -104,17 +96,17 @@ $(document).ready(() => {
                     var name = "";
                     var email = "";
                     var signed = "";
-                    var category = actualFeedback.category;
-                    var date = new Date(actualFeedback.createDate);
+                    var category = actualFeedback.feedbackCategory;
+                    var date = new Date(actualFeedback.createTime);
 
-                    var user = actualFeedback.user;
+                    var user = actualFeedback.authorUser;
                     if (typeof user !== "undefined" && user !== null) {
                         name = user.firstName + " " + user.lastName;
                         email = user.email;
                         signed = localization.translate("Yes", "ItJakubJs").value;
                     } else {
-                        name = actualFeedback.filledName;
-                        email = actualFeedback.filledEmail;
+                        name = actualFeedback.authorName;
+                        email = actualFeedback.authorEmail;
                         signed = localization.translate("No", "ItJakubJs").value;
                     }
 
@@ -149,9 +141,9 @@ $(document).ready(() => {
 
                     var feedbackCategorySpan = document.createElement("span");
                     $(feedbackCategorySpan).addClass("feedback-category");
-                    var categoryParams = [categoryTranslation[category]];
+                    var categoryParams = [categoryTranslation.get(category)];
                     var translation = localization.translateFormat("Category:", categoryParams, "ItJakubJs").value;
-                        feedbackCategorySpan.innerHTML = translation;
+                    feedbackCategorySpan.innerHTML = translation;
                         
 
                     feedbackHeaderInfosDiv.appendChild(feedbackCategorySpan);
@@ -205,7 +197,7 @@ $(document).ready(() => {
                         $(feedbackHeadwordDiv).text(localization.translateFormat("DictionaryHeadword:", new Array<string>(actualFeedback.headwordInfo.defaultHeadword), "ItJakubJs").value);
 
                         var feedbackDictionaryDiv = document.createElement("div");
-                        $(feedbackHeadwordDiv).text(localization.translateFormat("Dictionary:", new Array<string>(actualFeedback.headwordInfo.dictionaryName), "ItJakubJs").value);
+                        $(feedbackHeadwordDiv).text(localization.translateFormat("Dictionary:", new Array<string>(actualFeedback.projectInfo.name), "ItJakubJs").value);
 
 
                         $(feedbackBodyDiv)

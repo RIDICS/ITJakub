@@ -2,18 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using ITJakub.Core.SearchService;
 using ITJakub.DataEntities.Database;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Entities.SelectResults;
 using ITJakub.DataEntities.Database.Repositories;
-using ITJakub.ITJakubService.Core.Search;
-using ITJakub.ITJakubService.DataContracts;
 using ITJakub.MobileApps.MobileContracts;
+using ITJakub.SearchService.DataContracts;
+using ITJakub.SearchService.DataContracts.Contracts.SearchResults;
+using ITJakub.SearchService.DataContracts.Types;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching.Criteria;
-using ITJakub.Shared.Contracts.Searching.Results;
+using Vokabular.Core.Data;
+using Vokabular.Core.Search;
+using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Search.Old;
+using Vokabular.Shared.DataContracts.Search.QueryBuilder;
+using Vokabular.Shared.DataContracts.Types;
 using BookContract = ITJakub.MobileApps.MobileContracts.BookContract;
 
 namespace ITJakub.ITJakubService.Core
@@ -79,7 +84,7 @@ namespace ITJakub.ITJakubService.Core
             return query.Replace("[", "[[]");
         }
 
-        private FilteredCriterias FilterSearchCriterias(IList<SearchCriteriaContract> searchCriterias)
+        private LegacyFilteredCriterias FilterSearchCriterias(IList<SearchCriteriaContract> searchCriterias)
         {
             ResultCriteriaContract resultCriteria = null;
             var nonMetadataCriterias = new List<SearchCriteriaContract>();
@@ -104,7 +109,7 @@ namespace ITJakub.ITJakubService.Core
                 }
             }
 
-            return new FilteredCriterias
+            return new LegacyFilteredCriterias
             {
                 ResultCriteria = resultCriteria,
                 MetadataParameters = metadataParameters,
@@ -919,12 +924,8 @@ namespace ITJakub.ITJakubService.Core
             return databaseSearchResult.Count;
         }
 
-        private class FilteredCriterias
+        private class LegacyFilteredCriterias : FilteredCriterias
         {
-            public List<SearchCriteriaQuery> ConjunctionQuery { get; set; }
-            public List<SearchCriteriaContract> NonMetadataCriterias { get; set; }
-            public List<SearchCriteriaContract> MetadataCriterias { get; set; }
-            public Dictionary<string, object> MetadataParameters { get; set; }
             public ResultCriteriaContract ResultCriteria { get; set; }
         }
     }

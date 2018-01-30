@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Accessories
@@ -28,11 +27,11 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Accessories
             }
         }
 
-        protected override void PreprocessSetup(BookVersion bookVersion)
+        protected override void PreprocessSetup(BookData bookData)
         {
-            if (bookVersion.Accessories == null)
+            if (bookData.Accessories == null)
             {
-                bookVersion.Accessories = new List<BookAccessory>();
+                bookData.Accessories = new List<BookAccessoryData>();
             }
         }
     }

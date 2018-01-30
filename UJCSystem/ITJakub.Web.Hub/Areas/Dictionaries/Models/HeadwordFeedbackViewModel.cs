@@ -6,13 +6,10 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Models
     public class HeadwordFeedbackViewModel : FeedbackViewModel
     {
         [DataType(DataType.Text)]
-        public string BookXmlId { get; set; }
+        public long? BookId { get; set; }
 
         [DataType(DataType.Text)]
-        public string BookVersionXmlId { get; set; }
-
-        [DataType(DataType.Text)]
-        public string EntryXmlId { get; set; }
+        public long? HeadwordVersionId { get; set; }
 
         [DataType(DataType.Text)]
         [Display(Name = "Headword")]

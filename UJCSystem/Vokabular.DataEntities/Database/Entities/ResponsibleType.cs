@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
 using Vokabular.DataEntities.Database.Entities.Enums;
+using Vokabular.DataEntities.Database.Entities.SelectResults;
 
 namespace Vokabular.DataEntities.Database.Entities
 {
-    public class ResponsibleType : IEquatable<ResponsibleType>
+    public class ResponsibleType : IEquatable<ResponsibleType>, ICatalogValue
     {
         public virtual int Id { get; set; }
         public virtual string Text { get; set; }
         public virtual ResponsibleTypeEnum Type { get; set; }
-        public virtual IList<ResponsiblePerson> ResponsiblePersons { get; set; }
+        public virtual IList<ProjectResponsiblePerson> ResponsiblePersons { get; set; }
 
         public virtual bool Equals(ResponsibleType other)
         {

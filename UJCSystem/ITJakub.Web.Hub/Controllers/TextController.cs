@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using ITJakub.Web.Hub.Core.Communication;
-using ITJakub.Web.Hub.Core.Identity;
 using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Core.Markdown;
 using ITJakub.Web.Hub.Models;
@@ -11,6 +10,7 @@ using Localization.CoreLibrary.Manager;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.Shared.Const;
 using DynamicText = Localization.CoreLibrary.Entity.DynamicText;
 
 namespace ITJakub.Web.Hub.Controllers

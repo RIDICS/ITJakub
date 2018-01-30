@@ -14,7 +14,7 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
         private readonly ProjectMetadataContract m_data;
         private readonly int m_userId;
 
-        public CreateNewMetadataVersionWork(MetadataRepository metadataRepository, long projectId, ProjectMetadataContract data, int userId) : base(metadataRepository.UnitOfWork)
+        public CreateNewMetadataVersionWork(MetadataRepository metadataRepository, long projectId, ProjectMetadataContract data, int userId) : base(metadataRepository)
         {
             m_metadataRepository = metadataRepository;
             m_projectId = projectId;
@@ -26,9 +26,8 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
         {
             var now = DateTime.UtcNow;
 
-            var latestMetadataResource = m_metadataRepository.GetLatestMetadataResource(m_projectId, false);
+            var latestMetadataResource = m_metadataRepository.GetLatestMetadataResource(m_projectId);
             var userEntity = m_metadataRepository.Load<User>(m_userId);
-            var publisherEntity = m_data.PublisherId != null ? m_metadataRepository.Load<Publisher>(m_data.PublisherId) : null;
             Resource resource;
             int versionNumber;
             
@@ -53,6 +52,7 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
             var newResourceVersion = new MetadataResource
             {
                 Resource = resource,
+                AuthorsLabel = m_data.Authors,
                 BiblText = m_data.BiblText,
                 Copyright = m_data.Copyright,
                 CreateTime = now,
@@ -67,7 +67,8 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
                 OriginDate = m_data.OriginDate,
                 PublishDate = m_data.PublishDate,
                 PublishPlace = m_data.PublishPlace,
-                Publisher = publisherEntity,
+                PublisherText = m_data.PublisherText,
+                PublisherEmail = m_data.PublisherEmail,
                 RelicAbbreviation = m_data.RelicAbbreviation,
                 SourceAbbreviation = m_data.SourceAbbreviation,
                 SubTitle = m_data.SubTitle,

@@ -136,7 +136,7 @@
         $(link)
             .attr("href", "#")
             .data("id", favoriteLabel.id)
-            .data("bookIdList", favoriteLabel.bookIdList)
+            .data("bookIdList", favoriteLabel.projectIdList)
             .data("categoryIdList", favoriteLabel.categoryIdList)
             .click(this.onLabelClick.bind(this))
             .append(innerDiv);

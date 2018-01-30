@@ -1,4 +1,4 @@
-namespace Vokabular.DataEntities.Database.Entities
+namespace Vokabular.DataEntities.Database.Entities.Enums
 {
     public enum FeedbackType
     {

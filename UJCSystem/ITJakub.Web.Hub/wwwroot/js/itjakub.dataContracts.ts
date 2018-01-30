@@ -1,13 +1,19 @@
-﻿interface IFeedback {
+﻿interface IPagedResultArray<T> {
+    list: Array<T>;
+    totalCount: number;
+}
+
+interface IFeedback {
     id: number;
     text: string;
-    createDate: string;
-    user: IUser;
-    filledName: string;
-    filledEmail: string;
-    category: FeedbackCategoryEnum;
+    createTime: string;
+    authorUser: IUserDetail;
+    authorName: string;
+    authorEmail: string;
+    feedbackCategory: FeedbackCategoryEnum;
     feedbackType: FeedbackTypeEnum;
-    headwordInfo: IFeedbackHeadwordInfo;
+    headwordInfo: IHeadwordContract;
+    projectInfo: IProject;
 }
 
 interface IFeedbackHeadwordInfo {
@@ -18,30 +24,37 @@ interface IFeedbackHeadwordInfo {
 }
 
 interface IUser {
-    id: Number;
-    email: string;
+    id: number;
     userName: string;
     firstName: string;
     lastName: string;
+    avatarUrl: string;
+}
+
+interface IUserDetail extends IUser {
+    email: string;
     createTime: string;
 }
 
 interface INewsSyndicationItemContract {
+    id: number;
     title: string;
     text: string;
     url: string;
-    userEmail: string;
-    createDate: string;
-    userFirstName: string;
-    userLastName: string;
+    createTime: string;
+    createdByUser: IUser;
 }
 
 interface IFavoriteBaseInfo {
     id: number;
     title: string;
+    favoriteLabelId?: number;
+    createTime?: string;
+    favoriteType?: FavoriteType;
+}
+
+interface IFavoriteBaseInfoWithLabel extends IFavoriteBaseInfo {
     favoriteLabel: IFavoriteLabel;
-    createTime: string;
-    favoriteType: FavoriteType;
 }
 
 interface IFavoriteLabel {
@@ -56,35 +69,30 @@ interface IFavoriteLabelsWithBooksAndCategories {
     id: number;
     name: string;
     color: string;
-    bookIdList: number[];
+    projectIdList: number[];
     categoryIdList: number[];
 }
 
 interface IFavoriteLabeledBook {
     id: number;
-    favoriteInfo: Array<IFavoriteBaseInfo>;
+    favoriteInfo: Array<IFavoriteBaseInfoWithLabel>;
 }
 
 interface IFavoriteLabeledCategory {
     id: number;
-    favoriteInfo: Array<IFavoriteBaseInfo>;
+    favoriteInfo: Array<IFavoriteBaseInfoWithLabel>;
 }
 
-interface IFavoriteQuery {
-    id: number;
-    title: string;
-    createTime: string;
+interface IFavoriteQuery extends IFavoriteBaseInfo {
     query: string;
     favoriteLabel: IFavoriteLabel;
     bookType?: BookTypeEnum;
     queryType?: QueryTypeEnum;
 }
 
-interface IBookPageBookmark {
-    id: number;
-    pageXmlId: string;
-    pagePosition: number;
-    title: string;
+interface IBookPageBookmark extends IFavoriteBaseInfo {
+    pageId: number;
+    //pagePosition: number;
     favoriteLabel: IFavoriteLabel;
 }
 
@@ -104,6 +112,27 @@ interface IResponsibleType {
     id: number;
     text: string;
     type: ResponsibleTypeEnum;
+}
+
+interface ISaveProjectResponsiblePerson {
+    responsiblePersonId: number;
+    responsibleTypeId: number;
+}
+
+interface IPage {
+    id: number;
+    versionId: number;
+    name: string;
+    position: number;
+}
+
+interface IPageWithContext extends IPage {
+    contextStructure: IKwicStructure;
+}
+
+interface IProject {
+    id: number;
+    name: string;
 }
 
 interface IMetadataResource {
@@ -127,11 +156,96 @@ interface IMetadataResource {
     lastModification?: string;
 }
 
+interface IBookContract {
+    id: number;
+    title: string;
+    subTitle: string;
+    authors: string;
+    relicAbbreviation: string;
+    sourceAbbreviation: string;
+    publishPlace: string;
+    publishDate: string;
+    publisherText: string;
+    publisherEmail: string;
+    copyright: string;
+    biblText: string;
+    originDate: string;
+    notBefore: string;
+    notAfter: string;
+
+    manuscriptIdno: string;
+    manuscriptSettlement: string;
+    manuscriptCountry: string;
+    manuscriptRepository: string;
+    manuscriptExtent: string;
+    manuscriptTitle: string;
+
+    lastModification: string;
+}
+
+interface ICorpusSearchResult {
+    bookId: number;
+    //bookXmlId: string;
+    //versionXmlId: string;
+    title: string;
+    author: string;
+    originDate: string;
+    relicAbbreviation: string;
+    sourceAbbreviation: string;
+    notes: Array<string>;
+    pageResultContext: IPageWithContext;
+    verseResultContext: IVerseResultContext;
+    bibleVerseResultContext: IBibleVerseResultContext;
+}
+
+interface IKwicStructure {
+    before: string;
+    match: string;
+    after: string;
+}
+
+interface IVerseResultContext {
+    verseXmlId: string;
+    verseName: string;
+}
+
+interface IBibleVerseResultContext {
+    bibleBook: string;
+    bibleChapter: string;
+    bibleVerse: string;
+}
+
+interface ITermContract {
+    id: number;
+    name: string;
+    position: number;
+    categoryId: number;
+}
+
+interface IChapterHieararchyContract {
+    id: number;
+    versionId: number;
+    name: string;
+    position: number;
+    beginningPageId: number;
+    subChapters: Array<IChapterHieararchyContract>;
+}
+
 interface ISaveMetadataResource extends IMetadataResource {
+    keywordIdList: Array<number>;
     literaryKindIdList: Array<number>;
     literaryGenreIdList: Array<number>;
     authorIdList: Array<number>;
-    responsiblePersonIdList: Array<number>;
+    projectResponsiblePersonIdList: Array<ISaveProjectResponsiblePerson>;
+}
+
+interface IGetMetadataResource extends IMetadataResource {
+    keywordList?: Array<IKeywordContract>;
+    literaryKindList?: Array<ILiteraryKindContract>;
+    literaryGenreList?: Array<ILiteraryGenreContract>;
+    authorIdList?: Array<IOriginalAuthor>;
+    responsiblePersonList?: Array<{responsibleType: IResponsibleType , id:number,firestName:string, lastName:string}>;
+    literaryOriginalList?: Array<ILiteraryOriginalContract>;
 }
 
 interface IMetadataSaveResult {
@@ -147,20 +261,19 @@ interface ILocalizedString {
 }
 
 enum FavoriteType {
-    Unknown = 0,
-    Book = 1,
-    Category = 2,
-    PageBookmark = 3,
-    Query = 4,
-    BookVersion = 5,
-    HeadwordBookmark = 6,
+    Unknown = "Unknown",
+    Project = "Project",
+    Category = "Category",
+    Page = "Page",
+    Query = "Query",
+    Snapshot = "Snapshot",
+    Headword = "Headword",
 }
 
-enum QueryTypeEnum
-{
-    Search = 0,
-    List = 1,
-    Reader = 2,
+enum QueryTypeEnum {
+    Search = "Search",
+    List = "List",
+    Reader = "Reader",
 }
 
 enum ResourceType {
@@ -182,6 +295,117 @@ enum ResponsibleTypeEnum {
     Kolace = 2,
 }
 
+enum KeyTableEditorType {
+    Genre = 0,
+    Kind = 1,
+    Category = 2,
+    ResponsiblePerson = 3,
+    ResponsiblePersonType = 4,
+    Keyword = 5,
+    OriginalAuthor = 6,
+    LiteraryOriginal = 7
+}
+
+interface IGenreResponseContract {
+    id: number,
+    name: string;
+}
+
+interface ICommentStructureBase {
+    id: number;
+    textReferenceId: string;
+    text: string;
+}
+
+interface ICommentStructureReply extends ICommentStructureBase {
+    parentCommentId: number;
+}
+
+interface ICommentSctucture extends ICommentStructureBase {
+    picture: string;
+    nested: boolean;
+    textId: number;
+    name: string;
+    surname: string;
+    order: number;
+    time: number;
+}
+
+interface ITextWithPage {
+    bookVersionId: number;
+    id: number;
+    parentPage: IPage;
+    versionId: number;
+    versionNumber: number;
+}
+
+interface ICreateTextVersion {
+    text: string;
+    id: number;
+    versionNumber: number;
+}
+
+interface ITextWithContent {
+    id: number;
+    versionId: number;
+    versionNumber: number;
+    bookVersionId: number;
+    text: string;
+}
+
+interface ILiteraryGenreContract {
+    id: number;
+    name: string;
+}
+
+interface IKeywordContract {
+    id: number;
+    name: string;
+}
+
+interface ILiteraryOriginalContract {
+    id: number;
+    name: string;
+}
+
+interface ILiteraryKindContract {
+    id: number;
+    name: string;
+}
+
+interface ICategoryContract {
+    id: number;
+    parentCategoryId?: number;
+    externalId: string;
+    description: string;
+}
+
+interface IEditionNote { //TODO expand after server functionality is done
+    projectId: number;
+    content: string;
+}
+
+interface IResponsiblePersonPagedResult {
+    totalCount: number;
+    list: IResponsiblePerson[];
+}
+
+interface IOriginalAuthorPagedResult {
+    totalCount: number;
+    list: IOriginalAuthor[];
+}
+
+enum AudioType {
+    Unknown = "Unknown",
+    Mp3 = "Mp3",
+    Ogg = "Ogg",
+    Wav = "Wav",
+}
+
+enum TextFormatEnumContract {
+    Raw = 0,
+    Html = 1
+}
 
 
 //TODO Switch TypeScript to version 2.4 and use enums with String values

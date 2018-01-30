@@ -7,7 +7,7 @@
         WorkCooperation = 2,
         WorkMetadata = 3,
         WorkHistory = 4,
-        ResourcePreview = 101,
+        WorkNote = 5,
         ResourceDiscussion = 102,
         ResourceMetadata = 103,
     }

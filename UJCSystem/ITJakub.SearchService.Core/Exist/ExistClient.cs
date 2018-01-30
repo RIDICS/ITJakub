@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using ITJakub.SearchService.Core.Exist.Attributes;
-using Jewelery;
+using Vokabular.Shared.DataContracts.Attribute;
 
 namespace ITJakub.SearchService.Core.Exist
 {
@@ -22,7 +22,7 @@ namespace ITJakub.SearchService.Core.Exist
             m_httpClient = new HttpClient(clientHandler);
         }
 
-        public Task<HttpContent> SendRequest(CommunicationInfo commInfo, Uri uri, HttpContent content)
+        public Task<HttpContent> SendRequestAsync(CommunicationInfo commInfo, Uri uri, HttpContent content)
         {
             var httpRequestMessage = new HttpRequestMessage(new HttpMethod(commInfo.Method.GetStringValue()), uri);
 
@@ -41,21 +41,19 @@ namespace ITJakub.SearchService.Core.Exist
                 });
         }
 
-        public Task<string> SendRequestGetResponseAsString(CommunicationInfo commInfo, Uri uri, HttpContent content)
+        public Task<string> SendRequestGetResponseAsStringAsync(CommunicationInfo commInfo, Uri uri, HttpContent content)
         {
-            return
-                Task.Run(() => SendRequest(commInfo, uri, content).Result.ReadAsStringAsync());
+            return SendRequestAsync(commInfo, uri, content).Result.ReadAsStringAsync();
         }
 
-        public Task<Stream> SendRequestGetResponseAsStream(CommunicationInfo commInfo, Uri uri, HttpContent content)
+        public Task<Stream> SendRequestGetResponseAsStreamAsync(CommunicationInfo commInfo, Uri uri, HttpContent content)
         {
-            return
-                Task.Run(() => SendRequest(commInfo, uri, content).Result.ReadAsStreamAsync());
+            return SendRequestAsync(commInfo, uri, content).Result.ReadAsStreamAsync();
         }
 
-        public Task<byte[]> SendRequestGetResponseAsByteArray(CommunicationInfo commInfo, Uri uri, HttpContent content)
+        public Task<byte[]> SendRequestGetResponseAsByteArrayAsync(CommunicationInfo commInfo, Uri uri, HttpContent content)
         {
-            return Task.Run(() => SendRequest(commInfo, uri, content).Result.ReadAsByteArrayAsync());
+            return SendRequestAsync(commInfo, uri, content).Result.ReadAsByteArrayAsync();
         }
     }
 }

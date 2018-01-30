@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="Vokabular.DataEntities" namespace="Vokabular.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="Snapshot" table="[Snapshot]" >
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+    
+    <property name="VersionNumber" not-null="true" />
+
+    <property name="CreateTime" not-null="true" type="UtcDateTime" />
+    
+    <property name="PublishTime" not-null="false" type="UtcDateTime" />
+    
+    <property name="Comment" not-null="false" />
+
+    <many-to-one name="Project" class="Project" lazy="proxy" not-null="true" />
+    
+    <many-to-one name="CreatedByUser" class="User" lazy="proxy" not-null="true" />
+    
+    <many-to-one name="DefaultBookType" class="BookType" lazy="proxy" not-null="true" />
+
+    <many-to-one name="BookVersion" class="BookVersionResource" lazy="proxy" not-null="false" />
+    
+    <bag name="ResourceVersions" table="Snapshot_ResourceVersion" cascade="save-update" lazy="true">
+      <key column="Snapshot" />
+      <many-to-many class="ResourceVersion" column="ResourceVersion" />
+    </bag>
+
+    <bag name="BookTypes" table="Snapshot_BookType" cascade="save-update" lazy="true">
+      <key column="Snapshot" />
+      <many-to-many class="BookType" column="BookType" />
+    </bag>
+
+  </class>
+</hibernate-mapping>

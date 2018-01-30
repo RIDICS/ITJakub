@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Transactions;
 using Castle.Facilities.NHibernate;
@@ -8,13 +7,13 @@ using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Entities.SelectResults;
-using ITJakub.Shared.Contracts.Searching;
-using ITJakub.Shared.Contracts.Searching.Criteria;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Criterion.Lambda;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
+using Vokabular.Shared.DataContracts.Search.CriteriaItem;
+using Vokabular.Shared.DataContracts.Search.OldCriteriaItem;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {

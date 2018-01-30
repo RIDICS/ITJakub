@@ -1,7 +1,6 @@
 using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
-using ITJakub.DataEntities.Database.Entities.Enums;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
@@ -18,15 +17,15 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             get { return "availability"; }
         }
 
-        protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
+        protected override void ProcessElement(BookData bookData, XmlReader xmlReader)
         {
-            bookVersion.Copyright = GetInnerContentAsString(xmlReader);
+            bookData.Copyright = GetInnerContentAsString(xmlReader);
         }
 
-        protected override void ProcessAttributes(BookVersion bookVersion, XmlReader xmlReader)
+        protected override void ProcessAttributes(BookData bookData, XmlReader xmlReader)
         {
             string status = xmlReader.GetAttribute("status");
-            bookVersion.AvailabilityStatus = ParseEnum<AvailabilityStatus>(status);
+            bookData.AvailabilityStatus = ParseEnum<AvailabilityStatusEnum>(status);
         }
     }
 }

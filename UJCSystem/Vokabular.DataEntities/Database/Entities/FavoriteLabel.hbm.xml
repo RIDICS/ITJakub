@@ -12,14 +12,14 @@
     
     <property name="IsDefault" />
     
-    <property name="LastUseTime" />
+    <property name="LastUseTime" type="UtcDateTime" />
     
     <many-to-one name="User"
                  column="[User]"
                  class="User"
                  lazy="proxy" />
 
-    <bag name="FavoriteItems" cascade="all-delete-orphan">
+    <bag name="FavoriteItems" cascade="all-delete-orphan" inverse="true">
       <key column="FavoriteLabel" />
       <one-to-many class="FavoriteBase" />
     </bag>

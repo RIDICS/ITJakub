@@ -1,29 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Configuration;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Clients;
+using Vokabular.MainService.DataContracts.Clients;
 
 namespace ITJakub.BatchImport.Client.BusinessLogic.Communication
 {
     public class CommunicationProvider
     {
+        private const string NewMainServiceEndpointName = "MainService";
         private const string EncryptedEndpointName = "ItJakubServiceEncrypted";
         private const string MainServiceEndpointName = "ItJakubService";
         private const string MainServiceEndpointNameAuthenticated = "ItJakubService.Authenticated";
         private const string StreamedServiceEndpointName = "ItJakubServiceStreamed";
         //private const string StreamedServiceEndpointNameAuthenticated = "ItJakubServiceStreamed.Authenticated";
         private const string StreamedServiceEndpointNameAuthenticated = "ItJakubServiceStreamed";
+        private readonly AuthTokenStorage m_authTokenStorage;
 
-
-        public string GetFormattedPasswordAsAuthToken(string password)
+        public CommunicationProvider(AuthTokenStorage authTokenStorage)
         {
-            return string.Format("PW:{0}", password);
+            m_authTokenStorage = authTokenStorage;
         }
 
-
+        public MainServiceRestClient GetMainServiceClient()
+        {
+            var endpointAddress = ConfigurationManager.AppSettings[NewMainServiceEndpointName];
+            var uri = new Uri(endpointAddress);
+            var authToken = m_authTokenStorage.AuthToken;
+            return new MainServiceRestClient(uri, authToken);
+        }
+        
         /// <summary>
         /// 
         /// </summary>

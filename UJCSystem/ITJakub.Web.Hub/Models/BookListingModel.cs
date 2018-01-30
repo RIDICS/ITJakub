@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using ITJakub.Shared.Contracts;
 using Newtonsoft.Json;
+using Vokabular.MainService.DataContracts.Contracts;
 
 namespace ITJakub.Web.Hub.Models
 {
@@ -10,7 +10,7 @@ namespace ITJakub.Web.Hub.Models
         public string BookXmlId { get; set; }
         public string VersionXmlId { get; set; }
         public string BookTitle { get; set; }
-        public IList<BookPageContract> BookPages { get; set; }
+        public IList<PageContract> BookPages { get; set; }
         public string SearchText { get; set; }
         public string InitPageXmlId { get; set; }
         public bool CanPrintEdition { get; set; }

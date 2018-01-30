@@ -10,6 +10,8 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual string Name { get; set; }
 
+        public virtual bool IsRemoved { get; set; }
+
         public virtual ResourceTypeEnum ResourceType { get; set; }
 
         public virtual ContentTypeEnum ContentType { get; set; }

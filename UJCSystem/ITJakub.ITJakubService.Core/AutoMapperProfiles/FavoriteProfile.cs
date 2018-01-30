@@ -9,7 +9,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
     public class FavoriteProfile : Profile
     {
-        protected override void Configure()
+        public FavoriteProfile()
         {
             CreateMap<FavoriteBase, FavoriteBaseInfoContract>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
@@ -39,7 +39,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 
     public class PageBookmarkProfile : Profile
     {
-        protected override void Configure()
+        public PageBookmarkProfile()
         {
             CreateMap<PageBookmark, PageBookmarkContract>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
@@ -52,7 +52,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 
     public class HeadwordBookmarkProfile : Profile
     {
-        protected override void Configure()
+        public HeadwordBookmarkProfile()
         {
             CreateMap<HeadwordBookmarkResult, HeadwordBookmarkContract>()
                 .ForMember(dest => dest.BookId, opt => opt.MapFrom(src => src.BookGuid))

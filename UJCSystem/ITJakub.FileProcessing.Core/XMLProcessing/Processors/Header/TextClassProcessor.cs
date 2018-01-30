@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Castle.MicroKernel;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
@@ -25,6 +26,14 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
                     Container.Resolve<CatRefProcessor>(),
                     Container.Resolve<KeywordsProcessor>(),
                 };
+            }
+        }
+
+        protected override void PreprocessSetup(BookData bookData)
+        {
+            if (bookData.CategoryXmlIds == null)
+            {
+                bookData.CategoryXmlIds = new List<string>();
             }
         }
     }

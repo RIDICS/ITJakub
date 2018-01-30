@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Audiobooks
 {
-    public class TrackProcessor : ConcreteInstanceProcessorBase<Track>
+    public class TrackProcessor : ConcreteInstanceProcessorBase<TrackData>
     {
         private readonly RecordingProcessor m_recordingProcessor;
 
@@ -22,24 +22,23 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Audiobooks
             get { return "track"; }
         }
 
-        protected override IEnumerable<ConcreteInstanceProcessorBase<Track>> ConcreteSubProcessors
+        protected override IEnumerable<ConcreteInstanceProcessorBase<TrackData>> ConcreteSubProcessors
         {
-            get { return new List<ConcreteInstanceProcessorBase<Track>> {m_recordingProcessor}; }
+            get { return new List<ConcreteInstanceProcessorBase<TrackData>> {m_recordingProcessor}; }
         }
 
-        protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
+        protected override void ProcessElement(BookData bookData, XmlReader xmlReader)
         {
-            var track = new Track
+            var track = new TrackData
             {
-                BookVersion = bookVersion,
                 Name = xmlReader.GetAttribute("title"),
                 Text = xmlReader.GetAttribute("source"),
                 Position = Convert.ToInt32(xmlReader.GetAttribute("n")),
-                Recordings = new List<TrackRecording>()
+                Recordings = new List<TrackRecordingData>()
             };
-            bookVersion.Tracks.Add(track);
+            bookData.Tracks.Add(track);
 
-            base.ProcessElement(bookVersion,track, xmlReader);
+            base.ProcessElement(bookData,track, xmlReader);
         }
     }
 }

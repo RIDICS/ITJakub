@@ -110,7 +110,8 @@
             lastName: lastName,
             responsibleTypeIdList: [responsibleTypeId]
         }
-        this.postAjax("Admin/Project/CreateResponsiblePerson", data, callback);
+        throw "TODO update UI required, because DB model changed.";
+        //this.postAjax("Admin/Project/CreateResponsiblePerson", data, callback);
     }
 
     public createResponsibleType(type: ResponsibleTypeEnum, text: string, callback: (newResponsibleTypeId: number, errorCode: HttpStatusCode) => void) {

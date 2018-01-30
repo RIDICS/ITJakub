@@ -245,13 +245,13 @@ class GroupPermissionEditor {
         });
     }
 
-    private loadCategoryContent(targetDiv, categoryId: number) {
+    private loadCategoryContent(targetDiv, categoryId: number, bookType: BookTypeEnum) {
         
         $.ajax({
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Permission/GetCategoryContent",
-            data: { groupId: this.currentGroupSelectedItem.id, categoryId: categoryId },
+            data: { groupId: this.currentGroupSelectedItem.id, categoryId: categoryId, bookType: bookType },
             dataType: "json",
             contentType: "application/json",
             success: (response: ICategoryContent) => {
@@ -280,7 +280,7 @@ class GroupPermissionEditor {
     }
 
 
-    private createCategoryListItem(category: ICategory): HTMLLIElement {
+    private createCategoryListItem(category: ICategoryOrBookType): HTMLLIElement {
         var groupLi = document.createElement("li");
         $(groupLi).addClass("list-item non-leaf");
 
@@ -319,7 +319,7 @@ class GroupPermissionEditor {
             });
         });
 
-        buttonsSpan.appendChild(removeSpan);
+        //buttonsSpan.appendChild(removeSpan); // removing whole permission group is currently not supported
 
         groupLi.appendChild(buttonsSpan);
 
@@ -339,7 +339,7 @@ class GroupPermissionEditor {
                 $(target).addClass("glyphicon-chevron-up");
 
                 if (!detailsDiv.hasClass("loaded")) {
-                    this.loadCategoryContent(detailsDiv, category.id);
+                    this.loadCategoryContent(detailsDiv, category.id, category.bookType);
                 }
 
                 detailsDiv.slideDown();
@@ -563,42 +563,42 @@ class SpecialPermissionTextResolver {
     }
 
 
-    private newsPermission: string = "ITJakub.Shared.Contracts.NewsPermissionContract";
-    private uploadBookPermission: string = "ITJakub.Shared.Contracts.UploadBookPermissionContract";
-    private managePermission: string = "ITJakub.Shared.Contracts.ManagePermissionsPermissionContract";
-    private feedbackPermission: string = "ITJakub.Shared.Contracts.FeedbackPermissionContract";
-    private cardFilePermission: string = "ITJakub.Shared.Contracts.CardFilePermissionContract";
-    private autoimportPermission: string = "ITJakub.Shared.Contracts.AutoImportCategoryPermissionContract";
-    private readLemmatizationPermission: string = "ITJakub.Shared.Contracts.ReadLemmatizationPermissionContract";
-    private editLemmatizationPermission: string = "ITJakub.Shared.Contracts.EditLemmatizationPermissionContract";
-    private derivateLemmatizationPermission: string = "ITJakub.Shared.Contracts.DerivateLemmatizationPermissionContract";
-    private editionPrintPermission: string = "ITJakub.Shared.Contracts.EditionPrintPermissionContract";
-    private editStaticTextPermission: string = "ITJakub.Shared.Contracts.EditStaticTextPermissionContract";
+    private static newsPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.NewsPermissionContract";
+    private static uploadBookPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.UploadBookPermissionContract";
+    private static managePermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.ManagePermissionsPermissionContract";
+    private static feedbackPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.FeedbackPermissionContract";
+    private static cardFilePermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.CardFilePermissionContract";
+    private static autoimportPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.AutoImportCategoryPermissionContract";
+    private static readLemmatizationPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.ReadLemmatizationPermissionContract";
+    private static editLemmatizationPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.EditLemmatizationPermissionContract";
+    private static derivateLemmatizationPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.DerivateLemmatizationPermissionContract";
+    private static editionPrintPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.EditionPrintPermissionContract";
+    private static editStaticTextPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.EditStaticTextPermissionContract";
     
     public resolveSpecialPermissionCategoryText(type: string, specialPermissions: ISpecialPermission[]): string {
 
         switch (type) {
-            case this.newsPermission:
+            case SpecialPermissionTextResolver.newsPermission:
                 return this.localization.translate("News", this.localizationScope).value;
-            case this.uploadBookPermission:
+            case SpecialPermissionTextResolver.uploadBookPermission:
                 return this.localization.translate("BookUploading", this.localizationScope).value;
-            case this.managePermission:
+            case SpecialPermissionTextResolver.managePermission:
                 return this.localization.translate("PermissionManagement", this.localizationScope).value;
-            case this.feedbackPermission:
+            case SpecialPermissionTextResolver.feedbackPermission:
                 return this.localization.translate("FeedbackManagement", this.localizationScope).value;
-            case this.cardFilePermission:
+            case SpecialPermissionTextResolver.cardFilePermission:
                 return this.localization.translate("ReadCardFile", this.localizationScope).value;
-            case this.autoimportPermission:
+            case SpecialPermissionTextResolver.autoimportPermission:
                 return this.localization.translate("AutoImport", this.localizationScope).value;
-            case this.readLemmatizationPermission:
+            case SpecialPermissionTextResolver.readLemmatizationPermission:
                 return this.localization.translate("ReadLemmatization", this.localizationScope).value;
-            case this.editLemmatizationPermission:
+            case SpecialPermissionTextResolver.editLemmatizationPermission:
                 return this.localization.translate("EditLemmatization", this.localizationScope).value;
-            case this.derivateLemmatizationPermission:
+            case SpecialPermissionTextResolver.derivateLemmatizationPermission:
                 return this.localization.translate("DerivateLemmatization", this.localizationScope).value;
-            case this.editionPrintPermission:
+            case SpecialPermissionTextResolver.editionPrintPermission:
                 return this.localization.translate("PrintEdition", this.localizationScope).value;
-            case this.editStaticTextPermission:
+            case SpecialPermissionTextResolver.editStaticTextPermission:
                 return this.localization.translate("EditStaticText", this.localizationScope).value;
             default:
                 return this.localization.translate("UnknownPermission", this.localizationScope).value;
@@ -608,27 +608,27 @@ class SpecialPermissionTextResolver {
     public resolveSpecialPermissionText(type: string, specialPermission: ISpecialPermission): string {
 
         switch (type) {
-            case this.newsPermission:
+            case SpecialPermissionTextResolver.newsPermission:
                 return this.localization.translate("AddNews", this.localizationScope).value;
-            case this.uploadBookPermission:
+            case SpecialPermissionTextResolver.uploadBookPermission:
                 return this.localization.translate("UploadBook", this.localizationScope).value;
-            case this.managePermission:
+            case SpecialPermissionTextResolver.managePermission:
                 return this.localization.translate("ManagePermissions", this.localizationScope).value;
-            case this.feedbackPermission:
+            case SpecialPermissionTextResolver.feedbackPermission:
                 return this.localization.translate("ReadFeedback", this.localizationScope).value;
-            case this.cardFilePermission:
+            case SpecialPermissionTextResolver.cardFilePermission:
                 return this.resolveCardFileText(<ICardFilePermission>specialPermission);
-            case this.autoimportPermission:
+            case SpecialPermissionTextResolver.autoimportPermission:
                 return this.resolveAutoImportText(<IAutoImportPermission>specialPermission);
-            case this.readLemmatizationPermission:
+            case SpecialPermissionTextResolver.readLemmatizationPermission:
                 return this.localization.translate("ReadLemmatization", this.localizationScope).value;
-            case this.editLemmatizationPermission:
+            case SpecialPermissionTextResolver.editLemmatizationPermission:
                 return this.localization.translate("EditLemmatization", this.localizationScope).value;
-            case this.derivateLemmatizationPermission:
+            case SpecialPermissionTextResolver.derivateLemmatizationPermission:
                 return this.localization.translate("DerivateLemmatization", this.localizationScope).value;
-            case this.editionPrintPermission:
+            case SpecialPermissionTextResolver.editionPrintPermission:
                 return this.localization.translate("PrintEdition", this.localizationScope).value;
-            case this.editStaticTextPermission:
+            case SpecialPermissionTextResolver.editStaticTextPermission:
                 return this.localization.translate("EditStaticText", this.localizationScope).value;
             default:
                 return this.localization.translate("UnknownPermission", this.localizationScope).value;
@@ -640,7 +640,8 @@ class SpecialPermissionTextResolver {
     }
 
     private resolveAutoImportText(autoimportPermission: IAutoImportPermission): string {
-        return autoimportPermission.category.description;
+        var label = BookTypeHelper.getText(autoimportPermission.bookType);
+        return label;
     }
 
 }
@@ -897,10 +898,11 @@ class BooksSelector {
         return this.selectedCategoriesIds;
     }
 
-    private createCategoryListItem(category: ICategory): HTMLLIElement {
+    private createCategoryListItem(category: ICategoryOrBookType): HTMLLIElement {
         var groupLi = document.createElement("li");
         $(groupLi).addClass("list-item non-leaf");
         $(groupLi).data("id", category.id);
+        $(groupLi).data("bookType", category.bookType);
 
         var buttonsSpan = document.createElement("span");
         $(buttonsSpan).addClass("list-item-buttons");
@@ -932,7 +934,7 @@ class BooksSelector {
             }
         });
 
-        checkSpan.appendChild(checkInput);
+        //checkSpan.appendChild(checkInput);
 
         buttonsSpan.appendChild(checkSpan);
 
@@ -954,7 +956,7 @@ class BooksSelector {
                 $(target).addClass("glyphicon-chevron-up");
 
                 if (!detailsDiv.hasClass("loaded")) {
-                    this.loadCategoryContent(detailsDiv, category.id);
+                    this.loadCategoryContent(detailsDiv, category.id, category.bookType);
                 }
 
                 detailsDiv.slideDown();
@@ -1013,7 +1015,7 @@ class BooksSelector {
 
             if (typeof data === "undefined" || data === null || data.propagate === true) {
                 var parentCategoryItem: HTMLLIElement = <HTMLLIElement>$(bookLi).parents("li.list-item.non-leaf").first()[0];
-                this.changeStateOfCategoryItemCheckboxIfNeeded(parentCategoryItem);
+                //this.changeStateOfCategoryItemCheckboxIfNeeded(parentCategoryItem); // parent checkbox is currently disabled
             }
         });
 
@@ -1069,13 +1071,13 @@ class BooksSelector {
         this.changeStateOfCategoryItemCheckboxIfNeeded(parentCategoryItem);
     }
 
-    private loadCategoryContent(targetDiv, categoryId: number) {
+    private loadCategoryContent(targetDiv, categoryId: number, bookType: BookTypeEnum) {
 
         $.ajax({
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Permission/GetAllCategoryContent",
-            data: { categoryId: categoryId },
+            data: { categoryId: categoryId, bookType: bookType },
             dataType: "json",
             contentType: "application/json",
             success: (response: ICategoryContent) => {

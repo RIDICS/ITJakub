@@ -1,12 +1,14 @@
 using System;
+using System.Collections.Generic;
+using Vokabular.DataEntities.Database.Entities.SelectResults;
 
 namespace Vokabular.DataEntities.Database.Entities
 {
-    public class Keyword : IEquatable<Keyword>
+    public class Keyword : IEquatable<Keyword>, ICatalogValue
     {
         public virtual int Id { get; set; }
         public virtual string Text { get; set; }
-        //public virtual IList<ResourceVersion> ProjectKeywords { get; set; }
+        public virtual IList<Project> Projects { get; set; }
 
         public virtual bool Equals(Keyword other)
         {

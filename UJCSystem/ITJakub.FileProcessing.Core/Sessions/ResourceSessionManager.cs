@@ -1,29 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using ITJakub.Shared.Contracts.Resources;
 using log4net;
 
 namespace ITJakub.FileProcessing.Core.Sessions
 {
-    public class ResourceSessionManager : IDisposable
+    public class ResourceSessionManager
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private readonly object m_lock = new object();
-
-        private readonly Dictionary<string, ResourceSessionDirector> m_resourceDirectors =
-            new Dictionary<string, ResourceSessionDirector>();
-
+        
         private readonly ResourceProcessorManager m_resourceProcessorManager;
-        private bool m_disposed;
-        private string m_rootFolderPath;
-        private readonly ResourceTypeResolverManager m_resourceTypeResolverManager;
+        private readonly ActiveSessionManager m_activeSessionManager;
 
-        public ResourceSessionManager(ResourceProcessorManager resourceProcessorManager, string rootFolder, ResourceTypeResolverManager resourceTypeResolverManager)
+        public ResourceSessionManager(ResourceProcessorManager resourceProcessorManager, string rootFolder, ActiveSessionManager activeSessionManager)
         {
             m_resourceProcessorManager = resourceProcessorManager;
-            m_resourceTypeResolverManager = resourceTypeResolverManager;
+            m_activeSessionManager = activeSessionManager;
             InitializeRootFolder(rootFolder);
         }
 
@@ -63,95 +55,30 @@ namespace ITJakub.FileProcessing.Core.Sessions
                     throw;
                 }
             }
-            m_rootFolderPath = rootFolder;
         }
 
-        public void AddResource(UploadResourceContract resourceInfoSkeleton)
+        public void AddResource(string sessionId, string fileName, Stream data)
         {
-            ResourceSessionDirector director = GetDirectorBySessionId(resourceInfoSkeleton.SessionId);
+            ResourceSessionDirector director = m_activeSessionManager.GetDirectorBySessionId(sessionId);
 
-            director.AddResourceAndFillResourceTypeByExtension(resourceInfoSkeleton.FileName, resourceInfoSkeleton.Data);
+            director.AddResourceAndFillResourceTypeByExtension(fileName, data);
         }
-
-        private ResourceSessionDirector GetDirectorBySessionId(string sessionId)
+        
+        public bool ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage)
         {
-            ResourceSessionDirector result;
-
-            lock (m_lock)
+            if (!m_activeSessionManager.ContainsSessionId(sessionId))
             {
-                if (m_resourceDirectors.TryGetValue(sessionId, out result))
-                    return result;
-
-                result = new ResourceSessionDirector(sessionId, m_rootFolderPath, m_resourceTypeResolverManager);
-                m_resourceDirectors.Add(sessionId, result);
+                return false;
             }
-
-            return result;
-        }
-
-        public bool ProcessSession(string sessionId, string uploadMessage)
-        {
-            lock (m_lock)
-            {
-                if (!m_resourceDirectors.ContainsKey(sessionId))
-                {
-                    return false;
-                }
-            }
-            ResourceSessionDirector director = GetDirectorBySessionId(sessionId);
-            director.SetSessionInfoValue(SessionInfo.Message,  uploadMessage);
-            director.SetSessionInfoValue(SessionInfo.CreateTime,  DateTime.UtcNow);
+            
+            ResourceSessionDirector director = m_activeSessionManager.GetDirectorBySessionId(sessionId);
+            director.SetSessionInfoValue(SessionInfo.Message, uploadMessage);
+            director.SetSessionInfoValue(SessionInfo.CreateTime, DateTime.UtcNow);
+            director.SetSessionInfoValue(SessionInfo.ProjectId, projectId);
+            director.SetSessionInfoValue(SessionInfo.UserId, userId);
             bool result = m_resourceProcessorManager.ProcessSessionResources(director);
-            FinalizeSession(sessionId);
+            m_activeSessionManager.FinalizeSession(sessionId);
             return result;
         }
-
-        private void FinalizeSession(string sessionId)
-        {
-            lock (m_lock)
-            {
-                m_resourceDirectors[sessionId].Dispose();
-                m_resourceDirectors.Remove(sessionId);
-            }
-        }
-
-        #region IDisposable implmentation
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        ~ResourceSessionManager()
-        {
-            Dispose(false);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (m_disposed)
-                return;
-
-            if (disposing)
-            {
-                lock (m_lock)
-                {
-                    foreach (ResourceSessionDirector resourceDirector in m_resourceDirectors.Values)
-                    {
-                        resourceDirector.Dispose();
-                    }
-                }
-            }
-
-            if (Directory.Exists(m_rootFolderPath))
-            {
-                Directory.Delete(m_rootFolderPath, true);
-            }
-
-            m_disposed = true;
-        }
-
-        #endregion
     }
 }

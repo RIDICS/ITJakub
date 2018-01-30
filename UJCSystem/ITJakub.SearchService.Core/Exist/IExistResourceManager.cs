@@ -1,4 +1,4 @@
-using ITJakub.Shared.Contracts;
+using ITJakub.SearchService.DataContracts.Types;
 
 namespace ITJakub.SearchService.Core.Exist
 {

@@ -4,7 +4,6 @@ using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using ITJakub.ITJakubService.DataContracts.Contracts.AudioBooks;
-using ITJakub.Shared.Contracts.Resources;
 using log4net;
 
 namespace ITJakub.ITJakubService.DataContracts.Clients

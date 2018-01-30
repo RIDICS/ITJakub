@@ -1,24 +1,16 @@
-using System;
 using System.Collections.Generic;
 using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
-using ITJakub.DataEntities.Database.Repositories;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
 {
-    public class CategoryProcessor : ConcreteInstanceProcessorBase<Category>
+    public class CategoryProcessor : ConcreteInstanceProcessorBase<CategoryData>
     {
-        private readonly CategoryRepository m_categoryRepository;
-        private readonly PermissionRepository m_permissionRepository;
-
-        public CategoryProcessor(CategoryRepository categoryRepository, PermissionRepository permissionRepository,
-            XsltTransformationManager xsltTransformationManager, IKernel container)
+        public CategoryProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
         {
-            m_categoryRepository = categoryRepository;
-            m_permissionRepository = permissionRepository;
         }
 
         protected override string NodeName
@@ -27,11 +19,11 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
         }
 
 
-        protected override IEnumerable<ConcreteInstanceProcessorBase<Category>> ConcreteSubProcessors
+        protected override IEnumerable<ConcreteInstanceProcessorBase<CategoryData>> ConcreteSubProcessors
         {
             get
             {
-                return new List<ConcreteInstanceProcessorBase<Category>>
+                return new List<ConcreteInstanceProcessorBase<CategoryData>>
                 {
                     Container.Resolve<CategoryProcessor>(),
                     Container.Resolve<CategoryDescriptionProcessor>(),
@@ -39,39 +31,36 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             }
         }
 
-        protected override void ProcessElement(BookVersion bookVersion, Category parentCategory, XmlReader xmlReader)
+        protected override void ProcessElement(BookData bookData, CategoryData parentCategory, XmlReader xmlReader)
         {
             string xmlId = xmlReader.GetAttribute("xml:id");
-            var category = m_categoryRepository.FindByXmlId(xmlId);
-            if (category == null) { 
-                category = new Category
-                {
-                    XmlId = xmlId,
-                    ParentCategory = parentCategory
-                };
+            
+            var category = new CategoryData
+            {
+                XmlId = xmlId,
+                SubCategories = new List<CategoryData>()
+            };
 
-                if (parentCategory != null)
-                {
-                    category.BookType = parentCategory.BookType;
-                    category.Path = string.Format("{0}{1}/", parentCategory.Path, xmlId);
-                }
-                else
-                {
-                    category.Path = string.Format("/{0}/", xmlId);
-                }
-
-                m_categoryRepository.SaveOrUpdate(category);
-                var newlyCreatedCategory = m_categoryRepository.FindByXmlId(category.XmlId);
-                var newAutoimportPermission = new AutoImportCategoryPermission
-                {
-                    Category = newlyCreatedCategory,
-                    AutoImportIsAllowed = true
-                };
-                m_permissionRepository.CreateSpecialPermission(newAutoimportPermission);
+            if (parentCategory != null)
+            {
+                parentCategory.SubCategories.Add(category);
+            }
+            else
+            {
+                bookData.AllCategoriesHierarchy.Add(category);
             }
 
-            base.ProcessElement(bookVersion, category, xmlReader);
-            m_categoryRepository.SaveOrUpdate(category);
+            //TODO move creating AutoImportCategoryPermission to place, where Category is inserted to database
+            //var newlyCreatedCategory = m_categoryRepository.FindByXmlId(category.XmlId);
+            //var newAutoimportPermission = new AutoImportCategoryPermission
+            //{
+            //    Category = newlyCreatedCategory,
+            //    AutoImportIsAllowed = true
+            //};
+            //m_permissionRepository.CreateSpecialPermission(newAutoimportPermission);
+            
+
+            base.ProcessElement(bookData, category, xmlReader);
         }
     }
 }

@@ -1,4 +1,4 @@
-using ITJakub.Core;
+using Vokabular.Core.Storage;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
@@ -13,11 +13,12 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         public void Process(ResourceSessionDirector resourceSessionDirector)
         {
+            var projectId = resourceSessionDirector.GetSessionInfoValue<long>(SessionInfo.ProjectId);
+            var versionXmlId = resourceSessionDirector.GetSessionInfoValue<string>(SessionInfo.VersionXmlId);
+
             foreach (var resource in resourceSessionDirector.Resources)
             {
-                m_fileSystemManager.SaveResource(
-                    resourceSessionDirector.GetSessionInfoValue<string>(SessionInfo.BookId),
-                    resourceSessionDirector.GetSessionInfoValue<string>(SessionInfo.VersionId), resource);
+                m_fileSystemManager.SaveResource(projectId, versionXmlId, resource);
             }
         }
     }

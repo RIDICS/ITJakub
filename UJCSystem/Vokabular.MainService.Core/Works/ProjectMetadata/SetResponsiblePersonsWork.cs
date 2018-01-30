@@ -2,35 +2,56 @@
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.MainService.DataContracts.Contracts;
 
 namespace Vokabular.MainService.Core.Works.ProjectMetadata
 {
     public class SetResponsiblePersonsWork : UnitOfWorkBase
     {
-        private readonly MetadataRepository m_metadataRepository;
+        private readonly ProjectRepository m_projectRepository;
         private readonly long m_projectId;
-        private readonly IList<int> m_responsiblePersonIdList;
+        private readonly IList<ProjectResponsiblePersonIdContract> m_projectResponsiblePersonIdList;
 
-        public SetResponsiblePersonsWork(MetadataRepository metadataRepository, long projectId, IList<int> responsiblePersonIdList) : base(metadataRepository.UnitOfWork)
+        public SetResponsiblePersonsWork(ProjectRepository projectRepository, long projectId, IList<ProjectResponsiblePersonIdContract> projectResponsiblePersonIdList) : base(projectRepository)
         {
-            m_metadataRepository = metadataRepository;
+            m_projectRepository = projectRepository;
             m_projectId = projectId;
-            m_responsiblePersonIdList = responsiblePersonIdList;
+            m_projectResponsiblePersonIdList = projectResponsiblePersonIdList;
         }
 
         protected override void ExecuteWorkImplementation()
         {
-            var responsiblePersonList = new List<ResponsiblePerson>();
-            foreach (var id in m_responsiblePersonIdList)
+            var dbProjectResponsibles = m_projectRepository.GetProjectResponsibleList(m_projectId);
+            var project = m_projectRepository.Load<Project>(m_projectId);
+            
+            var newDbProjectResponsibles = new List<ProjectResponsiblePerson>();
+            foreach (var projectPerson in m_projectResponsiblePersonIdList)
             {
-                var responsiblePerson = m_metadataRepository.Load<ResponsiblePerson>(id);
-                responsiblePersonList.Add(responsiblePerson);
+                var responsiblePerson = m_projectRepository.Load<ResponsiblePerson>(projectPerson.ResponsiblePersonId);
+                var responsibleType = m_projectRepository.Load<ResponsibleType>(projectPerson.ResponsibleTypeId);
+                var newProjectResponsible = new ProjectResponsiblePerson
+                {
+                    Project = project,
+                    ResponsiblePerson = responsiblePerson,
+                    ResponsibleType = responsibleType,
+                };
+
+                newDbProjectResponsibles.Add(newProjectResponsible);
             }
 
-            var project = m_metadataRepository.Load<Project>(m_projectId);
-            project.ResponsiblePersons = responsiblePersonList;
+            // Delete responsibles
+            foreach (var dbProjectResponsible in dbProjectResponsibles)
+            {
+                if (!newDbProjectResponsibles.Contains(dbProjectResponsible))
+                    m_projectRepository.Delete(dbProjectResponsible);
+            }
 
-            m_metadataRepository.Update(project);
+            // Create new responsibles
+            foreach (var newDbProjectResponsible in newDbProjectResponsibles)
+            {
+                if (!dbProjectResponsibles.Contains(newDbProjectResponsible))
+                    m_projectRepository.Create(newDbProjectResponsible);
+            }
         }
     }
 }

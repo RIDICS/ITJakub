@@ -19,7 +19,7 @@
     
     <property name="Description" />
     
-    <property name="CreateTime" />
+    <property name="CreateTime" type="UtcDateTime" />
     
     
     <many-to-one name="FavoriteLabel"
@@ -31,7 +31,8 @@
       name="FavoritePage"
       discriminator-value="Page">
       
-      <many-to-one name="PageResource"
+      <many-to-one name="ResourcePage"
+                   column="Resource"
                    class="Resource"
                    lazy="proxy" />
 
@@ -71,9 +72,9 @@
       name="FavoriteHeadword"
       discriminator-value="Headword">
 
-      <many-to-one name="DefaultHeadwordResource"
+      <!--<many-to-one name="DefaultHeadwordResource"
                    class="Resource"
-                   lazy="proxy" />
+                   lazy="proxy" />-->
 
     </subclass>
 

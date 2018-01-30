@@ -9,14 +9,9 @@
     
     <property name="LastName" not-null="true" />
 
-    <bag name="ResponsibleTypes" cascade="save-update" table="ResponsiblePerson_ResponsibleType">
-      <key column="Person" />
-      <many-to-many class="ResponsibleType" column="Type" />
-    </bag>
-
     <bag name="Projects" table="Project_ResponsiblePerson" inverse="true" lazy="true">
       <key column="Responsible" />
-      <many-to-many class="Project" column="Project" />
+      <one-to-many class="ProjectResponsiblePerson" />
     </bag>
     
   </class>

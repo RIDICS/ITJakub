@@ -1,9 +1,8 @@
 using System;
-using System.IdentityModel.Tokens;
 using System.Security.Authentication;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Repositories;
-using Jewelery;
+using Vokabular.Jewelry;
 
 namespace ITJakub.ITJakubService.Core
 {

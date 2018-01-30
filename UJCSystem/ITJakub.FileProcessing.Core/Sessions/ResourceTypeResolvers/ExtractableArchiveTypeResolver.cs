@@ -1,4 +1,4 @@
-using ITJakub.Shared.Contracts.Resources;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.FileProcessing.Core.Sessions.ResourceTypeResolvers
 {

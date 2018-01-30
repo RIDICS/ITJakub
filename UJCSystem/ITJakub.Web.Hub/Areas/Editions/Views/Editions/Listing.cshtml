@@ -19,12 +19,12 @@
 
 </div>
 
-<div id="ReaderDiv" data-bookid="@Model.BookXmlId" data-versionid="@Model.VersionXmlId"  data-has-image-url="@Url.Action("HasBookImage", "Editions")" data-can-print="@Model.CanPrintEdition">
+<div id="ReaderDiv" data-bookid="@Model.BookXmlId" data-versionid="@Model.VersionXmlId"  data-has-image-url="@Url.Action("HasBookImage", "Reader", new {Area = ""})" data-can-print="@Model.CanPrintEdition">
 
 </div>
 
 <script type="text/javascript">
     $(document).ready(function() {
-        initReader(@Json.Serialize(Model.BookXmlId), @Json.Serialize(Model.VersionXmlId), @Json.Serialize(Model.BookTitle), @Json.Serialize(Model.BookPages, Model.JsonSerializerSettingsForBiblModule), @Json.Serialize(Model.SearchText, Model.JsonSerializerSettingsForBiblModule), @Json.Serialize(Model.InitPageXmlId));
+        initReader(@Json.Serialize(Model.BookXmlId), @Json.Serialize(Model.VersionXmlId), @Json.Serialize(Model.BookTitle), @Json.Serialize(Model.BookPages), @Json.Serialize(Model.SearchText, Model.JsonSerializerSettingsForBiblModule), @Json.Serialize(Model.InitPageXmlId));
     });
 </script>

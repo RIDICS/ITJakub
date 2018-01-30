@@ -7,13 +7,13 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
 {
     public class SetLiteraryKindWork : UnitOfWorkBase
     {
-        private readonly MetadataRepository m_metadataRepository;
+        private readonly ProjectRepository m_projectRepository;
         private readonly long m_projectId;
         private readonly IList<int> m_kindIdList;
 
-        public SetLiteraryKindWork(MetadataRepository metadataRepository, long projectId, IList<int> kindIdList) : base(metadataRepository.UnitOfWork)
+        public SetLiteraryKindWork(ProjectRepository projectRepository, long projectId, IList<int> kindIdList) : base(projectRepository)
         {
-            m_metadataRepository = metadataRepository;
+            m_projectRepository = projectRepository;
             m_projectId = projectId;
             m_kindIdList = kindIdList;
         }
@@ -23,14 +23,14 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
             var literaryKindList = new List<LiteraryKind>();
             foreach (var id in m_kindIdList)
             {
-                var literaryKind = m_metadataRepository.Load<LiteraryKind>(id);
+                var literaryKind = m_projectRepository.Load<LiteraryKind>(id);
                 literaryKindList.Add(literaryKind);
             }
 
-            var project = m_metadataRepository.Load<Project>(m_projectId);
+            var project = m_projectRepository.Load<Project>(m_projectId);
             project.LiteraryKinds = literaryKindList;
 
-            m_metadataRepository.Update(project);
+            m_projectRepository.Update(project);
         }
     }
 }

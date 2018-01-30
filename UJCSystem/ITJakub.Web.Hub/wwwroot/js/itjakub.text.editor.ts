@@ -85,6 +85,8 @@ class TextEditorWrapper {
     constructor(textArea: HTMLElement) {
         this.options = {
             element: textArea,
+            autoDownloadFontAwesome: false,
+            mode: "gfm",
             promptURLs: false,
             spellChecker: false,
             toolbar: [

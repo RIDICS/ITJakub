@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
@@ -31,23 +31,23 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
         {
         }
 
-        protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
+        protected override void ProcessElement(BookData bookData, XmlReader xmlReader)
         {
-            var instance = LoadInstance(bookVersion);
-            Process(bookVersion, instance, xmlReader);
-            SaveInstance(instance, bookVersion);
+            var instance = LoadInstance(bookData);
+            Process(bookData, instance, xmlReader);
+            SaveInstance(instance, bookData);
         }
 
-        protected virtual T LoadInstance(BookVersion bookVersion)
+        protected virtual T LoadInstance(BookData bookData)
         {
             return default(T);
         }
 
-        protected virtual void SaveInstance(T instance, BookVersion bookVersion)
+        protected virtual void SaveInstance(T instance, BookData bookData)
         {
         }
 
-        protected virtual void ProcessElement(BookVersion bookVersion, T instance, XmlReader xmlReader)
+        protected virtual void ProcessElement(BookData bookData, T instance, XmlReader xmlReader)
         {     
             Init();    
 
@@ -56,18 +56,18 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
                 if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.IsStartElement() &&
                     m_concreteInstaceProcessors.ContainsKey(xmlReader.LocalName))
                 {
-                    m_concreteInstaceProcessors[xmlReader.LocalName].Process(bookVersion, instance, GetSubtree(xmlReader));
+                    m_concreteInstaceProcessors[xmlReader.LocalName].Process(bookData, instance, GetSubtree(xmlReader));
                 }
             }
         }
 
-        public void Process(BookVersion bookVersion,T instance, XmlReader xmlReader)
+        public void Process(BookData bookData, T instance, XmlReader xmlReader)
         {          
             Init();
 
             PreprocessSetup(instance);
             ProcessAttributes(instance, xmlReader);
-            ProcessElement(bookVersion, instance, xmlReader);
+            ProcessElement(bookData, instance, xmlReader);
         }
         
 
