@@ -1,11 +1,10 @@
 ﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ProjectListViewModel
-@using System.Threading.Tasks
 @using ITJakub.Web.Hub.Core
 @using Localization.AspNetCore.Service
 @inject ILocalization Localizer
 
 @{
-    ViewBag.Title = @Localizer.Translate("ProjectList", "Admin");
+    ViewBag.Title = Localizer.Translate("ProjectList", "Admin");
 }
 @section styles {
     <link rel="stylesheet" href="~/Areas/Admin/css/ridics.project.css" />

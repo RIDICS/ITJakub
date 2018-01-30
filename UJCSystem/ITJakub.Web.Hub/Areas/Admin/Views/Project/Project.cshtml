@@ -1,5 +1,4 @@
 ﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ProjectItemViewModel
-@using System.Threading.Tasks
 @using ITJakub.Web.Hub.Core
 @using Localization.AspNetCore.Service
 
@@ -163,7 +162,7 @@
                 <h4 class="modal-title">@Localizer.Translate("DuplicateResource", "Admin")</h4>
             </div>
             <div class="modal-body">
-                @Localizer.Translate("DuplicateResourceModal", "Admin")"<span id="duplicate-resource-name"></span>"?
+                @Localizer.Translate("ResourceDuplicateModal", "Admin")"<span id="duplicate-resource-name"></span>"?
             </div>
             <div class="modal-footer">
                 <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("ErrorDuringDuplicate", "Admin")</div>
