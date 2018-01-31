@@ -69,7 +69,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         private string GetCommunicationToken()
         {
-            var communicationToken = HttpContext.Authentication.GetTokenAsync(AuthenticationManager.AuthenticationTokenName)
+            var communicationToken = HttpContext.GetTokenAsync(AuthenticationManager.AuthenticationTokenName)
                 .GetAwaiter().GetResult();
             if (communicationToken == null)
                 throw new ArgumentException("Cannot find communicationToken");

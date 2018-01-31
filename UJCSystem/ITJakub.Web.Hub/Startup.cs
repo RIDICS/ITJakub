@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using Localization.AspNetCore.Service.Extensions;
-using Localization.AspNetCore.Service.Factory;
 using Localization.CoreLibrary.Dictionary.Factory;
 using Localization.CoreLibrary.Util;
 using Localization.Database.EFCore.Data.Impl;
 using Localization.Database.EFCore.Factory;
-using Log4net.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -16,55 +13,42 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using Vokabular.Log4Net;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
 using Vokabular.Shared.Container;
 using Vokabular.Shared.Options;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace ITJakub.Web.Hub
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
-            var globalbuilder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("globalsettings.json");
-            var globalConfiguration = globalbuilder.Build();
-
-            var secretSettingsPath = globalConfiguration["SecretSettingsPath"];
-            var environmentConfiguration = globalConfiguration["EnvironmentConfiguration"];
-
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{environmentConfiguration}.json", optional: true)
-                .AddJsonFile(Path.Combine(secretSettingsPath, "ITJakub.Secrets.json"), optional: true)
-                .AddJsonFile(Path.Combine(secretSettingsPath, $"ITJakub.Secrets.{environmentConfiguration}.json"), optional: true);
-
-            if (env.IsDevelopment())
-            {
-                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                //builder.AddUserSecrets();
-            }
-
-            builder.AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = configuration;
             ApplicationConfig.Configuration = Configuration;
 
             env.ConfigureLog4Net("log4net.config");
         }
 
-        private IConfigurationRoot Configuration { get; }
+        private IConfiguration Configuration { get; }
         private IIocContainer Container { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(o =>
+                {
+                    o.AccessDeniedPath = "/Account/AccessDenied/";
+                    o.LoginPath = "/Account/Login";
+                });
+
+
             // Configuration options
             services.AddOptions();
             services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
@@ -142,17 +126,7 @@ namespace ITJakub.Web.Hub
 
             app.UseStatusCodePages();
 
-            //app.ConfigureAuth(); // Old authentication configuration
-            app.UseCookieAuthentication(new CookieAuthenticationOptions //TODO move to specific class?
-            {
-                AccessDeniedPath = "/Account/AccessDenied/",
-                AuthenticationScheme = CookieAuthenticationDefaults.AuthenticationScheme,
-                AutomaticAuthenticate = true,
-                AutomaticChallenge = true,
-                LoginPath = "/Account/Login",
-                //Events = new CookieAuthenticationEvents{} // TODO maybe useful events
-                //CookiePath = "" // TODO maybe useful for Development deployment
-            });
+            app.UseAuthentication();
 
             app.ConfigureAutoMapper();
 

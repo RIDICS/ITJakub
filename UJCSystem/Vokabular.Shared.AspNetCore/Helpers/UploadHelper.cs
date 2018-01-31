@@ -17,7 +17,7 @@ namespace Vokabular.Shared.AspNetCore.Helpers
             var element = elements.First(entry => entry.StartsWith("boundary="));
             var boundary = element.Substring("boundary=".Length);
 
-            boundary = HeaderUtilities.RemoveQuotes(boundary);
+            boundary = HeaderUtilities.RemoveQuotes(boundary).Value;
 
             return boundary;
         }

@@ -35,7 +35,7 @@ namespace ITJakub.Web.Hub.Core.Communication
         public MainServiceRestClient GetMainServiceClient()
         {
             var uri = m_configurationProvider.GetEndpointUri(NewMainServiceEndpointName);
-            var authToken = m_httpContextAccessor.HttpContext.Authentication.GetTokenAsync(AuthenticationManager.AuthenticationTokenName)
+            var authToken = m_httpContextAccessor.HttpContext.GetTokenAsync(AuthenticationManager.AuthenticationTokenName)
                 .GetAwaiter().GetResult();
             return new MainServiceRestClient(uri, authToken);
         }

@@ -6,7 +6,6 @@ using ITJakub.Web.Hub.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Authentication;
 using Vokabular.MainService.DataContracts.Contracts;
 
 namespace ITJakub.Web.Hub.Core.Managers
@@ -58,7 +57,7 @@ namespace ITJakub.Web.Hub.Core.Managers
                     }
                 });
 
-                await m_httpContextAccessor.HttpContext.Authentication.SignInAsync(
+                await m_httpContextAccessor.HttpContext.SignInAsync(
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity), authenticationProperties);
             }
@@ -70,7 +69,7 @@ namespace ITJakub.Web.Hub.Core.Managers
             {
                 client.SignOut();
 
-                await m_httpContextAccessor.HttpContext.Authentication.SignOutAsync(
+                await m_httpContextAccessor.HttpContext.SignOutAsync(
                     CookieAuthenticationDefaults.AuthenticationScheme);
             }
         }
