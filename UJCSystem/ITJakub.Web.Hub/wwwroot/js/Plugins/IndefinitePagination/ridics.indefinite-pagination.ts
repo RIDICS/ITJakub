@@ -60,6 +60,9 @@
                 this.options.loadPageCallBack(pageNumber);
             } else {
                 this.wrapped = true;
+                if (this.options.pageDoesntExistCallBack) {
+                    this.options.pageDoesntExistCallBack(pageNumber);
+                }
             }
         }
     }
