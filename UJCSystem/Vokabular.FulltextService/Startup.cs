@@ -21,6 +21,7 @@ namespace Vokabular.FulltextService
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            ApplicationConfig.Configuration = Configuration;
         }
 
         private IConfiguration Configuration { get; }

@@ -36,7 +36,6 @@ namespace Vokabular.FulltextService
                         .AddJsonFile($"appsettings.{environmentConfiguration}.json", optional: true)
                         .AddEnvironmentVariables();
 
-                    //Configuration = builder.Build();
                 })
                 .ConfigureLogging((builderContext, builder) =>
                 {
