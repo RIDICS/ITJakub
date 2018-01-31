@@ -37,7 +37,7 @@
 
   <ItemGroup>
     <PackageReference Include="Scalesoft.Localization.AspNetCore.Service" Version="1.0.1" />
-    <PackageReference Include="Scalesoft.Localization.CoreLibrary" Version="1.0.1" />
+    <PackageReference Include="Scalesoft.Localization.CoreLibrary" Version="1.0.2" />
     <PackageReference Include="Scalesoft.Localization.Database.EFCore" Version="1.0.2" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.0.1" />
