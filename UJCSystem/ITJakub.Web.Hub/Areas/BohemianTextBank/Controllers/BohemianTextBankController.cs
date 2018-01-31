@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;//TODO remove
 using AutoMapper;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
@@ -15,7 +14,6 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
-using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
@@ -233,14 +231,14 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         {
             if (string.IsNullOrEmpty(text))
             {
-                throw new ArgumentException("text can't be null in fulltext search");
+                return BadRequest("text can't be null in fulltext search");
             }
 
             var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
 
             AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
 
-            return GetSearchResult(new CorpusSearchRequestContract
+            return GetSearchCorpusSnapshotListResult(new CorpusSearchRequestContract
             {
                 Start = start,
                 Count = count,
@@ -258,7 +256,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             var text = request.Text;
             if (string.IsNullOrEmpty(text))
             {
-                throw new ArgumentException("text can't be null in fulltext search");
+                return BadRequest("Text can't be null in fulltext search");
             }
 
             var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
@@ -268,22 +266,30 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             var contextLength = request.ContextLength;
             var snapshotId = request.SnapshotId;
 
-            return GetSearchResult(new CorpusSearchRequestContract
+            return GetSearchCorpusInSnapshotResult(snapshotId, new CorpusSearchRequestContract
                 {
                     Start = start,
                     Count = count,
                     ContextLength = contextLength,
                     ConditionConjunction = listSearchCriteriaContracts,
-                }, snapshotId);
+                });
         }
         
         [HttpGet]
         public ActionResult AdvancedSearchGetHitBookIdsPaged(string json, SortTypeEnumContract sortBooksBy, SortDirectionEnumContract sortDirection, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds, bool fetchNumberOfResults = false)
 
         {
-            var listSearchCriteriaContracts = CreateTextCriteriaListFromJson(json, selectedBookIds, selectedCategoryIds);
-            
-            return GetSearchResult(new CorpusSearchRequestContract
+            List<SearchCriteriaContract> listSearchCriteriaContracts;
+
+            try
+            {
+                listSearchCriteriaContracts = CreateTextCriteriaListFromJson(json, selectedBookIds, selectedCategoryIds);
+            }catch (ArgumentException exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+            return GetSearchCorpusSnapshotListResult(new CorpusSearchRequestContract
             {
                 Start = start,
                 Count = count,
@@ -298,20 +304,28 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         public ActionResult AdvancedSearchCorpusGetPage([FromQuery] CorpusLookupContractAdvancedSearch request)
         {
             var json = request.Json;
-            var listSearchCriteriaContracts = CreateTextCriteriaListFromJson(json);
+
+            List<SearchCriteriaContract> listSearchCriteriaContracts;
+            try
+            {
+                listSearchCriteriaContracts = CreateTextCriteriaListFromJson(json);
+            }catch (ArgumentException exception)
+            {
+                return BadRequest(exception.Message);
+            }
 
             var start = request.Start;
             var count = request.Count;
             var contextLength = request.ContextLength;
             var snapshotId = request.SnapshotId;
 
-            return GetSearchResult(new CorpusSearchRequestContract
+            return GetSearchCorpusInSnapshotResult(snapshotId, new CorpusSearchRequestContract
             {
                 Start = start,
                 Count = count,
                 ContextLength = contextLength,
                 ConditionConjunction = listSearchCriteriaContracts,
-            }, snapshotId);
+            });
         }
 
         public ActionResult CreatePaginatedStructure(string text, IList<long> selectedSnapshotIds, IList<int> selectedCategoryIds, int approximateNumberOfResultsPerPage)
@@ -332,7 +346,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         {
             if (string.IsNullOrEmpty(text))
             {
-                throw new ArgumentException("text can't be null in fulltext search");
+                return BadRequest("Text can't be null in fulltext search");
             }
 
             var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
@@ -359,7 +373,15 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 
         public ActionResult GetTotalResultNumberAdvanced(string json, IList<long> selectedSnapshotIds, IList<int> selectedCategoryIds)
         {
-            var listSearchCriteriaContracts = CreateTextCriteriaListFromJson(json, selectedSnapshotIds, selectedCategoryIds);
+            List<SearchCriteriaContract> listSearchCriteriaContracts;
+
+            try
+            {
+                listSearchCriteriaContracts = CreateTextCriteriaListFromJson(json, selectedSnapshotIds, selectedCategoryIds);
+            }catch (ArgumentException exception)
+            {
+                return BadRequest(exception.Message);
+            }
 
             return GetTotalNumberOfResults(new SearchRequestContractBase
             {
@@ -382,25 +404,21 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             return listSearchCriteriaContracts;
         }
 
-
-        private ActionResult GetSearchResult(CorpusSearchRequestContract request, long? snapshotId = null)
+        private ActionResult GetSearchCorpusInSnapshotResult(long snapshotId, CorpusSearchRequestContract request)
         {
             using (var client = GetRestClient())
             {
-                if (snapshotId.HasValue)
-                {
-                    var result = client.SearchCorpusSnapshot(snapshotId.Value, request);
-                    return Json(new { results = result });
-                }
-                else
-                {
-                    var result = client.SearchCorpusSnapshots(request);
-                    if (request.FetchNumberOfResults)
-                    {
-                        return Json(new {list = result.ResultsInSnapshotsCount, totalCount = result.TotalCount});
-                    }
-                    return Json(new { list = result.SnapshotIds, totalCount = result.TotalCount });
-                }
+                var result = client.SearchCorpusInSnapshot(snapshotId, request);
+                return Json(new { results = result });
+            }
+        }
+
+        private ActionResult GetSearchCorpusSnapshotListResult(CorpusSearchRequestContract request)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.SearchCorpusGetSnapshotList(request);
+                return Json(new { list = result.SnapshotList, totalCount = result.TotalCount });
             }
         }
 
@@ -408,7 +426,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         {
             using (var client = GetRestClient())
             {
-                var result = client.SearchCorpusSnapshotsCount(request);
+                var result = client.SearchCorpusTotalResultCount(request);
                 return Json(new { totalCount = result });
             }
         }

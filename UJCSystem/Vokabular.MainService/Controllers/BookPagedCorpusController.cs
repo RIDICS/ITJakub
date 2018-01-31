@@ -11,22 +11,22 @@ using Vokabular.Shared.DataContracts.Search.Request;
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
-    public class PagedCorpusController : Controller
+    public class BookPagedCorpusController : Controller
     {
         private readonly BookSearchManager m_bookSearchManager;
 
-        public PagedCorpusController(BookSearchManager bookSearchManager)
+        public BookPagedCorpusController(BookSearchManager bookSearchManager)
         {
             m_bookSearchManager = bookSearchManager;
         }
 
         [HttpPost("search")]
         [ProducesResponseType(typeof(CorpusSearchSnapshotsResultContract), StatusCodes.Status200OK)]
-        public IActionResult SearchCorpusSnapshotsResult([FromBody] CorpusSearchRequestContract request)
+        public IActionResult SearchCorpusGetSnapshotListResult([FromBody] CorpusSearchRequestContract request)
         {
             try
             {
-                var result = m_bookSearchManager.SearchCorpusSnapshotsByCriteria(request);
+                var result = m_bookSearchManager.SearchCorpusGetSnapshotListByCriteria(request);
                 return Ok(result);
             }
             catch (ArgumentException exception)
@@ -39,13 +39,13 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [HttpPost("{snapshotId}/search")]
+        [HttpPost("snapshot/{snapshotId}/search")]
         [ProducesResponseType(typeof(List<CorpusSearchResultContract>), StatusCodes.Status200OK)]
-        public IActionResult SearchCorpusSnapshotResult(long snapshotId, [FromBody] CorpusSearchRequestContract request)
+        public IActionResult SearchCorpusInSnapshotResult(long snapshotId, [FromBody] CorpusSearchRequestContract request)
         {
             try
             {
-                var result = m_bookSearchManager.SearchCorpusSnapshotByCriteria(snapshotId, request);
+                var result = m_bookSearchManager.SearchCorpusInSnapshotByCriteria(snapshotId, request);
                 return Ok(result);
             }
             catch (ArgumentException exception)
@@ -60,11 +60,11 @@ namespace Vokabular.MainService.Controllers
 
         [HttpPost("search-count")]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-        public IActionResult SearchCorpusResultCount([FromBody] SearchRequestContractBase request)
+        public IActionResult SearchCorpusTotalResultCount([FromBody] SearchRequestContractBase request)
         {
             try
             {
-                var result = m_bookSearchManager.SearchCorpusSnapshotsByCriteriaCount(request);
+                var result = m_bookSearchManager.SearchCorpusTotalResultCount(request);
                 return Ok(result);
             }
             catch (ArgumentException exception)

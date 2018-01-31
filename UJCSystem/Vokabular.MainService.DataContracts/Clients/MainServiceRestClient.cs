@@ -1290,11 +1290,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public CorpusSearchSnapshotsResultContract SearchCorpusSnapshots(CorpusSearchRequestContract request)
+        public CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotList(CorpusSearchRequestContract request)
         {
             try
             {
-                var result = Post<CorpusSearchSnapshotsResultContract>("pagedcorpus/search", request);
+                var result = Post<CorpusSearchSnapshotsResultContract>("bookpagedcorpus/search", request);
                 return result;
             }
             catch (HttpRequestException e)
@@ -1306,11 +1306,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<CorpusSearchResultContract> SearchCorpusSnapshot(long snapshotId, CorpusSearchRequestContract request)
+        public List<CorpusSearchResultContract> SearchCorpusInSnapshot(long snapshotId, CorpusSearchRequestContract request)
         {
             try
             {
-                var result = Post<List<CorpusSearchResultContract>>($"pagedcorpus/{snapshotId}/search", request);
+                var result = Post<List<CorpusSearchResultContract>>($"bookpagedcorpus/snapshot/{snapshotId}/search", request);
                 return result;
             }
             catch (HttpRequestException e)
@@ -1322,11 +1322,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public object SearchCorpusSnapshotsCount(SearchRequestContractBase request)
+        public long SearchCorpusTotalResultCount(SearchRequestContractBase request)
         {
             try
             {
-                var result = Post<long>("pagedcorpus/search-count", request);
+                var result = Post<long>("bookpagedcorpus/search-count", request);
                 return result;
             }
             catch (HttpRequestException e)

@@ -8,11 +8,11 @@ using Vokabular.Shared.DataContracts.Search.Request;
 namespace Vokabular.FulltextService.Controllers
 {
     [Route("api/[controller]")]
-    public class PagedCorpusController : Controller
+    public class BookPagedCorpusController : Controller
     {
         private readonly SearchManager m_searchManager;
 
-        public PagedCorpusController(SearchManager searchManager)
+        public BookPagedCorpusController(SearchManager searchManager)
         {
             m_searchManager = searchManager;
         }
@@ -42,7 +42,7 @@ namespace Vokabular.FulltextService.Controllers
             return result;
         }
 
-        [HttpPost("{snapshotId}/search")]
+        [HttpPost("snapshot/{snapshotId}/search")]
         public List<CorpusSearchResultContract> SearchCorpusSnapshot(long snapshotId,[FromBody] CorpusSearchRequestContract searchRequest)
         {
             var result = m_searchManager.SearchCorpusSnapshotByCriteria(snapshotId, searchRequest);
