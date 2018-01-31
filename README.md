@@ -122,3 +122,22 @@ Currently secured services are:
 * ITJakub.ITJakubService - original main service, secured by communication token
 
 **Other services are not intended for direct client communication, so they should be accessible only for MainService or Web.Hub.**
+
+
+## Common errors
+
+**Publish failed with: Error MSB3073: The command "npm install" exited with code 9009.**
+NPM is not added to system path.
+
+**Publish failed with: Error MSB3073: The command "gulp clean" exited with code 9009.**
+Gulp is not installed as global package.
+
+**IIS error 500.19 - The requested page cannot be accessed because the related configuration data for the page is invalid.**
+Check if ".NET Core Windows Server Hosting" is installed.
+
+**An error occurred while starting the application.**
+* Check relational database access configuration (username, password, database exists, ...)
+* If you change stdoutLogEnabled in web.config to true, specific error can be displayed in text file inside "logs" folder.
+
+**Logging doesn't work on IIS**
+System user IIS_IUSRS must has permission to write to "logs" folder.
