@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using ITJakub.Web.DataEntities.Database.Entities.Enums;
 using ITJakub.Web.Hub.Core.Markdown;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Type;
@@ -83,15 +82,14 @@ namespace ITJakub.Web.Hub.Core.Managers
                 Scope = staticText.DictionaryScope
             };
 
-            StaticTextFormat typeFormat = (StaticTextFormat)staticText.Format;
-            switch (typeFormat)
+            switch (viewModel.Format)
             {
-                case StaticTextFormat.Markdown:
+                case StaticTextFormatType.Markdown:
                     viewModel.Text = m_markdownToHtmlConverter.ConvertToHtml(staticText.Text);
                     viewModel.Format = StaticTextFormatType.Html;
                     break;
-                case StaticTextFormat.PlainText:
-                case StaticTextFormat.Html:
+                case StaticTextFormatType.PlainText:
+                case StaticTextFormatType.Html:
                     break;
             }
 
