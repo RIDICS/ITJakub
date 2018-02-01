@@ -20,10 +20,10 @@ namespace Vokabular.FulltextService.Core.Helpers.Markdown.Extensions
             
             foreach (var child in commentMarkContainer.ChildList)
             {
-                if (child is CommentMark)
+                if (child is CommentMarkText)
                 {
-                    var castedchild = child as CommentMark;
-                    renderer.Write(castedchild.CommentContext);
+                    var castedchild = child as CommentMarkText;
+                    renderer.Write(castedchild.Text);
                 }
                 else if (child is CommentMarkContainer)
                 {

@@ -1,6 +1,4 @@
 ﻿using Markdig;
-using Markdig.Helpers;
-using Markdig.Parsers;
 using Markdig.Renderers;
 using Microsoft.Extensions.Options;
 using Vokabular.FulltextService.Core.Options;
