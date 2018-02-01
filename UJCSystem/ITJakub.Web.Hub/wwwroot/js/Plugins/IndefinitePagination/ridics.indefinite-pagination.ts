@@ -105,6 +105,24 @@
         this.make();
     }
 
+    disable() {
+        this.paginationContainer.find("button, input").prop("disabled", true);
+        if (this.slider) {
+            if (this.slider.slider("instance")) {
+                this.slider.slider("disable");
+            }
+        }
+    }
+
+    enable() {
+        this.paginationContainer.find("button, input").prop("disabled", false);
+        if (this.slider) {
+            if (this.slider.slider("instance")) {
+                this.slider.slider("enable");
+            }
+        }
+    }
+
     private makeSlider(currentPage: number, totalNumberOfPages: number): JQuery {
         const slider = $(`<div class="indefinite-pagination-navigation-slider"></div>`);
         const handle = $(`<div class="ui-slider-handle"></div>`);
