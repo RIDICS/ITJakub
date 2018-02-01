@@ -1,4 +1,3 @@
-PUT snapshotindex 
 {
   "settings": {
     "analysis": {
@@ -57,35 +56,6 @@ PUT snapshotindex
           "term_vector": "with_positions_offsets", 
           "analyzer": "snapshot_analyzer" 
         }
-      }
-    }
-  }
-}
-
-PUT pageindex 
-{
-  "settings": {
-    "analysis": {
-      "analyzer": {
-        "page_analyzer": {
-          "type": "custom",
-          "tokenizer": "whitespace",
-          "filter": "lowercase"
-          
-        }
-      }
-    }
-  },
-  "mappings": {
-    "page": { 
-      "properties": { 
-        "pageText":    { 
-          "type": "text", 
-          "term_vector": "with_positions_offsets", 
-          "analyzer": "page_analyzer" 
-        }, 
-        "versionNumber":     { "type": "integer"  }
-        
       }
     }
   }
