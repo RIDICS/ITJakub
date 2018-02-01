@@ -395,7 +395,7 @@ namespace Vokabular.FulltextService.Core.Managers
                     .Fields(f => f
                         .Field(SnapshotTextField)
                         .NumberOfFragments(FragmentsCount)
-                        .FragmentSize(FragmentSize)
+                        .FragmentSize(searchRequest.ContextLength)
                         .Type(HighlighterType)
                     )
                 )
