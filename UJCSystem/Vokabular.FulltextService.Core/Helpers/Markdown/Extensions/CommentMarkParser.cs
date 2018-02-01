@@ -50,10 +50,10 @@ namespace Vokabular.FulltextService.Core.Helpers.Markdown.Extensions
             {
                 slice.Start = slice.Start + m_idLenght;
                 
-                var currentChar = slice.NextChar();
-                newStart = slice.Start;
+                newStart = slice.Start + 1;
                 do //While closing char is escaped or it is not beginning of tag
                 {
+                    var currentChar = slice.NextChar();
                     while (currentChar != m_closingChar) //While closing char is not found
                     {
                         if (currentChar == m_openingChar && !IsCurrentCharEscaped(slice) && IsBeginningOfTag(slice, m_closingChar)) //Inner comment is found
@@ -76,10 +76,11 @@ namespace Vokabular.FulltextService.Core.Helpers.Markdown.Extensions
                         }
                         currentChar = slice.NextChar();
 
-                        if (currentChar == '\0')
+                        if (currentChar == '\0')//End of file
                         {
-                            throw new ArgumentException("Input text is not valid.");
-                        }; //End of file
+                            return null;
+                            
+                        } 
                     }
                 } while (!IsBeginningOfTag(slice, m_openingChar) && IsCurrentCharEscaped(slice));
 
