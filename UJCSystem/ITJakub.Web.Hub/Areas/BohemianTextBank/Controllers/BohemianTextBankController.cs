@@ -312,7 +312,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         }
 
 
-        public ActionResult AdvancedSearchGetHitBookIdsPaged([FromQuery]CorpusListGetPageContractAdvanced searchQuery)
+        public ActionResult AdvancedSearchGetHitBookIdsPaged(CorpusListGetPageContractAdvanced searchQuery)
         {
             var json = searchQuery.Json;
             var selectedBookIds = searchQuery.SelectedBookIds;
@@ -498,16 +498,47 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             });
         }
 
-        public ActionResult GetPagePositionInListsAdvanced(int hitResultTotalStart, int hitResultCount, int compositionsPerPage, CorpusListLookupAdvancedSearchParams searchParams)
+        public ActionResult GetPagePositionInListsAdvanced(int hitResultTotalStart, int compositionsPerPage, CorpusListLookupAdvancedSearchParams searchParams)
         {
-            var compositionResultListStart = 0;
-            var bookIndex = 0;
-            var hitResultStart = 0;
+            var bookId = 0L;
+
+            var compositionListStart = 0;
+            var currentResultsUpToThisBook = 0L;
+            long LoadCompositionPage()
+            {
+                while (true)
+                {
+                    var query = new CorpusListGetPageContractAdvanced
+                    {
+                        Start = compositionListStart,
+                        Count = compositionsPerPage,
+                        SortBooksBy = searchParams.SortBooksBy,
+                        SortDirection = searchParams.SortDirection,
+                        Json = searchParams.Json,
+                        SelectedBookIds = searchParams.SelectedBookIds,
+                        SelectedCategoryIds = searchParams.SelectedCategoryIds
+                    };
+                    var numberOfResultsArray = AdvancedSearchGetHitBookResultNumbers(query);
+
+                    var compositionResultNumbers = numberOfResultsArray.List;
+                    foreach (var composition in compositionResultNumbers)
+                    {
+                        currentResultsUpToThisBook += composition.Value;
+                        if (hitResultTotalStart >= currentResultsUpToThisBook) continue;
+                        bookId = composition.Key;
+                        return currentResultsUpToThisBook - composition.Value;
+                    }
+
+                    compositionListStart += compositionsPerPage;
+                }
+            }
+
+            var resultsUpToThisCompositionStart = LoadCompositionPage();
             return Json(new
             {
-                compositionResultListStart = compositionResultListStart,
-                bookIndex = bookIndex,
-                hitResultStart = hitResultStart
+                compositionListStart = compositionListStart,
+                bookId = bookId,
+                hitResultStart = (hitResultTotalStart - resultsUpToThisCompositionStart)
             });
         }
         #endregion

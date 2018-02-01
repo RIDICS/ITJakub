@@ -79,12 +79,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult RenameLiteraryGenre(int literaryGenreId, LiteraryGenreContract data)
+        public void RenameLiteraryGenre(int literaryGenreId, LiteraryGenreContract data)
         {
             using (var client = GetRestClient())
             {
-                var response = client.UpdateLiteraryGenre(literaryGenreId, data);
-                return Json(response);
+                client.UpdateLiteraryGenre(literaryGenreId, data);
             }
         }
 
@@ -125,12 +124,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
         [HttpPost]
-        public IActionResult RenameLiteraryKind(int literaryKindId, LiteraryKindContract request)
+        public void RenameLiteraryKind(int literaryKindId, LiteraryKindContract request)
         {
             using (var client = GetRestClient())
             {
-                var response = client.UpdateLiteraryKind(literaryKindId, request);
-                return Json(response);
+                client.UpdateLiteraryKind(literaryKindId, request);
             }
         }
         #endregion
@@ -162,12 +160,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
         [HttpPost]
-        public IActionResult RenameResponsibleType(int responsibleTypeId, ResponsibleTypeContract data)
+        public void RenameResponsibleType(int responsibleTypeId, ResponsibleTypeContract data)
         {
             using (var client = GetRestClient())
             {
-                var response = client.UpdateResponsibleType(responsibleTypeId, data);
-                return Json(response);
+                client.UpdateResponsibleType(responsibleTypeId, data);
             }
         }
         #endregion
@@ -191,12 +188,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
         [HttpPost]
-        public IActionResult RenameResponsiblePerson(int responsiblePersonId, ResponsiblePersonContract request)
+        public void RenameResponsiblePerson(int responsiblePersonId, ResponsiblePersonContract request)
         {
             using (var client = GetRestClient())
             {
-                var response = client.UpdateResponsiblePerson(responsiblePersonId, request);
-                return Json(response);
+                client.UpdateResponsiblePerson(responsiblePersonId, request);
             }
         }
         [HttpPost]
@@ -236,12 +232,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
         [HttpPost]
-        public IActionResult RenameLiteraryOriginal(int literaryOriginalId, LiteraryOriginalContract request)
+        public void RenameLiteraryOriginal(int literaryOriginalId, LiteraryOriginalContract request)
         {
             using (var client = GetRestClient())
             {
-                var response = client.UpdateLiteraryOriginal(literaryOriginalId, request);
-                return Json(response);
+                client.UpdateLiteraryOriginal(literaryOriginalId, request);
             }
         }
         #endregion
@@ -265,12 +260,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
         [HttpPost]
-        public IActionResult RenameOriginalAuthor(int authorId, OriginalAuthorContract request)
+        public void RenameOriginalAuthor(int authorId, OriginalAuthorContract request)
         {
             using (var client = GetRestClient())
             {
-                var response = client.UpdateOriginalAuthor(authorId, request);
-                return Json(response);
+                client.UpdateOriginalAuthor(authorId, request);
             }
         }
         [HttpPost]
@@ -310,12 +304,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
         [HttpPost]
-        public IActionResult RenameKeyword(int keywordId, KeywordContract request)
+        public void RenameKeyword(int keywordId, KeywordContract request)
         {
             using (var client = GetRestClient())
             {
-                var response = client.UpdateKeyword(keywordId, request);
-                return Json(response);
+                client.UpdateKeyword(keywordId, request);
             }
         }
         #endregion
