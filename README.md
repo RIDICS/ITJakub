@@ -48,6 +48,11 @@ Environment configuration
 * Prepare Elasticsearch:
   * Install Experimental highlighter plugin using following command: "./bin/elasticsearch-plugin install org.wikimedia.search.highlighter:experimental-highlighter-elasticsearch-plugin:5.5.2.2" in Elasticsearch installation directory.
   * Create indices using Elasticsearch-Update.ps1 script or manually using REST calls to Elasticsearch with configuration stored in "Database/Elasticsearch" folder (every file represents configuration for one index, index name is the same as file name).
+  * Elasticsearch-Update.ps1 script has following parameters:
+    1. -url URL of database (default is "http://localhost:9200")
+    2. -path Folder with indices configuration (default is "Elasticsearch")
+    3. -recreateMode Determine if indices should be deleted and then created new (default is $false)
+    4. -indexSuffix Add suffix to index name (default is empty)
 * Install certificates
   1. Open Manager for computers certificates - certlm.msc
   2. Install ITJakubCA to Trusted Root Certification Authrorities for Local computer
