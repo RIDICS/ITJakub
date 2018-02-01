@@ -36,17 +36,17 @@ namespace Vokabular.FulltextService.Controllers
         }
 
         [HttpPost]
-        public ResultContract CreateTextResource([FromBody] TextResourceContract textResource)
+        public ActionResult CreateTextResource([FromBody] TextResourceContract textResource)
         {
-            ResultContract result = null;
+            ResultContract result;
 
             try{
                 result = m_textResourceManager.CreateTextResource(textResource);
             }catch (ArgumentException exception){
-                BadRequest(exception.Message);
+                return BadRequest(exception.Message);
             }
 
-            return result;
+            return Ok(result);
         }
 
         [HttpPost("{textResourceId}/search")]

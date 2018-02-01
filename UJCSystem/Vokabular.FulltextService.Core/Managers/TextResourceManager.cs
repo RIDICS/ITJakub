@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.Options;
 using Vokabular.FulltextService.Core.Communication;
+using Vokabular.FulltextService.Core.Helpers;
 using Vokabular.FulltextService.Core.Helpers.Validators;
 using Vokabular.FulltextService.Core.Options;
 using Vokabular.FulltextService.DataContracts.Contracts;
@@ -22,7 +23,7 @@ namespace Vokabular.FulltextService.Core.Managers
             var response = client.Get<TextResourceContract>(textResourceId, idx => idx.Index(PageIndex).Type(PageType));
             if (!response.IsValid)
             {
-                throw new Exception(response.DebugInformation);
+                throw new FulltextDatabaseException(response.DebugInformation);
             }
             return response.Source;
         }
@@ -40,7 +41,7 @@ namespace Vokabular.FulltextService.Core.Managers
 
             if (!response.IsValid)
             {
-                throw new Exception(response.DebugInformation);
+                throw new FulltextDatabaseException(response.DebugInformation);
             }
 
             return new ResultContract {Id = response.Id};
