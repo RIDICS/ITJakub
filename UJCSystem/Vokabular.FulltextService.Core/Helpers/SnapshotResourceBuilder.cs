@@ -1,18 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using Vokabular.FulltextService.Core.Helpers.Converters;
 using Vokabular.FulltextService.Core.Managers;
 using Vokabular.FulltextService.DataContracts.Contracts;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.FulltextService.Core.Helpers
 {
     public class SnapshotResourceBuilder
     {
         private readonly TextResourceManager m_textResourceManager;
+        private readonly ITextConverter m_textConverter;
+
         private const int MinSnippetSize = 15;
 
-        public SnapshotResourceBuilder(TextResourceManager textResourceManager)
+        public SnapshotResourceBuilder(TextResourceManager textResourceManager, ITextConverter textConverter)
         {
             m_textResourceManager = textResourceManager;
+            m_textConverter = textConverter;
         }
 
         public SnapshotResourceContract GetSnapshotResourceFromPageIds(List<string> pageIds) {
@@ -25,7 +30,7 @@ namespace Vokabular.FulltextService.Core.Helpers
             {
                 var textResource = m_textResourceManager.GetTextResource(pageId);
 
-                var pageText = textResource.PageText;
+                var pageText = m_textConverter.Convert(textResource.PageText, TextFormatEnumContract.Raw);
                 
                 var pageTextWithIndex = InsertPageIndexIntoPageText(pageText, pageIndex);
                 var page = new SnapshotPageResourceContract { Id = pageId, PageIndex = pageIndex};
