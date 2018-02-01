@@ -430,7 +430,6 @@ interface IOriginalAuthorPagedResult {
 
 interface ICorpusSearchViewingPageHistoryEntry {
     compositionResultListStart: number;
-    bookIndex: number;
     bookId: number;
     hitResultStart: number;
 }
