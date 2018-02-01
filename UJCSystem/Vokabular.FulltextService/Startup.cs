@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -69,6 +70,9 @@ namespace Vokabular.FulltextService
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime applicationLifetime)
         {
             ApplicationLogging.LoggerFactory = loggerFactory;
+
+            var configuration = app.ApplicationServices.GetService<TelemetryConfiguration>();
+            configuration.DisableTelemetry = true; // Workaround for disabling telemetry
 
             if (env.IsDevelopment())
             {
