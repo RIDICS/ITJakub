@@ -27,11 +27,6 @@ namespace ITJakub.Web.Hub.Controllers
             return m_communication.GetMainServiceClient();
         }
 
-        public ItJakubServiceEncryptedClient GetEncryptedClient()
-        {
-            return m_communication.GetEncryptedClient();
-        }
-
         public IItJakubService GetMainServiceClient()
         {
             if (!IsUserLoggedIn()) return m_communication.GetUnsecuredClient();

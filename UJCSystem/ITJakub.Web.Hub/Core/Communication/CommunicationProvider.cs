@@ -1,7 +1,5 @@
 using System;
-using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
-using System.ServiceModel.Description;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Lemmatization.Shared.Contracts;
@@ -60,20 +58,6 @@ namespace ITJakub.Web.Hub.Core.Communication
             var endpoint = m_configurationProvider.GetEndpointAddress(MainServiceEndpointName);
             var binding = m_configurationProvider.GetBasicHttpBinding();
             var client = new ItJakubServiceClient(binding, endpoint);
-            return client;
-        }
-
-        public ItJakubServiceEncryptedClient GetEncryptedClient()
-        {
-            var endpoint = m_configurationProvider.GetEndpointAddress(EncryptedEndpointName);
-            var binding = m_configurationProvider.GetBasicHttpsBindingCertificateAuthentication();
-            var behavior = new ClientCredentials();
-            behavior.ClientCertificate.SetCertificate(StoreLocation.LocalMachine, StoreName.My, X509FindType.FindByThumbprint, "C787F20847606DC40E50E015A5D2E3A9E59B704C");
-
-            var client = new ItJakubServiceEncryptedClient(binding, endpoint);
-            client.Endpoint.Behaviors.Remove<ClientCredentials>();
-            client.Endpoint.Behaviors.Add(behavior);
-
             return client;
         }
 
