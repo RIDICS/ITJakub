@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Nest;
 using Vokabular.FulltextService.DataContracts.Contracts;
-using Vokabular.Shared.DataContracts;
 using Vokabular.Shared.DataContracts.Search.Corpus;
 
 namespace Vokabular.FulltextService.Core.Helpers
@@ -15,28 +14,27 @@ namespace Vokabular.FulltextService.Core.Helpers
         {
             if (!response.IsValid)
             {
-                throw new Exception(response.DebugInformation);
+                throw new FulltextDatabaseException(response.DebugInformation);
             }
 
             return new FulltextSearchResultContract { Count = response.Count };
-        }
+        }        
 
         public FulltextSearchResultContract ProcessSearchByCriteria(ISearchResponse<SnapshotResourceContract> response)
         {
             if (!response.IsValid)
             {
-                throw new Exception(response.DebugInformation);
+                throw new FulltextDatabaseException(response.DebugInformation);
             }
 
             return new FulltextSearchResultContract{ ProjectIds = response.Documents.Select(d => d.ProjectId).ToList() };
         }
-
-        //TODO Obsolete method
+        
         public FulltextSearchCorpusResultContract ProcessSearchCorpusByCriteriaCount(ISearchResponse<SnapshotResourceContract> response, string highlightTag)
         {
             if (!response.IsValid)
             {
-                throw new Exception(response.DebugInformation);
+                throw new FulltextDatabaseException(response.DebugInformation);
             }
 
             var counter = 0;
@@ -65,7 +63,7 @@ namespace Vokabular.FulltextService.Core.Helpers
         {
             if (!response.IsValid)
             {
-                throw new Exception(response.DebugInformation);
+                throw new FulltextDatabaseException(response.DebugInformation);
             }
 
             var startCounter = 0;
@@ -111,7 +109,7 @@ namespace Vokabular.FulltextService.Core.Helpers
         {
             if (!response.IsValid)
             {
-                throw new Exception(response.DebugInformation);
+                throw new FulltextDatabaseException(response.DebugInformation);
             }
 
             var resultList = new List<CorpusSearchResultContract>();
@@ -136,7 +134,7 @@ namespace Vokabular.FulltextService.Core.Helpers
         {
             if (!response.IsValid)
             {
-                throw new Exception(response.DebugInformation);
+                throw new FulltextDatabaseException(response.DebugInformation);
             }
             foreach (var hit in response.Hits)
             {
@@ -156,7 +154,7 @@ namespace Vokabular.FulltextService.Core.Helpers
         {
             if (!response.IsValid)
             {
-                throw new Exception(response.DebugInformation);
+                throw new FulltextDatabaseException(response.DebugInformation);
             }
 
             var result = new PageSearchResultContract
@@ -171,13 +169,13 @@ namespace Vokabular.FulltextService.Core.Helpers
         {
             foreach (var searchResultData in resultData)
             {
-                var snapshotIndex = Regex.Match(searchResultData.PageResultContext.ContextStructure.After, @"<([^>]*)>").Groups[1].Value;
+                var snapshotIndex = Regex.Match(searchResultData.PageResultContext.ContextStructure.After, @" <([^>]*)> ").Groups[1].Value;
                 if (string.IsNullOrWhiteSpace(snapshotIndex))
                 {
-                    snapshotIndex = Regex.Match(searchResultData.PageResultContext.ContextStructure.Before, @"<([^>]*)>").Groups[1].Value;
+                    snapshotIndex = Regex.Match(searchResultData.PageResultContext.ContextStructure.Before, @" <([^>]*)> ").Groups[1].Value;
                     if (string.IsNullOrWhiteSpace(snapshotIndex))
                     {
-                        snapshotIndex = Regex.Match(searchResultData.PageResultContext.ContextStructure.Match, @"<([^>]*)>").Groups[1].Value;
+                        snapshotIndex = Regex.Match(searchResultData.PageResultContext.ContextStructure.Match, @" <([^>]*)> ").Groups[1].Value;
                     }
                 }
                 var pageId = GetPageIdFromIndex(Int32.Parse(snapshotIndex), sourcePages);
@@ -194,15 +192,21 @@ namespace Vokabular.FulltextService.Core.Helpers
 
         private void RemovePageIds(KwicStructure contextStructure)
         {
-            contextStructure.After = Regex.Replace(contextStructure.After, @"<[0-9]*>", "");
-            contextStructure.After = Regex.Replace(contextStructure.After, @"<[0-9]*", "");
+            contextStructure.After = Regex.Replace(contextStructure.After, @"^<[0-9]*>[ ]|[ ]<[0-9]*>[ ]|[ ]<[0-9]*>$|[ ]<[0-9]*$", "");
+            //contextStructure.After = Regex.Replace(contextStructure.After, @"[ ]<[0-9]*>[ ]", "");
+            //contextStructure.After = Regex.Replace(contextStructure.After, @"[ ]<[0-9]*>$", "");
+            //contextStructure.After = Regex.Replace(contextStructure.After, @"[ ]<[0-9]*$", "");
 
-            contextStructure.Before = Regex.Replace(contextStructure.Before, @"<[0-9]*>", "");
-            contextStructure.Before = Regex.Replace(contextStructure.Before, @"[0-9]*>", "");
+            contextStructure.Before = Regex.Replace(contextStructure.Before, @"^[0-9]*>[ ]?|^<[0-9]*>[ ]|[ ]<[0-9]*>[ ]|[ ]<[0-9]*>$", "");
+            //contextStructure.Before = Regex.Replace(contextStructure.Before, @"^<[0-9]*>[ ]", "");
+            //contextStructure.Before = Regex.Replace(contextStructure.Before, @"[ ]<[0-9]*>[ ]", "");
+            //contextStructure.Before = Regex.Replace(contextStructure.Before, @"[ ]<[0-9]*>$", "");
 
-            contextStructure.Match = Regex.Replace(contextStructure.Match, @"<[0-9]*>", "");
-            contextStructure.Match = Regex.Replace(contextStructure.Match, @"[0-9]*>", "");
-            contextStructure.Match = Regex.Replace(contextStructure.Match, @"<[0-9]*", "");
+            contextStructure.Match = Regex.Replace(contextStructure.Match, @"^[0-9]*>[ ]|^<[0-9]*>[ ]|[ ]<[0-9]*>[ ]|[ ]<[0-9]*>$|[ ]<[0-9]*$", "");
+            //contextStructure.Match = Regex.Replace(contextStructure.Match, @"^<[0-9]*>[ ]", "");
+            //contextStructure.Match = Regex.Replace(contextStructure.Match, @"[ ]<[0-9]*>[ ]", "");
+            //contextStructure.Match = Regex.Replace(contextStructure.Match, @"[ ]<[0-9]*>$", "");
+            //contextStructure.Match = Regex.Replace(contextStructure.Match, @"[ ]<[0-9]*$", "");
         }
 
         private List<CorpusSearchResultContract> GetCorpusSearchResultDataList(string highlightedText, long projectId, string highlightTag)
@@ -247,13 +251,13 @@ namespace Vokabular.FulltextService.Core.Helpers
         {
             if (!response.IsValid)
             {
-                throw new Exception(response.DebugInformation);
+                throw new FulltextDatabaseException(response.DebugInformation);
             }
             
             return new CorpusSearchSnapshotsResultContract
             {
                 TotalCount = response.Total,
-                SnapshotIds = response.Documents.Select(x => x.SnapshotId).ToList()
+                SnapshotList = response.Documents.Select(x => new CorpusSearchSnapshotContract{ SnapshotId = x.SnapshotId }).ToList()
             };
         }
 
@@ -262,7 +266,7 @@ namespace Vokabular.FulltextService.Core.Helpers
         {
             if (!response.IsValid)
             {
-                throw new Exception(response.DebugInformation);
+                throw new FulltextDatabaseException(response.DebugInformation);
             }
 
             int startCounter = 0;
@@ -309,29 +313,30 @@ namespace Vokabular.FulltextService.Core.Helpers
         {
             if (!response.IsValid)
             {
-                throw new Exception(response.DebugInformation);
+                throw new FulltextDatabaseException(response.DebugInformation);
             }
 
-            Dictionary<long, long> resultsCount = new Dictionary<long, long>();
+            List<CorpusSearchSnapshotContract> snapshotWithCountList = new List<CorpusSearchSnapshotContract>();
 
             foreach (var hit in response.Hits)
             {
                 long resultsCounter = 0;
+
                 foreach (var value in hit.Highlights.Values)
                 {
-                    
                     foreach (var highlight in value.Highlights)
                     {
                         var numberOfOccurences = GetNumberOfHighlitOccurences(highlight, highlightTag);
                         resultsCounter += numberOfOccurences;
                     }
                 }
-                resultsCount.Add(hit.Source.SnapshotId, resultsCounter);
+
+                snapshotWithCountList.Add(new CorpusSearchSnapshotContract{ SnapshotId = hit.Source.SnapshotId, ResultCount = resultsCounter });
             }
 
             return new CorpusSearchSnapshotsResultContract
             {
-                ResultsInSnapshotsCount = resultsCount,
+                SnapshotList = snapshotWithCountList,
                 TotalCount = response.Total,
             };
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Vokabular.FulltextService.Core.Helpers.Converters;
 using Vokabular.FulltextService.Core.Managers;
@@ -17,6 +18,7 @@ namespace Vokabular.FulltextService.Controllers
         private readonly TextResourceManager m_textResourceManager;
         private readonly ITextConverter m_textConverter;
         private readonly SearchManager m_searchManager;
+
         public TextController(TextResourceManager textResourceManager, ITextConverter textConverter, SearchManager searchManager)
         {
             m_textResourceManager = textResourceManager;
@@ -34,10 +36,17 @@ namespace Vokabular.FulltextService.Controllers
         }
 
         [HttpPost]
-        public ResultContract CreateTextResource([FromBody] TextResourceContract textResource)
+        public ActionResult CreateTextResource([FromBody] TextResourceContract textResource)
         {
-            var result = m_textResourceManager.CreateTextResource(textResource);
-            return result;
+            ResultContract result;
+
+            try{
+                result = m_textResourceManager.CreateTextResource(textResource);
+            }catch (ArgumentException exception){
+                return BadRequest(exception.Message);
+            }
+
+            return Ok(result);
         }
 
         [HttpPost("{textResourceId}/search")]

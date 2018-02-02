@@ -296,9 +296,9 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
-        public CorpusSearchSnapshotsResultContract SearchCorpusSnapshotsByCriteria(CorpusSearchRequestContract request)
+        public CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotListByCriteria(CorpusSearchRequestContract request)
         {
-            var processedCriterias = GetProcessedCriterias(request.ConditionConjunction);
+            var processedCriterias = GetAuthorizatedProcessedCriterias(request.ConditionConjunction);
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
 
             var projectIdentificatorList = GetProjectIdentificatorList(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters);
@@ -308,14 +308,14 @@ namespace Vokabular.MainService.Core.Managers
             var start = m_corpusSearchManager.GetCorpusStart(request.Start);
             var count = m_corpusSearchManager.GetCorpusCount(request.Count);
 
-            var result = fulltextStorage.SearchCorpusSnapshotsByCriteria(start, count, nonMetadataCriterias, projectIdentificatorList, request.FetchNumberOfResults);
+            var result = fulltextStorage.SearchCorpusGetSnapshotListByCriteria(start, count, nonMetadataCriterias, projectIdentificatorList, request.FetchNumberOfResults);
 
             return result;
         }
         
-        public List<CorpusSearchResultContract> SearchCorpusSnapshotByCriteria(long snapshotId, CorpusSearchRequestContract request)
+        public List<CorpusSearchResultContract> SearchCorpusInSnapshotByCriteria(long snapshotId, CorpusSearchRequestContract request)
         {
-            var processedCriterias = GetProcessedCriterias(request.ConditionConjunction);
+            var processedCriterias = GetAuthorizatedProcessedCriterias(request.ConditionConjunction);
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
             
             // Search in fulltext DB
@@ -323,7 +323,7 @@ namespace Vokabular.MainService.Core.Managers
             var start = m_corpusSearchManager.GetCorpusStart(request.Start);
             var count = m_corpusSearchManager.GetCorpusCount(request.Count);
 
-            var result = fulltextStorage.SearchCorpusSnapshotByCriteria(snapshotId, start, count, request.ContextLength, nonMetadataCriterias);
+            var result = fulltextStorage.SearchCorpusInSnapshotByCriteria(snapshotId, start, count, request.ContextLength, nonMetadataCriterias);
 
             switch (result.SearchResultType)
             {
@@ -336,16 +336,16 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
-        public long SearchCorpusSnapshotsByCriteriaCount(SearchRequestContractBase request)
+        public long SearchCorpusTotalResultCount(SearchRequestContractBase request)
         {
-            var processedCriterias = GetProcessedCriterias(request.ConditionConjunction);
+            var processedCriterias = GetAuthorizatedProcessedCriterias(request.ConditionConjunction);
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
 
             var projectIdentificatorList = GetProjectIdentificatorList(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters);
 
             //Search in fulltext DB
             var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
-            var resultCount = fulltextStorage.SearchCorpusSnapshotsByCriteriaCount(nonMetadataCriterias, projectIdentificatorList);
+            var resultCount = fulltextStorage.SearchCorpusTotalResultCount(nonMetadataCriterias, projectIdentificatorList);
 
             return resultCount;
         }
@@ -358,7 +358,7 @@ namespace Vokabular.MainService.Core.Managers
             return projectIdentificatorList;
         }
 
-        private FilteredCriterias GetProcessedCriterias(IList<SearchCriteriaContract> conditionConjunction)
+        private FilteredCriterias GetAuthorizatedProcessedCriterias(IList<SearchCriteriaContract> conditionConjunction)
         {
             m_authorizationManager.AddAuthorizationCriteria(conditionConjunction);
             var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(conditionConjunction);
@@ -373,7 +373,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<CorpusSearchResultContract> SearchCorpusByCriteria(CorpusSearchRequestContract request)
         {
-            var processedCriterias = GetProcessedCriterias(request.ConditionConjunction);
+            var processedCriterias = GetAuthorizatedProcessedCriterias(request.ConditionConjunction);
 
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
 
@@ -398,7 +398,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public long SearchCorpusByCriteriaCount(CorpusSearchRequestContract request)
         {
-            var processedCriterias = GetProcessedCriterias(request.ConditionConjunction);
+            var processedCriterias = GetAuthorizatedProcessedCriterias(request.ConditionConjunction);
 
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
 

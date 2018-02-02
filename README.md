@@ -11,13 +11,14 @@ Required software:
   * (Git - for restoring NPM and Bower dependencies)
   * (Node.js - for restoring NPM)
 * Microsoft SQL Server
+* Java
 * eXist-db 2.1
 * .NET Core 2.0 SDK
 * TypeScript 2.4 SDK
 * Altova XML 2013 Community Edition (installer is in repository)
 * Internet Information Services (installed from Windows features dialog)
 * Yarn package manager
-* ElasticSearch 5.5.2
+* Elasticsearch 5.5.2
 
 Recommended software:
 * JetBrains ReSharper
@@ -44,9 +45,14 @@ Environment configuration
 	2. create collection with name "apps/jacob"
 	3. copy content of "Database/ExistDB" folder except "config" folder to app collection named "jacob"
 	4. copy content of "Database/ExistDB/config" folder to collection "/system/config/db/apps/jacob"
-* Prepare ElasticSearch:
-  * Install Experimental highlighter plugin "./bin/elasticsearch-plugin install org.wikimedia.search.highlighter:experimental-highlighter-elasticsearch-plugin:5.5.2"
-  * Create indices using REST calls from configuration file ("\itjakub\Database\Elasticsearch\mapping")
+* Prepare Elasticsearch:
+  * Install Experimental highlighter plugin using following command: "./bin/elasticsearch-plugin install org.wikimedia.search.highlighter:experimental-highlighter-elasticsearch-plugin:5.5.2.2" in Elasticsearch installation directory.
+  * Create indices using Elasticsearch-Update.ps1 script or manually using REST calls to Elasticsearch with configuration stored in "Database/Elasticsearch" folder (every file represents configuration for one index, index name is the same as file name).
+  * Elasticsearch-Update.ps1 script has following parameters:
+    1. -url URL of database (default is "http://localhost:9200")
+    2. -path Folder with indices configuration (default is "Elasticsearch")
+    3. -recreateMode Determine if indices should be deleted and then created new (default is $false)
+    4. -indexSuffix Add suffix to index name (default is empty)
 * Install certificates
   1. Open Manager for computers certificates - certlm.msc
   2. Install ITJakubCA to Trusted Root Certification Authrorities for Local computer
@@ -58,18 +64,17 @@ Environment configuration
 * Configure Application Pools in IIS
   1. ITJakub.SearchService should be deployed in different Application Pool than ITJakub.ITJakubService
 
-Dependencies automatically restored by Visual Studio:
+All dependencies are automatically restored by Visual Studio:
 * NuGet
-
-Dependencies manually restored:
+* NPM
 * Yarn
 
-It is recommended that You install Yarn Installer Extension and configure it to automatically restore yarn dependencies and disable automatic package restore for npm.
+It is possible to install Yarn Installer Extension and configure it to automatically restore Yarn dependencies and disable automatic package restore for NPM.
 
 Services to deploy:
 * ITJakub.Web.Hub - web portal (ASP.NET Core)
 * Vokabular.MainService - new main service for direct client communication (ASP.NET Core)
-* Vokabular.FulltextService - service for searching in fulltext database (in ElasticSearch) (ASP.NET Core)
+* Vokabular.FulltextService - service for searching in fulltext database (in Elasticsearch) (ASP.NET Core)
 * ITJakub.ITJakubService - original main service (will be completetly replaced by Vokabular.MainService) (WCF service)
 * ITJakub.FileProcessing.Service - service for importing books from DOCX format (WCF service)
 * ITJakub.SearchService - service for searching in fulltext database using old format (in eXist-db) (WCF service)
@@ -131,3 +136,9 @@ Currently secured services are:
 * ITJakub.ITJakubService - original main service, secured by communication token
 
 **Other services are not intended for direct client communication, so they should be accessible only for MainService or Web.Hub.**
+
+
+## Common errors
+
+**Install Elasticsearch plugin failed with error: The syntax of the command is incorrect.**  
+Java is not installed or Java folder is missing in PATH variable.

@@ -178,12 +178,12 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             }
         }
 
-        public CorpusSearchSnapshotsResultContract SearchCorpusSnapshotsByCriteria(int start, int count, List<SearchCriteriaContract> searchCriterias, bool fetchNumberOfResults)
+        public CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotListByCriteria(int start, int count, List<SearchCriteriaContract> searchCriterias, bool fetchNumberOfResults)
         {
             var searchRequest = new CorpusSearchRequestContract { Start = start, Count = count, ConditionConjunction = searchCriterias, FetchNumberOfResults = fetchNumberOfResults };
             try
             {
-                var result = Post<CorpusSearchSnapshotsResultContract>("pagedcorpus/search", searchRequest);
+                var result = Post<CorpusSearchSnapshotsResultContract>("bookpagedcorpus/search", searchRequest);
                 return result;
             }
             catch (HttpRequestException e)
@@ -195,12 +195,12 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             }
         }
 
-        public List<CorpusSearchResultContract> SearchCorpusSnapshotByCriteria(long snapshotId, int start, int count, int contextLength, List<SearchCriteriaContract> searchCriterias)
+        public List<CorpusSearchResultContract> SearchCorpusInSnapshotByCriteria(long snapshotId, int start, int count, int contextLength, List<SearchCriteriaContract> searchCriterias)
         {
             var searchRequest = new CorpusSearchRequestContract { Start = start, Count = count, ContextLength = contextLength, ConditionConjunction = searchCriterias };
             try
             {
-                var result = Post<List<CorpusSearchResultContract>>($"pagedcorpus/{snapshotId}/search", searchRequest);
+                var result = Post<List<CorpusSearchResultContract>>($"bookpagedcorpus/snapshot/{snapshotId}/search", searchRequest);
                 return result;
             }
             catch (HttpRequestException e)
@@ -212,12 +212,12 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             }
         }
 
-        public long SearchCorpusSnapshotByCriteriaCount(List<SearchCriteriaContract> searchCriterias)
+        public long SearchCorpusTotalResultCount(List<SearchCriteriaContract> searchCriterias)
         {
             var searchRequest = new SearchRequestContractBase { ConditionConjunction = searchCriterias };
             try
             {
-                var result = Post<long>("pagedcorpus/search-count", searchRequest);
+                var result = Post<long>("bookpagedcorpus/search-count", searchRequest);
                 return result;
             }
             catch (HttpRequestException e)

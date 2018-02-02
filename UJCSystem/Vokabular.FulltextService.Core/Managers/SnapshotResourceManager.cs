@@ -15,8 +15,8 @@ namespace Vokabular.FulltextService.Core.Managers
         {
             m_snapshotResourceBuilder = snapshotResourceBuilder;
         }
-        
-        public ResultContract CreateSnapshotResource(SnapshotResourceContract snapshotResourceContract)
+
+        private ResultContract CreateSnapshotResource(SnapshotResourceContract snapshotResourceContract)
         {
             var client = CommunicationProvider.GetElasticClient();
             
@@ -35,38 +35,35 @@ namespace Vokabular.FulltextService.Core.Managers
             var snapshotContract = m_snapshotResourceBuilder.GetSnapshotResourceFromPageIds(snapshotPageIdsResourceContract.PageIds);
             snapshotContract.SnapshotId = snapshotPageIdsResourceContract.SnapshotId;
             snapshotContract.ProjectId = snapshotPageIdsResourceContract.ProjectId;
-            snapshotContract.Metadata = MapToDatabaseMetadata(snapshotPageIdsResourceContract.MetadataResource);
-
+            MapToDatabaseMetadata(snapshotContract, snapshotPageIdsResourceContract.MetadataResource);
+            
             var result = CreateSnapshotResource(snapshotContract);
             return result;
 
         }
-
-        private MetadataResourceContract MapToDatabaseMetadata(SnapshotMetadataResourceContract metadata) //TODO automapper
+        
+        private void MapToDatabaseMetadata(SnapshotResourceContract snapshotContract, SnapshotMetadataResourceContract metadata)
         {
-            return new MetadataResourceContract
-            {
-                Title = metadata.Title,
-                SubTitle = metadata.SubTitle,
-                AuthorsLabel = metadata.AuthorsLabel,
-                RelicAbbreviation = metadata.RelicAbbreviation,
-                SourceAbbreviation = metadata.SourceAbbreviation,
-                PublishPlace = metadata.PublishPlace,
-                PublishDate = metadata.PublishDate,
-                PublisherText = metadata.PublisherText,
-                PublisherEmail = metadata.PublisherEmail,
-                Copyright = metadata.Copyright,
-                BiblText = metadata.BiblText,
-                OriginDate = metadata.OriginDate,
-                NotBefore = metadata.NotBefore,
-                NotAfter = metadata.NotAfter,
-                ManuscriptIdno = metadata.ManuscriptIdno,
-                ManuscriptSettlement = metadata.ManuscriptSettlement,
-                ManuscriptCountry = metadata.ManuscriptCountry,
-                ManuscriptRepository = metadata.ManuscriptRepository,
-                ManuscriptExtent = metadata.ManuscriptExtent,
-                ManuscriptTitle = metadata.ManuscriptTitle
-            };
+            snapshotContract.Title = metadata.Title;
+            snapshotContract.SubTitle = metadata.SubTitle;
+            snapshotContract.AuthorsLabel = metadata.AuthorsLabel;
+            snapshotContract.RelicAbbreviation = metadata.RelicAbbreviation;
+            snapshotContract.SourceAbbreviation = metadata.SourceAbbreviation;
+            snapshotContract.PublishPlace = metadata.PublishPlace;
+            snapshotContract.PublishDate = metadata.PublishDate;
+            snapshotContract.PublisherText = metadata.PublisherText;
+            snapshotContract.PublisherEmail = metadata.PublisherEmail;
+            snapshotContract.Copyright = metadata.Copyright;
+            snapshotContract.BiblText = metadata.BiblText;
+            snapshotContract.OriginDate = metadata.OriginDate;
+            snapshotContract.NotBefore = metadata.NotBefore;
+            snapshotContract.NotAfter = metadata.NotAfter;
+            snapshotContract.ManuscriptIdno = metadata.ManuscriptIdno;
+            snapshotContract.ManuscriptSettlement = metadata.ManuscriptSettlement;
+            snapshotContract.ManuscriptCountry = metadata.ManuscriptCountry;
+            snapshotContract.ManuscriptRepository = metadata.ManuscriptRepository;
+            snapshotContract.ManuscriptExtent = metadata.ManuscriptExtent;
+            snapshotContract.ManuscriptTitle = metadata.ManuscriptTitle;
         }
     }
 }

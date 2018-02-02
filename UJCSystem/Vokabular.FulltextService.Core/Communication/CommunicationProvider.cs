@@ -1,6 +1,4 @@
 using System;
-using System.Diagnostics;
-using System.Text;
 using Nest;
 
 namespace Vokabular.FulltextService.Core.Communication

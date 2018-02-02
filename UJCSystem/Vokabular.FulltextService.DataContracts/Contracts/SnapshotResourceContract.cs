@@ -9,17 +9,6 @@ namespace Vokabular.FulltextService.DataContracts.Contracts
         public string SnapshotText { get; set; }
         public long ProjectId { get; set; }
         public List<SnapshotPageResourceContract> Pages { get; set; }
-        public MetadataResourceContract Metadata { get; set; }
-    }
-
-    public class SnapshotPageResourceContract
-    {
-        public string Id { get; set; }
-        public int PageIndex { get; set; }
-    }
-
-    public class MetadataResourceContract
-    {
         public string Title { get; set; }
         public string SubTitle { get; set; }
         public string AuthorsLabel { get; set; }
@@ -40,5 +29,11 @@ namespace Vokabular.FulltextService.DataContracts.Contracts
         public string ManuscriptRepository { get; set; }
         public string ManuscriptExtent { get; set; }
         public string ManuscriptTitle { get; set; }
+    }
+
+    public class SnapshotPageResourceContract
+    {
+        public string Id { get; set; }
+        public int PageIndex { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.Options;
 using Vokabular.FulltextService.Core.Options;
 
@@ -11,29 +12,27 @@ namespace Vokabular.FulltextService.Core.Helpers.Validators
         private readonly string m_commentMarkEnding;
 
         private string m_startingIdPattern;
-        private string m_endingIdPattern;
-        private string m_contentPattern;
-        private string m_pattern;
-
-        private readonly string MarksNoMatchError = "Starting and ending mark does not match. Maybe overlaping comments?";
-        private readonly string MarkMissingError = "Comment marks not in pairs";
         
-
+        private readonly string MarksNoMatchError = "Starting and ending marks does not match. Maybe overlaping comments?";
+       
         public TextValidator(IOptions<SpecialCharsOption> options)
         {
             m_escapeChar = options.Value.EscapedEscapeCharacter;
-            m_commentMarkBegining = options.Value.EscapedCommentMarkBeginning;
-            m_commentMarkEnding = options.Value.EscapedCommentMarkEnding;
+            m_commentMarkBegining = options.Value.EscapedCommentMarkOpening;
+            m_commentMarkEnding = options.Value.EscapedCommentMarkClosing;
 
             CreateRegexPatterns();
         }
 
         private void CreateRegexPatterns()
         {
-            m_startingIdPattern = $"(?<!{m_escapeChar})(?:{m_escapeChar}{{2}})*{m_commentMarkBegining}([^{m_commentMarkEnding}]*){m_commentMarkEnding}"; 
-            m_endingIdPattern = $"(?<!{m_escapeChar})(?:{m_escapeChar}{{2}})*{m_commentMarkEnding}([^{m_commentMarkBegining}]*){m_commentMarkBegining}";
-            m_contentPattern = $"(?:(?<!{m_escapeChar})(?:{m_escapeChar}{{2}})*{m_escapeChar}{m_commentMarkEnding}|[^{m_commentMarkEnding}])+(?<!{m_escapeChar})(?:{m_escapeChar}{{2}})*";
-            m_pattern = $"{m_startingIdPattern}{m_contentPattern}{m_commentMarkEnding}([^{m_commentMarkBegining}]*){m_commentMarkBegining}";
+            //m_startingIdPattern = $"(?<!{m_escapeChar})(?:{m_escapeChar}{{2}})*{m_commentMarkBegining}([^{m_commentMarkEnding}]*){m_commentMarkEnding}"; 
+            //m_endingIdPattern = $"(?<!{m_escapeChar})(?:{m_escapeChar}{{2}})*{m_commentMarkEnding}([^{m_commentMarkBegining}]*){m_commentMarkBegining}";
+            //m_contentPattern = $"(?:(?<!{m_escapeChar})(?:{m_escapeChar}{{2}})*{m_escapeChar}{m_commentMarkEnding}|[^{m_commentMarkEnding}])+(?<!{m_escapeChar})(?:{m_escapeChar}{{2}})*";
+            //m_pattern = $"{m_startingIdPattern}{m_contentPattern}{m_commentMarkEnding}([^{m_commentMarkBegining}]*){m_commentMarkBegining}";
+
+            m_startingIdPattern = $"(?<!{m_escapeChar})(?:{m_escapeChar}{{2}})*{m_commentMarkBegining}([0-9a-f-]{{36}}){m_commentMarkEnding}|(?<!{m_escapeChar})(?:{m_escapeChar}{{2}})*{m_commentMarkEnding}([0-9a-f-]{{36}}){m_commentMarkBegining}"; 
+            
         }
 
         public ValidationResult Validate(string text)
@@ -44,28 +43,32 @@ namespace Vokabular.FulltextService.Core.Helpers.Validators
 
         private ValidationResult ValidateCommentMarks(string text)
         {
-            var startingMarksCount = Regex.Matches(text, m_startingIdPattern).Count;
-            var endingMarksCount = Regex.Matches(text, m_endingIdPattern).Count;
-
-            if (startingMarksCount != endingMarksCount)
-            {
-                return new ValidationResult{ IsValid = false, ErrorMessage = MarkMissingError };
-            }
-
+            var commentMarks = Regex.Matches(text, m_startingIdPattern);
             
-            var matches = Regex.Matches(text, m_pattern);
+            Stack<string> stack = new Stack<string>();
 
-            foreach (Match match in matches)
+            foreach (Match startingMark in commentMarks)
             {
-                var startingId = match.Groups[1].Value;
-                var endingId = match.Groups[2].Value;
-
-                if (!startingId.Equals(endingId))
+                var id = string.IsNullOrEmpty(startingMark.Groups[1].Value) ? startingMark.Groups[2].Value : startingMark.Groups[1].Value;
+                if (stack.Count == 0)
                 {
-                    return new ValidationResult { IsValid = false, ErrorMessage = MarksNoMatchError };
+                    stack.Push(id);
+                    continue;
+                }
+                if (stack.Peek().Equals(id))
+                {
+                    stack.Pop();
+                }
+                else
+                {
+                    stack.Push(id);
                 }
             }
 
+            if (stack.Count != 0)
+            {
+                return new ValidationResult { IsValid = false, ErrorMessage = MarksNoMatchError };
+            }
             return new ValidationResult { IsValid = true };
         }
     }

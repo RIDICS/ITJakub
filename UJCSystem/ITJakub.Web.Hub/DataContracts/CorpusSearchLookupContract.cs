@@ -54,11 +54,5 @@ namespace ITJakub.Web.Hub.DataContracts
         public int Start { get; set; }
         public int Count { get; set; }
     }
-
-    public class CorpusSearchResultCompositionPageResultNumber
-    {
-        public long TotalCount { get; set; }
-
-        public Dictionary<long, long> List { get; set; }
-    }
+    
 }
