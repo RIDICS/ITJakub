@@ -546,7 +546,7 @@ class BohemianTextBankNew {
     }
 
     private loadBookResultPage(start: number, bookId: number) {
-        const contextLength = $("#contextPositionsSelect").val() as number;
+        const contextLength = parseInt($("#contextPositionsSelect").val() as string);
         if (this.search.isLastQueryJson()) {
             this.corpusAdvancedSearchPaged(this.search.getLastQuery(), start, contextLength, bookId);
         } else {
@@ -793,13 +793,20 @@ class BohemianTextBankNew {
         updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
 
         $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetHitBookIdsPaged`, payload)
-            .done((bookIds: IPagedResultArray<number>) => {
+            .done((bookIds: ICoprusSearchSnapshotResult) => {
+                console.log(bookIds);
                 this.hideLoading();
                 const totalCount = bookIds.totalCount;
                 const page = (start / count) + 1;
                 const totalPages = Math.ceil(totalCount / count);
                 $("#totalCompositionsCountDiv").text(totalCount);
-                this.hitBookIds = bookIds.list;
+                const snapshotStructureArray = bookIds.list;
+                var idList = [];
+                snapshotStructureArray.forEach((snapshot) => {
+                    idList.push(snapshot.snapshotId);
+                });
+                this.hitBookIds = idList;
+                console.log(this.hitBookIds);
                 if (this.hitBookIds.length < this.compositionsPerPage || page === totalPages) {
                     this.compositionPageIsLast = true;
                 }
@@ -858,13 +865,18 @@ class BohemianTextBankNew {
         };
         console.log(payload);
         $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchGetHitBookIdsPaged`, payload)
-        .done((bookIds: IPagedResultArray<number>) => {
+            .done((bookIds: ICoprusSearchSnapshotResult) => {
                 this.hideLoading();
                 const totalCount = bookIds.totalCount;
                 const page = (start / count) + 1;
                 const totalPages = Math.ceil(totalCount / count);
                 $("#totalCompositionsCountDiv").text(totalCount);
-                this.hitBookIds = bookIds.list;
+                const snapshotStructureArray = bookIds.list;
+                var idList = [];
+                snapshotStructureArray.forEach((snapshot) => {
+                    idList.push(snapshot.snapshotId);
+                });
+                this.hitBookIds = idList;
                 if (this.hitBookIds.length < this.compositionsPerPage || page === totalPages) {
                     this.compositionPageIsLast = true;
                 }
