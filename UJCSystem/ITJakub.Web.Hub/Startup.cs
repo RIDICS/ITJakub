@@ -14,7 +14,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Vokabular.Log4Net;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
@@ -30,8 +29,6 @@ namespace ITJakub.Web.Hub
         {
             Configuration = configuration;
             ApplicationConfig.Configuration = Configuration;
-
-            env.ConfigureLog4Net("log4net.config");
         }
 
         private IConfiguration Configuration { get; }
@@ -101,10 +98,6 @@ namespace ITJakub.Web.Hub
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime applicationLifetime)
         {
-            // Logging
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-            loggerFactory.AddLog4Net();
             ApplicationLogging.LoggerFactory = loggerFactory;
 
             // Localization

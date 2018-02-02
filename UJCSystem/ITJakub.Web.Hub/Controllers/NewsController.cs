@@ -49,7 +49,7 @@ namespace ITJakub.Web.Hub.Controllers
                         Title = feed.Title,
                         Description = feed.Text,
                         Published = feed.CreateTime,
-                        LastUpdated = DateTimeOffset.UtcNow,
+                        LastUpdated = feed.CreateTime,
                     };
                     var person = new SyndicationPerson($"{feed.CreatedByUser.FirstName} {feed.CreatedByUser.LastName}", feed.CreatedByUser.Email);
                     var url = new SyndicationLink(new Uri(feed.Url));
