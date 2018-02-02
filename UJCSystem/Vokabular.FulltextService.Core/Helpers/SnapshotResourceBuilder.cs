@@ -60,7 +60,7 @@ namespace Vokabular.FulltextService.Core.Helpers
                         return pageBuilder.ToString();
                     }
 
-                    if (counter > MinSnippetSize && pageText[index + counter].Equals(' '))
+                    if (counter >= MinSnippetSize) //To insert pageindex into whitespace add this condition:  && pageText[index + counter].Equals(' ')
                     {
                         pageBuilder.Append($" <{pageIndex}> ");
                         pageBuilder.Append(pageText.Substring(index, counter));

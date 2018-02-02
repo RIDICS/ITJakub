@@ -169,13 +169,13 @@ namespace Vokabular.FulltextService.Core.Helpers
         {
             foreach (var searchResultData in resultData)
             {
-                var snapshotIndex = Regex.Match(searchResultData.PageResultContext.ContextStructure.After, @"[^\\]<([^>]*)>").Groups[1].Value;
+                var snapshotIndex = Regex.Match(searchResultData.PageResultContext.ContextStructure.After, @" <([^>]*)> ").Groups[1].Value;
                 if (string.IsNullOrWhiteSpace(snapshotIndex))
                 {
-                    snapshotIndex = Regex.Match(searchResultData.PageResultContext.ContextStructure.Before, @"[^\\]<([^>]*)>").Groups[1].Value;
+                    snapshotIndex = Regex.Match(searchResultData.PageResultContext.ContextStructure.Before, @" <([^>]*)> ").Groups[1].Value;
                     if (string.IsNullOrWhiteSpace(snapshotIndex))
                     {
-                        snapshotIndex = Regex.Match(searchResultData.PageResultContext.ContextStructure.Match, @"[^\\]<([^>]*)>").Groups[1].Value;
+                        snapshotIndex = Regex.Match(searchResultData.PageResultContext.ContextStructure.Match, @" <([^>]*)> ").Groups[1].Value;
                     }
                 }
                 var pageId = GetPageIdFromIndex(Int32.Parse(snapshotIndex), sourcePages);
@@ -192,21 +192,21 @@ namespace Vokabular.FulltextService.Core.Helpers
 
         private void RemovePageIds(KwicStructure contextStructure)
         {
-            contextStructure.After = Regex.Replace(contextStructure.After, @"^<[0-9]*>[ ]", "");
-            contextStructure.After = Regex.Replace(contextStructure.After, @"[ ]<[0-9]*>[ ]", "");
-            contextStructure.After = Regex.Replace(contextStructure.After, @"[ ]<[0-9]*>$", "");
-            contextStructure.After = Regex.Replace(contextStructure.After, @"[ ]<[0-9]*$", "");
+            contextStructure.After = Regex.Replace(contextStructure.After, @"^<[0-9]*>[ ]|[ ]<[0-9]*>[ ]|[ ]<[0-9]*>$|[ ]<[0-9]*$", "");
+            //contextStructure.After = Regex.Replace(contextStructure.After, @"[ ]<[0-9]*>[ ]", "");
+            //contextStructure.After = Regex.Replace(contextStructure.After, @"[ ]<[0-9]*>$", "");
+            //contextStructure.After = Regex.Replace(contextStructure.After, @"[ ]<[0-9]*$", "");
 
-            contextStructure.Before = Regex.Replace(contextStructure.Before, @"^[0-9]*>[ ]?", "");
-            contextStructure.Before = Regex.Replace(contextStructure.Before, @"^<[0-9]*>[ ]", "");
-            contextStructure.Before = Regex.Replace(contextStructure.Before, @"[ ]<[0-9]*>[ ]", "");
-            contextStructure.Before = Regex.Replace(contextStructure.Before, @"[ ]<[0-9]*>$", "");
+            contextStructure.Before = Regex.Replace(contextStructure.Before, @"^[0-9]*>[ ]?|^<[0-9]*>[ ]|[ ]<[0-9]*>[ ]|[ ]<[0-9]*>$", "");
+            //contextStructure.Before = Regex.Replace(contextStructure.Before, @"^<[0-9]*>[ ]", "");
+            //contextStructure.Before = Regex.Replace(contextStructure.Before, @"[ ]<[0-9]*>[ ]", "");
+            //contextStructure.Before = Regex.Replace(contextStructure.Before, @"[ ]<[0-9]*>$", "");
 
-            contextStructure.Match = Regex.Replace(contextStructure.Match, @"^[0-9]*>[ ]", "");
-            contextStructure.Match = Regex.Replace(contextStructure.Match, @"^<[0-9]*>[ ]", "");
-            contextStructure.Match = Regex.Replace(contextStructure.Match, @"[ ]<[0-9]*>[ ]", "");
-            contextStructure.Match = Regex.Replace(contextStructure.Match, @"[ ]<[0-9]*>$", "");
-            contextStructure.Match = Regex.Replace(contextStructure.Match, @"[ ]<[0-9]*$", "");
+            contextStructure.Match = Regex.Replace(contextStructure.Match, @"^[0-9]*>[ ]|^<[0-9]*>[ ]|[ ]<[0-9]*>[ ]|[ ]<[0-9]*>$|[ ]<[0-9]*$", "");
+            //contextStructure.Match = Regex.Replace(contextStructure.Match, @"^<[0-9]*>[ ]", "");
+            //contextStructure.Match = Regex.Replace(contextStructure.Match, @"[ ]<[0-9]*>[ ]", "");
+            //contextStructure.Match = Regex.Replace(contextStructure.Match, @"[ ]<[0-9]*>$", "");
+            //contextStructure.Match = Regex.Replace(contextStructure.Match, @"[ ]<[0-9]*$", "");
         }
 
         private List<CorpusSearchResultContract> GetCorpusSearchResultDataList(string highlightedText, long projectId, string highlightTag)
