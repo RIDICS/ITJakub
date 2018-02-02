@@ -41,6 +41,7 @@ namespace ITJakub.Web.Hub.Models.FeedResults
 
                 foreach (var syndicationItem in m_feedItems)
                 {
+                    syndicationItem.Id = null; // GUID in RSS is not required
                     await writer.Write(syndicationItem);
                 }
 
