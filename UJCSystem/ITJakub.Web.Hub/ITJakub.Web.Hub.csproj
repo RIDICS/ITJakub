@@ -19,7 +19,6 @@
     <None Update="wwwroot\**\*;Views\**\*;Areas\**\Views\**\*.cshtml;Content\**\*;log4net.config">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
-    <ProjectReference Include="..\ITJakub.ITJakubService.DataContracts\ITJakub.ITJakubService.DataContracts.csproj" />
     <ProjectReference Include="..\ITJakub.Lemmatization.Shared.Contracts\ITJakub.Lemmatization.Shared.Contracts.csproj" />
     <ProjectReference Include="..\ITJakub.SearchService.DataContracts\ITJakub.SearchService.DataContracts.csproj" />
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj" />

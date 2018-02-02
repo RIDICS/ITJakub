@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
-using ITJakub.ITJakubService.DataContracts.Contracts.AudioBooks;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core;
@@ -138,7 +137,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             }
         }
 
-        public FileResult DownloadAudio(long audioId, AudioTypeContract audioType)
+        public FileResult DownloadAudio(long audioId)
         {
             using (var client = GetRestClient())
             {
