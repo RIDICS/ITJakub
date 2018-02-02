@@ -21,8 +21,9 @@
     "bootstrap-colorpicker-plus": "https://github.com/Scalesoft/bootstrap-colorpicker-plus.git#0fdd970",
     "bootstrap-tokenfield": "https://github.com/tilonet/bootstrap-tokenfield.git#a9e9e703f4d54c743bc78b83c87f0eaa6cbbe6e9",
     "bootbox": "4.4.0",
-    "gijgo": "https://github.com/atatanasov/gijgo.git#3571d48b7c01814ff83d3d660d4bc18c77a746bd",
-    "s-pagination": "1.1.1"
+    "gijgo": "1.8.0",
+    "s-pagination": "1.1.1",
+    "jquery-table-fixer": "1.0.0" 
   },
   "resolutions": {
     "@types/jquery": "3.2.17"
