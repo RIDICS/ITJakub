@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using Nest;
 using Vokabular.FulltextService.Core.Communication;
 using Vokabular.FulltextService.Core.Helpers;
 using Vokabular.FulltextService.Core.Options;
@@ -21,7 +22,8 @@ namespace Vokabular.FulltextService.Core.Managers
         private const int DefaultSize = 10000;
         private const int BatchSize = 5;
         private const string HighlightTag = "$";
-        private const string EmphTag = "*";
+        private const string OpeningEmphTag = "<span class=\"reader-search-result-match\">";
+        private const string ClosingEmphTag = "</span>";
         private const string HighlighterType = "experimental";
 
         private readonly QueriesBuilder m_queriesBuilder;
@@ -226,8 +228,8 @@ namespace Vokabular.FulltextService.Core.Managers
                     )
                 )
                 .Highlight(h => h
-                    .PreTags(EmphTag)
-                    .PostTags(EmphTag)
+                    .PreTags(OpeningEmphTag)
+                    .PostTags(ClosingEmphTag)
                     .Fields(f => f
                         .Field(PageTextField)
                         .NumberOfFragments(0)
@@ -241,6 +243,64 @@ namespace Vokabular.FulltextService.Core.Managers
 
 
         public PageSearchResultContract SearchPageByCriteria(long snapshotId, SearchRequestContractBase searchRequest)
+        {
+            var pageIdList = GetPageIds(snapshotId);
+
+            var client = CommunicationProvider.GetElasticClient();
+
+            var filterQuery = m_queriesBuilder.GetFilterByIdSearchQuery(pageIdList);
+            var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, PageTextField);
+
+            var pageResponse = client.Search<TextResourceContract>(s => s
+                    .Index(PageIndex)
+                    .Type(PageType)
+                    .Source(sf => sf.Excludes(i => i.Field(f => f.PageText)))
+                    .Query(q => q
+                        .Bool(b => b
+                            .Filter(filterQuery)
+                            .Must(mustQuery)
+                        )
+                    )
+                    .Size(DefaultSize) //TODO add pagination
+            );
+            return m_searchResultProcessor.ProcessSearchPageResult(pageResponse);
+        }
+
+        public long SearchPageByCriteriaCount(long snapshotId, SearchRequestContractBase searchRequest)
+        {
+            var pageIdList = GetPageIds(snapshotId);
+
+            var client = CommunicationProvider.GetElasticClient();
+
+            var filterQuery = m_queriesBuilder.GetFilterByIdSearchQuery(pageIdList);
+            var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, PageTextField);
+
+            var pageResponse = client.Search<TextResourceContract>(s => s
+                    .Index(PageIndex)
+                    .Type(PageType)
+                    .Source(sf => sf.Excludes(i => i.Field(f => f.PageText)))
+                    .Query(q => q
+                        .Bool(b => b
+                            .Filter(filterQuery)
+                            .Must(mustQuery)
+                        )
+                    )
+                    .Highlight(h => h
+                        .PreTags(HighlightTag)
+                        .PostTags(HighlightTag)
+                        .Fields(f => f
+                            .Field(PageTextField)
+                            .NumberOfFragments(FragmentsCount)
+                            .FragmentSize(FragmentSize)
+                            .Type(HighlighterType)
+                        )
+                    )
+                    .Size(DefaultSize) //TODO add pagination
+            );
+            return m_searchResultProcessor.ProcessSearchPageResultCount(pageResponse, HighlightTag);
+        }
+
+        private List<string> GetPageIds(long snapshotId)
         {
             var client = CommunicationProvider.GetElasticClient();
 
@@ -257,26 +317,9 @@ namespace Vokabular.FulltextService.Core.Managers
             );
 
             if (!response.IsValid)
-                throw new Exception(response.DebugInformation);
+                throw new FulltextDatabaseException(response.DebugInformation);
 
-            var pageIdList = response.Documents.SelectMany(document => document.Pages).Select(page => page.Id).ToList();
-
-            var filterQuery = m_queriesBuilder.GetFilterByIdSearchQuery(pageIdList);
-            var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, PageTextField);
-
-            var pageResponse = client.Search<TextResourceContract>(s => s
-                    .Index(PageIndex)
-                    .Type(PageType)
-                    .Source(sf => sf.Excludes(i => i.Field(f => f.PageText)))
-                    .Query(q => q
-                        .Bool(b => b
-                            .Filter(filterQuery)
-                            .Must(mustQuery)
-                        )
-                    )
-                    .Size(1000) //TODO add pagination
-            );
-            return m_searchResultProcessor.ProcessSearchPageResult(pageResponse);
+            return response.Documents.SelectMany(document => document.Pages).Select(page => page.Id).ToList();
         }
 
         public CorpusSearchSnapshotsResultContract SearchCorpusSnapshotsByCriteria(CorpusSearchRequestContract searchRequest)
@@ -460,5 +503,7 @@ namespace Vokabular.FulltextService.Core.Managers
             });
 
             return counter;}
+
+      
     }
 }

@@ -112,11 +112,27 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             }
         }
 
-        public PageSearchResultContract SearchPageByCriteria(long snapshotId, List<SearchCriteriaContract> criteria)
+        public PageSearchResultContract SearchPageByCriteria(long snapshotId, List<SearchCriteriaContract> searchCriterias)
         {
             try
             {
-                var result = Post<PageSearchResultContract>($"text/search?snapshotId={snapshotId}", new SearchRequestContractBase{ConditionConjunction = criteria});
+                var result = Post<PageSearchResultContract>($"text/snapshot/{snapshotId}/search", new SearchRequestContractBase{ConditionConjunction = searchCriterias});
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (Logger.IsErrorEnabled())
+                    Logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public long SearchHitsResultCount(long snapshotId, List<SearchCriteriaContract> searchCriterias)
+        {
+            try
+            {
+                var result = Post<long>($"text/snapshot/{snapshotId}/search-count", new SearchRequestContractBase { ConditionConjunction = searchCriterias });
                 return result;
             }
             catch (HttpRequestException e)

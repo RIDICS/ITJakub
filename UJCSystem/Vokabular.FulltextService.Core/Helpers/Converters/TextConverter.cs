@@ -10,6 +10,7 @@ namespace Vokabular.FulltextService.Core.Helpers.Converters
         private readonly IMarkdownToHtmlConverter m_markdownToHtmlConverter;
         private readonly IHtmlToPlainTextConverter m_htmlToPLainTextConverter;
 
+
         public TextConverter(IMarkdownToHtmlConverter markdownToHtmlConverter, IHtmlToPlainTextConverter htmlToPLainTextConverter)
         {
             m_markdownToHtmlConverter = markdownToHtmlConverter;

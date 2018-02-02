@@ -165,6 +165,28 @@ namespace Vokabular.FulltextService.Core.Helpers
             return result;
         }
 
+        public long ProcessSearchPageResultCount(ISearchResponse<TextResourceContract> response, string highlightTag)
+        {
+            if (!response.IsValid)
+            {
+                throw new FulltextDatabaseException(response.DebugInformation);
+            }
+
+            long counter = 0;
+            foreach (var hit in response.Hits)
+            {
+                foreach (var value in hit.Highlights.Values)
+                {
+                    foreach (var highlight in value.Highlights)
+                    {
+                        counter += GetNumberOfHighlitOccurences(highlight, highlightTag);
+                    }
+                }
+            }
+
+            return counter;
+        }
+
         private void AddPageIdsToResult(List<CorpusSearchResultContract> resultData, List<SnapshotPageResourceContract> sourcePages)
         {
             foreach (var searchResultData in resultData)
@@ -340,5 +362,7 @@ namespace Vokabular.FulltextService.Core.Helpers
                 TotalCount = response.Total,
             };
         }
+
+        
     }
 }

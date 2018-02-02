@@ -6,6 +6,5 @@ namespace Vokabular.FulltextService.Core.Helpers.Converters
     {
         string Convert(string textResourceText, TextFormatEnumContract formatValue);
 
-
     }
 }

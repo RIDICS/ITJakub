@@ -3,7 +3,7 @@ using Markdig.Renderers;
 using Microsoft.Extensions.Options;
 using Vokabular.FulltextService.Core.Options;
 
-namespace Vokabular.FulltextService.Core.Helpers.Markdown.Extensions
+namespace Vokabular.FulltextService.Core.Helpers.Markdown.Extensions.CommentMark
 {
     public class CommentMarkExtension : IMarkdownExtension
     {

@@ -18,12 +18,14 @@ namespace Vokabular.FulltextService.Controllers
         private readonly TextResourceManager m_textResourceManager;
         private readonly ITextConverter m_textConverter;
         private readonly SearchManager m_searchManager;
+        private readonly IPageWithHtmlTagsCreator m_pageWithHtmlTagsCreator;
 
-        public TextController(TextResourceManager textResourceManager, ITextConverter textConverter, SearchManager searchManager)
+        public TextController(TextResourceManager textResourceManager, ITextConverter textConverter, SearchManager searchManager, IPageWithHtmlTagsCreator pageWithHtmlTagsCreator)
         {
             m_textResourceManager = textResourceManager;
             m_textConverter = textConverter;
             m_searchManager = searchManager;
+            m_pageWithHtmlTagsCreator = pageWithHtmlTagsCreator;
         }
 
         [HttpGet("{textResourceId}")]
@@ -31,7 +33,8 @@ namespace Vokabular.FulltextService.Controllers
         {
             var textResource = m_textResourceManager.GetTextResource(textResourceId);
             textResource.PageText = m_textConverter.Convert(textResource.PageText, formatValue);
-            
+            textResource.PageText = m_pageWithHtmlTagsCreator.CreatePage(textResource.PageText, formatValue);
+
             return textResource;
         }
 
@@ -54,14 +57,22 @@ namespace Vokabular.FulltextService.Controllers
         {
             var textResource = m_searchManager.SearchPageByCriteria(textResourceId, searchPageRequestContract);
             textResource.PageText = m_textConverter.Convert(textResource.PageText, formatValue);
+            textResource.PageText = m_pageWithHtmlTagsCreator.CreatePage(textResource.PageText, formatValue);
 
             return textResource;
         }
 
-        [HttpPost("search")]
-        public PageSearchResultContract SearchPageByCriteria([FromQuery] long snapshotId, [FromBody] SearchRequestContractBase criteria)
+        [HttpPost("snapshot/{snapshotId}/search")]
+        public PageSearchResultContract SearchPageByCriteria(long snapshotId, [FromBody] SearchRequestContractBase criteria)
         {
             var result = m_searchManager.SearchPageByCriteria(snapshotId, criteria);
+            return result;
+        }
+
+        [HttpPost("snapshot/{snapshotId}/search-count")]
+        public long SearchPageByCriteriaCount(long snapshotId, [FromBody] SearchRequestContractBase criteria)
+        {
+            var result = m_searchManager.SearchPageByCriteriaCount(snapshotId, criteria);
             return result;
         }
     }

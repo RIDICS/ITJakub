@@ -26,6 +26,7 @@ namespace Vokabular.FulltextService.Core
             container.AddPerWebRequest<IHtmlToPlainTextConverter, HtmlToPlainTextConverter>();
             container.AddPerWebRequest<ITextConverter, TextConverter>();
             container.AddPerWebRequest<ITextValidator, TextValidator>();
+            container.AddPerWebRequest<IPageWithHtmlTagsCreator, PageWithHtmlTagsCreator>();
         }
     }
 }

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Markdig.Helpers;
 using Markdig.Parsers;
 using Markdig.Syntax.Inlines;
 using Microsoft.Extensions.Options;
 using Vokabular.FulltextService.Core.Options;
 
-namespace Vokabular.FulltextService.Core.Helpers.Markdown.Extensions
+namespace Vokabular.FulltextService.Core.Helpers.Markdown.Extensions.CommentMark
 {
     public class CommentMarkParser : InlineParser
     {

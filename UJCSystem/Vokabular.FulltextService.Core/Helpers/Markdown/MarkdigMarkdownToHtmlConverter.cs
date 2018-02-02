@@ -1,6 +1,6 @@
 ﻿using Markdig;
 using Microsoft.Extensions.Options;
-using Vokabular.FulltextService.Core.Helpers.Markdown.Extensions;
+using Vokabular.FulltextService.Core.Helpers.Markdown.Extensions.CommentMark;
 using Vokabular.FulltextService.Core.Options;
 
 namespace Vokabular.FulltextService.Core.Helpers.Markdown

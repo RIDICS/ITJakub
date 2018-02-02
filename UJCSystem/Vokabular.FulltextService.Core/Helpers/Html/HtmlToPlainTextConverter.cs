@@ -7,6 +7,8 @@ namespace Vokabular.FulltextService.Core.Helpers.Hml
     {
         public string ConvertToPlaintext(string htmlText)
         {
+            if (string.IsNullOrEmpty(htmlText)) return htmlText;
+
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(htmlText);
 

@@ -113,13 +113,26 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
 
         public long SearchHitsResultCount(List<SearchCriteriaContract> criteria, ProjectIdentificationResult project)
         {
-            throw new System.NotImplementedException();
+            using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient())
+            {
+                var result = fulltextServiceClient.SearchHitsResultCount(project.SnapshotId, criteria);
+                return result;
+            }
         }
 
         public SearchHitsResultData SearchHitsWithPageContext(int start, int count, int contextLength, List<SearchCriteriaContract> criteria,
             ProjectIdentificationResult project)
         {
-            throw new System.NotImplementedException();
+            using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient()) 
+            {
+                var result = fulltextServiceClient.SearchCorpusInSnapshotByCriteria(project.SnapshotId, start, count, contextLength, criteria); //TODO create special method for this
+                return new SearchHitsResultData
+                {
+                    SearchResultType = PageSearchResultType.TextExternalId,
+                    ResultList = result.Select(x => new PageResultContextData{ ContextStructure = x.PageResultContext.ContextStructure, LongId = x.ProjectId }).ToList(),
+                    
+                };
+            }
         }
 
         public long SearchCorpusByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
