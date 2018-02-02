@@ -429,9 +429,9 @@ interface IOriginalAuthorPagedResult {
 }
 
 interface ICorpusSearchViewingPageHistoryEntry {
-    compositionPage: number;
-    bookIndex: number;
-    hitResultPage: number;
+    compositionResultListStart: number;
+    bookId: number;
+    hitResultStart: number;
 }
 
 interface ICorpusLookupBase {
@@ -450,6 +450,31 @@ interface ICorpusLookupBasicSearch extends ICorpusLookupBase
 
 interface ICorpusLookupAdvancedSearch extends ICorpusLookupBase {
     json: string;
+}
+
+interface ICorpusListLookupContractBase {
+sortBooksBy : SortEnum;
+sortDirection : SortDirection;
+selectedBookIds: number[];
+selectedCategoryIds: number[];
+}
+
+interface ICorpusListLookupBasicSearchParams extends ICorpusListLookupContractBase{
+    text : string;
+}
+
+interface ICorpusListLookupAdvancedSearchParams extends ICorpusListLookupContractBase {
+    json: string;
+}
+
+interface ICorpusListPageLookupBasicSearch extends ICorpusListLookupBasicSearchParams {
+    start: number;
+    count: number;
+}
+
+interface ICorpusListPageLookupAdvancedSearch extends ICorpusListLookupAdvancedSearchParams {
+    start: number;
+    count: number;
 }
 
 enum AudioType {

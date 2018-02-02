@@ -15,6 +15,6 @@ namespace Vokabular.Shared.DataContracts.Search.Corpus
 
         public long ResultCount { get; set; }
 
-        //TODO maybe add book title...
+        //TODO maybe add book title etc...
     }
 }

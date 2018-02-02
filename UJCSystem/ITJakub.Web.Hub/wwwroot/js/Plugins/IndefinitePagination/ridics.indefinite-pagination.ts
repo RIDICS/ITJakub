@@ -6,6 +6,7 @@
     private totalNumberOfPages: number;
     private firstPage = 1;
     private currentPage = this.firstPage;
+    private basicMode = true;
     private slider: JQuery;
     private wrapped = false;
 
@@ -17,7 +18,7 @@
         }
     }
 
-    make() { //TODO logic
+    make() {
         const container = this.paginationContainer;
         container.addClass("indefinite-pagination");
         container.empty();
@@ -59,6 +60,9 @@
                 this.options.loadPageCallBack(pageNumber);
             } else {
                 this.wrapped = true;
+                if (this.options.pageDoesntExistCallBack) {
+                    this.options.pageDoesntExistCallBack(pageNumber);
+                }
             }
         }
     }
@@ -80,6 +84,43 @@
         const result = this.wrapped;
         this.wrapped = false;
         return result;
+    }
+
+    isBasicMode() {
+        return this.basicMode;
+    }
+
+    reset() {
+        this.paginationContainer.off();
+        if (this.slider) {
+            if (this.slider.slider("instance")){
+                this.slider.slider("destroy");
+            }
+        }
+        if (this.goToPageInput) {
+            this.goToPageInput.off();
+        }
+        this.currentPage = this.firstPage;
+        this.basicMode = true;
+        this.make();
+    }
+
+    disable() {
+        this.paginationContainer.find("button, input").prop("disabled", true);
+        if (this.slider) {
+            if (this.slider.slider("instance")) {
+                this.slider.slider("disable");
+            }
+        }
+    }
+
+    enable() {
+        this.paginationContainer.find("button, input").prop("disabled", false);
+        if (this.slider) {
+            if (this.slider.slider("instance")) {
+                this.slider.slider("enable");
+            }
+        }
     }
 
     private makeSlider(currentPage: number, totalNumberOfPages: number): JQuery {
@@ -205,8 +246,10 @@
             const text = `${pageNumber} / ${this.totalNumberOfPages}`;
             indicatorEl.text(text);
             if (this.slider) {
-                this.slider.slider("option", "value", pageNumber);
-                this.slider.find(".tooltip-inner").text(pageNumber);
+                if (this.slider.slider("instance")) {
+                    this.slider.slider("option", "value", pageNumber);
+                    this.slider.find(".tooltip-inner").text(pageNumber);    
+                }
             }
         }
     }
@@ -246,6 +289,7 @@
                     const deferredObject = this.options.loadAllPagesCallback();
                     deferredObject.done((totalNumberOfPages: number) => {
                         this.setTotalNumberOfPages(totalNumberOfPages);
+                        this.basicMode = false;
                     });
                     deferredObject.fail(() => {
                         this.showFullPageListLoadingError();

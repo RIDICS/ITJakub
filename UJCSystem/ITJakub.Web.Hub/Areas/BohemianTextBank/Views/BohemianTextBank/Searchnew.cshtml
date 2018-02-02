@@ -33,41 +33,64 @@
                     </table>
                 </div></div>
             <div class="corpus-search-result-controls-container col-md-2 col-sm-3 col-xs-12">
-                <div class="corpus-search-settings-label">Možnosti zobrazení</div>
-                <div class="corpus-search-settings-checkboxes">
-                    <div class="checkbox" style="display: none;">
-                        <label><input id="wordCheckbox" type="checkbox" value="">Slovo</label>
+                <div class="row">
+
+                    <div class="col-xs-10">
+                        <div class="corpus-search-settings-label">Možnosti zobrazení</div>
                     </div>
-                    <div class="checkbox">
-                        <label><input id="commentCheckbox" type="checkbox" value="">Komentář</label>
-                    </div>
-                    <div class="checkbox">
-                        <label><input id="languageCheckbox" type="checkbox" value="">Jazyk</label>
-                    </div>
-                    <div class="checkbox">
-                        <label><input id="structureCheckbox" type="checkbox" value="">Struktura textu</label>
-                    </div>
-                    <div class="checkbox">
-                        <label><input id="paragraphCheckbox" type="checkbox" value="">Odstavec</label>
+                    <div class="col-xs-2">
+                        <div class="corpus-search-settings-advanced-menu" title="Advanced search parameters"><i class="fa fa-bars fa-lg"></i></div>
                     </div>
                 </div>
-                <div class="corpus-search-setting-div-context" style="display: none">
-                    <label for="contextPositionsSelect">Pozic v kontextu</label>
-                    <select id="contextPositionsSelect">
-                        <option value="20">20</option>
-                        <option value="50" selected="selected">50</option>
-                        <option value="70">70</option>
-                        <option value="100">100</option>
-                    </select>
+                <div class="corpus-search-result-view-properties-advanced" style="display: none">
+                    <div class="corpus-search-setting-div-context">
+                        <label for="contextPositionsSelect">Pozic v kontextu:</label>
+                        <select id="contextPositionsSelect">
+                            <option value="20">20</option>
+                            <option value="50" selected="selected">50</option>
+                            <option value="70">70</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                    <div class="number-of-results-per-viewing-page">
+                        <label for="number-of-results-per-viewing-page">Počet výsledků na stránce:</label>
+                        <select id="number-of-results-per-viewing-page">
+                            <option value="5">5</option>
+                            <option value="10" selected="selected">10</option>
+                            <option value="20">20</option>
+                            <option value="40">40</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="corpus-search-setting-div-results-count">
-                    <div>Počet děl:</div>
-                    <div id="totalResultCountDiv"></div>
-                </div>
-                <div class="corpus-search-setting-div-pagination pagination-extra-small" id="paginationContainer">
+                    <div class="corpus-search-settings-checkboxes">
+                        <div class="checkbox" style="display: none;">
+                            <label><input id="wordCheckbox" type="checkbox" value="">Slovo</label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input id="commentCheckbox" type="checkbox" value="">Komentář</label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input id="languageCheckbox" type="checkbox" value="">Jazyk</label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input id="structureCheckbox" type="checkbox" value="">Struktura textu</label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input id="paragraphCheckbox" type="checkbox" value="">Odstavec</label>
+                        </div>
+                    </div>
+                    <div class="corpus-search-setting-div-results-count">
+                        <div>Počet děl:</div>
+                        <div id="totalCompositionsCountDiv"></div>
+                        <div class="total-results-count" style="display: none">
+                            <div>Počet výsledků:</div>
+                            <div id="totalResultCountDiv"></div>
+                        </div>
+                    </div>
+                    <div class="corpus-search-setting-div-pagination pagination-extra-small" id="paginationContainer">
+                    </div>
                 </div>
             </div>
-        </div>
         <div class="row corpus-search-result-detail-row">
             <div class="corpus-search-result-detail-container col-xs-12">
                 <div class="corpus-search-detail">

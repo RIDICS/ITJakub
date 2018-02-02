@@ -14,5 +14,7 @@
         loadPageCallBack?: (pageNumber: number) => void;
         showSlider?: boolean;
         showInput?: boolean;
+
+        pageDoesntExistCallBack?: (pageNumber: number) => void;
     }
 }

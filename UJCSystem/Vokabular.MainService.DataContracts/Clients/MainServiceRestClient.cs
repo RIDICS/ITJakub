@@ -541,12 +541,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public object UpdateLiteraryGenre(int literaryGenreId, LiteraryGenreContract data)
+        public void UpdateLiteraryGenre(int literaryGenreId, LiteraryGenreContract data)
         {
             try
             {
-                var response = Put<object>($"literarygenre/{literaryGenreId}", data);
-                return response;
+                Put<HttpStatusCode>($"literarygenre/{literaryGenreId}", data);
             }
             catch (HttpRequestException e)
             {
@@ -624,12 +623,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public object UpdateLiteraryKind(int literaryKindId, LiteraryKindContract data)
+        public void UpdateLiteraryKind(int literaryKindId, LiteraryKindContract data)
         {
             try
             {
-                var response = Put<object>($"literarykind/{literaryKindId}", data);
-                return response;
+                Put<HttpStatusCode>($"literarykind/{literaryKindId}", data);
             }
             catch (HttpRequestException e)
             {
@@ -707,12 +705,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public object UpdateResponsiblePerson(int responsiblePersonId, ResponsiblePersonContract data)
+        public void UpdateResponsiblePerson(int responsiblePersonId, ResponsiblePersonContract data)
         {
             try
             {
-                var response = Put<object>($"responsibleperson/{responsiblePersonId}", data);
-                return response;
+                Put<HttpStatusCode>($"responsibleperson/{responsiblePersonId}", data);
             }
             catch (HttpRequestException e)
             {
@@ -789,12 +786,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public object UpdateResponsibleType(int responsibleTypeId, ResponsibleTypeContract data)
+        public void UpdateResponsibleType(int responsibleTypeId, ResponsibleTypeContract data)
         {
             try
             {
-                var resultId = Put<object>($"responsibleperson/type/{responsibleTypeId}", data);
-                return resultId;
+                Put<HttpStatusCode>($"responsibleperson/type/{responsibleTypeId}", data);
             }
             catch (HttpRequestException e)
             {
@@ -841,12 +837,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public object UpdateLiteraryOriginal(int literaryOriginalId, LiteraryOriginalContract data)
+        public void UpdateLiteraryOriginal(int literaryOriginalId, LiteraryOriginalContract data)
         {
             try
             {
-                var response = Put<object>($"literaryoriginal/{literaryOriginalId}", data);
-                return response;
+                Put<HttpStatusCode>($"literaryoriginal/{literaryOriginalId}", data);
             }
             catch (HttpRequestException e)
             {
@@ -924,12 +919,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public object UpdateOriginalAuthor(int authorId, OriginalAuthorContract data)
+        public void UpdateOriginalAuthor(int authorId, OriginalAuthorContract data)
         {
             try
             {
-                var response = Put<object>($"author/{authorId}", data);
-                return response;
+                Put<HttpStatusCode>($"author/{authorId}", data);
             }
             catch (HttpRequestException e)
             {
@@ -1007,12 +1001,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public object UpdateKeyword(int keywordId, KeywordContract data)
+        public void UpdateKeyword(int keywordId, KeywordContract data)
         {
             try
             {
-                var response = Put<object>($"keyword/{keywordId}", data);
-                return response;
+                Put<HttpStatusCode>($"keyword/{keywordId}", data);
             }
             catch (HttpRequestException e)
             {
@@ -1517,12 +1510,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public object UpdateComment(long commentId, CreateTextCommentContract request)
+        public void UpdateComment(long commentId, CreateTextCommentContract request)
         {
             try
             {
-                var result = Put<object>($"project/text/comment/{commentId}", request);
-                return result;
+                Put<HttpStatusCode>($"project/text/comment/{commentId}", request);
             }
             catch (HttpRequestException e)
             {

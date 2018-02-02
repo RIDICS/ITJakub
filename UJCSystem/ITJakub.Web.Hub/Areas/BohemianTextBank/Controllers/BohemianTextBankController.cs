@@ -7,13 +7,14 @@ using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
+using ITJakub.Web.Hub.DataContracts;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
@@ -226,17 +227,24 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             }
         }
 
-        [HttpGet]
-        public ActionResult GetHitBookIdsPaged(string text, SortTypeEnumContract sortBooksBy, SortDirectionEnumContract sortDirection, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds, bool fetchNumberOfResults = false)
+        public ActionResult GetHitBookIdsPaged(CorpusListGetPageContractBasic searchQuery)
         {
+            var text = searchQuery.Text;
             if (string.IsNullOrEmpty(text))
             {
-                return BadRequest("text can't be null in fulltext search");
+                return BadRequest("Text can't be null in fulltext search");
             }
 
             var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
 
+            var selectedBookIds = searchQuery.SelectedBookIds;
+            var selectedCategoryIds = searchQuery.SelectedCategoryIds;
             AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
+
+            var sortBooksBy = searchQuery.SortBooksBy;
+            var sortDirection = searchQuery.SortDirection;
+            var start = searchQuery.Start;
+            var count = searchQuery.Count;
 
             return GetSearchCorpusSnapshotListResult(new CorpusSearchRequestContract
             {
@@ -245,9 +253,38 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 ConditionConjunction = listSearchCriteriaContracts,
                 Sort = sortBooksBy,
                 SortDirection = sortDirection,
-                FetchNumberOfResults = fetchNumberOfResults,
             });
             
+        }
+
+        private CorpusSearchSnapshotsResultContract GetHitBookResultNumbers(CorpusListGetPageContractBasic searchQuery)
+        {
+            var text = searchQuery.Text;
+            if (string.IsNullOrEmpty(text))
+            {
+                throw new ArgumentException("text can't be null in fulltext search");
+            }
+
+            var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
+
+            var selectedBookIds = searchQuery.SelectedBookIds;
+            var selectedCategoryIds = searchQuery.SelectedCategoryIds;
+            AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
+
+            var sortBooksBy = searchQuery.SortBooksBy;
+            var sortDirection = searchQuery.SortDirection;
+            var start = searchQuery.Start;
+            var count = searchQuery.Count;
+
+            return GetSearchResultCount(new CorpusSearchRequestContract
+            {
+                Start = start,
+                Count = count,
+                ConditionConjunction = listSearchCriteriaContracts,
+                Sort = sortBooksBy,
+                SortDirection = sortDirection,
+                FetchNumberOfResults = true
+            });
         }
 
         [HttpGet]
@@ -274,13 +311,19 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                     ConditionConjunction = listSearchCriteriaContracts,
                 });
         }
-        
-        [HttpGet]
-        public ActionResult AdvancedSearchGetHitBookIdsPaged(string json, SortTypeEnumContract sortBooksBy, SortDirectionEnumContract sortDirection, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds, bool fetchNumberOfResults = false)
 
+
+        public ActionResult AdvancedSearchGetHitBookIdsPaged(CorpusListGetPageContractAdvanced searchQuery)
         {
+            var json = searchQuery.Json;
+            var selectedBookIds = searchQuery.SelectedBookIds;
+            var selectedCategoryIds = searchQuery.SelectedCategoryIds;
             List<SearchCriteriaContract> listSearchCriteriaContracts;
 
+            var sortBooksBy = searchQuery.SortBooksBy;
+            var sortDirection = searchQuery.SortDirection;
+            var start = searchQuery.Start;
+            var count = searchQuery.Count;
             try
             {
                 listSearchCriteriaContracts = CreateTextCriteriaListFromJson(json, selectedBookIds, selectedCategoryIds);
@@ -295,8 +338,30 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 Count = count,
                 ConditionConjunction = listSearchCriteriaContracts,
                 Sort = sortBooksBy,
+                SortDirection = sortDirection
+            });
+        }
+
+        private CorpusSearchSnapshotsResultContract AdvancedSearchGetHitBookResultNumbers(CorpusListGetPageContractAdvanced searchQuery)
+        {
+            var json = searchQuery.Json;
+            var selectedBookIds = searchQuery.SelectedBookIds;
+            var selectedCategoryIds = searchQuery.SelectedCategoryIds;
+            var listSearchCriteriaContracts = CreateTextCriteriaListFromJson(json, selectedBookIds, selectedCategoryIds);
+
+            var sortBooksBy = searchQuery.SortBooksBy;
+            var sortDirection = searchQuery.SortDirection;
+            var start = searchQuery.Start;
+            var count = searchQuery.Count;
+
+            return GetSearchResultCount(new CorpusSearchRequestContract
+            {
+                Start = start,
+                Count = count,
+                ConditionConjunction = listSearchCriteriaContracts,
+                Sort = sortBooksBy,
                 SortDirection = sortDirection,
-                FetchNumberOfResults = fetchNumberOfResults,
+                FetchNumberOfResults = true
             });
         }
 
@@ -328,20 +393,6 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             });
         }
 
-        public ActionResult CreatePaginatedStructure(string text, IList<long> selectedSnapshotIds, IList<int> selectedCategoryIds, int approximateNumberOfResultsPerPage)
-        {
-            var allResults = GetTotalResultNumber(text, selectedSnapshotIds, selectedCategoryIds);
-            var transientResults = 0;
-            return null;//TODO
-        }
-
-        public ActionResult CreatePaginatedStructureAdvanced(string json, IList<long> selectedSnapshotIds, IList<int> selectedCategoryIds, int approximateNumberOfResultsPerPage)
-        {
-            var allResults = GetTotalResultNumberAdvanced(json, selectedSnapshotIds, selectedCategoryIds);
-            var transientResults = 0;
-            return null;//TODO
-        }
-
         public ActionResult GetTotalResultNumber(string text, IList<long> selectedSnapshotIds, IList<int> selectedCategoryIds)
         {
             if (string.IsNullOrEmpty(text))
@@ -357,18 +408,6 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             {
                 ConditionConjunction = listSearchCriteriaContracts,
             });
-            //var allBookResults = new List<SnapshotResultsContract>();
-            //allBookResults.Add(new SnapshotResultsContract
-            //{
-            //    SnapshotId = 1,
-            //    ResultsInSnapshot = 2
-            //});
-            //allBookResults.Add(new SnapshotResultsContract
-            //{
-            //    SnapshotId = 2,
-            //    ResultsInSnapshot = 10
-            //});
-            //return allBookResults;
         }
 
         public ActionResult GetTotalResultNumberAdvanced(string json, IList<long> selectedSnapshotIds, IList<int> selectedCategoryIds)
@@ -422,6 +461,15 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             }
         }
 
+        private CorpusSearchSnapshotsResultContract GetSearchResultCount(CorpusSearchRequestContract request)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.SearchCorpusGetSnapshotList(request);
+                return result;
+            }
+        }
+
         private ActionResult GetTotalNumberOfResults(SearchRequestContractBase request)
         {
             using (var client = GetRestClient())
@@ -430,7 +478,94 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 return Json(new { totalCount = result });
             }
         }
-        
+
+        public ActionResult GetPagePositionInListsBasic(int hitResultTotalStart, int compositionsPerPage, CorpusListLookupBasicSearchParams searchParams)
+        {
+            var bookId=0L;
+
+            var compositionListStart = 0;
+            var currentResultsUpToThisBook = 0L;
+            long LoadCompositionPage()
+            {
+                while (true)
+                {
+                    var query = new CorpusListGetPageContractBasic
+                    {
+                        Start = compositionListStart,
+                        Count = compositionsPerPage,
+                        SortBooksBy = searchParams.SortBooksBy,
+                        SortDirection = searchParams.SortDirection,
+                        Text = searchParams.Text,
+                        SelectedBookIds = searchParams.SelectedBookIds,
+                        SelectedCategoryIds = searchParams.SelectedCategoryIds
+                    };
+                    var numberOfResultsArray = GetHitBookResultNumbers(query);
+
+                    var compositionResultNumbers = numberOfResultsArray.SnapshotList;
+                    foreach (var composition in compositionResultNumbers)
+                    {
+                        currentResultsUpToThisBook += composition.ResultCount;
+                        if (hitResultTotalStart >= currentResultsUpToThisBook) continue;
+                        bookId = composition.SnapshotId;
+                        return currentResultsUpToThisBook - composition.ResultCount;
+                    }
+
+                    compositionListStart += compositionsPerPage;
+                }
+            }
+
+            var resultsUpToThisCompositionStart =  LoadCompositionPage();
+            return Json(new
+            {
+                compositionListStart = compositionListStart,
+                bookId = bookId,
+                hitResultStart = (hitResultTotalStart - resultsUpToThisCompositionStart)
+            });
+        }
+
+        public ActionResult GetPagePositionInListsAdvanced(int hitResultTotalStart, int compositionsPerPage, CorpusListLookupAdvancedSearchParams searchParams)
+        {
+            var bookId = 0L;
+
+            var compositionListStart = 0;
+            var currentResultsUpToThisBook = 0L;
+            long LoadCompositionPage()
+            {
+                while (true)
+                {
+                    var query = new CorpusListGetPageContractAdvanced
+                    {
+                        Start = compositionListStart,
+                        Count = compositionsPerPage,
+                        SortBooksBy = searchParams.SortBooksBy,
+                        SortDirection = searchParams.SortDirection,
+                        Json = searchParams.Json,
+                        SelectedBookIds = searchParams.SelectedBookIds,
+                        SelectedCategoryIds = searchParams.SelectedCategoryIds
+                    };
+                    var numberOfResultsArray = AdvancedSearchGetHitBookResultNumbers(query);
+
+                    var compositionResultNumbers = numberOfResultsArray.SnapshotList;
+                    foreach (var composition in compositionResultNumbers)
+                    {
+                        currentResultsUpToThisBook += composition.ResultCount;
+                        if (hitResultTotalStart >= currentResultsUpToThisBook) continue;
+                        bookId = composition.SnapshotId;
+                        return currentResultsUpToThisBook - composition.ResultCount;
+                    }
+
+                    compositionListStart += compositionsPerPage;
+                }
+            }
+
+            var resultsUpToThisCompositionStart = LoadCompositionPage();
+            return Json(new
+            {
+                compositionListStart = compositionListStart,
+                bookId = bookId,
+                hitResultStart = (hitResultTotalStart - resultsUpToThisCompositionStart)
+            });
+        }
         #endregion
     }
 }
