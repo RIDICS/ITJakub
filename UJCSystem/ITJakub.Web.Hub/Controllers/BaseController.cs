@@ -27,11 +27,6 @@ namespace ITJakub.Web.Hub.Controllers
             return m_communication.GetMainServiceClient();
         }
 
-        public ItJakubServiceEncryptedClient GetEncryptedClient()
-        {
-            return m_communication.GetEncryptedClient();
-        }
-
         public IItJakubService GetMainServiceClient()
         {
             if (!IsUserLoggedIn()) return m_communication.GetUnsecuredClient();
@@ -40,16 +35,6 @@ namespace ITJakub.Web.Hub.Controllers
             var password = GetCommunicationToken();
 
             return m_communication.GetAuthenticatedClient(username, password);
-        }
-
-        public ItJakubServiceStreamedClient GetStreamingClient()
-        {
-            if (!IsUserLoggedIn()) return m_communication.GetStreamingClient();
-
-            var username = GetUserName();
-            var password = GetCommunicationToken();
-
-            return m_communication.GetStreamingClientAuthenticated(username, password);
         }
 
         public LemmatizationServiceClient GetLemmationzationServiceClient()

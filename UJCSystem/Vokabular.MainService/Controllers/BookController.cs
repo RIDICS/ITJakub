@@ -421,5 +421,16 @@ namespace Vokabular.MainService.Controllers
 
             return Content(result);
         }
+
+        [HttpGet("info")]
+        [ProducesResponseType(typeof(BookContract), StatusCodes.Status200OK)]
+        public IActionResult GetBookByExternalId([FromQuery] string externalId)
+        {
+            if (string.IsNullOrEmpty(externalId))
+                return BadRequest("Required ExternalId parameter is null");
+
+            var result = m_bookManager.GetBookInfoByExternalId(externalId);
+            return result != null ? (IActionResult) Ok(result) : NotFound();
+        }
     }
 }

@@ -1,7 +1,5 @@
 using System;
-using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
-using System.ServiceModel.Description;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Lemmatization.Shared.Contracts;
@@ -62,45 +60,7 @@ namespace ITJakub.Web.Hub.Core.Communication
             var client = new ItJakubServiceClient(binding, endpoint);
             return client;
         }
-
-        public ItJakubServiceEncryptedClient GetEncryptedClient()
-        {
-            var endpoint = m_configurationProvider.GetEndpointAddress(EncryptedEndpointName);
-            var binding = m_configurationProvider.GetBasicHttpsBindingCertificateAuthentication();
-            var behavior = new ClientCredentials();
-            behavior.ClientCertificate.SetCertificate(StoreLocation.LocalMachine, StoreName.My, X509FindType.FindByThumbprint, "C787F20847606DC40E50E015A5D2E3A9E59B704C");
-
-            var client = new ItJakubServiceEncryptedClient(binding, endpoint);
-            client.Endpoint.Behaviors.Remove<ClientCredentials>();
-            client.Endpoint.Behaviors.Add(behavior);
-
-            return client;
-        }
-
-        public ItJakubServiceStreamedClient GetStreamingClient()
-        {
-            var endpoint = m_configurationProvider.GetEndpointAddress(StreamedServiceEndpointName);
-            var binding = m_configurationProvider.GetBasicHttpBindingStreamed();
-            var client = new ItJakubServiceStreamedClient(binding, endpoint);
-            return client;
-        }
-
-        public ItJakubServiceStreamedClient GetStreamingClientAuthenticated(string username, string commToken)
-        {
-            return GetStreamingClient();
-            //var endpoint = m_configurationProvider.GetEndpointAddress(StreamedServiceEndpointNameAuthenticated);
-            //var binding = m_configurationProvider.GetBasicHttpsBindingStreamed();
-            //var client = new ItJakubServiceStreamedClient(binding, endpoint);
-            //if (client.ClientCredentials == null)
-            //{
-            //    throw new ArgumentException("Cannot set credentials for client");
-            //}
-            //client.ClientCredentials.UserName.UserName = username;
-            //client.ClientCredentials.UserName.Password = commToken;
-            //return client;
-        }
-
-
+        
         public LemmatizationServiceClient GetLemmatizationClient()
         {
             var endpoint = m_configurationProvider.GetEndpointAddress(LemmatizationServiceEndpointName);

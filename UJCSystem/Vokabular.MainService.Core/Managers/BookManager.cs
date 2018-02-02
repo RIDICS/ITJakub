@@ -87,6 +87,20 @@ namespace Vokabular.MainService.Core.Managers
             return result;
         }
 
+        public BookContract GetBookInfoByExternalId(string projectExternalId)
+        {
+            // Authorize after getting projectId
+
+            var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetLatestMetadataResourceByExternalId(projectExternalId));
+            if (metadataResult == null)
+                return null;
+
+            m_authorizationManager.AuthorizeBook(metadataResult.Resource.Project.Id);
+
+            var result = Mapper.Map<BookContract>(metadataResult);
+            return result;
+        }
+        
         public SearchResultDetailContract GetBookDetail(long projectId)
         {
             m_authorizationManager.AuthorizeBook(projectId);

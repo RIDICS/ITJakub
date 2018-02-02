@@ -30,6 +30,20 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             return query.SingleOrDefault();
         }
+        
+        public virtual MetadataResource GetLatestMetadataResourceByExternalId(string projectExternalId)
+        {
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+
+            var query = GetSession().QueryOver<MetadataResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .Where(x => projectAlias.ExternalId == projectExternalId && resourceAlias.ResourceType == ResourceTypeEnum.ProjectMetadata && resourceAlias.LatestVersion.Id == x.Id)
+                .Fetch(x => x.Resource).Eager;
+
+            return query.SingleOrDefault();
+        }
 
         public virtual Project GetAdditionalProjectMetadata(long projectId, bool includeAuthors, bool includeResponsibles, bool includeKind, bool includeGenre, bool includeOriginal, bool includeKeyword)
         {

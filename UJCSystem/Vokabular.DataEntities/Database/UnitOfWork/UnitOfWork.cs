@@ -54,7 +54,7 @@ namespace Vokabular.DataEntities.Database.UnitOfWork
             }
             finally
             {
-                CurrentSession.Dispose();
+                Dispose();
             }
         }
 
@@ -69,7 +69,7 @@ namespace Vokabular.DataEntities.Database.UnitOfWork
             }
             finally
             {
-                CurrentSession.Dispose();
+                Dispose();
             }
         }
     }
