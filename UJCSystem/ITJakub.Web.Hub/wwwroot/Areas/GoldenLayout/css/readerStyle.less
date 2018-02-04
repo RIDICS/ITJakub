@@ -7,7 +7,8 @@
 @color2: #777777; 
 @color3: #fafafa; 
 @color4: #888888;
-@color5: #8E5523;
+@linkColor: #8E5523;
+@linkColorHover: #633107;
 
 .lm_tab {
     height: @tabHeight !important;
@@ -36,8 +37,24 @@
     font-weight: bold;
 }
 
-.reader-left-panel, .reader-right-panel {
-    width: 100% !important;
+.reader-tool-panel {
+    float: left;
+    background-color: white;
+    width: 100%;
+    padding: 10px;
+    height: 77vh;
+    font-weight: 600;
+
+    ul {
+        padding-left: 30px;
+    }    
+
+    a {
+        color: @linkColor;
+        &:hover {
+            color: @linkColorHover;
+        }
+    }
 }
 
 .content-container {
@@ -52,7 +69,7 @@
     border: none;
     background: none;
     width: auto;
-    color: @color5;
+    color: @linkColor;
     padding: 0;
     margin: 2rem 2rem 0 0;
 }
@@ -70,5 +87,5 @@
 }
 
 .left {
-    float: left;
+    float: left !important;
 }
