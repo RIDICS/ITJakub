@@ -404,7 +404,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             throw new NotSupportedException("Saving resources to eXist-db isn't supported. eXist-db storage supports only full book import.");
         }
 
-        public CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotListByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects, bool fetchNumberOfResults)
+        public CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotListByCriteria(int start, int count, SortTypeEnumContract? sort, SortDirectionEnumContract? sortDirection, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects, bool fetchNumberOfResults)
         {
             throw new NotSupportedException("Paged search in corpus in eXist-db isn't supported.");
         }

@@ -29,8 +29,8 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         string CreateNewTextVersion(TextResource textResource);
         string CreateNewHeadwordVersion(HeadwordResource headwordResource);
         string CreateNewEditionNoteVersion(EditionNoteResource editionNoteResource);
-        CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotListByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects, bool fetchNumberOfresults);
+        CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotListByCriteria(int start, int count, SortTypeEnumContract? sort, SortDirectionEnumContract? sortDirection, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects, bool fetchNumberOfresults);
         CorpusSearchResultDataList SearchCorpusInSnapshotByCriteria(long projectId, int start, int count, int contextLength, List<SearchCriteriaContract> criteria);
         long SearchCorpusTotalResultCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects);
-    }
+       }
 }
