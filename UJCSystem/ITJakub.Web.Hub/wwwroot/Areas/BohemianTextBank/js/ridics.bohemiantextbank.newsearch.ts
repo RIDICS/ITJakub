@@ -4,7 +4,7 @@
 }
 
 class BohemianTextBankNew {
-    private searchResultsOnPage = 6;//corresponds to amount of results per page that should be on screen
+    private searchResultsOnPage = 10;//corresponds to amount of results per page that should be on screen
 
     private hitBookIds = [];
     private transientResults: ICorpusSearchResult[] = [];
@@ -137,12 +137,12 @@ class BohemianTextBankNew {
             advancedShowOptionsMenuEl.slideToggle();
         });
 
-        $("#resultsTableBody").on("click",
-            ".search-result",
+        $(".text-results-table-body").on("click",
+            ".result-row",
             (event: JQuery.Event) => {
-                var clickedRow = $(event.target as Node as Element).closest(".search-result");
+                var clickedRow = $(event.target as Node as Element).closest(".result-row");
 
-                $(".search-result").not(clickedRow).removeClass("clicked");
+                $(".result-row").not(clickedRow).removeClass("clicked");
                 clickedRow.addClass("clicked");
 
                 this.printDetailInfo(clickedRow);
@@ -287,8 +287,7 @@ class BohemianTextBankNew {
     }
 
     private showLoading() {
-        $("#result-abbrev-table").hide();
-        $("#result-table").hide();
+        $(".text-results-table").hide();
         $("#corpus-search-results-table-div-loader").empty();
         $("#corpus-search-results-table-div-loader").show();
         $("#corpus-search-results-table-div-loader").addClass("loader");
@@ -298,8 +297,7 @@ class BohemianTextBankNew {
     private hideLoading() {
         $("#corpus-search-results-table-div-loader").removeClass("loader");
         $("#corpus-search-results-table-div-loader").hide();
-        $("#result-abbrev-table").show();
-        $("#result-table").show();
+        $(".text-results-table").show();
     }
 
     private printErrorMessage(message: string) {
@@ -341,61 +339,65 @@ class BohemianTextBankNew {
         });
     }
 
-    private fillResultsIntoTable(results: ICorpusSearchResult[]) {
-        var tableBody = $("#resultsTableBody");
-        const abbrevTableBody = $("#resultsAbbrevTableBody");
-        const undefinedReplaceString = "<Nezadáno>";
+    private fillResultTable(results: ICorpusSearchResult[]) {
+        const tableSection = $(".corpus-search-results-div");
+        const textColumn = tableSection.find(".result-text-col");
+        const textResultTableEl = textColumn.find(".text-results-table-body");
+        for (let i = 0; i < results.length; i++) {
+            const result = results[i];
+            const pageContext = result.pageResultContext;
+            const verseContext = result.verseResultContext;
+            const bibleVerseContext = result.bibleVerseResultContext;
+            const contextStructure = pageContext.contextStructure;
+            const bookId = result.bookId;
+            const pageId = pageContext.id;
+            const acronym = result.sourceAbbreviation;
+            const notes = result.notes;
 
-        for (var i = 0; i < results.length; i++) {
-            var result = results[i];
-            var pageContext = result.pageResultContext;
-            var verseContext = result.verseResultContext;
-            var bibleVerseContext = result.bibleVerseResultContext;
-            var contextStructure = pageContext.contextStructure;
-            var bookId = result.bookId;
-            var pageId = pageContext.id;
-            var acronym = result.sourceAbbreviation;
-            var notes = result.notes;
+            const textResult = $(`<tr class="row result-row"></tr>`);
 
-            var tr = $("<tr></tr>");
-            tr.addClass("search-result abbr-result-row");
-            tr.attr("data-bookId", bookId);
-            tr.attr("data-author", result.author);
-            tr.attr("data-title", result.title);
-            tr.attr("data-dating", result.originDate);
-            tr.attr("data-pageId", pageId);
-            tr.attr("data-pageName", pageContext.name);
-            tr.attr("data-acronym", acronym);
-
+            textResult.attr("data-bookId", bookId);
+            textResult.attr("data-author", result.author);
+            textResult.attr("data-title", result.title);
+            textResult.attr("data-dating", result.originDate);
+            textResult.attr("data-pageId", pageId);
+            textResult.attr("data-pageName", pageContext.name);
+            textResult.attr("data-acronym", acronym);
 
             if (verseContext) {
-                tr.attr("data-verseXmlId", verseContext.verseXmlId);
-                tr.attr("data-verseName", verseContext.verseName);
+                textResult.attr("data-verseXmlId", verseContext.verseXmlId);
+                textResult.attr("data-verseName", verseContext.verseName);
             }
 
             if (bibleVerseContext) {
-                tr.attr("data-bibleBook", bibleVerseContext.bibleBook);
-                tr.attr("data-bibleChapter", bibleVerseContext.bibleChapter);
-                tr.attr("data-bibleVerse", bibleVerseContext.bibleVerse);
+                textResult.attr("data-bibleBook", bibleVerseContext.bibleBook);
+                textResult.attr("data-bibleChapter", bibleVerseContext.bibleChapter);
+                textResult.attr("data-bibleVerse", bibleVerseContext.bibleVerse);
             }
 
-            var tdBefore = $("<td></td>");
-            tdBefore.html(contextStructure.before);
+            const contextBefore = $(`<td class="context-before"></td>`);
+            contextBefore.text(contextStructure.before);
 
-            var tdMatch = $(`<td class="text-center"></td>`);
-            var matchSpanEl = $(`<span></span>`);
-            matchSpanEl.addClass("match");
-            matchSpanEl.html(contextStructure.match);
-            tdMatch.append(matchSpanEl);
+            const contextMatch = $(`<td class="text-center"></td>`);
+            contextMatch.append(`<span class="match">${contextStructure.match}</span>`);
 
-            var tdAfter = $("<td></td>");
-            tdAfter.html(contextStructure.after);
+            const contextAfter = $(`<td class="context-after"></td>`);
+            contextAfter.text(contextStructure.after);
 
-            tr.append(tdBefore);
-            tr.append(tdMatch);
-            tr.append(tdAfter);
+            const abbrevHref = $("<a></a>");
+            abbrevHref.prop("href",
+                `${getBaseUrl()}Editions/Editions/Listing?bookId=${bookId}&searchText=${this.search.getLastQuery()
+                }&page=${pageId}`);
+            abbrevHref.text(acronym);
+            const abbrevTd = $(`<td class="abbrev-col"></td>`);
+            abbrevTd.append(abbrevHref);
 
-            tableBody.append(tr);
+            textResult.append(abbrevTd);
+            textResult.append(contextBefore);
+            textResult.append(contextMatch);
+            textResult.append(contextAfter);
+
+            textResultTableEl.append(textResult);
 
             if (notes) {
 
@@ -422,57 +424,21 @@ class BohemianTextBankNew {
                 var afterNotesTr = $("<tr></tr>");
                 afterNotesTr.addClass("notes spacer");
 
-                tableBody.append(beforeNotesTr);
-                tableBody.append(notesTr);
-                tableBody.append(afterNotesTr);
+                textResultTableEl.append(beforeNotesTr);
+                textResultTableEl.append(notesTr);
+                textResultTableEl.append(afterNotesTr);
 
             }
 
-            //fill left table with abbrev of corpus name
-            var abbrevTr = $("<tr></tr>");
-            abbrevTr.addClass("abbr-result-row");
-            //$(abbrevTr).data("bookXmlId", bookXmlId);
-            //$(abbrevTr).data("pageXmlId", pageXmlId);
-            var abbrevTd = $("<td></td>");
-
-            var abbrevHref = $("<a></a>");
-            abbrevHref.attr("href", `${getBaseUrl()}Editions/Editions/Listing?bookId=${bookId}&searchText=${this.search.getLastQuery()}&page=${pageId}`);
-            abbrevHref.text(acronym ? acronym : undefinedReplaceString);
-
-            abbrevTd.append(abbrevHref);
-
-            abbrevTr.append(abbrevTd);
-            abbrevTableBody.append(abbrevTr);
-
-            if (notes) {
-
-                var abbRevNotesTr = $("<tr></tr>");
-                abbRevNotesTr.addClass("notes");
-
-                var abbrevTdNotes = $("<td></td>");
-
-                abbRevNotesTr.append(abbrevTdNotes);
-
-                var beforeAbbrevNotesTr = $("<tr></tr>");
-                beforeAbbrevNotesTr.addClass("notes spacer");
-
-                var afterAbbrevNotesTr = $("<tr></tr>");
-                afterAbbrevNotesTr.addClass("notes spacer");
-
-                abbrevTableBody.append(beforeAbbrevNotesTr);
-                abbrevTableBody.append(abbRevNotesTr);
-                abbrevTableBody.append(afterAbbrevNotesTr);
-
-            }
         }
 
+        $(".text-results-table").tableHeadFixer({ "left": 1, "head": false});
 
         //scroll from left to center match column in table
-        var firstChildTdWidth = tableBody.children("tr").first().children("td").first().width();
-        var tableContainer = tableBody.parents("#corpus-search-results-table-div");
-        var tableContainerWidth = tableContainer.width();
-        var scrollOffset = firstChildTdWidth - tableContainerWidth / 2;
-        tableContainer.scrollLeft(scrollOffset);
+        var matchPosition = textResultTableEl.children("tr").first().find(".match").position().left;
+        var tableContainerWidth = textColumn.width();
+        var scrollOffset = matchPosition - tableContainerWidth / 2;
+        textColumn.scrollLeft(scrollOffset);
     }
 
     private corpusBasicSearchPaged(text: string, start: number, contextLength: number, bookId: number) {
@@ -580,7 +546,7 @@ class BohemianTextBankNew {
     }
 
     private loadBookResultPage(start: number, bookId: number) {
-        const contextLength = $("#contextPositionsSelect").val() as number;
+        const contextLength = parseInt($("#contextPositionsSelect").val() as string);
         if (this.search.isLastQueryJson()) {
             this.corpusAdvancedSearchPaged(this.search.getLastQuery(), start, contextLength, bookId);
         } else {
@@ -620,15 +586,13 @@ class BohemianTextBankNew {
     }
 
     private emptyResultsTable() {
-        const tableBody = $("#resultsTableBody");
-        const abbrevTableBody = $("#resultsAbbrevTableBody");
+        const tableBody = $(".text-results-table-body");
         tableBody.empty();
-        abbrevTableBody.empty();
     }
 
     private flushTransientResults() {
         this.emptyResultsTable();
-        this.fillResultsIntoTable(this.transientResults);
+        this.fillResultTable(this.transientResults);
         this.transientResults = [];
     }
 
@@ -829,13 +793,20 @@ class BohemianTextBankNew {
         updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
 
         $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetHitBookIdsPaged`, payload)
-            .done((bookIds: IPagedResultArray<number>) => {
+            .done((bookIds: ICoprusSearchSnapshotResult) => {
+                console.log(bookIds);
                 this.hideLoading();
                 const totalCount = bookIds.totalCount;
                 const page = (start / count) + 1;
                 const totalPages = Math.ceil(totalCount / count);
                 $("#totalCompositionsCountDiv").text(totalCount);
-                this.hitBookIds = bookIds.list;
+                const snapshotStructureArray = bookIds.list;
+                var idList = [];
+                snapshotStructureArray.forEach((snapshot) => {
+                    idList.push(snapshot.snapshotId);
+                });
+                this.hitBookIds = idList;
+                console.log(this.hitBookIds);
                 if (this.hitBookIds.length < this.compositionsPerPage || page === totalPages) {
                     this.compositionPageIsLast = true;
                 }
@@ -894,20 +865,25 @@ class BohemianTextBankNew {
         };
         console.log(payload);
         $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchGetHitBookIdsPaged`, payload)
-        .done((bookIds: IPagedResultArray<number>) => {
+            .done((bookIds: ICoprusSearchSnapshotResult) => {
                 this.hideLoading();
                 const totalCount = bookIds.totalCount;
                 const page = (start / count) + 1;
                 const totalPages = Math.ceil(totalCount / count);
                 $("#totalCompositionsCountDiv").text(totalCount);
-                this.hitBookIds = bookIds.list;
+                const snapshotStructureArray = bookIds.list;
+                var idList = [];
+                snapshotStructureArray.forEach((snapshot) => {
+                    idList.push(snapshot.snapshotId);
+                });
+                this.hitBookIds = idList;
                 if (this.hitBookIds.length < this.compositionsPerPage || page === totalPages) {
                     this.compositionPageIsLast = true;
                 }
                 if (!this.hitBookIds.length) {//TODO requires attention
                     if (this.transientResults.length) {
                         this.emptyResultsTable();
-                        this.fillResultsIntoTable(this.transientResults);
+                        this.fillResultTable(this.transientResults);
                         this.transientResults = [];
                     }
                     bootbox.alert({

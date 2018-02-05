@@ -7,6 +7,7 @@
     <script src="~/Areas/BohemianTextBank/js/itjakub.bohemiantextbank.bundle.js"></script>
     <script src="~/lib/bootbox/bootbox.min.js"></script>
     <script src="~/js/Plugins/IndefinitePagination/ridics.indefinite-pagination.js"></script>
+    <script src="~/lib/jquery-table-fixer/tableHeadFixer.js"></script>
 }
 
 @{
@@ -18,20 +19,14 @@
     <div class="search-result-section container-fluid" id="corpus-search-div">
         <div class="row corpus-result-and-settings-row">
             <div class="corpus-search-results-div col-md-10 col-sm-9 col-xs-12">
-                <div id="corpus-search-results-abbrev-table-div" class="corpus-search-results-abbrev-table-div">
-                    <table id="result-abbrev-table">
-                        <tbody id="resultsAbbrevTableBody">
-                        </tbody>
-                    </table>
-                </div>
-                <div id="corpus-search-results-table-div" class="corpus-search-results-table-div">
-                    <div id="corpus-search-results-table-div-loader">
-                        Pro zobrazení výsledků použijte vyhledávání
+                <div class="row search-results-row no-gutters">
+                    <div class="col-xs-12 result-text-col text-center">
+                        <div id="corpus-search-results-table-div-loader">
+                            Pro zobrazení výsledků použijte vyhledávání
+                        </div><table class="text-results-table"><tbody class="text-results-table-body"></tbody></table>
                     </div>
-                    <table id="result-table">
-                        <tbody id="resultsTableBody"></tbody>
-                    </table>
-                </div></div>
+                </div>
+            </div>
             <div class="corpus-search-result-controls-container col-md-2 col-sm-3 col-xs-12">
                 <div class="row">
 
@@ -46,9 +41,9 @@
                     <div class="corpus-search-setting-div-context">
                         <label for="contextPositionsSelect">Pozic v kontextu:</label>
                         <select id="contextPositionsSelect">
-                            <option value="20">20</option>
-                            <option value="50" selected="selected">50</option>
-                            <option value="70">70</option>
+                            <option value="40">40</option>
+                            <option value="60" selected="selected">60</option>
+                            <option value="80">80</option>
                             <option value="100">100</option>
                         </select>
                     </div>

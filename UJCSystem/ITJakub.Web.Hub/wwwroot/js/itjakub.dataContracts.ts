@@ -477,6 +477,16 @@ interface ICorpusListPageLookupAdvancedSearch extends ICorpusListLookupAdvancedS
     count: number;
 }
 
+interface ISnapshotSearchResultStructure {
+    resultCount: number;
+    snapshotId: number;
+}
+
+interface ICoprusSearchSnapshotResult {
+    list: ISnapshotSearchResultStructure[];
+    totalCount: number;
+}
+
 enum AudioType {
     Unknown = "Unknown",
     Mp3 = "Mp3",

@@ -1,5 +1,20 @@
 ﻿@import "../../../css/ITJakub.Colors.less";
 @import "../../Admin/css/@editors-common-variables.less";
+@table-line-height: 3em;
+@table-even-colour: #eee;
+@table-odd-colour: white;
+@table-row-clicked-color: #C0C0C0;
+
+.no-gutters {
+    margin-right: 0;
+    margin-left: 0;
+
+    > .col,
+    > [class*="col-"] {
+        padding-right: 0;
+        padding-left: 0;
+    }
+}
 
 .search-result-section {
     &.show-notes {
@@ -48,30 +63,22 @@
 
     &.show-paragraph {
 
-        tr.search-result td, tr.notes td {
+        tr.notes td {
             display: inline-block;
         }
-    }
 
-    #corpus-search-results-abbrev-table-div, #corpus-search-results-table-div {
-        .abbr-result-row {
-            height: 4em;
-
-            td {
-                .match {
-                    background-color: @menu-active-background-color;
-                    color: white;
-                    margin-left: 1em;
-                    margin-right: 1em;
-                    text-align: center;
-                }
+        tr.result-row {
+            td.context-before {
+                display: inline-block;
             }
-        }
 
-        tr.clicked {
-            border-bottom: solid 1px;
-            border-top: solid 1px;
-            background-color: #eee;
+            td .match {
+                display: inline-block;
+            }
+
+            td.context-after {
+                display: inline-block;
+            }
         }
     }
 
@@ -81,21 +88,64 @@
         .corpus-search-results-div {
             height: inherit;
 
-            #corpus-search-results-abbrev-table-div {
-                float: left;
-                width: 8em;
-                height: inherit;
-                overflow-x: scroll;
-                overflow-y: hidden;
-                background-color: white;
-                margin-right: 1px;
-            }
+            .search-results-row {
+                height: 100%;
 
-            #corpus-search-results-table-div {
-                background-color: white;
-                height: inherit;
-                overflow-x: scroll;
-                overflow-y: auto;
+                .result-text-col {
+                    height: 100%;
+
+                    .text-results-table {
+                        width: 100%;
+
+                        tr:nth-child(even) {
+                            background: @table-even-colour;
+
+                            td {
+                                background-color: inherit;
+                            }
+                        }
+
+                        tr:nth-child(odd) {
+                            background: @table-odd-colour;
+
+                            td {
+                                background-color: inherit;
+                            }
+                        }
+
+                        .result-row {
+                            &.clicked {
+                                border-bottom: solid 1px;
+                                border-top: solid 1px;
+                                background-color: @table-row-clicked-color;
+                            }
+
+                            white-space: nowrap;
+                            line-height: @table-line-height;
+                            .abbrev-col{
+                                padding-right:5px;
+                            }
+                            
+                            .context-before {
+                                text-align: right;
+                                width: 45%;
+                            }
+
+                            .match {
+                                background-color: @menu-active-background-color;
+                                color: white;
+                                margin-left: 1em;
+                                margin-right: 1em;
+                                text-align: center;
+                            }
+
+                            .context-after {
+                                text-align: left;
+                                width: 45%;
+                            }
+                        }
+                    }
+                }
             }
         }
 
