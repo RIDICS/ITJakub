@@ -5,6 +5,7 @@ using Vokabular.FulltextService.Core.Helpers.Converters;
 using Vokabular.FulltextService.Core.Managers;
 using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.Shared;
+using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -73,6 +74,13 @@ namespace Vokabular.FulltextService.Controllers
         public long SearchPageByCriteriaCount(long snapshotId, [FromBody] SearchRequestContractBase criteria)
         {
             var result = m_searchManager.SearchPageByCriteriaCount(snapshotId, criteria);
+            return result;
+        }
+
+        [HttpPost("snapshot/{snapshotId}/search-context")]
+        public HitsWithPageContextResultContract SearchHitsWithPageContext(long snapshotId, [FromBody] SearchHitsRequestContract searchHitsRequestContract)
+        {
+            var result = m_searchManager.SearchHitsWithPageContext(snapshotId, searchHitsRequestContract);
             return result;
         }
     }

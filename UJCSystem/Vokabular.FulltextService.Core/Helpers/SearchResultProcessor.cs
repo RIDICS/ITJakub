@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Nest;
 using Vokabular.FulltextService.DataContracts.Contracts;
+using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Search.Corpus;
 
 namespace Vokabular.FulltextService.Core.Helpers
@@ -239,7 +240,14 @@ namespace Vokabular.FulltextService.Core.Helpers
 
             do
             {
-                var corpusSearchResult = GetCorpusSearchResultData(highlightedText, projectId, index, out index, highlightTag);
+                var contextStructure = GetContextStructure(highlightedText, index, out index, highlightTag);
+
+                var corpusSearchResult = new CorpusSearchResultContract
+                {
+                    ProjectId = projectId,
+                    PageResultContext = new CorpusSearchPageResultContract {ContextStructure = contextStructure},
+                };
+                
                 result.Add(corpusSearchResult);
 
                 index = highlightedText.IndexOf(highlightTag, index + highlightTag.Length, StringComparison.Ordinal);
@@ -248,7 +256,7 @@ namespace Vokabular.FulltextService.Core.Helpers
             return result;
         }
 
-        private CorpusSearchResultContract GetCorpusSearchResultData(string highlightedText, long projectId, int index, out int newIndex, string highlightTag)
+        private KwicStructure GetContextStructure(string highlightedText, int index, out int newIndex, string highlightTag)
         {
             newIndex = highlightedText.IndexOf(highlightTag, index + 1, StringComparison.Ordinal);
 
@@ -259,14 +267,7 @@ namespace Vokabular.FulltextService.Core.Helpers
             before = before.Replace(highlightTag, "");
             after = after.Replace(highlightTag, "");
 
-            return new CorpusSearchResultContract
-            {
-                ProjectId = projectId,
-                PageResultContext = new CorpusSearchPageResultContract
-                {
-                    ContextStructure = new KwicStructure { After = after, Before = before, Match = match },
-                }
-            };
+            return new KwicStructure {After = after, Before = before, Match = match};
         }
 
         public CorpusSearchSnapshotsResultContract ProcessSearchCorpusSnapshotsByCriteria(ISearchResponse<SnapshotResourceContract> response)
@@ -363,6 +364,81 @@ namespace Vokabular.FulltextService.Core.Helpers
             };
         }
 
-        
+
+        public HitsWithPageContextResultContract ProcessSearchHitsWithPageContext(ISearchResponse<TextResourceContract> response, List<SnapshotPageResourceContract> pageList, string highlightTag, int start, int count)
+        {
+            if (!response.IsValid)
+            {
+                throw new FulltextDatabaseException(response.DebugInformation);
+            }
+
+            var sortedPageList = pageList.OrderBy(x => x.PageIndex);
+
+            int startCounter = 0;
+
+            var resultList = new List<PageResultContextData>();
+
+
+            foreach (var page in sortedPageList)
+            {
+                foreach (var hit in response.Hits.Where(x => x.Id == page.Id))
+                {
+                    foreach (var value in hit.Highlights.Values)
+                    {
+                        foreach (var highlight in value.Highlights)
+                        {
+                            var numberOfOccurences = GetNumberOfHighlitOccurences(highlight, highlightTag);
+
+                            if (startCounter + numberOfOccurences <= start)
+                            {
+                                startCounter += numberOfOccurences;
+                                continue;
+                            }
+
+                            var resultData = GetSearchHitsWithPageContextList(highlight, hit.Id, highlightTag);
+
+                            if (startCounter < start)
+                            {
+                                resultData.RemoveRange(0, start - startCounter);
+                                startCounter += resultData.Count;
+                            }
+
+                            if (resultList.Count + resultData.Count > count)
+                                resultData = resultData.GetRange(0, count - resultList.Count);
+
+                            resultList.AddRange(resultData);
+
+                            if (resultList.Count == count)
+                                return new HitsWithPageContextResultContract { ResultList = resultList };
+                        }
+                    }
+                }
+            }
+            return new HitsWithPageContextResultContract { ResultList = resultList };
+        }
+
+        private List<PageResultContextData> GetSearchHitsWithPageContextList(string highlightedText, string sourceId, string highlightTag)
+        {
+            var result = new List<PageResultContextData>();
+
+            var index = highlightedText.IndexOf(highlightTag, StringComparison.Ordinal);
+
+            do
+            {
+                var contextStructure = GetContextStructure(highlightedText, index, out index, highlightTag);
+
+                var corpusSearchResult = new PageResultContextData
+                {
+                    PageExternalId = sourceId,
+                    ContextStructure = contextStructure,
+                };
+
+                result.Add(corpusSearchResult);
+
+                index = highlightedText.IndexOf(highlightTag, index + highlightTag.Length, StringComparison.Ordinal);
+            } while (index > 0);
+
+            return result;
+        }
     }
 }

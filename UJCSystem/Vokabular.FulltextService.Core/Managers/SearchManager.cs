@@ -8,6 +8,7 @@ using Vokabular.FulltextService.Core.Communication;
 using Vokabular.FulltextService.Core.Helpers;
 using Vokabular.FulltextService.Core.Options;
 using Vokabular.FulltextService.DataContracts.Contracts;
+using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
@@ -322,6 +323,28 @@ namespace Vokabular.FulltextService.Core.Managers
             return response.Documents.SelectMany(document => document.Pages).Select(page => page.Id).ToList();
         }
 
+        private List<SnapshotPageResourceContract> GetSnapshotPages(long snapshotId)
+        {
+            var client = CommunicationProvider.GetElasticClient();
+
+            var response = client.Search<SnapshotResourceContract>(s => s
+                .Index(SnapshotIndex)
+                .Type(SnapshotType)
+                .Source(sf => sf.Includes(i => i.Field(f => f.Pages)))
+                .Query(q => q
+                    .Term(t => t
+                        .Field(f => f.SnapshotId)
+                        .Value(snapshotId)
+                    )
+                )
+            );
+
+            if (!response.IsValid)
+                throw new FulltextDatabaseException(response.DebugInformation);
+
+            return response.Documents.SelectMany(document => document.Pages).ToList();
+        }
+
         public CorpusSearchSnapshotsResultContract SearchCorpusSnapshotsByCriteria(CorpusSearchRequestContract searchRequest)
         {
             var filterQuery = m_queriesBuilder.GetFilterSearchQuery(searchRequest.ConditionConjunction, SnapshotIdField);
@@ -502,8 +525,42 @@ namespace Vokabular.FulltextService.Core.Managers
                 }
             });
 
-            return counter;}
+            return counter;
+        }
 
-      
+
+        public HitsWithPageContextResultContract SearchHitsWithPageContext(long snapshotId, SearchHitsRequestContract searchRequest)
+        {
+            var pageList = GetSnapshotPages(snapshotId);
+
+            var client = CommunicationProvider.GetElasticClient();
+
+            var filterQuery = m_queriesBuilder.GetFilterByIdSearchQuery(pageList.Select(x => x.Id).ToList());
+            var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, PageTextField);
+
+            var pageResponse = client.Search<TextResourceContract>(s => s
+                    .Index(PageIndex)
+                    .Type(PageType)
+                    .Source(sf => sf.Excludes(i => i.Field(f => f.PageText)))
+                    .Query(q => q
+                        .Bool(b => b
+                            .Filter(filterQuery)
+                            .Must(mustQuery)
+                        )
+                    )
+                    .Highlight(h => h
+                        .PreTags(HighlightTag)
+                        .PostTags(HighlightTag)
+                        .Fields(f => f
+                            .Field(PageTextField)
+                            .NumberOfFragments(FragmentsCount)
+                            .FragmentSize(searchRequest.ContextLength)
+                            .Type(HighlighterType)
+                        )
+                    )
+                    .Size(DefaultSize) //TODO add pagination
+            );
+            return m_searchResultProcessor.ProcessSearchHitsWithPageContext(pageResponse, pageList, HighlightTag, searchRequest.Start ?? DefaultStart, searchRequest.Count ?? DefaultSize);
+        }
     }
 }

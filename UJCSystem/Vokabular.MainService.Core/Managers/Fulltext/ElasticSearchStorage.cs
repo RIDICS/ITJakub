@@ -125,11 +125,11 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         {
             using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient()) 
             {
-                var result = fulltextServiceClient.SearchCorpusInSnapshotByCriteria(project.SnapshotId, start, count, contextLength, criteria); //TODO create special method for this
+                var result = fulltextServiceClient.SearchHitsWithPageContext(project.SnapshotId, start, count, contextLength, criteria); 
                 return new SearchHitsResultData
                 {
                     SearchResultType = PageSearchResultType.TextExternalId,
-                    ResultList = result.Select(x => new PageResultContextData{ ContextStructure = x.PageResultContext.ContextStructure, LongId = x.ProjectId }).ToList(),
+                    ResultList = result.ResultList.Select(x => new PageResultContextData {ContextStructure = x.ContextStructure, StringId = x.PageExternalId}).ToList(),
                     
                 };
             }

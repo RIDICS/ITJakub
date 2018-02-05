@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.RestClient;
 using Vokabular.Shared;
+using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Search.Corpus;
@@ -234,6 +235,31 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             try
             {
                 var result = Post<long>("bookpagedcorpus/search-count", searchRequest);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (Logger.IsErrorEnabled())
+                    Logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public HitsWithPageContextResultContract SearchHitsWithPageContext(long snapshotId, int start, int count, int contextLength,
+            List<SearchCriteriaContract> criteria)
+        {
+            var searchRequest = new SearchHitsRequestContract
+            {
+                Start = start,
+                Count = count,
+                ContextLength = contextLength,
+                ConditionConjunction = criteria
+            };
+
+            try
+            {
+                var result = Post<HitsWithPageContextResultContract>($"text/snapshot/{snapshotId}/search-context", searchRequest);
                 return result;
             }
             catch (HttpRequestException e)
