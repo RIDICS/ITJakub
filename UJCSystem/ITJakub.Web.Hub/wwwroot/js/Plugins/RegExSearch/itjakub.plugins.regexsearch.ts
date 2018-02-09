@@ -1,11 +1,11 @@
 ﻿class HtmlItemsFactory {
 
-    public static createOption(label: string, value: string, disabled?: boolean): HTMLOptionElement {
+    public static createOption(label: string, value: string, disabled?: boolean): JQuery {
         const optionEl = $(`<option value="${value}">${label}</option>`);
         if (disabled) {
             optionEl.prop("disabled", true);
         }
-        return optionEl[0] as Node as HTMLOptionElement;//TODO rewrite to JQuery
+        return optionEl;
     }
 
     public static createOptionGroup(label: string): HTMLOptionElement {
@@ -389,7 +389,7 @@ class RegExAdvancedSearchEditor {
 
         for (var i = 0; i < jsonDataArray.length; i++) {
             var conditionData = jsonDataArray[i];
-            if (typeof this.enabledOptionsArray !== "undefined" && this.enabledOptionsArray !== null && $.inArray(conditionData.searchType, this.enabledOptionsArray) >= 0) {
+            if (this.enabledOptionsArray && $.inArray(conditionData.searchType, this.enabledOptionsArray) >= 0) {
                 this.addNewCondition();
                 this.getLastCondition().importData(conditionData);
             }
@@ -433,7 +433,7 @@ class RegExAdvancedSearchEditor {
 
     removeCondition(condition: RegExConditionListItem) {
         var index = this.regExConditions.indexOf(condition, 0);
-        if (index != undefined) {
+        if (index) {
             var arrayItem = this.regExConditions[index];
             $(arrayItem.getHtml()).fadeToggle("slow", "linear", () => {
                 this.innerContainer.removeChild(arrayItem.getHtml());    
@@ -450,15 +450,13 @@ class RegExAdvancedSearchEditor {
 
     getConditionsResultObject(enabledOptions?: Array<SearchTypeEnum>): Object {
         var resultArray = new Array();
-
-        for (var i = 0; i < this.regExConditions.length; i++) {
-            var regExCondition = this.regExConditions[i];
-            var regExConditionValue = regExCondition.getConditionValue();
-            if (typeof enabledOptions === "undefined" || enabledOptions === null || $.inArray(regExConditionValue.searchType, enabledOptions) >= 0) {
-                resultArray.push(regExConditionValue); 
+        for (let i = 0; i < this.regExConditions.length; i++) {
+            const regExCondition = this.regExConditions[i];
+            const regExConditionValue = regExCondition.getConditionValue();
+            if (!enabledOptions || $.inArray(regExConditionValue.searchType, enabledOptions) >= 0) {
+                resultArray.push(regExConditionValue);
             }
         }
-
         return resultArray;
     }
 
@@ -468,14 +466,14 @@ class RegExAdvancedSearchEditor {
     }
 
     private getLastCondition(): RegExConditionListItem {
-        if (this.regExConditions === null || this.regExConditions.length === 0) return null;
+        if (!this.regExConditions || !this.regExConditions.length) return null;
         return this.regExConditions[this.regExConditions.length - 1];
     }
 }
 
 class RegExConditionListItem {
     private html: HTMLDivElement;
-    private parent: RegExAdvancedSearchEditor;
+    private readonly parent: RegExAdvancedSearchEditor;
     private selectedSearchType: number;
     private innerConditionContainer: HTMLDivElement;
     private innerCondition: IRegExConditionListBase;
@@ -500,12 +498,12 @@ class RegExConditionListItem {
     }
 
     private hasDelimeter(): boolean {
-        var isEmpty = $(this.html).find(".regexsearch-delimiter").is(":empty");
+        const isEmpty = $(this.html).find(".regexsearch-delimiter").is(":empty");
         return !isEmpty;
     }
 
     setTextDelimeter() {
-        var textDelimeter = this.createTextDelimeter();
+        const textDelimeter = this.createTextDelimeter();
         if (this.hasDelimeter()) {
             this.removeDelimeter();
         }
@@ -513,7 +511,7 @@ class RegExConditionListItem {
     }
 
     setClickableDelimeter() {
-        var clickableDelimeter = this.createClickableDelimeter();
+        const clickableDelimeter = this.createClickableDelimeter();
         if (this.hasDelimeter()) {
             this.removeDelimeter();
         }
@@ -569,21 +567,21 @@ class RegExConditionListItem {
 
     private enableOptions(enabledOptions: Array<SearchTypeEnum>) {
 
-        if (typeof enabledOptions === "undefined" || enabledOptions === null) return; //TODO log error
+        if (!enabledOptions) return; //TODO log error
         
-        if (typeof this.searchDestinationSelect !== "undefined" || this.searchDestinationSelect !== null) {
-            for (var i = 0; i < enabledOptions.length; i++) {
-                var enabled = enabledOptions[i];
-                var option = $(this.searchDestinationSelect).find("option[value = " + enabled.toString() + "]");
+        if (this.searchDestinationSelect) {
+            for (let i = 0; i < enabledOptions.length; i++) {
+                const enabled = enabledOptions[i];
+                const option = $(this.searchDestinationSelect).find(`option[value = ${enabled.toString()}]`);
                 option.show();
                 option.removeClass("hidden");
             }
 
-            var optGroups = $(this.searchDestinationSelect).find("optgroup");
-            for (var j = 0; j < optGroups.length; j++) {
-                var optGroup = optGroups[j];
-                var visibleChilds = $(optGroup as Node as Element).children(":not(.hidden)");
-                if (visibleChilds.length === 0) $(optGroup as Node as Element).hide();
+            const optGroups = $(this.searchDestinationSelect).find("optgroup");
+            for (let j = 0; j < optGroups.length; j++) {
+                const optGroup = optGroups[j];
+                const visibleChilds = $(optGroup as Node as Element).children(":not(.hidden)");
+                if (!visibleChilds.length) $(optGroup as Node as Element).hide();
             }
         }
     }
@@ -605,34 +603,35 @@ class RegExConditionListItem {
         searchDestinationDiv.appendChild(searchDestinationSpan);
 
         var searchDestinationSelect = document.createElement("select");
-        $(searchDestinationSelect).addClass("regexsearch-select");
+        const searchDestinationSelectEl = $(searchDestinationSelect);
+        searchDestinationSelectEl.addClass("regexsearch-select");
         searchDestinationDiv.appendChild(searchDestinationSelect);
 
-        var metadataOptGroup = HtmlItemsFactory.createOptionGroup("Metadata");
-        searchDestinationSelect.appendChild(metadataOptGroup);
+        var metadataOptGroupEl = $(HtmlItemsFactory.createOptionGroup("Metadata"));
+        searchDestinationSelectEl.append(metadataOptGroupEl);
 
-        metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Titul", SearchTypeEnum.Title.toString()));
-        metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Autor", SearchTypeEnum.Author.toString()));
-        metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Editor", SearchTypeEnum.Editor.toString()));
-        metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Období vzniku", SearchTypeEnum.Dating.toString()));
-        metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Téma", SearchTypeEnum.Term.toString()));
+        metadataOptGroupEl.append(HtmlItemsFactory.createOption("Titul", SearchTypeEnum.Title.toString()));
+        metadataOptGroupEl.append(HtmlItemsFactory.createOption("Autor", SearchTypeEnum.Author.toString()));
+        metadataOptGroupEl.append(HtmlItemsFactory.createOption("Editor", SearchTypeEnum.Editor.toString()));
+        metadataOptGroupEl.append(HtmlItemsFactory.createOption("Období vzniku", SearchTypeEnum.Dating.toString()));
+        metadataOptGroupEl.append(HtmlItemsFactory.createOption("Téma", SearchTypeEnum.Term.toString()));
 
-        var textOptGroup = HtmlItemsFactory.createOptionGroup("Text");
-        searchDestinationSelect.appendChild(textOptGroup);
+        var textOptGroupEl = $(HtmlItemsFactory.createOptionGroup("Text"));
+        searchDestinationSelectEl.append(textOptGroupEl);
 
-        textOptGroup.appendChild(HtmlItemsFactory.createOption("Fulltext", SearchTypeEnum.Fulltext.toString(), fullTextLimited));
-        textOptGroup.appendChild(HtmlItemsFactory.createOption("X tokenů od sebe", SearchTypeEnum.TokenDistance.toString(), fullTextLimited));
-        textOptGroup.appendChild(HtmlItemsFactory.createOption("Ve větě", SearchTypeEnum.Sentence.toString(), fullTextLimited));
-        textOptGroup.appendChild(HtmlItemsFactory.createOption("V nadpisu", SearchTypeEnum.Heading.toString(), fullTextLimited));
+        textOptGroupEl.append(HtmlItemsFactory.createOption("Fulltext", SearchTypeEnum.Fulltext.toString(), fullTextLimited));
+        textOptGroupEl.append(HtmlItemsFactory.createOption("X tokenů od sebe", SearchTypeEnum.TokenDistance.toString(), fullTextLimited));
+        textOptGroupEl.append(HtmlItemsFactory.createOption("Ve větě", SearchTypeEnum.Sentence.toString(), fullTextLimited));
+        textOptGroupEl.append(HtmlItemsFactory.createOption("V nadpisu", SearchTypeEnum.Heading.toString(), fullTextLimited));
 
-        var headwordsOptGroup = HtmlItemsFactory.createOptionGroup("Hesla");
-        searchDestinationSelect.appendChild(headwordsOptGroup);
+        var headwordsOptGroupEl = $(HtmlItemsFactory.createOptionGroup("Hesla"));
+        searchDestinationSelectEl.append(headwordsOptGroupEl);
 
-        headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("X tokenů od sebe", SearchTypeEnum.HeadwordDescriptionTokenDistance.toString()));
-        headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("Hesla", SearchTypeEnum.Headword.toString()));
-        headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("Heslová stať", SearchTypeEnum.HeadwordDescription.toString()));
+        headwordsOptGroupEl.append(HtmlItemsFactory.createOption("X tokenů od sebe", SearchTypeEnum.HeadwordDescriptionTokenDistance.toString()));
+        headwordsOptGroupEl.append(HtmlItemsFactory.createOption("Hesla", SearchTypeEnum.Headword.toString()));
+        headwordsOptGroupEl.append(HtmlItemsFactory.createOption("Heslová stať", SearchTypeEnum.HeadwordDescription.toString()));
 
-        $(searchDestinationSelect).change((eventData: JQuery.Event) => {
+        searchDestinationSelectEl.change((eventData: JQuery.Event) => {
             var oldSelectedSearchType = this.selectedSearchType;
             this.selectedSearchType = parseInt($(eventData.target as HTMLElement).val() as string);
 
@@ -641,7 +640,7 @@ class RegExConditionListItem {
             }
         });
 
-        this.searchDestinationSelect = searchDestinationSelect;
+        this.searchDestinationSelect = searchDestinationSelectEl[0] as Node as HTMLSelectElement;
 
         var options = $(this.searchDestinationSelect).find("option");
         options.hide();
@@ -754,16 +753,17 @@ class RegExWordConditionList implements IRegExConditionListBase {
 
     importData(conditionsArray: WordsCriteriaListDescription) {
         this.resetItems();
-        if (conditionsArray.conditions.length === 0) return;
+        if (!conditionsArray.conditions.length) return;
+        console.log(conditionsArray.conditions[0]);
         this.getLastItem().importData(conditionsArray.conditions[0]);
-        for (var i = 1; i < conditionsArray.conditions.length; i++) {
+        for (let i = 1; i < conditionsArray.conditions.length; i++) {
             this.addItem();
             this.getLastItem().importData(conditionsArray.conditions[i]);
         }
     }
 
     getLastItem(): IRegExConditionItemBase {
-        if (this.conditionInputArray.length === 0) return null;
+        if (!this.conditionInputArray.length) return null;
         return this.conditionInputArray[this.conditionInputArray.length - 1];
     }
 
@@ -779,27 +779,27 @@ class RegExWordConditionList implements IRegExConditionListBase {
     };
 
     public makeRegExCondition(conditionContainerDiv: HTMLDivElement) {
-        var wordFormDiv = document.createElement("div");
-        $(wordFormDiv).addClass("regexsearch-word-form-div");
+        var wordFormDivEl = $(document.createElement("div"));
+        wordFormDivEl.addClass("regexsearch-word-form-div");
         //wordListContainerDiv.appendChild(wordFormDiv); //TODO implement after it iss implemented on server side
 
-        var wordFormSpan = document.createElement("span");
-        wordFormSpan.innerHTML = "Tvar slova";
-        $(wordFormSpan).addClass("regexsearch-upper-select-label");
-        wordFormDiv.appendChild(wordFormSpan);
+        var wordFormSpanEl = $(document.createElement("span"));
+        wordFormSpanEl.text("Tvar slova");
+        wordFormSpanEl.addClass("regexsearch-upper-select-label");
+        wordFormDivEl.append(wordFormSpanEl);
 
-        var wordFormSelect = document.createElement("select");
-        $(wordFormSelect).addClass("regexsearch-select");
-        wordFormDiv.appendChild(wordFormSelect);
+        const wordFormSelectEl = $(document.createElement("select"));
+        wordFormSelectEl.addClass("regexsearch-select");
+        wordFormDivEl.append(wordFormSelectEl);
 
-        wordFormSelect.appendChild(HtmlItemsFactory.createOption("Lemma", this.wordFormType.Lemma));
-        wordFormSelect.appendChild(HtmlItemsFactory.createOption("Hyperlemma - nové", this.wordFormType.HyperlemmaNew));
-        wordFormSelect.appendChild(HtmlItemsFactory.createOption("Hyperlemma - staré", this.wordFormType.HyperlemmaOld));
-        wordFormSelect.appendChild(HtmlItemsFactory.createOption("Stemma", this.wordFormType.Stemma));
+        wordFormSelectEl.append(HtmlItemsFactory.createOption("Lemma", this.wordFormType.Lemma));
+        wordFormSelectEl.append(HtmlItemsFactory.createOption("Hyperlemma - nové", this.wordFormType.HyperlemmaNew));
+        wordFormSelectEl.append(HtmlItemsFactory.createOption("Hyperlemma - staré", this.wordFormType.HyperlemmaOld));
+        wordFormSelectEl.append(HtmlItemsFactory.createOption("Stemma", this.wordFormType.Stemma));
 
         this.selectedWordFormType = this.wordFormType.Lemma;
 
-        $(wordFormSelect).change((eventData: JQuery.Event) => {
+        wordFormSelectEl.change((eventData: JQuery.Event) => {
             this.selectedWordFormType = $(eventData.target as HTMLElement).val() as string;
         });
 
@@ -812,7 +812,7 @@ class RegExWordConditionList implements IRegExConditionListBase {
 
     getConditionValue(): WordsCriteriaListDescription {
         var criteriaDescriptions: ConditionResult  = new WordsCriteriaListDescription();
-        for (var i = 0; i < this.conditionInputArray.length; i++) {
+        for (let i = 0; i < this.conditionInputArray.length; i++) {
             var regExWordCondition = this.conditionInputArray[i];
             criteriaDescriptions.conditions.push(regExWordCondition.getConditionItemValue());
         }
@@ -826,7 +826,7 @@ class RegExWordConditionList implements IRegExConditionListBase {
     resetItems() {
         $(this.wordListContainerDiv).empty();
         this.conditionInputArray = [];
-        var newWordCondition = new RegExWordCondition(this);
+        const newWordCondition = new RegExWordCondition(this);
         newWordCondition.makeRegExItemCondition();
         newWordCondition.setClickableDelimeter();
         this.conditionInputArray.push(newWordCondition);
@@ -835,7 +835,7 @@ class RegExWordConditionList implements IRegExConditionListBase {
 
     addItem() {
         this.conditionInputArray[this.conditionInputArray.length - 1].setTextDelimeter();
-        var newWordCondition = new RegExWordCondition(this);
+        const newWordCondition = new RegExWordCondition(this);
         newWordCondition.makeRegExItemCondition();
         newWordCondition.setClickableDelimeter();
         this.conditionInputArray.push(newWordCondition);
@@ -857,7 +857,7 @@ class RegExWordConditionList implements IRegExConditionListBase {
             this.conditionInputArray[0].setClickableDelimeter();
         }
 
-        if (this.conditionInputArray.length === 0) {
+        if (!this.conditionInputArray.length) {
             this.resetItems();
         }
     }
@@ -1217,16 +1217,16 @@ class RegExDatingConditionList implements IRegExConditionListBase {
 
     importData(conditionsArray: DatingCriteriaListDescription) {
         this.resetItems();
-        if (conditionsArray.conditions.length === 0) return;
+        if (!conditionsArray.conditions.length) return;
         this.getLastItem().importData(conditionsArray.conditions[0]);
-        for (var i = 1; i < conditionsArray.conditions.length; i++) {
+        for (let i = 1; i < conditionsArray.conditions.length; i++) {
             this.addItem();
             this.getLastItem().importData(conditionsArray.conditions[i]);
         }
     }
 
     getLastItem(): IRegExConditionItemBase {
-        if (this.conditionInputArray.length === 0) return null;
+        if (!this.conditionInputArray.length) return null;
         return this.conditionInputArray[this.conditionInputArray.length - 1];
     }
 
@@ -1437,29 +1437,29 @@ class RegExDatingCondition implements IRegExConditionItemBase{
     }
 
     public makeTopSelectBoxes() : HTMLDivElement {
-        var datingFormDiv = document.createElement("div");
-        $(datingFormDiv).addClass("regex-dating-condition-selects");
+        var datingFormDivEl = $(document.createElement("div"));
+        datingFormDivEl.addClass("regex-dating-condition-selects");
 
-        var datingSelectDiv = document.createElement("div");
-        $(datingSelectDiv).addClass("regex-dating-condition-select");
+        var datingSelectDivEl = $(document.createElement("div"));
+        datingSelectDivEl.addClass("regex-dating-condition-select");
 
-        var datingFormSpan = document.createElement("span");
-        datingFormSpan.innerHTML = "Zadání rozmezí";
-        $(datingFormSpan).addClass("regexsearch-upper-select-label");
-        datingSelectDiv.appendChild(datingFormSpan);
+        var datingFormSpanEl = $(document.createElement("span"));
+        datingFormSpanEl.text("Zadání rozmezí");
+        datingFormSpanEl.addClass("regexsearch-upper-select-label");
+        datingSelectDivEl.append(datingFormSpanEl);
 
-        var datingFormSelect = document.createElement("select");
-        $(datingFormSelect).addClass("regexsearch-select");
-        datingSelectDiv.appendChild(datingFormSelect);
+        var datingFormSelectEl = $(document.createElement("select"));
+        datingFormSelectEl.addClass("regexsearch-select");
+        datingSelectDivEl.append(datingFormSelectEl);
 
-        datingFormSelect.appendChild(HtmlItemsFactory.createOption("Starší než", DatingRangeEnum.OlderThen.toString()));
-        datingFormSelect.appendChild(HtmlItemsFactory.createOption("Mladší než", DatingRangeEnum.YoungerThen.toString()));
-        datingFormSelect.appendChild(HtmlItemsFactory.createOption("Mezi", DatingRangeEnum.Between.toString()));
-        datingFormSelect.appendChild(HtmlItemsFactory.createOption("Kolem", DatingRangeEnum.Around.toString()));
+        datingFormSelectEl.append(HtmlItemsFactory.createOption("Starší než", DatingRangeEnum.OlderThen.toString()));
+        datingFormSelectEl.append(HtmlItemsFactory.createOption("Mladší než", DatingRangeEnum.YoungerThen.toString()));
+        datingFormSelectEl.append(HtmlItemsFactory.createOption("Mezi", DatingRangeEnum.Between.toString()));
+        datingFormSelectEl.append(HtmlItemsFactory.createOption("Kolem", DatingRangeEnum.Around.toString()));
 
         this.datingRange = DatingRangeEnum.OlderThen;
 
-        $(datingFormSelect).change((eventData: JQuery.Event) => {
+        datingFormSelectEl.change((eventData: JQuery.Event) => {
             var oldRange = this.datingRange;
             this.datingRange = parseInt($(eventData.target as HTMLElement).val() as string);
 
@@ -1468,26 +1468,26 @@ class RegExDatingCondition implements IRegExConditionItemBase{
             }
         });
 
-        this.datingRangeSelect = datingFormSelect;
+        this.datingRangeSelect = datingFormSelectEl[0] as Node as HTMLSelectElement;
 
-        var precisionSelectDiv = document.createElement("div");
-        $(precisionSelectDiv).addClass("regex-dating-condition-select");
+        var precisionSelectDivEl = $(document.createElement("div"));
+        precisionSelectDivEl.addClass("regex-dating-condition-select");
 
-        var precisionFormSpan = document.createElement("span");
-        precisionFormSpan.innerHTML = "Zadání přesnosti";
-        $(precisionFormSpan).addClass("regexsearch-upper-select-label");
-        precisionSelectDiv.appendChild(precisionFormSpan);
+        var precisionFormSpanEl = $(document.createElement("span"));
+        precisionFormSpanEl.text("Zadání přesnosti");
+        precisionFormSpanEl.addClass("regexsearch-upper-select-label");
+        precisionSelectDivEl.append(precisionFormSpanEl);
 
-        var precisionFormSelect = document.createElement("select");
-        $(precisionFormSelect).addClass("regexsearch-select");
-        precisionSelectDiv.appendChild(precisionFormSelect);
+        var precisionFormSelectEl = $(document.createElement("select"));
+        precisionFormSelectEl.addClass("regexsearch-select");
+        precisionSelectDivEl.append(precisionFormSelectEl);
 
-        precisionFormSelect.appendChild(HtmlItemsFactory.createOption("Období", DatingPrecisionEnum.Period.toString()));
-        precisionFormSelect.appendChild(HtmlItemsFactory.createOption("Rok", DatingPrecisionEnum.Year.toString()));
+        precisionFormSelectEl.append(HtmlItemsFactory.createOption("Období", DatingPrecisionEnum.Period.toString()));
+        precisionFormSelectEl.append(HtmlItemsFactory.createOption("Rok", DatingPrecisionEnum.Year.toString()));
 
         this.datingPrecision = DatingPrecisionEnum.Period;
 
-        $(precisionFormSelect).change((eventData: JQuery.Event) => {
+        precisionFormSelectEl.change((eventData: JQuery.Event) => {
             var oldPrecision = this.datingPrecision;
             this.datingPrecision = parseInt($(eventData.target as HTMLElement).val() as string);
 
@@ -1496,14 +1496,14 @@ class RegExDatingCondition implements IRegExConditionItemBase{
             }
         });
 
-        this.datingPrecisionSelect = precisionFormSelect;
+        this.datingPrecisionSelect = precisionFormSelectEl[0] as Node as HTMLSelectElement;
 
-        precisionSelectDiv.appendChild(precisionFormSelect);
+        precisionSelectDivEl.append(precisionFormSelectEl);
 
-        datingFormDiv.appendChild(datingSelectDiv);
-        datingFormDiv.appendChild(precisionSelectDiv);
+        datingFormDivEl.append(datingSelectDivEl);
+        datingFormDivEl.append(precisionSelectDivEl);
 
-        return datingFormDiv;
+        return datingFormDivEl[0] as Node as HTMLDivElement;
     }
 
     private changeViews() {
@@ -1597,26 +1597,33 @@ class RegExWordCondition implements IRegExConditionItemBase{
 
     importData(conditionData: WordCriteriaDescription) {
         this.resetInputs();
-        if (typeof conditionData.startsWith !== "undefined" && conditionData.startsWith !== "") {
+        console.log(conditionData.startsWith);
+        console.log(conditionData.contains);
+        console.log(conditionData.endsWith);
+        console.log(conditionData.exactMatch);
+        if (conditionData.startsWith) {
             this.getLastInput().importData(conditionData.startsWith, WordInputTypeEnum.StartsWith);
             this.addInput();
         }
-        if (typeof conditionData.contains !== "undefined" && conditionData.contains.length > 0) {
+        if (conditionData.contains.length) {
             for (var i = 0; i < conditionData.contains.length; i++) {
                 this.getLastInput().importData(conditionData.contains[i], WordInputTypeEnum.Contains);
                 this.addInput();
             }
         }
-        if (typeof conditionData.endsWith !== "undefined" && conditionData.endsWith !== "") {
+        if (conditionData.endsWith) {
             this.getLastInput().importData(conditionData.endsWith, WordInputTypeEnum.EndsWith);
             this.addInput();
         }
-
+        if (conditionData.exactMatch) {
+            this.getLastInput().importData(conditionData.exactMatch, WordInputTypeEnum.ExactMatch);
+            this.addInput();
+        }
         this.removeInput(this.getLastInput());
     }
 
     private getLastInput(): RegExWordInput {
-        if (this.inputsArray.length === 0) return null;
+        if (!this.inputsArray.length) return null;
         return this.inputsArray[this.inputsArray.length - 1];
     }
 
@@ -1625,11 +1632,11 @@ class RegExWordCondition implements IRegExConditionItemBase{
     }
 
     removeDelimeter() {
-        $(this.html).find("."+this.delimeterClass).empty();
+        $(this.html).find(`.${this.delimeterClass}`).empty();
     }
 
     hasDelimeter(): boolean {
-        var isEmpty = $(this.html).find("." + this.delimeterClass).is(":empty");
+        const isEmpty = $(this.html).find("." + this.delimeterClass).is(":empty");
         return !isEmpty;
     }
 
@@ -1638,7 +1645,7 @@ class RegExWordCondition implements IRegExConditionItemBase{
         if (this.hasDelimeter()) {
             this.removeDelimeter();
         }
-        $(this.html).find("." + this.delimeterClass).append(textDelimeter);
+        $(this.html).find(`.${this.delimeterClass}`).append(textDelimeter);
     }
 
     setClickableDelimeter() {
@@ -1646,7 +1653,7 @@ class RegExWordCondition implements IRegExConditionItemBase{
         if (this.hasDelimeter()) {
             this.removeDelimeter();
         }
-        $(this.html).find("." + this.delimeterClass).append(clickableDelimeter);
+        $(this.html).find(`.${this.delimeterClass}`).append(clickableDelimeter);
     }
 
     private createClickableDelimeter(): HTMLDivElement {
@@ -1729,9 +1736,9 @@ class RegExWordCondition implements IRegExConditionItemBase{
     }
 
     addInput() {
-        var newInput = new RegExWordInput(this);
+        const newInput = new RegExWordInput(this);
         newInput.makeRegExInput();
-        for (var i = 0; i < this.hiddenWordInputSelects.length; i++) {
+        for (let i = 0; i < this.hiddenWordInputSelects.length; i++) {
             newInput.hideSelectCondition(this.hiddenWordInputSelects[i]);
         }
         if (!(newInput.getConditionType() === WordInputTypeEnum.Contains)) {
@@ -1746,7 +1753,7 @@ class RegExWordCondition implements IRegExConditionItemBase{
 
     removeInput(input: RegExWordInput) {
         this.wordInpuConditionRemoved(input.getConditionType());
-        var index = this.inputsArray.indexOf(input, 0);
+        const index = this.inputsArray.indexOf(input, 0);
         if (index >= 0) {
             var arrayItem = this.inputsArray[index];
             this.inputsContainerDiv.removeChild(arrayItem.getHtml());
@@ -1760,9 +1767,9 @@ class RegExWordCondition implements IRegExConditionItemBase{
 
     getConditionItemValue(): WordCriteriaDescription {
         var wordCriteriaDescription = new WordCriteriaDescription();
-        for (var i = 0; i < this.inputsArray.length; i++) {
-            var wordInput = this.inputsArray[i];
-            var inputValue = wordInput.getConditionValue();
+        for (let i = 0; i < this.inputsArray.length; i++) {
+            const wordInput = this.inputsArray[i];
+            const inputValue = wordInput.getConditionValue();
             switch (wordInput.getConditionType()) {
             case WordInputTypeEnum.StartsWith:
                 wordCriteriaDescription.startsWith = inputValue;
@@ -1772,6 +1779,9 @@ class RegExWordCondition implements IRegExConditionItemBase{
                 break;
             case WordInputTypeEnum.EndsWith:
                 wordCriteriaDescription.endsWith = inputValue;
+                break;
+            case WordInputTypeEnum.ExactMatch:
+                wordCriteriaDescription.exactMatch = inputValue;
                 break;
             default:
                 break;
@@ -1784,12 +1794,12 @@ class RegExWordCondition implements IRegExConditionItemBase{
     wordInputConditionChanged(wordInput: RegExWordInput, oldWordInputType: WordInputTypeEnum) {
         var newWordInputType = wordInput.getConditionType();
 
-        if (typeof oldWordInputType !== "undefined") {
+        if (oldWordInputType) {
             this.wordInpuConditionRemoved(oldWordInputType);
         }
 
         if (!(newWordInputType === WordInputTypeEnum.Contains)) {
-            for (var i = 0; i < this.inputsArray.length; i++) {
+            for (let i = 0; i < this.inputsArray.length; i++) {
                 if (this.inputsArray[i] === wordInput) continue;
                 this.inputsArray[i].hideSelectCondition(newWordInputType);
             }
@@ -1801,12 +1811,12 @@ class RegExWordCondition implements IRegExConditionItemBase{
     wordInpuConditionRemoved(wordInputType: WordInputTypeEnum) {
 
         if (!(wordInputType === WordInputTypeEnum.Contains)) {
-            for (var i = 0; i < this.inputsArray.length; i++) {
+            for (let i = 0; i < this.inputsArray.length; i++) {
                 this.inputsArray[i].showSelectCondition(wordInputType);
             }
         }
 
-        var index = this.hiddenWordInputSelects.indexOf(wordInputType, 0);
+        const index = this.hiddenWordInputSelects.indexOf(wordInputType, 0);
         if (index >= 0) {
             this.hiddenWordInputSelects.splice(index, 1);
         }
@@ -1819,7 +1829,7 @@ class RegExWordInput {
     private editorDiv: HTMLDivElement;
     private conditionInput: HTMLInputElement;
     private conditionInputType: WordInputTypeEnum;
-    private parentRegExWordCondition: RegExWordCondition;
+    private readonly parentRegExWordCondition: RegExWordCondition;
     private regexButtonsDiv: HTMLDivElement;
     private conditionSelectbox: HTMLSelectElement;
 
@@ -1841,8 +1851,8 @@ class RegExWordInput {
     }
 
     hasDelimeter(): boolean {
-        var delimeter = $(this.html).find(".regexsearch-input-and-delimiter");
-        return (typeof delimeter != "undefined" && delimeter != null);
+        const delimeter = $(this.html).find(".regexsearch-input-and-delimiter");
+        return (delimeter ? true : false);
     }
 
     makeRegExInput() {
@@ -1859,23 +1869,23 @@ class RegExWordInput {
         conditionTitleDiv.innerHTML = "Podmínka";
         editorDiv.appendChild(conditionTitleDiv);
         
-        var conditionTypeDiv = document.createElement("div");
-        conditionTypeDiv.classList.add("regexsearch-condition-type-div");
-        editorDiv.appendChild(conditionTypeDiv);
+        var conditionTypeDivEl = $(document.createElement("div"));
+        conditionTypeDivEl.addClass("regexsearch-condition-type-div");
+        editorDiv.appendChild(conditionTypeDivEl[0]);
 
-        var conditionSelect = document.createElement("select");
-        conditionSelect.classList.add("regexsearch-condition-select");
-        conditionTypeDiv.appendChild(conditionSelect);
+        var conditionSelectEl = $(document.createElement("select"));
+        conditionSelectEl.addClass("regexsearch-condition-select");
+        conditionTypeDivEl.append(conditionSelectEl);
 
-        conditionSelect.appendChild(HtmlItemsFactory.createOption("Začíná na", WordInputTypeEnum.StartsWith.toString()));
-        //conditionSelect.appendChild(this.createOption("Nezačíná na", this.conditionType.NotStartsWith));
-        conditionSelect.appendChild(HtmlItemsFactory.createOption("Obsahuje", WordInputTypeEnum.Contains.toString()));
-        //conditionSelect.appendChild(this.createOption("Neobsahuje", this.conditionType.NotContains));
-        conditionSelect.appendChild(HtmlItemsFactory.createOption("Končí na", WordInputTypeEnum.EndsWith.toString()));
-        //conditionSelect.appendChild(this.createOption("Nekončí na", this.conditionType.NotEndsWith));
-        conditionSelect.appendChild(HtmlItemsFactory.createOption("Přesně shoduje", WordInputTypeEnum.ExactMatch.toString()));
+        conditionSelectEl.append(HtmlItemsFactory.createOption("Začíná na", WordInputTypeEnum.StartsWith.toString()));
+        //conditionSelectEl.appendChild(this.createOption("Nezačíná na", this.conditionType.NotStartsWith));
+        conditionSelectEl.append(HtmlItemsFactory.createOption("Obsahuje", WordInputTypeEnum.Contains.toString()));
+        //conditionSelectEl.append(this.createOption("Neobsahuje", this.conditionType.NotContains));
+        conditionSelectEl.append(HtmlItemsFactory.createOption("Končí na", WordInputTypeEnum.EndsWith.toString()));
+        //conditionSelectEl.append(this.createOption("Nekončí na", this.conditionType.NotEndsWith));
+        conditionSelectEl.append(HtmlItemsFactory.createOption("Přesně shoduje", WordInputTypeEnum.ExactMatch.toString()));
 
-        $(conditionSelect).change((eventData: JQuery.Event) => {
+        conditionSelectEl.change((eventData: JQuery.Event) => {
             var oldConditonType = this.conditionInputType;
             const selectEl = $(eventData.target as HTMLElement);
             this.conditionInputType = parseInt(selectEl.val() as string);
@@ -1903,7 +1913,7 @@ class RegExWordInput {
             this.parentRegExWordCondition.wordInputConditionChanged(this, oldConditonType);
         });
 
-        this.conditionSelectbox = conditionSelect;
+        this.conditionSelectbox = conditionSelectEl[0] as Node as HTMLSelectElement;
 
         this.conditionInput = document.createElement("input");
         this.conditionInput.type = "text";
@@ -1914,18 +1924,18 @@ class RegExWordInput {
         
         lineDiv.appendChild(this.conditionInput);
         
-        var keyboardButton = document.createElement("button");
-        $(keyboardButton).attr("type", "button");
-        $(keyboardButton).addClass("btn");
-        $(keyboardButton).addClass("regexsearch-condition-input-button");
-        var keyboardIcon = document.createElement("div");
-        $(keyboardIcon).addClass("custom-glyphicon-keyboard");
-        $(keyboardIcon).css("height", "100%");
-        keyboardButton.appendChild(keyboardIcon);
-        lineDiv.appendChild(keyboardButton);
+        var keyboardButton = $(document.createElement("button"));
+        keyboardButton.attr("type", "button");
+        keyboardButton.addClass("btn");
+        keyboardButton.addClass("regexsearch-condition-input-button");
+        var keyboardIcon = $(document.createElement("div"));
+        keyboardIcon.addClass("custom-glyphicon-keyboard");
+        keyboardIcon.css("height", "100%");
+        keyboardButton.append(keyboardIcon);
+        lineDiv.appendChild(keyboardButton[0]);
 
         var keyboardComponent = KeyboardManager.getKeyboard("0");
-        keyboardComponent.registerButton(keyboardButton, this.conditionInput, null);
+        keyboardComponent.registerButton(keyboardButton[0] as Node as HTMLButtonElement, this.conditionInput, null);
 
         var regExButton = $("<button></button>");
         regExButton.text("R");
@@ -2032,7 +2042,7 @@ class RegExTokenDistanceConditionList implements IRegExConditionListBase {
     
     importData(conditionsArray: TokenDistanceCriteriaListDescription) {
         this.resetItems();
-        if (conditionsArray.conditions.length === 0) return;
+        if (!conditionsArray.conditions.length) return;
         this.getLastItem().importData(conditionsArray.conditions[0]);
         for (var i = 1; i < conditionsArray.conditions.length; i++) {
             this.addItem();
@@ -2041,7 +2051,7 @@ class RegExTokenDistanceConditionList implements IRegExConditionListBase {
     }
 
     getLastItem(): IRegExConditionItemBase {
-        if (this.conditionInputArray.length === 0) return null;
+        if (!this.conditionInputArray.length) return null;
         return this.conditionInputArray[this.conditionInputArray.length - 1];
     }
 
@@ -2069,7 +2079,7 @@ class RegExTokenDistanceConditionList implements IRegExConditionListBase {
     resetItems() {
         $(this.tokenDistanceListContainerDiv).empty();
         this.conditionInputArray = [];
-        var newTokenDistanceCondition = new RegExTokenDistanceCondition(this);
+        const newTokenDistanceCondition = new RegExTokenDistanceCondition(this);
         newTokenDistanceCondition.makeRegExItemCondition();
         newTokenDistanceCondition.setClickableDelimeter();
         this.conditionInputArray.push(newTokenDistanceCondition);
@@ -2087,8 +2097,8 @@ class RegExTokenDistanceConditionList implements IRegExConditionListBase {
 
     removeItem(condition: RegExTokenDistanceCondition) {
 
-        var index = this.conditionInputArray.indexOf(condition, 0);
-        if (index != undefined) {
+        const index = this.conditionInputArray.indexOf(condition, 0);
+        if (!index) {
             var arrayItem = this.conditionInputArray[index];
             $(arrayItem.getHtml()).fadeToggle("slow", "linear",() => {
                 this.tokenDistanceListContainerDiv.removeChild(arrayItem.getHtml());
@@ -2141,20 +2151,20 @@ class RegExTokenDistanceCondition implements IRegExConditionItemBase {
     }
 
     removeDelimeter() {
-        $(this.html).find("." + this.delimeterClass).empty();
+        $(this.html).find(`.${this.delimeterClass}`).empty();
     }
 
     hasDelimeter(): boolean {
-        var isEmpty = $(this.html).find("." + this.delimeterClass).is(":empty");
+        const isEmpty = $(this.html).find(`.${this.delimeterClass}`).is(":empty");
         return !isEmpty;
     }
 
     setTextDelimeter() {
-        var textDelimeter = this.createTextDelimeter();
+        const textDelimeter = this.createTextDelimeter();
         if (this.hasDelimeter()) {
             this.removeDelimeter();
         }
-        $(this.html).find("." + this.delimeterClass).append(textDelimeter);
+        $(this.html).find(`.${this.delimeterClass}`).append(textDelimeter);
     }
 
     setClickableDelimeter() {
@@ -2162,7 +2172,7 @@ class RegExTokenDistanceCondition implements IRegExConditionItemBase {
         if (this.hasDelimeter()) {
             this.removeDelimeter();
         }
-        $(this.html).find("." + this.delimeterClass).append(clickableDelimeter);
+        $(this.html).find(`.${this.delimeterClass}`).append(clickableDelimeter);
     }
 
     private createClickableDelimeter(): HTMLDivElement {
@@ -2315,6 +2325,7 @@ class WordCriteriaDescription extends ConditionItemResult{
     startsWith: string;
     contains: Array<string>;
     endsWith: string;
+    exactMatch: string;
 
     constructor() {
         super();
