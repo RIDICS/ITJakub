@@ -5,6 +5,12 @@
 
 class BohemianTextBankNew {
     private searchResultsOnPage = 10;//corresponds to amount of results per page that should be on screen
+    private contextLength = 50;
+
+    private minContextLength = 20;
+    private maxContextLength = 100;
+    private minResultsPerPage = 1;
+    private maxResultsPerPage = 50;
 
     private hitBookIds = [];
     private transientResults: ICorpusSearchResult[] = [];
@@ -20,8 +26,6 @@ class BohemianTextBankNew {
     private currentResultStart = -1;
     private currentViewPage = 1;
     private totalViewPages = 0;
-
-    private contextLength = -1;
 
     private defaultErrorMessage =
         "Vyhledávání se nezdařilo. Ujistěte se, zda máte zadáno alespoň jedno kritérium na vyhledávání v textu.";
@@ -64,15 +68,38 @@ class BohemianTextBankNew {
         paginator.make();
         paginator.disable();
 
-        const numberOfResultsPerPageEl = $("#number-of-results-per-viewing-page");
-        this.searchResultsOnPage = numberOfResultsPerPageEl.val() as number;
-        numberOfResultsPerPageEl.val(this.searchResultsOnPage);
-        numberOfResultsPerPageEl.change(() => {
-            const resultsPerPage = numberOfResultsPerPageEl.val() as number;
-            this.searchResultsOnPage = resultsPerPage;
-            updateQueryStringParameter(this.urlResultPerPageKey, resultsPerPage);
+        const contextLengthInputEl = $("#contextPositionsSelect");
+        contextLengthInputEl.prop("max", this.maxContextLength);
+        contextLengthInputEl.prop("min", this.minContextLength);
+        contextLengthInputEl.val(this.contextLength);
+        const resultsPerPageInputEl = $("#number-of-results-per-viewing-page");
+        resultsPerPageInputEl.prop("max", this.maxResultsPerPage);
+        resultsPerPageInputEl.prop("min", this.minResultsPerPage);
+        resultsPerPageInputEl.val(this.searchResultsOnPage);
+
+        contextLengthInputEl.on("change", () => {
+            const contextLengthString = contextLengthInputEl.val() as string;
+            const contextLengthNumber = parseInt(contextLengthString);
+            if (!isNaN(contextLengthNumber)) {
+                if (contextLengthNumber >= this.minContextLength && contextLengthNumber <= this.maxContextLength) {
+                    this.contextLength = contextLengthNumber;
+                    updateQueryStringParameter(this.urlContextSizeKey, contextLengthNumber);
+                    //TODO reload page on context change?
+                }
+            }
         });
 
+        resultsPerPageInputEl.on("change", () => {
+            const resultsPerPageString = resultsPerPageInputEl.val() as string;
+            const resultsPerPageNumber = parseInt(resultsPerPageString);
+            if (!isNaN(resultsPerPageNumber)) {
+                if (resultsPerPageNumber >= this.minResultsPerPage && resultsPerPageNumber <= this.maxResultsPerPage) {
+                    this.searchResultsOnPage = resultsPerPageNumber;
+                    updateQueryStringParameter(this.urlResultPerPageKey, resultsPerPageNumber);
+                    //TODO reload page on result number change?
+                }
+            }
+        });
 
         $("#wordCheckbox").change(() => {
             var checkbox = $("#wordCheckbox");
@@ -148,19 +175,13 @@ class BohemianTextBankNew {
                 this.printDetailInfo(clickedRow);
             });
 
-        $("#contextPositionsSelect").change(() => {
-            const contextLength = $("#contextPositionsSelect").val() as number;
-            updateQueryStringParameter(this.urlContextSizeKey, contextLength);
-            //this.searchForBook(this.currentPage);TODO reload page on context change?
-        });
+        //$("#corpus-search-results-table-div").scroll((event) => {
+        //    $("#corpus-search-results-abbrev-table-div").scrollTop($(event.target as Node as Element).scrollTop());
+        //});
 
-        $("#corpus-search-results-table-div").scroll((event) => {
-            $("#corpus-search-results-abbrev-table-div").scrollTop($(event.target as Node as Element).scrollTop());
-        });
-
-        $("#corpus-search-results-abbrev-table-div").scroll((event) => {
-            $("#corpus-search-results-table-div").scrollTop($(event.target as Node as Element).scrollTop());
-        });
+        //$("#corpus-search-results-abbrev-table-div").scroll((event) => {
+        //    $("#corpus-search-results-table-div").scrollTop($(event.target as Node as Element).scrollTop());
+        //});
 
         this.initializeFromUrlParams();
 
@@ -224,14 +245,7 @@ class BohemianTextBankNew {
             });
             return;
         }
-        //const historyContainerEl = $(".page-history-constainer");
-        //const previousPage = this.currentViewPage - 1;
-        //const viewingPageEl = historyContainerEl.children(`[data-viewing-page-number=${previousPage}]`);
-        //if (viewingPageEl.length) {
-        //    this.goToPage(this.currentViewPage);
-        //}else{
             this.generateViewingPage();
-        //}
     }
 
     private initializeFromUrlParams() {
@@ -241,12 +255,24 @@ class BohemianTextBankNew {
 
             const contextSize = getQueryStringParameterByName(this.urlContextSizeKey);
             if (contextSize) {
-                $("#contextPositionsSelect").val(contextSize);
+                const contextLengthNumber = parseInt(contextSize);
+                if (!isNaN(contextLengthNumber)) {
+                    if (contextLengthNumber >= this.minContextLength && contextLengthNumber <= this.maxContextLength) {
+                        this.contextLength = contextLengthNumber;
+                        $("#contextPositionsSelect").val(contextLengthNumber);
+                    }
+                }
             }
 
             const resultPerPage = getQueryStringParameterByName(this.urlResultPerPageKey);
             if (resultPerPage) {
-                $("#number-of-results-per-viewing-page").val(resultPerPage);
+                const resultsPerPageNumber = parseInt(resultPerPage);
+                if (!isNaN(resultsPerPageNumber)) {
+                    if (resultsPerPageNumber >= this.minResultsPerPage && resultsPerPageNumber <= this.maxResultsPerPage) {
+                        this.searchResultsOnPage = resultsPerPageNumber;
+                        $("#number-of-results-per-viewing-page").val(resultPerPage);
+                    }
+                }
             }
 
             const sortedAsc = getQueryStringParameterByName(this.urlSortAscKey);
@@ -281,9 +307,11 @@ class BohemianTextBankNew {
     }
 
     private sortOrderChanged() {
-        //if (paginator) {TODO
-        //    paginator.goToPage(1);
-        //}
+        if (this.search.isLastQueryJson()) {//TODO test
+            this.corpusAdvancedSearchBookHits(this.search.getLastQuery());
+        } else {
+            this.corpusBasicSearchBookHits(this.search.getLastQuery());
+        }
     }
 
     private showLoading() {
@@ -546,7 +574,7 @@ class BohemianTextBankNew {
     }
 
     private loadBookResultPage(start: number, bookId: number) {
-        const contextLength = parseInt($("#contextPositionsSelect").val() as string);
+        const contextLength = this.contextLength;
         if (this.search.isLastQueryJson()) {
             this.corpusAdvancedSearchPaged(this.search.getLastQuery(), start, contextLength, bookId);
         } else {
@@ -941,20 +969,21 @@ class BohemianTextBankNew {
     private loadAllPages() : JQuery.Deferred<any>{
         const searchQuery = this.search.getLastQuery();
         let ajax: JQuery.jqXHR;
+        let payload: JQuery.PlainObject;
         if (this.search.isLastQueryJson()) {
-            ajax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetTotalResultNumberAdvanced`,
-                {
-                    json: searchQuery,
-                    selectedSnapshotIds: this.bookIdsInQuery,
-                    selectedCategoryIds: this.categoryIdsInQuery
-                });
+            payload = {
+                json: searchQuery,
+                selectedSnapshotIds: this.bookIdsInQuery,
+                selectedCategoryIds: this.categoryIdsInQuery
+            };
+            ajax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetTotalResultNumberAdvanced`, payload);
         } else {
-            ajax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetTotalResultNumber`,
-                {
-                    text: searchQuery,
-                    selectedSnapshotIds: this.bookIdsInQuery,
-                    selectedCategoryIds: this.categoryIdsInQuery
-                });
+            payload = {
+                text: searchQuery,
+                selectedSnapshotIds: this.bookIdsInQuery,
+                selectedCategoryIds: this.categoryIdsInQuery
+            };
+            ajax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetTotalResultNumber`, payload);
         }
         const deferred = $.Deferred();
         ajax.done((result) => {
