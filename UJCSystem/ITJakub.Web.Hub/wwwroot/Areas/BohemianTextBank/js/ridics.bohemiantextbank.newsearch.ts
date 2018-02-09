@@ -7,7 +7,7 @@ class BohemianTextBankNew {
     private searchResultsOnPage = 10;//corresponds to amount of results per page that should be on screen
     private contextLength = 50;
 
-    private minContextLength = 20;
+    private minContextLength = 30;
     private maxContextLength = 100;
     private minResultsPerPage = 1;
     private maxResultsPerPage = 50;
@@ -185,14 +185,6 @@ class BohemianTextBankNew {
 
         this.initializeFromUrlParams();
 
-        const sortBarContainer = "#listResultsHeader";
-
-        const sortBarContainerEl = $(sortBarContainer);
-        sortBarContainerEl.empty();
-        this.sortBar = new SortBar(this.sortOrderChanged);
-        const sortBarHtml = this.sortBar.makeSortBar(sortBarContainer);
-        sortBarContainerEl.append(sortBarHtml);
-
         this.enabledOptions.push(SearchTypeEnum.Title);
         this.enabledOptions.push(SearchTypeEnum.Author);
         this.enabledOptions.push(SearchTypeEnum.Editor);
@@ -213,6 +205,13 @@ class BohemianTextBankNew {
             favoritesQueriesConfig);
         this.search.limitFullTextSearchToOne();
         this.search.makeSearch(this.enabledOptions);
+
+        const sortBarContainer = "#listResultsHeader";
+        const sortBarContainerEl = $(sortBarContainer);
+        sortBarContainerEl.empty();
+        this.sortBar = new SortBar(this.sortOrderChanged.bind(this));
+        const sortBarHtml = this.sortBar.makeSortBar(sortBarContainer);
+        sortBarContainerEl.append(sortBarHtml);
 
         const callbackDelegate = new DropDownSelectCallbackDelegate();
         callbackDelegate.selectedChangedCallback = (state: State) => {
@@ -307,7 +306,7 @@ class BohemianTextBankNew {
     }
 
     private sortOrderChanged() {
-        if (this.search.isLastQueryJson()) {//TODO test
+        if (this.search.isLastQueryJson()) {
             this.corpusAdvancedSearchBookHits(this.search.getLastQuery());
         } else {
             this.corpusBasicSearchBookHits(this.search.getLastQuery());
@@ -371,6 +370,7 @@ class BohemianTextBankNew {
         const tableSection = $(".corpus-search-results-div");
         const textColumn = tableSection.find(".result-text-col");
         const textResultTableEl = textColumn.find(".text-results-table-body");
+        const undefinedReplaceString = "<Nezadáno>";
         for (let i = 0; i < results.length; i++) {
             const result = results[i];
             const pageContext = result.pageResultContext;
@@ -416,7 +416,7 @@ class BohemianTextBankNew {
             abbrevHref.prop("href",
                 `${getBaseUrl()}Editions/Editions/Listing?bookId=${bookId}&searchText=${this.search.getLastQuery()
                 }&page=${pageId}`);
-            abbrevHref.text(acronym);
+            abbrevHref.text(acronym ? acronym : undefinedReplaceString);
             const abbrevTd = $(`<td class="abbrev-col"></td>`);
             abbrevTd.append(abbrevHref);
 
@@ -787,7 +787,6 @@ class BohemianTextBankNew {
         if (!json) return;
         this.paginator.enable();
         this.onSearchStart();
-
         this.loadNextCompositionAdvancedResultPage(json);
     }
 
