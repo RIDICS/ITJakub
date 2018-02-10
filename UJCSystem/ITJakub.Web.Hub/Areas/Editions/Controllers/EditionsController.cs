@@ -77,12 +77,11 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     View(new BookListingModel
                     {
                         BookId = book.Id,
-                        BookXmlId = book.Id.ToString(), // TODO remove this property
-                        VersionXmlId = null, // TODO replace this property with snapshot ID
+                        SnapshotId = null, 
                         BookTitle = book.Title,
                         BookPages = pages,
                         SearchText = searchText,
-                        InitPageXmlId = page, // TODO rename to InitPageId
+                        InitPageId = page, 
                         CanPrintEdition = User.IsInRole("CanEditionPrint"),
                         JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
                     });

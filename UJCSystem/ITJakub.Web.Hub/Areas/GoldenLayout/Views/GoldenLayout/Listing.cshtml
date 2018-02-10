@@ -18,7 +18,7 @@
 
 </div>
 
-<div id="ReaderDiv" data-bookid="@Model.BookXmlId" data-versionid="@Model.VersionXmlId" data-has-image-url="@Url.Action("HasBookImage", "Reader", new {Area = ""})" data-can-print="@Model.CanPrintEdition">
+<div id="ReaderDiv" data-bookid="@Model.BookId" data-versionid="@Model.SnapshotId" data-has-image-url="@Url.Action("HasBookImage", "Reader", new {Area = ""})" data-can-print="@Model.CanPrintEdition">
     <div id="ReaderHeaderDiv">
         
     </div>
@@ -29,7 +29,6 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        @*testFunction(@Json.Serialize(Model.BookXmlId), @Json.Serialize(Model.VersionXmlId), @Json.Serialize(Model.BookTitle), @Json.Serialize(Model.BookPages), @Json.Serialize(Model.SearchText, Model.JsonSerializerSettingsForBiblModule), @Json.Serialize(Model.InitPageXmlId));*@
-        initGoldenReader(@Json.Serialize(Model.BookXmlId), @Json.Serialize(Model.VersionXmlId), @Json.Serialize(Model.BookTitle), @Json.Serialize(Model.BookPages), @Json.Serialize(Model.SearchText, Model.JsonSerializerSettingsForBiblModule), @Json.Serialize(Model.InitPageXmlId));
+        initGoldenReader(@Json.Serialize(Model.BookId), @Json.Serialize(Model.SnapshotId), @Json.Serialize(Model.BookTitle), @Json.Serialize(Model.BookPages), @Json.Serialize(Model.SearchText, Model.JsonSerializerSettingsForBiblModule), @Json.Serialize(Model.InitPageId));
     });
 </script>

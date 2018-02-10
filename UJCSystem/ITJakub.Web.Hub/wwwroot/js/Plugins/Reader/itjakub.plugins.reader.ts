@@ -2712,7 +2712,7 @@ class ContentItem {
 
 
 class SearchResult {
-    pageXmlId: string;
+    pageId: string;
     pageName: string;
     before: string;
     after: string;

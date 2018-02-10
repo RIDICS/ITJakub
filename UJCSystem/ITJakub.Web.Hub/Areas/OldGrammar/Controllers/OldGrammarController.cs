@@ -110,12 +110,11 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                     View(new BookListingModel
                     {
                         BookId = book.Id,
-                        BookXmlId = book.Id.ToString(),
-                        VersionXmlId = null,
+                        SnapshotId = null,
                         BookTitle = book.Title,
                         BookPages = pages,
                         SearchText = searchText,
-                        InitPageXmlId = page,
+                        InitPageId = page,
                         JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
                     });
             }

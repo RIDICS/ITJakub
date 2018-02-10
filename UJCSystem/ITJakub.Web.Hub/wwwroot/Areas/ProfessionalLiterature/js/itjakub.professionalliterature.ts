@@ -18,7 +18,7 @@
             var result = responseResults[i];
             var resultContextStructure = result["ContextStructure"];
             var searchResult = new SearchResult();
-            searchResult.pageXmlId = result["PageXmlId"];
+            searchResult.pageId = result["PageXmlId"];
             searchResult.pageName = result["PageName"];
             searchResult.before = resultContextStructure["Before"];
             searchResult.match = resultContextStructure["Match"];
