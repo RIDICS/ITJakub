@@ -15,12 +15,12 @@
 
 </div>
 
-<div id="ReaderDiv" data-bookid="@Model.BookXmlId" data-versionid="@Model.VersionXmlId">
+<div id="ReaderDiv" data-bookid="@Model.BookId" data-versionid="@Model.SnapshotId">
 
 </div>
 
 <script type="text/javascript">
     $(document).ready(function() {
-        initProfLitReader(@Json.Serialize(Model.BookXmlId), @Json.Serialize(Model.VersionXmlId),  @Json.Serialize(Model.BookTitle), @Json.Serialize(Model.BookPages), @Json.Serialize(Model.SearchText, Model.JsonSerializerSettingsForBiblModule), @Json.Serialize(Model.InitPageXmlId));
+        initProfLitReader(@Json.Serialize(Model.BookId), @Json.Serialize(Model.SnapshotId),  @Json.Serialize(Model.BookTitle), @Json.Serialize(Model.BookPages), @Json.Serialize(Model.SearchText, Model.JsonSerializerSettingsForBiblModule), @Json.Serialize(Model.InitPageId));
     });
 </script>

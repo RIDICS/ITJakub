@@ -1898,7 +1898,7 @@ class SearchResultPanel extends LeftSidePanel {
         var resultItemDiv = document.createElement("div");
         $(resultItemDiv).addClass("reader-search-result-item");
         $(resultItemDiv).click(() => {
-            var pageId = Number(result.pageXmlId);
+            var pageId = Number(result.pageId);
             this.parentReader.moveToPage(pageId, true);
         });
 
