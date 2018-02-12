@@ -465,6 +465,10 @@ class BohemianTextBankNew {
         }
 
         const tableEl = textColumn.find(".text-results-table");
+        var rowsFixed = 0;
+        var mutationObserver = new MutationObserver((mutationRecords) => { this.mutationHandler(mutationRecords, results.length, rowsFixed)});//TODO handle error if mutation observer is not defined
+        var obsConfig = { childList: true, characterData: true, attributes: true, subtree: true };
+        mutationObserver.observe(tableEl[0], obsConfig);
         tableEl.tableHeadFixer({ "left": 1, "head": false });
 
         setTimeout(() => {//HACK needs a way to detect when table column has been frozen
@@ -474,8 +478,15 @@ class BohemianTextBankNew {
             const abbrColWidth = textResultTableEl.children("tr").first().find(".abbrev-col").width();
             var scrollOffset = matchPosition - ((textColumn.width() + abbrColWidth - matchEl.width()) / 2);
             textColumn.scrollLeft(scrollOffset);
-        }, 200);
+        },300);
     }
+
+    private mutationHandler(mutationRecords, numberOfResults: number, rowsFixed: number) {
+        mutationRecords.forEach(mutation => {
+            console.log(mutation.target);
+        });
+    }
+
     private corpusBasicSearchPaged(text: string, start: number, contextLength: number, bookId: number) {
         if (!text) return;
         const count = this.searchResultsOnPage - this.transientResults.length;
