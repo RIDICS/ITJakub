@@ -143,36 +143,39 @@ class AlertComponentBuilder {
     }
 
     public buildElement(): HTMLDivElement {
-        var alertDiv = document.createElement("div");
-        var $alertDiv = $(alertDiv);
+        const $alertDiv = $("<div></div>");
         $alertDiv.addClass("alert");
 
         switch (this.alertType) {
             case AlertType.Success:
                 $alertDiv.addClass("alert-success");
+                break;
             case AlertType.Info:
                 $alertDiv.addClass("alert-info");
+                break;
             case AlertType.Warning:
                 $alertDiv.addClass("alert-warning");
+                break;
             case AlertType.Error:
                 $alertDiv.addClass("alert-danger");
+                break;
         }
 
-        if (this.heading != null) {
-            var headingElement = document.createElement("h3");
-            $(headingElement)
+        if (this.heading) {
+            const headingElement = $("<h3></h3>");
+            headingElement
                 .text(this.heading)
-                .appendTo(alertDiv);
+                .appendTo($alertDiv);
         }
 
-        if (this.content != null) {
-            var contentDiv = document.createElement("div");
-            $(contentDiv)
+        if (this.content) {
+            const contentDiv = $("<div></div>");
+            contentDiv
                 .text(this.content)
-                .appendTo(alertDiv);
+                .appendTo($alertDiv);
         }
 
-        return alertDiv;
+        return $alertDiv.get(0) as Node as HTMLDivElement;
     }
 }
 
