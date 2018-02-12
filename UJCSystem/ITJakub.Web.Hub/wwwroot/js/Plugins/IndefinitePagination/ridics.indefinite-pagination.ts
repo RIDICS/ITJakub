@@ -32,7 +32,7 @@
     }
 
     previousPageIsAvailable(): boolean | null {
-        if (this.totalNumberOfPages) {
+        if (!this.isBasicMode()) {
             if (this.currentPage > this.firstPage) {
                 return true;
             } else {
@@ -43,7 +43,7 @@
     }
 
     nextPageIsAvailable(): boolean | null {
-        if (this.totalNumberOfPages) {
+        if (!this.isBasicMode()) {
             if (this.currentPage < this.totalNumberOfPages) {
                 return true;
             } else {
@@ -54,7 +54,7 @@
     }
 
     goToPage(pageNumber: number) {
-        if (this.totalNumberOfPages) {
+        if (!this.isBasicMode()) {
             if (pageNumber <= this.totalNumberOfPages && pageNumber >= this.firstPage) {
                 this.wrapped = false;
                 this.options.loadPageCallBack(pageNumber);
@@ -81,9 +81,7 @@
     }
 
     hasBeenWrapped(): boolean {
-        const result = this.wrapped;
-        this.wrapped = false;
-        return result;
+        return this.wrapped;
     }
 
     isBasicMode() {
@@ -258,28 +256,12 @@
         this.paginationContainer.on("click",
             ".indefinite-pagination-next-page",
             () => {
-                this.currentPage++;
-                this.wrapped = false;
-                if (this.totalNumberOfPages) {
-                    if (this.currentPage > this.totalNumberOfPages) {
-                        this.currentPage = this.totalNumberOfPages;
-                        this.wrapped = true;
-                    }
-                    this.updatePage(this.currentPage);
-                }
-                this.options.nextPageCallback();
+                this.onNextPageButtonClick();
             });
         this.paginationContainer.on("click",
             ".indefinite-pagination-prev-page",
             () => {
-                this.currentPage--;
-                this.wrapped = false;
-                if (this.currentPage < this.firstPage) {
-                    this.currentPage = this.firstPage;
-                    this.wrapped = true;
-                }
-                this.updatePage(this.currentPage);
-                this.options.previousPageCallback();
+                this.onPrevPageButtonClick();
             });
         if (this.options.loadAllPagesButton) {
             this.paginationContainer.on("click",
@@ -296,6 +278,38 @@
                     });
                 });
         }
+    }
+
+    private onPrevPageButtonClick() {
+        this.currentPage--;
+        this.wrapped = false;
+        if (this.currentPage < this.firstPage) {
+            this.currentPage = this.firstPage;
+            this.wrapped = true;
+            $(".indefinite-pagination-prev-page").prop("disabled", true);
+        }
+        this.updatePage(this.currentPage);
+        if (this.nextPageIsAvailable()) {
+            $(".indefinite-pagination-next-page").prop("disabled", false);
+        }
+        this.options.previousPageCallback();
+    }
+
+    private onNextPageButtonClick() {
+        this.currentPage++;
+        this.wrapped = false;
+        if (!this.isBasicMode()) {
+            if (this.currentPage > this.totalNumberOfPages) {
+                this.currentPage = this.totalNumberOfPages;
+                this.wrapped = true;
+                $(".indefinite-pagination-next-page").prop("disabled", true);
+            }
+            this.updatePage(this.currentPage);
+        }
+        if (this.previousPageIsAvailable()) {
+            $(".indefinite-pagination-prev-page").prop("disabled", false);
+        }
+        this.options.nextPageCallback();
     }
 
     private showFullPageListLoadingError() {
