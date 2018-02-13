@@ -227,6 +227,7 @@ class BohemianTextBankNew {
 
     private formNextPage() {
         this.currentViewPage = this.paginator.getCurrentPage();
+        this.paginator.disable();
         const hasBeenWrapped = this.paginator.hasBeenWrapped();
         if (hasBeenWrapped) {
             bootbox.alert({
@@ -349,7 +350,6 @@ class BohemianTextBankNew {
         };
         const advancedSearchPageAjax =
             $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchCorpusGetPage`, payload);
-        this.paginator.disable();
         const viewingPage = this.paginator.getCurrentPage();
         const compositionListStart = this.compositionResultListStart - this.compositionsPerPage;
         advancedSearchPageAjax.done((response) => {
@@ -493,7 +493,6 @@ class BohemianTextBankNew {
 
         const getPageAjax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/TextSearchFulltextGetBookPage`,
             payload);
-        this.paginator.disable();
         const viewingPage = this.paginator.getCurrentPage();
         const compositionListStart = this.compositionResultListStart - this.compositionsPerPage;
         getPageAjax.done((response) => {
@@ -641,12 +640,14 @@ class BohemianTextBankNew {
     }
 
     private goToPage(pageNumber: number) {
+        this.paginator.disable();
         this.loadPage(pageNumber);
         this.paginator.updatePage(pageNumber);
     }
 
     private loadPreviousPage() {
         const previousPage = this.paginator.getCurrentPage();
+        this.paginator.disable();
         this.loadPage(previousPage);
     }
 
@@ -841,7 +842,8 @@ class BohemianTextBankNew {
                         this.hideLoading();
                         const alert = new AlertComponentBuilder(AlertType.Info);
                         alert.addContent("No results");
-                        $(".result-text-col").append(alert.buildElement());
+                        this.emptyResultsTable();
+                        $(".text-results-table-body").append(alert.buildElement());
                     }
                 } else {
                     if (setIndexFromId) {
