@@ -80,7 +80,7 @@ class BohemianTextBankNew {
         const viewingSettingsChangedWarningEl = $(".search-settings-changed-warning");
 
         contextLengthInputEl.on("change", () => {
-            viewingSettingsChangedWarningEl.show();
+            viewingSettingsChangedWarningEl.slideDown();
             const contextLengthString = contextLengthInputEl.val() as string;
             const contextLengthNumber = parseInt(contextLengthString);
             if (!isNaN(contextLengthNumber)) {
@@ -93,7 +93,7 @@ class BohemianTextBankNew {
         });
 
         resultsPerPageInputEl.on("change", () => {
-            viewingSettingsChangedWarningEl.show();
+            viewingSettingsChangedWarningEl.slideDown();
             const resultsPerPageString = resultsPerPageInputEl.val() as string;
             const resultsPerPageNumber = parseInt(resultsPerPageString);
             if (!isNaN(resultsPerPageNumber)) {
@@ -360,9 +360,6 @@ class BohemianTextBankNew {
         advancedSearchPageAjax.fail(() => {
             this.printErrorMessage(this.defaultErrorMessage);
         });
-        advancedSearchPageAjax.always(() => {
-            this.hideLoading();
-        });
     }
 
     private fillResultTable(results: ICorpusSearchResult[]) {
@@ -461,7 +458,7 @@ class BohemianTextBankNew {
 
         const tableEl = textColumn.find(".text-results-table");
         tableEl.tableHeadFixer({ "left": 1, "head": false });
-        tableEl.show();//ensure table is visible before calculating offset
+        this.hideLoading();//ensure table is visible before calculating offset
             //scroll from left to center match column in table
         const matchEl = textResultTableEl.children("tr").first().find(".text-center");
             const matchPosition = matchEl.position().left;
@@ -507,9 +504,6 @@ class BohemianTextBankNew {
         getPageAjax.fail(() => {
             this.printErrorMessage(this.defaultErrorMessage);
         });
-        getPageAjax.always(() => {
-            this.hideLoading();
-        });
     }
 
     private calculateAndFlushNumberOfResults(results: ICorpusSearchResult[], count: number, currentResultStart: number, compositionListStart: number, viewingPage: number) {
@@ -545,6 +539,7 @@ class BohemianTextBankNew {
                     if (this.paginator.isBasicMode()) {//unknown number of pages, thus page was increased by one and needs descreasing
                         this.paginator.updatePage(this.paginator.getCurrentPage() - 1);
                     }
+                    this.hideLoading();
                     bootbox.alert({
                         title: "Attention",
                         message: "Last result page",
@@ -842,12 +837,13 @@ class BohemianTextBankNew {
                 if (!this.hitBookIds.length) {
                     if (this.transientResults.length) {
                         this.flushTransientResults();
-                    }else{
+                    } else {
+                        this.hideLoading();
                         const alert = new AlertComponentBuilder(AlertType.Info);
                         alert.addContent("No results");
                         $(".result-text-col").append(alert.buildElement());
                     }
-            } else {
+                } else {
                     if (setIndexFromId) {
                         this.currentBookIndex = $.inArray(this.currentBookId, this.hitBookIds);
                     }
@@ -856,8 +852,6 @@ class BohemianTextBankNew {
                 }
             }).fail(() => {
                 this.printErrorMessage(this.defaultErrorMessage);
-            }).always(() => {
-                this.hideLoading();
             });
     }
     /**
@@ -891,7 +885,6 @@ class BohemianTextBankNew {
         console.log(payload);
         $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchGetHitBookIdsPaged`, payload)
             .done((bookIds: ICoprusSearchSnapshotResult) => {
-                this.hideLoading();
                 const totalCount = bookIds.totalCount;
                 const page = (start / count) + 1;
                 const totalPages = Math.ceil(totalCount / count);
