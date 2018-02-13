@@ -186,12 +186,16 @@
     private checkSelectedCategoriesInTree(categoryTree: any) {
         const selectedCategoriesEl = $(".selected-category-list");
         const selectedCategoriesElList = selectedCategoriesEl.children(".selected-category-list-item");
-        selectedCategoriesElList.each((index, elem) => {
-            const categoryEl = $(elem as Node as Element);
-            const catId = categoryEl.data("category-id");
-            const catChechbox = categoryTree.getNodeById(catId);
-            categoryTree.check(catChechbox);
-        });
+        if (selectedCategoriesElList.length) {
+            selectedCategoriesElList.each((index, elem) => {
+                const categoryEl = $(elem as Node as Element);
+                const catId = categoryEl.data("category-id");
+                const catChechbox = categoryTree.getNodeById(catId);
+                if (catChechbox) {
+                    categoryTree.check(catChechbox);
+                }
+            });
+        }
     }
 
     private convertCategoryArrayToCategoryTreeObject() {
@@ -954,7 +958,6 @@
         $buttons.prop("disabled", true);
         $successAlert.finish().hide();
         $errorAlert.hide();
-
         this.projectClient.saveMetadata(this.projectId, data).done((data) => {
             $successAlert.show().delay(3000).fadeOut(2000);
             $("#work-metadata-last-modification").text(data.lastModificationText);
