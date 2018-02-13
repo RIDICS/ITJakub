@@ -17,70 +17,6 @@
 }
 
 .search-result-section {
-    &.show-notes {
-        .note-ref, .note {
-            display: inline;
-        }
-
-        tr.notes {
-            display: table-row;
-            height: 25px;
-        }
-
-        tr.notes td {
-            text-align: right;
-        }
-
-        tr.spacer {
-            height: 5px;
-        }
-
-        tr.notes::after, tr.notes::before {
-            display: table-row;
-            height: 20px;
-        }
-    }
-
-    &.show-language .itj-foreign {
-        font-style: italic;
-    }
-
-    &.show-structure {
-
-        .itj-structure-start, .itj-structure-end, .itj-structure-pb {
-            display: inline;
-            color: rgb(56, 74, 182);
-        }
-
-        .itj-structure-pb:before {
-            content: "[";
-        }
-
-        .itj-structure-pb:after {
-            content: "]";
-        }
-    }
-
-    &.show-paragraph {
-
-        tr.notes td {
-            display: inline-block;
-        }
-
-        tr.result-row {
-            td.context-before {
-                display: inline-block;
-            }
-
-            td .match {
-                display: inline-block;
-            }
-
-            td.context-after {
-                display: inline-block;
-            }
-        }
-    }
 
     .corpus-result-and-settings-row {
         height: 32em;
@@ -185,10 +121,10 @@
                 margin-bottom: 25px;
             }
 
-            .search-settings-changed-warning{
-                display:none;
+            .search-settings-changed-warning {
+                display: none;
             }
-            
+
             .corpus-search-settings-checkboxes {
                 margin-bottom: 30px;
             }
@@ -212,6 +148,75 @@
             line-height: 1.1;
             padding: 15px;
             height: inherit;
+        }
+    }
+
+    &.show-notes {
+        .note-ref, .note {
+            display: inline;
+        }
+
+        tr.notes {
+            display: table-row;
+            height: 25px;
+        }
+
+        tr.notes td {
+            text-align: right;
+        }
+
+        tr.spacer {
+            height: 5px;
+        }
+
+        tr.notes::after, tr.notes::before {
+            display: table-row;
+            height: 20px;
+        }
+    }
+
+    &.show-language .itj-foreign {
+        font-style: italic;
+    }
+
+    &.show-structure {
+
+        .itj-structure-start, .itj-structure-end, .itj-structure-pb {
+            display: inline;
+            color: rgb(56, 74, 182);
+        }
+
+        .itj-structure-pb:before {
+            content: "[";
+        }
+
+        .itj-structure-pb:after {
+            content: "]";
+        }
+    }
+
+    &.show-paragraph {
+        .text-results-table {
+            text-align: left;
+
+            tr.notes td {
+                display: inline-block;
+            }
+
+            tr.result-row {//overwrite default style
+                td {
+                    display: inline-block;
+                    text-align: left !important;
+                }
+
+                td.context-before {
+                    width: initial !important;
+                }
+
+                td.context-after {
+                    width: initial !important;
+                }
+            }
         }
     }
 
