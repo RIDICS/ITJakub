@@ -170,7 +170,6 @@
         if (ui.value !== this.currentPage) {
             const newPage = ui.value;
             const indicatorEl = $(event.target as Node as Element).closest(".indefinite-pagination-load-all-indicator");
-            console.log(indicatorEl);
             const text = `${newPage} / ${this.totalNumberOfPages}`;
             indicatorEl.text(text);
             this.goToPage(newPage);
