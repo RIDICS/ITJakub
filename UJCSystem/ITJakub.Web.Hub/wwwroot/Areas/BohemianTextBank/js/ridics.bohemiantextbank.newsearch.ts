@@ -77,8 +77,10 @@ class BohemianTextBankNew {
         resultsPerPageInputEl.prop("max", this.maxResultsPerPage);
         resultsPerPageInputEl.prop("min", this.minResultsPerPage);
         resultsPerPageInputEl.val(this.searchResultsOnPage);
+        const viewingSettingsChangedWarningEl = $(".search-settings-changed-warning");
 
         contextLengthInputEl.on("change", () => {
+            viewingSettingsChangedWarningEl.show();
             const contextLengthString = contextLengthInputEl.val() as string;
             const contextLengthNumber = parseInt(contextLengthString);
             if (!isNaN(contextLengthNumber)) {
@@ -91,6 +93,7 @@ class BohemianTextBankNew {
         });
 
         resultsPerPageInputEl.on("change", () => {
+            viewingSettingsChangedWarningEl.show();
             const resultsPerPageString = resultsPerPageInputEl.val() as string;
             const resultsPerPageNumber = parseInt(resultsPerPageString);
             if (!isNaN(resultsPerPageNumber)) {
@@ -590,6 +593,8 @@ class BohemianTextBankNew {
     private onSearchStart() {
         const nextPageEl = $(".indefinite-pagination-next-page");
         const totalResultsEl = $(".total-results-count");
+        const viewingSettingsChangedWarningEl = $(".search-settings-changed-warning");
+        viewingSettingsChangedWarningEl.slideUp();
         totalResultsEl.hide();
         nextPageEl.prop("disabled", false);
         this.resetIds();
