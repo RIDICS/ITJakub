@@ -638,7 +638,7 @@ class ReaderLayout {
         }
     }
 
-    private initLayout(): any {
+    private initLayout(): GoldenLayout {
         var module = this;
         var config = this.createConfig(this.textPanelId, "Text");
         this.readerLayout = new GoldenLayout(config, $('#ReaderBodyDiv'));
@@ -671,9 +671,9 @@ class ReaderLayout {
             //case module.audioPanelId:
             //    container.getElement().append(module.createAudioPanel());
             //    break;
-            //case module.imagePanelId:
-            //    container.getElement().append(module.createImagePanel());
-            //    break;
+            case module.imagePanelId:
+                container.getElement().append(module.createImagePanel());
+                break;
             case module.textPanelId:
                 container.getElement().append(module.createTextPanel());
               break;
@@ -722,18 +722,18 @@ class ReaderLayout {
     }
 
     private createContentPanel(): HTMLDivElement {
-        var contentPanel: ContentPanelNew = null;
+        var contentPanel: ContentPanel = null;
         if (this.showPanelList.indexOf(ReaderPanelEnum.ContentPanel) >= 0) {
-            contentPanel = new ContentPanelNew(this.contentPanelId, this);
+            contentPanel = new ContentPanel(this.contentPanelId, this);
             this.toolPanels.push(contentPanel);
         }
         return contentPanel.panelHtml;
     }
 
     private createSearchPanel(): HTMLDivElement {
-        var resultPanel: SearchResultPanelNew = null;
+        var resultPanel: SearchResultPanel = null;
         if (this.showPanelList.indexOf(ReaderPanelEnum.SearchPanel) >= 0) {
-            resultPanel = new SearchResultPanelNew(this.searchPanelId, this);
+            resultPanel = new SearchResultPanel(this.searchPanelId, this);
             this.toolPanels.push(resultPanel);
         }
         return resultPanel.panelHtml;
@@ -759,12 +759,20 @@ class ReaderLayout {
     }
 
     private createTextPanel(): HTMLDivElement {
-        var textPanel: TextPanelNew = null;
+        var textPanel: TextPanel = null;
         if (this.showPanelList.indexOf(ReaderPanelEnum.TextPanel) >= 0) {
-            textPanel = new TextPanelNew(this.textPanelId, this);
+            textPanel = new TextPanel(this.textPanelId, this);
             this.contentViewPanels.push(textPanel);
         }
         return textPanel.panelHtml;
+    }
+
+    private createImagePanel(): HTMLDivElement {
+        var imagePanel: ImagePanel = null;
+        if (this.showPanelList.indexOf(ReaderPanelEnum.ImagePanel) >= 0) {
+            imagePanel = new ImagePanel(this.imagePanelId, this);
+        }
+        return imagePanel.panelHtml;
     }
 
     hasBookPage(bookId: string, bookVersionId: string, onTrue: () => any = null, onFalse: () => any = null) {
@@ -821,7 +829,7 @@ class ReaderLayout {
     protected hasBookPageCallOnSuccess: { [key: string]: { [key: string]: Array<() => any>; }; } = {};
 }
 
-class SidePanelNew {
+abstract class SidePanel {
     panelHtml: HTMLDivElement;
     identificator: string;
     innerContent: HTMLElement;
@@ -841,7 +849,7 @@ class SidePanelNew {
         this.panelHtml = sidePanelDiv;
     }
 
-    protected makeBody(rootReference: SidePanelNew, window: Window): HTMLElement {
+    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
         throw new Error("Not implemented");
     }
 
@@ -854,14 +862,14 @@ class SidePanelNew {
     }
 }
 
-class ToolPanel extends SidePanelNew {
+abstract class ToolPanel extends SidePanel {
     addPanelClass(sidePanelDiv: HTMLDivElement): void {
         $(sidePanelDiv).addClass("reader-tool-panel");
     }
 }
 
-class ContentPanelNew extends ToolPanel {
-    makeBody(rootReference: SidePanelNew, window: Window): HTMLElement {
+class ContentPanel extends ToolPanel {
+    makeBody(rootReference: SidePanel, window: Window): HTMLElement {
         var bodyDiv: HTMLDivElement = window.document.createElement("div");
         $(bodyDiv).addClass("content-panel-container");
         this.downloadBookContent();
@@ -948,8 +956,8 @@ class ContentPanelNew extends ToolPanel {
         return liElement;
     }
 } 
-// TODO styles, remove SearchBar
-class SearchResultPanelNew extends ToolPanel {
+
+class SearchResultPanel extends ToolPanel {
     private searchResultItemsDiv: HTMLDivElement;
     private searchPagingDiv: HTMLDivElement;
 
@@ -959,7 +967,7 @@ class SearchResultPanelNew extends ToolPanel {
     private maxPaginatorVisibleElements;
 
 
-    protected makeBody(rootReference: SidePanelNew, window: Window): HTMLElement {
+    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
         var innerContent: HTMLDivElement = window.document.createElement("div");
 
         var searchResultItemsDiv = window.document.createElement("div");
@@ -1037,16 +1045,40 @@ class SearchResultPanelNew extends ToolPanel {
     }
 }
 
+class TermsPanel extends ToolPanel {
+    private termsResultItemsDiv: HTMLDivElement;
+    private termsOrderedList: HTMLOListElement;
 
+    private termsResultItemsLoadDiv: HTMLDivElement;
+    
+    private termClickedCallback: (termId: number, text: string) => void;
+
+    makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+        throw new Error("Not implemented");
+    }
+}
+
+class TermsSearchPanel extends ToolPanel {
+    private searchResultItemsDiv: HTMLDivElement;
+    private searchResultOrderedList: HTMLOListElement; 
+
+    private searchResultItemsLoadDiv: HTMLDivElement;
+
+    makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+        throw new Error("Not implemented");
+    }
+
+
+}
 //end of tool panels
 
-class ContentViewPanel extends SidePanelNew {
+abstract class ContentViewPanel extends SidePanel {
     addPanelClass(sidePanelDiv: HTMLDivElement): void {
         $(sidePanelDiv).addClass("reader-right-panel");
     }
 }
 
-class TextPanelNew extends ContentViewPanel {
+class TextPanel extends ContentViewPanel {
     preloadPagesBefore: number;
     preloadPagesAfter: number;
 
@@ -1059,7 +1091,7 @@ class TextPanelNew extends ContentViewPanel {
         this.preloadPagesAfter = 10;
     }
 
-    protected makeBody(rootReference: SidePanelNew, window: Window): HTMLElement {
+    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
         var textContainerDiv: HTMLDivElement = window.document.createElement("div");
         $(textContainerDiv).addClass("reader-text-container");
 
@@ -1080,8 +1112,6 @@ class TextPanelNew extends ContentViewPanel {
             rootReference.parentReader.moveToPage($(pageWithMinOffset).data("page-xmlId"), false);
         });
 
-        var textAreaDiv: HTMLDivElement = window.document.createElement("div");
-        $(textAreaDiv).addClass("reader-text");
         for (var i = 0; i < rootReference.parentReader.pages.length; i++) {
             var page: BookPage = rootReference.parentReader.pages[i];
 
@@ -1100,14 +1130,14 @@ class TextPanelNew extends ContentViewPanel {
             $(pageDiv).addClass("page-wrapper");
             $(pageDiv).append(pageTextDiv);
             $(pageDiv).append(pageNameDiv);
-            textAreaDiv.appendChild(pageDiv);
+            textContainerDiv.appendChild(pageDiv);
         }
 
         var dummyPage: HTMLDivElement = window.document.createElement("div");
         $(dummyPage).addClass("dummy-page");
-        textAreaDiv.appendChild(dummyPage);
+        textContainerDiv.appendChild(dummyPage);
 
-        textContainerDiv.appendChild(textAreaDiv);
+        
         return textContainerDiv;
     }
 
@@ -1197,9 +1227,6 @@ class TextPanelNew extends ContentViewPanel {
     private downloadSearchPageById(query: string, queryIsJson: boolean, page: BookPage, onSuccess: () => any = null, onFailed: () => any = null) {
         var pageContainer = document.getElementById(page.pageId.toString());
         $(pageContainer).addClass("loading");
-        //if (typeof this.windowBody !== "undefined") {
-        //    $(this.windowBody).find("#" + page.pageId).addClass("loading");
-        //}
         $.ajax({
             type: "GET",
             traditional: true,
@@ -1214,11 +1241,6 @@ class TextPanelNew extends ContentViewPanel {
                 $(pageContainer).removeClass("unloaded");
                 $(pageContainer).removeClass("search-unloaded");
                 $(pageContainer).addClass("search-loaded");
-
-                //if (typeof this.windowBody !== "undefined") {
-                //    $(this.windowBody).find("#" + page.pageId).removeClass("loading");
-                //    $(this.windowBody).find("#" + page.pageId).append(response["pageText"]);
-                //}
 
                 if (this.parentReader.clickedMoveToPage) {
                     this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex, true);
@@ -1238,6 +1260,67 @@ class TextPanelNew extends ContentViewPanel {
                 }
             }
         });
+    }
+}
+
+class ImagePanel extends ContentViewPanel {
+    protected
+
+    makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+        var imageContainerDiv: HTMLDivElement = window.document.createElement("div");
+        imageContainerDiv.classList.add("reader-image-container");
+        return imageContainerDiv;
+    }
+
+    public onMoveToPage(pageIndex: number, scrollTo: boolean) {
+        var pageInfo = this.parentReader.pages[pageIndex];
+        $(this.innerContent).empty();
+
+        var image: HTMLImageElement = document.createElement("img");
+        image.classList.add("reader-image");
+        image.src = getBaseUrl() + "Reader/GetBookImage?snapshotId=" + this.parentReader.versionId + "&pageId=" + pageInfo.pageId;
+
+        var imageLink: HTMLAnchorElement = document.createElement("a");
+        imageLink.classList.add("no-click-href");
+        imageLink.href = image.src;
+        imageLink.onclick = (event: MouseEvent) => { return event.ctrlKey; };
+
+        imageLink.appendChild(image);
+        this.innerContent.appendChild(imageLink);
+
+        var zoomOnClick = false;
+
+        var img = new Image();
+        img.onload = () => {
+            var $innerContent = $(this.innerContent);
+
+            if (zoomOnClick) {
+                $innerContent.zoom({ on: "click" });
+            } else {
+                image.setAttribute("data-image-src", image.src);
+                wheelzoom(image);
+
+                var lastWidth = $innerContent.width();
+                var lastHeight = $innerContent.height();
+                $(window).resize(() => {
+                    var newWidth = $innerContent.width();
+                    var newHeight = $innerContent.height();
+
+                    if (lastWidth != newWidth || lastHeight != newHeight) {
+                        image.src = image.getAttribute("data-image-src");
+
+                        console.log(image);
+                        wheelzoom(image);
+
+                        lastWidth = newWidth;
+                        lastHeight = newHeight;
+                    }
+                });
+
+            }
+        };
+        img.src = getBaseUrl() + "Reader/GetBookImage?snapshotId=" + this.parentReader.versionId + "&pageId=" + pageInfo.pageId;
+
     }
 }
 

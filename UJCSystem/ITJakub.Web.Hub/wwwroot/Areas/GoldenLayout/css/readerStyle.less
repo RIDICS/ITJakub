@@ -89,3 +89,29 @@
 .left {
     float: left !important;
 }
+
+.reader-text-container {
+
+    .page-name {
+        text-align: center;
+        font-size: 1.1em;
+        display: none;
+    }
+
+    &.show-notes {
+        .page {
+            display: inherit;
+        }
+
+        .itj-notes .itj-note {
+            display: inherit;
+            margin-bottom: 2px;
+            margin-top: 2px;
+        }
+    }
+
+
+    .itj-notes .itj-note {
+        display: none;
+    }
+}
