@@ -31,7 +31,6 @@ class BohemianTextBankNew {
         "Vyhledávání se nezdařilo. Ujistěte se, zda máte zadáno alespoň jedno kritérium na vyhledávání v textu.";
 
     private urlSearchKey = "search";
-    private urlStartKey = "start"; //TODO in process of changing to start
     private urlSelectionKey = "selected";
     private urlSortAscKey = "sortAsc";
     private urlSortCriteriaKey = "sortCriteria";
@@ -87,7 +86,6 @@ class BohemianTextBankNew {
                 if (contextLengthNumber >= this.minContextLength && contextLengthNumber <= this.maxContextLength) {
                     this.contextLength = contextLengthNumber;
                     updateQueryStringParameter(this.urlContextSizeKey, contextLengthNumber);
-                    //TODO reload page on context change?
                 }
             }
         });
@@ -100,7 +98,6 @@ class BohemianTextBankNew {
                 if (resultsPerPageNumber >= this.minResultsPerPage && resultsPerPageNumber <= this.maxResultsPerPage) {
                     this.searchResultsOnPage = resultsPerPageNumber;
                     updateQueryStringParameter(this.urlResultPerPageKey, resultsPerPageNumber);
-                    //TODO reload page on result number change?
                 }
             }
         });
@@ -230,15 +227,7 @@ class BohemianTextBankNew {
         this.paginator.disable();
         const hasBeenWrapped = this.paginator.hasBeenWrapped();
         if (hasBeenWrapped) {
-            bootbox.alert({
-                title: "Attention",
-                message: "Page does not exist",
-                buttons: {
-                    ok: {
-                        className: "btn-default"
-                    }
-                }
-            });
+            this.showNoPageWarning();
         } else {
              this.generateViewingPage();
         }
@@ -483,14 +472,6 @@ class BohemianTextBankNew {
             selectedBookIds: this.bookIdsInQuery
         };
 
-        console.log(`---PAGE ${this.paginator.getCurrentPage()} INDEX---`);
-        console.log(`composition list start: ${this.compositionResultListStart - this.compositionsPerPage}`);
-        console.log(`result list start: ${start}`);
-        console.log(`result list count: ${count}`);
-        console.log(`current bookID: ${this.currentBookId}`);
-        console.log(`context length: ${contextLength}`);
-        console.log(`---PAGE INDEX END---`);
-
         const getPageAjax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/TextSearchFulltextGetBookPage`,
             payload);
         const viewingPage = this.paginator.getCurrentPage();
@@ -652,6 +633,7 @@ class BohemianTextBankNew {
     }
 
     private showNoPageWarning(pageNumber?: number) {
+        this.paginator.enable();
         const pageNumberString = (pageNumber) ? pageNumber.toString() : ""; 
         bootbox.alert({
             title: "Attention",
@@ -676,20 +658,13 @@ class BohemianTextBankNew {
             }
             return;
         }
-        const historyContainerEl = $(".page-history-constainer");
-        //const prevPageButtonEl = $(".indefinite-pagination-prev-page");
+        const historyContainerEl = $(".page-history-constainer");;
         const viewingPageEl = historyContainerEl.children(`[data-viewing-page-number=${previousPage}]`);
         if (viewingPageEl.length && !pageHasBeenWrapped) {
             const entry: ICorpusSearchViewingPageHistoryEntry = JSON.parse(viewingPageEl.attr("data-viewing-page-structure"));
             this.compositionResultListStart = entry.compositionResultListStart;
             this.currentResultStart = entry.hitResultStart;
             this.currentBookId = entry.bookId;
-            console.log(`---PAGE ${previousPage} LAST INDEX---`);
-            console.log(`comosition list start: ${this.compositionResultListStart}`);
-            console.log(`result list start: ${this.currentResultStart}`);
-            console.log(`current bookID: ${this.hitBookIds[this.currentBookIndex]}`);
-            console.log(`current viewing page: ${previousPage}`);
-            console.log(`---PAGE INDEX END---`);
             if (this.search.isLastQueryJson()) {
                 this.loadNextCompositionAdvancedResultPage(this.search.getLastQuery(), true);
             } else {
@@ -820,7 +795,6 @@ class BohemianTextBankNew {
 
         $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetHitBookIdsPaged`, payload)
             .done((bookIds: ICoprusSearchSnapshotResult) => {
-                console.log(bookIds);
                 const totalCount = bookIds.totalCount;
                 const page = (start / count) + 1;
                 const totalPages = Math.ceil(totalCount / count);
@@ -831,7 +805,6 @@ class BohemianTextBankNew {
                     idList.push(snapshot.snapshotId);
                 });
                 this.hitBookIds = idList;
-                console.log(this.hitBookIds);
                 if (this.hitBookIds.length < this.compositionsPerPage || page === totalPages) {
                     this.compositionPageIsLast = true;
                 }
@@ -884,7 +857,6 @@ class BohemianTextBankNew {
             start: start,
             count: count
         };
-        console.log(payload);
         $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchGetHitBookIdsPaged`, payload)
             .done((bookIds: ICoprusSearchSnapshotResult) => {
                 const totalCount = bookIds.totalCount;
@@ -900,20 +872,16 @@ class BohemianTextBankNew {
                 if (this.hitBookIds.length < this.compositionsPerPage || page === totalPages) {
                     this.compositionPageIsLast = true;
                 }
-                if (!this.hitBookIds.length) {//TODO requires attention
+                if (!this.hitBookIds.length) {
                     if (this.transientResults.length) {
                         this.flushTransientResults();
+                    } else {
+                        this.hideLoading();
+                        const alert = new AlertComponentBuilder(AlertType.Info);
+                        alert.addContent("No results");
+                        this.emptyResultsTable();
+                        $(".text-results-table-body").append(alert.buildElement());
                     }
-                    bootbox.alert({
-                        title: "Attention",
-                        message: "No more results",
-                        buttons: {
-                            ok: {
-                                className: "btn-default"
-                            }
-                        }
-                    });
-                    $(".indefinite-pagination-next-page").prop("disabled", true);
                 } else {
                     if (setIndexFromId) {
                         this.currentBookIndex = $.inArray(this.currentBookId, this.hitBookIds);
