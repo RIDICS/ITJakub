@@ -505,11 +505,11 @@ class CardFileViewer {
         var sliderHandle = $(sliderDiv).find('.ui-slider-handle');
         $(sliderHandle).append(sliderTooltip);
         $(sliderHandle).hover((event) => {
-            $(event.target).find('.slider-tip').stop(true, true);
-            $(event.target).find('.slider-tip').show();
+            $(event.target as Node as Element).find('.slider-tip').stop(true, true);
+            $(event.target as Node as Element).find('.slider-tip').show();
         });
         $(sliderHandle).mouseout((event) => {
-            $(event.target as Element).find('.slider-tip').fadeOut(1000);
+            $(event.target as Node as Element).find('.slider-tip').fadeOut(1000);
         });
 
         pageControlsDiv.appendChild(sliderDiv);

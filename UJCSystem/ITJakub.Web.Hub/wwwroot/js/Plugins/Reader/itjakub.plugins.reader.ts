@@ -1678,7 +1678,7 @@ class BookmarksPanel extends LeftSidePanel {
         }
         else {
             $bookmarksContainer.empty();
-            bookmarksContainer = <HTMLDivElement>$bookmarksContainer.get(0);
+            bookmarksContainer = $bookmarksContainer.get(0) as Node as HTMLDivElement;
         }
 
         var bookmarksHead = document.createElement("h2");
