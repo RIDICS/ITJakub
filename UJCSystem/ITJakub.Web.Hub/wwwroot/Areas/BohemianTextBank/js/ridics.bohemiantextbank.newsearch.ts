@@ -905,13 +905,15 @@ class BohemianTextBankNew {
 
         //Edition note
         const editionNoteAnchor = $("#detail-edition-note-href");
-        editionNoteAnchor.prop("href", `/EditionNote/EditionNote?bookId=${tableRowEl.data("bookId")}`);
+        const bookId = tableRowEl.data("bookid");
+        editionNoteAnchor.prop("href", `/EditionNote/EditionNote?bookId=${bookId}`);
 
         const folioHref = $("<a></a>");
+        const pageId = tableRowEl.data("pageid");
         folioHref.prop("href",
-            `${getBaseUrl()}Editions/Editions/Listing?bookId=${tableRowEl.data("bookId")}&searchText=${
-            this.search.getLastQuery()}&page=${tableRowEl.data("pageId")}`);
-        folioHref.text(tableRowEl.data("pageName") ? tableRowEl.data("pageName") : undefinedReplaceString);
+            `${getBaseUrl()}Editions/Editions/Listing?bookId=${bookId}&searchText=${
+            this.search.getLastQuery()}&page=${pageId}`);
+        folioHref.text(tableRowEl.data("pagename") ? tableRowEl.data("pagename") : undefinedReplaceString);
 
         $("#detail-folio").empty().append(folioHref);
 
