@@ -487,6 +487,19 @@ interface ICoprusSearchSnapshotResult {
     totalCount: number;
 }
 
+interface CorpusSearchTotalResultCountBase {
+    selectedSnapshotIds: any[];
+    selectedCategoryIds: any[];
+}
+
+interface CorpusSearchTotalResultCountBasic extends CorpusSearchTotalResultCountBase{
+    text: string;
+}
+
+interface CorpusSearchTotalResultCountAdvanced extends CorpusSearchTotalResultCountBase{
+    json: string;
+}
+
 enum AudioType {
     Unknown = "Unknown",
     Mp3 = "Mp3",

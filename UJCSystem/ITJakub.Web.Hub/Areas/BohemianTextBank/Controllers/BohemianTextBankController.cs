@@ -365,8 +365,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             });
         }
 
-        [HttpGet]
-        public ActionResult AdvancedSearchCorpusGetPage([FromQuery] CorpusLookupContractAdvancedSearch request)
+        public ActionResult AdvancedSearchCorpusGetPage(CorpusLookupContractAdvancedSearch request)
         {
             var json = request.Json;
 
@@ -393,8 +392,9 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             });
         }
 
-        public ActionResult GetTotalResultNumber(string text, IList<long> selectedSnapshotIds, IList<int> selectedCategoryIds)
+        public ActionResult GetTotalResultNumber(CorpusSearchTotalResultCountBasic request)
         {
+            var text = request.Text;
             if (string.IsNullOrEmpty(text))
             {
                 return BadRequest("Text can't be null in fulltext search");
@@ -402,6 +402,8 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 
             var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
 
+            var selectedSnapshotIds = request.SelectedSnapshotIds;
+            var selectedCategoryIds = request.SelectedCategoryIds;
             AddCategoryCriteria(listSearchCriteriaContracts, selectedSnapshotIds, selectedCategoryIds);
 
             return GetTotalNumberOfResults(new SearchRequestContractBase
@@ -410,12 +412,15 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             });
         }
 
-        public ActionResult GetTotalResultNumberAdvanced(string json, IList<long> selectedSnapshotIds, IList<int> selectedCategoryIds)
+        public ActionResult GetTotalResultNumberAdvanced(CorpusSearchTotalResultCountAdvanced request)
         {
             List<SearchCriteriaContract> listSearchCriteriaContracts;
 
             try
             {
+                var json = request.Json;
+                var selectedSnapshotIds = request.SelectedSnapshotIds;
+                var selectedCategoryIds = request.SelectedCategoryIds;
                 listSearchCriteriaContracts = CreateTextCriteriaListFromJson(json, selectedSnapshotIds, selectedCategoryIds);
             }catch (ArgumentException exception)
             {

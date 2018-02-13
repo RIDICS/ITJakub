@@ -959,21 +959,20 @@ class BohemianTextBankNew {
     private loadAllPages() : JQuery.Deferred<any>{
         const searchQuery = this.search.getLastQuery();
         let ajax: JQuery.jqXHR;
-        let payload: JQuery.PlainObject;
         if (this.search.isLastQueryJson()) {
-            payload = {
+            const payload: CorpusSearchTotalResultCountAdvanced = {
                 json: searchQuery,
                 selectedSnapshotIds: this.bookIdsInQuery,
                 selectedCategoryIds: this.categoryIdsInQuery
             };
-            ajax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetTotalResultNumberAdvanced`, payload);
+            ajax = $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetTotalResultNumberAdvanced`, payload);
         } else {
-            payload = {
+            const payload: CorpusSearchTotalResultCountBasic = {
                 text: searchQuery,
                 selectedSnapshotIds: this.bookIdsInQuery,
                 selectedCategoryIds: this.categoryIdsInQuery
             };
-            ajax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetTotalResultNumber`, payload);
+            ajax = $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetTotalResultNumber`, payload);
         }
         const deferred = $.Deferred();
         ajax.done((result) => {
