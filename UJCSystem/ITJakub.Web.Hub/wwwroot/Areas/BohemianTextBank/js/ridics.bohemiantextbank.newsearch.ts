@@ -176,14 +176,6 @@ class BohemianTextBankNew {
                 this.printDetailInfo(clickedRow);
             });
 
-        //$("#corpus-search-results-table-div").scroll((event) => {
-        //    $("#corpus-search-results-abbrev-table-div").scrollTop($(event.target as Node as Element).scrollTop());
-        //});
-
-        //$("#corpus-search-results-abbrev-table-div").scroll((event) => {
-        //    $("#corpus-search-results-table-div").scrollTop($(event.target as Node as Element).scrollTop());
-        //});
-
         this.initializeFromUrlParams();
 
         this.enabledOptions.push(SearchTypeEnum.Title);
@@ -465,26 +457,14 @@ class BohemianTextBankNew {
         }
 
         const tableEl = textColumn.find(".text-results-table");
-        var rowsFixed = 0;
-        var mutationObserver = new MutationObserver((mutationRecords) => { this.mutationHandler(mutationRecords, results.length, rowsFixed)});//TODO handle error if mutation observer is not defined
-        var obsConfig = { childList: true, characterData: true, attributes: true, subtree: true };
-        mutationObserver.observe(tableEl[0], obsConfig);
         tableEl.tableHeadFixer({ "left": 1, "head": false });
-
-        setTimeout(() => {//HACK needs a way to detect when table column has been frozen
+        tableEl.show();//ensure table is visible before calculating offset
             //scroll from left to center match column in table
-            const matchEl = textResultTableEl.children("tr").first().find(".text-center");
+        const matchEl = textResultTableEl.children("tr").first().find(".text-center");
             const matchPosition = matchEl.position().left;
             const abbrColWidth = textResultTableEl.children("tr").first().find(".abbrev-col").width();
             var scrollOffset = matchPosition - ((textColumn.width() + abbrColWidth - matchEl.width()) / 2);
             textColumn.scrollLeft(scrollOffset);
-        },300);
-    }
-
-    private mutationHandler(mutationRecords, numberOfResults: number, rowsFixed: number) {
-        mutationRecords.forEach(mutation => {
-            console.log(mutation.target);
-        });
     }
 
     private corpusBasicSearchPaged(text: string, start: number, contextLength: number, bookId: number) {
@@ -840,7 +820,6 @@ class BohemianTextBankNew {
         $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetHitBookIdsPaged`, payload)
             .done((bookIds: ICoprusSearchSnapshotResult) => {
                 console.log(bookIds);
-                this.hideLoading();
                 const totalCount = bookIds.totalCount;
                 const page = (start / count) + 1;
                 const totalPages = Math.ceil(totalCount / count);
@@ -872,6 +851,8 @@ class BohemianTextBankNew {
                 }
             }).fail(() => {
                 this.printErrorMessage(this.defaultErrorMessage);
+            }).always(() => {
+                this.hideLoading();
             });
     }
     /**
