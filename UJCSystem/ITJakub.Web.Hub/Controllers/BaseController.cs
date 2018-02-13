@@ -1,10 +1,11 @@
 using System;
-using System.Linq;
+using System.IO;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Lemmatization.Shared.Contracts;
 using ITJakub.Web.Hub.Core.Communication;
-using ITJakub.Web.Hub.Core.Identity;
+using ITJakub.Web.Hub.Core.Managers;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -68,11 +69,12 @@ namespace ITJakub.Web.Hub.Controllers
 
         private string GetCommunicationToken()
         {
-            var communicationToken = User.Claims.FirstOrDefault(x => x.Type == CustomClaimType.CommunicationToken);
+            var communicationToken = HttpContext.GetTokenAsync(AuthenticationManager.AuthenticationTokenName)
+                .GetAwaiter().GetResult();
             if (communicationToken == null)
                 throw new ArgumentException("Cannot find communicationToken");
 
-            return communicationToken.Value;
+            return communicationToken;
         }
         
         protected JsonSerializerSettings GetJsonSerializerSettingsForBiblModule()
@@ -82,6 +84,12 @@ namespace ITJakub.Web.Hub.Controllers
                 ContractResolver = new DefaultContractResolver(),
                 DateFormatHandling = DateFormatHandling.MicrosoftDateFormat
             };
+        }
+
+        protected FileStreamResult File(Stream fileStream, string contentType, string fileDownloadName, long? fileSize)
+        {
+            Response.ContentLength = fileSize;
+            return base.File(fileStream, contentType, fileDownloadName);
         }
     }
 }

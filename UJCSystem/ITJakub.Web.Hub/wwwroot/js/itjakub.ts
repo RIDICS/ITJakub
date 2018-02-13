@@ -1,5 +1,6 @@
 ﻿/// <reference path="Plugins/Bibliography/itjakub.plugins.bibliography.ts"/>
 /// <reference path="Plugins/DropdownSelect/itjakub.plugins.dropdownselect.ts"/>
+/// <reference path="../../node_modules/@types/dropzone/index.d.ts"/>
 
 
 //sets state to main plugins menu

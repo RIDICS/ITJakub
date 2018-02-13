@@ -50,7 +50,7 @@ namespace ITJakub.Web.Hub.Core.Communication
 
         public BasicHttpsBinding GetBasicHttpsBindingUserNameAuthentication()
         {
-            return new BasicHttpsBinding
+            var binding = new BasicHttpsBinding
             {
                 MaxBufferPoolSize = 2147483647,
                 MaxBufferSize = 2147483647,
@@ -66,20 +66,20 @@ namespace ITJakub.Web.Hub.Core.Communication
                     MaxBytesPerRead = 2147483647,
                     MaxNameTableCharCount = 2147483647
                 },
-                Security = new BasicHttpsSecurity
-                {
-                    Mode = BasicHttpsSecurityMode.TransportWithMessageCredential,
-                    Transport = new HttpTransportSecurity
-                    {
-                        ClientCredentialType = HttpClientCredentialType.Basic
-                    }
-                }
             };
+
+            binding.Security.Mode = BasicHttpsSecurityMode.TransportWithMessageCredential;
+            binding.Security.Transport = new HttpTransportSecurity
+            {
+                ClientCredentialType = HttpClientCredentialType.Basic
+            };
+
+            return binding;
         }
 
         public BasicHttpsBinding GetBasicHttpsBindingStreamed()
         {
-            return new BasicHttpsBinding
+            var binding = new BasicHttpsBinding
             {
                 MaxBufferPoolSize = 2097120,
                 MaxBufferSize = 65536,
@@ -88,30 +88,28 @@ namespace ITJakub.Web.Hub.Core.Communication
                 OpenTimeout = new TimeSpan(0, 25, 0),
                 SendTimeout = new TimeSpan(0, 10, 0),
                 TransferMode = TransferMode.StreamedRequest,
-                Security = new BasicHttpsSecurity
-                {
-                    Mode = BasicHttpsSecurityMode.TransportWithMessageCredential,
-                    Transport = new HttpTransportSecurity
-                    {
-                        ClientCredentialType = HttpClientCredentialType.Basic
-                    }
-                }
             };
+
+            binding.Security.Mode = BasicHttpsSecurityMode.TransportWithMessageCredential;
+            binding.Security.Transport = new HttpTransportSecurity
+            {
+                ClientCredentialType = HttpClientCredentialType.Basic
+            };
+
+            return binding;
         }
 
         public BasicHttpsBinding GetBasicHttpsBindingCertificateAuthentication()
         {
-            return new BasicHttpsBinding
+            var binding = new BasicHttpsBinding();
+
+            binding.Security.Mode = BasicHttpsSecurityMode.Transport;
+            binding.Security.Transport = new HttpTransportSecurity
             {
-                Security = new BasicHttpsSecurity
-                {
-                    Mode = BasicHttpsSecurityMode.Transport,
-                    Transport = new HttpTransportSecurity
-                    {
-                        ClientCredentialType = HttpClientCredentialType.Certificate
-                    }
-                }
+                ClientCredentialType = HttpClientCredentialType.Certificate
             };
+
+            return binding;
         }
     }
 }

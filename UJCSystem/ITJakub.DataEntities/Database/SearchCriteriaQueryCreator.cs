@@ -90,8 +90,8 @@ namespace ITJakub.DataEntities.Database
             {
                 if (parameterKeyValue.Value is DateTime)
                 {
-                    //set parameter as DateTime2 otherwise comparison years before 1753 doesn't work
-                    query.SetDateTime2(parameterKeyValue.Key, (DateTime)parameterKeyValue.Value);
+                    //since NHibernate 5.0 DateTime2 is default type
+                    query.SetDateTime(parameterKeyValue.Key, (DateTime)parameterKeyValue.Value);
                 }
                 else if (parameterKeyValue.Value is IList)
                 {

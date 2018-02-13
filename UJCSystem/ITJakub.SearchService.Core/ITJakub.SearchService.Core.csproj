@@ -1,124 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F8EC1AE0-6AAF-4917-92E3-FD0927E6DE1A}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ITJakub.SearchService.Core</RootNamespace>
-    <AssemblyName>ITJakub.SearchService.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Development|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Development\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <TargetFramework>net461</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Castle.Windsor, Version=3.4.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Windsor.3.4.0\lib\net45\Castle.Windsor.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Web" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Exist\ExistClient.cs" />
-    <Compile Include="Exist\ExistResourceManager.cs" />
-    <Compile Include="Exist\Attributes\ExistQuery.cs" />
-    <Compile Include="Exist\Attributes\ExistResource.cs" />
-    <Compile Include="Exist\IExistResourceManager.cs" />
-    <Compile Include="Exist\MethodInfoResolver.cs" />
-    <Compile Include="Exist\ExistCommunicationManager.cs" />
-    <Compile Include="Exist\Attributes\ExistAttribute.cs" />
-    <Compile Include="Exist\ExistConnectionSettingsSkeleton.cs" />
-    <Compile Include="Exist\ExistManager.cs" />
-    <Compile Include="Exist\AttributeResolver\ExistQueryResolver.cs" />
-    <Compile Include="Exist\AttributeResolver\ExistResourceResolver.cs" />
-    <Compile Include="Exist\AttributeResolver\IExistAttributeResolver.cs" />
-    <Compile Include="Exist\IExistCommunicationManager.cs" />
-    <Compile Include="Search\DataContract\ResultConjunctionsCriteriaContract.cs" />
-    <Compile Include="Search\RegexCriteriaBuilder.cs" />
-    <Compile Include="Search\DataContract\ResultSearchCriteriaContract.cs" />
-    <Compile Include="Exist\UriCache.cs" />
-    <Compile Include="Search\FulltextSearchCriteriaDirector.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Remove="ITJakub.SearchService.Core.Container.Config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ITJakub.SearchService.Core.Container.Config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ITJakub.SearchService.DataContracts\ITJakub.SearchService.DataContracts.csproj">
-      <Project>{ba58bca2-f98a-4dda-934c-b78c10bc0cad}</Project>
-      <Name>ITJakub.SearchService.DataContracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
-      <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
-      <Name>ITJakub.Shared.Contracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj">
-      <Project>{130f3c52-e563-4b9b-a70f-e7e5bbab4296}</Project>
-      <Name>Vokabular.Shared</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj">
-      <Project>{d172f949-ae59-4029-bf5c-40b633362034}</Project>
-      <Name>Vokabular.Shared.DataContracts</Name>
-    </ProjectReference>
+    <PackageReference Include="Castle.Core" Version="4.2.1" />
+    <PackageReference Include="Castle.Windsor" Version="4.1.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.4.1" />
+    <PackageReference Include="System.Net.Http" Version="4.3.3" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Exist\DAOs\" />
+    <ProjectReference Include="..\ITJakub.SearchService.DataContracts\ITJakub.SearchService.DataContracts.csproj" />
+    <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj" />
+    <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

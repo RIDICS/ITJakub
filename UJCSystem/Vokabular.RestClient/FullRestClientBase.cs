@@ -7,7 +7,7 @@ namespace Vokabular.RestClient
 {
     public abstract class FullRestClientBase : RestClientBase
     {
-        protected FullRestClientBase(Uri baseAddress) : base(baseAddress)
+        protected FullRestClientBase(Uri baseAddress, bool createCustomHandler = false) : base(baseAddress, createCustomHandler)
         {
         }
 
@@ -66,9 +66,9 @@ namespace Vokabular.RestClient
             return PutAsync<T>(uriPath, data).GetAwaiter().GetResult();
         }
 
-        protected void Delete(string uriPath)
+        protected void Delete(string uriPath, object data = null)
         {
-            DeleteAsync(uriPath).GetAwaiter().GetResult();
+            DeleteAsync(uriPath, data).GetAwaiter().GetResult();
         }
     }
 }

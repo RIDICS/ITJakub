@@ -12,8 +12,12 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\net461\Vokabular.MainService.xml</DocumentationFile>
+    <DocumentationFile></DocumentationFile>
     <NoWarn>1701;1702;1705;1591</NoWarn>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,32 +27,35 @@
     </None>
     <ProjectReference Include="..\ITJakub.FileProcessing.DataContracts\ITJakub.FileProcessing.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj" />
+    <ProjectReference Include="..\Vokabular.Log4Net\Vokabular.Log4Net.csproj" />
     <ProjectReference Include="..\Vokabular.MainService.Core\Vokabular.MainService.Core.csproj" />
     <ProjectReference Include="..\Vokabular.MainService.DataContracts\Vokabular.MainService.DataContracts.csproj" />
+    <ProjectReference Include="..\Vokabular.Shared.AspNetCore\Vokabular.Shared.AspNetCore.csproj" />
     <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="6.2.1" />
-    <PackageReference Include="Castle.Windsor" Version="3.4.0" />
-    <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="1.3.3" />
-    <PackageReference Include="DryIoc.dll" Version="2.12.5" />
+    <PackageReference Include="AutoMapper" Version="6.2.2" />
+    <PackageReference Include="DryIoc.dll" Version="2.12.7" />
     <PackageReference Include="DryIoc.Microsoft.DependencyInjection" Version="1.3.1" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="7.4.0" />
     <PackageReference Include="log4net" Version="2.0.8" />
-    <PackageReference Include="Log4net.Extensions.Logging" Version="1.0.0-beta11" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Routing" Version="1.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="1.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="1.0.3" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="1.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="1.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="1.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.0.2" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="1.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="2.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Net.Http.Headers" Version="2.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">

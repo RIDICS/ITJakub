@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using ITJakub.Web.Hub.AppStart;
-using ITJakub.Web.Hub.AppStart.Containers;
-using ITJakub.Web.Hub.AppStart.Extensions;
-using ITJakub.Web.Hub.AppStart.Middleware;
-using Log4net.Extensions.Logging;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Vokabular.Log4Net;
 using Vokabular.Shared;
+using Vokabular.Shared.AspNetCore.Container;
+using Vokabular.Shared.AspNetCore.Container.Extensions;
 using Vokabular.Shared.Container;
 using Vokabular.Shared.Options;
 
@@ -20,46 +19,29 @@ namespace ITJakub.Web.Hub
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
-            var globalbuilder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("globalsettings.json");
-            var globalConfiguration = globalbuilder.Build();
-
-            var secretSettingsPath = globalConfiguration["SecretSettingsPath"];
-            var environmentConfiguration = globalConfiguration["EnvironmentConfiguration"];
-
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{environmentConfiguration}.json", optional: true)
-                .AddJsonFile(Path.Combine(secretSettingsPath, "ITJakub.Secrets.json"), optional: true)
-                .AddJsonFile(Path.Combine(secretSettingsPath, $"ITJakub.Secrets.{environmentConfiguration}.json"), optional: true);
-
-            if (env.IsDevelopment())
-            {
-                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                //builder.AddUserSecrets();
-            }
-
-            builder.AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = configuration;
             ApplicationConfig.Configuration = Configuration;
 
             env.ConfigureLog4Net("log4net.config");
         }
 
-        private IConfigurationRoot Configuration { get; }
+        private IConfiguration Configuration { get; }
         private IIocContainer Container { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            // Authorization
-            services.AddCustomAuthServices();
-            
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(o =>
+                {
+                    o.AccessDeniedPath = "/Account/AccessDenied/";
+                    o.LoginPath = "/Account/Login";
+                });
+
+
             // Configuration options
             services.AddOptions();
             services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
@@ -70,6 +52,8 @@ namespace ITJakub.Web.Hub
             });
 
             services.AddMvc();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // IoC
             IIocContainer container = new DryIocContainer();
@@ -100,13 +84,11 @@ namespace ITJakub.Web.Hub
 
             app.UseStatusCodePages();
 
-            app.ConfigureAuth();
+            app.UseAuthentication();
 
             app.ConfigureAutoMapper();
 
             app.UseStaticFiles();
-
-            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseMvc(routes =>
             {

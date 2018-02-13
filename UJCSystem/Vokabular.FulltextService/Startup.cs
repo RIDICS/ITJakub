@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
-using Vokabular.FulltextService.Containers;
-using Vokabular.FulltextService.Containers.Extensions;
-using Vokabular.FulltextService.Utils.Documentation;
 using Vokabular.Shared;
+using Vokabular.Shared.AspNetCore.Container;
+using Vokabular.Shared.AspNetCore.Container.Extensions;
 using Vokabular.Shared.Container;
-using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.Options;
 
 namespace Vokabular.FulltextService
@@ -96,8 +94,9 @@ namespace Vokabular.FulltextService
 
         private string GetXmlCommentsPath()
         {
-            var app = PlatformServices.Default.Application;
-            return Path.Combine(app.ApplicationBasePath, $"{app.ApplicationName}.xml");
+            var appBasePath = AppContext.BaseDirectory;
+            var appName = Assembly.GetEntryAssembly().GetName().Name;
+            return Path.Combine(appBasePath, $"{appName}.xml");
         }
     }
 }

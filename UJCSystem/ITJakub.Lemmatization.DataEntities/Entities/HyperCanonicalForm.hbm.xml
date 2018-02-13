@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="ITJakub.Lemmatization.DataEntities" namespace="ITJakub.Lemmatization.DataEntities.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="HyperCanonicalForm" table="[HyperCanonicalForm]">
+    
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+    
+    <property name="Text" not-null="true"/>      
+           
+    <property name="Type" not-null="true"/>
+    
+    <property name="Description" not-null="false"/>
+
+    <bag name="CanonicalForms" cascade="all">
+      <key column="HyperCanonicalForm"/>
+      <one-to-many class="CanonicalForm"/>
+    </bag>
+        
+  </class>
+</hibernate-mapping>

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.RestClient.Errors;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -55,6 +56,10 @@ namespace Vokabular.MainService.Controllers
             {
                 return BadRequest(exception.Message);
             }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode((int) exception.StatusCode, exception.Message);
+            }
         }
 
         /// <summary>
@@ -74,6 +79,10 @@ namespace Vokabular.MainService.Controllers
             catch (ArgumentException exception)
             {
                 return BadRequest(exception.Message);
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode((int)exception.StatusCode, exception.Message);
             }
         }
 

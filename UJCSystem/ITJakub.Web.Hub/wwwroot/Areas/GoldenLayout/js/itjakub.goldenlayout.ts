@@ -1003,7 +1003,7 @@ class SearchResultPanel extends ToolPanel {
         return this.resultsOnPage;
     }
 
-    showResults(searchResults: SearchResult[]) {
+    showResults(searchResults: SearchHitResult[]) {
         $(this.searchResultItemsDiv).empty();
         for (var i = 0; i < searchResults.length; i++) {
             var result = searchResults[i];
@@ -1012,7 +1012,7 @@ class SearchResultPanel extends ToolPanel {
         }
     }
 
-    private createResultItem(result: SearchResult): HTMLDivElement {
+    private createResultItem(result: SearchHitResult): HTMLDivElement {
         var resultItemDiv = document.createElement("div");
         $(resultItemDiv).addClass("reader-search-result-item");
         $(resultItemDiv).click(() => {

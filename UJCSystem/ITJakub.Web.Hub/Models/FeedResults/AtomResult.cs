@@ -1,44 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ServiceModel.Syndication;
+using System.Threading.Tasks;
 using System.Xml;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.SyndicationFeed;
+using Microsoft.SyndicationFeed.Atom;
 
 namespace ITJakub.Web.Hub.Models.FeedResults
 {
     public class AtomResult : FileResult
     {
-        private readonly SyndicationFeed m_feed;
-
-        /// <summary>
-        /// Creates a new instance of AtomResult
-        /// based on this sample 
-        /// http://www.developerzen.com/2009/01/11/aspnet-mvc-rss-feed-action-result/
-        /// </summary>
-        /// <param name="feed">The feed to return the user.</param>
-        public AtomResult(SyndicationFeed feed)
-            : base("application/atom+xml")
-        {
-            m_feed = feed;
-        }
+        private readonly string m_feedTitle;
+        private readonly List<SyndicationItem> m_feedItems;
+        private readonly Uri m_feedRequestUrl;
 
         /// <summary>
         /// Creates a new instance of AtomResult
         /// </summary>
-        /// <param name="title">The title for the feed.</param>
+        /// <param name="feedTitle">The title for the feed.</param>
         /// <param name="feedItems">The items of the feed.</param>
-        /// <param name="requestUrl">The URL of feed alternate link.</param>
-        public AtomResult(string title, List<SyndicationItem> feedItems, Uri requestUrl)
+        /// <param name="feedRequestUrl">The URL of feed alternate link.</param>
+        public AtomResult(string feedTitle, List<SyndicationItem> feedItems, Uri feedRequestUrl)
             : base("application/atom+xml")
         {
-            m_feed = new SyndicationFeed(title, title, requestUrl) { Items = feedItems };
+            m_feedTitle = feedTitle;
+            m_feedItems = feedItems;
+            m_feedRequestUrl = feedRequestUrl;
         }
 
-        public override void ExecuteResult(ActionContext context)
+        public override async Task ExecuteResultAsync(ActionContext context)
         {
-            using (XmlWriter writer = XmlWriter.Create(context.HttpContext.Response.Body))
+            using (XmlWriter xmlWriter = XmlWriter.Create(context.HttpContext.Response.Body, new XmlWriterSettings { Async = true, Indent = true }))
             {
-                m_feed.GetAtom10Formatter().WriteTo(writer);
+                var writer = new AtomFeedWriter(xmlWriter);
+
+                await writer.WriteTitle(m_feedTitle);
+                //await writer.WriteDescription(m_feedTitle);
+                await writer.Write(new SyndicationLink(m_feedRequestUrl));
+                //await writer.WriteUpdated(DateTimeOffset.UtcNow);
+
+                foreach (var syndicationItem in m_feedItems)
+                {
+                    await writer.Write(syndicationItem);
+                }
+
+                xmlWriter.Flush();
             }
         }
     }

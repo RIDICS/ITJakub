@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
@@ -10,7 +9,7 @@ namespace ITJakub.Lemmatization.Shared.Contracts
 {
     public class LemmatizationServiceClient : ClientBase<ILemmatizationService>, ILemmatizationService
     {
-        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog m_log = LogManager.GetLogger(typeof(LemmatizationServiceClient));
 
         public LemmatizationServiceClient(string endpointConfigurationName) : base(endpointConfigurationName)
         {

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<hibernate-mapping assembly="Vokabular.DataEntities" namespace="Vokabular.DataEntities.Database.Entities"
+                   xmlns="urn:nhibernate-mapping-2.2">
+  <class name="UserGroup" table="[UserGroup]">
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+    
+    <property name="Name" not-null="true" unique="true" />
+    
+    <property name="Description" not-null="false" />
+
+    <property name="CreateTime" not-null="true" type="UtcDateTime" />
+
+    <many-to-one name="CreatedBy" not-null="false">
+      <column name="CreatedBy" sql-type="bigint" />
+    </many-to-one>
+    
+    <bag name="Users" table="User_UserGroup" lazy="true">
+      <key column="[UserGroup]" />
+      <many-to-many class="User" column="[User]" />
+    </bag>
+
+    <bag name="Permissions" inverse="true" cascade="delete-orphan">
+      <key column="[UserGroup]" />
+      <one-to-many class="Permission" />
+    </bag>
+
+    <bag name="SpecialPermissions" table="SpecialPermission_UserGroup">
+      <key column="[UserGroup]" />
+      <many-to-many class="SpecialPermission" column="[SpecialPermission]" />
+    </bag>
+    
+  </class>
+</hibernate-mapping>

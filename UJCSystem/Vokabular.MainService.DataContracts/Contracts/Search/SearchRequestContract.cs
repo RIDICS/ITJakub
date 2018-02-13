@@ -25,6 +25,11 @@ namespace Vokabular.MainService.DataContracts.Contracts.Search
         public SortDirectionEnumContract? SortDirection { get; set; }
     }
 
+    public class SearchHitsRequestContract : SearchRequestContractBase
+    {
+        public int ContextLength { get; set; }
+    }
+
     public class HeadwordSearchRequestContract : SearchRequestContractBase
     {
     }

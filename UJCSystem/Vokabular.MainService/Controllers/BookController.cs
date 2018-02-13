@@ -6,6 +6,7 @@ using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
@@ -15,11 +16,13 @@ namespace Vokabular.MainService.Controllers
     {
         private readonly BookManager m_bookManager;
         private readonly BookSearchManager m_bookSearchManager;
+        private readonly BookHitSearchManager m_bookHitSearchManager;
 
-        public BookController(BookManager bookManager, BookSearchManager bookSearchManager)
+        public BookController(BookManager bookManager, BookSearchManager bookSearchManager, BookHitSearchManager bookHitSearchManager)
         {
             m_bookManager = bookManager;
             m_bookSearchManager = bookSearchManager;
+            m_bookHitSearchManager = bookHitSearchManager;
         }
 
         [HttpGet("type/{bookType}")]
@@ -29,8 +32,26 @@ namespace Vokabular.MainService.Controllers
             if (bookType == null)
                 return NotFound();
 
-            var result = m_bookManager.GetBooksByType(bookType.Value);
+            var result = m_bookManager.GetBooksByTypeForUser(bookType.Value);
             return Ok(result);
+        }
+
+        [HttpGet("type/{bookType}/all")]
+        [ProducesResponseType(typeof(List<BookContract>), StatusCodes.Status200OK)]
+        public IActionResult GetAllBooksByType(BookTypeEnumContract? bookType)
+        {
+            if (bookType == null)
+                return NotFound();
+
+            var result = m_bookManager.GetAllBooksByType(bookType.Value);
+            return Ok(result);
+        }
+
+        [HttpGet("type")]
+        public List<BookTypeContract> GetBookTypeList()
+        {
+            var result = m_bookManager.GetBookTypeList();
+            return result;
         }
 
         /// <summary>
@@ -70,6 +91,10 @@ namespace Vokabular.MainService.Controllers
             {
                 return BadRequest(exception.Message);
             }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode((int)exception.StatusCode, exception.Message);
+            }
         }
 
         /// <summary>
@@ -89,6 +114,10 @@ namespace Vokabular.MainService.Controllers
             catch (ArgumentException exception)
             {
                 return BadRequest(exception.Message);
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode((int)exception.StatusCode, exception.Message);
             }
         }
 
@@ -122,12 +151,54 @@ namespace Vokabular.MainService.Controllers
         {
             try
             {
-                var result = m_bookManager.SearchPage(projectId, request);
+                var result = m_bookHitSearchManager.SearchPage(projectId, request);
                 return Ok(result);
             }
             catch (ArgumentException exception)
             {
                 return BadRequest(exception.Message);
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode((int)exception.StatusCode, exception.Message);
+            }
+        }
+
+        [HttpPost("{projectId}/hit/search")]
+        [ProducesResponseType(typeof(List<PageResultContextContract>), StatusCodes.Status200OK)]
+        public IActionResult SearchHitsWithPageContext(long projectId, [FromBody] SearchHitsRequestContract request)
+        {
+            try
+            {
+                var result = m_bookHitSearchManager.SearchHitsWithPageContext(projectId, request);
+                return Ok(result);
+            }
+            catch (ArgumentException exception)
+            {
+                return BadRequest(exception.Message);
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode((int)exception.StatusCode, exception.Message);
+            }
+        }
+
+        [HttpPost("{projectId}/hit/search-count")]
+        [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
+        public IActionResult SearchHitsResultCount(long projectId, [FromBody] SearchHitsRequestContract request)
+        {
+            try
+            {
+                var resultCount = m_bookHitSearchManager.SearchHitsResultCount(projectId, request);
+                return Ok(resultCount);
+            }
+            catch (ArgumentException exception)
+            {
+                return BadRequest(exception.Message);
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode((int)exception.StatusCode, exception.Message);
             }
         }
 
@@ -201,7 +272,7 @@ namespace Vokabular.MainService.Controllers
             if (result == null)
                 return NotFound();
             
-            return Ok(result);
+            return Content(result);
         }
 
         /// <summary>
@@ -237,11 +308,15 @@ namespace Vokabular.MainService.Controllers
                 if (result == null)
                     return NotFound();
 
-                return Ok(result);
+                return Content(result);
             }
             catch (ArgumentException exception)
             {
                 return BadRequest(exception.Message);
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode((int)exception.StatusCode, exception.Message);
             }
         }
 
@@ -288,7 +363,7 @@ namespace Vokabular.MainService.Controllers
             if (result == null)
                 return NotFound();
 
-            return Ok(result);
+            return Content(result);
         }
 
         /// <summary>
@@ -324,11 +399,15 @@ namespace Vokabular.MainService.Controllers
                 if (result == null)
                     return NotFound();
 
-                return Ok(result);
+                return Content(result);
             }
             catch (ArgumentException exception)
             {
                 return BadRequest(exception.Message);
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode((int)exception.StatusCode, exception.Message);
             }
         }
 
@@ -340,7 +419,7 @@ namespace Vokabular.MainService.Controllers
             if (result == null)
                 return NotFound();
 
-            return Ok(result);
+            return Content(result);
         }
     }
 }

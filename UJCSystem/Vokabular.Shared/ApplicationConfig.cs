@@ -4,6 +4,6 @@ namespace Vokabular.Shared
 {
     public static class ApplicationConfig
     {
-        public static IConfigurationRoot Configuration { get; set; }
+        public static IConfiguration Configuration { get; set; }
     }
 }

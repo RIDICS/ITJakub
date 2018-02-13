@@ -4,25 +4,29 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Vokabular.RestClient.Headers;
 
 namespace Vokabular.RestClient.Extensions
 {
     internal static class HttpRestClientExtensions
     {
-        private static string JsonContentType = "application/json";
-        private static string WwwFormUrlEncodedContentType = "application/x-www-form-urlencoded";
-
-        private static JsonSerializer CreateJsonSerializer()
+        private static JsonSerializerSettings CreateJsonSerializerSettings()
         {
-            var settings = new JsonSerializerSettings
+            return new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 DateTimeZoneHandling = DateTimeZoneHandling.Utc,
                 NullValueHandling = NullValueHandling.Ignore,
                 MissingMemberHandling = MissingMemberHandling.Ignore,
             };
+        }
+
+        private static JsonSerializer CreateJsonSerializer()
+        {
+            var settings = CreateJsonSerializerSettings();
             return JsonSerializer.Create(settings);
         }
 
@@ -44,6 +48,24 @@ namespace Vokabular.RestClient.Extensions
             }
         }
 
+        public static T Deserialize<T>(this string content)
+        {
+            var settings = CreateJsonSerializerSettings();
+            var item = JsonConvert.DeserializeObject<T>(content, settings);
+            return item;
+        }
+
+        public static async Task<T> ReadXmlAsAsync<T>(this HttpContent content)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
+
+            using (var stream = await content.ReadAsStreamAsync())
+            {
+                var item = serializer.Deserialize(stream);
+                return (T) item;
+            }
+        }
+
         public static async Task<HttpResponseMessage> SendAsJsonAsync(this HttpClient httpClient, HttpRequestMessage requestMessage, object value)
         {
             var stream = new MemoryStream(); // Using block isn't used. Stream is disposed automatically by httpClient.SendAsync method.
@@ -57,7 +79,7 @@ namespace Vokabular.RestClient.Extensions
             stream.Seek(0, SeekOrigin.Begin);
 
             requestMessage.Content = new StreamContent(stream);
-            requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(JsonContentType);
+            requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(ContentTypes.JsonContentType);
 
             var result = await httpClient.SendAsync(requestMessage);
             return result;
@@ -77,7 +99,7 @@ namespace Vokabular.RestClient.Extensions
                 sb.AppendFormat("{0}={1}", dataItem.Key.EncodeQueryString(), dataItem.Value?.EncodeQueryString());
             }
 
-            requestMessage.Content = new StringContent(sb.ToString(), Encoding.UTF8, WwwFormUrlEncodedContentType);
+            requestMessage.Content = new StringContent(sb.ToString(), Encoding.UTF8, ContentTypes.WwwFormUrlEncodedContentType);
 
             var result = await httpClient.SendAsync(requestMessage);
             return result;

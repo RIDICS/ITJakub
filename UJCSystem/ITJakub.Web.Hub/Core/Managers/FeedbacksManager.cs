@@ -16,12 +16,11 @@ namespace ITJakub.Web.Hub.Core.Managers
             m_communicationProvider = communicationProvider;
         }
 
-        public FeedbackViewModel GetBasicViewModel(FeedbackFormIdentification formIdentification, string staticTextName, string username = null)
+        public FeedbackViewModel GetBasicViewModel(FeedbackFormIdentification formIdentification, string staticTextName, bool isAuthenticated)
         {
-            // TODO need method with basic user info
             var pageStaticText = m_staticTextManager.GetRenderedHtmlText(staticTextName);
 
-            if (string.IsNullOrWhiteSpace(username))
+            if (!isAuthenticated)
             {
                 var viewModel = new FeedbackViewModel
                 {
@@ -32,9 +31,9 @@ namespace ITJakub.Web.Hub.Core.Managers
                 return viewModel;
             }
 
-            using (var client = m_communicationProvider.GetEncryptedClient())
+            using (var client = m_communicationProvider.GetMainServiceClient())
             {
-                var user = client.FindUserByUserName(username);
+                var user = client.GetCurrentUserInfo();
                 var viewModel = new FeedbackViewModel
                 {
                     Name = string.Format("{0} {1}", user.FirstName, user.LastName),

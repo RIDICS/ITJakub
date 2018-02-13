@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using ITJakub.Shared.Contracts.Searching.Criteria;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 
@@ -23,6 +22,7 @@ namespace ITJakub.SearchService.Core.Search
 
         private static void ConvertWildcardToRegex(WordCriteriaContract wordCriteria)
         {
+            wordCriteria.ExactMatch = ConvertWildcardToRegex(wordCriteria.ExactMatch);
             wordCriteria.StartsWith = ConvertWildcardToRegex(wordCriteria.StartsWith);
             wordCriteria.EndsWith = ConvertWildcardToRegex(wordCriteria.EndsWith);
 
@@ -59,23 +59,32 @@ namespace ITJakub.SearchService.Core.Search
             var regexBuilder = new StringBuilder();
 
             regexBuilder.Append("^");
-            if (!string.IsNullOrEmpty(word.StartsWith))
-            {
-                regexBuilder.Append("(").Append(word.StartsWith).Append(").*");
-            }
 
-            if (word.Contains != null)
+            if (!string.IsNullOrEmpty(word.ExactMatch))
             {
-                foreach (var innerWord in word.Contains.Where(innerWord => !string.IsNullOrEmpty(innerWord)))
+                regexBuilder.Append(word.ExactMatch);
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(word.StartsWith))
                 {
-                    regexBuilder.Append(".*(").Append(innerWord).Append(").*");
+                    regexBuilder.Append("(").Append(word.StartsWith).Append(").*");
+                }
+
+                if (word.Contains != null)
+                {
+                    foreach (var innerWord in word.Contains.Where(innerWord => !string.IsNullOrEmpty(innerWord)))
+                    {
+                        regexBuilder.Append(".*(").Append(innerWord).Append(").*");
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(word.EndsWith))
+                {
+                    regexBuilder.Append(".*(").Append(word.EndsWith).Append(")");
                 }
             }
 
-            if (!string.IsNullOrEmpty(word.EndsWith))
-            {
-                regexBuilder.Append(".*(").Append(word.EndsWith).Append(")");
-            }
             regexBuilder.Append("$");
 
             return regexBuilder.ToString();
