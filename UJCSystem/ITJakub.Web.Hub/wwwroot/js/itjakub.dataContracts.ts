@@ -500,6 +500,12 @@ interface CorpusSearchTotalResultCountAdvanced extends CorpusSearchTotalResultCo
     json: string;
 }
 
+interface CorpusSearchPagePosition {
+    compositionListStart: number;
+    bookId: number;
+    hitResultStart: number;
+}
+
 enum AudioType {
     Unknown = "Unknown",
     Mp3 = "Mp3",

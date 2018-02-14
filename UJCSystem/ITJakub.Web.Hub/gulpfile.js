@@ -206,7 +206,7 @@ gulp.task("bundle:itjakub_bohemiantextbank", function () {
             paths.webroot + "Areas/BohemianTextBank/js/itjakub.bohemiantextbank.modul.inicializator.js",
             paths.webroot + "Areas/BohemianTextBank/js/itjakub.bohemiantextbank.search.js",
             paths.webroot + "Areas/BohemianTextBank/js/itjakub.bohemiantextbank.list.js",
-            paths.webroot + "Areas/BohemianTextBank/js/ridics.bohemiantextbank.newsearch.js"
+            paths.webroot + "Areas/BohemianTextBank/js/corpus-search-viewer/ridics.bohemiantextbank.*.js"
         ])
         .pipe(sourcemaps.init())
         .pipe(concat("itjakub.bohemiantextbank.bundle.js"))

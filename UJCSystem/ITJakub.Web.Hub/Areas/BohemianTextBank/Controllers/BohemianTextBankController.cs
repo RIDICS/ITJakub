@@ -50,7 +50,12 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             return View();
         }
 
-        public ActionResult Searchnew()
+        public ActionResult SearchCombined()
+        {
+            return View();
+        }
+
+        public ActionResult SearchSingle()
         {
             return View();
         }
