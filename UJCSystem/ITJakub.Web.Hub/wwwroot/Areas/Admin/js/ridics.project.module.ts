@@ -124,7 +124,7 @@ abstract class ProjectModuleBase {
                 });
     }
 
-    private loadTabPanel(tabPanelSelector: string) {
+    loadTabPanel(tabPanelSelector: string) {
         var tabPanelType = this.getTabPanelType(tabPanelSelector);
         var $tabPanel = $(tabPanelSelector);
         var url = this.getLoadTabPanelContentUrl(tabPanelType);
@@ -238,7 +238,7 @@ class ProjectWorkModule extends ProjectModuleBase {
     makeProjectModuleTab(tabPanelType: ProjectModuleTabType): ProjectModuleTabBase {
         switch (tabPanelType) {
         case ProjectModuleTabType.WorkMetadata:
-            return new ProjectWorkMetadataTab(this.projectId);
+            return new ProjectWorkMetadataTab(this.projectId, this);
         case ProjectModuleTabType.WorkPageList:
             return new ProjectWorkPageListTab(this.projectId);
         case ProjectModuleTabType.WorkPublications:

@@ -11,12 +11,12 @@
     private publisherName: string = null;
     private existingGenres: JQuery = null;
     private existingLitKinds: JQuery = null;
-
-    constructor(projectId: number) {
+    private workModule: ProjectWorkModule;
+    constructor(projectId: number, workModule: ProjectWorkModule) {
         super();
         this.projectId = projectId;
         this.projectClient = new ProjectClient();
-
+        this.workModule = workModule;
         this.publisherTypeahead =
             new SingleSetTypeaheadSearchBox<string>("#work-metadata-publisher", "Admin/Project", x => `${x}`, null);
         this.publisherTypeahead.setDataSet("Publisher");
@@ -338,6 +338,10 @@
 
         $("#work-metadata-cancel-button").click(() => {
             this.disableEdit();
+            const metadataTabSelector = "#project-work-metadata";
+            var tabPanelEl = $(metadataTabSelector);
+            tabPanelEl.empty();
+            this.workModule.loadTabPanel(metadataTabSelector);
             this.publisherTypeahead.destroy();
             $("#category-tree").children("input").prop("disabled", true);
         });
