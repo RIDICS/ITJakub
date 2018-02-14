@@ -754,7 +754,6 @@ class RegExWordConditionList implements IRegExConditionListBase {
     importData(conditionsArray: WordsCriteriaListDescription) {
         this.resetItems();
         if (!conditionsArray.conditions.length) return;
-        console.log(conditionsArray.conditions[0]);
         this.getLastItem().importData(conditionsArray.conditions[0]);
         for (let i = 1; i < conditionsArray.conditions.length; i++) {
             this.addItem();
@@ -1597,10 +1596,6 @@ class RegExWordCondition implements IRegExConditionItemBase{
 
     importData(conditionData: WordCriteriaDescription) {
         this.resetInputs();
-        console.log(conditionData.startsWith);
-        console.log(conditionData.contains);
-        console.log(conditionData.endsWith);
-        console.log(conditionData.exactMatch);
         if (conditionData.startsWith) {
             this.getLastInput().importData(conditionData.startsWith, WordInputTypeEnum.StartsWith);
             this.addInput();
