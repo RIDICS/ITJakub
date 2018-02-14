@@ -25,7 +25,7 @@ function initGoldenReader(bookId: string,
 class ReaderLayout {
     private favoriteManager: FavoriteManager;
     private newFavoriteDialog: NewFavoriteDialog;
-    readerLayout: any;
+    readerLayout: GoldenLayout;
     readerHeaderDiv: HTMLDivElement;
     sliderOnPage: number;
     actualPageIndex: number;
@@ -40,6 +40,8 @@ class ReaderLayout {
     loadedBookContent: boolean;
 
     clickedMoveToPage: boolean;
+
+    private bookmarksPanel: BookmarksPanel;
 
     toolPanels: Array<ToolPanel>;
     contentViewPanels: Array<ContentViewPanel>;
@@ -63,8 +65,8 @@ class ReaderLayout {
         $(this.readerHeaderDiv).addClass("content-container");
         this.pageChangedCallback = pageChangedCallback;
         this.pagerDisplayPages = 5;
-        this.favoriteManager = new FavoriteManager();
         this.showPanelList = showPanelList;
+        this.favoriteManager = new FavoriteManager();
         this.newFavoriteDialog = new NewFavoriteDialog(this.favoriteManager, true);
     }
 
@@ -98,6 +100,288 @@ class ReaderLayout {
 
         this.readerLayout = this.initLayout();
 
+        this.loadBookmarks();
+        this.newFavoriteDialog.make();
+        this.newFavoriteDialog.setSaveCallback(this.createBookmarks.bind(this));
+
+    }
+
+    getBookmarks(): IBookmarksInfo {
+        var result: IBookmarksInfo = {
+            positions: new Array<IBookmarkPosition>(),
+            totalCount: 0
+        };
+
+        for (var i = 0; i < this.bookmarks.length; i++) {
+            var bookmarkPosition = this.bookmarks[i];
+            if (bookmarkPosition && bookmarkPosition.bookmarks.length > 0) {
+                result.positions.push(bookmarkPosition);
+                result.totalCount += bookmarkPosition.bookmarks.length;
+            }
+        }
+
+        return result;
+    }
+
+    createBookmarks(data: INewFavoriteItemData) {
+        if (data.labels.length === 0) {
+            // TODO possible create default label
+            return;
+        }
+
+        var pageIndex: number = this.actualPageIndex;
+        var page: BookPage = this.pages[pageIndex];
+        var bookmarkPosition: IBookmarkPosition = this.bookmarks[pageIndex];
+
+        if (!bookmarkPosition) {
+            bookmarkPosition = {
+                bookmarks: new Array<IBookPageBookmark>(),
+                bookmarkSpan: null,
+                pageIndex: pageIndex
+            };
+            this.bookmarks[pageIndex] = bookmarkPosition;
+        }
+
+        var newBookmarks = new Array<IBookPageBookmark>();
+        var labelIds = new Array<number>();
+        for (let i = 0; i < data.labels.length; i++) {
+            var labelItem = data.labels[i];
+            var favoriteLabel: IFavoriteLabel = {
+                id: labelItem.labelId,
+                name: labelItem.labelName,
+                color: labelItem.labelColor,
+                isDefault: false,
+                lastUseTime: null
+            }
+            var bookPageBookmark: IBookPageBookmark = {
+                id: 0,
+                favoriteLabel: favoriteLabel,
+                pageId: page.pageId,
+                title: data.itemName
+            };
+
+            newBookmarks.push(bookPageBookmark);
+            bookmarkPosition.bookmarks.push(bookPageBookmark);
+            labelIds.push(labelItem.labelId);
+        }
+
+        $(bookmarkPosition.bookmarkSpan).remove();
+
+        if (bookmarkPosition.bookmarks.length > 1) {
+            bookmarkPosition.bookmarkSpan = this.createMultipleBookmarkSpan(pageIndex, page.text, page.pageId, bookmarkPosition.bookmarks.length);
+        } else {
+            bookmarkPosition.bookmarkSpan = this.createSingleBookmarkSpan(pageIndex, page.text, page.pageId, data.itemName, bookmarkPosition.bookmarks[0].favoriteLabel);
+        }
+
+        const postShowAction = () => {
+            const $bookmarksContainer = $(".reader-bookmarks-container");
+            if (this.bookmarksPanel !== undefined && $bookmarksContainer.length > 0) {
+                this.bookmarksPanel.createBookmarkList(
+                    $bookmarksContainer.parent().get(0),
+                    this.bookmarksPanel
+                );
+            }
+        };
+
+        this.favoriteManager.createPageBookmark(Number(this.bookId), page.pageId, data.itemName, labelIds, (ids, error) => {
+            if (error) {
+                this.newFavoriteDialog.showError("Chyba při vytváření záložky");
+                return;
+            }
+
+            for (var i = 0; i < ids.length; i++) {
+                var id = ids[i];
+                var bookmark = newBookmarks[i];
+                bookmark.id = id;
+
+            }
+            this.newFavoriteDialog.hide();
+            this.showBookmark(bookmarkPosition.bookmarkSpan);
+            postShowAction();
+        });
+    }
+
+    showBookmark(bookmarkHtml: HTMLSpanElement) {
+        $(this.readerHeaderDiv).find(".slider").append(bookmarkHtml).promise();
+    }
+
+    private createBookmarkSpan(pageIndex: number, pageName: string, pageId: number, title: string, tooltipTitle: string | (() => string), favoriteLabel: IFavoriteLabel) {
+        var positionStep = 100 / (this.pages.length - 1);
+        var bookmarkSpan = document.createElement("span");
+        var $bookmarkSpan = $(bookmarkSpan);
+
+        $bookmarkSpan.addClass("glyphicon glyphicon-bookmark bookmark");
+        $bookmarkSpan.data("page-index", pageIndex);
+        $bookmarkSpan.data("page-name", pageName);
+        $bookmarkSpan.data("page-xmlId", pageId);
+        $bookmarkSpan.data("title", title);
+
+        $bookmarkSpan.click(() => {
+            this.moveToPage(pageId, true);
+        });
+
+        if (favoriteLabel) {
+            $bookmarkSpan.css("color", favoriteLabel.color);
+            $bookmarkSpan.data("label-id", favoriteLabel.id);
+            $bookmarkSpan.data("label-name", favoriteLabel.name);
+            $bookmarkSpan.data("label-color", favoriteLabel.color);
+        }
+
+        var tooltipOptions: TooltipOptions = {
+            placement: "bottom",
+            title: tooltipTitle
+        };
+        $bookmarkSpan.tooltip(tooltipOptions);
+
+        var computedPosition = (positionStep * pageIndex);
+        $bookmarkSpan.css("left", computedPosition + "%");
+
+        return bookmarkSpan;
+    }
+
+    createSingleBookmarkSpan(pageIndex: number, pageName: string, pageId: number, title: string, favoriteLabel: IFavoriteLabel): HTMLSpanElement {
+        var tooltipTitle = function () {
+            var bookmarkTitle = $(this).data("title");
+            return favoriteLabel
+                ? bookmarkTitle + " (Štítek: " + favoriteLabel.name + ")"
+                : bookmarkTitle;
+        };
+
+        var bookmarkSpan = this.createBookmarkSpan(pageIndex, pageName, pageId, title, tooltipTitle, favoriteLabel);
+        return bookmarkSpan;
+    }
+
+    createMultipleBookmarkSpan(pageIndex: number, pageName: string, pageId: number, labelCount: number): HTMLSpanElement {
+        var favoriteLabel: IFavoriteLabel = {
+            id: 0,
+            name: "",
+            isDefault: false,
+            color: "#000000",
+            lastUseTime: null
+        };
+
+        var tooltipTitle: string;
+        if (labelCount > 4 || labelCount < 1) {
+            tooltipTitle = labelCount + " záložek";
+        } else if (labelCount > 1) {
+            tooltipTitle = labelCount + " záložky";
+        } else {
+            tooltipTitle = "1 záložka";
+        }
+
+        var bookmarkSpan = this.createBookmarkSpan(pageIndex, pageName, pageId, "", tooltipTitle, favoriteLabel);
+        var $bookmarkSpan = $(bookmarkSpan);
+        $bookmarkSpan.addClass("bookmark-multiple");
+
+        if (labelCount >= 2 && labelCount < 10) {
+            $bookmarkSpan.addClass("bookmark-content-" + labelCount);
+        } else if (labelCount >= 10) {
+            $bookmarkSpan.addClass("bookmark-content-9plus");
+        }
+
+        return bookmarkSpan;
+    }
+
+    private loadBookmarks() {
+        this.favoriteManager.getPageBookmarks(Number(this.bookId), (bookmarks) => {
+            for (var i = 0; i < bookmarks.length; i++) {
+                var bookmark = bookmarks[i];
+                this.loadBookmark(bookmark);
+            }
+        });
+    }
+
+    private loadBookmark(actualBookmark: IBookPageBookmark) {
+        for (var pageIndex = 0; pageIndex < this.pages.length; pageIndex++) {
+            var actualPage = this.pages[pageIndex];
+            if (actualBookmark.pageId === actualPage.pageId) {
+                var bookmarkPosition = this.bookmarks[pageIndex];
+                if (!bookmarkPosition) {
+                    bookmarkPosition = {
+                        bookmarks: new Array<IBookPageBookmark>(),
+                        bookmarkSpan: null,
+                        pageIndex: pageIndex
+                    };
+                    this.bookmarks[pageIndex] = bookmarkPosition;
+                }
+
+                bookmarkPosition.bookmarks.push(actualBookmark);
+
+                this.recreateAndShowBookmarkSpan(bookmarkPosition);
+                break;
+            }
+        }
+    }
+
+    recreateAndShowBookmarkSpan(bookmarkPosition: IBookmarkPosition) {
+        var pageIndex = bookmarkPosition.pageIndex;
+        var actualPage = this.pages[pageIndex];
+
+        $(bookmarkPosition.bookmarkSpan).remove();
+
+        if (bookmarkPosition.bookmarks.length > 1) {
+            bookmarkPosition.bookmarkSpan = this.createMultipleBookmarkSpan(pageIndex, actualPage.text, actualPage.pageId, bookmarkPosition.bookmarks.length);
+            $(bookmarkPosition.bookmarkSpan).data("favorite-id", 0);
+        } else if (bookmarkPosition.bookmarks.length === 1) {
+            let actualBookmark = bookmarkPosition.bookmarks[0];
+            bookmarkPosition.bookmarkSpan = this.createSingleBookmarkSpan(pageIndex, actualPage.text, actualPage.pageId, actualBookmark.title, actualBookmark.favoriteLabel);
+            $(bookmarkPosition.bookmarkSpan).data("favorite-id", actualBookmark.id);
+        } else {
+            bookmarkPosition.bookmarkSpan = null;
+        }
+
+        if (bookmarkPosition.bookmarkSpan) {
+            this.showBookmark(bookmarkPosition.bookmarkSpan);
+        }
+    }
+
+    setBookmarkTitle(bookmarkId: number, pageIndex: number, title: string) {
+        var bookmarkPosition = this.bookmarks[pageIndex];
+        var bookmark: IBookPageBookmark = null;
+        for (let i = 0; i < bookmarkPosition.bookmarks.length; i++) {
+            var bookmarkItem = bookmarkPosition.bookmarks[i];
+            if (bookmarkItem.id === bookmarkId) {
+                bookmark = bookmarkItem;
+                break;
+            }
+        }
+
+        if (!bookmark || bookmark.title === title) {
+            return;
+        }
+
+        bookmark.title = title;
+        if (bookmarkPosition.bookmarks.length === 1) {
+            $(bookmarkPosition.bookmarkSpan).data("title", title);
+        }
+
+        this.favoriteManager.updateFavoriteItem(bookmarkId, title, () => { });
+    }
+
+    public persistRemoveBookmark(pageIndex: number, bookmarkId: number) {
+        const postRemoveAction = () => {
+            const $bookmarksContainer = $(".reader-bookmarks-container");
+            if (this.bookmarksPanel !== undefined && $bookmarksContainer.length > 0) {
+                this.bookmarksPanel.createBookmarkList(
+                    $bookmarksContainer.parent().get(0),
+                    this.bookmarksPanel
+                );
+            }
+        };
+
+        this.favoriteManager.deleteFavoriteItem(bookmarkId, () => {
+            var bookmarkPosition = this.bookmarks[pageIndex];
+            var indexToRemove: number;
+            for (indexToRemove = 0; indexToRemove < bookmarkPosition.bookmarks.length; indexToRemove++) {
+                if (bookmarkPosition.bookmarks[indexToRemove].id === bookmarkId) {
+                    bookmarkPosition.bookmarks.splice(indexToRemove, 1);
+                    break;
+                }
+            }
+
+            this.recreateAndShowBookmarkSpan(bookmarkPosition);
+            postRemoveAction();
+        });
     }
 
     private makeBookDetails(bookTitle: string) : HTMLDivElement {
@@ -362,7 +646,8 @@ class ReaderLayout {
 
 
         $(addBookmarksButton).click((event: Event) => {
-            throw new Error("Not implemented");
+            var actualPageName = this.getActualPage().text;
+            this.newFavoriteDialog.show(actualPageName);
         });
         toolButtons.appendChild(addBookmarksButton);
 
@@ -638,15 +923,23 @@ class ReaderLayout {
         }
     }
 
+    getActualPage(): BookPage {
+        return this.pages[this.actualPageIndex];
+    }
+
+    getPageByIndex(pageIndex: number): BookPage {
+        return this.pages[pageIndex];
+    }
+
     private initLayout(): GoldenLayout {
         var module = this;
         var config = this.createConfig(this.textPanelId, "Text");
-        this.readerLayout = new GoldenLayout(config, $('#ReaderBodyDiv'));
-        this.readerLayout.registerComponent('toolTab', function (container, state) {
+        var readerLayout = new GoldenLayout(config, $('#ReaderBodyDiv'));
+        readerLayout.registerComponent('toolTab', function (container, state) {
             switch (state.label) {
-                //case module.bookmarksPanelId:
-                //    container.getElement().append(module.createBookmarkPanel());
-                //    break;
+                case module.bookmarksPanelId:
+                    container.getElement().append(module.createBookmarksPanel());
+                    break;
                 case module.termsPanelId:
                     module.createTermsPanel();
                     break;
@@ -666,7 +959,7 @@ class ReaderLayout {
                     break;
             }    
         });
-        this.readerLayout.registerComponent('viewTab', function(container, state) {
+        readerLayout.registerComponent('viewTab', function(container, state) {
             switch (state.label) {
             //case module.audioPanelId:
             //    container.getElement().append(module.createAudioPanel());
@@ -681,9 +974,8 @@ class ReaderLayout {
                 break;
             }        
         });
-        this.readerLayout.init();
-        var readerLayout = this.readerLayout;
-        this.readerLayout.on("stateChanged", function () {
+        readerLayout.init();
+        readerLayout.on("stateChanged", function () {
             $(".reader-text-container").scroll();
         });
         $(window).resize(function () {
@@ -711,7 +1003,6 @@ class ReaderLayout {
                             id: panelId,
                             componentState: { label: panelId },
                             componentName: 'viewTab',
-                            isClosable: false,
                             title: panelTitle       
                         }]
                     }]
@@ -721,58 +1012,67 @@ class ReaderLayout {
         return layoutConfig;    
     }
 
+    private createBookmarksPanel(): HTMLDivElement {
+        var bookmarksPanel: BookmarksPanel = new BookmarksPanel(this.bookmarksPanelId, this);
+        this.bookmarksPanel = bookmarksPanel;
+        this.toolPanels.push(bookmarksPanel);
+        return bookmarksPanel.panelHtml;
+    }
+
     private createContentPanel(): HTMLDivElement {
         var contentPanel: ContentPanel = null;
-        if (this.showPanelList.indexOf(ReaderPanelEnum.ContentPanel) >= 0) {
-            contentPanel = new ContentPanel(this.contentPanelId, this);
-            this.toolPanels.push(contentPanel);
-        }
+        contentPanel = new ContentPanel(this.contentPanelId, this);
+        this.toolPanels.push(contentPanel);
         return contentPanel.panelHtml;
     }
 
     private createSearchPanel(): HTMLDivElement {
         var resultPanel: SearchResultPanel = null;
-        if (this.showPanelList.indexOf(ReaderPanelEnum.SearchPanel) >= 0) {
             resultPanel = new SearchResultPanel(this.searchPanelId, this);
             this.toolPanels.push(resultPanel);
-        }
         return resultPanel.panelHtml;
     }
 
     private createTermsPanel() {
-        var itemConfig = [{
+        var itemConfig = {
             type: 'component',
             id: this.occurOnPageId,
-            componentState: { label: this.occurOnPageId},
+            componentState: { label: this.occurOnPageId },
             componentName: 'viewTab',
             title: "Výskyty na stránce",
             isClosable: false
-        }, {
+        };
+        this.readerLayout.root.getItemsById(this.termsPanelId)[0].addChild(itemConfig);
+        itemConfig = {
             type: 'component',
             id: this.termsOnPageId,
             componentState: { label: this.termsOnPageId },
             componentName: 'viewTab',
             title: "Témata na stránce",
             isClosable: false
-        }];   
+        };   
         this.readerLayout.root.getItemsById(this.termsPanelId)[0].addChild(itemConfig);
     }
 
     private createTextPanel(): HTMLDivElement {
         var textPanel: TextPanel = null;
-        if (this.showPanelList.indexOf(ReaderPanelEnum.TextPanel) >= 0) {
-            textPanel = new TextPanel(this.textPanelId, this);
-            this.contentViewPanels.push(textPanel);
-        }
+        textPanel = new TextPanel(this.textPanelId, this);
+        this.contentViewPanels.push(textPanel);
         return textPanel.panelHtml;
     }
 
     private createImagePanel(): HTMLDivElement {
         var imagePanel: ImagePanel = null;
-        if (this.showPanelList.indexOf(ReaderPanelEnum.ImagePanel) >= 0) {
-            imagePanel = new ImagePanel(this.imagePanelId, this);
-        }
+        imagePanel = new ImagePanel(this.imagePanelId, this);
+        this.contentViewPanels.push(imagePanel);
         return imagePanel.panelHtml;
+    }
+
+    private createAudioPanel(): HTMLDivElement {
+        var audioPanel: AudioPanel = null;
+        audioPanel = new AudioPanel(this.audioPanelId, this);
+        this.contentViewPanels.push(audioPanel);
+        return audioPanel.panelHtml;
     }
 
     hasBookPage(bookId: string, bookVersionId: string, onTrue: () => any = null, onFalse: () => any = null) {
@@ -854,7 +1154,7 @@ abstract class SidePanel {
     }
 
     public onMoveToPage(pageIndex: number, scrollTo: boolean) {
-        throw new Error("Not implemented");
+        
     }
 
     protected addPanelClass(sidePanelDiv: HTMLDivElement){
@@ -1045,30 +1345,371 @@ class SearchResultPanel extends ToolPanel {
     }
 }
 
-class TermsPanel extends ToolPanel {
-    private termsResultItemsDiv: HTMLDivElement;
-    private termsOrderedList: HTMLOListElement;
+class BookmarksPanel extends ToolPanel {
 
-    private termsResultItemsLoadDiv: HTMLDivElement;
-    
-    private termClickedCallback: (termId: number, text: string) => void;
+    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+        var innerContent: HTMLDivElement = window.document.createElement("div");
+        this.createBookmarkList(innerContent, rootReference);
+        return innerContent;
+    }
 
-    makeBody(rootReference: SidePanel, window: Window): HTMLElement {
-        throw new Error("Not implemented");
+    public createBookmarkList(innerContent: HTMLElement, rootReference: SidePanel) {
+        const bookmarksPerPage = 20;
+        const actualBookmarkPage = 1;
+
+        const $bookmarksContainer = $(innerContent).children(".reader-bookmarks-container");
+        let bookmarksContainer: HTMLDivElement;
+
+        if ($(innerContent).children(".reader-bookmarks-container").length == 0) {
+            bookmarksContainer = document.createElement("div");
+            bookmarksContainer.classList.add("reader-bookmarks-container");
+            innerContent.appendChild(bookmarksContainer);
+        }
+        else {
+            $bookmarksContainer.empty();
+            bookmarksContainer = <HTMLDivElement>$bookmarksContainer.get(0);
+        }
+
+        var bookmarksHead = document.createElement("h2");
+        bookmarksHead.innerHTML = "Všechny záložky";
+        bookmarksHead.classList.add("reader-bookmarks-head");
+        bookmarksContainer.appendChild(bookmarksHead);
+
+        var bookmarksContent = document.createElement("div");
+        bookmarksContent.classList.add("reader-bookmarks-content");
+        bookmarksContainer.appendChild(bookmarksContent);
+
+        var bookmarks = rootReference.parentReader.getBookmarks();
+
+        var pageInContainer: Array<HTMLUListElement> = [];
+        var pagesContainer: HTMLDivElement = document.createElement("div");
+        bookmarksContent.appendChild(pagesContainer);
+
+        var paginationContainer: HTMLDivElement = document.createElement("div");
+        paginationContainer.classList.add("reader-bookmarks-pagination");
+        bookmarksContent.appendChild(paginationContainer);
+
+        for (let i = 0; i < Math.ceil(bookmarks.totalCount / bookmarksPerPage); i++) {
+            pageInContainer[i] = document.createElement("ul");
+            pageInContainer[i].classList.add("reader-bookmarks-content-list");
+            pageInContainer[i].setAttribute("data-page-index", (i + 1).toString());
+            if (i != actualBookmarkPage) {
+                pageInContainer[i].classList.add("hide");
+            }
+
+            pagesContainer.appendChild(pageInContainer[i]);
+        }
+
+        var currentIndex = 0;
+        for (let i = 0; i < bookmarks.positions.length; i++) {
+            var bookmarkPosition = bookmarks.positions[i];
+            for (let j = 0; j < bookmarkPosition.bookmarks.length; j++) {
+                var bookmark = bookmarkPosition.bookmarks[j];
+                var bookmarkElement = this.createBookmark(bookmark, rootReference, bookmarkPosition.pageIndex);
+                pageInContainer[Math.floor(currentIndex / bookmarksPerPage)].appendChild(bookmarkElement);
+                currentIndex++;
+            }
+        }
+
+        const paginator = new Pagination({
+            container: paginationContainer,
+            pageClickCallback: (pageNumber: number) => this.showBookmarkPage(pagesContainer, pageNumber),
+            callPageClickCallbackOnInit: true
+        });
+        paginator.make(bookmarks.totalCount, bookmarksPerPage, actualBookmarkPage);
+
+        $(".pagination", paginationContainer).addClass("pagination-extra-small");
+    }
+
+    protected showBookmarkPage(pagesContainer: HTMLDivElement, page: number) {
+        $(pagesContainer).children().addClass("hide");
+        $(pagesContainer).children(`[data-page-index="${page}"]`).removeClass("hide");
+    }
+
+    protected createBookmark(bookmark: IBookPageBookmark, rootReference: SidePanel, pageIndex: number) {
+        const bookmarkItem = document.createElement("li");
+        bookmarkItem.classList.add("reader-bookmarks-content-item");
+
+        const bookmarkRemoveIco = document.createElement("a");
+        bookmarkRemoveIco.href = "#";
+        bookmarkRemoveIco.classList.add("glyphicon", "glyphicon-trash", "bookmark-remote-ico");
+        bookmarkItem.appendChild(bookmarkRemoveIco);
+
+        bookmarkRemoveIco.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            rootReference.parentReader.persistRemoveBookmark(pageIndex, bookmark.id);
+        });
+
+        const bookmarkIco = document.createElement("span");
+        bookmarkIco.classList.add("glyphicon", "glyphicon-bookmark", "bookmark-ico");
+        if (bookmark.favoriteLabel) {
+            $(bookmarkIco).css("color", bookmark.favoriteLabel.color);
+            $(bookmarkIco).attr("title", bookmark.favoriteLabel.name);
+        }
+        bookmarkItem.appendChild(bookmarkIco);
+
+        const pageInfo = rootReference.parentReader.getPageByIndex(pageIndex);
+        const page = document.createElement("a");
+        page.href = "#";
+        page.innerHTML = pageInfo.text;
+        page.classList.add("reader-bookmarks-content-item-page");
+
+        const actionHook = () => {
+            var pageId = bookmark.pageId;
+            rootReference.parentReader.moveToPage(pageId, true);
+        };
+        bookmarkIco.addEventListener("click", actionHook);
+        page.addEventListener("click", actionHook);
+
+        bookmarkItem.appendChild(page);
+        bookmarkItem.appendChild(document.createTextNode(" "));
+
+        const titleContainer = document.createElement("span");
+        titleContainer.classList.add("reader-bookmarks-content-item-title-container");
+        bookmarkItem.appendChild(titleContainer);
+
+        const titleInput = document.createElement("input");
+        titleInput.classList.add("reader-bookmarks-content-item-title-input", "hide");
+        titleInput.value = bookmark.title;
+        $(titleInput).attr("maxlength", FavoriteManager.maxTitleLength);
+        bookmarkItem.appendChild(titleInput);
+
+        const title = document.createElement("span");
+        this.setBookmarkTitle(title, rootReference, bookmark.id, pageIndex, bookmark.title);
+        title.classList.add("reader-bookmarks-content-item-title");
+
+        titleContainer.addEventListener("click", () => {
+            titleContainer.classList.add("hide");
+            titleInput.classList.remove("hide");
+
+            titleInput.focus();
+        });
+        const updateHook = () => {
+            this.setBookmarkTitle(title, rootReference, bookmark.id, pageIndex, titleInput.value);
+
+            titleInput.classList.add("hide");
+            titleContainer.classList.remove("hide");
+        };
+        titleInput.addEventListener("blur", updateHook);
+        titleInput.addEventListener("keyup", (e: KeyboardEvent) => {
+            if (e.keyCode == 13) {
+                updateHook();
+            }
+        });
+
+        titleContainer.appendChild(title);
+        titleContainer.appendChild(document.createTextNode(" "));
+
+        const titleEdit = document.createElement("span");
+        titleEdit.classList.add("glyphicon", "glyphicon-pencil", "edit-button");
+        titleContainer.appendChild(titleEdit);
+
+        return bookmarkItem;
+    }
+
+    protected setBookmarkTitle(titleItem: HTMLElement, rootReference: SidePanel, bookmarkId: number, pageIndex: number, title: string) {
+        rootReference.parentReader.setBookmarkTitle(bookmarkId, pageIndex, title);
+
+        if (!title) {
+            title = "&lt;bez názvu&gt;";
+        }
+
+        titleItem.innerHTML = title;
+    }
+
+}
+
+abstract class TermsPanel extends ToolPanel {
+    protected termClickedCallback: (termId: number, text: string) => void;
+
+    setTermClickedCallback(callback: (termId: number, text: string) => void) {
+        this.termClickedCallback = callback;
     }
 }
 
-class TermsSearchPanel extends ToolPanel {
+class TermsSearchPanel extends TermsPanel {
     private searchResultItemsDiv: HTMLDivElement;
     private searchResultOrderedList: HTMLOListElement; 
 
     private searchResultItemsLoadDiv: HTMLDivElement;
 
     makeBody(rootReference: SidePanel, window: Window): HTMLElement {
-        throw new Error("Not implemented");
+        var searchResultDiv = window.document.createElement("div");
+        $(searchResultDiv).addClass("reader-search-result-div");
+
+        var searchResultItemsLoadDiv = window.document.createElement("div");
+        $(searchResultItemsLoadDiv).addClass("reader-terms-search-result-items-div-load loader");
+        this.searchResultItemsLoadDiv = searchResultItemsLoadDiv;
+        $(searchResultItemsLoadDiv).hide();
+        searchResultDiv.appendChild(searchResultItemsLoadDiv);
+
+        var searchResultItemsDiv = window.document.createElement("div");
+        $(searchResultItemsDiv).addClass("reader-terms-search-result-items-div");
+        this.searchResultItemsDiv = searchResultItemsDiv;
+        searchResultDiv.appendChild(searchResultItemsDiv);
+
+        this.searchResultOrderedList = window.document.createElement("ol");
+
+        this.searchResultItemsDiv.appendChild(this.searchResultOrderedList);
+
+        return searchResultDiv;
     }
 
+    showLoading() {
+        $(this.searchResultItemsDiv).hide();
+        $(this.searchResultItemsLoadDiv).show();
 
+    }
+
+    clearLoading() {
+        $(this.searchResultItemsLoadDiv).hide();
+        $(this.searchResultItemsDiv).show();
+    }
+
+    clearResults() {
+        $(this.searchResultOrderedList).empty();
+        $(this.searchResultOrderedList).append("Pro zobrazení výskytů použijte vyhledávání.");
+        $(this.searchResultOrderedList).addClass("no-items");
+    }
+
+    showResults(searchResults: PageDescription[]) {
+
+        $(this.searchResultOrderedList).empty();
+        $(this.searchResultOrderedList).removeClass("no-items");
+
+        for (var i = 0; i < searchResults.length; i++) {
+            var result = searchResults[i];
+            var resultItem = this.createResultItem(result);
+            this.searchResultOrderedList.appendChild(resultItem);
+        }
+
+        if (searchResults.length === 0) {
+            $(this.searchResultOrderedList).addClass("no-items");
+            $(this.searchResultOrderedList).append("Žádné výskyty na stránce.");
+        }
+    }
+
+    private createResultItem(page: PageDescription): HTMLLIElement {
+        var resultItemListElement = document.createElement("li");
+
+        var hrefElement = document.createElement("a");
+        hrefElement.href = "#";
+        $(hrefElement).click(() => {
+            this.parentReader.moveToPage(page.pageId, true);
+        });
+
+        var textSpanElement = document.createElement("span");
+        textSpanElement.innerHTML = `[${page.pageName}]`;
+
+        $(hrefElement).append(textSpanElement);
+
+        $(resultItemListElement).append(hrefElement);
+
+        return resultItemListElement;
+    }
+}
+
+class TermsResultPanel extends TermsPanel {
+
+    private termsResultItemsDiv: HTMLDivElement;
+    private termsOrderedList: HTMLOListElement;
+
+    private termsResultItemsLoadDiv: HTMLDivElement;
+    makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+        var termsResultDiv = window.document.createElement("div");
+        $(termsResultDiv).addClass("reader-terms-result-div");
+
+        var termsResultItemsLoadDiv = window.document.createElement("div");
+        $(termsResultItemsLoadDiv).addClass("reader-terms-result-items-div-load loader");
+        this.termsResultItemsLoadDiv = termsResultItemsLoadDiv;
+        $(termsResultItemsLoadDiv).hide();
+        termsResultDiv.appendChild(termsResultItemsLoadDiv);
+
+        var termsResultItemsDiv = window.document.createElement("div");
+        $(termsResultItemsDiv).addClass("reader-terms-result-items-div");
+        this.termsResultItemsDiv = termsResultItemsDiv;
+        termsResultDiv.appendChild(termsResultItemsDiv);
+
+        this.termsOrderedList = window.document.createElement("ol");
+
+        this.termsResultItemsDiv.appendChild(this.termsOrderedList);
+
+        var actualPage = this.parentReader.pages[this.parentReader.actualPageIndex];
+        this.loadTermsOnPage(actualPage);
+
+        return termsResultItemsDiv;
+    }
+
+    public onMoveToPage(pageIndex: number, scrollTo: boolean) {
+        var page = this.parentReader.getPageByIndex(pageIndex);
+        this.loadTermsOnPage(page);
+    }
+
+    private loadTermsOnPage(page: BookPage) {
+
+        $(this.termsOrderedList).empty();
+        $(this.termsOrderedList).removeClass("no-items");
+        $(this.termsResultItemsLoadDiv).show();
+        $(this.termsResultItemsDiv).hide();
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { snapshotId: this.parentReader.bookId, pageId: page.pageId },
+            url: getBaseUrl() + "Reader/GetTermsOnPage",
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+
+                if (page.pageId === this.parentReader.getActualPage().pageId) {
+
+                    $(this.termsResultItemsLoadDiv).hide();
+                    $(this.termsResultItemsDiv).show();
+
+                    var terms = response["terms"] as Array<ITermContract>;
+                    for (var i = 0; i < terms.length; i++) {
+                        var term = terms[i];
+                        this.termsOrderedList.appendChild(this.createTermItem(term.id, term.name));
+                    }
+
+                    if (terms.length === 0 && this.termsOrderedList.innerHTML == "") {
+                        $(this.termsOrderedList).addClass("no-items");
+                        $(this.termsOrderedList).append("Na této stránce se nenachází žádné téma");
+                    }
+                }
+            },
+            error: (response) => {
+                if (page.pageId === this.parentReader.getActualPage().pageId) {
+                    $(this.termsResultItemsLoadDiv).hide();
+                    $(this.termsResultItemsDiv).show();
+                    $(this.termsOrderedList).addClass("no-items");
+                    $(this.termsOrderedList).append("Chyba při načítání témat na stránce '" + page.text + "'");
+                }
+            }
+        });
+    }
+
+    private createTermItem(termId: number, text: string): HTMLLIElement {
+        var termItemListElement = document.createElement("li");
+
+        var hrefElement = document.createElement("a");
+        hrefElement.href = "#";
+        $(hrefElement).click(() => {
+            if (typeof this.termClickedCallback !== "undefined" && this.termClickedCallback !== null) {
+                this.termClickedCallback(termId, text);
+            }
+        });
+
+        var textSpanElement = document.createElement("span");
+        textSpanElement.innerHTML = `[${text}]`;
+
+        $(hrefElement).append(textSpanElement);
+
+        $(termItemListElement).append(hrefElement);
+
+        return termItemListElement;
+    }
 }
 //end of tool panels
 
@@ -1112,6 +1753,9 @@ class TextPanel extends ContentViewPanel {
             rootReference.parentReader.moveToPage($(pageWithMinOffset).data("page-xmlId"), false);
         });
 
+        var textAreaDiv: HTMLDivElement = window.document.createElement("div");
+        $(textAreaDiv).addClass("reader-text");
+
         for (var i = 0; i < rootReference.parentReader.pages.length; i++) {
             var page: BookPage = rootReference.parentReader.pages[i];
 
@@ -1130,14 +1774,14 @@ class TextPanel extends ContentViewPanel {
             $(pageDiv).addClass("page-wrapper");
             $(pageDiv).append(pageTextDiv);
             $(pageDiv).append(pageNameDiv);
-            textContainerDiv.appendChild(pageDiv);
+            textAreaDiv.appendChild(pageDiv);
         }
 
         var dummyPage: HTMLDivElement = window.document.createElement("div");
         $(dummyPage).addClass("dummy-page");
-        textContainerDiv.appendChild(dummyPage);
+        textAreaDiv.appendChild(dummyPage);
 
-        
+        textContainerDiv.appendChild(textAreaDiv);
         return textContainerDiv;
     }
 
@@ -1264,9 +1908,7 @@ class TextPanel extends ContentViewPanel {
 }
 
 class ImagePanel extends ContentViewPanel {
-    protected
-
-    makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
         var imageContainerDiv: HTMLDivElement = window.document.createElement("div");
         imageContainerDiv.classList.add("reader-image-container");
         return imageContainerDiv;
@@ -1324,4 +1966,10 @@ class ImagePanel extends ContentViewPanel {
     }
 }
 
-// End of new stuff
+class AudioPanel extends ContentViewPanel {
+    protected
+
+    makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+         throw new Error("Not implemented");
+    }
+}

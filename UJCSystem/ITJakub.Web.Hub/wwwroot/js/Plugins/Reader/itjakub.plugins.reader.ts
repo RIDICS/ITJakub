@@ -36,7 +36,7 @@ class ReaderModule {
     imagePanel: ImagePanelOld;
     textPanel: TextPanelOld;
     searchPanel: SearchResultPanelOld;
-    bookmarksPanel: BookmarksPanel;
+    bookmarksPanel: BookmarksPanelOld;
     settingsPanel: SettingsPanel;
     contentPanel: ContentPanelOld;
     termsPanel: TermsPanelOld;
@@ -519,7 +519,7 @@ class ReaderModule {
         $(bookmarkButton).click((event: Event) => {
             var panelId = this.bookmarksPanelIdentificator;
             if (!this.existSidePanel(panelId)) {
-                var bookmarksPanel: BookmarksPanel = new BookmarksPanel(panelId, this, this.showLeftSidePanelsButtonList);
+                var bookmarksPanel: BookmarksPanelOld = new BookmarksPanelOld(panelId, this, this.showLeftSidePanelsButtonList);
                 this.loadSidePanel(bookmarksPanel.panelHtml);
                 this.leftSidePanels.push(bookmarksPanel);
                 this.bookmarksPanel = bookmarksPanel;
@@ -1645,7 +1645,7 @@ class SettingsPanel extends LeftSidePanel {
     }
 }
 
-class BookmarksPanel extends LeftSidePanel {
+class BookmarksPanelOld extends LeftSidePanel {
     constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
         super(identificator, "Záložky", readerModule, showPanelButtonList);
     }
