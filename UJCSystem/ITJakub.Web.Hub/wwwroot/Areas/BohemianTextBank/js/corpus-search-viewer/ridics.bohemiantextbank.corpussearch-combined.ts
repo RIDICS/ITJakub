@@ -4,51 +4,12 @@
 }
 
 class BohemianTextBankCombined extends BohemianTextBankBase{
-    private searchResultsOnPage = 10;//corresponds to amount of results per page that should be on screen
-    private contextLength = 50;
 
-    private minContextLength = 30;
-    private maxContextLength = 100;
-    private minResultsPerPage = 1;
-    private maxResultsPerPage = 50;
-
-    private hitBookIds = [];
     private transientResults: ICorpusSearchResult[] = [];
 
     private paginator: IndefinitePagination;
 
-    private compositionResultListStart = -1;
-    private compositionsPerPage = 10;
     private compositionPageIsLast = false;
-
-    private currentBookId = -1;
-    private currentBookIndex = 0;
-    private currentResultStart = -1;
-    private currentViewPage = 1;
-    private totalViewPages = 0;
-
-    private defaultErrorMessage =
-        "Vyhledávání se nezdařilo. Ujistěte se, zda máte zadáno alespoň jedno kritérium na vyhledávání v textu.";
-
-    private urlSearchKey = "search";
-    private urlSelectionKey = "selected";
-    private urlSortAscKey = "sortAsc";
-    private urlSortCriteriaKey = "sortCriteria";
-    private urlContextSizeKey = "contextSize";
-    private urlResultPerPageKey = "resultsPerPage";
-
-    private readyForInit = false;
-    private notInitialized = true;
-
-    private bookIdsInQuery = new Array();
-    private categoryIdsInQuery = new Array();
-
-    private booksSelector: DropDownSelect2;
-    private sortBar: SortBar;
-
-    private enabledOptions = new Array<SearchTypeEnum>();
-
-    private search: Search;
 
     private paginationContainerEl = $("#paginationContainer");
 
@@ -251,58 +212,6 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
              this.generateViewingPage();
         }
             
-    }
-
-    private initializeFromUrlParams() {
-        if (this.readyForInit && this.notInitialized) {
-
-            this.notInitialized = false;
-
-            const contextSize = getQueryStringParameterByName(this.urlContextSizeKey);
-            if (contextSize) {
-                const contextLengthNumber = parseInt(contextSize);
-                if (!isNaN(contextLengthNumber)) {
-                    if (contextLengthNumber >= this.minContextLength && contextLengthNumber <= this.maxContextLength) {
-                        this.contextLength = contextLengthNumber;
-                        $("#contextPositionsSelect").val(contextLengthNumber);
-                    }
-                }
-            }
-
-            const resultPerPage = getQueryStringParameterByName(this.urlResultPerPageKey);
-            if (resultPerPage) {
-                const resultsPerPageNumber = parseInt(resultPerPage);
-                if (!isNaN(resultsPerPageNumber)) {
-                    if (resultsPerPageNumber >= this.minResultsPerPage && resultsPerPageNumber <= this.maxResultsPerPage) {
-                        this.searchResultsOnPage = resultsPerPageNumber;
-                        $("#number-of-results-per-viewing-page").val(resultPerPage);
-                    }
-                }
-            }
-
-            const sortedAsc = getQueryStringParameterByName(this.urlSortAscKey);
-            const sortCriteria = parseInt(getQueryStringParameterByName(this.urlSortCriteriaKey));
-
-            if (sortedAsc && sortCriteria) {
-                this.sortBar.setSortedAsc(sortedAsc === "true");
-                this.sortBar.setSortCriteria(sortCriteria as SortEnum);
-            }
-
-            const selected = getQueryStringParameterByName(this.urlSelectionKey);
-
-            const searched = getQueryStringParameterByName(this.urlSearchKey);
-            this.search.writeTextToTextField(searched);
-
-            if (selected) {
-                this.booksSelector.restoreFromSerializedState(selected);
-            }
-
-        } else if (!this.notInitialized) {
-            this.search.processSearch();
-        } else {
-            this.readyForInit = true;
-        }
-
     }
 
     private actualizeSelectedBooksAndCategoriesInQuery() {

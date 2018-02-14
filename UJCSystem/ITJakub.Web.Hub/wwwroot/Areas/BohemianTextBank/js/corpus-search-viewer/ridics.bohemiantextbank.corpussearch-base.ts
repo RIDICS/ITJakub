@@ -1,5 +1,47 @@
 ﻿class BohemianTextBankBase {
-    showLoading() {
+    protected searchResultsOnPage = 10;//corresponds to amount of results per page that should be on screen
+    protected contextLength = 50;
+
+    protected minContextLength = 30;
+    protected maxContextLength = 100;
+    protected minResultsPerPage = 1;
+    protected maxResultsPerPage = 50;
+
+    protected hitBookIds = [];
+
+    protected compositionResultListStart = -1;
+    protected compositionsPerPage = 10;
+
+    protected currentBookId = -1;
+    protected currentBookIndex = 0;
+    protected currentResultStart = -1;
+    protected currentViewPage = 1;
+    protected totalViewPages = 0;
+
+    protected defaultErrorMessage =
+        "Vyhledávání se nezdařilo. Ujistěte se, zda máte zadáno alespoň jedno kritérium na vyhledávání v textu.";
+
+    protected urlSearchKey = "search";
+    protected urlSelectionKey = "selected";
+    protected urlSortAscKey = "sortAsc";
+    protected urlSortCriteriaKey = "sortCriteria";
+    protected urlContextSizeKey = "contextSize";
+    protected urlResultPerPageKey = "resultsPerPage";
+
+    protected readyForInit = false;
+    protected notInitialized = true;
+
+    protected bookIdsInQuery = new Array();
+    protected categoryIdsInQuery = new Array();
+
+    protected booksSelector: DropDownSelect2;
+    protected sortBar: SortBar;
+
+    protected enabledOptions = new Array<SearchTypeEnum>();
+
+    protected search: Search;
+
+    protected showLoading() {
         $(".text-results-table").hide();
         $("#corpus-search-results-table-div-loader").empty();
         $("#corpus-search-results-table-div-loader").show();
@@ -7,13 +49,13 @@
     }
 
 
-    hideLoading() {
+    protected hideLoading() {
         $("#corpus-search-results-table-div-loader").removeClass("loader");
         $("#corpus-search-results-table-div-loader").hide();
         $(".text-results-table").show();
     }
 
-    printErrorMessage(message: string) {
+    protected printErrorMessage(message: string) {
         this.hideLoading();
         const corpusErrorDiv = $("#corpus-search-results-table-div-loader");
         corpusErrorDiv.empty();
@@ -21,7 +63,59 @@
         corpusErrorDiv.show();
     }
 
-    fillResultTable(results: ICorpusSearchResult[], query: string) {
+    protected initializeFromUrlParams() {
+        if (this.readyForInit && this.notInitialized) {
+
+            this.notInitialized = false;
+
+            const contextSize = getQueryStringParameterByName(this.urlContextSizeKey);
+            if (contextSize) {
+                const contextLengthNumber = parseInt(contextSize);
+                if (!isNaN(contextLengthNumber)) {
+                    if (contextLengthNumber >= this.minContextLength && contextLengthNumber <= this.maxContextLength) {
+                        this.contextLength = contextLengthNumber;
+                        $("#contextPositionsSelect").val(contextLengthNumber);
+                    }
+                }
+            }
+
+            const resultPerPage = getQueryStringParameterByName(this.urlResultPerPageKey);
+            if (resultPerPage) {
+                const resultsPerPageNumber = parseInt(resultPerPage);
+                if (!isNaN(resultsPerPageNumber)) {
+                    if (resultsPerPageNumber >= this.minResultsPerPage && resultsPerPageNumber <= this.maxResultsPerPage) {
+                        this.searchResultsOnPage = resultsPerPageNumber;
+                        $("#number-of-results-per-viewing-page").val(resultPerPage);
+                    }
+                }
+            }
+
+            const sortedAsc = getQueryStringParameterByName(this.urlSortAscKey);
+            const sortCriteria = parseInt(getQueryStringParameterByName(this.urlSortCriteriaKey));
+
+            if (sortedAsc && sortCriteria) {
+                this.sortBar.setSortedAsc(sortedAsc === "true");
+                this.sortBar.setSortCriteria(sortCriteria as SortEnum);
+            }
+
+            const selected = getQueryStringParameterByName(this.urlSelectionKey);
+
+            const searched = getQueryStringParameterByName(this.urlSearchKey);
+            this.search.writeTextToTextField(searched);
+
+            if (selected) {
+                this.booksSelector.restoreFromSerializedState(selected);
+            }
+
+        } else if (!this.notInitialized) {
+            this.search.processSearch();
+        } else {
+            this.readyForInit = true;
+        }
+
+    }
+
+    protected fillResultTable(results: ICorpusSearchResult[], query: string) {
         const tableSection = $(".corpus-search-results-div");
         const textColumn = tableSection.find(".result-text-col");
         const textResultTableEl = textColumn.find(".text-results-table-body");
@@ -129,12 +223,12 @@
         textColumn.scrollLeft(scrollOffset);
     }
 
-    emptyResultsTable() {
+    protected emptyResultsTable() {
         const tableBody = $(".text-results-table-body");
         tableBody.empty();
     }
 
-    printDetailInfo(tableRowEl: JQuery, query:string) {
+    protected printDetailInfo(tableRowEl: JQuery, query:string) {
         const undefinedReplaceString = "<Nezadáno>";
 
         $("#detail-author").text(tableRowEl.data("author") ? tableRowEl.data("author") : undefinedReplaceString);
