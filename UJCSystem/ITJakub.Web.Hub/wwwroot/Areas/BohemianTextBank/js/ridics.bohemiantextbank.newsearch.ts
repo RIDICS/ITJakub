@@ -78,26 +78,44 @@ class BohemianTextBankNew {
         resultsPerPageInputEl.val(this.searchResultsOnPage);
         const viewingSettingsChangedWarningEl = $(".search-settings-changed-warning");
 
+        const contextSizeWarningEl = $(".context-size-warning");
+        const contextSizeAlert = new AlertComponentBuilder(AlertType.Error);
+        contextSizeAlert.addContent(`Context size must be between ${this.minContextLength} and ${this.maxContextLength}`);
+        contextSizeWarningEl.append(contextSizeAlert.buildElement());
+
         contextLengthInputEl.on("change", () => {
             viewingSettingsChangedWarningEl.slideDown();
             const contextLengthString = contextLengthInputEl.val() as string;
             const contextLengthNumber = parseInt(contextLengthString);
             if (!isNaN(contextLengthNumber)) {
+                const contextSizeWarningEl = $(".context-size-warning");
                 if (contextLengthNumber >= this.minContextLength && contextLengthNumber <= this.maxContextLength) {
+                    contextSizeWarningEl.slideUp();
                     this.contextLength = contextLengthNumber;
                     updateQueryStringParameter(this.urlContextSizeKey, contextLengthNumber);
+                } else {
+                    contextSizeWarningEl.slideDown();
                 }
             }
         });
+
+        const numberOfPositionsWarningEl = $(".number-of-positions-size-warning");
+        const numberOfPositions = new AlertComponentBuilder(AlertType.Error);
+        numberOfPositions.addContent(`Number of results must be between ${this.minResultsPerPage} and ${this.maxResultsPerPage}`);
+        numberOfPositionsWarningEl.append(numberOfPositions.buildElement());
 
         resultsPerPageInputEl.on("change", () => {
             viewingSettingsChangedWarningEl.slideDown();
             const resultsPerPageString = resultsPerPageInputEl.val() as string;
             const resultsPerPageNumber = parseInt(resultsPerPageString);
             if (!isNaN(resultsPerPageNumber)) {
+                const numberOfPositionsWarningEl = $(".number-of-positions-size-warning");
                 if (resultsPerPageNumber >= this.minResultsPerPage && resultsPerPageNumber <= this.maxResultsPerPage) {
+                    numberOfPositionsWarningEl.slideUp();
                     this.searchResultsOnPage = resultsPerPageNumber;
                     updateQueryStringParameter(this.urlResultPerPageKey, resultsPerPageNumber);
+                } else {
+                    numberOfPositionsWarningEl.slideDown();
                 }
             }
         });
@@ -229,6 +247,7 @@ class BohemianTextBankNew {
         if (hasBeenWrapped) {
             this.showNoPageWarning();
         } else {
+            this.showLoading();
              this.generateViewingPage();
         }
             
@@ -325,8 +344,7 @@ class BohemianTextBankNew {
     private corpusAdvancedSearchPaged(json: string, start: number, contextLength: number, bookId: number) {
         if (!json) return;
 
-        const count = this.searchResultsOnPage - this.transientResults.length;//TODO test
-        this.showLoading();
+        const count = this.searchResultsOnPage - this.transientResults.length;
 
         const payload: ICorpusLookupAdvancedSearch = {
             json: json,
@@ -463,8 +481,6 @@ class BohemianTextBankNew {
         if (!text) return;
         const count = this.searchResultsOnPage - this.transientResults.length;
 
-        this.showLoading();
-
         const payload: ICorpusLookupBasicSearch = {
             text: text,
             start: start,
@@ -495,12 +511,12 @@ class BohemianTextBankNew {
             return;
         }
         this.transientResults = this.transientResults.concat(results);
-        if (results.length < count && this.transientResults.length < this.searchResultsOnPage) {//TODO test
+        if (results.length < count && this.transientResults.length < this.searchResultsOnPage) {
             this.switchToNextBook();
             return;
         }
 
-        if (this.transientResults.length < this.searchResultsOnPage) {//TODO test
+        if (this.transientResults.length < this.searchResultsOnPage) {
             this.loadBookResultPage(this.currentResultStart, this.currentBookId);
         } else {
             this.makeHistoryEntry(currentResultStart, compositionListStart, viewingPage);
@@ -650,6 +666,7 @@ class BohemianTextBankNew {
     }
 
     private loadPage(pageNumber: number) {
+        this.showLoading();
         const pageHasBeenWrapped = this.paginator.hasBeenWrapped();
         const previousPage = pageNumber - 1;
         if (previousPage === 0 && !pageHasBeenWrapped) {//to load page 1 it's needed to reset indexes

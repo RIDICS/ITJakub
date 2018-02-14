@@ -23,6 +23,8 @@
 
         .corpus-search-results-div {
             height: inherit;
+            padding-left: 0;
+            padding-right: 0;
 
             .search-results-row {
                 height: 100%;
@@ -93,28 +95,39 @@
                 padding-left: 0;
             }
 
-            .corpus-search-setting-div-context {
-                margin-top: 0.5em;
-                margin-bottom: 0.5em;
+            .corpus-search-result-view-properties-advanced {
+                display: none;
 
-                #contextPositionsSelect {
-                    color: initial;
-                    width: 6em;
-                }
-            }
+                .corpus-search-setting-div-context {
+                    margin-top: 0.5em;
+                    margin-bottom: 0.5em;
 
-            .number-of-results-per-viewing-page {
-                margin-top: 0.5em;
-                margin-bottom: 0.5em;
-
-                label {
-                    font-weight: normal;
-                    display: block;
+                    #contextPositionsSelect {
+                        color: initial;
+                        width: 6em;
+                        line-height: 1.5;
+                    }
                 }
 
-                #number-of-results-per-viewing-page {
-                    color: initial;
-                    width: 6em;
+                .context-size-warning, .number-of-positions-size-warning {
+                    display: none;
+                    margin-top: 5px;
+                }
+
+                .number-of-results-per-viewing-page {
+                    margin-top: 0.5em;
+                    margin-bottom: 0.5em;
+
+                    label {
+                        font-weight: normal;
+                        display: block;
+                    }
+
+                    #number-of-results-per-viewing-page {
+                        color: initial;
+                        width: 6em;
+                        line-height: 1.5;
+                    }
                 }
             }
 
@@ -134,7 +147,14 @@
                 margin-top: 10px;
             }
 
+            .corpus-search-setting-div-results-count {
+                margin-bottom: 15px;
+            }
+
             .corpus-search-setting-div-pagination {
+                padding-left: 8%;
+                padding-right: 8%;
+
                 .ui-slider-handle {
                     width: 1.5em;
                     height: 1.5em;
