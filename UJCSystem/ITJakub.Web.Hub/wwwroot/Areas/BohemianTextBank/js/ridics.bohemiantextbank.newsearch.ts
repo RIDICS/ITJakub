@@ -366,9 +366,12 @@ class BohemianTextBankNew {
             const pageId = pageContext.id;
             const acronym = result.sourceAbbreviation;
             const notes = result.notes;
-
             const textResult = $(`<tr class="row result-row"></tr>`);
-
+            if (i % 2 === 1) {
+                textResult.addClass("even");
+            } else {
+                textResult.addClass("odd");
+            }
             textResult.attr("data-bookId", bookId);
             textResult.attr("data-author", result.author);
             textResult.attr("data-title", result.title);
