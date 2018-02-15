@@ -1,17 +1,16 @@
 ﻿@section styles{
     <link href="~/Areas/BohemianTextBank/css/itjakub.bohemiantextbank.css" rel="stylesheet" />
-    <link href="~/Areas/BohemianTextBank/css/ridics.bohemiantextbank-search-viewer.css" rel="stylesheet" />
-    <link href="~/css/Plugins/ridics.indefinite-pagination.css" rel="stylesheet" />
+    <link href="~/Areas/BohemianTextBank/css/ridics.bohemiantextbank-search-viewer-single.css" rel="stylesheet" />
 }
 @section scripts{
     <script src="~/Areas/BohemianTextBank/js/itjakub.bohemiantextbank.bundle.js"></script>
     <script src="~/lib/bootbox/bootbox.min.js"></script>
-    <script src="~/js/Plugins/IndefinitePagination/ridics.indefinite-pagination.js"></script>
     <script src="~/lib/jquery-table-fixer/tableHeadFixer.js"></script>
+    <script src="~/lib/lazysizes/lazysizes.min.js"></script>
 }
 
 @{
-    ViewBag.Title = "Korpusy - Vyhledávání TEST";
+    ViewBag.Title = "Korpusy - Vyhledávání Single";
 }
 
 @Html.Partial("_BibliographySearch")
@@ -20,10 +19,10 @@
     <div class="row corpus-result-and-settings-row">
         <div class="corpus-search-results-div col-md-10 col-sm-9 col-xs-12">
             <div class="row search-results-row no-gutters">
-                <div class="col-xs-12 result-text-col text-center">
-                    <div id="corpus-search-results-table-div-loader">
+                <div class="col-xs-12 results-container">
+                    @*<div id="corpus-search-results-table-div-loader">
                         Pro zobrazení výsledků použijte vyhledávání
-                    </div><table class="text-results-table"><tbody class="text-results-table-body"></tbody></table>
+                    </div><table class="text-results-table"><tbody class="text-results-table-body"></tbody></table>*@
                 </div>
             </div>
         </div>
@@ -61,12 +60,12 @@
                 <div class="checkbox">
                     <label><input id="commentCheckbox" type="checkbox" value="">Komentář</label>
                 </div>
-                <div class="checkbox">
+                @*<div class="checkbox">
                     <label><input id="languageCheckbox" type="checkbox" value="">Jazyk</label>
                 </div>
                 <div class="checkbox">
                     <label><input id="structureCheckbox" type="checkbox" value="">Struktura textu</label>
-                </div>
+                </div>*@
                 <div class="checkbox">
                     <label><input id="paragraphCheckbox" type="checkbox" value="">Odstavec</label>
                 </div>

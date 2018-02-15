@@ -483,7 +483,7 @@ interface ISnapshotSearchResultStructure {
 }
 
 interface ICoprusSearchSnapshotResult {
-    list: ISnapshotSearchResultStructure[];
+    snapshotList: ISnapshotSearchResultStructure[];
     totalCount: number;
 }
 

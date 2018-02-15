@@ -9,8 +9,6 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
 
     private paginator: IndefinitePagination;
 
-    private compositionPageIsLast = false;
-
     private paginationContainerEl = $("#paginationContainer");
 
     initSearch() {
@@ -208,7 +206,8 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
         if (hasBeenWrapped) {
             this.showNoPageWarning();
         } else {
-            this.showLoading();
+            const tableEl = $(".text-results-table");
+            this.showLoading(tableEl);
              this.generateViewingPage();
         }
             
@@ -252,7 +251,8 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
             this.calculateAndFlushNumberOfResults(results, count, start + count, compositionListStart, viewingPage);
         });
         advancedSearchPageAjax.fail(() => {
-            this.printErrorMessage(this.defaultErrorMessage);
+            const loaderEl = $(".corpus-search-results-table-div-loader");
+            this.printErrorMessage(this.defaultErrorMessage, loaderEl);
         });
     }
 
@@ -280,7 +280,8 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
             this.calculateAndFlushNumberOfResults(results, count, start + count, compositionListStart, viewingPage);
         });
         getPageAjax.fail(() => {
-            this.printErrorMessage(this.defaultErrorMessage);
+            const loaderEl = $(".corpus-search-results-table-div-loader");
+            this.printErrorMessage(this.defaultErrorMessage, loaderEl);
         });
     }
 
@@ -317,7 +318,8 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
                     if (this.paginator.isBasicMode()) {//unknown number of pages, thus page was increased by one and needs descreasing
                         this.paginator.updatePage(this.paginator.getCurrentPage() - 1);
                     }
-                    this.hideLoading();
+                    const tableEl = $(".text-results-table");
+                    this.hideLoading(tableEl);
                     bootbox.alert({
                         title: "Attention",
                         message: "Last result page",
@@ -380,7 +382,8 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
         this.compositionPageIsLast = false;
         this.totalViewPages = 0;
         this.actualizeSelectedBooksAndCategoriesInQuery();
-        this.showLoading();
+        const tableEl = $(".text-results-table");
+        this.showLoading(tableEl);
     }
 
     private corpusBasicSearchBookHits(text: string) {
@@ -392,8 +395,14 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
 
     private flushTransientResults() {
         this.emptyResultsTable();
-        this.fillResultTable(this.transientResults, this.search.getLastQuery());
+        const tableSectionEl = $(".corpus-search-results-div");
+        this.fillResultTable(this.transientResults, this.search.getLastQuery(), tableSectionEl);
         this.transientResults = [];
+    }
+
+    private emptyResultsTable() {
+        const tableBody = $(".text-results-table-body");
+        tableBody.empty();
     }
 
     private showNoPageWarning(pageNumber?: number) {
@@ -441,7 +450,8 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
     }
 
     private loadPage(pageNumber: number) {
-        this.showLoading();
+        const tableEl = $(".text-results-table");
+        this.showLoading(tableEl);
         const pageHasBeenWrapped = this.paginator.hasBeenWrapped();
         const previousPage = pageNumber - 1;
         if (previousPage === 0 && !pageHasBeenWrapped) {//to load page 1 it's needed to reset indexes
@@ -525,7 +535,8 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
             this.loadPage(pageNumber);
         });
         getPagePositionAjax.fail(() => {
-            this.printErrorMessage(this.defaultErrorMessage);
+            const loaderEl = $(".corpus-search-results-table-div-loader");
+            this.printErrorMessage(this.defaultErrorMessage, loaderEl);
         });
     }
 
@@ -594,8 +605,8 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
                 const page = (start / count) + 1;
                 const totalPages = Math.ceil(totalCount / count);
                 $("#totalCompositionsCountDiv").text(totalCount);
-                const snapshotStructureArray = bookIds.list;
-                var idList = [];
+                const snapshotStructureArray = bookIds.snapshotList;
+                var idList: number[] = [];
                 snapshotStructureArray.forEach((snapshot) => {
                     idList.push(snapshot.snapshotId);
                 });
@@ -607,7 +618,8 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
                     if (this.transientResults.length) {
                         this.flushTransientResults();
                     } else {
-                        this.hideLoading();
+                        const tableEl = $(".text-results-table");
+                        this.showLoading(tableEl);
                         const alert = new AlertComponentBuilder(AlertType.Info);
                         alert.addContent("No results");
                         this.emptyResultsTable();
@@ -621,7 +633,8 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
                     this.generateViewingPage();
                 }
             }).fail(() => {
-                this.printErrorMessage(this.defaultErrorMessage);
+                const loaderEl = $(".corpus-search-results-table-div-loader");
+                this.printErrorMessage(this.defaultErrorMessage, loaderEl);
             });
     }
     /**
@@ -658,7 +671,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
                 const page = (start / count) + 1;
                 const totalPages = Math.ceil(totalCount / count);
                 $("#totalCompositionsCountDiv").text(totalCount);
-                const snapshotStructureArray = bookIds.list;
+                const snapshotStructureArray = bookIds.snapshotList;
                 var idList = [];
                 snapshotStructureArray.forEach((snapshot) => {
                     idList.push(snapshot.snapshotId);
@@ -671,7 +684,8 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
                     if (this.transientResults.length) {
                         this.flushTransientResults();
                     } else {
-                        this.hideLoading();
+                        const tableEl = $(".text-results-table");
+                        this.showLoading(tableEl);
                         const alert = new AlertComponentBuilder(AlertType.Info);
                         alert.addContent("No results");
                         this.emptyResultsTable();
@@ -685,7 +699,8 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
                     this.generateViewingPage();
                 }
             }).fail(() => {
-                this.printErrorMessage(this.defaultErrorMessage);
+                const loaderEl = $(".corpus-search-results-table-div-loader");
+                this.printErrorMessage(this.defaultErrorMessage, loaderEl);
             });
     }
 

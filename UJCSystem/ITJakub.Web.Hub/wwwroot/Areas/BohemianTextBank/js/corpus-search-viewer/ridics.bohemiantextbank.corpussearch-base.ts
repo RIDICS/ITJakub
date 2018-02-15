@@ -2,15 +2,16 @@
     protected searchResultsOnPage = 10;//corresponds to amount of results per page that should be on screen
     protected contextLength = 50;
 
-    protected minContextLength = 30;
+    protected minContextLength = 40;//search backend may crash if context is too short
     protected maxContextLength = 100;
     protected minResultsPerPage = 1;
     protected maxResultsPerPage = 50;
 
-    protected hitBookIds = [];
+    protected hitBookIds:number[] = [];
 
     protected compositionResultListStart = -1;
     protected compositionsPerPage = 10;
+    protected compositionPageIsLast = false;
 
     protected currentBookId = -1;
     protected currentBookIndex = 0;
@@ -41,26 +42,30 @@
 
     protected search: Search;
 
-    protected showLoading() {
-        $(".text-results-table").hide();
-        $("#corpus-search-results-table-div-loader").empty();
-        $("#corpus-search-results-table-div-loader").show();
-        $("#corpus-search-results-table-div-loader").addClass("loader");
+    protected showLoading(tableEl: JQuery) {
+        const loaderEl = tableEl.siblings(".corpus-search-results-table-div-loader");
+        tableEl.hide();
+        loaderEl.empty();
+        loaderEl.show();
+        loaderEl.addClass("loader");
     }
 
 
-    protected hideLoading() {
-        $("#corpus-search-results-table-div-loader").removeClass("loader");
-        $("#corpus-search-results-table-div-loader").hide();
-        $(".text-results-table").show();
+    protected hideLoading(tableEl: JQuery) {
+        const loaderEl = tableEl.siblings(".corpus-search-results-table-div-loader");
+        loaderEl.removeClass("loader");
+        loaderEl.hide();
+        tableEl.show();
     }
 
-    protected printErrorMessage(message: string) {
-        this.hideLoading();
-        const corpusErrorDiv = $("#corpus-search-results-table-div-loader");
-        corpusErrorDiv.empty();
-        corpusErrorDiv.text(message);
-        corpusErrorDiv.show();
+    protected printErrorMessage(message: string, loaderEl: JQuery<HTMLElement>) {
+        const tableEl = loaderEl.siblings(".text-results-table");
+        this.hideLoading(tableEl);
+        const errorAlert = new AlertComponentBuilder(AlertType.Error);
+        errorAlert.addContent(message);
+        loaderEl.empty();
+        loaderEl.append(errorAlert.buildElement());
+        loaderEl.show();
     }
 
     protected initializeFromUrlParams() {
@@ -115,9 +120,8 @@
 
     }
 
-    protected fillResultTable(results: ICorpusSearchResult[], query: string) {
-        const tableSection = $(".corpus-search-results-div");
-        const textColumn = tableSection.find(".result-text-col");
+    protected fillResultTable(results: ICorpusSearchResult[], query: string, tableSectionEl: JQuery) {
+        const textColumn = tableSectionEl.find(".result-text-col");
         const textResultTableEl = textColumn.find(".text-results-table-body");
         const undefinedReplaceString = "<Nezadáno>";
         for (let i = 0; i < results.length; i++) {
@@ -214,18 +218,13 @@
 
         const tableEl = textColumn.find(".text-results-table");
         tableEl.tableHeadFixer({ "left": 1, "head": false });
-        this.hideLoading();//ensure table is visible before calculating offset
+        this.hideLoading(tableEl);//ensure table is visible before calculating offset
         //scroll from left to center match column in table
         const matchEl = textResultTableEl.children("tr").first().find(".text-center");
         const matchPosition = matchEl.position().left;
         const abbrColWidth = textResultTableEl.children("tr").first().find(".abbrev-col").width();
         var scrollOffset = matchPosition - ((textColumn.width() + abbrColWidth - matchEl.width()) / 2);
         textColumn.scrollLeft(scrollOffset);
-    }
-
-    protected emptyResultsTable() {
-        const tableBody = $(".text-results-table-body");
-        tableBody.empty();
     }
 
     protected printDetailInfo(tableRowEl: JQuery, query:string) {

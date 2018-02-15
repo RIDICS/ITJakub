@@ -262,7 +262,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             
         }
 
-        private CorpusSearchSnapshotsResultContract GetHitBookResultNumbers(CorpusListGetPageContractBasic searchQuery)
+        public CorpusSearchSnapshotsResultContract GetHitBookResultNumbers(CorpusListGetPageContractBasic searchQuery)
         {
             var text = searchQuery.Text;
             if (string.IsNullOrEmpty(text))
@@ -347,7 +347,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             });
         }
 
-        private CorpusSearchSnapshotsResultContract AdvancedSearchGetHitBookResultNumbers(CorpusListGetPageContractAdvanced searchQuery)
+        public CorpusSearchSnapshotsResultContract AdvancedSearchGetHitBookResultNumbers(CorpusListGetPageContractAdvanced searchQuery)
         {
             var json = searchQuery.Json;
             var selectedBookIds = searchQuery.SelectedBookIds;
@@ -467,7 +467,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             using (var client = GetRestClient())
             {
                 var result = client.SearchCorpusGetSnapshotList(request);
-                return Json(new { list = result.SnapshotList, totalCount = result.TotalCount });
+                return Json(new CorpusSearchSnapshotsResultContract { SnapshotList = result.SnapshotList, TotalCount = result.TotalCount });
             }
         }
 
