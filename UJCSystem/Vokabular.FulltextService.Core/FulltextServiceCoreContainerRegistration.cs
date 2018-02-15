@@ -24,6 +24,7 @@ namespace Vokabular.FulltextService.Core
 
             container.AddPerWebRequest<IMarkdownToHtmlConverter, MarkdigMarkdownToHtmlConverter>();
             container.AddPerWebRequest<IHtmlToPlainTextConverter, HtmlToPlainTextConverter>();
+            container.AddPerWebRequest<IMarkdownToPlainTextConverter, MarkdownToPlainTextConverter>();
             container.AddPerWebRequest<ITextConverter, TextConverter>();
             container.AddPerWebRequest<ITextValidator, TextValidator>();
             container.AddPerWebRequest<IPageWithHtmlTagsCreator, PageWithHtmlTagsCreator>();

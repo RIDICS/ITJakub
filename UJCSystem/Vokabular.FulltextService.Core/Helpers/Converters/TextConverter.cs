@@ -8,13 +8,10 @@ namespace Vokabular.FulltextService.Core.Helpers.Converters
     public class TextConverter : ITextConverter
     {
         private readonly IMarkdownToHtmlConverter m_markdownToHtmlConverter;
-        private readonly IHtmlToPlainTextConverter m_htmlToPLainTextConverter;
-
-
-        public TextConverter(IMarkdownToHtmlConverter markdownToHtmlConverter, IHtmlToPlainTextConverter htmlToPLainTextConverter)
+        
+        public TextConverter(IMarkdownToHtmlConverter markdownToHtmlConverter)
         {
             m_markdownToHtmlConverter = markdownToHtmlConverter;
-            m_htmlToPLainTextConverter = htmlToPLainTextConverter;
         }
 
         public string Convert(string textResourceText, TextFormatEnumContract formatValue)
@@ -22,7 +19,7 @@ namespace Vokabular.FulltextService.Core.Helpers.Converters
             switch (formatValue)
             {
                 case TextFormatEnumContract.Raw:
-                    return m_htmlToPLainTextConverter.ConvertToPlaintext(m_markdownToHtmlConverter.ConvertToHtml(textResourceText));
+                    return textResourceText; 
                 case TextFormatEnumContract.Html:
                     return m_markdownToHtmlConverter.ConvertToHtml(textResourceText);
                 case TextFormatEnumContract.Rtf:

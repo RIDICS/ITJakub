@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using Vokabular.FulltextService.Core.Helpers.Converters;
+using Vokabular.FulltextService.Core.Helpers.Markdown;
 using Vokabular.FulltextService.Core.Managers;
 using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.Shared.DataContracts.Types;
@@ -11,13 +12,14 @@ namespace Vokabular.FulltextService.Core.Helpers
     {
         private readonly TextResourceManager m_textResourceManager;
         private readonly ITextConverter m_textConverter;
-
+        private readonly IMarkdownToPlainTextConverter m_markdownToPlainTextConverter;
         private const int MinSnippetSize = 15;
 
-        public SnapshotResourceBuilder(TextResourceManager textResourceManager, ITextConverter textConverter)
+        public SnapshotResourceBuilder(TextResourceManager textResourceManager, ITextConverter textConverter, IMarkdownToPlainTextConverter markdownToPlainTextConverter)
         {
             m_textResourceManager = textResourceManager;
             m_textConverter = textConverter;
+            m_markdownToPlainTextConverter = markdownToPlainTextConverter;
         }
 
         public SnapshotResourceContract GetSnapshotResourceFromPageIds(List<string> pageIds) {
@@ -30,9 +32,9 @@ namespace Vokabular.FulltextService.Core.Helpers
             {
                 var textResource = m_textResourceManager.GetTextResource(pageId);
 
-                var pageText = m_textConverter.Convert(textResource.PageText, TextFormatEnumContract.Raw);
+                var pageTextWithoutMarkdown = m_markdownToPlainTextConverter.Convert(textResource.PageText);
                 
-                var pageTextWithIndex = InsertPageIndexIntoPageText(pageText, pageIndex);
+                var pageTextWithIndex = InsertPageIndexIntoPageText(pageTextWithoutMarkdown, pageIndex);
                 var page = new SnapshotPageResourceContract { Id = pageId, PageIndex = pageIndex};
                 
                 pages.Add(page);
