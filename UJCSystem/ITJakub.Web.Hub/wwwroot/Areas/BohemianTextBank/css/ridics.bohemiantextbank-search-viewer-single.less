@@ -1,0 +1,72 @@
+﻿@import "../../../css/ITJakub.Colors.less";
+@import "../../Admin/css/@editors-common-variables.less";
+@table-line-height: 3em;
+@table-even-colour: #eee;
+@table-odd-colour: white;
+@table-row-clicked-color: #C0C0C0;
+
+.results-container {
+    .book-section-row {
+        min-height: 16em;
+        margin-bottom:2em;
+        margin-top:2em;
+
+        .result-text-col {
+            height: 100%;
+            min-height:20em;
+
+            .text-results-table {
+                width: 100%;
+
+                .result-row.even {
+                    background: @table-even-colour;
+
+                    td {
+                        background-color: inherit;
+                    }
+                }
+
+                .result-row.odd {
+                    background: @table-odd-colour;
+
+                    td {
+                        background-color: inherit;
+                    }
+                }
+
+                .result-row {
+                    &.clicked {
+                        border-bottom: solid 1px;
+                        border-top: solid 1px;
+                        background-color: @table-row-clicked-color;
+                    }
+
+                    white-space: nowrap;
+                    line-height: @table-line-height;
+
+                    .abbrev-col {
+                        padding-right: 5px;
+                    }
+
+                    .context-before {
+                        text-align: right;
+                        width: 45%;
+                    }
+
+                    .match {
+                        background-color: @menu-active-background-color;
+                        color: white;
+                        margin-left: 1em;
+                        margin-right: 1em;
+                        text-align: center;
+                    }
+
+                    .context-after {
+                        text-align: left;
+                        width: 45%;
+                    }
+                }
+            }
+        }
+    }
+}
