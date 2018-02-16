@@ -227,17 +227,28 @@
         textColumn.scrollLeft(scrollOffset);
     }
 
-    protected printDetailInfo(tableRowEl: JQuery, query:string) {
+    protected printDetailInfo(tableRowEl: JQuery, detailSectionEl: JQuery, query:string) {
         const undefinedReplaceString = "<Nezadáno>";
+        const detailAuthorEl = detailSectionEl.find(".detail-author");
+        const detailTitleEl = detailSectionEl.find(".detail-title");
+        const detailDatingEl = detailSectionEl.find(".detail-dating");
+        const detailDatingCenturyEl = detailSectionEl.find(".detail-dating-century");
+        const detailAbbrevEl = detailSectionEl.find(".detail-abbrev");
+        const editionNoteEl = detailSectionEl.find(".detail-edition-note-href");
+        const detailPholioEl = detailSectionEl.find(".detail-folio");
+        const detailVerseEl = detailSectionEl.find(".detail-vers");
+        const detailBibleVerseBookEl = detailSectionEl.find(".detail-bible-vers-book");
+        const detailBibleVerseChapterEl = detailSectionEl.find(".detail-bible-vers-chapter");
+        const detailBibleVerseVerseEl = detailSectionEl.find(".detail-bible-vers-vers");
 
-        $("#detail-author").text(tableRowEl.data("author") ? tableRowEl.data("author") : undefinedReplaceString);
-        $("#detail-title").text(tableRowEl.data("title") ? tableRowEl.data("title") : undefinedReplaceString);
-        $("#detail-dating").text(tableRowEl.data("dating") ? tableRowEl.data("dating") : undefinedReplaceString);
-        $("#detail-dating-century").text(undefinedReplaceString); //TODO ask where is this info stored
-        $("#detail-abbrev").text(tableRowEl.data("acronym") ? tableRowEl.data("acronym") : undefinedReplaceString);
+        detailAuthorEl.text(tableRowEl.data("author") ? tableRowEl.data("author") : undefinedReplaceString);
+        detailTitleEl.text(tableRowEl.data("title") ? tableRowEl.data("title") : undefinedReplaceString);
+        detailDatingEl.text(tableRowEl.data("dating") ? tableRowEl.data("dating") : undefinedReplaceString);
+        detailDatingCenturyEl.text(undefinedReplaceString); //TODO ask where is this info stored
+        detailAbbrevEl.text(tableRowEl.data("acronym") ? tableRowEl.data("acronym") : undefinedReplaceString);
 
         //Edition note
-        const editionNoteAnchor = $("#detail-edition-note-href");
+        const editionNoteAnchor = editionNoteEl;
         const bookId = tableRowEl.data("bookid");
         editionNoteAnchor.prop("href", `/EditionNote/EditionNote?bookId=${bookId}`);
 
@@ -248,14 +259,14 @@
             query}&page=${pageId}`);
         folioHref.text(tableRowEl.data("pagename") ? tableRowEl.data("pagename") : undefinedReplaceString);
 
-        $("#detail-folio").empty().append(folioHref);
+        detailPholioEl.empty().append(folioHref);
 
-        $("#detail-vers").text(tableRowEl.data("verseName") ? tableRowEl.data("verseName") : undefinedReplaceString);
-        $("#detail-bible-vers-book")
+        detailVerseEl.text(tableRowEl.data("verseName") ? tableRowEl.data("verseName") : undefinedReplaceString);
+        detailBibleVerseBookEl
             .text(tableRowEl.data("bibleBook") ? tableRowEl.data("bibleBook") : undefinedReplaceString);
-        $("#detail-bible-vers-chapter")
+        detailBibleVerseChapterEl
             .text(tableRowEl.data("bibleChapter") ? tableRowEl.data("bibleChapter") : undefinedReplaceString);
-        $("#detail-bible-vers-vers")
+        detailBibleVerseVerseEl
             .text(tableRowEl.data("bibleVerse") ? tableRowEl.data("bibleVerse") : undefinedReplaceString);
     }
 }

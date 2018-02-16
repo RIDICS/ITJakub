@@ -149,8 +149,8 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
 
                 $(".result-row").not(clickedRow).removeClass("clicked");
                 clickedRow.addClass("clicked");
-
-                this.printDetailInfo(clickedRow, this.search.getLastQuery());
+                const detailSectionEl = $(".corpus-search-detail");
+                this.printDetailInfo(clickedRow, detailSectionEl, this.search.getLastQuery());
             });
 
         this.initializeFromUrlParams();

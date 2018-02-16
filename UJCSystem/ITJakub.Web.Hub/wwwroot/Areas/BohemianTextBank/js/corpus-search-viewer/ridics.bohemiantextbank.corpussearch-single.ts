@@ -123,17 +123,6 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
             advancedShowOptionsMenuEl.slideToggle();
         });
 
-        $(".text-results-table-body").on("click",
-            ".result-row",
-            (event: JQuery.Event) => {
-                var clickedRow = $(event.target as Node as Element).closest(".result-row");
-
-                $(".result-row").not(clickedRow).removeClass("clicked");
-                clickedRow.addClass("clicked");
-
-                this.printDetailInfo(clickedRow, this.search.getLastQuery());
-            });
-
         this.initializeFromUrlParams();
 
         this.enabledOptions.push(SearchTypeEnum.Title);
@@ -194,6 +183,21 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
         }
     }
 
+    private resultRowClickAttach() {
+        $(".text-results-table-body").off("click", ".result-row");
+        $(".text-results-table-body").on("click",
+            ".result-row",
+            (event: JQuery.Event) => {
+                console.log(event.target);
+                var clickedRow = $(event.target as Node as Element).closest(".result-row");
+
+                clickedRow.siblings(".result-row").removeClass("clicked");
+                clickedRow.addClass("clicked");
+                const detailSectionEl = clickedRow.parents(".result-text-col").siblings(".book-detail-section");
+                this.printDetailInfo(clickedRow, detailSectionEl, this.search.getLastQuery());
+            });
+    }
+
     private loadResultPageBasic(text: string, start: number, count: number, contextSize: number, snapshotId: number) {
         const url = `${getBaseUrl()}BohemianTextBank/BohemianTextBank/TextSearchFulltextGetBookPage`;
         const payload: ICorpusLookupBasicSearch = {
@@ -211,6 +215,7 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
             const bookSectionEl = $(`*[data-snapshotId=${snapshotId}]`);
             this.emptyResultsTable(bookSectionEl);
             this.fillResultTable(results, this.search.getLastQuery(), bookSectionEl);
+            this.resultRowClickAttach();
         });
         getPageAjax.fail(() => {
             const loaderEl = $(".corpus-search-results-table-div-loader");
@@ -244,6 +249,7 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
             const bookSectionEl = $(`*[data-snapshotId=${snapshotId}]`);
             this.emptyResultsTable(bookSectionEl);
             this.fillResultTable(results, this.search.getLastQuery(), bookSectionEl);
+            this.resultRowClickAttach();
         });
         getPageAjax.fail(() => {
             const loaderEl = $(`*[data-snapshotId=${snapshotId}]`).find(".corpus-search-results-table-div-loader");
@@ -253,9 +259,9 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
 
     private generateBookSectionLayout(snapshotId: number, resultNumber: number) {
         const bookSectionsContainer = $(".results-container");
-        const bookRowEl = $(`<div class="book-section-row row lazyload" data-snapshotId="${snapshotId}" data-result-number="${resultNumber}"></div>`);
-        const bookDetailSection = $(`<div class="col-xs-6 book-detail-section"></div>`);
-        const searchResultsSection = $(`<div class="col-xs-6 result-text-col text-center"></div>`);
+        const bookRowEl = $(`<div class="book-section-row row no-gutters lazyload" data-snapshotId="${snapshotId}" data-result-number="${resultNumber}"></div>`);
+        const bookDetailSection = $(`<div class="col-xs-4 col-sm-6 book-detail-section"></div>`);
+        const searchResultsSection = $(`<div class="col-xs-8 col-sm-6 result-text-col text-center"></div>`);
         const tableEl = $(`<div class="corpus-search-results-table-div-loader">Pro zobrazení výsledků použijte vyhledávání</div><table class="text-results-table"><tbody class="text-results-table-body"></tbody></table>`);
         const searchResultsPaginationSection = $(`<div class="col-xs-12 pagination-section text-center"></div>`);
         searchResultsSection.append(tableEl);
@@ -296,11 +302,83 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
             callPageClickCallbackOnInit: true
         });
         paginator.make(totalResults, this.searchResultsOnPage, 1);
-        //TODO fill book details
+        this.createBookDetailsSection(bookSectionEl);
     }
 
     private sortOrderChanged() {
         //TODO logic
+    }
+
+    private createBookDetailsSection(bookSectionEl: JQuery) {
+        const bookDetailEl = bookSectionEl.find(".book-detail-section");
+        const docSectionEl = $(`<div class="row result-info-section">
+                        <div class="col-sm-2 col-xs-12 label">Doc</div>
+                        <div class="col-sm-10 col-xs-12">
+                            <div class="corpus-search-detail">
+                                <div class="table-row row">
+                                    <div class="col-sm-3 col-xs-12 label">Autor</div>
+                                    <div class="detail-author col-sm-9 col-xs-12 break-word">&lt;Nezadáno&gt;</div>
+                                </div>
+                                <div class="table-row row">
+                                    <div class="col-sm-3 col-xs-12 label">Titul</div>
+                                    <div class="detail-title col-sm-9 col-xs-12 break-word">&lt;Nezadáno&gt;</div>
+                                </div>
+                                <div class="table-row row">
+                                    <div class="col-sm-3 col-xs-12 label">Datace pramene</div>
+                                    <div class="detail-dating col-sm-9 col-xs-12 break-word">&lt;Nezadáno&gt;</div>
+                                </div>
+                                <div class="table-row row">
+                                    <div class="col-sm-3 col-xs-12 label">Datace století</div>
+                                    <div class="detail-dating-century col-sm-9 col-xs-12 break-word">&lt;Nezadáno&gt;</div>
+                                </div>
+                                <div class="table-row row">
+                                    <div class="col-sm-3 col-xs-12 label">Zkratka památky</div>
+                                    <div class="detail-abbrev col-sm-9 col-xs-12 break-word">&lt;Nezadáno&gt;</div>
+                                </div>
+                                <div class="table-row row">
+                                    <div class="col-xs-12 col-no-padding">
+                                        <a class="detail-edition-note-href" href="#">Ediční poznámka</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div></div>`);
+        const pholioSection = $(`<div class="row result-info-section">
+                        <div class="col-sm-2 col-xs-12 label">Folio</div>
+                        <div class="col-sm-10 col-xs-12 col-no-padding">
+                            <div class="detail-folio">&lt;Nezadáno&gt;</div>
+                            </div>
+                        </div>`);
+        const verseSection = $(`<div class="row result-info-section">
+                        <div class="col-sm-2 col-xs-12 label">Vers</div>
+                        <div class="col-sm-10 col-xs-12 col-no-padding">
+                            <div class="detail-vers">&lt;Nezadáno&gt;</div>
+                            </div>
+                        </div>`);
+        const bibleVerse = $(`<div class="row result-info-section">
+                        <div class="col-sm-2 col-xs-12 label">Bible vers</div>
+                        <div class="col-sm-10 col-xs-12">
+                                <div class="corpus-search-detail">
+                                    <div class="table-row row">
+                                        <div class="col-sm-3 col-xs-12 label">Kniha</div>
+                                        <div class="detail-bible-vers-book col-sm-9 col-xs-12 break-word">&lt;Nezadáno&gt;</div>
+                                    </div>
+                                    <div class="table-row row">
+                                        <div class="col-sm-3 col-xs-12 label">Kapitola</div>
+                                        <div class="detail-bible-vers-chapter col-sm-9 col-xs-12 break-word">&lt;Nezadáno&gt;</div>
+                                    </div>
+                                    <div class="table-row row">
+                                        <div class="col-sm-3 col-xs-12 label">Verš</div>
+                                        <div class="detail-bible-vers-vers col-sm-9 col-xs-12 break-word">&lt;Nezadáno&gt;</div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>`);
+        const detailStructureContainer = $(`<div class="corpus-search-detail"></div>`);
+        detailStructureContainer.append(docSectionEl);
+        detailStructureContainer.append(pholioSection);
+        detailStructureContainer.append(verseSection);
+        detailStructureContainer.append(bibleVerse);
+        bookDetailEl.append(detailStructureContainer);
     }
 
     private showNoPageWarning(pageNumber?: number) {
@@ -318,8 +396,11 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
 
     private onSearchStartSingle() {//TODO logic
         $(".results-container").empty();
+        const viewingSettingsChangedWarningEl = $(".search-settings-changed-warning");
+        viewingSettingsChangedWarningEl.slideUp();
         this.compositionResultListStart = - 1;
         this.lastSnapshotId = - 1;
+        this.compositionPageIsLast = false;
     }
 
     private startBasicSearch(text: string) {
@@ -365,7 +446,7 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
                 const page = (start / count) + 1;
                 const totalPages = Math.ceil(totalCount / count);
                 this.compositionResultListStart += this.compositionsPerPage;
-                //$("#totalCompositionsCountDiv").text(totalCount);
+                $("#totalCompositionsCountDiv").text(totalCount);
                 const snapshotStructureArray = bookIds.snapshotList;
                 var idList: number[] = [];
                 snapshotStructureArray.forEach((snapshot) => {
@@ -381,10 +462,54 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
                 const loaderEl = $(".corpus-search-results-table-div-loader");
                 this.printErrorMessage(this.defaultErrorMessage, loaderEl);
             });
-
     }
 
     private corpusAdvancedSearchBookHits(json: string) {
-        //this.loadNextCompositionAdvancedResultPage(json);TODO logic
+        if (this.compositionResultListStart === -1) {
+            this.compositionResultListStart = 0;
+        }
+        const start = this.compositionResultListStart;
+        const count = this.compositionsPerPage;
+        const sortingEnum = this.sortBar.getSortCriteria();
+        const sortAsc = this.sortBar.isSortedAsc();
+        const sortingDirection = sortAsc ? SortDirection.Asc : SortDirection.Desc;
+
+        const payload: ICorpusListPageLookupAdvancedSearch = {
+            json: json,
+            selectedBookIds: this.bookIdsInQuery,
+            selectedCategoryIds: this.categoryIdsInQuery,
+            sortBooksBy: sortingEnum,
+            sortDirection: sortingDirection,
+            start: start,
+            count: count
+        };
+
+        updateQueryStringParameter(this.urlSearchKey, json);
+        updateQueryStringParameter(this.urlSortAscKey, sortAsc);
+        updateQueryStringParameter(this.urlSortCriteriaKey, sortingEnum);
+        updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
+
+        $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchGetHitBookResultNumbers`, payload)
+            .done((bookIds: ICoprusSearchSnapshotResult) => {
+                const totalCount = bookIds.totalCount;
+                const page = (start / count) + 1;
+                const totalPages = Math.ceil(totalCount / count);
+                this.compositionResultListStart += this.compositionsPerPage;
+                $("#totalCompositionsCountDiv").text(totalCount);
+                const snapshotStructureArray = bookIds.snapshotList;
+                var idList: number[] = [];
+                snapshotStructureArray.forEach((snapshot) => {
+                    idList.push(snapshot.snapshotId);
+                    this.generateBookSectionLayout(snapshot.snapshotId, snapshot.resultCount);
+                });
+                this.hitBookIds = idList;
+                this.lastSnapshotId = idList[idList.length - 1];
+                if (this.hitBookIds.length < this.compositionsPerPage || page === totalPages) {
+                    this.compositionPageIsLast = true;
+                }
+            }).fail(() => {
+                const loaderEl = $(".corpus-search-results-table-div-loader");
+                this.printErrorMessage(this.defaultErrorMessage, loaderEl);
+            });
     }
 }
