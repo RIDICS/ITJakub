@@ -64,18 +64,36 @@
     width:unset !important;
 }
 
-.more-button {
+.more-button, .fullscreen-button{
     float: right;
     border: none;
     background: none;
     width: auto;
     color: @linkColor;
     padding: 0;
-    margin: 2rem 2rem 0 0;
+    margin: 1.5rem 2rem 0 0;
+    font-size:25px;
+    display: block !important;
+
+    &:hover {
+        color: @linkColorHover;
+    }
+}
+
+.button-text {
+    max-width:65px;
+}
+
+button {
+    &:disabled {
+        color: #999 !important;
+        cursor: not-allowed;
+    }
 }
 
 .title {
     display: inline-block;
+    padding-left: 19px;
 }
 
 .hidden-content{

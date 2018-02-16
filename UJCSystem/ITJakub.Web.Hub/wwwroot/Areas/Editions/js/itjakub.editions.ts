@@ -178,7 +178,7 @@ function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, 
     $(mainMenuLi).addClass('active');
 }
 
-function listBookReadClicked(target) {
+function listBookReadClickedOld(target) {
     return context => {
         var bookId = $(target).parents("li.list-item").attr("data-id");
         if (context.search.isLastQueryJson()) { //only text seach criteria we should propagate
@@ -189,7 +189,7 @@ function listBookReadClicked(target) {
     };
 }
 
-function searchBookReadClicked(target) {
+function searchBookReadClickedOld(target) {
     return context => {
         var bookId = $(target).parents("li.list-item").attr("data-id");
         return onClickHref(context.event, getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery());
