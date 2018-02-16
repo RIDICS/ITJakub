@@ -55,7 +55,12 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             return View();
         }
 
-        public ActionResult SearchSingle()
+        public ActionResult SearchSingleLazyload()
+        {
+            return View();
+        }
+
+        public ActionResult SearchSinglePaged()
         {
             return View();
         }

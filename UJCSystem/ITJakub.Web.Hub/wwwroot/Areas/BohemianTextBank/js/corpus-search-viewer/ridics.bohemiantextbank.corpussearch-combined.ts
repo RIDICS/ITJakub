@@ -619,7 +619,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
                         this.flushTransientResults();
                     } else {
                         const tableEl = $(".text-results-table");
-                        this.showLoading(tableEl);
+                        this.hideLoading(tableEl);
                         const alert = new AlertComponentBuilder(AlertType.Info);
                         alert.addContent("No results");
                         this.emptyResultsTable();

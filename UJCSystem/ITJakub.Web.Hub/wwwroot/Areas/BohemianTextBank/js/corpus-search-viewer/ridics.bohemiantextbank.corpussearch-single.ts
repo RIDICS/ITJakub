@@ -1,12 +1,15 @@
-﻿function initSearchSingle() {
-    const searchSingle = new BohemianTextBankSingle();
-    searchSingle.initSearch();
+﻿function initSearchSingleLazyload() {
+    const searchSingleLazyload = new BohemianTextBankSingleLazyload();
+    searchSingleLazyload.initSearch();
+}
+
+function initSearchSinglePaged() {
+    const searchSinglePaged = new BohemianTextBankSinglePaged();
+    searchSinglePaged.initSearch();
 }
 
 class BohemianTextBankSingle extends BohemianTextBankBase {
-    private lastSnapshotId=-1;
-    initSearch() {
-        this.lazyloadEventProcess();
+    protected init() {
 
         const contextLengthInputEl = $("#contextPositionsSelect");
         contextLengthInputEl.prop("max", this.maxContextLength);
@@ -135,17 +138,6 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
         this.enabledOptions.push(SearchTypeEnum.Term);
         this.enabledOptions.push(SearchTypeEnum.TokenDistance);
 
-        const favoritesQueriesConfig: IModulInicializatorConfigurationSearchFavorites = {
-            bookType: BookTypeEnum.TextBank,
-            queryType: QueryTypeEnum.Search
-        };
-        this.search = new Search($("#listSearchDiv")[0] as Node as HTMLDivElement,
-            this.startAdvancedSearch.bind(this),
-            this.startBasicSearch.bind(this),
-            favoritesQueriesConfig);
-        this.search.limitFullTextSearchToOne();
-        this.search.makeSearch(this.enabledOptions);
-
         const sortBarContainer = "#listResultsHeader";
         const sortBarContainerEl = $(sortBarContainer);
         sortBarContainerEl.empty();
@@ -169,7 +161,7 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
         this.booksSelector.makeDropdown();
     }
 
-    private goToResultPage(pageNumber: number, snapshotId: number, query: string, contextSize: number) {//TODO logic
+    protected  goToResultPage(pageNumber: number, snapshotId: number, query: string, contextSize: number) {//TODO logic
         if (!query) return;
         const tableEl = $(`*[data-snapshotId=${snapshotId}]`).find(".text-results-table");
         this.showLoading(tableEl);
@@ -183,7 +175,7 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
         }
     }
 
-    private resultRowClickAttach() {
+    protected resultRowClickAttach() {
         $(".text-results-table-body").off("click", ".result-row");
         $(".text-results-table-body").on("click",
             ".result-row",
@@ -198,7 +190,7 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
             });
     }
 
-    private loadResultPageBasic(text: string, start: number, count: number, contextSize: number, snapshotId: number) {
+    protected loadResultPageBasic(text: string, start: number, count: number, contextSize: number, snapshotId: number) {
         const url = `${getBaseUrl()}BohemianTextBank/BohemianTextBank/TextSearchFulltextGetBookPage`;
         const payload: ICorpusLookupBasicSearch = {
             text: text,
@@ -223,12 +215,12 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
         });
     }
 
-    private emptyResultsTable(bookSectionEl : JQuery) {
+    protected emptyResultsTable(bookSectionEl : JQuery) {
         const tableEl = bookSectionEl.find(".text-results-table-body");
         tableEl.empty();
     }
 
-    private loadResultPageAdvanced(json: string,
+    protected loadResultPageAdvanced(json: string,
         start: number,
         count: number,
         contextSize: number,
@@ -257,7 +249,7 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
         });
     }
 
-    private generateBookSectionLayout(snapshotId: number, resultNumber: number) {
+    protected generateBookSectionLayout(snapshotId: number, resultNumber: number) {
         const bookSectionsContainer = $(".results-container");
         const bookRowEl = $(`<div class="book-section-row row no-gutters lazyload" data-snapshotId="${snapshotId}" data-result-number="${resultNumber}"></div>`);
         const bookDetailSection = $(`<div class="col-xs-4 col-sm-6 book-detail-section"></div>`);
@@ -269,27 +261,7 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
         bookSectionsContainer.append(bookRowEl);
     }
 
-    private lazyloadEventProcess() {
-        $(".corpus-result-and-settings-row").on("lazybeforeunveil", (event) => {
-            const targetEl = $(event.target as Node as Element);
-            const snapshotId = parseInt(targetEl.attr("data-snapshotId"));
-            const totalResults = parseInt(targetEl.attr("data-result-number"));
-            if (!isNaN(snapshotId) && !isNaN(totalResults)) {
-                this.fillBookSection(snapshotId, totalResults);
-                if (snapshotId === this.lastSnapshotId && !this.compositionPageIsLast) {
-                    const isAdvancedSearch = this.search.isLastQueryJson();
-                    if (isAdvancedSearch) {
-                        this.corpusAdvancedSearchBookHits(this.search.getLastQuery());
-                    } else {
-                        this.corpusBasicSearchBookHits(this.search.getLastQuery());
-                    }
-                    
-                }
-            }
-        });
-    }
-
-    private fillBookSection(snapshotId: number, totalResults: number) {
+    protected fillBookSection(snapshotId: number, totalResults: number) {
         const bookSectionEl = $(`*[data-snapshotId=${snapshotId}]`);
         const paginationEl = bookSectionEl.find(".pagination-section");
         const paginator = new Pagination({
@@ -305,11 +277,11 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
         this.createBookDetailsSection(bookSectionEl);
     }
 
-    private sortOrderChanged() {
+    protected sortOrderChanged() {
         //TODO logic
     }
 
-    private createBookDetailsSection(bookSectionEl: JQuery) {
+    protected createBookDetailsSection(bookSectionEl: JQuery) {
         const bookDetailEl = bookSectionEl.find(".book-detail-section");
         const docSectionEl = $(`<div class="row result-info-section">
                         <div class="col-sm-2 col-xs-12 label">Doc</div>
@@ -381,7 +353,7 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
         bookDetailEl.append(detailStructureContainer);
     }
 
-    private showNoPageWarning(pageNumber?: number) {
+    protected showNoPageWarning(pageNumber?: number) {
         const pageNumberString = (pageNumber) ? pageNumber.toString() : "";
         bootbox.alert({
             title: "Attention",
@@ -393,8 +365,27 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
             }
         });
     }
+}
 
-    private onSearchStartSingle() {//TODO logic
+class BohemianTextBankSingleLazyload extends BohemianTextBankSingle {
+    private lastSnapshotId = -1;
+
+    initSearch() {
+        this.lazyloadEventProcess();
+        this.init();
+        const favoritesQueriesConfig: IModulInicializatorConfigurationSearchFavorites = {
+            bookType: BookTypeEnum.TextBank,
+            queryType: QueryTypeEnum.Search
+        };
+        this.search = new Search($("#listSearchDiv")[0] as Node as HTMLDivElement,
+            this.startAdvancedSearch.bind(this),
+            this.startBasicSearch.bind(this),
+            favoritesQueriesConfig);
+        this.search.limitFullTextSearchToOne();
+        this.search.makeSearch(this.enabledOptions);
+    }
+
+    private onSearchStartSingleLazyload() {//TODO logic
         $(".results-container").empty();
         const viewingSettingsChangedWarningEl = $(".search-settings-changed-warning");
         viewingSettingsChangedWarningEl.slideUp();
@@ -405,14 +396,83 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
 
     private startBasicSearch(text: string) {
         if (!text) return;
-        this.onSearchStartSingle();
+        this.onSearchStartSingleLazyload();
         this.corpusBasicSearchBookHits(text);
     }
 
     private startAdvancedSearch(json: string) {
         if (!json) return;
-        this.onSearchStartSingle();
+        this.onSearchStartSingleLazyload();
         this.corpusAdvancedSearchBookHits(json);
+    }
+
+    private lazyloadEventProcess() {
+        $(".corpus-result-and-settings-row").on("lazybeforeunveil", (event) => {
+            const targetEl = $(event.target as Node as Element);
+            const snapshotId = parseInt(targetEl.attr("data-snapshotId"));
+            const totalResults = parseInt(targetEl.attr("data-result-number"));
+            if (!isNaN(snapshotId) && !isNaN(totalResults)) {
+                this.fillBookSection(snapshotId, totalResults);
+                if (snapshotId === this.lastSnapshotId && !this.compositionPageIsLast) {
+                    const isAdvancedSearch = this.search.isLastQueryJson();
+                    if (isAdvancedSearch) {
+                        this.corpusAdvancedSearchBookHits(this.search.getLastQuery());
+                    } else {
+                        this.corpusBasicSearchBookHits(this.search.getLastQuery());
+                    }
+
+                }
+            }
+        });
+    }
+
+    private corpusAdvancedSearchBookHits(json: string) {
+        if (this.compositionResultListStart === -1) {
+            this.compositionResultListStart = 0;
+        }
+        const start = this.compositionResultListStart;
+        const count = this.compositionsPerPage;
+        const sortingEnum = this.sortBar.getSortCriteria();
+        const sortAsc = this.sortBar.isSortedAsc();
+        const sortingDirection = sortAsc ? SortDirection.Asc : SortDirection.Desc;
+
+        const payload: ICorpusListPageLookupAdvancedSearch = {
+            json: json,
+            selectedBookIds: this.bookIdsInQuery,
+            selectedCategoryIds: this.categoryIdsInQuery,
+            sortBooksBy: sortingEnum,
+            sortDirection: sortingDirection,
+            start: start,
+            count: count
+        };
+
+        updateQueryStringParameter(this.urlSearchKey, json);
+        updateQueryStringParameter(this.urlSortAscKey, sortAsc);
+        updateQueryStringParameter(this.urlSortCriteriaKey, sortingEnum);
+        updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
+
+        $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchGetHitBookResultNumbers`, payload)
+            .done((bookIds: ICoprusSearchSnapshotResult) => {
+                const totalCount = bookIds.totalCount;
+                const page = (start / count) + 1;
+                const totalPages = Math.ceil(totalCount / count);
+                this.compositionResultListStart += this.compositionsPerPage;
+                $("#totalCompositionsCountDiv").text(totalCount);
+                const snapshotStructureArray = bookIds.snapshotList;
+                var idList: number[] = [];
+                snapshotStructureArray.forEach((snapshot) => {
+                    idList.push(snapshot.snapshotId);
+                    this.generateBookSectionLayout(snapshot.snapshotId, snapshot.resultCount);
+                });
+                this.hitBookIds = idList;
+                this.lastSnapshotId = idList[idList.length - 1];
+                if (this.hitBookIds.length < this.compositionsPerPage || page === totalPages) {
+                    this.compositionPageIsLast = true;
+                }
+            }).fail(() => {
+                const loaderEl = $(".corpus-search-results-table-div-loader");
+                this.printErrorMessage(this.defaultErrorMessage, loaderEl);
+            });
     }
 
     private corpusBasicSearchBookHits(text: string) {
@@ -463,13 +523,100 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
                 this.printErrorMessage(this.defaultErrorMessage, loaderEl);
             });
     }
+}
 
-    private corpusAdvancedSearchBookHits(json: string) {
+class BohemianTextBankSinglePaged extends BohemianTextBankSingle {
+    private paginationInitialised = false;
+    private mainPaginator: Pagination;
+    initSearch() {
+        this.lazyloadEventProcess();
+        this.init();
+        const favoritesQueriesConfig: IModulInicializatorConfigurationSearchFavorites = {
+            bookType: BookTypeEnum.TextBank,
+            queryType: QueryTypeEnum.Search
+        };
+        this.search = new Search($("#listSearchDiv")[0] as Node as HTMLDivElement,
+            this.startAdvancedSearch.bind(this),
+            this.startBasicSearch.bind(this),
+            favoritesQueriesConfig);
+        this.search.limitFullTextSearchToOne();
+        this.search.makeSearch(this.enabledOptions);
+    }
+
+    private lazyloadEventProcess() {
+        $(".corpus-result-and-settings-row").on("lazybeforeunveil", (event) => {
+            const targetEl = $(event.target as Node as Element);
+            const snapshotId = parseInt(targetEl.attr("data-snapshotId"));
+            const totalResults = parseInt(targetEl.attr("data-result-number"));
+            if (!isNaN(snapshotId) && !isNaN(totalResults)) {
+                this.fillBookSection(snapshotId, totalResults);
+            }
+        });
+    }
+    private onSearchStartSinglePaged() {//TODO logic
+        $(".results-container").empty();
+        const viewingSettingsChangedWarningEl = $(".search-settings-changed-warning");
+        viewingSettingsChangedWarningEl.slideUp();
+        this.compositionResultListStart = - 1;
+        if (this.mainPaginator) {
+            this.mainPaginator = null;
+            $(".main-pagination-container").empty();
+        }
+        this.paginationInitialised = false;
+    }
+
+    private startBasicSearch(text: string) {
+        if (!text) return;
+        this.onSearchStartSinglePaged();
+        this.corpusBasicSearchBookHits(text, 1);
+    }
+
+    private startAdvancedSearch(json: string) {
+        if (!json) return;
+        this.onSearchStartSinglePaged();
+        this.corpusAdvancedSearchBookHits(json, 1);
+    }
+
+    private createMainPaginator(totalBooks: number) {
+        if (this.paginationInitialised) {
+            return;
+        } else {
+            const paginationContainerEl = $(".main-pagination-container");
+            const query = this.search.getLastQuery();
+            const isAdvancedMode = this.search.isLastQueryJson();
+            if (isAdvancedMode) {
+                this.mainPaginator = new Pagination({
+                    container: paginationContainerEl,
+                    pageClickCallback: (pageNumber) => {
+                        $(".results-container").empty();
+                        this.corpusAdvancedSearchBookHits(query, pageNumber);
+                    },
+                    showSlider: false,
+                    showInput: false,
+                    callPageClickCallbackOnInit: false
+                });
+            } else {
+                this.mainPaginator = new Pagination({
+                    container: paginationContainerEl,
+                    pageClickCallback: (pageNumber) => {
+                        $(".results-container").empty();
+                        this.corpusBasicSearchBookHits(query, pageNumber);
+                    },
+                    showSlider: false,
+                    showInput: false,
+                    callPageClickCallbackOnInit: false
+                });
+            }
+            this.mainPaginator.make(totalBooks, this.compositionsPerPage, 1);
+        }
+    }
+
+    private corpusAdvancedSearchBookHits(json: string, page: number) {
         if (this.compositionResultListStart === -1) {
             this.compositionResultListStart = 0;
         }
-        const start = this.compositionResultListStart;
         const count = this.compositionsPerPage;
+        const start = (page - 1) * count;
         const sortingEnum = this.sortBar.getSortCriteria();
         const sortAsc = this.sortBar.isSortedAsc();
         const sortingDirection = sortAsc ? SortDirection.Asc : SortDirection.Desc;
@@ -492,7 +639,56 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
         $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchGetHitBookResultNumbers`, payload)
             .done((bookIds: ICoprusSearchSnapshotResult) => {
                 const totalCount = bookIds.totalCount;
-                const page = (start / count) + 1;
+                this.createMainPaginator(totalCount);
+                this.paginationInitialised = true;
+                const totalPages = Math.ceil(totalCount / count);
+                $("#totalCompositionsCountDiv").text(totalCount);
+                const snapshotStructureArray = bookIds.snapshotList;
+                var idList: number[] = [];
+                snapshotStructureArray.forEach((snapshot) => {
+                    idList.push(snapshot.snapshotId);
+                    this.generateBookSectionLayout(snapshot.snapshotId, snapshot.resultCount);
+                });
+                this.hitBookIds = idList;
+                if (this.hitBookIds.length < this.compositionsPerPage || page === totalPages) {
+                    this.compositionPageIsLast = true;
+                }
+            }).fail(() => {
+                const loaderEl = $(".corpus-search-results-table-div-loader");
+                this.printErrorMessage(this.defaultErrorMessage, loaderEl);
+            });
+    }
+
+    private corpusBasicSearchBookHits(text: string, page : number) {
+        if (this.compositionResultListStart === -1) {
+            this.compositionResultListStart = 0;
+        }
+        const count = this.compositionsPerPage;
+        const start = (page - 1) * count;
+        const sortingEnum = this.sortBar.getSortCriteria();
+        const sortAsc = this.sortBar.isSortedAsc();
+        const sortingDirection = sortAsc ? SortDirection.Asc : SortDirection.Desc;
+
+        const payload: ICorpusListPageLookupBasicSearch = {
+            text: text,
+            selectedBookIds: this.bookIdsInQuery,
+            selectedCategoryIds: this.categoryIdsInQuery,
+            sortBooksBy: sortingEnum,
+            sortDirection: sortingDirection,
+            start: start,
+            count: count
+        };
+
+        updateQueryStringParameter(this.urlSearchKey, text);
+        updateQueryStringParameter(this.urlSortAscKey, sortAsc);
+        updateQueryStringParameter(this.urlSortCriteriaKey, sortingEnum);
+        updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
+
+        $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetHitBookResultNumbers`, payload)
+            .done((bookIds: ICoprusSearchSnapshotResult) => {
+                const totalCount = bookIds.totalCount;
+                this.createMainPaginator(totalCount);
+                this.paginationInitialised = true;
                 const totalPages = Math.ceil(totalCount / count);
                 this.compositionResultListStart += this.compositionsPerPage;
                 $("#totalCompositionsCountDiv").text(totalCount);
@@ -503,7 +699,6 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
                     this.generateBookSectionLayout(snapshot.snapshotId, snapshot.resultCount);
                 });
                 this.hitBookIds = idList;
-                this.lastSnapshotId = idList[idList.length - 1];
                 if (this.hitBookIds.length < this.compositionsPerPage || page === totalPages) {
                     this.compositionPageIsLast = true;
                 }
