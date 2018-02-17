@@ -224,6 +224,8 @@ class ReaderLayout {
     private bookmarksPanel: BookmarksPanel;
     private searchPanel: SearchResultPanel;
     private contentPanel: ContentPanel;
+    private termsResultPanel: TermsResultPanel;
+    private termsSearchPanel: TermsSearchPanel;
 
     private textPanel: TextPanel;
     private imagePanel: ImagePanel;
@@ -239,8 +241,8 @@ class ReaderLayout {
     bookmarksPanelId: string = "bookmarks";
     searchPanelId: string = "search";
     termsPanelId: string = "terms";
-    termsOnPageId: string = "termsOnPage";
-    occurOnPageId: string = "occurance";
+    termsResultId: string = "termsResult";
+    termsSearchId: string = "termsSearch";
 
     showPanelList: Array<ReaderPanelEnum>;
 
@@ -278,9 +280,6 @@ class ReaderLayout {
 
         var bookDetails = this.makeBookDetails(bookTitle);
         this.readerHeaderDiv.appendChild(bookDetails);
-
-        var searchBar = this.makeSearchBar();
-        // this.readerHeaderDiv.appendChild(searchBar);
 
         var controlsDiv = this.makeControls();
         this.readerHeaderDiv.appendChild(controlsDiv);
@@ -832,11 +831,6 @@ class ReaderLayout {
         return listingContainer;
     }
 
-    private makeSearchBar(): HTMLDivElement {
-        //TODO create searchBar
-        return;
-    }
-
     private makeToolButtons(): HTMLDivElement {
         var readerLayout = this;
         var toolButtons: HTMLDivElement = document.createElement("div");
@@ -984,8 +978,83 @@ class ReaderLayout {
         });
         viewButtons.appendChild(audioButton);
 
+        var checkboxDiv = this.createCheckboxDiv();
+        viewButtons.appendChild(checkboxDiv);
 
         return viewButtons;
+    }
+
+    private createCheckboxDiv(): HTMLDivElement {
+        var checkboxesDiv = window.document.createElement("div");
+        $(checkboxesDiv).addClass("reader-settings-checkboxes-area");
+
+        var showPageCheckboxDiv: HTMLDivElement = window.document.createElement("div");
+        var showPageNameCheckbox: HTMLInputElement = window.document.createElement("input");
+        showPageNameCheckbox.type = "checkbox";
+
+        $(showPageNameCheckbox).change((eventData: Event) => {
+            var readerText: JQuery = $("#" + this.textPanelId).find(".reader-text");
+            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
+            if (currentTarget.checked) {
+                readerText.addClass("reader-text-show-page-names");
+            } else {
+                readerText.removeClass("reader-text-show-page-names");
+            }
+        });
+
+        var showPageNameLabel: HTMLLabelElement = window.document.createElement("label");
+        showPageNameLabel.innerHTML = "Zobrazit číslování stránek";
+        showPageCheckboxDiv.appendChild(showPageNameCheckbox);
+        showPageCheckboxDiv.appendChild(showPageNameLabel);
+        showPageNameCheckbox.id = "checkbox-show-page-numbers";
+        showPageNameLabel.setAttribute("for", showPageNameCheckbox.id);
+        checkboxesDiv.appendChild(showPageCheckboxDiv);
+
+        var showPageOnNewLineDiv: HTMLDivElement = window.document.createElement("div");
+        var showPageOnNewLineCheckbox: HTMLInputElement = window.document.createElement("input");
+        showPageOnNewLineCheckbox.type = "checkbox";
+
+        $(showPageOnNewLineCheckbox).change((eventData: Event) => {
+            var readerText = $("#" + this.textPanelId).find(".reader-text");
+            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
+            if (currentTarget.checked) {
+                $(readerText).addClass("reader-text-page-new-line");
+            } else {
+                $(readerText).removeClass("reader-text-page-new-line");
+            }
+        });
+
+        var showPageOnNewLineLabel: HTMLLabelElement = window.document.createElement("label");
+        showPageOnNewLineLabel.innerHTML = "Zalamovat stránky";
+        showPageOnNewLineDiv.appendChild(showPageOnNewLineCheckbox);
+        showPageOnNewLineDiv.appendChild(showPageOnNewLineLabel);
+        showPageOnNewLineCheckbox.id = "checkbox-page-breaks";
+        showPageOnNewLineLabel.setAttribute("for", showPageOnNewLineCheckbox.id);
+        checkboxesDiv.appendChild(showPageOnNewLineDiv);
+        
+        var showCommentCheckboxDiv: HTMLDivElement = window.document.createElement("div");
+        var showCommentCheckbox: HTMLInputElement = window.document.createElement("input");
+        showCommentCheckbox.type = "checkbox";
+
+        $(showCommentCheckbox).change((eventData: Event) => {
+            var readerText = $("#" + this.textPanelId).find(".reader-text");
+            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
+            if (currentTarget.checked) {
+                $(readerText).addClass("show-notes");
+            } else {
+                $(readerText).removeClass("show-notes");
+            }
+        });
+
+        var showCommentLabel: HTMLLabelElement = window.document.createElement("label");
+        showCommentLabel.innerHTML = "Zobrazit komentáře";
+        showCommentCheckboxDiv.appendChild(showCommentCheckbox);
+        showCommentCheckboxDiv.appendChild(showCommentLabel);
+        showCommentCheckbox.id = "checkbox-show-comment";
+        showCommentLabel.setAttribute("for", showCommentCheckbox.id);
+        checkboxesDiv.appendChild(showCommentCheckboxDiv);
+
+        return checkboxesDiv;
     }
 
     private createToolPanel(panelId: string, panelTitle: string) {
@@ -1003,7 +1072,7 @@ class ReaderLayout {
         }
         if (this.readerLayout.root.getItemsById(panelId).length === 0) {
             var type: string;
-            if (panelId === "terms") type = "column";
+            if (panelId === this.termsPanelId) type = "column";
             else type = "component";
             var itemConfig = {
                 type: type,
@@ -1013,6 +1082,9 @@ class ReaderLayout {
                 title: panelTitle
             };
             this.readerLayout.root.getItemsById('tools')[0].addChild(itemConfig);
+            if (panelId === this.termsPanelId) {
+                this.createTermsPanel();
+            }
         }
     }
 
@@ -1221,14 +1293,11 @@ class ReaderLayout {
                 case module.bookmarksPanelId:
                     container.getElement().append(module.createBookmarksPanel());
                     break;
-                case module.termsPanelId:
-                    module.createTermsPanel();
+                case module.termsResultId:
+                    container.getElement().append(module.createTermsResultPanel());
                     break;
-                case module.termsOnPageId:
-                    //TODO create terms on page panel 
-                    break;
-                case module.occurOnPageId:
-                    //TODO create occurance on page panel
+                case module.termsSearchId:
+                    container.getElement().append(module.createTermsSearchPanel());
                     break;
                 case module.contentPanelId:
                     container.getElement().append(module.createContentPanel());
@@ -1242,9 +1311,9 @@ class ReaderLayout {
         });
         readerLayout.registerComponent('viewTab', function (container, state) {
             switch (state.label) {
-                //case module.audioPanelId:
-                //    container.getElement().append(module.createAudioPanel());
-                //    break;
+                case module.audioPanelId:
+                    container.getElement().append(module.createAudioPanel());
+                    break;
                 case module.imagePanelId:
                     container.getElement().append(module.createImagePanel());
                     break;
@@ -1312,6 +1381,7 @@ class ReaderLayout {
         var resultPanel: SearchResultPanel = null;
         resultPanel = new SearchResultPanel(this.searchPanelId, this);
         this.searchPanel = resultPanel;
+        alert();
         this.toolPanels.push(resultPanel);
         return resultPanel.panelHtml;
     }
@@ -1319,22 +1389,36 @@ class ReaderLayout {
     private createTermsPanel() {
         var itemConfig = {
             type: 'component',
-            id: this.occurOnPageId,
-            componentState: { label: this.occurOnPageId },
-            componentName: 'viewTab',
-            title: "Výskyty na stránce",
-            isClosable: false
+            id: this.termsSearchId,
+            componentState: { label: this.termsSearchId },
+            componentName: 'toolTab',
+            title: "Výskyty na stránce"
         };
         this.readerLayout.root.getItemsById(this.termsPanelId)[0].addChild(itemConfig);
         itemConfig = {
             type: 'component',
-            id: this.termsOnPageId,
-            componentState: { label: this.termsOnPageId },
-            componentName: 'viewTab',
-            title: "Témata na stránce",
-            isClosable: false
+            id: this.termsResultId,
+            componentState: { label: this.termsResultId },
+            componentName: 'toolTab',
+            title: "Témata na stránce"
         };
         this.readerLayout.root.getItemsById(this.termsPanelId)[0].addChild(itemConfig);
+    }
+
+    private createTermsResultPanel(): HTMLDivElement {
+        var termsPanel: TermsResultPanel = null;
+        termsPanel = new TermsResultPanel(this.termsResultId, this);
+        this.termsResultPanel = termsPanel;
+        this.toolPanels.push(termsPanel);
+        return termsPanel.panelHtml;
+    }
+
+    private createTermsSearchPanel(): HTMLDivElement {
+        var termsPanel: TermsSearchPanel = null;
+        termsPanel = new TermsSearchPanel(this.termsSearchId, this);
+        this.termsSearchPanel = termsPanel;
+        this.toolPanels.push(termsPanel);
+        return termsPanel.panelHtml;
     }
 
     private createTextPanel(): HTMLDivElement {
@@ -2271,9 +2355,35 @@ class ImagePanel extends ContentViewPanel {
 }
 
 class AudioPanel extends ContentViewPanel {
-    protected
+    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+        var audioContainerDiv: HTMLDivElement = document.createElement("div");
+        $(audioContainerDiv).addClass("reader-audio-container");
 
-    makeBody(rootReference: SidePanel, window: Window): HTMLElement {
-        throw new Error("Not implemented");
+        var trackName = document.createElement("h3");
+        audioContainerDiv.appendChild(trackName);
+
+        var trackSelect = document.createElement("select");
+        //for (var i = 0; i < numberOfTracks; i++) {
+        //    var track = document.createElement("option");
+        //    track.innerHTML = tracks[numberOfTrack];
+        //    $(trackSelect).append(track);
+        //}
+        audioContainerDiv.appendChild(trackSelect);
+
+        var audioTextDiv = document.createElement("div");
+        $(audioTextDiv).addClass("audio-text");
+        //audioTextDiv.innerHTML = AudioTrackText;
+        audioContainerDiv.appendChild(audioTextDiv);
+
+        var audioPlayer = document.createElement("audio");
+        $(audioPlayer).prop("controls", "controls");
+        $(audioPlayer).prop("preload", "none");
+        var audioSource = document.createElement("source");
+        //TODO add source src and type
+        audioPlayer.appendChild(audioSource);
+        $(audioPlayer).append("Váš prohlížeč nepodporuje html audio");
+        audioContainerDiv.appendChild(audioPlayer);
+
+        return audioContainerDiv;
     }
 }
