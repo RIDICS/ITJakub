@@ -2,7 +2,7 @@
 //import GoldenLayout = require("golden-layout");
 //declare var GoldenLayout;
 
-function initGoldenReader(bookId: string, versionId: string, bookTitle: string, pageList: any, searchedText?: string, initPageId?: string) {
+function initGoldenReader(editionNote: string, bookId: string, versionId: string, bookTitle: string, pageList: any, searchedText?: string, initPageId?: string) {
 
 
     function readerPageChangedCallback(pageId: number) {
@@ -13,8 +13,9 @@ function initGoldenReader(bookId: string, versionId: string, bookTitle: string, 
 
     var readerPlugin = new ReaderLayout(<any>$("#ReaderHeaderDiv")[0],
         readerPageChangedCallback,
-        readerPanels);
-    readerPlugin.makeReader(bookId, versionId, bookTitle, pageList);
+        readerPanels
+    );
+    readerPlugin.makeReader(bookId, versionId, bookTitle, editionNote, pageList);
     var search: Search;
 
     function convertSearchResults(responseResults: Array<Object>): SearchHitResult[] {
@@ -259,7 +260,7 @@ class ReaderLayout {
     }
 
 
-    public makeReader(bookId: string, versionId: string, bookTitle: string, pageList: IPage[]) {
+    public makeReader(bookId: string, versionId: string, bookTitle: string, editionNote: string, pageList: IPage[]) {
         this.bookId = bookId;
         this.versionId = versionId;
         this.actualPageIndex = 0;
@@ -278,7 +279,7 @@ class ReaderLayout {
             this.pagesById[bookPageItem.pageId] = bookPageItem;
         }
 
-        var bookDetails = this.makeBookDetails(bookTitle);
+        var bookDetails = this.makeBookDetails(bookTitle, editionNote);
         this.readerHeaderDiv.appendChild(bookDetails);
 
         var controlsDiv = this.makeControls();
@@ -570,7 +571,7 @@ class ReaderLayout {
         });
     }
 
-    private makeBookDetails(bookTitle: string): HTMLDivElement {
+    private makeBookDetails(bookTitle: string, editionNote: string): HTMLDivElement {
         var bookDetailsDiv: HTMLDivElement = document.createElement("div");
         $(bookDetailsDiv).addClass("book-details");
 
@@ -609,21 +610,25 @@ class ReaderLayout {
         $(detailsButton).click((event) => {
             var target: JQuery = $(event.target);
             var details = target.parents(".book-details").find(".hidden-content");
-            if (details.is(":hidden")) {
+            if (!details.hasClass("visible")) {
                 $(target).removeClass("glyphicon-chevron-down");
                 $(target).addClass("glyphicon-chevron-up");
-                details.css("display", "block");
+                details.addClass("visible");
             } else {
                 $(target).removeClass("glyphicon-chevron-up");
                 $(target).addClass("glyphicon-chevron-down");
-                details.css("display", "none");
+                details.removeClass("visible");
             }
         });
         bookDetailsDiv.appendChild(detailsButton);
 
         var detailsDiv = document.createElement("div");
         $(detailsDiv).addClass("hidden-content");
-        var editionNote = document.createElement("div");
+
+        var editionNoteDiv = document.createElement("div");
+        $(editionNoteDiv).addClass("edition-note-wrapper");
+        editionNoteDiv.innerHTML = editionNote;
+        detailsDiv.appendChild(editionNoteDiv);
 
         bookDetailsDiv.appendChild(detailsDiv);
 
@@ -2386,4 +2391,5 @@ class AudioPanel extends ContentViewPanel {
 
         return audioContainerDiv;
     }
+
 }

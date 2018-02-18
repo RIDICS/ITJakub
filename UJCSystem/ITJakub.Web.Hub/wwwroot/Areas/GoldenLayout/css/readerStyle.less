@@ -9,6 +9,7 @@
 @color4: #888888;
 @linkColor: #8E5523;
 @linkColorHover: #633107;
+@lineColor: #e5e5e5;
 
 .lm_tab {
     height: @tabHeight !important;
@@ -97,8 +98,13 @@ button {
 }
 
 .hidden-content{
-    height:300px;
-    display:none;
+    height:0px;
+    display: block;
+    transition: height 1s;
+
+    &.visible {
+        height:300px;
+    }
 }
 .page-navigation-container-helper{
     text-align:center;
@@ -131,5 +137,17 @@ button {
 
     .itj-notes .itj-note {
         display: none;
+    }
+}
+
+.edition-note-wrapper {
+    overflow-y: scroll;
+    min-width: 20px;
+    width: 70%;
+    height: 100%;
+    padding: 0 5px;
+
+    .grant  {
+        border-top: @lineColor solid 2px;
     }
 }

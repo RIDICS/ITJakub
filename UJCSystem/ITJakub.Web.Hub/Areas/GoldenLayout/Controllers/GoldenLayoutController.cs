@@ -73,6 +73,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             {
                 var book = client.GetBookInfo(bookId);
                 var pages = client.GetBookPageList(bookId);
+                var text = client.GetEditionNote(bookId, TextFormatEnumContract.Html);
                 return
                     View(new BookListingModel
                     {
@@ -82,6 +83,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                         BookPages = pages,
                         SearchText = searchText,
                         InitPageId = page, 
+                        EditionNoteText = text,
                         CanPrintEdition = User.IsInRole("CanEditionPrint"),
                         JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
                     });
