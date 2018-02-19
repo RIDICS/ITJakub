@@ -109,9 +109,10 @@
         margin-top: 2em;
 
         .result-text-col {
+            padding: 0;
             min-height: 30em;
             max-height: 40em;
-            overflow:auto;
+            overflow: auto;
 
             .text-results-table {
                 width: 100%;
@@ -168,31 +169,38 @@
         }
     }
 
-    .result-info-section {
-        .label {
-            font-weight: bolder;
-            font-size: 100%;
-            color: grey;
-            text-align: left;
-        }
+    .book-detail-section {
+        overflow-x: auto;
 
-        .result-info-section {
-            margin: 0.8em 0;
+        .corpus-search-detail-container {
 
-            .col-no-padding {
-                padding-left: 0;
-            }
-
-            .table-row {
+            .result-info-section {
                 .label {
-                    font-weight: bold;
+                    font-weight: bolder;
                     font-size: 100%;
-                    color: black;
-                    padding-left: 0;
+                    color: grey;
+                    text-align: left;
                 }
 
-                .break-word {
-                    word-break: break-word;
+                .result-info-section {
+                    margin: 0.8em 0;
+
+                    .col-no-padding {
+                        padding-left: 0;
+                    }
+
+                    .table-row {
+                        .label {
+                            font-weight: bold;
+                            font-size: 100%;
+                            color: black;
+                            padding-left: 0;
+                        }
+
+                        .break-word {
+                            word-break: break-word;
+                        }
+                    }
                 }
             }
         }

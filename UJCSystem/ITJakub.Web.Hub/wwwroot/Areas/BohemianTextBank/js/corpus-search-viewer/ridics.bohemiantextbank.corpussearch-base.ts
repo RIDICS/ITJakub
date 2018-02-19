@@ -226,47 +226,4 @@
         var scrollOffset = matchPosition - ((textColumn.width() + abbrColWidth - matchEl.width()) / 2);
         textColumn.scrollLeft(scrollOffset);
     }
-
-    protected printDetailInfo(tableRowEl: JQuery, detailSectionEl: JQuery, query:string) {
-        const undefinedReplaceString = "<Nezadáno>";
-        const detailAuthorEl = detailSectionEl.find(".detail-author");
-        const detailTitleEl = detailSectionEl.find(".detail-title");
-        const detailDatingEl = detailSectionEl.find(".detail-dating");
-        const detailDatingCenturyEl = detailSectionEl.find(".detail-dating-century");
-        const detailAbbrevEl = detailSectionEl.find(".detail-abbrev");
-        const editionNoteEl = detailSectionEl.find(".detail-edition-note-href");
-        const detailPholioEl = detailSectionEl.find(".detail-folio");
-        const detailVerseEl = detailSectionEl.find(".detail-vers");
-        const detailBibleVerseBookEl = detailSectionEl.find(".detail-bible-vers-book");
-        const detailBibleVerseChapterEl = detailSectionEl.find(".detail-bible-vers-chapter");
-        const detailBibleVerseVerseEl = detailSectionEl.find(".detail-bible-vers-vers");
-
-        detailAuthorEl.text(tableRowEl.data("author") ? tableRowEl.data("author") : undefinedReplaceString);
-        detailTitleEl.text(tableRowEl.data("title") ? tableRowEl.data("title") : undefinedReplaceString);
-        detailDatingEl.text(tableRowEl.data("dating") ? tableRowEl.data("dating") : undefinedReplaceString);
-        detailDatingCenturyEl.text(undefinedReplaceString); //TODO ask where is this info stored
-        detailAbbrevEl.text(tableRowEl.data("acronym") ? tableRowEl.data("acronym") : undefinedReplaceString);
-
-        //Edition note
-        const editionNoteAnchor = editionNoteEl;
-        const bookId = tableRowEl.data("bookid");
-        editionNoteAnchor.prop("href", `/EditionNote/EditionNote?bookId=${bookId}`);
-
-        const folioHref = $("<a></a>");
-        const pageId = tableRowEl.data("pageid");
-        folioHref.prop("href",
-            `${getBaseUrl()}Editions/Editions/Listing?bookId=${bookId}&searchText=${
-            query}&page=${pageId}`);
-        folioHref.text(tableRowEl.data("pagename") ? tableRowEl.data("pagename") : undefinedReplaceString);
-
-        detailPholioEl.empty().append(folioHref);
-
-        detailVerseEl.text(tableRowEl.data("verseName") ? tableRowEl.data("verseName") : undefinedReplaceString);
-        detailBibleVerseBookEl
-            .text(tableRowEl.data("bibleBook") ? tableRowEl.data("bibleBook") : undefinedReplaceString);
-        detailBibleVerseChapterEl
-            .text(tableRowEl.data("bibleChapter") ? tableRowEl.data("bibleChapter") : undefinedReplaceString);
-        detailBibleVerseVerseEl
-            .text(tableRowEl.data("bibleVerse") ? tableRowEl.data("bibleVerse") : undefinedReplaceString);
-    }
 }
