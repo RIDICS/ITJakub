@@ -10,6 +10,7 @@ rem specify "cd" and "bower" command for all projects with Bower dependecies
 cd ITJakub.Web.Hub
 call npm install
 call bower install --config.interactive=false
+call gulp yarn-runtime
 
 rem ----------
 
