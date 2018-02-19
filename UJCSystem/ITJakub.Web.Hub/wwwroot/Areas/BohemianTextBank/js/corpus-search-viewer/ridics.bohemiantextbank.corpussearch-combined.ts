@@ -11,6 +11,10 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
 
     private paginationContainerEl = $("#paginationContainer");
 
+    //string for localisation
+    private attentionString = "Upozornění";
+    private lastResultPageString = "Poslední stránka výsledků";
+
     initSearch() {
         const paginator = new IndefinitePagination({
             container: this.paginationContainerEl,
@@ -39,7 +43,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
 
         const contextSizeWarningEl = $(".context-size-warning");
         const contextSizeAlert = new AlertComponentBuilder(AlertType.Error);
-        contextSizeAlert.addContent(`Context size must be between ${this.minContextLength} and ${this.maxContextLength}`);
+        contextSizeAlert.addContent(this.contextSizeWarningMessage);
         contextSizeWarningEl.append(contextSizeAlert.buildElement());
 
         contextLengthInputEl.on("change", () => {
@@ -60,7 +64,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
 
         const numberOfPositionsWarningEl = $(".number-of-positions-size-warning");
         const numberOfPositions = new AlertComponentBuilder(AlertType.Error);
-        numberOfPositions.addContent(`Number of results must be between ${this.minResultsPerPage} and ${this.maxResultsPerPage}`);
+        numberOfPositions.addContent(this.numberOfResultsPerPageWarningMessage);
         numberOfPositionsWarningEl.append(numberOfPositions.buildElement());
 
         resultsPerPageInputEl.on("change", () => {
@@ -257,7 +261,6 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
     }
 
     private printDetailInfo(tableRowEl: JQuery, detailSectionEl: JQuery, query: string) {
-        const undefinedReplaceString = "<Nezadáno>";
         const detailAuthorEl = detailSectionEl.find(".detail-author");
         const detailTitleEl = detailSectionEl.find(".detail-title");
         const detailDatingEl = detailSectionEl.find(".detail-dating");
@@ -270,11 +273,11 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
         const detailBibleVerseChapterEl = detailSectionEl.find(".detail-bible-vers-chapter");
         const detailBibleVerseVerseEl = detailSectionEl.find(".detail-bible-vers-vers");
 
-        detailAuthorEl.text(tableRowEl.data("author") ? tableRowEl.data("author") : undefinedReplaceString);
-        detailTitleEl.text(tableRowEl.data("title") ? tableRowEl.data("title") : undefinedReplaceString);
-        detailDatingEl.text(tableRowEl.data("dating") ? tableRowEl.data("dating") : undefinedReplaceString);
-        detailDatingCenturyEl.text(undefinedReplaceString); //TODO ask where is this info stored
-        detailAbbrevEl.text(tableRowEl.data("acronym") ? tableRowEl.data("acronym") : undefinedReplaceString);
+        detailAuthorEl.text(tableRowEl.data("author") ? tableRowEl.data("author") : this.undefinedReplaceString);
+        detailTitleEl.text(tableRowEl.data("title") ? tableRowEl.data("title") : this.undefinedReplaceString);
+        detailDatingEl.text(tableRowEl.data("dating") ? tableRowEl.data("dating") : this.undefinedReplaceString);
+        detailDatingCenturyEl.text(this.undefinedReplaceString); //TODO ask where is this info stored
+        detailAbbrevEl.text(tableRowEl.data("acronym") ? tableRowEl.data("acronym") : this.undefinedReplaceString);
 
         //Edition note
         const editionNoteAnchor = editionNoteEl;
@@ -286,17 +289,17 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
         folioHref.prop("href",
             `${getBaseUrl()}Editions/Editions/Listing?bookId=${bookId}&searchText=${
             query}&page=${pageId}`);
-        folioHref.text(tableRowEl.data("pagename") ? tableRowEl.data("pagename") : undefinedReplaceString);
+        folioHref.text(tableRowEl.data("pagename") ? tableRowEl.data("pagename") : this.undefinedReplaceString);
 
         detailPholioEl.empty().append(folioHref);
 
-        detailVerseEl.text(tableRowEl.data("verseName") ? tableRowEl.data("verseName") : undefinedReplaceString);
+        detailVerseEl.text(tableRowEl.data("verseName") ? tableRowEl.data("verseName") : this.undefinedReplaceString);
         detailBibleVerseBookEl
-            .text(tableRowEl.data("bibleBook") ? tableRowEl.data("bibleBook") : undefinedReplaceString);
+            .text(tableRowEl.data("bibleBook") ? tableRowEl.data("bibleBook") : this.undefinedReplaceString);
         detailBibleVerseChapterEl
-            .text(tableRowEl.data("bibleChapter") ? tableRowEl.data("bibleChapter") : undefinedReplaceString);
+            .text(tableRowEl.data("bibleChapter") ? tableRowEl.data("bibleChapter") : this.undefinedReplaceString);
         detailBibleVerseVerseEl
-            .text(tableRowEl.data("bibleVerse") ? tableRowEl.data("bibleVerse") : undefinedReplaceString);
+            .text(tableRowEl.data("bibleVerse") ? tableRowEl.data("bibleVerse") : this.undefinedReplaceString);
     }
 
     private corpusBasicSearchPaged(text: string, start: number, contextLength: number, bookId: number) {
@@ -364,8 +367,8 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
                     const tableEl = $(".text-results-table");
                     this.hideLoading(tableEl);
                     bootbox.alert({
-                        title: "Attention",
-                        message: "Last result page",
+                        title: this.attentionString,
+                        message: this.lastResultPageString,
                         buttons: {
                             ok: {
                                 className: "btn-default"
@@ -452,8 +455,8 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
         this.paginator.enable();
         const pageNumberString = (pageNumber) ? pageNumber.toString() : "";
         bootbox.alert({
-            title: "Attention",
-            message: `Page ${pageNumberString} does not exist`,
+            title: this.attentionString,
+            message: `Stránka ${pageNumberString} neexistuje`,
             buttons: {
                 ok: {
                     className: "btn-default"

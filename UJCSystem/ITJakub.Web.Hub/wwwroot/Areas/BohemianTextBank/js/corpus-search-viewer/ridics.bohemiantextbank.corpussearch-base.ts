@@ -19,8 +19,12 @@
     protected currentViewPage = 1;
     protected totalViewPages = 0;
 
+    //string for localisation
     protected defaultErrorMessage =
         "Vyhledávání se nezdařilo. Ujistěte se, zda máte zadáno alespoň jedno kritérium na vyhledávání v textu.";
+    protected undefinedReplaceString = "<Nezadáno>";
+    protected contextSizeWarningMessage = `Velikost kontextu by měla být mezi ${this.minContextLength} a ${this.maxContextLength}`;
+    protected numberOfResultsPerPageWarningMessage = `Počet výsledků na stránce by měl být mezi ${this.minResultsPerPage} a ${this.maxResultsPerPage}`;
 
     protected urlSearchKey = "search";
     protected urlSelectionKey = "selected";
@@ -121,6 +125,9 @@
     }
 
     protected fillResultTable(results: ICorpusSearchResult[], query: string, tableSectionEl: JQuery) {
+        if (!tableSectionEl.length || !query || !results) {
+            return;
+        }
         const textColumn = tableSectionEl.find(".result-text-col");
         const textResultTableEl = textColumn.find(".text-results-table-body");
         const undefinedReplaceString = "<Nezadáno>";
@@ -162,7 +169,7 @@
             const contextBefore = $(`<td class="context-before"></td>`);
             contextBefore.text(contextStructure.before);
 
-            const contextMatch = $(`<td class="text-center"></td>`);
+            const contextMatch = $(`<td class="text-center match-container"></td>`);
             contextMatch.append(`<span class="match">${contextStructure.match}</span>`);
 
             const contextAfter = $(`<td class="context-after"></td>`);
@@ -220,7 +227,7 @@
         tableEl.tableHeadFixer({ "left": 1, "head": false });
         this.hideLoading(tableEl);//ensure table is visible before calculating offset
         //scroll from left to center match column in table
-        const matchEl = textResultTableEl.children("tr").first().find(".text-center");
+        const matchEl = textResultTableEl.children("tr").first().find(".match-container");
         const matchPosition = matchEl.position().left;
         const abbrColWidth = textResultTableEl.children("tr").first().find(".abbrev-col").width();
         var scrollOffset = matchPosition - ((textColumn.width() + abbrColWidth - matchEl.width()) / 2);
