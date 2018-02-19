@@ -1,4 +1,4 @@
-﻿$(document).ready(() => {
+﻿$(document as Node as Element).ready(() => {
     var staticTextEditor = new StaticTextEditor();
     staticTextEditor.init();
 });
@@ -17,7 +17,7 @@ class StaticTextEditor {
     }
 
     private saveText() {
-        var textName = $("#name").val();
+        var textName = $("#name").val() as string;
         var markdownText = this.textEditor.getValue();
 
         var data: IStaticTextViewModel = {
@@ -220,8 +220,8 @@ class TextEditorWrapper {
     }
 
     private customImageAction() {
-        var url = $("#editor-insert-image-url").val();
-        var alt = $("#editor-insert-image-alt").val();
+        var url = $("#editor-insert-image-url").val() as string;
+        var alt = $("#editor-insert-image-alt").val() as string;
         var imageText = "![" + alt + "](" + url+ ")";
 
         var cm = this.simplemde.codemirror;
@@ -229,8 +229,8 @@ class TextEditorWrapper {
     }
 
     private customLinkAction() {
-        var url = $("#editor-insert-link-url").val();
-        var label = $("#editor-insert-link-label").val();
+        var url = $("#editor-insert-link-url").val() as string;
+        var label = $("#editor-insert-link-label").val() as string;
 
         if (!url) {
             url = "#";

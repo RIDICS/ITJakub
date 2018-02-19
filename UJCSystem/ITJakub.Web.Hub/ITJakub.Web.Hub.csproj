@@ -14,6 +14,12 @@
     <TypeScriptToolsVersion>2.4</TypeScriptToolsVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Remove="wwwroot\Areas\BohemianTextBank\js\ridics.bohemiantextbank.corpussearch-base.ts" />
+    <Content Remove="wwwroot\Areas\BohemianTextBank\js\ridics.bohemiantextbank.corpussearch-single.ts" />
+    <Content Remove="wwwroot\js\typings-custom\jquery-table-fixer_.d.ts.ts" />
+  </ItemGroup>
+
     <ItemGroup>
     <None Include="App.config" />
     <None Update="wwwroot\**\*;Views\**\*;Areas\**\Views\**\*.cshtml;Content\**\*;log4net.config">
@@ -76,6 +82,12 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
+  <ItemGroup>
+    <TypeScriptCompile Include="wwwroot\Areas\BohemianTextBank\js\corpus-search-viewer\ridics.bohemiantextbank.corpussearch-single.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\BohemianTextBank\js\corpus-search-viewer\ridics.bohemiantextbank.corpussearch-base.ts" />
+    <TypeScriptCompile Include="wwwroot\js\typings-custom\jquery-table-fixer_.d.ts.ts" />
+  </ItemGroup>
+
   <Target Name="ApplyXdtConfigTransform" BeforeTargets="MSDeployPublish">
     <PropertyGroup>
       <_SourceWebConfig>$(MSBuildThisFileDirectory)Web.config</_SourceWebConfig>
@@ -87,7 +99,7 @@
   
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
     <Exec Command="npm install" />
-    <Exec Command="bower install" />
+    <Exec Command="gulp yarn-runtime" />
     <Exec Command="gulp clean" />
     <Exec Command="gulp build:ts" />
     <Exec Command="gulp default" />

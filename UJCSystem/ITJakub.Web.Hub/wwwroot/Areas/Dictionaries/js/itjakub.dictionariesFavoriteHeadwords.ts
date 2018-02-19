@@ -33,7 +33,7 @@
                 area.height(actualHeight);
                 area.animate({
                     height: targetHeight
-                });
+                } as JQuery.PlainObject);
 
             } else {
                 $(this).children().removeClass("glyphicon-collapse-up");
@@ -42,7 +42,7 @@
                 let targetHeight = $(".dictionary-header", area).innerHeight();
                 area.animate({
                     height: targetHeight
-                });
+                } as JQuery.PlainObject);
             }
         });
 
@@ -145,7 +145,7 @@
         area.height(actualHeight);
         area.animate({
             height: targetHeight
-        });
+        } as JQuery.PlainObject);
     }
 
     private goToPageWithSelectedHeadword(element: Element) {
@@ -191,8 +191,8 @@
         var elements = $(".saved-word", $(this.listContainer));
         for (var i = 0; i < elements.length; i++) {
             var element = elements.get(i);
-            if ($(element).data("bookId") === bookId && $(element).data("entryXmlId") === entryXmlId) {
-                this.removeHeadword(element);
+            if ($(element as Node as Element).data("bookId") === bookId && $(element as Node as Element).data("entryXmlId") === entryXmlId) {
+                this.removeHeadword(element as Node as Element);
                 return;
             }
         }

@@ -3,12 +3,10 @@
 class CommentInput {
     private readonly commentArea: CommentArea;
     private readonly util: EditorsUtil;
-    private readonly gui: TextEditorGui;
 
-    constructor(commentArea: CommentArea, util: EditorsUtil, gui: TextEditorGui) {
+    constructor(commentArea: CommentArea, util: EditorsUtil) {
         this.commentArea = commentArea;
         this.util = util;
-        this.gui = gui;
     }
 
     init() {
@@ -23,18 +21,24 @@ class CommentInput {
 * @param {Number} id - Unique comment id 
 * @param {Number} parentCommentId - Unique id of parent comment
 * @param {JQuery} dialogEl - Dialog element to display result message about send
+* @param {string} text - Comment body
 */
     processCommentSendClick(
         textId: number,
         textReferenceId: string,
         id: number,
-        parentCommentId: number,
-        dialogEl: JQuery) {
+        parentCommentId: number, commentText: string) {
         const serverAddress = this.util.getServerAddress();
-        var commentTextArea = $("#commentInput");
-        const commentText = commentTextArea.val() as string;
-        if (commentText === "") {
-            this.gui.showMessageDialog("Warning", "Comment is empty. Please fill it");
+        if (!commentText) {
+            bootbox.alert({
+                title: "Warning",
+                message: "Comment is empty. Please fill it",
+                buttons: {
+                    ok: {
+                        className: "btn-default"
+                    }
+                }
+            });
         } else {
             const comment: ICommentStructureReply = {
                 id: id,
@@ -49,20 +53,38 @@ class CommentInput {
                 }
             );
             sendAjax.done(() => {
-                dialogEl.dialog("close");
-                this.gui.showMessageDialog("Success", "Successfully sent");
-                commentTextArea.val("");
-                this.commentArea.reloadCommentArea(textId);
+                bootbox.alert({
+                    title: "Success",
+                    message: "Successfully sent",
+                    buttons: {
+                        ok: {
+                            className: "btn-default"
+                        }
+                    }
+                });
+                const deferred = this.commentArea.reloadCommentArea(textId);
+                deferred.done(() => {
+                    const pageEl = $(`[data-page="${textId}"]`);
+                    this.commentArea.collapseIfCommentAreaContentOverflows(pageEl.children(".comment-area"));//collapse section fully when updating section height initially
+                });
             });
             sendAjax.fail(() => {
-                this.gui.showMessageDialog("Error", "Sending failed. Server error.");
+                bootbox.alert({
+                    title: "Error",
+                    message: "Sending failed. Server error.",
+                    buttons: {
+                        ok: {
+                            className: "btn-default"
+                        }
+                    }
+                });
             });
         }
     }
 
     private processEditCommentClick() {
-        $("#project-resource-preview").on("click", ".edit-comment", (event: JQueryEventObject) => {
-            const target = $(event.target);
+        $("#project-resource-preview").on("click", ".edit-comment", (event: JQuery.Event) => {
+            const target = $(event.target as HTMLElement);
             const commentActionsRowEl = target.parents(".comment-actions-row");
             const commentBody = commentActionsRowEl.siblings(".media-body");
             const mainCommentContentEl = commentBody.parents(".media-body");
@@ -85,8 +107,8 @@ class CommentInput {
     private processRespondToCommentClick() {
         $("#project-resource-preview").on("click",
             "button.respond-to-comment",
-            (event: JQueryEventObject) => { // Process click on "Respond" button
-                const target = $(event.target);
+            (event: JQuery.Event) => { // Process click on "Respond" button
+                const target = $(event.target as HTMLElement);
                 const pageRow =
                     target.parents(".comment-area").parent(".page-row");
                 var textId = $(pageRow).data("page") as number;
@@ -119,16 +141,18 @@ class CommentInput {
                 new RegExp(
                     `\\$${guidRegExpString}\\%`)); //searching on one side only because of the same amount of characters.
         if (!addSigns) {
-            output = selectedText.replace(
-                new RegExp(`\\$${guidRegExpString}\\%`),
-                "");
-            output = output.replace(
-                new RegExp(`\\%${guidRegExpString}\\$`),
-                "");
-            markSize = customCommentarySign[0].length;
-            cm.replaceSelection(output);
-            cm.setSelection({ line: selectionStartLine, ch: selectionStartChar },
-                { line: selectionEndLine, ch: selectionEndChar - markSize });
+            if (customCommentarySign) {
+                output = selectedText.replace(
+                    new RegExp(`\\$${guidRegExpString}\\%`),
+                    "");
+                output = output.replace(
+                    new RegExp(`\\%${guidRegExpString}\\$`),
+                    "");
+                markSize = customCommentarySign[0].length;
+                cm.replaceSelection(output);
+                cm.setSelection({ line: selectionStartLine, ch: selectionStartChar },
+                    { line: selectionEndLine, ch: selectionEndChar - markSize });
+            }
             return null;
         } else {
             const textReferenceId = this.util.createTextRefereceId();
@@ -160,14 +184,14 @@ class CommentInput {
     private processCommentReply(
         textId: number,
         textReferenceId: string,
-        id: number,
+        commentId: number,
         parentCommentId: number,
         textAreaEl: JQuery,
         jEl: JQuery) {
         var serverAddress = this.util.getServerAddress();
         var commentTextOriginal = textAreaEl.val() as string;
         textAreaEl.on("focusout",
-            (event: JQueryEventObject) => {
+            (event: JQuery.Event) => {
                 event.stopImmediatePropagation();
                 var commentText = textAreaEl.val() as string;
                 if (commentText === commentTextOriginal) {
@@ -175,12 +199,12 @@ class CommentInput {
                     textAreaEl.remove();
                 } else {
                     const comment: ICommentStructureReply = {
-                        id: id,
+                        id: commentId,
                         text: commentText,
                         parentCommentId: parentCommentId,
                         textReferenceId: textReferenceId
                     };
-                    if (id === 0) {
+                    if (commentId === 0) {
                         const sendAjax = $.post(`${serverAddress}Admin/ContentEditor/SaveComment`,
                             {
                                 comment: comment,
@@ -192,7 +216,7 @@ class CommentInput {
                         const sendAjax = $.post(`${serverAddress}Admin/ContentEditor/UpdateComment`,
                             {
                                 comment: comment,
-                                textId: textId
+                                commentId: commentId
                             }
                         );
                         this.onCommentSendRequest(sendAjax, textAreaEl, textId);
@@ -203,13 +227,29 @@ class CommentInput {
 
     private onCommentSendRequest(sendAjax:JQueryXHR, textAreaEl:JQuery, textId:number) {
         sendAjax.done(() => {
-            this.gui.showMessageDialog("Success", "Successfully sent");
+            bootbox.alert({
+                title: "Success",
+                message: "Successfully sent",
+                buttons: {
+                    ok: {
+                        className: "btn-default"
+                    }
+                }
+            });
             textAreaEl.val("");
             textAreaEl.off();
             this.commentArea.reloadCommentArea(textId);
         });
         sendAjax.fail(() => {
-            this.gui.showMessageDialog("Error", "Sending failed. Server error.");
+            bootbox.alert({
+                title: "Error",
+                message: "Sending failed. Server error.",
+                buttons: {
+                    ok: {
+                        className: "btn-default"
+                    }
+                }
+            });
         });
     }
 }

@@ -2,16 +2,20 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
+using Vokabular.FulltextService.Core.Options;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
+using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
 using Vokabular.Shared.Container;
+using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.Options;
 
 namespace Vokabular.FulltextService
@@ -34,6 +38,8 @@ namespace Vokabular.FulltextService
             // Configuration options
             services.AddOptions();
             services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
+            services.Configure<IndicesOption>(Configuration.GetSection("ElasticsearchIndices"));
+            services.Configure<SpecialCharsOption>(Configuration.GetSection("SpecialChars"));
 
             // Add framework services
             services.AddMvc();
@@ -49,9 +55,8 @@ namespace Vokabular.FulltextService
                 options.DescribeAllEnumsAsStrings();
                 options.IncludeXmlComments(GetXmlCommentsPath());
 
-                //TODO enable this DocumentFilter and SchemaFilter after merge with branch with ElasticSearch usage
-                //options.DocumentFilter<PolymorphismDocumentFilter<SearchCriteriaContract>>();
-                //options.SchemaFilter<PolymorphismSchemaFilter<SearchCriteriaContract>>();
+                options.DocumentFilter<PolymorphismDocumentFilter<SearchCriteriaContract>>();
+                options.SchemaFilter<PolymorphismSchemaFilter<SearchCriteriaContract>>();
             });
 
             // IoC
@@ -66,6 +71,9 @@ namespace Vokabular.FulltextService
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime applicationLifetime)
         {
             ApplicationLogging.LoggerFactory = loggerFactory;
+
+            var configuration = app.ApplicationServices.GetService<TelemetryConfiguration>();
+            configuration.DisableTelemetry = true; // Workaround for disabling telemetry
 
             if (env.IsDevelopment())
             {

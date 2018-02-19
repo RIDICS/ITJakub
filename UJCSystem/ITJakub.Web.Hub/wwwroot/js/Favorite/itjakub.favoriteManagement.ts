@@ -1,4 +1,4 @@
-﻿$(document).ready(() => {
+﻿$(document.documentElement).ready(() => {
     var favoriteManager = new FavoriteManager();
     var favoriteManagement = new FavoriteManagement(favoriteManager);
     favoriteManagement.init();
@@ -41,8 +41,8 @@ class FavoriteManagement {
         this.labelColorInput.setColorChangedCallback(this.renderNewLabelPreview.bind(this));
         $("#favorite-label-name").change(this.renderNewLabelPreview.bind(this));
 
-        $(".favorite-label-management").each((index, element) => {
-            this.renderLabelColor($(element));
+        $(".favorite-label-management").each((index, element : Node) => {
+            this.renderLabelColor($(element as Element));
         });
         
         $("#add-new-label").click(() => {
@@ -54,17 +54,17 @@ class FavoriteManagement {
         });
 
         $(".favorite-label-management .favorite-label-link").click((event) => {
-            var activeElement = $(event.target).closest(".favorite-label-management");
+            var activeElement = $(event.target as Node as HTMLElement).closest(".favorite-label-management");
             this.setActiveLabel(activeElement);
         });
 
         $(".favorite-label-management .favorite-label-remove-link").click((event) => {
-            var item = $(event.target).closest(".favorite-label-management");
+            var item = $(event.target as Node as HTMLElement).closest(".favorite-label-management");
             this.showRemoveDialog(item);
         });
 
         $(".favorite-label-management .favorite-label-edit-link").click((event) => {
-            var item = $(event.target).closest(".favorite-label-management");
+            var item = $(event.target as Node as HTMLElement).closest(".favorite-label-management");
             var name = item.data("name");
             var color = item.data("color");
             this.showEditLabelDialog(name, color, item);
@@ -93,7 +93,7 @@ class FavoriteManagement {
 
     private renderNewLabelPreview() {
         var color = this.labelColorInput.getValue();
-        var name = $("#favorite-label-name").val();
+        var name = $("#favorite-label-name").val() as string;
         var hexColor = new HexColor(color);
 
         $("#label-preview").text(name);
@@ -156,7 +156,7 @@ class FavoriteManagement {
     private filterLabels() {
         this.setInactiveLabel();
 
-        var filterValue = $("#label-name-filter").val().toLocaleLowerCase();
+        var filterValue = ($("#label-name-filter").val() as string).toLocaleLowerCase();
         if (!filterValue) {
             $(".favorite-label-management").show();
             $("#no-label").hide();
@@ -166,7 +166,7 @@ class FavoriteManagement {
 
         var isAnyVisible = false;
         $(".favorite-label-management").each((index, element) => {
-            var item = $(element);
+            var item = $(element as Node as Element);
             var name = String(item.data("name")).toLocaleLowerCase();
             var inactiveBackgroundColor = item.data("inactive-background");
             var inactiveBorderColor = item.data("inactive-border");
@@ -204,9 +204,9 @@ class FavoriteManagement {
     }
 
     private loadFavoriteItems() {
-        this.currentSortOrder = $("#sort-select").val();
-        this.currentTypeFilter = $("#type-filter-select").val();
-        this.currentNameFilter = $("#name-filter").val();
+        this.currentSortOrder = parseInt($("#sort-select").val() as string);
+        this.currentTypeFilter = parseInt($("#type-filter-select").val() as string);
+        this.currentNameFilter = $("#name-filter").val() as string;
         
         this.showLoader();
 
@@ -251,8 +251,8 @@ class FavoriteManagement {
 
         $(".favorite-label-management")
             .removeClass("active")
-            .each((index, element) => {
-                var elementJQuery = $(element);
+            .each((index, element : Node) => {
+                var elementJQuery = $(element as Element);
                 let fontColor = FavoriteHelper.getInactiveFontColor();
                 let backgroundColor = elementJQuery.data("inactive-background");
                 let borderColor = elementJQuery.data("inactive-border");
@@ -380,7 +380,7 @@ class FavoriteManagement {
     }
 
     private saveFavoriteLabel() {
-        var name = $("#favorite-label-name").val();
+        var name = $("#favorite-label-name").val() as string;
         var color = this.labelColorInput.getValue();
 
         var error = "";
@@ -579,7 +579,7 @@ class FavoriteManagementItem {
     }
 
     private edit() {
-        var newName = $("#favorite-item-name").val();
+        var newName = $("#favorite-item-name").val() as string;
 
         this.editFavoriteDialog.showSaving();
         this.favoriteManager.updateFavoriteItem(this.id, newName, (error) => {

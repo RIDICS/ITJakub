@@ -38,16 +38,16 @@ class ProjectResourceDiscussionTab extends ProjectModuleTabBase {
         $(".icon-close", $container).hide();
 
         $container.children(".discussion-thread").each((index, elem) => {
-            var $directSubcontainer = $(elem).children(".discussion-thread");
+            var $directSubcontainer = $(elem as Node as Element).children(".discussion-thread");
 
             if ($directSubcontainer.length === 0) {
-                $(".discussion-open-thread-link", elem).hide();
+                $(".discussion-open-thread-link", elem as Node as Element).hide();
             } else {
                 $directSubcontainer.hide();
 
-                $(".discussion-open-thread-link", elem).click((event) => {
-                    var $openIcon = $(".icon-open", event.currentTarget);
-                    var $closeIcon = $(".icon-close", event.currentTarget);
+                $(".discussion-open-thread-link", elem as Node as Element).click((event) => {
+                    var $openIcon = $(".icon-open", event.currentTarget as Node as Element);
+                    var $closeIcon = $(".icon-close", event.currentTarget as Node as Element);
 
                     if ($directSubcontainer.is(":visible")) {
                         $directSubcontainer.hide();
@@ -61,33 +61,5 @@ class ProjectResourceDiscussionTab extends ProjectModuleTabBase {
                 });
             }
         });
-    }
-}
-
-class ProjectResourcePreviewTab extends ProjectModuleTabBase {
-    private readonly projectId:number;
-    constructor(resourceId: number, projectId: number) {
-        super();
-        this.projectId = projectId;
-    }
-
-    initTab() {
-        $("#project-resource-preview").off();
-        const main = new TextEditorMain();
-        main.init(this.projectId);
-    }
-}
-
-class ProjectResourceImagesTab extends ProjectModuleTabBase {
-    private readonly projectId: number;
-    constructor(resourceId: number, projectId: number) {
-        super();
-        this.projectId = projectId;
-    }
-
-    initTab() {
-        $("#project-resource-images").off();
-        const main = new ImageViewerMain();
-        main.init(this.projectId);
     }
 }

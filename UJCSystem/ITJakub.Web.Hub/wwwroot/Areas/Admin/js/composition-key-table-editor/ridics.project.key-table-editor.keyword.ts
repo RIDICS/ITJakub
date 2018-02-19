@@ -16,40 +16,37 @@
         this.deleteEntryButtonEl.text("Delete keyword");
         this.titleEl.text("Keywords");
         this.unbindEventsDialog();
-        this.util.getKeywordList().done((data: IKeywordContract[]) => {
-            this.keywordItemList = data;
-            const itemsOnPage = this.numberOfItemsPerPage;
-            this.initPagination(data.length, itemsOnPage, this.loadPage.bind(this));
             const initialPage = 1;
-            this.loadPage(initialPage);
+            const initial = true;
+            this.loadPage(initialPage, initial);
             this.currentPage = initialPage;
             this.keywordRename();
             this.keywordDelete();
             this.keywordCreation();
+    };
+
+    private loadPage(pageNumber: number, initial?: boolean) {
+        const listEl = $(".selectable-list-div");
+        const startIndex = (pageNumber - 1) * this.numberOfItemsPerPage;
+        const endIndex = pageNumber * this.numberOfItemsPerPage;
+        const pagedResponsiblePersonListAjax = this.util.getKeywordList(startIndex, endIndex);
+        pagedResponsiblePersonListAjax.done((data: IKeywordPagedResult) => {
+            listEl.empty();
+            if (initial) {
+                this.initPagination(data.totalCount, this.numberOfItemsPerPage, this.loadPage.bind(this));
+            }
+            const generatedListStructure = this.generateKeywordList(data.list, listEl);
+            listEl.append(generatedListStructure);
+            this.makeSelectable(listEl);
         }).fail(() => {
             const error = new AlertComponentBuilder(AlertType.Error).addContent("Failed to load editor");
             $("#project-layout-content").empty().append(error.buildElement());
         });
-    };
-
-    private loadPage(pageNumber: number) {
-        const listEl = $(".selectable-list-div");
-        const splitArray = this.splitArray(this.keywordItemList, pageNumber);
-        listEl.empty();
-        const generatedListStructure = this.generateKeywordList(splitArray, listEl);
-        listEl.append(generatedListStructure);
-        this.makeSelectable(listEl);
     }
 
     private updateContentAfterChange() {
-        this.util.getKeywordList().done((data: IKeywordContract[]) => {
-            this.keywordItemList = data;
-            this.loadPage(this.currentPage);
-            const itemsOnPage = this.numberOfItemsPerPage;
-            this.initPagination(data.length, itemsOnPage, this.loadPage.bind(this));
-        }).fail(() => {
-            this.gui.showInfoDialog("Warning", "Connection to server lost.\nAutomatic page reload is not possible.");
-        });
+        const initial = true;
+        this.loadPage(this.currentPage, initial);
     }
 
     protected generateKeywordList(keywordItemList: IKeywordContract[], jEl: JQuery): JQuery {
@@ -66,7 +63,7 @@
                 $(".info-dialog-ok-button").on("click",
                     () => {
                         const textareaEl = $(".input-dialog-textarea");
-                        const keywordString = textareaEl.val();
+                        const keywordString = textareaEl.val() as string;
                         const newKeywordAjax = this.util.createNewKeyword(keywordString);
                         newKeywordAjax.done(() => {
                             textareaEl.val("");
@@ -94,7 +91,7 @@
                     textareaEl.val(originalText);
                 $(".info-dialog-ok-button").on("click",
                     () => {
-                        const keywordName = textareaEl.val();
+                        const keywordName = textareaEl.val() as string;
                             const keywordId = selectedPageEl.data("key-id") as number;
                             const renameAjax = this.util.renameKeyword(keywordId, keywordName);
                             renameAjax.done(() => {

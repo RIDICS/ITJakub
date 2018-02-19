@@ -30,4 +30,5 @@ namespace Vokabular.MainService.DataContracts.Contracts.Search
     {
         public KwicStructure ContextStructure { get; set; }
     }
+
 }

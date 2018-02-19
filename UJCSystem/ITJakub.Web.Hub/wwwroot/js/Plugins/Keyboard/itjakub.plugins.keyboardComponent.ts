@@ -361,7 +361,7 @@
     }
     
     public getCursorPosition(): number {
-        var el = <HTMLInputElement>this.input.get(0);
+        var el = this.input.get(0) as Node as HTMLInputElement;
         var pos = el.value.length;
         if ('selectionStart' in el) {
             pos = el.selectionStart;
@@ -370,7 +370,7 @@
     }
 
     public setCursorPosition(position: number) {
-        var el = <HTMLInputElement>this.input.get(0);
+        var el = this.input.get(0) as Node as HTMLInputElement;
         if ('selectionStart' in el) {
             el.selectionStart = position;
             el.selectionEnd = position;

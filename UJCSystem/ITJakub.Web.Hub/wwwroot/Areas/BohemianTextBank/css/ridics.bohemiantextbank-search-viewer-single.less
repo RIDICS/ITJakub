@@ -1,0 +1,200 @@
+﻿@import "../../../css/ITJakub.Colors.less";
+@import "../../Admin/css/@editors-common-variables.less";
+@table-line-height: 3em;
+@table-even-colour: #eee;
+@table-odd-colour: white;
+@table-row-clicked-color: #C0C0C0;
+
+.no-gutters {
+    margin-right: 0;
+    margin-left: 0;
+
+    > .col,
+    > [class*="col-"] {
+        padding-right: 0;
+        padding-left: 0;
+    }
+}
+
+.corpus-search-result-controls-container {
+    overflow-y: auto;
+
+    .viewing-settings-menu-icon {
+        padding-left: 0;
+    }
+
+    .corpus-search-result-view-properties-advanced {
+        display: none;
+
+        .corpus-search-setting-div-context {
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+
+            #contextPositionsSelect {
+                color: initial;
+                width: 6em;
+                line-height: 1.5;
+            }
+        }
+
+        .context-size-warning, .number-of-positions-size-warning {
+            display: none;
+            margin-top: 5px;
+        }
+
+        .number-of-results-per-viewing-page {
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+
+            label {
+                font-weight: normal;
+                display: block;
+            }
+
+            #number-of-results-per-viewing-page {
+                color: initial;
+                width: 6em;
+                line-height: 1.5;
+            }
+        }
+    }
+
+    .corpus-search-settings-label {
+        color: white;
+        font-size: larger;
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .search-settings-changed-warning {
+        display: none;
+    }
+
+    .corpus-search-settings-checkboxes {
+        margin-bottom: 30px;
+        margin-top: 10px;
+    }
+
+    .corpus-search-setting-div-results-count {
+        margin-bottom: 15px;
+    }
+
+    .corpus-search-setting-div-pagination {
+        padding-left: 8%;
+        padding-right: 8%;
+
+        .ui-slider-handle {
+            width: 1.5em;
+            height: 1.5em;
+            top: 50%;
+            border: none !important;
+            margin-top: -.8em;
+            text-align: center;
+            border-radius: 50%;
+            background-color: @editor-sliderbar-hander-color;
+            outline: none;
+        }
+    }
+
+    background-color: @menu-background-color;
+    color: white;
+    line-height: 1.1;
+    padding: 15px;
+    height: inherit;
+}
+
+.results-container {
+    .book-section-row {
+        margin-bottom: 2em;
+        margin-top: 2em;
+
+        .result-text-col {
+            min-height: 30em;
+            max-height: 40em;
+            overflow:auto;
+
+            .text-results-table {
+                width: 100%;
+
+                .result-row.even {
+                    background: @table-even-colour;
+
+                    td {
+                        background-color: inherit;
+                    }
+                }
+
+                .result-row.odd {
+                    background: @table-odd-colour;
+
+                    td {
+                        background-color: inherit;
+                    }
+                }
+
+                .result-row {
+                    &.clicked {
+                        border-bottom: solid 1px;
+                        border-top: solid 1px;
+                        background-color: @table-row-clicked-color;
+                    }
+
+                    white-space: nowrap;
+                    line-height: @table-line-height;
+
+                    .abbrev-col {
+                        padding-right: 5px;
+                    }
+
+                    .context-before {
+                        text-align: right;
+                        width: 45%;
+                    }
+
+                    .match {
+                        background-color: @menu-active-background-color;
+                        color: white;
+                        margin-left: 1em;
+                        margin-right: 1em;
+                        text-align: center;
+                    }
+
+                    .context-after {
+                        text-align: left;
+                        width: 45%;
+                    }
+                }
+            }
+        }
+    }
+
+    .result-info-section {
+        .label {
+            font-weight: bolder;
+            font-size: 100%;
+            color: grey;
+            text-align: left;
+        }
+
+        .result-info-section {
+            margin: 0.8em 0;
+
+            .col-no-padding {
+                padding-left: 0;
+            }
+
+            .table-row {
+                .label {
+                    font-weight: bold;
+                    font-size: 100%;
+                    color: black;
+                    padding-left: 0;
+                }
+
+                .break-word {
+                    word-break: break-word;
+                }
+            }
+        }
+    }
+}

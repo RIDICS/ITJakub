@@ -66,7 +66,7 @@
         }
         elm += listEnd;
         const html = $.parseHTML(elm);
-        const jListEl = $(html);
+        const jListEl = $(html as Element[]);
         return jListEl;
     }
 
@@ -80,7 +80,7 @@
                 $(".info-dialog-ok-button").on("click",
                     () => {
                         const textareaEl = $(".responsible-type-text-input-dialog-textarea");
-                        const typeDescriptionString = textareaEl.val();
+                        const typeDescriptionString = textareaEl.val() as string;
                         if (!typeDescriptionString) {
                             this.gui.showInfoDialog("Warning", "You haven't entered anything.");
                         } else {
@@ -121,7 +121,7 @@
                     responsibilityTypeSelectEl.val(responsibilityType);
                     $(".info-dialog-ok-button").on("click",
                         () => {
-                            const typeDescriptionString = textareaEl.val();
+                            const typeDescriptionString = textareaEl.val() as string;
                             const responsibilityTypeSelect = responsibilityTypeSelectEl.val() as ResponsibleTypeEnum;
                             if (!typeDescriptionString) {
                                 this.gui.showInfoDialog("Warning", "You haven't entered anything.");

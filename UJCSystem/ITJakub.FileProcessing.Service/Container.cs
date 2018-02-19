@@ -10,9 +10,12 @@ using Castle.Windsor.Installer;
 using log4net;
 using log4net.Config;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Vokabular.Core;
 using Vokabular.DataEntities;
+using Vokabular.Log4Net;
+using Vokabular.Shared;
 using Vokabular.Shared.Container;
 
 namespace ITJakub.FileProcessing.Service
@@ -40,7 +43,9 @@ namespace ITJakub.FileProcessing.Service
             //configure log4net
             XmlConfigurator.Configure();
             m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
+            ApplicationLogging.LoggerFactory = new LoggerFactory();
+            ApplicationLogging.LoggerFactory.AddProvider(new Log4NetProvider(GetAssembly()));
+            
             AddSubresolvers();
 
             InstallComponents();

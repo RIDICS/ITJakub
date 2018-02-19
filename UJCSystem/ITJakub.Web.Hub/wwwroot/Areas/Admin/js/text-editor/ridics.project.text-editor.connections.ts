@@ -1,6 +1,4 @@
-﻿declare var jqSimpleConnect: any;
-
-class Connections {
+﻿class Connections {
     private interval: number;
 
     /**
@@ -39,7 +37,7 @@ class Connections {
     private connectionsOnEnter(): void {
         $(document.documentElement).on("mouseenter",
             ".media-list",
-            (event: JQueryEventObject) => {
+            (event: JQuery.Event) => {
                 event.stopImmediatePropagation();
                 const target = event.target as HTMLElement;
                 var thread = $(target).parents(".media-list");
@@ -48,7 +46,7 @@ class Connections {
                 if (uniqueId !== null) {
                     if (!this.checkIfOverFlowing(uniqueId)) {
                         this.drawConnections(uniqueId);
-                        this.interval = setInterval(() => {
+                        this.interval = window.setInterval(() => {
                             if (this.checkIfOverFlowing(uniqueId)) {
                                 $(".highlighted-element").removeClass("highlighted-element");
                                     jqSimpleConnect.removeAll();
