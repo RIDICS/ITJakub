@@ -246,7 +246,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
             selectedBookIds: this.bookIdsInQuery
         };
         const advancedSearchPageAjax =
-            $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchCorpusGetPage`, payload);
+            $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedCorpusSearchGetResultsPage`, payload);
         const viewingPage = this.paginator.getCurrentPage();
         const compositionListStart = this.compositionResultListStart - this.compositionsPerPage;
         advancedSearchPageAjax.done((response) => {
@@ -316,7 +316,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
             selectedBookIds: this.bookIdsInQuery
         };
 
-        const getPageAjax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/TextSearchFulltextGetBookPage`,
+        const getPageAjax = $.get(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/BasicCorpusSearchGetResultsPage`,
             payload);
         const viewingPage = this.paginator.getCurrentPage();
         const compositionListStart = this.compositionResultListStart - this.compositionsPerPage;
@@ -557,7 +557,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
                 compositionsPerPage: compositionsPerPage,
                 searchParams: searchParams
             };
-            getPagePositionAjax = $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetPagePositionInListsAdvanced`, payload);
+            getPagePositionAjax = $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchGetPagePositionInAllResultPages`, payload);
         } else {
             const searchParams: ICorpusListLookupBasicSearchParams = {
                 text: searchQuery,
@@ -571,7 +571,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
                 compositionsPerPage: compositionsPerPage,
                 searchParams: searchParams
             };
-            getPagePositionAjax = $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetPagePositionInListsBasic`, payload);
+            getPagePositionAjax = $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/BasicSearchGetPagePositionInAllResultPages`, payload);
         }
         getPagePositionAjax.done((response: CorpusSearchPagePosition) => {
             this.currentBookId = response.bookId;
@@ -645,7 +645,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
         updateQueryStringParameter(this.urlSortCriteriaKey, sortingEnum);
         updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
 
-        $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetHitBookIdsPaged`, payload)
+        $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/BasicSearchGetResultSnapshotListPageOfIdsWithoutResultNumbers`, payload)
             .done((bookIds: ICoprusSearchSnapshotResult) => {
                 const totalCount = bookIds.totalCount;
                 const page = (start / count) + 1;
@@ -711,7 +711,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
             start: start,
             count: count
         };
-        $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchGetHitBookIdsPaged`, payload)
+        $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchGetResultSnapshotListPageOfIdsWithoutResultNumbers`, payload)
             .done((bookIds: ICoprusSearchSnapshotResult) => {
                 const totalCount = bookIds.totalCount;
                 const page = (start / count) + 1;
@@ -759,14 +759,14 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
                 selectedSnapshotIds: this.bookIdsInQuery,
                 selectedCategoryIds: this.categoryIdsInQuery
             };
-            ajax = $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetTotalResultNumberAdvanced`, payload);
+            ajax = $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchGetTotalResultNumber`, payload);
         } else {
             const payload: CorpusSearchTotalResultCountBasic = {
                 text: searchQuery,
                 selectedSnapshotIds: this.bookIdsInQuery,
                 selectedCategoryIds: this.categoryIdsInQuery
             };
-            ajax = $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/GetTotalResultNumber`, payload);
+            ajax = $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/BasicSearchGetTotalResultNumber`, payload);
         }
         const deferred = $.Deferred();
         ajax.done((result) => {
