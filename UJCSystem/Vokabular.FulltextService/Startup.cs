@@ -73,7 +73,10 @@ namespace Vokabular.FulltextService
             ApplicationLogging.LoggerFactory = loggerFactory;
 
             var configuration = app.ApplicationServices.GetService<TelemetryConfiguration>();
-            configuration.DisableTelemetry = true; // Workaround for disabling telemetry
+            if (configuration != null)
+            {
+                configuration.DisableTelemetry = true; // Workaround for disabling telemetry
+            }
 
             if (env.IsDevelopment())
             {
