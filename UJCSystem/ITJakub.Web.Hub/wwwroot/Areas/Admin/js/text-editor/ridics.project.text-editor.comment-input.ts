@@ -125,15 +125,14 @@ class CommentInput {
             });
     }
 
-    toggleCommentSignsAndReturnCommentNumber(editor: SimpleMDE, addSigns: boolean): string {
-        const cm = editor.codemirror as CodeMirror.Doc;
+    toggleCommentSignsAndReturnCommentNumber(codeMirror: CodeMirror.Doc, addSigns: boolean): string {
         let output = "";
         let markSize: number;
-        const selectedText = cm.getSelection();
-        const selectionStartChar = cm.getCursor("from").ch;
-        const selectionStartLine = cm.getCursor("from").line;
-        const selectionEndChar = cm.getCursor("to").ch;
-        const selectionEndLine = cm.getCursor("to").line;
+        const selectedText = codeMirror.getSelection();
+        const selectionStartChar = codeMirror.getCursor("from").ch;
+        const selectionStartLine = codeMirror.getCursor("from").line;
+        const selectionEndChar = codeMirror.getCursor("to").ch;
+        const selectionEndLine = codeMirror.getCursor("to").line;
         const guidRegExpString =
             "([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}";
         const customCommentarySign =
@@ -149,8 +148,8 @@ class CommentInput {
                     new RegExp(`\\%${guidRegExpString}\\$`),
                     "");
                 markSize = customCommentarySign[0].length;
-                cm.replaceSelection(output);
-                cm.setSelection({ line: selectionStartLine, ch: selectionStartChar },
+                codeMirror.replaceSelection(output);
+                codeMirror.setSelection({ line: selectionStartLine, ch: selectionStartChar },
                     { line: selectionEndLine, ch: selectionEndChar - markSize });
             }
             return null;
@@ -160,8 +159,8 @@ class CommentInput {
                     const uniqueNumberLength = textReferenceId.length;
                     markSize = uniqueNumberLength + 2; // + $ + %
                     output = `$${textReferenceId}%${selectedText}%${textReferenceId}$`;
-                    cm.replaceSelection(output);
-                    cm.setSelection({ line: selectionStartLine, ch: selectionStartChar }, //setting caret
+                    codeMirror.replaceSelection(output);
+                    codeMirror.setSelection({ line: selectionStartLine, ch: selectionStartChar }, //setting caret
                         { line: selectionEndLine, ch: selectionEndChar + 2 * markSize });
                 }
                 return textReferenceId;
