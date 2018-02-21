@@ -3,12 +3,10 @@ using System.Linq;
 using AutoMapper;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
-using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts.Search;
@@ -73,7 +71,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             {
                 var book = client.GetBookInfo(bookId);
                 var pages = client.GetBookPageList(bookId);
-                var text = client.GetEditionNote(bookId, TextFormatEnumContract.Html);
+                var audioBookPage = client.GetAudioBookDetail(bookId).Tracks;
                 return
                     View(new BookListingModel
                     {
@@ -81,9 +79,9 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                         SnapshotId = null, 
                         BookTitle = book.Title,
                         BookPages = pages,
+                        AudioTracks = audioBookPage,
                         SearchText = searchText,
                         InitPageId = page, 
-                        EditionNoteText = text,
                         CanPrintEdition = User.IsInRole("CanEditionPrint"),
                         JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
                     });

@@ -97,13 +97,16 @@ button {
     padding-left: 19px;
 }
 
-.hidden-content{
-    height:0px;
-    display: block;
-    transition: height 1s;
+.hidden-content {
+    height: 0px;
+    visibility: hidden;
+    transition: height 1s, visibility 0.65s, margin-bottom 1s;
+    margin-bottom: 0px;
 
     &.visible {
-        height:300px;
+        visibility: visible;
+        height: 300px;
+        margin-bottom: 25px;
     }
 }
 .page-navigation-container-helper{
@@ -141,13 +144,50 @@ button {
 }
 
 .edition-note-wrapper {
-    overflow-y: scroll;
     min-width: 20px;
-    width: 70%;
+    width: calc(~'70% - 10px');
     height: 100%;
     padding: 0 5px;
+    border-right: @lineColor solid 2px;
+    display: inline-block;
 
-    .grant  {
+    .edition-note-text {
+        overflow-y: scroll;
+        height: calc(~'100% - 70px');
+    }
+
+    .grant {
         border-top: @lineColor solid 2px;
     }
+}
+
+.bib-table {
+    .bib-table-row {
+        display: table-row;
+
+        .bib-table-cell {
+            display: table-cell;
+            text-align: left;
+            padding-left: 20px;
+        }
+
+        .bib-label {
+            font-weight: bold;
+            font-size: 100%;
+            color: black;
+            padding-left: 0;
+        }
+    }
+}
+
+.book-detail-wrapper {
+    width:30%;
+    display:inline-block;
+    margin-left: 10px;
+    overflow: hidden;
+    height: 100%;
+}
+
+.clear {
+    clear: both;
 }

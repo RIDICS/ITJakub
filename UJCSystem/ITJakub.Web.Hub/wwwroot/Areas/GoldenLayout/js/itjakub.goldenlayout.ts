@@ -2,7 +2,7 @@
 //import GoldenLayout = require("golden-layout");
 //declare var GoldenLayout;
 
-function initGoldenReader(editionNote: string, bookId: string, versionId: string, bookTitle: string, pageList: any, searchedText?: string, initPageId?: string) {
+function initGoldenReader(bookId: string, versionId: string, bookTitle: string, pageList: any, tracksList: any, searchedText?: string, initPageId?: string) {
 
 
     function readerPageChangedCallback(pageId: number) {
@@ -15,7 +15,7 @@ function initGoldenReader(editionNote: string, bookId: string, versionId: string
         readerPageChangedCallback,
         readerPanels
     );
-    readerPlugin.makeReader(bookId, versionId, bookTitle, editionNote, pageList);
+    readerPlugin.makeReader(bookId, versionId, bookTitle, pageList, tracksList);
     var search: Search;
 
     function convertSearchResults(responseResults: Array<Object>): SearchHitResult[] {
@@ -211,6 +211,7 @@ class ReaderLayout {
     sliderOnPage: number;
     actualPageIndex: number;
     pages: Array<BookPage>;
+    tracks: Array<any>;
     pagesById: IDictionary<BookPage>;
     bookmarks: Array<IBookmarkPosition>;
     pagerDisplayPages: number;
@@ -260,7 +261,7 @@ class ReaderLayout {
     }
 
 
-    public makeReader(bookId: string, versionId: string, bookTitle: string, editionNote: string, pageList: IPage[]) {
+    public makeReader(bookId: string, versionId: string, bookTitle: string, pageList: IPage[], tracksList: any[]) {
         this.bookId = bookId;
         this.versionId = versionId;
         this.actualPageIndex = 0;
@@ -271,6 +272,11 @@ class ReaderLayout {
         this.toolPanels = new Array<ToolPanel>();
         this.contentViewPanels = new Array<ContentViewPanel>();
 
+        //this.tracks = new Array();
+        //for (var i = 0; i < tracksList.length; i++) {
+        //    var track = tracksList[i];
+        //}
+
         for (var i = 0; i < pageList.length; i++) { //load pageList
             var page = pageList[i];
             var bookPageItem = new BookPage(page.id, page.name, page.position);
@@ -279,8 +285,8 @@ class ReaderLayout {
             this.pagesById[bookPageItem.pageId] = bookPageItem;
         }
 
-        var bookDetails = this.makeBookDetails(bookTitle, editionNote);
-        this.readerHeaderDiv.appendChild(bookDetails);
+        var bookInformationDiv = this.makeBookInformation(bookTitle);
+        this.readerHeaderDiv.appendChild(bookInformationDiv);
 
         var controlsDiv = this.makeControls();
         this.readerHeaderDiv.appendChild(controlsDiv);
@@ -571,14 +577,14 @@ class ReaderLayout {
         });
     }
 
-    private makeBookDetails(bookTitle: string, editionNote: string): HTMLDivElement {
-        var bookDetailsDiv: HTMLDivElement = document.createElement("div");
-        $(bookDetailsDiv).addClass("book-details");
+    private makeBookInformation(bookTitle: string): HTMLDivElement {
+        var bookInfoDiv: HTMLDivElement = document.createElement("div");
+        $(bookInfoDiv).addClass("book-details");
 
         var title = document.createElement("span");
         $(title).addClass("title");
         title.innerHTML = bookTitle;
-        bookDetailsDiv.appendChild(title);
+        bookInfoDiv.appendChild(title);
 
         var fullscreenButton = document.createElement("button");
         $(fullscreenButton).addClass("fullscreen-button");
@@ -600,7 +606,7 @@ class ReaderLayout {
             }
 
         });
-        bookDetailsDiv.appendChild(fullscreenButton);
+        bookInfoDiv.appendChild(fullscreenButton);
 
         var detailsButton = document.createElement("button");
         $(detailsButton).addClass("more-button");
@@ -620,19 +626,88 @@ class ReaderLayout {
                 details.removeClass("visible");
             }
         });
-        bookDetailsDiv.appendChild(detailsButton);
+        bookInfoDiv.appendChild(detailsButton);
 
-        var detailsDiv = document.createElement("div");
-        $(detailsDiv).addClass("hidden-content");
+        var hiddenDiv = document.createElement("div");
+        $(hiddenDiv).addClass("hidden-content");
+
+
 
         var editionNoteDiv = document.createElement("div");
         $(editionNoteDiv).addClass("edition-note-wrapper");
-        editionNoteDiv.innerHTML = editionNote;
-        detailsDiv.appendChild(editionNoteDiv);
+        var editionNoteHeader = document.createElement("h3");
+        $(editionNoteHeader).append("Ediční poznámka");
+        $(editionNoteDiv).append(editionNoteHeader);
+        
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { projectId: this.bookId, format: "Html" },
+            url: getBaseUrl() + "Reader/GetEditionNote",
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+                var editionNoteText = document.createElement("div");
+                $(editionNoteText).addClass("edition-note-text");
+                $(editionNoteText).append(response["editionNote"]);
+                editionNoteDiv.appendChild(editionNoteText);
+            },
+            error: (response) => {
+                $(editionNoteDiv).append("Toto dílo nemá ediční poznámku");
+            }
+        });
+        hiddenDiv.appendChild(editionNoteDiv);
 
-        bookDetailsDiv.appendChild(detailsDiv);
+        var bookDetailDiv = document.createElement("div");
+        $(bookDetailDiv).addClass("book-detail-wrapper");
+        var bookDetailHeader = document.createElement("h3");
+        $(bookDetailHeader).append("Informace o díle");
+        bookDetailDiv.appendChild(bookDetailHeader);
 
-        return bookDetailsDiv;
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { projectId: this.bookId},
+            url: getBaseUrl() + "Reader/GetProjectDetail",
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+                var detailData = response["detail"];
+                var detailTable = new TableBuilder();
+                var editors: string = "";
+                for (var i = 0; i < detailData.Editors.length; i++) {
+                    var editor = detailData.Editors[i];
+                    editors += editor.FirstName + " " + editor.LastName;
+                    if (i + 1 != detailData.Editors.length) {
+                        editors += ", ";
+                    }
+                }
+
+                detailTable.makeTableRow("Editor", editors);
+                detailTable.makeTableRow("Předloha", detailData.LiteraryOriginal);
+                detailTable.makeTableRow("Zkratka památky", detailData.RelicAbbreviation);
+                detailTable.makeTableRow("Zkratka pramene", detailData.SourceAbbreviation);
+                detailTable.makeTableRow("Literární druh", detailData.LiteraryKinds);
+                detailTable.makeTableRow("Literární žánr", detailData.LiteraryGenre);
+                detailTable.makeTableRow("Poslední úprava edice	", detailData.CreateTimeString);
+
+                $(detailTable.build()).find(".bib-table-cell").each(function () {
+                    if (this.innerHTML === "" || this.innerHTML === "undefined") {
+                        this.innerHTML = "&lt;Nezadáno&gt;";
+                    }
+                });
+
+                $(bookDetailDiv).append(detailTable.build());
+            },
+            error: (response) => {
+                $(editionNoteDiv).append("Toto dílo nemá ediční poznámku");
+            }
+        });
+        hiddenDiv.appendChild(bookDetailDiv);
+
+        bookInfoDiv.appendChild(hiddenDiv);
+        
+        return bookInfoDiv;
     }
 
     private makeControls(): HTMLDivElement {
@@ -1386,7 +1461,6 @@ class ReaderLayout {
         var resultPanel: SearchResultPanel = null;
         resultPanel = new SearchResultPanel(this.searchPanelId, this);
         this.searchPanel = resultPanel;
-        alert();
         this.toolPanels.push(resultPanel);
         return resultPanel.panelHtml;
     }
@@ -2393,3 +2467,27 @@ class AudioPanel extends ContentViewPanel {
     }
 
 }
+
+//class AudioTrac {
+//    private _pageId: number;
+//    private _text: string;
+//    private _position: number;
+
+//    constructor(pageId: number, text: string, position: number) {
+//        this._pageId = pageId;
+//        this._text = text;
+//        this._position = position;
+//    }
+
+//    get pageId(): number {
+//        return this._pageId;
+//    }
+
+//    get text(): string {
+//        return this._text;
+//    }
+
+//    get position(): number {
+//        return this._position;
+//    }
+//}

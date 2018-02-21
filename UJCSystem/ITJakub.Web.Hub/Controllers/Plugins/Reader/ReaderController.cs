@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using AutoMapper;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core.Communication;
@@ -128,6 +129,24 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             {
                 var contentItems = client.GetBookChapterList(bookId);
                 return Json(new { content = contentItems });
+            }
+        }
+
+        public ActionResult GetEditionNote(long projectId, TextFormatEnumContract format)
+        {
+            using (var client = GetRestClient())
+            {
+                var editionNote = client.GetEditionNote(projectId, TextFormatEnumContract.Html);
+                return Json(new { editionNote = editionNote }, GetJsonSerializerSettings());
+            }
+        }
+
+        public ActionResult GetProjectDetail(long projectId)
+        {
+            using (var client = GetRestClient())
+            {
+                var projectDetail = client.GetBookDetail(projectId);
+                return Json(new {detail = projectDetail}, GetJsonSerializerSettings());
             }
         }
     }

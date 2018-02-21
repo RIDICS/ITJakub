@@ -10,9 +10,9 @@ namespace ITJakub.Web.Hub.Models
         public string SnapshotId { get; set; }
         public string BookTitle { get; set; }
         public IList<PageContract> BookPages { get; set; }
+        public IList<TrackWithRecordingContract> AudioTracks { get; set; }
         public string SearchText { get; set; }
         public string InitPageId { get; set; }
-        public string EditionNoteText { get; set; }
         public bool CanPrintEdition { get; set; }
         public JsonSerializerSettings JsonSerializerSettingsForBiblModule { get; set; }
     }
