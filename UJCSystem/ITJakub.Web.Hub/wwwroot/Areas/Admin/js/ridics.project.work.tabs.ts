@@ -387,11 +387,20 @@
 
         $(".new-original-author-button").on("click",
             () => {
-                const finishAddingResponsiblePersonButton = $(".new-original-author-finish-button");
+                const finishAddingResponsiblePersonButtonGroup = $(".new-original-author-button-group");
                 $("#add-author-search").prop("disabled", true);
                 $(".new-original-author-button").prop("disabled", true);
                 $(".author-name-input-row").show();
-                finishAddingResponsiblePersonButton.show();
+                finishAddingResponsiblePersonButtonGroup.show();
+            });
+
+        $(".new-original-author-cancel-button").on("click",
+            () => {
+                const finishAddingResponsiblePersonButtonGroup = $(".new-original-author-button-group");
+                $("#add-author-search").prop("disabled", false);
+                $(".new-original-author-button").prop("disabled", false);
+                $(".author-name-input-row").hide();
+                finishAddingResponsiblePersonButtonGroup.hide();
             });
 
         $(".new-original-author-finish-button").on("click",
@@ -402,7 +411,7 @@
                 var firstName = firstNameEl.val() as string;
                 var lastName = lastNameEl.val() as string;
                 var id: number;
-                if (firstName === "" || lastName === "") {
+                if (!firstName || !lastName) {
                     this.addAuthorDialog.showError("Please enter a name and surname");
                     return;
                 }
@@ -429,7 +438,7 @@
                     firstNameEl.val("");
                     lastNameEl.val("");
                     $(".author-name-input-row").hide();
-                    $(".new-original-author-finish-button").hide();
+                    $(".new-original-author-button-group").hide();
                 }).fail(() => {
                     this.addAuthorDialog.showError();
                 });
@@ -437,12 +446,20 @@
 
         $(".new-responsible-person-button").on("click",
             () => {
-                const finishAddingResponsiblePersonButton = $(".new-responsible-person-finish-button");
+                const finishAddingResponsiblePersonButtonGroup = $(".new-responsible-person-button-group");
                 $(".new-responsible-person-button").prop("disabled", true);
                 $("#add-editor-search").prop("disabled", true);
                 $(".responsible-person-name-input-row").show();
-                finishAddingResponsiblePersonButton.show();
+                finishAddingResponsiblePersonButtonGroup.show();
+            });
 
+        $(".new-responsible-person-cancel-button").on("click",
+            () => {
+                const finishAddingResponsiblePersonButtonGroup = $(".new-responsible-person-button-group");
+                $(".new-responsible-person-button").prop("disabled", false);
+                $("#add-editor-search").prop("disabled", false);
+                $(".responsible-person-name-input-row").hide();
+                finishAddingResponsiblePersonButtonGroup.hide();
             });
 
         $(".new-responsible-person-finish-button").on("click",
@@ -478,7 +495,7 @@
                         firstNameEl.val("");
                         lastNameEl.val("");
                         $(".responsible-person-name-input-row").hide();
-                        $(".new-responsible-person-finish-button").hide();
+                        $(".new-responsible-person-button-group").hide();
                     }).fail(() => {
                     this.addEditorDialog.showError();
                 });
@@ -493,7 +510,10 @@
                 $(".existing-original-author-selected").removeClass("existing-original-author-selected");
                 const newAuthorButtonEl = $(".new-original-author-button");
                 newAuthorButtonEl.prop("disabled", false);
-                $(".new-original-author-finish-button").hide();
+                $(".new-original-author-button-group").hide();
+                const worksParticipatedEl = $(".works-produced");
+                const tableBodyEl = worksParticipatedEl.find(".works-list-items");
+                tableBodyEl.empty();
             });
 
         const $authorId = $("#add-author-id-preview");
@@ -612,6 +632,9 @@
                 const newResponsiblePersonButtonEl = $(".new-responsible-person-button");
                 newResponsiblePersonButtonEl.prop("disabled", false);
                 $(".new-responsible-person-finish-button").hide();
+                const worksParticipatedEl = $(".works-participated");
+                const tableBodyEl = worksParticipatedEl.find(".works-list-items");
+                tableBodyEl.empty();
             });
 
         $addResponsibleTypeButton.click(() => {
@@ -639,14 +662,17 @@
     }
 
     private loadProjectsByAuthor(authorId: number) {
-        const start = 0; //TODO debug
-        const count = 10; //TODO debug
+        const start = 0;
+        const count = 10; //Get first ten works
         const projectInfoAjax = this.projectClient.getProjectsByAuthor(authorId, start, count);
-        const tableBodyEl = $(".works-produced").find(".works-list-items");
+        const worksProducedEl = $(".works-produced");
+        const tableBodyEl = worksProducedEl.find(".works-list-items");
+        const numberOfWorksEl = worksProducedEl.find(".number-of-works-value");
         tableBodyEl.empty();
         tableBodyEl.addClass("loading");
-        projectInfoAjax.done((data: IProjectDetailContract[]) => {
-            this.generateWorkAuthorTableItem(data);
+        projectInfoAjax.done((data: IPagedResult<IProjectDetailContract>) => {
+            this.generateWorkAuthorTableItem(data.list);
+            numberOfWorksEl.text(data.totalCount);
         }).fail(() => {
             tableBodyEl.text("Error loading works");
         }).always(() => {
@@ -681,20 +707,23 @@
         authorWorkListEl.append(tableItems);
     }
 
-    private populateResponsiblePersonWorkListItemsTable(tableItems: JQuery) { //TODO
+    private populateResponsiblePersonWorkListItemsTable(tableItems: JQuery) {
         const authorWorkListEl = $(".works-participated").find(".works-list-items");
         authorWorkListEl.append(tableItems);
     }
 
     private loadProjectsByResponsiblePerson(responsiblePersonId: number) {
-        const start = 0; //TODO debug
-        const count = 10; //TODO debug
+        const start = 0;
+        const count = 10; //Get first ten works
         const projectInfoAjax = this.projectClient.getProjectsByResponsiblePerson(responsiblePersonId, start, count);
-        const tableBodyEl = $(".works-participated").find(".works-list-items");
+        const worksParticipatedEl = $(".works-participated");
+        const tableBodyEl = worksParticipatedEl.find(".works-list-items");
+        const numberOfWorksEl = worksParticipatedEl.find(".number-of-works-value");
         tableBodyEl.empty();
         tableBodyEl.addClass("loading");
-        projectInfoAjax.done((data: IProjectDetailContract[]) => {
-            this.generateWorkResponsiblePersonItem(data, responsiblePersonId);
+        projectInfoAjax.done((data: IPagedResult<IProjectDetailContract>) => {
+            this.generateWorkResponsiblePersonItem(data.list, responsiblePersonId);
+            numberOfWorksEl.text(data.totalCount);
         }).fail(() => {
             tableBodyEl.text("Error loading works");
         }).always(() => {

@@ -379,7 +379,7 @@
 </div>
 
 <div class="modal fade" role="dialog" id="add-author-dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -388,17 +388,15 @@
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-xs-7 col-no-padding">
+                        <div class="col-xs-12 col-no-padding">
                             <div class="form-group">
                                 <label for="add-author-search" class="col-xs-5 control-label">Vyhledat autora</label>
                                 <input class="form-control" id="add-author-search" type="text">
                             </div>
                         </div>
-                        <div class="col-xs-5">
-                        </div>
                     </div>
                     <div class="row table-row">
-                        <div class="col-xs-7">
+                        <div class="col-xs-6">
                             <div class="list-unstyled row author-table-header">
                                 <div class="list-group-item border-right col-xs-6">Name</div>
                                 <div class="list-group-item border-left col-xs-6">Surname</div>
@@ -416,23 +414,33 @@
                                         </div>
                                     </div>
                                     <div class="row new-author-button-row">
-                                        <div class="col-xs-9 col-no-padding">
+                                        <div class="col-xs-7 col-no-padding">
                                             <button class="new-original-author-button btn btn-default">Add new author</button>
                                         </div>
-                                        <div class="col-xs-3 col-no-padding">
-                                            <button class="new-original-author-finish-button btn btn-default">Done</button>
+                                        <div class="col-xs-5 col-no-padding">
+                                            <div class="btn-group new-original-author-button-group">
+                                                <button class="new-original-author-cancel-button btn btn-default">Cancel</button>
+                                                <button class="new-original-author-finish-button btn btn-default">Done</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-offset-1 col-xs-4 works-produced">
+                        <div class="col-xs-6 works-produced">
                             <div class="list-unstyled row">
                                 <div class="list-group-item works-table-header">Works</div>
                             </div>
                             <div class="list-unstyled row">
 
                                 <div class="list-group-item works-list-items"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="row number-of-works-written">
+                                        <div class="col-xs-8 works-number-text">Number of works written:</div><div class="col-xs-4 number-of-works-value"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -448,7 +456,7 @@
 </div>
 
 <div class="modal fade" role="dialog" id="add-editor-dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -457,17 +465,15 @@
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-xs-7 col-no-padding">
+                        <div class="col-xs-12 col-no-padding">
                             <div class="form-group">
                                 <label for="add-author-search" class="col-xs-9 control-label">Vyhledat odpovědnou osobu</label>
                                 <input class="form-control" id="add-editor-search" type="text">
                             </div>
                         </div>
-                        <div class="col-xs-5">
-                        </div>
                     </div>
                     <div class="row table-row">
-                        <div class="col-xs-7 responsible-people-table">
+                        <div class="col-xs-6 responsible-people-table">
                             <div class="list-unstyled row responsible-person-table-header">
                                 <div class="list-group-item border-right col-xs-6">Name</div>
                                 <div class="list-group-item border-left col-xs-6">Surname</div>
@@ -485,28 +491,28 @@
                                         </div>
                                     </div>
                                     <div class="row new-responsible-person-button-row">
-                                        <div class="col-xs-9 col-no-padding">
+                                        <div class="col-xs-7 col-no-padding">
                                             <button class="new-responsible-person-button btn btn-default">Add new responsible person</button>
                                         </div>
-                                        <div class="col-xs-3">
-                                            <button class="new-responsible-person-finish-button btn btn-default">Done</button>
+                                        <div class="col-xs-5">
+                                            <div class="btn-group new-responsible-person-button-group">
+                                                <button class="new-responsible-person-cancel-button btn btn-default">Cancel</button>
+                                                <button class="new-responsible-person-finish-button btn btn-default">Done</button>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
                                     <div class="row type-input-row">
                                         <div class="form-group">
                                             <label for="responsibility-type-input-elements" class="col-xs-9 control-label">Type</label>
                                             <div id="responsibility-type-input-elements">
                                                 <div class="form-group">
-                                                    <div class="col-xs-8 col-no-padding">
+                                                    <div class="col-xs-12 col-no-padding">
                                                         <select size="1" class="form-control" id="add-editor-type">
                                                             @foreach (var responsibleType in Model.AllResponsibleTypeList)
                                                             {
-                                                                <option value="@responsibleType.Id">@responsibleType.Text (@responsibleType.Type.GetDisplayAttributeValue())</option>
+                                                                <option value="@responsibleType.Id" @(Model.AllResponsibleTypeList.IndexOf(responsibleType) == 0 ? "selected" : null)>@responsibleType.Text (@responsibleType.Type.GetDisplayAttributeValue())</option>
                                                             }
                                                         </select>
-                                                    </div>
-                                                    <div class="col-xs-4">
-                                                        <button class="btn btn-default" id="add-responsible-type-button">Add new type</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -528,13 +534,20 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-offset-1 col-xs-4 works-participated">
+                        <div class="col-xs-6 works-participated">
                             <div class="list-unstyled row">
-                                <div class="list-group-item works-table-header">Works participated - role/</div>
+                                <div class="list-group-item works-table-header">Works participated - role</div>
                             </div>
                             <div class="list-unstyled row">
 
                                 <div class="list-group-item works-list-items"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="row number-of-works-participated">
+                                        <div class="col-xs-8 works-number-text">Number of works participated in:</div><div class="col-xs-4 number-of-works-value"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
