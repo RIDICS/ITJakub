@@ -485,18 +485,10 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
     }
 
     protected stickPanelToTop() {
-        //const pageEl = $(".page-body-content");
-        //const panelEl = $(".corpus-search-result-controls-container");
-        //const windowEl = $(window.document as Node as Element);
-        //windowEl.on("scroll", () => {
-        //    const offset = (panelEl.offset().top - pageEl.offset().top - windowEl.scrollTop());
-        //    if (offset < 0) {
-        //        panelEl.css("position", "fixed");
-        //        panelEl.css("top", windowEl.scrollTop() - pageEl.offset().top);
-        //    } else {
-        //        panelEl.css("position", "relative");
-        //    }
-        //});
+        const pageEl = $(".page-body-content");
+        const panelEl = $(".corpus-search-result-controls-container");
+        const pageOffset = pageEl.offset().top;
+        panelEl.stickybits({ stickyBitStickyOffset: pageOffset });
     }
 }
 //Unpaged lazyloaded search, each book gets a section
