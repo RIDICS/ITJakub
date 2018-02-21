@@ -36,7 +36,7 @@
         const startIndex = (pageNumber - 1) * this.numberOfItemsPerPage;
         const endIndex = pageNumber * this.numberOfItemsPerPage;
         const pagedAuthorListAjax = this.util.getOriginalAuthorList(startIndex, endIndex);
-        pagedAuthorListAjax.done((data: IOriginalAuthorPagedResult) => {
+        pagedAuthorListAjax.done((data: IPagedResult<IOriginalAuthor>) => {
             listEl.empty();
             if (initial) {
                 this.initPagination(data.totalCount, this.numberOfItemsPerPage, this.loadPage.bind(this));
