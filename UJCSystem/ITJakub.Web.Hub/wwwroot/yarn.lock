@@ -2251,6 +2251,10 @@ statuses@1:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.4.0.tgz#bb73d446da2796106efcc1b601a253d6c46bd087"
 
+stickybits@3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/stickybits/-/stickybits-3.0.4.tgz#a6b33557c3cab2a3a2b598741df9e9e019ee6052"
+
 stream-combiner@~0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/stream-combiner/-/stream-combiner-0.0.4.tgz#4d5e433c185261dde623ca3f44c586bcf5c4ad14"
