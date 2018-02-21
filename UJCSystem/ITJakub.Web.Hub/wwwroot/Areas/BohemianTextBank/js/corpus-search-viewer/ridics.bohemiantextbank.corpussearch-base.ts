@@ -18,7 +18,7 @@
     protected currentResultStart = -1;
     protected currentViewPage = 1;
     protected totalViewPages = 0;
-
+    protected atLeastOnSearchDone = false;
     //string for localisation
     protected defaultErrorMessage =
         "Vyhledávání se nezdařilo. Ujistěte se, zda máte zadáno alespoň jedno kritérium na vyhledávání v textu.";
@@ -51,7 +51,7 @@
         tableEl.hide();
         loaderEl.empty();
         loaderEl.show();
-        loaderEl.addClass("loader");
+        loaderEl.removeClass("alert alert-info").addClass("loader");
     }
 
 

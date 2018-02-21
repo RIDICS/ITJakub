@@ -37,15 +37,19 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
         resultsPerPageInputEl.prop("max", this.maxResultsPerPage);
         resultsPerPageInputEl.prop("min", this.minResultsPerPage);
         resultsPerPageInputEl.val(this.searchResultsOnPage);
-        const viewingSettingsChangedWarningEl = $(".search-settings-changed-warning");
+        const viewingSettingsChangedRefreshEl = $(".search-settings-changed-refresh");
 
         const contextSizeWarningEl = $(".context-size-warning");
         const contextSizeAlert = new AlertComponentBuilder(AlertType.Error);
         contextSizeAlert.addContent(this.contextSizeWarningMessage);
         contextSizeWarningEl.append(contextSizeAlert.buildElement());
 
+        this.stickPanelToTop();
+
         contextLengthInputEl.on("change", () => {
-            viewingSettingsChangedWarningEl.slideDown();
+            if (this.atLeastOnSearchDone) {
+                viewingSettingsChangedRefreshEl.slideDown();
+            }
             const contextLengthString = contextLengthInputEl.val() as string;
             const contextLengthNumber = parseInt(contextLengthString);
             if (!isNaN(contextLengthNumber)) {
@@ -66,7 +70,9 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
         numberOfPositionsWarningEl.append(numberOfPositions.buildElement());
 
         resultsPerPageInputEl.on("change", () => {
-            viewingSettingsChangedWarningEl.slideDown();
+            if (this.atLeastOnSearchDone) {
+                viewingSettingsChangedRefreshEl.slideDown();
+            }
             const resultsPerPageString = resultsPerPageInputEl.val() as string;
             const resultsPerPageNumber = parseInt(resultsPerPageString);
             if (!isNaN(resultsPerPageNumber)) {
@@ -137,11 +143,6 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
             } else {
                 mainDiv.removeClass("show-paragraph");
             }
-        });
-
-        $(".corpus-search-settings-advanced-menu").on("click", () => {
-            const advancedShowOptionsMenuEl = $(".corpus-search-result-view-properties-advanced");
-            advancedShowOptionsMenuEl.slideToggle();
         });
 
         this.initializeFromUrlParams();
@@ -482,6 +483,21 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
         detailStructureContainer.append(bibleVerse);
         bookDetailEl.append(detailStructureContainer);
     }
+
+    protected stickPanelToTop() {
+        //const pageEl = $(".page-body-content");
+        //const panelEl = $(".corpus-search-result-controls-container");
+        //const windowEl = $(window.document as Node as Element);
+        //windowEl.on("scroll", () => {
+        //    const offset = (panelEl.offset().top - pageEl.offset().top - windowEl.scrollTop());
+        //    if (offset < 0) {
+        //        panelEl.css("position", "fixed");
+        //        panelEl.css("top", windowEl.scrollTop() - pageEl.offset().top);
+        //    } else {
+        //        panelEl.css("position", "relative");
+        //    }
+        //});
+    }
 }
 //Unpaged lazyloaded search, each book gets a section
 class BohemianTextBankSingleLazyload extends BohemianTextBankSingle {
@@ -503,6 +519,18 @@ class BohemianTextBankSingleLazyload extends BohemianTextBankSingle {
         this.search.limitFullTextSearchToOne();
         this.search.makeSearch(this.enabledOptions);
 
+        $(".results-refresh-button").on("click", () => {
+            const query = this.search.getLastQuery();
+            if (query) {
+                const advancedMode = this.search.isLastQueryJson();
+                if (advancedMode) {
+                    this.startAdvancedSearch(query);
+                } else {
+                    this.startBasicSearch(query);
+                }
+            }
+        });
+
         const sortBarContainer = "#listResultsHeader";
         const sortBarContainerEl = $(sortBarContainer);
         sortBarContainerEl.empty();
@@ -514,9 +542,10 @@ class BohemianTextBankSingleLazyload extends BohemianTextBankSingle {
      * Returns page to initial state
      */
     private onSearchStartSingleLazyload() {
+        this.atLeastOnSearchDone = true;
         $(".results-container").empty();
-        const viewingSettingsChangedWarningEl = $(".search-settings-changed-warning");
-        viewingSettingsChangedWarningEl.slideUp();
+        const viewingSettingsChangedRefreshEl = $(".search-settings-changed-refresh");
+        viewingSettingsChangedRefreshEl.slideUp();
         this.compositionResultListStart = - 1;
         this.lastSnapshotId = - 1;
         this.compositionPageIsLast = false;
@@ -724,6 +753,18 @@ class BohemianTextBankSinglePaged extends BohemianTextBankSingle {
         this.search.limitFullTextSearchToOne();
         this.search.makeSearch(this.enabledOptions);
 
+        $(".results-refresh-button").on("click", () => {
+            const query = this.search.getLastQuery();
+            if (query) {
+                const advancedMode = this.search.isLastQueryJson();
+                if (advancedMode) {
+                    this.startAdvancedSearch(query);
+                } else {
+                    this.startBasicSearch(query);
+                }
+            }
+        });
+
         const sortBarContainer = "#listResultsHeader";
         const sortBarContainerEl = $(sortBarContainer);
         sortBarContainerEl.empty();
@@ -748,9 +789,10 @@ class BohemianTextBankSinglePaged extends BohemianTextBankSingle {
      * Resets page to initial state
      */
     private onSearchStartSinglePaged() {
+        this.atLeastOnSearchDone = true;
         $(".results-container").empty();
-        const viewingSettingsChangedWarningEl = $(".search-settings-changed-warning");
-        viewingSettingsChangedWarningEl.slideUp();
+        const viewingSettingsChangedRefreshEl = $(".search-settings-changed-refresh");
+        viewingSettingsChangedRefreshEl.slideUp();
         this.compositionResultListStart = - 1;
         if (this.mainPaginator) {
             this.mainPaginator = null;

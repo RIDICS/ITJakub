@@ -14,6 +14,9 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
     //string for localisation
     private attentionString = "Upozornění";
     private lastResultPageString = "Poslední stránka výsledků";
+    private allResults = "Všechny výsledky";
+
+    private loadAllResultsButtonContent = $(`<div>${this.allResults}</div>`);
 
     initSearch() {
         const paginator = new IndefinitePagination({
@@ -22,6 +25,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
             previousPageCallback: this.loadPreviousPage.bind(this),
             loadAllPagesButton: true,
             loadAllPagesCallback: this.loadAllPages.bind(this),
+            loadAllPagesButtonContent: this.loadAllResultsButtonContent,
             loadPageCallBack: this.goToPage.bind(this),
             pageDoesntExistCallBack: this.showNoPageWarning.bind(this),
             showSlider: true,
@@ -39,7 +43,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
         resultsPerPageInputEl.prop("max", this.maxResultsPerPage);
         resultsPerPageInputEl.prop("min", this.minResultsPerPage);
         resultsPerPageInputEl.val(this.searchResultsOnPage);
-        const viewingSettingsChangedWarningEl = $(".search-settings-changed-warning");
+        const viewingSettingsChangedRefreshEl = $(".search-settings-changed-refresh");
 
         const contextSizeWarningEl = $(".context-size-warning");
         const contextSizeAlert = new AlertComponentBuilder(AlertType.Error);
@@ -47,7 +51,9 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
         contextSizeWarningEl.append(contextSizeAlert.buildElement());
 
         contextLengthInputEl.on("change", () => {
-            viewingSettingsChangedWarningEl.slideDown();
+            if(this.atLeastOnSearchDone){
+                viewingSettingsChangedRefreshEl.slideDown();
+            }
             const contextLengthString = contextLengthInputEl.val() as string;
             const contextLengthNumber = parseInt(contextLengthString);
             if (!isNaN(contextLengthNumber)) {
@@ -68,7 +74,9 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
         numberOfPositionsWarningEl.append(numberOfPositions.buildElement());
 
         resultsPerPageInputEl.on("change", () => {
-            viewingSettingsChangedWarningEl.slideDown();
+            if (this.atLeastOnSearchDone) {
+                viewingSettingsChangedRefreshEl.slideDown();
+            }
             const resultsPerPageString = resultsPerPageInputEl.val() as string;
             const resultsPerPageNumber = parseInt(resultsPerPageString);
             if (!isNaN(resultsPerPageNumber)) {
@@ -141,11 +149,6 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
             }
         });
 
-        $(".corpus-search-settings-advanced-menu").on("click", () => {
-            const advancedShowOptionsMenuEl = $(".corpus-search-result-view-properties-advanced");
-            advancedShowOptionsMenuEl.slideToggle();
-        });
-
         $(".text-results-table-body").on("click",
             ".result-row",
             (event: JQuery.Event) => {
@@ -179,6 +182,18 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
             favoritesQueriesConfig);
         this.search.limitFullTextSearchToOne();
         this.search.makeSearch(this.enabledOptions);
+
+        $(".results-refresh-button").on("click", () => {
+            const query = this.search.getLastQuery();
+            if (query) {
+                const advancedMode = this.search.isLastQueryJson();
+                if (advancedMode) {
+                    this.corpusAdvancedSearchBookHits(query);
+                } else {
+                    this.corpusBasicSearchBookHits(query);
+                }
+            }
+        });
 
         const sortBarContainer = "#listResultsHeader";
         const sortBarContainerEl = $(sortBarContainer);
@@ -412,10 +427,11 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
     }
 
     private onSearchStart() {
+        this.atLeastOnSearchDone = true;
         const nextPageEl = $(".indefinite-pagination-next-page");
         const totalResultsEl = $(".total-results-count");
-        const viewingSettingsChangedWarningEl = $(".search-settings-changed-warning");
-        viewingSettingsChangedWarningEl.slideUp();
+        const viewingSettingsChangedRefreshEl = $(".search-settings-changed-refresh");
+        viewingSettingsChangedRefreshEl.slideUp();
         totalResultsEl.hide();
         nextPageEl.prop("disabled", false);
         this.resetIds();
