@@ -2,7 +2,7 @@
 //import GoldenLayout = require("golden-layout");
 //declare var GoldenLayout;
 
-function initGoldenReader(bookId: string, versionId: string, bookTitle: string, pageList: any, tracksList: any, searchedText?: string, initPageId?: string) {
+function initGoldenReader(bookId: string, versionId: string, bookTitle: string, pageList: any, searchedText?: string, initPageId?: string) {
 
 
     function readerPageChangedCallback(pageId: number) {
@@ -15,7 +15,7 @@ function initGoldenReader(bookId: string, versionId: string, bookTitle: string, 
         readerPageChangedCallback,
         readerPanels
     );
-    readerPlugin.makeReader(bookId, versionId, bookTitle, pageList, tracksList);
+    readerPlugin.makeReader(bookId, versionId, bookTitle, pageList);
     var search: Search;
 
     function convertSearchResults(responseResults: Array<Object>): SearchHitResult[] {
@@ -211,7 +211,6 @@ class ReaderLayout {
     sliderOnPage: number;
     actualPageIndex: number;
     pages: Array<BookPage>;
-    tracks: Array<any>;
     pagesById: IDictionary<BookPage>;
     bookmarks: Array<IBookmarkPosition>;
     pagerDisplayPages: number;
@@ -261,7 +260,7 @@ class ReaderLayout {
     }
 
 
-    public makeReader(bookId: string, versionId: string, bookTitle: string, pageList: IPage[], tracksList: any[]) {
+    public makeReader(bookId: string, versionId: string, bookTitle: string, pageList: IPage[]) {
         this.bookId = bookId;
         this.versionId = versionId;
         this.actualPageIndex = 0;
@@ -271,11 +270,6 @@ class ReaderLayout {
         this.bookmarks = new Array<IBookmarkPosition>(pageList.length);
         this.toolPanels = new Array<ToolPanel>();
         this.contentViewPanels = new Array<ContentViewPanel>();
-
-        //this.tracks = new Array();
-        //for (var i = 0; i < tracksList.length; i++) {
-        //    var track = tracksList[i];
-        //}
 
         for (var i = 0; i < pageList.length; i++) { //load pageList
             var page = pageList[i];
@@ -634,6 +628,7 @@ class ReaderLayout {
 
 
         var editionNoteDiv = document.createElement("div");
+        $(editionNoteDiv).addClass("loading");
         $(editionNoteDiv).addClass("edition-note-wrapper");
         var editionNoteHeader = document.createElement("h3");
         $(editionNoteHeader).append("Ediční poznámka");
@@ -649,8 +644,13 @@ class ReaderLayout {
             success: (response) => {
                 var editionNoteText = document.createElement("div");
                 $(editionNoteText).addClass("edition-note-text");
-                $(editionNoteText).append(response["editionNote"]);
+                if (response["editionNote"] == "") {
+                    $(editionNoteText).append("Toto dílo nemá ediční poznámku");
+                } else {
+                    $(editionNoteText).append(response["editionNote"]);
+                }
                 editionNoteDiv.appendChild(editionNoteText);
+                $(editionNoteDiv).removeClass("loading");
             },
             error: (response) => {
                 $(editionNoteDiv).append("Toto dílo nemá ediční poznámku");
@@ -700,7 +700,7 @@ class ReaderLayout {
                 $(bookDetailDiv).append(detailTable.build());
             },
             error: (response) => {
-                $(editionNoteDiv).append("Toto dílo nemá ediční poznámku");
+                $(bookDetailDiv).append("Nepodařilo se načíst detaily o díle");
             }
         });
         hiddenDiv.appendChild(bookDetailDiv);
@@ -1417,7 +1417,8 @@ class ReaderLayout {
     private createConfig(panelId: string, panelTitle: string) {
         var layoutConfig = {
             dimensions: {
-                headerHeight: 26
+                headerHeight: 26,
+                minItemWidth: 200
             },
             content: [{
                 type: "row",
@@ -1443,26 +1444,30 @@ class ReaderLayout {
     }
 
     private createBookmarksPanel(): HTMLDivElement {
-        var bookmarksPanel: BookmarksPanel = new BookmarksPanel(this.bookmarksPanelId, this);
-        this.bookmarksPanel = bookmarksPanel;
-        this.toolPanels.push(bookmarksPanel);
-        return bookmarksPanel.panelHtml;
+        if (this.bookmarksPanel == null) {
+            var bookmarksPanel: BookmarksPanel = new BookmarksPanel(this.bookmarksPanelId, this);
+            this.bookmarksPanel = bookmarksPanel;
+            this.toolPanels.push(bookmarksPanel);
+        }
+        return this.bookmarksPanel.panelHtml;
     }
 
     private createContentPanel(): HTMLDivElement {
-        var contentPanel: ContentPanel = null;
-        contentPanel = new ContentPanel(this.contentPanelId, this);
-        this.contentPanel = contentPanel;
-        this.toolPanels.push(contentPanel);
-        return contentPanel.panelHtml;
+        if (this.contentPanel == null) {
+            var contentPanel: ContentPanel = new ContentPanel(this.contentPanelId, this);
+            this.contentPanel = contentPanel;
+            this.toolPanels.push(contentPanel);
+        }
+        return this.contentPanel.panelHtml;
     }
 
     private createSearchPanel(): HTMLDivElement {
-        var resultPanel: SearchResultPanel = null;
-        resultPanel = new SearchResultPanel(this.searchPanelId, this);
-        this.searchPanel = resultPanel;
-        this.toolPanels.push(resultPanel);
-        return resultPanel.panelHtml;
+        if (this.searchPanel == null) {
+            var resultPanel: SearchResultPanel =  new SearchResultPanel(this.searchPanelId, this);
+            this.searchPanel = resultPanel;
+            this.toolPanels.push(resultPanel);
+        }
+        return this.searchPanel.panelHtml;
     }
 
     private createTermsPanel() {
@@ -1485,43 +1490,48 @@ class ReaderLayout {
     }
 
     private createTermsResultPanel(): HTMLDivElement {
-        var termsPanel: TermsResultPanel = null;
-        termsPanel = new TermsResultPanel(this.termsResultId, this);
-        this.termsResultPanel = termsPanel;
-        this.toolPanels.push(termsPanel);
-        return termsPanel.panelHtml;
+        if (this.termsResultPanel == null) {
+            var termsPanel: TermsResultPanel = new TermsResultPanel(this.termsResultId, this);
+            this.termsResultPanel = termsPanel;
+            this.toolPanels.push(termsPanel);
+        }
+        return this.termsResultPanel.panelHtml;
     }
 
     private createTermsSearchPanel(): HTMLDivElement {
-        var termsPanel: TermsSearchPanel = null;
-        termsPanel = new TermsSearchPanel(this.termsSearchId, this);
-        this.termsSearchPanel = termsPanel;
-        this.toolPanels.push(termsPanel);
-        return termsPanel.panelHtml;
+        if (this.termsSearchPanel == null) {
+            var termsPanel: TermsSearchPanel = new TermsSearchPanel(this.termsSearchId, this);
+            this.termsSearchPanel = termsPanel;
+            this.toolPanels.push(termsPanel);
+        }
+        return this.termsSearchPanel.panelHtml;
     }
 
     private createTextPanel(): HTMLDivElement {
-        var textPanel: TextPanel = null;
-        textPanel = new TextPanel(this.textPanelId, this);
-        this.textPanel = textPanel;
-        this.contentViewPanels.push(textPanel);
-        return textPanel.panelHtml;
+        if (this.textPanel == null) {
+            var textPanel: TextPanel = new TextPanel(this.textPanelId, this);
+            this.textPanel = textPanel;
+            this.contentViewPanels.push(textPanel);    
+        }
+        return this.textPanel.panelHtml;
     }
 
     private createImagePanel(): HTMLDivElement {
-        var imagePanel: ImagePanel = null;
-        imagePanel = new ImagePanel(this.imagePanelId, this);
-        this.imagePanel = imagePanel;
-        this.contentViewPanels.push(imagePanel);
-        return imagePanel.panelHtml;
+        if (this.imagePanel == null) {
+            var imagePanel: ImagePanel = new ImagePanel(this.imagePanelId, this);
+            this.imagePanel = imagePanel;
+            this.contentViewPanels.push(imagePanel);    
+        }
+        return this.imagePanel.panelHtml;
     }
 
     private createAudioPanel(): HTMLDivElement {
-        var audioPanel: AudioPanel = null;
-        audioPanel = new AudioPanel(this.audioPanelId, this);
-        this.audioPanel = audioPanel;
-        this.contentViewPanels.push(audioPanel);
-        return audioPanel.panelHtml;
+        if (this.audioPanel == null) {
+            var audioPanel: AudioPanel = new AudioPanel(this.audioPanelId, this);
+            this.audioPanel = audioPanel;
+            this.contentViewPanels.push(audioPanel);
+        }
+        return this.audioPanel.panelHtml;
     }
 
     hasBookPage(bookId: string, bookVersionId: string, onTrue: () => any = null, onFalse: () => any = null) {
@@ -1753,7 +1763,7 @@ class SearchResultPanel extends ToolPanel {
     }
 
     showResults(searchResults: SearchHitResult[]) {
-        $(this.searchResultItemsDiv).empty();
+        this.clearResults();
         for (var i = 0; i < searchResults.length; i++) {
             var result = searchResults[i];
             var resultItem = this.createResultItem(result);
@@ -2434,60 +2444,105 @@ class ImagePanel extends ContentViewPanel {
 }
 
 class AudioPanel extends ContentViewPanel {
+    private trackId: number;
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
         var audioContainerDiv: HTMLDivElement = document.createElement("div");
         $(audioContainerDiv).addClass("reader-audio-container");
+        $(audioContainerDiv).addClass("loading");
 
         var trackName = document.createElement("h3");
+        $(trackName).addClass("track-name");
         audioContainerDiv.appendChild(trackName);
-
         var trackSelect = document.createElement("select");
-        //for (var i = 0; i < numberOfTracks; i++) {
-        //    var track = document.createElement("option");
-        //    track.innerHTML = tracks[numberOfTrack];
-        //    $(trackSelect).append(track);
-        //}
+        trackSelect.id = "track-select";
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { projectId: this.parentReader.bookId },
+            url: getBaseUrl() + "Reader/GetAudioBook",
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+                var audioBook = response["audioBook"];
+                for (var index in audioBook.Tracks) {
+                    var track = document.createElement("option");
+                    $(track).prop("value", index);
+                    track.innerHTML = audioBook.Tracks[index].Name;
+                    $(trackSelect).append(track);
+                }
+
+                this.trackId = 0;
+                //TODO Download full book
+                this.reloadTrack();
+                $(".reader-audio-container").removeClass("loading");
+            },
+            error: (response) => {
+            }           
+    });
+
+        $(trackSelect).change(() => {
+            this.trackId = $(trackSelect).val();
+            this.reloadTrack();    
+        });
+        
         audioContainerDiv.appendChild(trackSelect);
 
         var audioTextDiv = document.createElement("div");
         $(audioTextDiv).addClass("audio-text");
-        //audioTextDiv.innerHTML = AudioTrackText;
         audioContainerDiv.appendChild(audioTextDiv);
+
+        var audioControl = document.createElement("div");
+        $(audioControl).addClass("buttons control-buttons");
+        var buttonBack = document.createElement("button");
+        $(buttonBack).addClass("glyphicon glyphicon-step-backward");
+        $(buttonBack).click(() => {
+            this.trackId--;
+            this.reloadTrack();
+        });
+        audioControl.appendChild(buttonBack);
+        var buttonForward = document.createElement("button");
+        $(buttonForward).addClass("glyphicon glyphicon-step-forward");
+        $(buttonForward).click(() => {
+            this.trackId++;
+            this.reloadTrack();
+        });
+        audioControl.appendChild(buttonForward);
+        audioContainerDiv.appendChild(audioControl);
 
         var audioPlayer = document.createElement("audio");
         $(audioPlayer).prop("controls", "controls");
         $(audioPlayer).prop("preload", "none");
-        var audioSource = document.createElement("source");
-        //TODO add source src and type
-        audioPlayer.appendChild(audioSource);
-        $(audioPlayer).append("Váš prohlížeč nepodporuje html audio");
         audioContainerDiv.appendChild(audioPlayer);
 
         return audioContainerDiv;
     }
 
+    private reloadTrack() {
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { projectId: this.parentReader.bookId, trackId: this.trackId },
+            url: getBaseUrl() + "Reader/GetAudioBookTrack",
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+                var track = response["track"];
+                $(".track-name").html(track.Name);
+                $("#track-select").val(this.trackId);
+                $(".audio-text").html(track.Text);
+                var audioPlayer = $("audio");
+                audioPlayer.load();
+                $(audioPlayer).empty();
+                for (var index in track.Recordings) {
+                    var source = document.createElement("source");
+                    source.src = getBaseUrl() + "AudioBooks/AudioBooks/DownloadAudio?audioId=" + track.Recordings[index].Id + "&audioType=" + track.Recordings[index].AudioType;
+                    source.type = track.Recordings[index].MimeType;
+                    $(audioPlayer).append(source);
+                }
+                $(audioPlayer).append("Váš prohlížeč nepodporuje html audio");
+            },
+            error: (response) => {
+            }
+        });
+    }
 }
-
-//class AudioTrac {
-//    private _pageId: number;
-//    private _text: string;
-//    private _position: number;
-
-//    constructor(pageId: number, text: string, position: number) {
-//        this._pageId = pageId;
-//        this._text = text;
-//        this._position = position;
-//    }
-
-//    get pageId(): number {
-//        return this._pageId;
-//    }
-
-//    get text(): string {
-//        return this._text;
-//    }
-
-//    get position(): number {
-//        return this._position;
-//    }
-//}

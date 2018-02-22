@@ -64,8 +64,8 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             return View();
         }
         */
-        // TODO rename parameter page to pageId
-        public ActionResult Listing(long bookId, string searchText, string page)
+        
+        public ActionResult Listing(long bookId, string searchText, string pageId)
         {
             using (var client = GetRestClient())
             {
@@ -81,7 +81,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                         BookPages = pages,
                         AudioTracks = audioBookPage,
                         SearchText = searchText,
-                        InitPageId = page, 
+                        InitPageId = pageId, 
                         CanPrintEdition = User.IsInRole("CanEditionPrint"),
                         JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
                     });

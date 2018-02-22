@@ -5,7 +5,7 @@
 @tabHeight: 20px;
 @color1: #e1e1e1; 
 @color2: #777777; 
-@color3: #fafafa; 
+@color3: #ffffff; 
 @color4: #888888;
 @linkColor: #8E5523;
 @linkColorHover: #633107;
@@ -144,7 +144,7 @@ button {
 }
 
 .edition-note-wrapper {
-    min-width: 20px;
+    min-width: 50%;
     width: calc(~'70% - 10px');
     height: 100%;
     padding: 0 5px;
@@ -182,12 +182,38 @@ button {
 
 .book-detail-wrapper {
     width:30%;
+    min-width: 350px;
     display:inline-block;
     margin-left: 10px;
     overflow: hidden;
     height: 100%;
 }
 
-.clear {
-    clear: both;
+.reader-audio-container {
+    padding: 1rem;
+
+    h3 {
+        margin: 0 50px 10px 0;
+        display: inline-block;
+    }
+
+    .control-buttons {
+        background-color: #fafafa;
+        display: inline-block;
+        float: left;
+
+        button {
+            background: none;
+            border: none;
+            outline: 0;
+            padding: 0;
+            text-align: center;
+            height: 32px;
+            margin:0 5px;
+        }
+    }
+
+    .audio-text {
+        min-height:1em;
+    }
 }

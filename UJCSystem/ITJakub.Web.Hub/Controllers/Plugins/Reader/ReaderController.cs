@@ -149,5 +149,23 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
                 return Json(new {detail = projectDetail}, GetJsonSerializerSettings());
             }
         }
+
+        public ActionResult GetAudioBook(long projectId)
+        {
+            using (var client = GetRestClient())
+            {
+                var audioBook = client.GetAudioBookDetail(projectId);
+                return Json(new { audioBook = audioBook }, GetJsonSerializerSettings());
+            }
+        }
+
+        public ActionResult GetAudioBookTrack(long projectId, int trackId)
+        {
+            using (var client = GetRestClient())
+            {
+                var audioBookTrack = client.GetAudioBookDetail(projectId).Tracks[trackId];
+                return Json(new { track = audioBookTrack }, GetJsonSerializerSettings());
+            }
+        }
     }
 }
