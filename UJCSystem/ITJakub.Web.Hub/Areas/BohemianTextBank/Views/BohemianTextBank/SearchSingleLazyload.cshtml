@@ -7,7 +7,7 @@
     <script src="~/lib/bootbox/bootbox.min.js"></script>
     <script src="~/lib/jquery-table-fixer/tableHeadFixer.js"></script>
     <script src="~/lib/lazysizes/lazysizes.min.js"></script>
-    <script src="~/lib/stickybits/dist/jquery.stickybits.min.js"></script>
+    <script src="~/lib/stickybits/dist/stickybits.min.js"></script>
 }
 
 @{
@@ -18,18 +18,7 @@
 
 <div class="search-result-section container-fluid" id="corpus-search-div">
     <div class="row corpus-result-and-settings-row">
-        <div class="corpus-search-results-div col-md-10 col-sm-9 col-xs-12">
-            <div class="row search-results-row">
-                <div class="col-xs-12 text-center">
-                    <div class="alert alert-info page-loader">
-                        Pro zobrazení výsledků použijte vyhledávání.
-                    </div>
-                </div>
-                <div class="col-xs-12 results-container">
-                </div>
-            </div>
-        </div>
-        <div class="corpus-search-result-controls-container col-md-2 col-sm-3 col-xs-12">
+        <div class="corpus-search-result-controls-container col-md-2 col-md-push-10 col-sm-push-9 col-sm-3 col-xs-12">
             <div class="row">
                 <div class="col-xs-12">
                     <div class="corpus-search-settings-label">Možnosti zobrazení</div>
@@ -73,6 +62,17 @@
                 <div class="total-results-count" style="display: none">
                     <div>Počet výsledků:</div>
                     <div id="totalResultCountDiv"></div>
+                </div>
+            </div>
+        </div>
+        <div class="corpus-search-results-div col-md-10 col-md-pull-2 col-sm-pull-3 col-sm-9 col-xs-12">
+            <div class="row search-results-row">
+                <div class="col-xs-12 text-center">
+                    <div class="alert alert-info page-loader">
+                        Pro zobrazení výsledků použijte vyhledávání.
+                    </div>
+                </div>
+                <div class="col-xs-12 results-container">
                 </div>
             </div>
         </div>

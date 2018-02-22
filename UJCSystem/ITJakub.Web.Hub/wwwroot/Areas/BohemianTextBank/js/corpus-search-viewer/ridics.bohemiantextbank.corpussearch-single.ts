@@ -9,6 +9,8 @@ function initSearchSinglePaged() {
 }
 
 class BohemianTextBankSingle extends BohemianTextBankBase {
+    protected bootstrapXsScreenWidth = 768;
+
     //string for localisation
     protected errorDisplayingResultsMessage = "Chyba při zobrazení výsledků";
     protected noResultsMessage = "Žadné výsledky";
@@ -351,8 +353,8 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
     protected generateBookSectionLayout(snapshotId: number, resultNumber: number) {
         const bookSectionsContainer = $(".results-container");
         const bookRowEl = $(`<div class="book-section-row row lazyload" data-snapshotId="${snapshotId}" data-result-number="${resultNumber}"></div>`);
-        const bookDetailSection = $(`<div class="col-xs-4 col-sm-6 book-detail-section"></div>`);
-        const searchResultsSection = $(`<div class="col-xs-8 col-sm-6 result-text-col text-center"></div>`);
+        const bookDetailSection = $(`<div class="col-xs-4 col-md-6 book-detail-section"></div>`);
+        const searchResultsSection = $(`<div class="col-xs-8 col-md-6 result-text-col text-center"></div>`);
         const tableEl = $(`<div class="corpus-search-results-table-div-loader"></div><table class="text-results-table"><tbody class="text-results-table-body"></tbody></table>`);
         const searchResultsPaginationSection = $(`<div class="col-xs-12 pagination-section text-center"></div>`);
         searchResultsSection.append(tableEl);
@@ -415,28 +417,28 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
     protected createBookDetailsSection(bookSectionEl: JQuery) {
         const bookDetailEl = bookSectionEl.find(".book-detail-section");
         const docSectionEl = $(`<div class="row result-info-section">
-                        <div class="col-sm-2 col-xs-12 label">${this.docString}</div>
-                        <div class="col-sm-10 col-xs-12">
+                        <div class="col-md-2 col-xs-12 label">${this.docString}</div>
+                        <div class="col-md-10 col-xs-12">
                             <div class="corpus-search-detail">
                                 <div class="table-row row">
-                                    <div class="col-sm-3 col-xs-12 label">${this.authorString}</div>
-                                    <div class="detail-author col-sm-9 col-xs-12 break-word">${this.undefinedReplaceString}</div>
+                                    <div class="col-md-4 col-xs-12 label">${this.authorString}</div>
+                                    <div class="detail-author col-md-8 col-xs-12 break-word">${this.undefinedReplaceString}</div>
                                 </div>
                                 <div class="table-row row">
-                                    <div class="col-sm-3 col-xs-12 label">${this.titleString}</div>
-                                    <div class="detail-title col-sm-9 col-xs-12 break-word">${this.undefinedReplaceString}</div>
+                                    <div class="col-md-4 col-xs-12 label">${this.titleString}</div>
+                                    <div class="detail-title col-md-8 col-xs-12 break-word">${this.undefinedReplaceString}</div>
                                 </div>
                                 <div class="table-row row">
-                                    <div class="col-sm-3 col-xs-12 label">${this.sourceDateString}</div>
-                                    <div class="detail-dating col-sm-9 col-xs-12 break-word">${this.undefinedReplaceString}</div>
+                                    <div class="col-md-4 col-xs-12 label">${this.sourceDateString}</div>
+                                    <div class="detail-dating col-md-8 col-xs-12 break-word">${this.undefinedReplaceString}</div>
                                 </div>
                                 <div class="table-row row">
-                                    <div class="col-sm-3 col-xs-12 label">${this.sourceDateCenturyString}</div>
-                                    <div class="detail-dating-century col-sm-9 col-xs-12 break-word">${this.undefinedReplaceString}</div>
+                                    <div class="col-md-4 col-xs-12 label">${this.sourceDateCenturyString}</div>
+                                    <div class="detail-dating-century col-md-8 col-xs-12 break-word">${this.undefinedReplaceString}</div>
                                 </div>
                                 <div class="table-row row">
-                                    <div class="col-sm-3 col-xs-12 label">${this.sourceAbbreviationString}</div>
-                                    <div class="detail-abbrev col-sm-9 col-xs-12 break-word">${this.undefinedReplaceString}</div>
+                                    <div class="col-md-4 col-xs-12 label">${this.sourceAbbreviationString}</div>
+                                    <div class="detail-abbrev col-md-8 col-xs-12 break-word">${this.undefinedReplaceString}</div>
                                 </div>
                                 <div class="table-row row">
                                     <div class="col-xs-12 col-no-padding">
@@ -446,32 +448,32 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
                             </div>
                         </div></div>`);
         const pholioSection = $(`<div class="row result-info-section">
-                        <div class="col-sm-2 col-xs-12 label">${this.pholioString}</div>
-                        <div class="col-sm-10 col-xs-12 col-no-padding">
+                        <div class="col-md-2 col-xs-12 label">${this.pholioString}</div>
+                        <div class="col-md-10 col-xs-12 col-no-padding">
                             <div class="detail-folio">${this.undefinedReplaceString}</div>
                             </div>
                         </div>`);
         const verseSection = $(`<div class="row result-info-section">
-                        <div class="col-sm-2 col-xs-12 label">${this.verseString}</div>
-                        <div class="col-sm-10 col-xs-12 col-no-padding">
+                        <div class="col-md-2 col-xs-12 label">${this.verseString}</div>
+                        <div class="col-md-10 col-xs-12 col-no-padding">
                             <div class="detail-vers">${this.undefinedReplaceString}</div>
                             </div>
                         </div>`);
         const bibleVerse = $(`<div class="row result-info-section">
-                        <div class="col-sm-2 col-xs-12 label">${this.bibleVerseString}</div>
-                        <div class="col-sm-10 col-xs-12">
+                        <div class="col-md-2 col-xs-12 label">${this.bibleVerseString}</div>
+                        <div class="col-md-10 col-xs-12">
                                 <div class="corpus-search-detail">
                                     <div class="table-row row">
-                                        <div class="col-sm-3 col-xs-12 label">${this.bookString}</div>
-                                        <div class="detail-bible-vers-book col-sm-9 col-xs-12 break-word">${this.undefinedReplaceString}</div>
+                                        <div class="col-md-4 col-xs-12 label">${this.bookString}</div>
+                                        <div class="detail-bible-vers-book col-md-8 col-xs-12 break-word">${this.undefinedReplaceString}</div>
                                     </div>
                                     <div class="table-row row">
-                                        <div class="col-sm-3 col-xs-12 label">${this.chapterString}</div>
-                                        <div class="detail-bible-vers-chapter col-sm-9 col-xs-12 break-word">${this.undefinedReplaceString}</div>
+                                        <div class="col-md-4 col-xs-12 label">${this.chapterString}</div>
+                                        <div class="detail-bible-vers-chapter col-md-8 col-xs-12 break-word">${this.undefinedReplaceString}</div>
                                     </div>
                                     <div class="table-row row">
-                                        <div class="col-sm-3 col-xs-12 label">${this.verseString}</div>
-                                        <div class="detail-bible-vers-vers col-sm-9 col-xs-12 break-word">${this.undefinedReplaceString}</div>
+                                        <div class="col-md-4 col-xs-12 label">${this.verseString}</div>
+                                        <div class="detail-bible-vers-vers col-md-8 col-xs-12 break-word">${this.undefinedReplaceString}</div>
                                     </div>
                                 </div>
                         </div>
@@ -486,9 +488,26 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
 
     protected stickPanelToTop() {
         const pageEl = $(".page-body-content");
-        const panelEl = $(".corpus-search-result-controls-container");
+        const panelSelector = ".corpus-search-result-controls-container";
+        const panelEl = $(panelSelector);
+        var stickyBits: any;
         const pageOffset = pageEl.offset().top;
-        panelEl.stickybits({ stickyBitStickyOffset: pageOffset });
+        const checkWidth = () => {
+            const pageWidth = pageEl.width();
+            if (pageWidth >= this.bootstrapXsScreenWidth) {
+                stickyBits = stickybits(panelSelector, { stickyBitStickyOffset: pageOffset });
+            } else {
+                if (stickyBits) {
+                    stickyBits.cleanup();
+                    panelEl.css("position", "");
+                    panelEl.css("top", "");
+                }
+            }
+        };
+        checkWidth();
+        $(window as any).on("resize", ()=>{
+            checkWidth();
+        });
     }
 }
 //Unpaged lazyloaded search, each book gets a section
