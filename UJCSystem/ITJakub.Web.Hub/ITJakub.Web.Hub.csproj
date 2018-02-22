@@ -17,7 +17,7 @@
   <ItemGroup>
     <Content Remove="wwwroot\Areas\BohemianTextBank\js\ridics.bohemiantextbank.corpussearch-base.ts" />
     <Content Remove="wwwroot\Areas\BohemianTextBank\js\ridics.bohemiantextbank.corpussearch-single.ts" />
-    <Content Remove="wwwroot\js\typings-custom\jquery-table-fixer_.d.ts.ts" />
+    <Content Remove="wwwroot\js\typings-custom\jquery-table-fixer_.d.ts" />
   </ItemGroup>
 
     <ItemGroup>
@@ -79,7 +79,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="wwwroot\Areas\BohemianTextBank\js\corpus-search-viewer\ridics.bohemiantextbank.corpussearch-single.ts" />
     <TypeScriptCompile Include="wwwroot\Areas\BohemianTextBank\js\corpus-search-viewer\ridics.bohemiantextbank.corpussearch-base.ts" />
-    <TypeScriptCompile Include="wwwroot\js\typings-custom\jquery-table-fixer_.d.ts.ts" />
+    <TypeScriptCompile Include="wwwroot\js\typings-custom\jquery-table-fixer_.d.ts" />
   </ItemGroup>
 
   <Target Name="ApplyXdtConfigTransform" BeforeTargets="MSDeployPublish">
