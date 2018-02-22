@@ -2514,6 +2514,11 @@ class AudioPanel extends ContentViewPanel {
         $(audioPlayer).prop("preload", "none");
         audioContainerDiv.appendChild(audioPlayer);
 
+        var downloadTrackDiv = document.createElement("div");
+        $(downloadTrackDiv).addClass("audio-track-download");
+        $(downloadTrackDiv).append("Stáhnout kapitolu:");
+        audioContainerDiv.appendChild(downloadTrackDiv);
+
         return audioContainerDiv;
     }
 
@@ -2538,6 +2543,12 @@ class AudioPanel extends ContentViewPanel {
                     source.src = getBaseUrl() + "AudioBooks/AudioBooks/DownloadAudio?audioId=" + track.Recordings[index].Id + "&audioType=" + track.Recordings[index].AudioType;
                     source.type = track.Recordings[index].MimeType;
                     $(audioPlayer).append(source);
+
+                    var download = document.createElement("a");
+                    $(download).addClass("audio-download-href");
+                    download.href = source.src;
+                    $(download).html(track.Recordings[index].AudioType);
+                    $(".audio-track-download").append(download);
                 }
                 $(audioPlayer).append("Váš prohlížeč nepodporuje html audio");
             },

@@ -71,7 +71,6 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             {
                 var book = client.GetBookInfo(bookId);
                 var pages = client.GetBookPageList(bookId);
-                var audioBookPage = client.GetAudioBookDetail(bookId).Tracks;
                 return
                     View(new BookListingModel
                     {
@@ -79,7 +78,6 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                         SnapshotId = null, 
                         BookTitle = book.Title,
                         BookPages = pages,
-                        AudioTracks = audioBookPage,
                         SearchText = searchText,
                         InitPageId = pageId, 
                         CanPrintEdition = User.IsInRole("CanEditionPrint"),
