@@ -183,7 +183,6 @@ button {
 
 .book-detail-wrapper {
     width:30%;
-    min-width: 350px;
     display:inline-block;
     margin-left: 10px;
     overflow: hidden;
@@ -198,6 +197,12 @@ button {
         display: inline-block;
     }
 
+    #track-select {
+        height: 2em;
+        float: right;
+       
+    }
+
     .control-buttons {
         background-color: #fafafa;
         display: inline-block;
@@ -210,11 +215,34 @@ button {
             padding: 0;
             text-align: center;
             height: 32px;
-            margin:0 5px;
+            margin: 0 5px;
         }
     }
 
     .audio-text {
-        min-height:1em;
+        min-height: 1em;
+    }
+
+    .audio-download {
+        float: right;
+
+        a.audio-download-href {
+            border-radius: 5px;
+            background: #8E5523;
+            padding: 5px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: "Arial";
+            margin-left: .25rem;
+            margin-top: .25rem;
+            display: inline-block;
+
+            &:hover {
+                background-color: #633107;
+                opacity: 1;
+                cursor: pointer;
+            }
+        }
     }
 }

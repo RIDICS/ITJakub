@@ -2445,6 +2445,7 @@ class ImagePanel extends ContentViewPanel {
 
 class AudioPanel extends ContentViewPanel {
     private trackId: number;
+    private numberOfTracks: number;
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
         var audioContainerDiv: HTMLDivElement = document.createElement("div");
         $(audioContainerDiv).addClass("reader-audio-container");
@@ -2464,15 +2465,23 @@ class AudioPanel extends ContentViewPanel {
             contentType: "application/json",
             success: (response) => {
                 var audioBook = response["audioBook"];
+                this.numberOfTracks = audioBook.Tracks.length;
                 for (var index in audioBook.Tracks) {
                     var track = document.createElement("option");
                     $(track).prop("value", index);
                     track.innerHTML = audioBook.Tracks[index].Name;
                     $(trackSelect).append(track);
                 }
+                //TODO FullBookRecordings is null?!
+                //for (var recording of response["fullBookRec"]) {    
+                //    var download = document.createElement("a");
+                //    $(download).addClass("audio-download-href");
+                //    download.href = getBaseUrl() + "AudioBooks/AudioBooks/DownloadAudio?audioId=" + recording.Id + "&audioType=" + recording[index].AudioType;;
+                //    $(download).html(recording.AudioType);
+                //    $(".full-book-download").append(download);
+                //}
 
                 this.trackId = 0;
-                //TODO Download full book
                 this.reloadTrack();
                 $(".reader-audio-container").removeClass("loading");
             },
@@ -2496,15 +2505,19 @@ class AudioPanel extends ContentViewPanel {
         var buttonBack = document.createElement("button");
         $(buttonBack).addClass("glyphicon glyphicon-step-backward");
         $(buttonBack).click(() => {
-            this.trackId--;
-            this.reloadTrack();
+            if (this.trackId > 0) {
+                this.trackId--;
+                this.reloadTrack();
+            }
         });
         audioControl.appendChild(buttonBack);
         var buttonForward = document.createElement("button");
         $(buttonForward).addClass("glyphicon glyphicon-step-forward");
         $(buttonForward).click(() => {
-            this.trackId++;
-            this.reloadTrack();
+            if (this.trackId < this.numberOfTracks - 1) {
+                this.trackId++;
+                this.reloadTrack();
+            }
         });
         audioControl.appendChild(buttonForward);
         audioContainerDiv.appendChild(audioControl);
@@ -2514,10 +2527,16 @@ class AudioPanel extends ContentViewPanel {
         $(audioPlayer).prop("preload", "none");
         audioContainerDiv.appendChild(audioPlayer);
 
+        var audioDownloadDiv = document.createElement("div");
+        $(audioDownloadDiv).addClass("audio-download");
+        var downloadBookDiv = document.createElement("div");
+        $(downloadBookDiv).addClass("full-book");
+        $(downloadBookDiv).append("Stáhnout celou audioknihu:");
+        audioDownloadDiv.appendChild(downloadBookDiv);
         var downloadTrackDiv = document.createElement("div");
-        $(downloadTrackDiv).addClass("audio-track-download");
-        $(downloadTrackDiv).append("Stáhnout kapitolu:");
-        audioContainerDiv.appendChild(downloadTrackDiv);
+        $(downloadTrackDiv).addClass("track");
+        audioDownloadDiv.appendChild(downloadTrackDiv);
+        audioContainerDiv.appendChild(audioDownloadDiv);
 
         return audioContainerDiv;
     }
@@ -2538,6 +2557,7 @@ class AudioPanel extends ContentViewPanel {
                 var audioPlayer = $("audio");
                 audioPlayer.load();
                 $(audioPlayer).empty();
+                $(".track").html("Stáhnout kapitolu:");
                 for (var index in track.Recordings) {
                     var source = document.createElement("source");
                     source.src = getBaseUrl() + "AudioBooks/AudioBooks/DownloadAudio?audioId=" + track.Recordings[index].Id + "&audioType=" + track.Recordings[index].AudioType;
@@ -2548,7 +2568,7 @@ class AudioPanel extends ContentViewPanel {
                     $(download).addClass("audio-download-href");
                     download.href = source.src;
                     $(download).html(track.Recordings[index].AudioType);
-                    $(".audio-track-download").append(download);
+                    $(".track").append(download);
                 }
                 $(audioPlayer).append("Váš prohlížeč nepodporuje html audio");
             },
