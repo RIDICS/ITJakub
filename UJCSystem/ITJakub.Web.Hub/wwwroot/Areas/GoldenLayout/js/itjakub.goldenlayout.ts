@@ -633,16 +633,10 @@ class ReaderLayout {
         var editionNoteHeader = document.createElement("h3");
         $(editionNoteHeader).append("Ediční poznámka");
         $(editionNoteDiv).append(editionNoteHeader);
-        
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            data: { projectId: this.bookId, format: "Html" },
-            url: getBaseUrl() + "Reader/GetEditionNote",
-            dataType: "json",
-            contentType: "application/json",
-            success: (response) => {
-                var editionNoteText = document.createElement("div");
+
+        var editionNote: JQueryXHR = ServerCommunication.getEditionNote(this.bookId);
+        editionNote.done((response) => {
+            var editionNoteText = document.createElement("div");
                 $(editionNoteText).addClass("edition-note-text");
                 if (response["editionNote"] == "") {
                     $(editionNoteText).append("Toto dílo nemá ediční poznámku");
@@ -651,11 +645,11 @@ class ReaderLayout {
                 }
                 editionNoteDiv.appendChild(editionNoteText);
                 $(editionNoteDiv).removeClass("loading");
-            },
-            error: (response) => {
-                $(editionNoteDiv).append("Toto dílo nemá ediční poznámku");
-            }
         });
+        editionNote.fail(() => {
+            $(editionNoteDiv).append("Toto dílo nemá ediční poznámku");    
+        });
+        
         hiddenDiv.appendChild(editionNoteDiv);
 
         var bookDetailDiv = document.createElement("div");
@@ -664,45 +658,38 @@ class ReaderLayout {
         $(bookDetailHeader).append("Informace o díle");
         bookDetailDiv.appendChild(bookDetailHeader);
 
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            data: { projectId: this.bookId},
-            url: getBaseUrl() + "Reader/GetProjectDetail",
-            dataType: "json",
-            contentType: "application/json",
-            success: (response) => {
-                var detailData = response["detail"];
-                var detailTable = new TableBuilder();
-                var editors: string = "";
-                for (var i = 0; i < detailData.Editors.length; i++) {
-                    var editor = detailData.Editors[i];
-                    editors += editor.FirstName + " " + editor.LastName;
-                    if (i + 1 != detailData.Editors.length) {
-                        editors += ", ";
-                    }
+        var bookDetail: JQueryXHR = ServerCommunication.getBookDetail(this.bookId);
+        bookDetail.done((response) => {
+            var detailData = response["detail"];
+            var detailTable = new TableBuilder();
+            var editors: string = "";
+            for (var i = 0; i < detailData.Editors.length; i++) {
+                var editor = detailData.Editors[i];
+                editors += editor.FirstName + " " + editor.LastName;
+                if (i + 1 != detailData.Editors.length) {
+                    editors += ", ";
                 }
-
-                detailTable.makeTableRow("Editor", editors);
-                detailTable.makeTableRow("Předloha", detailData.LiteraryOriginal);
-                detailTable.makeTableRow("Zkratka památky", detailData.RelicAbbreviation);
-                detailTable.makeTableRow("Zkratka pramene", detailData.SourceAbbreviation);
-                detailTable.makeTableRow("Literární druh", detailData.LiteraryKinds);
-                detailTable.makeTableRow("Literární žánr", detailData.LiteraryGenre);
-                detailTable.makeTableRow("Poslední úprava edice	", detailData.CreateTimeString);
-
-                $(detailTable.build()).find(".bib-table-cell").each(function () {
-                    if (this.innerHTML === "" || this.innerHTML === "undefined") {
-                        this.innerHTML = "&lt;Nezadáno&gt;";
-                    }
-                });
-
-                $(bookDetailDiv).append(detailTable.build());
-            },
-            error: (response) => {
-                $(bookDetailDiv).append("Nepodařilo se načíst detaily o díle");
             }
+
+            detailTable.makeTableRow("Editor", editors);
+            detailTable.makeTableRow("Předloha", detailData.LiteraryOriginal);
+            detailTable.makeTableRow("Zkratka památky", detailData.RelicAbbreviation);
+            detailTable.makeTableRow("Zkratka pramene", detailData.SourceAbbreviation);
+            detailTable.makeTableRow("Literární druh", detailData.LiteraryKinds);
+            detailTable.makeTableRow("Literární žánr", detailData.LiteraryGenre);
+            detailTable.makeTableRow("Poslední úprava edice	", detailData.CreateTimeString);
+
+            $(detailTable.build()).find(".bib-table-cell").each(function () {
+                if (this.innerHTML === "" || this.innerHTML === "undefined") {
+                    this.innerHTML = "&lt;Nezadáno&gt;";
+                }
+            });
+
+            $(bookDetailDiv).append(detailTable.build());
         });
+        bookDetail.fail(() => {
+            $(bookDetailDiv).append("Nepodařilo se načíst detaily o díle");
+        });    
         hiddenDiv.appendChild(bookDetailDiv);
 
         bookInfoDiv.appendChild(hiddenDiv);
@@ -1548,34 +1535,26 @@ class ReaderLayout {
                 this.hasBookPageCallOnSuccess[bookId] = {};
                 this.hasBookPageCallOnSuccess[bookId][bookVersionId] = [];
             }
+            var hasBookPage: JQueryXHR = ServerCommunication.hasBookPage(bookId, bookVersionId)
+            hasBookPage.done((response: { HasBookPage: boolean }) => {
+                this.hasBookPageCache[bookId][bookVersionId] = response.HasBookPage;
+                this.hasBookPageCache[bookId][bookVersionId + "_loading"] = false;
 
-            $.ajax({
-                type: "GET",
-                traditional: true,
-                data: { bookId: bookId, snapshotId: bookVersionId },
-                url: document.getElementsByTagName("body")[0].getAttribute("data-has-book-text-url"),
-                dataType: "json",
-                contentType: "application/json",
-                success: (response: { HasBookPage: boolean }) => {
-                    this.hasBookPageCache[bookId][bookVersionId] = response.HasBookPage;
-                    this.hasBookPageCache[bookId][bookVersionId + "_loading"] = false;
+                if (response.HasBookPage && onTrue !== null) {
+                    onTrue();
+                } else if (!response.HasBookPage && onFalse !== null) {
+                    onFalse();
+                }
 
-                    if (response.HasBookPage && onTrue !== null) {
-                        onTrue();
-                    } else if (!response.HasBookPage && onFalse !== null) {
-                        onFalse();
-                    }
-
-                    while (this.hasBookPageCallOnSuccess[bookId][bookVersionId].length) {
-                        this.hasBookPageCallOnSuccess[bookId][bookVersionId].pop()();
-                    }
-                },
-                error: (response) => {
-                    console.error(response);
-
-                    this.hasBookPageCache[bookId][bookVersionId + "_loading"] = false;
+                while (this.hasBookPageCallOnSuccess[bookId][bookVersionId].length) {
                     this.hasBookPageCallOnSuccess[bookId][bookVersionId].pop()();
                 }
+            });
+            hasBookPage.fail((response) => {
+                console.error(response);
+
+                this.hasBookPageCache[bookId][bookVersionId + "_loading"] = false;
+                this.hasBookPageCallOnSuccess[bookId][bookVersionId].pop()();
             });
         } else if (this.hasBookPageCache[bookId][bookVersionId] && onTrue !== null) {
             onTrue();
@@ -1639,35 +1618,27 @@ class ContentPanel extends ToolPanel {
 
         $(this.panelHtml).empty();
         $(this.panelHtml).addClass("loader");
-
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            data: { bookId: this.parentReader.bookId },
-            url: getBaseUrl() + "Reader/GetBookContent",
-            dataType: "json",
-            contentType: "application/json",
-            success: (response) => {
-                var rootContentItems: IChapterHieararchyContract[] = response["content"];
-                var ulElement = document.createElement("ul");
-                $(ulElement).addClass("content-item-root-list");
-                for (var i = 0; i < rootContentItems.length; i++) {
-                    var chapterItem: IChapterHieararchyContract = rootContentItems[i];
-                    $(ulElement).append(this.makeContentItem(this.parseJsonItemToContentItem(chapterItem)));
-                }
-
-                $(this.panelHtml).removeClass("loader");
-                $(this.panelHtml).empty();
-                $(this.panelHtml).append(ulElement);
-
-                this.innerContent = this.panelHtml;
-
-            },
-            error: (response) => {
-                $(this.panelHtml).empty();
-                $(this.panelHtml).append("Chyba při načítání obsahu");
+        var bookContent: JQueryXHR = ServerCommunication.getBookContent(this.parentReader.bookId);
+        bookContent.done((response) => {
+            var rootContentItems: IChapterHieararchyContract[] = response["content"];
+            var ulElement = document.createElement("ul");
+            $(ulElement).addClass("content-item-root-list");
+            for (var i = 0; i < rootContentItems.length; i++) {
+                var chapterItem: IChapterHieararchyContract = rootContentItems[i];
+                $(ulElement).append(this.makeContentItem(this.parseJsonItemToContentItem(chapterItem)));
             }
+
+            $(this.panelHtml).removeClass("loader");
+            $(this.panelHtml).empty();
+            $(this.panelHtml).append(ulElement);
+
+            this.innerContent = this.panelHtml;
+
         });
+        bookContent.fail(() => {
+            $(this.panelHtml).empty();
+            $(this.panelHtml).append("Chyba při načítání obsahu");    
+        });    
     }
 
     private parseJsonItemToContentItem(chapterItem: IChapterHieararchyContract): ContentItem {
@@ -2124,40 +2095,32 @@ class TermsResultPanel extends TermsPanel {
         $(this.termsOrderedList).removeClass("no-items");
         $(this.termsResultItemsLoadDiv).show();
         $(this.termsResultItemsDiv).hide();
+        var terms: JQueryXHR = ServerCommunication.getTerms(this.parentReader.bookId, page.pageId);
+        terms.done((response) => {
 
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            data: { snapshotId: this.parentReader.bookId, pageId: page.pageId },
-            url: getBaseUrl() + "Reader/GetTermsOnPage",
-            dataType: "json",
-            contentType: "application/json",
-            success: (response) => {
+            if (page.pageId === this.parentReader.getActualPage().pageId) {
 
-                if (page.pageId === this.parentReader.getActualPage().pageId) {
+                $(this.termsResultItemsLoadDiv).hide();
+                $(this.termsResultItemsDiv).show();
 
-                    $(this.termsResultItemsLoadDiv).hide();
-                    $(this.termsResultItemsDiv).show();
-
-                    var terms = response["terms"] as Array<ITermContract>;
-                    for (var i = 0; i < terms.length; i++) {
-                        var term = terms[i];
-                        this.termsOrderedList.appendChild(this.createTermItem(term.id, term.name));
-                    }
-
-                    if (terms.length === 0 && this.termsOrderedList.innerHTML == "") {
-                        $(this.termsOrderedList).addClass("no-items");
-                        $(this.termsOrderedList).append("Na této stránce se nenachází žádné téma");
-                    }
+                var terms = response["terms"] as Array<ITermContract>;
+                for (var i = 0; i < terms.length; i++) {
+                    var term = terms[i];
+                    this.termsOrderedList.appendChild(this.createTermItem(term.id, term.name));
                 }
-            },
-            error: (response) => {
-                if (page.pageId === this.parentReader.getActualPage().pageId) {
-                    $(this.termsResultItemsLoadDiv).hide();
-                    $(this.termsResultItemsDiv).show();
+
+                if (terms.length === 0 && this.termsOrderedList.innerHTML == "") {
                     $(this.termsOrderedList).addClass("no-items");
-                    $(this.termsOrderedList).append("Chyba při načítání témat na stránce '" + page.text + "'");
+                    $(this.termsOrderedList).append("Na této stránce se nenachází žádné téma");
                 }
+            }
+        });
+        terms.fail(() => {
+            if (page.pageId === this.parentReader.getActualPage().pageId) {
+                $(this.termsResultItemsLoadDiv).hide();
+                $(this.termsResultItemsDiv).show();
+                $(this.termsOrderedList).addClass("no-items");
+                $(this.termsOrderedList).append("Chyba při načítání témat na stránce '" + page.text + "'");
             }
         });
     }
@@ -2307,35 +2270,28 @@ class TextPanel extends ContentViewPanel {
     private downloadPageById(page: BookPage, onSuccess: () => any = null, onFailed: () => any = null) {
         var pageContainer = document.getElementById(page.pageId.toString());
         $(pageContainer).addClass("loading");
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            data: { snapshotId: this.parentReader.versionId, pageId: page.pageId },
-            url: getBaseUrl() + "Reader/GetBookPage",
-            dataType: "json",
-            contentType: "application/json",
-            success: (response) => {
-                $(pageContainer).empty();
-                $(pageContainer).append(response["pageText"]);
-                $(pageContainer).removeClass("loading");
-                $(pageContainer).removeClass("unloaded");
+        var bookPage: JQueryXHR = ServerCommunication.getBookPage(this.parentReader.versionId, page.pageId);
+        bookPage.done((response) => {
+            $(pageContainer).empty();
+            $(pageContainer).append(response["pageText"]);
+            $(pageContainer).removeClass("loading");
+            $(pageContainer).removeClass("unloaded");
 
-                if (this.parentReader.clickedMoveToPage) {
-                    this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex, true);
-                }
+            if (this.parentReader.clickedMoveToPage) {
+                this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex, true);
+            }
 
-                if (onSuccess != null) {
-                    onSuccess();
-                }
-            },
-            error: (response) => {
-                $(pageContainer).empty();
-                $(pageContainer).removeClass("loading");
-                $(pageContainer).append("Chyba při načítání stránky '" + page.text + "'");
+            if (onSuccess != null) {
+                onSuccess();
+            }
+        });
+        bookPage.fail(() => {
+            $(pageContainer).empty();
+            $(pageContainer).removeClass("loading");
+            $(pageContainer).append("Chyba při načítání stránky '" + page.text + "'");
 
-                if (onFailed != null) {
-                    onFailed();
-                }
+            if (onFailed != null) {
+                onFailed();
             }
         });
     }
@@ -2343,37 +2299,31 @@ class TextPanel extends ContentViewPanel {
     private downloadSearchPageById(query: string, queryIsJson: boolean, page: BookPage, onSuccess: () => any = null, onFailed: () => any = null) {
         var pageContainer = document.getElementById(page.pageId.toString());
         $(pageContainer).addClass("loading");
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            data: { query: query, isQueryJson: queryIsJson, snapshotId: this.parentReader.versionId, pageId: page.pageId },
-            url: getBaseUrl() + "Reader/GetBookSearchPageByXmlId",
-            dataType: "json",
-            contentType: "application/json",
-            success: (response) => {
-                $(pageContainer).empty();
-                $(pageContainer).append(response["pageText"]);
-                $(pageContainer).removeClass("loading");
-                $(pageContainer).removeClass("unloaded");
-                $(pageContainer).removeClass("search-unloaded");
-                $(pageContainer).addClass("search-loaded");
+        var bookPage: JQueryXHR = ServerCommunication.getBookPageSearch(this.parentReader.versionId, page.pageId, queryIsJson, query);
+        bookPage.done((response) => {
+            $(pageContainer).empty();
+            $(pageContainer).append(response["pageText"]);
+            $(pageContainer).removeClass("loading");
+            $(pageContainer).removeClass("unloaded");
+            $(pageContainer).removeClass("search-unloaded");
+            $(pageContainer).addClass("search-loaded");
 
-                if (this.parentReader.clickedMoveToPage) {
-                    this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex, true);
-                }
+            if (this.parentReader.clickedMoveToPage) {
+                this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex, true);
+            }
 
-                if (onSuccess != null) {
-                    onSuccess();
-                }
-            },
-            error: (response) => {
-                $(pageContainer).empty();
-                $(pageContainer).removeClass("loading");
-                $(pageContainer).append("Chyba při načítání stránky '" + page.text + "' s výsledky vyhledávání");
+            if (onSuccess != null) {
+                onSuccess();
+            }
+        });
 
-                if (onFailed != null) {
-                    onFailed();
-                }
+        bookPage.fail(() => {
+            $(pageContainer).empty();
+            $(pageContainer).removeClass("loading");
+            $(pageContainer).append("Chyba při načítání stránky '" + page.text + "' s výsledky vyhledávání");
+
+            if (onFailed != null) {
+                onFailed();
             }
         });
     }
@@ -2456,38 +2406,29 @@ class AudioPanel extends ContentViewPanel {
         audioContainerDiv.appendChild(trackName);
         var trackSelect = document.createElement("select");
         trackSelect.id = "track-select";
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            data: { projectId: this.parentReader.bookId },
-            url: getBaseUrl() + "Reader/GetAudioBook",
-            dataType: "json",
-            contentType: "application/json",
-            success: (response) => {
-                var audioBook = response["audioBook"];
-                this.numberOfTracks = audioBook.Tracks.length;
-                for (var index in audioBook.Tracks) {
-                    var track = document.createElement("option");
-                    $(track).prop("value", index);
-                    track.innerHTML = audioBook.Tracks[index].Name;
-                    $(trackSelect).append(track);
-                }
-                //TODO FullBookRecordings is null?!
-                //for (var recording of response["fullBookRec"]) {    
-                //    var download = document.createElement("a");
-                //    $(download).addClass("audio-download-href");
-                //    download.href = getBaseUrl() + "AudioBooks/AudioBooks/DownloadAudio?audioId=" + recording.Id + "&audioType=" + recording[index].AudioType;;
-                //    $(download).html(recording.AudioType);
-                //    $(".full-book-download").append(download);
-                //}
+        var book: JQueryXHR = ServerCommunication.getAudioBook(this.parentReader.bookId);
+        book.done((response) => {
+            var audioBook = response["audioBook"];
+            this.numberOfTracks = audioBook.Tracks.length;
+            for (var index in audioBook.Tracks) {
+                var track = document.createElement("option");
+                $(track).prop("value", index);
+                track.innerHTML = audioBook.Tracks[index].Name;
+                $(trackSelect).append(track);
+            }
+            //TODO FullBookRecordings is null?!
+            //for (var recording of response["fullBookRec"]) {    
+            //    var download = document.createElement("a");
+            //    $(download).addClass("audio-download-href");
+            //    download.href = getBaseUrl() + "AudioBooks/AudioBooks/DownloadAudio?audioId=" + recording.Id + "&audioType=" + recording[index].AudioType;;
+            //    $(download).html(recording.AudioType);
+            //    $(".full-book-download").append(download);
+            //}
 
-                this.trackId = 0;
-                this.reloadTrack();
-                $(".reader-audio-container").removeClass("loading");
-            },
-            error: (response) => {
-            }           
-    });
+            this.trackId = 0;
+            this.reloadTrack();
+            $(".reader-audio-container").removeClass("loading");
+        });           
 
         $(trackSelect).change(() => {
             this.trackId = $(trackSelect).val();
@@ -2542,38 +2483,29 @@ class AudioPanel extends ContentViewPanel {
     }
 
     private reloadTrack() {
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            data: { projectId: this.parentReader.bookId, trackId: this.trackId },
-            url: getBaseUrl() + "Reader/GetAudioBookTrack",
-            dataType: "json",
-            contentType: "application/json",
-            success: (response) => {
-                var track = response["track"];
-                $(".track-name").html(track.Name);
-                $("#track-select").val(this.trackId);
-                $(".audio-text").html(track.Text);
-                var audioPlayer = $("audio");
-                audioPlayer.load();
-                $(audioPlayer).empty();
-                $(".track").html("Stáhnout kapitolu:");
-                for (var index in track.Recordings) {
-                    var source = document.createElement("source");
-                    source.src = getBaseUrl() + "AudioBooks/AudioBooks/DownloadAudio?audioId=" + track.Recordings[index].Id + "&audioType=" + track.Recordings[index].AudioType;
-                    source.type = track.Recordings[index].MimeType;
-                    $(audioPlayer).append(source);
+        var getTrack: JQueryXHR = ServerCommunication.getTrack(this.parentReader.bookId, this.trackId);
+        getTrack.done((response) => {
+            var track = response["track"];
+            $(".track-name").html(track.Name);
+            $("#track-select").val(this.trackId);
+            $(".audio-text").html(track.Text);
+            var audioPlayer = $("audio");
+            audioPlayer.load();
+            $(audioPlayer).empty();
+            $(".track").html("Stáhnout kapitolu:");
+            for (var index in track.Recordings) {
+                var source = document.createElement("source");
+                source.src = getBaseUrl() + "AudioBooks/AudioBooks/DownloadAudio?audioId=" + track.Recordings[index].Id + "&audioType=" + track.Recordings[index].AudioType;
+                source.type = track.Recordings[index].MimeType;
+                $(audioPlayer).append(source);
 
-                    var download = document.createElement("a");
-                    $(download).addClass("audio-download-href");
-                    download.href = source.src;
-                    $(download).html(track.Recordings[index].AudioType);
-                    $(".track").append(download);
-                }
-                $(audioPlayer).append("Váš prohlížeč nepodporuje html audio");
-            },
-            error: (response) => {
+                var download = document.createElement("a");
+                $(download).addClass("audio-download-href");
+                download.href = source.src;
+                $(download).html(track.Recordings[index].AudioType);
+                $(".track").append(download);
             }
+            $(audioPlayer).append("Váš prohlížeč nepodporuje html audio");
         });
     }
 }

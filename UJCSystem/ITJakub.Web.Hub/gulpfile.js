@@ -343,6 +343,17 @@ gulp.task("bundle:ridics_admin_composition-key-table-editor", function () {
         .pipe(gulp.dest(paths.webroot + "Areas/Admin/js"));
 });
 
+gulp.task("bundle:new_reader", function() {
+    return gulp.src([
+        paths.webroot + "Areas/GoldenLayout/js/itjakub.goldenlayout.js",
+        paths.webroot + "Areas/GoldenLayout/js/ServerCommunication.js"
+    ])
+    .pipe(sourcemaps.init())
+    .pipe(concat("new-reader.bundle.js"))
+    .pipe(sourcemaps.write())
+        .pipe(gulp.dest(paths.webroot + "Areas/GoldenLayout/js"));
+});
+
 gulp.task("bundlejs_areas",
 [
     "bundle:itjakub_audiobooks",
@@ -357,7 +368,8 @@ gulp.task("bundlejs_areas",
     "bundle:ridics_admin_text-editor",
     "bundle:ridics_admin_page-image-viewer",
     "bundle:ridics_admin_page-list-editor",
-    "bundle:ridics_admin_composition-key-table-editor"
+    "bundle:ridics_admin_composition-key-table-editor",
+    "bundle:new_reader"
 ]);
 
 
