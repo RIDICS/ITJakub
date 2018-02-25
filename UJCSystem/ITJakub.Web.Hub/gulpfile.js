@@ -346,7 +346,8 @@ gulp.task("bundle:ridics_admin_composition-key-table-editor", function () {
 gulp.task("bundle:new_reader", function() {
     return gulp.src([
         paths.webroot + "Areas/GoldenLayout/js/itjakub.goldenlayout.js",
-        paths.webroot + "Areas/GoldenLayout/js/ServerCommunication.js"
+        paths.webroot + "Areas/GoldenLayout/js/panels.js",
+        paths.webroot + "Areas/GoldenLayout/js/serverCommunication.js"
     ])
     .pipe(sourcemaps.init())
     .pipe(concat("new-reader.bundle.js"))

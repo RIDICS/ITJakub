@@ -1,5 +1,5 @@
 ﻿abstract class ServerCommunication {
-    public static getEditionNote(bookId: string): JQueryXHR {
+    static getEditionNote(bookId: string): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
@@ -10,7 +10,7 @@
         });
     }
 
-    public static getBookDetail(bookId: string): JQueryXHR {
+    static getBookDetail(bookId: string): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
@@ -21,7 +21,7 @@
         });
     }
 
-    public static getBookContent(bookId: string): JQueryXHR {
+    static getBookContent(bookId: string): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
@@ -32,7 +32,7 @@
         });
     }
 
-    public static getTrack(bookId: string, trackId: number): JQueryXHR {
+    static getTrack(bookId: string, trackId: number): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
@@ -42,7 +42,7 @@
             contentType: "application/json"
         });
     }
-    public static getTerms(bookId: string, pageId: number): JQueryXHR {
+    static getTerms(bookId: string, pageId: number): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
@@ -53,7 +53,7 @@
         });
     }
 
-    public static getBookPage(versionId: string, pageId: number): JQueryXHR {
+    static getBookPage(versionId: string, pageId: number): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
@@ -64,7 +64,7 @@
         });
     }
 
-    public static getBookPageSearch(versionId: string, pageId: number, queryIsJson: boolean, query: string): JQueryXHR {
+    static getBookPageSearch(versionId: string, pageId: number, queryIsJson: boolean, query: string): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
@@ -75,7 +75,7 @@
         });
     }
 
-    public static getAudioBook(bookId: string): JQueryXHR {
+    static getAudioBook(bookId: string): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
@@ -86,7 +86,7 @@
         });
     }
 
-    public static hasBookPage(bookId: string, bookVersionId: string): JQueryXHR {
+    static hasBookPage(bookId: string, bookVersionId: string): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
@@ -94,6 +94,74 @@
             url: document.getElementsByTagName("body")[0].getAttribute("data-has-book-text-url"),
             dataType: "json",
             contentType: "application/json"
+        });
+    }
+
+    static textSearchBookCount(bookId: string, versionId: string, text: string): JQueryXHR {
+        return $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Editions/Editions/TextSearchInBookCount",
+            data: { text: text, projectId: bookId, snapshotId: versionId },
+            dataType: 'json',
+            contentType: 'application/json'
+        });
+    }
+
+    static advancedSearchBookCount(bookId: string, versionId: string, json: string): JQueryXHR {
+        return $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Editions/Editions/AdvancedSearchInBookCount",
+            data: { json: json, projectId: bookId, snapshotId: versionId },
+            dataType: 'json',
+            contentType: 'application/json'
+        });
+    }
+
+    static textSearchMatchHit(bookId: string, versionId: string, text: string): JQueryXHR {
+        return $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Editions/Editions/TextSearchInBookPagesWithMatchHit",
+            data: { text: text, projectId: bookId, snapshotId: versionId },
+            dataType: 'json',
+            contentType: 'application/json'
+        });
+
+    }
+
+    static advancedSearchMatchHit(bookId: string, versionId: string, json: string): JQueryXHR {
+        return $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Editions/Editions/AdvancedSearchInBookPagesWithMatchHit",
+            data: { json: json, projectId: bookId, snapshotId: versionId },
+            dataType: 'json',
+            contentType: 'application/json'
+        });
+    }
+
+    static textSearchBookPaged(bookId: string, versionId: string, text: string, start: number, count: number):
+        JQueryXHR {
+        return $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Editions/Editions/TextSearchInBookPaged",
+            data: { text: text, start: start, count: count, projectId: bookId, snapshotId: versionId },
+            dataType: 'json',
+            contentType: 'application/json'
+        });
+    }
+
+    static advancedSearchBookPaged(bookId: string, versionId: string, json: string, start: number, count: number): JQueryXHR {
+        return $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Editions/Editions/AdvancedSearchInBookPaged",
+            data: { json: json, start: start, count: count, projectId: bookId, snapshotId: versionId },
+            dataType: 'json',
+            contentType: 'application/json'
         });
     }
 }
