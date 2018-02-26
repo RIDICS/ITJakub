@@ -164,4 +164,15 @@
             contentType: 'application/json'
         });
     }
+
+    static hasBookImage(bookId: string, versionId: string): JQueryXHR {
+        return $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { bookId: bookId, snapshotId: versionId },
+            url: getBaseUrl() + "Reader/HasBookImage",
+            dataType: "json",
+            contentType: "application/json"
+        });
+    }
 }

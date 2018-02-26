@@ -17,7 +17,36 @@ function initGoldenReader(bookId: string, versionId: string, bookTitle: string, 
     );
     readerPlugin.makeReader(bookId, versionId, bookTitle, pageList);
     var search: Search;
+    var favoriteQueriesConfig: IModulInicializatorConfigurationSearchFavorites = {
+        bookType: BookTypeEnum.Edition,
+        queryType: QueryTypeEnum.Reader
+    };
+    search = new Search(<any>$("#SearchDiv")[0], advancedSearch, basicSearch, favoriteQueriesConfig);
+    var enabledOptions = new Array<SearchTypeEnum>();
+    enabledOptions.push(SearchTypeEnum.Fulltext);
+    enabledOptions.push(SearchTypeEnum.TokenDistance);
+    enabledOptions.push(SearchTypeEnum.Sentence);
+    enabledOptions.push(SearchTypeEnum.Heading);
 
+    search.makeSearch(enabledOptions);
+
+    if (typeof searchedText !== "undefined" && searchedText !== null) {
+        var decodedText = decodeURIComponent(searchedText);
+        decodedText = replaceSpecialChars(decodedText);
+        search.processSearchQuery(decodedText);
+    }
+
+    if (typeof initPageId !== "undefined" && initPageId !== null) {
+        var decodedText = decodeURIComponent(initPageId);
+        decodedText = replaceSpecialChars(decodedText);
+        var pageId = Number(decodedText);
+        readerPlugin.moveToPage(pageId, true);
+    }
+
+    //label item in main menu
+    $('#main-plugins-menu').find('li').removeClass('active');
+    var mainMenuLi = $('#editions-menu');
+    $(mainMenuLi).addClass('active');
     function convertSearchResults(responseResults: Array<Object>): SearchHitResult[] {
         var searchResults = new Array<SearchHitResult>();
         for (var i = 0; i < responseResults.length; i++) {
@@ -36,7 +65,6 @@ function initGoldenReader(bookId: string, versionId: string, bookTitle: string, 
     }
 
     function editionAdvancedSearchPaged(json: string, pageNumber: number) {
-
         if (typeof json === "undefined" || json === null || json === "") return;
 
         var start = (pageNumber - 1) * readerPlugin.getSearchResultsCountOnPage();
@@ -111,36 +139,7 @@ function initGoldenReader(bookId: string, versionId: string, bookTitle: string, 
     }
 
 
-    var favoriteQueriesConfig: IModulInicializatorConfigurationSearchFavorites = {
-        bookType: BookTypeEnum.Edition,
-        queryType: QueryTypeEnum.Reader
-    };
-    search = new Search(<any>$("#SearchDiv")[0], advancedSearch, basicSearch, favoriteQueriesConfig);
-    var enabledOptions = new Array<SearchTypeEnum>();
-    enabledOptions.push(SearchTypeEnum.Fulltext);
-    enabledOptions.push(SearchTypeEnum.TokenDistance);
-    enabledOptions.push(SearchTypeEnum.Sentence);
-    enabledOptions.push(SearchTypeEnum.Heading);
-
-    search.makeSearch(enabledOptions);
-
-    if (typeof searchedText !== "undefined" && searchedText !== null) {
-        var decodedText = decodeURIComponent(searchedText);
-        decodedText = replaceSpecialChars(decodedText);
-        search.processSearchQuery(decodedText);
-    }
-
-    if (typeof initPageId !== "undefined" && initPageId !== null) {
-        var decodedText = decodeURIComponent(initPageId);
-        decodedText = replaceSpecialChars(decodedText);
-        var pageId = Number(decodedText);
-        readerPlugin.moveToPage(pageId, true);
-    }
-
-    //label item in main menu
-    $('#main-plugins-menu').find('li').removeClass('active');
-    var mainMenuLi = $('#editions-menu');
-    $(mainMenuLi).addClass('active');
+    
 }
 
 function listBookReadClicked(target) {
@@ -951,42 +950,52 @@ class ReaderLayout {
 
     private makeViewButtons(): HTMLDivElement {
         var readerLayout = this;
-        var viewButtons: HTMLDivElement = document.createElement("div");
+        var viewControl: HTMLDivElement = document.createElement("div");
+        $(viewControl).addClass("view-control");
+
+        var viewButtons = document.createElement("div");
         $(viewButtons).addClass("buttons");
 
-        var textButton: HTMLButtonElement = document.createElement("button");
-        $(textButton).addClass("text-button");
-        var textSpan = document.createElement("span");
-        $(textSpan).addClass("glyphicon glyphicon-font");
-        $(textButton).append(textSpan);
+        this.hasBookPage(this.bookId, this.versionId, () => {
+            var textButton: HTMLButtonElement = document.createElement("button");
+            $(textButton).addClass("text-button");
+            var textSpan = document.createElement("span");
+            $(textSpan).addClass("glyphicon glyphicon-font");
+            $(textButton).append(textSpan);
 
-        var textSpanText = document.createElement("span");
-        $(textSpanText).addClass("button-text");
-        $(textSpanText).append("Text");
-        $(textButton).append(textSpanText);
+            var textSpanText = document.createElement("span");
+            $(textSpanText).addClass("button-text");
+            $(textSpanText).append("Text");
+            $(textButton).append(textSpanText);
 
-        $(textButton).click((event: Event) => {
-            readerLayout.createViewPanel(this.textPanelId, textSpanText.innerHTML);
+            $(textButton).click((event: Event) => {
+                readerLayout.createViewPanel(this.textPanelId, textSpanText.innerHTML);
+            });
+            viewButtons.appendChild(textButton); 
+
+            var checkboxDiv = this.createCheckboxDiv();
+            viewControl.appendChild(checkboxDiv);
         });
-        viewButtons.appendChild(textButton);
+            
 
+        this.hasBookImage(this.bookId, this.versionId,() => {
+            var imageButton: HTMLButtonElement = document.createElement("button");
+            $(imageButton).addClass("image-button");
+            var imageSpan = document.createElement("span");
+            $(imageSpan).addClass("glyphicon glyphicon-picture");
+            $(imageButton).append(imageSpan);
 
-        var imageButton: HTMLButtonElement = document.createElement("button");
-        $(imageButton).addClass("image-button");
-        var imageSpan = document.createElement("span");
-        $(imageSpan).addClass("glyphicon glyphicon-picture");
-        $(imageButton).append(imageSpan);
+            var imageSpanText = document.createElement("span");
+            $(imageSpanText).addClass("button-text");
+            $(imageSpanText).append("Obraz");
+            $(imageButton).append(imageSpanText);
 
-        var imageSpanText = document.createElement("span");
-        $(imageSpanText).addClass("button-text");
-        $(imageSpanText).append("Obraz");
-        $(imageButton).append(imageSpanText);
-
-        $(imageButton).click((event: Event) => {
-            readerLayout.createViewPanel(this.imagePanelId, imageSpanText.innerHTML);
+            $(imageButton).click((event: Event) => {
+                readerLayout.createViewPanel(this.imagePanelId, imageSpanText.innerHTML);
+            });
+            viewButtons.appendChild(imageButton);       
         });
-        viewButtons.appendChild(imageButton);
-
+            
 
         var audioButton: HTMLButtonElement = document.createElement("button");
         $(audioButton).addClass("audio-button");
@@ -1003,11 +1012,9 @@ class ReaderLayout {
             readerLayout.createViewPanel(this.audioPanelId, audioSpanText.innerHTML);
         });
         viewButtons.appendChild(audioButton);
+        viewControl.appendChild(viewButtons);
 
-        var checkboxDiv = this.createCheckboxDiv();
-        viewButtons.appendChild(checkboxDiv);
-
-        return viewButtons;
+        return viewControl;
     }
 
     private createCheckboxDiv(): HTMLDivElement {
@@ -1479,6 +1486,33 @@ class ReaderLayout {
             this.contentViewPanels.push(audioPanel);
         }
         return this.audioPanel.panelHtml;
+    }
+
+    protected hasBookImageCache: { [key: string]: { [key: string]: boolean; }; } = {};
+
+    hasBookImage(bookId: string, bookVersionId: string, onTrue: () => any = null, onFalse: () => any = null) {
+        if (this.hasBookImageCache[bookId] === undefined || this.hasBookImageCache[bookId][bookVersionId] === undefined) {
+            var hasBookImageAjax: JQueryXHR = ServerCommunication.hasBookImage(bookId, bookVersionId);
+            hasBookImageAjax.done((response: { HasBookImage: boolean }) => {
+                if (this.hasBookImageCache[bookId] === undefined) {
+                    this.hasBookImageCache[bookId] = {};
+                }
+                this.hasBookImageCache[bookId][bookVersionId] = response.HasBookImage;
+                if (response.HasBookImage && onTrue !== null) {
+                    onTrue();
+                } else if (!response.HasBookImage && onFalse !== null) {
+                    onFalse();
+                }    
+            });
+
+            hasBookImageAjax.fail((response) => {
+                console.error(response);    
+            });
+        } else if (this.hasBookImageCache[bookId][bookVersionId] && onTrue !== null) {
+            onTrue();
+        } else if (!this.hasBookImageCache[bookId][bookVersionId] && onFalse !== null) {
+            onFalse();
+        }
     }
 
     hasBookPage(bookId: string, bookVersionId: string, onTrue: () => any = null, onFalse: () => any = null) {

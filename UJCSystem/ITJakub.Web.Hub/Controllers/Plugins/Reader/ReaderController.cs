@@ -34,7 +34,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
         {
             using (var client = GetRestClient())
             {
-                return Json(new { HasBookImage = client.HasBookAnyImage(bookId) });
+                return Json(new { HasBookImage = client.HasBookAnyImage(bookId) }, GetJsonSerializerSettings());
             }
         }
 

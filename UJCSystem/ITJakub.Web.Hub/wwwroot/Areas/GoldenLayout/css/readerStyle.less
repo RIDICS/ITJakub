@@ -43,11 +43,13 @@
     background-color: white;
     width: 100%;
     padding: 10px;
-    height: 77vh;
+    height: 100%;
+    overflow-y: scroll;
 
     ul {
-        padding-left: 30px;
+        padding-left: 10px;
         font-weight: 600;
+        list-style: none;
     }
 
     a {
@@ -244,5 +246,15 @@ button {
                 cursor: pointer;
             }
         }
+    }
+}
+
+.loading :nth-child(n){
+    display: none;
+}
+.view-control {
+    float: right;
+    .buttons {
+        float: none;
     }
 }
