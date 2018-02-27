@@ -123,6 +123,9 @@ namespace Vokabular.MainService.Core.Managers
 
             bookInfo.Tracks = trackList;
 
+            var fullBookRecordings = audioBookDetailWork.Recordings.Where(x => x.ResourceTrack == null);
+            bookInfo.FullBookRecordings = Mapper.Map<List<AudioContract>>(fullBookRecordings);
+
             return bookInfo;
         }
 
