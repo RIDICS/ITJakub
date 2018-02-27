@@ -155,9 +155,8 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             using (var client = GetRestClient())
             {
                 var audioBook = client.GetAudioBookDetail(projectId);
-                var bookRecordings = audioBook.FullBookRecordings;
 
-                return Json(new { audioBook = audioBook, fullBookRec = bookRecordings }, GetJsonSerializerSettings());
+                return Json(new {  audioBook }, GetJsonSerializerSettings());
             }
         }
 

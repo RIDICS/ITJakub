@@ -50,12 +50,11 @@ class ContentPanel extends ToolPanel {
         $(this.panelHtml).empty();
         $(this.panelHtml).addClass("loader");
         var bookContent: JQueryXHR = ServerCommunication.getBookContent(this.parentReader.bookId);
-        bookContent.done((response) => {
-            var rootContentItems: IChapterHieararchyContract[] = response["content"];
+        bookContent.done((response: {content: IChapterHieararchyContract[]}) => {
             var ulElement = document.createElement("ul");
             $(ulElement).addClass("content-item-root-list");
-            for (var i = 0; i < rootContentItems.length; i++) {
-                var chapterItem: IChapterHieararchyContract = rootContentItems[i];
+            for (var i = 0; i < response.content.length; i++) {
+                var chapterItem: IChapterHieararchyContract = response.content[i];
                 $(ulElement).append(this.makeContentItem(this.parseJsonItemToContentItem(chapterItem)));
             }
 
@@ -527,20 +526,19 @@ class TermsResultPanel extends TermsPanel {
         $(this.termsResultItemsLoadDiv).show();
         $(this.termsResultItemsDiv).hide();
         var terms: JQueryXHR = ServerCommunication.getTerms(this.parentReader.bookId, page.pageId);
-        terms.done((response) => {
+        terms.done((response: {terms: Array<ITermContract>}) => {
 
             if (page.pageId === this.parentReader.getActualPage().pageId) {
 
                 $(this.termsResultItemsLoadDiv).hide();
                 $(this.termsResultItemsDiv).show();
 
-                var terms = response["terms"] as Array<ITermContract>;
-                for (var i = 0; i < terms.length; i++) {
-                    var term = terms[i];
+                for (var i = 0; i < response.terms.length; i++) {
+                    var term = response.terms[i];
                     this.termsOrderedList.appendChild(this.createTermItem(term.id, term.name));
                 }
 
-                if (terms.length === 0 && this.termsOrderedList.innerHTML == "") {
+                if (response.terms.length === 0 && this.termsOrderedList.innerHTML == "") {
                     $(this.termsOrderedList).addClass("no-items");
                     $(this.termsOrderedList).append("Na této stránce se nenachází žádné téma");
                 }
@@ -702,9 +700,9 @@ class TextPanel extends ContentViewPanel {
         var pageContainer = document.getElementById(page.pageId.toString());
         $(pageContainer).addClass("loading");
         var bookPage: JQueryXHR = ServerCommunication.getBookPage(this.parentReader.versionId, page.pageId);
-        bookPage.done((response) => {
+        bookPage.done((response: { pageText: string}) => {
             $(pageContainer).empty();
-            $(pageContainer).append(response["pageText"]);
+            $(pageContainer).append(response.pageText);
             $(pageContainer).removeClass("loading");
             $(pageContainer).removeClass("unloaded");
 
@@ -731,9 +729,9 @@ class TextPanel extends ContentViewPanel {
         var pageContainer = document.getElementById(page.pageId.toString());
         $(pageContainer).addClass("loading");
         var bookPage: JQueryXHR = ServerCommunication.getBookPageSearch(this.parentReader.versionId, page.pageId, queryIsJson, query);
-        bookPage.done((response) => {
+        bookPage.done((response: {pageText: string}) => {
             $(pageContainer).empty();
-            $(pageContainer).append(response["pageText"]);
+            $(pageContainer).append(response.pageText);
             $(pageContainer).removeClass("loading");
             $(pageContainer).removeClass("unloaded");
             $(pageContainer).removeClass("search-unloaded");
@@ -838,23 +836,21 @@ class AudioPanel extends ContentViewPanel {
         var trackSelect = document.createElement("select");
         trackSelect.id = "track-select";
         var book: JQueryXHR = ServerCommunication.getAudioBook(this.parentReader.bookId);
-        book.done((response) => {
-            var audioBook = response["audioBook"];
-            this.numberOfTracks = audioBook.Tracks.length;
-            for (var index in audioBook.Tracks) {
+        book.done((response: {audioBook: IAudioBookSearchResultContract}) => {
+            this.numberOfTracks = response.audioBook.Tracks.length;
+            for (var index in response.audioBook.Tracks) {
                 var track = document.createElement("option");
                 $(track).prop("value", index);
-                track.innerHTML = audioBook.Tracks[index].Name;
+                track.innerHTML = response.audioBook.Tracks[index].Name;
                 $(trackSelect).append(track);
             }
-            //TODO FullBookRecordings is null?!
-            //for (var recording of response["fullBookRec"]) {    
-            //    var download = document.createElement("a");
-            //    $(download).addClass("audio-download-href");
-            //    download.href = getBaseUrl() + "AudioBooks/AudioBooks/DownloadAudio?audioId=" + recording.Id + "&audioType=" + recording[index].AudioType;;
-            //    $(download).html(recording.AudioType);
-            //    $(".full-book-download").append(download);
-            //}
+            for (var recording of response.audioBook.FullBookRecordings) {    
+                var download = document.createElement("a");
+                $(download).addClass("audio-download-href");
+                download.href = getBaseUrl() + "AudioBooks/AudioBooks/DownloadAudio?audioId=" + recording.Id + "&audioType=" + recording.AudioType;;
+                $(download).html(recording.AudioType);
+                $(".full-book-download").append(download);
+            }
 
             this.trackId = 0;
             this.reloadTrack();
@@ -915,25 +911,24 @@ class AudioPanel extends ContentViewPanel {
 
     private reloadTrack() {
         var getTrack: JQueryXHR = ServerCommunication.getTrack(this.parentReader.bookId, this.trackId);
-        getTrack.done((response) => {
-            var track = response["track"];
-            $(".track-name").html(track.Name);
+        getTrack.done((response: {track: ITrackWithRecordingContract}) => {
+            $(".track-name").html(response.track.Name);
             $("#track-select").val(this.trackId);
-            $(".audio-text").html(track.Text);
+            $(".audio-text").html(response.track.Text);
             var audioPlayer = $("audio");
             audioPlayer.load();
             $(audioPlayer).empty();
             $(".track").html("Stáhnout kapitolu:");
-            for (var index in track.Recordings) {
+            for (var index in response.track.Recordings) {
                 var source = document.createElement("source");
-                source.src = getBaseUrl() + "AudioBooks/AudioBooks/DownloadAudio?audioId=" + track.Recordings[index].Id + "&audioType=" + track.Recordings[index].AudioType;
-                source.type = track.Recordings[index].MimeType;
+                source.src = getBaseUrl() + "AudioBooks/AudioBooks/DownloadAudio?audioId=" + response.track.Recordings[index].Id + "&audioType=" + response.track.Recordings[index].AudioType;
+                source.type = response.track.Recordings[index].MimeType;
                 $(audioPlayer).append(source);
 
                 var download = document.createElement("a");
                 $(download).addClass("audio-download-href");
                 download.href = source.src;
-                $(download).html(track.Recordings[index].AudioType);
+                $(download).html(response.track.Recordings[index].AudioType);
                 $(".track").append(download);
             }
             $(audioPlayer).append("Váš prohlížeč nepodporuje html audio");

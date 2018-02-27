@@ -183,6 +183,61 @@ interface IBookContract {
     lastModification: string;
 }
 
+interface IAudioBookSearchResultContract {
+    Tracks: Array<ITrackWithRecordingContract>;
+    FullBookRecordings: Array<IAudioContract>;
+
+    bookId: number;
+    title: string;
+    subTitle: string;
+    biblText: string;
+    originDate: string;
+    notBefore: string;
+    notAfter: string;
+
+    publishPlace: string;
+    publishDate: string;
+    publisherText: string;
+    publisherEmail: string;
+
+    authorsLabel: string;
+    copyright: string;
+    pageCount: number;
+    createTime: string;
+    createTimeString: string;
+
+    manuscriptIdno: string;
+    manuscriptSettlement: string;
+    manuscriptCountry: string;
+    manuscriptRepository: string;
+    manuscriptExtent: string;
+    manuscriptTitle: string;
+
+    relicAbbreviation: string;
+    sourceAbbreviation: string;
+}
+
+interface ITrackWithRecordingContract {
+    Id: number;
+    VersionId: number;
+    Name: string;
+    Text: string;
+    Position: number;
+    ChapterId: number;
+    BeginningPageId: number;
+    Recordings: Array<IAudioContract>;
+}
+
+interface IAudioContract {
+    Id: number;
+    VersionId: number;
+    VersionNumber: number;
+    Duration: string;
+    FileName: string;
+    AudioType: string;
+    MimeType: string ;
+}
+
 interface ICorpusSearchResult {
     bookId: number;
     //bookXmlId: string;

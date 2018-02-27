@@ -111,14 +111,14 @@ function initGoldenReader(bookId: string, versionId: string, bookTitle: string, 
 
         if (typeof text === "undefined" || text === null || text === "") return;
         var textSearch: JQueryXHR = ServerCommunication.textSearchBookCount(readerPlugin.getBookId(), readerPlugin.getVersionId(), text);
-        textSearch.done((response) => {
+        textSearch.done((response: {count: number}) => {
             updateQueryStringParameter("searchText", text);
-            readerPlugin.setResultsPaging(response["count"], paginatorPageClickCallback);    
+            readerPlugin.setResultsPaging(response.count, paginatorPageClickCallback);    
         });
 
         var textSearchMatchHit: JQueryXHR = ServerCommunication.textSearchMatchHit(readerPlugin.getBookId(), readerPlugin.getVersionId(), text)
-        textSearchMatchHit.done((response) => {
-            readerPlugin.showSearchResultInPages(text, false, response["pages"]);
+        textSearchMatchHit.done((response: {pages: Array<IPage>}) => {
+            readerPlugin.showSearchResultInPages(text, false, response.pages);
         }); 
     }
 
@@ -126,14 +126,14 @@ function initGoldenReader(bookId: string, versionId: string, bookTitle: string, 
         if (typeof json === "undefined" || json === null || json === "") return;
         var advancedSearch: JQueryXHR =
             ServerCommunication.advancedSearchBookCount(readerPlugin.getBookId(), readerPlugin.getVersionId(), json);
-        advancedSearch.done((response) => {
+        advancedSearch.done((response: {count: number}) => {
             updateQueryStringParameter("searchText", json);
-            readerPlugin.setResultsPaging(response["count"], paginatorPageClickCallback);    
+            readerPlugin.setResultsPaging(response.count, paginatorPageClickCallback);    
         });
 
         var advancedSearchMatchHit: JQueryXHR = ServerCommunication.advancedSearchMatchHit(readerPlugin.getBookId(), readerPlugin.getVersionId(), json);
-        advancedSearchMatchHit.done((response) => {
-            readerPlugin.showSearchResultInPages(json, true, response["pages"]);    
+        advancedSearchMatchHit.done((response: {pages: Array<IPage>}) => {
+            readerPlugin.showSearchResultInPages(json, true, response.pages);    
         });
         
     }
@@ -593,13 +593,13 @@ class ReaderLayout {
         $(editionNoteDiv).append(editionNoteHeader);
 
         var editionNote: JQueryXHR = ServerCommunication.getEditionNote(this.bookId);
-        editionNote.done((response) => {
+        editionNote.done((response: {editionNote: string}) => {
             var editionNoteText = document.createElement("div");
                 $(editionNoteText).addClass("edition-note-text");
-                if (response["editionNote"] == "") {
+                if (response.editionNote == "") {
                     $(editionNoteText).append("Toto dílo nemá ediční poznámku");
                 } else {
-                    $(editionNoteText).append(response["editionNote"]);
+                    $(editionNoteText).append(response.editionNote);
                 }
                 editionNoteDiv.appendChild(editionNoteText);
                 $(editionNoteDiv).removeClass("loading");
@@ -995,23 +995,25 @@ class ReaderLayout {
             });
             viewButtons.appendChild(imageButton);       
         });
-            
 
-        var audioButton: HTMLButtonElement = document.createElement("button");
-        $(audioButton).addClass("audio-button");
-        var audioSpan = document.createElement("span");
-        $(audioSpan).addClass("glyphicon glyphicon-music");
-        $(audioButton).append(audioSpan);
+        this.hasBookAudio(this.bookId, this.versionId, () => {
+            var audioButton: HTMLButtonElement = document.createElement("button");
+            $(audioButton).addClass("audio-button");
+            var audioSpan = document.createElement("span");
+            $(audioSpan).addClass("glyphicon glyphicon-music");
+            $(audioButton).append(audioSpan);
 
-        var audioSpanText = document.createElement("span");
-        $(audioSpanText).addClass("button-text");
-        $(audioSpanText).append("Zvuková stopa");
-        $(audioButton).append(audioSpanText);
+            var audioSpanText = document.createElement("span");
+            $(audioSpanText).addClass("button-text");
+            $(audioSpanText).append("Zvuková stopa");
+            $(audioButton).append(audioSpanText);
 
-        $(audioButton).click((event: Event) => {
-            readerLayout.createViewPanel(this.audioPanelId, audioSpanText.innerHTML);
+            $(audioButton).click((event: Event) => {
+                readerLayout.createViewPanel(this.audioPanelId, audioSpanText.innerHTML);
+            });
+            viewButtons.appendChild(audioButton);
         });
-        viewButtons.appendChild(audioButton);
+        
         viewControl.appendChild(viewButtons);
 
         return viewControl;
@@ -1513,6 +1515,17 @@ class ReaderLayout {
         } else if (!this.hasBookImageCache[bookId][bookVersionId] && onFalse !== null) {
             onFalse();
         }
+    }
+
+    hasBookAudio(bookId: string, bookVersionId: string, onTrue: () => any = null, onFalse: () => any = null) {
+        var audioBook: JQueryXHR = ServerCommunication.getAudioBook(bookId);
+        audioBook.done((response) => {
+            if (response["audioBook"].Tracks.length == 0) {
+                onFalse();
+            } else {
+                onTrue();
+            }
+        });
     }
 
     hasBookPage(bookId: string, bookVersionId: string, onTrue: () => any = null, onFalse: () => any = null) {
