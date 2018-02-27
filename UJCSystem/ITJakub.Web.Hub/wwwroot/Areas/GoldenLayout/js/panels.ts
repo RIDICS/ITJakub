@@ -2,10 +2,12 @@
     panelHtml: HTMLDivElement;
     identificator: string;
     innerContent: HTMLElement;
+    sc: ServerCommunication;
     parentReader: ReaderLayout;
 
-    constructor(identificator: string, readerLayout: ReaderLayout) {
+    constructor(identificator: string, readerLayout: ReaderLayout, sc: ServerCommunication) {
         this.identificator = identificator;
+        this.sc = sc;
         this.parentReader = readerLayout;
         var sidePanelDiv: HTMLDivElement = document.createElement("div");
         sidePanelDiv.id = identificator;
@@ -49,7 +51,7 @@ class ContentPanel extends ToolPanel {
 
         $(this.panelHtml).empty();
         $(this.panelHtml).addClass("loader");
-        var bookContent: JQueryXHR = ServerCommunication.getBookContent(this.parentReader.bookId);
+        var bookContent: JQueryXHR = this.sc.getBookContent(this.parentReader.bookId);
         bookContent.done((response: {content: IChapterHieararchyContract[]}) => {
             var ulElement = document.createElement("ul");
             $(ulElement).addClass("content-item-root-list");
@@ -525,7 +527,7 @@ class TermsResultPanel extends TermsPanel {
         $(this.termsOrderedList).removeClass("no-items");
         $(this.termsResultItemsLoadDiv).show();
         $(this.termsResultItemsDiv).hide();
-        var terms: JQueryXHR = ServerCommunication.getTerms(this.parentReader.bookId, page.pageId);
+        var terms: JQueryXHR = this.sc.getTerms(this.parentReader.bookId, page.pageId);
         terms.done((response: {terms: Array<ITermContract>}) => {
 
             if (page.pageId === this.parentReader.getActualPage().pageId) {
@@ -590,8 +592,8 @@ class TextPanel extends ContentViewPanel {
     private query: string; //search for text search
     private queryIsJson: boolean;
 
-    constructor(identificator: string, readerLayout: ReaderLayout) {
-        super(identificator, readerLayout);
+    constructor(identificator: string, readerLayout: ReaderLayout, sc: ServerCommunication) {
+        super(identificator, readerLayout, sc);
         this.preloadPagesBefore = 5;
         this.preloadPagesAfter = 10;
     }
@@ -699,7 +701,7 @@ class TextPanel extends ContentViewPanel {
     private downloadPageById(page: BookPage, onSuccess: () => any = null, onFailed: () => any = null) {
         var pageContainer = document.getElementById(page.pageId.toString());
         $(pageContainer).addClass("loading");
-        var bookPage: JQueryXHR = ServerCommunication.getBookPage(this.parentReader.versionId, page.pageId);
+        var bookPage: JQueryXHR = this.sc.getBookPage(this.parentReader.versionId, page.pageId);
         bookPage.done((response: { pageText: string}) => {
             $(pageContainer).empty();
             $(pageContainer).append(response.pageText);
@@ -728,7 +730,7 @@ class TextPanel extends ContentViewPanel {
     private downloadSearchPageById(query: string, queryIsJson: boolean, page: BookPage, onSuccess: () => any = null, onFailed: () => any = null) {
         var pageContainer = document.getElementById(page.pageId.toString());
         $(pageContainer).addClass("loading");
-        var bookPage: JQueryXHR = ServerCommunication.getBookPageSearch(this.parentReader.versionId, page.pageId, queryIsJson, query);
+        var bookPage: JQueryXHR = this.sc.getBookPageSearch(this.parentReader.versionId, page.pageId, queryIsJson, query);
         bookPage.done((response: {pageText: string}) => {
             $(pageContainer).empty();
             $(pageContainer).append(response.pageText);
@@ -835,7 +837,7 @@ class AudioPanel extends ContentViewPanel {
         audioContainerDiv.appendChild(trackName);
         var trackSelect = document.createElement("select");
         trackSelect.id = "track-select";
-        var book: JQueryXHR = ServerCommunication.getAudioBook(this.parentReader.bookId);
+        var book: JQueryXHR = this.sc.getAudioBook(this.parentReader.bookId);
         book.done((response: {audioBook: IAudioBookSearchResultContract}) => {
             this.numberOfTracks = response.audioBook.Tracks.length;
             for (var index in response.audioBook.Tracks) {
@@ -910,7 +912,7 @@ class AudioPanel extends ContentViewPanel {
     }
 
     private reloadTrack() {
-        var getTrack: JQueryXHR = ServerCommunication.getTrack(this.parentReader.bookId, this.trackId);
+        var getTrack: JQueryXHR = this.sc.getTrack(this.parentReader.bookId, this.trackId);
         getTrack.done((response: {track: ITrackWithRecordingContract}) => {
             $(".track-name").html(response.track.Name);
             $("#track-select").val(this.trackId);

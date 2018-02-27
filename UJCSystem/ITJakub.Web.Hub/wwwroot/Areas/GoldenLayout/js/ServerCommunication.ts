@@ -1,5 +1,5 @@
-﻿abstract class ServerCommunication {
-    static getEditionNote(bookId: string): JQueryXHR {
+﻿class ServerCommunication {
+    getEditionNote(bookId: string): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
@@ -10,7 +10,7 @@
         });
     }
 
-    static getBookDetail(bookId: string): JQueryXHR {
+    getBookDetail(bookId: string): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
@@ -21,7 +21,7 @@
         });
     }
 
-    static getBookContent(bookId: string): JQueryXHR {
+    getBookContent(bookId: string): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
@@ -32,7 +32,7 @@
         });
     }
 
-    static getTrack(bookId: string, trackId: number): JQueryXHR {
+    getTrack(bookId: string, trackId: number): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
@@ -42,7 +42,7 @@
             contentType: "application/json"
         });
     }
-    static getTerms(bookId: string, pageId: number): JQueryXHR {
+    getTerms(bookId: string, pageId: number): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
@@ -53,7 +53,7 @@
         });
     }
 
-    static getBookPage(versionId: string, pageId: number): JQueryXHR {
+    getBookPage(versionId: string, pageId: number): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
@@ -64,7 +64,7 @@
         });
     }
 
-    static getBookPageSearch(versionId: string, pageId: number, queryIsJson: boolean, query: string): JQueryXHR {
+    getBookPageSearch(versionId: string, pageId: number, queryIsJson: boolean, query: string): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
@@ -75,7 +75,7 @@
         });
     }
 
-    static getAudioBook(bookId: string): JQueryXHR {
+    getAudioBook(bookId: string): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
@@ -86,7 +86,7 @@
         });
     }
 
-    static hasBookPage(bookId: string, bookVersionId: string): JQueryXHR {
+    hasBookPage(bookId: string, bookVersionId: string): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
@@ -97,7 +97,7 @@
         });
     }
 
-    static textSearchBookCount(bookId: string, versionId: string, text: string): JQueryXHR {
+    textSearchBookCount(bookId: string, versionId: string, text: string): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
@@ -108,7 +108,7 @@
         });
     }
 
-    static advancedSearchBookCount(bookId: string, versionId: string, json: string): JQueryXHR {
+    advancedSearchBookCount(bookId: string, versionId: string, json: string): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
@@ -119,7 +119,7 @@
         });
     }
 
-    static textSearchMatchHit(bookId: string, versionId: string, text: string): JQueryXHR {
+    textSearchMatchHit(bookId: string, versionId: string, text: string): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
@@ -131,7 +131,7 @@
 
     }
 
-    static advancedSearchMatchHit(bookId: string, versionId: string, json: string): JQueryXHR {
+    advancedSearchMatchHit(bookId: string, versionId: string, json: string): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
@@ -142,7 +142,7 @@
         });
     }
 
-    static textSearchBookPaged(bookId: string, versionId: string, text: string, start: number, count: number):
+    textSearchBookPaged(bookId: string, versionId: string, text: string, start: number, count: number):
         JQueryXHR {
         return $.ajax({
             type: "GET",
@@ -154,7 +154,7 @@
         });
     }
 
-    static advancedSearchBookPaged(bookId: string, versionId: string, json: string, start: number, count: number): JQueryXHR {
+    advancedSearchBookPaged(bookId: string, versionId: string, json: string, start: number, count: number): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
@@ -165,7 +165,7 @@
         });
     }
 
-    static hasBookImage(bookId: string, versionId: string): JQueryXHR {
+    hasBookImage(bookId: string, versionId: string): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,

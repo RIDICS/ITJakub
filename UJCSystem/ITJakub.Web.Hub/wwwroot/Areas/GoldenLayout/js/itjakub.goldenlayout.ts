@@ -10,10 +10,11 @@ function initGoldenReader(bookId: string, versionId: string, bookTitle: string, 
     }
 
     var readerPanels = [ReaderPanelEnum.TextPanel, ReaderPanelEnum.ImagePanel, ReaderPanelEnum.ContentPanel, ReaderPanelEnum.SearchPanel, ReaderPanelEnum.SettingsPanel];
-
+    var sc = new ServerCommunication();
     var readerPlugin = new ReaderLayout(<any>$("#ReaderHeaderDiv")[0],
         readerPageChangedCallback,
-        readerPanels
+        readerPanels,
+        sc
     );
     readerPlugin.makeReader(bookId, versionId, bookTitle, pageList);
     var search: Search;
@@ -70,7 +71,7 @@ function initGoldenReader(bookId: string, versionId: string, bookTitle: string, 
         var start = (pageNumber - 1) * readerPlugin.getSearchResultsCountOnPage();
         var count = readerPlugin.getSearchResultsCountOnPage();
 
-        var advancedSearch: JQueryXHR = ServerCommunication.advancedSearchBookPaged(readerPlugin.getBookId(), readerPlugin.getVersionId(), json, start, count);
+        var advancedSearch: JQueryXHR = sc.advancedSearchBookPaged(readerPlugin.getBookId(), readerPlugin.getVersionId(), json, start, count);
         advancedSearch.done((response) => {
             var convertedResults = convertSearchResults(response["results"]);
             readerPlugin.searchPanelRemoveLoading();
@@ -86,7 +87,7 @@ function initGoldenReader(bookId: string, versionId: string, bookTitle: string, 
         var start = (pageNumber - 1) * readerPlugin.getSearchResultsCountOnPage();
         var count = readerPlugin.getSearchResultsCountOnPage();
 
-        var textSearch: JQueryXHR = ServerCommunication.textSearchBookPaged(readerPlugin.getBookId(), readerPlugin.getVersionId(), text, start, count);
+        var textSearch: JQueryXHR = sc.textSearchBookPaged(readerPlugin.getBookId(), readerPlugin.getVersionId(), text, start, count);
         textSearch.done((response) => {
             var convertedResults = convertSearchResults(response["results"]);
             readerPlugin.searchPanelRemoveLoading();
@@ -110,13 +111,13 @@ function initGoldenReader(bookId: string, versionId: string, bookTitle: string, 
     function basicSearch(text: string) {
 
         if (typeof text === "undefined" || text === null || text === "") return;
-        var textSearch: JQueryXHR = ServerCommunication.textSearchBookCount(readerPlugin.getBookId(), readerPlugin.getVersionId(), text);
+        var textSearch: JQueryXHR = sc.textSearchBookCount(readerPlugin.getBookId(), readerPlugin.getVersionId(), text);
         textSearch.done((response: {count: number}) => {
             updateQueryStringParameter("searchText", text);
             readerPlugin.setResultsPaging(response.count, paginatorPageClickCallback);    
         });
 
-        var textSearchMatchHit: JQueryXHR = ServerCommunication.textSearchMatchHit(readerPlugin.getBookId(), readerPlugin.getVersionId(), text)
+        var textSearchMatchHit: JQueryXHR = sc.textSearchMatchHit(readerPlugin.getBookId(), readerPlugin.getVersionId(), text)
         textSearchMatchHit.done((response: {pages: Array<IPage>}) => {
             readerPlugin.showSearchResultInPages(text, false, response.pages);
         }); 
@@ -125,13 +126,13 @@ function initGoldenReader(bookId: string, versionId: string, bookTitle: string, 
     function advancedSearch(json: string) {
         if (typeof json === "undefined" || json === null || json === "") return;
         var advancedSearch: JQueryXHR =
-            ServerCommunication.advancedSearchBookCount(readerPlugin.getBookId(), readerPlugin.getVersionId(), json);
+            sc.advancedSearchBookCount(readerPlugin.getBookId(), readerPlugin.getVersionId(), json);
         advancedSearch.done((response: {count: number}) => {
             updateQueryStringParameter("searchText", json);
             readerPlugin.setResultsPaging(response.count, paginatorPageClickCallback);    
         });
 
-        var advancedSearchMatchHit: JQueryXHR = ServerCommunication.advancedSearchMatchHit(readerPlugin.getBookId(), readerPlugin.getVersionId(), json);
+        var advancedSearchMatchHit: JQueryXHR = sc.advancedSearchMatchHit(readerPlugin.getBookId(), readerPlugin.getVersionId(), json);
         advancedSearchMatchHit.done((response: {pages: Array<IPage>}) => {
             readerPlugin.showSearchResultInPages(json, true, response.pages);    
         });
@@ -177,6 +178,7 @@ class ReaderLayout {
     bookId: string;
     versionId: string;
     loadedBookContent: boolean;
+    sc: ServerCommunication;
 
     clickedMoveToPage: boolean;
 
@@ -207,13 +209,14 @@ class ReaderLayout {
 
     pageChangedCallback: (pageId: number) => void;
 
-    constructor(readerHeaderDiv: HTMLDivElement, pageChangedCallback: (pageId: number) => void, showPanelList: Array<ReaderPanelEnum>) {
+    constructor(readerHeaderDiv: HTMLDivElement, pageChangedCallback: (pageId: number) => void, showPanelList: Array<ReaderPanelEnum>, sc: ServerCommunication) {
         this.readerHeaderDiv = readerHeaderDiv;
         $(this.readerHeaderDiv).addClass("content-container");
         this.pageChangedCallback = pageChangedCallback;
         this.pagerDisplayPages = 5;
         this.showPanelList = showPanelList;
         this.favoriteManager = new FavoriteManager();
+        this.sc = sc;
         this.newFavoriteDialog = new NewFavoriteDialog(this.favoriteManager, true);
     }
 
@@ -592,7 +595,7 @@ class ReaderLayout {
         $(editionNoteHeader).append("Ediční poznámka");
         $(editionNoteDiv).append(editionNoteHeader);
 
-        var editionNote: JQueryXHR = ServerCommunication.getEditionNote(this.bookId);
+        var editionNote: JQueryXHR = this.sc.getEditionNote(this.bookId);
         editionNote.done((response: {editionNote: string}) => {
             var editionNoteText = document.createElement("div");
                 $(editionNoteText).addClass("edition-note-text");
@@ -616,7 +619,7 @@ class ReaderLayout {
         $(bookDetailHeader).append("Informace o díle");
         bookDetailDiv.appendChild(bookDetailHeader);
 
-        var bookDetail: JQueryXHR = ServerCommunication.getBookDetail(this.bookId);
+        var bookDetail: JQueryXHR = this.sc.getBookDetail(this.bookId);
         bookDetail.done((response) => {
             var detailData = response["detail"];
             var detailTable = new TableBuilder();
@@ -1401,7 +1404,7 @@ class ReaderLayout {
 
     private createBookmarksPanel(): HTMLDivElement {
         if (this.bookmarksPanel == null) {
-            var bookmarksPanel: BookmarksPanel = new BookmarksPanel(this.bookmarksPanelId, this);
+            var bookmarksPanel: BookmarksPanel = new BookmarksPanel(this.bookmarksPanelId, this, this.sc);
             this.bookmarksPanel = bookmarksPanel;
             this.toolPanels.push(bookmarksPanel);
         }
@@ -1410,7 +1413,7 @@ class ReaderLayout {
 
     private createContentPanel(): HTMLDivElement {
         if (this.contentPanel == null) {
-            var contentPanel: ContentPanel = new ContentPanel(this.contentPanelId, this);
+            var contentPanel: ContentPanel = new ContentPanel(this.contentPanelId, this, this.sc);
             this.contentPanel = contentPanel;
             this.toolPanels.push(contentPanel);
         }
@@ -1419,7 +1422,7 @@ class ReaderLayout {
 
     private createSearchPanel(): HTMLDivElement {
         if (this.searchPanel == null) {
-            var resultPanel: SearchResultPanel =  new SearchResultPanel(this.searchPanelId, this);
+            var resultPanel: SearchResultPanel =  new SearchResultPanel(this.searchPanelId, this, this.sc);
             this.searchPanel = resultPanel;
             this.toolPanels.push(resultPanel);
         }
@@ -1447,7 +1450,7 @@ class ReaderLayout {
 
     private createTermsResultPanel(): HTMLDivElement {
         if (this.termsResultPanel == null) {
-            var termsPanel: TermsResultPanel = new TermsResultPanel(this.termsResultId, this);
+            var termsPanel: TermsResultPanel = new TermsResultPanel(this.termsResultId, this, this.sc);
             this.termsResultPanel = termsPanel;
             this.toolPanels.push(termsPanel);
         }
@@ -1456,7 +1459,7 @@ class ReaderLayout {
 
     private createTermsSearchPanel(): HTMLDivElement {
         if (this.termsSearchPanel == null) {
-            var termsPanel: TermsSearchPanel = new TermsSearchPanel(this.termsSearchId, this);
+            var termsPanel: TermsSearchPanel = new TermsSearchPanel(this.termsSearchId, this, this.sc);
             this.termsSearchPanel = termsPanel;
             this.toolPanels.push(termsPanel);
         }
@@ -1465,7 +1468,7 @@ class ReaderLayout {
 
     private createTextPanel(): HTMLDivElement {
         if (this.textPanel == null) {
-            var textPanel: TextPanel = new TextPanel(this.textPanelId, this);
+            var textPanel: TextPanel = new TextPanel(this.textPanelId, this, this.sc);
             this.textPanel = textPanel;
             this.contentViewPanels.push(textPanel);    
         }
@@ -1474,7 +1477,7 @@ class ReaderLayout {
 
     private createImagePanel(): HTMLDivElement {
         if (this.imagePanel == null) {
-            var imagePanel: ImagePanel = new ImagePanel(this.imagePanelId, this);
+            var imagePanel: ImagePanel = new ImagePanel(this.imagePanelId, this, this.sc);
             this.imagePanel = imagePanel;
             this.contentViewPanels.push(imagePanel);    
         }
@@ -1483,7 +1486,7 @@ class ReaderLayout {
 
     private createAudioPanel(): HTMLDivElement {
         if (this.audioPanel == null) {
-            var audioPanel: AudioPanel = new AudioPanel(this.audioPanelId, this);
+            var audioPanel: AudioPanel = new AudioPanel(this.audioPanelId, this, this.sc);
             this.audioPanel = audioPanel;
             this.contentViewPanels.push(audioPanel);
         }
@@ -1494,7 +1497,7 @@ class ReaderLayout {
 
     hasBookImage(bookId: string, bookVersionId: string, onTrue: () => any = null, onFalse: () => any = null) {
         if (this.hasBookImageCache[bookId] === undefined || this.hasBookImageCache[bookId][bookVersionId] === undefined) {
-            var hasBookImageAjax: JQueryXHR = ServerCommunication.hasBookImage(bookId, bookVersionId);
+            var hasBookImageAjax: JQueryXHR = this.sc.hasBookImage(bookId, bookVersionId);
             hasBookImageAjax.done((response: { HasBookImage: boolean }) => {
                 if (this.hasBookImageCache[bookId] === undefined) {
                     this.hasBookImageCache[bookId] = {};
@@ -1518,7 +1521,7 @@ class ReaderLayout {
     }
 
     hasBookAudio(bookId: string, bookVersionId: string, onTrue: () => any = null, onFalse: () => any = null) {
-        var audioBook: JQueryXHR = ServerCommunication.getAudioBook(bookId);
+        var audioBook: JQueryXHR = this.sc.getAudioBook(bookId);
         audioBook.done((response) => {
             if (response["audioBook"].Tracks.length == 0) {
                 onFalse();
@@ -1542,7 +1545,7 @@ class ReaderLayout {
                 this.hasBookPageCallOnSuccess[bookId] = {};
                 this.hasBookPageCallOnSuccess[bookId][bookVersionId] = [];
             }
-            var hasBookPage: JQueryXHR = ServerCommunication.hasBookPage(bookId, bookVersionId)
+            var hasBookPage: JQueryXHR = this.sc.hasBookPage(bookId, bookVersionId)
             hasBookPage.done((response: { HasBookPage: boolean }) => {
                 this.hasBookPageCache[bookId][bookVersionId] = response.HasBookPage;
                 this.hasBookPageCache[bookId][bookVersionId + "_loading"] = false;
