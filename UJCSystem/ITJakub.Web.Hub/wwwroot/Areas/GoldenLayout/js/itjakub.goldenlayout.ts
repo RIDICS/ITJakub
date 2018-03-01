@@ -72,8 +72,9 @@ function initGoldenReader(bookId: string, versionId: string, bookTitle: string, 
         var count = readerPlugin.getSearchResultsCountOnPage();
 
         var advancedSearch: JQueryXHR = sc.advancedSearchBookPaged(readerPlugin.getBookId(), readerPlugin.getVersionId(), json, start, count);
-        advancedSearch.done((response) => {
-            var convertedResults = convertSearchResults(response["results"]);
+        advancedSearch.done((response: { results: Array<IPageWithContext> }) => {
+
+            var convertedResults = convertSearchResults(response.results);
             readerPlugin.searchPanelRemoveLoading();
             readerPlugin.showSearchInPanel(convertedResults);    
         });
@@ -88,8 +89,8 @@ function initGoldenReader(bookId: string, versionId: string, bookTitle: string, 
         var count = readerPlugin.getSearchResultsCountOnPage();
 
         var textSearch: JQueryXHR = sc.textSearchBookPaged(readerPlugin.getBookId(), readerPlugin.getVersionId(), text, start, count);
-        textSearch.done((response) => {
-            var convertedResults = convertSearchResults(response["results"]);
+        textSearch.done((response: {results: Array<IPageWithContext>}) => {
+            var convertedResults = convertSearchResults(response.results);
             readerPlugin.searchPanelRemoveLoading();
             readerPlugin.showSearchInPanel(convertedResults);
         });
@@ -570,6 +571,10 @@ class ReaderLayout {
         detailsButton.appendChild(detailsSpan);
         $(detailsButton).click((event) => {
             var target: JQuery = $(event.target);
+
+            var title = target.parents(".book-details").find(".title");
+            title.toggleClass("full")
+
             var details = target.parents(".book-details").find(".hidden-content");
             if (!details.hasClass("visible")) {
                 $(target).removeClass("glyphicon-chevron-down");
@@ -647,6 +652,20 @@ class ReaderLayout {
             });
 
             $(bookDetailDiv).append(detailTable.build());
+
+            
+            if (detailData.Authors.length != 0) {
+                var authors: string = "";
+                for (var i = 0; i < detailData.Authors.length; i++) {
+                    var author = detailData.Authors[i];
+                    authors += author.FirstName + " " + author.LastName;
+                    if (i + 1 != detailData.Authors.length) {
+                        authors += ", ";
+                    }
+                }
+                $(".title").prepend(authors + ": ");    
+            }
+            
         });
         bookDetail.fail(() => {
             $(bookDetailDiv).append("Nepodařilo se načíst detaily o díle");

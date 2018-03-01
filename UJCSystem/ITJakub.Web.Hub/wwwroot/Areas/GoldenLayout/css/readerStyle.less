@@ -98,6 +98,16 @@ button {
 .title {
     display: inline-block;
     padding-left: 19px;
+    text-align: left !important;
+    max-width: calc(~'100% - 120px');
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    &.full {
+        overflow: unset;
+        text-overflow: initial;
+        white-space: initial;
+    }
 }
 
 .hidden-content {
