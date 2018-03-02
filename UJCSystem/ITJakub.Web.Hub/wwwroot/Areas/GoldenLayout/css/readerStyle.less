@@ -98,6 +98,62 @@ button {
     }
 }
 
+.reader-settings-checkboxes-area {
+    div {
+        display: inline-block;
+    }
+
+    input {
+        display: none;
+
+        &:checked {
+            ~ .switch {
+                background: @linkColor;
+
+                &:before {
+                    left: 20px;
+                    background: @linkColorHover;
+                }
+            }
+        }
+    }
+
+    label {
+        width: 44px;
+        cursor: pointer;
+        margin-right: 20px;
+        text-align: center;
+        display: flex;
+    }
+
+    .switch {
+        height: 20px;
+        position: relative;
+        display: block;
+        background: #898989;
+        border-radius: 100px;
+        transition: all 0.3s ease;
+
+        &:before {
+            position: absolute;
+            left: -2px;
+            top: -3px;
+            display: block;
+            width: 26px;
+            height: 26px;
+            border-radius: 100px;
+            background: #fff;
+            box-shadow: 0px 3px 3px rgba(0,0,0,0.05);
+            content: '';
+            transition: all 0.3s ease;
+        }
+
+        &:active:after {
+            transform: scale(1.15, 0.85);
+        }
+    }
+}
+
 .title {
     display: inline-block;
     padding-left: 19px;
@@ -106,6 +162,7 @@ button {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+
     &.full {
         overflow: unset;
         text-overflow: initial;
@@ -267,7 +324,23 @@ button {
 }
 .view-control {
     float: right;
+    text-align: center;
+
     .buttons {
         float: none;
+    }
+}
+
+.reader-controls {
+    text-align: center;
+
+    .page-navigation-container-helper {
+        display: inline-block;
+    }
+
+    &:after {
+        content: '';
+        display: block;
+        clear: both;
     }
 }

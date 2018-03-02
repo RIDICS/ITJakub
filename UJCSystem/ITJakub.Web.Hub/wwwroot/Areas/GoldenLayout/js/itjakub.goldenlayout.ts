@@ -813,6 +813,7 @@ class ReaderLayout {
         var readerLayout = this;
         var viewControl: HTMLDivElement = document.createElement("div");
         $(viewControl).addClass("view-control");
+        $(viewControl).append("Zobrazení: ");
 
         var viewButtons = document.createElement("div");
         $(viewButtons).addClass("buttons");
@@ -883,7 +884,7 @@ class ReaderLayout {
     private createCheckboxDiv(): HTMLDivElement {
         var checkboxesDiv = window.document.createElement("div");
         $(checkboxesDiv).addClass("reader-settings-checkboxes-area");
-
+        
         var showPageCheckboxDiv: HTMLDivElement = window.document.createElement("div");
         var showPageNameCheckbox: HTMLInputElement = window.document.createElement("input");
         showPageNameCheckbox.type = "checkbox";
@@ -898,12 +899,17 @@ class ReaderLayout {
             }
         });
 
+        var pageNameSlider = document.createElement("label");
+        $(pageNameSlider).addClass("switch");
+
         var showPageNameLabel: HTMLLabelElement = window.document.createElement("label");
-        showPageNameLabel.innerHTML = "Zobrazit číslování stránek";
+        showPageNameLabel.innerHTML = "Číslování stránek";
         showPageCheckboxDiv.appendChild(showPageNameCheckbox);
+        showPageCheckboxDiv.appendChild(pageNameSlider);
         showPageCheckboxDiv.appendChild(showPageNameLabel);
         showPageNameCheckbox.id = "checkbox-show-page-numbers";
         showPageNameLabel.setAttribute("for", showPageNameCheckbox.id);
+        pageNameSlider.setAttribute("for", showPageNameCheckbox.id);
         checkboxesDiv.appendChild(showPageCheckboxDiv);
 
         var showPageOnNewLineDiv: HTMLDivElement = window.document.createElement("div");
@@ -920,12 +926,17 @@ class ReaderLayout {
             }
         });
 
+        var pageOnNewLineSlider = document.createElement("label");
+        $(pageOnNewLineSlider).addClass("switch");
+
         var showPageOnNewLineLabel: HTMLLabelElement = window.document.createElement("label");
         showPageOnNewLineLabel.innerHTML = "Zalamovat stránky";
         showPageOnNewLineDiv.appendChild(showPageOnNewLineCheckbox);
+        showPageOnNewLineDiv.appendChild(pageOnNewLineSlider);
         showPageOnNewLineDiv.appendChild(showPageOnNewLineLabel);
         showPageOnNewLineCheckbox.id = "checkbox-page-breaks";
         showPageOnNewLineLabel.setAttribute("for", showPageOnNewLineCheckbox.id);
+        pageOnNewLineSlider.setAttribute("for", showPageOnNewLineCheckbox.id);
         checkboxesDiv.appendChild(showPageOnNewLineDiv);
         
         var showCommentCheckboxDiv: HTMLDivElement = window.document.createElement("div");
@@ -942,12 +953,17 @@ class ReaderLayout {
             }
         });
 
+        var commentSlider = document.createElement("label");
+        $(commentSlider).addClass("switch");
+
         var showCommentLabel: HTMLLabelElement = window.document.createElement("label");
-        showCommentLabel.innerHTML = "Zobrazit komentáře";
+        showCommentLabel.innerHTML = "Komentáře";
         showCommentCheckboxDiv.appendChild(showCommentCheckbox);
+        showCommentCheckboxDiv.appendChild(commentSlider);
         showCommentCheckboxDiv.appendChild(showCommentLabel);
         showCommentCheckbox.id = "checkbox-show-comment";
         showCommentLabel.setAttribute("for", showCommentCheckbox.id);
+        commentSlider.setAttribute("for", showCommentCheckbox.id);
         checkboxesDiv.appendChild(showCommentCheckboxDiv);
 
         return checkboxesDiv;
