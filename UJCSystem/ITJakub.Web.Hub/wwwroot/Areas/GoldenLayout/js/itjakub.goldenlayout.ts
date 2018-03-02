@@ -813,7 +813,7 @@ class ReaderLayout {
         var readerLayout = this;
         var viewControl: HTMLDivElement = document.createElement("div");
         $(viewControl).addClass("view-control");
-        $(viewControl).append("Zobrazení: ");
+        //$(viewControl).append("Zobrazení: ");
 
         var viewButtons = document.createElement("div");
         $(viewButtons).addClass("buttons");
