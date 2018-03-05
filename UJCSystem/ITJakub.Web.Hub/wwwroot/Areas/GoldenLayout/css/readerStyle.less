@@ -99,6 +99,7 @@ button {
 }
 
 .reader-settings-checkboxes-area {
+    text-align: center;
     div {
         display: inline-block;
         margin-right: 5px;
@@ -112,7 +113,7 @@ button {
                 background: @linkColor;
 
                 &:before {
-                    left: 20px;
+                    left: 16px;
                     background: @linkColorHover;
                 }
             }
@@ -121,14 +122,13 @@ button {
 
     label {
         cursor: pointer;
-        text-align: center;
         display: flex;
         max-width: 65px;
     }
 
     .switch {
-        width: 44px;
-        height: 20px;
+        width: 35px;
+        height: 15px;
         position: relative;
         display: inline-block;
         margin-bottom: 0px;
@@ -141,8 +141,8 @@ button {
             left: -2px;
             top: -3px;
             display: block;
-            width: 26px;
-            height: 26px;
+            width: 21px;
+            height: 21px;
             border-radius: 100px;
             background: #eee;
             box-shadow: 0px 3px 3px rgba(0,0,0,0.05);
@@ -326,18 +326,25 @@ button {
 }
 .view-control {
     float: right;
-    text-align: center;
 
     .buttons {
         float: none;
+        text-align: right;
     }
 }
 
 .reader-controls {
     text-align: center;
+    position: relative;
 
     .page-navigation-container-helper {
         display: inline-block;
+        position: absolute;
+        margin: 0 auto;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
     }
 
     &:after {
