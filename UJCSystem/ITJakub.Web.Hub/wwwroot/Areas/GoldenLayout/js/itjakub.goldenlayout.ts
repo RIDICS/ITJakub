@@ -817,7 +817,8 @@ class ReaderLayout {
 
         var viewButtons = document.createElement("div");
         $(viewButtons).addClass("buttons");
-
+        var hasBookText: boolean = false;
+        var hasBookImage: boolean = false;
         this.hasBookPage(this.bookId, this.versionId, () => {
             var textButton: HTMLButtonElement = document.createElement("button");
             $(textButton).addClass("text-button");
@@ -833,6 +834,8 @@ class ReaderLayout {
             $(textButton).click((event: Event) => {
                 readerLayout.createViewPanel(this.textPanelId, textSpanText.innerHTML);
             });
+            hasBookText = true;
+            textButton.click();
             viewButtons.appendChild(textButton); 
 
             var checkboxDiv = this.createCheckboxDiv();
@@ -855,6 +858,10 @@ class ReaderLayout {
             $(imageButton).click((event: Event) => {
                 readerLayout.createViewPanel(this.imagePanelId, imageSpanText.innerHTML);
             });
+            hasBookImage = true;
+            if (!hasBookText) {
+                imageButton.click();
+            }
             viewButtons.appendChild(imageButton);       
         });
 
@@ -873,6 +880,10 @@ class ReaderLayout {
             $(audioButton).click((event: Event) => {
                 readerLayout.createViewPanel(this.audioPanelId, audioSpanText.innerHTML);
             });
+
+            if (!hasBookText && !hasBookImage) {
+                audioButton.click();
+            }
             viewButtons.appendChild(audioButton);
         });
         
@@ -1261,14 +1272,8 @@ class ReaderLayout {
                     isClosable: false,
                     content: [{
                         type: "row",
-                        id: "viewsRow",
-                        content: [{
-                            type: 'component',
-                            id: panelId,
-                            componentState: { label: panelId },
-                            componentName: 'viewTab',
-                            title: panelTitle
-                        }]
+                        id: "viewsRow"
+                        
                     }]
                 }]
             }]
