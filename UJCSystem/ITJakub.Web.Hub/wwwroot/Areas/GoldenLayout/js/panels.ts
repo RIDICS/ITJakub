@@ -840,18 +840,18 @@ class AudioPanel extends ContentViewPanel {
         var book: JQueryXHR = this.sc.getAudioBook(this.parentReader.bookId);
         book.done((response: {audioBook: IAudioBookSearchResultContract}) => {
             this.numberOfTracks = response.audioBook.Tracks.length;
-            for (var index in response.audioBook.Tracks) {
-                var track = document.createElement("option");
-                $(track).prop("value", index);
-                track.innerHTML = response.audioBook.Tracks[index].Name;
-                $(trackSelect).append(track);
+            for (var track of response.audioBook.Tracks) {
+                var trackOption = document.createElement("option");
+                $(trackOption).prop("value", track.Position-1);
+                trackOption.innerHTML = track.Name;
+                $(trackSelect).append(trackOption);
             }
             for (var recording of response.audioBook.FullBookRecordings) {    
                 var download = document.createElement("a");
                 $(download).addClass("audio-download-href");
                 download.href = getBaseUrl() + "AudioBooks/AudioBooks/DownloadAudio?audioId=" + recording.Id + "&audioType=" + recording.AudioType;;
                 $(download).html(recording.AudioType);
-                $(".full-book-download").append(download);
+                $(".full-book").append(download);
             }
 
             this.trackId = 0;
@@ -921,16 +921,16 @@ class AudioPanel extends ContentViewPanel {
             audioPlayer.load();
             $(audioPlayer).empty();
             $(".track").html("Stáhnout kapitolu:");
-            for (var index in response.track.Recordings) {
+            for (var recording  of response.track.Recordings) {
                 var source = document.createElement("source");
-                source.src = getBaseUrl() + "AudioBooks/AudioBooks/DownloadAudio?audioId=" + response.track.Recordings[index].Id + "&audioType=" + response.track.Recordings[index].AudioType;
-                source.type = response.track.Recordings[index].MimeType;
+                source.src = getBaseUrl() + "AudioBooks/AudioBooks/DownloadAudio?audioId=" + recording.Id + "&audioType=" + recording.AudioType;
+                source.type = recording.MimeType;
                 $(audioPlayer).append(source);
 
                 var download = document.createElement("a");
                 $(download).addClass("audio-download-href");
                 download.href = source.src;
-                $(download).html(response.track.Recordings[index].AudioType);
+                $(download).html(recording.AudioType);
                 $(".track").append(download);
             }
             $(audioPlayer).append("Váš prohlížeč nepodporuje html audio");
