@@ -1,4 +1,4 @@
-﻿/// <binding AfterBuild='default' Clean='clean' ProjectOpened='watch:less' />
+﻿/// <binding AfterBuild='default, bundle:new_reader' Clean='clean' ProjectOpened='watch:less' />
 /*
 This file in the main entry point for defining Gulp tasks and using Gulp plugins.
 Click here to learn more. http://go.microsoft.com/fwlink/?LinkId=518007
@@ -345,11 +345,13 @@ gulp.task("bundle:ridics_admin_composition-key-table-editor", function () {
 
 gulp.task("bundle:new_reader", function() {
     return gulp.src([
+        paths.webroot + "Areas/GoldenLayout/js/initReader.js",
         paths.webroot + "Areas/GoldenLayout/js/itjakub.goldenlayout.js",
         paths.webroot + "Areas/GoldenLayout/js/panels.js",
-        paths.webroot + "Areas/GoldenLayout/js/serverCommunication.js",
         paths.webroot + "Areas/GoldenLayout/js/searchModule.js",
-        paths.webroot + "Areas/GoldenLayout/js/initReader.js"
+        paths.webroot + "Areas/GoldenLayout/js/readerHeader.js",
+        paths.webroot + "Areas/GoldenLayout/js/serverCommunication.js"
+      
     ])
     .pipe(sourcemaps.init())
     .pipe(concat("new-reader.bundle.js"))
