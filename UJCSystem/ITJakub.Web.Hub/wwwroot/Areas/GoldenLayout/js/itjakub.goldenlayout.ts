@@ -711,6 +711,7 @@ class ReaderLayout {
 
         var listingContainer: HTMLDivElement = document.createElement("div");
         listingContainer.classList.add("page-navigation-container-helper");
+        listingContainer.classList.add("hidden");
         listingContainer.appendChild(toLeft);
         listingContainer.appendChild(paginationUl);
         listingContainer.appendChild(toRight);
@@ -836,6 +837,7 @@ class ReaderLayout {
             });
             hasBookText = true;
             textButton.click();
+            $(".page-navigation-container-helper").removeClass("hidden");
             viewButtons.appendChild(textButton); 
 
             var checkboxDiv = this.createCheckboxDiv();
@@ -861,6 +863,7 @@ class ReaderLayout {
             hasBookImage = true;
             if (!hasBookText) {
                 imageButton.click();
+                $(".page-navigation-container-helper").removeClass("hidden");
             }
             viewButtons.appendChild(imageButton);       
         });
@@ -883,6 +886,7 @@ class ReaderLayout {
 
             if (!hasBookText && !hasBookImage) {
                 audioButton.click();
+                $(".page-navigation-container-helper").removeClass("hidden");
             }
             viewButtons.appendChild(audioButton);
         });
