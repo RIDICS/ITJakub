@@ -10,10 +10,10 @@
                 SearchTypeEnum.Editor,
                 SearchTypeEnum.Dating,
                 SearchTypeEnum.Fulltext,
-                SearchTypeEnum.Heading,
-                SearchTypeEnum.Sentence,
+               // SearchTypeEnum.Heading,TODO not implemented yet
+               // SearchTypeEnum.Sentence,
                 SearchTypeEnum.Term,
-                SearchTypeEnum.TokenDistance
+               // SearchTypeEnum.TokenDistance
             ],
             url: {
                 advanced: getBaseUrl() + "BohemianTextBank/BohemianTextBank/AdvancedSearchPaged",

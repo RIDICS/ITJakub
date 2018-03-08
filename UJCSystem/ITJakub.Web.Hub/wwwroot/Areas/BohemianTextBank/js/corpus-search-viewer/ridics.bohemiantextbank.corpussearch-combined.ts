@@ -167,10 +167,10 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
         this.enabledOptions.push(SearchTypeEnum.Editor);
         this.enabledOptions.push(SearchTypeEnum.Dating);
         this.enabledOptions.push(SearchTypeEnum.Fulltext);
-        this.enabledOptions.push(SearchTypeEnum.Heading);
-        this.enabledOptions.push(SearchTypeEnum.Sentence);
+        // this.enabledOptions.push(SearchTypeEnum.Heading);TODO restore once implemented
+        // this.enabledOptions.push(SearchTypeEnum.Sentence);
         this.enabledOptions.push(SearchTypeEnum.Term);
-        this.enabledOptions.push(SearchTypeEnum.TokenDistance);
+        // this.enabledOptions.push(SearchTypeEnum.TokenDistance);
 
         const favoritesQueriesConfig: IModulInicializatorConfigurationSearchFavorites = {
             bookType: BookTypeEnum.TextBank,
