@@ -1,10 +1,13 @@
-﻿@model ITJakub.Web.Hub.Models.FeedbackViewModel
+﻿@using Localization.AspNetCore.Service
+@model ITJakub.Web.Hub.Models.FeedbackViewModel
+@inject ILocalization Localizer
+
 @section styles{
     <link href="~/Areas/BohemianTextBank/css/itjakub.bohemiantextbank.css" rel="stylesheet" />
 }
 
 @{
-    ViewBag.Title = "Korpusy - Připomínky";
+    ViewBag.Title = @Localizer.Translate("BohemianTextBankFeedback", "BohemianTextBank");
 }
 
 <div class="content-container">

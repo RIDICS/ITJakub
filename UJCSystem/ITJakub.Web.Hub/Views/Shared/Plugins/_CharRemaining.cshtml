@@ -1,7 +1,12 @@
-﻿<div class="text-area-info" style="float: right; margin-right: 140px;">
-    Max. <span class="text-area-max-chars"></span> znaků <br />
-    Zbývá: <span class="text-area-remaining-chars" style="color: lightseagreen"></span> znaků <br />
-    Můžete používat diakritiku
+﻿@using Localization.AspNetCore.Service
+@using Localization.CoreLibrary.Util
+
+@inject ILocalization Localizer
+
+<div class="text-area-info" style="float: right; margin-right: 140px;">
+    @Localizer.Translate("Max", "global", LocTranslationSource.File) <span class="text-area-max-chars"></span> @Localizer.Translate("Characters","global", LocTranslationSource.File) <br />
+    @Localizer.Translate("Remaining", "global", LocTranslationSource.File): <span class="text-area-remaining-chars" style="color: lightseagreen"></span> @Localizer.Translate("Characters", "global", LocTranslationSource.File) <br />
+    @Localizer.Translate("YouCanUseDiacritics", "global", LocTranslationSource.File)
 </div>
 
 <script>

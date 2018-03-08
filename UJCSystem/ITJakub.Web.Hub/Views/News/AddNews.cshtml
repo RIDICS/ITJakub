@@ -1,12 +1,16 @@
-﻿@using ITJakub.Web.Hub.Models
+﻿@using Localization.AspNetCore.Service
+@using Localization.CoreLibrary.Util
+@using ITJakub.Web.Hub.Models
 @model NewsSyndicationItemViewModel
 
+@inject ILocalization Localizer
+
 @{
-    ViewBag.Title = "Administrace - Přidat novinku";
+    ViewBag.Title = Localizer.Translate("NewsManagementTitle", "News", LocTranslationSource.File);
 }
 
 <div class="content-container">
-    <h1>Přidat novinku</h1>
+    <h1>@Localizer.Translate("AddNews", "News", LocTranslationSource.File)</h1>
 
     <p>
         @using (Html.BeginForm("Add", "News", FormMethod.Post))
@@ -42,21 +46,21 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-1" })
                     <div class="col-md-10">
-                        @Html.TextAreaFor(m => m.Content, new { @class = "form-control news-text-area", @style = "min-height: 100px", @placeholder = "Zde napište text novinky..." })
+                        @Html.TextAreaFor(m => m.Content, new { @class = "form-control news-text-area", @style = "min-height: 100px", @placeholder = Localizer.Translate("NewsTextPlaceholder", "News", LocTranslationSource.File) })
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="text-area-info" style="float: right;margin-right:140px;">
-                        Max. <span class="text-area-max-chars"></span> znaků <br />
-                        Zbývá: <span class="text-area-remaining-chars" style="color: lightseagreen"></span> znaků <br />
-                        Můžete používat diakritiku
+                        @Localizer.Translate("Max", "News", LocTranslationSource.File) <span class="text-area-max-chars"></span> @Localizer.Translate("Characters", "News", LocTranslationSource.File) <br />
+                        @Localizer.Translate("Remaining", "News", LocTranslationSource.File): <span class="text-area-remaining-chars" style="color: lightseagreen"></span> @Localizer.Translate("Characters", "News", LocTranslationSource.File) <br />
+                        @Localizer.Translate("DiacriticsAllowed", "News", LocTranslationSource.File)
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-md-offset-10 col-md-1">
-                        <input type="submit" value="Přidat" class="btn btn-default" />
+                        <input type="submit" value="@Localizer.Translate("Submit","News", LocTranslationSource.File)" class="btn btn-default" />
                     </div>
                 </div>
             </div>

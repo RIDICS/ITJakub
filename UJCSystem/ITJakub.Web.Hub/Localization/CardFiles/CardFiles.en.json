@@ -1,0 +1,31 @@
+{
+	"culture":"en",
+	"scope":"CardFiles",
+	"dictionary": {
+		"LoadingError" : "translate[Nepodařilo se načíst výsledek ze zásuvky '{0}' z kartotétky '{1}']",
+		"NotFilled" : "translate[&lt;Nezadáno&gt;]",
+		"SmallPreview" : "translate[Malý náhled]",
+		"List" : "translate[Lístek: ]",
+		"Preview" : "translate[Náhled]",
+		"Pages" : "translate[Stránky: ]",
+		"Keywords" : "translate[Hesla: ]",
+		"Notice" : "translate[Upozornění: ]",
+		"Note" : "translate[Poznámka: ]",
+		
+		"CardFiles" : "translate[Kartotéky]",
+
+		"CardFilesFeedback" : "translate[Kartotéky - Připomínky]",
+		"CardFilesInformation" : "translate[Kartotéky - Informace]",
+		"CardFilesList" : "translate[Kartotéky - Seznam]",
+		"CardFilesSearching" : "translate[Kartotétky - Vyhledávání]",
+		"Search" : "translate[Vyhledat]",
+		"Find" : "translate[Hledat]",
+		"SortBy" : "translate[Řadit podle]",
+		"CardFilesListing" : "translate[Kartotéky - Listování]",
+		"CardFile" : "translate[Kartotéka]",
+		"Drawer" : "translate[Zásuvka]",
+		"NoResults" : "translate[Vyhledávání neodpovídá žádný výsledek]",
+		"NoCardFileSelected" : "translate[Není vybrána žádná kartotéka]",
+		"ServerCommunicationError" : "translate[Došlo k chybě v komunikaci se serverem]"
+		}
+}

@@ -90,13 +90,13 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
 
         public ActionResult Information()
         {
-            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextProfessionalInfo);
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextProfessionalInfo, "professional");
             return View(pageStaticText);
         }
 
         public ActionResult Feedback()
         {
-            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, IsUserLoggedIn());
+            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, IsUserLoggedIn(), "home");
             return View(viewModel);
         }
 
@@ -107,7 +107,7 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
         {
             if (!ModelState.IsValid)
             {
-                m_feedbacksManager.FillViewModel(model, StaticTexts.TextHomeFeedback, GetFeedbackFormIdentification());
+                m_feedbacksManager.FillViewModel(model, StaticTexts.TextHomeFeedback, "home", GetFeedbackFormIdentification());
                 return View(model);
             }
 
@@ -117,7 +117,7 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
 
         public ActionResult Help()
         {
-            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextProfessionalHelp);
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextProfessionalHelp, "professional");
             return View(pageStaticText);
         }
 

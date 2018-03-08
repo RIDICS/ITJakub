@@ -1,0 +1,31 @@
+{
+	"culture":"cs-CZ",
+	"scope":"CardFiles",
+	"dictionary": {
+		"LoadingError" : "Nepodařilo se načíst výsledek ze zásuvky '{0}' z kartotétky '{1}'",
+		"NotFilled" : "&lt;Nezadáno&gt;",
+		"SmallPreview" : "Malý náhled",
+		"List" : "Lístek: ",
+		"Preview" : "Náhled",
+		"Pages" : "Stránky: ",
+		"Keywords" : "Hesla: ",
+		"Notice" : "Upozornění: ",
+		"Note" : "Poznámka: ",
+		
+		"CardFiles" : "Kartotéky",
+
+		"CardFilesFeedback" : "Kartotéky - Připomínky",
+		"CardFilesInformation" : "Kartotéky - Informace",
+		"CardFilesList" : "Kartotéky - Seznam",
+		"CardFilesSearching" : "Kartotétky - Vyhledávání",
+		"Search" : "Vyhledat",
+		"Find" : "Hledat",
+		"SortBy" : "Řadit podle",
+		"CardFilesListing" : "Kartotéky - Listování",
+		"CardFile" : "Kartotéka",
+		"Drawer" : "Zásuvka",
+		"NoResults" : "Vyhledávání neodpovídá žádný výsledek",
+		"NoCardFileSelected" : "Není vybrána žádná kartotéka",
+		"ServerCommunicationError" : "Došlo k chybě v komunikaci se serverem"
+		}
+}

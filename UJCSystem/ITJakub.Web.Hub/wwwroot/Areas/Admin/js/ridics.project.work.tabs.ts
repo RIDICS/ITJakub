@@ -1047,7 +1047,7 @@ class ProjectWorkPublicationsTab extends ProjectModuleTabBase {
             (responseText, textStatus, xmlHttpRequest) => {
                 if (xmlHttpRequest.status !== HttpStatusCode.Success) {
                     var errorElement = new AlertComponentBuilder(AlertType.Error)
-                        .addContent("Chyba při načítání zdrojů k publikaci")
+                        .addContent(localization.translate("CreateResourcesError", "Admin").value)
                         .buildElement();
                     $("#new-snapshot-container").empty().append(errorElement);
                     return;

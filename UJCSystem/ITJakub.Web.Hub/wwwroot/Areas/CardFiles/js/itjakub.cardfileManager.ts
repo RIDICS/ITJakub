@@ -6,6 +6,7 @@
     constructor(cardFilesContainer: string) {
         this.cardFilesContainer = cardFilesContainer;
         this.bucketsCache = new Array<Bucket>();
+     
     }
 
     public makeCardFile(cardFileId: string, cardFileName: string, bucketId: string, bucketName: string,  initCardPosition?: number) {
@@ -65,7 +66,11 @@ class CardFileViewer {
 
     public onErrorCallback: (viewer: CardFileViewer) => void;
 
+    private localization: Localization; 
+
     constructor(cardFileId: string, cardFileName: string, bucket: Bucket, initCardPosition?: number) {
+        this.localization = new Localization();
+
         this.cardFileId = cardFileId;
         this.cardFileName = cardFileName;
         var cardFileDiv = document.createElement("div");
@@ -87,7 +92,8 @@ class CardFileViewer {
     private showError() {
         $(this.htmlBody).removeClass("loading");
         $(this.htmlBody).addClass("error");
-        $(this.htmlBody).html("Nepodařilo se načíst výsledek ze zásuvky '" + this.actualBucket.getName() + "' z kartotéky '" + this.cardFileName + "'");
+        //$(this.htmlBody).html("Nepodařilo se načíst výsledek ze zásuvky '" + this.actualBucket.getName() + "' z kartotéky '" + this.cardFileName + "'");
+        $(this.htmlBody).html(this.localization.translateFormat("LoadingError", new Array<string>(this.actualBucket.getName(), this.cardFileName)  , "CardFiles").value);
         this.onErrorCallback(this);
     }
 
@@ -146,7 +152,7 @@ class CardFileViewer {
         var headwordsText: string = "";
         for (var i = 0; i < headwords.length; i++) {
             if (typeof headwords[i] === "undefined" || headwords[i] == null) {
-                headwordsText = "&lt;Nezadáno&gt;";
+                headwordsText = this.localization.translate("NotFilled", "CardFiles").value;
             } else {
                 headwordsText += headwords[i];
                 if (i < headwords.length - 1) {
@@ -155,7 +161,7 @@ class CardFileViewer {
             }
         }
         if (headwordsText === "") {
-            headwordsText = "&lt;Nezadáno&gt;";
+            headwordsText = this.localization.translate("NotFilled", "CardFiles").value;
         }
 
         return headwordsText;
@@ -216,8 +222,8 @@ class CardFileViewer {
         });
 
         var image: HTMLImageElement = document.createElement("img");
-        image.title = "Malý náhled";
-        image.alt = "Malý náhled";
+        image.title = this.localization.translate("SmallPreview", "CardFiles").value;
+        image.alt = this.localization.translate("SmallPreview", "CardFiles").value;
         image.src = getBaseUrl() +"CardFiles/CardFiles/Image?cardFileId="+this.cardFileId+"&bucketId="+this.actualBucket.getId()+"&cardId="+cardId+"&imageId="+imageId+"&imageSize=thumbnail";
 
         imageAnchor.appendChild(image);
@@ -251,7 +257,7 @@ class CardFileViewer {
             headwordText += " ...";
         }
 
-        return "Lístek: " + cardPosition + "<br/> Hesla: " + headwordText;
+        return this.localization.translate("List", "CardFiles").value + cardPosition + "<br/>" + this.localization.translate("Keywords", "CardFiles").value + headwordText;
     }
 
     private makeLeftPanel(cardFileDiv : HTMLDivElement) {
@@ -276,8 +282,8 @@ class CardFileViewer {
         imageAnchor.href = "";
 
         var image: HTMLImageElement = document.createElement("img");
-        image.title = "Náhled";
-        image.alt = "Náhled";
+        image.title = this.localization.translate("Preview", "CardFiles").value;
+        image.alt = this.localization.translate("Preview", "CardFiles").value;
         image.src = "";
 
         imageAnchor.appendChild(image);
@@ -298,7 +304,7 @@ class CardFileViewer {
 
         var cardFileDescDiv: HTMLDivElement = document.createElement("div");
         $(cardFileDescDiv).addClass("cardfile-description");
-        cardFileDescDiv.innerHTML = "Kartotéka: ";
+        cardFileDescDiv.innerHTML = this.localization.translate("CardFile", "CardFiles").value + ": ";
 
         var cardFileNameSpan: HTMLSpanElement = document.createElement("span");
         $(cardFileNameSpan).addClass("cardfile-name");
@@ -309,7 +315,7 @@ class CardFileViewer {
         
         var cardFileDrawerDescDiv: HTMLDivElement = document.createElement("div");
         $(cardFileDrawerDescDiv).addClass("cardfile-drawer-description");
-        cardFileDrawerDescDiv.innerHTML = "Zásuvka: ";
+        cardFileDrawerDescDiv.innerHTML = this.localization.translate("Drawer", "CardFiles").value + ": ";
 
         var cardFileDrawerNameSpan: HTMLSpanElement = document.createElement("span");
         $(cardFileDrawerNameSpan).addClass("cardfile-drawer-name");
@@ -329,7 +335,7 @@ class CardFileViewer {
 
         var cardFilePagesDiv: HTMLDivElement = document.createElement("div");
         $(cardFilePagesDiv).addClass("cardfile-pages");
-        cardFilePagesDiv.innerHTML = "Stránky: ";
+        cardFilePagesDiv.innerHTML = this.localization.translate("Pages", "CardFiles").value;
 
         cardFileControlPanelDiv.appendChild(cardFilePagesDiv);
 
@@ -338,7 +344,7 @@ class CardFileViewer {
 
         var cardFileHeadwordDescDiv: HTMLDivElement = document.createElement("div");
         $(cardFileHeadwordDescDiv).addClass("cardfile-headword-description");
-        cardFileHeadwordDescDiv.innerHTML = "Hesla: ";
+        cardFileHeadwordDescDiv.innerHTML = this.localization.translate("Keywords", "CardFiles").value;
 
         var cardFileHeadwordTextSpan: HTMLSpanElement = document.createElement("span");
         $(cardFileHeadwordTextSpan).addClass("cardfile-headword-text");
@@ -349,7 +355,7 @@ class CardFileViewer {
 
         var cardFileNoticeDiv: HTMLDivElement = document.createElement("div");
         $(cardFileNoticeDiv).addClass("cardfile-notice");
-        cardFileNoticeDiv.innerHTML = "Upozornění: ";
+        cardFileNoticeDiv.innerHTML = this.localization.translate("Notice", "CardFiles").value;
 
         var cardFileNoticeList: HTMLUListElement = document.createElement("ul");
         $(cardFileNoticeList).addClass("cardfile-notice-list");
@@ -359,7 +365,7 @@ class CardFileViewer {
 
         var cardFileNoteDiv: HTMLDivElement = document.createElement("div");
         $(cardFileNoteDiv).addClass("cardfile-note");
-        cardFileNoteDiv.innerHTML = "Poznámka: ";
+        cardFileNoteDiv.innerHTML = this.localization.translate("Note", "CardFiles").value;
 
         var cardFileNoteList: HTMLUListElement = document.createElement("ul");
         $(cardFileNoteList).addClass("cardfile-note-list");

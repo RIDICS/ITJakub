@@ -27,9 +27,9 @@
             this.changeSortCriteria(parseInt(selectedOptionValue));
         });
 
-        this.addOption(select, "Název", SortEnum.Title.toString());
-        this.addOption(select, "Datace", SortEnum.Dating.toString());
-        this.addOption(select, "Autor", SortEnum.Author.toString());
+        this.addOption(select, localization.translate("TitleSort", "PluginsJs").value, SortEnum.Title.toString());
+        this.addOption(select, localization.translate("DatingSort", "PluginsJs").value, SortEnum.Dating.toString());
+        this.addOption(select, localization.translate("AuthorSort", "PluginsJs").value, SortEnum.Author.toString());
 
         sortBarDiv.appendChild(select);
 

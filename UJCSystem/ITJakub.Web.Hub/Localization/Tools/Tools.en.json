@@ -1,0 +1,9 @@
+{
+	"culture":"en",
+	"scope":"Tools",
+	"dictionary": {
+		"ToolsFeedback" : "translate[Pomůcky - Připomínky]",
+		"ToolsInformation" : "translate[Pomůcky - Informace]",
+		"ToolsList" : "translate[Pomůcky - Seznam]"
+	}
+}

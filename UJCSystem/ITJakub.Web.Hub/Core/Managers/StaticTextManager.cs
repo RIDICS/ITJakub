@@ -1,27 +1,28 @@
-﻿using AutoMapper;
-using ITJakub.Web.DataEntities.Database.Entities.Enums;
-using ITJakub.Web.DataEntities.Database.Repositories;
+﻿using System;
+using System.Globalization;
 using ITJakub.Web.Hub.Core.Markdown;
-using ITJakub.Web.Hub.Core.Work;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Type;
+using Localization.AspNetCore.Service;
+using DynamicText = Localization.CoreLibrary.Entity.DynamicText;
 
 namespace ITJakub.Web.Hub.Core.Managers
 {
     public class StaticTextManager
     {
-        private readonly StaticTextRepository m_staticTextRepository;
+        private readonly IDynamicText m_localizationService;
         private readonly IMarkdownToHtmlConverter m_markdownToHtmlConverter;
 
-        public StaticTextManager(StaticTextRepository staticTextRepository, IMarkdownToHtmlConverter markdownToHtmlConverter)
+        public StaticTextManager(IDynamicText localizationService, IMarkdownToHtmlConverter markdownToHtmlConverter)
         {
-            m_staticTextRepository = staticTextRepository;
+            m_localizationService = localizationService;
             m_markdownToHtmlConverter = markdownToHtmlConverter;
         }
         
-        public StaticTextViewModel GetText(string name)
+        public StaticTextViewModel GetText(string name, string scope)
         {
-            var staticText = new GetStaticTextWork(m_staticTextRepository, name).Execute();
+            DynamicText staticText = m_localizationService.GetDynamicText(name, scope);           
+
             if (staticText == null)
             {
                 return new StaticTextViewModel
@@ -31,14 +32,36 @@ namespace ITJakub.Web.Hub.Core.Managers
                 };
             }
 
-            var viewModel = Mapper.Map<StaticTextViewModel>(staticText);
-            return viewModel;
+            StaticTextViewModel staticTextViewModel = new StaticTextViewModel()
+            {
+                Format = (StaticTextFormatType) staticText.Format,
+                Name = staticText.Name,
+                Scope = staticText.DictionaryScope
+            };
+
+            if (staticText.FallBack)
+            {
+                staticTextViewModel.IsRecordExists = false;
+                staticTextViewModel.LastModificationTime = new DateTime();
+                staticTextViewModel.Text = string.Empty;
+                staticTextViewModel.LastModificationAuthor = string.Empty;
+            }
+            else
+            {
+                staticTextViewModel.IsRecordExists = true;
+                staticTextViewModel.LastModificationAuthor = staticText.ModificationUser;
+                staticTextViewModel.LastModificationTime = staticText.ModificationTime;
+                staticTextViewModel.Text = staticText.Text;
+            }
+
+            return staticTextViewModel;
         }
 
-        public StaticTextViewModel GetRenderedHtmlText(string name)
+        //TODO #Localization
+        public StaticTextViewModel GetRenderedHtmlText(string name, string scope)
         {
-            var staticTextEntity = new GetStaticTextWork(m_staticTextRepository, name).Execute();
-            if (staticTextEntity == null)
+            DynamicText staticText = m_localizationService.GetDynamicText(name, scope);
+            if (staticText == null)
             {
                 return new StaticTextViewModel
                 {
@@ -48,25 +71,53 @@ namespace ITJakub.Web.Hub.Core.Managers
                 };
             }
 
-            var viewModel = Mapper.Map<StaticTextViewModel>(staticTextEntity);
-            switch (staticTextEntity.Format)
+            StaticTextViewModel viewModel = new StaticTextViewModel()
             {
-                case StaticTextFormat.Markdown:
-                    viewModel.Text = m_markdownToHtmlConverter.ConvertToHtml(staticTextEntity.Text);
+                Format = (StaticTextFormatType)staticText.Format,
+                IsRecordExists = true,
+                LastModificationAuthor = staticText.ModificationUser,
+                LastModificationTime = staticText.ModificationTime,
+                Name = staticText.Name,
+                Text = staticText.Text,
+                Scope = staticText.DictionaryScope
+            };
+
+            switch (viewModel.Format)
+            {
+                case StaticTextFormatType.Markdown:
+                    viewModel.Text = m_markdownToHtmlConverter.ConvertToHtml(staticText.Text);
                     viewModel.Format = StaticTextFormatType.Html;
                     break;
-                case StaticTextFormat.PlainText:
-                case StaticTextFormat.Html:
+                case StaticTextFormatType.PlainText:
+                case StaticTextFormatType.Html:
                     break;
             }
 
             return viewModel;
         }
 
-        public ModificationUpdateViewModel SaveText(string name, string text, StaticTextFormatType format, string username)
+        public ModificationUpdateViewModel SaveText(string name, string scope, string text, string culture, StaticTextFormatType format, string username)
         {
-            var formatType = Mapper.Map<StaticTextFormat>(format);
-            var result = new SaveStaticTextWork(m_staticTextRepository, name, text, formatType, username).Execute();
+            //var formatType = Mapper.Map<StaticTextFormat>(format);
+            DynamicText dynamicText = new DynamicText()
+            {
+                Culture = culture,
+                DictionaryScope = scope,
+                Format = (short)format,
+                ModificationUser = username,
+                Name = name,
+                Text = text
+            };
+
+            m_localizationService.SaveDynamicText(dynamicText);
+
+            ModificationUpdateViewModel result = new ModificationUpdateViewModel()
+            {
+                ModificationTime = dynamicText.ModificationTime.ToString(new CultureInfo(culture)),
+                User = username
+            };
+
+            //var result = new SaveStaticTextWork(m_staticTextRepository, name, text, formatType, username).Execute();
             return result;
         }
     }

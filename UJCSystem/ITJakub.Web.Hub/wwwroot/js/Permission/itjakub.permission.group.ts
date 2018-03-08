@@ -14,8 +14,11 @@ class GroupPermissionEditor {
     private bookSelector: BooksSelector;
     private specialPermissionSelector: SpecialPermissionsSelector;
 
+    private specialPermissionTextResolver : SpecialPermissionTextResolver;
+
     constructor(mainContainer: string) {
         this.mainContainer = mainContainer;
+        this.specialPermissionTextResolver = new SpecialPermissionTextResolver();
     }
 
     private searchboxStateChangedCallback(selectedExists: boolean, selectionConfirmed: boolean) {
@@ -460,7 +463,7 @@ class GroupPermissionEditor {
 
         var nameSpan = document.createElement("span");
         $(nameSpan).addClass("list-item-name");
-        nameSpan.innerHTML = SpecialPermissionTextResolver.resolveSpecialPermissionCategoryText(type, specialPermissions);
+        nameSpan.innerHTML = this.specialPermissionTextResolver.resolveSpecialPermissionCategoryText(type, specialPermissions);
 
         groupSpecialPermissionsLi.appendChild(nameSpan);
 
@@ -525,7 +528,7 @@ class GroupPermissionEditor {
 
         var textSpan = document.createElement("span");
         $(textSpan).addClass("list-item-name");
-        textSpan.innerHTML = SpecialPermissionTextResolver.resolveSpecialPermissionText(type, specialPermission);
+        textSpan.innerHTML = this.specialPermissionTextResolver.resolveSpecialPermissionText(type, specialPermission);
 
         specPermissionLi.appendChild(textSpan);
 
@@ -552,7 +555,14 @@ class GroupPermissionEditor {
 }
 
 class SpecialPermissionTextResolver {
+    private localization : Localization;
+    private localizationScope = "PermissionJs";
     
+    constructor() {
+        this.localization = new Localization();
+    }
+
+
     private static newsPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.NewsPermissionContract";
     private static uploadBookPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.UploadBookPermissionContract";
     private static managePermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.ManagePermissionsPermissionContract";
@@ -565,72 +575,71 @@ class SpecialPermissionTextResolver {
     private static editionPrintPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.EditionPrintPermissionContract";
     private static editStaticTextPermission: string = "Vokabular.MainService.DataContracts.Contracts.Permission.EditStaticTextPermissionContract";
     
-    static resolveSpecialPermissionCategoryText(type: string, specialPermissions: ISpecialPermission[]): string {
+    public resolveSpecialPermissionCategoryText(type: string, specialPermissions: ISpecialPermission[]): string {
 
         switch (type) {
-            case this.newsPermission:
-                return "Novinky";
-            case this.uploadBookPermission:
-                return "Nahrávání děl";
-            case this.managePermission:
-                return "Správa práv";
-            case this.feedbackPermission:
-                return "Správa připomínek";
-            case this.cardFilePermission:
-                return "Prohlížení kartoték";
-            case this.autoimportPermission:
-                return "Automatické právo na kategorii";
-            case this.readLemmatizationPermission:
-                return "Prohlížení lematizace";
-            case this.editLemmatizationPermission:
-                return "Úprava lematizace";
-            case this.derivateLemmatizationPermission:
-                return "Derivace hláskových podob";
-            case this.editionPrintPermission:
-                return "Tisk edic";
-            case this.editStaticTextPermission:
-                return "Úprava statických textů";
+            case SpecialPermissionTextResolver.newsPermission:
+                return this.localization.translate("News", this.localizationScope).value;
+            case SpecialPermissionTextResolver.uploadBookPermission:
+                return this.localization.translate("BookUploading", this.localizationScope).value;
+            case SpecialPermissionTextResolver.managePermission:
+                return this.localization.translate("PermissionManagement", this.localizationScope).value;
+            case SpecialPermissionTextResolver.feedbackPermission:
+                return this.localization.translate("FeedbackManagement", this.localizationScope).value;
+            case SpecialPermissionTextResolver.cardFilePermission:
+                return this.localization.translate("ReadCardFile", this.localizationScope).value;
+            case SpecialPermissionTextResolver.autoimportPermission:
+                return this.localization.translate("AutoImport", this.localizationScope).value;
+            case SpecialPermissionTextResolver.readLemmatizationPermission:
+                return this.localization.translate("ReadLemmatization", this.localizationScope).value;
+            case SpecialPermissionTextResolver.editLemmatizationPermission:
+                return this.localization.translate("EditLemmatization", this.localizationScope).value;
+            case SpecialPermissionTextResolver.derivateLemmatizationPermission:
+                return this.localization.translate("DerivateLemmatization", this.localizationScope).value;
+            case SpecialPermissionTextResolver.editionPrintPermission:
+                return this.localization.translate("PrintEdition", this.localizationScope).value;
+            case SpecialPermissionTextResolver.editStaticTextPermission:
+                return this.localization.translate("EditStaticText", this.localizationScope).value;
             default:
-                return "Neznámé právo";
-        }
-         
+                return this.localization.translate("UnknownPermission", this.localizationScope).value;
+        }    
     }
 
-    static resolveSpecialPermissionText(type: string, specialPermission: ISpecialPermission): string {
+    public resolveSpecialPermissionText(type: string, specialPermission: ISpecialPermission): string {
 
         switch (type) {
-            case this.newsPermission:
-                return "Přidávat novinky";
-            case this.uploadBookPermission:
-                return "Nahrávat díla";
-            case this.managePermission:
-                return "Spravovat práva";
-            case this.feedbackPermission:
-                return "Číst připomínky";
-            case this.cardFilePermission:
+            case SpecialPermissionTextResolver.newsPermission:
+                return this.localization.translate("AddNews", this.localizationScope).value;
+            case SpecialPermissionTextResolver.uploadBookPermission:
+                return this.localization.translate("UploadBook", this.localizationScope).value;
+            case SpecialPermissionTextResolver.managePermission:
+                return this.localization.translate("ManagePermissions", this.localizationScope).value;
+            case SpecialPermissionTextResolver.feedbackPermission:
+                return this.localization.translate("ReadFeedback", this.localizationScope).value;
+            case SpecialPermissionTextResolver.cardFilePermission:
                 return this.resolveCardFileText(<ICardFilePermission>specialPermission);
-            case this.autoimportPermission:
+            case SpecialPermissionTextResolver.autoimportPermission:
                 return this.resolveAutoImportText(<IAutoImportPermission>specialPermission);
-            case this.readLemmatizationPermission:
-                return "Prohlížení lematizace";
-            case this.editLemmatizationPermission:
-                return "Úprava lematizace";
-            case this.derivateLemmatizationPermission:
-                return "Derivace hláskových podob";
-            case this.editionPrintPermission:
-                return "Tisk edic";
-            case this.editStaticTextPermission:
-                return "Úprava statických textů";
+            case SpecialPermissionTextResolver.readLemmatizationPermission:
+                return this.localization.translate("ReadLemmatization", this.localizationScope).value;
+            case SpecialPermissionTextResolver.editLemmatizationPermission:
+                return this.localization.translate("EditLemmatization", this.localizationScope).value;
+            case SpecialPermissionTextResolver.derivateLemmatizationPermission:
+                return this.localization.translate("DerivateLemmatization", this.localizationScope).value;
+            case SpecialPermissionTextResolver.editionPrintPermission:
+                return this.localization.translate("PrintEdition", this.localizationScope).value;
+            case SpecialPermissionTextResolver.editStaticTextPermission:
+                return this.localization.translate("EditStaticText", this.localizationScope).value;
             default:
-                return "Neznámé právo";
+                return this.localization.translate("UnknownPermission", this.localizationScope).value;
         }
     }
 
-    private static resolveCardFileText(cardFilePermission: ICardFilePermission):string {
+    private resolveCardFileText(cardFilePermission: ICardFilePermission):string {
         return cardFilePermission.cardFileName;
     }
 
-    private static resolveAutoImportText(autoimportPermission: IAutoImportPermission): string {
+    private resolveAutoImportText(autoimportPermission: IAutoImportPermission): string {
         var label = BookTypeHelper.getText(autoimportPermission.bookType);
         return label;
     }
@@ -641,8 +650,12 @@ class SpecialPermissionsSelector {
     private container: HTMLDivElement;
     private specialPermissionIds: Array<number>;
 
+    private specialPermissionTextResolver: SpecialPermissionTextResolver;
+
     constructor(container: HTMLDivElement) {
         this.container = container;
+
+        this.specialPermissionTextResolver = new SpecialPermissionTextResolver();
     }
 
     public make() {
@@ -725,7 +738,7 @@ class SpecialPermissionsSelector {
 
         var nameSpan = document.createElement("span");
         $(nameSpan).addClass("list-item-name");
-        nameSpan.innerHTML = SpecialPermissionTextResolver.resolveSpecialPermissionCategoryText(type, specialPermissions);
+        nameSpan.innerHTML = this.specialPermissionTextResolver.resolveSpecialPermissionCategoryText(type, specialPermissions);
 
         groupSpecialPermissionsLi.appendChild(nameSpan);
 
@@ -795,7 +808,7 @@ class SpecialPermissionsSelector {
 
         var textSpan = document.createElement("span");
         $(textSpan).addClass("list-item-name");
-        textSpan.innerHTML = SpecialPermissionTextResolver.resolveSpecialPermissionText(type, specialPermission);
+        textSpan.innerHTML = this.specialPermissionTextResolver.resolveSpecialPermissionText(type, specialPermission);
 
         specPermissionLi.appendChild(textSpan);
 

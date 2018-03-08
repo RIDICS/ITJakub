@@ -2,6 +2,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Entities\CanonicalForm.hbm.xml" />
@@ -16,8 +19,8 @@
     <EmbeddedResource Include="Entities\TokenCharacteristic.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Iesi.Collections" Version="4.0.2" />
-    <PackageReference Include="NHibernate" Version="4.1.1.4000" />
+    <PackageReference Include="Iesi.Collections" Version="4.0.3" />
+    <PackageReference Include="NHibernate" Version="5.0.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj" />

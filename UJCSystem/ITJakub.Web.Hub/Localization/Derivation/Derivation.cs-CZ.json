@@ -1,0 +1,9 @@
+{
+	"culture":"cs-CZ",
+	"scope":"Derivation",
+	"dictionary": {
+		"Derivation" : "Derivace hláskových podob",
+		"Load" : "Načíst",
+		"Description" : "Popis"
+		}
+}

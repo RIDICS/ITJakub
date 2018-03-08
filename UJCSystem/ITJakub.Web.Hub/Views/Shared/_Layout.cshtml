@@ -1,5 +1,11 @@
 ﻿@using ITJakub.Web.Hub.Helpers
 @using Vokabular.Shared.Const
+@using Localization.AspNetCore.Service
+@using Localization.CoreLibrary.Util
+@using Microsoft.AspNetCore.Http
+
+@inject ILocalization Localizer
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,7 +28,7 @@
 </head>
 <body class="eupopup eupopup-fixedtop eupopup-color-inverse" data-has-book-text-url="@Url.Action("HasBookText", "Reader",  new {area = ""})">
 
-    <div class="component keyboard-component" data-keyboard-id="0" data-keyboard-api-url="@Url.Action("GetLayoutList", "Keyboard",  new {area = ""})"></div>
+<div class="component keyboard-component" data-keyboard-id="0" data-keyboard-api-url="@Url.Action("GetLayoutList", "Keyboard",  new {area = ""})"></div>
 
     @*top fixed part*@
     <div class="navbar navbar-inverse navbar-fixed-top header-content">
@@ -38,8 +44,8 @@
                     <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
                         <img src="@Url.Content("~/images/logo/main_logo.png")" alt="main_logo" class="main_logo" />
                         <div class="main_logo_text">
-                            <h1>Vokabulář</h1>
-                            <h2>webový</h2>
+                            <h1>@Localizer.Translate("Vokabulář", "global", LocTranslationSource.File)</h1>
+                            <h2>@Localizer.Translate("webový", "global", LocTranslationSource.File)</h2>
                         </div>
                     </a>
                 @*</div>*@
@@ -49,96 +55,96 @@
                         <ul>
                             <li id="dictionaries-menu" class="has-sub">
                                 <a href='@Url.Action("Search", "Dictionaries", new {area = "Dictionaries"})'>
-                                    <span>Slovníky</span>
+                                    <span>@Localizer.Translate("Dictionaries", "layout")</span>
                                 </a>
                                 <ul>
                                     <li>
                                         <a href='@Url.Action("Information", "Dictionaries", new {area = "Dictionaries"})'>
-                                            <span>Informace</span>
+                                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("List", "Dictionaries", new {area = "Dictionaries"})'>
-                                            <span>Seznam</span>
+                                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("Search", "Dictionaries", new {area = "Dictionaries"})'>
-                                            <span>Vyhledávání</span>
+                                            <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("Listing", "Dictionaries", new {area = "Dictionaries"})'>
-                                            <span>Listování</span>
+                                            <span>@Localizer.Translate("Listing", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("Help", "Dictionaries", new {area = "Dictionaries"})'>
-                                            <span>Nápověda</span>
+                                            <span>@Localizer.Translate("Help", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("Feedback", "Dictionaries", new {area = "Dictionaries"})'>
-                                            <span>Připomínky</span>
+                                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                 </ul>
                             </li>
                             <li id="editions-menu" class="has-sub">
                                 <a href='@Url.Action("List", "Editions", new {area = "Editions"})'>
-                                    <span>Edice</span>
+                                    <span>@Localizer.Translate("Editions", "layout", LocTranslationSource.File)</span>
                                 </a>
                                 <ul>
                                     <li>
                                         <a href='@Url.Action("Information", "Editions", new {area = "Editions"})'>
-                                            <span>Informace</span>
+                                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("List", "Editions", new {area = "Editions"})'>
-                                            <span>Seznam</span>
+                                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("Search", "Editions", new {area = "Editions"})'>
-                                            <span>Vyhledávání</span>
+                                            <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("EditionPrinciples", "Editions", new {area = "Editions"})'>
-                                            <span>Ediční zásady</span>
+                                            <span>@Localizer.Translate("EditionPrinciples", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("Help", "Editions", new {area = "Editions"})'>
-                                            <span>Nápověda</span>
+                                            <span>@Localizer.Translate("Help", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("Feedback", "Editions", new {area = "Editions"})'>
-                                            <span>Připomínky</span>
+                                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                 </ul>
                             </li>
                             <li id="corpus-menu" class="has-sub">
                                 <a href='@Url.Action("List", "BohemianTextBank", new {area = "BohemianTextBank"})'>
-                                    <span>Korpusy</span>
+                                    <span>@Localizer.Translate("Corpora", "layout", LocTranslationSource.File)</span>
                                 </a>
                                 <ul>
                                     <li>
                                         <a href='@Url.Action("Information", "BohemianTextBank", new {area = "BohemianTextBank"})'>
-                                            <span>Informace</span>
+                                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("List", "BohemianTextBank", new {area = "BohemianTextBank"})'>
-                                            <span>Seznam</span>
+                                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     @*<li>//TODO remove old search?
                                         <a href='@Url.Action("Search", "BohemianTextBank", new {area = "BohemianTextBank"})'>
-                                            <span>Vyhledávání</span>
+                                            <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>*@
                                     <li>
@@ -158,179 +164,179 @@
                                     </li>
                                     <li>
                                         <a href='@Url.Action("Help", "BohemianTextBank", new {area = "BohemianTextBank"})'>
-                                            <span>Nápověda</span>
+                                            <span>@Localizer.Translate("Help", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("Feedback", "BohemianTextBank", new {area = "BohemianTextBank"})'>
-                                            <span>Připomínky</span>
+                                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                 </ul>
                             </li>
                             <li id="grammars-menu" class="has-sub">
                                 <a href='@Url.Action("List", "OldGrammar", new {area = "OldGrammar"})'>
-                                    <span>Mluvnice</span>
+                                    <span>@Localizer.Translate("Grammar", "layout", LocTranslationSource.File)</span>
                                 </a>
                                 <ul>
                                     <li>
                                         <a href='@Url.Action("Information", "OldGrammar", new {area = "OldGrammar"})'>
-                                            <span>Informace</span>
+                                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("List", "OldGrammar", new {area = "OldGrammar"})'>
-                                            <span>Seznam</span>
+                                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("Search", "OldGrammar", new {area = "OldGrammar"})'>
-                                            <span>Vyhledávání</span>
+                                            <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("ListTerms", "OldGrammar", new {area = "OldGrammar"})'>
-                                            <span>Seznam termínů</span>
+                                            <span>@Localizer.Translate("ListTerms", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("Help", "OldGrammar", new {area = "OldGrammar"})'>
-                                            <span>Nápověda</span>
+                                            <span>@Localizer.Translate("Help", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("Feedback", "OldGrammar", new {area = "OldGrammar"})'>
-                                            <span>Připomínky</span>
+                                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                 </ul>
                             </li>
                             <li id="professional-menu" class="has-sub">
                                 <a href='@Url.Action("List", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
-                                    <span>Odborná literatura</span>
+                                    <span>@Localizer.Translate("ProfessionalLiterature", "layout", LocTranslationSource.File)</span>
                                 </a>
                                 <ul>
                                     <li>
                                         <a href='@Url.Action("Information", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
-                                            <span>Informace</span>
+                                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("List", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
-                                            <span>Seznam</span>
+                                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("Search", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
-                                            <span>Vyhledávání</span>
+                                            <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("Help", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
-                                            <span>Nápověda</span>
+                                            <span>@Localizer.Translate("Help", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("Feedback", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
-                                            <span>Připomínky</span>
+                                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                 </ul>
                             </li>
                             <li id="bibliographies-menu" class="has-sub">
                                 <a href='@Url.Action("Search", "Bibliographies", new {area = "Bibliographies"})'>
-                                    <span>Bibliografie</span>
+                                    <span>@Localizer.Translate("Bibliographies", "layout", LocTranslationSource.File)</span>
                                 </a>
                                 <ul>
                                     <li>
                                         <a href='@Url.Action("Information", "Bibliographies", new {area = "Bibliographies"})'>
-                                            <span>Informace</span>
+                                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("Search", "Bibliographies", new {area = "Bibliographies"})'>
-                                            <span>Vyhledávání</span>
+                                            <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("Feedback", "Bibliographies", new {area = "Bibliographies"})'>
-                                            <span>Připomínky</span>
+                                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                 </ul>
                             </li>
                             <li id="cardifiles-menu" class="has-sub">
                                 <a href='@Url.Action("List", "CardFiles", new {area = "CardFiles"})'>
-                                    <span>Kartotéky</span>
+                                    <span>@Localizer.Translate("CardFiles", "layout", LocTranslationSource.File)</span>
                                 </a>
                                 <ul>
                                     <li>
                                         <a href='@Url.Action("Information", "CardFiles", new {area = "CardFiles"})'>
-                                            <span>Informace</span>
+                                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("List", "CardFiles", new {area = "CardFiles"})'>
-                                            <span>Seznam</span>
+                                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("Search", "CardFiles", new {area = "CardFiles"})'>
-                                            <span>Vyhledávání</span>
+                                            <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("Listing", "CardFiles", new {area = "CardFiles"})'>
-                                            <span>Listování</span>
+                                            <span>@Localizer.Translate("Listing", "layout", LocTranslationSource.File)</span>
                                         </a> @*TODO delete from menu*@
                                     </li>
                                     <li>
                                         <a href='@Url.Action("Feedback", "CardFiles", new {area = "CardFiles"})'>
-                                            <span>Připomínky</span>
+                                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                 </ul>
                             </li>
                             <li id="audio-menu" class="has-sub">
                                 <a href='@Url.Action("List", "AudioBooks", new {area = "AudioBooks"})'>
-                                    <span>Audioknihy</span>
+                                    <span>@Localizer.Translate("AudioBooks", "layout", LocTranslationSource.File)</span>
                                 </a>
                                 <ul>
                                     <li>
                                         <a href='@Url.Action("Information", "AudioBooks", new {area = "AudioBooks"})'>
-                                            <span>Informace</span>
+                                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("List", "AudioBooks", new {area = "AudioBooks"})'>
-                                            <span>Seznam</span>
+                                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("Feedback", "AudioBooks", new {area = "AudioBooks"})'>
-                                            <span>Připomínky</span>
+                                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                 </ul>
                             </li>
                             <li id="tools-menu" class="has-sub">
                                 <a href='@Url.Action("List", "Tools", new {area = "Tools"})'>
-                                    <span>Pomůcky</span>
+                                    <span>@Localizer.Translate("Tools", "layout", LocTranslationSource.File)</span>
                                 </a>
                                 <ul>
                                     <li>
                                         <a href='@Url.Action("Information", "Tools", new {area = "Tools"})'>
-                                            <span>Informace</span>
+                                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("List", "Tools", new {area = "Tools"})'>
-                                            <span>Seznam</span>
+                                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href='@Url.Action("Feedback", "Tools", new {area = "Tools"})'>
-                                            <span>Připomínky</span>
+                                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -341,49 +347,49 @@
                                     @if (User.IsInRole(CustomRole.CanUploadBooks))
                                     {
                                         <a href='@Url.Action("Upload", "Upload", new {area = ""})'>
-                                            <span>Administrace</span>
+                                            <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     }
                                     else if (User.IsInRole(CustomRole.CanEditLemmatization))
                                     {
                                         <a href="@Url.Action("Index", "Lemmatization", new {area = "Lemmatization"})">
-                                            <span>Administrace</span>
+                                            <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     }
                                     else if (User.IsInRole(CustomRole.CanReadLemmatization))
                                     {
                                         <a href="@Url.Action("List", "Lemmatization", new {area = "Lemmatization"})">
-                                            <span>Administrace</span>
+                                            <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     }
                                     else if (User.IsInRole(CustomRole.CanDerivateLemmatization))
                                     {
                                         <a href="@Url.Action("Index", "Derivation", new {area = "Derivation"})">
-                                            <span>Administrace</span>
+                                            <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     }
                                     else if (User.IsInRole(CustomRole.CanManagePermissions))
                                     {
                                         <a href='@Url.Action("UserPermission", "Permission", new {area = ""})'>
-                                            <span>Administrace</span>
+                                            <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     }
                                     else if (User.IsInRole(CustomRole.CanManageFeedbacks))
                                     {
                                         <a href='@Url.Action("Feedback", "Feedback", new {area = ""})'>
-                                            <span>Administrace</span>
+                                            <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     }
                                     else if (User.IsInRole(CustomRole.CanAddNews))
                                     {
                                         <a href='@Url.Action("Add", "News", new {area = ""})'>
-                                            <span>Administrace</span>
+                                            <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     }
                                     else
                                     {
                                         <a href='@Url.Action("Management", "Favorite", new {area = ""})'>
-                                            <span>Administrace</span>
+                                            <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     }
                                     <ul>
@@ -391,7 +397,7 @@
                                         {
                                             <li>
                                                 <a href='@Url.Action("Upload", "Upload", new {area = ""})'>
-                                                    <span>Nahrání díla</span>
+                                                    <span>@Localizer.Translate("UploadWork", "layout", LocTranslationSource.File)</span>
                                                 </a>
                                             </li>
                                         }
@@ -400,12 +406,12 @@
                                         {
                                             <li>
                                                 <a href="@Url.Action("Index", "Lemmatization", new {area = "Lemmatization"})">
-                                                    <span>Lemmatizace</span>
+                                                    <span>@Localizer.Translate("Lemmatisation", "layout", LocTranslationSource.File)</span>
                                                 </a>
                                             </li>
                                             <li>
                                                 <a href="@Url.Action("List", "Lemmatization", new {area = "Lemmatization"})">
-                                                    <span>Lemmatizace - procházení</span>
+                                                    <span>@Localizer.Translate("LemmatisationWalkthrough", "layout", LocTranslationSource.File)</span>
                                                 </a>
                                             </li>
                                         }
@@ -414,7 +420,7 @@
                                         {
                                             <li>
                                                 <a href="@Url.Action("Index", "Derivation", new {area = "Derivation"})">
-                                                    <span>Derivace hláskových podob</span>
+                                                    <span>@Localizer.Translate("Derivation", "layout", LocTranslationSource.File)</span>
                                                 </a>
                                             </li>
                                         }
@@ -423,12 +429,12 @@
                                         {
                                             <li>
                                                 <a href='@Url.Action("UserPermission", "Permission", new {area = ""})'>
-                                                    <span>Správa uživatelů</span>
+                                                    <span>@Localizer.Translate("UserManagement", "layout", LocTranslationSource.File)</span>
                                                 </a>
                                             </li>
                                             <li>
                                                 <a href='@Url.Action("GroupPermission", "Permission", new {area = ""})'>
-                                                    <span>Správa skupin</span>
+                                                    <span>@Localizer.Translate("GroupManagement", "layout", LocTranslationSource.File)</span>
                                                 </a>
                                             </li>
                                         }
@@ -437,14 +443,14 @@
                                         {
                                             <li>
                                                 <a href='@Url.Action("Feedback", "Feedback", new {area = ""})'>
-                                                    <span>Správa připomínek</span>
+                                                    <span>@Localizer.Translate("FeedbackManagement", "layout", LocTranslationSource.File)</span>
                                                 </a>
                                             </li>
                                         }
 
                                         <li>
                                             <a href='@Url.Action("Management", "Favorite", new {area = ""})'>
-                                                <span>Oblíbené položky</span>
+                                                <span>@Localizer.Translate("FavoriteItems", "layout", LocTranslationSource.File)</span>
                                             </a>
                                         </li>
 
@@ -452,7 +458,7 @@
                                         {
                                             <li>
                                                 <a href='@Url.Action("Add", "News", new {area = ""})'>
-                                                    <span>Přidat novinku</span>
+                                                    <span>@Localizer.Translate("AddNews", "layout", LocTranslationSource.File)</span>
                                                 </a>
                                             </li>
                                         }
@@ -479,6 +485,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="~/lib/respond.js/dest/respond.min.js"></script>
     <script src="~/lib-custom/typeahead.bundle.js"></script>
+    <script src="~/lib-custom/localization.js"></script>
     <script src="~/lib/jquery-appear/src/jquery.appear.js"></script>
     <script src="~/lib/jquery-zoom/jquery.zoom.js"></script>
     <script src="~/lib/wheelzoom/wheelzoom.js"></script>
@@ -552,7 +559,7 @@
     @*main page content*@
     <div class="container-header">
         <div class="container">
-            @BreadcrumbsHelper.Create(ViewBag.Title)
+            @BreadcrumbsHelper.Create(Context, ViewBag.Title)
         </div>
     </div>
     <div class="container module-content">
@@ -568,42 +575,48 @@
         <div class="footer-text-area">
             <ul>
                 <li class="footer-first">
-                    <a href='@Url.Action("About", "Home", new {area = ""})'>O Vokabuláři webovém</a>
+                    <a href='@Url.Action("About", "Home", new {area = ""})'>@Localizer.Translate("AboutVW", "layout", LocTranslationSource.File)</a>
                 </li>
                 <li>
-                    <a href='@Url.Action("Copyright", "Home", new {area = ""})'>Copyright</a>
+                    <a href='@Url.Action("Copyright", "Home", new {area = ""})'>@Localizer.Translate("Copyright", "layout", LocTranslationSource.File)</a>
                 </li>
                 <li>
-                    <a href='@Url.Action("Contacts", "Home", new {area = ""})'>Kontakty</a>
+                    <a href='@Url.Action("Contacts", "Home", new {area = ""})'>@Localizer.Translate("Contacts", "layout", LocTranslationSource.File)</a>
                 </li>
                 <li>
-                    <a href='@Url.Action("Links", "Home", new {area = ""})'>Odkazy</a>
+                    <a href='@Url.Action("Links", "Home", new {area = ""})'>@Localizer.Translate("Links", "layout", LocTranslationSource.File)</a>
                 </li>
                 <li>
-                    <a href='@Url.Action("Support", "Home", new {area = ""})'>Podpora</a>
+                    <a href='@Url.Action("Support", "Home", new {area = ""})'>@Localizer.Translate("Support", "layout", LocTranslationSource.File)</a>
                 </li>
                 <li>
-                    <a href='@Url.Action("HowToCite", "Home", new {area = ""})'>Jak citovat</a>
+                    <a href='@Url.Action("HowToCite", "Home", new {area = ""})'>@Localizer.Translate("HowToCite", "layout", LocTranslationSource.File)</a>
                 </li>
                 <li class="footer-last">
-                    <a href='@Url.Action("Feedback", "Home", new {area = ""})'>Připomínky</a>
+                    <a href='@Url.Action("Feedback", "Home", new {area = ""})'>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</a>
                 </li>
             </ul>
             <div class="footer-text">
-                VOKABULÁŘ WEBOVÝ byl spuštěn před @FooterHelper.VokabularStarted(new DateTime(2015, 1, 1))
+                @{
+                    
+                    //string vokabularStarted = FooterHelper.VokabularStarted(new DateTime(2015, 1, 1)).Value;
+                    string vokabularStartedNew = FooterHelper.VokabularStartedLocalized(new DateTime(2015, 1, 1), Context.Request.Cookies[ServiceBase.CultureCookieName]).Value;
+                }
+                
+                @Localizer.TranslateFormat("FooterText", new object[] {vokabularStartedNew}, "layout", LocTranslationSource.File)
             </div>
             <div class="footer-logos">
-                <a href="http://www.ujc.cas.cz/" class="ujc" title="Ústav pro jazyk český">
-                    <img src="@Url.Content("~/images/logo/logo_ujc_white.png")" alt="Ústav pro jazyk český" />
+                <a href="http://www.ujc.cas.cz/" class="ujc" title="@Localizer.Translate("UjcLong", "layout")">
+                    <img src="@Url.Content("~/images/logo/logo_ujc_white.png")" alt="@Localizer.Translate("UjcLong", "layout", LocTranslationSource.File)" />
                 </a>
-                <a href="https://www.fel.cvut.cz/cz/" class="fel" title="ČVUT Fakulta Elektrotechnická">
-                    <img src="@Url.Content("~/images/logo/logo_fel_white.png")" alt="ČVUT Fakulta Elektrotechnická" />
+                <a href="https://www.fel.cvut.cz/cz/" class="fel" title="@Localizer.Translate("CtuFelLong", "layout")">
+                    <img src="@Url.Content("~/images/logo/logo_fel_white.png")" alt="@Localizer.Translate("CtuFelLong", "layout", LocTranslationSource.File)" />
                 </a>
-                <a href="http://av21.avcr.cz/" class="av21" title="AVČR Strategie AV 21">
-                    <img src="@Url.Content("~/images/logo/logo_av21_white.png")" alt="AVČR Strategie AV 21" />
+                <a href="http://av21.avcr.cz/" class="av21" title="@Localizer.Translate("AvcrStrategyAV21","layout")">
+                    <img src="@Url.Content("~/images/logo/logo_av21_white.png")" alt="@Localizer.Translate("AvcrStrategyAV21","layout", LocTranslationSource.File)" />
                 </a>
-                <a href="http://www.msmt.cz" class="msmt" title="Ministerstvo školství, mládeže a tělovýchovy">
-                    <img src="@Url.Content("~/images/logo/logo_msmt_white.png")" alt="Ministerstvo školství, mládeže a tělovýchovy" />
+                <a href="http://www.msmt.cz" class="msmt" title="@Localizer.Translate("MsmtLong","layout", LocTranslationSource.File)">
+                    <img src="@Url.Content("~/images/logo/logo_msmt_white.png")" alt="@Localizer.Translate("MsmtLong","layout", LocTranslationSource.File)" />
                 </a>
             </div>
         </div>

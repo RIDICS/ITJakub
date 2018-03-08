@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using Log4net.Extensions.Logging;
+using Localization.AspNetCore.Service.Extensions;
+using Localization.CoreLibrary.Dictionary.Factory;
+using Localization.CoreLibrary.Util;
+using Localization.Database.EFCore.Data.Impl;
+using Localization.Database.EFCore.Factory;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -15,48 +20,33 @@ using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
 using Vokabular.Shared.Container;
 using Vokabular.Shared.Options;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace ITJakub.Web.Hub
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
-            var globalbuilder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("globalsettings.json");
-            var globalConfiguration = globalbuilder.Build();
-
-            var secretSettingsPath = globalConfiguration["SecretSettingsPath"];
-            var environmentConfiguration = globalConfiguration["EnvironmentConfiguration"];
-
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{environmentConfiguration}.json", optional: true)
-                .AddJsonFile(Path.Combine(secretSettingsPath, "ITJakub.Secrets.json"), optional: true)
-                .AddJsonFile(Path.Combine(secretSettingsPath, $"ITJakub.Secrets.{environmentConfiguration}.json"), optional: true);
-
-            if (env.IsDevelopment())
-            {
-                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                //builder.AddUserSecrets();
-            }
-
-            builder.AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = configuration;
             ApplicationConfig.Configuration = Configuration;
-
-            env.ConfigureLog4Net("log4net.config");
         }
 
-        private IConfigurationRoot Configuration { get; }
+        private IConfiguration Configuration { get; }
         private IIocContainer Container { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(o =>
+                {
+                    o.AccessDeniedPath = "/Account/AccessDenied/";
+                    o.LoginPath = "/Account/Login";
+                });
+
+
             // Configuration options
             services.AddOptions();
             services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
@@ -66,26 +56,63 @@ namespace ITJakub.Web.Hub
                 options.MultipartBodyLengthLimit = 1048576000;
             });
 
-            services.AddMvc();
+            // Localization
+            var connectionString = Configuration.GetConnectionString(SettingKeys.WebConnectionString) ??
+                                   throw new ArgumentException("Connection string not found");
+            services.AddDbContext<StaticTextsContext>(options => options
+                .UseSqlServer(connectionString));
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddLocalizationService();
+
+
+            services.AddMvc()
+                .AddDataAnnotationsLocalization(options =>
+                {
+                    options.DataAnnotationLocalizerProvider = (type, factory) =>
+                    {
+                        return factory
+                            .Create(type.Name, LocTranslationSource.File.ToString());
+                    };
+                })
+                .AddRazorOptions(options =>
+                {
+                    var previous = options.CompilationCallback;
+                    options.CompilationCallback = context =>
+                    {
+                        previous?.Invoke(context);
+
+                        context.Compilation = context.Compilation.AddReferences(Microsoft.CodeAnalysis.MetadataReference.CreateFromFile(typeof(Localization.AspNetCore.Service.ILocalization).Assembly.Location));
+                        context.Compilation = context.Compilation.AddReferences(Microsoft.CodeAnalysis.MetadataReference.CreateFromFile(typeof(Localization.CoreLibrary.Localization).Assembly.Location));
+                    };
+                });
 
             // IoC
             IIocContainer container = new DryIocContainer();
             container.Install<WebHubContainerRegistration>();
             Container = container;
             
+
             return container.CreateServiceProvider(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime applicationLifetime)
         {
-            // Logging
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-            loggerFactory.AddLog4Net();
             ApplicationLogging.LoggerFactory = loggerFactory;
+
+            var configuration = app.ApplicationServices.GetService<TelemetryConfiguration>();
+            if (configuration != null)
+            {
+                configuration.DisableTelemetry = true; // Workaround for disabling telemetry
+            }
+
+            // Localization
+            Localization.CoreLibrary.Localization.Init(
+                @"localizationsettings.json",
+                new DatabaseServiceFactory(Container.Resolve<StaticTextsContext>()),
+                new JsonDictionaryFactory());
+            Localization.CoreLibrary.Localization.AttachLogger(loggerFactory);
 
             if (env.IsDevelopment())
             {
@@ -99,17 +126,7 @@ namespace ITJakub.Web.Hub
 
             app.UseStatusCodePages();
 
-            //app.ConfigureAuth(); // Old authentication configuration
-            app.UseCookieAuthentication(new CookieAuthenticationOptions //TODO move to specific class?
-            {
-                AccessDeniedPath = "/Account/AccessDenied/",
-                AuthenticationScheme = CookieAuthenticationDefaults.AuthenticationScheme,
-                AutomaticAuthenticate = true,
-                AutomaticChallenge = true,
-                LoginPath = "/Account/Login",
-                //Events = new CookieAuthenticationEvents{} // TODO maybe useful events
-                //CookiePath = "" // TODO maybe useful for Development deployment
-            });
+            app.UseAuthentication();
 
             app.ConfigureAutoMapper();
 

@@ -1,21 +1,23 @@
 ﻿/// <reference path="Plugins/Bibliography/itjakub.plugins.bibliography.ts"/>
 /// <reference path="Plugins/DropdownSelect/itjakub.plugins.dropdownselect.ts"/>
 /// <reference path="../../node_modules/@types/dropzone/index.d.ts"/>
-
 /// <reference path="../../node_modules/@types/jquery/index.d.ts" />
 /// <reference path="../../node_modules/@types/jqueryui/index.d.ts" />
-/// <reference path="../../node_modules/@types/dropzone/index.d.ts" />
 /// <reference path="../../node_modules/@types/jquery.validation/index.d.ts" />
 /// <reference path="../../node_modules/@types/typeahead/index.d.ts" />
 /// <reference path="../../node_modules/@types/simplemde/index.d.ts" />
 /// <reference path="../../node_modules/@types/codemirror/index.d.ts" />
 /// <reference path="../lib/s-pagination/dist/pagination.d.ts" />
 
+var localization: Localization;
+
 // Disable Dropzone auto-initializing
 Dropzone.autoDiscover = false;
 
 //sets state to main plugins menu
 $(document as Node as Element).ready(() => {
+    localization = new Localization();
+
     $('#main-plugins-menu').find('li').removeClass('active');
     var href = window.location.pathname;
     var liTargetingActualPage = $('#main-plugins-menu').find("a[href='" + href.toString() + "']").parent('li');

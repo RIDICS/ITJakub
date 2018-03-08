@@ -1,8 +1,13 @@
-﻿<div id="listHeader">
+﻿@using Localization.AspNetCore.Service
+@using Localization.CoreLibrary.Util
+
+@inject ILocalization Localizer
+
+<div id="listHeader">
     <div id="listSearchDiv" class="list-search-div">
     </div>
     <div class="list-results-header">
-        Řadit podle
+        @Localizer.Translate("SortBy", "global", LocTranslationSource.File)
         <div id="listResultsHeader" class="list-results-header-div">
         </div>
     </div>

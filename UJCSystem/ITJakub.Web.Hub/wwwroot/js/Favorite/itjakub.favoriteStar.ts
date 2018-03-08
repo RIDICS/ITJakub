@@ -10,6 +10,9 @@
     private popoverBuilder: FavoritePopoverBuilder;
     private starGlyphIcon: HTMLSpanElement;
 
+    //private localization : Localization;
+	private localizationScope = "FavoriteJs";
+
     constructor(container: JQuery, type: FavoriteType, itemId: string, favoriteDefaultTitle: string, favoriteDialog: NewFavoriteDialog, favoriteManager: FavoriteManager, favoritesChangedCallback: () => void) {
         this.favoritesChangedCallback = favoritesChangedCallback;
         this.favoriteManager = favoriteManager;
@@ -20,6 +23,8 @@
         this.container = container;
         this.isItemLabeled = false;
         this.popoverBuilder = new FavoritePopoverBuilder();
+
+        //this.localization = new Localization();
     }
 
     private createGlyphIcon(name: string): HTMLSpanElement {
@@ -61,7 +66,7 @@
         var glyphIconType = this.isItemLabeled ? "glyphicon-star" : "glyphicon-star-empty";
         var glyphIcon = this.createGlyphIcon(glyphIconType);
         $(glyphIcon)
-            .attr("data-title", "Štítky této položky")
+            .attr("data-title", localization.translate("ThisItemLabels", this.localizationScope).value)
             .attr("data-toggle", "popover")
             .popover(popoverOptions);
         $(glyphIcon).on("shown.bs.popover", () => {
@@ -126,7 +131,7 @@
 
         this.favoriteManager.createFavoriteItem(this.favoriteItemType, this.itemId, data.itemName, labelIds, (ids, error) => {
             if (error) {
-                this.favoriteDialog.showError("Chyba při vytváření oblíbené položky");
+                this.favoriteDialog.showError(localization.translate("CreateFavItemError", this.localizationScope).value);
                 return;
             }
 
@@ -168,7 +173,7 @@
             this.notifyFavoritesChanged();
 
             if (this.popoverBuilder.getFavoriteItemsCount() === 0) {
-                itemsContainerJQuery.text("Žádná položka");
+                itemsContainerJQuery.text(localization.translate("NoItem", this.localizationScope).value);
             }
         });
     }
@@ -199,23 +204,34 @@
 }
 
 class FavoritePopoverBuilder {
-    private templateStart = '<div class="row"><div class="col-md-12"><h6>Seznam přiřazených štítků:</h6><div class="favorite-label-popover-container">';
-    private templateMiddle = '</div><hr></div></div><div class="row"><div class="col-md-12"><h6>Přidat štítek z naposledy použitých:</h6>';
-    private templateEnd = '<hr></div></div><div class="row"><div class="col-md-12"><button type="button" class="btn btn-default btn-block btn-sm show-all-favorite-button">Pokročilé možnosti</button></div></div>';
+    private localizationScope = "FavoriteJs";
 
+    private templateStart: string;
+    private templateMiddle: string;
+    private templateEnd: string;
     private favoriteItems: Array<IFavoriteBaseInfoWithLabel>;
     private favoriteLabels: Array<IFavoriteLabel>;
 
     constructor() {
         this.favoriteItems = [];
         this.favoriteLabels = [];
+
+        var attachedTagList = localization.translate("AttachedTagList", this.localizationScope).value;
+        var addTagFromLastUsed = localization.translate("AddTagFromLastUsed", this.localizationScope).value;
+        var advancedOptions = localization.translate("AdvancedOptions", this.localizationScope).value;
+
+        this.templateStart = `<div class="row"><div class="col-md-12"><h6>${attachedTagList}</h6><div class="favorite-label-popover-container">`;
+        this.templateMiddle = `</div><hr></div></div><div class="row"><div class="col-md-12"><h6>${addTagFromLastUsed}</h6>`;
+        this.templateEnd = `<hr></div></div><div class="row"><div class="col-md-12"><button type="button" class="btn btn-default btn-block btn-sm show-all-favorite-button">${advancedOptions}</button></div></div>`;
     }
 
     private getFavoriteItemHtml(item: IFavoriteBaseInfoWithLabel): string {
         var color = new HexColor(item.favoriteLabel.color);
         var fontColor = FavoriteHelper.getDefaultFontColor(color);
         var borderColor = FavoriteHelper.getDefaultBorderColor(color);
-        return `<div class="favorite-item"><span class="label label-favorite" data-toggle="tooltip" title="Uloženo jako: ${item.title
+        var title = localization.translate("SavedAs", this.localizationScope).value;
+
+        return `<div class="favorite-item"><span class="label label-favorite" data-toggle="tooltip" title="${title}${item.title
             }" style="background-color: ${escapeHtmlChars(item.favoriteLabel.color)}; border-color:${borderColor}; color: ${fontColor};">${escapeHtmlChars(item.favoriteLabel.name)
             }<a href="#" class="favorite-book-remove" data-id="${escapeHtmlChars(item.id.toString())
             }" style="color: ${fontColor}"><span class="glyphicon glyphicon-remove"></span></a></span></div>`;
@@ -247,7 +263,9 @@ class FavoritePopoverBuilder {
             resultStrings.push(labelHtml);
         }
 
-        var nextButtonString = '<span class="label-favorite-container"><a href="#" class="show-all-favorite-button" title="Přidat ze seznamu všech štítků"><span style="color: black; font-weight: bold; margin-left: 3px;">...</span></a></span>';
+        var title = localization.translate("AddFromAllTagList", this.localizationScope).value;
+
+        var nextButtonString = `<span class="label-favorite-container"><a href="#" class="show-all-favorite-button" title="${title}"><span style="color: black; font-weight: bold; margin-left: 3px;">...</span></a></span>`;
         resultStrings.push(nextButtonString);
 
         return resultStrings.join("");
@@ -279,10 +297,10 @@ class FavoritePopoverBuilder {
 
     public getHtmlString(): string {
         var favoriteItemsString = this.favoriteItems.length === 0
-            ? "<div>Žádná položka</div>"
+            ? "<div>" + localization.translate("NoItem", this.localizationScope).value + "</div>"
             : this.getFavoriteItemsHtml();
         var favoriteLabelsString = this.favoriteLabels.length === 0
-            ? "<div>Žádná položka</div>"
+            ? "<div>" + localization.translate("NoItem", this.localizationScope).value + "</div>"
             : this.getFavoriteLabelsHtml();
 
         return this.templateStart +

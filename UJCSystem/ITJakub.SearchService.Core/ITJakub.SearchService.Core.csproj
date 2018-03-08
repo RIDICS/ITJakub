@@ -2,6 +2,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="ITJakub.SearchService.Core.Container.Config" />
@@ -10,8 +13,8 @@
     <EmbeddedResource Include="ITJakub.SearchService.Core.Container.Config" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Castle.Core" Version="3.3.3" />
-    <PackageReference Include="Castle.Windsor" Version="3.4.0" />
+    <PackageReference Include="Castle.Core" Version="4.2.1" />
+    <PackageReference Include="Castle.Windsor" Version="4.1.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.4.1" />
     <PackageReference Include="System.Net.Http" Version="4.3.3" />
   </ItemGroup>

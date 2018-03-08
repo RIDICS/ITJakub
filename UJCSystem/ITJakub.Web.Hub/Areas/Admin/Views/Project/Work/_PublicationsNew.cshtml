@@ -1,6 +1,8 @@
 ﻿@using ITJakub.Web.Hub.Areas.Admin.Models
+@using Localization.AspNetCore.Service
 @using Vokabular.MainService.DataContracts.Contracts.Type
 @model NewPublicationViewModel
+@inject ILocalization Localizer
 
 <div class="project-snapshot-new">
     <div class="project-snapshot-resources">
@@ -10,16 +12,16 @@
         @Html.Partial("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Video, "Video zdroje", Model.ResourceList))
         
         <div class="project-bottom-buttons">
-            <button type="button" class="btn btn-default">Uložit</button>
+            <button type="button" class="btn btn-default">@Localizer.Translate("Save", "Admin")</button>
         </div>
     </div>
 
     <div class="project-snapshot-visibility">
         <div>
-            <h4>Viditelnost</h4>
+            <h4>@Localizer.Translate("Visibility", "Admin")</h4>
             <div>
                 <button type="button" class="btn btn-default form-control">
-                    <span class="glyphicon glyphicon-plus"></span> Přidat skupinu/uživatele
+                    <span class="glyphicon glyphicon-plus"></span> @Localizer.Translate("AddGroupUser", "Admin")
                 </button>
             </div>
 

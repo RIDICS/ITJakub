@@ -1381,6 +1381,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public BookContract GetBookInfoByExternalId(string externalId)
+        {
+            try
+            {
+                var result = Get<BookContract>("book/info".AddQueryString("externalId", externalId));
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public SearchResultDetailContract GetBookDetail(long projectId)
         {
             try

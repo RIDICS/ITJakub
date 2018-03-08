@@ -11,6 +11,7 @@ using ITJakub.Web.Hub.Areas.Admin.Models.Type;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Helpers;
+using Localization.AspNetCore.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
@@ -27,9 +28,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
     public class ProjectController : BaseController
     {
         private const int ProjectListPageSize = 5;
+        private readonly ILocalization m_localizer;
 
-        public ProjectController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        public ProjectController(CommunicationProvider communicationProvider, ILocalization localizer) : base(communicationProvider)
         {
+            this.m_localizer = localizer;
         }
 
         private ProjectListViewModel CreateProjectListViewModel(PagedResultList<ProjectDetailContract> data, int start)
@@ -182,7 +185,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 var resources = client.GetResourceList(projectId);
                 // TODO
             }
-            var viewModel = ProjectMock.GetNewPulication();
+            var viewModel = ProjectMock.GetNewPulication(m_localizer);
             return PartialView("Work/_PublicationsNew", viewModel);
         }
 
@@ -570,42 +573,44 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
     public static class ProjectMock
     {
-        public static NewPublicationViewModel GetNewPulication()
+        public static NewPublicationViewModel GetNewPulication(ILocalization localizer)
         {
             return new NewPublicationViewModel
             {
                 ResourceList = new List<ResourceViewModel>
                 {
-                    GetResourceViewModel(1),
-                    GetResourceViewModel(2),
-                    GetResourceViewModel(3),
-                    GetResourceViewModel(4),
-                    GetResourceViewModel(5)
+                    GetResourceViewModel(1, localizer),
+                    GetResourceViewModel(2, localizer),
+                    GetResourceViewModel(3, localizer),
+                    GetResourceViewModel(4, localizer),
+                    GetResourceViewModel(5, localizer)
                 },
                 VisibilityForGroups = new List<GroupInfoViewModel>
                 {
-                    GetVisibilityForGroup(1),
-                    GetVisibilityForGroup(2),
-                    GetVisibilityForGroup(3),
+                    GetVisibilityForGroup(1, localizer),
+                    GetVisibilityForGroup(2, localizer),
+                    GetVisibilityForGroup(3, localizer),
                 }
             };
         }
 
-        private static GroupInfoViewModel GetVisibilityForGroup(int id)
+        private static GroupInfoViewModel GetVisibilityForGroup(int id, ILocalization localizer)
         {
             return new GroupInfoViewModel
             {
                 GroupId = id,
-                Name = string.Format("Skupina {0}", id)
+                //Name = string.Format("Skupina {0}", id)
+                Name = localizer.TranslateFormat("Group", new object[]{id}, "Admin")
             };
         }
 
-        private static ResourceViewModel GetResourceViewModel(int id)
+        private static ResourceViewModel GetResourceViewModel(int id, ILocalization localizer)
         {
             return new ResourceViewModel
             {
                 Id = id,
-                Name = string.Format("Strana {0}", id),
+                //Name = string.Format("Strana {0}", id),
+                Name = localizer.TranslateFormat("Page", new object[]{id}, "Admin"),
                 VersionList = new List<VersionNumberViewModel>
                 {
                     GetVersionNumber(1),

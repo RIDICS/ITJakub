@@ -1,4 +1,7 @@
-﻿@section styles{
+﻿@using Localization.AspNetCore.Service
+@inject ILocalization Localizer
+
+@section styles{
     <link href="~/Areas/CardFiles/css/itjakub.cardfiles.bundle.css" rel="stylesheet" />
 }
 @section scripts{
@@ -6,7 +9,7 @@
 }
 
 @{
-    ViewBag.Title = "Kartotéky - Vyhledávání";
+    ViewBag.Title = @Localizer.Translate("CardFilesSearching", "CardFiles");
 }
 
 
@@ -17,11 +20,11 @@
                 <div class="form-group searchbar">
                     <div class="searchbar-buttons">
                         <button id="searchButton" type="button" class="btn btn-default searchbar-button">
-                            Vyhledat
+                            @Localizer.Translate("Search", "CardFiles")
                         </button>
                     </div>
                     <div class="searchbar-inputs">
-                        <input type="text" class="form-control searchbar-input" id="searchbox" placeholder="Hledat..." style="max-width: 100%;" />
+                        <input type="text" class="form-control searchbar-input" id="searchbox" placeholder="@Localizer.Translate("Find", "CardFiles")..." style="max-width: 100%;" />
                     </div>
                 </div>
             </form>
@@ -31,13 +34,13 @@
     <div class="cardfile-selects" style="margin-top: 50px; clear: both;">
     </div>
     <div class="no-result">
-        Výhledávání neodpovídá žádný výsledek...
+        @Localizer.Translate("NoResults", "CardFiles")...
     </div>
     <div class="nothing-selected">
-        Není vybrána žádná kartotéka...
+        @Localizer.Translate("NoCardFileSelected", "CardFiles")...
     </div>
     <div class="server-error">
-        Došlo k chybě v komunikaci se serverem...
+        @Localizer.Translate("ServerCommunicationError", "CardFiles")...
     </div>
     <div class="cardfile-result-area">
 

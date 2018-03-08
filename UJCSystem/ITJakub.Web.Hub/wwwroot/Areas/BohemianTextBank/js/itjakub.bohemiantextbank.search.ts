@@ -9,8 +9,8 @@ class BohemianTextbankSearch {
     private resultsCountOnPage = 30;
     private paginationMaxVisibleElements = 5;
 
-    private defaultErrorMessage =
-        "Vyhledávání se nezdařilo. Ujistěte se, zda máte zadáno alespoň jedno kritérium na vyhledávání v textu.";
+    private localization: Localization;
+    private defaultErrorMessage = this.localization.translate("SearchDefaultError", "BohemianTextBank").value;
 
     private urlSearchKey = "search";
     private urlPageKey = "page";
@@ -34,6 +34,10 @@ class BohemianTextbankSearch {
     private enabledOptions = new Array<SearchTypeEnum>();
 
     private search: Search;
+
+    constructor() {
+        this.localization = new Localization();
+    }
 
     initSearch() {
 

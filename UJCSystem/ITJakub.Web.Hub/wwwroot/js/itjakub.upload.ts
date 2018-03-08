@@ -78,7 +78,7 @@ class BookUploader {
                 error: (xmlHttpRequest, textStatus, errorMessage) => {
                     var done = $("#done");
                     var error = done.find(".error");
-                    error.children(".message").append("Chyba: " + errorMessage);
+                    error.children(".message").append(localization.translateFormat("Error:", new Array<string>(errorMessage), "ItJakubJs").value);
                     error.show();
                     $("#processing").hide();
                     done.show();

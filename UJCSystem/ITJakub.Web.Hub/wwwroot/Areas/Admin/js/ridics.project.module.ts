@@ -117,7 +117,7 @@ abstract class ProjectModuleBase {
                         this.initModule();
                     } else {
                         var alert = new AlertComponentBuilder(AlertType.Error)
-                            .addContent("Chyba při načítání modulu")
+                            .addContent(localization.translate("ModuleError", "RidicsProject").value)
                             .buildElement();
                         $contentContainer.append(alert);
                     }
@@ -135,7 +135,7 @@ abstract class ProjectModuleBase {
                 (responseText, textStatus, xmlHttpRequest) => {
                     if (xmlHttpRequest.status !== HttpStatusCode.Success) {
                         var errorDiv = new AlertComponentBuilder(AlertType.Error)
-                            .addContent("Chyba při načítání záložky.")
+                            .addContent(localization.translate("BookmarkError", "RidicsProject").value)
                             .buildElement();
                         $tabPanel.empty().append(errorDiv);
                         this.moduleTab = null;
@@ -266,6 +266,7 @@ class ProjectResourceModule extends ProjectModuleBase {
     private renameResourceDialog: BootstrapDialogWrapper;
     private duplicateResourceDialog: BootstrapDialogWrapper;
     private resourceVersionModule: ProjectResourceVersionModule;
+
 
     constructor(projectId: number, resourceType: ResourceType) {
         super();
@@ -496,7 +497,7 @@ class ProjectResourceVersionModule {
     private $iconUp: JQuery;
     private $iconDown: JQuery;
     private versionPanelHeight: number;
-
+    
     constructor(resourceId: number) {
         this.resourceId = resourceId;
     }
@@ -535,7 +536,7 @@ class ProjectResourceVersionModule {
                 (responseText, textStatus, xmlHttpRequest) => {
                     if (xmlHttpRequest.status !== HttpStatusCode.Success) {
                         var error = new AlertComponentBuilder(AlertType.Error).addContent(
-                            "Chyba při načítání seznamu verzí");
+                            localization.translate("VersionListError", "RidicsProject").value);
                         $resourceVersionPanel.empty().append(error.buildElement());
                     }
                 });

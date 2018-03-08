@@ -1,0 +1,44 @@
+{
+    "culture": "cs-CZ",
+    "scope": "global.plural",
+    "dictionary": {
+        "Characters": 
+            {"znaků": [   
+                [null, -5, "znaků"],               
+                [-4, -2, "znaky"], 
+                [-1, -1, "znak"], 
+                [0, 0, "znaků"],
+                [1, 1, "znak" ],
+                [2, 4, "znaky"],
+                [5, null, "znaků"] 
+               ]
+            },
+		"Years": 
+			{"lety": [
+				[null, -2, "lety"],
+				[-1, -1, "rokem"],
+				[0, 0, "lety"],
+				[1, 1, "rokem"],
+				[2, null, "lety"]			
+			   ]
+			},
+		"Months":
+			{"měsíci": [
+				[null, -2, "měsíci"],
+				[-1, -1, "měsícem"],
+				[0, 0, "měsíci"],
+				[1, 1, "měsícem"],
+				[2, null, "měsíci"]			
+			   ]
+			},
+		"Days":
+			{"dny": [
+				[null, -2, "dny"],
+				[-1, -1, "dnem"],
+				[0, 0, "dny"],
+				[1, 1, "dnem"],
+				[2, null, "dny"]			
+			   ]
+			}
+    }
+}

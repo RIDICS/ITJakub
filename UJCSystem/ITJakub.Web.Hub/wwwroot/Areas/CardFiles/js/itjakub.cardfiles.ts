@@ -3,6 +3,7 @@
     var cardfileSelector = new DropDownSelect("div.cardfile-selects", getBaseUrl() +"CardFiles/CardFiles/CardFiles", false, callbackDelegate);
     var cardFileManager = new CardFileManager("div.cardfile-result-area");
     cardfileSelector.makeDropdown();
+    
 
     $("#searchbox").keypress((event: any) => {
         var keyCode = event.which || event.keyCode;
@@ -84,6 +85,8 @@
 };
 
 function createDelegate() {
+    var localization = new Localization();
+
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.getCategoriesFromResponseCallback = (response) => {
         return null;
@@ -111,7 +114,7 @@ function createDelegate() {
 
     callbackDelegate.getRootCategoryCallback = (categories): any => {
         var rootCategory = new Object();
-        rootCategory["Name"] = "Kartotéky";
+        rootCategory["Name"] = "kartoteky";
         return rootCategory;
     };
 

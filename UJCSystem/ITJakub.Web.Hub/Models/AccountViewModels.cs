@@ -4,51 +4,49 @@ namespace ITJakub.Web.Hub.Models
 {
     public class LoginViewModel
     {
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Uživatelské jméno nemůže být prázdné")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "NotEmpty")]
         [DataType(DataType.Text)]
-        [Display(Name = "Uživatelské jméno")]
+        [Display(Name = "UserName")]
         public string UserName { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Heslo nemůže být prázdné")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "NotEmpty")]
         [DataType(DataType.Password)]
-        [Display(Name = "Heslo")]
+        [Display(Name = "Password")]
         public string Password { get; set; }
 
-        [Display(Name = "Zůstat přihlášen po vypnutí prohlížeče")]
+        [Display(Name = "RememberMe")]
         public bool RememberMe { get; set; }
-
-
     }
 
     public class RegisterViewModel
     {
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Uživatelské jméno nemůže být prázdné")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "NotEmpty")]
         [DataType(DataType.Text)]
-        [Display(Name = "Uživatelské jméno")]
+        [Display(Name = "UserName")]
         public string UserName { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Email musí být vyplněn")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "MustBeFilled")]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Heslo nemůže být prázdné")]
-        [StringLength(100, ErrorMessage = "{0} musí obsahovat alespoň {2} znaků.", MinimumLength = 6)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "NotEmpty")]
+        [StringLength(100, ErrorMessage = "HasAtLeastNChars", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Heslo")]
+        [Display(Name = "Password")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Potvrzení hesla")]
-        [Compare("Password", ErrorMessage = "Hesla se neshodují.")]
+        [Display(Name = "ConfirmPassword")]
+        [Compare("Password", ErrorMessage = "PasswordsNotEqual")]
         public string ConfirmPassword { get; set; }
 
         [DataType(DataType.Text)]
-        [Display(Name = "Křestní jméno")]
+        [Display(Name = "FirstName")]
         public string FirstName { get; set; }
 
         [DataType(DataType.Text)]
-        [Display(Name = "Příjmení")]
+        [Display(Name = "LastName")]
         public string LastName { get; set; }
     }
 }

@@ -1,4 +1,7 @@
 ﻿@model ITJakub.Web.Hub.Models.Favorite.FavoriteLabelViewModel
+@using Localization.AspNetCore.Service
+
+@inject ILocalization Localizer
 
 <div class="favorite-label-management" style="background-color: @Model.Color;" data-id="@Model.Id" data-name="@Model.Name" data-color="@Model.Color">
     <div class="row">
@@ -10,12 +13,12 @@
         <div class="col-xs-4">
             @if (!Model.IsDefault)
             {
-                <a href="#" title="Smazat štítek" class="favorite-label-remove-link" style="float: right; width: 45%;">
+                <a href="#" title="@Localizer.Translate("DeleteLabel", "Favorite")" class="favorite-label-remove-link" style="float: right; width: 45%;">
                     <div class="text-center">
                         <span class="glyphicon glyphicon-trash"></span>
                     </div>
                 </a>
-                <a href="#" title="Upravit štítek" class="favorite-label-edit-link">
+                <a href="#" title="@Localizer.Translate("EditLabel", "Favorite")" class="favorite-label-edit-link">
                     <div class="text-center">
                         <span class="glyphicon glyphicon-pencil"></span>
                     </div>

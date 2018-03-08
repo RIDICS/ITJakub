@@ -1,4 +1,7 @@
-﻿@model ITJakub.Web.Hub.Areas.Dictionaries.Models.HeadwordFeedbackViewModel
+﻿@inject ILocalization Localizer
+
+@using Localization.AspNetCore.Service
+@model ITJakub.Web.Hub.Areas.Dictionaries.Models.HeadwordFeedbackViewModel
 @section styles{
     <link href="~/Areas/Dictionaries/css/itjakub.dictionaries.css" rel="stylesheet" />
 }
@@ -7,7 +10,7 @@
 }
 
 @{
-    ViewBag.Title = "Slovníky - Připomínky";
+    ViewBag.Title = @Localizer.Translate("DictionariesFeedback", "Dictionaries");
 }
 
 
@@ -43,7 +46,7 @@
             </div>
 
             <div class="form-group">
-                @Html.TextAreaFor(m => m.Text, new {@class = "form-control feedback-text-area", @style = "margin-left: 15px; width:97%; min-height: 100px; max-width: 97%", @placeholder = "Zde napište vaši připomínku..."})
+                @Html.TextAreaFor(m => m.Text, new {@class = "form-control feedback-text-area", @style = "margin-left: 15px; width:97%; min-height: 100px; max-width: 97%", @placeholder = @Localizer.Translate("FeedbackFormPlaceholder", "global") })
             </div>
 
             @Html.Partial("Plugins/_CharRemaining")
@@ -51,20 +54,20 @@
             <div class="form-group">
                 @Html.LabelFor(m => m.Name, new { @class = "col-md-1 control-label" })
                 <div class="col-md-3">
-                    @(User.Identity.IsAuthenticated ? Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = "Zde zadejte Vaše jméno...", @readonly = "readonly" }) : Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = "Zde zadejte Vaše jméno..." }))
+                    @(User.Identity.IsAuthenticated ? Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = @Localizer.Translate("NameFormPlaceholder", "global"), @readonly = "readonly" }) : Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = @Localizer.Translate("NameFormPlaceholder", "global") }))
                 </div>
             </div>
 
             <div class="form-group">
                 @Html.LabelFor(m => m.Email, new { @class = "col-md-1 control-label" })
                 <div class="col-md-3">
-                    @(User.Identity.IsAuthenticated ? Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Zde zadejte Váš e-mail...", @readonly = "readonly" }) : Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Zde zadejte Váš e-mail..." }))
+                    @(User.Identity.IsAuthenticated ? Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = @Localizer.Translate("EmailFormPlaceholder", "global"), @readonly = "readonly" }) : Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = @Localizer.Translate("EmailFormPlaceholder", "global") }))
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="col-md-offset-9 col-md-2">
-                    <input type="submit" value="Odeslat" class="btn btn-default">
+                    <input type="submit" value="@Localizer.Translate("Send", "Dictionaries")" class="btn btn-default">
                 </div>
             </div>
         }

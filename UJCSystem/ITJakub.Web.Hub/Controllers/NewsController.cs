@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ServiceModel.Syndication;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.FeedResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.SyndicationFeed;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.Const;
@@ -43,10 +43,18 @@ namespace ITJakub.Web.Hub.Controllers
                 var feeds = client.GetNewsSyndicationItems(0, count, NewsTypeEnumContract.Web);
                 foreach (var feed in feeds.List)
                 {
-                    var syndicationItem = new SyndicationItem(feed.Title, feed.Text, new Uri(feed.Url));
-                    syndicationItem.PublishDate = feed.CreateTime;
-                    var person = new SyndicationPerson(feed.CreatedByUser.Email) {Name = $"{feed.CreatedByUser.FirstName} {feed.CreatedByUser.LastName}"};
-                    syndicationItem.Authors.Add(person);
+                    var syndicationItem = new SyndicationItem
+                    {
+                        Id = feed.Id.ToString(),
+                        Title = feed.Title,
+                        Description = feed.Text,
+                        Published = feed.CreateTime,
+                        LastUpdated = feed.CreateTime,
+                    };
+                    var person = new SyndicationPerson($"{feed.CreatedByUser.FirstName} {feed.CreatedByUser.LastName}", feed.CreatedByUser.Email);
+                    var url = new SyndicationLink(new Uri(feed.Url));
+                    syndicationItem.AddContributor(person);
+                    syndicationItem.AddLink(url);
 
                     items.Add(syndicationItem);
                 }

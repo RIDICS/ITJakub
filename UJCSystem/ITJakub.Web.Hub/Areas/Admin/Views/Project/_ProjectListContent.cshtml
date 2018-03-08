@@ -1,4 +1,6 @@
-﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ProjectListViewModel
+﻿@using Localization.AspNetCore.Service
+@model ITJakub.Web.Hub.Areas.Admin.Models.ProjectListViewModel
+@inject ILocalization Localizer
 
 <div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>
 @foreach (var viewModel in Model.List)
@@ -11,25 +13,25 @@
                 </div>
                 <div>@viewModel.PublisherString</div>
                 <div>@viewModel.LiteraryOriginalString</div>
-                <div>Počet stran: @viewModel.PageCount</div>
+                <div>@Localizer.Translate("NumberOfPages", "Admin"): @viewModel.PageCount</div>
             </a>
         </div>
         <div class="col-md-4">
-            Naposledy upraveno: @viewModel.LastEditDate uživatelem @viewModel.LastEditUser<br />
-            Vytvořeno: @viewModel.CreateDate uživatelem @viewModel.CreateUser
+            @Localizer.Translate("LastEdited", "Admin"): @viewModel.LastEditDate @Localizer.Translate("ByUser", "Admin") @viewModel.LastEditUser<br />
+            @Localizer.Translate("Created", "Admin"): @viewModel.CreateDate @Localizer.Translate("ByUser", "Admin") @viewModel.CreateUser
         </div>
         <div class="col-md-2 project-item-buttons">
             <a href="#" class="delete-button">
                 <div>
                     <span class="glyphicon glyphicon-trash"></span>
                 </div>
-                <div>Smazat</div>
+                <div>@Localizer.Translate("Delete", "Admin")</div>
             </a>
             <a href="@Url.Action("Project", "Project", new {id = viewModel.Id})">
                 <div>
                     <span class="glyphicon glyphicon-pencil"></span>
                 </div>
-                <div>Upravit</div>
+                <div>@Localizer.Translate("Edit", "Admin")</div>
             </a>
         </div>
     </div>

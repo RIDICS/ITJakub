@@ -16,8 +16,12 @@ class DictionarySearch {
     private disabledShowOptions: Array<SearchTypeEnum>;
     private typeaheadSearchBox: SearchBox;
 
+    private localization : Localization;
+
     constructor() {
         var pageSize = 25;
+
+        this.localization = new Localization();
 
         this.tabs = new DictionarySearchTabs();
         this.callbackDelegate = new DropDownSelectCallbackDelegate();
@@ -66,7 +70,7 @@ class DictionarySearch {
         this.dictionarySelector.makeDropdown();
         this.search.makeSearch(enabledOptions);
 
-        this.typeaheadSearchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
+        this.typeaheadSearchBox.addDataSet("DictionaryHeadword", this.localization.translate("DictionaryTerms", "Dictionaries").value);
         this.typeaheadSearchBox.create();
 
         $("#cancelFilter").click(() => {
@@ -92,7 +96,7 @@ class DictionarySearch {
     private updateTypeaheadSearchBox(state: State) {
         var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
         this.typeaheadSearchBox.clearAndDestroy();
-        this.typeaheadSearchBox.addDataSet("DictionaryHeadword", "Slovníková hesla", parametersUrl);
+        this.typeaheadSearchBox.addDataSet("DictionaryHeadword", this.localization.translate("DictionaryTerms", "Dictionaries").value, parametersUrl);
         this.typeaheadSearchBox.create();
     }
 

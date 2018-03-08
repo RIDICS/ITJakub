@@ -20,6 +20,8 @@ class DictionaryViewer {
     private isCriteriaJson: boolean;
     private defaultPageNumber: number;
 
+    private localization : Localization;
+
     constructor(headwordListContainer: string, paginationContainer: string, headwordDescriptionContainer: string, lazyLoad: boolean) {
         this.headwordDescriptionContainer = headwordDescriptionContainer;
         this.paginationContainer = paginationContainer;
@@ -32,6 +34,8 @@ class DictionaryViewer {
             maxVisibleElements: 11,
             showInput: true
         });
+
+        this.localization = new Localization();
     }
 
     public createViewer(recordCount: number, showPageCallback: (pageNumber: number) => void, pageSize: number, searchCriteria: string = null,
@@ -107,7 +111,7 @@ class DictionaryViewer {
             $(this.headwordDescriptionContainer).empty();
 
             var noEntryFoundDiv = document.createElement("div");
-            noEntryFoundDiv.innerHTML = "Žádné výsledky k zobrazení";
+            noEntryFoundDiv.innerHTML = this.localization.translate("NoEntryFound", "Dictionaries").value;
             noEntryFoundDiv.classList.add("dictionary-list-empty");
             $(this.headwordListContainer).append(noEntryFoundDiv);
 
@@ -224,7 +228,7 @@ class DictionaryViewer {
                 
                 var commentsDiv = document.createElement("div");
                 var commentsLink = document.createElement("a");
-                $(commentsLink).text("Připomínky");
+                $(commentsLink).text(this.localization.translate("Feedback", "Dictionaries").value);
                 commentsLink.href = "Feedback?bookId=" + dictionaryMetadata.id
                     + "&headwordVersionId=" + dictionary.headwordVersionId
                     + "&headword=" + record.headword
@@ -308,7 +312,8 @@ class DictionaryViewer {
                 $(imageContainer).empty();
 
                 var errorDiv = document.createElement("div");
-                $(errorDiv).text("Chyba při načítání obrázku k heslu '" + this.headwordList[index] + "'.");
+                //$(errorDiv).text("Chyba při načítání obrázku k heslu '" + this.headwordList[index] + "'.");
+                $(errorDiv).text(this.localization.translateFormat("ImageTermLoadError", new Array<string>(this.headwordList[index]) , "Dictionaries").value);
                 $(errorDiv).addClass("entry-load-error");
 
                 imageContainer.append(errorDiv);
@@ -379,7 +384,8 @@ class DictionaryViewer {
         $(container).parent().removeClass("loading-background");
 
         var errorDiv = document.createElement("div");
-        $(errorDiv).text("Chyba při náčítání hesla '" + headword + "'.");
+        //$(errorDiv).text("Chyba při náčítání hesla '" + headword + "'.");
+        $(errorDiv).text(this.localization.translateFormat("ImageTermLoadError", new Array<string>(headword), "Dictionaries").value);
         $(errorDiv).addClass("entry-load-error");
 
         container.appendChild(errorDiv);

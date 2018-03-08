@@ -1,4 +1,7 @@
-﻿@section styles{
+﻿@using Localization.AspNetCore.Service
+@inject ILocalization Localizer
+
+@section styles{
     <link href="~/Areas/BohemianTextBank/css/itjakub.bohemiantextbank.css" rel="stylesheet" />
 }
 @section scripts{
@@ -6,7 +9,7 @@
 }
 
 @{
-    ViewBag.Title = "Korpusy - Seznam";
+    ViewBag.Title = @Localizer.Translate("BohemianTextBankList", "BohemianTextBank");
 }
 
 @Html.Partial("_BibliographySearch")

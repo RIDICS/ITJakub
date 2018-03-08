@@ -27,31 +27,13 @@ namespace Vokabular.MainService
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
-            var globalbuilder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("globalsettings.json");
-            var globalConfiguration = globalbuilder.Build();
-
-            var secretSettingsPath = globalConfiguration["SecretSettingsPath"];
-            var environmentConfiguration = globalConfiguration["EnvironmentConfiguration"];
-
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{environmentConfiguration}.json", optional: true)
-                .AddJsonFile(Path.Combine(secretSettingsPath, "ITJakub.Secrets.json"), optional: true)
-                .AddJsonFile(Path.Combine(secretSettingsPath, $"ITJakub.Secrets.{environmentConfiguration}.json"), optional: true)
-                .AddEnvironmentVariables();
-
-            Configuration = builder.Build();
+            Configuration = configuration;
             ApplicationConfig.Configuration = Configuration;
-
-            env.ConfigureLog4Net("log4net.config");
         }
 
-        private IConfigurationRoot Configuration { get; }
+        private IConfiguration Configuration { get; }
         private IIocContainer Container { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -101,10 +83,6 @@ namespace Vokabular.MainService
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime applicationLifetime)
         {
-            // Configure logging
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-            loggerFactory.AddLog4Net();
             ApplicationLogging.LoggerFactory = loggerFactory;
 
             app.ConfigureAutoMapper();

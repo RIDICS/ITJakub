@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ITJakub.Web.Hub.Core.Communication;
@@ -6,8 +7,8 @@ using ITJakub.Web.Hub.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Authentication;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.RestClient.Errors;
 
 namespace ITJakub.Web.Hub.Core.Managers
 {
@@ -58,7 +59,7 @@ namespace ITJakub.Web.Hub.Core.Managers
                     }
                 });
 
-                await m_httpContextAccessor.HttpContext.Authentication.SignInAsync(
+                await m_httpContextAccessor.HttpContext.SignInAsync(
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity), authenticationProperties);
             }
@@ -68,9 +69,20 @@ namespace ITJakub.Web.Hub.Core.Managers
         {
             using (var client = m_communicationProvider.GetMainServiceClient())
             {
-                client.SignOut();
+                try
+                {
+                    client.SignOut();
+                }
+                catch (HttpErrorCodeException exception)
+                {
+                    if (exception.StatusCode != HttpStatusCode.Unauthorized &&
+                        exception.StatusCode != HttpStatusCode.Forbidden)
+                    {
+                        throw;
+                    }
+                }
 
-                await m_httpContextAccessor.HttpContext.Authentication.SignOutAsync(
+                await m_httpContextAccessor.HttpContext.SignOutAsync(
                     CookieAuthenticationDefaults.AuthenticationScheme);
             }
         }

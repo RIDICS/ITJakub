@@ -5,6 +5,9 @@
     private storage: IStorage;
     private isUserLoggedIn: boolean;
 
+    //private localization : Localization;
+	private localizationScope = "FavoriteJs";
+
     constructor() {
         this.storage = StorageManager.getInstance().getStorage(StorageTypeEnum.Local);
         this.isUserLoggedIn = isUserLoggedIn();
@@ -12,12 +15,14 @@
         if (!this.isUserLoggedIn) {
             this.updateLocalStorage();
         }
+
+       // this.localization = new Localization();
     }
 
     private getDefaultFavoriteLabel(): IFavoriteLabel {
         return {
             id: 0,
-            name: "Všechny položky",
+            name: localization.translate("AllItems", this.localizationScope).value,
             color: "#CC9900",
             isDefault: true,
             lastUseTime: null

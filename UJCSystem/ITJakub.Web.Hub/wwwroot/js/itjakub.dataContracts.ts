@@ -282,6 +282,12 @@ interface IMetadataSaveResult {
     lastModificationText: string;
 }
 
+interface ILocalizedString {
+    name: string;
+    resourceNotFound: boolean;
+    value : string;
+}
+
 enum FavoriteType {
     Unknown = "Unknown",
     Project = "Project",

@@ -273,7 +273,7 @@ class ReaderModule {
                 targetEl.find(".ui-slider-handle").find(".slider-tip").stop(true, true);
                 targetEl.find(".ui-slider-handle").find(".slider-tip").show();
                 if (this.pages[ui.value] !== undefined) {
-                    targetEl.find(".ui-slider-handle").find(".tooltip-inner").html("Strana: " + this.pages[ui.value].text);
+                    targetEl.find(".ui-slider-handle").find(".tooltip-inner").html(localization.translate("Page:", "PluginsJs").value + this.pages[ui.value].text);
                 } else {
                     console.error("missing page "+ui.value);
                 }
@@ -294,7 +294,7 @@ class ReaderModule {
         var innerTooltip: HTMLDivElement = document.createElement("div");
         $(innerTooltip).addClass("tooltip-inner");
         if (this.pages[0] !== undefined) {
-            $(innerTooltip).html("Strana: " + this.pages[0].text);
+            $(innerTooltip).html(localization.translate("Page:", "PluginsJs").value + this.pages[0].text);
         }
         else {
             console.error("missing page " + 0);
@@ -322,7 +322,7 @@ class ReaderModule {
         var pageInputText = document.createElement("input");
         pageInputText.setAttribute("type", "text");
         pageInputText.setAttribute("id", "pageInputText");
-        pageInputText.setAttribute("placeholder", "Přejít na stranu...");
+        pageInputText.setAttribute("placeholder", localization.translate("GotoPage", "PluginsJs").value + "...");
         pageInputText.classList.add("page-input-text");
         pageInputDiv.appendChild(pageInputText);
 
@@ -497,7 +497,7 @@ class ReaderModule {
 
         var addBookmarkSpanText = document.createElement("span");
         $(addBookmarkSpanText).addClass("button-text");
-        $(addBookmarkSpanText).append("Přidat záložku");
+        $(addBookmarkSpanText).append(localization.translate("AddBookmark", "PluginsJs").value);
         $(addBookmarkButton).append(addBookmarkSpanText);
 
         $(addBookmarkButton).click((event: JQuery.Event) => {
@@ -514,7 +514,7 @@ class ReaderModule {
 
         var bookmarkSpanText = document.createElement("span");
         $(bookmarkSpanText).addClass("button-text");
-        $(bookmarkSpanText).append("Záložky");
+        $(bookmarkSpanText).append(localization.translate("Bookmarks", "PluginsJs").value);
         $(bookmarkButton).append(bookmarkSpanText);
 
         $(bookmarkButton).click((event: JQuery.Event) => {
@@ -542,7 +542,7 @@ class ReaderModule {
 
             var settingsSpanText = document.createElement("span");
             $(settingsSpanText).addClass("button-text");
-            $(settingsSpanText).append("Zobrazení");
+            $(settingsSpanText).append(localization.translate("View", "PluginsJs").value);
             $(settingsButton).append(settingsSpanText);
 
             $(settingsButton).click((event: JQuery.Event) => {
@@ -570,7 +570,7 @@ class ReaderModule {
 
             var searchSpanText = document.createElement("span");
             $(searchSpanText).addClass("button-text");
-            $(searchSpanText).append("Vyhledávání");
+            $(searchSpanText).append(localization.translate("Search", "PluginsJs").value);
             $(searchResultButton).append(searchSpanText);
 
             $(searchResultButton).click((event: JQuery.Event) => {
@@ -598,7 +598,7 @@ class ReaderModule {
 
             var termsSpanText = document.createElement("span");
             $(termsSpanText).addClass("button-text");
-            $(termsSpanText).append("Témata");
+            $(termsSpanText).append(localization.translate("Terms", "PluginsJs").value);
             $(termsButton).append(termsSpanText);
 
             $(termsButton).click((event: JQuery.Event) => {
@@ -627,7 +627,7 @@ class ReaderModule {
         
                 var contentSpanText = document.createElement("span");
                 $(contentSpanText).addClass("button-text");
-                $(contentSpanText).append("Obsah");
+                $(contentSpanText).append(localization.translate("Content", "PluginsJs").value);
                 $(contentButton).append(contentSpanText);
 
                 $(contentButton).click((event: JQuery.Event) => {
@@ -857,7 +857,7 @@ class ReaderModule {
     actualizeSlider(pageIndex: number) {
         var slider = $(this.readerContainer).find(".slider");
         $(slider).slider().slider("value", pageIndex);
-        $(slider).find(".ui-slider-handle").find(".tooltip-inner").html("Strana: " + this.pages[pageIndex].text);
+        $(slider).find(".ui-slider-handle").find(".tooltip-inner").html(localization.translate("Page:", "PluginsJs").value + this.pages[pageIndex].text);
     }
 
     actualizePagination(pageIndex: number) {
@@ -939,7 +939,7 @@ class ReaderModule {
         var tooltipTitle = function() {
                 var bookmarkTitle = $(this).data("title");
                 return favoriteLabel
-                    ? bookmarkTitle + " (Štítek: " + favoriteLabel.name + ")"
+                    ? localization.translateFormat("Label", new Array<string>(bookmarkTitle, favoriteLabel.name))
                     : bookmarkTitle;
         };
 
@@ -958,11 +958,11 @@ class ReaderModule {
 
         var tooltipTitle: string;
         if (labelCount > 4 || labelCount < 1) {
-            tooltipTitle = labelCount + " záložek";
+            tooltipTitle = labelCount + localization.translate("BookmarksGt4", "PluginsJs").value;
         } else if (labelCount > 1) {
-            tooltipTitle = labelCount + " záložky";
+            tooltipTitle = labelCount + localization.translate("BookmarksLt4", "PluginsJs").value;
         } else {
-            tooltipTitle = "1 záložka";
+            tooltipTitle = "1" + localization.translate("Bookmark", "PluginsJs").value;
         }
 
         var bookmarkSpan = this.createBookmarkSpan(pageIndex, pageName, pageId, "", tooltipTitle, favoriteLabel);
@@ -1083,7 +1083,7 @@ class ReaderModule {
 
         this.favoriteManager.createPageBookmark(Number(this.bookId), page.pageId, data.itemName, labelIds, (ids, error) => {
             if (error) {
-                this.newFavoriteDialog.showError("Chyba při vytváření záložky");
+                this.newFavoriteDialog.showError(localization.translate("CreatingBookmarkError", "PluginsJs").value);
                 return;
             }
 
@@ -1524,7 +1524,7 @@ class LeftSidePanel extends SidePanel {
 class SettingsPanel extends LeftSidePanel {
 
     constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
-        super(identificator, "Zobrazení", readerModule, showPanelButtonList);
+        super(identificator, localization.translate("View", "PluginsJs").value, readerModule, showPanelButtonList);
     }
 
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
@@ -1576,7 +1576,7 @@ class SettingsPanel extends LeftSidePanel {
         });
 
         var showPageNameLabel: HTMLLabelElement = window.document.createElement("label");
-        showPageNameLabel.innerHTML = "Zobrazit číslování stránek";
+        showPageNameLabel.innerHTML = localization.translate("ViewPagination", "PluginsJs").value;
         showPageCheckboxDiv.appendChild(showPageNameCheckbox);
         showPageCheckboxDiv.appendChild(showPageNameLabel);
         showPageNameCheckbox.id = "checkbox-show-page-numbers";
@@ -1597,7 +1597,7 @@ class SettingsPanel extends LeftSidePanel {
         });
 
         var showPageOnNewLineLabel: HTMLLabelElement = window.document.createElement("label");
-        showPageOnNewLineLabel.innerHTML = "Zalamovat stránky";
+        showPageOnNewLineLabel.innerHTML = localization.translate("WrapPages", "PluginsJs").value;
         showPageOnNewLineDiv.appendChild(showPageOnNewLineCheckbox);
         showPageOnNewLineDiv.appendChild(showPageOnNewLineLabel);
         showPageOnNewLineCheckbox.id = "checkbox-page-breaks";
@@ -1618,7 +1618,7 @@ class SettingsPanel extends LeftSidePanel {
         });
 
         var showCommentLabel: HTMLLabelElement = window.document.createElement("label");
-        showCommentLabel.innerHTML = "Zobrazit komentáře";
+        showCommentLabel.innerHTML = localization.translate("ViewComments", "PluginsJs").value;
         showCommentCheckboxDiv.appendChild(showCommentCheckbox);
         showCommentCheckboxDiv.appendChild(showCommentLabel);
         showCommentCheckbox.id = "checkbox-show-comment";
@@ -1639,7 +1639,7 @@ class SettingsPanel extends LeftSidePanel {
         checkboxesDiv.appendChild(showCommentCheckboxDiv);
         var innerContent: HTMLDivElement = window.document.createElement("div");
         var displaySettingsHead = document.createElement("h2");
-        displaySettingsHead.innerHTML = "Možnosti zobrazení";
+        displaySettingsHead.innerHTML = localization.translate("ViewOptions", "PluginsJs").value;
         displaySettingsHead.classList.add("reader-view-head");
         innerContent.appendChild(displaySettingsHead);
 
@@ -1652,7 +1652,7 @@ class SettingsPanel extends LeftSidePanel {
 
 class BookmarksPanel extends LeftSidePanel {
     constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
-        super(identificator, "Záložky", readerModule, showPanelButtonList);
+        super(identificator, localization.translate("Bookmarks", "PluginsJs").value, readerModule, showPanelButtonList);
     }
 
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
@@ -1682,7 +1682,7 @@ class BookmarksPanel extends LeftSidePanel {
         }
 
         var bookmarksHead = document.createElement("h2");
-        bookmarksHead.innerHTML = "Všechny záložky";
+        bookmarksHead.innerHTML = localization.translate("AllBookmarks", "PluginsJs").value;
         bookmarksHead.classList.add("reader-bookmarks-head");
         bookmarksContainer.appendChild(bookmarksHead);
 
@@ -1823,7 +1823,8 @@ class BookmarksPanel extends LeftSidePanel {
         rootReference.parentReader.setBookmarkTitle(bookmarkId, pageIndex, title);
 
         if (!title) {
-            title = "&lt;bez názvu&gt;";
+            //title = "&lt;bez názvu&gt;";
+            title = localization.translateFormat("NoTitle", new Array<string>("&lt;", "&gt;")).value;
         }
 
         titleItem.innerHTML = title;
@@ -1840,7 +1841,7 @@ class SearchResultPanel extends LeftSidePanel {
     private maxPaginatorVisibleElements;
 
     constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
-        super(identificator, "Vyhledávání", readerModule, showPanelButtonList);
+        super(identificator, localization.translate("Search", "PluginsJs").value, readerModule, showPanelButtonList);
     }
 
     showLoading() {
@@ -1938,7 +1939,7 @@ class SearchResultPanel extends LeftSidePanel {
 class ContentPanel extends LeftSidePanel {
 
     constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
-        super(identificator, "Obsah", readerModule, showPanelButtonList);
+        super(identificator, localization.translate("Content", "PluginsJs").value, readerModule, showPanelButtonList);
     }
 
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
@@ -1982,7 +1983,7 @@ class ContentPanel extends LeftSidePanel {
             },
             error: (response) => {
                 $(this.panelBodyHtml).empty();
-                $(this.panelBodyHtml).append("Chyba při načítání obsahu");
+                $(this.panelBodyHtml).append(localization.translate("LoadingContentError", "PluginsJs").value);
             }
         });
     }
@@ -2088,7 +2089,7 @@ class ImagePanel extends RightSidePanel {
     isDisabled: boolean;
 
     constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
-        super(identificator, "Obrázky", readerModule, showPanelButtonList);
+        super(identificator, localization.translate("Pictures", "PluginsJs").value, readerModule, showPanelButtonList);
         this.isDisabled = false;
     }
 
@@ -2165,7 +2166,7 @@ class TextPanel extends RightSidePanel {
     private queryIsJson: boolean;
 
     constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
-        super(identificator, "Text", readerModule, showPanelButtonList);
+        super(identificator, localization.translate("Text", "PluginsJs").value, readerModule, showPanelButtonList);
         this.preloadPagesBefore = 5;
         this.preloadPagesAfter = 10;
 
@@ -2337,7 +2338,7 @@ class TextPanel extends RightSidePanel {
             error: (response) => {
                 $(pageContainer).empty();
                 $(pageContainer).removeClass("loading");
-                $(pageContainer).append("Chyba při načítání stránky '" + page.text + "'");
+                $(pageContainer).append(localization.translateFormat("PageLoadingError", new Array<string>(page.text), "PluginsJs").value);
 
                 if (onFailed != null) {
                     onFailed();
@@ -2383,7 +2384,7 @@ class TextPanel extends RightSidePanel {
             error: (response) => {
                 $(pageContainer).empty();
                 $(pageContainer).removeClass("loading");
-                $(pageContainer).append("Chyba při načítání stránky '" + page.text + "' s výsledky vyhledávání");
+                $(pageContainer).append(localization.translateFormat("PageLoadingErrorWithSearchResults", new Array<string>(page.text), "PluginsJs").value);
 
                 if (onFailed != null) {
                     onFailed();
@@ -2399,17 +2400,19 @@ class TextPanel extends RightSidePanel {
 
     private onPrintButtonClick(button: HTMLButtonElement) {
         const loadedPages: Array<boolean> = [];
-        const progress = new Progress("print-progress-bar", "Probíhá příprava díla pro tisk",
+        const progress = new Progress("print-progress-bar", localization.translate("PreparingPrint", "PluginsJs").value,
         {
             body: {
                 showLoading: true,
-                afterLoadingText: "Připravuji",
+                afterLoadingText: localization.translate("Preparing", "PluginsJs").value,
                 afterLoadingTextPosition: ProgressTextPosition.Center
             },
             update: {
                 field: ProgressUpdateField.BodyAfterLoading,
                 valueCallback: (value:number, max:number) => {
-                    return `Zpracováno ${value} z ${max}`;
+                    //return `Zpracováno ${value} z ${max}`;
+                    return localization
+                        .translateFormat("CompletedIndicator", new Array<string>(value.toString(), max.toString()), "PluginsJs").value;
                 }
             }
         });
@@ -2467,7 +2470,7 @@ class TermsPanel extends LeftSidePanel {
     private termClickedCallback: (termId: number, text: string) => void;
 
     constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
-        super(identificator, "Témata", readerModule, showPanelButtonList);
+        super(identificator, localization.translate("Topics", "PluginsJs").value, readerModule, showPanelButtonList);
     }
 
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
@@ -2478,7 +2481,7 @@ class TermsPanel extends LeftSidePanel {
         $(searchResultDiv).addClass("reader-search-result-div");
 
         var searchResultDivHeading = window.document.createElement("h2");
-        searchResultDivHeading.innerHTML = "Výskyty na stránce";
+        searchResultDivHeading.innerHTML = localization.translate("OccurrencesOnPage", "PluginsJs").value;
         searchResultDiv.appendChild(searchResultDivHeading);
 
         var searchResultItemsLoadDiv = window.document.createElement("div");
@@ -2503,7 +2506,7 @@ class TermsPanel extends LeftSidePanel {
         $(termsResultDiv).addClass("reader-terms-result-div");
 
         var termsResultDivHeading = window.document.createElement("h2");
-        termsResultDivHeading.innerHTML = "Témata na stránce";
+        termsResultDivHeading.innerHTML = localization.translate("TopicsOnPage", "PluginsJs").value;
         termsResultDiv.appendChild(termsResultDivHeading);
 
         var termsResultItemsLoadDiv = window.document.createElement("div");
@@ -2546,7 +2549,7 @@ class TermsPanel extends LeftSidePanel {
 
     clearResults() {
         $(this.searchResultOrderedList).empty();
-        $(this.searchResultOrderedList).append("Pro zobrazení výskytů použijte vyhledávání.");
+        $(this.searchResultOrderedList).append(localization.translate("UseSearch", "PluginsJs").value);
         $(this.searchResultOrderedList).addClass("no-items");
     }
 
@@ -2563,7 +2566,7 @@ class TermsPanel extends LeftSidePanel {
 
         if (searchResults.length === 0) {
             $(this.searchResultOrderedList).addClass("no-items");
-            $(this.searchResultOrderedList).append("Žádné výskyty na stránce.");
+            $(this.searchResultOrderedList).append(localization.translate("NoOccurencesOnPage", "PluginsJs").value);
         }
     }
 
@@ -2646,7 +2649,7 @@ class TermsPanel extends LeftSidePanel {
 
                     if (terms.length === 0 && this.termsOrderedList.innerHTML == "") {
                         $(this.termsOrderedList).addClass("no-items");
-                        $(this.termsOrderedList).append("Na této stránce se nenachází žádné téma");
+                        $(this.termsOrderedList).append(localization.translate("NoTopicOnPage", "PluginsJs").value);
                     }
                 }
             },
@@ -2655,7 +2658,7 @@ class TermsPanel extends LeftSidePanel {
                     $(this.termsResultItemsLoadDiv).hide();
                     $(this.termsResultItemsDiv).show();
                     $(this.termsOrderedList).addClass("no-items");
-                    $(this.termsOrderedList).append("Chyba při načítání témat na stránce '" + page.text + "'");
+                    $(this.termsOrderedList).append(localization.translateFormat("LoadingTopicsError", new Array<string>(page.text), "PluginsJs").value);
                 }
             }
         });

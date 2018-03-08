@@ -94,7 +94,7 @@
     search.makeSearch(enabledOptions);
 
     var typeaheadSearchBox = new SearchBox(".searchbar-input", "OldGrammar/OldGrammar");
-    typeaheadSearchBox.addDataSet("Term", "Téma", `selectedBookIds=${bookId}`);
+    typeaheadSearchBox.addDataSet("Term", this.localization.translate("Term", "Lemmatization").value, `selectedBookIds=${bookId}`);
     typeaheadSearchBox.create();
     typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
 

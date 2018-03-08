@@ -94,7 +94,7 @@ class ProjectList {
             .html("<div class=\"loader\"></div>")
             .load(url, null, (responseText, textStatus, xmlHttpRequest) => {
                 if (xmlHttpRequest.status !== HttpStatusCode.Success) {
-                    var alert = new AlertComponentBuilder(AlertType.Error).addContent("Chyba při načítání strany se seznamem projektů");
+                    var alert = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("ListError", "Admin").value);
                     $listContainer
                         .empty()
                         .append(alert.buildElement());

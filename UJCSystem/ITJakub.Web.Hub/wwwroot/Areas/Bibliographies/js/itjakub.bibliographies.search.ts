@@ -12,6 +12,8 @@ class BibliographiesSearch {
     private typeaheadSearchBox: SearchBox;
     private bibliographyModule: BibliographyModule;
 
+    private localization: Localization;
+
     private urlSearchKey = "search";
     private urlPageKey = "page";
     private urlSortAscKey = "sortAsc";
@@ -22,6 +24,8 @@ class BibliographiesSearch {
 
     constructor(bookCountPerPage: number) {
         this.bookCountPerPage = bookCountPerPage;
+
+        this.localization = new Localization();
     }
 
     create() {
@@ -40,8 +44,8 @@ class BibliographiesSearch {
         this.search.setOverrideQueryCallback(newQuery => this.typeaheadSearchBox.value(newQuery));
 
         this.typeaheadSearchBox = new SearchBox(".searchbar-input", "Bibliographies/Bibliographies");
-        this.typeaheadSearchBox.addDataSet("Title", "Názvy");
-        this.typeaheadSearchBox.addDataSet("Author", "Autoři");
+        this.typeaheadSearchBox.addDataSet("Title", this.localization.translate("Titles", "Bibliographies").value);
+        this.typeaheadSearchBox.addDataSet("Author", this.localization.translate("Authors", "Bibliographies").value);
         this.typeaheadSearchBox.create();
         this.typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
 

@@ -243,7 +243,7 @@ class DropDownSelect {
 
         var filterInput = document.createElement("input");
         $(filterInput).addClass("dropdown-filter-input");
-        filterInput.placeholder = "Filtrovat podle názvu..";
+        filterInput.placeholder = localization.translate("FilterByName", "PluginsJs").value;
 
         $(filterInput).keyup(function() {
             $(this).change();

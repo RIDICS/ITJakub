@@ -1,0 +1,9 @@
+{
+	"culture":"cs-CZ",
+	"scope":"ResponsibleTypeViewModel",
+    "dictionary": {
+	   "Unknown": "Neznámý",
+	   "Editor" : "Editor",
+	   "Kolace" : "Kolace"
+  }
+}

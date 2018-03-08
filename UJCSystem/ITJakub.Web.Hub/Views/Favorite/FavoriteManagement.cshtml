@@ -1,24 +1,29 @@
 ﻿@using ITJakub.Web.Hub.Core
+@using Localization.AspNetCore.Service
+@using Localization.CoreLibrary.Util
 @model ITJakub.Web.Hub.Models.Favorite.FavoriteManagementViewModel
+
+@inject ILocalization Localizer
+
 @{
-    ViewBag.Title = "Administrace - Správa oblíbených položek";
+    ViewBag.Title = Localizer.Translate("FavoriteManagementTitle","Favorite", LocTranslationSource.File);
 }
 @section scripts{
     <script src="~/js/Favorite/itjakub.favoriteManagement.js"></script>
 }
 
 <div class="content-container favorite-management">
-    <h2>Správa oblíbených položek</h2>
+    <h2>@Localizer.Translate("FavoriteManagement", "Favorite", LocTranslationSource.File)</h2>
     
     <div class="row">
         <div class="col-md-3">
             <div class="row">
                 <div class="col-md-6">
-                    <span class="favorite-management-heading">Štítky</span>
+                    <span class="favorite-management-heading">@Localizer.Translate("Labels", "Favorite", LocTranslationSource.File)</span>
                 </div>
                 <div class="col-md-6">
                     <button type="button" class="btn btn-default btn-block btn-sm" id="add-new-label" style="margin-top: 20px;">
-                        Vytvořit nový
+                        @Localizer.Translate("CreateNew", "Favorite", LocTranslationSource.File)
                     </button>
                 </div>
             </div>
@@ -27,11 +32,11 @@
 
             <div class="row favorite-management-subheading">
                 <div class="col-md-5">
-                    <a href="#" id="show-all-link">Zobrazit vše</a>
+                    <a href="#" id="show-all-link">@Localizer.Translate("ViewAll", "Favorite", LocTranslationSource.File)</a>
                 </div>
                 <div class="col-md-7">
                     @*<div class="input-group input-group-sm">*@
-                        <input type="text" class="form-control input-sm" id="label-name-filter" placeholder="Filtrovat štítky" title="Filtrovat štítky podle názvu" />
+                        <input type="text" class="form-control input-sm" id="label-name-filter" placeholder="@Localizer.Translate("FilterLabels", "Favorite", LocTranslationSource.File)" title="@Localizer.Translate("FilterByType", "Favorite", LocTranslationSource.File)" />
                         @*<span class="input-group-btn">
                             <button type="button" class="btn btn-default disabled" id="label-name-filter-button"><span class="glyphicon glyphicon-search"></span></button>
                         </span>
@@ -40,7 +45,7 @@
             </div>
 
             <div id="favorite-labels">
-                <div id="no-label" class="text-center" style="display: none;">Žádný štítek neodpovídá zadanému filtru</div>
+                <div id="no-label" class="text-center" style="display: none;">@Localizer.Translate("NoLabelCorrespondsFilter", "Favorite", LocTranslationSource.File)</div>
 
                 @foreach (var favoriteLabel in Model.FavoriteLabels)
                 {
@@ -56,11 +61,11 @@
         <div class="col-md-9">
             <div class="row">
                 <div class="col-md-5">
-                    <span class="favorite-management-heading">Oblíbené položky</span>
+                    <span class="favorite-management-heading">@Localizer.Translate("NoLabelCorrespondsFilter","Favorite", LocTranslationSource.File)</span>
                 </div>
                 <div class="col-md-2">
-                    <label for="sort-select">Řadit podle:</label>
-                    <select class="form-control input-sm" id="sort-select" title="Seřadit oblíbené položky">
+                    <label for="sort-select">@Localizer.Translate("SortBy", "Favorite", LocTranslationSource.File)</label>
+                    <select class="form-control input-sm" id="sort-select" title="@Localizer.Translate("SortFavoriteItems", "Favorite", LocTranslationSource.File)">
                         @foreach (var sort in Model.SortList)
                         {
                             <option value="@((short) sort.SortType)">@sort.Name</option>
@@ -68,8 +73,8 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <label for="type-filter-select">Filtrovat podle:</label>
-                    <select class="form-control input-sm" id="type-filter-select" title="Filtrovat oblíbené položky podle typu">
+                    <label for="type-filter-select">@Localizer.Translate("FilterBy", "Favorite", LocTranslationSource.File)</label>
+                    <select class="form-control input-sm" id="type-filter-select" title="@Localizer.Translate("FilterByType", "Favorite", LocTranslationSource.File)">
                         @foreach (var filter in Model.FilterList)
                         {
                             <option value="@((short) filter.FavoriteType)">@filter.Name</option>
@@ -77,9 +82,9 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label for="name-filter">Vyhledat podle názvu:</label>
+                    <label for="name-filter">@Localizer.Translate("SearchByName", "Favorite", LocTranslationSource.File)</label>
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" id="name-filter" placeholder="Název položky" title="Vyhledat oblíbené položky podle názvu"/>
+                        <input type="text" class="form-control" id="name-filter" placeholder="@Localizer.Translate("ItemName", "Favorite", LocTranslationSource.File)" title="@Localizer.Translate("SearchFavorieItemsByName", "Favorite", LocTranslationSource.File)"/>
                         <span class="input-group-btn">
                             <button type="button" class="btn btn-default" id="name-filter-button"><span class="glyphicon glyphicon-search"></span></button>
                         </span>
@@ -88,8 +93,8 @@
             </div>
             <hr/>
             
-            <div id="no-results" class="text-center hidden">Žádné výsledky k zobrazení</div>
-            <div id="no-selected-label" class="hidden" style="margin-left: 20px; margin-top: 20px;">Pro zobrazení oblíbených položek vyberte štítek ze seznamu</div>
+            <div id="no-results" class="text-center hidden">@Localizer.Translate("NoResultsToShow", "Favorite", LocTranslationSource.File)</div>
+            <div id="no-selected-label" class="hidden" style="margin-left: 20px; margin-top: 20px;">@Localizer.Translate("ChooseLabelFromList", "Favorite", LocTranslationSource.File)</div>
             <div id="favorite-item-container"></div>
             
             <div id="pagination" class="bottom-pagination"></div>
@@ -102,19 +107,19 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Vytvořit nový štítek</h4>
+                <h4 class="modal-title">@Localizer.Translate("CreateLabel", "Favorite", LocTranslationSource.File)</h4>
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <label for="favorite-label-name" class="col-md-3 control-label">Název štítku</label>
+                        <label for="favorite-label-name" class="col-md-3 control-label">@Localizer.Translate("LabelName", "Favorite", LocTranslationSource.File)</label>
                         <div class="col-md-8">
                             <input class="form-control" id="favorite-label-name" type="text" maxlength="@Favorites.MaxLabelLength">
                         </div>
                     </div>
                     
                     <div class="form-group">
-                        <label for="favorite-label-color" class="col-md-3 control-label">Barva</label>
+                        <label for="favorite-label-color" class="col-md-3 control-label">@Localizer.Translate("Color", "Favorite", LocTranslationSource.File)</label>
                         <div class="col-md-8">
                             <div class="input-group">
                                 <span class="input-group-btn">
@@ -126,7 +131,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="favorite-label-name" class="col-md-3 control-label">Náhled štítku</label>
+                        <label for="favorite-label-name" class="col-md-3 control-label">@Localizer.Translate("LabelView", "Favorite", LocTranslationSource.File)</label>
                         <div class="col-md-8">
                             <div class="favorite-selected-label-info-2">
                                 <span class="label label-default" id="label-preview"></span>
@@ -136,9 +141,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="error">Chyba při ukládání štítku</div>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
-                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>Uložit</button>
+                <div class="error">@Localizer.Translate("LabelSaveError", "Favorite", LocTranslationSource.File)</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "Favorite", LocTranslationSource.File)</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>@Localizer.Translate("Save", "Favorite", LocTranslationSource.File)</button>
             </div>
         </div>
     </div>
@@ -149,15 +154,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Smazat</h4>
+                <h4 class="modal-title">@Localizer.Translate("Remove", "Favorite", LocTranslationSource.File)</h4>
             </div>
             <div class="modal-body">
-                Opravdu chcete smazat vybranou položku?
+                @Localizer.Translate("RemoveAreYouSure", "Favorite", LocTranslationSource.File)
             </div>
             <div class="modal-footer">
-                <div class="error">Chyba při mazání</div>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
-                <button type="button" class="btn btn-default remove-button"><span class="saving-icon loading-small-button"></span>Smazat</button>
+                <div class="error">@Localizer.Translate("RemoveError", "Favorite", LocTranslationSource.File)</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "Favorite", LocTranslationSource.File)</button>
+                <button type="button" class="btn btn-default remove-button"><span class="saving-icon loading-small-button"></span>@Localizer.Translate("Remove", "Favorite", LocTranslationSource.File)</button>
             </div>
         </div>
     </div>
@@ -168,12 +173,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Upravit oblíbenou položku</h4>
+                <h4 class="modal-title">@Localizer.Translate("EditFavoriteItem", "Favorite", LocTranslationSource.File)</h4>
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <label for="favorite-item-name" class="col-md-3 control-label">Název oblíbené položky</label>
+                        <label for="favorite-item-name" class="col-md-3 control-label">@Localizer.Translate("FavoriteItemName", "Favorite", LocTranslationSource.File)</label>
                         <div class="col-md-8">
                             <input class="form-control" id="favorite-item-name" type="text" maxlength="@Favorites.MaxTitleLength">
                         </div>
@@ -181,9 +186,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="error">Chyba při ukládání oblíbené položky</div>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
-                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>Uložit</button>
+                <div class="error">@Localizer.Translate("FavoriteItemSaveError", "Favorite", LocTranslationSource.File)</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "Favorite", LocTranslationSource.File)</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>@Localizer.Translate("Save", "Favorite", LocTranslationSource.File)</button>
             </div>
         </div>
     </div>
