@@ -4,6 +4,7 @@
 @table-even-colour: #eee;
 @table-odd-colour: white;
 @table-row-clicked-color: #C0C0C0;
+@compositions-separator-color: #8E5523;
 
 .no-gutters {
     margin-right: 0;
@@ -98,7 +99,7 @@
             margin-top: -.8em;
             text-align: center;
             border-radius: 50%;
-            background-color: @editor-sliderbar-hander-color;
+            background-color: @editor-sliderbar-handle-color;
             outline: none;
         }
     }
@@ -106,8 +107,13 @@
 
 .results-container {
     .book-section-row {
-        margin-bottom: 2em;
+        margin-bottom: 1em;
         margin-top: 2em;
+
+        &:not(:last-child) {
+            padding-bottom: 1em;
+            border-bottom: dashed 2px @compositions-separator-color;
+        }
 
         .result-text-col {
             padding: 0;
