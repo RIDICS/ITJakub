@@ -152,7 +152,7 @@
     }
     //responsible person type section end
     //responsible person section start
-    getResponsiblePersonList(start?: number, count?: number): JQueryXHR {
+    getResponsiblePersonList(start: number, count: number): JQueryXHR {
         const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetResponsiblePersonList`,
             {
                 start: start,
@@ -266,8 +266,11 @@
     //original author section end
 
     //keyword section start
-    getKeywordList(): JQueryXHR {
-        const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetKeywordList`);
+    getKeywordList(start?: number, count?: number): JQueryXHR {
+        const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetKeywordList`, {
+            start: start,
+            count: count
+        });
         return ajax;
     }
 

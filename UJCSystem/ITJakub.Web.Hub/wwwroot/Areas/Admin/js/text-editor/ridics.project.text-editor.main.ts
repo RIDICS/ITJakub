@@ -1,6 +1,4 @@
-﻿///<reference path="../../../../../wwwroot/lib-custom/@types/simplemde/index.d.ts" />
-///<reference path="../../../../../node_modules/@types/jquery/index.d.ts" />
-///<reference path="./ridics.project.text-editor.connections.ts" />
+﻿///<reference path="./ridics.project.text-editor.connections.ts" />
 ///<reference path="./ridics.project.text-editor.editor.ts" />
 ///<reference path="../editors-common-base/ridics.project.editors.util.ts" />
 ///<reference path="./ridics.project.text-editor.comment-area.ts" />
@@ -8,7 +6,6 @@
 ///<reference path="./ridics.project.text-editor.page-structure.ts" />
 ///<reference path="./ridics.project.text-editor.page-navigation.ts" />
 ///<reference path="./ridics.project.text-editor.lazyloading.ts" />
-///<reference path="./ridics.project.text-editor.gui.ts" />
 
 class TextEditorMain {
     private numberOfPages: number = 0;
@@ -23,18 +20,17 @@ class TextEditorMain {
     }
 
     init(projectId: number) {
-        const gui = new TextEditorGui();
         const util = new EditorsUtil();
         const projectAjax = util.getProjectContent(projectId);
         projectAjax.done((data: ITextWithPage[]) => {
             if (data.length) {
                 const connections = new Connections();
-                const commentArea = new CommentArea(util, gui);
-                const commentInput = new CommentInput(commentArea, util, gui);
-                const pageTextEditor = new Editor(commentInput, util, gui, commentArea);
-                const pageStructure = new PageStructure(commentArea, util, this, pageTextEditor, gui);
+                const commentArea = new CommentArea(util);
+                const commentInput = new CommentInput(commentArea, util);
+                const pageTextEditor = new Editor(commentInput, util, commentArea);
+                const pageStructure = new PageStructure(commentArea, util, this, pageTextEditor);
                 const lazyLoad = new PageLazyLoading(pageStructure);
-                const pageNavigation = new TextEditorPageNavigation(this, gui);
+                const pageNavigation = new TextEditorPageNavigation(this);
                 pageTextEditor.init();
                 connections.init();
                 const numberOfPages = data.length;
@@ -73,7 +69,15 @@ class TextEditorMain {
             }
         });
         projectAjax.fail(() => {
-            gui.showMessageDialog("Error", "Failed to get project information.");
+            bootbox.alert({
+                title: "Error",
+                message: "Failed to get project information.",
+                buttons: {
+                    ok: {
+                        className: "btn-default"
+                    }
+                }
+            });
         });
     }
 

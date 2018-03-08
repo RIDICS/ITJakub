@@ -98,7 +98,7 @@
                     continue;
                 }
                 category.checkBox.checked = true;
-                this.propagateSelectChange(<HTMLDivElement>$(category.checkBox).parent(".concrete-item")[0]);
+                this.propagateSelectChange($(category.checkBox).parent(".concrete-item")[0] as Node as HTMLDivElement);
                 categoriesCount++;
             }
         }
@@ -116,7 +116,7 @@
                         continue;
 
                     checkbox.checked = true;
-                    this.propagateSelectChange(<HTMLDivElement>$(checkbox).parent(".concrete-item")[0]);
+                    this.propagateSelectChange($(checkbox).parent(".concrete-item")[0] as Node as HTMLDivElement);
                 }
             }
             booksCount = this.getSelectedBookCount();
@@ -143,7 +143,7 @@
                 $(dropDownItemsDiv).children("div.loading").remove();
                 this.processDownloadedData(response);
                 this.makeTreeStructure(this.categories, this.books, dropDownItemsDiv);
-                this.rootCategory.checkBox = <HTMLInputElement>($(dropDownItemsDiv).parent().children(".dropdown-select-header").children("span.dropdown-select-checkbox").children("input").get(0));
+                this.rootCategory.checkBox = ($(dropDownItemsDiv).parent().children(".dropdown-select-header").children("span.dropdown-select-checkbox").children("input").get(0) as Node as HTMLInputElement);
                 this.doRestore();
                 this.isLoaded = true;
                 this.dataLoaded(this.rootCategory.id);
@@ -254,7 +254,7 @@
         this.books[currentLeafItem].checkboxes.push(checkbox);
 
         var info = this.createCallbackInfo(String(this.books[currentLeafItem].id), this.books[currentLeafItem].name, itemDiv);
-        $(checkbox).change((event: Event, propagate: boolean) => {
+        $(checkbox).change((event: JQuery.Event, propagate: boolean) => {
             if (checkbox.checked) {
                 this.addToSelectedItems(info);
             } else {
@@ -262,7 +262,7 @@
             }
 
             if (typeof propagate === "undefined" || propagate === null || propagate) { //Deafault behaviour is to propagate change
-                this.propagateSelectChange(<HTMLDivElement>$(checkbox).parent(".concrete-item")[0]);
+                this.propagateSelectChange($(checkbox).parent(".concrete-item")[0] as Node as HTMLDivElement);
                 this.propagateLeafSelectChange(checkbox, info);
             }
         });
@@ -339,7 +339,7 @@
             var otherCheckBox = sameBookCheckBoxes[i];
             if ($(otherCheckBox).prop("checked") !== checkBoxState) {
                 $(otherCheckBox).prop("checked", checkBoxState);
-                this.propagateSelectChange(<HTMLDivElement>$(otherCheckBox).parent(".concrete-item")[0]);
+                this.propagateSelectChange($(otherCheckBox).parent(".concrete-item")[0] as Node as HTMLDivElement);
             }
         }
 
@@ -360,7 +360,7 @@
                 var bookCheckBox = book.checkboxes[j];
                 if ($(bookCheckBox).prop("checked") !== isChecked) {
                     $(bookCheckBox).prop("checked", isChecked);
-                    this.propagateSelectChange(<HTMLDivElement>$(bookCheckBox).parent(".concrete-item")[0]);
+                    this.propagateSelectChange($(bookCheckBox).parent(".concrete-item")[0] as Node as HTMLDivElement);
                 }
             }
         }

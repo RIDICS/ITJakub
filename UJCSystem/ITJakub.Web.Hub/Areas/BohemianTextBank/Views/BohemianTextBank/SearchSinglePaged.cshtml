@@ -1,0 +1,88 @@
+﻿@section styles{
+    <link href="~/Areas/BohemianTextBank/css/itjakub.bohemiantextbank.css" rel="stylesheet" />
+    <link href="~/Areas/BohemianTextBank/css/ridics.bohemiantextbank-search-viewer-single.css" rel="stylesheet" />
+}
+@section scripts{
+    <script src="~/Areas/BohemianTextBank/js/itjakub.bohemiantextbank.bundle.js"></script>
+    <script src="~/lib/bootbox/bootbox.min.js"></script>
+    <script src="~/lib/jquery-table-fixer/tableHeadFixer.js"></script>
+    <script src="~/lib/lazysizes/lazysizes.min.js"></script>
+    <script src="~/lib/stickybits/dist/stickybits.min.js"></script>
+}
+
+@{
+    ViewBag.Title = "Korpusy - Vyhledávání Single,Paged";
+}
+
+@Html.Partial("_BibliographySearch")
+
+<div class="search-result-section container-fluid" id="corpus-search-div">
+    <div class="row corpus-result-and-settings-row">
+        <div class="corpus-search-result-controls-container col-md-2 col-md-push-10 col-sm-push-9 col-sm-3 col-xs-12">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="corpus-search-settings-label">Možnosti zobrazení</div>
+                </div>
+            </div>
+            <div class="corpus-search-result-view-properties-advanced">
+                <div class="corpus-search-setting-div-context">
+                    <label for="contextPositionsSelect">Pozic v kontextu:</label>
+                    <input id="contextPositionsSelect" type="number">
+                    <div class="context-size-warning"></div>
+                </div>
+                <div class="number-of-results-per-viewing-page">
+                    <label for="number-of-results-per-viewing-page">Počet výsledků na stránce:</label>
+                    <input id="number-of-results-per-viewing-page" type="number">
+                    <div class="number-of-positions-size-warning"></div>
+                </div>
+                <div class="search-settings-changed-refresh text-center">
+                    <button class="btn btn-default results-refresh-button"><i class="fa fa-refresh"></i></button>
+                </div>
+            </div>
+            <div class="corpus-search-settings-checkboxes">
+                @*<div class="checkbox">
+                        <label><input id="wordCheckbox" type="checkbox" value="">Slovo</label>
+                    </div>*@
+                <div class="checkbox">
+                    <label><input id="commentCheckbox" type="checkbox" value="">Komentář</label>
+                </div>
+                @*<div class="checkbox">
+                        <label><input id="languageCheckbox" type="checkbox" value="">Jazyk</label>
+                    </div>
+                    <div class="checkbox">
+                        <label><input id="structureCheckbox" type="checkbox" value="">Struktura textu</label>
+                    </div>*@
+                <div class="checkbox">
+                    <label><input id="paragraphCheckbox" type="checkbox" value="">Odstavec</label>
+                </div>
+            </div>
+            <div class="corpus-search-setting-div-results-count">
+                <div>Počet děl:</div>
+                <div id="totalCompositionsCountDiv"></div>
+                <div class="total-results-count" style="display: none">
+                    <div>Počet výsledků:</div>
+                    <div id="totalResultCountDiv"></div>
+                </div>
+            </div>
+            <div class="corpus-search-setting-div-pagination pagination-extra-small main-pagination-container text-center">
+            </div>
+        </div>
+        <div class="corpus-search-results-div col-md-10 col-md-pull-2 col-sm-pull-3 col-sm-9 col-xs-12">
+            <div class="row search-results-row no-gutters">
+                <div class="col-xs-12 text-center">
+                    <div class="alert alert-info page-loader">
+                        Pro zobrazení výsledků použijte vyhledávání.
+                    </div>
+                </div>
+                <div class="col-xs-12 results-container">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        initSearchSinglePaged();
+    });
+</script>

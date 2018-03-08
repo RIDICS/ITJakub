@@ -70,7 +70,7 @@ class ReaderModule {
         this.leftSidePanels = new Array<SidePanel>();
         this.rightSidePanels = new Array<SidePanel>();
 
-        $(window).on("beforeunload", (event: Event) => {
+        $(window.document.documentElement).on("beforeunload", (event: JQuery.Event) => {
             for (var k = 0; k < this.leftSidePanels.length; k++) {
                 if (this.leftSidePanels && this.leftSidePanels[k].childwindow) {
                     this.leftSidePanels[k].childwindow.close();    
@@ -163,7 +163,7 @@ class ReaderModule {
             $.ajax({
                 type: "GET",
                 traditional: true,
-                data: { bookId: bookId, snapshotId: bookVersionId },
+                data: { bookId: bookId, snapshotId: bookVersionId } as JQuery.PlainObject,
                 url: document.getElementsByTagName("body")[0].getAttribute("data-has-book-text-url"),
                 dataType: "json",
                 contentType: "application/json",
@@ -202,7 +202,7 @@ class ReaderModule {
             $.ajax({
                 type: "GET",
                 traditional: true,
-                data: { bookId: bookId, snapshotId: bookVersionId },
+                data: { bookId: bookId, snapshotId: bookVersionId } as JQuery.PlainObject,
                 url: this.readerContainer.getAttribute("data-has-image-url"),
                 dataType: "json",
                 contentType: "application/json",
@@ -263,16 +263,17 @@ class ReaderModule {
             max: this.pages.length - 1,
             value: 0,
             start: (event, ui) => {
-                $(event.target).find(".ui-slider-handle").find(".slider-tip").show();
+                $(event.target as Node as Element).find(".ui-slider-handle").find(".slider-tip").show();
             },
             stop: (event, ui) => {
-                $(event.target).find(".ui-slider-handle").find(".slider-tip").fadeOut(1000);
+                $(event.target as Node as Element).find(".ui-slider-handle").find(".slider-tip").fadeOut(1000);
             },
             slide: (event, ui) => {
-                $(event.target).find(".ui-slider-handle").find(".slider-tip").stop(true, true);
-                $(event.target).find(".ui-slider-handle").find(".slider-tip").show();
+                const targetEl = $(event.target as Node as Element);
+                targetEl.find(".ui-slider-handle").find(".slider-tip").stop(true, true);
+                targetEl.find(".ui-slider-handle").find(".slider-tip").show();
                 if (this.pages[ui.value] !== undefined) {
-                    $(event.target).find(".ui-slider-handle").find(".tooltip-inner").html(localization.translate("Page:", "PluginsJs").value + this.pages[ui.value].text);
+                    targetEl.find(".ui-slider-handle").find(".tooltip-inner").html(localization.translate("Page:", "PluginsJs").value + this.pages[ui.value].text);
                 } else {
                     console.error("missing page "+ui.value);
                 }
@@ -332,8 +333,8 @@ class ReaderModule {
         $(pageInputButtonSpan).addClass("glyphicon glyphicon-arrow-right");
         $(pageInputButton).append(pageInputButtonSpan);
 
-        $(pageInputButton).click((event: Event) => {
-            var pageName = $("#pageInputText").val();
+        $(pageInputButton).click((event: JQuery.Event) => {
+            var pageName = $("#pageInputText").val() as string;
             var pageIndex: number = -1;
             for (var i = 0; i < this.pages.length; i++) {
                 if (this.pages[i].text === pageName) {
@@ -376,7 +377,7 @@ class ReaderModule {
         var anchor: HTMLAnchorElement = document.createElement("a");
         anchor.href = "#";
         anchor.innerHTML = "|<";
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.moveToPageNumber(0, true);
             return false;
@@ -389,7 +390,7 @@ class ReaderModule {
         anchor = document.createElement("a");
         anchor.href = "#";
         anchor.innerHTML = "<<";
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.moveToPageNumber(this.actualPageIndex - 5, true);
             return false;
@@ -402,7 +403,7 @@ class ReaderModule {
         anchor = document.createElement("a");
         anchor.href = "#";
         anchor.innerHTML = "<";
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.moveToPageNumber(this.actualPageIndex - 1, true);
             return false;
@@ -418,7 +419,7 @@ class ReaderModule {
         anchor = document.createElement("a");
         anchor.href = "#";
         anchor.innerHTML = ">";
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.moveToPageNumber(this.actualPageIndex + 1, true);
             return false;
@@ -431,7 +432,7 @@ class ReaderModule {
         anchor = document.createElement("a");
         anchor.href = "#";
         anchor.innerHTML = ">>";
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.moveToPageNumber(this.actualPageIndex + 5, true);
             return false;
@@ -444,7 +445,7 @@ class ReaderModule {
         anchor = document.createElement("a");
         anchor.href = "#";
         anchor.innerHTML = ">|";
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.moveToPageNumber(this.pages.length - 1, true);
             return false;
@@ -464,7 +465,7 @@ class ReaderModule {
             anchor = document.createElement("a");
             anchor.href = "#";
             anchor.innerHTML = page.text;
-            $(anchor).click((event: Event) => {
+            $(anchor).click((event: JQuery.Event) => {
                 event.stopPropagation();
                 this.moveToPage(page.pageId, true);
                 return false;
@@ -499,7 +500,7 @@ class ReaderModule {
         $(addBookmarkSpanText).append(localization.translate("AddBookmark", "PluginsJs").value);
         $(addBookmarkButton).append(addBookmarkSpanText);
 
-        $(addBookmarkButton).click((event: Event) => {
+        $(addBookmarkButton).click((event: JQuery.Event) => {
             var actualPageName = this.getActualPage().text;
             this.newFavoriteDialog.show(actualPageName);
         });
@@ -516,7 +517,7 @@ class ReaderModule {
         $(bookmarkSpanText).append(localization.translate("Bookmarks", "PluginsJs").value);
         $(bookmarkButton).append(bookmarkSpanText);
 
-        $(bookmarkButton).click((event: Event) => {
+        $(bookmarkButton).click((event: JQuery.Event) => {
             var panelId = this.bookmarksPanelIdentificator;
             if (!this.existSidePanel(panelId)) {
                 var bookmarksPanel: BookmarksPanel = new BookmarksPanel(panelId, this, this.showLeftSidePanelsButtonList);
@@ -544,7 +545,7 @@ class ReaderModule {
             $(settingsSpanText).append(localization.translate("View", "PluginsJs").value);
             $(settingsButton).append(settingsSpanText);
 
-            $(settingsButton).click((event: Event) => {
+            $(settingsButton).click((event: JQuery.Event) => {
                 var panelId = this.settingsPanelIdentificator;
                 if (!this.existSidePanel(panelId)) {
                     var settingsPanel: SettingsPanel = new SettingsPanel(panelId, this, this.showLeftSidePanelsButtonList);
@@ -572,7 +573,7 @@ class ReaderModule {
             $(searchSpanText).append(localization.translate("Search", "PluginsJs").value);
             $(searchResultButton).append(searchSpanText);
 
-            $(searchResultButton).click((event: Event) => {
+            $(searchResultButton).click((event: JQuery.Event) => {
                 var panelId = this.searchPanelIdentificator;
                 if (!this.existSidePanel(panelId)) {
                     var searchPanel = new SearchResultPanel(panelId, this, this.showLeftSidePanelsButtonList);
@@ -600,7 +601,7 @@ class ReaderModule {
             $(termsSpanText).append(localization.translate("Terms", "PluginsJs").value);
             $(termsButton).append(termsSpanText);
 
-            $(termsButton).click((event: Event) => {
+            $(termsButton).click((event: JQuery.Event) => {
                 var panelId = this.termsPanelIdentificator;
                 if (!this.existSidePanel(panelId)) {
                     var termsPanel = new TermsPanel(panelId, this, this.showLeftSidePanelsButtonList);
@@ -629,7 +630,7 @@ class ReaderModule {
                 $(contentSpanText).append(localization.translate("Content", "PluginsJs").value);
                 $(contentButton).append(contentSpanText);
 
-                $(contentButton).click((event: Event) => {
+                $(contentButton).click((event: JQuery.Event) => {
                     var panelId = this.contentPanelIdentificator;
                     if (!this.existSidePanel(panelId)) {
                         var contentPanel: ContentPanel = new ContentPanel(panelId, this, this.showLeftSidePanelsButtonList);
@@ -665,7 +666,7 @@ class ReaderModule {
 
         var pages = new Bloodhound({ datumTokenizer: Bloodhound.tokenizers.whitespace, queryTokenizer: Bloodhound.tokenizers.whitespace, local: (): string[] => { return pagesTexts; } });
 
-        $(input).typeahead({ hint: true, highlight: true, minLength: 1 },{ name: "pages", source: pages });
+        $(input as Node as Element).typeahead({ hint: true, highlight: true, minLength: 1 },{ name: "pages", source: pages });
     }
 
     private loadBookmarks() {
@@ -1074,7 +1075,7 @@ class ReaderModule {
             const $bookmarksContainer = $(".reader-bookmarks-container");
             if (this.bookmarksPanel !== undefined && $bookmarksContainer.length > 0) {
                 this.bookmarksPanel.createBookmarkList(
-                    $bookmarksContainer.parent().get(0),
+                    $bookmarksContainer.parent().get(0) as Node as HTMLElement,
                     this.bookmarksPanel
                 );
             }
@@ -1126,7 +1127,7 @@ class ReaderModule {
             const $bookmarksContainer = $(".reader-bookmarks-container");
             if (this.bookmarksPanel !== undefined && $bookmarksContainer.length > 0) {
                 this.bookmarksPanel.createBookmarkList(
-                    $bookmarksContainer.parent().get(0),
+                    $bookmarksContainer.parent().get(0) as Node as HTMLElement,
                     this.bookmarksPanel
                 );
             }
@@ -1147,18 +1148,18 @@ class ReaderModule {
         });
     }
 
-    repaint() {
+    repaint() {//no usages found
         for (var i = 0; i < this.leftSidePanels.length; i++) {
-            if ($(this.leftSidePanels[i]).is(":visible")) {
-                $(this.leftSidePanels[i]).hide();
-                $(this.leftSidePanels[i]).show();
+            if ($(this.leftSidePanels[i].panelHtml).is(":visible")) {
+                $(this.leftSidePanels[i].panelHtml).hide();
+                $(this.leftSidePanels[i].panelHtml).show();
             }
         }
 
         for (var i = 0; i < this.rightSidePanels.length; i++) {
-            if ($(this.rightSidePanels[i]).is(":visible")) {
-                $(this.rightSidePanels[i]).hide();
-                $(this.rightSidePanels[i]).show();
+            if ($(this.rightSidePanels[i].panelHtml).is(":visible")) {
+                $(this.rightSidePanels[i].panelHtml).hide();
+                $(this.rightSidePanels[i].panelHtml).show();
             }
         }
     }
@@ -1348,7 +1349,7 @@ class SidePanel {
         if (showPanelButtonList.indexOf(PanelButtonEnum.Close) >= 0) {
             var sidePanelCloseButton = document.createElement("button");
             $(sidePanelCloseButton).addClass("close-button");
-            $(sidePanelCloseButton).click((event: Event) => {
+            $(sidePanelCloseButton).click((event: JQuery.Event) => {
                 this.onCloseButtonClick(sidePanelDiv);
             });
 
@@ -1365,7 +1366,7 @@ class SidePanel {
         {
             var panelPinButton = document.createElement("button");
             $(panelPinButton).addClass("pin-button");
-            $(panelPinButton).click((event: Event) => {
+            $(panelPinButton).click((event: JQuery.Event) => {
                 this.onPinButtonClick(sidePanelDiv);
             });
 
@@ -1381,7 +1382,7 @@ class SidePanel {
         if (showPanelButtonList.indexOf(PanelButtonEnum.ToNewWindow) >= 0) {
             var newWindowButton = document.createElement("button");
             $(newWindowButton).addClass("new-window-button");
-            $(newWindowButton).click((event: Event) => {
+            $(newWindowButton).click((event: JQuery.Event) => {
                 this.onNewWindowButtonClick(sidePanelDiv);
             });
 
@@ -1401,7 +1402,7 @@ class SidePanel {
         
         sidePanelDiv.appendChild(panelBodyDiv);
 
-        $(sidePanelDiv).mousedown((event: Event) => {
+        $(sidePanelDiv).mousedown((event: JQuery.Event) => {
             this.parentReader.populatePanelOnTop(this);
         });
 
@@ -1447,7 +1448,7 @@ class SidePanel {
         newWindow.document.open();
         newWindow.document.close();
 
-        $(newWindow).on("beforeunload", (event: Event) => {
+        $(newWindow.document.documentElement).on("beforeunload", (event: JQuery.Event) => {
             this.onUnloadWindowMode();
         });
 
@@ -1468,7 +1469,7 @@ class SidePanel {
     onUnloadWindowMode() {
         $(document.getElementById(this.identificator)).removeClass("windowed");
         $(this.windowBody).val("");
-        $(this.childwindow).val("");
+        $(this.childwindow.document.documentElement).val("");
     }
 
     onPinButtonClick(sidePanelDiv: HTMLDivElement) { throw new Error("Not implemented"); }
@@ -1534,7 +1535,7 @@ class SettingsPanel extends LeftSidePanel {
         $textButton.addClass("reader-settings-button");
         $textButton.append(textButtonSpan);
 
-        $(textButton).click((event: Event) => {
+        $(textButton).click((event: JQuery.Event) => {
             rootReference.parentReader.changeSidePanelVisibility(rootReference.parentReader.textPanelIdentificator, "");
             rootReference.parentReader.setRightPanelsLayout();
         });
@@ -1546,7 +1547,7 @@ class SettingsPanel extends LeftSidePanel {
         $imageButton.addClass("reader-settings-button");
         $imageButton.append(imageButtonSpan);
 
-        $(imageButton).click((event: Event) => {
+        $(imageButton).click((event: JQuery.Event) => {
             rootReference.parentReader.changeSidePanelVisibility(rootReference.parentReader.imagePanelIdentificator, "");
             rootReference.parentReader.setRightPanelsLayout();
         });
@@ -1564,7 +1565,7 @@ class SettingsPanel extends LeftSidePanel {
         var showPageNameCheckbox: HTMLInputElement = window.document.createElement("input");
         showPageNameCheckbox.type = "checkbox";
 
-        $(showPageNameCheckbox).change((eventData: Event) => {
+        $(showPageNameCheckbox).change((eventData: JQuery.Event) => {
             var readerText:JQuery = $("#" + this.parentReader.textPanelIdentificator).find(".reader-text");
             var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
             if (currentTarget.checked) {
@@ -1585,7 +1586,7 @@ class SettingsPanel extends LeftSidePanel {
         var showPageOnNewLineCheckbox: HTMLInputElement = window.document.createElement("input");
         showPageOnNewLineCheckbox.type = "checkbox";
 
-        $(showPageOnNewLineCheckbox).change((eventData: Event) => {
+        $(showPageOnNewLineCheckbox).change((eventData: JQuery.Event) => {
             var readerText = $("#" + this.parentReader.textPanelIdentificator).find(".reader-text");
             var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
             if (currentTarget.checked) {
@@ -1606,7 +1607,7 @@ class SettingsPanel extends LeftSidePanel {
         var showCommentCheckbox: HTMLInputElement = window.document.createElement("input");
         showCommentCheckbox.type = "checkbox";
 
-        $(showCommentCheckbox).change((eventData: Event) => {
+        $(showCommentCheckbox).change((eventData: JQuery.Event) => {
             var readerText = $("#" + this.parentReader.textPanelIdentificator).find(".reader-text");
             var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
             if (currentTarget.checked) {
@@ -1677,7 +1678,7 @@ class BookmarksPanel extends LeftSidePanel {
         }
         else {
             $bookmarksContainer.empty();
-            bookmarksContainer = <HTMLDivElement>$bookmarksContainer.get(0);
+            bookmarksContainer = $bookmarksContainer.get(0) as Node as HTMLDivElement;
         }
 
         var bookmarksHead = document.createElement("h2");
@@ -1956,7 +1957,7 @@ class ContentPanel extends LeftSidePanel {
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { bookId: this.parentReader.bookId },
+            data: { bookId: this.parentReader.bookId } as JQuery.PlainObject,
             url: getBaseUrl() + "Reader/GetBookContent",
             dataType: "json",
             contentType: "application/json",
@@ -2131,7 +2132,7 @@ class ImagePanel extends RightSidePanel {
 
                 var lastWidth = $innerContent.width();
                 var lastHeight = $innerContent.height();
-                $(window).resize(() => {
+                $(window.document.documentElement).resize(() => {
                     var newWidth = $innerContent.width();
                     var newHeight = $innerContent.height();
 
@@ -2188,14 +2189,14 @@ class TextPanel extends RightSidePanel {
         var textContainerDiv: HTMLDivElement = window.document.createElement("div");
         $(textContainerDiv).addClass("reader-text-container");
 
-        $(textContainerDiv).scroll((event: Event) => {
+        $(textContainerDiv).scroll((event: JQuery.Event) => {
             this.parentReader.clickedMoveToPage = false;
 
-            var pages = $(event.target).find(".page");
+            var pages = $(event.target as Node as Element).find(".page");
             var minOffset = Number.MAX_VALUE;
             var pageWithMinOffset;
             $.each(pages, (index, page) => {
-                var pageOfsset = Math.abs($(page).offset().top - $(event.target).offset().top);
+                var pageOfsset = Math.abs($(page as Node as Element).offset().top - $(event.target as Node as Element).offset().top);
                 if (minOffset > pageOfsset) {
                     minOffset = pageOfsset;
                     pageWithMinOffset = page;
@@ -2291,7 +2292,7 @@ class TextPanel extends RightSidePanel {
     onNewWindowButtonClick(sidePanelDiv: HTMLDivElement) {
         super.onNewWindowButtonClick(sidePanelDiv);
         var pageIndex = this.parentReader.actualPageIndex;
-        $(this.childwindow.document).ready(() => {
+        $(this.childwindow.document.documentElement).ready(() => {
             this.parentReader.moveToPageNumber(pageIndex, true);
         });
     }
@@ -2311,7 +2312,7 @@ class TextPanel extends RightSidePanel {
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { snapshotId: this.parentReader.versionId, pageId: page.pageId },
+            data: { snapshotId: this.parentReader.versionId, pageId: page.pageId } as JQuery.PlainObject,
             url: getBaseUrl() + "Reader/GetBookPage",
             dataType: "json",
             contentType: "application/json",
@@ -2355,7 +2356,7 @@ class TextPanel extends RightSidePanel {
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { query: query, isQueryJson: queryIsJson, snapshotId: this.parentReader.versionId, pageId: page.pageId },
+            data: { query: query, isQueryJson: queryIsJson, snapshotId: this.parentReader.versionId, pageId: page.pageId } as JQuery.PlainObject,
             url: getBaseUrl() + "Reader/GetBookSearchPageByXmlId",
             dataType: "json",
             contentType: "application/json",
@@ -2629,7 +2630,7 @@ class TermsPanel extends LeftSidePanel {
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { snapshotId: this.parentReader.bookId, pageId: page.pageId },
+            data: { snapshotId: this.parentReader.bookId, pageId: page.pageId } as JQuery.PlainObject,
             url: getBaseUrl() + "Reader/GetTermsOnPage",
             dataType: "json",
             contentType: "application/json",

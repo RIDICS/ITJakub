@@ -1,10 +1,8 @@
 ﻿class CommentArea {
     private readonly util: EditorsUtil;
-    private readonly gui: TextEditorGui;
 
-    constructor(util: EditorsUtil, gui: TextEditorGui) {
+    constructor(util: EditorsUtil) {
         this.util = util;
-        this.gui = gui;
     }
 
     init() {
@@ -169,6 +167,38 @@
             commentAreaEl); //collapse section on page load, collapse nested comments on page load
     }
 
+    collapseIfCommentAreaContentOverflows = (
+        commentAreaEl: JQuery) => {
+        var areaContent = "";
+        const ellipsisStart = "<div class=\"ellipsis-container\">";
+        const ellipsisBodyStart = "<div class=\"ellipsis toggleCommentViewAreaSize\">";
+        const ellipsisIconExpand =
+            "<i class=\"fa fa-expand expand-icon fa-lg\" aria-hidden=\"true\" title=\"Expand comment area\"></i>";
+        const ellipsisIconCollapse =
+            "<i class=\"fa fa-compress collapse-icon fa-lg\" aria-hidden=\"true\" title=\"Collapse comment area\"></i>";
+        const ellipsisBodyEnd = "</div>";
+        const ellipsisEnd = "</div>";
+        areaContent += ellipsisStart;
+        areaContent += ellipsisBodyStart;
+        areaContent += ellipsisIconExpand;
+        areaContent += ellipsisIconCollapse;
+        areaContent += ellipsisBodyEnd;
+        areaContent += ellipsisEnd;
+        const html = $.parseHTML(areaContent);
+        const commentAreaHeight = commentAreaEl.height();
+        const threadsContainer = commentAreaEl.children(".threads-container");
+        const threadsHeight = threadsContainer.height();
+        if (threadsHeight > commentAreaHeight
+        ) {
+                commentAreaEl.addClass("comment-area-collapsed");
+                threadsContainer.height(commentAreaHeight);
+                this.collapseNestedComments(commentAreaEl);
+            threadsContainer.append(html);
+        }
+        this.toggleAreaSizeIconHide(
+            commentAreaEl); //collapse section on page load, collapse nested comments on page load
+    }
+
     private collapseNestedComments(commentAreaEl: JQuery) {
         const threadsContainer = commentAreaEl.children(".threads-container");
         const children = threadsContainer.children(".media-list");
@@ -255,7 +285,15 @@
                 }
             });
         ajax.fail(() => {
-            this.gui.showMessageDialog("Error", `Failed to construct comment area for page ${pageName}`);
+            bootbox.alert({
+                title: "Error",
+                message: `Failed to construct comment area for page ${pageName}`,
+                buttons: {
+                    ok: {
+                        className: "btn-default"
+                    }
+                }
+            });
         });
         return ajax;
     }
@@ -303,21 +341,50 @@
     }
 
     private processDeleteCommentClick() {
-        $("#project-resource-preview").on("click", ".delete-comment", (event: JQueryEventObject) => {
-            const target = $(event.target);
+        $(".delete-comment").on("click", (event: JQuery.Event) => {
+            const target = $(event.target as Node as Element);
             const commentActionsRowEl = target.parents(".comment-actions-row");
             const commentId = parseInt(commentActionsRowEl.siblings(".media-body").attr("data-comment-id"));
-            console.log(commentId);
-            this.gui.createDeleteConfirmationDialog(() => {
-                const deleteAjax = this.util.deleteComment(commentId);
-                deleteAjax.done(() => {
-                    const textId = commentActionsRowEl.parents(".page-row").data("page");
-                    this.gui.showMessageDialog("Success", "Comment successfully deleted.");
-                    this.reloadCommentArea(textId);
-                });
-                deleteAjax.fail(() => {
-                    this.gui.showMessageDialog("Fail", "Failed to delete this comment.");
-                });
+            bootbox.confirm({
+                message:"Do you want to delete this comment?",
+                title: "Please confirm",
+                buttons: {
+                    confirm: {
+                        className: "btn-default"
+                    },
+                    cancel: {
+                        className: "btn-default"
+                    }
+                },
+                callback: (result) => {
+                    if (result) {
+                        const deleteAjax = this.util.deleteComment(commentId);
+                        deleteAjax.done(() => {
+                            const textId = commentActionsRowEl.parents(".page-row").data("page");
+                            bootbox.alert({
+                                title: "Success",
+                                message: "Comment successfully deleted.",
+                                buttons: {
+                                    ok: {
+                                        className: "btn-default"
+                                    }
+                                }
+                            });
+                            this.reloadCommentArea(textId);
+                        });
+                        deleteAjax.fail(() => {
+                            bootbox.alert({
+                                title: "Fail",
+                                message: "Failed to delete this comment.",
+                                buttons: {
+                                    ok: {
+                                        className: "btn-default"
+                                    }
+                                }
+                            });
+                        });
+                    }
+                }
             });
         });
     }
@@ -325,7 +392,7 @@
     private processToggleNestedCommentClick() {
         $("#project-resource-preview").on("click",
             ".toggle-nested-comments",
-            (event: JQueryEventObject) => {
+            (event: JQuery.Event) => {
                 event.stopImmediatePropagation();
                 const editorPageContainer = ".pages-start";
                 var target = $(event.target as HTMLElement);
@@ -353,7 +420,7 @@
                         if (scrollToMainComment < container.scrollTop()) {
                             container.animate({
                                 scrollTop: scrollToMainComment
-                            });
+                            } as JQuery.PlainObject);
                         }
                     } else {
                         const scrollToMainCommentWhileExpanded = $(parentComment).offset().top -
@@ -375,7 +442,7 @@
     private processToggleCommentAresSizeClick() {
         $("#project-resource-preview").on("click",
             ".toggleCommentViewAreaSize",
-            (event: JQueryEventObject) => {
+            (event: JQuery.Event) => {
                 event.stopImmediatePropagation();
                 const target = $(event.target as HTMLElement);
                 const commentArea = target.parents(".comment-area");
@@ -404,6 +471,7 @@
 
 
     reloadCommentArea(textId: number) {
+        var deferred = $.Deferred();
         const commentAreaEl = $(`*[data-page="${textId}"]`).children(".comment-area");
         const threadsContainer = commentAreaEl.children(".threads-container");
         threadsContainer.remove();
@@ -419,11 +487,16 @@
         const commentAreaAjax = this.asyncConstructCommentArea(commentAreaEl);
         commentAreaAjax.done(() => {
             this.collapseIfCommentAreaIsTall(commentAreaEl, sectionWasCollapsed, nestedCommentsCollapsed);
+            deferred.resolve();
+        });
+        commentAreaAjax.fail(() => {
+            deferred.reject();
         });
         const buttonAreaSize = $(".toggleCommentViewAreaSize");
         buttonAreaSize.off();
         const buttonNestedComments = $(".toggle-nested-comments");
         buttonNestedComments.off();
         this.init();
+        return deferred;
     }
 }

@@ -1,4 +1,4 @@
-﻿$(document).ready(() => {
+﻿$(document.documentElement).ready(() => {
     var dictionarySearch = new DictionarySearch();
     dictionarySearch.create();
 });
@@ -147,9 +147,9 @@ class DictionarySearchTabs {
         $("#search-tabs li").addClass("hidden");
         $("#search-tabs a").click(e => {
             e.preventDefault();
-            $(e.target).tab("show");
-            this.show(e.target.getAttribute("href"));
-            $(window).trigger("scroll");
+            $(e.target as Node as Element).tab("show");
+            this.show($(e.target as Node as Element).attr("href"));
+            $(window.document.documentElement).trigger("scroll");
         });
     }
 
@@ -317,7 +317,7 @@ class DictionaryViewerTextWrapper {
                 text: text,
                 selectedBookIds: this.selectedIds.selectedBookIds,
                 selectedCategoryIds: this.selectedIds.selectedCategoryIds
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (resultCount: number) => {
@@ -337,7 +337,7 @@ class DictionaryViewerTextWrapper {
                 text: text,
                 selectedBookIds: this.selectedIds.selectedBookIds,
                 selectedCategoryIds: this.selectedIds.selectedCategoryIds
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (resultCount: number) => {
@@ -367,7 +367,7 @@ class DictionaryViewerTextWrapper {
                 count: this.pageSize,
                 selectedBookIds: this.selectedIds.selectedBookIds,
                 selectedCategoryIds: this.selectedIds.selectedCategoryIds
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (response) => {
@@ -387,7 +387,7 @@ class DictionaryViewerTextWrapper {
                 count: this.pageSize,
                 selectedBookIds: this.selectedIds.selectedBookIds,
                 selectedCategoryIds: this.selectedIds.selectedCategoryIds
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (response) => {

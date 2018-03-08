@@ -1,6 +1,4 @@
-﻿declare var lazySizes: any;
-
-class PageLazyLoading {
+﻿class PageLazyLoading {
     private readonly pageStructure: PageStructure;
 
     constructor(pageStructure: PageStructure) {
@@ -10,7 +8,7 @@ class PageLazyLoading {
     init() {
         $(".pages-start").on("lazybeforeunveil",
             (event) => {
-                var targetEl = $(event.target);
+                var targetEl = $(event.target as Node as Element);
                 if (targetEl.hasClass("page-row")) {
                     this.pageStructure.loadPage(targetEl);
                 } else {

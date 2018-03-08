@@ -9,12 +9,14 @@ using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
+using Vokabular.Shared.DataContracts.Types;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
 using Vokabular.MainService.DataContracts.Contracts.Search;
-using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Search.OldCriteriaItem;
+using Vokabular.Shared.DataContracts.Search.Request;
 
 namespace Vokabular.MainService.Core.Managers.Fulltext
 {
@@ -41,6 +43,44 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
                     return OutputFormatEnum.Rtf;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(format), format, null);
+            }
+        }
+
+        private SortEnum ConvertSortType(SortTypeEnumContract? sortType)
+        {
+            if (sortType == null)
+            {
+                return SortEnum.Title;
+            }
+
+            switch (sortType.Value)
+            {
+                case SortTypeEnumContract.Author:
+                    return SortEnum.Author;
+                case SortTypeEnumContract.Title:
+                    return SortEnum.Title;
+                case SortTypeEnumContract.Dating:
+                    return SortEnum.Dating;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private ListSortDirection ConvertSortDirection(SortDirectionEnumContract? sortDirection)
+        {
+            if (sortDirection == null)
+            {
+                return ListSortDirection.Ascending;
+            }
+
+            switch (sortDirection.Value)
+            {
+                case SortDirectionEnumContract.Asc:
+                    return ListSortDirection.Ascending;
+                case SortDirectionEnumContract.Desc:
+                    return ListSortDirection.Descending;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -141,7 +181,8 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             }
         }
 
-        public FulltextSearchResultData SearchProjectIdByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        public FulltextSearchResultData SearchProjectIdByCriteria(int start, int count, SortTypeEnumContract? sort,
+            SortDirectionEnumContract? sortDirection, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
             UpdateCriteriaWithBookVersionRestriction(criteria, projects);
 
@@ -149,8 +190,8 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             {
                 Start = start,
                 Count = count,
-                Sorting = SortEnum.Title, // TODO use sorting from method parameter
-                Direction = ListSortDirection.Ascending,
+                Sorting = ConvertSortType(sort),
+                Direction = ConvertSortDirection(sortDirection),
             });
 
             using (var ssc = m_communicationProvider.GetSearchServiceClient())
@@ -361,6 +402,21 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         public string CreateNewEditionNoteVersion(EditionNoteResource editionNoteResource)
         {
             throw new NotSupportedException("Saving resources to eXist-db isn't supported. eXist-db storage supports only full book import.");
+        }
+
+        public CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotListByCriteria(int start, int count, SortTypeEnumContract? sort, SortDirectionEnumContract? sortDirection, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects, bool fetchNumberOfResults)
+        {
+            throw new NotSupportedException("Paged search in corpus in eXist-db isn't supported.");
+        }
+
+        public CorpusSearchResultDataList SearchCorpusInSnapshotByCriteria(long projectId, int start, int count, int contextLength, List<SearchCriteriaContract> criteria)
+        {
+            throw new NotSupportedException("Paged search in corpus in eXist-db isn't supported.");
+        }
+
+        public long SearchCorpusTotalResultCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        {
+            throw new NotSupportedException("Paged search in corpus in eXist-db isn't supported.");
         }
     }
 }

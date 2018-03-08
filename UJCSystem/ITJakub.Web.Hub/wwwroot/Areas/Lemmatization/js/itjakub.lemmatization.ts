@@ -3,8 +3,8 @@
     var lemmatization = new Lemmatization("#mainContainer", canEdit);
     lemmatization.make();
 
-    var inputElement = <HTMLInputElement>$("#mainSearchInput").get(0);
-    var keyboardButton = <HTMLButtonElement>$("#keyboard-button").get(0);
+    var inputElement = $("#mainSearchInput").get(0) as Node as HTMLInputElement;
+    var keyboardButton = $("#keyboard-button").get(0) as Node as HTMLButtonElement;
     var keyboardComponent = KeyboardManager.getKeyboard("0");
     keyboardComponent.registerButton(keyboardButton, inputElement, (newQuery) => lemmatization.setMainSearchBoxValue(newQuery));
 
@@ -107,7 +107,7 @@ class Lemmatization {
             url: getBaseUrl() + "Lemmatization/Lemmatization/GetToken",
             data: {
                 tokenId: tokenId
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (token) => {
@@ -137,7 +137,7 @@ class Lemmatization {
             url: getBaseUrl() + "Lemmatization/Lemmatization/GetTokenCharacteristic",
             data: {
                 tokenId: this.currentTokenItem.id
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (list) => {
@@ -179,8 +179,8 @@ class Lemmatization {
     }
 
     private saveNewToken() {
-        var token = $("#new-token").val();
-        var description = $("#new-token-description").val();
+        var token = $("#new-token").val() as string;
+        var description = $("#new-token-description").val() as string;
 
         if (!token) {
             return;
@@ -212,7 +212,7 @@ class Lemmatization {
     }
 
     private saveEditedToken() {
-        var description = $("#edit-token-description").val();
+        var description = $("#edit-token-description").val() as string;
 
         $.ajax({
             type: "POST",
@@ -262,7 +262,7 @@ class LemmatizationCharacteristicEditor {
         var result = "";
 
         for (var i = 0; i < selects.length; i++) {
-            var value = selects.filter("#description-" + i).val();
+            var value = selects.filter("#description-" + i).val() as string;
             result += value;
         }
 
@@ -270,8 +270,8 @@ class LemmatizationCharacteristicEditor {
     }
 
     private clear() {
-        $("#newTokenCharacteristic select").each((index: number, element: HTMLSelectElement) => {
-            element.selectedIndex = 0;
+        $("#newTokenCharacteristic select").each((index: number, element: Node) => {
+            (element as HTMLSelectElement).selectedIndex = 0;
         });
         $("#new-token-text-description").val("");
         this.updateTag();
@@ -280,14 +280,14 @@ class LemmatizationCharacteristicEditor {
     private loadData(tokenCharacteristic: ITokenCharacteristic) {
         var characteristic = tokenCharacteristic.morphologicalCharacteristic;
         $("#new-token-text-description").val(tokenCharacteristic.description);
-        $("#newTokenCharacteristic select").each((index: number, element: HTMLSelectElement) => {
-            element.selectedIndex = 0;
+        $("#newTokenCharacteristic select").each((index: number, element: Node) => {
+            (element as HTMLSelectElement).selectedIndex = 0;
             var charValue = characteristic.charAt(index);
-            for (var i = 0; i < element.children.length; i++) {
-                var option = element.children[i];
+            for (var i = 0; i < (element as HTMLSelectElement).children.length; i++) {
+                var option = (element as HTMLSelectElement).children[i];
                 var value = $(option).attr("value");
                 if (value === charValue) {
-                    element.selectedIndex = i;
+                    (element as HTMLSelectElement).selectedIndex = i;
                     break;
                 }
             }
@@ -321,7 +321,7 @@ class LemmatizationCharacteristicEditor {
     }
 
     private saveNew() {
-        var description = $("#new-token-text-description").val();
+        var description = $("#new-token-text-description").val() as string;
         $.ajax({
             type: "POST",
             traditional: true,
@@ -349,7 +349,7 @@ class LemmatizationCharacteristicEditor {
     }
 
     private saveEdit() {
-        var description = $("#new-token-text-description").val();
+        var description = $("#new-token-text-description").val() as string;
         $.ajax({
             type: "POST",
             traditional: true,
@@ -821,9 +821,9 @@ class LemmatizationCanonicalForm {
     }
 
     private createItem() {
-        var name = $("#new-form").val();
+        var name = $("#new-form").val() as string;
         var formType = Number($("#new-form-type").val());
-        var description = $("#new-form-description").val();
+        var description = $("#new-form-description").val() as string;
 
         if ($("#tab-create-new").hasClass("active")) {
             $.ajax({
@@ -867,9 +867,9 @@ class LemmatizationCanonicalForm {
     }
 
     private createHyperItem() {
-        var name = $("#new-hyper").val();
+        var name = $("#new-hyper").val() as string;
         var formType = Number($("#new-hyper-type").val());
-        var description = $("#new-hyper-description").val();
+        var description = $("#new-hyper-description").val() as string;
 
         if ($("#tab2-create-new").hasClass("active")) {
             $.ajax({
@@ -913,9 +913,9 @@ class LemmatizationCanonicalForm {
     }
 
     private editItem() {
-        var text = $("#edit-form-text").val();
+        var text = $("#edit-form-text").val() as string;
         var formType = Number($("#edit-form-type").val());
-        var description = $("#edit-form-description").val();
+        var description = $("#edit-form-description").val() as string;
 
         $.ajax({
             type: "POST",
@@ -937,9 +937,9 @@ class LemmatizationCanonicalForm {
     }
 
     private editHyperItem() {
-        var text = $("#edit-hyper-text").val();
+        var text = $("#edit-hyper-text").val() as string;
         var formType = Number($("#edit-hyper-type").val());
-        var description = $("#edit-hyper-description").val();
+        var description = $("#edit-hyper-description").val() as string;
 
         $.ajax({
             type: "POST",
@@ -1110,13 +1110,13 @@ class LemmatizationCanonicalForm {
         hyperSearchBox.create(hyperSelectedChangedCallback);
 
         $("#new-form-existing-type").on("change", (e) => {
-            var value = $(e.target).val();
+            var value = $(e.target as Node as Element).val() as string;
             searchBox.setDataSet("CanonicalForm", "type=" + value);
             searchBox.create(selectedChangedCallback);
             searchBox.reload();
         });
         $("#new-hyper-existing-type").on("change", (e) => {
-            var value = $(e.target).val();
+            var value = $(e.target as Node as Element).val() as string;
             hyperSearchBox.setDataSet("HyperCanonicalForm", "type=" + value);
             hyperSearchBox.create(hyperSelectedChangedCallback);
             hyperSearchBox.reload();

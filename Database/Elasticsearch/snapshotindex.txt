@@ -1,0 +1,62 @@
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "snapshot_analyzer": {
+          "type": "custom",
+          "char_filter": "escaped_chars",
+          "tokenizer": "whitespace",
+          "filter": "lowercase"
+        }
+      },
+      "char_filter": {
+        "escaped_chars": { 
+          "type": "pattern_replace",
+          "pattern": " <[0-9]*?> ",
+          "replacement": ""
+        }
+      }
+    }
+  },
+  "mappings": {
+    "snapshot": { 
+      "properties": { 
+        "snapshotId":    { "type": "long"  }, 
+        "projectId":    { "type": "long"  },
+        "title": {"type": "keyword" }, 
+        "subtitle": {"type": "keyword" },
+        "authorsLabel": {"type": "keyword" },
+        "relicAbbreviation": {"type": "keyword" },
+        "sourceAbbreviation": {"type": "keyword" },
+        "publishPlace": {"type": "keyword" },
+        "publishDate": {"type": "keyword" },
+        "publisherText": {"type": "keyword" },
+        "publisherEmail": {"type": "keyword" },
+        "copyright": {"type": "keyword" },
+        "biblText": {"type": "keyword" },
+        "originDate": {"type": "keyword" },
+        "manuscriptIdno": {"type": "keyword" },
+        "manuscriptSettlement": {"type": "keyword" },
+        "manuscriptCountry": {"type": "keyword" },
+        "manuscriptRepository": {"type": "keyword" },
+        "manuscriptExtent": {"type": "keyword" },
+        "manuscriptTitle": {"type": "keyword" },
+        "notBefore": {"type": "date" },
+        "notAfter": {"type": "date" },
+        "pages":{
+          "type": "nested",
+          "properties": { 
+            "id": {"type": "keyword"},
+            "pageIndex": {"type": "long"}
+          }
+        },
+        
+        "snapshotText":     { 
+          "type": "text", 
+          "term_vector": "with_positions_offsets", 
+          "analyzer": "snapshot_analyzer" 
+        }
+      }
+    }
+  }
+}

@@ -1,11 +1,9 @@
 ﻿class TextEditorPageNavigation {
 
     private readonly main: TextEditorMain;
-    private readonly gui: TextEditorGui;
 
-    constructor(main: TextEditorMain, gui: TextEditorGui) {
+    constructor(main: TextEditorMain) {
         this.main = main;
-        this.gui = gui;
     }
 
     private updateOnlySliderValue = false;
@@ -127,12 +125,28 @@
         const inputField = $(".go-to-page-field");
         const inputFieldValue = inputField.val() as string;
         if (inputFieldValue === "") {
-            this.gui.showMessageDialog("Warning", "You haven't entered anything. Please enter a page name.");
+            bootbox.alert({
+                title: "Warning",
+                message: "You haven't entered anything. Please enter a page name.",
+                buttons: {
+                    ok: {
+                        className: "btn-default"
+                }
+            }
+            });
         } else {
             const pageEl = $(`*[data-page-name="${inputFieldValue}"]`);
             const pageId = pageEl.data("page");
             if (!pageEl.length) {
-                this.gui.showMessageDialog("Warning", `Page ${inputFieldValue} does not exist.`);
+                bootbox.alert({
+                    title: "Warning",
+                    message: `Page ${inputFieldValue} does not exist.`,
+                    buttons: {
+                        ok: {
+                            className: "btn-default"
+                        }
+                    }
+                });
                 inputField.val("");
             } else {
                 this.navigateToPage(pageId, loadingPages, compositionPages);

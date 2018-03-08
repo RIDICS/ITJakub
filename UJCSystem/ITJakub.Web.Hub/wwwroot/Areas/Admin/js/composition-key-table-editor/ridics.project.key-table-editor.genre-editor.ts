@@ -66,7 +66,7 @@
                 $(".info-dialog-ok-button").on("click",
                     () => {
                         const textareaEl = $(".input-dialog-textarea");
-                        const genreString = textareaEl.val();
+                        const genreString = textareaEl.val() as string;
                         const newGenreAjax = this.util.createNewGenre(genreString);
                         newGenreAjax.done(() => {
                             textareaEl.val("");
@@ -94,7 +94,7 @@
                     textareaEl.val(originalText);
                 $(".info-dialog-ok-button").on("click",
                     () => {
-                        const genreName = textareaEl.val();
+                        const genreName = textareaEl.val() as string;
                             const genreId = selectedPageEl.data("key-id") as number;
                             const renameAjax = this.util.renameGenre(genreId, genreName);
                             renameAjax.done(() => {

@@ -12,7 +12,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             m_fulltextStorages = fulltextStorages.ToDictionary(x => x.ProjectType);
         }
 
-        public IFulltextStorage GetFulltextStorage(ProjectType projectType = ProjectType.Research)
+        public IFulltextStorage GetFulltextStorage(ProjectType projectType = ProjectType.Community)
         {
             return m_fulltextStorages[projectType];
         }

@@ -34,6 +34,7 @@ namespace ITJakub.Web.Hub
             container.AddSingleton<Profile, LiteraryGenreProfile>();
             container.AddSingleton<Profile, LiteraryKindProfile>();
             container.AddSingleton<Profile, LiteraryOriginalProfile>();
+            container.AddSingleton<Profile, CategoryProfile>();
             container.AddSingleton<Profile, ProjectProfile>();
             container.AddSingleton<Profile, ResourceProfile>();
             container.AddSingleton<Profile, ResponsibleTypeProfile>();

@@ -78,10 +78,6 @@
       <Project>{ba58bca2-f98a-4dda-934c-b78c10bc0cad}</Project>
       <Name>ITJakub.SearchService.DataContracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
-      <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
-      <Name>ITJakub.Shared.Contracts</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj">
       <Project>{d172f949-ae59-4029-bf5c-40b633362034}</Project>
       <Name>Vokabular.Shared.DataContracts</Name>

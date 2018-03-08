@@ -18,6 +18,10 @@ using Vokabular.MainService.Core.Works.Search;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.RestClient.Errors;
+using Vokabular.Shared.DataContracts.Search.Corpus;
+using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Search.QueryBuilder;
+using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Core.Managers
@@ -115,8 +119,7 @@ namespace Vokabular.MainService.Core.Managers
 
                 // 2) search in fulltext
                 var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
-                var fulltextSearchResultData = fulltextStorage.SearchProjectIdByCriteria(queryCreator.GetStart(), queryCreator.GetCount(), nonMetadataCriterias, projectIdentificatorList);
-                // TODO add sorting parameter for fulltext search
+                var fulltextSearchResultData = fulltextStorage.SearchProjectIdByCriteria(queryCreator.GetStart(), queryCreator.GetCount(), request.Sort, request.SortDirection, nonMetadataCriterias, projectIdentificatorList);
 
                 // 3) load paged result
                 var termCriteria = CreateTermConditionCreatorOrDefault(request, processedCriterias);
@@ -293,24 +296,90 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
-        public List<CorpusSearchResultContract> SearchCorpusByCriteria(CorpusSearchRequestContract request)
+        public CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotListByCriteria(CorpusSearchRequestContract request)
         {
-            m_authorizationManager.AddAuthorizationCriteria(request.ConditionConjunction);
-
-            var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
+            var processedCriterias = GetAuthorizatedProcessedCriterias(request.ConditionConjunction);
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
+
+            var projectIdentificatorList = GetProjectIdentificatorList(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters);
+            
+            // Search in fulltext DB
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            var start = m_corpusSearchManager.GetCorpusStart(request.Start);
+            var count = m_corpusSearchManager.GetCorpusCount(request.Count);
+
+            var result = fulltextStorage.SearchCorpusGetSnapshotListByCriteria(start, count, request.Sort, request.SortDirection, nonMetadataCriterias, projectIdentificatorList, request.FetchNumberOfResults);
+
+            return result;
+        }
+        
+        public List<CorpusSearchResultContract> SearchCorpusInSnapshotByCriteria(long snapshotId, CorpusSearchRequestContract request)
+        {
+            var processedCriterias = GetAuthorizatedProcessedCriterias(request.ConditionConjunction);
+            var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
+            
+            // Search in fulltext DB
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            var start = m_corpusSearchManager.GetCorpusStart(request.Start);
+            var count = m_corpusSearchManager.GetCorpusCount(request.Count);
+
+            var result = fulltextStorage.SearchCorpusInSnapshotByCriteria(snapshotId, start, count, request.ContextLength, nonMetadataCriterias);
+
+            switch (result.SearchResultType)
+            {
+                case FulltextSearchResultType.ProjectId:
+                    return m_corpusSearchManager.GetCorpusSearchResultByStandardIds(result.List);
+                case FulltextSearchResultType.ProjectExternalId:
+                    return m_corpusSearchManager.GetCorpusSearchResultByExternalIds(result.List);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public long SearchCorpusTotalResultCount(SearchRequestContractBase request)
+        {
+            var processedCriterias = GetAuthorizatedProcessedCriterias(request.ConditionConjunction);
+            var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
+
+            var projectIdentificatorList = GetProjectIdentificatorList(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters);
+
+            //Search in fulltext DB
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            var resultCount = fulltextStorage.SearchCorpusTotalResultCount(nonMetadataCriterias, projectIdentificatorList);
+
+            return resultCount;
+        }
+
+        private IList<ProjectIdentificationResult> GetProjectIdentificatorList(List<SearchCriteriaQuery> processedCriteriasConjunctionQuery, Dictionary<string, object> processedCriteriasMetadataParameters)
+        {
+            var queryCreator = new SearchCriteriaQueryCreator(processedCriteriasConjunctionQuery, processedCriteriasMetadataParameters);
+            var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
+
+            return projectIdentificatorList;
+        }
+
+        private FilteredCriterias GetAuthorizatedProcessedCriterias(IList<SearchCriteriaContract> conditionConjunction)
+        {
+            m_authorizationManager.AddAuthorizationCriteria(conditionConjunction);
+            var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(conditionConjunction);
 
             if (processedCriterias.NonMetadataCriterias.Count == 0)
             {
                 throw new HttpErrorCodeException("Missing any fulltext criteria", HttpStatusCode.BadRequest);
             }
 
-            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters);
+            return processedCriterias;
+        }
 
+        public List<CorpusSearchResultContract> SearchCorpusByCriteria(CorpusSearchRequestContract request)
+        {
+            var processedCriterias = GetAuthorizatedProcessedCriterias(request.ConditionConjunction);
+
+            var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
+
+            var projectIdentificatorList = GetProjectIdentificatorList(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters);
             // Search in fulltext DB
-
-            var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
-
+            
             var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
             var start = m_corpusSearchManager.GetCorpusStart(request.Start);
             var count = m_corpusSearchManager.GetCorpusCount(request.Count);
@@ -329,22 +398,13 @@ namespace Vokabular.MainService.Core.Managers
 
         public long SearchCorpusByCriteriaCount(CorpusSearchRequestContract request)
         {
-            m_authorizationManager.AddAuthorizationCriteria(request.ConditionConjunction);
+            var processedCriterias = GetAuthorizatedProcessedCriterias(request.ConditionConjunction);
 
-            var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
 
-            if (processedCriterias.NonMetadataCriterias.Count == 0)
-            {
-                throw new HttpErrorCodeException("Missing any fulltext criteria", HttpStatusCode.BadRequest);
-            }
-
-            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters);
-
+            var projectIdentificatorList = GetProjectIdentificatorList(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters);
+            
             // Search in fulltext DB
-
-            var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
-
             var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
             var resultCount = fulltextStorage.SearchCorpusByCriteriaCount(nonMetadataCriterias, projectIdentificatorList);
 

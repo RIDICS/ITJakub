@@ -99,7 +99,7 @@ class BibliographiesSearch {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Bibliographies/Bibliographies/AdvancedSearchPaged",
-            data: { json: json, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc},
+            data: { json: json, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: response => {
@@ -128,7 +128,7 @@ class BibliographiesSearch {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Bibliographies/Bibliographies/TextSearchPaged",
-            data: { text: text, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc},
+            data: { text: text, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: response => {
@@ -161,7 +161,7 @@ class BibliographiesSearch {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Bibliographies/Bibliographies/TextSearchCount",
-            data: { text: text },
+            data: { text: text } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: response => {
@@ -184,7 +184,7 @@ class BibliographiesSearch {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Bibliographies/Bibliographies/AdvancedSearchResultsCount",
-            data: { json: json },
+            data: { json: json } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: response => {

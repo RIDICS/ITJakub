@@ -25,4 +25,8 @@
     <PackageReference Include="System.ServiceModel.Http" Version="4.4.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Converters\" />
+  </ItemGroup>
+
 </Project>

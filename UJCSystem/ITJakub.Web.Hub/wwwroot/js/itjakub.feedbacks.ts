@@ -39,7 +39,7 @@ var categories = new Array<number>();
 var paginator: Pagination;
 var feedbacksOnPage = 5;
 
-$(document).ready(() => {
+$(document.documentElement).ready(() => {
 
     var notFilledMessage = localization.translateFormat("NotFilled", new Array<string>("&lt;", "&gt;"), "ItJakubJs").value;
 
@@ -71,7 +71,7 @@ $(document).ready(() => {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Feedback/GetFeedbacks",
-            data: { categories: categories, start: start, count: count, sortCriteria: sortCriteria, sortAsc: sortOrderAsc },
+            data: { categories: categories, start: start, count: count, sortCriteria: sortCriteria, sortAsc: sortOrderAsc } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (results: IFeedback[]) => {
@@ -173,8 +173,8 @@ $(document).ready(() => {
                     $(removeGlyph).addClass("glyphicon glyphicon-trash");
                     feedbackDeleteButton.appendChild(removeGlyph);
 
-                    $(feedbackDeleteButton).click((event: Event) => {
-                        var elementId = $(event.target).parents(".feedback")[0].id;
+                    $(feedbackDeleteButton).click((event: JQuery.Event) => {
+                        var elementId = $(event.target as Element).parents(".feedback").attr("id");
                         deleteFeedback(elementId);
                     });
 
@@ -228,7 +228,7 @@ $(document).ready(() => {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Feedback/GetFeedbacksCount",
-            data: { categories: categories },
+            data: { categories: categories } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: response => {

@@ -52,9 +52,9 @@
 
         this.container.append(innerContainer);
         
-        $(document).unbind("click.favoriteBooks");
-        $(document).bind("click.favoriteBooks", (event) => {
-            var parents = $(event.target).parents();
+        $(document.documentElement).unbind("click.favoriteBooks");
+        $(document.documentElement).bind("click.favoriteBooks", (event) => {
+            var parents = $(event.target as Node as Element).parents();
             if (!parents.is(this.container)) {
                 this.hide();
             }

@@ -1,4 +1,4 @@
-﻿$(document).ready(() => {
+﻿$(document.documentElement).ready(() => {
     var permissionEditor = new UserPermissionEditor("#mainContainer");
     permissionEditor.make();
     var userId = getQueryStringParameterByName("userId");
@@ -83,8 +83,8 @@ class UserPermissionEditor {
 
             } else {
 
-                var groupName = $("#new-group-name").val();
-                var groupDescription = $("#new-group-description").val();
+                var groupName = $("#new-group-name").val() as string;
+                var groupDescription = $("#new-group-description").val() as string;
 
                 $.ajax({
                     type: "POST",
@@ -122,7 +122,7 @@ class UserPermissionEditor {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Permission/GetGroupsByUser",
-            data: { userId: user.id },
+            data: { userId: user.id } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (results) => {
@@ -144,7 +144,7 @@ class UserPermissionEditor {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Permission/GetUser",
-            data: { userId: userId },
+            data: { userId: userId } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (response) => {
@@ -186,16 +186,16 @@ class UserPermissionEditor {
         var moreSpan = document.createElement("span");
         $(moreSpan).addClass("list-item-more");
 
-        $(moreSpan).click((event: Event) => {
-            var target = event.target;
+        $(moreSpan).click((event: JQuery.Event) => {
+            const target = $(event.target as Node as Element);
             var detailsDiv = $(target).parents(".list-item").first().find(".list-item-details").first();
             if (detailsDiv.is(":hidden")) {
-                $(target).removeClass("glyphicon-chevron-down");
-                $(target).addClass("glyphicon-chevron-up");
+                target.removeClass("glyphicon-chevron-down");
+                target.addClass("glyphicon-chevron-up");
                 detailsDiv.slideDown();
             } else {
-                $(target).removeClass("glyphicon-chevron-up");
-                $(target).addClass("glyphicon-chevron-down");
+                target.removeClass("glyphicon-chevron-up");
+                target.addClass("glyphicon-chevron-down");
                 detailsDiv.slideUp();
             }
         });

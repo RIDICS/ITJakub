@@ -26,7 +26,7 @@
             type: "GET",
             traditional: true,
             url: this.configuration.search.url.advancedCount,
-            data: { json: json, selectedBookIds: this.bookIdsInQuery, selectedCategoryIds: this.categoryIdsInQuery },
+            data: { json: json, selectedBookIds: this.bookIdsInQuery, selectedCategoryIds: this.categoryIdsInQuery } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: response => {
@@ -55,7 +55,7 @@
             type: "GET",
             traditional: true,
             url: this.configuration.search.url.advanced,
-            data: { json: json, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: this.bookIdsInQuery, selectedCategoryIds: this.categoryIdsInQuery },
+            data: { json: json, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: this.bookIdsInQuery, selectedCategoryIds: this.categoryIdsInQuery } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: response => {

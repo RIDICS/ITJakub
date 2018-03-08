@@ -184,7 +184,7 @@
                 sort: sort,
                 start: start,
                 count: count
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (favorites: Array<IFavoriteBaseInfo>) => {
@@ -206,7 +206,7 @@
                 labelId: labelId,
                 filterByType: filterByType,
                 filterByTitle: filterByTitle
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (count: number) => {
@@ -322,7 +322,7 @@
             url: getBaseUrl() + "Favorite/GetFavoriteLabelsWithBooksAndCategories",
             data: {
                 bookType: bookType
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (favoriteLabels) => {
@@ -372,7 +372,7 @@
                 filterByTitle: filterByTitle,
                 start: start,
                 count: count
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (queries) => {
@@ -396,7 +396,7 @@
                 bookType: bookType,
                 queryType: queryType,
                 filterByTitle: filterByTitle
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (count) => {
@@ -430,7 +430,7 @@
             url: getBaseUrl() + "Favorite/GetPageBookmarks",
             data: {
                 bookId: bookId
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (bookmarks) => {

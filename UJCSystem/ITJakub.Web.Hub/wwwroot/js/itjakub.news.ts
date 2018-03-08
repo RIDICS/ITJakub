@@ -27,7 +27,7 @@
             data: {
                 start: start,
                 count: this.newsOnPage
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: callback
