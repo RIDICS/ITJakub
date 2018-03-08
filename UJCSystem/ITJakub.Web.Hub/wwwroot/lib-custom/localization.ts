@@ -106,7 +106,7 @@
             baseUrl = baseUrl.substring(0, baseUrl.length - 1);
         }
 
-        xmlHttpRequest.open("GET", `/Localization/Dictionary?scope=${scope}`, false);
+        xmlHttpRequest.open("GET", `${getBaseUrl()}Localization/Dictionary?scope=${scope}`, false); // HACK fix base URL in this library
         xmlHttpRequest.send();
     }
 
