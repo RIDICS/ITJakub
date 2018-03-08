@@ -142,9 +142,24 @@
                                             <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     </li>
-                                    <li>
+                                    @*<li>//TODO remove old search?
                                         <a href='@Url.Action("Search", "BohemianTextBank", new {area = "BohemianTextBank"})'>
                                             <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
+                                        </a>
+                                    </li>*@
+                                    <li>
+                                        <a href='@Url.Action("SearchCombined", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                                            <span>Vyhledávání kombinované</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("SearchSingleLazyload", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                                            <span>Vyhledávání podle díla na jedné stránce</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("SearchSinglePaged", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                                            <span>Vyhledávání podle díla strankované</span>
                                         </a>
                                     </li>
                                     <li>
