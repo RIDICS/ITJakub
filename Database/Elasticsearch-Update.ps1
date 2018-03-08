@@ -3,7 +3,7 @@
 param (
     [string]$url = "http://localhost:9200",
 	[string]$path = "Elasticsearch",
-	[bool]$recreateMode = $false,
+	[switch]$recreateMode = $false,
 	[string]$indexSuffix = ""
 )
 
