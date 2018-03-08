@@ -17,14 +17,16 @@
 }
 
 .corpus-search-result-controls-container {
-    overflow-y: auto;
+    background-color: @menu-background-color;
+    color: white;
+    line-height: 1.1;
+    padding: 15px;
 
     .viewing-settings-menu-icon {
         padding-left: 0;
     }
 
     .corpus-search-result-view-properties-advanced {
-        display: none;
 
         .corpus-search-setting-div-context {
             margin-top: 0.5em;
@@ -63,19 +65,24 @@
         color: white;
         font-size: larger;
         text-align: center;
-        margin-bottom: 25px;
+        margin-bottom: 10px;
     }
 
-    .search-settings-changed-warning {
+    .search-settings-changed-refresh {
         display: none;
+
+        .results-refresh-button {
+            width: 100%;
+        }
     }
 
     .corpus-search-settings-checkboxes {
-        margin-bottom: 30px;
+        margin-bottom: 20px;
         margin-top: 10px;
     }
 
     .corpus-search-setting-div-results-count {
+        margin-top: 10px;
         margin-bottom: 15px;
     }
 
@@ -95,12 +102,6 @@
             outline: none;
         }
     }
-
-    background-color: @menu-background-color;
-    color: white;
-    line-height: 1.1;
-    padding: 15px;
-    height: inherit;
 }
 
 .results-container {
@@ -109,9 +110,10 @@
         margin-top: 2em;
 
         .result-text-col {
+            padding: 0;
             min-height: 30em;
             max-height: 40em;
-            overflow:auto;
+            overflow: auto;
 
             .text-results-table {
                 width: 100%;
@@ -168,31 +170,38 @@
         }
     }
 
-    .result-info-section {
-        .label {
-            font-weight: bolder;
-            font-size: 100%;
-            color: grey;
-            text-align: left;
-        }
+    .book-detail-section {
+        overflow-x: auto;
 
-        .result-info-section {
-            margin: 0.8em 0;
+        .corpus-search-detail-container {
 
-            .col-no-padding {
-                padding-left: 0;
-            }
-
-            .table-row {
+            .result-info-section {
                 .label {
-                    font-weight: bold;
+                    font-weight: bolder;
                     font-size: 100%;
-                    color: black;
-                    padding-left: 0;
+                    color: grey;
+                    text-align: left;
                 }
 
-                .break-word {
-                    word-break: break-word;
+                .result-info-section {
+                    margin: 0.8em 0;
+
+                    .col-no-padding {
+                        padding-left: 0;
+                    }
+
+                    .table-row {
+                        .label {
+                            font-weight: bold;
+                            font-size: 100%;
+                            color: black;
+                            padding-left: 0;
+                        }
+
+                        .break-word {
+                            word-break: break-word;
+                        }
+                    }
                 }
             }
         }

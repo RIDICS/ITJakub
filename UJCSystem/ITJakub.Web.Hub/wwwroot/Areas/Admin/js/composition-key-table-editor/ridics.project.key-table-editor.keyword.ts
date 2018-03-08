@@ -30,7 +30,7 @@
         const startIndex = (pageNumber - 1) * this.numberOfItemsPerPage;
         const endIndex = pageNumber * this.numberOfItemsPerPage;
         const pagedResponsiblePersonListAjax = this.util.getKeywordList(startIndex, endIndex);
-        pagedResponsiblePersonListAjax.done((data: IKeywordPagedResult) => {
+        pagedResponsiblePersonListAjax.done((data: IPagedResult<IKeywordContract>) => {
             listEl.empty();
             if (initial) {
                 this.initPagination(data.totalCount, this.numberOfItemsPerPage, this.loadPage.bind(this));

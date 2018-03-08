@@ -23,7 +23,8 @@
     "bootbox": "4.4.0",
     "gijgo": "1.8.0",
     "s-pagination": "1.1.1",
-    "jquery-table-fixer": "1.0.0"
+    "jquery-table-fixer": "1.0.0",
+    "stickybits": "3.0.4"
   },
   "resolutions": {
     "@types/jquery": "3.2.17"

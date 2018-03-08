@@ -657,11 +657,11 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         #region Responsible person
 
-        public List<ProjectDetailContract> GetProjectsByResponsiblePerson(int responsiblePersonId, int? start, int? count)
+        public PagedResultList<ProjectDetailContract> GetProjectsByResponsiblePerson(int responsiblePersonId, int? start, int? count)
         {
             try
             {
-                var result = Get<List<ProjectDetailContract>>($"responsibleperson/{responsiblePersonId}/project?start={start}&count={count}");
+                var result = GetPagedList<ProjectDetailContract>($"responsibleperson/{responsiblePersonId}/project?start={start}&count={count}");
                 return result;
             }
             catch (HttpRequestException e)
@@ -871,11 +871,11 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         #region Original author
 
-        public List<ProjectDetailContract> GetProjectsByAuthor(int authorId, int? start, int? count)
+        public PagedResultList<ProjectDetailContract> GetProjectsByAuthor(int authorId, int? start, int? count)
         {
             try
             {
-                var result = Get<List<ProjectDetailContract>>($"author/{authorId}/project?start={start}&count={count}");
+                var result = GetPagedList<ProjectDetailContract>($"author/{authorId}/project?start={start}&count={count}");
                 return result;
             }
             catch (HttpRequestException e)

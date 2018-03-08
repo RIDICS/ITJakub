@@ -5,6 +5,8 @@
 @import "@image-viewer-variables.less";
 
 @box-border: 1px solid #ddd;
+@even-table-row-colour: #eee;
+@odd-table-row-colour: #white;
 
 .project-list {
     hr {
@@ -562,149 +564,149 @@
         }
     }
 
-    #project-work-metadata {
-        .person-surname {
-            margin: 0 3px;
-        }
+#project-work-metadata {
+    .person-surname {
+        margin: 0 3px;
+    }
 
-        #work-metadata-copyright {
-            resize: none;
-            width: 100%;
-        }
+    #work-metadata-copyright {
+        resize: none;
+        width: 100%;
+    }
 
-        #work-metadata-literary-genre, #work-metadata-literary-kind {
-            .button-float-right {
-                float: right;
-            }
-
-            .genre-item, .lit-kind-item {
-                margin: 6px 0;
-
-                .item-select-box {
-                    width: 100%;
-                }
-            }
-        }
-
-        .regex-slider-div {
-            .slider {
-                width: 65%;
-            }
-
-            .regex-dating-checkbox-div {
-                width: 25%;
-
-                span {
-                    margin-left: 3px;
-                }
-            }
-        }
-
-        #work-metadata-invalid-keyword-fail {
-            display: none;
-        }
-
-        .person-list-manipulate {
+    #work-metadata-literary-genre, #work-metadata-literary-kind {
+        .button-float-right {
             float: right;
         }
 
-        .generate-bibliography-row {
+        .genre-item, .lit-kind-item {
             margin: 6px 0;
-        }
 
-        .move-button {
-            margin-right: 5px;
-
-            .btn {
-                padding: 0px 4px;
-                max-height: 18px;
-            }
-        }
-
-        .category-container {
-            height: 300px;
-            overflow-y: scroll;
-        }
-
-        .email-group, .publication-years-group {
-            .form-control-feedback {
-                display: none;
-            }
-        }
-
-        #work-metadata-editors {
-            word-break: break-all;
-        }
-
-        #work-metadata-authors {
-            word-break: break-all;
-        }
-
-        #category-tree {
-            word-break: break-all;
-        }
-
-        .keywords-container {
-            .bootstrap-tagsinput {
+            .item-select-box {
                 width: 100%;
             }
         }
+    }
 
-        #add-author-dialog {
-            .modal-body {
-                .border-between > [class*='col-']:before {
-                    background: black;
-                    bottom: 0;
-                    content: " ";
-                    left: 0;
-                    position: absolute;
-                    width: 1px;
-                    top: 0;
+    .regex-slider-div {
+        .slider {
+            width: 65%;
+        }
+
+        .regex-dating-checkbox-div {
+            width: 25%;
+
+            span {
+                margin-left: 3px;
+            }
+        }
+    }
+
+    #work-metadata-invalid-keyword-fail {
+        display: none;
+    }
+
+    .person-list-manipulate {
+        float: right;
+    }
+
+    .generate-bibliography-row {
+        margin: 6px 0;
+    }
+
+    .move-button {
+        margin-right: 5px;
+
+        .btn {
+            padding: 0px 4px;
+            max-height: 18px;
+        }
+    }
+
+    .category-container {
+        height: 300px;
+        overflow-y: scroll;
+    }
+
+    .email-group, .publication-years-group {
+        .form-control-feedback {
+            display: none;
+        }
+    }
+
+    #work-metadata-editors {
+        word-break: break-all;
+    }
+
+    #work-metadata-authors {
+        word-break: break-all;
+    }
+
+    #category-tree {
+        word-break: break-all;
+    }
+
+    .keywords-container {
+        .bootstrap-tagsinput {
+            width: 100%;
+        }
+    }
+
+    #add-author-dialog {
+        .modal-body {
+            .border-between > [class*='col-']:before {
+                background: black;
+                bottom: 0;
+                content: " ";
+                left: 0;
+                position: absolute;
+                width: 1px;
+                top: 0;
+            }
+
+            .col-no-padding {
+                padding: 0;
+            }
+
+            .border-between > [class*='col-']:first-child:before {
+                display: none;
+            }
+
+            .author-name-input-row {
+                display: none;
+                border: solid 1px;
+                border-top: none;
+
+                [class*="col-"] {
+                    padding-right: 0;
+                    padding-left: 0;
                 }
+            }
 
-                .col-no-padding {
-                    padding: 0;
-                }
+            .new-author-button-row {
+                margin-top: 4px;
 
-                .border-between > [class*='col-']:first-child:before {
+                .new-original-author-button-group {
                     display: none;
                 }
+            }
 
-                .author-name-input-row {
-                    display: none;
-                    border: solid 1px;
-                    border-top: none;
+            .table-row {
 
-                    [class*="col-"] {
-                        padding-right: 0;
-                        padding-left: 0;
-                    }
+                .list-group-item {
+                    border: none;
                 }
 
-                .new-author-button-row {
-                    margin-top: 4px;
-
-                    .new-original-author-finish-button {
-                        display: none;
-                    }
+                .loading {
+                    width: initial;
+                    height: initial;
                 }
 
-                .table-row {
-
-                    .list-group-item {
-                        border: none;
-                    }
-
-                    .loading {
-                        width: initial;
-                        height: initial;
-                    }
-
+                .works-produced {
                     .works-list-items {
                         border: solid 1px gray;
                         border-top: none;
-                        min-height: 175px;
-                        max-height: 200px;
+                        height: 200px;
                         overflow-y: auto;
                         padding: 0;
 
@@ -714,177 +716,223 @@
                             &:last-child {
                                 border-bottom: none;
                             }
-                        }
-                    }
 
-                    .border-left {
-                        border-left: solid 1px gray;
-                    }
+                            &:nth-child(even) {
+                                background-color: @even-table-row-colour;
+                            }
 
-                    .border-right {
-                        border-right: solid 1px gray;
-                    }
-
-                    .author-list-items {
-                        overflow-y: scroll;
-                        border: solid 1px gray;
-                        border-top: none;
-                        min-height: 175px;
-                        max-height: 200px;
-
-                        .author-list-item {
-                            border-bottom: solid 1px gray;
-
-                            .list-group-item {
-                                padding: 4px;
+                            &:nth-child(odd) {
+                                background-color: @odd-table-row-colour;
                             }
                         }
-
-                        .existing-original-author-selected {
-                            background-color: orange;
-                        }
-
-                        .existing-original-author-name {
-                            background-color: inherit;
-                        }
-
-                        .existing-original-author-surname {
-                            background-color: inherit;
-                        }
                     }
 
-                    .author-table-header {
-                        overflow-y: scroll;
-                        border: solid 1px gray;
-                        font-weight: bold;
-                    }
-
-                    .works-table-header {
-                        border: solid 1px gray;
+                    .works-number-text {
                         font-weight: bold;
                     }
                 }
-            }
-        }
 
-        #add-editor-dialog {
-            .modal-body {
-                .border-between > [class*='col-']:before {
-                    background: black;
-                    bottom: 0;
-                    content: " ";
-                    left: 0;
-                    position: absolute;
-                    width: 1px;
-                    top: 0;
+                .border-left {
+                    border-left: solid 1px gray;
                 }
 
-                .border-between > [class*='col-']:first-child:before {
-                    display: none;
+                .border-right {
+                    border-right: solid 1px gray;
                 }
 
-                .col-no-padding {
-                    padding: 0;
-                }
-
-                .list-group-item {
-                    border: none;
-                }
-
-                .responsible-people-table {
-                    .responsible-person-table-header {
-                        overflow-y: scroll;
-                        border: solid 1px gray;
-                        font-weight: bold;
-                    }
-
-                    .border-left {
-                        border-left: solid 1px gray;
-                    }
-
-                    .border-right {
-                        border-right: solid 1px gray;
-                    }
-                }
-
-                .responsible-person-list-items {
+                .author-list-items {
+                    overflow-y: scroll;
                     border: solid 1px gray;
                     border-top: none;
-                    min-height: 175px;
-                    max-height: 200px;
-                    overflow-y: scroll;
+                    height: 200px;
 
-                    .responsible-person-list-item {
+                    .author-list-item {
                         border-bottom: solid 1px gray;
+
+                        &:nth-child(even) {
+                            background-color: @even-table-row-colour;
+                        }
+
+                        &:nth-child(odd) {
+                            background-color: @odd-table-row-colour;
+                        }
 
                         .list-group-item {
                             padding: 4px;
                         }
                     }
 
-                    .existing-responsible-person-selected {
+                    .existing-original-author-selected {
                         background-color: orange;
                     }
 
-                    .existing-responsible-person-name {
+                    .existing-original-author-name {
                         background-color: inherit;
                     }
 
-                    .existing-responsible-person-surname {
+                    .existing-original-author-surname {
                         background-color: inherit;
                     }
                 }
 
-                .responsible-person-name-input-row {
-                    display: none;
-                    border: solid 1px;
-                    border-top: none;
-
-                    [class*="col-"] {
-                        padding-right: 0;
-                        padding-left: 0;
-                    }
+                .author-table-header {
+                    overflow-y: scroll;
+                    border: solid 1px gray;
+                    font-weight: bold;
                 }
 
-                .new-responsible-person-button-row {
-                    margin-top: 4px;
-
-                    .new-responsible-person-finish-button {
-                        display: none;
-                    }
-                }
-
-                .new-responsibility-type-row {
-                    margin-top: 5px;
-
-                    #add-responsible-type-type {
-                        padding: 0;
-                    }
-                }
-
-                .works-participated {
-
-                    .loading {
-                        width: initial;
-                        height: initial;
-                    }
-
-                    .works-table-header {
-                        border: solid 1px gray;
-                        font-weight: bold;
-                    }
-
-                    .works-list-items {
-                        border: solid 1px gray;
-                        border-top: none;
-                        min-height: 175px;
-                        max-height: 200px;
-                        overflow-y: auto;
-                    }
+                .works-table-header {
+                    border: solid 1px gray;
+                    font-weight: bold;
                 }
             }
         }
     }
+
+    #add-editor-dialog {
+        .modal-body {
+            .border-between > [class*='col-']:before {
+                background: black;
+                bottom: 0;
+                content: " ";
+                left: 0;
+                position: absolute;
+                width: 1px;
+                top: 0;
+            }
+
+            .border-between > [class*='col-']:first-child:before {
+                display: none;
+            }
+
+            .col-no-padding {
+                padding: 0;
+            }
+
+            .list-group-item {
+                border: none;
+            }
+
+            .responsible-people-table {
+                .responsible-person-table-header {
+                    overflow-y: scroll;
+                    border: solid 1px gray;
+                    font-weight: bold;
+                }
+
+                .border-left {
+                    border-left: solid 1px gray;
+                }
+
+                .border-right {
+                    border-right: solid 1px gray;
+                }
+            }
+
+            .responsible-person-list-items {
+                border: solid 1px gray;
+                border-top: none;
+                height: 200px;
+                overflow-y: scroll;
+
+                .responsible-person-list-item {
+                    border-bottom: solid 1px gray;
+
+                    &:nth-child(even) {
+                        background-color: @even-table-row-colour;
+                    }
+
+                    &:nth-child(odd) {
+                        background-color: @odd-table-row-colour;
+                    }
+
+                    .list-group-item {
+                        padding: 4px;
+                    }
+                }
+
+                .existing-responsible-person-selected {
+                    background-color: orange;
+                }
+
+                .existing-responsible-person-name {
+                    background-color: inherit;
+                }
+
+                .existing-responsible-person-surname {
+                    background-color: inherit;
+                }
+            }
+
+            .responsible-person-name-input-row {
+                display: none;
+                border: solid 1px;
+                border-top: none;
+
+                [class*="col-"] {
+                    padding-right: 0;
+                    padding-left: 0;
+                }
+            }
+
+            .new-responsible-person-button-row {
+                margin-top: 4px;
+
+                .new-responsible-person-button-group {
+                    display: none;
+                }
+            }
+
+            .new-responsibility-type-row {
+                margin-top: 5px;
+
+                #add-responsible-type-type {
+                    padding: 0;
+                }
+            }
+
+            .works-participated {
+
+                .loading {
+                    width: initial;
+                    height: initial;
+                }
+
+                .works-table-header {
+                    border: solid 1px gray;
+                    font-weight: bold;
+                }
+
+                .works-list-items {
+                    border: solid 1px gray;
+                    border-top: none;
+                    height: 200px;
+                    overflow-y: auto;
+
+                    .works-list-item {
+                        border-bottom: solid 1px gray;
+
+                        &:last-child {
+                            border-bottom: none;
+                        }
+
+                        &:nth-child(even) {
+                            background-color: @even-table-row-colour;
+                        }
+
+                        &:nth-child(odd) {
+                            background-color: @odd-table-row-colour;
+                        }
+                    }
+                }
+
+                .works-number-text {
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+}
 
     #project-resource-images {
 

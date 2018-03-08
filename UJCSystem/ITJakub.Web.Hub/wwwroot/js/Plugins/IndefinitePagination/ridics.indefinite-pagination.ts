@@ -9,12 +9,17 @@
     private basicMode = true;
     private slider: JQuery;
     private wrapped = false;
-
+    private loadAllPagesButtonContent: JQuery;
     constructor(options: IndefinitePagination.Options) {
         this.options = options;
         this.paginationContainer = $(options.container);
         if (options.buttonClass) {
             this.buttonClass = options.buttonClass;
+        }
+        if (options.loadAllPagesButtonContent) {
+            this.loadAllPagesButtonContent = $(options.loadAllPagesButtonContent);
+        } else {
+            this.loadAllPagesButtonContent = $(`<span class="glyphicon glyphicon-arrow-down"></span>`);
         }
     }
 
@@ -186,9 +191,10 @@
         }
         buttonGroupContainerEl.append(previousButtonEl);
         if (this.options.loadAllPagesButton) {
-            buttonGroupContainerEl.append(
-                `<button class="btn indefinite-pagination-load-all ${this.buttonClass
-                }"><span class="glyphicon glyphicon-arrow-down"></span></button>`);
+            const buttonsContent = $(`<button class="btn indefinite-pagination-load-all ${this.buttonClass
+                }"></button>`);
+            buttonsContent.append(this.loadAllPagesButtonContent);
+            buttonGroupContainerEl.append(buttonsContent);
         }
         buttonGroupContainerEl.append(
             `<button class="btn indefinite-pagination-next-page ${this.buttonClass

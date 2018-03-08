@@ -413,19 +413,9 @@ interface IEditionNote { //TODO expand after server functionality is done
     content: string;
 }
 
-interface IKeywordPagedResult {
+interface IPagedResult<T> {
     totalCount: number;
-    list: IKeywordContract[];
-}
-
-interface IResponsiblePersonPagedResult {
-    totalCount: number;
-    list: IResponsiblePerson[];
-}
-
-interface IOriginalAuthorPagedResult {
-    totalCount: number;
-    list: IOriginalAuthor[];
+    list: T[];
 }
 
 interface ICorpusSearchViewingPageHistoryEntry {

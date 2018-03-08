@@ -18,9 +18,13 @@
     protected currentResultStart = -1;
     protected currentViewPage = 1;
     protected totalViewPages = 0;
-
+    protected atLeastOnSearchDone = false;
+    //string for localisation
     protected defaultErrorMessage =
         "Vyhledávání se nezdařilo. Ujistěte se, zda máte zadáno alespoň jedno kritérium na vyhledávání v textu.";
+    protected undefinedReplaceString = "<Nezadáno>";
+    protected contextSizeWarningMessage = `Velikost kontextu by měla být mezi ${this.minContextLength} a ${this.maxContextLength}`;
+    protected numberOfResultsPerPageWarningMessage = `Počet výsledků na stránce by měl být mezi ${this.minResultsPerPage} a ${this.maxResultsPerPage}`;
 
     protected urlSearchKey = "search";
     protected urlSelectionKey = "selected";
@@ -47,7 +51,7 @@
         tableEl.hide();
         loaderEl.empty();
         loaderEl.show();
-        loaderEl.addClass("loader");
+        loaderEl.removeClass("alert alert-info").addClass("loader");
     }
 
 
@@ -121,6 +125,9 @@
     }
 
     protected fillResultTable(results: ICorpusSearchResult[], query: string, tableSectionEl: JQuery) {
+        if (!tableSectionEl.length || !query || !results) {
+            return;
+        }
         const textColumn = tableSectionEl.find(".result-text-col");
         const textResultTableEl = textColumn.find(".text-results-table-body");
         const undefinedReplaceString = "<Nezadáno>";
@@ -162,7 +169,7 @@
             const contextBefore = $(`<td class="context-before"></td>`);
             contextBefore.text(contextStructure.before);
 
-            const contextMatch = $(`<td class="text-center"></td>`);
+            const contextMatch = $(`<td class="text-center match-container"></td>`);
             contextMatch.append(`<span class="match">${contextStructure.match}</span>`);
 
             const contextAfter = $(`<td class="context-after"></td>`);
@@ -220,53 +227,10 @@
         tableEl.tableHeadFixer({ "left": 1, "head": false });
         this.hideLoading(tableEl);//ensure table is visible before calculating offset
         //scroll from left to center match column in table
-        const matchEl = textResultTableEl.children("tr").first().find(".text-center");
+        const matchEl = textResultTableEl.children("tr").first().find(".match-container");
         const matchPosition = matchEl.position().left;
         const abbrColWidth = textResultTableEl.children("tr").first().find(".abbrev-col").width();
         var scrollOffset = matchPosition - ((textColumn.width() + abbrColWidth - matchEl.width()) / 2);
         textColumn.scrollLeft(scrollOffset);
-    }
-
-    protected printDetailInfo(tableRowEl: JQuery, detailSectionEl: JQuery, query:string) {
-        const undefinedReplaceString = "<Nezadáno>";
-        const detailAuthorEl = detailSectionEl.find(".detail-author");
-        const detailTitleEl = detailSectionEl.find(".detail-title");
-        const detailDatingEl = detailSectionEl.find(".detail-dating");
-        const detailDatingCenturyEl = detailSectionEl.find(".detail-dating-century");
-        const detailAbbrevEl = detailSectionEl.find(".detail-abbrev");
-        const editionNoteEl = detailSectionEl.find(".detail-edition-note-href");
-        const detailPholioEl = detailSectionEl.find(".detail-folio");
-        const detailVerseEl = detailSectionEl.find(".detail-vers");
-        const detailBibleVerseBookEl = detailSectionEl.find(".detail-bible-vers-book");
-        const detailBibleVerseChapterEl = detailSectionEl.find(".detail-bible-vers-chapter");
-        const detailBibleVerseVerseEl = detailSectionEl.find(".detail-bible-vers-vers");
-
-        detailAuthorEl.text(tableRowEl.data("author") ? tableRowEl.data("author") : undefinedReplaceString);
-        detailTitleEl.text(tableRowEl.data("title") ? tableRowEl.data("title") : undefinedReplaceString);
-        detailDatingEl.text(tableRowEl.data("dating") ? tableRowEl.data("dating") : undefinedReplaceString);
-        detailDatingCenturyEl.text(undefinedReplaceString); //TODO ask where is this info stored
-        detailAbbrevEl.text(tableRowEl.data("acronym") ? tableRowEl.data("acronym") : undefinedReplaceString);
-
-        //Edition note
-        const editionNoteAnchor = editionNoteEl;
-        const bookId = tableRowEl.data("bookid");
-        editionNoteAnchor.prop("href", `/EditionNote/EditionNote?bookId=${bookId}`);
-
-        const folioHref = $("<a></a>");
-        const pageId = tableRowEl.data("pageid");
-        folioHref.prop("href",
-            `${getBaseUrl()}Editions/Editions/Listing?bookId=${bookId}&searchText=${
-            query}&page=${pageId}`);
-        folioHref.text(tableRowEl.data("pagename") ? tableRowEl.data("pagename") : undefinedReplaceString);
-
-        detailPholioEl.empty().append(folioHref);
-
-        detailVerseEl.text(tableRowEl.data("verseName") ? tableRowEl.data("verseName") : undefinedReplaceString);
-        detailBibleVerseBookEl
-            .text(tableRowEl.data("bibleBook") ? tableRowEl.data("bibleBook") : undefinedReplaceString);
-        detailBibleVerseChapterEl
-            .text(tableRowEl.data("bibleChapter") ? tableRowEl.data("bibleChapter") : undefinedReplaceString);
-        detailBibleVerseVerseEl
-            .text(tableRowEl.data("bibleVerse") ? tableRowEl.data("bibleVerse") : undefinedReplaceString);
     }
 }

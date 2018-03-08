@@ -87,14 +87,16 @@
         }
 
         .corpus-search-result-controls-container {
-            overflow-y: auto;
+            background-color: @menu-background-color;
+            color: white;
+            line-height: 1.1;
+            padding: 15px;
 
             .viewing-settings-menu-icon {
                 padding-left: 0;
             }
 
             .corpus-search-result-view-properties-advanced {
-                display: none;
 
                 .corpus-search-setting-div-context {
                     margin-top: 0.5em;
@@ -133,19 +135,24 @@
                 color: white;
                 font-size: larger;
                 text-align: center;
-                margin-bottom: 25px;
+                margin-bottom: 10px;
             }
 
-            .search-settings-changed-warning {
+            .search-settings-changed-refresh {
                 display: none;
+
+                .results-refresh-button {
+                    width: 100%;
+                }
             }
 
             .corpus-search-settings-checkboxes {
-                margin-bottom: 30px;
+                margin-bottom: 20px;
                 margin-top: 10px;
             }
 
             .corpus-search-setting-div-results-count {
+                margin-top: 10px;
                 margin-bottom: 15px;
             }
 
@@ -165,12 +172,6 @@
                     outline: none;
                 }
             }
-
-            background-color: @menu-background-color;
-            color: white;
-            line-height: 1.1;
-            padding: 15px;
-            height: inherit;
         }
     }
 

@@ -2,11 +2,15 @@
     private currentTextId = 0; //default initialisation
     private editingMode = false;
     private originalContent = "";
-    private simplemde: any; //TODO temporary
+    private simplemde: IExtendedSimpleMDE;
     private readonly commentInput: CommentInput;
     private readonly util: EditorsUtil;
     private readonly commentArea: CommentArea;
     private commentInputDialog: BootstrapDialogWrapper;
+
+    private commentIdPattern =
+        "([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}";
+    private overlappingCommentString = "Your comment overlaps with another comment. Please select other part of text.";
 
     constructor(commentInput: CommentInput, util: EditorsUtil, commentArea: CommentArea) {
         this.commentInput = commentInput;
@@ -19,7 +23,7 @@
             submitCallback: this.onSendButtonClick.bind(this)
         });
 
-        bootbox.setLocale("cs"); //TODO get actual locale 
+        bootbox.setLocale("cs");
     }
 
     getCurrentTextId() {
@@ -36,14 +40,31 @@
 
     private onSendButtonClick(text: string) {
         const textId = this.getCurrentTextId();
-        const textReferenceId = (this.commentInput).toggleCommentSignsAndReturnCommentNumber(this.simplemde, true);
+        const cm = this.simplemde.codemirror as CodeMirror.Doc;
+        const textReferenceId = (this.commentInput).toggleCommentSignsAndReturnCommentNumber(cm, true);
         const id = 0; //creating comment
         const parentComment = null; //creating comment
         this.commentInput.processCommentSendClick(textId, textReferenceId, id, parentComment, text);
     }
 
     private toggleCommentFromEditor = (editor: SimpleMDE, userIsEnteringText: boolean) => {
+        const cm = editor.codemirror as CodeMirror.Doc;
         if (userIsEnteringText) {
+            const commentText = cm.getSelection();
+            const commentBeginRegex = new RegExp(`(\\$${this.commentIdPattern}\\%)`);
+            const commentEndRegex = new RegExp(`(\\%${this.commentIdPattern}\\$)`);
+            if (commentBeginRegex.test(commentText) || commentEndRegex.test(commentText)) {
+                bootbox.alert({
+                    title: "Warning",
+                    message: this.overlappingCommentString,
+                    buttons: {
+                        ok: {
+                            className: "btn-default"
+                        }
+                    }
+                });
+                return;
+            }
             bootbox.prompt({
                 title: "Please enter your comment here:",
                 inputType: "textarea",
@@ -67,7 +88,7 @@
                 }
             });
         } else {
-            (this.commentInput).toggleCommentSignsAndReturnCommentNumber(editor, false);
+            (this.commentInput).toggleCommentSignsAndReturnCommentNumber(cm, false);
         }
     }
 
@@ -251,14 +272,14 @@
     }
 
     private openMarkdownHelp() {
-        const url = "#"; //TODO add link to actual markdown help
+        const url = "#";
         window.open(url, "_blank");
     }
 
     private addEditor(jEl: JQuery) {
         const editorEl = jEl.find(".editor");
         const textAreaEl = editorEl.children("textarea");
-        const textId = jEl.data("page") as number;
+        const textId = parseInt(jEl.data("page") as string);
         this.currentTextId = textId;
         const simpleMdeOptions: SimpleMDE.Options = {
             element: textAreaEl[0],
@@ -274,12 +295,14 @@
                     }),
                     className: "fa fa-comment",
                     title: "Add comment"
-                }, {
-                    name: "help",
-                    action: (() => { this.openMarkdownHelp(); }),
-                    className: "fa fa-question-circle",
-                    title: "Markdown help"
-                }, "|", {
+                },
+                //{Temporarily hide while there is no markdown manual yet
+                //    name: "help",
+                //    action: (() => { this.openMarkdownHelp(); }),
+                //    className: "fa fa-question-circle",
+                //    title: "Markdown help"
+                //},
+                "|", {
                     name: "save",
                     action: (editor) => { this.saveContents(textId, editor.value()) },
                     className: "fa fa-floppy-o",
@@ -288,23 +311,20 @@
             ]
         };
         this.simplemde = new SimpleMDE(simpleMdeOptions);
+        const commentIdRegex = new RegExp(`${this.commentIdPattern}`);
+        const commentBeginRegex = new RegExp(`(\\$${this.commentIdPattern}\\%)`);
+        const commentEndRegex = new RegExp(`(\\%${this.commentIdPattern}\\$)`);
         this.simplemde.defineMode("comment",
             () => ({
-                token(stream: any) {
-                    if (stream.match(
-                        /(\$([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\%)/)
-                    ) {
+                token(stream: CodeMirror.StringStream) {
+                    if (stream.match(commentBeginRegex)) {
                         return "comment-start";
                     }
-                    if (stream.match(
-                        /(\%([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\$)/)
-                    ) {
+                    if (stream.match(commentEndRegex)) {
                         return "comment-end";
                     }
                     while (stream.next() != null &&
-                        !stream.match(
-                            /([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}/,
-                            false)) {
+                        !stream.match(commentIdRegex, false)) {
                         return null;
                     }
 

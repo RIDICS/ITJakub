@@ -18,23 +18,10 @@
 
     <div class="search-result-section container-fluid" id="corpus-search-div">
         <div class="row corpus-result-and-settings-row no-gutters">
-            <div class="corpus-search-results-div col-md-10 col-sm-9 col-xs-12">
-                <div class="row search-results-row no-gutters">
-                    <div class="col-xs-12 result-text-col text-center">
-                        <div class="corpus-search-results-table-div-loader">
-                            Pro zobrazení výsledků použijte vyhledávání
-                        </div><table class="text-results-table"><tbody class="text-results-table-body"></tbody></table>
-                    </div>
-                </div>
-            </div>
-            <div class="corpus-search-result-controls-container col-md-2 col-sm-3 col-xs-12">
+            <div class="corpus-search-result-controls-container col-md-2 col-md-push-10 col-sm-push-9 col-sm-3 col-xs-12">
                 <div class="row">
-
-                    <div class="col-xs-10">
+                    <div class="col-xs-12">
                         <div class="corpus-search-settings-label">Možnosti zobrazení</div>
-                    </div>
-                    <div class="col-xs-2 viewing-settings-menu-icon">
-                        <div class="corpus-search-settings-advanced-menu" title="Advanced search parameters"><i class="fa fa-bars fa-lg"></i></div>
                     </div>
                 </div>
                 <div class="corpus-search-result-view-properties-advanced">
@@ -48,40 +35,47 @@
                         <input id="number-of-results-per-viewing-page" type="number">
                         <div class="number-of-positions-size-warning"></div>
                     </div>
-                    <div class="search-settings-changed-warning">
-                        <div class="alert alert-warning">
-                            <strong>Warning.</strong> Changes will take effect only after executing new search
-                        </div>
+                    <div class="search-settings-changed-refresh text-center">
+                        <button class="btn btn-default results-refresh-button"><i class="fa fa-refresh"></i></button>
                     </div>
                 </div>
-                    <div class="corpus-search-settings-checkboxes">
-                        <div class="checkbox" style="display: none;">
-                            <label><input id="wordCheckbox" type="checkbox" value="">Slovo</label>
-                        </div>
-                        <div class="checkbox">
-                            <label><input id="commentCheckbox" type="checkbox" value="">Komentář</label>
-                        </div>
-                        @*<div class="checkbox">TODO backend implementation required
+                <div class="corpus-search-settings-checkboxes">
+                    <div class="checkbox" style="display: none;">
+                        <label><input id="wordCheckbox" type="checkbox" value="">Slovo</label>
+                    </div>
+                    <div class="checkbox">
+                        <label><input id="commentCheckbox" type="checkbox" value="">Komentář</label>
+                    </div>
+                    @*<div class="checkbox">TODO backend implementation required
                             <label><input id="languageCheckbox" type="checkbox" value="">Jazyk</label>
                         </div>
                         <div class="checkbox">
                             <label><input id="structureCheckbox" type="checkbox" value="">Struktura textu</label>
                         </div>*@
-                        <div class="checkbox">
-                            <label><input id="paragraphCheckbox" type="checkbox" value="">Odstavec</label>
-                        </div>
-                    </div>
-                    <div class="corpus-search-setting-div-results-count">
-                        <div>Počet děl:</div>
-                        <div id="totalCompositionsCountDiv"></div>
-                        <div class="total-results-count" style="display: none">
-                            <div>Počet výsledků:</div>
-                            <div id="totalResultCountDiv"></div>
-                        </div>
-                    </div>
-                    <div class="corpus-search-setting-div-pagination pagination-extra-small" id="paginationContainer">
+                    <div class="checkbox">
+                        <label><input id="paragraphCheckbox" type="checkbox" value="">Odstavec</label>
                     </div>
                 </div>
+                <div class="corpus-search-setting-div-results-count">
+                    <div>Počet děl:</div>
+                    <div id="totalCompositionsCountDiv"></div>
+                    <div class="total-results-count" style="display: none">
+                        <div>Počet výsledků:</div>
+                        <div id="totalResultCountDiv"></div>
+                    </div>
+                </div>
+                <div class="corpus-search-setting-div-pagination pagination-extra-small" id="paginationContainer">
+                </div>
+            </div>
+            <div class="corpus-search-results-div col-md-10 col-md-pull-2 col-sm-pull-3 col-sm-9 col-xs-12">
+                <div class="row search-results-row no-gutters">
+                    <div class="col-xs-12 result-text-col text-center">
+                        <div class="alert alert-info corpus-search-results-table-div-loader">
+                            Pro zobrazení výsledků použijte vyhledávání
+                        </div><table class="text-results-table"><tbody class="text-results-table-body"></tbody></table>
+                    </div>
+                </div>
+            </div>
             </div>
         <div class="row corpus-search-result-detail-row">
             <div class="corpus-search-result-detail-container col-xs-12">
