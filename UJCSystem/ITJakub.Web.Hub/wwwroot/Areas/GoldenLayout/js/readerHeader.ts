@@ -411,42 +411,58 @@
         $(viewButtons).addClass("buttons");
         var hasBookText: boolean = false;
         var hasBookImage: boolean = false;
-        this.parentReader.hasBookPage(this.bookId, this.versionId, () => {
-            var textButton = new Button(this.parentReader).createViewButton("font",
-                this.parentReader.textPanelLabel,
-                this.parentReader.textPanelId);
-            hasBookText = true;
-            textButton.click();
-            $(".page-navigation-container-helper").removeClass("hidden");
-            viewButtons.appendChild(textButton);
+        var hasBookPage: JQueryXHR = this.sc.hasBookPage(this.bookId, this.versionId);
+        hasBookPage.done((response: { HasBookPage: boolean }) => {
+            if (response.HasBookPage) {
+                var textButton = new Button(this.parentReader).createViewButton("font",
+                    this.parentReader.textPanelLabel,
+                    this.parentReader.textPanelId);
+                hasBookText = true;
+                textButton.click();
+                $(".page-navigation-container-helper").removeClass("hidden");
+                viewButtons.appendChild(textButton);
 
-            var checkboxDiv = this.createCheckboxDiv();
-            viewControl.appendChild(checkboxDiv);
+                var checkboxDiv = this.createCheckboxDiv();
+                viewControl.appendChild(checkboxDiv);
+            }
+        });
+        var hasBookImageAjax: JQueryXHR;
+        $.when(hasBookPage).then(() => {
+            hasBookImageAjax = this.sc.hasBookImage(this.bookId, this.versionId);
+
+            hasBookImageAjax.done((response: { HasBookImage: boolean }) => {
+                if (response.HasBookImage) {
+                    var imageButton = new Button(this.parentReader).createViewButton("picture",
+                        this.parentReader.imagePanelLabel,
+                        this.parentReader.imagePanelId);
+                    hasBookImage = true;
+                    if (!hasBookText) {
+                        imageButton.click();
+                        $(".page-navigation-container-helper").removeClass("hidden");
+                    }
+                    viewButtons.appendChild(imageButton);
+                }
+            });    
         });
 
-        this.parentReader.hasBookImage(this.bookId, this.versionId, () => {
-            var imageButton = new Button(this.parentReader).createViewButton("picture",
-                this.parentReader.imagePanelLabel,
-                this.parentReader.imagePanelId);
-            hasBookImage = true;
-            if(!hasBookText) {
-                imageButton.click();
-                $(".page-navigation-container-helper").removeClass("hidden");
-            }
-            viewButtons.appendChild(imageButton);
+        $.when(hasBookPage, hasBookImageAjax).then(() => {
+            var audioBook: JQueryXHR = this.sc.getAudioBook(this.bookId);
+            audioBook.done((response: { audioBook: IAudioBookSearchResultContract }) => {
+                if (response.audioBook.Tracks.length > 0) {
+                    var audioButton = new Button(this.parentReader).createViewButton("music",
+                        this.parentReader.audioPanelLabel,
+                        this.parentReader.audioPanelId);
+
+                    if (!hasBookText && !hasBookImage) {
+                        audioButton.click();
+                        $(".page-navigation-container-helper").removeClass("hidden");
+                    }
+                    viewButtons.appendChild(audioButton);
+                }
+            });    
         });
+        
 
-        this.parentReader.hasBookAudio(this.bookId, this.versionId, () => {
-            var audioButton = new Button(this.parentReader).createViewButton("music",
-                this.parentReader.audioPanelLabel,
-                this.parentReader.audioPanelId);
-
-            if (!hasBookText && !hasBookImage) {
-                audioButton.click();
-                $(".page-navigation-container-helper").removeClass("hidden");
-            }
-            viewButtons.appendChild(audioButton);
-        });;
         viewControl.appendChild(viewButtons);
         return viewControl;
     }

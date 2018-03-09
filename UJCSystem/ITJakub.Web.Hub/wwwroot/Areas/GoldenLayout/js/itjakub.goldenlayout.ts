@@ -652,6 +652,7 @@ class ReaderLayout {
         readerLayout.init();
         readerLayout.on("stateChanged", function () {
             $(".reader-text-container").scroll();
+            module.moveToPageNumber(module.actualPageIndex, true);
         });
         $(window).resize(function () {
             readerLayout.updateSize();
@@ -674,8 +675,8 @@ class ReaderLayout {
                     isClosable: false,
                     content: [{
                         type: "row",
-                        id: "viewsRow"
-                        
+                        id: "viewsRow",
+                        isClosable: false
                     }]
                 }]
             }]
@@ -775,43 +776,6 @@ class ReaderLayout {
     }
 
     protected hasBookImageCache: { [key: string]: { [key: string]: boolean; }; } = {};
-
-    hasBookImage(bookId: string, bookVersionId: string, onTrue: () => any = null, onFalse: () => any = null) {
-        if (this.hasBookImageCache[bookId] === undefined || this.hasBookImageCache[bookId][bookVersionId] === undefined) {
-            var hasBookImageAjax: JQueryXHR = this.sc.hasBookImage(bookId, bookVersionId);
-            hasBookImageAjax.done((response: { HasBookImage: boolean }) => {
-                if (this.hasBookImageCache[bookId] === undefined) {
-                    this.hasBookImageCache[bookId] = {};
-                }
-                this.hasBookImageCache[bookId][bookVersionId] = response.HasBookImage;
-                if (response.HasBookImage && onTrue !== null) {
-                    onTrue();
-                } else if (!response.HasBookImage && onFalse !== null) {
-                    onFalse();
-                }    
-            });
-
-            hasBookImageAjax.fail((response) => {
-                console.error(response);    
-            });
-        } else if (this.hasBookImageCache[bookId][bookVersionId] && onTrue !== null) {
-            onTrue();
-        } else if (!this.hasBookImageCache[bookId][bookVersionId] && onFalse !== null) {
-            onFalse();
-        }
-    }
-
-    hasBookAudio(bookId: string, bookVersionId: string, onTrue: () => any = null, onFalse: () => any = null) {
-        var audioBook: JQueryXHR = this.sc.getAudioBook(bookId);
-        audioBook.done((response) => {
-            if (response["audioBook"].Tracks.length == 0) {
-                onFalse();
-            } else {
-                onTrue();
-            }
-        });
-    }
-
     hasBookPage(bookId: string, bookVersionId: string, onTrue: () => any = null, onFalse: () => any = null) {
         if (this.hasBookPageCache[bookId] !== undefined && this.hasBookPageCache[bookId][bookVersionId + "_loading"]) {
             this.hasBookPageCallOnSuccess[bookId][bookVersionId].push(() => {
