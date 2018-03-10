@@ -610,8 +610,8 @@ class ReaderLayout {
     }
 
     private initLayout(): GoldenLayout {
-        var config = this.createConfig(this.textPanelId, "Text");
-        var readerLayout = new GoldenLayout(config, $('#ReaderBodyDiv'));
+        var config = new LayoutConfiguration();
+        var readerLayout = new GoldenLayout(config.getConfiguration(), $('#ReaderBodyDiv'));
         readerLayout.registerComponent('toolTab', (container, state) => {
             switch (state.label) {
             case this.bookmarksPanelId:
@@ -656,33 +656,6 @@ class ReaderLayout {
             readerLayout.updateSize();
         });
         return readerLayout;
-    }
-
-    private createConfig(panelId: string, panelTitle: string) {
-        var layoutConfig = {
-            settings: {
-                showPopoutIcon: false
-            },
-            dimensions: {
-                headerHeight: 26,
-                minItemWidth: 200
-            },
-            content: [{
-                type: "row",
-                isClosable: false,
-                content: [{
-                    type: "column",
-                    id: "views",
-                    isClosable: false,
-                    content: [{
-                        type: "row",
-                        id: "viewsRow",
-                        isClosable: false
-                    }]
-                }]
-            }]
-        }
-        return layoutConfig;
     }
 
     private createBookmarksPanel(): HTMLDivElement {
