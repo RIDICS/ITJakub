@@ -849,7 +849,7 @@ class AudioPanel extends ContentViewPanel {
             for (var recording of response.audioBook.FullBookRecordings) {    
                 var download = document.createElement("a");
                 $(download).addClass("audio-download-href");
-                download.href = getBaseUrl() + "AudioBooks/AudioBooks/DownloadAudio?audioId=" + recording.Id + "&audioType=" + recording.AudioType;;
+                download.href = this.sc.getTrackDownloadUrl(recording.Id, recording.AudioType);
                 $(download).html(recording.AudioType);
                 $(".full-book").append(download);
             }
@@ -923,13 +923,13 @@ class AudioPanel extends ContentViewPanel {
             $(".track").html("Stáhnout kapitolu:");
             for (var recording  of response.track.Recordings) {
                 var source = document.createElement("source");
-                source.src = getBaseUrl() + "AudioBooks/AudioBooks/DownloadAudio?audioId=" + recording.Id + "&audioType=" + recording.AudioType;
+                source.src = this.sc.getTrackDownloadUrl(recording.Id, recording.AudioType);
                 source.type = recording.MimeType;
                 $(audioPlayer).append(source);
 
                 var download = document.createElement("a");
                 $(download).addClass("audio-download-href");
-                download.href = source.src;
+                download.href = this.sc.getTrackDownloadUrl(recording.Id, recording.AudioType);
                 $(download).html(recording.AudioType);
                 $(".track").append(download);
             }

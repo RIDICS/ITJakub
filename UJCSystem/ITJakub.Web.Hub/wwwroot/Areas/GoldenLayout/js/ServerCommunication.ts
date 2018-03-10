@@ -175,4 +175,13 @@
             contentType: "application/json"
         });
     }
+
+    getTrackDownloadUrl(recordingId: number, audioType: string): string {
+        var trackDownloadUrl: string = getBaseUrl();
+        trackDownloadUrl += "AudioBooks/AudioBooks/DownloadAudio?audioId=" +
+            recordingId +
+            "&audioType=" +
+            audioType;
+        return trackDownloadUrl;
+    }
 }
