@@ -584,10 +584,14 @@ class Button {
     public createToolButton(iconName: string, label: string, buttonId: string): HTMLButtonElement {
         var button: HTMLButtonElement = document.createElement("button");
         $(button).addClass(buttonId + "-button");
+        if (buttonId === this.readerLayout.searchPanelId) {
+            $(button).prop("disabled", true);
+        }
+
         var span = document.createElement("span");
         $(span).addClass("glyphicon glyphicon-" + iconName);
         $(button).append(span);
-
+        
         var spanText = document.createElement("span");
         $(spanText).addClass("button-text");
         $(spanText).append(label);
