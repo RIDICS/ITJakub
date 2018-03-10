@@ -610,51 +610,49 @@ class ReaderLayout {
     }
 
     private initLayout(): GoldenLayout {
-        var module = this;
         var config = this.createConfig(this.textPanelId, "Text");
         var readerLayout = new GoldenLayout(config, $('#ReaderBodyDiv'));
-        readerLayout.registerComponent('toolTab', function (container, state) {
+        readerLayout.registerComponent('toolTab', (container, state) => {
             switch (state.label) {
-                case module.bookmarksPanelId:
-                    container.getElement().append(module.createBookmarksPanel());
-                    break;
-                case module.termsResultId:
-                    container.getElement().append(module.createTermsResultPanel());
-                    break;
-                case module.termsSearchId:
-                    container.getElement().append(module.createTermsSearchPanel());
-                    break;
-                case module.contentPanelId:
-                    container.getElement().append(module.createContentPanel());
-                    break;
-                case module.searchPanelId:
-                    container.getElement().append(module.createSearchPanel());
-                    break;
-                default:
-                    break;
+            case this.bookmarksPanelId:
+                container.getElement().append(this.createBookmarksPanel());
+                break;
+            case this.termsResultId:
+                container.getElement().append(this.createTermsResultPanel());
+                break;
+            case this.termsSearchId:
+                container.getElement().append(this.createTermsSearchPanel());
+                break;
+            case this.contentPanelId:
+                container.getElement().append(this.createContentPanel());
+                break;
+            case this.searchPanelId:
+                container.getElement().append(this.createSearchPanel());
+                break;
+            default:
+                break;
             }
         });
-        readerLayout.registerComponent('viewTab', function (container, state) {
+        readerLayout.registerComponent('viewTab', (container, state) => {
             switch (state.label) {
-                case module.audioPanelId:
-                    container.getElement().append(module.createAudioPanel());
-                    break;
-                case module.imagePanelId:
-                    container.getElement().append(module.createImagePanel());
-                    break;
-                case module.textPanelId:
-                    container.getElement().append(module.createTextPanel());
-                    break;
-                default:
-                    break;
+            case this.audioPanelId:
+                container.getElement().append(this.createAudioPanel());
+                break;
+            case this.imagePanelId:
+                container.getElement().append(this.createImagePanel());
+                break;
+            case this.textPanelId:
+                container.getElement().append(this.createTextPanel());
+                break;
+            default:
+                break;
             }
         });
         readerLayout.init();
-        readerLayout.on("stateChanged", function () {
-            $(".reader-text-container").scroll();
-            module.moveToPageNumber(module.actualPageIndex, true);
+        readerLayout.on("stateChanged", () => {
+            this.moveToPageNumber(this.actualPageIndex, true);
         });
-        $(window).resize(function () {
+        $(window).resize(() => {
             readerLayout.updateSize();
         });
         return readerLayout;
@@ -662,6 +660,9 @@ class ReaderLayout {
 
     private createConfig(panelId: string, panelTitle: string) {
         var layoutConfig = {
+            settings: {
+                showPopoutIcon: false
+            },
             dimensions: {
                 headerHeight: 26,
                 minItemWidth: 200
