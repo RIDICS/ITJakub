@@ -791,7 +791,7 @@ class ReaderLayout {
                 this.hasBookPageCallOnSuccess[bookId] = {};
                 this.hasBookPageCallOnSuccess[bookId][bookVersionId] = [];
             }
-            var hasBookPage: JQueryXHR = this.sc.hasBookPage(bookId, bookVersionId)
+            var hasBookPage: JQueryXHR = this.sc.hasBookPage(bookId, bookVersionId);
             hasBookPage.done((response: { HasBookPage: boolean }) => {
                 this.hasBookPageCache[bookId][bookVersionId] = response.HasBookPage;
                 this.hasBookPageCache[bookId][bookVersionId + "_loading"] = false;

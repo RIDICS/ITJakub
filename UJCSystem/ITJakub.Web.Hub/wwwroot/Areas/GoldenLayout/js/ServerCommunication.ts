@@ -86,12 +86,12 @@
         });
     }
 
-    hasBookPage(bookId: string, bookVersionId: string): JQueryXHR {
+    hasBookPage(bookId: string, bookVersionId: string, ): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
             data: { bookId: bookId, snapshotId: bookVersionId },
-            url: document.getElementsByTagName("body")[0].getAttribute("data-has-book-text-url"),
+            url: getBaseUrl() + "Reader/HasBookText",
             dataType: "json",
             contentType: "application/json"
         });
