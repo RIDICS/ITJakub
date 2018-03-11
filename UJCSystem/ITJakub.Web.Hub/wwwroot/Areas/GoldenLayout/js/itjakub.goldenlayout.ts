@@ -383,54 +383,33 @@ class ReaderLayout {
     }
     
     public createToolPanel(panelId: string, panelTitle: string) {
-
+        var configurationObject: LayoutConfiguration = new LayoutConfiguration();
         if (this.readerLayout.root.getItemsById('tools').length === 0) {
-            var toolStackConfig = {
-                type: 'stack',
-                width: 18,
-                id: 'tools',
-                componentName: 'toolTab'
-            };
+            var toolStackConfig = configurationObject.toolPanelConfig(PanelType.Stack, "tools", "");
             this.readerLayout.root.contentItems[0].addChild(toolStackConfig, 0);
             this.readerLayout.root.getItemsById('tools')[0].config.width = 15;
             this.readerLayout.updateSize();
         }
         if (this.readerLayout.root.getItemsById(panelId).length === 0) {
-            var type: string;
-            if (panelId === this.termsPanelId) type = "column";
-            else type = "component";
-            var itemConfig = {
-                type: type,
-                id: panelId,
-                componentState: { label: panelId },
-                componentName: 'toolTab',
-                title: panelTitle
-            };
+            var type: PanelType;
+            if (panelId === this.termsPanelId) type = PanelType.Column;
+            else type = PanelType.Component;
+            var itemConfig = configurationObject.toolPanelConfig(type, panelId, panelTitle);
             this.readerLayout.root.getItemsById('tools')[0].addChild(itemConfig);
             if (panelId === this.termsPanelId) {
-                this.createTermsPanel();
+                this.createTermsPanel(configurationObject);
             }
         }
     }
 
     createViewPanel(panelId: string, panelTitle: string) {
+        var configurationObject: LayoutConfiguration = new LayoutConfiguration();
         if (this.readerLayout.root.getItemsById('views').length === 0) {
-            var viewColumnConfig = {
-                isClosable: false,
-                type: 'column',
-                id: 'views',
-                componentName: 'viewTab'
-            };
+            var viewColumnConfig = configurationObject.viewPanelConfig(false, PanelType.Column, "views", "");
             this.readerLayout.root.contentItems[0].addChild(viewColumnConfig);
         }
         if (this.readerLayout.root.getItemsById(panelId).length === 0) {
-            var itemConfig = {
-                type: 'component',
-                id: panelId,
-                componentState: { label: panelId },
-                componentName: 'viewTab',
-                title: panelTitle,
-            };
+            var itemConfig = configurationObject.viewPanelConfig(true, PanelType.Component, panelId, panelTitle);
             if (this.readerLayout.root.getItemsById('tools').length === 1) {
                 this.readerLayout.root.getItemsById('tools')[0].config.width = 15;
                 this.readerLayout.updateSize();
@@ -440,12 +419,7 @@ class ReaderLayout {
                 //TODO UpdateSize
             } else {
                 if (this.readerLayout.root.getItemsById('viewsRow').length === 0) {
-                    var viewRowConfig = {
-                        isClosable: false,
-                        type: 'row',
-                        id: 'viewsRow',
-                        componentName: 'viewTab'
-                    };
+                    var viewRowConfig = configurationObject.viewPanelConfig(false, PanelType.Row, "viewsRow", "");
                     this.readerLayout.root.getItemsById('views')[0].addChild(viewRowConfig);
                 }
                 this.readerLayout.root.getItemsById('viewsRow')[0].addChild(itemConfig);
@@ -611,7 +585,7 @@ class ReaderLayout {
 
     private initLayout(): GoldenLayout {
         var config = new LayoutConfiguration();
-        var readerLayout = new GoldenLayout(config.getConfiguration(), $('#ReaderBodyDiv'));
+        var readerLayout = new GoldenLayout(config.goldenLayoutConfig(), $('#ReaderBodyDiv'));
         readerLayout.registerComponent('toolTab', (container, state) => {
             switch (state.label) {
             case this.bookmarksPanelId:
@@ -685,22 +659,10 @@ class ReaderLayout {
         return this.searchPanel.panelHtml;
     }
 
-    private createTermsPanel() {
-        var itemConfig = {
-            type: 'component',
-            id: this.termsSearchId,
-            componentState: { label: this.termsSearchId },
-            componentName: 'toolTab',
-            title: "Výskyty na stránce"
-        };
+    private createTermsPanel(configObject: LayoutConfiguration) {
+        var itemConfig = configObject.toolPanelConfig(PanelType.Component, this.termsSearchId, "Výskyty na stránce");
         this.readerLayout.root.getItemsById(this.termsPanelId)[0].addChild(itemConfig);
-        itemConfig = {
-            type: 'component',
-            id: this.termsResultId,
-            componentState: { label: this.termsResultId },
-            componentName: 'toolTab',
-            title: "Témata na stránce"
-        };
+        itemConfig = configObject.toolPanelConfig(PanelType.Component, this.termsResultId, "Témata na stránce");
         this.readerLayout.root.getItemsById(this.termsPanelId)[0].addChild(itemConfig);
     }
 
