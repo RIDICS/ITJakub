@@ -27,6 +27,20 @@
         return layoutConfig;
     }
 
+    public goldenLayoutMobileConfig(): GoldenLayout.Config {
+        var layoutConfig = {
+            settings: {
+                showPopoutIcon: false,
+                reorderEnabled: false
+            },
+            dimensions: {
+                headerHeight: 26,
+                minItemWidth: 200
+            }
+        }
+        return layoutConfig;
+    }
+
     public viewPanelConfig(closable: boolean, type: PanelType, id: string, title: string): GoldenLayout.ItemConfig {
         var itemConfig = {
             isClosable: closable,
