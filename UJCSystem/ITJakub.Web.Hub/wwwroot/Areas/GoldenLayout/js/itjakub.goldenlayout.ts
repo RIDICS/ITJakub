@@ -2,9 +2,9 @@
 //import GoldenLayout = require("golden-layout");
 //declare var GoldenLayout;
 
-class ReaderLayout {
+abstract class ReaderLayout {
     private favoriteManager: FavoriteManager;
-    private newFavoriteDialog: NewFavoriteDialog;
+    protected newFavoriteDialog: NewFavoriteDialog;
     readerLayout: GoldenLayout;
     readerHeaderDiv: HTMLDivElement;
     sliderOnPage: number;
@@ -74,35 +74,7 @@ class ReaderLayout {
         return this.newFavoriteDialog;
     }
 
-    public makeReader(bookId: string, versionId: string, bookTitle: string, pageList: IPage[]) {
-        this.bookId = bookId;
-        this.versionId = versionId;
-        this.actualPageIndex = 0;
-        this.sliderOnPage = 0;
-        this.pages = new Array<BookPage>();
-        this.pagesById = {};
-        this.bookmarks = new Array<IBookmarkPosition>(pageList.length);
-        this.toolPanels = new Array<ToolPanel>();
-        this.contentViewPanels = new Array<ContentViewPanel>();
-
-        for (var i = 0; i < pageList.length; i++) { //load pageList
-            var page = pageList[i];
-            var bookPageItem = new BookPage(page.id, page.name, page.position);
-
-            this.pages.push(bookPageItem);
-            this.pagesById[bookPageItem.pageId] = bookPageItem;
-        }
-
-        var bookHeader = new BookHeader(this, this.sc, this.readerHeaderDiv, bookTitle);
-        this.readerHeaderDiv.appendChild(bookHeader.getInnerHtml());
-
-        this.readerLayout = this.initLayout();
-
-        this.loadBookmarks();
-        this.newFavoriteDialog.make();
-        this.newFavoriteDialog.setSaveCallback(this.createBookmarks.bind(this));
-
-    }
+    protected initLayout(): GoldenLayout { throw new Error("Not implemented"); };
 
     getBookmarks(): IBookmarksInfo {
         var result: IBookmarksInfo = {
@@ -280,7 +252,7 @@ class ReaderLayout {
         return bookmarkSpan;
     }
 
-    private loadBookmarks() {
+    protected loadBookmarks() {
         this.favoriteManager.getPageBookmarks(Number(this.bookId), (bookmarks) => {
             for (var i = 0; i < bookmarks.length; i++) {
                 var bookmark = bookmarks[i];
@@ -583,56 +555,9 @@ class ReaderLayout {
         this.getSearchPanel().clearResults();
     }
 
-    private initLayout(): GoldenLayout {
-        var config = new LayoutConfiguration();
-        var readerLayout = new GoldenLayout(config.goldenLayoutConfig(), $('#ReaderBodyDiv'));
-        readerLayout.registerComponent('toolTab', (container, state) => {
-            switch (state.label) {
-            case this.bookmarksPanelId:
-                container.getElement().append(this.createBookmarksPanel());
-                break;
-            case this.termsResultId:
-                container.getElement().append(this.createTermsResultPanel());
-                break;
-            case this.termsSearchId:
-                container.getElement().append(this.createTermsSearchPanel());
-                break;
-            case this.contentPanelId:
-                container.getElement().append(this.createContentPanel());
-                break;
-            case this.searchPanelId:
-                container.getElement().append(this.createSearchPanel());
-                break;
-            default:
-                break;
-            }
-        });
-        readerLayout.registerComponent('viewTab', (container, state) => {
-            switch (state.label) {
-            case this.audioPanelId:
-                container.getElement().append(this.createAudioPanel());
-                break;
-            case this.imagePanelId:
-                container.getElement().append(this.createImagePanel());
-                break;
-            case this.textPanelId:
-                container.getElement().append(this.createTextPanel());
-                break;
-            default:
-                break;
-            }
-        });
-        readerLayout.init();
-        readerLayout.on("stateChanged", () => {
-            this.moveToPageNumber(this.actualPageIndex, true);
-        });
-        $(window).resize(() => {
-            readerLayout.updateSize();
-        });
-        return readerLayout;
-    }
+    
 
-    private createBookmarksPanel(): HTMLDivElement {
+    protected createBookmarksPanel(): HTMLDivElement {
         if (this.bookmarksPanel == null) {
             var bookmarksPanel: BookmarksPanel = new BookmarksPanel(this.bookmarksPanelId, this, this.sc);
             this.bookmarksPanel = bookmarksPanel;
@@ -641,7 +566,7 @@ class ReaderLayout {
         return this.bookmarksPanel.panelHtml;
     }
 
-    private createContentPanel(): HTMLDivElement {
+    protected createContentPanel(): HTMLDivElement {
         if (this.contentPanel == null) {
             var contentPanel: ContentPanel = new ContentPanel(this.contentPanelId, this, this.sc);
             this.contentPanel = contentPanel;
@@ -650,7 +575,7 @@ class ReaderLayout {
         return this.contentPanel.panelHtml;
     }
 
-    private createSearchPanel(): HTMLDivElement {
+    protected createSearchPanel(): HTMLDivElement {
         if (this.searchPanel == null) {
             var resultPanel: SearchResultPanel =  new SearchResultPanel(this.searchPanelId, this, this.sc);
             this.searchPanel = resultPanel;
@@ -659,14 +584,14 @@ class ReaderLayout {
         return this.searchPanel.panelHtml;
     }
 
-    private createTermsPanel(configObject: LayoutConfiguration) {
+    protected createTermsPanel(configObject: LayoutConfiguration) {
         var itemConfig = configObject.toolPanelConfig(PanelType.Component, this.termsSearchId, "Výskyty na stránce");
         this.readerLayout.root.getItemsById(this.termsPanelId)[0].addChild(itemConfig);
         itemConfig = configObject.toolPanelConfig(PanelType.Component, this.termsResultId, "Témata na stránce");
         this.readerLayout.root.getItemsById(this.termsPanelId)[0].addChild(itemConfig);
     }
 
-    private createTermsResultPanel(): HTMLDivElement {
+    protected createTermsResultPanel(): HTMLDivElement {
         if (this.termsResultPanel == null) {
             var termsPanel: TermsResultPanel = new TermsResultPanel(this.termsResultId, this, this.sc);
             this.termsResultPanel = termsPanel;
@@ -675,7 +600,7 @@ class ReaderLayout {
         return this.termsResultPanel.panelHtml;
     }
 
-    private createTermsSearchPanel(): HTMLDivElement {
+    protected createTermsSearchPanel(): HTMLDivElement {
         if (this.termsSearchPanel == null) {
             var termsPanel: TermsSearchPanel = new TermsSearchPanel(this.termsSearchId, this, this.sc);
             this.termsSearchPanel = termsPanel;
@@ -684,7 +609,7 @@ class ReaderLayout {
         return this.termsSearchPanel.panelHtml;
     }
 
-    private createTextPanel(): HTMLDivElement {
+    protected createTextPanel(): HTMLDivElement {
         if (this.textPanel == null) {
             var textPanel: TextPanel = new TextPanel(this.textPanelId, this, this.sc);
             this.textPanel = textPanel;
@@ -693,7 +618,7 @@ class ReaderLayout {
         return this.textPanel.panelHtml;
     }
 
-    private createImagePanel(): HTMLDivElement {
+    protected createImagePanel(): HTMLDivElement {
         if (this.imagePanel == null) {
             var imagePanel: ImagePanel = new ImagePanel(this.imagePanelId, this, this.sc);
             this.imagePanel = imagePanel;
@@ -702,7 +627,7 @@ class ReaderLayout {
         return this.imagePanel.panelHtml;
     }
 
-    private createAudioPanel(): HTMLDivElement {
+    protected createAudioPanel(): HTMLDivElement {
         if (this.audioPanel == null) {
             var audioPanel: AudioPanel = new AudioPanel(this.audioPanelId, this, this.sc);
             this.audioPanel = audioPanel;

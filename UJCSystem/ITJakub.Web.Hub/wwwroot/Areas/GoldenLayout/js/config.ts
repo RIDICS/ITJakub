@@ -1,6 +1,6 @@
 ﻿class LayoutConfiguration {
 
-    public goldenLayoutConfig(): GoldenLayout.Config {
+    public goldenLayoutDesktopConfig(): GoldenLayout.Config {
         var layoutConfig = {
             settings: {
                 showPopoutIcon: false

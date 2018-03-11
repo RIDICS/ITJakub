@@ -1,9 +1,9 @@
-﻿class BookHeader {
-    private innerHtml: HTMLDivElement;
-    private parentReader: ReaderLayout;
-    private bookId: string;
-    private versionId: string;
-    private sc: ServerCommunication;
+﻿abstract class BookHeader {
+    protected innerHtml: HTMLDivElement;
+    protected parentReader: ReaderLayout;
+    protected bookId: string;
+    protected versionId: string;
+    protected sc: ServerCommunication;
 
     constructor(parentReader: ReaderLayout, sc: ServerCommunication, headerDiv: HTMLDivElement, bookTitle: string) {
         this.parentReader = parentReader;
@@ -18,91 +18,9 @@
         return this.innerHtml;
     }
 
-    private createHeaderDiv(bookTitle: string): HTMLDivElement {
-        var headerDiv = document.createElement("div");
-        headerDiv.appendChild(this.informationDiv(bookTitle));
+    protected createHeaderDiv(bookTitle: string): HTMLDivElement { throw new Error("Not implemented"); }
 
-        var controlsDiv = document.createElement("div");
-        $(controlsDiv).addClass("reader-controls content-container");
-        controlsDiv.appendChild(this.makeSlider());
-        controlsDiv.appendChild(this.makeViewButtons());
-        controlsDiv.appendChild(this.makeToolButtons());
-        controlsDiv.appendChild(this.makePageNavigation());
-        headerDiv.appendChild(controlsDiv);
-
-        return headerDiv;
-    }
-
-    private informationDiv(bookTitle: string): HTMLDivElement {
-        var bookInfoDiv: HTMLDivElement = document.createElement("div");
-        $(bookInfoDiv).addClass("book-details");
-
-        var title = document.createElement("span");
-        $(title).addClass("title");
-        title.innerHTML = bookTitle;
-        bookInfoDiv.appendChild(title);
-
-        var fullscreenButton = document.createElement("button");
-        $(fullscreenButton).addClass("fullscreen-button");
-
-        var fullscreenSpan = document.createElement("span");
-        $(fullscreenSpan).addClass("glyphicon glyphicon-fullscreen");
-        $(fullscreenButton).append(fullscreenSpan);
-        $(fullscreenButton).click(() => {
-            if ($(fullscreenSpan).hasClass("glyphicon-fullscreen")) {
-                $(this.innerHtml).addClass("fullscreen");
-                $(fullscreenSpan).removeClass("glyphicon-fullscreen");
-                $(fullscreenSpan).addClass("glyphicon-remove");
-                this.parentReader.readerLayout.updateSize();
-            } else {
-                $(this.innerHtml).removeClass("fullscreen");
-                $(fullscreenSpan).removeClass("glyphicon-remove");
-                $(fullscreenSpan).addClass("glyphicon-fullscreen");
-                this.parentReader.readerLayout.updateSize();
-            }
-
-        });
-        bookInfoDiv.appendChild(fullscreenButton);
-
-        var detailsButton = document.createElement("button");
-        $(detailsButton).addClass("more-button");
-        var detailsSpan = document.createElement("span");
-        $(detailsSpan).addClass("glyphicon glyphicon-chevron-down");
-        detailsButton.appendChild(detailsSpan);
-        $(detailsButton).click((event) => {
-            var target: JQuery = $(event.target);
-
-            var title = target.parents(".book-details").find(".title");
-            title.toggleClass("full");
-
-            var details = target.parents(".book-details").find(".hidden-content");
-            if (!details.hasClass("visible")) {
-                $(target).removeClass("glyphicon-chevron-down");
-                $(target).addClass("glyphicon-chevron-up");
-                details.addClass("visible");
-            } else {
-                $(target).removeClass("glyphicon-chevron-up");
-                $(target).addClass("glyphicon-chevron-down");
-                details.removeClass("visible");
-            }
-        });
-        bookInfoDiv.appendChild(detailsButton);
-
-        var hiddenDiv = document.createElement("div");
-        $(hiddenDiv).addClass("hidden-content");
-
-        var editionNoteDiv = this.getEditionNote();
-        hiddenDiv.appendChild(editionNoteDiv);
-
-        var bookDetailDiv = this.getBookDetail();
-        hiddenDiv.appendChild(bookDetailDiv);
-
-        bookInfoDiv.appendChild(hiddenDiv);
-
-        return bookInfoDiv;
-    }
-
-    private getEditionNote(): HTMLDivElement {
+    protected getEditionNote(): HTMLDivElement {
         var editionNoteDiv = document.createElement("div");
         $(editionNoteDiv).addClass("loading");
         $(editionNoteDiv).addClass("edition-note-wrapper");
@@ -129,7 +47,7 @@
         return editionNoteDiv;
     }
 
-    private getBookDetail(): HTMLDivElement {
+    protected getBookDetail(): HTMLDivElement {
         var bookDetailDiv = document.createElement("div");
         $(bookDetailDiv).addClass("book-detail-wrapper");
         var bookDetailHeader = document.createElement("h3");
@@ -186,188 +104,7 @@
         return bookDetailDiv;
     }
 
-    private makeSlider(): HTMLDivElement {
-        var slider: HTMLDivElement = document.createElement("div");
-        $(slider).addClass("slider");
-        $(slider).slider({
-            min: 0,
-            max: this.parentReader.pages.length - 1,
-            value: 0,
-            start: (event, ui) => {
-                $(event.target).find(".ui-slider-handle").find(".slider-tip").show();
-            },
-            stop: (event, ui) => {
-                $(event.target).find(".ui-slider-handle").find(".slider-tip").fadeOut(1000);
-            },
-            slide: (event, ui) => {
-                $(event.target).find(".ui-slider-handle").find(".slider-tip").stop(true, true);
-                $(event.target).find(".ui-slider-handle").find(".slider-tip").show();
-                if (this.parentReader.pages[ui.value] !== undefined) {
-                    $(event.target).find(".ui-slider-handle").find(".tooltip-inner").html("Strana: " + this.parentReader.pages[ui.value].text);
-                } else {
-                    console.error("missing page " + ui.value);
-                }
-            },
-            change: (event: Event, ui: JQueryUI.SliderUIParams) => {
-                if (this.parentReader.actualPageIndex !== ui.value) {
-                    this.parentReader.moveToPageNumber(<any>ui.value, true);
-                }
-            }
-        });
-
-        var sliderTooltip: HTMLDivElement = document.createElement("div");
-        sliderTooltip.classList.add("tooltip", "top", "slider-tip");
-        var arrowTooltip: HTMLDivElement = document.createElement("div");
-        arrowTooltip.classList.add("tooltip-arrow");
-        sliderTooltip.appendChild(arrowTooltip);
-
-        var innerTooltip: HTMLDivElement = document.createElement("div");
-        $(innerTooltip).addClass("tooltip-inner");
-        if (this.parentReader.pages[0] !== undefined) {
-            $(innerTooltip).html("Strana: " + this.parentReader.pages[0].text);
-        }
-        else {
-            console.error("missing page " + 0);
-        }
-        sliderTooltip.appendChild(innerTooltip);
-        $(sliderTooltip).hide();
-
-        var sliderHandle: JQuery = $(slider).find(".ui-slider-handle");
-        sliderHandle.append(sliderTooltip);
-        sliderHandle.hover((event) => {
-            $(event.target).find(".slider-tip").stop(true, true);
-            $(event.target).find(".slider-tip").show();
-        });
-        sliderHandle.mouseout((event) => {
-            $(event.target).find(".slider-tip").fadeOut(1000);
-        });
-        return slider;
-    }
-
-    private makePageNavigation(): HTMLDivElement {
-        var paginationUl: HTMLUListElement = document.createElement("ul");
-        paginationUl.classList.add("pagination", "pagination-sm");
-
-        var toLeft = document.createElement("ul");
-        toLeft.classList.add("page-navigation-container", "page-navigation-container-left");
-
-        var liElement: HTMLLIElement = document.createElement("li");
-        $(liElement).addClass("page-navigation page-navigation-left");
-        var anchor: HTMLAnchorElement = document.createElement("a");
-        anchor.href = "#";
-        anchor.innerHTML = "|<";
-        $(anchor).click((event: Event) => {
-            event.stopPropagation();
-            this.parentReader.moveToPageNumber(0, true);
-            return false;
-        });
-        liElement.appendChild(anchor);
-        toLeft.appendChild(liElement);
-
-        liElement = document.createElement("li");
-        $(liElement).addClass("page-navigation page-navigation-left");
-        anchor = document.createElement("a");
-        anchor.href = "#";
-        anchor.innerHTML = "<<";
-        $(anchor).click((event: Event) => {
-            event.stopPropagation();
-            this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex - 5, true);
-            return false;
-        });
-        liElement.appendChild(anchor);
-        toLeft.appendChild(liElement);
-
-        liElement = document.createElement("li");
-        $(liElement).addClass("page-navigation page-navigation-left");
-        anchor = document.createElement("a");
-        anchor.href = "#";
-        anchor.innerHTML = "<";
-        $(anchor).click((event: Event) => {
-            event.stopPropagation();
-            this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex - 1, true);
-            return false;
-        });
-        liElement.appendChild(anchor);
-        toLeft.appendChild(liElement);
-
-        var toRight = document.createElement("ul");
-        toRight.classList.add("page-navigation-container", "page-navigation-container-right");
-
-        liElement = document.createElement("li");
-        $(liElement).addClass("page-navigation page-navigation-right");
-        anchor = document.createElement("a");
-        anchor.href = "#";
-        anchor.innerHTML = ">";
-        $(anchor).click((event: Event) => {
-            event.stopPropagation();
-            this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex + 1, true);
-            return false;
-        });
-        liElement.appendChild(anchor);
-        toRight.appendChild(liElement);
-
-        liElement = document.createElement("li");
-        $(liElement).addClass("page-navigation page-navigation-right");
-        anchor = document.createElement("a");
-        anchor.href = "#";
-        anchor.innerHTML = ">>";
-        $(anchor).click((event: Event) => {
-            event.stopPropagation();
-            this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex + 5, true);
-            return false;
-        });
-        liElement.appendChild(anchor);
-        toRight.appendChild(liElement);
-
-        liElement = document.createElement("li");
-        $(liElement).addClass("page-navigation page-navigation-right");
-        anchor = document.createElement("a");
-        anchor.href = "#";
-        anchor.innerHTML = ">|";
-        $(anchor).click((event: Event) => {
-            event.stopPropagation();
-            this.parentReader.moveToPageNumber(this.parentReader.pages.length - 1, true);
-            return false;
-        });
-        liElement.appendChild(anchor);
-        toRight.appendChild(liElement);
-
-        liElement = document.createElement("li");
-        $(liElement).addClass("more-pages more-pages-left");
-        liElement.innerHTML = "...";
-        paginationUl.appendChild(liElement);
-
-        $.each(this.parentReader.pages, (index, page) => {
-            liElement = document.createElement("li");
-            $(liElement).addClass("page");
-            $(liElement).data("page-index", index);
-            anchor = document.createElement("a");
-            anchor.href = "#";
-            anchor.innerHTML = page.text;
-            $(anchor).click((event: Event) => {
-                event.stopPropagation();
-                this.parentReader.moveToPage(page.pageId, true);
-                return false;
-            });
-            liElement.appendChild(anchor);
-            paginationUl.appendChild(liElement);
-        });
-
-        liElement = document.createElement("li");
-        $(liElement).addClass("more-pages more-pages-right");
-        liElement.innerHTML = "...";
-        paginationUl.appendChild(liElement);
-
-        var listingContainer: HTMLDivElement = document.createElement("div");
-        listingContainer.classList.add("page-navigation-container-helper");
-        listingContainer.classList.add("hidden");
-        listingContainer.appendChild(toLeft);
-        listingContainer.appendChild(paginationUl);
-        listingContainer.appendChild(toRight);
-        return listingContainer;
-    }
-
-    private makeToolButtons(): HTMLDivElement {
+    protected makeToolButtons(): HTMLDivElement {
         var readerLayout = this;
         var toolButtons: HTMLDivElement = document.createElement("div");
         $(toolButtons).addClass("buttons left");
@@ -403,7 +140,7 @@
         return toolButtons;
     }
 
-    private makeViewButtons(): HTMLDivElement {
+    protected makeViewButtons(): HTMLDivElement {
         var viewControl: HTMLDivElement = document.createElement("div");
         $(viewControl).addClass("view-control");
 
@@ -554,6 +291,280 @@
 
         return checkboxesDiv;
     }
+
+    
+}
+
+class DesktopHeader extends BookHeader {
+    protected createHeaderDiv(bookTitle: string): HTMLDivElement {
+        var headerDiv = document.createElement("div");
+        headerDiv.appendChild(this.informationDiv(bookTitle));
+
+        var controlsDiv = document.createElement("div");
+        $(controlsDiv).addClass("reader-controls content-container");
+        controlsDiv.appendChild(this.makeSlider());
+        controlsDiv.appendChild(this.makeViewButtons());
+        controlsDiv.appendChild(this.makeToolButtons());
+        controlsDiv.appendChild(this.makePageNavigation());
+        headerDiv.appendChild(controlsDiv);
+
+        return headerDiv;
+    }
+
+    private makeSlider(): HTMLDivElement {
+        var slider: HTMLDivElement = document.createElement("div");
+        $(slider).addClass("slider");
+        $(slider).slider({
+            min: 0,
+            max: this.parentReader.pages.length - 1,
+            value: 0,
+            start: (event, ui) => {
+                $(event.target).find(".ui-slider-handle").find(".slider-tip").show();
+            },
+            stop: (event, ui) => {
+                $(event.target).find(".ui-slider-handle").find(".slider-tip").fadeOut(1000);
+            },
+            slide: (event, ui) => {
+                $(event.target).find(".ui-slider-handle").find(".slider-tip").stop(true, true);
+                $(event.target).find(".ui-slider-handle").find(".slider-tip").show();
+                if (this.parentReader.pages[ui.value] !== undefined) {
+                    $(event.target).find(".ui-slider-handle").find(".tooltip-inner").html("Strana: " + this.parentReader.pages[ui.value].text);
+                } else {
+                    console.error("missing page " + ui.value);
+                }
+            },
+            change: (event: Event, ui: JQueryUI.SliderUIParams) => {
+                if (this.parentReader.actualPageIndex !== ui.value) {
+                    this.parentReader.moveToPageNumber(<any>ui.value, true);
+                }
+            }
+        });
+
+        var sliderTooltip: HTMLDivElement = document.createElement("div");
+        sliderTooltip.classList.add("tooltip", "top", "slider-tip");
+        var arrowTooltip: HTMLDivElement = document.createElement("div");
+        arrowTooltip.classList.add("tooltip-arrow");
+        sliderTooltip.appendChild(arrowTooltip);
+
+        var innerTooltip: HTMLDivElement = document.createElement("div");
+        $(innerTooltip).addClass("tooltip-inner");
+        if (this.parentReader.pages[0] !== undefined) {
+            $(innerTooltip).html("Strana: " + this.parentReader.pages[0].text);
+        }
+        else {
+            console.error("missing page " + 0);
+        }
+        sliderTooltip.appendChild(innerTooltip);
+        $(sliderTooltip).hide();
+
+        var sliderHandle: JQuery = $(slider).find(".ui-slider-handle");
+        sliderHandle.append(sliderTooltip);
+        sliderHandle.hover((event) => {
+            $(event.target).find(".slider-tip").stop(true, true);
+            $(event.target).find(".slider-tip").show();
+        });
+        sliderHandle.mouseout((event) => {
+            $(event.target).find(".slider-tip").fadeOut(1000);
+        });
+        return slider;
+    }
+
+    private informationDiv(bookTitle: string): HTMLDivElement {
+        var bookInfoDiv: HTMLDivElement = document.createElement("div");
+        $(bookInfoDiv).addClass("book-details");
+
+        var title = document.createElement("span");
+        $(title).addClass("title");
+        title.innerHTML = bookTitle;
+        bookInfoDiv.appendChild(title);
+
+        var fullscreenButton = document.createElement("button");
+        $(fullscreenButton).addClass("fullscreen-button");
+
+        var fullscreenSpan = document.createElement("span");
+        $(fullscreenSpan).addClass("glyphicon glyphicon-fullscreen");
+        $(fullscreenButton).append(fullscreenSpan);
+        $(fullscreenButton).click(() => {
+            if ($(fullscreenSpan).hasClass("glyphicon-fullscreen")) {
+                $(this.innerHtml).addClass("fullscreen");
+                $(fullscreenSpan).removeClass("glyphicon-fullscreen");
+                $(fullscreenSpan).addClass("glyphicon-remove");
+                this.parentReader.readerLayout.updateSize();
+            } else {
+                $(this.innerHtml).removeClass("fullscreen");
+                $(fullscreenSpan).removeClass("glyphicon-remove");
+                $(fullscreenSpan).addClass("glyphicon-fullscreen");
+                this.parentReader.readerLayout.updateSize();
+            }
+
+        });
+        bookInfoDiv.appendChild(fullscreenButton);
+
+        var detailsButton = document.createElement("button");
+        $(detailsButton).addClass("more-button");
+        var detailsSpan = document.createElement("span");
+        $(detailsSpan).addClass("glyphicon glyphicon-chevron-down");
+        detailsButton.appendChild(detailsSpan);
+        $(detailsButton).click((event) => {
+            var target: JQuery = $(event.target);
+
+            var title = target.parents(".book-details").find(".title");
+            title.toggleClass("full");
+
+            var details = target.parents(".book-details").find(".hidden-content");
+            if (!details.hasClass("visible")) {
+                $(target).removeClass("glyphicon-chevron-down");
+                $(target).addClass("glyphicon-chevron-up");
+                details.addClass("visible");
+            } else {
+                $(target).removeClass("glyphicon-chevron-up");
+                $(target).addClass("glyphicon-chevron-down");
+                details.removeClass("visible");
+            }
+        });
+        bookInfoDiv.appendChild(detailsButton);
+
+        var hiddenDiv = document.createElement("div");
+        $(hiddenDiv).addClass("hidden-content");
+
+        var editionNoteDiv = this.getEditionNote();
+        hiddenDiv.appendChild(editionNoteDiv);
+
+        var bookDetailDiv = this.getBookDetail();
+        hiddenDiv.appendChild(bookDetailDiv);
+
+        bookInfoDiv.appendChild(hiddenDiv);
+
+        return bookInfoDiv;
+    }
+
+    private makePageNavigation(): HTMLDivElement {
+        var paginationUl: HTMLUListElement = document.createElement("ul");
+        paginationUl.classList.add("pagination", "pagination-sm");
+
+        var toLeft = document.createElement("ul");
+        toLeft.classList.add("page-navigation-container", "page-navigation-container-left");
+
+        var liElement: HTMLLIElement = document.createElement("li");
+        $(liElement).addClass("page-navigation page-navigation-left");
+        var anchor: HTMLAnchorElement = document.createElement("a");
+        anchor.href = "#";
+        anchor.innerHTML = "|<";
+        $(anchor).click((event: Event) => {
+            event.stopPropagation();
+            this.parentReader.moveToPageNumber(0, true);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        toLeft.appendChild(liElement);
+
+        liElement = document.createElement("li");
+        $(liElement).addClass("page-navigation page-navigation-left");
+        anchor = document.createElement("a");
+        anchor.href = "#";
+        anchor.innerHTML = "<<";
+        $(anchor).click((event: Event) => {
+            event.stopPropagation();
+            this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex - 5, true);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        toLeft.appendChild(liElement);
+
+        liElement = document.createElement("li");
+        $(liElement).addClass("page-navigation page-navigation-left");
+        anchor = document.createElement("a");
+        anchor.href = "#";
+        anchor.innerHTML = "<";
+        $(anchor).click((event: Event) => {
+            event.stopPropagation();
+            this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex - 1, true);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        toLeft.appendChild(liElement);
+
+        var toRight = document.createElement("ul");
+        toRight.classList.add("page-navigation-container", "page-navigation-container-right");
+
+        liElement = document.createElement("li");
+        $(liElement).addClass("page-navigation page-navigation-right");
+        anchor = document.createElement("a");
+        anchor.href = "#";
+        anchor.innerHTML = ">";
+        $(anchor).click((event: Event) => {
+            event.stopPropagation();
+            this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex + 1, true);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        toRight.appendChild(liElement);
+
+        liElement = document.createElement("li");
+        $(liElement).addClass("page-navigation page-navigation-right");
+        anchor = document.createElement("a");
+        anchor.href = "#";
+        anchor.innerHTML = ">>";
+        $(anchor).click((event: Event) => {
+            event.stopPropagation();
+            this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex + 5, true);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        toRight.appendChild(liElement);
+
+        liElement = document.createElement("li");
+        $(liElement).addClass("page-navigation page-navigation-right");
+        anchor = document.createElement("a");
+        anchor.href = "#";
+        anchor.innerHTML = ">|";
+        $(anchor).click((event: Event) => {
+            event.stopPropagation();
+            this.parentReader.moveToPageNumber(this.parentReader.pages.length - 1, true);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        toRight.appendChild(liElement);
+
+        liElement = document.createElement("li");
+        $(liElement).addClass("more-pages more-pages-left");
+        liElement.innerHTML = "...";
+        paginationUl.appendChild(liElement);
+
+        $.each(this.parentReader.pages, (index, page) => {
+            liElement = document.createElement("li");
+            $(liElement).addClass("page");
+            $(liElement).data("page-index", index);
+            anchor = document.createElement("a");
+            anchor.href = "#";
+            anchor.innerHTML = page.text;
+            $(anchor).click((event: Event) => {
+                event.stopPropagation();
+                this.parentReader.moveToPage(page.pageId, true);
+                return false;
+            });
+            liElement.appendChild(anchor);
+            paginationUl.appendChild(liElement);
+        });
+
+        liElement = document.createElement("li");
+        $(liElement).addClass("more-pages more-pages-right");
+        liElement.innerHTML = "...";
+        paginationUl.appendChild(liElement);
+
+        var listingContainer: HTMLDivElement = document.createElement("div");
+        listingContainer.classList.add("page-navigation-container-helper");
+        listingContainer.classList.add("hidden");
+        listingContainer.appendChild(toLeft);
+        listingContainer.appendChild(paginationUl);
+        listingContainer.appendChild(toRight);
+        return listingContainer;
+    }
+
+}
+
+class MobileHeader extends BookHeader {
+    
 }
 
 class Button {  
@@ -624,3 +635,5 @@ class Button {
         return button;
     }
 }
+
+
