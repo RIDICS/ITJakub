@@ -78,4 +78,50 @@
         });
         return readerLayout;
     }
+
+    createToolPanel(panelId: string, panelTitle: string) {
+        var configurationObject: LayoutConfiguration = new LayoutConfiguration();
+
+        if (this.readerLayout.root.getItemsById(panelId).length === 0) {
+            if (this.readerLayout.root.getItemsById('tools').length === 0) {
+                var toolStackConfig = configurationObject.toolPanelConfig(PanelType.Stack, "tools", "");
+                this.readerLayout.root.contentItems[0].addChild(toolStackConfig, 0);
+            }
+            var type: PanelType;
+            if (panelId === this.termsPanelId) type = PanelType.Column;
+            else type = PanelType.Component;
+            var itemConfig = configurationObject.toolPanelConfig(type, panelId, panelTitle);
+            this.readerLayout.root.getItemsById('tools')[0].addChild(itemConfig);
+            this.readerLayout.root.getItemsById('tools')[0].config.width = 15;
+            this.readerLayout.updateSize();
+            if (panelId === this.termsPanelId) {
+                this.createTermsPanel(configurationObject);
+            }
+        }
+    }
+
+    createViewPanel(panelId: string, panelTitle: string) {
+        var configurationObject: LayoutConfiguration = new LayoutConfiguration();
+        if (this.readerLayout.root.getItemsById(panelId).length === 0) {
+            if (this.readerLayout.root.getItemsById('views').length === 0) {
+                var viewColumnConfig = configurationObject.viewPanelConfig(false, PanelType.Column, "views", "");
+                this.readerLayout.root.contentItems[0].addChild(viewColumnConfig);
+            }
+            var itemConfig = configurationObject.viewPanelConfig(true, PanelType.Component, panelId, panelTitle);
+            if (this.readerLayout.root.getItemsById('tools').length === 1) {
+                this.readerLayout.root.getItemsById('tools')[0].config.width = 15;
+                this.readerLayout.updateSize();
+            }
+            if (panelId === "audio") {
+                this.readerLayout.root.getItemsById('views')[0].addChild(itemConfig, 0);
+                //TODO UpdateSize
+            } else {
+                if (this.readerLayout.root.getItemsById('viewsRow').length === 0) {
+                    var viewRowConfig = configurationObject.viewPanelConfig(false, PanelType.Row, "viewsRow", "");
+                    this.readerLayout.root.getItemsById('views')[0].addChild(viewRowConfig);
+                }
+                this.readerLayout.root.getItemsById('viewsRow')[0].addChild(itemConfig);
+            }
+        }
+    }
 }
