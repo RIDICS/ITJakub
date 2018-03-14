@@ -402,8 +402,8 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
             pageClickCallback: (pageNumber) => {
                 this.goToResultPage(pageNumber, snapshotId, this.search.getLastQuery(), this.contextLength);
             },
-            showSlider: true,
-            showInput: true,
+            showSlider: false,
+            showInput: false,
             callPageClickCallbackOnInit: true
         });
         paginator.make(totalResults, this.searchResultsOnPage, 1);
