@@ -402,8 +402,8 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
             pageClickCallback: (pageNumber) => {
                 this.goToResultPage(pageNumber, snapshotId, this.search.getLastQuery(), this.contextLength);
             },
-            showSlider: true,
-            showInput: true,
+            showSlider: false,
+            showInput: false,
             callPageClickCallbackOnInit: true
         });
         paginator.make(totalResults, this.searchResultsOnPage, 1);
@@ -810,6 +810,7 @@ class BohemianTextBankSinglePaged extends BohemianTextBankSingle {
             $(".main-pagination-container").empty();
         }
         this.paginationInitialised = false;
+        this.actualizeSelectedBooksAndCategoriesInQuery();
     }
 
     /**
@@ -834,6 +835,13 @@ class BohemianTextBankSinglePaged extends BohemianTextBankSingle {
         this.onSearchStartSinglePaged();
         this.corpusAdvancedSearchBookHits(json, firstPage);
     }
+
+    private actualizeSelectedBooksAndCategoriesInQuery() {
+        const selectedIds = this.booksSelector.getSelectedIds();
+        this.bookIdsInQuery = selectedIds.selectedBookIds;
+        this.categoryIdsInQuery = selectedIds.selectedCategoryIds;
+    }
+
     /**
      * Reloads search results on change of sort ordering
      */
@@ -981,7 +989,6 @@ class BohemianTextBankSinglePaged extends BohemianTextBankSingle {
             start: start,
             count: count
         };
-
         updateQueryStringParameter(this.urlSearchKey, text);
         updateQueryStringParameter(this.urlSortAscKey, sortAsc);
         updateQueryStringParameter(this.urlSortCriteriaKey, sortingEnum);
