@@ -810,7 +810,7 @@ class BohemianTextBankSinglePaged extends BohemianTextBankSingle {
             $(".main-pagination-container").empty();
         }
         this.paginationInitialised = false;
-        this.actualizeSelectedBooksAndCategoriesInQuery();
+        this.updateSelectedBooksAndCategoriesInQuery();
     }
 
     /**
@@ -834,12 +834,6 @@ class BohemianTextBankSinglePaged extends BohemianTextBankSingle {
         this.showPageLoading();
         this.onSearchStartSinglePaged();
         this.corpusAdvancedSearchBookHits(json, firstPage);
-    }
-
-    private actualizeSelectedBooksAndCategoriesInQuery() {
-        const selectedIds = this.booksSelector.getSelectedIds();
-        this.bookIdsInQuery = selectedIds.selectedBookIds;
-        this.categoryIdsInQuery = selectedIds.selectedCategoryIds;
     }
 
     /**

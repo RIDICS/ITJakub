@@ -72,6 +72,12 @@
         loaderEl.show();
     }
 
+    protected updateSelectedBooksAndCategoriesInQuery() {
+        const selectedIds = this.booksSelector.getSelectedIds();
+        this.bookIdsInQuery = selectedIds.selectedBookIds;
+        this.categoryIdsInQuery = selectedIds.selectedCategoryIds;
+    }
+
     protected initializeFromUrlParams() {
         if (this.readyForInit && this.notInitialized) {
 

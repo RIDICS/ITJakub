@@ -232,12 +232,6 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
             
     }
 
-    private actualizeSelectedBooksAndCategoriesInQuery() {
-        const selectedIds = this.booksSelector.getSelectedIds();
-        this.bookIdsInQuery = selectedIds.selectedBookIds;
-        this.categoryIdsInQuery = selectedIds.selectedCategoryIds;
-    }
-
     private sortOrderChanged() {
         if (this.search.isLastQueryJson()) {
             this.corpusAdvancedSearchBookHits(this.search.getLastQuery());
@@ -443,7 +437,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
         this.resetHistory();
         this.compositionPageIsLast = false;
         this.totalViewPages = 0;
-        this.actualizeSelectedBooksAndCategoriesInQuery();
+        this.updateSelectedBooksAndCategoriesInQuery();
         const tableEl = $(".text-results-table");
         this.showLoading(tableEl);
     }
