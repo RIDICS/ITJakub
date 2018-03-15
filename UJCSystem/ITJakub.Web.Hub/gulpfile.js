@@ -347,8 +347,6 @@ gulp.task("bundle:new_reader", function() {
     return gulp.src([
         paths.webroot + "Areas/GoldenLayout/js/initReader.js",
         paths.webroot + "Areas/GoldenLayout/js/itjakub.goldenlayout.js",
-        paths.webroot + "Areas/GoldenLayout/js/goldenLayoutDesktop.js",
-        paths.webroot + "Areas/GoldenLayout/js/goldenLayoutMobile.js",
         paths.webroot + "Areas/GoldenLayout/js/config.js",
         paths.webroot + "Areas/GoldenLayout/js/panels.js",
         paths.webroot + "Areas/GoldenLayout/js/searchModule.js",

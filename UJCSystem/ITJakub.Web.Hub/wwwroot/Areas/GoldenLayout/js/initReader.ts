@@ -15,7 +15,7 @@
         ReaderPanelEnum.SearchPanel, ReaderPanelEnum.SettingsPanel
     ];
     var sc = new ServerCommunication();
-    var readerPlugin = new DesktopReader(<any>$("#ReaderHeaderDiv")[0],
+    var readerPlugin = new ReaderLayout(<any>$("#ReaderHeaderDiv")[0],
         readerPageChangedCallback,
         readerPanels,
         sc

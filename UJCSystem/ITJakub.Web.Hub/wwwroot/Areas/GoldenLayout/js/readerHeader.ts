@@ -1,4 +1,4 @@
-﻿abstract class BookHeader {
+﻿class BookHeader {
     protected innerHtml: HTMLDivElement;
     protected parentReader: ReaderLayout;
     protected bookId: string;
@@ -17,8 +17,6 @@
     public getInnerHtml(): HTMLDivElement {
         return this.innerHtml;
     }
-
-    protected createHeaderDiv(bookTitle: string): HTMLDivElement { throw new Error("Not implemented"); }
 
     protected getEditionNote(): HTMLDivElement {
         var editionNoteDiv = document.createElement("div");
@@ -143,6 +141,7 @@
     protected makeViewButtons(): HTMLDivElement {
         var viewControl: HTMLDivElement = document.createElement("div");
         $(viewControl).addClass("view-control");
+        viewControl.id = "view";
 
         var viewButtons = document.createElement("div");
         $(viewButtons).addClass("buttons");
@@ -292,10 +291,6 @@
         return checkboxesDiv;
     }
 
-    
-}
-
-class DesktopHeader extends BookHeader {
     protected createHeaderDiv(bookTitle: string): HTMLDivElement {
         var headerDiv = document.createElement("div");
         headerDiv.appendChild(this.informationDiv(bookTitle));
@@ -386,12 +381,12 @@ class DesktopHeader extends BookHeader {
         $(fullscreenButton).append(fullscreenSpan);
         $(fullscreenButton).click(() => {
             if ($(fullscreenSpan).hasClass("glyphicon-fullscreen")) {
-                $(this.innerHtml).addClass("fullscreen");
+                $("#ReaderDiv").addClass("fullscreen");
                 $(fullscreenSpan).removeClass("glyphicon-fullscreen");
                 $(fullscreenSpan).addClass("glyphicon-remove");
                 this.parentReader.readerLayout.updateSize();
             } else {
-                $(this.innerHtml).removeClass("fullscreen");
+                $("#ReaderDiv").removeClass("fullscreen");
                 $(fullscreenSpan).removeClass("glyphicon-remove");
                 $(fullscreenSpan).addClass("glyphicon-fullscreen");
                 this.parentReader.readerLayout.updateSize();
@@ -560,11 +555,6 @@ class DesktopHeader extends BookHeader {
         listingContainer.appendChild(toRight);
         return listingContainer;
     }
-
-}
-
-class MobileHeader extends BookHeader {
-    
 }
 
 class Button {  
