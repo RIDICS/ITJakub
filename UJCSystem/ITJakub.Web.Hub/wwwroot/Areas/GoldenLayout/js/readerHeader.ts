@@ -1,24 +1,28 @@
 ﻿class BookHeader {
-    protected innerHtml: HTMLDivElement;
-    protected parentReader: ReaderLayout;
-    protected bookId: string;
-    protected versionId: string;
-    protected sc: ServerCommunication;
+    private parentReader: ReaderLayout;
+    private bookId: string;
+    private versionId: string;
+    private sc: ServerCommunication;
+    private bookTitle: string;
 
     constructor(parentReader: ReaderLayout, sc: ServerCommunication, headerDiv: HTMLDivElement, bookTitle: string) {
         this.parentReader = parentReader;
         this.sc = sc;
         this.bookId = parentReader.getBookId();
         this.versionId = parentReader.getVersionId();
+        this.bookTitle = bookTitle;
 
-        this.innerHtml = this.createHeaderDiv(bookTitle);
     }
 
     public getInnerHtml(): HTMLDivElement {
-        return this.innerHtml;
+        if (window.innerWidth < 800) {
+            return this.createMobileHeaderDiv(this.bookTitle);
+        } else {
+            return this.createDesktopHeaderDiv(this.bookTitle);
+        }
     }
 
-    protected getEditionNote(): HTMLDivElement {
+    private getEditionNote(): HTMLDivElement {
         var editionNoteDiv = document.createElement("div");
         $(editionNoteDiv).addClass("loading");
         $(editionNoteDiv).addClass("edition-note-wrapper");
@@ -45,7 +49,7 @@
         return editionNoteDiv;
     }
 
-    protected getBookDetail(): HTMLDivElement {
+    private getBookDetail(): HTMLDivElement {
         var bookDetailDiv = document.createElement("div");
         $(bookDetailDiv).addClass("book-detail-wrapper");
         var bookDetailHeader = document.createElement("h3");
@@ -80,20 +84,8 @@
             });
 
             $(bookDetailDiv).append(detailTable.build());
-
-
-            if (detailData.Authors.length != 0) {
-                var authors: string = "";
-                for (var i = 0; i < detailData.Authors.length; i++) {
-                    var author = detailData.Authors[i];
-                    authors += author.FirstName + " " + author.LastName;
-                    if (i + 1 != detailData.Authors.length) {
-                        authors += ", ";
-                    }
-                }
-                $(".title").prepend(authors + ": ");
-            }
-
+            
+            
         });
         bookDetail.fail(() => {
             $(bookDetailDiv).append("Nepodařilo se načíst detaily o díle");
@@ -102,7 +94,28 @@
         return bookDetailDiv;
     }
 
-    protected makeToolButtons(): HTMLDivElement {
+    private getAuthors(target: JQuery) {
+        var authors: string = "";
+        var bookDetail: JQueryXHR = this.sc.getBookDetail(this.bookId);
+        bookDetail.done((response) => {
+            var detailData = response["detail"];
+            if (detailData.Authors.length != 0) {
+
+                
+                for (var i = 0; i < detailData.Authors.length; i++) {
+                    var author = detailData.Authors[i];
+                    authors += author.FirstName + " " + author.LastName;
+                    if (i + 1 != detailData.Authors.length) {
+                        authors += ", ";
+                    }
+                }
+                authors += ": ";
+                target.prepend(authors);
+            }
+        });
+    }
+
+    private makeToolButtons(): HTMLDivElement {
         var readerLayout = this;
         var toolButtons: HTMLDivElement = document.createElement("div");
         $(toolButtons).addClass("buttons left");
@@ -138,7 +151,7 @@
         return toolButtons;
     }
 
-    protected makeViewButtons(): HTMLDivElement {
+    private makeViewButtons(): HTMLDivElement {
         var viewControl: HTMLDivElement = document.createElement("div");
         $(viewControl).addClass("view-control");
         viewControl.id = "view";
@@ -291,9 +304,9 @@
         return checkboxesDiv;
     }
 
-    protected createHeaderDiv(bookTitle: string): HTMLDivElement {
+    private createDesktopHeaderDiv(bookTitle: string): HTMLDivElement {
         var headerDiv = document.createElement("div");
-        headerDiv.appendChild(this.informationDiv(bookTitle));
+        headerDiv.appendChild(this.informationDiv(bookTitle, Device.Desktop));
 
         var controlsDiv = document.createElement("div");
         $(controlsDiv).addClass("reader-controls content-container");
@@ -304,6 +317,12 @@
         headerDiv.appendChild(controlsDiv);
 
         return headerDiv;
+    }
+
+    private createMobileHeaderDiv(bookTitle: string): HTMLDivElement {
+        var headerDiv = document.createElement("div");
+        headerDiv.appendChild(this.informationDiv(bookTitle, Device.Mobile));
+        return headerDiv;    
     }
 
     private makeSlider(): HTMLDivElement {
@@ -364,72 +383,89 @@
         return slider;
     }
 
-    private informationDiv(bookTitle: string): HTMLDivElement {
+    private informationDiv(bookTitle: string, deviceType: Device): HTMLDivElement {
+        var buttonObject = new Button(this.parentReader);
         var bookInfoDiv: HTMLDivElement = document.createElement("div");
         $(bookInfoDiv).addClass("book-details");
+        
+        var editionNoteDiv = this.getEditionNote();
 
         var title = document.createElement("span");
         $(title).addClass("title");
         title.innerHTML = bookTitle;
         bookInfoDiv.appendChild(title);
+        if (deviceType == Device.Desktop) {
+            this.getAuthors($(title));
+            var fullscreenButton = buttonObject.createButton("fullscreen", "fullscreen");
+            $(fullscreenButton).click(() => {
+                if ($(fullscreenButton.firstChild).hasClass("glyphicon-fullscreen")) {
+                    $("#ReaderDiv").addClass("fullscreen");
+                    $(fullscreenButton.firstChild).removeClass("glyphicon-fullscreen");
+                    $(fullscreenButton.firstChild).addClass("glyphicon-remove");
+                    this.parentReader.readerLayout.updateSize();
+                } else {
+                    $("#ReaderDiv").removeClass("fullscreen");
+                    $(fullscreenButton.firstChild).removeClass("glyphicon-remove");
+                    $(fullscreenButton.firstChild).addClass("glyphicon-fullscreen");
+                    this.parentReader.readerLayout.updateSize();
+                }
 
-        var fullscreenButton = document.createElement("button");
-        $(fullscreenButton).addClass("fullscreen-button");
+            });
+            bookInfoDiv.appendChild(fullscreenButton);
 
-        var fullscreenSpan = document.createElement("span");
-        $(fullscreenSpan).addClass("glyphicon glyphicon-fullscreen");
-        $(fullscreenButton).append(fullscreenSpan);
-        $(fullscreenButton).click(() => {
-            if ($(fullscreenSpan).hasClass("glyphicon-fullscreen")) {
-                $("#ReaderDiv").addClass("fullscreen");
-                $(fullscreenSpan).removeClass("glyphicon-fullscreen");
-                $(fullscreenSpan).addClass("glyphicon-remove");
-                this.parentReader.readerLayout.updateSize();
-            } else {
-                $("#ReaderDiv").removeClass("fullscreen");
-                $(fullscreenSpan).removeClass("glyphicon-remove");
-                $(fullscreenSpan).addClass("glyphicon-fullscreen");
-                this.parentReader.readerLayout.updateSize();
-            }
+            var detailsButton = buttonObject.createButton("more", "chevron-down");
+            $(detailsButton).click((event) => {
+                var target: JQuery = $(event.target);
 
+                var title = target.parents(".book-details").find(".title");
+                title.toggleClass("full");
+
+                var details = target.parents(".book-details").find(".hidden-content");
+                if (!details.hasClass("visible")) {
+                    $(target).removeClass("glyphicon-chevron-down");
+                    $(target).addClass("glyphicon-chevron-up");
+                    details.addClass("visible");
+                } else {
+                    $(target).removeClass("glyphicon-chevron-up");
+                    $(target).addClass("glyphicon-chevron-down");
+                    details.removeClass("visible");
+                }
+            });
+            bookInfoDiv.appendChild(detailsButton);  
+
+        }
+
+        if (deviceType == Device.Mobile) {
+            var bookDetailDiv = this.getBookDetail();
+            var detailHeader = $(bookDetailDiv).children("h3");
+            detailHeader.empty();
+            this.getAuthors(detailHeader);
+            detailHeader.append(bookTitle);
+            var bookDetailButton = buttonObject.createLink("display-details", "tags");
+            $(bookDetailButton)
+                .attr("tabindex", 0)
+                .attr("data-toggle", "popover")
+                .attr("title", "Informace o díle")
+                .attr("data-placement", "bottom");
+            $(bookDetailButton).popover({
+                trigger: "focus",
+                html: true,
+                content: bookDetailDiv
         });
-        bookInfoDiv.appendChild(fullscreenButton);
+            bookInfoDiv.appendChild(bookDetailButton);
 
-        var detailsButton = document.createElement("button");
-        $(detailsButton).addClass("more-button");
-        var detailsSpan = document.createElement("span");
-        $(detailsSpan).addClass("glyphicon glyphicon-chevron-down");
-        detailsButton.appendChild(detailsSpan);
-        $(detailsButton).click((event) => {
-            var target: JQuery = $(event.target);
-
-            var title = target.parents(".book-details").find(".title");
-            title.toggleClass("full");
-
-            var details = target.parents(".book-details").find(".hidden-content");
-            if (!details.hasClass("visible")) {
-                $(target).removeClass("glyphicon-chevron-down");
-                $(target).addClass("glyphicon-chevron-up");
-                details.addClass("visible");
-            } else {
-                $(target).removeClass("glyphicon-chevron-up");
-                $(target).addClass("glyphicon-chevron-down");
-                details.removeClass("visible");
-            }
-        });
-        bookInfoDiv.appendChild(detailsButton);
+            var editionNoteButton = buttonObject.createButton("displayNote", "comment");
+            $(editionNoteButton).click(() => {
+                
+            });        
+        }
 
         var hiddenDiv = document.createElement("div");
         $(hiddenDiv).addClass("hidden-content");
-
-        var editionNoteDiv = this.getEditionNote();
         hiddenDiv.appendChild(editionNoteDiv);
-
-        var bookDetailDiv = this.getBookDetail();
-        hiddenDiv.appendChild(bookDetailDiv);
+        hiddenDiv.appendChild(this.getBookDetail());
 
         bookInfoDiv.appendChild(hiddenDiv);
-
         return bookInfoDiv;
     }
 
@@ -557,7 +593,7 @@
     }
 }
 
-class Button {  
+class Button {
     private readerLayout: ReaderLayout;
 
     constructor(readerLayout: ReaderLayout) {
@@ -566,9 +602,9 @@ class Button {
 
     public createViewButton(iconName: string, label: string, buttonId: string): HTMLButtonElement {
         var button: HTMLButtonElement = document.createElement("button");
-        $(button).addClass(buttonId+"-button");
+        $(button).addClass(buttonId + "-button");
         var span = document.createElement("span");
-        $(span).addClass("glyphicon glyphicon-"+iconName);
+        $(span).addClass("glyphicon glyphicon-" + iconName);
         $(button).append(span);
 
         var spanText = document.createElement("span");
@@ -592,7 +628,7 @@ class Button {
         var span = document.createElement("span");
         $(span).addClass("glyphicon glyphicon-" + iconName);
         $(button).append(span);
-        
+
         var spanText = document.createElement("span");
         $(spanText).addClass("button-text");
         $(spanText).append(label);
@@ -624,6 +660,31 @@ class Button {
 
         return button;
     }
+
+    public createButton(buttonId: string, iconName: string): HTMLButtonElement {
+        var button = document.createElement("button");
+        $(button).addClass(buttonId + "-button");
+
+        var span = document.createElement("span");
+        $(span).addClass("glyphicon glyphicon-" + iconName);
+        $(button).append(span);
+
+        return button;
+    }
+
+    public createLink(buttonId: string, iconName: string): HTMLAnchorElement {
+        var button = document.createElement("a");
+        $(button).addClass(buttonId + "-button");
+
+        var span = document.createElement("span");
+        $(span).addClass("glyphicon glyphicon-" + iconName);
+        $(button).append(span);
+
+        return button;
+    }
 }
 
-
+enum Device {
+    Mobile,
+    Desktop
+}

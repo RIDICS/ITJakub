@@ -58,7 +58,7 @@
     a {
         color: @linkColor;
 
-        &:hover {
+        &:hover, &:focus {
             color: @linkColorHover;
         }
     }
@@ -72,7 +72,7 @@
     width:unset !important;
 }
 
-.more-button, .fullscreen-button{
+.more-button, .fullscreen-button, .display-details-button{
     float: right;
     border: none;
     background: none;
@@ -260,6 +260,10 @@ button {
     margin-left: 10px;
     overflow: hidden;
     height: 100%;
+
+    @media screen and (max-width: 800px){
+        width: auto;
+    }
 }
 
 .reader-audio-container {
@@ -355,4 +359,11 @@ button {
 
 .hidden {
     display: none;
+}
+
+#ReaderDiv {
+    .popover {
+        max-width: unset;
+        width: 100%;
+    }
 }

@@ -91,7 +91,11 @@ class ReaderLayout {
 
         var bookHeader = new BookHeader(this, this.sc, this.readerHeaderDiv, bookTitle);
         this.readerHeaderDiv.appendChild(bookHeader.getInnerHtml());
-
+        $(window).resize(() => {
+            $(this.readerHeaderDiv).empty();
+            $(this.readerHeaderDiv).append(bookHeader.getInnerHtml());
+        });
+        
         this.readerLayout = this.initLayout();
 
         this.loadBookmarks();
