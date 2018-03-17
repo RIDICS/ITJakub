@@ -116,7 +116,6 @@
     }
 
     private makeToolButtons(): HTMLDivElement {
-        var readerLayout = this;
         var toolButtons: HTMLDivElement = document.createElement("div");
         $(toolButtons).addClass("buttons left");
 
@@ -322,8 +321,17 @@
     private createMobileHeaderDiv(bookTitle: string): HTMLDivElement {
         var headerDiv = document.createElement("div");
         headerDiv.appendChild(this.informationDiv(bookTitle, Device.Mobile));
+
+        var controlsDiv = document.createElement("div");
+        $(controlsDiv).addClass("reader-controls content-container");
+        controlsDiv.appendChild(this.makeViewButtons());
+        headerDiv.appendChild(controlsDiv);
+
         return headerDiv;    
     }
+
+    
+
 
     private makeSlider(): HTMLDivElement {
         var slider: HTMLDivElement = document.createElement("div");
