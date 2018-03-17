@@ -325,12 +325,65 @@
         var controlsDiv = document.createElement("div");
         $(controlsDiv).addClass("reader-controls content-container");
         controlsDiv.appendChild(this.makeViewButtons());
+        controlsDiv.appendChild(this.makePageInput());
         headerDiv.appendChild(controlsDiv);
 
         return headerDiv;    
     }
 
-    
+    private makePageInput(): HTMLDivElement {
+        var pageInputDiv: HTMLDivElement = document.createElement("div");
+        pageInputDiv.classList.add("page-input");
+
+        var pageInputText = document.createElement("input");
+        pageInputText.setAttribute("type", "text");
+        pageInputText.setAttribute("id", "pageInputText");
+        pageInputText.setAttribute("placeholder", "Přejít na stranu...");
+        pageInputText.classList.add("page-input-text");
+        pageInputDiv.appendChild(pageInputText);
+
+        var pageInputButton = document.createElement("button");
+        $(pageInputButton).addClass("btn btn-default page-input-button");
+
+        var pageInputButtonSpan = document.createElement("span");
+        $(pageInputButtonSpan).addClass("glyphicon glyphicon-arrow-right");
+        $(pageInputButton).append(pageInputButtonSpan);
+
+        $(pageInputButton).click((event: Event) => {
+            var pageName = $("#pageInputText").val();
+            var pageIndex: number = -1;
+            for (var i = 0; i < this.parentReader.pages.length; i++) {
+                if (this.parentReader.pages[i].text === pageName) {
+                    pageIndex = i;
+                    break;
+                }
+            }
+
+            if (this.parentReader.pages[pageIndex] !== undefined) {
+                var page: BookPage = this.parentReader.pages[pageIndex];
+                this.parentReader.moveToPage(page.pageId, true);
+            }
+            else {
+                console.error("missing page " + pageIndex);
+            }
+        });
+
+        pageInputDiv.appendChild(pageInputButton);
+
+        $(pageInputText).keypress((event: any) => {
+            var keyCode = event.which || event.keyCode;
+            if (keyCode === 13) {     //13 = Enter
+                $(pageInputButton).click();
+                event.preventDefault();
+                event.stopPropagation();
+                return false;
+            }
+        });
+
+        this.parentReader.activateTypeahead(pageInputText);
+
+        return pageInputDiv;
+    }
 
 
     private makeSlider(): HTMLDivElement {

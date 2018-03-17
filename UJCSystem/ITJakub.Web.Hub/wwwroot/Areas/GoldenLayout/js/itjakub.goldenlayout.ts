@@ -204,6 +204,18 @@ class ReaderLayout {
         return this.newFavoriteDialog;
     }
 
+    public activateTypeahead(input: HTMLInputElement) {
+
+        var pagesTexts = new Array<string>();
+        $.each(this.pages, (index, page: BookPage) => {
+            pagesTexts.push(page.text);
+        });
+
+        var pages = new Bloodhound({ datumTokenizer: Bloodhound.tokenizers.whitespace, queryTokenizer: Bloodhound.tokenizers.whitespace, local: (): string[] => { return pagesTexts; } });
+
+        $(input).typeahead({ hint: true, highlight: true, minLength: 1 }, { name: "pages", source: pages });
+    }
+
     getBookmarks(): IBookmarksInfo {
         var result: IBookmarksInfo = {
             positions: new Array<IBookmarkPosition>(),
