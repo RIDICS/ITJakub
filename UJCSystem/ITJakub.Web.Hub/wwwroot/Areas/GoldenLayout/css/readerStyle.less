@@ -80,11 +80,15 @@
     color: @linkColor;
     padding: 0;
     margin: 1.5rem 2rem 0 0;
-    font-size:25px;
+    font-size: 25px;
     display: block !important;
 
     &:hover {
         color: @linkColorHover;
+    }
+
+    @media screen and (max-width: 800px) {
+        font-size: 30px;
     }
 }
 
@@ -105,8 +109,14 @@ button {
     div {
         display: inline-block;
         margin-right: 5px;
+        @media screen and (max-width: 800px) {
+            margin-right: 2rem;
+        }
     }
 
+    @media screen and (max-width: 800px) {
+        display: block;
+    }
     input {
         display: none;
 
@@ -171,6 +181,12 @@ button {
         overflow: unset;
         text-overflow: initial;
         white-space: initial;
+    }
+
+    @media screen and (max-width: 800px) {
+        font-size: 27px;
+        padding-right: 0;
+        padding-bottom: 10px;
     }
 }
 
@@ -341,7 +357,12 @@ button {
 
     @media screen and (max-width: 800px) {
         float: none;
-        text-align: center;
+        text-align: center !important;
+
+        .buttons {
+            display: block;
+            text-align: inherit;
+        }
     }
 }
 
@@ -359,6 +380,16 @@ button {
         display: block;
         clear: both;
     }
+
+    .buttons button {
+        @media screen and (max-width: 800px) {
+            margin-left: 2rem;
+
+            .glyphicon{
+                font-size: 3em;
+            }
+        }
+    }
 }
 
 .hidden {
@@ -370,3 +401,16 @@ button {
         max-width: 500px;
     }
 }
+
+.regex-search-div {
+    @media screen and (max-width: 800px) {
+        .searchbar-button:nth-child(2), .regexsearch-input-button {
+            display: none;
+        }
+
+        .regex-searchbar-inputs {
+            margin-right: 90px;
+        }
+    }
+}
+
