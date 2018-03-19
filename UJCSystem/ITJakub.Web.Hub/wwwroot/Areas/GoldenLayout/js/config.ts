@@ -9,6 +9,12 @@
                 headerHeight: 26,
                 minItemWidth: 200
             },
+            labels: {
+                close: 'Zavřít',
+                maximise: 'Maximalizovat',
+                minimise: 'Minimalizovat',
+                popout: 'Otevřít v novém okně'
+            },
             content: [{
                 type: "row",
                 isClosable: false,
@@ -36,7 +42,13 @@
             dimensions: {
                 headerHeight: 26,
                 minItemWidth: 200
-            }, 
+            },
+            labels: {
+                close: 'Zavřít',
+                maximise: 'Maximalizovat',
+                minimise: 'Minimalizovat',
+                popout: 'Otevřít v novém okně'
+            },
             content: [
                 
                     
