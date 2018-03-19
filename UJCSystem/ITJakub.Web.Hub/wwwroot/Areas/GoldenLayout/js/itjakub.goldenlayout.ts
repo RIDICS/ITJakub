@@ -19,6 +19,7 @@ class ReaderLayout {
     versionId: string;
     loadedBookContent: boolean;
     sc: ServerCommunication;
+    isMobileSwitch: boolean;
 
     clickedMoveToPage: boolean;
 
@@ -68,6 +69,11 @@ class ReaderLayout {
         this.favoriteManager = new FavoriteManager();
         this.sc = sc;
         this.newFavoriteDialog = new NewFavoriteDialog(this.favoriteManager, true);
+        if (window.innerWidth < 800) {
+            this.isMobileSwitch = true;
+        } else {
+            this.isMobileSwitch = false;
+        }
     }
 
     public makeReader(bookId: string, versionId: string, bookTitle: string, pageList: IPage[]) {
@@ -91,23 +97,21 @@ class ReaderLayout {
 
         var bookHeader = new BookHeader(this, this.sc, this.readerHeaderDiv, bookTitle);
         this.readerHeaderDiv.appendChild(bookHeader.getInnerHtml());
-        $(window).resize(() => {
-            $(this.readerHeaderDiv).empty();
-            $(this.readerHeaderDiv).append(bookHeader.getInnerHtml());
-        });
-        
-        this.readerLayout = this.initLayout();
+
+        var config = new LayoutConfiguration();
+        this.readerLayout = this.initLayout(config.goldenLayoutDesktopConfig());
 
         this.loadBookmarks();
         this.newFavoriteDialog.make();
         this.newFavoriteDialog.setSaveCallback(this.createBookmarks.bind(this));
 
-        this.addResponsibleBehavior();
+        $(window).resize(() => {
+            this.addResponsiveBehavior(bookHeader);
+        });
     }
 
-    private initLayout(): GoldenLayout {
-        var config = new LayoutConfiguration();
-        var readerLayout = new GoldenLayout(config.goldenLayoutDesktopConfig(), $('#ReaderBodyDiv'));
+    private initLayout(layoutConfiguration: GoldenLayout.Config): GoldenLayout {
+        var readerLayout = new GoldenLayout(layoutConfiguration, $('#ReaderBodyDiv'));
         readerLayout.registerComponent('toolTab', (container, state) => {
             switch (state.label) {
                 case this.bookmarksPanelId:
@@ -154,7 +158,7 @@ class ReaderLayout {
         return readerLayout;
     }
 
-    createToolPanel(panelId: string, panelTitle: string) {
+    createDesktopToolPanel(panelId: string, panelTitle: string) {
         var configurationObject: LayoutConfiguration = new LayoutConfiguration();
 
         if (this.readerLayout.root.getItemsById(panelId).length === 0) {
@@ -175,7 +179,7 @@ class ReaderLayout {
         }
     }
 
-    createViewPanel(panelId: string, panelTitle: string) {
+    createDesktopViewPanel(panelId: string, panelTitle: string) {
         var configurationObject: LayoutConfiguration = new LayoutConfiguration();
         if (this.readerLayout.root.getItemsById(panelId).length === 0) {
             if (this.readerLayout.root.getItemsById('views').length === 0) {
@@ -198,6 +202,22 @@ class ReaderLayout {
                 this.readerLayout.root.getItemsById('viewsRow')[0].addChild(itemConfig);
             }
         }
+    }
+
+    createMobileToolPanel(panelId: string, panelTitle: string) {
+        var configurationObject: LayoutConfiguration = new LayoutConfiguration();
+        var itemConfig = configurationObject.toolPanelConfig(PanelType.Component, panelId, panelTitle);
+        this.readerLayout.root.contentItems[0].remove();
+        this.readerLayout.root.addChild(itemConfig);
+    }
+
+    createMobileViewPanel(panelId: string, panelTitle: string) {
+        var configurationObject: LayoutConfiguration = new LayoutConfiguration();
+        var itemConfig = configurationObject.viewPanelConfig(true, PanelType.Component, panelId, panelTitle);
+        if (this.readerLayout.root.contentItems.length > 0) {
+            this.readerLayout.root.contentItems[0].remove();    
+        }
+        this.readerLayout.root.addChild(itemConfig);
     }
 
     public getNewFavoriteDialog(): NewFavoriteDialog {
@@ -617,7 +637,12 @@ class ReaderLayout {
     }
 
     private getSearchPanel(): SearchResultPanel {
-        this.createToolPanel(this.searchPanelId, "Výsledky vyhledávání");
+        if (window.innerWidth < 800) {
+            this.createMobileToolPanel(this.searchPanelId, "Výsledky vyhledávání");
+        } else {
+            this.createDesktopToolPanel(this.searchPanelId, "Výsledky vyhledávání");    
+        }
+        
         var searchButton = $(document).find(".search-button");
         searchButton.prop("disabled", false);
         return this.searchPanel;
@@ -775,10 +800,23 @@ class ReaderLayout {
     protected hasBookPageCache: { [key: string]: { [key: string]: boolean; }; } = {};
     protected hasBookPageCallOnSuccess: { [key: string]: { [key: string]: Array<() => any>; }; } = {};
 
-    private addResponsibleBehavior() {
-        if (window.innerWidth < 800) {
-            
-        }            
+    private addResponsiveBehavior(bookHeader: BookHeader) {
+        var config = new LayoutConfiguration();
+        if (window.innerWidth < 800 && !this.isMobileSwitch) {
+            this.isMobileSwitch = !this.isMobileSwitch;
+            this.readerLayout.destroy();
+            this.readerLayout = this.initLayout(config.goldenLayoutMobileConfig());
+            $(this.readerHeaderDiv).empty();
+            $(this.readerHeaderDiv).append(bookHeader.getInnerHtml());
+        }   
+
+        if (window.innerWidth > 800 && this.isMobileSwitch) {
+            this.isMobileSwitch = !this.isMobileSwitch; 
+            this.readerLayout.destroy();
+            this.readerLayout = this.initLayout(config.goldenLayoutDesktopConfig());
+            $(this.readerHeaderDiv).empty();
+            $(this.readerHeaderDiv).append(bookHeader.getInnerHtml());
+        }
     }
 }
 

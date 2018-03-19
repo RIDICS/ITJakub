@@ -36,7 +36,11 @@
             dimensions: {
                 headerHeight: 26,
                 minItemWidth: 200
-            }
+            }, 
+            content: [
+                
+                    
+            ]
         }
         return layoutConfig;
     }

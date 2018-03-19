@@ -17,7 +17,8 @@
     public getInnerHtml(): HTMLDivElement {
         if (window.innerWidth < 800) {
             return this.createMobileHeaderDiv(this.bookTitle);
-        } else {
+        } 
+        if (window.innerWidth > 800) {
             return this.createDesktopHeaderDiv(this.bookTitle);
         }
     }
@@ -115,11 +116,12 @@
         });
     }
 
-    private makeToolButtons(): HTMLDivElement {
+    private makeToolButtons(deviceType: Device): HTMLDivElement {
+        var button = new Button(this.parentReader, deviceType);
         var toolButtons: HTMLDivElement = document.createElement("div");
         $(toolButtons).addClass("buttons left");
 
-        var addBookmarksButton = new Button(this.parentReader).createAddBookmarkButton("bookmark",
+        var addBookmarksButton = button.createAddBookmarkButton("bookmark",
             "Přidat záložku",
             this.parentReader.bookmarksPanelId
         );
@@ -127,22 +129,22 @@
 
 
         var bookmarksButton =
-            new Button(this.parentReader).createToolButton("bookmark",
+            button.createToolButton("bookmark",
                 this.parentReader.bookmarksPanelLabel,
                 this.parentReader.bookmarksPanelId);
         toolButtons.appendChild(bookmarksButton);
 
-        var contentButton = new Button(this.parentReader).createToolButton("book",
+        var contentButton = button.createToolButton("book",
             this.parentReader.contentPanelLabel,
             this.parentReader.contentPanelId);
         toolButtons.appendChild(contentButton);
 
-        var searchResultButton = new Button(this.parentReader).createToolButton("search",
+        var searchResultButton = button.createToolButton("search",
             this.parentReader.searchPanelLabel,
             this.parentReader.searchPanelId);
         toolButtons.appendChild(searchResultButton);
 
-        var termsButton = new Button(this.parentReader).createToolButton("list-alt",
+        var termsButton = button.createToolButton("list-alt",
             this.parentReader.termsPanelLabel,
             this.parentReader.termsPanelId);
         toolButtons.appendChild(termsButton);
@@ -150,7 +152,7 @@
         return toolButtons;
     }
 
-    private makeViewButtons(): HTMLDivElement {
+    private makeViewButtons(deviceType: Device): HTMLDivElement {
         var viewControl: HTMLDivElement = document.createElement("div");
         $(viewControl).addClass("view-control");
         viewControl.id = "view";
@@ -162,7 +164,7 @@
         var hasBookPage: JQueryXHR = this.sc.hasBookPage(this.bookId, this.versionId);
         hasBookPage.done((response: { HasBookPage: boolean }) => {
             if (response.HasBookPage) {
-                var textButton = new Button(this.parentReader).createViewButton("font",
+                var textButton = new Button(this.parentReader, deviceType).createViewButton("font",
                     this.parentReader.textPanelLabel,
                     this.parentReader.textPanelId);
                 hasBookText = true;
@@ -180,7 +182,7 @@
 
             hasBookImageAjax.done((response: { HasBookImage: boolean }) => {
                 if (response.HasBookImage) {
-                    var imageButton = new Button(this.parentReader).createViewButton("picture",
+                    var imageButton = new Button(this.parentReader, deviceType).createViewButton("picture",
                         this.parentReader.imagePanelLabel,
                         this.parentReader.imagePanelId);
                     hasBookImage = true;
@@ -197,7 +199,7 @@
             var audioBook: JQueryXHR = this.sc.getAudioBook(this.bookId);
             audioBook.done((response: { audioBook: IAudioBookSearchResultContract }) => {
                 if (response.audioBook.Tracks.length > 0) {
-                    var audioButton = new Button(this.parentReader).createViewButton("music",
+                    var audioButton = new Button(this.parentReader, deviceType).createViewButton("music",
                         this.parentReader.audioPanelLabel,
                         this.parentReader.audioPanelId);
 
@@ -310,8 +312,8 @@
         var controlsDiv = document.createElement("div");
         $(controlsDiv).addClass("reader-controls content-container");
         controlsDiv.appendChild(this.makeSlider());
-        controlsDiv.appendChild(this.makeViewButtons());
-        controlsDiv.appendChild(this.makeToolButtons());
+        controlsDiv.appendChild(this.makeViewButtons(Device.Desktop));
+        controlsDiv.appendChild(this.makeToolButtons(Device.Desktop));
         controlsDiv.appendChild(this.makePageNavigation());
         headerDiv.appendChild(controlsDiv);
 
@@ -324,7 +326,7 @@
 
         var controlsDiv = document.createElement("div");
         $(controlsDiv).addClass("reader-controls content-container");
-        controlsDiv.appendChild(this.makeViewButtons());
+        controlsDiv.appendChild(this.makeViewButtons(Device.Mobile));
         controlsDiv.appendChild(this.makePageInput());
         headerDiv.appendChild(controlsDiv);
 
@@ -445,7 +447,7 @@
     }
 
     private informationDiv(bookTitle: string, deviceType: Device): HTMLDivElement {
-        var buttonObject = new Button(this.parentReader);
+        var buttonObject = new Button(this.parentReader, deviceType);
         var bookInfoDiv: HTMLDivElement = document.createElement("div");
         $(bookInfoDiv).addClass("book-details");
         
@@ -656,9 +658,11 @@
 
 class Button {
     private readerLayout: ReaderLayout;
+    private deviceType: Device;
 
-    constructor(readerLayout: ReaderLayout) {
+    constructor(readerLayout: ReaderLayout, deviceType: Device) {
         this.readerLayout = readerLayout;
+        this.deviceType = deviceType;
     }
 
     public createViewButton(iconName: string, label: string, buttonId: string): HTMLButtonElement {
@@ -674,7 +678,11 @@ class Button {
         $(button).append(spanText);
 
         $(button).click(() => {
-            this.readerLayout.createViewPanel(buttonId, spanText.innerHTML);
+            if (this.deviceType == Device.Desktop) {
+                this.readerLayout.createDesktopViewPanel(buttonId, spanText.innerHTML);
+            } else {
+                this.readerLayout.createMobileViewPanel(buttonId, spanText.innerHTML);
+            }
         });
         return button;
     }
@@ -696,7 +704,11 @@ class Button {
         $(button).append(spanText);
 
         $(button).click(() => {
-            this.readerLayout.createToolPanel(buttonId, spanText.innerHTML);
+            if (this.deviceType == Device.Desktop) {
+                this.readerLayout.createDesktopToolPanel(buttonId, spanText.innerHTML);
+            } else {
+                this.readerLayout.createMobileToolPanel(buttonId, spanText.innerHTML);
+            }
         });
         return button;
     }
