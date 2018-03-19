@@ -581,7 +581,7 @@ class TermsResultPanel extends TermsPanel {
 
 abstract class ContentViewPanel extends Panel {
     addPanelClass(sidePanelDiv: HTMLDivElement): void {
-        $(sidePanelDiv).addClass("reader-right-panel");
+        $(sidePanelDiv).addClass("reader-view-panel");
     }
 }
 
