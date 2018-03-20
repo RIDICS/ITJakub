@@ -1,6 +1,22 @@
 ﻿class LayoutConfiguration {
 
-    public goldenLayoutDesktopConfig(): GoldenLayout.Config {
+    public getLayoutConfig(): ILayoutConfig[] {
+        return [
+            {
+                minWidth: 0,
+                maxWidth: 800,
+                deviceType: Device.Mobile,
+                goldenLayoutConfig: this.goldenLayoutMobileConfig()
+            }, {
+                minWidth: 801,
+                maxWidth: Number.POSITIVE_INFINITY,
+                deviceType: Device.Desktop,
+                goldenLayoutConfig: this.goldenLayoutDesktopConfig()
+            }
+        ];
+    }
+
+    private goldenLayoutDesktopConfig(): GoldenLayout.Config {
         var layoutConfig = {
             settings: {
                 showPopoutIcon: false
@@ -33,7 +49,7 @@
         return layoutConfig;
     }
 
-    public goldenLayoutMobileConfig(): GoldenLayout.Config {
+    private goldenLayoutMobileConfig(): GoldenLayout.Config {
         var layoutConfig = {
             settings: {
                 showPopoutIcon: false,
@@ -86,4 +102,11 @@ enum PanelType {
     Row = "row",
     Stack = "stack",
     Component = "component"
+}
+
+interface ILayoutConfig {
+    minWidth: number;
+    maxWidth: number;
+    deviceType: Device;
+    goldenLayoutConfig: GoldenLayout.Config;
 }

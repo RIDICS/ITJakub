@@ -20,6 +20,7 @@ class ReaderLayout {
     loadedBookContent: boolean;
     sc: ServerCommunication;
     isMobileSwitch: boolean;
+    deviceType: Device;
 
     clickedMoveToPage: boolean;
 
@@ -95,11 +96,19 @@ class ReaderLayout {
             this.pagesById[bookPageItem.pageId] = bookPageItem;
         }
 
-        var bookHeader = new BookHeader(this, this.sc, this.readerHeaderDiv, bookTitle);
-        this.readerHeaderDiv.appendChild(bookHeader.getInnerHtml());
+        
 
-        var config = new LayoutConfiguration();
-        this.readerLayout = this.initLayout(config.goldenLayoutDesktopConfig());
+        var layoutConfig = new LayoutConfiguration().getLayoutConfig();
+        for (var index = 0; index < layoutConfig.length; index++) {
+            if (layoutConfig[index].maxWidth > window.innerWidth && layoutConfig[index].minWidth < window.innerWidth) {
+                this.deviceType = layoutConfig[index].deviceType;
+                this.readerLayout = this.initLayout(layoutConfig[index].goldenLayoutConfig);
+                break;
+            }
+        }
+        
+        var bookHeader = new BookHeader(this, this.sc, this.readerHeaderDiv, bookTitle);
+        this.readerHeaderDiv.appendChild(bookHeader.getInnerHtml(this.deviceType));
 
         this.loadBookmarks();
         this.newFavoriteDialog.make();
@@ -801,22 +810,18 @@ class ReaderLayout {
     protected hasBookPageCallOnSuccess: { [key: string]: { [key: string]: Array<() => any>; }; } = {};
 
     private addResponsiveBehavior(bookHeader: BookHeader) {
-        var config = new LayoutConfiguration();
-        if (window.innerWidth < 800 && !this.isMobileSwitch) {
-            this.isMobileSwitch = !this.isMobileSwitch;
-            this.readerLayout.destroy();
-            this.readerLayout = this.initLayout(config.goldenLayoutMobileConfig());
-            $(this.readerHeaderDiv).empty();
-            $(this.readerHeaderDiv).append(bookHeader.getInnerHtml());
-        }   
-
-        if (window.innerWidth > 800 && this.isMobileSwitch) {
-            this.isMobileSwitch = !this.isMobileSwitch; 
-            this.readerLayout.destroy();
-            this.readerLayout = this.initLayout(config.goldenLayoutDesktopConfig());
-            $(this.readerHeaderDiv).empty();
-            $(this.readerHeaderDiv).append(bookHeader.getInnerHtml());
+        var configArray = new LayoutConfiguration().getLayoutConfig();
+        for (var index = 0; index<configArray.length; index++) {
+            if (configArray[index].minWidth <= window.innerWidth && configArray[index].maxWidth >= window.innerWidth && this.deviceType !== configArray[index].deviceType) {
+                this.deviceType = configArray[index].deviceType;
+                this.readerLayout.destroy();
+                this.readerLayout = this.initLayout(configArray[index].goldenLayoutConfig);
+                $(this.readerHeaderDiv).empty();
+                $(this.readerHeaderDiv).append(bookHeader.getInnerHtml(this.deviceType));
+                return;
+            }
         }
+       
     }
 }
 

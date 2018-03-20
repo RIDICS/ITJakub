@@ -14,11 +14,11 @@
 
     }
 
-    public getInnerHtml(): HTMLDivElement {
-        if (window.innerWidth < 800) {
+    public getInnerHtml(deviceType: Device): HTMLDivElement {
+        if (deviceType === Device.Mobile) {
             return this.createMobileHeaderDiv(this.bookTitle);
         } 
-        if (window.innerWidth > 800) {
+        if (deviceType === Device.Desktop) {
             return this.createDesktopHeaderDiv(this.bookTitle);
         }
     }
