@@ -117,7 +117,7 @@
     }
 
     private makeToolButtons(deviceType: Device): HTMLDivElement {
-        var button = new Button(this.parentReader, deviceType);
+        var button = new ButtonFactory(this.parentReader, deviceType);
         var toolButtons: HTMLDivElement = document.createElement("div");
         $(toolButtons).addClass("buttons left");
 
@@ -164,7 +164,7 @@
         var hasBookPage: JQueryXHR = this.sc.hasBookPage(this.bookId, this.versionId);
         hasBookPage.done((response: { HasBookPage: boolean }) => {
             if (response.HasBookPage) {
-                var textButton = new Button(this.parentReader, deviceType).createViewButton("font",
+                var textButton = new ButtonFactory(this.parentReader, deviceType).createViewButton("font",
                     this.parentReader.textPanelLabel,
                     this.parentReader.textPanelId);
                 hasBookText = true;
@@ -182,7 +182,7 @@
 
             hasBookImageAjax.done((response: { HasBookImage: boolean }) => {
                 if (response.HasBookImage) {
-                    var imageButton = new Button(this.parentReader, deviceType).createViewButton("picture",
+                    var imageButton = new ButtonFactory(this.parentReader, deviceType).createViewButton("picture",
                         this.parentReader.imagePanelLabel,
                         this.parentReader.imagePanelId);
                     hasBookImage = true;
@@ -199,7 +199,7 @@
             var audioBook: JQueryXHR = this.sc.getAudioBook(this.bookId);
             audioBook.done((response: { audioBook: IAudioBookSearchResultContract }) => {
                 if (response.audioBook.Tracks.length > 0) {
-                    var audioButton = new Button(this.parentReader, deviceType).createViewButton("music",
+                    var audioButton = new ButtonFactory(this.parentReader, deviceType).createViewButton("music",
                         this.parentReader.audioPanelLabel,
                         this.parentReader.audioPanelId);
 
@@ -447,7 +447,7 @@
     }
 
     private informationDiv(bookTitle: string, deviceType: Device): HTMLDivElement {
-        var buttonObject = new Button(this.parentReader, deviceType);
+        var buttonObject = new ButtonFactory(this.parentReader, deviceType);
         var bookInfoDiv: HTMLDivElement = document.createElement("div");
         $(bookInfoDiv).addClass("book-details");
         
@@ -656,7 +656,7 @@
     }
 }
 
-class Button {
+class ButtonFactory {
     private readerLayout: ReaderLayout;
     private deviceType: Device;
 
