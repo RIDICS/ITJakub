@@ -509,7 +509,7 @@
                 .attr("tabindex", 0)
                 .attr("data-toggle", "popover")
                 .attr("title", "Informace o díle")
-                .attr("data-placement", "bottom");
+                .attr("data-placement", "left");
             $(bookDetailButton).popover({
                 trigger: "focus",
                 html: true,
