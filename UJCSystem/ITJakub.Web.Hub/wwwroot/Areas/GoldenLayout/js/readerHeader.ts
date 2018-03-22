@@ -23,14 +23,16 @@
         }
     }
 
-    private getEditionNote(): HTMLDivElement {
+    private getEditionNote(addHeader: boolean): HTMLDivElement {
         var editionNoteDiv = document.createElement("div");
         $(editionNoteDiv).addClass("loading");
         $(editionNoteDiv).addClass("edition-note-wrapper");
-        var editionNoteHeader = document.createElement("h3");
-        $(editionNoteHeader).append("Ediční poznámka");
-        $(editionNoteDiv).append(editionNoteHeader);
-
+        if (addHeader) {
+            var editionNoteHeader = document.createElement("h3");
+            $(editionNoteHeader).append("Ediční poznámka");
+            $(editionNoteDiv).append(editionNoteHeader);
+        }
+        
         var editionNote: JQueryXHR = this.sc.getEditionNote(this.bookId);
         editionNote.done((response: { editionNote: string }) => {
             var editionNoteText = document.createElement("div");
@@ -451,7 +453,7 @@
         var bookInfoDiv: HTMLDivElement = document.createElement("div");
         $(bookInfoDiv).addClass("book-details");
         
-        var editionNoteDiv = this.getEditionNote();
+        var editionNoteDiv = this.getEditionNote(true);
 
         var title = document.createElement("span");
         $(title).addClass("title");
@@ -500,27 +502,36 @@
 
         if (deviceType == Device.Mobile) {
             var bookDetailDiv = this.getBookDetail();
-            var detailHeader = $(bookDetailDiv).children("h3");
-            detailHeader.empty();
-            this.getAuthors(detailHeader);
-            detailHeader.append(bookTitle);
-            var bookDetailButton = buttonObject.createLink("display-details", "tags");
+            var bookDetailButton = buttonObject.createButton("display-details", "tags");
             $(bookDetailButton)
-                .attr("tabindex", 0)
-                .attr("data-toggle", "popover")
-                .attr("title", "Informace o díle")
-                .attr("data-placement", "left");
-            $(bookDetailButton).popover({
-                trigger: "focus",
-                html: true,
-                content: bookDetailDiv
-        });
+                .attr("data-toggle", "modal")
+                .attr("data-target", "#book-info-modal")
+                .click(() => {
+                    $("#modalHeader")
+                        .empty()
+                        .append(bookTitle);
+                    this.getAuthors($("#modalHeader"));
+
+                    $("#modalBody")
+                        .empty()
+                        .append(bookDetailDiv);
+                });
             bookInfoDiv.appendChild(bookDetailButton);
 
-            var editionNoteButton = buttonObject.createButton("displayNote", "comment");
-            $(editionNoteButton).click(() => {
-                
-            });        
+            var editionNoteButton = buttonObject.createButton("display-note", "comment");
+            $(editionNoteButton)
+                .attr("data-toggle", "modal")
+                .attr("data-target", "#book-info-modal")
+                .click(() => {
+                    $("#modalHeader")
+                        .empty()
+                        .append("Ediční poznámka");
+
+                    $("#modalBody")
+                        .empty()
+                        .append(this.getEditionNote(false));
+                });     
+            bookInfoDiv.appendChild(editionNoteButton);
         }
 
         var hiddenDiv = document.createElement("div");
@@ -736,7 +747,7 @@ class ButtonFactory {
 
     public createButton(buttonId: string, iconName: string): HTMLButtonElement {
         var button = document.createElement("button");
-        $(button).addClass(buttonId + "-button");
+        $(button).addClass(buttonId + "-button button");
 
         var span = document.createElement("span");
         $(span).addClass("glyphicon glyphicon-" + iconName);

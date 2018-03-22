@@ -81,7 +81,7 @@
     width:unset !important;
 }
 
-.more-button, .fullscreen-button, .display-details-button{
+.book-details button{
     float: right;
     border: none;
     background: none;
@@ -410,10 +410,25 @@ button {
     display: none;
 }
 
-#ReaderDiv {
-    .popover {
-        min-width: 400px;
-        max-width: unset;
+#book-info-modal {
+    @media screen and (max-width: 800px) {
+        .modal-title {
+            display: inline-block;
+        }
+
+        .modal-body {
+            overflow-y: scroll;
+            max-height: 400px;
+
+            .edition-note-wrapper {
+                width: 100% !important;
+                border: none;
+                padding: 0px;
+                .edition-note-text {
+                    overflow-y: hidden;
+                }
+            }
+        }
     }
 }
 
