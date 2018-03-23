@@ -13,21 +13,25 @@
 @linkColor: #8E5523;
 @linkColorHover: #633107;
 @lineColor: #e5e5e5;
+@navBackground: #388E3C;
 
-.lm_tab {
-    height: @tabHeight !important;
-    line-height: @tabHeight;
-    background: @color1 !important;
-    color: @color2 !important;
-}
+.lm_tabs {
+    z-index: 1;
 
-.lm_tab {
-    &:hover, 
-    &.lm_active {
-        color:@color4 !important;
-        background:@color3 !important;
+    .lm_tab {
+        height: @tabHeight !important;
+        line-height: @tabHeight;
+        background: @color1 !important;
+        color: @color2 !important;
+
+        &:hover,
+        &.lm_active {
+            color: @color4 !important;
+            background: @color3 !important;
+        }
     }
 }
+
 .lm_close_tab {
     height: @tabHeight - 5px !important;
 }
@@ -214,6 +218,45 @@ button {
 
 .left {
     float: left !important;
+
+    @media screen and (max-width: 800px) {
+        position: fixed;
+        background: @navBackground;
+        margin-left: 0 !important;
+        z-index: 2;
+        left: 0;
+        top: 150px;
+        padding: 1em 5px;
+
+        button {
+            color: white !important;
+            display: block;
+            margin: auto !important;
+            margin-top: 10px !important;
+
+            &:disabled {
+                color: #ddd !important;
+                cursor: not-allowed;
+
+                &:hover {
+                    color: #ddd !important;
+                }
+            }
+
+            &:first-of-type {
+                margin-top: 0px !important;
+            }
+
+            &:hover {
+                color: #eee !important;
+            }
+
+            .button-text {
+                font-weight: 600;
+                color: inherit !important;
+            }
+        }
+    }
 }
 
 .reader-text-container {

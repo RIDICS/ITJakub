@@ -330,6 +330,7 @@
         $(controlsDiv).addClass("reader-controls content-container");
         controlsDiv.appendChild(this.makeViewButtons(Device.Mobile));
         controlsDiv.appendChild(this.makePageInput());
+        controlsDiv.appendChild(this.makeToolButtons(Device.Mobile));
         headerDiv.appendChild(controlsDiv);
 
         return headerDiv;    
