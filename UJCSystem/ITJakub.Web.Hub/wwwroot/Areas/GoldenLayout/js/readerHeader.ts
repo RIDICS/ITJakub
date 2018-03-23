@@ -119,6 +119,9 @@
     }
 
     private makeToolButtons(deviceType: Device): HTMLDivElement {
+        var toolButtonsDiv = document.createElement("div");
+        $(toolButtonsDiv).addClass("tool-panel buttons");
+
         var button = new ButtonFactory(this.parentReader, deviceType);
         var toolButtons: HTMLDivElement = document.createElement("div");
         $(toolButtons).addClass("buttons left");
@@ -150,8 +153,32 @@
             this.parentReader.termsPanelLabel,
             this.parentReader.termsPanelId);
         toolButtons.appendChild(termsButton);
+        toolButtonsDiv.appendChild(toolButtons);
+        if (deviceType === Device.Mobile) {
+            
+            var showPanelButton = button.createButton("display-panel", "chevron-right");
+            $(showPanelButton).click(() => {
+                if ($(showPanelButton.firstChild).hasClass("glyphicon-chevron-left")) {
+                    $(showPanelButton.firstChild)
+                        .removeClass("glyphicon-chevron-left")
+                        .addClass("glyphicon-chevron-right");
+                    $(toolButtonsDiv).animate({
+                        "left": "-75"
+                    });
+                } else if ($(showPanelButton.firstChild).hasClass("glyphicon-chevron-right")) {
+                    $(showPanelButton.firstChild)
+                        .removeClass("glyphicon-chevron-right")
+                        .addClass("glyphicon-chevron-left");
+                    $(toolButtonsDiv).animate({
+                        "left": "0"
+                    });
+                }
+            });
+            
+            toolButtonsDiv.appendChild(showPanelButton);
+        }
+        return toolButtonsDiv;
 
-        return toolButtons;
     }
 
     private makeViewButtons(deviceType: Device): HTMLDivElement {

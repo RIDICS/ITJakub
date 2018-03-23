@@ -218,21 +218,32 @@ button {
 
 .left {
     float: left !important;
-
+}
+.tool-panel {
     @media screen and (max-width: 800px) {
+        .left {
+            background: @navBackground;
+            margin: 0 !important;
+            padding: 1em 5px;
+        }
+
+        margin: 0px !important;
         position: fixed;
-        background: @navBackground;
-        margin-left: 0 !important;
         z-index: 2;
-        left: 0;
+        left: -75px;
         top: 150px;
-        padding: 1em 5px;
 
         button {
             color: white !important;
             display: block;
             margin: auto !important;
             margin-top: 10px !important;
+            background: @navBackground !important;
+
+            &.display-panel-button {
+                float: right;
+                padding: 5px;
+            }
 
             &:disabled {
                 color: #ddd !important;
