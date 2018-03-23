@@ -120,7 +120,7 @@
 
     private makeToolButtons(deviceType: Device): HTMLDivElement {
         var toolButtonsDiv = document.createElement("div");
-        $(toolButtonsDiv).addClass("tool-panel buttons");
+        $(toolButtonsDiv).addClass("tool-panel");
 
         var button = new ButtonFactory(this.parentReader, deviceType);
         var toolButtons: HTMLDivElement = document.createElement("div");
@@ -155,7 +155,7 @@
         toolButtons.appendChild(termsButton);
         toolButtonsDiv.appendChild(toolButtons);
         if (deviceType === Device.Mobile) {
-            
+            $(toolButtonsDiv).addClass("buttons")
             var showPanelButton = button.createButton("display-panel", "chevron-right");
             $(showPanelButton).click(() => {
                 if ($(showPanelButton.firstChild).hasClass("glyphicon-chevron-left")) {
