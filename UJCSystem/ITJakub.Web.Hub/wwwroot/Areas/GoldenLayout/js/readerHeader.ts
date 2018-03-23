@@ -356,6 +356,7 @@
         var controlsDiv = document.createElement("div");
         $(controlsDiv).addClass("reader-controls content-container");
         controlsDiv.appendChild(this.makeViewButtons(Device.Mobile));
+        controlsDiv.appendChild(this.makePageNavigation());
         controlsDiv.appendChild(this.makePageInput());
         controlsDiv.appendChild(this.makeToolButtons(Device.Mobile));
         headerDiv.appendChild(controlsDiv);
@@ -688,9 +689,14 @@
         var listingContainer: HTMLDivElement = document.createElement("div");
         listingContainer.classList.add("page-navigation-container-helper");
         listingContainer.classList.add("hidden");
-        listingContainer.appendChild(toLeft);
-        listingContainer.appendChild(paginationUl);
-        listingContainer.appendChild(toRight);
+        if (this.parentReader.deviceType === Device.Mobile) {
+            $(listingContainer).prepend("Aktuální stránka: ");
+            listingContainer.appendChild(paginationUl);
+        } else {
+            listingContainer.appendChild(toLeft);
+            listingContainer.appendChild(paginationUl);
+            listingContainer.appendChild(toRight);
+        }
         return listingContainer;
     }
 }

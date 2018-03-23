@@ -515,3 +515,26 @@ button {
     }
 }
 
+.page-navigation-container-helper {
+    @media screen and (max-width: 800px) {
+        float: left;
+        padding: 4px 0 !important;
+        .pagination-sm {
+            margin: 0;
+            .page, .more-pages {
+                display: none !important;
+
+                &.page-active {
+                    display: inline-block !important;
+                }
+            }
+        }
+    }
+}
+
+.page-input {
+    @media screen and (max-width: 800px) {
+        float: right !important;
+        margin-right: 0 !important;
+    }
+}
