@@ -77,6 +77,10 @@ class ReaderLayout {
         }
     }
 
+    public getSearchResultPanel(): SearchResultPanel {
+        return this.searchPanel;
+    }
+
     public makeReader(bookId: string, versionId: string, bookTitle: string, pageList: IPage[]) {
         this.bookId = bookId;
         this.versionId = versionId;
