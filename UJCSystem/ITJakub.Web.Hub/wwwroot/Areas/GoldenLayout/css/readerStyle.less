@@ -62,6 +62,16 @@
         overflow-y: scroll;
     }
 
+    @media screen and (max-width: 800px) {
+        &#search {
+            overflow-y: scroll;
+            
+            .reader-search-result-paging {
+                display: none;
+            }
+        }
+    }
+
     ul {
         padding-left: 10px;
         font-weight: 600;

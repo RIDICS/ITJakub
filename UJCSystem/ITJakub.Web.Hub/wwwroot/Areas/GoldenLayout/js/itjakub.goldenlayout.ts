@@ -220,7 +220,9 @@ class ReaderLayout {
     createMobileToolPanel(panelId: string, panelTitle: string) {
         var configurationObject: LayoutConfiguration = new LayoutConfiguration();
         var itemConfig = configurationObject.toolPanelConfig(PanelType.Component, panelId, panelTitle);
-        this.readerLayout.root.contentItems[0].remove();
+        if (this.readerLayout.root.contentItems.length > 0) {
+            this.readerLayout.root.contentItems[0].remove();
+        }
         this.readerLayout.root.addChild(itemConfig);
     }
 
@@ -817,6 +819,7 @@ class ReaderLayout {
         var configArray = new LayoutConfiguration().getLayoutConfig();
         for (var index = 0; index<configArray.length; index++) {
             if (configArray[index].minWidth <= window.innerWidth && configArray[index].maxWidth >= window.innerWidth && this.deviceType !== configArray[index].deviceType) {
+                    this.createSearchPanel();
                 this.deviceType = configArray[index].deviceType;
                 this.readerLayout.destroy();
                 this.readerLayout = this.initLayout(configArray[index].goldenLayoutConfig);
@@ -827,6 +830,7 @@ class ReaderLayout {
         }
        
     }
+
 }
 
 

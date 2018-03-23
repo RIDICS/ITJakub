@@ -139,8 +139,11 @@ class SearchResultPanel extends ToolPanel {
         var pagingDiv = window.document.createElement("div");
         $(pagingDiv).addClass("reader-search-result-paging pagination-extra-small");
         this.searchPagingDiv = pagingDiv;
-
-        this.resultsOnPage = 8;
+        if (this.parentReader.deviceType === Device.Mobile) {
+            this.resultsOnPage = Number.POSITIVE_INFINITY;
+        } else {
+            this.resultsOnPage = 8;
+        }
         this.maxPaginatorVisibleElements = 11;
 
         this.paginatorOptions = {
