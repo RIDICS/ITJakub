@@ -729,7 +729,7 @@ class ButtonFactory {
     public createToolButton(iconName: string, label: string, buttonId: string): HTMLButtonElement {
         var button: HTMLButtonElement = document.createElement("button");
         $(button).addClass(buttonId + "-button");
-        if (buttonId === this.readerLayout.searchPanelId) {
+        if (buttonId === this.readerLayout.searchPanelId && this.readerLayout.getSearchResultPanel() == null) {
             $(button).prop("disabled", true);
         }
 
