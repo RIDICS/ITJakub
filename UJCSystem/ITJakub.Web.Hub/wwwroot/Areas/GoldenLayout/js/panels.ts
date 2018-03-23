@@ -178,6 +178,9 @@ class SearchResultPanel extends ToolPanel {
         var resultItemDiv = document.createElement("div");
         $(resultItemDiv).addClass("reader-search-result-item");
         $(resultItemDiv).click(() => {
+            if (this.parentReader.deviceType === Device.Mobile) {
+                this.parentReader.createMobileViewPanel(this.parentReader.textPanelId, this.parentReader.textPanelLabel);
+            }
             var pageId = Number(result.pageId);
             this.parentReader.moveToPage(pageId, true);
         });
