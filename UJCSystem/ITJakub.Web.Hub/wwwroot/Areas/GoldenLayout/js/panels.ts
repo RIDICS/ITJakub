@@ -98,7 +98,7 @@ class ContentPanel extends ToolPanel {
         var hrefElement = document.createElement("a");
         hrefElement.href = "#";
         $(hrefElement).click(() => {
-            this.parentReader.moveToPage(contentItem.referredPageId, true);
+            this.parentReader.readerLayout.eventHub.emit("navigationClicked", contentItem.referredPageId);
         });
 
 
@@ -187,7 +187,7 @@ class SearchResultPanel extends ToolPanel {
                 this.parentReader.createMobileViewPanel(this.parentReader.textPanelId, this.parentReader.textPanelLabel);
             }
             var pageId = Number(result.pageId);
-            this.parentReader.moveToPage(pageId, true);
+            this.parentReader.readerLayout.eventHub.emit("navigationClicked", pageId);
         });
 
         var pageNameSpan = document.createElement("span");
@@ -479,7 +479,7 @@ class TermsSearchPanel extends TermsPanel {
         var hrefElement = document.createElement("a");
         hrefElement.href = "#";
         $(hrefElement).click(() => {
-            this.parentReader.moveToPage(page.pageId, true);
+            this.parentReader.readerLayout.eventHub.emit("navigationClicked", page.pageId);
         });
 
         var textSpanElement = document.createElement("span");

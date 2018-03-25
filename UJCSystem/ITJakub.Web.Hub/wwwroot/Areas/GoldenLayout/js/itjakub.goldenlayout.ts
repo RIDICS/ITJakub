@@ -110,7 +110,7 @@ class ReaderLayout {
                 break;
             }
         }
-        
+        this.addListeners();
         var bookHeader = new BookHeader(this, this.sc, this.readerHeaderDiv, bookTitle);
         this.readerHeaderDiv.appendChild(bookHeader.getInnerHtml(this.deviceType));
 
@@ -830,7 +830,11 @@ class ReaderLayout {
         }
        
     }
-
+    private addListeners() {
+        this.readerLayout.eventHub.on("navigationClicked", (pageNumber: number) => {
+            this.moveToPage(pageNumber, true);
+        });
+    }
 }
 
 

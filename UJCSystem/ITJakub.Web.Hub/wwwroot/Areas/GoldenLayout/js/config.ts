@@ -18,9 +18,6 @@
 
     private goldenLayoutDesktopConfig(): GoldenLayout.Config {
         var layoutConfig = {
-            settings: {
-                showPopoutIcon: false
-            },
             dimensions: {
                 headerHeight: 26,
                 minItemWidth: 200
