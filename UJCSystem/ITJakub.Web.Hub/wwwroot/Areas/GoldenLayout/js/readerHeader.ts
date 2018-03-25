@@ -46,7 +46,7 @@
             $(editionNoteDiv).removeClass("loading");
         });
         editionNote.fail(() => {
-            $(editionNoteDiv).append("Toto dílo nemá ediční poznámku");
+            $(editionNoteDiv).append("Ediční poznámku se nepodařilo načíst");
         });
 
         return editionNoteDiv;
@@ -115,6 +115,9 @@
                 authors += ": ";
                 target.prepend(authors);
             }
+        });
+        bookDetail.fail(() => {
+            target.prepend("&lt;Nenačtení autoři&gt;");
         });
     }
 

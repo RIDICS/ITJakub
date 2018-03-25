@@ -128,7 +128,9 @@ class SearchResultPanel extends ToolPanel {
     private resultsOnPage;
     private maxPaginatorVisibleElements;
 
-
+    public getSearchResultDiv(): HTMLDivElement {
+        return this.searchResultItemsDiv;
+    };
     protected makeBody(rootReference: Panel, window: Window): HTMLElement {
         var innerContent: HTMLDivElement = window.document.createElement("div");
 
@@ -864,6 +866,11 @@ class AudioPanel extends ContentViewPanel {
             this.reloadTrack();
             $(".reader-audio-container").removeClass("loading");
         });
+        book.fail(() => {
+            $(".reader-audio-container").empty();
+            $(".reader-audio-container").append("Nepodařilo se načíst audio knihu, opakujte prosím pokus později");
+            $(".reader-audio-container").removeClass("loading");
+        });
 
         trackSelect.addEventListener("change", () => {
             this.trackId = $(trackSelect).val();
@@ -940,6 +947,10 @@ class AudioPanel extends ContentViewPanel {
                 $(".track").append(download);
             }
             $(audioPlayer).append("Váš prohlížeč nepodporuje html audio");
+        });
+        getTrack.fail(() => {
+            $(".reader-audio-container").empty();
+            $(".reader-audio-container").append("Nepodařilo se načíst stopu, opakujte prosím pokus později");
         });
     }
 }

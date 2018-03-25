@@ -100,6 +100,10 @@
             this.readerPlugin.searchPanelRemoveLoading();
             this.readerPlugin.showSearchInPanel(convertedResults);
         });
+        advancedSearch.fail(() => {
+            this.readerPlugin.getSearchResultPanel().getSearchResultDiv().innerHTML =
+                "Nepodařilo se načíst výsledky vyhledávání, opakujte prosím vyhledávání později";
+        });
 
     }
 
@@ -115,6 +119,10 @@
             var convertedResults = this.convertSearchResults(response.results);
             this.readerPlugin.searchPanelRemoveLoading();
             this.readerPlugin.showSearchInPanel(convertedResults);
+        });
+        textSearch.fail(() => {
+            this.readerPlugin.getSearchResultPanel().getSearchResultDiv().innerHTML =
+                "Nepodařilo se načíst výsledky vyhledávání, opakujte prosím vyhledávání později";
         });
 
     }
