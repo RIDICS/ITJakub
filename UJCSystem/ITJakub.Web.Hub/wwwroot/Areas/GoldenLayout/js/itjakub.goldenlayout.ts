@@ -652,7 +652,7 @@ class ReaderLayout {
     }
 
     private getSearchPanel(): SearchResultPanel {
-        if (window.innerWidth < 800) {
+        if (this.deviceType === Device.Mobile) {
             this.createMobileToolPanel(this.searchPanelId, "Výsledky vyhledávání");
         } else {
             this.createDesktopToolPanel(this.searchPanelId, "Výsledky vyhledávání");    
