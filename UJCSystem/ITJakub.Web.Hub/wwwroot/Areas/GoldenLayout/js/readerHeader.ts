@@ -693,7 +693,7 @@
         listingContainer.classList.add("page-navigation-container-helper");
         listingContainer.classList.add("hidden");
         if (this.parentReader.deviceType === Device.Mobile) {
-            $(listingContainer).prepend("Aktuální stránka: ");
+            $(listingContainer).prepend("Str: ");
             listingContainer.appendChild(paginationUl);
         } else {
             listingContainer.appendChild(toLeft);

@@ -88,8 +88,13 @@
 }
 
 .content-container {
-    min-height:unset !important;
+    min-height: unset !important;
     padding-bottom: 5px;
+
+    @media screen and (max-width: 800px) {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
 }
 .twitter-typeahead {
     width:unset !important;
@@ -520,12 +525,18 @@ button {
         float: left;
         padding: 4px 0 !important;
         .pagination-sm {
-            margin: 0;
+            margin: 0 !important;
             .page, .more-pages {
                 display: none !important;
 
                 &.page-active {
                     display: inline-block !important;
+                    min-width: unset;
+
+                    a {
+                        padding-left: 0;
+                        padding-right: 0;
+                    }
                 }
             }
         }
