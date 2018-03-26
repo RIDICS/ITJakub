@@ -691,7 +691,7 @@ class ReaderLayout {
     }
 
     protected createBookmarksPanel(): HTMLDivElement {
-        if (this.bookmarksPanel == null) {
+        if (this.bookmarksPanel == null || this.deviceType === Device.Mobile) {
             var bookmarksPanel: BookmarksPanel = new BookmarksPanel(this.bookmarksPanelId, this, this.sc);
             this.bookmarksPanel = bookmarksPanel;
             this.toolPanels.push(bookmarksPanel);
@@ -700,7 +700,7 @@ class ReaderLayout {
     }
 
     protected createContentPanel(): HTMLDivElement {
-        if (this.contentPanel == null) {
+        if (this.contentPanel == null || this.deviceType === Device.Mobile) {
             var contentPanel: ContentPanel = new ContentPanel(this.contentPanelId, this, this.sc);
             this.contentPanel = contentPanel;
             this.toolPanels.push(contentPanel);
