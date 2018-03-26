@@ -159,18 +159,18 @@
         toolButtonsDiv.appendChild(toolButtons);
         if (deviceType === Device.Mobile) {
             $(toolButtonsDiv).addClass("buttons")
-            var showPanelButton = button.createButton("display-panel", "chevron-right");
+            var showPanelButton = button.createButton("display-panel", "align-justify");
             $(showPanelButton).click(() => {
                 if ($(showPanelButton.firstChild).hasClass("glyphicon-chevron-left")) {
                     $(showPanelButton.firstChild)
                         .removeClass("glyphicon-chevron-left")
-                        .addClass("glyphicon-chevron-right");
+                        .addClass("glyphicon-align-justify");
                     $(toolButtonsDiv).animate({
                         "left": "-75"
                     });
-                } else if ($(showPanelButton.firstChild).hasClass("glyphicon-chevron-right")) {
+                } else if ($(showPanelButton.firstChild).hasClass("glyphicon-align-justify")) {
                     $(showPanelButton.firstChild)
-                        .removeClass("glyphicon-chevron-right")
+                        .removeClass("glyphicon-align-justify")
                         .addClass("glyphicon-chevron-left");
                     $(toolButtonsDiv).animate({
                         "left": "0"
@@ -486,30 +486,29 @@
         $(bookInfoDiv).addClass("book-details");
         
         var editionNoteDiv = this.getEditionNote(true);
+        var fullscreenButton = buttonObject.createButton("fullscreen", "fullscreen");
+        $(fullscreenButton).click(() => {
+            if ($(fullscreenButton.firstChild).hasClass("glyphicon-fullscreen")) {
+                $("#ReaderDiv").addClass("fullscreen");
+                $(fullscreenButton.firstChild).removeClass("glyphicon-fullscreen");
+                $(fullscreenButton.firstChild).addClass("glyphicon-remove");
+            } else {
+                $("#ReaderDiv").removeClass("fullscreen");
+                $(fullscreenButton.firstChild).removeClass("glyphicon-remove");
+                $(fullscreenButton.firstChild).addClass("glyphicon-fullscreen");
+            }
+            this.parentReader.readerLayout.updateSize();
 
+
+        });
+        bookInfoDiv.appendChild(fullscreenButton);
         var title = document.createElement("span");
         $(title).addClass("title");
-        title.innerHTML = bookTitle;
         bookInfoDiv.appendChild(title);
-        if (deviceType == Device.Desktop) {
+        if (deviceType === Device.Desktop) {
+            title.innerHTML = bookTitle;
             this.getAuthors($(title));
-            var fullscreenButton = buttonObject.createButton("fullscreen", "fullscreen");
-            $(fullscreenButton).click(() => {
-                if ($(fullscreenButton.firstChild).hasClass("glyphicon-fullscreen")) {
-                    $("#ReaderDiv").addClass("fullscreen");
-                    $(fullscreenButton.firstChild).removeClass("glyphicon-fullscreen");
-                    $(fullscreenButton.firstChild).addClass("glyphicon-remove");
-                    this.parentReader.readerLayout.updateSize();
-                } else {
-                    $("#ReaderDiv").removeClass("fullscreen");
-                    $(fullscreenButton.firstChild).removeClass("glyphicon-remove");
-                    $(fullscreenButton.firstChild).addClass("glyphicon-fullscreen");
-                    this.parentReader.readerLayout.updateSize();
-                }
-
-            });
-            bookInfoDiv.appendChild(fullscreenButton);
-
+            
             var detailsButton = buttonObject.createButton("more", "chevron-down");
             $(detailsButton).click((event) => {
                 var target: JQuery = $(event.target);
@@ -534,7 +533,7 @@
 
         if (deviceType == Device.Mobile) {
             var bookDetailDiv = this.getBookDetail();
-            var bookDetailButton = buttonObject.createButton("display-details", "tags");
+            var bookDetailButton = buttonObject.createButton("display-details", "info-sign");
             $(bookDetailButton)
                 .attr("data-toggle", "modal")
                 .attr("data-target", "#book-info-modal")
@@ -548,7 +547,8 @@
                         .empty()
                         .append(bookDetailDiv);
                 });
-            bookInfoDiv.appendChild(bookDetailButton);
+            title.appendChild(bookDetailButton);
+            $(title).append(bookTitle);
 
             var editionNoteButton = buttonObject.createButton("display-note", "comment");
             $(editionNoteButton)
@@ -565,6 +565,8 @@
                 });     
             bookInfoDiv.appendChild(editionNoteButton);
         }
+
+        
 
         var hiddenDiv = document.createElement("div");
         $(hiddenDiv).addClass("hidden-content");

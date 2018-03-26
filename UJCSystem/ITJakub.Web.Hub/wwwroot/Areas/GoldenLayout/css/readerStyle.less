@@ -100,7 +100,7 @@
     width:unset !important;
 }
 
-.book-details button{
+.book-details button {
     float: right;
     border: none;
     background: none;
@@ -117,6 +117,14 @@
 
     @media screen and (max-width: 800px) {
         font-size: 30px;
+        margin-right: 1.5rem;
+        &:first-of-type {
+            margin-right: 10px;
+        }
+        &.display-details-button{
+            float: left !important;
+            margin: 0;
+        }
     }
 }
 
@@ -548,5 +556,18 @@ button {
     @media screen and (max-width: 800px) {
         float: right !important;
         margin-right: 0 !important;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .fullscreen {
+        #ReaderBodyDiv {
+            margin-left: 0;
+            height: 65%;
+        }
+
+        .view-control, .tool-panel {
+            display: none;
+        }
     }
 }
