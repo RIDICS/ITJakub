@@ -159,18 +159,18 @@
         toolButtonsDiv.appendChild(toolButtons);
         if (deviceType === Device.Mobile) {
             $(toolButtonsDiv).addClass("buttons")
-            var showPanelButton = button.createButton("display-panel", "align-justify");
+            var showPanelButton = button.createButton("display-panel", "wrench");
             $(showPanelButton).click(() => {
                 if ($(showPanelButton.firstChild).hasClass("glyphicon-chevron-left")) {
                     $(showPanelButton.firstChild)
                         .removeClass("glyphicon-chevron-left")
-                        .addClass("glyphicon-align-justify");
+                        .addClass("glyphicon-wrench");
                     $(toolButtonsDiv).animate({
                         "left": "-75"
                     });
-                } else if ($(showPanelButton.firstChild).hasClass("glyphicon-align-justify")) {
+                } else if ($(showPanelButton.firstChild).hasClass("glyphicon-wrench")) {
                     $(showPanelButton.firstChild)
-                        .removeClass("glyphicon-align-justify")
+                        .removeClass("glyphicon-wrench")
                         .addClass("glyphicon-chevron-left");
                     $(toolButtonsDiv).animate({
                         "left": "0"
@@ -188,7 +188,7 @@
         var viewControl: HTMLDivElement = document.createElement("div");
         $(viewControl).addClass("view-control");
         viewControl.id = "view";
-
+        var buttonObject = new ButtonFactory(this.parentReader, deviceType);
         var viewButtons = document.createElement("div");
         $(viewButtons).addClass("buttons");
         var hasBookText: boolean = false;
@@ -196,7 +196,7 @@
         var hasBookPage: JQueryXHR = this.sc.hasBookPage(this.bookId, this.versionId);
         hasBookPage.done((response: { HasBookPage: boolean }) => {
             if (response.HasBookPage) {
-                var textButton = new ButtonFactory(this.parentReader, deviceType).createViewButton("font",
+                var textButton = buttonObject.createViewButton("font",
                     this.parentReader.textPanelLabel,
                     this.parentReader.textPanelId);
                 hasBookText = true;
@@ -214,7 +214,7 @@
 
             hasBookImageAjax.done((response: { HasBookImage: boolean }) => {
                 if (response.HasBookImage) {
-                    var imageButton = new ButtonFactory(this.parentReader, deviceType).createViewButton("picture",
+                    var imageButton = buttonObject.createViewButton("picture",
                         this.parentReader.imagePanelLabel,
                         this.parentReader.imagePanelId);
                     hasBookImage = true;
@@ -231,7 +231,7 @@
             var audioBook: JQueryXHR = this.sc.getAudioBook(this.bookId);
             audioBook.done((response: { audioBook: IAudioBookSearchResultContract }) => {
                 if (response.audioBook.Tracks.length > 0) {
-                    var audioButton = new ButtonFactory(this.parentReader, deviceType).createViewButton("music",
+                    var audioButton = buttonObject.createViewButton("music",
                         this.parentReader.audioPanelLabel,
                         this.parentReader.audioPanelId);
 
@@ -243,7 +243,24 @@
                 }
             });    
         });
-        
+        var editionNoteButton = buttonObject.createButton("display-note", "comment");
+        $(editionNoteButton)
+            .attr("data-toggle", "modal")
+            .attr("data-target", "#book-info-modal")
+            .click(() => {
+                $("#modalHeader")
+                    .empty()
+                    .append("Ediční poznámka");
+
+                $("#modalBody")
+                    .empty()
+                    .append(this.getEditionNote(false));
+            });
+        var editionNoteLabel = document.createElement("span");
+        $(editionNoteLabel).addClass("button-text");
+        $(editionNoteLabel).append("Ediční poznámka");
+        $(editionNoteButton).append(editionNoteLabel);
+        viewButtons.appendChild(editionNoteButton);
 
         viewControl.appendChild(viewButtons);
         return viewControl;
@@ -550,20 +567,7 @@
             title.appendChild(bookDetailButton);
             $(title).append(bookTitle);
 
-            var editionNoteButton = buttonObject.createButton("display-note", "comment");
-            $(editionNoteButton)
-                .attr("data-toggle", "modal")
-                .attr("data-target", "#book-info-modal")
-                .click(() => {
-                    $("#modalHeader")
-                        .empty()
-                        .append("Ediční poznámka");
-
-                    $("#modalBody")
-                        .empty()
-                        .append(this.getEditionNote(false));
-                });     
-            bookInfoDiv.appendChild(editionNoteButton);
+            
         }
 
         

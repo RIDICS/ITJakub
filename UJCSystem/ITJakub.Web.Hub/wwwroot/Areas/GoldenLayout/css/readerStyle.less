@@ -220,9 +220,13 @@ button {
     }
 
     @media screen and (max-width: 800px) {
-        font-size: 27px;
         padding-right: 0;
         padding-bottom: 10px;
+        max-width: calc(~'100% - 60px');
+
+        button {
+            font-size: 25px;
+        }
     }
 }
 
