@@ -244,24 +244,28 @@
                 }
             });    
         });
-        var editionNoteButton = buttonObject.createButton("display-note", "comment");
-        $(editionNoteButton)
-            .attr("data-toggle", "modal")
-            .attr("data-target", "#book-info-modal")
-            .click(() => {
-                $("#modalHeader")
-                    .empty()
-                    .append("Ediční poznámka");
 
-                $("#modalBody")
-                    .empty()
-                    .append(this.getEditionNote(false));
-            });
-        var editionNoteLabel = document.createElement("span");
-        $(editionNoteLabel).addClass("button-text");
-        $(editionNoteLabel).append("Ediční poznámka");
-        $(editionNoteButton).append(editionNoteLabel);
-        viewButtons.appendChild(editionNoteButton);
+        if (deviceType === Device.Mobile) {
+            var editionNoteButton = buttonObject.createButton("display-note", "comment");
+            $(editionNoteButton)
+                .attr("data-toggle", "modal")
+                .attr("data-target", "#book-info-modal")
+                .click(() => {
+                    $("#modalHeader")
+                        .empty()
+                        .append("Ediční poznámka");
+
+                    $("#modalBody")
+                        .empty()
+                        .append(this.getEditionNote(false));
+                });
+            var editionNoteLabel = document.createElement("span");
+            $(editionNoteLabel).addClass("button-text");
+            $(editionNoteLabel).append("Ediční poznámka");
+            $(editionNoteButton).append(editionNoteLabel);
+            viewButtons.appendChild(editionNoteButton);
+        }
+        
 
         viewControl.appendChild(viewButtons);
         return viewControl;
