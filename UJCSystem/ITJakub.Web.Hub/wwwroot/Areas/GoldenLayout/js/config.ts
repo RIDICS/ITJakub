@@ -30,15 +30,12 @@
             },
             content: [{
                 type: "row",
-                isClosable: false,
                 content: [{
                     type: "column",
                     id: "views",
-                    isClosable: false,
                     content: [{
                         type: "row",
                         id: "viewsRow",
-                        isClosable: false
                     }]
                 }]
             }]
@@ -70,9 +67,8 @@
         return layoutConfig;
     }
 
-    public viewPanelConfig(closable: boolean, type: PanelType, id: string, title: string): GoldenLayout.ItemConfig {
+    public viewPanelConfig(type: PanelType, id: string, title: string): GoldenLayout.ItemConfig {
         var itemConfig = {
-            isClosable: closable,
             type: type,
             componentState: { label: id },
             id: id,
