@@ -218,16 +218,24 @@ class ReaderLayout {
     }
 
     createMobileToolPanel(panelId: string, panelTitle: string) {
+        var type; 
+        if (panelId === this.termsPanelId) type = PanelType.Column;
+        else type = PanelType.Component;
         var configurationObject: LayoutConfiguration = new LayoutConfiguration();
-        var itemConfig = configurationObject.toolPanelConfig(PanelType.Component, panelId, panelTitle);
+        var itemConfig = configurationObject.toolPanelConfig(type, panelId, panelTitle);
         if (this.readerLayout.root.contentItems.length > 0) {
             this.readerLayout.root.contentItems[0].remove();
         }
+        
         this.readerLayout.root.addChild(itemConfig);
+        if (panelId === this.termsPanelId) {
+            this.createTermsPanel(configurationObject);
+        }
     }
 
     createMobileViewPanel(panelId: string, panelTitle: string) {
         var configurationObject: LayoutConfiguration = new LayoutConfiguration();
+
         var itemConfig = configurationObject.viewPanelConfig(true, PanelType.Component, panelId, panelTitle);
         if (this.readerLayout.root.contentItems.length > 0) {
             this.readerLayout.root.contentItems[0].remove();    
