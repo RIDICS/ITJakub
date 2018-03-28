@@ -99,7 +99,7 @@ class ContentPanel extends ToolPanel {
         hrefElement.href = "#";
         $(hrefElement).click(() => {
             if (this.parentReader.deviceType === Device.Mobile) {
-                $(".view-control").find("button").click();
+                $(".view-control button")[1].click();
             }
             this.parentReader.readerLayout.eventHub.emit("navigationClicked", contentItem.referredPageId);
         });
@@ -187,7 +187,7 @@ class SearchResultPanel extends ToolPanel {
         $(resultItemDiv).addClass("reader-search-result-item");
         $(resultItemDiv).click(() => {
             if (this.parentReader.deviceType === Device.Mobile) {
-                $(".view-control").find("button").click();
+                $(".view-control button")[1].click();
             }
             var pageId = Number(result.pageId);
             this.parentReader.readerLayout.eventHub.emit("navigationClicked", pageId);
@@ -483,7 +483,7 @@ class TermsSearchPanel extends TermsPanel {
         hrefElement.href = "#";
         $(hrefElement).click(() => {
             if (this.parentReader.deviceType === Device.Mobile) {
-                $(".view-control").find("button").click();
+                $(".view-control button")[1].click();
             }
             this.parentReader.readerLayout.eventHub.emit("navigationClicked", page.pageId);
         });
