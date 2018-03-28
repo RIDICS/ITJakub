@@ -103,6 +103,7 @@
         advancedSearch.fail(() => {
             this.readerPlugin.getSearchResultPanel().getSearchResultDiv().innerHTML =
                 "Nepodařilo se načíst výsledky vyhledávání, opakujte prosím vyhledávání později";
+            this.readerPlugin.searchPanelRemoveLoading();
         });
 
     }
@@ -123,6 +124,7 @@
         textSearch.fail(() => {
             this.readerPlugin.getSearchResultPanel().getSearchResultDiv().innerHTML =
                 "Nepodařilo se načíst výsledky vyhledávání, opakujte prosím vyhledávání později";
+            this.readerPlugin.searchPanelRemoveLoading();
         });
 
     }

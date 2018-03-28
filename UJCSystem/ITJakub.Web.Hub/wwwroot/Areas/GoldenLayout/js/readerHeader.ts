@@ -47,6 +47,7 @@
         });
         editionNote.fail(() => {
             $(editionNoteDiv).append("Ediční poznámku se nepodařilo načíst");
+            $(editionNoteDiv).removeClass("loading");
         });
 
         return editionNoteDiv;
