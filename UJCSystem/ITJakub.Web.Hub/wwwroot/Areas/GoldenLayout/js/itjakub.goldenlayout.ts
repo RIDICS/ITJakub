@@ -19,7 +19,6 @@ class ReaderLayout {
     versionId: string;
     loadedBookContent: boolean;
     sc: ServerCommunication;
-    isMobileSwitch: boolean;
     deviceType: Device;
 
     clickedMoveToPage: boolean;
@@ -70,11 +69,6 @@ class ReaderLayout {
         this.favoriteManager = new FavoriteManager();
         this.sc = sc;
         this.newFavoriteDialog = new NewFavoriteDialog(this.favoriteManager, true);
-        if (window.innerWidth < 800) {
-            this.isMobileSwitch = true;
-        } else {
-            this.isMobileSwitch = false;
-        }
     }
 
     public getSearchResultPanel(): SearchResultPanel {
