@@ -98,7 +98,7 @@ class ContentPanel extends ToolPanel {
         var hrefElement = document.createElement("a");
         hrefElement.href = "#";
         $(hrefElement).click(() => {
-            if (this.parentReader.deviceType === Device.Mobile) {
+            if (this.parentReader.deviceType === Device.Mobile && !$(".lm_popin").is("div")) {
                 $(".view-control button")[1].click();
             }
             this.parentReader.readerLayout.eventHub.emit("navigationClicked", contentItem.referredPageId);
@@ -144,7 +144,7 @@ class SearchResultPanel extends ToolPanel {
         var pagingDiv = window.document.createElement("div");
         $(pagingDiv).addClass("reader-search-result-paging pagination-extra-small");
         this.searchPagingDiv = pagingDiv;
-        if (this.parentReader.deviceType === Device.Mobile) {
+        if (this.parentReader.deviceType === Device.Mobile && !$(".lm_popin").is("div")) {
             this.resultsOnPage = Number.POSITIVE_INFINITY;
         } else {
             this.resultsOnPage = 8;
@@ -186,7 +186,7 @@ class SearchResultPanel extends ToolPanel {
         var resultItemDiv = document.createElement("div");
         $(resultItemDiv).addClass("reader-search-result-item");
         $(resultItemDiv).click(() => {
-            if (this.parentReader.deviceType === Device.Mobile) {
+            if (this.parentReader.deviceType === Device.Mobile && !$(".lm_popin").is("div")) {
                 $(".view-control button")[1].click();
             }
             var pageId = Number(result.pageId);
@@ -482,7 +482,7 @@ class TermsSearchPanel extends TermsPanel {
         var hrefElement = document.createElement("a");
         hrefElement.href = "#";
         $(hrefElement).click(() => {
-            if (this.parentReader.deviceType === Device.Mobile) {
+            if (this.parentReader.deviceType === Device.Mobile && !$(".lm_popin").is("div")) {
                 $(".view-control button")[1].click();
             }
             this.parentReader.readerLayout.eventHub.emit("navigationClicked", page.pageId);
