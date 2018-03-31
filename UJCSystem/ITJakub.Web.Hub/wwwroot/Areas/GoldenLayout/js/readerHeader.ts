@@ -201,7 +201,9 @@
                     this.parentReader.textPanelLabel,
                     this.parentReader.textPanelId);
                 hasBookText = true;
-                textButton.click();
+                if (!$(".lm_popin").is("div")) {
+                    textButton.click();
+                }
                 $(".page-navigation-container-helper").removeClass("hidden");
                 viewButtons.appendChild(textButton);
 
@@ -219,7 +221,7 @@
                         this.parentReader.imagePanelLabel,
                         this.parentReader.imagePanelId);
                     hasBookImage = true;
-                    if (!hasBookText) {
+                    if (!hasBookText && !$(".lm_popin").is("div")) {
                         imageButton.click();
                         $(".page-navigation-container-helper").removeClass("hidden");
                     }
@@ -236,7 +238,7 @@
                         this.parentReader.audioPanelLabel,
                         this.parentReader.audioPanelId);
 
-                    if (!hasBookText && !hasBookImage) {
+                    if (!hasBookText && !hasBookImage && !$(".lm_popin").is("div")) {
                         audioButton.click();
                         $(".page-navigation-container-helper").removeClass("hidden");
                     }
