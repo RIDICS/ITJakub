@@ -1,5 +1,4 @@
 ﻿abstract class Panel {
-    panelHtml: HTMLDivElement;
     identificator: string;
     innerContent: HTMLElement;
     sc: ServerCommunication;
@@ -9,19 +8,20 @@
         this.identificator = identificator;
         this.sc = sc;
         this.parentReader = readerLayout;
-        var sidePanelDiv: HTMLDivElement = document.createElement("div");
-        sidePanelDiv.id = identificator;
-        this.addPanelClass(sidePanelDiv);
 
         this.innerContent = this.makeBody(this, window);
-
-        sidePanelDiv.appendChild(this.innerContent);
-
-        this.panelHtml = sidePanelDiv;
     }
 
     protected makeBody(rootReference: Panel, window: Window): HTMLElement {
         throw new Error("Not implemented");
+    }
+
+    public getPanelHtml(): HTMLDivElement {
+        var panelDiv: HTMLDivElement = document.createElement("div");
+        panelDiv.id = this.identificator;
+        this.addPanelClass(panelDiv);
+        panelDiv.appendChild(this.innerContent);
+        return panelDiv;
     }
 
     public onMoveToPage(pageIndex: number, scrollTo: boolean) {
@@ -49,8 +49,8 @@ class ContentPanel extends ToolPanel {
 
     private downloadBookContent() {
 
-        $(this.panelHtml).empty();
-        $(this.panelHtml).addClass("loader");
+        $(this.innerContent).empty();
+        $(this.innerContent).addClass("loader");
         var bookContent: JQueryXHR = this.sc.getBookContent(this.parentReader.bookId);
         bookContent.done((response: {content: IChapterHieararchyContract[]}) => {
             var ulElement = document.createElement("ul");
@@ -60,16 +60,16 @@ class ContentPanel extends ToolPanel {
                 $(ulElement).append(this.makeContentItem(this.parseJsonItemToContentItem(chapterItem)));
             }
 
-            $(this.panelHtml).removeClass("loader");
-            $(this.panelHtml).empty();
-            $(this.panelHtml).append(ulElement);
+            $(this.innerContent).removeClass("loader");
+            $(this.innerContent).empty();
+            $(this.innerContent).append(ulElement);
 
-            this.innerContent = this.panelHtml;
+            this.innerContent = this.innerContent;
 
         });
         bookContent.fail(() => {
-            $(this.panelHtml).empty();
-            $(this.panelHtml).append("Chyba při načítání obsahu");
+            $(this.innerContent).empty();
+            $(this.innerContent).append("Chyba při načítání obsahu");
         });
     }
 
@@ -103,7 +103,14 @@ class ContentPanel extends ToolPanel {
             }
             this.parentReader.readerLayout.eventHub.emit("navigationClicked", contentItem.referredPageId);
         });
-
+        this.parentReader.readerLayout.on("itemCreated", () => {
+            $(hrefElement).click(() => {
+                if (this.parentReader.deviceType === Device.Mobile && !$(".lm_popin").is("div")) {
+                    $(".view-control button")[1].click();
+                }
+                this.parentReader.readerLayout.eventHub.emit("navigationClicked", contentItem.referredPageId);
+            });   
+        });
 
         var textSpanElement = document.createElement("span");
         $(textSpanElement).addClass("content-item-text");
@@ -126,6 +133,7 @@ class SearchResultPanel extends ToolPanel {
     private searchResultItemsDiv: HTMLDivElement;
     private searchPagingDiv: HTMLDivElement;
 
+    private itemsCount: number;
     private paginator: Pagination;
     private paginatorOptions: Pagination.Options;
     private resultsOnPage;
@@ -157,6 +165,7 @@ class SearchResultPanel extends ToolPanel {
             callPageClickCallbackOnInit: true
         };
         this.paginator = new Pagination(this.paginatorOptions);
+       
 
         innerContent.appendChild(this.searchPagingDiv);
         innerContent.appendChild(searchResultItemsDiv);
@@ -166,6 +175,7 @@ class SearchResultPanel extends ToolPanel {
 
     createPagination(pageChangedCallback: (pageNumber: number) => void, itemsCount: number) {
         this.paginatorOptions.pageClickCallback = pageChangedCallback;
+        this.itemsCount = itemsCount;
         this.paginator.make(itemsCount, this.resultsOnPage);
     }
 
@@ -191,6 +201,15 @@ class SearchResultPanel extends ToolPanel {
             }
             var pageId = Number(result.pageId);
             this.parentReader.readerLayout.eventHub.emit("navigationClicked", pageId);
+        });
+        this.parentReader.readerLayout.on("itemCreated", () => {
+            $(resultItemDiv).click(() => {
+                if (this.parentReader.deviceType === Device.Mobile && !$(".lm_popin").is("div")) {
+                    $(".view-control button")[1].click();
+                }
+                var pageId = Number(result.pageId);
+                this.parentReader.readerLayout.eventHub.emit("navigationClicked", pageId);
+            });
         });
 
         var pageNameSpan = document.createElement("span");
@@ -487,6 +506,14 @@ class TermsSearchPanel extends TermsPanel {
             }
             this.parentReader.readerLayout.eventHub.emit("navigationClicked", page.pageId);
         });
+        this.parentReader.readerLayout.on("itemCreated", () => {
+            $(hrefElement).click(() => {
+                if (this.parentReader.deviceType === Device.Mobile && !$(".lm_popin").is("div")) {
+                    $(".view-control button")[1].click();
+                }
+                this.parentReader.readerLayout.eventHub.emit("navigationClicked", page.pageId);
+            });
+        });
 
         var textSpanElement = document.createElement("span");
         textSpanElement.innerHTML = `[${page.pageName}]`;
@@ -579,6 +606,13 @@ class TermsResultPanel extends TermsPanel {
             if (typeof this.termClickedCallback !== "undefined" && this.termClickedCallback !== null) {
                 this.termClickedCallback(termId, text);
             }
+        });
+        this.parentReader.readerLayout.on("itemCreated", () => {
+            $(hrefElement).click(() => {
+                if (typeof this.termClickedCallback !== "undefined" && this.termClickedCallback !== null) {
+                    this.termClickedCallback(termId, text);
+                }
+            });
         });
 
         var textSpanElement = document.createElement("span");

@@ -139,6 +139,7 @@ class ReaderLayout {
                 default:
                     break;
             }
+       
         });
         readerLayout.registerComponent('viewTab', (container, state) => {
             switch (state.label) {
@@ -698,7 +699,7 @@ class ReaderLayout {
             this.bookmarksPanel = bookmarksPanel;
             this.toolPanels.push(bookmarksPanel);
         }
-        return this.bookmarksPanel.panelHtml;
+        return this.bookmarksPanel.getPanelHtml();
     }
 
     protected createContentPanel(): HTMLDivElement {
@@ -707,7 +708,7 @@ class ReaderLayout {
             this.contentPanel = contentPanel;
             this.toolPanels.push(contentPanel);
         }
-        return this.contentPanel.panelHtml;
+        return this.contentPanel.getPanelHtml();
     }
 
     protected createSearchPanel(): HTMLDivElement {
@@ -716,7 +717,7 @@ class ReaderLayout {
             this.searchPanel = resultPanel;
             this.toolPanels.push(resultPanel);
         }
-        return this.searchPanel.panelHtml;
+        return this.searchPanel.getPanelHtml();
     }
 
     protected createTermsPanel(configObject: LayoutConfiguration) {
@@ -732,7 +733,7 @@ class ReaderLayout {
             this.termsResultPanel = termsPanel;
             this.toolPanels.push(termsPanel);
         }
-        return this.termsResultPanel.panelHtml;
+        return this.termsResultPanel.getPanelHtml();
     }
 
     protected createTermsSearchPanel(): HTMLDivElement {
@@ -741,7 +742,7 @@ class ReaderLayout {
             this.termsSearchPanel = termsPanel;
             this.toolPanels.push(termsPanel);
         }
-        return this.termsSearchPanel.panelHtml;
+        return this.termsSearchPanel.getPanelHtml();
     }
 
     protected createTextPanel(): HTMLDivElement {
@@ -750,7 +751,7 @@ class ReaderLayout {
             this.textPanel = textPanel;
             this.contentViewPanels.push(textPanel);    
         }
-        return this.textPanel.panelHtml;
+        return this.textPanel.getPanelHtml();
     }
 
     protected createImagePanel(): HTMLDivElement {
@@ -759,7 +760,7 @@ class ReaderLayout {
             this.imagePanel = imagePanel;
             this.contentViewPanels.push(imagePanel);    
         }
-        return this.imagePanel.panelHtml;
+        return this.imagePanel.getPanelHtml();
     }
 
     protected createAudioPanel(): HTMLDivElement {
@@ -768,7 +769,7 @@ class ReaderLayout {
             this.audioPanel = audioPanel;
             this.contentViewPanels.push(audioPanel);
         }
-        return this.audioPanel.panelHtml;
+        return this.audioPanel.getPanelHtml();
     }
 
     protected hasBookImageCache: { [key: string]: { [key: string]: boolean; }; } = {};
