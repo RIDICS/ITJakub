@@ -167,7 +167,7 @@
                         .removeClass("glyphicon-chevron-left")
                         .addClass("glyphicon-wrench");
                     $(toolButtonsDiv).animate({
-                        "left": "-75"
+                        "left": "-116.5"
                     });
                 } else if ($(showPanelButton.firstChild).hasClass("glyphicon-wrench")) {
                     $(showPanelButton.firstChild)
