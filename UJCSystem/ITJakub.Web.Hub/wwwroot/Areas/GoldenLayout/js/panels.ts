@@ -920,7 +920,7 @@ class AudioPanel extends ContentViewPanel {
         $(audioDownloadDiv).addClass("audio-download");
         var downloadBookDiv = document.createElement("div");
         $(downloadBookDiv).addClass("full-book");
-        $(downloadBookDiv).append("Stáhnout celou audioknihu:");
+        $(downloadBookDiv).append("Stáhnout audioknihu:");
         audioDownloadDiv.appendChild(downloadBookDiv);
         var downloadTrackDiv = document.createElement("div");
         $(downloadTrackDiv).addClass("track");
