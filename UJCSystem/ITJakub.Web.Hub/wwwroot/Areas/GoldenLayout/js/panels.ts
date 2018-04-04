@@ -734,8 +734,10 @@ class TextPanel extends ContentViewPanel {
 
         if (scrollTo) {
             this.scrollTextToPositionFromTop(0);
-            var topOffset = $(pageDiv).offset().top;
-            this.scrollTextToPositionFromTop(topOffset);
+            var offset = $(pageDiv).offset();
+            if (offset != undefined) {
+                this.scrollTextToPositionFromTop(offset.top);
+            }
 
         }
     }
