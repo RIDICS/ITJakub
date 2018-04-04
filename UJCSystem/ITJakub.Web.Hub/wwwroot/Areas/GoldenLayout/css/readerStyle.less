@@ -1,6 +1,6 @@
 ﻿#ReaderBodyDiv{
     height: 550px;
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: @mobile-max-width) {
         margin: 0 15px;
     }
 }
@@ -14,6 +14,7 @@
 @linkColorHover: #633107;
 @lineColor: #e5e5e5;
 @navBackground: #388E3C;
+@mobile-max-width: 800px;
 
 .lm_tabs {
     z-index: 1;
@@ -62,7 +63,7 @@
         overflow-y: scroll;
     }
 
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: @mobile-max-width) {
         &#search {
             overflow-y: scroll;
             
@@ -91,7 +92,7 @@
     min-height: unset !important;
     padding-bottom: 5px;
 
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: @mobile-max-width) {
         padding: 0 10px;
     }
 }
@@ -114,7 +115,7 @@
         color: @linkColorHover;
     }
 
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: @mobile-max-width) {
         font-size: 30px;
         margin-top: 1rem;
         margin-right: 1.5rem;
@@ -149,12 +150,12 @@ button {
         &:last-of-type {
             margin-right: 0;
         }
-        @media screen and (max-width: 800px) {
+        @media screen and (max-width: @mobile-max-width) {
             margin-right: 2rem;
         }
     }
 
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: @mobile-max-width) {
         display: block;
     }
     input {
@@ -252,7 +253,7 @@ button {
     float: left !important;
 }
 .tool-panel {
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: @mobile-max-width) {
         .left {
             background: @navBackground;
             margin: 0 !important;
@@ -304,7 +305,7 @@ button {
 }
 
 .reader-text-container {
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: @mobile-max-width) {
         padding: 5px;
     }
     .page-name {
@@ -375,7 +376,7 @@ button {
     overflow: hidden;
     height: 100%;
 
-    @media screen and (max-width: 800px){
+    @media screen and (max-width: @mobile-max-width){
         width: auto;
     }
 }
@@ -459,7 +460,7 @@ button {
         margin: 0;
     }
 
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: @mobile-max-width) {
         float: none;
         text-align: center !important;
         min-width: unset;
@@ -489,7 +490,7 @@ button {
     .buttons button {
         width: 65px;
         margin-left: 0;
-        @media screen and (max-width: 800px) {
+        @media screen and (max-width: @mobile-max-width) {
             margin-left: 1rem;
 
             .glyphicon{
@@ -504,7 +505,7 @@ button {
 }
 
 #book-info-modal {
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: @mobile-max-width) {
         .modal-title {
             display: inline-block;
         }
@@ -533,7 +534,7 @@ button {
 }
 
 .regex-search-div {
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: @mobile-max-width) {
         .searchbar-button:nth-child(2), .regexsearch-input-button {
             display: none;
         }
@@ -545,7 +546,7 @@ button {
 }
 
 .page-navigation-container-helper {
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: @mobile-max-width) {
         float: left;
         padding: 4px 0 !important;
         .pagination-sm {
@@ -568,13 +569,13 @@ button {
 }
 
 .page-input {
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: @mobile-max-width) {
         float: right !important;
         margin-right: 0 !important;
     }
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: @mobile-max-width) {
     .fullscreen {
         #ReaderBodyDiv {
             margin: 0;
