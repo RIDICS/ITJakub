@@ -30,6 +30,7 @@
             },
             content: [{
                 type: "row",
+                isClosable: false,
                 content: [{
                     type: "column",
                     id: "views",
