@@ -120,7 +120,7 @@
         margin-top: 1rem;
         margin-right: 1.5rem;
         &:first-of-type {
-            margin-right: 10px;
+            margin-right: 0px;
         }
         &.display-details-button{
             float: left !important;
@@ -157,6 +157,7 @@ button {
 
     @media screen and (max-width: @mobile-max-width) {
         display: block;
+        margin-top: 1rem;
     }
     input {
         display: none;
@@ -224,9 +225,8 @@ button {
         white-space: initial;
     }
 
-    @media screen and (max-width: 800px) {
-        padding-right: 0;
-        padding-bottom: 5px;
+    @media screen and (max-width: @mobile-max-width) {
+        padding: 1rem 0 5px;
         max-width: calc(~'100% - 60px');
         font-size: 20px;
 
@@ -479,6 +479,9 @@ button {
         display: inline-block;
         margin-top: 2rem;
 
+        @media screen and (max-width: @mobile-max-width) {
+            margin: 0.5rem 0 1rem !important;
+        }
     }
 
     &:after {
@@ -508,6 +511,7 @@ button {
     @media screen and (max-width: @mobile-max-width) {
         .modal-title {
             display: inline-block;
+            font-size: 18px;
         }
 
         .close {
@@ -571,7 +575,7 @@ button {
 .page-input {
     @media screen and (max-width: @mobile-max-width) {
         float: right !important;
-        margin-right: 0 !important;
+        margin: 0.5rem 0 1rem 1rem !important;
     }
 }
 
