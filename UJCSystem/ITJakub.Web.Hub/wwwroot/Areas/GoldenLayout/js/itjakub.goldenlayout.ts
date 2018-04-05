@@ -647,7 +647,7 @@ class ReaderLayout {
     }
 
     setResultsPaging(itemsCount: number, pageChangedCallback: (pageNumner: number) => void) {
-        this.getSearchPanel().createPagination(pageChangedCallback, itemsCount);
+        this.getSearchPanel().createPagination(pageChangedCallback, itemsCount, this.getSearchPanel().getPaginator().getCurrentPage());
     }
 
     getSearchResultsCountOnPage(): number {

@@ -763,12 +763,16 @@ class ButtonFactory {
         $(spanText).addClass("button-text");
         $(spanText).append(label);
         $(button).append(spanText);
-
+        
         $(button).click(() => {
+            if (buttonId === this.readerLayout.searchPanelId) {
+                $(".searchbar-button")[0].click();
+            } else {
             if (this.deviceType == Device.Desktop) {
                 this.readerLayout.createDesktopToolPanel(buttonId, spanText.innerHTML);
             } else {
                 this.readerLayout.createMobileToolPanel(buttonId, spanText.innerHTML);
+                }
             }
         });
         return button;

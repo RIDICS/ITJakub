@@ -141,7 +141,12 @@ class SearchResultPanel extends ToolPanel {
 
     public getSearchResultDiv(): HTMLDivElement {
         return this.searchResultItemsDiv;
-    };
+    }
+
+    public getPaginator(): Pagination {
+        return this.paginator;
+    }
+
     protected makeBody(rootReference: Panel, window: Window): HTMLElement {
         var innerContent: HTMLDivElement = window.document.createElement("div");
 
@@ -173,10 +178,13 @@ class SearchResultPanel extends ToolPanel {
         return innerContent;
     }
 
-    createPagination(pageChangedCallback: (pageNumber: number) => void, itemsCount: number) {
+    createPagination(pageChangedCallback: (pageNumber: number) => void, itemsCount: number, currentPage: number) {
+        if (this.parentReader.deviceType === Device.Mobile && !$(".lm_popin").is("div")) {
+            currentPage = 1;
+        }
         this.paginatorOptions.pageClickCallback = pageChangedCallback;
         this.itemsCount = itemsCount;
-        this.paginator.make(itemsCount, this.resultsOnPage);
+        this.paginator.make(itemsCount, this.resultsOnPage, currentPage);
     }
 
     getResultsCountOnPage(): number {
@@ -251,6 +259,21 @@ class SearchResultPanel extends ToolPanel {
 }
 
 class BookmarksPanel extends ToolPanel {
+    actualBookmarkPage: number;
+    paginator: Pagination;
+
+    constructor(identificator: string, readerLayout: ReaderLayout, sc: ServerCommunication) {
+        super(identificator, readerLayout, sc);
+        this.actualBookmarkPage = 1;
+    }
+
+    public getPanelHtml(): HTMLDivElement {
+        var panelDiv: HTMLDivElement = document.createElement("div");
+        panelDiv.id = this.identificator;
+        this.addPanelClass(panelDiv);
+        panelDiv.appendChild(this.makeBody(this, window));
+        return panelDiv;
+    }
 
     protected makeBody(rootReference: Panel, window: Window): HTMLElement {
         var innerContent: HTMLDivElement = window.document.createElement("div");
@@ -260,7 +283,6 @@ class BookmarksPanel extends ToolPanel {
 
     public createBookmarkList(innerContent: HTMLElement, rootReference: Panel) {
         const bookmarksPerPage = 20;
-        const actualBookmarkPage = 1;
 
         const $bookmarksContainer = $(innerContent).children(".reader-bookmarks-container");
         let bookmarksContainer: HTMLDivElement;
@@ -298,7 +320,7 @@ class BookmarksPanel extends ToolPanel {
             pageInContainer[i] = document.createElement("ul");
             pageInContainer[i].classList.add("reader-bookmarks-content-list");
             pageInContainer[i].setAttribute("data-page-index", (i + 1).toString());
-            if (i != actualBookmarkPage) {
+            if (i != this.actualBookmarkPage) {
                 pageInContainer[i].classList.add("hide");
             }
 
@@ -315,13 +337,16 @@ class BookmarksPanel extends ToolPanel {
                 currentIndex++;
             }
         }
-
-        const paginator = new Pagination({
+        if (this.paginator != null) {
+            this.actualBookmarkPage = this.paginator.getCurrentPage();
+        }
+        
+        this.paginator = new Pagination({
             container: paginationContainer,
             pageClickCallback: (pageNumber: number) => this.showBookmarkPage(pagesContainer, pageNumber),
             callPageClickCallbackOnInit: true
         });
-        paginator.make(bookmarks.totalCount, bookmarksPerPage, actualBookmarkPage);
+        this.paginator.make(bookmarks.totalCount, bookmarksPerPage, this.actualBookmarkPage);
 
         $(".pagination", paginationContainer).addClass("pagination-extra-small");
     }
@@ -345,7 +370,7 @@ class BookmarksPanel extends ToolPanel {
 
             rootReference.parentReader.persistRemoveBookmark(pageIndex, bookmark.id);
         });
-
+        
         const bookmarkIco = document.createElement("span");
         bookmarkIco.classList.add("glyphicon", "glyphicon-bookmark", "bookmark-ico");
         if (bookmark.favoriteLabel) {
@@ -390,6 +415,7 @@ class BookmarksPanel extends ToolPanel {
 
             titleInput.focus();
         });
+       
         const updateHook = () => {
             this.setBookmarkTitle(title, rootReference, bookmark.id, pageIndex, titleInput.value);
 

@@ -65,13 +65,12 @@
     padding: 10px;
     height: 100%;
 
-    &#content {
+    &#content, &#search {
         overflow-y: scroll;
     }
 
     @media screen and (max-width: @mobile-max-width) {
         &#search {
-            overflow-y: scroll;
             
             .reader-search-result-paging {
                 display: none;
