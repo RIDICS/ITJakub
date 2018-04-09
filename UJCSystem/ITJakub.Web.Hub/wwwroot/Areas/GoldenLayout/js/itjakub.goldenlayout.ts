@@ -666,6 +666,30 @@ class ReaderLayout {
         return this.searchPanel;
     }
 
+    private getTermsResultPanel(): TermsResultPanel {
+        if (this.termsResultPanel === null) {
+            if (this.deviceType === Device.Mobile) {
+                this.createMobileToolPanel(this.termsResultId, this.termsResultLabel);
+            } else {
+                this.createDesktopToolPanel(this.termsResultId, this.termsResultLabel);
+            }
+        }
+
+        return this.termsResultPanel;
+    }
+
+    private getTermsSearchPanel(): TermsSearchPanel {
+        if (this.termsSearchPanel === null) {
+            if (this.deviceType === Device.Mobile) {
+                this.createMobileToolPanel(this.termsSearchId, this.termsSearchLabel);
+            } else {
+                this.createDesktopToolPanel(this.termsSearchId, this.termsSearchLabel);
+            }
+        }
+
+        return this.termsSearchPanel;
+    }
+
     showSearchResultInPages(searchQuery: string, isQueryJson: boolean, pages: Array<IPage>) {
         this.textPanel.setSearchedQuery(searchQuery, isQueryJson);
         $(".search-unloaded").removeClass(".search-unloaded");
@@ -691,6 +715,23 @@ class ReaderLayout {
 
     searchPanelClearResults() {
         this.getSearchPanel().clearResults();
+    }
+
+    setTermPanelCallback(callback: (termId: number, text: string) => void) {
+        this.getTermsResultPanel().setTermClickedCallback(callback);
+    }
+
+    termsPanelShowLoading() {
+        this.getTermsSearchPanel().showLoading();
+
+    }
+
+    termsPanelRemoveLoading() {
+        this.getTermsSearchPanel().clearLoading();
+    }
+
+    termsPanelClearResults() {
+        this.getTermsSearchPanel().clearResults();
     }
 
     protected createBookmarksPanel(): HTMLDivElement {

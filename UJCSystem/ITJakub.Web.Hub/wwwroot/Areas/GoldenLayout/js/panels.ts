@@ -271,7 +271,8 @@ class BookmarksPanel extends ToolPanel {
         var panelDiv: HTMLDivElement = document.createElement("div");
         panelDiv.id = this.identificator;
         this.addPanelClass(panelDiv);
-        panelDiv.appendChild(this.makeBody(this, window));
+        alert(this.innerContent.innerHTML);
+        panelDiv.appendChild(this.innerContent);
         return panelDiv;
     }
 
@@ -457,6 +458,8 @@ abstract class TermsPanel extends ToolPanel {
     setTermClickedCallback(callback: (termId: number, text: string) => void) {
         this.termClickedCallback = callback;
     }
+
+
 }
 
 class TermsSearchPanel extends TermsPanel {
@@ -579,12 +582,16 @@ class TermsResultPanel extends TermsPanel {
 
         var actualPage = this.parentReader.pages[this.parentReader.actualPageIndex];
         this.loadTermsOnPage(actualPage);
-
+        if (typeof this.termClickedCallback === "undefined") {
+            this.termClickedCallback = (termId: number, text: string) => {
+                window.location.href = getBaseUrl() + "OldGrammar/OldGrammar/Search?search=" + text;
+            };
+        }
         return termsResultItemsDiv;
     }
 
     public onMoveToPage(pageIndex: number, scrollTo: boolean) {
-        var page = this.parentReader.getPageByIndex(pageIndex);
+        var page = this.parentReader.getPageByIndex(this.parentReader.actualPageIndex);
         this.loadTermsOnPage(page);
     }
 
