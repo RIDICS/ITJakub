@@ -879,8 +879,8 @@ class ReaderLayout {
             this.moveToPage(pageNumber, true);
         });
 
-        this.readerLayout.on("itemCreated", () => {
-            this.readerLayout.eventHub.emit("moveToPageNumber", this.actualPageIndex);
+        this.readerLayout.on("windowOpened", () => {
+            this.readerLayout.eventHub.emit("moveToPageNumber", this.getActualPage().position-1);
         });
 
         this.readerLayout.eventHub.on("moveToPageNumber", (pageNumber: number) => {

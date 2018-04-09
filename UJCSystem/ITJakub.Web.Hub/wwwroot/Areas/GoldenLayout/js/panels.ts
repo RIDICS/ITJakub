@@ -602,20 +602,21 @@ class TermsResultPanel extends TermsPanel {
         $(this.termsResultItemsDiv).hide();
         var terms: JQueryXHR = this.sc.getTerms(this.parentReader.bookId, page.pageId);
         terms.done((response: {terms: Array<ITermContract>}) => {
+                
+            $(this.termsOrderedList).empty();
+            $(this.termsOrderedList).removeClass("no-items");
+            $(this.termsResultItemsLoadDiv).hide();
+            $(this.termsResultItemsDiv).show();
 
+            for (var i = 0; i < response.terms.length; i++) {
+                var term = response.terms[i];
+                this.termsOrderedList.appendChild(this.createTermItem(term.id, term.name));
+            }
 
-                $(this.termsResultItemsLoadDiv).hide();
-                $(this.termsResultItemsDiv).show();
-
-                for (var i = 0; i < response.terms.length; i++) {
-                    var term = response.terms[i];
-                    this.termsOrderedList.appendChild(this.createTermItem(term.id, term.name));
-                }
-
-                if (response.terms.length === 0 && this.termsOrderedList.innerHTML == "") {
-                    $(this.termsOrderedList).addClass("no-items");
-                    $(this.termsOrderedList).append("Na této stránce se nenachází žádné téma");
-                }
+            if (response.terms.length === 0 && this.termsOrderedList.innerHTML === "") {
+                $(this.termsOrderedList).addClass("no-items");
+                $(this.termsOrderedList).append("Na této stránce se nenachází žádné téma");
+            }
             
         });
         terms.fail(() => {
