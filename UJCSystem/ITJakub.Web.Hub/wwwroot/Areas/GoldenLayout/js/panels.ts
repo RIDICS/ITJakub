@@ -271,7 +271,6 @@ class BookmarksPanel extends ToolPanel {
         var panelDiv: HTMLDivElement = document.createElement("div");
         panelDiv.id = this.identificator;
         this.addPanelClass(panelDiv);
-        alert(this.innerContent.innerHTML);
         panelDiv.appendChild(this.innerContent);
         return panelDiv;
     }
@@ -388,7 +387,7 @@ class BookmarksPanel extends ToolPanel {
 
         const actionHook = () => {
             var pageId = bookmark.pageId;
-            rootReference.parentReader.moveToPage(pageId, true);
+            this.parentReader.readerLayout.eventHub.emit("navigationClicked", pageId);
         };
         bookmarkIco.addEventListener("click", actionHook);
         page.addEventListener("click", actionHook);
@@ -591,7 +590,7 @@ class TermsResultPanel extends TermsPanel {
     }
 
     public onMoveToPage(pageIndex: number, scrollTo: boolean) {
-        var page = this.parentReader.getPageByIndex(this.parentReader.actualPageIndex);
+        var page = this.parentReader.getPageByIndex(pageIndex);
         this.loadTermsOnPage(page);
     }
 
@@ -604,7 +603,6 @@ class TermsResultPanel extends TermsPanel {
         var terms: JQueryXHR = this.sc.getTerms(this.parentReader.bookId, page.pageId);
         terms.done((response: {terms: Array<ITermContract>}) => {
 
-            if (page.pageId === this.parentReader.getActualPage().pageId) {
 
                 $(this.termsResultItemsLoadDiv).hide();
                 $(this.termsResultItemsDiv).show();
@@ -618,7 +616,7 @@ class TermsResultPanel extends TermsPanel {
                     $(this.termsOrderedList).addClass("no-items");
                     $(this.termsOrderedList).append("Na této stránce se nenachází žádné téma");
                 }
-            }
+            
         });
         terms.fail(() => {
             if (page.pageId === this.parentReader.getActualPage().pageId) {

@@ -421,7 +421,7 @@
 
             if (this.parentReader.pages[pageIndex] !== undefined) {
                 var page: BookPage = this.parentReader.pages[pageIndex];
-                this.parentReader.moveToPage(page.pageId, true);
+                this.parentReader.readerLayout.eventHub.emit("navigationClicked", page.pageId);
             }
             else {
                 console.error("missing page " + pageIndex);
@@ -470,7 +470,7 @@
             },
             change: (event: Event, ui: JQueryUI.SliderUIParams) => {
                 if (this.parentReader.actualPageIndex !== ui.value) {
-                    this.parentReader.moveToPageNumber(<any>ui.value, true);
+                    this.parentReader.readerLayout.eventHub.emit("moveToPageNumber", <any>ui.value);
                 }
             }
         });
@@ -602,7 +602,7 @@
         anchor.innerHTML = "|<";
         $(anchor).click((event: Event) => {
             event.stopPropagation();
-            this.parentReader.moveToPageNumber(0, true);
+            this.parentReader.readerLayout.eventHub.emit("moveToPageNumber", 0);
             return false;
         });
         liElement.appendChild(anchor);
@@ -615,7 +615,7 @@
         anchor.innerHTML = "<<";
         $(anchor).click((event: Event) => {
             event.stopPropagation();
-            this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex - 5, true);
+            this.parentReader.readerLayout.eventHub.emit("moveToPageNumber", this.parentReader.actualPageIndex - 5);
             return false;
         });
         liElement.appendChild(anchor);
@@ -628,7 +628,7 @@
         anchor.innerHTML = "<";
         $(anchor).click((event: Event) => {
             event.stopPropagation();
-            this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex - 1, true);
+            this.parentReader.readerLayout.eventHub.emit("moveToPageNumber", this.parentReader.actualPageIndex - 1);
             return false;
         });
         liElement.appendChild(anchor);
@@ -644,7 +644,7 @@
         anchor.innerHTML = ">";
         $(anchor).click((event: Event) => {
             event.stopPropagation();
-            this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex + 1, true);
+            this.parentReader.readerLayout.eventHub.emit("moveToPageNumber", this.parentReader.actualPageIndex + 1);
             return false;
         });
         liElement.appendChild(anchor);
@@ -657,7 +657,7 @@
         anchor.innerHTML = ">>";
         $(anchor).click((event: Event) => {
             event.stopPropagation();
-            this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex + 5, true);
+            this.parentReader.readerLayout.eventHub.emit("moveToPageNumber", this.parentReader.actualPageIndex + 5);
             return false;
         });
         liElement.appendChild(anchor);
@@ -670,7 +670,7 @@
         anchor.innerHTML = ">|";
         $(anchor).click((event: Event) => {
             event.stopPropagation();
-            this.parentReader.moveToPageNumber(this.parentReader.pages.length - 1, true);
+            this.parentReader.readerLayout.eventHub.emit("moveToPageNumber", this.parentReader.actualPageIndex - 1);
             return false;
         });
         liElement.appendChild(anchor);
@@ -690,7 +690,7 @@
             anchor.innerHTML = page.text;
             $(anchor).click((event: Event) => {
                 event.stopPropagation();
-                this.parentReader.moveToPage(page.pageId, true);
+                this.parentReader.readerLayout.eventHub.emit("navigationClicked", page.pageId);
                 return false;
             });
             liElement.appendChild(anchor);

@@ -878,6 +878,14 @@ class ReaderLayout {
         this.readerLayout.eventHub.on("navigationClicked", (pageNumber: number) => {
             this.moveToPage(pageNumber, true);
         });
+
+        this.readerLayout.on("itemCreated", () => {
+            this.readerLayout.eventHub.emit("moveToPageNumber", this.actualPageIndex);
+        });
+
+        this.readerLayout.eventHub.on("moveToPageNumber", (pageNumber: number) => {
+        this.moveToPageNumber(pageNumber, true);
+    });
     }
 }
 
