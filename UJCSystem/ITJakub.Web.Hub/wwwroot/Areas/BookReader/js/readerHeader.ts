@@ -769,7 +769,7 @@ class ButtonFactory {
         
         $(button).click(() => {
             if (buttonId === this.readerLayout.searchPanelId) {
-                $(".searchbar-button")[0].click();
+                $(".searchbar-button")[0].click(); //WORKAROUND recreating of search result panel
             } else {
             if (this.deviceType === Device.Desktop) {
                 this.readerLayout.createDesktopToolPanel(buttonId, spanText.innerHTML);
