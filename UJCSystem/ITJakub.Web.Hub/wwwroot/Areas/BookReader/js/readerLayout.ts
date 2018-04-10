@@ -584,7 +584,7 @@ class ReaderLayout {
         var pages = $(pager).find(".page");
         $(pages).css("display", "none");
         $(pages).removeClass("page-active");
-        var actualPage = $(pages).filter(function (index) {
+        var actualPage = $(pages).filter(function () {
             return $(this).data("page-index") === pageIndex;
         });
 
@@ -601,7 +601,7 @@ class ReaderLayout {
             pager.find("li.more-pages-right").css("visibility", "hidden");
         }
 
-        var displayedPages = $(pages).filter(function (index) {
+        var displayedPages = $(pages).filter(function () {
             var itemPageIndex = $(this).data("page-index");
             return (itemPageIndex >= pageIndex - displayOnLeft && itemPageIndex <= pageIndex + displayOnRight);
         });
@@ -617,11 +617,12 @@ class ReaderLayout {
     }
 
     notifyPanelsMovePage(pageIndex: number, scrollTo: boolean) {
-        for (var k = 0; k < this.toolPanels.length; k++) {
+        var k: 0;
+        for (k = 0; k < this.toolPanels.length; k++) {
             this.toolPanels[k].onMoveToPage(pageIndex, scrollTo);
         }
 
-        for (var k = 0; k < this.contentViewPanels.length; k++) {
+        for (k = 0; k < this.contentViewPanels.length; k++) {
             this.contentViewPanels[k].onMoveToPage(pageIndex, scrollTo);
         }
     }
@@ -829,13 +830,13 @@ class ReaderLayout {
                 this.hasBookPageCallOnSuccess[bookId][bookVersionId] = [];
             }
             var hasBookPage: JQueryXHR = this.sc.hasBookPage(bookId, bookVersionId);
-            hasBookPage.done((response: { HasBookPage: boolean }) => {
-                this.hasBookPageCache[bookId][bookVersionId] = response.HasBookPage;
+            hasBookPage.done((response: { hasBookPage: boolean }) => {
+                this.hasBookPageCache[bookId][bookVersionId] = response.hasBookPage;
                 this.hasBookPageCache[bookId][bookVersionId + "_loading"] = false;
 
-                if (response.HasBookPage && onTrue !== null) {
+                if (response.hasBookPage && onTrue !== null) {
                     onTrue();
-                } else if (!response.HasBookPage && onFalse !== null) {
+                } else if (!response.hasBookPage && onFalse !== null) {
                     onFalse();
                 }
 

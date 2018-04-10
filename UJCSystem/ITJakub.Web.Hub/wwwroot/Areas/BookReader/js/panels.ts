@@ -287,7 +287,7 @@ class BookmarksPanel extends ToolPanel {
         const $bookmarksContainer = $(innerContent).children(".reader-bookmarks-container");
         let bookmarksContainer: HTMLDivElement;
 
-        if ($(innerContent).children(".reader-bookmarks-container").length == 0) {
+        if ($(innerContent).children(".reader-bookmarks-container").length === 0) {
             bookmarksContainer = document.createElement("div");
             bookmarksContainer.classList.add("reader-bookmarks-container");
             innerContent.appendChild(bookmarksContainer);
@@ -320,7 +320,7 @@ class BookmarksPanel extends ToolPanel {
             pageInContainer[i] = document.createElement("ul");
             pageInContainer[i].classList.add("reader-bookmarks-content-list");
             pageInContainer[i].setAttribute("data-page-index", (i + 1).toString());
-            if (i != this.actualBookmarkPage) {
+            if (i !== this.actualBookmarkPage) {
                 pageInContainer[i].classList.add("hide");
             }
 
@@ -424,7 +424,7 @@ class BookmarksPanel extends ToolPanel {
         };
         titleInput.addEventListener("blur", updateHook);
         titleInput.addEventListener("keyup", (e: KeyboardEvent) => {
-            if (e.keyCode == 13) {
+            if (e.keyCode === 13) {
                 updateHook();
             }
         });
@@ -888,7 +888,7 @@ class ImagePanel extends ContentViewPanel {
                     var newWidth = $innerContent.width();
                     var newHeight = $innerContent.height();
 
-                    if (lastWidth != newWidth || lastHeight != newHeight) {
+                    if (lastWidth !== newWidth || lastHeight !== newHeight) {
                         image.src = image.getAttribute("data-image-src");
 
                         console.log(image);

@@ -345,19 +345,19 @@ gulp.task("bundle:ridics_admin_composition-key-table-editor", function () {
 
 gulp.task("bundle:new_reader", function() {
     return gulp.src([
-        paths.webroot + "Areas/GoldenLayout/js/initReader.js",
-        paths.webroot + "Areas/GoldenLayout/js/itjakub.goldenlayout.js",
-        paths.webroot + "Areas/GoldenLayout/js/config.js",
-        paths.webroot + "Areas/GoldenLayout/js/panels.js",
-        paths.webroot + "Areas/GoldenLayout/js/searchModule.js",
-        paths.webroot + "Areas/GoldenLayout/js/readerHeader.js",
-        paths.webroot + "Areas/GoldenLayout/js/serverCommunication.js"
+        paths.webroot + "Areas/BookReader/js/initReader.js",
+        paths.webroot + "Areas/BookReader/js/readerLayout.js",
+        paths.webroot + "Areas/BookReader/js/config.js",
+        paths.webroot + "Areas/BookReader/js/panels.js",
+        paths.webroot + "Areas/BookReader/js/searchModule.js",
+        paths.webroot + "Areas/BookReader/js/readerHeader.js",
+        paths.webroot + "Areas/BookReader/js/serverCommunication.js"
       
     ])
     .pipe(sourcemaps.init())
     .pipe(concat("new-reader.bundle.js"))
     .pipe(sourcemaps.write())
-        .pipe(gulp.dest(paths.webroot + "Areas/GoldenLayout/js"));
+        .pipe(gulp.dest(paths.webroot + "Areas/BookReader/js"));
 });
 
 gulp.task("bundlejs_areas",

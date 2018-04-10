@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Net.Http;
 using AutoMapper;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core.Communication;
@@ -34,7 +33,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
         {
             using (var client = GetRestClient())
             {
-                return Json(new { HasBookImage = client.HasBookAnyImage(bookId) }, GetJsonSerializerSettings());
+                return Json(new { hasBookImage = client.HasBookAnyImage(bookId) }, GetJsonSerializerSettings());
             }
         }
 
@@ -42,7 +41,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
         {
             using (var client = GetRestClient())
             {
-                return Json(new {HasBookPage = client.HasBookAnyText(bookId)}, GetJsonSerializerSettings());
+                return Json(new {hasBookPage = client.HasBookAnyText(bookId)}, GetJsonSerializerSettings());
             }
         }
 
@@ -137,7 +136,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             using (var client = GetRestClient())
             {
                 var editionNote = client.GetEditionNote(projectId, TextFormatEnumContract.Html);
-                return Json(new { editionNote = editionNote }, GetJsonSerializerSettings());
+                return Json(new { editionNote }, GetJsonSerializerSettings());
             }
         }
 

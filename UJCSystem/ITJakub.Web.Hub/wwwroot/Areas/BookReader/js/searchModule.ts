@@ -3,7 +3,7 @@
     sc: ServerCommunication;
     readerPlugin: ReaderLayout;
     bookId: string;
-    versionId: string
+    versionId: string;
 
     constructor(searchContainer: HTMLDivElement, sc: ServerCommunication, readerPlugin: ReaderLayout, bookId: string, versionId: string) {
         this.sc = sc;
@@ -26,14 +26,15 @@
 
         this.search.makeSearch(enabledOptions);
 
+        var decodedText: string;
         if (typeof searchedText !== "undefined" && searchedText !== null) {
-            var decodedText = decodeURIComponent(searchedText);
+            decodedText = decodeURIComponent(searchedText);
             decodedText = replaceSpecialChars(decodedText);
             this.search.processSearchQuery(decodedText);
         }
 
         if (typeof initPageId !== "undefined" && initPageId !== null) {
-            var decodedText = decodeURIComponent(initPageId);
+            decodedText = decodeURIComponent(initPageId);
             decodedText = replaceSpecialChars(decodedText);
             var pageId = Number(decodedText);
             this.readerPlugin.moveToPage(pageId, true);
@@ -53,7 +54,7 @@
             this.readerPlugin.setResultsPaging(response.count, this.paginatorPageClickCallback.bind(this));
         });
 
-        var textSearchMatchHit: JQueryXHR = this.sc.textSearchMatchHit(this.bookId, this.versionId, text)
+        var textSearchMatchHit: JQueryXHR = this.sc.textSearchMatchHit(this.bookId, this.versionId, text);
         textSearchMatchHit.done((response: { pages: Array<IPage> }) => {
             this.readerPlugin.showSearchResultInPages(text, false, response.pages);
         });

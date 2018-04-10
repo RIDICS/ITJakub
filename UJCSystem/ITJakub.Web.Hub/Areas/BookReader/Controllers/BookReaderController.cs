@@ -10,33 +10,27 @@ using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts.Search;
-using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Types;
 using HitSettingsContract = Vokabular.Shared.DataContracts.Search.OldCriteriaItem.HitSettingsContract;
 
-namespace ITJakub.Web.Hub.Areas.Editions.Controllers
+namespace ITJakub.Web.Hub.Areas.BookReader.Controllers
 {
-    [Area("GoldenLayout")]
-    public class GoldenLayoutController : AreaController
+    [Area("BookReader")]
+    public class BookReaderController : AreaController
     {
-        private readonly StaticTextManager m_staticTextManager;
-        private readonly FeedbacksManager m_feedbacksManager;
+        private StaticTextManager MStaticTextManager { get; }
+        private FeedbacksManager MFeedbacksManager { get; }
 
-        public GoldenLayoutController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager, CommunicationProvider communicationProvider) : base(communicationProvider)
+        public BookReaderController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager, CommunicationProvider communicationProvider) : base(communicationProvider)
         {
-            m_staticTextManager = staticTextManager;
-            m_feedbacksManager = feedbacksManager;
+            MStaticTextManager = staticTextManager;
+            MFeedbacksManager = feedbacksManager;
         }
 
         protected override BookTypeEnumContract AreaBookType => BookTypeEnumContract.Edition;
-        
-        private FeedbackFormIdentification GetFeedbackFormIdentification()
-        {
-            return new FeedbackFormIdentification { Area = "GoldenLayout", Controller = "GoldenLayout" };
-        }
 
         public ActionResult GetListConfiguration()
         {
@@ -52,19 +46,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
 
         #region Views and Feedback
-        /*
-        // GET: Editions/Editions
-        public ActionResult Index()
-        {
-            return View("List");
-        }
-
-        public ActionResult Search()
-        {
-            return View();
-        }
-        */
-        
+                
         public ActionResult Listing(long bookId, string searchText, string pageId)
         {
             using (var client = GetRestClient())
@@ -85,52 +67,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     });
             }
         }
-        /*
-        public ActionResult List()
-        {
-            return View();
-        }
-
-        public ActionResult Information()
-        {
-            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextEditionInfo);
-            return View(pageStaticText);
-        }
-
-        public ActionResult Feedback()
-        {
-            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, GetUserName());
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public ActionResult Feedback(FeedbackViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                m_feedbacksManager.FillViewModel(model, StaticTexts.TextHomeFeedback, GetFeedbackFormIdentification());
-                return View(model);
-            }
-
-            m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.Editions, IsUserLoggedIn());
-            return View("Feedback/FeedbackSuccess");
-        }
-
-        public ActionResult Help()
-        {
-            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextEditionHelp);
-            return View(pageStaticText);
-        }
-
-        public ActionResult EditionPrinciples()
-        {
-            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextEditionPrinciples);
-            return View(pageStaticText);
-        }
-        */
-
+        
         #endregion
 
         public ActionResult GetEditionsWithCategories()

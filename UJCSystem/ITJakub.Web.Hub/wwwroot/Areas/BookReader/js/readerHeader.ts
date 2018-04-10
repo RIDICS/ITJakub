@@ -15,12 +15,14 @@
     }
 
     public getInnerHtml(deviceType: Device): HTMLDivElement {
+        var innerHtml: HTMLDivElement = null;
         if (deviceType === Device.Mobile) {
-            return this.createMobileHeaderDiv(this.bookTitle);
+            innerHtml = this.createMobileHeaderDiv(this.bookTitle);
         } 
         if (deviceType === Device.Desktop) {
-            return this.createDesktopHeaderDiv(this.bookTitle);
+            innerHtml = this.createDesktopHeaderDiv(this.bookTitle);
         }
+        return innerHtml;
     }
 
     private getEditionNote(addHeader: boolean): HTMLDivElement {
@@ -37,7 +39,7 @@
         editionNote.done((response: { editionNote: string }) => {
             var editionNoteText = document.createElement("div");
             $(editionNoteText).addClass("edition-note-text");
-            if (response.editionNote == "") {
+            if (response.editionNote === "") {
                 $(editionNoteText).append("Toto dílo nemá ediční poznámku");
             } else {
                 $(editionNoteText).append(response.editionNote);
@@ -68,7 +70,7 @@
             for (var i = 0; i < detailData.Editors.length; i++) {
                 var editor = detailData.Editors[i];
                 editors += editor.FirstName + " " + editor.LastName;
-                if (i + 1 != detailData.Editors.length) {
+                if (i + 1 !== detailData.Editors.length) {
                     editors += ", ";
                 }
             }
@@ -103,13 +105,13 @@
         var bookDetail: JQueryXHR = this.sc.getBookDetail(this.bookId);
         bookDetail.done((response) => {
             var detailData = response["detail"];
-            if (detailData.Authors.length != 0) {
+            if (detailData.Authors.length !== 0) {
 
                 
                 for (var i = 0; i < detailData.Authors.length; i++) {
                     var author = detailData.Authors[i];
                     authors += author.FirstName + " " + author.LastName;
-                    if (i + 1 != detailData.Authors.length) {
+                    if (i + 1 !== detailData.Authors.length) {
                         authors += ", ";
                     }
                 }
@@ -159,7 +161,7 @@
         toolButtons.appendChild(termsButton);
         toolButtonsDiv.appendChild(toolButtons);
         if (deviceType === Device.Mobile) {
-            $(toolButtonsDiv).addClass("buttons")
+            $(toolButtonsDiv).addClass("buttons");
             var showPanelButton = button.createButton("display-panel", "wrench");
             $(showPanelButton).click(() => {
                 if ($(showPanelButton.firstChild).hasClass("glyphicon-chevron-left")) {
@@ -195,8 +197,8 @@
         var hasBookText: boolean = false;
         var hasBookImage: boolean = false;
         var hasBookPage: JQueryXHR = this.sc.hasBookPage(this.bookId, this.versionId);
-        hasBookPage.done((response: { HasBookPage: boolean }) => {
-            if (response.HasBookPage) {
+        hasBookPage.done((response: { hasBookPage: boolean }) => {
+            if (response.hasBookPage) {
                 var textButton = buttonObject.createViewButton("font",
                     this.parentReader.textPanelLabel,
                     this.parentReader.textPanelId);
@@ -215,8 +217,8 @@
         $.when(hasBookPage).then(() => {
             hasBookImageAjax = this.sc.hasBookImage(this.bookId, this.versionId);
 
-            hasBookImageAjax.done((response: { HasBookImage: boolean }) => {
-                if (response.HasBookImage) {
+            hasBookImageAjax.done((response: { hasBookImage: boolean }) => {
+                if (response.hasBookImage) {
                     var imageButton = buttonObject.createViewButton("picture",
                         this.parentReader.imagePanelLabel,
                         this.parentReader.imagePanelId);
@@ -409,7 +411,7 @@
         $(pageInputButtonSpan).addClass("glyphicon glyphicon-arrow-right");
         $(pageInputButton).append(pageInputButtonSpan);
 
-        $(pageInputButton).click((event: Event) => {
+        $(pageInputButton).click(() => {
             var pageName = $("#pageInputText").val();
             var pageIndex: number = -1;
             for (var i = 0; i < this.parentReader.pages.length; i++) {
@@ -438,6 +440,7 @@
                 event.stopPropagation();
                 return false;
             }
+// ReSharper disable once NotAllPathsReturnValue
         });
 
         this.parentReader.activateTypeahead(pageInputText);
@@ -453,10 +456,10 @@
             min: 0,
             max: this.parentReader.pages.length - 1,
             value: 0,
-            start: (event, ui) => {
+            start: (event) => {
                 $(event.target).find(".ui-slider-handle").find(".slider-tip").show();
             },
-            stop: (event, ui) => {
+            stop: (event) => {
                 $(event.target).find(".ui-slider-handle").find(".slider-tip").fadeOut(1000);
             },
             slide: (event, ui) => {
@@ -555,7 +558,7 @@
 
         }
 
-        if (deviceType == Device.Mobile) {
+        if (deviceType === Device.Mobile) {
             var bookDetailDiv = this.getBookDetail();
             var bookDetailButton = buttonObject.createButton("display-details", "info-sign");
             $(bookDetailButton)
@@ -739,7 +742,7 @@ class ButtonFactory {
         $(button).append(spanText);
 
         $(button).click(() => {
-            if (this.deviceType == Device.Desktop) {
+            if (this.deviceType === Device.Desktop) {
                 this.readerLayout.createDesktopViewPanel(buttonId, spanText.innerHTML);
             } else {
                 this.readerLayout.createMobileViewPanel(buttonId, spanText.innerHTML);
@@ -768,7 +771,7 @@ class ButtonFactory {
             if (buttonId === this.readerLayout.searchPanelId) {
                 $(".searchbar-button")[0].click();
             } else {
-            if (this.deviceType == Device.Desktop) {
+            if (this.deviceType === Device.Desktop) {
                 this.readerLayout.createDesktopToolPanel(buttonId, spanText.innerHTML);
             } else {
                 this.readerLayout.createMobileToolPanel(buttonId, spanText.innerHTML);
