@@ -263,6 +263,7 @@ button {
             background: @navBackground;
             margin: 0 !important;
             padding: 1em 5px;
+            width: 116.5px;
         }
 
         margin: 0px !important;
@@ -277,6 +278,7 @@ button {
             margin: 10px 0 0 !important;
             width: auto !important;
             background: @navBackground !important;
+            position: relative;
 
             &.display-panel-button {
                 float: right;
@@ -307,6 +309,9 @@ button {
                 color: inherit !important;
                 display: inline-block !important;
                 width: 65px;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
                 text-align: left;
                 margin: 0 5px;
             }
