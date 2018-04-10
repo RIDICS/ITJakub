@@ -182,9 +182,9 @@ function listBookReadClickedOld(target) {
     return context => {
         var bookId = $(target).parents("li.list-item").attr("data-id");
         if (context.search.isLastQueryJson()) { //only text seach criteria we should propagate
-            return onClickHref(context.event, getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery());
+            return onClickHref(context.event, getBaseUrl() + "BookReader/BookReader/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery());
         } else {
-            return onClickHref(context.event, getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId);
+            return onClickHref(context.event, getBaseUrl() + "BookReader/BookReader/Listing?bookId=" + bookId);
         }
     };
 }
@@ -192,6 +192,6 @@ function listBookReadClickedOld(target) {
 function searchBookReadClickedOld(target) {
     return context => {
         var bookId = $(target).parents("li.list-item").attr("data-id");
-        return onClickHref(context.event, getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery());
+        return onClickHref(context.event, getBaseUrl() + "BookReader/BookReader/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery());
     };
 }

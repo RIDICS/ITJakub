@@ -161,10 +161,10 @@
     },
     "right-panel": {
       "info-button": {
-        "onclick-callable": "searchBookReadClicked(this)"
+        "onclick-callable": "searchBookReadClickedOld(this)"
       },
       "read-button": {
-        "onclick-callable": "searchBookReadClicked(this)"
+        "onclick-callable": "searchBookReadClickedOld(this)"
       },
       "favorite-button": {},
       "load-detail-url": "Bibliography/GetBookDetailInfo?bookId={BookId}",
