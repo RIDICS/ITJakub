@@ -244,14 +244,31 @@ class ReaderLayout {
 
     public activateTypeahead(input: HTMLInputElement) {
 
-        var pagesTexts = new Array<string>();
+        var pagesTexts = new Array<ISearchResult>();
         $.each(this.pages, (index, page: BookPage) => {
-            pagesTexts.push(page.text);
+            pagesTexts.push({index: index, pageText: page.text});
         });
 
-        var pages = new Bloodhound({ datumTokenizer: Bloodhound.tokenizers.whitespace, queryTokenizer: Bloodhound.tokenizers.whitespace, local: (): string[] => { return pagesTexts; } });
+        var pages = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace(['index', 'pageText']),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            local: (): ISearchResult[] => { return pagesTexts; }
+        });
 
-        $(input).typeahead({ hint: true, highlight: true, minLength: 1 }, { name: "pages", source: pages });
+        $(input).typeahead(
+            {
+                hint: true,
+                highlight: true,
+                minLength: 1
+            },
+            {
+                name: "pages",
+                source: pages,
+                display: data => data.pageText,
+                templates: {
+                     suggestion: data => '<div><span style = "text-align: left;display: inline-block;width: 50%;">Str: ' + data.pageText + '</span> <span style="width: 50%;float: right;text-align: right;display: inline-block;"> Číslo: ' + data.index + '</span></div>'
+                }
+            });
     }
 
     getBookmarks(): IBookmarksInfo {
@@ -892,4 +909,7 @@ class ReaderLayout {
     }
 }
 
-
+interface ISearchResult {
+    index: number,
+    pageText: string;
+}
