@@ -267,6 +267,14 @@ class BookmarksPanel extends ToolPanel {
         this.actualBookmarkPage = 1;
     }
 
+    public getPanelHtml(): HTMLDivElement {
+        var panelDiv: HTMLDivElement = document.createElement("div");
+        panelDiv.id = this.identificator;
+        this.addPanelClass(panelDiv);
+        panelDiv.appendChild(this.makeBody(this, window));
+        return panelDiv;
+    }
+
     protected makeBody(rootReference: Panel, window: Window): HTMLElement {
         var innerContent: HTMLDivElement = window.document.createElement("div");
         this.createBookmarkList(innerContent, rootReference);

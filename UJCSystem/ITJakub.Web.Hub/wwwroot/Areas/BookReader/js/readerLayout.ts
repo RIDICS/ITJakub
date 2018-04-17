@@ -453,11 +453,11 @@ class ReaderLayout {
                 var bookmark = bookmarks[i];
                 this.loadBookmark(bookmark);
             }
+            if ($(".lm_popin").is("div") && $("#bookmarks").is("div")) { //WORKAROUND - reload bookmarks panel after ajax request is done (if bookmarksPanel is poppedOut)
+                $("#bookmarks").empty();
+                $("#bookmarks").append(this.bookmarksPanel.getPanelHtml());
+            }
         });
-        if ($(".lm_popin").is("div") && $("#bookmarks").is("div")) { //WORKAROUND - reload bookmarks panel after ajax request is done (if bookmarksPanel is poppedOut)
-            $("#bookmarks").empty();
-            $("#bookmarks").append(this.bookmarksPanel.getPanelHtml());
-        }
     }
 
     private loadBookmark(actualBookmark: IBookPageBookmark) {
@@ -757,10 +757,12 @@ class ReaderLayout {
     }
 
     protected createBookmarksPanel(): HTMLDivElement {
-        var bookmarksPanel: BookmarksPanel = new BookmarksPanel(this.bookmarksPanelId, this, this.sc);
+        if (this.contentPanel == null || this.deviceType === Device.Mobile) {
+            var bookmarksPanel: BookmarksPanel = new BookmarksPanel(this.bookmarksPanelId, this, this.sc);
             this.bookmarksPanel = bookmarksPanel;
             this.toolPanels.push(bookmarksPanel);
-        return this.bookmarksPanel.getPanelHtml();
+            return this.bookmarksPanel.getPanelHtml();
+        }
     }
 
     protected createContentPanel(): HTMLDivElement {
