@@ -266,7 +266,7 @@ class ReaderLayout {
                 source: pages,
                 display: data => data.pageText,
                 templates: {
-                     suggestion: data => '<div><span style = "text-align: left;display: inline-block;width: 50%;">Str: ' + data.pageText + '</span> <span style="width: 50%;float: right;text-align: right;display: inline-block;"> Číslo: ' + data.index + '</span></div>'
+                     suggestion: data => '<div><span style = "text-align: left;display: inline-block;width: 50%;">Str: ' + data.pageText + '</span> <span style="width: 50%;float: right;text-align: right;display: inline-block;"> Pořadí: ' + data.index + '</span></div>'
                 }
             });
     }
