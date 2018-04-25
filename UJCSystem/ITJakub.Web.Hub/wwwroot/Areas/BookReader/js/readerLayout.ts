@@ -757,12 +757,12 @@ class ReaderLayout {
     }
 
     protected createBookmarksPanel(): HTMLDivElement {
-        if (this.contentPanel == null || this.deviceType === Device.Mobile) {
+        if (this.bookmarksPanel == null || this.deviceType === Device.Mobile) {
             var bookmarksPanel: BookmarksPanel = new BookmarksPanel(this.bookmarksPanelId, this, this.sc);
             this.bookmarksPanel = bookmarksPanel;
             this.toolPanels.push(bookmarksPanel);
-            return this.bookmarksPanel.getPanelHtml();
         }
+        return this.bookmarksPanel.getPanelHtml();
     }
 
     protected createContentPanel(): HTMLDivElement {
