@@ -351,7 +351,7 @@
         $(commentSlider).addClass("switch");
 
         var showCommentLabel: HTMLLabelElement = window.document.createElement("label");
-        showCommentLabel.innerHTML = "Komentáře";
+        showCommentLabel.innerHTML = "Poznámky";
         showCommentCheckboxDiv.appendChild(showCommentCheckbox);
         showCommentCheckboxDiv.appendChild(commentSlider);
         showCommentCheckboxDiv.appendChild(showCommentLabel);
