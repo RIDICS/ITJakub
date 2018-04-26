@@ -591,6 +591,7 @@ class ReaderLayout {
     }
 
     actualizePagination(pageIndex: number) {
+        var prevActualPage = $(".page-active").data("page-index");
         var pager = $(this.readerHeaderDiv).find("ul.pagination");
         pager.find("li.page-navigation").css("visibility", "visible");
         pager.find("li.more-pages").css("visibility", "visible");
@@ -628,7 +629,9 @@ class ReaderLayout {
         });
         $(displayedPages).css("display", "inline-block");
         $(actualPage).addClass("page-active");
-
+        if (actualPage.data("page-index") !== prevActualPage) { //WORKAROUND notify view panels in different windows
+            actualPage.children()[0].click();
+        }
     }
 
     actualizeSlider(pageIndex: number) {
@@ -907,7 +910,11 @@ class ReaderLayout {
 
         this.readerLayout.eventHub.on("moveToPageNumber", (pageNumber: number) => {
         this.moveToPageNumber(pageNumber, true);
-    });
+        });
+
+        this.readerLayout.eventHub.on("scrollPage", (pageWithMinOffset) => {
+            this.moveToPage($(pageWithMinOffset).data("page-xmlId"), false);
+        });
     }
 }
 
