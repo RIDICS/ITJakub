@@ -20,7 +20,7 @@
         var layoutConfig = {
             dimensions: {
                 headerHeight: 26,
-                minItemWidth: 200
+                minItemWidth: 265
             },
             labels: {
                 close: 'Zavřít',
