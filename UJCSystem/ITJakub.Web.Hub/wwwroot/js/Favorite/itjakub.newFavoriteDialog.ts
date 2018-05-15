@@ -36,8 +36,8 @@
 
     private finishInitialization() {
         var dialogHeading = this.allowMultipleLabels
-            ? "Přiřadit nové štítky k vybrané položce"
-            : "Přiřadit nový štítek k vybrané položce";
+            ? "Přiřadit nové štítky k vybrané záložce"
+            : "Přiřadit nový štítek k vybrané záložce";
         $(".modal-title", this.container).text(dialogHeading);
 
         var saveIcon = document.createElement("span");
