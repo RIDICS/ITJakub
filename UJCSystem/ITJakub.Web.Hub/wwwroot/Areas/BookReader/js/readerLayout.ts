@@ -52,8 +52,8 @@ class ReaderLayout {
     contentPanelLabel: string = "Obsah";
     bookmarksPanelLabel: string = "Záložky";
     searchPanelLabel: string = "Výsledky vyhledávání";
-    termsPanelLabel: string = "Témata";
-    termsResultLabel: string = "Témata na stránce";
+    termsPanelLabel: string = "Lingvistické pojmy";
+    termsResultLabel: string = "Pojmy na stránce";
     termsSearchLabel: string = "Výskyty na stránce";
 
     showPanelList: Array<ReaderPanelEnum>;
