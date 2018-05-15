@@ -536,7 +536,7 @@
             title.innerHTML = bookTitle;
             this.getAuthors($(title));
             
-            var detailsButton = buttonObject.createButton("more", "chevron-down");
+            var detailsButton = buttonObject.createButton("more", "info-sign");
             $(detailsButton).click((event) => {
                 var target: JQuery = $(event.target);
 
@@ -545,12 +545,12 @@
 
                 var details = target.parents(".book-details").find(".hidden-content");
                 if (!details.hasClass("visible")) {
-                    $(target).removeClass("glyphicon-chevron-down");
+                    $(target).removeClass("glyphicon-info-sign");
                     $(target).addClass("glyphicon-chevron-up");
                     details.addClass("visible");
                 } else {
                     $(target).removeClass("glyphicon-chevron-up");
-                    $(target).addClass("glyphicon-chevron-down");
+                    $(target).addClass("glyphicon-info-sign");
                     details.removeClass("visible");
                 }
             });
