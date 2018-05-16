@@ -48,6 +48,7 @@
         var layoutConfig = {
             settings: {
                 showPopoutIcon: false,
+                showMaximiseIcon: false,
                 reorderEnabled: false
             },
             dimensions: {
