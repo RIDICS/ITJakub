@@ -101,7 +101,7 @@
         return $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Editions/Editions/TextSearchInBookCount",
+            url: getBaseUrl() + "BookReader/BookReader/TextSearchInBookCount",
             data: { text: text, projectId: bookId, snapshotId: versionId },
             dataType: 'json',
             contentType: 'application/json'
@@ -112,7 +112,7 @@
         return $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Editions/Editions/AdvancedSearchInBookCount",
+            url: getBaseUrl() + "BookReader/BookReader/AdvancedSearchInBookCount",
             data: { json: json, projectId: bookId, snapshotId: versionId },
             dataType: 'json',
             contentType: 'application/json'
@@ -123,7 +123,7 @@
         return $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Editions/Editions/TextSearchInBookPagesWithMatchHit",
+            url: getBaseUrl() + "BookReader/BookReader/TextSearchInBookPagesWithMatchHit",
             data: { text: text, projectId: bookId, snapshotId: versionId },
             dataType: 'json',
             contentType: 'application/json'
@@ -135,7 +135,7 @@
         return $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Editions/Editions/AdvancedSearchInBookPagesWithMatchHit",
+            url: getBaseUrl() + "BookReader/BookReader/AdvancedSearchInBookPagesWithMatchHit",
             data: { json: json, projectId: bookId, snapshotId: versionId },
             dataType: 'json',
             contentType: 'application/json'
@@ -147,7 +147,7 @@
         return $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Editions/Editions/TextSearchInBookPaged",
+            url: getBaseUrl() + "BookReader/BookReader/TextSearchInBookPaged",
             data: { text: text, start: start, count: count, projectId: bookId, snapshotId: versionId },
             dataType: 'json',
             contentType: 'application/json'
@@ -158,7 +158,7 @@
         return $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Editions/Editions/AdvancedSearchInBookPaged",
+            url: getBaseUrl() + "BookReader/BookReader/AdvancedSearchInBookPaged",
             data: { json: json, start: start, count: count, projectId: bookId, snapshotId: versionId },
             dataType: 'json',
             contentType: 'application/json'
