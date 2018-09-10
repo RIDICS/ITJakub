@@ -183,14 +183,14 @@ namespace ITJakub.ITJakubService
             Register(Component.For<TService>().ImplementedBy<TImplementation>().LifestylePerWebRequest());
         }
 
-        public void AddInstance<TImplementation>(TImplementation instance) where TImplementation : class
+        public void AddInstance<TImplementation>(TImplementation instance, string serviceKey = null) where TImplementation : class
         {
-            Register(Component.For<TImplementation>().Instance(instance));
+            Register(Component.For<TImplementation>().Instance(instance).Named(serviceKey));
         }
 
-        public void AddInstance<TService, TImplementation>(TImplementation instance) where TService : class where TImplementation : class, TService
+        public void AddInstance<TService, TImplementation>(TImplementation instance, string serviceKey = null) where TService : class where TImplementation : class, TService
         {
-            Register(Component.For<TService>().Instance(instance));
+            Register(Component.For<TService>().Instance(instance).Named(serviceKey));
         }
 
         public void AddAllSingletonBasedOn<TService>(Assembly assembly) where TService : class

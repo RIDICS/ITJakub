@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using Vokabular.Core;
+using Vokabular.ForumSite.DataEntities;
 using Vokabular.Log4Net;
 using Vokabular.MainService.Core;
 using Vokabular.MainService.Middleware;
@@ -72,10 +73,12 @@ namespace Vokabular.MainService
             });
 
             // IoC
-            IIocContainer container = new DryIocContainer();
+            var container = new DryIocContainer();
             container.Install<MainServiceContainerRegistration>();
             container.Install<NHibernateInstaller>();
             Container = container;
+
+            container.Container.AddForumDataEntities();
 
             return container.CreateServiceProvider(services);
         }

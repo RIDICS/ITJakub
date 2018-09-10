@@ -54,14 +54,14 @@ namespace Vokabular.MainService.Test.Containers
             m_container.Register<TService, TImplementation>(Reuse.Singleton);
         }
 
-        public void AddInstance<TImplementation>(TImplementation instance) where TImplementation : class
+        public void AddInstance<TImplementation>(TImplementation instance, string serviceKey = null) where TImplementation : class
         {
-            m_container.UseInstance(instance);
+            m_container.UseInstance(instance, serviceKey: serviceKey);
         }
 
-        public void AddInstance<TService, TImplementation>(TImplementation instance) where TService : class where TImplementation : class, TService
+        public void AddInstance<TService, TImplementation>(TImplementation instance, string serviceKey = null) where TService : class where TImplementation : class, TService
         {
-            m_container.UseInstance(typeof(TService), instance);
+            m_container.UseInstance(typeof(TService), instance, serviceKey: serviceKey);
         }
 
         public void AddAllSingletonBasedOn<TService>(Assembly assembly) where TService : class
