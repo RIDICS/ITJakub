@@ -5,7 +5,6 @@ using AutoMapper;
 using Vokabular.Core.Storage;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Works.Content;
@@ -13,6 +12,7 @@ using Vokabular.MainService.Core.Works.Text;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataContracts.Types;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Managers
 {

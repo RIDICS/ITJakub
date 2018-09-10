@@ -7,7 +7,7 @@ using ITJakub.FileProcessing.Core.Sessions.Works;
 using log4net;
 using Vokabular.Core.Storage.Resources;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {

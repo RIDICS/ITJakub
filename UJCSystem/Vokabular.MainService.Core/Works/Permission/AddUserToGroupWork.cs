@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Permission
 {

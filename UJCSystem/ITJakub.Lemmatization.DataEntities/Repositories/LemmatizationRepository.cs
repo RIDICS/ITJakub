@@ -3,8 +3,8 @@ using ITJakub.Lemmatization.DataEntities.Entities;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
-using Vokabular.DataEntities.Database.Daos;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.Shared.DataEntities.Daos;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace ITJakub.Lemmatization.DataEntities.Repositories
 {

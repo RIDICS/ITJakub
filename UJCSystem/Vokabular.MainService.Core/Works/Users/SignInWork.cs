@@ -4,11 +4,11 @@ using System.Net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.Jewelry;
 using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Errors;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Users
 {

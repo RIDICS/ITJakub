@@ -237,6 +237,10 @@
       <Project>{d172f949-ae59-4029-bf5c-40b633362034}</Project>
       <Name>Vokabular.Shared.DataContracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vokabular.Shared.DataEntities\Vokabular.Shared.DataEntities.csproj">
+      <Project>{1d302489-8778-4dec-9bcf-ee35f90af87b}</Project>
+      <Name>Vokabular.Shared.DataEntities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj">
       <Project>{130f3c52-e563-4b9b-a70f-e7e5bbab4296}</Project>
       <Name>Vokabular.Shared</Name>

@@ -5,11 +5,11 @@ using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Results;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Managers
 {

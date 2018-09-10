@@ -5,7 +5,6 @@ using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Favorite;
 using Vokabular.MainService.DataContracts.Contracts.Favorite;
@@ -13,6 +12,7 @@ using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataContracts.Types.Favorite;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Managers
 {

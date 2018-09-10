@@ -5,7 +5,7 @@ using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
-using Vokabular.DataEntities.Database.Daos;
+using Vokabular.DataEntities;
 using Vokabular.Shared.Container;
 using Vokabular.Shared.Options;
 using Configuration = NHibernate.Cfg.Configuration;
@@ -44,7 +44,7 @@ namespace Vokabular.MainService.Test.Containers
                     //db.LogFormattedSql = true;
                     //db.LogSqlInConsole = true;                     
                 })
-                .AddAssembly(typeof(NHibernateDao).Assembly);
+                .AddAssembly(typeof(DataEntitiesContainerRegistration).Assembly);
 
             var sessionFactory = cfg.BuildSessionFactory();
 

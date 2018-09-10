@@ -7,7 +7,7 @@ using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
-using Vokabular.DataEntities.Database.Daos;
+using Vokabular.DataEntities;
 using Vokabular.Shared;
 using Vokabular.Shared.Container;
 using Vokabular.Shared.Options;
@@ -36,7 +36,7 @@ namespace Vokabular.MainService
                     //db.LogFormattedSql = true;
                     //db.LogSqlInConsole = true;                     
                 })
-                .AddAssembly(typeof(NHibernateDao).Assembly);
+                .AddAssembly(typeof(DataEntitiesContainerRegistration).Assembly);
 
             try
             {

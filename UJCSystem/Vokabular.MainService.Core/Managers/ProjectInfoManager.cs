@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Works.ProjectMetadata;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Managers
 {

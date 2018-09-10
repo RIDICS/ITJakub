@@ -44,6 +44,9 @@ namespace Vokabular.MainService.Core.Managers
                     throw new InvalidOperationException("Import failed");
                 }
             }
+
+            //TODO return object with id from client.ProcessSession
+            //TODO create forum
         }
     }
 }

@@ -3,11 +3,11 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
-using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.Shared.DataEntities.Daos;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
 {

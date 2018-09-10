@@ -1,6 +1,6 @@
 ﻿using ITJakub.Lemmatization.DataEntities.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.Shared.Container;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace ITJakub.Lemmatization.DataEntities
 {
