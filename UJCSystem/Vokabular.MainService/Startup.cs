@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using DryIoc;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,7 +14,6 @@ using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using Vokabular.Core;
 using Vokabular.ForumSite.DataEntities;
-using Vokabular.Log4Net;
 using Vokabular.MainService.Core;
 using Vokabular.MainService.Middleware;
 using Vokabular.Shared;
@@ -22,6 +22,7 @@ using Vokabular.Shared.AspNetCore.Container.Extensions;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
 using Vokabular.Shared.Container;
 using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 using Vokabular.Shared.Options;
 
 namespace Vokabular.MainService
@@ -73,14 +74,31 @@ namespace Vokabular.MainService
             });
 
             // IoC
-            var container = new DryIocContainer();
-            container.Install<MainServiceContainerRegistration>();
-            container.Install<NHibernateInstaller>();
+            var container = new DryIocContainerWrapper();
             Container = container;
 
-            container.Container.AddForumDataEntities();
+            container.Install<MainServiceContainerRegistration>();
+            container.InnerContainer.AddNHibernateDefaultDatabase();
+            container.InnerContainer.AddNHibernateForumDatabase();
+
+            container.InnerContainer.Register<IUnitOfWork>(Made.Of(
+                () => GetCorrectUnitOfWork(Arg.Of<IResolver>(), Arg.Index<Type>(0)),
+                request => request.Parent.ImplementationType));
+
+            container.InnerContainer.AddForumDataEntities(); // TODO move to Forum.Core registration
 
             return container.CreateServiceProvider(services);
+        }
+
+        private static IUnitOfWork GetCorrectUnitOfWork(IResolver resolver, Type parentImplementationType)
+        {
+            // TODO better logic for selecting correct UnitOfWork
+            if (parentImplementationType.Namespace != null && parentImplementationType.Namespace.StartsWith("Vokabular.ForumSite"))
+            {
+                return resolver.Resolve<UnitOfWork>("forum");
+            }
+
+            return resolver.Resolve<UnitOfWork>("default");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

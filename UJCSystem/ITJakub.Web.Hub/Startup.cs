@@ -88,7 +88,7 @@ namespace ITJakub.Web.Hub
                 });
 
             // IoC
-            IIocContainer container = new DryIocContainer();
+            IIocContainer container = new DryIocContainerWrapper();
             container.Install<WebHubContainerRegistration>();
             Container = container;
             

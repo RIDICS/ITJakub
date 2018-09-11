@@ -1,24 +1,26 @@
 using System;
 using System.Data.SqlClient;
 using System.Reflection;
+using DryIoc;
 using log4net;
 using Microsoft.Extensions.Configuration;
+using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
 using Vokabular.DataEntities;
 using Vokabular.Shared;
-using Vokabular.Shared.Container;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 using Vokabular.Shared.Options;
 
 namespace Vokabular.MainService
 {
-    public class NHibernateInstaller : IContainerInstaller
+    public static class NHibernateInstaller
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public void Install(IIocContainer container)
+        public static void AddNHibernateDefaultDatabase(this IContainer container)
         {
             var connectionString =
                 ApplicationConfig.Configuration.GetConnectionString(SettingKeys.MainConnectionString) ??
@@ -42,9 +44,11 @@ namespace Vokabular.MainService
             {
                 var sessionFactory = cfg.BuildSessionFactory();
 
-                container.AddInstance(cfg);
+                container.UseInstance(cfg, serviceKey: "default");
 
-                container.AddInstance(sessionFactory);
+                container.UseInstance(sessionFactory, serviceKey: "default");
+
+                container.Register<UnitOfWork>(Reuse.InWebRequest, Made.Of(() => new UnitOfWork(Arg.Of<ISessionFactory>("default"))), serviceKey: "default");
             }
             catch (SqlException e)
             {

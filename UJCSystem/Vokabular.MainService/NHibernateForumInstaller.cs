@@ -1,24 +1,26 @@
 using System;
 using System.Data.SqlClient;
 using System.Reflection;
+using DryIoc;
 using log4net;
 using Microsoft.Extensions.Configuration;
+using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
 using Vokabular.ForumSite.DataEntities.Database.Repositories;
 using Vokabular.Shared;
-using Vokabular.Shared.Container;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 using Vokabular.Shared.Options;
 
 namespace Vokabular.MainService
 {
-    public class NHibernateForumInstaller : IContainerInstaller
+    public static class NHibernateForumInstaller
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public void Install(IIocContainer container)
+        public static void AddNHibernateForumDatabase(this IContainer container)
         {
             var connectionString =
                 ApplicationConfig.Configuration.GetConnectionString(SettingKeys.ForumConnectionString) ??
@@ -42,10 +44,11 @@ namespace Vokabular.MainService
             {
                 var sessionFactory = cfg.BuildSessionFactory();
 
-                container.AddInstance(cfg, "forum");
+                container.UseInstance(cfg, serviceKey: "forum");
 
-                container.AddInstance(sessionFactory, "forum");
+                container.UseInstance(sessionFactory, serviceKey: "forum");
 
+                container.Register<UnitOfWork>(Reuse.InWebRequest, Made.Of(() => new UnitOfWork(Arg.Of<ISessionFactory>("forum"))), serviceKey: "forum");
             }
             catch (SqlException e)
             {

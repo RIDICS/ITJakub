@@ -60,7 +60,7 @@ namespace Vokabular.FulltextService
             });
 
             // IoC
-            IIocContainer container = new DryIocContainer();
+            IIocContainer container = new DryIocContainerWrapper();
             container.Install<FulltextServiceContainerRegistration>();
             Container = container;
 

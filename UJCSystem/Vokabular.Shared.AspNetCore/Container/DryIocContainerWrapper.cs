@@ -8,16 +8,16 @@ using Vokabular.Shared.Container;
 
 namespace Vokabular.Shared.AspNetCore.Container
 {
-    public class DryIocContainer : IIocContainer
+    public class DryIocContainerWrapper : IIocContainer
     {
         private readonly IContainer m_container;
 
-        public DryIocContainer()
+        public DryIocContainerWrapper()
         {
             m_container = new DryIoc.Container().WithDependencyInjectionAdapter();
         }
 
-        public IContainer Container => m_container;
+        public IContainer InnerContainer => m_container;
 
         public void Dispose()
         {
