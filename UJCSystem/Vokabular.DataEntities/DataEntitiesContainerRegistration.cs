@@ -10,8 +10,6 @@ namespace Vokabular.DataEntities
     {
         public void Install(IIocContainer container)
         {
-            container.AddPerWebRequest<IUnitOfWork, UnitOfWork>();
-
             container.AddPerWebRequest<BookRepository>();
             container.AddPerWebRequest<CatalogValueRepository>();
             container.AddPerWebRequest<CategoryRepository>();

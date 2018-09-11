@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Vokabular.Shared.DataEntities\Vokabular.Shared.DataEntities.csproj" />
+    <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj" />
   </ItemGroup>
 
 </Project>

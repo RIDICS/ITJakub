@@ -1,18 +1,15 @@
-﻿using System;
-using DryIoc;
-using Microsoft.Extensions.DependencyInjection;
+﻿using DryIoc;
 using Vokabular.ForumSite.DataEntities.Database.Repositories;
-using Vokabular.Shared.DataEntities.UnitOfWork;
+using Vokabular.Shared.Container;
 
 namespace Vokabular.ForumSite.DataEntities
 {
-    public static class ForumDataEntitiesContainerRegistration
+    public class ForumDataEntitiesContainerRegistration : IContainerInstaller
     {
-        public static void AddForumDataEntities(this IRegistrator registrator)
+        public void Install(IIocContainer container)
         {
-            registrator.Register<IUnitOfWork, UnitOfWork>(Reuse.InWebRequest, serviceKey: "forum");
-            registrator.Register<CategoryRepository>(Reuse.InWebRequest, serviceKey: "forum");
-            registrator.Register<ForumRepository>(Reuse.InWebRequest, serviceKey: "forum");
+            container.AddPerWebRequest<CategoryRepository>();
+            container.AddPerWebRequest<ForumRepository>();
         }
     }
 }

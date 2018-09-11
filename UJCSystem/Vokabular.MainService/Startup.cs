@@ -85,7 +85,7 @@ namespace Vokabular.MainService
                 () => GetCorrectUnitOfWork(Arg.Of<IResolver>(), Arg.Index<Type>(0)),
                 request => request.Parent.ImplementationType));
 
-            container.InnerContainer.AddForumDataEntities(); // TODO move to Forum.Core registration
+            container.Install<ForumDataEntitiesContainerRegistration>();  // TODO move to Forum.Core registration
 
             return container.CreateServiceProvider(services);
         }

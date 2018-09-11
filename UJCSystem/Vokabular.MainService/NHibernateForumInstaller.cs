@@ -6,9 +6,11 @@ using log4net;
 using Microsoft.Extensions.Configuration;
 using NHibernate;
 using NHibernate.Cfg;
+using NHibernate.Cfg.MappingSchema;
 using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
+using NHibernate.Mapping.ByCode;
 using Vokabular.ForumSite.DataEntities.Database.Repositories;
 using Vokabular.Shared;
 using Vokabular.Shared.DataEntities.UnitOfWork;
@@ -30,15 +32,16 @@ namespace Vokabular.MainService
                 .DataBaseIntegration(db =>
                 {
                     db.ConnectionString = connectionString;
-                    db.Dialect<MsSql2008Dialect>();
+                    db.Dialect<MsSql2012Dialect>();
                     db.Driver<SqlClientDriver>();
                     db.ConnectionProvider<DriverConnectionProvider>();
                     db.BatchSize = 5000;
                     db.Timeout = byte.MaxValue;
                     //db.LogFormattedSql = true;
                     //db.LogSqlInConsole = true;                     
-                })
-                .AddAssembly(typeof(ForumRepository).Assembly);
+                });
+
+            cfg.AddMapping(GetMapping());
 
             try
             {
@@ -57,6 +60,13 @@ namespace Vokabular.MainService
 
                 throw;
             }
+        }
+
+        private static HbmMapping GetMapping()
+        {
+            var mapper = new ModelMapper();
+            mapper.AddMappings(Assembly.GetAssembly(typeof(ForumRepository)).GetExportedTypes());
+            return mapper.CompileMappingForAllExplicitlyAddedEntities();
         }
     }
 }

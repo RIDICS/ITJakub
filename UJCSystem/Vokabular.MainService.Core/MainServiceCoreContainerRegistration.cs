@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Vokabular.Core;
+using Vokabular.ForumSite.Core.Managers;
 using Vokabular.MainService.Core.AutoMapperProfiles;
 using Vokabular.MainService.Core.AutoMapperProfiles.CardFile;
 using Vokabular.MainService.Core.Communication;
@@ -39,6 +40,7 @@ namespace Vokabular.MainService.Core
             container.AddPerWebRequest<TermManager>();
             container.AddPerWebRequest<UserGroupManager>();
             container.AddPerWebRequest<UserManager>();
+            container.AddPerWebRequest<ForumManager>();
 
             container.AddPerWebRequest<ICommunicationTokenGenerator, GuidCommunicationTokenGenerator>();
             container.AddPerWebRequest<ICommunicationTokenProvider, HttpHeaderCommunicationTokenProvider>();
