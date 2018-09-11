@@ -56,41 +56,37 @@ namespace Vokabular.ForumSite.DataEntities.Database.Entities {
 			ManyToOne(x => x.Category, map => 
 			{
 				map.Column("CategoryID");
+                map.NotNullable(true);
 				map.Cascade(Cascade.None);
 			});
 
 			ManyToOne(x => x.ParentForum, map => 
 			{
 				map.Column("ParentID");
-				map.NotNullable(false);
 				map.Cascade(Cascade.None);
 			});
 
 			ManyToOne(x => x.LastTopic, map => 
 			{
 				map.Column("LastTopicID");
-				map.NotNullable(false);
 				map.Cascade(Cascade.None);
 			});
 
 			ManyToOne(x => x.LastMessage, map => 
 			{
 				map.Column("LastMessageID");
-				map.NotNullable(false);
 				map.Cascade(Cascade.None);
 			});
 
 			ManyToOne(x => x.LastUser, map => 
 			{
 				map.Column("LastUserID");
-				map.NotNullable(false);
 				map.Cascade(Cascade.None);
 			});
 
 			ManyToOne(x => x.PollGroupCluster, map => 
 			{
 				map.Column("PollGroupID");
-				map.NotNullable(false);
 				map.Cascade(Cascade.None);
 			});
 

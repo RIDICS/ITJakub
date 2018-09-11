@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using Vokabular.Core;
-using Vokabular.ForumSite.DataEntities;
+using Vokabular.ForumSite.Core;
 using Vokabular.MainService.Core;
 using Vokabular.MainService.Middleware;
 using Vokabular.Shared;
@@ -85,7 +85,7 @@ namespace Vokabular.MainService
                 () => GetCorrectUnitOfWork(Arg.Of<IResolver>(), Arg.Index<Type>(0)),
                 request => request.Parent.ImplementationType));
 
-            container.Install<ForumDataEntitiesContainerRegistration>();  // TODO move to Forum.Core registration
+            container.Install<ForumCoreContainerRegistration>();
 
             return container.CreateServiceProvider(services);
         }

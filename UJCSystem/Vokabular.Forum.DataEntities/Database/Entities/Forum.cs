@@ -6,6 +6,17 @@ using System.Collections.Generic;
 namespace Vokabular.ForumSite.DataEntities.Database.Entities {
     
     public class Forum {
+
+        public Forum(string name, Category category, short sortOrder, int numTopics = 0, int numPosts = 0, int flags = 0)
+        {
+            Name = name;
+            Category = category;
+            SortOrder = sortOrder;
+            NumTopics = numTopics;
+            NumPosts = numPosts;
+            Flags = flags;
+        }
+
         public Forum() {
 			Actives = new List<Active>();
 			Forums = new List<Forum>();
