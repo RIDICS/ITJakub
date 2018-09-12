@@ -6,6 +6,7 @@ using NHibernate.Dialect;
 using NHibernate.Driver;
 using Vokabular.DataEntities;
 using Vokabular.Shared.Container;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 using Vokabular.Shared.Options;
 using Configuration = NHibernate.Cfg.Configuration;
 
@@ -36,6 +37,8 @@ namespace ITJakub.FileProcessing.Service
             container.AddInstance(cfg);
 
             container.AddInstance(sessionFactory);
+
+            container.AddPerWebRequest<IUnitOfWork, UnitOfWork>();
         }
     }
 }
