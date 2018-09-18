@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Vokabular.DataEntities.Database.Entities;
 using Vokabular.ForumSite.Core.Works;
 using Vokabular.ForumSite.DataEntities.Database.Entities;
 using Vokabular.ForumSite.DataEntities.Database.Repositories;
@@ -24,7 +23,7 @@ namespace Vokabular.ForumSite.Core.Managers
             return m_forumRepository.InvokeUnitOfWork(x => x.FindById<Forum>(forumId));
         }
 
-        public long CreateNewForum(Project project, IList<BookType> bookTypes, UserDetailContract user)
+        public long CreateNewForum(ProjectDetailContract project, IList<string> bookTypes, UserDetailContract user)
         {
             var work = new CreateForumWork(m_forumRepository, m_categoryRepository, project, bookTypes, user);
             var resultId = work.Execute();

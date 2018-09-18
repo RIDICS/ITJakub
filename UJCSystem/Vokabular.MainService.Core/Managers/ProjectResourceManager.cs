@@ -84,8 +84,8 @@ namespace Vokabular.MainService.Core.Managers
 
             //TODO create forum
             UserDetailContract user = m_userManager.GetUserDetail(m_authorizationManager.GetCurrentUserId());
-            m_forumManager.CreateNewForum(project, work.BookTypes, user);
-            //----
+            //m_forumManager.CreateNewForum(project, work.BookTypes, user);
+            //-----
         }
     }
 }
