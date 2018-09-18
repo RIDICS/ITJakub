@@ -99,6 +99,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             //{
             //     m_permissionRepository.CreatePermissionIfNotExist(newPermission);
             //}
+            resourceDirector.SetSessionInfoValue(SessionInfo.ProjectId, projectId);
+            resourceDirector.SetSessionInfoValue(SessionInfo.SnapshotId, createNewSnapshot.SnapshotId);
         }
 
         private void PublishSnapshotToExternalDatabase(long snapshotId, long projectId, List<BookPageData> bookDataPages)

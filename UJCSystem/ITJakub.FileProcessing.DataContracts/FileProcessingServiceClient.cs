@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
+using Vokabular.Shared;
 
 namespace ITJakub.FileProcessing.DataContracts
 {
@@ -34,7 +35,7 @@ namespace ITJakub.FileProcessing.DataContracts
             }
         }
 
-        public bool ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage)
+        public ImportResult ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage)
         {
             try
             {

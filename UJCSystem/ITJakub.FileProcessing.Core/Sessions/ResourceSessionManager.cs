@@ -2,17 +2,19 @@
 using System.IO;
 using System.Reflection;
 using log4net;
+using Vokabular.Shared;
 
 namespace ITJakub.FileProcessing.Core.Sessions
 {
     public class ResourceSessionManager
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        
+
         private readonly ResourceProcessorManager m_resourceProcessorManager;
         private readonly ActiveSessionManager m_activeSessionManager;
 
-        public ResourceSessionManager(ResourceProcessorManager resourceProcessorManager, string rootFolder, ActiveSessionManager activeSessionManager)
+        public ResourceSessionManager(ResourceProcessorManager resourceProcessorManager, string rootFolder,
+            ActiveSessionManager activeSessionManager)
         {
             m_resourceProcessorManager = resourceProcessorManager;
             m_activeSessionManager = activeSessionManager;
@@ -63,22 +65,27 @@ namespace ITJakub.FileProcessing.Core.Sessions
 
             director.AddResourceAndFillResourceTypeByExtension(fileName, data);
         }
-        
-        public bool ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage)
+
+        public ImportResult ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage)
         {
             if (!m_activeSessionManager.ContainsSessionId(sessionId))
             {
-                return false;
+                return new ImportResult{Success = false};
             }
-            
+
             ResourceSessionDirector director = m_activeSessionManager.GetDirectorBySessionId(sessionId);
             director.SetSessionInfoValue(SessionInfo.Message, uploadMessage);
             director.SetSessionInfoValue(SessionInfo.CreateTime, DateTime.UtcNow);
             director.SetSessionInfoValue(SessionInfo.ProjectId, projectId);
             director.SetSessionInfoValue(SessionInfo.UserId, userId);
             bool result = m_resourceProcessorManager.ProcessSessionResources(director);
+            ImportResult importResult = new ImportResult(
+                director.GetSessionInfoValue<long>(SessionInfo.ProjectId),
+                director.GetSessionInfoValue<long>(SessionInfo.SnapshotId),
+                result
+            );
             m_activeSessionManager.FinalizeSession(sessionId);
-            return result;
+            return importResult;
         }
     }
 }

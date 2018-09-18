@@ -1,4 +1,5 @@
 ﻿using System.ServiceModel;
+using Vokabular.Shared;
 
 namespace ITJakub.FileProcessing.DataContracts
 {
@@ -9,6 +10,6 @@ namespace ITJakub.FileProcessing.DataContracts
         void AddResource(UploadResourceContract resourceInfoSkeleton);
 
         [OperationContract]
-        bool ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage);
+        ImportResult ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage);
     }
 }

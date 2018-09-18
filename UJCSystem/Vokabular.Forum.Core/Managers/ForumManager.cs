@@ -24,7 +24,7 @@ namespace Vokabular.ForumSite.Core.Managers
 
         public long CreateNewForum(Project project)
         {
-            var work = new CreateForumWork(m_forumRepository, m_categoryRepository, project);
+            var work = new CreateForumWork(m_forumRepository,0);
             var resultId = work.Execute();
             return resultId;
         }

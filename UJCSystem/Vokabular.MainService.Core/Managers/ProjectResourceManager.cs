@@ -2,6 +2,7 @@
 using System.IO;
 using ITJakub.FileProcessing.DataContracts;
 using Vokabular.MainService.Core.Communication;
+using Vokabular.Shared;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -38,8 +39,8 @@ namespace Vokabular.MainService.Core.Managers
 
             using (var client = m_communicationProvider.GetFileProcessingClient())
             {
-                var success = client.ProcessSession(sessionId, projectId, permissionResult.UserId, comment);
-                if (!success)
+                ImportResult importResult = client.ProcessSession(sessionId, projectId, permissionResult.UserId, comment);
+                if (!importResult.Success)
                 {
                     throw new InvalidOperationException("Import failed");
                 }
