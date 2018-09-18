@@ -443,7 +443,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List<string>();
         }
 
-        public virtual IList<MetadataResource> GetMetadataByProjectIds(IList<long> projectIds, bool fetchAuthors, bool fetchResponsiblePersons)
+        public virtual IList<MetadataResource> GetMetadataByProjectIds(IList<long> projectIds, bool fetchAuthors, bool fetchResponsiblePersons, bool fetchBookTypes)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;
@@ -476,6 +476,15 @@ namespace Vokabular.DataEntities.Database.Repositories
                     .Fetch(x => x.ResponsiblePersons).Eager
                     .Fetch(x => x.ResponsiblePersons[0].ResponsiblePerson).Eager
                     .Fetch(x => x.ResponsiblePersons[0].ResponsibleType).Eager
+                    .Future();
+            }
+
+            if (fetchBookTypes)
+            {
+                GetSession().QueryOver<Project>()
+                    .WhereRestrictionOn(x => x.Id).IsInG(projectIds)
+                    .Fetch(x => x.LatestPublishedSnapshot).Eager
+                    .Fetch(x => x.LatestPublishedSnapshot.BookTypes).Eager
                     .Future();
             }
 

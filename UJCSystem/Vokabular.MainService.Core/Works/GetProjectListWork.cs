@@ -36,7 +36,7 @@ namespace Vokabular.MainService.Core.Works
             var dbResult = m_projectRepository.GetProjectList(m_start, m_count);
             var projectIdList = dbResult.List.Select(x => x.Id).ToList();
 
-            m_metadataList = m_metadataRepository.GetMetadataByProjectIds(projectIdList, m_fetchAuthors, m_fetchResponsiblePersons);
+            m_metadataList = m_metadataRepository.GetMetadataByProjectIds(projectIdList, m_fetchAuthors, m_fetchResponsiblePersons, false);
             m_resultCount = dbResult.Count;
 
             m_pageCount = m_fetchPageCount

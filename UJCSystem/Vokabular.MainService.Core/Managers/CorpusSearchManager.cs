@@ -37,7 +37,7 @@ namespace Vokabular.MainService.Core.Managers
         public List<CorpusSearchResultContract> GetCorpusSearchResultByStandardIds(List<CorpusSearchResultData> list)
         {
             var projectIds = list.Select(x => x.ProjectId).Distinct().ToList();
-            var dbProjects = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByProjectIds(projectIds, true, true));//TODO to be replaced with intended logic
+            var dbProjects = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByProjectIds(projectIds, true, true, false));//TODO to be replaced with intended logic
             var bookDictionary = dbProjects.ToDictionary(x => x.Resource.Project.Id);
             
             // Load all pages in one transaction

@@ -7,6 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj" />
     <ProjectReference Include="..\Vokabular.Forum.DataEntities\Vokabular.ForumSite.DataEntities.csproj" />
+    <ProjectReference Include="..\Vokabular.MainService.DataContracts\Vokabular.MainService.DataContracts.csproj" />
   </ItemGroup>
 
 </Project>

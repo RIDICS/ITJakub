@@ -16,5 +16,22 @@ namespace Vokabular.ForumSite.DataEntities.Database.Repositories
                 .Where(x => x.Name == name)
                 .SingleOrDefault();
         }
+
+        public virtual Category CreateOrGetCategoryByName(string name)
+        {
+            Category category = GetSession().QueryOver<Category>()
+                .Where(x => x.Name == name)
+                .SingleOrDefault();
+
+            if (category == null)
+            {
+                category = new Category();
+                category.Board = null; //TODO how to get board
+                category.Name = name;
+                category = (Category) this.Create(category);
+            }
+
+            return category;
+        }
     }
 }
