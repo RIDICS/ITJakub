@@ -11,11 +11,18 @@ namespace Vokabular.ForumSite.Core.Managers
     {
         private readonly ForumRepository m_forumRepository;
         private readonly CategoryRepository m_categoryRepository;
+        private readonly TopicRepository m_topicRepository;
+        private readonly MessageRepository m_messageRepository;
+        private readonly UserRepository m_userRepository;
 
-        public ForumManager(ForumRepository forumRepository, CategoryRepository categoryRepository)
+        public ForumManager(ForumRepository forumRepository, CategoryRepository categoryRepository, TopicRepository topicRepository,
+            MessageRepository messageRepository, UserRepository userRepository)
         {
             m_forumRepository = forumRepository;
             m_categoryRepository = categoryRepository;
+            m_topicRepository = topicRepository;
+            m_messageRepository = messageRepository;
+            m_userRepository = userRepository;
         }
 
         public Forum GetForum(int forumId)
@@ -23,9 +30,10 @@ namespace Vokabular.ForumSite.Core.Managers
             return m_forumRepository.InvokeUnitOfWork(x => x.FindById<Forum>(forumId));
         }
 
-        public long CreateNewForum(ProjectDetailContract project, IList<string> bookTypes, UserDetailContract user)
+        public long CreateNewForum(ProjectDetailContract project, short[] bookTypeIds, UserDetailContract user)
         {
-            var work = new CreateForumWork(m_forumRepository, m_categoryRepository, project, bookTypes, user);
+            var work = new CreateForumWork(m_forumRepository, m_categoryRepository, m_topicRepository, m_messageRepository,
+                m_userRepository, project, bookTypeIds, user);
             var resultId = work.Execute();
             return resultId;
         }

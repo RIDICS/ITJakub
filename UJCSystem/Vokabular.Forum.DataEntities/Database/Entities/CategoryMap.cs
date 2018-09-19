@@ -20,7 +20,8 @@ namespace Vokabular.ForumSite.DataEntities.Database.Entities {
 			Property(x => x.Name, map => { map.NotNullable(true); map.Unique(true); });
 			Property(x => x.CategoryImage);
 			Property(x => x.SortOrder, map => map.NotNullable(true));
-			ManyToOne(x => x.Board, map => { map.Column("BoardID"); map.Cascade(Cascade.None); });
+            Property(x => x.ExternalId);
+            ManyToOne(x => x.Board, map => { map.Column("BoardID"); map.Cascade(Cascade.None); });
 
 			ManyToOne(x => x.PollGroupCluster, map => 
 			{

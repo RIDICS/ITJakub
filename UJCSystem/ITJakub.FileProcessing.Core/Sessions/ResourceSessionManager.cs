@@ -81,7 +81,6 @@ namespace ITJakub.FileProcessing.Core.Sessions
             bool result = m_resourceProcessorManager.ProcessSessionResources(director);
             ImportResult importResult = new ImportResult(
                 director.GetSessionInfoValue<long>(SessionInfo.ProjectId),
-                director.GetSessionInfoValue<long>(SessionInfo.SnapshotId),
                 result
             );
             m_activeSessionManager.FinalizeSession(sessionId);

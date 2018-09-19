@@ -15,6 +15,7 @@ namespace Vokabular.ForumSite.DataEntities.Database.Entities {
         public string Name { get; set; }
         public string CategoryImage { get; set; }
         public short SortOrder { get; set; }
+        public short? ExternalId { get; set; }
         public IList<Forum> Forums { get; set; }
     }
 }
