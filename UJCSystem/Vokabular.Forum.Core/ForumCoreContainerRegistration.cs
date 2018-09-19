@@ -10,7 +10,7 @@ namespace Vokabular.ForumSite.Core
         {
             container.AddPerWebRequest<ForumManager>();
 
-            container.Install<ForumDataEntitiesContainerRegistration>();  // TODO move to Forum.Core registration
+            container.Install<ForumDataEntitiesContainerRegistration>();
         }
     }
 }

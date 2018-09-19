@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Vokabular.ForumSite.Core
+﻿namespace Vokabular.ForumSite.Core
 {
     public enum ForumTypeEnum : short
     {
