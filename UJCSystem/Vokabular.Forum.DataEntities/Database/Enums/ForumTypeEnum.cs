@@ -1,4 +1,4 @@
-﻿namespace Vokabular.ForumSite.Core
+﻿namespace Vokabular.ForumSite.DataEntities.Database.Enums
 {
     public enum ForumTypeEnum : short
     {
