@@ -25,6 +25,7 @@ namespace Vokabular.MainService.Core
             container.AddPerWebRequest<CorpusSearchManager>();
             container.AddPerWebRequest<FavoriteManager>();
             container.AddPerWebRequest<FeedbackManager>();
+            container.AddPerWebRequest<ForumSiteManager>();
             container.AddPerWebRequest<HeadwordSearchManager>();
             container.AddPerWebRequest<NamedResourceGroupManager>();
             container.AddPerWebRequest<NewsManager>();

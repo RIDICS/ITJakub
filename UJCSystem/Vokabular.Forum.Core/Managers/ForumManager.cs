@@ -23,9 +23,9 @@ namespace Vokabular.ForumSite.Core.Managers
             return m_forumRepository.InvokeUnitOfWork(x => x.FindById<Forum>(forumId));
         }
 
-        public long CreateNewForum(ProjectDetailContract project, IList<string> bookTypes, UserDetailContract user)
+        public long CreateNewForum(ProjectDetailContract project, short[] bookTypeIds, UserDetailContract user)
         {
-            var work = new CreateForumWork(m_forumRepository, m_categoryRepository, project, bookTypes, user);
+            var work = new CreateForumWork(m_forumRepository, m_categoryRepository, project, bookTypeIds, user);
             var resultId = work.Execute();
             return resultId;
         }

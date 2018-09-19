@@ -17,21 +17,11 @@ namespace Vokabular.ForumSite.DataEntities.Database.Repositories
                 .SingleOrDefault();
         }
 
-        public virtual Category CreateOrGetCategoryByName(string name)
+        public virtual Category GetCategoryByExternalId(short externalId)
         {
-            Category category = GetSession().QueryOver<Category>()
-                .Where(x => x.Name == name)
+            return GetSession().QueryOver<Category>()
+                .Where(x => x.ExternalId == externalId)
                 .SingleOrDefault();
-
-            if (category == null)
-            {
-                category = new Category();
-                category.Board = null; //TODO how to get board
-                category.Name = name;
-                category = (Category) this.Create(category);
-            }
-
-            return category;
         }
     }
 }
