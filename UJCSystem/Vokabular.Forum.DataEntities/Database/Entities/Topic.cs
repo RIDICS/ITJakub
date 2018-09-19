@@ -1,21 +1,22 @@
 using System;
-using System.Text;
 using System.Collections.Generic;
-
 
 namespace Vokabular.ForumSite.DataEntities.Database.Entities {
     
     public class Topic {
-        public Topic() {
-			Actives = new List<Active>();
-			FavoriteTopics = new List<FavoriteTopic>();
-			Forums = new List<Forum>();
-			Messages = new List<Message>();
-			NntpTopics = new List<NntpTopic>();
-			Topics = new List<Topic>();
-			TopicReadTrackings = new List<TopicReadTracking>();
-			WatchTopics = new List<WatchTopic>();
+
+        public Topic(Forum forum, DateTime posted, string topicText, short priority, User user)
+        {
+            Forum = forum;
+            Posted = posted;
+            TopicText = topicText;
+            Priority = priority;
+            User = user;
         }
+
+        public Topic()
+        {}
+
         public int TopicID { get; set; }
         public Forum Forum { get; set; }
         public User User { get; set; }
@@ -31,13 +32,13 @@ namespace Vokabular.ForumSite.DataEntities.Database.Entities {
         public string Status { get; set; }
         public string Styles { get; set; }
         public DateTime? LinkDate { get; set; }
-        public int Views { get; set; }
+        public int Views { get; set; } = 0;
         public short Priority { get; set; }
         public DateTime? LastPosted { get; set; }
         public string LastUserName { get; set; }
         public string LastUserDisplayName { get; set; }
-        public int NumPosts { get; set; }
-        public int Flags { get; set; }
+        public int NumPosts { get; set; } = 0;
+        public int Flags { get; set; } = 0;
         public bool? IsDeleted { get; set; }
         public bool? IsQuestion { get; set; }
         public int? AnswerMessageId { get; set; }
