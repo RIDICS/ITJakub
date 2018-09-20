@@ -9,7 +9,7 @@
 	private localizationScope = "FavoriteJs";
 
     constructor() {
-        this.storage = StorageManager.getInstance().getStorage(StorageTypeEnum.Local);
+        this.storage = ValueStorageManager.getInstance().getStorage(StorageTypeEnum.Local);
         this.isUserLoggedIn = isUserLoggedIn();
 
         if (!this.isUserLoggedIn) {

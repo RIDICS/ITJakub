@@ -1,22 +1,22 @@
-﻿class StorageManager
+﻿class ValueStorageManager
 {
-    private static instance: StorageManager = new StorageManager();
+    private static instance: ValueStorageManager = new ValueStorageManager();
 
     private storage:Array<IStorage>=[];
     
     constructor() {
-        if (StorageManager.instance) {
+        if (ValueStorageManager.instance) {
             throw new Error("Error: Instantiation failed: Use StorageManager.getInstance() instead of new.");
         }
 
-        StorageManager.instance = this;
+        ValueStorageManager.instance = this;
     }
 
-    public static getInstance(): StorageManager {
-        return StorageManager.instance;
+    public static getInstance(): ValueStorageManager {
+        return ValueStorageManager.instance;
     }
 
-    public getStorage(type: StorageTypeEnum = StorageTypeEnum.Any):IStorage {
+    public getStorage(type: StorageTypeEnum = StorageTypeEnum.Any): IStorage {
         if (this.storage[type] === undefined) {
             switch (type) {
                 case StorageTypeEnum.Any:
@@ -43,7 +43,7 @@
         return this.storage[type];
     }
 
-    private createLocalStorage():IStorage {
+    private createLocalStorage(): IStorage {
         if (typeof (Storage) !== "undefined") {
             return new LocalStorage;
         } else {
