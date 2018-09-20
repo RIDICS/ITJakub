@@ -8,9 +8,12 @@ namespace Vokabular.ForumSite.DataEntities
     {
         public void Install(IIocContainer container)
         {
+            container.AddPerWebRequest<AccessMaskRepository>();
             container.AddPerWebRequest<BoardRepository>();
             container.AddPerWebRequest<CategoryRepository>();
+            container.AddPerWebRequest<ForumAccessRepository>();
             container.AddPerWebRequest<ForumRepository>();
+            container.AddPerWebRequest<GroupRepository>();
             container.AddPerWebRequest<MessageRepository>();
             container.AddPerWebRequest<TopicRepository>();
             container.AddPerWebRequest<UserRepository>();
