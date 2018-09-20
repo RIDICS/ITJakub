@@ -4,15 +4,15 @@ using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.ForumSite.DataEntities.Database.Repositories
 {
-    public class BoardRepository : NHibernateDao
+    public class AccessMaskRepository : NHibernateDao
     {
-        public BoardRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public AccessMaskRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
 
-        public virtual Board GetBoardByName(string name)
+        public virtual AccessMask GetAccessMaskByName(string name)
         {
-            return GetSession().QueryOver<Board>()
+            return GetSession().QueryOver<AccessMask>()
                 .Where(x => x.Name == name)
                 .SingleOrDefault();
         }
