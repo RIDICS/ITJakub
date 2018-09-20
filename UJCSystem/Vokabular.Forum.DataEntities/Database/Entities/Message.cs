@@ -1,17 +1,30 @@
 using System;
-using System.Text;
 using System.Collections.Generic;
-
 
 namespace Vokabular.ForumSite.DataEntities.Database.Entities {
     
     public class Message {
+
+        public Message(Topic topic, User user, DateTime posted, string messageText)
+        {
+            Topic = topic;
+            User = user;
+            UserDisplayName = user.DisplayName;
+            Posted = posted;
+            MessageText = messageText;
+            Flags = 534;
+            IP = "";
+            Position = 0;
+            Indent = 0;
+        }
+
         public Message() {
 			Forums = new List<Forum>();
 			Messages = new List<Message>();
 			MessageHistories = new List<MessageHistory>();
 			Topics = new List<Topic>();
         }
+
         public int MessageID { get; set; }
         public Topic Topic { get; set; }
         public Message ReplyTo { get; set; }
