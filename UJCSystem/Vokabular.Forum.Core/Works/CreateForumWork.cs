@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Vokabular.ForumSite.Core.Helpers;
 using Vokabular.ForumSite.DataEntities.Database.Entities;
 using Vokabular.ForumSite.DataEntities.Database.Enums;
 using Vokabular.ForumSite.DataEntities.Database.Repositories;
@@ -12,7 +13,6 @@ namespace Vokabular.ForumSite.Core.Works
 {
     class CreateForumWork : UnitOfWorkBase<long>
     {
-        private const string m_topicDescription = "Link to Vokabular";  //TODO how to create link?
         private const string m_firstMessage = "First message..."; //TODO better first messsage
         private readonly ForumRepository m_forumRepository;
         private readonly CategoryRepository m_categoryRepository;
@@ -81,7 +81,7 @@ namespace Vokabular.ForumSite.Core.Works
             {
                 Forum tempForum = new Forum(m_project.Name, m_categoryRepository.GetCategoryByExternalId(m_bookTypeIds[i]),
                     (short)ForumTypeEnum.Forum);
-                tempForum.RemoteURL = UrlHelper.GetTopicsUrl(forum.ForumID, forum.Name);
+                tempForum.RemoteURL = ForumSiteUrlHelper.GetTopicsUrl(forum.ForumID, forum.Name);
                 m_forumRepository.Create(tempForum);
                 //TODO create forum access
             }
@@ -89,7 +89,7 @@ namespace Vokabular.ForumSite.Core.Works
 
         private Topic CreateFirstTopic(Forum forum, User user)
         {
-            Topic firstTopic = new Topic(forum, DateTime.UtcNow, m_topicDescription, (short)TopicTypeEnum.Announcement, user);
+            Topic firstTopic = new Topic(forum, DateTime.UtcNow, VokabularUrlHelper.GetBookUrl(m_project.Id, m_bookTypeIds.First()), (short)TopicTypeEnum.Announcement, user);
             m_topicRepository.Create(firstTopic);
             return firstTopic;
         }
