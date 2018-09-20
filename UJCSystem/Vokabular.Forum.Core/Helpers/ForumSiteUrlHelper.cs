@@ -4,15 +4,14 @@ using System.Text.RegularExpressions;
 
 namespace Vokabular.ForumSite.Core.Helpers
 {
-    class ForumSiteUrlHelper
+    public static class ForumSiteUrlHelper
     {
         public const string ForumSiteBaseUrl = "http://localhost:50165"; //TODO load from config file???
-
-        private const string topicsUrlPart = "/topics";
+        private const string TopicsUrlPart = "/topics";
 
         public static string GetTopicsUrl(int forumId, string forumName)
         {
-            return ForumSiteBaseUrl + topicsUrlPart + "/" + forumId + "-" + CleanStringForURL(forumName);
+            return ForumSiteBaseUrl + TopicsUrlPart + "/" + forumId + "-" + CleanStringForURL(forumName);
         }
 
         /// <summary>

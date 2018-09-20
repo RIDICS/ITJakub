@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace Vokabular.ForumSite.Core.Helpers
 {
-    public class VokabularUrlHelper
+    public static class VokabularUrlHelper
     {
         public const string VokabularBaseUrl = "https://localhost:44368"; //TODO load from config file???
 
