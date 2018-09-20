@@ -19,12 +19,16 @@ namespace Vokabular.ForumSite.Core.Works
         private readonly TopicRepository m_topicRepository;
         private readonly MessageRepository m_messageRepository;
         private readonly UserRepository m_userRepository;
+        private readonly ForumAccessRepository m_forumAccessRepository;
+        private readonly AccessMaskRepository m_accessMaskRepository;
+        private readonly GroupRepository m_groupRepository;
         private readonly ProjectDetailContract m_project;
         private readonly short[] m_bookTypeIds;
         private readonly UserDetailContract m_user;
 
         public CreateForumWork(ForumRepository forumRepository, CategoryRepository categoryRepository, TopicRepository topicRepository,
-            MessageRepository messageRepository, UserRepository userRepository, ProjectDetailContract project,
+            MessageRepository messageRepository, UserRepository userRepository, ForumAccessRepository forumAccessRepository,
+            AccessMaskRepository accessMaskRepository, GroupRepository groupRepository, ProjectDetailContract project,
             short[] bookTypeIds, UserDetailContract user) : base(forumRepository)
         {
             m_forumRepository = forumRepository;
@@ -32,6 +36,9 @@ namespace Vokabular.ForumSite.Core.Works
             m_project = project;
             m_bookTypeIds = bookTypeIds;
             m_user = user;
+            m_forumAccessRepository = forumAccessRepository;
+            m_accessMaskRepository = accessMaskRepository;
+            m_groupRepository = groupRepository;
             m_userRepository = userRepository;
             m_topicRepository = topicRepository;
             m_messageRepository = messageRepository;
@@ -41,16 +48,15 @@ namespace Vokabular.ForumSite.Core.Works
         {
             Category category = m_categoryRepository.GetCategoryByExternalId(m_bookTypeIds.First());
 
-            Forum forum = new Forum(m_project.Name, category, (short)ForumTypeEnum.Forum);
+            Forum forum = new Forum(m_project.Name, category, (short) ForumTypeEnum.Forum);
             m_forumRepository.Create(forum);
-            //TODO create forum access
+            SetAdminAccessToForumForAdminGroup(forum);
 
             CreateVirtualForumsForOtherBookTypes(forum);
 
             //User user = m_userRepository.GetUserByEmail(m_user.Email); //TODO connect with Vokabular
             User user = m_userRepository.GetUserByEmail("tomas.hrabacek@scalesoft.cz");
 
-            //TODO set lastTopic to Forum
             Topic firstTopic = CreateFirstTopic(forum, user);
             Message firstMessage = CreateFirstMessageInTopic(firstTopic, user);
 
@@ -80,16 +86,17 @@ namespace Vokabular.ForumSite.Core.Works
             for (int i = 1; i < m_bookTypeIds.Length; i++)
             {
                 Forum tempForum = new Forum(m_project.Name, m_categoryRepository.GetCategoryByExternalId(m_bookTypeIds[i]),
-                    (short)ForumTypeEnum.Forum);
+                    (short) ForumTypeEnum.Forum);
                 tempForum.RemoteURL = ForumSiteUrlHelper.GetTopicsUrl(forum.ForumID, forum.Name);
                 m_forumRepository.Create(tempForum);
-                //TODO create forum access
+                SetAdminAccessToForumForAdminGroup(tempForum);
             }
         }
 
         private Topic CreateFirstTopic(Forum forum, User user)
         {
-            Topic firstTopic = new Topic(forum, DateTime.UtcNow, VokabularUrlHelper.GetBookUrl(m_project.Id, m_bookTypeIds.First()), (short)TopicTypeEnum.Announcement, user);
+            Topic firstTopic = new Topic(forum, DateTime.UtcNow, VokabularUrlHelper.GetBookUrl(m_project.Id, m_bookTypeIds.First()),
+                (short) TopicTypeEnum.Announcement, user);
             m_topicRepository.Create(firstTopic);
             return firstTopic;
         }
@@ -99,6 +106,18 @@ namespace Vokabular.ForumSite.Core.Works
             Message firstMessage = new Message(topic, user, DateTime.UtcNow, m_firstMessage);
             m_messageRepository.Create(firstMessage);
             return firstMessage;
+        }
+
+        private void SetAdminAccessToForumForAdminGroup(Forum forum)
+        {
+            AccessMask accessMask = m_accessMaskRepository.FindById<AccessMask>(1); //TODO
+            Group group = m_groupRepository.FindById<Group>(1); //TODO
+            m_forumAccessRepository.Create(new ForumAccess
+            {
+                Group = group,
+                AccessMask = accessMask,
+                Forum = forum
+            });
         }
     }
 }
