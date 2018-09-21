@@ -17,32 +17,42 @@ namespace Vokabular.MainService.Core.Managers
         private readonly UserManager m_userManager;
         private readonly AuthorizationManager m_authorizationManager;
         private readonly ForumManager m_forumManager;
+        private readonly SubForumManager m_subForumManager;
 
-        public ForumSiteManager(ProjectRepository projectRepository, MetadataRepository metadataRepository, UserManager userManager, AuthorizationManager authorizationManager, ForumManager forumManager)
+        public ForumSiteManager(ProjectRepository projectRepository, MetadataRepository metadataRepository, UserManager userManager,
+            AuthorizationManager authorizationManager, ForumManager forumManager, SubForumManager subForumManager)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
             m_userManager = userManager;
             m_authorizationManager = authorizationManager;
             m_forumManager = forumManager;
+            m_subForumManager = subForumManager;
         }
 
         public void CreateForums(ImportResult importResult)
         {
             var work = new GetProjectWork(m_projectRepository, m_metadataRepository, importResult.ProjectId, true, true, false, true);
             Project project = work.Execute();
-            
-            if (project == null) 
+
+            if (project == null)
             {
                 throw new InvalidOperationException("Create of forum failed. Import was successful.");
             }
 
             ProjectDetailContract projectDetailContract = Mapper.Map<ProjectDetailContract>(project);
             projectDetailContract.PageCount = work.GetPageCount();
-            short[] bookTypeIds = project.LatestPublishedSnapshot.BookTypes.Select(x => (short)x.Type).ToArray();
+            short[] bookTypeIds = project.LatestPublishedSnapshot.BookTypes.Select(x => (short) x.Type).ToArray();
             UserDetailContract user = m_userManager.GetUserDetail(m_authorizationManager.GetCurrentUserId());
 
             m_forumManager.CreateNewForum(projectDetailContract, bookTypeIds, user);
+        }
+
+        public void CreateCategory(CategoryContract category, int categoryId)
+        {
+            UserDetailContract user = m_userManager.GetUserDetail(m_authorizationManager.GetCurrentUserId());
+            category.Id = categoryId;
+            m_subForumManager.CreateNewSubForum(category, user);
         }
     }
 }

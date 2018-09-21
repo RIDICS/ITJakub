@@ -9,6 +9,7 @@ namespace Vokabular.ForumSite.Core
         public void Install(IIocContainer container)
         {
             container.AddPerWebRequest<ForumManager>();
+            container.AddPerWebRequest<SubForumManager>();
 
             container.Install<ForumDataEntitiesContainerRegistration>();
         }
