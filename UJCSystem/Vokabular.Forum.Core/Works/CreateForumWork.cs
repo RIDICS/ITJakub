@@ -12,7 +12,7 @@ namespace Vokabular.ForumSite.Core.Works
 {
     class CreateForumWork : UnitOfWorkBase<long>
     {
-        private const string m_FirstTopicName = "Základní informace";
+        private const string FirstTopicName = "Základní informace";
         private readonly ForumRepository m_forumRepository;
         private readonly CategoryRepository m_categoryRepository;
         private readonly TopicRepository m_topicRepository;
@@ -49,7 +49,7 @@ namespace Vokabular.ForumSite.Core.Works
 
             Forum forum = new Forum(m_project.Name, category, (short) ForumTypeEnum.Forum);
             m_forumRepository.Create(forum);
-            SetAdminAccessToForumForAdminGroup(forum);
+            SetAdminAccessToForumForAdminGroup(forum); //TODO set access to forum
             CreateVirtualForumsForOtherBookTypes(forum);
 
             //User user = m_userRepository.GetUserByEmail(m_user.Email); //TODO connect with Vokabular
@@ -87,13 +87,13 @@ namespace Vokabular.ForumSite.Core.Works
                     (short) ForumTypeEnum.Forum);
                 tempForum.RemoteURL = ForumSiteUrlHelper.GetTopicsUrl(forum.ForumID, forum.Name);
                 m_forumRepository.Create(tempForum);
-                SetAdminAccessToForumForAdminGroup(tempForum);
+                SetAdminAccessToForumForAdminGroup(tempForum); //TODO set access to forum
             }
         }
 
         private Topic CreateFirstTopic(Forum forum, User user)
         {
-            Topic firstTopic = new Topic(forum, DateTime.UtcNow, m_FirstTopicName,
+            Topic firstTopic = new Topic(forum, DateTime.UtcNow, FirstTopicName,
                 (short) TopicTypeEnum.Announcement, user);
             m_topicRepository.Create(firstTopic);
             return firstTopic;
@@ -112,7 +112,7 @@ namespace Vokabular.ForumSite.Core.Works
 
             string messageText = $@"{m_project.Name}
 [url={VokabularUrlHelper.GetBookUrl(m_project.Id, m_bookTypeIds.First())}]Odkaz na knihu ve Vokabuláři webovém[/url]
-{(authors == "" ? "Autor: <Nezadáno>" : (m_project.Authors.Count == 1 ? "Autor:" : "Autoři:"))} {authors}
+{(m_project.Authors == null ? "Autor: <Nezadáno>" : (m_project.Authors.Count == 1 ? "Autor:" : "Autoři:"))} {authors}
 Počet stran: {(m_project.PageCount == null ? "<Nezadáno>" : m_project.PageCount.ToString())}";
 
             Message firstMessage = new Message(topic, user, DateTime.UtcNow, messageText);
