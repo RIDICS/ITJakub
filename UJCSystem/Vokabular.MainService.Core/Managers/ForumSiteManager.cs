@@ -29,15 +29,16 @@ namespace Vokabular.MainService.Core.Managers
 
         public void CreateForums(ImportResult importResult)
         {
-            var work = new GetProjectWork(m_projectRepository, m_metadataRepository, importResult.ProjectId, false, false, false, true);
+            var work = new GetProjectWork(m_projectRepository, m_metadataRepository, importResult.ProjectId, true, true, false, true);
             Project project = work.Execute();
             
             if (project == null) 
             {
-                throw new InvalidOperationException("Create of forum failed");
+                throw new InvalidOperationException("Create of forum failed. Import was successful.");
             }
 
             ProjectDetailContract projectDetailContract = Mapper.Map<ProjectDetailContract>(project);
+            projectDetailContract.PageCount = work.GetPageCount();
             short[] bookTypeIds = project.LatestPublishedSnapshot.BookTypes.Select(x => (short)x.Type).ToArray();
             UserDetailContract user = m_userManager.GetUserDetail(m_authorizationManager.GetCurrentUserId());
 

@@ -6,7 +6,10 @@
 
         public static string GetBookUrl(long bookId, short bookTypeId)
         {
-            return VokabularBaseUrl + "/" + (UrlBookTypeEnum)bookTypeId + "/" + (UrlBookTypeEnum)bookTypeId + "/listing?bookId=" + bookId; 
+            UrlBookTypeEnum urlBookType = (UrlBookTypeEnum) bookTypeId == UrlBookTypeEnum.BohemianTextBank
+                ? UrlBookTypeEnum.Editions
+                : (UrlBookTypeEnum) bookTypeId;
+            return VokabularBaseUrl + "/" + urlBookType + "/" + urlBookType + "/listing?bookId=" + bookId; 
         }
     }
 }

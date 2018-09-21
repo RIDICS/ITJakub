@@ -14,42 +14,17 @@ namespace Vokabular.ForumSite.Core.Helpers
             return ForumSiteBaseUrl + TopicsUrlPart + "/" + forumId + "-" + CleanStringForURL(forumName);
         }
 
-        /// <summary>
-        /// Cleans the string for URL.
-        /// </summary>
-        /// <param name="inputString">The input String.</param>
-        /// <returns>
-        /// The clean string for url.
-        /// </returns>
         public static string CleanStringForURL(string inputString)
         {
             var sb = new StringBuilder();
 
-            // trim...
             inputString = inputString.Trim();
-
-            // fix ampersand...
             inputString = inputString.Replace("&", "and").Replace("ـ", string.Empty);
-
             inputString = Regex.Replace(inputString, @"\p{Cs}", string.Empty);
-
-            // normalize the Unicode
             inputString = inputString.Normalize(NormalizationForm.FormD);
 
 
-            /* string strUnidecode;
-
-             try
-             {
-                 strUnidecode = inputString.Unidecode().Replace(" ", "-");
-             }
-             catch (Exception)
-             {
-                 strUnidecode = inputString;
-             }*/
-            string strUnidecode = inputString;
-
-            foreach (char currentChar in strUnidecode)
+            foreach (char currentChar in inputString)
             {
                 if (char.IsWhiteSpace(currentChar) || char.IsPunctuation(currentChar))
                 {
