@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace Vokabular.ForumSite.Core.Helpers
+﻿namespace Vokabular.ForumSite.Core.Helpers
 {
     public enum UrlBookTypeEnum : short
     {

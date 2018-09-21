@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
@@ -29,15 +29,13 @@ namespace Vokabular.MainService.Core.Managers
 
         public void CreateForums(ImportResult importResult)
         {
-            //TODO all requests in one unit of work
-            //TODO get Project & BookTypes
             var work = new GetProjectWork(m_projectRepository, m_metadataRepository, importResult.ProjectId, false, false, false, true);
             Project project = work.Execute();
             
-            /*if (project == null) //TODO exception?
-             {
-                 return null;
-             }*/
+            if (project == null) 
+            {
+                throw new InvalidOperationException("Create of forum failed");
+            }
 
             ProjectDetailContract projectDetailContract = Mapper.Map<ProjectDetailContract>(project);
             short[] bookTypeIds = project.LatestPublishedSnapshot.BookTypes.Select(x => (short)x.Type).ToArray();

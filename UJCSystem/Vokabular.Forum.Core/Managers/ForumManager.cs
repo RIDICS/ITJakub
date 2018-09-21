@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Vokabular.ForumSite.Core.Works;
+﻿using Vokabular.ForumSite.Core.Works;
 using Vokabular.ForumSite.DataEntities.Database.Entities;
 using Vokabular.ForumSite.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts.Contracts;

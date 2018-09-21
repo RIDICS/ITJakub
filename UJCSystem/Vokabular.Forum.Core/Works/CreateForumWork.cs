@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Vokabular.ForumSite.Core.Helpers;
 using Vokabular.ForumSite.DataEntities.Database.Entities;
