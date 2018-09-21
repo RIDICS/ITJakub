@@ -42,7 +42,7 @@ namespace Vokabular.MainService.Core.Managers
         public void UpdateCategory(int categoryId, CategoryContract category)
         {
             var updateCategoryWork = new UpdateCategoryWork(m_categoryRepository, categoryId, category);
-            //m_forumSiteManager.UpdateCategory(resultId); //TODO
+            m_forumSiteManager.UpdateCategory(category, categoryId);
             updateCategoryWork.Execute();
         }
 

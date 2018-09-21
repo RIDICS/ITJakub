@@ -24,11 +24,17 @@ namespace Vokabular.ForumSite.Core.Managers
             m_groupRepository = groupRepository;
         }
 
-        public int CreateNewSubForum(CategoryContract category, UserDetailContract user)
+        public int CreateNewSubForum(CategoryContract category)
         {
             var work = new CreateSubForumWork(m_forumRepository, m_categoryRepository, m_forumAccessRepository, m_accessMaskRepository, m_groupRepository, category);
             var resultId = work.Execute();
             return resultId;
+        }
+
+        public void UpdateSubForum(CategoryContract updatedCategory, CategoryContract oldCategory)
+        {
+            //TODO update description and parent forum for all subforums in all categories
+            throw new System.NotImplementedException();
         }
     }
 }
