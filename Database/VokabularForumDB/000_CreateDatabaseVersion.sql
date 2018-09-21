@@ -21,8 +21,11 @@ BEGIN TRAN
 	   [UpgradeUser] varchar(150) NOT NULL default SYSTEM_USER,
 	)
 
--- Add column for mapping Category - BookType
+-- Add column for mapping Category (Forum) - BookType (Vokabular)
 	ALTER TABLE [dbo].[yaf_Category] ADD ExternalID SMALLINT NULL
+
+-- Add column for mapping Forum (Forum) - Category (Vokabular)
+	ALTER TABLE [dbo].[yaf_Forum] ADD ExternalID INT NULL
 
 -- Insert version number to DatabaseVersion table
 

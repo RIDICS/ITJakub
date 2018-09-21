@@ -53,7 +53,8 @@ namespace Vokabular.ForumSite.DataEntities.Database.Entities {
 			Property(x => x.Styles);
 			Property(x => x.ModeratedPostCount);
 			Property(x => x.IsModeratedNewTopicOnly, map => map.NotNullable(true));
-			ManyToOne(x => x.Category, map => 
+            Property(x => x.ExternalId);
+            ManyToOne(x => x.Category, map => 
 			{
 				map.Column("CategoryID");
                 map.NotNullable(true);

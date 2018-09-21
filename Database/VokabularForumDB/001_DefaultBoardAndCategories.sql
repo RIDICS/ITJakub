@@ -3,6 +3,7 @@
 BEGIN TRAN
 
 	  CREATE UNIQUE INDEX IX_ExternalID ON [dbo].[yaf_Category](ExternalID) WHERE ExternalID IS NOT NULL
+	  CREATE UNIQUE INDEX IX_ExternalID ON [dbo].[yaf_Forum](ExternalID) WHERE ExternalID IS NOT NULL
 
 -- Insert default board 
 	  INSERT INTO [dbo].[yaf_Board]
