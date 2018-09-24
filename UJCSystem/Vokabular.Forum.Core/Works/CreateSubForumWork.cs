@@ -8,7 +8,7 @@ using Category = Vokabular.ForumSite.DataEntities.Database.Entities.Category;
 
 namespace Vokabular.ForumSite.Core.Works
 {
-    class CreateSubForumWork : UnitOfWorkBase<int>
+    class CreateSubForumWork : UnitOfWorkBase
     {
         private readonly ForumRepository m_forumRepository;
         private readonly CategoryRepository m_categoryRepository;
@@ -29,10 +29,8 @@ namespace Vokabular.ForumSite.Core.Works
             m_category = category;
         }
 
-        protected override int ExecuteWorkImplementation()
+        protected override void ExecuteWorkImplementation()
         {
-            int id = 0;
-
             foreach (UrlBookTypeEnum bookType in BookTypeHelper.GetBookTypeEnumsWithCategories())
             {
                 Category category = m_categoryRepository.GetCategoryByExternalId((short) bookType);
@@ -49,23 +47,8 @@ namespace Vokabular.ForumSite.Core.Works
                     ParentForum = parentForum
                 };
                 m_forumRepository.Create(forum);
-                SetAdminAccessToForumForAdminGroup(forum);
-                id = forum.ForumID;
+                m_forumAccessRepository.SetAdminAccessToForumForAdminGroup(forum);
             }
-
-            return id;
-        }
-
-        private void SetAdminAccessToForumForAdminGroup(Forum forum)
-        {
-            AccessMask accessMask = m_accessMaskRepository.FindById<AccessMask>(1); //TODO
-            Group group = m_groupRepository.FindById<Group>(1); //TODO
-            m_forumAccessRepository.Create(new ForumAccess
-            {
-                Group = group,
-                AccessMask = accessMask,
-                Forum = forum
-            });
         }
     }
 }

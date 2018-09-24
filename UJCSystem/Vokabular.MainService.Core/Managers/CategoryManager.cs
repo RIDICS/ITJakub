@@ -35,14 +35,14 @@ namespace Vokabular.MainService.Core.Managers
         public void DeleteCategory(int categoryId)
         {
             var deleteCategoryWork = new DeleteCategoryWork(m_categoryRepository, categoryId);
-            //m_forumSiteManager.DeleteCategory(resultId); //TODO
+            m_forumSiteManager.DeleteCategory(categoryId); 
             deleteCategoryWork.Execute();
         }
 
         public void UpdateCategory(int categoryId, CategoryContract category)
         {
             var updateCategoryWork = new UpdateCategoryWork(m_categoryRepository, categoryId, category);
-            m_forumSiteManager.UpdateCategory(category, categoryId);
+            m_forumSiteManager.UpdateCategory(category, GetCategory(categoryId));
             updateCategoryWork.Execute();
         }
 

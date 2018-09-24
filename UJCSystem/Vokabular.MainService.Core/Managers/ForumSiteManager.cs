@@ -14,15 +14,13 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly ProjectRepository m_projectRepository;
         private readonly MetadataRepository m_metadataRepository;
-        private readonly CategoryRepository m_categoryRepository;
         private readonly UserManager m_userManager;
         private readonly AuthorizationManager m_authorizationManager;
         private readonly ForumManager m_forumManager;
         private readonly SubForumManager m_subForumManager;
 
-        public ForumSiteManager(ProjectRepository projectRepository, MetadataRepository metadataRepository,
-            CategoryRepository categoryRepository, UserManager userManager, AuthorizationManager authorizationManager,
-            ForumManager forumManager, SubForumManager subForumManager)
+        public ForumSiteManager(ProjectRepository projectRepository, MetadataRepository metadataRepository, UserManager userManager,
+            AuthorizationManager authorizationManager, ForumManager forumManager, SubForumManager subForumManager)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
@@ -30,7 +28,6 @@ namespace Vokabular.MainService.Core.Managers
             m_authorizationManager = authorizationManager;
             m_forumManager = forumManager;
             m_subForumManager = subForumManager;
-            m_categoryRepository = categoryRepository;
         }
 
         public void CreateForums(ImportResult importResult)
@@ -57,10 +54,14 @@ namespace Vokabular.MainService.Core.Managers
             m_subForumManager.CreateNewSubForum(category);
         }
 
-        public void UpdateCategory(CategoryContract updatedCategory, int categoryId)
+        public void UpdateCategory(CategoryContract updatedCategory, CategoryContract oldCategory)
         {
-            var category = m_categoryRepository.FindById<Category>(categoryId);
-            m_subForumManager.UpdateSubForum(updatedCategory, Mapper.Map<CategoryContract>(category));
+            m_subForumManager.UpdateSubForum(updatedCategory, oldCategory);
+        }
+
+        public void DeleteCategory(int categoryId)
+        {
+            m_subForumManager.DeleteSubForum(categoryId);
         }
     }
 }
