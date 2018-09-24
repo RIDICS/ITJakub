@@ -27,6 +27,9 @@ BEGIN TRAN
 -- Add column for mapping Forum (Forum) - Category (Vokabular)
 	ALTER TABLE [dbo].[yaf_Forum] ADD ExternalID INT NULL
 
+-- Add column for mapping Forum (Forum) - Project (Vokabular)
+	ALTER TABLE [dbo].[yaf_Forum] ADD ExternalProjectID BIGINT NULL
+
 -- Insert version number to DatabaseVersion table
 
     INSERT INTO [dbo].[DatabaseVersion]

@@ -55,6 +55,7 @@ namespace Vokabular.ForumSite.DataEntities.Database.Entities {
         public int? ModeratedPostCount { get; set; }
         public bool IsModeratedNewTopicOnly { get; set; }
         public int? ExternalId { get; set; }
+        public long? ExternalProjectId { get; set; }
         public IList<Active> Actives { get; set; }
         public IList<Forum> Forums { get; set; }
         public IList<ForumAccess> ForumAccesses { get; set; }
