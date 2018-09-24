@@ -1,4 +1,5 @@
-﻿using Vokabular.ForumSite.Core.Works;
+﻿using System.Collections.Generic;
+using Vokabular.ForumSite.Core.Works;
 using Vokabular.ForumSite.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts.Contracts;
 
@@ -9,37 +10,33 @@ namespace Vokabular.ForumSite.Core.Managers
         private readonly ForumRepository m_forumRepository;
         private readonly CategoryRepository m_categoryRepository;
         private readonly ForumAccessRepository m_forumAccessRepository;
-        private readonly AccessMaskRepository m_accessMaskRepository;
-        private readonly GroupRepository m_groupRepository;
 
         public SubForumManager(ForumRepository forumRepository, CategoryRepository categoryRepository,
-            ForumAccessRepository forumAccessRepository,
-            AccessMaskRepository accessMaskRepository, GroupRepository groupRepository)
+            ForumAccessRepository forumAccessRepository)
         {
             m_forumRepository = forumRepository;
             m_categoryRepository = categoryRepository;
             m_forumAccessRepository = forumAccessRepository;
-            m_accessMaskRepository = accessMaskRepository;
-            m_groupRepository = groupRepository;
         }
 
         public void CreateNewSubForum(CategoryContract category)
         {
-            var work = new CreateSubForumWork(m_forumRepository, m_categoryRepository, m_forumAccessRepository, m_accessMaskRepository,
-                m_groupRepository, category);
-            work.Execute();
+            new CreateSubForumWork(m_forumRepository, m_categoryRepository, m_forumAccessRepository, category).Execute();
         }
 
         public void UpdateSubForum(CategoryContract updatedCategory, CategoryContract oldCategory)
         {
-            var work = new UpdateSubForumWork(m_forumRepository, m_categoryRepository, updatedCategory, oldCategory);
-            work.Execute();
+            new UpdateSubForumWork(m_forumRepository, m_categoryRepository, updatedCategory, oldCategory).Execute();
         }
 
         public void DeleteSubForum(int categoryId)
         {
-            var work = new DeleteSubForumWork(m_forumRepository, m_categoryRepository, m_forumAccessRepository, categoryId);
-            work.Execute();
+            new DeleteSubForumWork(m_forumRepository, m_categoryRepository, m_forumAccessRepository, categoryId).Execute();
+        }
+
+        public void CreateVirtualForums(long projectId, IList<int> categoryIds, IList<int> oldCategoryIds)
+        {
+            new CreateVirtualForumsForCategories(m_forumRepository, m_forumAccessRepository, categoryIds, oldCategoryIds, projectId).Execute();
         }
     }
 }

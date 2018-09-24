@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
@@ -62,6 +63,11 @@ namespace Vokabular.MainService.Core.Managers
         public void DeleteCategory(int categoryId)
         {
             m_subForumManager.DeleteSubForum(categoryId);
+        }
+
+        public void SetCategoriesToForum(long projectId, IList<int> categoryIds, IList<int> oldCategoryIds)
+        {
+            m_subForumManager.CreateVirtualForums(projectId, categoryIds, oldCategoryIds);
         }
     }
 }

@@ -41,8 +41,9 @@ namespace Vokabular.MainService.Core.Managers
 
         public void UpdateCategory(int categoryId, CategoryContract category)
         {
+            var oldCategory = GetCategory(categoryId);
             var updateCategoryWork = new UpdateCategoryWork(m_categoryRepository, categoryId, category);
-            m_forumSiteManager.UpdateCategory(category, GetCategory(categoryId));
+            m_forumSiteManager.UpdateCategory(category, oldCategory);
             updateCategoryWork.Execute();
         }
 
