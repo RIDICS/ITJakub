@@ -10,7 +10,7 @@ namespace Vokabular.ForumSite.DataEntities.Database.Repositories
         {
         }
 
-        public User GetUserByEmail(string email)
+        public virtual User GetUserByEmail(string email)
         {
             return GetSession().QueryOver<User>()
                 .Where(x => x.Email == email)

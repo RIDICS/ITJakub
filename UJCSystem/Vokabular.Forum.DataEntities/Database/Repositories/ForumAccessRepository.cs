@@ -7,8 +7,8 @@ namespace Vokabular.ForumSite.DataEntities.Database.Repositories
 {
     public class ForumAccessRepository : NHibernateDao
     {
-        private AccessMaskRepository m_accessMaskRepository;
-        private GroupRepository m_groupRepository;
+        private readonly AccessMaskRepository m_accessMaskRepository;
+        private readonly GroupRepository m_groupRepository;
 
         public ForumAccessRepository(IUnitOfWork unitOfWork, AccessMaskRepository accessMaskRepository, GroupRepository groupRepository) :
             base(unitOfWork)
@@ -17,10 +17,10 @@ namespace Vokabular.ForumSite.DataEntities.Database.Repositories
             m_groupRepository = groupRepository;
         }
 
-        public void SetAdminAccessToForumForAdminGroup(Forum forum)
+        public virtual void SetAdminAccessToForumForAdminGroup(Forum forum)
         {
-            AccessMask accessMask = m_accessMaskRepository.FindById<AccessMask>(1); //TODO
-            Group group = m_groupRepository.FindById<Group>(1); //TODO
+            AccessMask accessMask = m_accessMaskRepository.FindById<AccessMask>(1); 
+            Group group = m_groupRepository.FindById<Group>(1); //TODO connect with Vokobular
             Create(new ForumAccess
             {
                 Group = group,
@@ -29,12 +29,12 @@ namespace Vokabular.ForumSite.DataEntities.Database.Repositories
             });
         }
 
-        public void RemoveAllAccessesFromForum(Forum forum)
+        public virtual void RemoveAllAccessesFromForum(Forum forum)
         {
             DeleteAll(GetAllAccessesForForum(forum));
         }
 
-        public IList<ForumAccess> GetAllAccessesForForum(Forum forum)
+        public virtual IList<ForumAccess> GetAllAccessesForForum(Forum forum)
         {
             return GetSession().QueryOver<ForumAccess>()
                 .Where(x => x.Forum == forum)
