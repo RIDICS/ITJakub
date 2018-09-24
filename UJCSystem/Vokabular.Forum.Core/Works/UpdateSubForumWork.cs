@@ -29,14 +29,14 @@ namespace Vokabular.ForumSite.Core.Works
             {
                 Category category = m_categoryRepository.GetCategoryByExternalId((short) bookType);
 
-                Forum forum = m_forumRepository.GetForumByExternalIdAndCategory(m_oldCategory.Id, category);
+                Forum forum = m_forumRepository.GetForumByExternalCategoryIdAndCategory(m_oldCategory.Id, category);
                 forum.Name = m_updatedCategory.Description;
 
                 if (m_oldCategory.ParentCategoryId != m_updatedCategory.ParentCategoryId)
                 {
                     forum.ParentForum = m_updatedCategory.ParentCategoryId == null
                         ? null
-                        : m_forumRepository.GetForumByExternalIdAndCategory((int) m_updatedCategory.ParentCategoryId, category);
+                        : m_forumRepository.GetForumByExternalCategoryIdAndCategory((int) m_updatedCategory.ParentCategoryId, category);
                 }
 
                 m_forumRepository.Update(forum);

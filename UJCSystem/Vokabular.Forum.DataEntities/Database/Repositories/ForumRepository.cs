@@ -1,4 +1,7 @@
-﻿using Vokabular.ForumSite.DataEntities.Database.Entities;
+﻿using System.Collections;
+using System.Collections.Generic;
+using NHibernate.Criterion;
+using Vokabular.ForumSite.DataEntities.Database.Entities;
 using Vokabular.Shared.DataEntities.Daos;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
@@ -17,12 +20,34 @@ namespace Vokabular.ForumSite.DataEntities.Database.Repositories
                 .SingleOrDefault();
         }
 
-        public virtual Forum GetForumByExternalIdAndCategory(int externalId, Category category)
+        public virtual Forum GetForumByExternalCategoryIdAndCategory(int externalCategoryId, Category category)
         {
             return GetSession().QueryOver<Forum>()
-                .Where(x => x.ExternalId == externalId)
+                .Where(x => x.ExternalId == externalCategoryId)
                 .Where(x => x.Category == category)
                 .SingleOrDefault();
+        }
+
+        public virtual IList<Forum> GetForumsByExternalCategoryIds(ICollection categoryIds)
+        {
+            return GetSession().QueryOver<Forum>()
+                .Where(x => x.ExternalId.IsIn(categoryIds))
+                .List();
+        }
+
+        public virtual Forum GetMainForumByExternalProjectId(long externalProjectId)
+        {
+            return GetSession().QueryOver<Forum>()
+                .Where(x => x.ExternalProjectId == externalProjectId)
+                .Where(x => x.RemoteURL == null)
+                .SingleOrDefault();
+        }
+
+        public virtual IList<Forum> GetForumsByExternalProjectId(long externalProjectId)
+        {
+            return GetSession().QueryOver<Forum>()
+                .Where(x => x.ExternalProjectId == externalProjectId)
+                .List();
         }
     }
 }

@@ -24,7 +24,8 @@ namespace Vokabular.ForumSite.Core.Works
         private readonly UserDetailContract m_user;
 
         public CreateForumWork(ForumRepository forumRepository, CategoryRepository categoryRepository, TopicRepository topicRepository,
-            MessageRepository messageRepository, UserRepository userRepository, ForumAccessRepository forumAccessRepository, ProjectDetailContract project,
+            MessageRepository messageRepository, UserRepository userRepository, ForumAccessRepository forumAccessRepository,
+            ProjectDetailContract project,
             short[] bookTypeIds, UserDetailContract user) : base(forumRepository)
         {
             m_forumRepository = forumRepository;
@@ -42,7 +43,7 @@ namespace Vokabular.ForumSite.Core.Works
         {
             Category category = m_categoryRepository.GetCategoryByExternalId(m_bookTypeIds.First());
 
-            Forum forum = new Forum(m_project.Name, category, (short) ForumTypeEnum.Forum);
+            Forum forum = new Forum(m_project.Name, category, (short) ForumTypeEnum.Forum) {ExternalProjectId = m_project.Id};
             m_forumRepository.Create(forum);
             m_forumAccessRepository.SetAdminAccessToForumForAdminGroup(forum); //TODO set access to forum
             CreateVirtualForumsForOtherBookTypes(forum);
@@ -79,7 +80,7 @@ namespace Vokabular.ForumSite.Core.Works
             for (int i = 1; i < m_bookTypeIds.Length; i++)
             {
                 Forum tempForum = new Forum(m_project.Name, m_categoryRepository.GetCategoryByExternalId(m_bookTypeIds[i]),
-                    (short) ForumTypeEnum.Forum);
+                    (short) ForumTypeEnum.Forum) {ExternalProjectId = m_project.Id};
                 tempForum.RemoteURL = ForumSiteUrlHelper.GetTopicsUrl(forum.ForumID, forum.Name);
                 m_forumRepository.Create(tempForum);
                 m_forumAccessRepository.SetAdminAccessToForumForAdminGroup(tempForum); //TODO set access to forum

@@ -28,7 +28,7 @@ namespace Vokabular.ForumSite.Core.Works
             foreach (UrlBookTypeEnum bookType in BookTypeHelper.GetBookTypeEnumsWithCategories())
             {
                 Category category = m_categoryRepository.GetCategoryByExternalId((short)bookType);
-                Forum forum = m_forumRepository.GetForumByExternalIdAndCategory(m_categoryId, category);
+                Forum forum = m_forumRepository.GetForumByExternalCategoryIdAndCategory(m_categoryId, category);
 
                 if (forum == null)
                     throw new HttpErrorCodeException(ErrorMessages.NotFound, HttpStatusCode.NotFound);

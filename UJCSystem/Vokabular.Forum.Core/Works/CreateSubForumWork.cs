@@ -33,7 +33,7 @@ namespace Vokabular.ForumSite.Core.Works
                 Forum parentForum = null;
                 if (m_category.ParentCategoryId != null)
                 {
-                    parentForum = m_forumRepository.GetForumByExternalIdAndCategory((int) m_category.ParentCategoryId, category);
+                    parentForum = m_forumRepository.GetForumByExternalCategoryIdAndCategory((int) m_category.ParentCategoryId, category);
                 }
 
                 Forum forum = new Forum(m_category.Description, category, (short) ForumTypeEnum.SubCategory)
