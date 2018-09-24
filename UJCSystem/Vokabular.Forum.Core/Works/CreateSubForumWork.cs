@@ -13,19 +13,14 @@ namespace Vokabular.ForumSite.Core.Works
         private readonly ForumRepository m_forumRepository;
         private readonly CategoryRepository m_categoryRepository;
         private readonly ForumAccessRepository m_forumAccessRepository;
-        private readonly AccessMaskRepository m_accessMaskRepository;
-        private readonly GroupRepository m_groupRepository;
         private readonly CategoryContract m_category;
 
         public CreateSubForumWork(ForumRepository forumRepository, CategoryRepository categoryRepository,
-            ForumAccessRepository forumAccessRepository,
-            AccessMaskRepository accessMaskRepository, GroupRepository groupRepository, CategoryContract category) : base(forumRepository)
+            ForumAccessRepository forumAccessRepository, CategoryContract category) : base(forumRepository)
         {
             m_forumRepository = forumRepository;
             m_categoryRepository = categoryRepository;
             m_forumAccessRepository = forumAccessRepository;
-            m_accessMaskRepository = accessMaskRepository;
-            m_groupRepository = groupRepository;
             m_category = category;
         }
 

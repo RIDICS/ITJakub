@@ -14,12 +14,9 @@ namespace Vokabular.ForumSite.Core.Managers
         private readonly MessageRepository m_messageRepository;
         private readonly UserRepository m_userRepository;
         private readonly ForumAccessRepository m_forumAccessRepository;
-        private readonly AccessMaskRepository m_accessMaskRepository;
-        private readonly GroupRepository m_groupRepository;
 
         public ForumManager(ForumRepository forumRepository, CategoryRepository categoryRepository, TopicRepository topicRepository,
-            MessageRepository messageRepository, UserRepository userRepository, ForumAccessRepository forumAccessRepository,
-            AccessMaskRepository accessMaskRepository, GroupRepository groupRepository)
+            MessageRepository messageRepository, UserRepository userRepository, ForumAccessRepository forumAccessRepository)
         {
             m_forumRepository = forumRepository;
             m_categoryRepository = categoryRepository;
@@ -27,8 +24,6 @@ namespace Vokabular.ForumSite.Core.Managers
             m_messageRepository = messageRepository;
             m_userRepository = userRepository;
             m_forumAccessRepository = forumAccessRepository;
-            m_accessMaskRepository = accessMaskRepository;
-            m_groupRepository = groupRepository;
         }
 
         public Forum GetForum(int forumId)
@@ -39,7 +34,7 @@ namespace Vokabular.ForumSite.Core.Managers
         public long CreateNewForum(ProjectDetailContract project, short[] bookTypeIds, UserDetailContract user)
         {
             var work = new CreateForumWork(m_forumRepository, m_categoryRepository, m_topicRepository, m_messageRepository,
-                m_userRepository, m_forumAccessRepository, m_accessMaskRepository, m_groupRepository, project, bookTypeIds, user);
+                m_userRepository, m_forumAccessRepository, project, bookTypeIds, user);
             var resultId = work.Execute();
             return resultId;
         }

@@ -19,15 +19,12 @@ namespace Vokabular.ForumSite.Core.Works
         private readonly MessageRepository m_messageRepository;
         private readonly UserRepository m_userRepository;
         private readonly ForumAccessRepository m_forumAccessRepository;
-        private readonly AccessMaskRepository m_accessMaskRepository;
-        private readonly GroupRepository m_groupRepository;
         private readonly ProjectDetailContract m_project;
         private readonly short[] m_bookTypeIds;
         private readonly UserDetailContract m_user;
 
         public CreateForumWork(ForumRepository forumRepository, CategoryRepository categoryRepository, TopicRepository topicRepository,
-            MessageRepository messageRepository, UserRepository userRepository, ForumAccessRepository forumAccessRepository,
-            AccessMaskRepository accessMaskRepository, GroupRepository groupRepository, ProjectDetailContract project,
+            MessageRepository messageRepository, UserRepository userRepository, ForumAccessRepository forumAccessRepository, ProjectDetailContract project,
             short[] bookTypeIds, UserDetailContract user) : base(forumRepository)
         {
             m_forumRepository = forumRepository;
@@ -36,8 +33,6 @@ namespace Vokabular.ForumSite.Core.Works
             m_bookTypeIds = bookTypeIds;
             m_user = user;
             m_forumAccessRepository = forumAccessRepository;
-            m_accessMaskRepository = accessMaskRepository;
-            m_groupRepository = groupRepository;
             m_userRepository = userRepository;
             m_topicRepository = topicRepository;
             m_messageRepository = messageRepository;
@@ -49,7 +44,7 @@ namespace Vokabular.ForumSite.Core.Works
 
             Forum forum = new Forum(m_project.Name, category, (short) ForumTypeEnum.Forum);
             m_forumRepository.Create(forum);
-            SetAdminAccessToForumForAdminGroup(forum); //TODO set access to forum
+            m_forumAccessRepository.SetAdminAccessToForumForAdminGroup(forum); //TODO set access to forum
             CreateVirtualForumsForOtherBookTypes(forum);
 
             //User user = m_userRepository.GetUserByEmail(m_user.Email); //TODO connect with Vokabular
@@ -87,7 +82,7 @@ namespace Vokabular.ForumSite.Core.Works
                     (short) ForumTypeEnum.Forum);
                 tempForum.RemoteURL = ForumSiteUrlHelper.GetTopicsUrl(forum.ForumID, forum.Name);
                 m_forumRepository.Create(tempForum);
-                SetAdminAccessToForumForAdminGroup(tempForum); //TODO set access to forum
+                m_forumAccessRepository.SetAdminAccessToForumForAdminGroup(tempForum); //TODO set access to forum
             }
         }
 
@@ -118,18 +113,6 @@ Počet stran: {(m_project.PageCount == null ? "<Nezadáno>" : m_project.PageCoun
             Message firstMessage = new Message(topic, user, DateTime.UtcNow, messageText);
             m_messageRepository.Create(firstMessage);
             return firstMessage;
-        }
-
-        private void SetAdminAccessToForumForAdminGroup(Forum forum)
-        {
-            AccessMask accessMask = m_accessMaskRepository.FindById<AccessMask>(1); //TODO
-            Group group = m_groupRepository.FindById<Group>(1); //TODO
-            m_forumAccessRepository.Create(new ForumAccess
-            {
-                Group = group,
-                AccessMask = accessMask,
-                Forum = forum
-            });
         }
     }
 }
