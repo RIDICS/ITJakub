@@ -31,7 +31,7 @@ namespace Vokabular.MainService.Core.Managers
             m_subForumManager = subForumManager;
         }
 
-        public void CreateForums(ImportResult importResult)
+        public void CreateForums(ImportResult importResult, string hostUrl)
         {
             var work = new GetProjectWork(m_projectRepository, m_metadataRepository, importResult.ProjectId, true, true, false, true);
             Project project = work.Execute();
@@ -46,7 +46,7 @@ namespace Vokabular.MainService.Core.Managers
             short[] bookTypeIds = project.LatestPublishedSnapshot.BookTypes.Select(x => (short) x.Type).ToArray();
             UserDetailContract user = m_userManager.GetUserDetail(m_authorizationManager.GetCurrentUserId());
 
-            int forumId = m_forumManager.CreateNewForum(projectDetailContract, bookTypeIds, user);
+            int forumId = m_forumManager.CreateNewForum(projectDetailContract, bookTypeIds, user, hostUrl);
             new SetForumIdToProjectWork(m_projectRepository, importResult.ProjectId, forumId).Execute();
         }
 

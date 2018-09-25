@@ -23,11 +23,12 @@ namespace Vokabular.ForumSite.Core.Works
         private readonly ProjectDetailContract m_project;
         private readonly short[] m_bookTypeIds;
         private readonly UserDetailContract m_user;
+        private readonly string m_hostUrl;
 
 
         public CreateForumWork(ForumRepository forumRepository, CategoryRepository categoryRepository, TopicRepository topicRepository,
             MessageRepository messageRepository, UserRepository userRepository, ForumAccessRepository forumAccessRepository,
-            ForumSiteUrlHelper forumSiteUrlHelper, ProjectDetailContract project, short[] bookTypeIds, UserDetailContract user) : base(
+            ForumSiteUrlHelper forumSiteUrlHelper, ProjectDetailContract project, short[] bookTypeIds, UserDetailContract user, string hostUrl) : base(
             forumRepository)
         {
             m_forumRepository = forumRepository;
@@ -40,6 +41,7 @@ namespace Vokabular.ForumSite.Core.Works
             m_project = project;
             m_bookTypeIds = bookTypeIds;
             m_user = user;
+            m_hostUrl = hostUrl;
         }
 
         protected override int ExecuteWorkImplementation()
@@ -83,8 +85,11 @@ namespace Vokabular.ForumSite.Core.Works
             for (int i = 1; i < m_bookTypeIds.Length; i++)
             {
                 Forum tempForum = new Forum(m_project.Name, m_categoryRepository.GetCategoryByExternalId(m_bookTypeIds[i]),
-                    (short) ForumTypeEnum.Forum) {ExternalProjectId = m_project.Id};
-                tempForum.RemoteURL = m_forumSiteUrlHelper.GetTopicsUrl(forum.ForumID);
+                    (short) ForumTypeEnum.Forum)
+                {
+                    ExternalProjectId = m_project.Id,
+                    RemoteURL = m_forumSiteUrlHelper.GetTopicsUrl(forum.ForumID)
+                };
                 m_forumRepository.Create(tempForum);
                 m_forumAccessRepository.SetAdminAccessToForumForAdminGroup(tempForum); //TODO set access to forum
             }
@@ -110,7 +115,7 @@ namespace Vokabular.ForumSite.Core.Works
             }
 
             string messageText = $@"{m_project.Name}
-[url={VokabularUrlHelper.GetBookUrl(m_project.Id, m_bookTypeIds.First())}]Odkaz na knihu ve Vokabuláři webovém[/url]
+[url={VokabularUrlHelper.GetBookUrl(m_project.Id, m_bookTypeIds.First(), m_hostUrl)}]Odkaz na knihu ve Vokabuláři webovém[/url]
 {(m_project.Authors == null ? "Autor: <Nezadáno>" : (m_project.Authors.Count == 1 ? "Autor:" : "Autoři:"))} {authors}
 Počet stran: {(m_project.PageCount == null ? "<Nezadáno>" : m_project.PageCount.ToString())}";
 

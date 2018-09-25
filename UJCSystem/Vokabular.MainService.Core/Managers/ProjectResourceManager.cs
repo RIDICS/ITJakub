@@ -35,7 +35,7 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
-        public void ProcessSessionAsImport(string sessionId, long? projectId, string comment)
+        public void ProcessSessionAsImport(string sessionId, long? projectId, string comment, string hostUrl)
         {
             var permissionResult = m_authorizationManager.CheckUserCanUploadBook();
 
@@ -49,7 +49,7 @@ namespace Vokabular.MainService.Core.Managers
                 }
             }
 
-            m_forumSiteManager.CreateForums(importResult);
+            m_forumSiteManager.CreateForums(importResult, hostUrl);
         }
     }
 }

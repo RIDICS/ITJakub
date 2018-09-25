@@ -27,9 +27,9 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPost("session/{sessionId}")]
-        public void ProcessSessionAsImport(string sessionId, [FromBody] NewBookImportContract info)
+        public void ProcessSessionAsImport(string sessionId, [FromBody] NewBookImportContract info, [FromQuery] string hostUrl)
         {
-            m_resourceManager.ProcessSessionAsImport(sessionId, info.ProjectId, info.Comment);
+            m_resourceManager.ProcessSessionAsImport(sessionId, info.ProjectId, info.Comment, hostUrl);
         }
 
         [HttpPost("project/{projectId}/resource")]

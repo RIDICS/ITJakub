@@ -2,14 +2,12 @@
 {
     public static class VokabularUrlHelper
     {
-        public const string VokabularBaseUrl = "https://localhost:44368"; //TODO load from config file???
-
-        public static string GetBookUrl(long bookId, short bookTypeId)
+        public static string GetBookUrl(long bookId, short bookTypeId, string hostUrl)
         {
             UrlBookTypeEnum urlBookType = (UrlBookTypeEnum) bookTypeId == UrlBookTypeEnum.BohemianTextBank
                 ? UrlBookTypeEnum.Editions
                 : (UrlBookTypeEnum) bookTypeId;
-            return VokabularBaseUrl + "/" + urlBookType + "/" + urlBookType + "/listing?bookId=" + bookId; 
+            return hostUrl + "/" + urlBookType + "/" + urlBookType + "/listing?bookId=" + bookId; 
         }
     }
 }

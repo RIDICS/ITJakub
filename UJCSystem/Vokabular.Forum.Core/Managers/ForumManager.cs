@@ -27,10 +27,10 @@ namespace Vokabular.ForumSite.Core.Managers
             m_forumSiteUrlHelper = forumSiteUrlHelper;
         } 
 
-        public int CreateNewForum(ProjectDetailContract project, short[] bookTypeIds, UserDetailContract user)
+        public int CreateNewForum(ProjectDetailContract project, short[] bookTypeIds, UserDetailContract user, string hostUrl)
         {
             var work = new CreateForumWork(m_forumRepository, m_categoryRepository, m_topicRepository, m_messageRepository,
-                m_userRepository, m_forumAccessRepository, m_forumSiteUrlHelper, project, bookTypeIds, user);
+                m_userRepository, m_forumAccessRepository, m_forumSiteUrlHelper, project, bookTypeIds, user, hostUrl);
             var resultId = work.Execute();
             return resultId;
         }
