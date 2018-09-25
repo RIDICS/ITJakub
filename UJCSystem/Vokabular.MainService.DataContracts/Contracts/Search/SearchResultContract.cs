@@ -71,6 +71,8 @@ namespace Vokabular.MainService.DataContracts.Contracts.Search
         public string SourceAbbreviation { get; set; }
 
         public SearchTermResultContract TermPageHits { get; set; }
+
+        public string ForumUrl { get; set; }
     }
 
     public class SearchResultDetailContract : SearchResultContract

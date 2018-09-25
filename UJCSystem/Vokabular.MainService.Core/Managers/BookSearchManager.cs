@@ -10,6 +10,7 @@ using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.Search;
+using Vokabular.ForumSite.Core.Helpers;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
 using Vokabular.MainService.Core.Utils;
@@ -35,11 +36,12 @@ namespace Vokabular.MainService.Core.Managers
         private readonly HeadwordSearchManager m_headwordSearchManager;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
         private readonly AuthorizationManager m_authorizationManager;
+        private readonly ForumSiteUrlHelper m_forumSiteUrlHelper;
 
         public BookSearchManager(MetadataRepository metadataRepository,
             MetadataSearchCriteriaProcessor metadataSearchCriteriaProcessor, BookRepository bookRepository,
             CorpusSearchManager corpusSearchManager, HeadwordSearchManager headwordSearchManager,
-            FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager)
+            FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager, ForumSiteUrlHelper forumSiteUrlHelper)
         {
             m_metadataRepository = metadataRepository;
             m_metadataSearchCriteriaProcessor = metadataSearchCriteriaProcessor;
@@ -48,6 +50,7 @@ namespace Vokabular.MainService.Core.Managers
             m_headwordSearchManager = headwordSearchManager;
             m_fulltextStorageProvider = fulltextStorageProvider;
             m_authorizationManager = authorizationManager;
+            m_forumSiteUrlHelper = forumSiteUrlHelper;
         }
 
         private List<SearchResultContract> MapToSearchResult(IList<MetadataResource> dbResult,
@@ -64,6 +67,11 @@ namespace Vokabular.MainService.Core.Managers
 
                 var pageCountItem = dbPageCounts.FirstOrDefault(x => x.ProjectId == dbMetadata.Resource.Project.Id);
                 resultItem.PageCount = pageCountItem != null ? pageCountItem.PageCount : 0;
+
+                if (dbMetadata.Resource.Project.ForumId != null)
+                {
+                    resultItem.ForumUrl = m_forumSiteUrlHelper.GetTopicsUrl((int) dbMetadata.Resource.Project.ForumId);
+                }
 
                 if (termResultDictionary != null)
                 {
