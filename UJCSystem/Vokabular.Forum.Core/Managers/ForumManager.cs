@@ -1,9 +1,7 @@
 ﻿using Vokabular.ForumSite.Core.Helpers;
 using Vokabular.ForumSite.Core.Works;
-using Vokabular.ForumSite.DataEntities.Database.Entities;
 using Vokabular.ForumSite.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.ForumSite.Core.Managers
 {
@@ -27,14 +25,9 @@ namespace Vokabular.ForumSite.Core.Managers
             m_userRepository = userRepository;
             m_forumAccessRepository = forumAccessRepository;
             m_forumSiteUrlHelper = forumSiteUrlHelper;
-        }
+        } 
 
-        public Forum GetForum(int forumId)
-        {
-            return m_forumRepository.InvokeUnitOfWork(x => x.FindById<Forum>(forumId));
-        }
-
-        public long CreateNewForum(ProjectDetailContract project, short[] bookTypeIds, UserDetailContract user)
+        public int CreateNewForum(ProjectDetailContract project, short[] bookTypeIds, UserDetailContract user)
         {
             var work = new CreateForumWork(m_forumRepository, m_categoryRepository, m_topicRepository, m_messageRepository,
                 m_userRepository, m_forumAccessRepository, m_forumSiteUrlHelper, project, bookTypeIds, user);

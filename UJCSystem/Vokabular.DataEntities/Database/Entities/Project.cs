@@ -17,7 +17,7 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual Snapshot LatestPublishedSnapshot { get; set; }
 
-        public virtual int ForumId { get; set; }
+        public virtual int? ForumId { get; set; }
 
         public virtual IList<Resource> Resources { get; set; }
 

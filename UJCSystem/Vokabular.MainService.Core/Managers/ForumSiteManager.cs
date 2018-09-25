@@ -46,7 +46,8 @@ namespace Vokabular.MainService.Core.Managers
             short[] bookTypeIds = project.LatestPublishedSnapshot.BookTypes.Select(x => (short) x.Type).ToArray();
             UserDetailContract user = m_userManager.GetUserDetail(m_authorizationManager.GetCurrentUserId());
 
-            m_forumManager.CreateNewForum(projectDetailContract, bookTypeIds, user);
+            int forumId = m_forumManager.CreateNewForum(projectDetailContract, bookTypeIds, user);
+            new SetForumIdToProjectWork(m_projectRepository, importResult.ProjectId, forumId).Execute();
         }
 
         public void CreateCategory(CategoryContract category, int categoryId)

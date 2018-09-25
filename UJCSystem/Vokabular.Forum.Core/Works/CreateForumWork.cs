@@ -10,7 +10,7 @@ using Category = Vokabular.ForumSite.DataEntities.Database.Entities.Category;
 
 namespace Vokabular.ForumSite.Core.Works
 {
-    class CreateForumWork : UnitOfWorkBase<long>
+    class CreateForumWork : UnitOfWorkBase<int>
     {
         private const string FirstTopicName = "Základní informace";
         private readonly ForumRepository m_forumRepository;
@@ -42,7 +42,7 @@ namespace Vokabular.ForumSite.Core.Works
             m_user = user;
         }
 
-        protected override long ExecuteWorkImplementation()
+        protected override int ExecuteWorkImplementation()
         {
             Category category = m_categoryRepository.GetCategoryByExternalId(m_bookTypeIds.First());
 
