@@ -13,15 +13,18 @@ namespace Vokabular.ForumSite.Core.Works
     {
         private readonly ForumRepository m_forumRepository;
         private readonly ForumAccessRepository m_forumAccessRepository;
+        private readonly ForumSiteUrlHelper m_forumSiteUrlHelper;
         private readonly IList<int> m_categoryIds;
         private readonly IList<int> m_oldCategoryIds;
         private readonly long m_projectId;
 
         public CreateVirtualForumsForCategories(ForumRepository forumRepository, ForumAccessRepository forumAccessRepository,
-            IList<int> categoryIds, IList<int> oldCategoryIds, long projectId) : base(forumRepository)
+            ForumSiteUrlHelper forumSiteUrlHelper, IList<int> categoryIds, IList<int> oldCategoryIds, long projectId) : base(
+            forumRepository)
         {
             m_forumRepository = forumRepository;
             m_forumAccessRepository = forumAccessRepository;
+            m_forumSiteUrlHelper = forumSiteUrlHelper;
             m_categoryIds = categoryIds;
             m_oldCategoryIds = oldCategoryIds;
             m_projectId = projectId;
@@ -52,7 +55,7 @@ namespace Vokabular.ForumSite.Core.Works
                 {
                     ExternalProjectId = m_projectId,
                     ParentForum = forum,
-                    RemoteURL = ForumSiteUrlHelper.GetTopicsUrl(mainForum.ForumID, mainForum.Name)
+                    RemoteURL = m_forumSiteUrlHelper.GetTopicsUrl(mainForum.ForumID)
                 };
                 m_forumRepository.Create(tempForum);
                 m_forumAccessRepository.SetAdminAccessToForumForAdminGroup(tempForum);

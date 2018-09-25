@@ -1,4 +1,5 @@
-﻿using Vokabular.ForumSite.Core.Managers;
+﻿using Vokabular.ForumSite.Core.Helpers;
+using Vokabular.ForumSite.Core.Managers;
 using Vokabular.ForumSite.DataEntities;
 using Vokabular.Shared.Container;
 
@@ -10,6 +11,8 @@ namespace Vokabular.ForumSite.Core
         {
             container.AddPerWebRequest<ForumManager>();
             container.AddPerWebRequest<SubForumManager>();
+
+            container.AddPerWebRequest<ForumSiteUrlHelper>();
 
             container.Install<ForumDataEntitiesContainerRegistration>();
         }

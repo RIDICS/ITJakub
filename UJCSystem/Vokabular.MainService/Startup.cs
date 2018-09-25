@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using Vokabular.Core;
 using Vokabular.ForumSite.Core;
+using Vokabular.ForumSite.Core.Options;
 using Vokabular.MainService.Core;
 using Vokabular.MainService.Middleware;
 using Vokabular.Shared;
@@ -46,6 +47,7 @@ namespace Vokabular.MainService
             services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
             services.Configure<List<CredentialsOption>>(Configuration.GetSection("Credentials"));
             services.Configure<PathConfiguration>(Configuration.GetSection("PathConfiguration"));
+            services.Configure<ForumOption>(Configuration.GetSection("ForumOptions"));
 
             services.Configure<FormOptions>(options =>
             {

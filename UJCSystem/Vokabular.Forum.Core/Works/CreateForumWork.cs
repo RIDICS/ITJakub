@@ -19,24 +19,27 @@ namespace Vokabular.ForumSite.Core.Works
         private readonly MessageRepository m_messageRepository;
         private readonly UserRepository m_userRepository;
         private readonly ForumAccessRepository m_forumAccessRepository;
+        private readonly ForumSiteUrlHelper m_forumSiteUrlHelper;
         private readonly ProjectDetailContract m_project;
         private readonly short[] m_bookTypeIds;
         private readonly UserDetailContract m_user;
 
+
         public CreateForumWork(ForumRepository forumRepository, CategoryRepository categoryRepository, TopicRepository topicRepository,
             MessageRepository messageRepository, UserRepository userRepository, ForumAccessRepository forumAccessRepository,
-            ProjectDetailContract project,
-            short[] bookTypeIds, UserDetailContract user) : base(forumRepository)
+            ForumSiteUrlHelper forumSiteUrlHelper, ProjectDetailContract project, short[] bookTypeIds, UserDetailContract user) : base(
+            forumRepository)
         {
             m_forumRepository = forumRepository;
             m_categoryRepository = categoryRepository;
+            m_topicRepository = topicRepository;
+            m_messageRepository = messageRepository;
+            m_userRepository = userRepository;
+            m_forumAccessRepository = forumAccessRepository;
+            m_forumSiteUrlHelper = forumSiteUrlHelper;
             m_project = project;
             m_bookTypeIds = bookTypeIds;
             m_user = user;
-            m_forumAccessRepository = forumAccessRepository;
-            m_userRepository = userRepository;
-            m_topicRepository = topicRepository;
-            m_messageRepository = messageRepository;
         }
 
         protected override long ExecuteWorkImplementation()
@@ -81,7 +84,7 @@ namespace Vokabular.ForumSite.Core.Works
             {
                 Forum tempForum = new Forum(m_project.Name, m_categoryRepository.GetCategoryByExternalId(m_bookTypeIds[i]),
                     (short) ForumTypeEnum.Forum) {ExternalProjectId = m_project.Id};
-                tempForum.RemoteURL = ForumSiteUrlHelper.GetTopicsUrl(forum.ForumID, forum.Name);
+                tempForum.RemoteURL = m_forumSiteUrlHelper.GetTopicsUrl(forum.ForumID);
                 m_forumRepository.Create(tempForum);
                 m_forumAccessRepository.SetAdminAccessToForumForAdminGroup(tempForum); //TODO set access to forum
             }

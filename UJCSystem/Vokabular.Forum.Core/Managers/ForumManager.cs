@@ -1,4 +1,5 @@
-﻿using Vokabular.ForumSite.Core.Works;
+﻿using Vokabular.ForumSite.Core.Helpers;
+using Vokabular.ForumSite.Core.Works;
 using Vokabular.ForumSite.DataEntities.Database.Entities;
 using Vokabular.ForumSite.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -14,9 +15,10 @@ namespace Vokabular.ForumSite.Core.Managers
         private readonly MessageRepository m_messageRepository;
         private readonly UserRepository m_userRepository;
         private readonly ForumAccessRepository m_forumAccessRepository;
+        private readonly ForumSiteUrlHelper m_forumSiteUrlHelper;
 
         public ForumManager(ForumRepository forumRepository, CategoryRepository categoryRepository, TopicRepository topicRepository,
-            MessageRepository messageRepository, UserRepository userRepository, ForumAccessRepository forumAccessRepository)
+            MessageRepository messageRepository, UserRepository userRepository, ForumAccessRepository forumAccessRepository, ForumSiteUrlHelper forumSiteUrlHelper)
         {
             m_forumRepository = forumRepository;
             m_categoryRepository = categoryRepository;
@@ -24,6 +26,7 @@ namespace Vokabular.ForumSite.Core.Managers
             m_messageRepository = messageRepository;
             m_userRepository = userRepository;
             m_forumAccessRepository = forumAccessRepository;
+            m_forumSiteUrlHelper = forumSiteUrlHelper;
         }
 
         public Forum GetForum(int forumId)
@@ -34,7 +37,7 @@ namespace Vokabular.ForumSite.Core.Managers
         public long CreateNewForum(ProjectDetailContract project, short[] bookTypeIds, UserDetailContract user)
         {
             var work = new CreateForumWork(m_forumRepository, m_categoryRepository, m_topicRepository, m_messageRepository,
-                m_userRepository, m_forumAccessRepository, project, bookTypeIds, user);
+                m_userRepository, m_forumAccessRepository, m_forumSiteUrlHelper, project, bookTypeIds, user);
             var resultId = work.Execute();
             return resultId;
         }
