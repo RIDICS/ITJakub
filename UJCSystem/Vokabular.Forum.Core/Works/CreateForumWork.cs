@@ -51,32 +51,13 @@ namespace Vokabular.ForumSite.Core.Works
             Forum forum = new Forum(m_project.Name, category, (short) ForumTypeEnum.Forum) {ExternalProjectId = m_project.Id};
             m_forumRepository.Create(forum);
             m_forumAccessRepository.SetAdminAccessToForumForAdminGroup(forum); //TODO set access to forum
-            CreateVirtualForumsForOtherBookTypes(forum);
 
             //User user = m_userRepository.GetUserByEmail(m_user.Email); //TODO connect with Vokabular
             User user = m_userRepository.GetUserByEmail("tomas.hrabacek@scalesoft.cz");
+            CreateFirstTopicWithMessage(forum, user);
 
-            Topic firstTopic = CreateFirstTopic(forum, user);
-            Message firstMessage = CreateFirstMessageInTopic(firstTopic, user);
-
-            firstTopic.LastMessage = firstMessage;
-            firstTopic.LastUser = firstMessage.User;
-            firstTopic.LastPosted = firstMessage.Posted;
-            firstTopic.LastMessageFlags = firstMessage.Flags;
-            firstTopic.NumPosts++;
-
-            m_topicRepository.Update(firstTopic);
-
-            forum.LastPosted = firstTopic.Posted;
-            forum.LastTopic = firstTopic;
-            forum.LastUser = firstTopic.User;
-            forum.NumTopics++;
-            forum.NumPosts++;
-            forum.LastUserDisplayName = firstMessage.UserDisplayName;
-            forum.LastMessage = firstMessage;
-
-            m_forumRepository.Update(forum);
-
+            CreateVirtualForumsForOtherBookTypes(forum);
+            
             return forum.ForumID;
         }
 
@@ -95,15 +76,19 @@ namespace Vokabular.ForumSite.Core.Works
             }
         }
 
-        private Topic CreateFirstTopic(Forum forum, User user)
+        private void CreateFirstTopicWithMessage(Forum forum, User user)
         {
             Topic firstTopic = new Topic(forum, DateTime.UtcNow, FirstTopicName,
                 (short) TopicTypeEnum.Announcement, user);
             m_topicRepository.Create(firstTopic);
-            return firstTopic;
+
+            PostMessageInTopic(firstTopic, user);
+
+            forum.NumTopics++;
+            m_forumRepository.Update(forum);
         }
 
-        private Message CreateFirstMessageInTopic(Topic topic, User user)
+        private void PostMessageInTopic(Topic topic, User user)
         {
             string authors = "";
             if (m_project.Authors != null)
@@ -119,9 +104,8 @@ namespace Vokabular.ForumSite.Core.Works
 {(m_project.Authors == null ? "Autor: <Nezadáno>" : (m_project.Authors.Count == 1 ? "Autor:" : "Autoři:"))} {authors}
 Počet stran: {(m_project.PageCount == null ? "<Nezadáno>" : m_project.PageCount.ToString())}";
 
-            Message firstMessage = new Message(topic, user, DateTime.UtcNow, messageText);
-            m_messageRepository.Create(firstMessage);
-            return firstMessage;
+            Message message = new Message(topic, user, DateTime.UtcNow, messageText);
+            m_messageRepository.Create(message);
         }
     }
 }

@@ -34,5 +34,11 @@ namespace Vokabular.ForumSite.Core.Managers
             var resultId = work.Execute();
             return resultId;
         }
+
+        public void UpdateForum(ProjectDetailContract project, short[] bookTypeIds, UserDetailContract user, string hostUrl)
+        {
+            new UpdateForumWork(m_forumRepository, m_topicRepository, m_messageRepository,
+                m_userRepository, project,  bookTypeIds, user, hostUrl).Execute();
+        }
     }
 }
