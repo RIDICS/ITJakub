@@ -13,6 +13,7 @@ namespace Vokabular.ForumSite.Core
             container.AddPerWebRequest<SubForumManager>();
 
             container.AddPerWebRequest<ForumSiteUrlHelper>();
+            container.AddPerWebRequest<MessageGenerator>();
 
             container.Install<ForumDataEntitiesContainerRegistration>();
         }
