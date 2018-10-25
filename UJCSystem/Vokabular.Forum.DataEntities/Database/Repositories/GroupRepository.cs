@@ -10,10 +10,11 @@ namespace Vokabular.ForumSite.DataEntities.Database.Repositories
         {
         }
 
-        public virtual Group GetGroupByName(string name)
+        public virtual Group GetGroupByNameAndBoard(string name, Board board)
         {
             return GetSession().QueryOver<Group>()
                 .Where(x => x.Name == name)
+                .Where(x => x.Board == board)
                 .SingleOrDefault();
         }
     }

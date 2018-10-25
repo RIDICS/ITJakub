@@ -50,10 +50,10 @@ namespace Vokabular.ForumSite.Core.Works
 
             Forum forum = new Forum(m_project.Name, category, (short) ForumTypeEnum.Forum) {ExternalProjectId = m_project.Id};
             m_forumRepository.Create(forum);
-            m_forumAccessRepository.SetAdminAccessToForumForAdminGroup(forum); //TODO set access to forum
+            m_forumAccessRepository.SetAdminAccessToForumForAdminGroup(forum);
+            m_forumAccessRepository.SetMemberAccessToForumForRegisteredGroup(forum);
 
-            //User user = m_userRepository.GetUserByEmail(m_user.Email); //TODO connect with Vokabular
-            User user = m_userRepository.GetUserByEmail("tomas.hrabacek@scalesoft.cz");
+            User user = m_userRepository.GetUserByEmail("info@ridics.cz"); //TODO set default user
             CreateFirstTopicWithMessage(forum, user);
 
             CreateVirtualForumsForOtherBookTypes(forum);
@@ -72,7 +72,8 @@ namespace Vokabular.ForumSite.Core.Works
                     RemoteURL = m_forumSiteUrlHelper.GetTopicsUrl(forum.ForumID)
                 };
                 m_forumRepository.Create(tempForum);
-                m_forumAccessRepository.SetAdminAccessToForumForAdminGroup(tempForum); //TODO set access to forum
+                m_forumAccessRepository.SetAdminAccessToForumForAdminGroup(tempForum);
+                m_forumAccessRepository.SetMemberAccessToForumForRegisteredGroup(tempForum);
             }
         }
 

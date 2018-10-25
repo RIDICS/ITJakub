@@ -40,8 +40,7 @@ namespace Vokabular.ForumSite.Core.Works
             Forum mainForum = m_forumRepository.GetMainForumByExternalProjectId(m_project.Id);
 
             Topic infoTopic = m_topicRepository.GetFirstTopicInForum(mainForum);
-            //User user = m_userRepository.GetUserByEmail(m_user.Email); //TODO connect with Vokabular
-            User user = m_userRepository.GetUserByEmail("tomas.hrabacek@scalesoft.cz");
+            User user = m_userRepository.GetUserByEmail("info@ridics.cz"); //TODO set default user
             PostMessageInTopic(infoTopic, user);
             
             if (mainForum.Name != m_project.Name)

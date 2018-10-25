@@ -19,8 +19,22 @@ namespace Vokabular.ForumSite.DataEntities.Database.Repositories
 
         public virtual void SetAdminAccessToForumForAdminGroup(Forum forum)
         {
-            AccessMask accessMask = m_accessMaskRepository.FindById<AccessMask>(1); 
-            Group group = m_groupRepository.FindById<Group>(1); //TODO connect with Vokobular
+            AccessMask accessMask = m_accessMaskRepository.GetAccessMaskByNameAndBoard("Admin Access", forum.Category.Board);
+            Group group = m_groupRepository.GetGroupByNameAndBoard("Administrators", forum.Category.Board); 
+
+            Create(new ForumAccess
+            {
+                Group = group,
+                AccessMask = accessMask,
+                Forum = forum
+            });
+        }
+
+        public virtual void SetMemberAccessToForumForRegisteredGroup(Forum forum)
+        {
+            AccessMask accessMask = m_accessMaskRepository.GetAccessMaskByNameAndBoard("Member Access", forum.Category.Board);
+            Group group = m_groupRepository.GetGroupByNameAndBoard("Registered", forum.Category.Board);
+
             Create(new ForumAccess
             {
                 Group = group,

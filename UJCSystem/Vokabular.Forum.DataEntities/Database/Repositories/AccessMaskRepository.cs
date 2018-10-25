@@ -10,10 +10,11 @@ namespace Vokabular.ForumSite.DataEntities.Database.Repositories
         {
         }
 
-        public virtual AccessMask GetAccessMaskByName(string name)
+        public virtual AccessMask GetAccessMaskByNameAndBoard(string name, Board board)
         {
             return GetSession().QueryOver<AccessMask>()
                 .Where(x => x.Name == name)
+                .Where(x => x.Board == board)
                 .SingleOrDefault();
         }
     }
