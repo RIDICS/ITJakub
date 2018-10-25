@@ -52,7 +52,6 @@ namespace Vokabular.MainService.Core.Managers
 
             try
             {
-                importResult.ProjectId = 4561231;
                  m_forumSiteManager.CreateForums(importResult, hostUrl);
              }
              catch (ForumException e)
