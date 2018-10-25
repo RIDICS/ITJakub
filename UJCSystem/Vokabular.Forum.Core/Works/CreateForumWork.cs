@@ -22,13 +22,12 @@ namespace Vokabular.ForumSite.Core.Works
         private readonly ForumSiteUrlHelper m_forumSiteUrlHelper;
         private readonly ProjectDetailContract m_project;
         private readonly short[] m_bookTypeIds;
-        private readonly UserDetailContract m_user;
-        private readonly string m_hostUrl;
+        private readonly string m_messageText;
 
 
         public CreateForumWork(ForumRepository forumRepository, CategoryRepository categoryRepository, TopicRepository topicRepository,
             MessageRepository messageRepository, UserRepository userRepository, ForumAccessRepository forumAccessRepository,
-            ForumSiteUrlHelper forumSiteUrlHelper, ProjectDetailContract project, short[] bookTypeIds, UserDetailContract user, string hostUrl) : base(
+            ForumSiteUrlHelper forumSiteUrlHelper, ProjectDetailContract project, short[] bookTypeIds, string messageText) : base(
             forumRepository)
         {
             m_forumRepository = forumRepository;
@@ -40,8 +39,7 @@ namespace Vokabular.ForumSite.Core.Works
             m_forumSiteUrlHelper = forumSiteUrlHelper;
             m_project = project;
             m_bookTypeIds = bookTypeIds;
-            m_user = user;
-            m_hostUrl = hostUrl;
+            m_messageText = messageText;
         }
 
         protected override int ExecuteWorkImplementation()
@@ -54,7 +52,7 @@ namespace Vokabular.ForumSite.Core.Works
             m_forumAccessRepository.SetMemberAccessToForumForRegisteredGroup(forum);
 
             User user = m_userRepository.GetUserByEmail("info@ridics.cz"); //TODO set default user
-            CreateFirstTopicWithMessage(forum, user);
+            CreateFirstTopicWithMessage(forum, user, m_messageText);
 
             CreateVirtualForumsForOtherBookTypes(forum);
             
@@ -77,34 +75,20 @@ namespace Vokabular.ForumSite.Core.Works
             }
         }
 
-        private void CreateFirstTopicWithMessage(Forum forum, User user)
+        private void CreateFirstTopicWithMessage(Forum forum, User user, string messageText)
         {
             Topic firstTopic = new Topic(forum, DateTime.UtcNow, FirstTopicName,
                 (short) TopicTypeEnum.Announcement, user);
             m_topicRepository.Create(firstTopic);
 
-            PostMessageInTopic(firstTopic, user);
+            PostMessageInTopic(firstTopic, user, messageText);
 
             forum.NumTopics++;
             m_forumRepository.Update(forum);
         }
 
-        private void PostMessageInTopic(Topic topic, User user)
+        private void PostMessageInTopic(Topic topic, User user, string messageText)
         {
-            string authors = "";
-            if (m_project.Authors != null)
-            {
-                foreach (var author in m_project.Authors)
-                {
-                    authors += author.FirstName + " " + author.LastName + Environment.NewLine;
-                }
-            }
-
-            string messageText = $@"{m_project.Name}
-[url={VokabularUrlHelper.GetBookUrl(m_project.Id, m_bookTypeIds.First(), m_hostUrl)}]Odkaz na knihu ve Vokabuláři webovém[/url]
-{(m_project.Authors == null ? "Autor: <Nezadáno>" : (m_project.Authors.Count == 1 ? "Autor:" : "Autoři:"))} {authors}
-Počet stran: {(m_project.PageCount == null ? "<Nezadáno>" : m_project.PageCount.ToString())}";
-
             Message message = new Message(topic, user, DateTime.UtcNow, messageText);
             m_messageRepository.Create(message);
         }
