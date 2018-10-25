@@ -6,6 +6,7 @@ using Vokabular.Core.Storage;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.ForumSite.Core.Helpers;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Search;
@@ -27,11 +28,12 @@ namespace Vokabular.MainService.Core.Managers
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
         private readonly AuthorizationManager m_authorizationManager;
         private readonly CategoryRepository m_categoryRepository;
+        private readonly ForumSiteUrlHelper m_forumSiteUrlHelper;
         private readonly BookTypeEnum[] m_filterBookType;
 
         public BookManager(MetadataRepository metadataRepository, CategoryRepository categoryRepository,
             BookRepository bookRepository, ResourceRepository resourceRepository, FileSystemManager fileSystemManager,
-            FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager)
+            FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager, ForumSiteUrlHelper forumSiteUrlHelper)
         {
             m_metadataRepository = metadataRepository;
             m_bookRepository = bookRepository;
@@ -39,6 +41,7 @@ namespace Vokabular.MainService.Core.Managers
             m_fileSystemManager = fileSystemManager;
             m_fulltextStorageProvider = fulltextStorageProvider;
             m_authorizationManager = authorizationManager;
+            m_forumSiteUrlHelper = forumSiteUrlHelper;
             m_categoryRepository = categoryRepository;
             m_filterBookType = new[] {BookTypeEnum.CardFile};
         }
@@ -107,6 +110,12 @@ namespace Vokabular.MainService.Core.Managers
 
             var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataWithDetail(projectId));
             var result = Mapper.Map<SearchResultDetailContract>(metadataResult);
+            
+            if (metadataResult.Resource.Project.ForumId != null)
+            {
+                result.ForumUrl = m_forumSiteUrlHelper.GetTopicsUrl((int)metadataResult.Resource.Project.ForumId);
+            }
+
             return result;
         }
 

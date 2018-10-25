@@ -1,25 +1,27 @@
 {
 	"culture":"en",
 	"scope":"BibliographyModule",
-	"dictionary": {
-		"NumberOfPages" : "translate[Počet stran]",
-		"Century" : "translate[století]",
-		"EditionNote" : "translate[Ediční poznámka]",
-		"Pattern" : "translate[Předloha]",
-		"RelicAbbreviation" : "translate[Zkratka památky]",
-		"SourceAbbreviation" : "translate[Zkratka pramene]",
-		"LiteraryType" : "translate[Literární druh]",
-		"LiteraryGenre" : "translate[Literární žánr]",
-		"EditionLastModification" : "translate[Poslední úprava edice]",
-		"LinkedDictionary" : "translate[zapojený slovník]",
-		"UnlinkedDictionary" : "translate[nezapojený slovník]",
-		"Copyright" : "translate[Copyright]",
-		"Editor" : "translate[Editor]",
-		"DownloadFullAudioBook" : "translate[Stáhnout celou audioknihu]",
-		"BrowserDoesNotSupportHtmlAudio" : "translate[Váš prohlížeč nepodporuje html audio]",
-		"Length" : "translate[Délka]",
-		"DownloadChapter" : "translate[Stáhnout kapitolu]",
-		
-		"NotFilled" : "&lt;translate[Nezadáno]&gt;"
-		}
+  "dictionary": {
+    "NumberOfPages": "translate[Počet stran]",
+    "Century": "translate[století]",
+    "EditionNote": "translate[Ediční poznámka]",
+    "Pattern": "translate[Předloha]",
+    "RelicAbbreviation": "translate[Zkratka památky]",
+    "SourceAbbreviation": "translate[Zkratka pramene]",
+    "LiteraryType": "translate[Literární druh]",
+    "LiteraryGenre": "translate[Literární žánr]",
+    "EditionLastModification": "translate[Poslední úprava edice]",
+    "LinkToForum": "translate[Odkaz na fórum]",
+    "Link": "translate[Odkaz]",
+    "LinkedDictionary": "translate[zapojený slovník]",
+    "UnlinkedDictionary": "translate[nezapojený slovník]",
+    "Copyright": "translate[Copyright]",
+    "Editor": "translate[Editor]",
+    "DownloadFullAudioBook": "translate[Stáhnout celou audioknihu]",
+    "BrowserDoesNotSupportHtmlAudio": "translate[Váš prohlížeč nepodporuje html audio]",
+    "Length": "translate[Délka]",
+    "DownloadChapter": "translate[Stáhnout kapitolu]",
+
+    "NotFilled": "&lt;translate[Nezadáno]&gt;"
+  }
 }
