@@ -34,7 +34,7 @@ namespace Vokabular.ForumSite.Core.Managers
 
         public int CreateNewForum(ProjectDetailContract project, short[] bookTypeIds, string hostUrl)
         {
-            string messageText = m_messageGenerator.GetMessage(project, bookTypeIds.First(), hostUrl);
+            string messageText = m_messageGenerator.GetCreateMessage(project, bookTypeIds.First(), hostUrl);
             var work = new CreateForumWork(m_forumRepository, m_categoryRepository, m_topicRepository, m_messageRepository,
                 m_userRepository, m_forumAccessRepository, m_forumSiteUrlHelper, project, bookTypeIds, messageText);
             var resultId = work.Execute();
@@ -43,8 +43,9 @@ namespace Vokabular.ForumSite.Core.Managers
 
         public void UpdateForum(ProjectDetailContract project, short[] bookTypeIds, string hostUrl)
         {
+            string messageText = m_messageGenerator.GetUpdateMessage(project, bookTypeIds.First(), hostUrl);
             new UpdateForumWork(m_forumRepository, m_topicRepository, m_messageRepository,
-                m_userRepository, project, bookTypeIds, hostUrl).Execute();
+                m_userRepository, project, messageText).Execute();
         }
 
         public Forum GetForumByExternalId(long projectId)

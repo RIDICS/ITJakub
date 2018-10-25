@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Vokabular.ForumSite.Core.Helpers;
 using Vokabular.ForumSite.DataEntities.Database.Entities;
 using Vokabular.ForumSite.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -16,21 +14,18 @@ namespace Vokabular.ForumSite.Core.Works
         private readonly MessageRepository m_messageRepository;
         private readonly UserRepository m_userRepository;
         private readonly ProjectDetailContract m_project;
-        private readonly short[] m_bookTypeIds;
-        private readonly string m_hostUrl;
+        private readonly string m_messageText;
 
 
         public UpdateForumWork(ForumRepository forumRepository, TopicRepository topicRepository, MessageRepository messageRepository,
-            UserRepository userRepository, ProjectDetailContract project, short[] bookTypeIds,
-            string hostUrl) : base(forumRepository)
+            UserRepository userRepository, ProjectDetailContract project, string messageText) : base(forumRepository)
         {
             m_forumRepository = forumRepository;
             m_topicRepository = topicRepository;
             m_messageRepository = messageRepository;
             m_userRepository = userRepository;
             m_project = project;
-            m_bookTypeIds = bookTypeIds;
-            m_hostUrl = hostUrl;
+            m_messageText = messageText;
         }
 
         protected override void ExecuteWorkImplementation()
@@ -39,7 +34,7 @@ namespace Vokabular.ForumSite.Core.Works
 
             Topic infoTopic = m_topicRepository.GetFirstTopicInForum(mainForum);
             User user = m_userRepository.GetUserByEmail("info@ridics.cz");
-            PostMessageInTopic(infoTopic, user);
+            PostMessageInTopic(infoTopic, user, m_messageText);
             
             if (mainForum.Name != m_project.Name)
             {
@@ -55,11 +50,8 @@ namespace Vokabular.ForumSite.Core.Works
             }
         }
 
-        private void PostMessageInTopic(Topic topic, User user)
+        private void PostMessageInTopic(Topic topic, User user, string messageText)
         {
-            string messageText = $@"Nová publikace: {m_project.Name}
-[url={VokabularUrlHelper.GetBookUrl(m_project.Id, m_bookTypeIds.First(), m_hostUrl)}]Odkaz na knihu ve Vokabuláři webovém[/url]";
-
             Message message = new Message(topic, user, DateTime.UtcNow, messageText);
             m_messageRepository.Create(message);
         }

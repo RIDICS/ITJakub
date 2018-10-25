@@ -5,7 +5,7 @@ namespace Vokabular.ForumSite.Core.Helpers
 {
     public class MessageGenerator
     {
-        public string GetMessage(ProjectDetailContract project, short bookType, string hostUrl)
+        public string GetCreateMessage(ProjectDetailContract project, short bookType, string hostUrl)
         {
             string authors = "";
             if (project.Authors != null)
@@ -21,5 +21,12 @@ namespace Vokabular.ForumSite.Core.Helpers
 {(project.Authors == null ? "Autor: <Nezadáno>" : (project.Authors.Count == 1 ? "Autor:" : "Autoři:"))} {authors}
 Počet stran: {(project.PageCount == null ? "<Nezadáno>" : project.PageCount.ToString())}";
         }
+
+        public string GetUpdateMessage(ProjectDetailContract project, short bookType, string hostUrl)
+        {
+            return $@"Nová publikace: {project.Name}
+[url={VokabularUrlHelper.GetBookUrl(project.Id, bookType, hostUrl)}]Odkaz na knihu ve Vokabuláři webovém[/url]";
+        }
+
     }
 }
