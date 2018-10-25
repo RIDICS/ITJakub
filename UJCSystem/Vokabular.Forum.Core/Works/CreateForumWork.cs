@@ -51,7 +51,7 @@ namespace Vokabular.ForumSite.Core.Works
             m_forumAccessRepository.SetAdminAccessToForumForAdminGroup(forum);
             m_forumAccessRepository.SetMemberAccessToForumForRegisteredGroup(forum);
 
-            User user = m_userRepository.GetUserByEmail("info@ridics.cz"); //TODO set default user
+            User user = m_userRepository.GetUserByEmail("info@ridics.cz");
             CreateFirstTopicWithMessage(forum, user, m_messageText);
 
             CreateVirtualForumsForOtherBookTypes(forum);

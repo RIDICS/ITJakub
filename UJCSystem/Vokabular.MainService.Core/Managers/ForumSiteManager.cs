@@ -5,6 +5,7 @@ using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.ForumSite.Core.Managers;
+using Vokabular.MainService.Core.Errors;
 using Vokabular.MainService.Core.Works;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared;
@@ -15,18 +16,14 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly ProjectRepository m_projectRepository;
         private readonly MetadataRepository m_metadataRepository;
-        private readonly UserManager m_userManager;
-        private readonly AuthorizationManager m_authorizationManager;
         private readonly ForumManager m_forumManager;
         private readonly SubForumManager m_subForumManager;
 
-        public ForumSiteManager(ProjectRepository projectRepository, MetadataRepository metadataRepository, UserManager userManager,
-            AuthorizationManager authorizationManager, ForumManager forumManager, SubForumManager subForumManager)
+        public ForumSiteManager(ProjectRepository projectRepository, MetadataRepository metadataRepository, ForumManager forumManager,
+            SubForumManager subForumManager)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
-            m_userManager = userManager;
-            m_authorizationManager = authorizationManager;
             m_forumManager = forumManager;
             m_subForumManager = subForumManager;
         }
@@ -38,22 +35,32 @@ namespace Vokabular.MainService.Core.Managers
 
             if (project == null)
             {
-                throw new InvalidOperationException("Create of forum failed. Import was successful.");
+                throw new ForumException("Create of forum failed. Project does not exist.");
             }
 
             ProjectDetailContract projectDetailContract = Mapper.Map<ProjectDetailContract>(project);
             projectDetailContract.PageCount = work.GetPageCount();
             short[] bookTypeIds = project.LatestPublishedSnapshot.BookTypes.Select(x => (short) x.Type).ToArray();
-            UserDetailContract user = m_userManager.GetUserDetail(m_authorizationManager.GetCurrentUserId());
 
             if (project.ForumId == null)
-            {
-                int forumId = m_forumManager.CreateNewForum(projectDetailContract, bookTypeIds, user, hostUrl);
-                new SetForumIdToProjectWork(m_projectRepository, importResult.ProjectId, forumId).Execute();
+            {                
+                var forum = m_forumManager.GetForumByExternalId(project.Id);
+
+                if (forum == null)
+                {
+                    //Create forum
+                    int forumId = m_forumManager.CreateNewForum(projectDetailContract, bookTypeIds, hostUrl);
+                    new SetForumIdToProjectWork(m_projectRepository, importResult.ProjectId, forumId).Execute();
+                }
+                else
+                {
+                    //Forum is created, but not connect with project -> set ForumId to Project
+                    new SetForumIdToProjectWork(m_projectRepository, importResult.ProjectId, forum.ForumID).Execute();
+                }
             }
             else
             {
-                m_forumManager.UpdateForum(projectDetailContract, bookTypeIds, user, hostUrl);
+                m_forumManager.UpdateForum(projectDetailContract, bookTypeIds, hostUrl);
             }
         }
 

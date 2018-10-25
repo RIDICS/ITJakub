@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Vokabular.ForumSite.Core.Helpers;
 using Vokabular.ForumSite.Core.Works;
+using Vokabular.ForumSite.DataEntities.Database.Entities;
 using Vokabular.ForumSite.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts.Contracts;
 
@@ -31,7 +32,7 @@ namespace Vokabular.ForumSite.Core.Managers
             m_messageGenerator = messageGenerator;
         }
 
-        public int CreateNewForum(ProjectDetailContract project, short[] bookTypeIds, UserDetailContract user, string hostUrl)
+        public int CreateNewForum(ProjectDetailContract project, short[] bookTypeIds, string hostUrl)
         {
             string messageText = m_messageGenerator.GetMessage(project, bookTypeIds.First(), hostUrl);
             var work = new CreateForumWork(m_forumRepository, m_categoryRepository, m_topicRepository, m_messageRepository,
@@ -40,10 +41,15 @@ namespace Vokabular.ForumSite.Core.Managers
             return resultId;
         }
 
-        public void UpdateForum(ProjectDetailContract project, short[] bookTypeIds, UserDetailContract user, string hostUrl)
+        public void UpdateForum(ProjectDetailContract project, short[] bookTypeIds, string hostUrl)
         {
             new UpdateForumWork(m_forumRepository, m_topicRepository, m_messageRepository,
-                m_userRepository, project, bookTypeIds, user, hostUrl).Execute();
+                m_userRepository, project, bookTypeIds, hostUrl).Execute();
+        }
+
+        public Forum GetForumByExternalId(long projectId)
+        {
+            return new GetForumWork(m_forumRepository, projectId).Execute();
         }
     }
 }

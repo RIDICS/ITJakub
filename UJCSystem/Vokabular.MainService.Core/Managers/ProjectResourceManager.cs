@@ -2,6 +2,7 @@
 using System.IO;
 using ITJakub.FileProcessing.DataContracts;
 using Vokabular.MainService.Core.Communication;
+using Vokabular.MainService.Core.Errors;
 using Vokabular.Shared;
 
 namespace Vokabular.MainService.Core.Managers
@@ -49,7 +50,15 @@ namespace Vokabular.MainService.Core.Managers
                 }
             }
 
-            m_forumSiteManager.CreateForums(importResult, hostUrl);
+            try
+            {
+                importResult.ProjectId = 4561231;
+                 m_forumSiteManager.CreateForums(importResult, hostUrl);
+             }
+             catch (ForumException e)
+             {
+                 throw new InvalidOperationException("Import succeeded. " + e.Message);
+             }
         }
     }
 }

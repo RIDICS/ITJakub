@@ -17,12 +17,11 @@ namespace Vokabular.ForumSite.Core.Works
         private readonly UserRepository m_userRepository;
         private readonly ProjectDetailContract m_project;
         private readonly short[] m_bookTypeIds;
-        private readonly UserDetailContract m_user;
         private readonly string m_hostUrl;
 
 
         public UpdateForumWork(ForumRepository forumRepository, TopicRepository topicRepository, MessageRepository messageRepository,
-            UserRepository userRepository, ProjectDetailContract project, short[] bookTypeIds, UserDetailContract user,
+            UserRepository userRepository, ProjectDetailContract project, short[] bookTypeIds,
             string hostUrl) : base(forumRepository)
         {
             m_forumRepository = forumRepository;
@@ -31,7 +30,6 @@ namespace Vokabular.ForumSite.Core.Works
             m_userRepository = userRepository;
             m_project = project;
             m_bookTypeIds = bookTypeIds;
-            m_user = user;
             m_hostUrl = hostUrl;
         }
 
@@ -40,7 +38,7 @@ namespace Vokabular.ForumSite.Core.Works
             Forum mainForum = m_forumRepository.GetMainForumByExternalProjectId(m_project.Id);
 
             Topic infoTopic = m_topicRepository.GetFirstTopicInForum(mainForum);
-            User user = m_userRepository.GetUserByEmail("info@ridics.cz"); //TODO set default user
+            User user = m_userRepository.GetUserByEmail("info@ridics.cz");
             PostMessageInTopic(infoTopic, user);
             
             if (mainForum.Name != m_project.Name)
