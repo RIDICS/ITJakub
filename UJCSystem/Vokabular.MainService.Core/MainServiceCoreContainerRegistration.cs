@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Vokabular.Core;
+using Vokabular.ForumSite.Core.Helpers;
 using Vokabular.MainService.Core.AutoMapperProfiles;
 using Vokabular.MainService.Core.AutoMapperProfiles.CardFile;
 using Vokabular.MainService.Core.Communication;
@@ -41,6 +42,8 @@ namespace Vokabular.MainService.Core
             container.AddPerWebRequest<UserGroupManager>();
             container.AddPerWebRequest<UserManager>();
 
+            container.AddPerWebRequest<ForumSiteUrlHelper>();
+
             container.AddPerWebRequest<ICommunicationTokenGenerator, GuidCommunicationTokenGenerator>();
             container.AddPerWebRequest<ICommunicationTokenProvider, HttpHeaderCommunicationTokenProvider>();
 
@@ -59,6 +62,7 @@ namespace Vokabular.MainService.Core
             container.AddSingleton<Profile, FavoriteLabelProfile>();
             container.AddSingleton<Profile, FavoriteProfile>();
             container.AddSingleton<Profile, FeedbackProfile>();
+            container.AddSingleton<Profile, ForumProfile>();
             container.AddSingleton<Profile, HeadwordProfile>();
             container.AddSingleton<Profile, ImageProfile>();
             container.AddSingleton<Profile, KeywordProfile>();

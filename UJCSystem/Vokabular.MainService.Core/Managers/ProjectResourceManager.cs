@@ -52,7 +52,7 @@ namespace Vokabular.MainService.Core.Managers
 
             try
             {
-                 m_forumSiteManager.CreateForums(importResult, hostUrl);
+                 m_forumSiteManager.CreateForums(importResult.ProjectId, hostUrl);
              }
              catch (ForumException e)
              {

@@ -129,6 +129,14 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                         return PartialView("Work/_History");
                     case ProjectModuleTabType.WorkNote:
                         return PartialView("Work/_Note");
+                    case ProjectModuleTabType.Forum:
+                        var forum = client.GetForum(projectId.Value);
+                        if (forum == null)
+                        {
+                            return PartialView("Work/_RepairForum", projectId.Value);
+                        }
+                        var forumViewModel = Mapper.Map<ForumViewModel>(forum);
+                        return PartialView("Work/_Forum", forumViewModel);
                     default:
                         return NotFound();
                 }

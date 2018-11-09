@@ -1,0 +1,29 @@
+﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ForumViewModel
+
+<div class="container-fluid">
+    <div class="row"></div>
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-3 control-label">
+                <!--TODO translation-->
+                Název:
+            </label>
+            <div class="col-md-9">
+                <span class="text-as-form-control">
+                    @Model.Name
+                </span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-3 control-label">
+                <!--TODO translation-->
+                URl:
+            </label>
+            <div class="col-md-9">
+                <span class="text-as-form-control">
+                    <a href="@Model.Url">@Model.Url</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

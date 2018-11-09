@@ -98,6 +98,15 @@
     <TypeScriptCompile Include="wwwroot\js\typings-custom\jquery-table-fixer_.d.ts" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Areas\Admin\Views\Project\Work\_RepairForum.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\Admin\Views\Project\Work\_Forum.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+  </ItemGroup>
+
   <Target Name="ApplyXdtConfigTransform" BeforeTargets="MSDeployPublish">
     <PropertyGroup>
       <_SourceWebConfig>$(MSBuildThisFileDirectory)Web.config</_SourceWebConfig>

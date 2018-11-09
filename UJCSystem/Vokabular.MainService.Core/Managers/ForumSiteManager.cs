@@ -4,6 +4,7 @@ using System.Linq;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.ForumSite.Core.Helpers;
 using Vokabular.ForumSite.Core.Managers;
 using Vokabular.MainService.Core.Errors;
 using Vokabular.MainService.Core.Works;
@@ -18,19 +19,21 @@ namespace Vokabular.MainService.Core.Managers
         private readonly MetadataRepository m_metadataRepository;
         private readonly ForumManager m_forumManager;
         private readonly SubForumManager m_subForumManager;
+        private readonly ForumSiteUrlHelper m_forumSiteUrlHelper;
 
         public ForumSiteManager(ProjectRepository projectRepository, MetadataRepository metadataRepository, ForumManager forumManager,
-            SubForumManager subForumManager)
+            SubForumManager subForumManager, ForumSiteUrlHelper forumSiteUrlHelper)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
             m_forumManager = forumManager;
             m_subForumManager = subForumManager;
+            m_forumSiteUrlHelper = forumSiteUrlHelper;
         }
 
-        public void CreateForums(ImportResult importResult, string hostUrl)
+        public void CreateForums(long projectId, string hostUrl)
         {
-            var work = new GetProjectWork(m_projectRepository, m_metadataRepository, importResult.ProjectId, true, true, false, true);
+            var work = new GetProjectWork(m_projectRepository, m_metadataRepository, projectId, true, true, false, true);
             Project project = work.Execute();
 
             if (project == null)
@@ -50,18 +53,31 @@ namespace Vokabular.MainService.Core.Managers
                 {
                     //Create forum
                     int forumId = m_forumManager.CreateNewForum(projectDetailContract, bookTypeIds, hostUrl);
-                    new SetForumIdToProjectWork(m_projectRepository, importResult.ProjectId, forumId).Execute();
+                    new SetForumIdToProjectWork(m_projectRepository, projectId, forumId).Execute();
                 }
                 else
                 {
                     //Forum is created, but not connect with project -> set ForumId to Project
-                    new SetForumIdToProjectWork(m_projectRepository, importResult.ProjectId, forum.ForumID).Execute();
+                    new SetForumIdToProjectWork(m_projectRepository, projectId, forum.ForumID).Execute();
                 }
             }
             else
             {
                 m_forumManager.UpdateForum(projectDetailContract, bookTypeIds, hostUrl);
             }
+        }
+
+        public ForumContract GetForum(long projectId)
+        {
+            var forum = m_forumManager.GetForumByExternalId(projectId);
+            if (forum == null)
+            {
+                return null;
+            }
+
+            var result = Mapper.Map<ForumContract>(forum);
+            result.Url = m_forumSiteUrlHelper.GetTopicsUrl(result.Id);
+            return result;
         }
 
         public void CreateCategory(CategoryContract category, int categoryId)

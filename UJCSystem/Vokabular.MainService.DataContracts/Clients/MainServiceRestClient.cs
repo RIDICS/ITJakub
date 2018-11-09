@@ -2752,5 +2752,41 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+
+        #region Forum
+
+        public int CreateForum(long projectId)
+        {
+            try
+            {
+                var forumId = Post<int>($"project/{projectId}/forum", null);
+                return forumId;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public ForumContract GetForum(long projectId)
+        {
+            try
+            {
+                var result = Get<ForumContract>($"project/{projectId}/forum");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
     }
 }
