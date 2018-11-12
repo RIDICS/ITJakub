@@ -31,41 +31,60 @@ namespace Vokabular.MainService.Core.Managers
             m_forumSiteUrlHelper = forumSiteUrlHelper;
         }
 
-        public void CreateForums(long projectId, string hostUrl)
+        public int CreateForums(long projectId, string hostUrl)
         {
             var work = new GetProjectWork(m_projectRepository, m_metadataRepository, projectId, true, true, false, true);
             Project project = work.Execute();
 
             if (project == null)
             {
-                throw new ForumException("Create of forum failed. Project does not exist.");
+                throw new ForumException("Create of forum failed. The project does not exist.");
             }
 
             ProjectDetailContract projectDetailContract = Mapper.Map<ProjectDetailContract>(project);
             projectDetailContract.PageCount = work.GetPageCount();
             short[] bookTypeIds = project.LatestPublishedSnapshot.BookTypes.Select(x => (short) x.Type).ToArray();
 
-            if (project.ForumId == null)
-            {                
-                var forum = m_forumManager.GetForumByExternalId(project.Id);
-
-                if (forum == null)
-                {
-                    //Create forum
-                    int forumId = m_forumManager.CreateNewForum(projectDetailContract, bookTypeIds, hostUrl);
-                    new SetForumIdToProjectWork(m_projectRepository, projectId, forumId).Execute();
-                }
-                else
-                {
-                    //Forum is created, but not connect with project -> set ForumId to Project
-                    new SetForumIdToProjectWork(m_projectRepository, projectId, forum.ForumID).Execute();
-                }
+            if (project.ForumId != null)
+            {
+                throw new ForumException("Create of forum failed. The forum is already created.");
             }
-            else
+
+            var forum = m_forumManager.GetForumByExternalId(project.Id);
+
+            if (forum == null)
+            {
+                //Create forum
+                int forumId = m_forumManager.CreateNewForum(projectDetailContract, bookTypeIds, hostUrl);
+                new SetForumIdToProjectWork(m_projectRepository, projectId, forumId).Execute();
+                return forumId;
+            }
+
+            //Forum is created, but not connect with project -> set ForumId to Project
+            new SetForumIdToProjectWork(m_projectRepository, projectId, forum.ForumID).Execute();
+            return forum.ForumID;
+        }
+
+        public void UpdateForums(long projectId, string hostUrl)
+        {
+            var work = new GetProjectWork(m_projectRepository, m_metadataRepository, projectId, true, true, false, true);
+            Project project = work.Execute();
+
+            if (project == null)
+            {
+                throw new ForumException("Update of forum failed. Project does not exist.");
+            }
+
+            ProjectDetailContract projectDetailContract = Mapper.Map<ProjectDetailContract>(project);
+            projectDetailContract.PageCount = work.GetPageCount();
+            short[] bookTypeIds = project.LatestPublishedSnapshot.BookTypes.Select(x => (short) x.Type).ToArray();
+
+            if (project.ForumId != null)
             {
                 m_forumManager.UpdateForum(projectDetailContract, bookTypeIds, hostUrl);
             }
         }
+
 
         public ForumContract GetForum(long projectId)
         {

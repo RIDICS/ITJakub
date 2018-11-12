@@ -1142,6 +1142,50 @@ class ProjectWorkNoteTab extends ProjectModuleTabBase {
     }
 }
 
+class ProjectWorkForumTab extends ProjectModuleTabBase {
+    private readonly projectId: number;
+    private readonly projectClient: ProjectClient;
+
+    constructor(projectId: number) {
+        super();
+        this.projectId = projectId;
+        this.projectClient = new ProjectClient();
+    }
+
+    initTab() {
+        var $saveButton = $("#forum-repair-button");
+        $saveButton.click(() => {
+            this.repairForum();
+        });
+        $(".saving-icon", $saveButton).hide();
+
+        $("#forum-repair-error, #forum-repair-success").hide();
+    }
+
+    private repairForum() {
+        var $loadingGlyph = $("#forum-repair-button .saving-icon");
+        var $buttons = $("#forum-repair-button");
+        var $successAlert = $("#forum-repair-success");
+        var $errorAlert = $("#forum-repair-error");
+        var $repairBlock = $("#forum-repair-block");
+        $loadingGlyph.show();
+        $buttons.prop("disabled", true);
+        $successAlert.finish().hide();
+        $errorAlert.hide();
+        this.projectClient.createForum(this.projectId).done((data) => {
+            $successAlert.show().delay(1500);
+            $("#forum-name").text(data.name);
+            $("#forum-url").html("<a href=\""+data.url+"\" >"+data.url+"</a>");
+            $repairBlock.delay(5000).fadeOut(1500);
+        }).fail(() => {
+            $errorAlert.show();
+            $buttons.prop("disabled", false);
+        }).always(() => {
+            $loadingGlyph.hide();
+        });
+    }
+}
+
 class MetadataUiHelper {
     static addPerson($container: JQuery,
         name: string,

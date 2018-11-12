@@ -131,11 +131,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                         return PartialView("Work/_Note");
                     case ProjectModuleTabType.Forum:
                         var forum = client.GetForum(projectId.Value);
-                        if (forum == null)
+                        ForumViewModel forumViewModel = null;
+                        if (forum != null)
                         {
-                            return PartialView("Work/_RepairForum", projectId.Value);
+                            forumViewModel = Mapper.Map<ForumViewModel>(forum);
                         }
-                        var forumViewModel = Mapper.Map<ForumViewModel>(forum);
                         return PartialView("Work/_Forum", forumViewModel);
                     default:
                         return NotFound();
@@ -195,6 +195,18 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
             var viewModel = ProjectMock.GetNewPulication(m_localizer);
             return PartialView("Work/_PublicationsNew", viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult CreateForum(long projectId)
+        {
+            using (var client = GetRestClient())
+            {
+                client.CreateForum(projectId);
+                var forum = client.GetForum(projectId);
+                ForumViewModel forumViewModel = Mapper.Map<ForumViewModel>(forum); 
+                return Json(forumViewModel);
+            }
         }
 
         [HttpPost]

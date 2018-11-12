@@ -142,4 +142,8 @@
     getProjectsByResponsiblePerson(responsiblePersonId: number, start?: number, count?: number): JQueryXHR {
         return $.get(`${getBaseUrl()}Admin/Project/GetProjectsByResponsiblePerson?responsiblePersonId=${responsiblePersonId}&start=${start}&count=${count}`);
     }
+
+    createForum(projectId: number): JQueryXHR {
+        return $.post(`${getBaseUrl()}Admin/Project/CreateForum?projectId=${projectId}`, {});
+    }
 }
