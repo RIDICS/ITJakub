@@ -99,9 +99,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Areas\Admin\Views\Project\Work\_RepairForum.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
     <Content Update="Areas\Admin\Views\Project\Work\_Forum.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
