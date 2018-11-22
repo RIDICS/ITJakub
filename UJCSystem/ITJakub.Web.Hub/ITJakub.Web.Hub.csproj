@@ -42,6 +42,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="2.0.1" />
     <PackageReference Include="Scalesoft.Localization.AspNetCore.Service" Version="1.0.1" />
     <PackageReference Include="Scalesoft.Localization.CoreLibrary" Version="1.0.2" />
     <PackageReference Include="Scalesoft.Localization.Database.EFCore" Version="1.0.2" />

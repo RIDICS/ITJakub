@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using Localization.AspNetCore.Service.Extensions;
 using Localization.CoreLibrary.Dictionary.Factory;
 using Localization.CoreLibrary.Util;
 using Localization.Database.EFCore.Data.Impl;
 using Localization.Database.EFCore.Factory;
 using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -15,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
@@ -39,22 +43,60 @@ namespace ITJakub.Web.Hub
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(o =>
-                {
-                    o.AccessDeniedPath = "/Account/AccessDenied/";
-                    o.LoginPath = "/Account/Login";
-                });
+            /* services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                 .AddCookie(o =>
+                 {
+                     o.AccessDeniedPath = "/Account/AccessDenied/";
+                     o.LoginPath = "/Account/Login";
+                 });*/
 
+
+            var openIdConnectConfig = Configuration.GetSection("OpenIdConnect").Get<OpenIdConnect>();
+
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                })
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+                {
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                    options.Cookie.Name = "identity";
+                    // options.AccessDeniedPath = "/Error/403";
+                })
+                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
+                {
+                    options.Authority = openIdConnectConfig.Url;
+
+                    options.ClientSecret = openIdConnectConfig.ClientSecret;
+                    options.ClientId = openIdConnectConfig.ClientId;
+
+                    options.ResponseType = "code id_token";
+
+                    options.Scope.Clear();
+                    options.Scope.Add("openid");
+                    options.Scope.Add("profile");
+
+                    options.ClaimActions.MapJsonKey("email", "email");
+                    options.ClaimActions.MapJsonKey("role", "role");
+                    options.ClaimActions.MapJsonKey("permission", "permission");
+                    
+
+                    options.GetClaimsFromUserInfoEndpoint = true;
+                    options.SaveTokens = true;
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        NameClaimType = "name",
+                        RoleClaimType = "role",
+                    };
+                });
 
             // Configuration options
             services.AddOptions();
             services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
 
-            services.Configure<FormOptions>(options =>
-            {
-                options.MultipartBodyLengthLimit = 1048576000;
-            });
+            services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = 1048576000; });
 
             // Localization
             var connectionString = Configuration.GetConnectionString(SettingKeys.WebConnectionString) ??
@@ -64,7 +106,6 @@ namespace ITJakub.Web.Hub
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddLocalizationService();
-
 
             services.AddMvc()
                 .AddDataAnnotationsLocalization(options =>
@@ -82,8 +123,12 @@ namespace ITJakub.Web.Hub
                     {
                         previous?.Invoke(context);
 
-                        context.Compilation = context.Compilation.AddReferences(Microsoft.CodeAnalysis.MetadataReference.CreateFromFile(typeof(Localization.AspNetCore.Service.ILocalization).Assembly.Location));
-                        context.Compilation = context.Compilation.AddReferences(Microsoft.CodeAnalysis.MetadataReference.CreateFromFile(typeof(Localization.CoreLibrary.Localization).Assembly.Location));
+                        context.Compilation = context.Compilation.AddReferences(
+                            Microsoft.CodeAnalysis.MetadataReference.CreateFromFile(typeof(Localization.AspNetCore.Service.ILocalization)
+                                .Assembly.Location));
+                        context.Compilation = context.Compilation.AddReferences(
+                            Microsoft.CodeAnalysis.MetadataReference.CreateFromFile(typeof(Localization.CoreLibrary.Localization).Assembly
+                                .Location));
                     };
                 });
 
@@ -91,13 +136,14 @@ namespace ITJakub.Web.Hub
             IIocContainer container = new DryIocContainer();
             container.Install<WebHubContainerRegistration>();
             Container = container;
-            
+
 
             return container.CreateServiceProvider(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime applicationLifetime)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,
+            IApplicationLifetime applicationLifetime)
         {
             ApplicationLogging.LoggerFactory = loggerFactory;
 
@@ -147,13 +193,14 @@ namespace ITJakub.Web.Hub
                     .MapAreaRoute("editionsDefault", "Editions", "{controller=Editions}/{action=Index}")
                     .MapAreaRoute("bohemianTextBankDefault", "BohemianTextBank", "{controller=BohemianTextBank}/{action=Index}")
                     .MapAreaRoute("oldGrammarDefault", "OldGrammar", "{controller=OldGrammar}/{action=Index}")
-                    .MapAreaRoute("professionalLiteratureDefault", "ProfessionalLiterature", "{controller=ProfessionalLiterature}/{action=Index}")
+                    .MapAreaRoute("professionalLiteratureDefault", "ProfessionalLiterature",
+                        "{controller=ProfessionalLiterature}/{action=Index}")
                     .MapAreaRoute("bibliographiesDefault", "Bibliographies", "{controller=Bibliographies}/{action=Index}")
                     .MapAreaRoute("cardFilesDefault", "CardFiles", "{controller=CardFiles}/{action=Index}")
                     .MapAreaRoute("audioBooksDefault", "AudioBooks", "{controller=AudioBooks}/{action=Index}")
                     .MapAreaRoute("toolsDefault", "Tools", "{controller=Tools}/{action=Index}");
             });
-            
+
             applicationLifetime.ApplicationStopped.Register(OnShutdown);
         }
 
