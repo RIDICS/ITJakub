@@ -22,6 +22,7 @@ using Microsoft.IdentityModel.Tokens;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
+using Vokabular.Shared.Const;
 using Vokabular.Shared.Container;
 using Vokabular.Shared.Options;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
@@ -77,10 +78,13 @@ namespace ITJakub.Web.Hub
                     options.Scope.Add("openid");
                     options.Scope.Add("profile");
 
-                    options.ClaimActions.MapJsonKey("email", "email");
-                    options.ClaimActions.MapJsonKey("role", "role");
-                    options.ClaimActions.MapJsonKey("permission", "permission");
-                    
+                    options.ClaimActions.MapJsonKey(ClaimTypes.Role, "role");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.DateOfBirth, "birthdate");
+                    options.ClaimActions.MapJsonKey(CustomClaimTypes.Permission, CustomClaimTypes.Permission);
 
                     options.GetClaimsFromUserInfoEndpoint = true;
                     options.SaveTokens = true;

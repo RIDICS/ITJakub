@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -12,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using Vokabular.Core;
-using Vokabular.Log4Net;
 using Vokabular.MainService.Core;
 using Vokabular.MainService.Middleware;
 using Vokabular.Shared;
@@ -39,16 +39,15 @@ namespace Vokabular.MainService
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            var openIdConnectConfig = Configuration.GetSection("OpenIdConnect").Get<OpenIdConnect>();
+
             // Configuration options
             services.AddOptions();
             services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
             services.Configure<List<CredentialsOption>>(Configuration.GetSection("Credentials"));
             services.Configure<PathConfiguration>(Configuration.GetSection("PathConfiguration"));
 
-            services.Configure<FormOptions>(options =>
-            {
-                options.MultipartBodyLengthLimit = 1048576000;
-            });
+            services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = 1048576000; });
 
             // Add framework services.
             services.AddMvc()
@@ -71,6 +70,17 @@ namespace Vokabular.MainService
                 options.SchemaFilter<PolymorphismSchemaFilter<SearchCriteriaContract>>();
             });
 
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = openIdConnectConfig.Url;
+
+                    // Disable validation (client-app is already authenticated)
+                    options.TokenValidationParameters.ValidateAudience = false;
+                    options.TokenValidationParameters.ValidateIssuer = false;
+                    options.TokenValidationParameters.ValidateLifetime = false;
+                });
+
             // IoC
             IIocContainer container = new DryIocContainer();
             container.Install<MainServiceContainerRegistration>();
@@ -81,13 +91,16 @@ namespace Vokabular.MainService
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime applicationLifetime)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,
+            IApplicationLifetime applicationLifetime)
         {
             ApplicationLogging.LoggerFactory = loggerFactory;
 
             app.ConfigureAutoMapper();
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
+
+            app.UseAuthentication();
 
             app.UseMvc();
 
