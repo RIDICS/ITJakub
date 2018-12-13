@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
@@ -6,6 +10,7 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Headers;
+using Vokabular.Shared.AspNetCore.Extensions;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Attributes;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
 using Vokabular.Shared.DataContracts.Types;
@@ -41,14 +46,6 @@ namespace Vokabular.MainService.Controllers
             {
                 return StatusCode(exception.StatusCode, exception.Message);
             }
-        }
-
-        [HttpGet("current")]
-        public UserDetailContract GetCurrentUser(
-            [FromHeader(Name = CustomHttpHeaders.Authorization)] string authorizationToken)
-        {
-            var result = m_userManager.GetCurrentUserByToken();
-            return result;
         }
 
         [HttpPut("current")]
