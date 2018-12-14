@@ -111,7 +111,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             }
 
             viewModel.Name = $"{User.GetFirstName()} {User.GetLastName()}";
-            viewModel.Email = User.GetUserEmail();
+            viewModel.Email = User.GetEmail();
 
             return View(viewModel);
         }

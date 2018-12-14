@@ -28,7 +28,7 @@ namespace ITJakub.Web.Hub.Core.Managers
                 var viewModel = new FeedbackViewModel
                 {
                     Name = $"{user.GetFirstName()} {user.GetLastName()}",
-                    Email = user.GetUserEmail(),
+                    Email = user.GetEmail(),
                     PageStaticText = pageStaticText,
                     FormIdentification = formIdentification
                 };
