@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Http.Extensions
 @using Localization.AspNetCore.Service
 @using Localization.CoreLibrary.Util
+@using Vokabular.Shared.AspNetCore.Extensions
 @using Vokabular.Shared.Const
 @model ITJakub.Web.Hub.Models.StaticTextViewModel
     
@@ -8,7 +9,7 @@
 
 <div class="static-text-container">
     <div class="static-text-panel">
-        @if (User.IsInRole(CustomRole.CanEditStaticText))
+        @if (User.HasPermission(PermissionNames.EditStaticText))
         {
             if (Model.IsRecordExists)
             {
