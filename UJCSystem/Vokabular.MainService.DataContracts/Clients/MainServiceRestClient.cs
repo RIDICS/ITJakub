@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using Microsoft.Extensions.Logging;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.CardFile;
@@ -30,7 +31,8 @@ namespace Vokabular.MainService.DataContracts.Clients
     {
         private static readonly ILogger m_logger = ApplicationLogging.CreateLogger<MainServiceRestClient>();
         private readonly string m_authenticationToken;
-        
+        private const string AuthenticationScheme = "Bearer";
+
         public MainServiceRestClient(Uri baseAddress, string authenticationToken) : base(baseAddress)
         {
             m_authenticationToken = authenticationToken;
@@ -38,7 +40,7 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         protected override void FillRequestMessage(HttpRequestMessage requestMessage)
         {
-            requestMessage.Headers.TryAddWithoutValidation(CustomHttpHeaders.Authorization, m_authenticationToken);
+            requestMessage.Headers.Authorization = new AuthenticationHeaderValue(AuthenticationScheme, m_authenticationToken);
         }
 
         protected override void ProcessResponse(HttpResponseMessage response)

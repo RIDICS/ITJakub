@@ -16,7 +16,6 @@ namespace ITJakub.Web.Hub
             container.AddPerWebRequest<CommunicationConfigurationProvider>();
             container.AddPerWebRequest<StaticTextManager>();
             container.AddPerWebRequest<FeedbacksManager>();
-            container.AddPerWebRequest<AuthenticationManager>();
 
             container.AddPerWebRequest<IMarkdownToHtmlConverter, MarkdigMarkdownToHtmlConverter>();
 

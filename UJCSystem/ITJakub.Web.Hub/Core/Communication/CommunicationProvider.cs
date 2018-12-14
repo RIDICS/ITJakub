@@ -14,6 +14,7 @@ namespace ITJakub.Web.Hub.Core.Communication
 
         private const string MainServiceEndpointName = "MainService";
         private const string LemmatizationServiceEndpointName = "LemmatizationService";
+        private const string AuthenticationTokenName = "access_token";
 
         public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider, IHttpContextAccessor httpContextAccessor)
         {
@@ -23,7 +24,7 @@ namespace ITJakub.Web.Hub.Core.Communication
 
         private string GetCommunicationToken()
         {
-            var communicationToken = m_httpContextAccessor.HttpContext.GetTokenAsync(AuthenticationManager.AuthenticationTokenName)
+            var communicationToken = m_httpContextAccessor.HttpContext.GetTokenAsync(AuthenticationTokenName)
                 .GetAwaiter().GetResult();
             return communicationToken;
         }
