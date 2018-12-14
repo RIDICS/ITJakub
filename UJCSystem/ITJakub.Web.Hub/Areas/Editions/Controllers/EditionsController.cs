@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.AspNetCore.Extensions;
+using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
@@ -79,7 +81,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                         BookPages = pages,
                         SearchText = searchText,
                         InitPageXmlId = page, // TODO rename to InitPageId
-                        CanPrintEdition = User.IsInRole("CanEditionPrint"),
+                        CanPrintEdition = User.HasPermission(PermissionNames.EditionPrintText),
                         JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
                     });
             }
