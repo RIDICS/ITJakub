@@ -13,7 +13,7 @@ using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Controllers
 {
-    [Authorize(Roles = CustomRole.CanManagePermissions)]
+    [Authorize(PermissionNames.ManagePermissions)]
     public class PermissionController : BaseController
     {
         public PermissionController(CommunicationProvider communicationProvider) : base(communicationProvider)
