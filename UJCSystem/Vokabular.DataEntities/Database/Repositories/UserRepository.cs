@@ -31,6 +31,13 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SingleOrDefault();
         }
 
+        public User GetUserByExternalId(long externalUserId)
+        {
+            return GetSession().QueryOver<User>()
+                .Where(x => x.ExternalId == externalUserId)
+                .SingleOrDefault();
+        }
+
         public virtual ListWithTotalCountResult<User> GetUserList(int start, int count, string filterByName)
         {
             var query = GetSession().QueryOver<User>()

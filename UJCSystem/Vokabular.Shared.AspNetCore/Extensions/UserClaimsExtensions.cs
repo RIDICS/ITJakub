@@ -1,5 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
+using System.Security.Authentication;
 using System.Security.Claims;
 using Vokabular.Shared.Const;
 
@@ -14,7 +14,7 @@ namespace Vokabular.Shared.AspNetCore.Extensions
                 return long.Parse(claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier).Value);
             }
 
-            throw new ArgumentException("User is not authenticated");
+            throw new AuthenticationException("User is not authenticated");
         }
 
         public static string GetUserName(this ClaimsPrincipal claimsPrincipal)
@@ -24,7 +24,7 @@ namespace Vokabular.Shared.AspNetCore.Extensions
                 return claimsPrincipal.FindFirst(ClaimTypes.Name).Value;
             }
 
-            throw new ArgumentException("User is not authenticated");
+            throw new AuthenticationException("User is not authenticated");
         }
 
         public static string GetFirstName(this ClaimsPrincipal claimsPrincipal)
@@ -34,7 +34,7 @@ namespace Vokabular.Shared.AspNetCore.Extensions
                 return claimsPrincipal.FindFirst(ClaimTypes.GivenName).Value;
             }
 
-            throw new ArgumentException("User is not authenticated");
+            throw new AuthenticationException("User is not authenticated");
         }
 
         public static string GetLastName(this ClaimsPrincipal claimsPrincipal)
@@ -44,7 +44,7 @@ namespace Vokabular.Shared.AspNetCore.Extensions
                 return claimsPrincipal.FindFirst(ClaimTypes.Surname).Value;
             }
 
-            throw new ArgumentException("User is not authenticated");
+            throw new AuthenticationException("User is not authenticated");
         }
 
         public static string GetEmail(this ClaimsPrincipal claimsPrincipal)
@@ -54,7 +54,7 @@ namespace Vokabular.Shared.AspNetCore.Extensions
                 return claimsPrincipal.FindFirst(ClaimTypes.Email).Value;
             }
 
-            throw new ArgumentException("User is not authenticated");
+            throw new AuthenticationException("User is not authenticated");
         }
 
         public static bool HasPermission(this ClaimsPrincipal claimsPrincipal, string permissionName)

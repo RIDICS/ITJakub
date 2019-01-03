@@ -7,6 +7,9 @@ BEGIN TRAN
 
 	ALTER TABLE [dbo].[User] ALTER COLUMN [LastName] varchar(50) NULL
 
+	ALTER TABLE [dbo].[User] ADD [ExternalId] bigint NOT NUll
+	
+
     INSERT INTO [dbo].[DatabaseVersion]
 		(DatabaseVersion)
 	VALUES

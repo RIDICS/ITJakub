@@ -8,6 +8,10 @@ namespace Vokabular.DataEntities.Database.Entities
     {
         public virtual int Id { get; set; }
 
+        public long ExternalId { get; set; }
+
+        //TODO remove
+
         public virtual string UserName { get; set; }
 
         public virtual string FirstName { get; set; }
