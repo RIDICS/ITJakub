@@ -59,16 +59,6 @@ namespace ITJakub.BatchImport.Client.ViewModel
             }
         }
 
-        public string UserName
-        {
-            get { return m_userName; }
-            set
-            {
-                m_userName = value;
-                RaisePropertyChanged();
-            }
-        }
-
         public int ThreadCount
         {
             get { return m_threadCount; }
@@ -80,7 +70,7 @@ namespace ITJakub.BatchImport.Client.ViewModel
         }
 
 
-        public RelayCommand<PasswordBox> ConvertCommand { get; set; }
+        public RelayCommand ConvertCommand { get; set; }
 
         public RelayCommand LoadItemsCommand { get; set; }
 
@@ -90,7 +80,7 @@ namespace ITJakub.BatchImport.Client.ViewModel
 
         private void InitializeCommands()
         {
-            ConvertCommand = new RelayCommand<PasswordBox>(ConvertSelectedPath);
+            ConvertCommand = new RelayCommand(ConvertSelectedPath);
             LoadItemsCommand = new RelayCommand(LoadItems);
         }
 
@@ -118,9 +108,9 @@ namespace ITJakub.BatchImport.Client.ViewModel
             //item = item.ToLowerInvariant(); 
         }
 
-        private void ConvertSelectedPath(PasswordBox passwordBox)
+        private void ConvertSelectedPath()
         {
-            m_dataService.ProcessItems(UserName, passwordBox.Password, ThreadCount, (resultProcessed, error) =>
+            m_dataService.ProcessItems(ThreadCount, (resultProcessed, error) =>
             {
                 if (error != null)
                     return;

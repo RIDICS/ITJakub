@@ -47,12 +47,11 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
         }
 
 
-        public void ProcessAllItems(string username, string password, int threadCount, Action<string, Exception> callback)
+        public void ProcessAllItems(int threadCount, Action<string, Exception> callback)
         {
             try
             {
                 m_authenticationManager.SignInAsync().Wait();
-
 
                 ParallelLoopResult result = Parallel.ForEach(m_files,
                     new ParallelOptions { MaxDegreeOfParallelism = threadCount },
