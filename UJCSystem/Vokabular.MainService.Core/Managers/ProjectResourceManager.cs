@@ -18,8 +18,6 @@ namespace Vokabular.MainService.Core.Managers
 
         public void UploadResource(string sessionId, Stream data, string fileName)
         {
-            m_authorizationManager.CheckUserCanUploadBook();
-
             using (var client = m_communicationProvider.GetFileProcessingClient())
             {
                 var resourceInfo = new UploadResourceContract
@@ -34,11 +32,11 @@ namespace Vokabular.MainService.Core.Managers
 
         public void ProcessSessionAsImport(string sessionId, long? projectId, string comment)
         {
-            var permissionResult = m_authorizationManager.CheckUserCanUploadBook();
+            var userId = m_authorizationManager.GetCurrentUserId();
 
             using (var client = m_communicationProvider.GetFileProcessingClient())
             {
-                var success = client.ProcessSession(sessionId, projectId, permissionResult.UserId, comment);
+                var success = client.ProcessSession(sessionId, projectId, userId, comment);
                 if (!success)
                 {
                     throw new InvalidOperationException("Import failed");

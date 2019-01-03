@@ -54,8 +54,6 @@ namespace Vokabular.MainService.Core.Managers
 
         public PagedResultList<FeedbackContract> GetFeedbackList(int? start, int? count, FeedbackSortEnumContract sort, SortDirectionEnumContract sortDirection, IList<FeedbackCategoryEnumContract> filterCategories)
         {
-            m_authorizationManager.CheckUserCanManageFeedbacks();
-
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
             var sortValue = Mapper.Map<FeedbackSortEnum>(sort);
@@ -81,8 +79,6 @@ namespace Vokabular.MainService.Core.Managers
 
         public void DeleteFeedback(long feedbackId)
         {
-            m_authorizationManager.CheckUserCanManageFeedbacks();
-
             new DeleteFeedbackWork(m_portalRepository, feedbackId).Execute();
         }
     }

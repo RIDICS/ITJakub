@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.Const;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -20,12 +22,14 @@ namespace Vokabular.MainService.Controllers
             m_namedResourceGroupManager = namedResourceGroupManager;
         }
 
+        [Authorize(PermissionNames.UploadBook)]
         [HttpPost("session/{sessionId}/resource")]
         public void UploadResource(string sessionId, [FromQuery] string fileName)
         {
             m_resourceManager.UploadResource(sessionId, Request.Body, fileName);
         }
 
+        [Authorize(PermissionNames.UploadBook)]
         [HttpPost("session/{sessionId}")]
         public void ProcessSessionAsImport(string sessionId, [FromBody] NewBookImportContract info)
         {

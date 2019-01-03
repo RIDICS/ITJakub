@@ -49,20 +49,6 @@ namespace Vokabular.MainService.Core.Managers
             searchCriteriaConjuction.Add(authorizationCriteria);
         }
 
-
-        public void CheckUserCanManageFeedbacks()
-        {
-            var user = m_authenticationManager.GetCurrentUser(true);
-            var specialPermissions = m_permissionRepository.InvokeUnitOfWork(x => x.GetSpecialPermissionsByUserAndType(user.Id,
-                SpecialPermissionCategorization.Action));
-            var feedbackPermissions = specialPermissions.OfType<FeedbackPermission>();
-            if (!feedbackPermissions.Any(x => x.CanManageFeedbacks))
-            {
-                throw new UnauthorizedException(
-                    string.Format("User with username '{0}' does not have permission to manage feedbacks", user.UserName));
-            }
-        }
-
         public PermissionResult CheckUserCanManagePermissions()
         {
             var user = m_authenticationManager.GetCurrentUser(true);
@@ -74,24 +60,6 @@ namespace Vokabular.MainService.Core.Managers
                 throw new UnauthorizedException(
                     string.Format("User with username '{0}' does not have permission to manage permissions",
                         user.UserName));
-            }
-
-            return new PermissionResult
-            {
-                UserId = user.Id,
-            };
-        }
-
-        public PermissionResult CheckUserCanUploadBook()
-        {
-            var user = m_authenticationManager.GetCurrentUser(true);
-            var specialPermissions = m_permissionRepository.InvokeUnitOfWork(x => x.GetSpecialPermissionsByUserAndType(user.Id,
-                SpecialPermissionCategorization.Action));
-            var uploadBookPermissions = specialPermissions.OfType<UploadBookPermission>();
-            if (!uploadBookPermissions.Any(x => x.CanUploadBook))
-            {
-                throw new UnauthorizedException(
-                    string.Format("User with username '{0}' does not have permission to upload books", user.UserName));
             }
 
             return new PermissionResult
