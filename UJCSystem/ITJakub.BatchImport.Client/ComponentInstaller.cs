@@ -12,7 +12,7 @@ namespace ITJakub.BatchImport.Client
         {            
             container.Register(Component.For<FileUploadManager>());
             container.Register(Component.For<CommunicationProvider>());
-            container.Register(Component.For<AuthTokenStorage>());
+            container.Register(Component.For<AuthenticationManager>());
         }
     }
 }

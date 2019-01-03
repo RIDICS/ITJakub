@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 using ITJakub.BatchImport.Client.BusinessLogic.Communication;
 using ITJakub.BatchImport.Client.ViewModel;
@@ -13,16 +15,16 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
     public class FileUploadManager
     {
         private readonly CommunicationProvider m_communicationProvider;
-        private readonly AuthTokenStorage m_authTokenStorage;
+        private readonly AuthenticationManager m_authenticationManager;
 
         private const string DefaultUploadMessage = "Uploaded by BatchImport client";
 
         private ConcurrentQueue<FileModel> m_files = new ConcurrentQueue<FileModel>();
 
-        public FileUploadManager(CommunicationProvider communicationProvider, AuthTokenStorage authTokenStorage)
+        public FileUploadManager(CommunicationProvider communicationProvider, AuthenticationManager authenticationManager)
         {
             m_communicationProvider = communicationProvider;
-            m_authTokenStorage = authTokenStorage;
+            m_authenticationManager = authenticationManager;
         }
 
         public void AddFilesForUpload(Action<List<FileViewModel>, Exception> callback, string folderPath)
@@ -47,32 +49,30 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
 
         public void ProcessAllItems(string username, string password, int threadCount, Action<string, Exception> callback)
         {
-            using (var client = m_communicationProvider.GetMainServiceClient())
+            try
             {
-                try
-                {
-                    var signInResult = client.SignIn(new SignInContract
-                    {
-                        Username = username,
-                        Password = password
-                    });
+                m_authenticationManager.SignInAsync().Wait();
 
-                    m_authTokenStorage.AuthToken = signInResult.CommunicationToken;
-                }
-                catch (HttpRequestException exception)
+
+                ParallelLoopResult result = Parallel.ForEach(m_files,
+                    new ParallelOptions { MaxDegreeOfParallelism = threadCount },
+                    model => ProcessFile(model, callback));
+            }
+            catch (AggregateException e)
+            {
+                if (e.GetBaseException().GetType() == typeof(AuthenticationException))
                 {
                     foreach (var fileModel in m_files)
                     {
                         fileModel.CurrentState = FileStateType.Error;
-                        fileModel.ErrorMessage = exception.Message;
+                        fileModel.ErrorMessage = e.GetBaseException().Message;
                     }
-                    return;
+                }
+                else
+                {
+                    throw;
                 }
             }
-
-            ParallelLoopResult result = Parallel.ForEach(m_files,
-                new ParallelOptions {MaxDegreeOfParallelism = threadCount},
-                model => ProcessFile(model, callback));
         }
     
 
