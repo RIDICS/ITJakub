@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
+using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
@@ -29,6 +31,7 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
+        [Authorize(PermissionNames.ManagePermissions)]
         [HttpPost("")]
         public int CreateGroup([FromBody] UserGroupContract data)
         {
@@ -43,6 +46,7 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
+        [Authorize(PermissionNames.ManagePermissions)]
         [HttpDelete("{groupId}")]
         public void DeleteGroup(int groupId)
         {
@@ -59,24 +63,28 @@ namespace Vokabular.MainService.Controllers
         //    //TODO split two methods - for books and categories
         //}
 
+        [Authorize(PermissionNames.ManagePermissions)]
         [HttpPost("{groupId}/permission/book")]
         public void AddBooksToGroup(int groupId, [FromBody] AddBookToUserGroupRequestContract request)
         {
             m_permissionManager.AddBooksAndCategoriesToGroup(groupId, request.BookIdList);
         }
 
+        [Authorize(PermissionNames.ManagePermissions)]
         [HttpDelete("{groupId}/permission/book")]
         public void RemoveBooksFromGroup(int groupId, [FromBody] AddBookToUserGroupRequestContract request)
         {
             m_permissionManager.RemoveBooksAndCategoriesFromGroup(groupId, request.BookIdList);
         }
 
+        [Authorize(PermissionNames.ManagePermissions)]
         [HttpDelete("{groupId}/user/{userId}")]
         public void RemoveUserFromGroup(int userId, int groupId)
         {
             m_userGroupManager.RemoveUserFromGroup(userId, groupId);
         }
 
+        [Authorize(PermissionNames.ManagePermissions)]
         [HttpPost("{groupId}/user/{userId}")]
         public void AddUserToGroup(int userId, int groupId)
         {
@@ -99,6 +107,7 @@ namespace Vokabular.MainService.Controllers
         //{
         //}
 
+        [Authorize(PermissionNames.ManagePermissions)]
         [HttpGet("{groupId}/permission/special")]
         public List<SpecialPermissionContract> GetSpecialPermissionsForGroup(int groupId)
         {
@@ -106,18 +115,21 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
+        [Authorize(PermissionNames.ManagePermissions)]
         [HttpPost("{groupId}/permission/special")]
         public void AddSpecialPermissionsToGroup(int groupId, [FromBody] IntegerIdListContract specialPermissionsIds)
         {
             m_permissionManager.AddSpecialPermissionsToGroup(groupId, specialPermissionsIds.IdList);
         }
 
+        [Authorize(PermissionNames.ManagePermissions)]
         [HttpDelete("{groupId}/permission/special")]
         public void RemoveSpecialPermissionsFromGroup(int groupId, [FromBody] IntegerIdListContract specialPermissionsIds)
         {
             m_permissionManager.RemoveSpecialPermissionsFromGroup(groupId, specialPermissionsIds.IdList);
         }
 
+        [Authorize(PermissionNames.ManagePermissions)]
         [HttpGet("autocomplete")]
         public List<UserGroupContract> GetAutocomplete([FromQuery] string query, [FromQuery] int? count)
         {

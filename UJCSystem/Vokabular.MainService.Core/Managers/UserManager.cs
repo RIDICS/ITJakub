@@ -15,14 +15,12 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly UserRepository m_userRepository;
         private readonly ICommunicationTokenGenerator m_communicationTokenGenerator;
-        private readonly AuthorizationManager m_authorizationManager;
         private readonly AuthenticationManager m_authenticationManager;
 
-        public UserManager(UserRepository userRepository, ICommunicationTokenGenerator communicationTokenGenerator, AuthorizationManager authorizationManager, AuthenticationManager authenticationManager)
+        public UserManager(UserRepository userRepository, ICommunicationTokenGenerator communicationTokenGenerator, AuthenticationManager authenticationManager)
         {
             m_userRepository = userRepository;
             m_communicationTokenGenerator = communicationTokenGenerator;
-            m_authorizationManager = authorizationManager;
             m_authenticationManager = authenticationManager;
         }
 
@@ -58,9 +56,7 @@ namespace Vokabular.MainService.Core.Managers
         }
 
         public PagedResultList<UserDetailContract> GetUserList(int? start, int? count, string filterByName)
-        {
-            m_authorizationManager.CheckUserCanManagePermissions();
-
+        {        
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
 
@@ -74,8 +70,6 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<UserDetailContract> GetUserAutocomplete(string query, int? count)
         {
-            m_authorizationManager.CheckUserCanManagePermissions();
-
             if (query == null)
                 query = string.Empty;
 
@@ -87,8 +81,6 @@ namespace Vokabular.MainService.Core.Managers
 
         public UserDetailContract GetUserDetail(int userId)
         {
-            m_authorizationManager.CheckUserCanManagePermissions();
-
             var dbResult = m_userRepository.InvokeUnitOfWork(x => x.FindById<User>(userId));
             var result = Mapper.Map<UserDetailContract>(dbResult);
 

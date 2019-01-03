@@ -49,8 +49,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public int CreateGroup(string groupName, string description)
         {
-            var permissionResult = m_authorizationManager.CheckUserCanManagePermissions();
-            var userId = permissionResult.UserId;
+            var userId = m_authorizationManager.GetCurrentUserId();
             var result = new CreateGroupWork(m_permissionRepository, groupName, description, userId).Execute();
             return result;
         }
@@ -65,26 +64,21 @@ namespace Vokabular.MainService.Core.Managers
 
         public void DeleteGroup(int groupId)
         {
-            m_authorizationManager.CheckUserCanManagePermissions();
             new DeleteGroupWork(m_permissionRepository, groupId).Execute();
         }
 
         public void RemoveUserFromGroup(int userId, int groupId)
         {
-            m_authorizationManager.CheckUserCanManagePermissions();
             new RemoveUserFromGroupWork(m_permissionRepository, userId, groupId).Execute();
         }
 
         public void AddUserToGroup(int userId, int groupId)
         {
-            m_authorizationManager.CheckUserCanManagePermissions();
             new AddUserToGroupWork(m_permissionRepository, userId, groupId).Execute();
         }
 
         public List<UserGroupContract> GetUserGroupAutocomplete(string query, int? count)
         {
-            m_authorizationManager.CheckUserCanManagePermissions();
-
             if (query == null)
                 query = string.Empty;
 

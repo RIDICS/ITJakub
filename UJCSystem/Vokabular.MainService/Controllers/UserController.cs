@@ -13,6 +13,7 @@ using Vokabular.RestClient.Headers;
 using Vokabular.Shared.AspNetCore.Extensions;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Attributes;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
+using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
@@ -78,6 +79,7 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
+        [Authorize(PermissionNames.ManagePermissions)]
         [HttpGet("")]
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
         public List<UserDetailContract> GetUserList([FromQuery] int? start, [FromQuery] int? count, [FromQuery] string filterByName)
@@ -88,6 +90,7 @@ namespace Vokabular.MainService.Controllers
             return result.List;
         }
 
+        [Authorize(PermissionNames.ManagePermissions)]
         [HttpGet("{userId}/detail")]
         public UserDetailContract GetUserDetail(int userId)
         {
@@ -109,6 +112,7 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
+        [Authorize(PermissionNames.ManagePermissions)]
         [HttpGet("autocomplete")]
         public List<UserDetailContract> GetAutocomplete([FromQuery] string query, [FromQuery] int? count)
         {

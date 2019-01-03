@@ -49,25 +49,6 @@ namespace Vokabular.MainService.Core.Managers
             searchCriteriaConjuction.Add(authorizationCriteria);
         }
 
-        public PermissionResult CheckUserCanManagePermissions()
-        {
-            var user = m_authenticationManager.GetCurrentUser(true);
-            var specialPermissions = m_permissionRepository.InvokeUnitOfWork(x => x.GetSpecialPermissionsByUserAndType(user.Id,
-                SpecialPermissionCategorization.Action));
-            var managePermissionsPermissions = specialPermissions.OfType<ManagePermissionsPermission>();
-            if (!managePermissionsPermissions.Any(x => x.CanManagePermissions))
-            {
-                throw new UnauthorizedException(
-                    string.Format("User with username '{0}' does not have permission to manage permissions",
-                        user.UserName));
-            }
-
-            return new PermissionResult
-            {
-                UserId = user.Id,
-            };
-        }
-
         public void CheckUserCanViewCardFile(string cardFileId)
         {
             var user = m_authenticationManager.GetCurrentUser(true);

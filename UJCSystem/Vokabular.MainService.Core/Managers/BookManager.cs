@@ -53,9 +53,7 @@ namespace Vokabular.MainService.Core.Managers
         }
 
         public List<BookContract> GetAllBooksByType(BookTypeEnumContract bookType)
-        {
-            m_authorizationManager.CheckUserCanManagePermissions();
-            
+        {           
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
             var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetAllMetadataByBookType(bookTypeEnum));
             var resultList = Mapper.Map<List<BookContract>>(dbMetadataList);
