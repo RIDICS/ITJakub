@@ -40,8 +40,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public long CreateNewsSyndicationItem(CreateNewsSyndicationItemContract data)
         {
-            var permissionResult = m_authorizationManager.CheckUserCanAddNews();
-            var work = new CreateNewsWork(m_portalRepository, data, permissionResult.UserId);
+            var userId = m_authorizationManager.GetCurrentUserId();
+            var work = new CreateNewsWork(m_portalRepository, data, userId);
             var resultId = work.Execute();
             return resultId;
         }

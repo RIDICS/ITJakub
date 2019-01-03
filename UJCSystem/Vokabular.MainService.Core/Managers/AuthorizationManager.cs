@@ -49,23 +49,6 @@ namespace Vokabular.MainService.Core.Managers
             searchCriteriaConjuction.Add(authorizationCriteria);
         }
 
-        public PermissionResult CheckUserCanAddNews()
-        {
-            var user = m_authenticationManager.GetCurrentUser(true);
-            var specialPermissions = m_permissionRepository.InvokeUnitOfWork(x => x.GetSpecialPermissionsByUserAndType(user.Id,
-                SpecialPermissionCategorization.Action));
-            var newsPermissions = specialPermissions.OfType<NewsPermission>();
-            if (!newsPermissions.Any(x => x.CanAddNews))
-            {
-                throw new UnauthorizedException(
-                    string.Format("User with username '{0}' does not have permission to add news", user.UserName));
-            }
-            
-            return new PermissionResult
-            {
-                UserId = user.Id,
-            };
-        }
 
         public void CheckUserCanManageFeedbacks()
         {
