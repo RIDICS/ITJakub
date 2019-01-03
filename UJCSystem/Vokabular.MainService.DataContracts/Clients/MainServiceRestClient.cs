@@ -2303,39 +2303,6 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public SignInResultContract SignIn(SignInContract data)
-        {
-            try
-            {
-                //EnsureSecuredClient();
-                var result = Post<SignInResultContract>("authtoken", data);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void SignOut()
-        {
-            try
-            {
-                //EnsureSecuredClient();
-                Delete("authtoken");
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
         #endregion
 
         #region Card files
