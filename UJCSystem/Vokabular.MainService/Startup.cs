@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using Vokabular.Core;
+using Vokabular.MainService.Authorization;
 using Vokabular.MainService.Core;
 using Vokabular.MainService.Middleware;
 using Vokabular.Shared;
@@ -80,6 +82,8 @@ namespace Vokabular.MainService
                     options.TokenValidationParameters.ValidateIssuer = false;
                     options.TokenValidationParameters.ValidateLifetime = false;
                 });
+
+            services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
 
             // IoC
             IIocContainer container = new DryIocContainer();
