@@ -2,7 +2,7 @@
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
-using Vokabular.MainService.Core.Errors;
+using System.Security.Authentication;
 using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.Shared.AspNetCore.Extensions;
 

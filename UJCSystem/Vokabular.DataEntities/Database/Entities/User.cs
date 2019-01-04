@@ -8,7 +8,7 @@ namespace Vokabular.DataEntities.Database.Entities
     {
         public virtual int Id { get; set; }
 
-        public long ExternalId { get; set; }
+        public virtual long ExternalId { get; set; }
 
         //TODO remove
 

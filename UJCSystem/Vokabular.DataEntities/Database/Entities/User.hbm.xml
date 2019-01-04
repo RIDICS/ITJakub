@@ -25,6 +25,8 @@
     <property name="CreateTime" not-null="true" type="UtcDateTime" />
     
     <property name="AvatarUrl" not-null="false" />
+
+    <property name="ExternalId" not-null="false" />
     
     <!--<bag name="FavoriteItems" inverse="true">
       <key column="[User]" />
