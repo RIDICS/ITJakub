@@ -47,14 +47,6 @@ namespace ITJakub.Web.Hub
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            /* services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                 .AddCookie(o =>
-                 {
-                     o.AccessDeniedPath = "/Account/AccessDenied/";
-                     o.LoginPath = "/Account/Login";
-                 });*/
-
-
             var openIdConnectConfig = Configuration.GetSection("OpenIdConnect").Get<OpenIdConnect>();
 
             services.AddAuthentication(options =>
@@ -66,12 +58,12 @@ namespace ITJakub.Web.Hub
                 {
                     options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
                     options.Cookie.Name = "identity";
-                    // options.AccessDeniedPath = "/Error/403";
+                    options.AccessDeniedPath = "/Account/AccessDenied/";
+                    options.LoginPath = "/Account/Login";
                 })
                 .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
                 {
                     options.Authority = openIdConnectConfig.Url;
-
                     options.ClientSecret = openIdConnectConfig.ClientSecret;
                     options.ClientId = openIdConnectConfig.ClientId;
 
