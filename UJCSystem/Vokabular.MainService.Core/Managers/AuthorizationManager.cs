@@ -58,8 +58,7 @@ namespace Vokabular.MainService.Core.Managers
             if (!cardFilePermissions.Any(x => x.CanReadCardFile && x.CardFileId == cardFileId))
             {
                 throw new UnauthorizedException(
-                    string.Format("User with username '{0}' does not have permission to read cardfile with id '{1}'",
-                        user.UserName, cardFileId));
+                    $"User with id '{user.Id}' (external id '{user.ExternalId}')  does not have permission to read cardfile with id '{cardFileId}'");
             }
         }
 
@@ -99,7 +98,7 @@ namespace Vokabular.MainService.Core.Managers
 
             if (filtered == null || filtered.Count == 0)
             {
-                throw new UnauthorizedException($"User with username '{user.UserName}' does not have permission on book with id '{projectId}'");
+                throw new UnauthorizedException($"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission on book with id '{projectId}'");
             }
         }
 
@@ -110,7 +109,7 @@ namespace Vokabular.MainService.Core.Managers
 
             if (filtered == null)
             {
-                throw new UnauthorizedException($"User with username '{user.UserName}' does not have permission on book with resource with id '{resourceId}'");
+                throw new UnauthorizedException($"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission on book with resource with id '{resourceId}'");
             }
         }
     }
