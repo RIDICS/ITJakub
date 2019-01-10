@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
+using System.Net.Http;
 using System.Reflection;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +16,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using Swashbuckle.AspNetCore.Swagger;
 using Vokabular.Core;
 using Vokabular.MainService.Authorization;
@@ -21,6 +26,7 @@ using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
+using Vokabular.Shared.Const;
 using Vokabular.Shared.Container;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.Options;
@@ -81,6 +87,38 @@ namespace Vokabular.MainService
                     options.TokenValidationParameters.ValidateAudience = false;
                     options.TokenValidationParameters.ValidateIssuer = false;
                     options.TokenValidationParameters.ValidateLifetime = false;
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = context =>
+                        {
+                            var client = new HttpClient();
+                            var jwtToken = (JwtSecurityToken)context.SecurityToken;
+                            client.SetBearerToken(jwtToken.RawData);
+                        
+                            var content = client.GetStringAsync(openIdConnectConfig.UserInfoEndpoint).Result;                           
+                            IList<Claim> claims = new List<Claim>();
+
+                            foreach (var property in JToken.Parse(content).Children<JProperty>())
+                            {
+                                if (!property.Name.Equals(CustomClaimTypes.Permission))
+                                {
+                                    claims.Add(new Claim(property.Name, property.Value.ToString()));
+                                }
+                                else
+                                {
+                                    var permArray = JArray.Parse(property.Value.ToString());
+                                    foreach (var permission in permArray)
+                                    {
+                                        claims.Add(new Claim(property.Name, permission.ToString(), context.SecurityToken.Issuer));
+                                    }
+                                }
+                            }
+
+                            context.Principal.AddIdentity(new ClaimsIdentity(claims));                         
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
 
             services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
