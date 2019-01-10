@@ -3,6 +3,7 @@ using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using System.Security.Authentication;
+using System.Security.Claims;
 using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.Shared.AspNetCore.Extensions;
 
@@ -26,8 +27,8 @@ namespace Vokabular.MainService.Core.Managers
         {
             try
             {
-                var externalUserId = m_httpContextAccessor.HttpContext.User.GetId();
-                var user = m_userRepository.InvokeUnitOfWork(x => x.GetUserByExternalId(externalUserId));
+                var externalUser = m_httpContextAccessor.HttpContext.User;
+                var user = m_userRepository.InvokeUnitOfWork(x => x.GetUserByExternalId(externalUser.GetId()));
 
                 if (user == null)
                 {
@@ -50,6 +51,11 @@ namespace Vokabular.MainService.Core.Managers
         public int GetCurrentUserId()
         {
             return GetCurrentUser(false).Id;
+        }
+
+        public ClaimsPrincipal GetContextUser()
+        {
+            return m_httpContextAccessor.HttpContext.User;
         }
     }
 }

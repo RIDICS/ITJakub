@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using log4net;
-using Vokabular.DataEntities.Database.Entities;
-using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Errors;
-using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.DataContracts.Contracts.CardFile;
+using Vokabular.Shared.AspNetCore.Extensions;
+using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -52,10 +51,9 @@ namespace Vokabular.MainService.Core.Managers
         public void CheckUserCanViewCardFile(string cardFileId)
         {
             var user = m_authenticationManager.GetCurrentUser(true);
-            var specialPermissions = m_permissionRepository.InvokeUnitOfWork(x => x.GetSpecialPermissionsByUserAndType(user.Id,
-                SpecialPermissionCategorization.CardFile));
-            var cardFilePermissions = specialPermissions.OfType<CardFilePermission>();
-            if (!cardFilePermissions.Any(x => x.CanReadCardFile && x.CardFileId == cardFileId))
+
+            var contextUser = m_authenticationManager.GetContextUser();
+            if (!contextUser.HasPermission(PermissionNames.CardFile + cardFileId))
             {
                 throw new UnauthorizedException(
                     $"User with id '{user.Id}' (external id '{user.ExternalId}')  does not have permission to read cardfile with id '{cardFileId}'");
@@ -65,17 +63,13 @@ namespace Vokabular.MainService.Core.Managers
         public void FilterCardFileList(ref IList<CardFileContract> cardFilesContracts)
         {
             var user = m_authenticationManager.GetCurrentUser(true);
-
             if (cardFilesContracts == null || cardFilesContracts.Count == 0)
             {
                 return;
             }
 
-            var specialPermissions = m_permissionRepository.InvokeUnitOfWork(x => x.GetSpecialPermissionsByUserAndType(user.Id,
-                SpecialPermissionCategorization.CardFile));
-            var cardFileSpecialPermissions = specialPermissions.OfType<CardFilePermission>();
-            var allowedCardFileIds = cardFileSpecialPermissions.Where(x => x.CanReadCardFile).Select(x => x.CardFileId);
-            cardFilesContracts = cardFilesContracts.Where(x => allowedCardFileIds.Contains(x.Id)).ToList();
+            var contextUser = m_authenticationManager.GetContextUser();
+            cardFilesContracts = cardFilesContracts.Where(x => contextUser.HasPermission(PermissionNames.CardFile + x.Id)).ToList();
         }
 
         public void FilterProjectIdList(ref IList<long> projectIds)
