@@ -14,12 +14,6 @@
     
     <property name="Email" not-null="true" />
     
-    <property name="AuthenticationProvider" not-null="true" />
-    
-    <property name="CommunicationToken" not-null="true" />
-    
-    <property name="CommunicationTokenCreateTime" not-null="false" type="UtcDateTime" />
-    
     <property name="PasswordHash" not-null="false" />
     
     <property name="CreateTime" not-null="true" type="UtcDateTime" />

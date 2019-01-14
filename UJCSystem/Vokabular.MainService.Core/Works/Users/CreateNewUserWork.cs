@@ -55,8 +55,6 @@ namespace Vokabular.MainService.Core.Works.Users
                     CreateTime = now,
                     PasswordHash = passwordHash,
                     AvatarUrl = m_data.AvatarUrl,
-                    AuthenticationProvider = AuthenticationProvider.ItJakub,
-                    CommunicationToken = "example"
                     //Groups = new List<Group> { m_defaultMembershipProvider.GetDefaultRegisteredUserGroup(), m_defaultMembershipProvider.GetDefaultUnRegisteredUserGroup() },
                     //FavoriteLabels = new List<FavoriteLabel> { defaultFavoriteLabel }
                 };

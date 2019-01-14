@@ -24,14 +24,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SingleOrDefault();
         }
 
-        public virtual User GetUserByToken(string authorizationToken)
-        {
-            return GetSession().QueryOver<User>()
-                .Where(x => x.CommunicationToken == authorizationToken)
-                .SingleOrDefault();
-        }
-
-        public User GetUserByExternalId(long externalUserId)
+        public User GetUserByExternalId(int externalUserId)
         {
             return GetSession().QueryOver<User>()
                 .Where(x => x.ExternalId == externalUserId)
@@ -109,9 +102,6 @@ namespace Vokabular.DataEntities.Database.Repositories
                 LastName = unregisteredUserName,
                 CreateTime = now,
                 PasswordHash = string.Empty,
-                AuthenticationProvider = AuthenticationProvider.ItJakub,
-                CommunicationToken = string.Empty,
-                CommunicationTokenCreateTime = now,
                 Groups = new List<UserGroup> { unregisteredUserGroup },
                 AvatarUrl = null,
             };

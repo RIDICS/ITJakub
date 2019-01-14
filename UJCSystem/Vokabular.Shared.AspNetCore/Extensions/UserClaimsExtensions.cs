@@ -7,11 +7,11 @@ namespace Vokabular.Shared.AspNetCore.Extensions
 {
     public static class UserClaimsExtensions
     {
-        public static long GetId(this ClaimsPrincipal claimsPrincipal)
+        public static int GetId(this ClaimsPrincipal claimsPrincipal)
         {
             if (claimsPrincipal.Identity.IsAuthenticated)
             {
-                return long.Parse(claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier).Value);
+                return int.Parse(claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier).Value);
             }
 
             throw new AuthenticationException("User is not authenticated");

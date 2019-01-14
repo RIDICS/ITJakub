@@ -30,13 +30,6 @@ namespace Vokabular.MainService.Core.Managers
             return userId;
         }
 
-        public UserDetailContract GetCurrentUserByToken()
-        {
-            var dbUser = m_authenticationManager.GetCurrentUser(false);
-            var result = Mapper.Map<UserDetailContract>(dbUser);
-            return result;
-        }
-
         public void UpdateUser(UpdateUserContract data)
         {
             var userId = m_authenticationManager.GetCurrentUserId();
