@@ -31,8 +31,6 @@ namespace Vokabular.MainService.Test
             container.AddPerWebRequest<IHttpContextAccessor, MockHttpContextAccessor>();
             container.ReplacePerWebRequest<PermissionRepository, MockPermissionRepository>();
             container.ReplacePerWebRequest<UserRepository, MockUserRepository>();
-            container.ReplacePerWebRequest<ICommunicationTokenProvider, MockCommunicationTokenProvider>();
-            container.ReplacePerWebRequest<ICommunicationTokenGenerator, MockCommunicationTokenGenerator>();
             
             container.InitAutoMapper();
             container.InitNHibernate();

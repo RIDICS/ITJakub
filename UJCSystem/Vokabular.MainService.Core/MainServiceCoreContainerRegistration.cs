@@ -40,9 +40,6 @@ namespace Vokabular.MainService.Core
             container.AddPerWebRequest<UserGroupManager>();
             container.AddPerWebRequest<UserManager>();
 
-            container.AddPerWebRequest<ICommunicationTokenGenerator, GuidCommunicationTokenGenerator>();
-            container.AddPerWebRequest<ICommunicationTokenProvider, HttpHeaderCommunicationTokenProvider>();
-
             container.AddPerWebRequest<CommunicationConfigurationProvider>();
             container.AddPerWebRequest<CommunicationProvider>();
             container.AddPerWebRequest<DefaultUserProvider>();
