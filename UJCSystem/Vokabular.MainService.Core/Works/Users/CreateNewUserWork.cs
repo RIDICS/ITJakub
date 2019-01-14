@@ -1,10 +1,8 @@
 ﻿using System;
 using Vokabular.Authentication.DataContracts.User;
 using Vokabular.DataEntities.Database.Entities;
-using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
-using Vokabular.Jewelry;
 using Vokabular.MainService.Core.Communication;
 using CreateUserContract = Vokabular.MainService.DataContracts.Contracts.CreateUserContract;
 
@@ -43,7 +41,6 @@ namespace Vokabular.MainService.Core.Works.Users
                 var user = client.CreateUser(authUser);
 
                 var now = DateTime.UtcNow;
-                var passwordHash = CustomPasswordHasher.CreateHash(m_data.NewPassword);
 
                 var dbUser = new User
                 {
@@ -53,8 +50,7 @@ namespace Vokabular.MainService.Core.Works.Users
                     FirstName = m_data.FirstName,
                     LastName = m_data.LastName,
                     CreateTime = now,
-                    PasswordHash = passwordHash,
-                    AvatarUrl = m_data.AvatarUrl,
+                    AvatarUrl = m_data.AvatarUrl
                     //Groups = new List<Group> { m_defaultMembershipProvider.GetDefaultRegisteredUserGroup(), m_defaultMembershipProvider.GetDefaultUnRegisteredUserGroup() },
                     //FavoriteLabels = new List<FavoriteLabel> { defaultFavoriteLabel }
                 };

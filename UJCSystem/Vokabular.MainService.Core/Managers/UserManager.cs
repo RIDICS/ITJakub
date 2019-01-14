@@ -36,7 +36,7 @@ namespace Vokabular.MainService.Core.Managers
 
             // TODO add data validation
 
-            new UpdateUserWork(m_userRepository, userId, data).Execute();
+            new UpdateUserWork(m_userRepository, userId, data, m_communicationProvider).Execute();
         }
 
         public void UpdateUserPassword(UpdateUserPasswordContract data)
@@ -45,7 +45,7 @@ namespace Vokabular.MainService.Core.Managers
 
             // TODO add data validation
 
-            new UpdateUserPasswordWork(m_userRepository, userId, data).Execute();
+            new UpdateUserPasswordWork(m_userRepository, userId, data, m_communicationProvider).Execute();
         }
 
         public PagedResultList<UserDetailContract> GetUserList(int? start, int? count, string filterByName)

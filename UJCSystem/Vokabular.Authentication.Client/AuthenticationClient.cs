@@ -48,8 +48,38 @@ namespace Vokabular.Authentication.Client
         {
             try
             {
-                var result = Get<UserContract>("api/v1/user/" + id);
+                var result = Get<UserContract>($"api/v1/user/{id}");
                 return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void EditUser(int userId, UserContract userContract)
+        {
+            try
+            {
+                Put<object>($"api/v1/user/{userId}/edit", userContract);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void ChangePassword(int userId, ChangePasswordContract changePasswordContract)
+        {
+            try
+            {
+                Post<object>($"api/v1/user/{userId}/changePassword", changePasswordContract);
             }
             catch (HttpRequestException e)
             {
