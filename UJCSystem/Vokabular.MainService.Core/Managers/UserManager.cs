@@ -3,7 +3,7 @@ using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
-using Vokabular.MainService.Core.Managers.Authentication;
+using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Users;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -14,19 +14,19 @@ namespace Vokabular.MainService.Core.Managers
     public class UserManager
     {
         private readonly UserRepository m_userRepository;
-        private readonly ICommunicationTokenGenerator m_communicationTokenGenerator;
+        private readonly CommunicationProvider m_communicationProvider;
         private readonly AuthenticationManager m_authenticationManager;
 
-        public UserManager(UserRepository userRepository, ICommunicationTokenGenerator communicationTokenGenerator, AuthenticationManager authenticationManager)
+        public UserManager(UserRepository userRepository, CommunicationProvider communicationProvider, AuthenticationManager authenticationManager)
         {
             m_userRepository = userRepository;
-            m_communicationTokenGenerator = communicationTokenGenerator;
+            m_communicationProvider = communicationProvider;
             m_authenticationManager = authenticationManager;
         }
 
         public int CreateNewUser(CreateUserContract data)
         {
-            var userId = new CreateNewUserWork(m_userRepository, m_communicationTokenGenerator, data).Execute();
+            var userId = new CreateNewUserWork(m_userRepository, m_communicationProvider, data).Execute();
             return userId;
         }
 

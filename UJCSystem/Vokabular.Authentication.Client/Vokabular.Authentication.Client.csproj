@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Vokabular.Authentication.DataContracts\Vokabular.Authentication.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.RestClient\Vokabular.RestClient.csproj" />
     <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj" />
   </ItemGroup>
