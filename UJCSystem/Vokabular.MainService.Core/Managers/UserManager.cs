@@ -53,31 +53,43 @@ namespace Vokabular.MainService.Core.Managers
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
 
-            var dbResult = m_userRepository.InvokeUnitOfWork(x => x.GetUserList(startValue, countValue, filterByName));
-            return new PagedResultList<UserDetailContract>
+            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
             {
-                List = Mapper.Map<List<UserDetailContract>>(dbResult.List),
-                TotalCount = dbResult.Count,
-            };
+                var result = client.GetUserAutocomplete(filterByName, startValue, countValue);
+
+                return new PagedResultList<UserDetailContract>
+                {
+                    List = Mapper.Map<List<UserDetailContract>>(result),
+                    TotalCount = result.Count,
+                };
+            }
         }
 
         public List<UserDetailContract> GetUserAutocomplete(string query, int? count)
         {
-            if (query == null)
+           if (query == null)
                 query = string.Empty;
 
             var countValue = PagingHelper.GetAutocompleteCount(count);
 
-            var result = m_userRepository.InvokeUnitOfWork(x => x.GetUserAutocomplete(query, countValue));
-            return Mapper.Map<List<UserDetailContract>>(result);
+            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
+            {
+                var result = client.GetUserAutocomplete(query, null, countValue);
+                return Mapper.Map<List<UserDetailContract>>(result);
+            }
         }
 
         public UserDetailContract GetUserDetail(int userId)
         {
             var dbResult = m_userRepository.InvokeUnitOfWork(x => x.FindById<User>(userId));
-            var result = Mapper.Map<UserDetailContract>(dbResult);
 
-            return result;
+            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
+            {
+                var user = client.GetUser(dbResult.ExternalId);
+
+                var result = Mapper.Map<UserDetailContract>(user);
+                return result;
+            }
         }
     }
 }

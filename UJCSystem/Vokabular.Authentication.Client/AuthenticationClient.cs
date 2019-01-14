@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.Extensions.Logging;
@@ -12,6 +13,7 @@ namespace Vokabular.Authentication.Client
     public class AuthenticationClient : FullRestClientBase
     {
         private static readonly ILogger m_logger = ApplicationLogging.CreateLogger<AuthenticationClient>();
+        private readonly string ApiBasePath = "api/v1";
 
         public AuthenticationClient(Uri baseAddress, string username, string password) : base(baseAddress, true)
         {
@@ -32,7 +34,7 @@ namespace Vokabular.Authentication.Client
         {
             try
             {
-                var result = Post<UserContract>("api/v1/registration/create", contract);
+                var result = Post<UserContract>($"{ApiBasePath}/registration/create", contract);
                 return result;
             }
             catch (HttpRequestException e)
@@ -48,7 +50,7 @@ namespace Vokabular.Authentication.Client
         {
             try
             {
-                var result = Get<UserContract>($"api/v1/user/{id}");
+                var result = Get<UserContract>($"{ApiBasePath}/user/{id}");
                 return result;
             }
             catch (HttpRequestException e)
@@ -64,7 +66,7 @@ namespace Vokabular.Authentication.Client
         {
             try
             {
-                Put<object>($"api/v1/user/{userId}/edit", userContract);
+                Put<object>($"{ApiBasePath}/user/{userId}/edit", userContract);
             }
             catch (HttpRequestException e)
             {
@@ -79,7 +81,22 @@ namespace Vokabular.Authentication.Client
         {
             try
             {
-                Post<object>($"api/v1/user/{userId}/changePassword", changePasswordContract);
+                Post<object>($"{ApiBasePath}/user/{userId}/changePassword", changePasswordContract);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public IList<UserContract> GetUserAutocomplete(string query, int? start, int? count)
+        {
+            try
+            {
+                return Get<IList<UserContract>>($"{ApiBasePath}/user/search?nameStart={query}{(start.HasValue ? "&start=" + start : "")}{(count.HasValue ? "&count=" + count : "")}");
             }
             catch (HttpRequestException e)
             {
