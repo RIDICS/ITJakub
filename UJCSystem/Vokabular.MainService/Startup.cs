@@ -62,7 +62,7 @@ namespace Vokabular.MainService
             services.AddMvc()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<MainServiceCoreContainerRegistration>());
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            
+
             // Inject an implementation of ISwaggerProvider with defaulted settings applied
             services.AddSwaggerGen(options =>
             {
@@ -91,23 +91,9 @@ namespace Vokabular.MainService
 
                     options.Events = new JwtBearerEvents
                     {
-                        OnAuthenticationFailed = context =>
-                        {
-                            var res = context;
-                            return Task.CompletedTask;
-                        },
                         OnTokenValidated = context =>
                         {
-                            try
-                            {
-                                AddClaimsToUser(ref context, openIdConnectConfig.UserInfoEndpoint);
-                            }
-                            catch (Exception e)
-                            {
-                                Console.WriteLine(e);
-                                throw;
-                            }
-                            
+                            AddClaimsToUser(ref context, openIdConnectConfig.UserInfoEndpoint);
                             return Task.CompletedTask;
                         }
                     };
@@ -167,7 +153,7 @@ namespace Vokabular.MainService
         {
             using (var client = new HttpClient())
             {
-                var jwtToken = (JwtSecurityToken)context.SecurityToken;
+                var jwtToken = (JwtSecurityToken) context.SecurityToken;
                 client.SetBearerToken(jwtToken.RawData);
 
                 var content = client.GetStringAsync(userInfoEndpoint).Result;
@@ -189,7 +175,7 @@ namespace Vokabular.MainService
                     }
                 }
 
-                context.Principal.AddIdentity(new ClaimsIdentity(claims));   
+                context.Principal.AddIdentity(new ClaimsIdentity(claims));
             }
         }
     }
