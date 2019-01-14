@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Vokabular.Core;
 using Vokabular.MainService.Core.AutoMapperProfiles;
+using Vokabular.MainService.Core.AutoMapperProfiles.Authentication;
 using Vokabular.MainService.Core.AutoMapperProfiles.CardFile;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers;
@@ -77,6 +78,7 @@ namespace Vokabular.MainService.Core
             container.AddSingleton<Profile, TransformationProfile>();
             container.AddSingleton<Profile, UserGroupProfile>();
             container.AddSingleton<Profile, UserProfile>();
+            container.AddSingleton<Profile, AuthUserProfile>();
 
             container.AddSingleton<Profile, BucketContractProfile>();
             container.AddSingleton<Profile, BucketShortContractProfile>();
