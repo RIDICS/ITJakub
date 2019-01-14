@@ -17,9 +17,7 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual string LastName { get; set; }
 
-        public virtual string Email { get; set; }
-
-        public virtual string PasswordHash { get; set; }        
+        public virtual string Email { get; set; }   
 
         public virtual DateTime CreateTime { get; set; }
 

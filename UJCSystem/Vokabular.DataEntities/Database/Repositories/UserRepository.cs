@@ -5,7 +5,6 @@ using NHibernate;
 using NHibernate.Criterion;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
-using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.UnitOfWork;
 
@@ -101,7 +100,6 @@ namespace Vokabular.DataEntities.Database.Repositories
                 FirstName = unregisteredUserName,
                 LastName = unregisteredUserName,
                 CreateTime = now,
-                PasswordHash = string.Empty,
                 Groups = new List<UserGroup> { unregisteredUserGroup },
                 AvatarUrl = null,
             };
