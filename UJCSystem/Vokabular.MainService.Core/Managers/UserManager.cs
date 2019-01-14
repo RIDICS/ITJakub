@@ -30,13 +30,13 @@ namespace Vokabular.MainService.Core.Managers
             return userId;
         }
 
-        public void UpdateUser(UpdateUserContract data)
+        public void UpdateCurrentUser(UpdateUserContract data)
         {
             var userId = m_authenticationManager.GetCurrentUserId();
 
             // TODO add data validation
 
-            new UpdateUserWork(m_userRepository, userId, data, m_communicationProvider).Execute();
+            new UpdateCurrentUserWork(m_userRepository, userId, data, m_communicationProvider).Execute();
         }
 
         public void UpdateUserPassword(UpdateUserPasswordContract data)

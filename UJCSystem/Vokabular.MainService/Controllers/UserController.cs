@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using AutoMapper;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +7,6 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Headers;
-using Vokabular.Shared.AspNetCore.Extensions;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Attributes;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
 using Vokabular.Shared.Const;
@@ -50,12 +46,11 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPut("current")]
-        public IActionResult UpdateCurrentUser([FromBody] UpdateUserContract data,
-            [FromHeader(Name = CustomHttpHeaders.Authorization)] string authorizationToken)
+        public IActionResult UpdateCurrentUser([FromBody] UpdateUserContract data)
         {
             try
             {
-                m_userManager.UpdateUser(data);
+                m_userManager.UpdateCurrentUser(data);
                 return Ok();
             }
             catch (HttpErrorCodeException exception)
@@ -65,8 +60,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPut("current/password")]
-        public IActionResult UpdateCurrentPassword([FromBody] UpdateUserPasswordContract data,
-            [FromHeader(Name = CustomHttpHeaders.Authorization)] string authorizationToken)
+        public IActionResult UpdateCurrentPassword([FromBody] UpdateUserPasswordContract data)
         {
             try
             {

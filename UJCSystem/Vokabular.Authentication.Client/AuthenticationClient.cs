@@ -62,11 +62,11 @@ namespace Vokabular.Authentication.Client
             }
         }
 
-        public void EditUser(int userId, UserContract userContract)
+        public void EditCurrentUser(int userId, UserContract userContract)
         {
             try
             {
-                Put<object>($"{ApiBasePath}/user/{userId}/edit", userContract);
+                Put<object>($"{ApiBasePath}/user/{userId}/editself", userContract);
             }
             catch (HttpRequestException e)
             {
