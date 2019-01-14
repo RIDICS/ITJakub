@@ -4,6 +4,7 @@ using System.Linq;
 using ITJakub.FileProcessing.DataContracts;
 using ITJakub.SearchService.DataContracts;
 using Microsoft.Extensions.Options;
+using Vokabular.Authentication.Client;
 using Vokabular.CardFile.Core;
 using Vokabular.FulltextService.DataContracts.Clients;
 using Vokabular.Shared.Options;
@@ -14,17 +15,20 @@ namespace Vokabular.MainService.Core.Communication
     {
         private readonly CommunicationConfigurationProvider m_configurationProvider;
         private readonly IOptions<List<CredentialsOption>> m_credentialsOptions;
+        private readonly IOptions<AuthServiceApiKey> m_authServiceApiKey;
 
         private const string FileProcessingServiceEndpointName = "FileProcessingService";
         private const string FulltextServiceEndpointName = "FulltextService";
         private const string SearchServiceEndpointName = "SearchService";
+        private const string AuthenticationEndpointName = "AuthenticationService";
         private const string CardFilesEndpointName = "CardFilesService";
         private const string CardFilesCredentials = "CardFiles";
         
-        public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider, IOptions<List<CredentialsOption>> credentialsOptions)
+        public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider, IOptions<List<CredentialsOption>> credentialsOptions, IOptions<AuthServiceApiKey> authServiceApiKey)
         {
             m_configurationProvider = communicationConfigurationProvider;
             m_credentialsOptions = credentialsOptions;
+            m_authServiceApiKey = authServiceApiKey;
         }
 
         public FileProcessingServiceClient GetFileProcessingClient()
@@ -59,6 +63,19 @@ namespace Vokabular.MainService.Core.Communication
             }
 
             var client = new CardFilesClient(uri, credentials.Username, credentials.Password);
+            return client;
+        }
+
+        public AuthenticationClient GetAuthenticationServiceClient()
+        {
+            var uri = m_configurationProvider.GetEndpointUri(AuthenticationEndpointName);
+            var credentials = m_authServiceApiKey.Value;
+            if (credentials?.Name == null || credentials.ApiKeyHash == null)
+            {
+                throw new ArgumentException("Credentials for Authentication service not found");
+            }
+
+            var client = new AuthenticationClient(uri, credentials.Name, credentials.ApiKeyHash);
             return client;
         }
     }
