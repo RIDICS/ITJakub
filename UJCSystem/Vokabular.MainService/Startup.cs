@@ -54,7 +54,7 @@ namespace Vokabular.MainService
             services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
             services.Configure<List<CredentialsOption>>(Configuration.GetSection("Credentials"));
             services.Configure<PathConfiguration>(Configuration.GetSection("PathConfiguration"));
-            services.Configure<ApiAccessKey>(Configuration.GetSection("ApiAccessKey"));
+            services.Configure<AuthServiceApiKey>(Configuration.GetSection("ApiAccessKey"));
 
             services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = 1048576000; });
 
@@ -91,32 +91,23 @@ namespace Vokabular.MainService
 
                     options.Events = new JwtBearerEvents
                     {
+                        OnAuthenticationFailed = context =>
+                        {
+                            var res = context;
+                            return Task.CompletedTask;
+                        },
                         OnTokenValidated = context =>
                         {
-                            var client = new HttpClient();
-                            var jwtToken = (JwtSecurityToken)context.SecurityToken;
-                            client.SetBearerToken(jwtToken.RawData);
-                        
-                            var content = client.GetStringAsync(openIdConnectConfig.UserInfoEndpoint).Result;                           
-                            IList<Claim> claims = new List<Claim>();
-
-                            foreach (var property in JToken.Parse(content).Children<JProperty>())
+                            try
                             {
-                                if (!property.Name.Equals(CustomClaimTypes.Permission))
-                                {
-                                    claims.Add(new Claim(property.Name, property.Value.ToString()));
-                                }
-                                else
-                                {
-                                    var permArray = JArray.Parse(property.Value.ToString());
-                                    foreach (var permission in permArray)
-                                    {
-                                        claims.Add(new Claim(property.Name, permission.ToString(), context.SecurityToken.Issuer));
-                                    }
-                                }
+                                AddClaimsToUser(ref context, openIdConnectConfig.UserInfoEndpoint);
                             }
-
-                            context.Principal.AddIdentity(new ClaimsIdentity(claims));                         
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e);
+                                throw;
+                            }
+                            
                             return Task.CompletedTask;
                         }
                     };
@@ -170,6 +161,36 @@ namespace Vokabular.MainService
             var appBasePath = AppContext.BaseDirectory;
             var appName = Assembly.GetEntryAssembly().GetName().Name;
             return Path.Combine(appBasePath, $"{appName}.xml");
+        }
+
+        private void AddClaimsToUser(ref TokenValidatedContext context, string userInfoEndpoint)
+        {
+            using (var client = new HttpClient())
+            {
+                var jwtToken = (JwtSecurityToken)context.SecurityToken;
+                client.SetBearerToken(jwtToken.RawData);
+
+                var content = client.GetStringAsync(userInfoEndpoint).Result;
+                IList<Claim> claims = new List<Claim>();
+
+                foreach (var property in JToken.Parse(content).Children<JProperty>())
+                {
+                    if (!property.Name.Equals(CustomClaimTypes.Permission))
+                    {
+                        claims.Add(new Claim(property.Name, property.Value.ToString()));
+                    }
+                    else
+                    {
+                        var permArray = JArray.Parse(property.Value.ToString());
+                        foreach (var permission in permArray)
+                        {
+                            claims.Add(new Claim(property.Name, permission.ToString(), context.SecurityToken.Issuer));
+                        }
+                    }
+                }
+
+                context.Principal.AddIdentity(new ClaimsIdentity(claims));   
+            }
         }
     }
 }
