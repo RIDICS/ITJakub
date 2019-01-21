@@ -34,7 +34,7 @@ namespace Vokabular.MainService.Core.Works.Users
                         FirstName = m_data.FirstName,
                         FamilyName = m_data.LastName,
                         Email = m_data.Email,
-                        PhoneNumber = "+420739123676"
+                        PhoneNumber = "+420749123678" //TODO remove
                     }
                 };
 
@@ -45,10 +45,6 @@ namespace Vokabular.MainService.Core.Works.Users
                 var dbUser = new User
                 {
                     ExternalId = user.Id,
-                    UserName = m_data.UserName,
-                    Email = m_data.Email,
-                    FirstName = m_data.FirstName,
-                    LastName = m_data.LastName,
                     CreateTime = now,
                     AvatarUrl = m_data.AvatarUrl
                     //Groups = new List<Group> { m_defaultMembershipProvider.GetDefaultRegisteredUserGroup(), m_defaultMembershipProvider.GetDefaultUnRegisteredUserGroup() },

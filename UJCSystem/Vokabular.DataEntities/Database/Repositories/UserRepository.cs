@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using NHibernate;
-using NHibernate.Criterion;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
-using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
@@ -16,13 +12,6 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
         }
 
-        public virtual User GetUserByUsername(string username)
-        {
-            return GetSession().QueryOver<User>()
-                .Where(x => x.UserName == username)
-                .SingleOrDefault();
-        }
-
         public User GetUserByExternalId(int externalUserId)
         {
             return GetSession().QueryOver<User>()
@@ -30,62 +19,15 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SingleOrDefault();
         }
 
-        public virtual ListWithTotalCountResult<User> GetUserList(int start, int count, string filterByName)
+        public virtual User GetVirtualUserForUnregisteredUsersOrCreate(UserGroup unregisteredUserGroup)
         {
-            var query = GetSession().QueryOver<User>()
-                .OrderBy(x => x.LastName).Asc
-                .ThenBy(x => x.FirstName).Asc;
+            User userAlias = null;
+            UserGroup groupAlias = null;
 
-            if (filterByName != null)
-            {
-                filterByName = EscapeQuery(filterByName);
-
-                query = query.Where(Restrictions.Disjunction()
-                    .Add(Restrictions.On<User>(u => u.UserName).IsLike(filterByName, MatchMode.Anywhere))
-                    .Add(Restrictions.On<User>(u => u.FirstName).IsLike(filterByName, MatchMode.Anywhere))
-                    .Add(Restrictions.On<User>(u => u.LastName).IsLike(filterByName, MatchMode.Anywhere))
-                );
-            }
-
-            var list = query.Skip(start)
-                .Take(count)
-                .Future();
-
-            var totalCount = query.ToRowCountQuery()
-                .FutureValue<int>();
-
-            return new ListWithTotalCountResult<User>
-            {
-                List = list.ToList(),
-                Count = totalCount.Value,
-            };
-        }
-
-        public virtual IList<User> GetUserAutocomplete(string queryString, int count)
-        {
-            queryString = EscapeQuery(queryString);
-
-            var query = GetSession().QueryOver<User>()
-                .Where(Restrictions.Disjunction()
-                    .Add(Restrictions.On<User>(u => u.UserName).IsLike(queryString, MatchMode.Start))
-                    .Add(Restrictions.Like(Projections.SqlFunction("concat", NHibernateUtil.String, Projections.Property<User>(u => u.LastName),
-                        Projections.Constant(" "), Projections.Property<User>(u => u.FirstName)), queryString, MatchMode.Start))
-                    .Add(Restrictions.Like(Projections.SqlFunction("concat", NHibernateUtil.String, Projections.Property<User>(u => u.FirstName),
-                        Projections.Constant(" "), Projections.Property<User>(u => u.LastName)), queryString, MatchMode.Start))
-                    .Add(Restrictions.On<User>(u => u.Email).IsLike(queryString, MatchMode.Start))
-                )
-                .OrderBy(x => x.LastName).Asc
-                .ThenBy(x => x.FirstName).Asc
-                .Take(count);
-
-            return query.List();
-        }
-
-        public virtual User GetVirtualUserForUnregisteredUsersOrCreate(string unregisteredUserName, UserGroup unregisteredUserGroup)
-        {
-            var defaultUser = GetSession().QueryOver<User>()
-                .Where(x => x.UserName == unregisteredUserName)
-                .SingleOrDefault<User>();
+            var defaultUser = GetSession().QueryOver(() => userAlias)
+                .JoinQueryOver(x => x.Groups, () => groupAlias)
+                .Where(x => groupAlias.Id == unregisteredUserGroup.Id)
+                .SingleOrDefault();
 
             if (defaultUser != null)
             {
@@ -95,10 +37,6 @@ namespace Vokabular.DataEntities.Database.Repositories
             var now = DateTime.UtcNow;
             defaultUser = new User
             {
-                UserName = unregisteredUserName,
-                Email = string.Empty,
-                FirstName = unregisteredUserName,
-                LastName = unregisteredUserName,
                 CreateTime = now,
                 Groups = new List<UserGroup> { unregisteredUserGroup },
                 AvatarUrl = null,

@@ -37,10 +37,6 @@ namespace Vokabular.MainService.Core.Works.Users
             }
 
             user.AvatarUrl = m_data.AvatarUrl;
-            user.Email = m_data.Email;
-            user.FirstName = m_data.FirstName;
-            user.LastName = m_data.LastName;
-            
             m_userRepository.Update(user);
         }
     }

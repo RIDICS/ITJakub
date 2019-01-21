@@ -6,14 +6,6 @@
       <generator class="identity" />
     </id>
     
-    <property name="UserName" not-null="true" />
-    
-    <property name="FirstName" not-null="true" />
-    
-    <property name="LastName" not-null="true" />
-    
-    <property name="Email" not-null="true" />
-    
     <property name="CreateTime" not-null="true" type="UtcDateTime" />
     
     <property name="AvatarUrl" not-null="false" />
