@@ -60,23 +60,6 @@ BEGIN TRAN
 	  ('pageToRtf.xsl', 'def for paged', 2, @GrammarTypeId , 1, 2),
 	  ('pageToRtf.xsl', 'def for paged', 2, @ProfessionalLiteratureTypeId , 1, 2)
 
-
-	INSERT INTO [dbo].[User]
-           ([FirstName]
-           ,[LastName]
-           ,[Email]
-           ,[UserName]
-           ,[CreateTime]
-           ,[AvatarUrl])
-     VALUES
-           ('Admin' -- FirstName
-           ,'Admin' -- LastName
-           ,'admin@example.com' -- Email
-           ,'Admin' -- UserName
-           ,'2017-08-21 00:00:00.000' -- CreateTime
-           ,NULL) -- AvatarUrl
-
-
 	INSERT INTO [dbo].[DatabaseVersion]
 		(DatabaseVersion)
     VALUES

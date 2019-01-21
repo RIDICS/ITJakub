@@ -356,40 +356,16 @@ BEGIN TRAN;
 	)
 
 
-	--INSERT INTO dbo.[User]
-	--(
-	--    --Id - this column value is auto-generated
-	--    FirstName,
-	--    LastName,
-	--    Email,
-	--    AuthenticationProvider,
-	--    CommunicationToken,
-	--    CommunicationTokenCreateTime,
-	--    PasswordHash,
-	--    Salt,
-	--    CreateTime,
-	--    AvatarUrl,
-	--    UserName
-	--)
-	--VALUES
-	--(
-	--    -- Id - int
-	--    'Admin', -- FirstName - varchar
-	--    'Admin', -- LastName - varchar
-	--    'Admin', -- Email - varchar
-	--    0, -- AuthenticationProvider - tinyint
-	--    'CT:ca22d7b7-e1d6-46b0-a77f-29296fe9f7f0', -- CommunicationToken - varchar
-	--    '2015-10-01 10:50:36', -- CommunicationTokenCreateTime - datetime
-	--    'PW:sha1:1000:FhLySoxcL/5CA0RqlRBZMiqblj4sZ0zV:Vocj0I6bhs9bF4p9Nh+Rk7vbCoToulg9', -- PasswordHash - varchar -- password is 'Administrator'
-	--    '', -- Salt - varchar
-	--    '2015-10-01 10:50:36', -- CreateTime - datetime
-	--    NULL, -- AvatarUrl - varchar
-	--    'Admin' -- UserName - varchar
-	--)
 
-	DECLARE @AdminUserId INT
+	DECLARE @AdminUserId INT;
 
-	SELECT @AdminUserId = [Id] FROM [dbo].[User] WHERE [dbo].[User].[UserName]= 'Admin'
+	INSERT INTO [dbo].[User] ([CreateTime]
+           ,[AvatarUrl])
+     VALUES
+           ('2017-08-21 00:00:00.000' -- CreateTime
+           ,NULL) -- AvatarUrl
+		  
+	SET @AdminUserId = SCOPE_IDENTITY();
 
 	INSERT INTO dbo.[UserGroup]
 	(
