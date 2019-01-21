@@ -72,7 +72,7 @@ namespace Vokabular.MainService.Core.Managers
 
             return new PagedResultList<FeedbackContract>
             {
-                List = m_userDetailManager.GetUserDetailContracts(Mapper.Map<List<FeedbackContract>>(result.List)),
+                List = m_userDetailManager.AddUserDetails(Mapper.Map<List<FeedbackContract>>(result.List)),
                 TotalCount = result.Count,
             };
         }

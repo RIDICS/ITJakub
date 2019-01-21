@@ -46,7 +46,7 @@ namespace Vokabular.MainService.Core.Managers
         public List<UserContract> GetUsersByGroup(int groupId)
         {
             var users = m_permissionRepository.InvokeUnitOfWork(x => x.GetUsersByGroup(groupId));
-            return m_userDetailManager.GetUserDetailContracts(Mapper.Map<List<UserContract>>(users));
+            return m_userDetailManager.AddUserDetails(Mapper.Map<List<UserContract>>(users));
         }
 
         public int CreateGroup(string groupName, string description)

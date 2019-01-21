@@ -35,7 +35,7 @@ namespace Vokabular.MainService.Core.Managers
 
             return new PagedResultList<NewsSyndicationItemContract>
             {
-                List = m_userDetailManager.GetUserDetailContracts(Mapper.Map<List<NewsSyndicationItemContract>>(result.List)),
+                List = m_userDetailManager.AddUserDetails(Mapper.Map<List<NewsSyndicationItemContract>>(result.List)),
                 TotalCount = result.Count
             };
         }

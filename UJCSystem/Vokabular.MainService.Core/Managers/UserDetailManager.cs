@@ -84,7 +84,7 @@ namespace Vokabular.MainService.Core.Managers
             return userDetailContracts;
         }
 
-        public List<UserContract> GetUserDetailContracts(List<UserContract> list)
+        public List<UserContract> AddUserDetails(List<UserContract> list)
         {
             var users = new List<UserContract>();
             foreach (var user in list)
@@ -95,7 +95,7 @@ namespace Vokabular.MainService.Core.Managers
             return users;
         }
 
-        public List<NewsSyndicationItemContract> GetUserDetailContracts(List<NewsSyndicationItemContract> list)
+        public List<NewsSyndicationItemContract> AddUserDetails(List<NewsSyndicationItemContract> list)
         {
             foreach (var newsItem in list)
             {
@@ -105,11 +105,22 @@ namespace Vokabular.MainService.Core.Managers
             return list;
         }
 
-        public List<FeedbackContract> GetUserDetailContracts(List<FeedbackContract> list)
+        public List<FeedbackContract> AddUserDetails(List<FeedbackContract> list)
         {
             foreach (var feedback in list)
             {
                 feedback.AuthorUser = GetUserDetailContractForUser(feedback.AuthorUser);
+            }
+
+            return list;
+        }
+
+        public List<GetTextCommentContract> AddUserDetails(List<GetTextCommentContract> list)
+        {
+            foreach (var textComment in list)
+            {
+                textComment.User = GetUserContractForUser(textComment.User);
+                textComment.TextComments = AddUserDetails(textComment.TextComments);
             }
 
             return list;
