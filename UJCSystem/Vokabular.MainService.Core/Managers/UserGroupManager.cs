@@ -60,7 +60,7 @@ namespace Vokabular.MainService.Core.Managers
         {
             var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupById(groupId));
             if (group == null) return null;
-            var groupContract = Mapper.Map<UserGroupDetailContract>(group);
+            var groupContract = m_userDetailManager.AddUserDetails(Mapper.Map<UserGroupDetailContract>(group));
             return groupContract;
         }
 
