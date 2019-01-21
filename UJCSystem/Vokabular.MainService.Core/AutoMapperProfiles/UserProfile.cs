@@ -17,7 +17,6 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
 
             CreateMap<User, UserDetailContract>()
                 .IncludeBase<User, UserContract>()
-                .ForMember(dest => dest.CreateTime, opt => opt.MapFrom(src => src.CreateTime))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email));
         }
     }

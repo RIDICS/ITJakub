@@ -18,8 +18,6 @@ namespace Vokabular.MainService.DataContracts.Contracts
     public class UserDetailContract : UserContract
     {
         public string Email { get; set; }
-
-        public DateTime CreateTime { get; set; }
     }
 
     public class CreateUserContract : UserContract
