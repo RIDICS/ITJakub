@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
@@ -6,6 +8,7 @@ using System.Security.Authentication;
 using System.Security.Claims;
 using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.Shared.AspNetCore.Extensions;
+using Vokabular.Shared.Const;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -37,7 +40,7 @@ namespace Vokabular.MainService.Core.Managers
 
                 return user;
             }
-            catch (AuthenticationException e)
+            catch (AuthenticationException)
             {
                 if (returnDefaultIfNull)
                 {
@@ -53,9 +56,11 @@ namespace Vokabular.MainService.Core.Managers
             return GetCurrentUser(false).Id;
         }
 
-        public ClaimsPrincipal GetContextUser()
+        public IList<Claim> GetCurrentUserPermissions(bool returnDefaultIfNull = false)
         {
-            return m_httpContextAccessor.HttpContext.User;
+            //TODO check for null
+            return m_httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == CustomClaimTypes.Permission).ToList();
+            //TODO get default permissions            
         }
     }
 }

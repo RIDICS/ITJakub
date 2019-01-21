@@ -7,7 +7,6 @@ using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Errors;
 using Vokabular.MainService.DataContracts.Contracts.CardFile;
-using Vokabular.Shared.AspNetCore.Extensions;
 using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Types;
@@ -52,8 +51,8 @@ namespace Vokabular.MainService.Core.Managers
         {
             var user = m_authenticationManager.GetCurrentUser(true);
 
-            var contextUser = m_authenticationManager.GetContextUser();
-            if (!contextUser.HasPermission(PermissionNames.CardFile + cardFileId))
+            var currentUserPermissions = m_authenticationManager.GetCurrentUserPermissions();
+            if (currentUserPermissions.All(x => x.Value != PermissionNames.CardFile + cardFileId))
             {
                 throw new UnauthorizedException(
                     $"User with id '{user.Id}' (external id '{user.ExternalId}')  does not have permission to read cardfile with id '{cardFileId}'");
@@ -62,14 +61,13 @@ namespace Vokabular.MainService.Core.Managers
 
         public void FilterCardFileList(ref IList<CardFileContract> cardFilesContracts)
         {
-            var user = m_authenticationManager.GetCurrentUser(true);
             if (cardFilesContracts == null || cardFilesContracts.Count == 0)
             {
                 return;
             }
 
-            var contextUser = m_authenticationManager.GetContextUser();
-            cardFilesContracts = cardFilesContracts.Where(x => contextUser.HasPermission(PermissionNames.CardFile + x.Id)).ToList();
+            var permissions = m_authenticationManager.GetCurrentUserPermissions();
+            cardFilesContracts = cardFilesContracts.Where(x => permissions.Any(y => y.Value == PermissionNames.CardFile + x.Id)).ToList();
         }
 
         public void FilterProjectIdList(ref IList<long> projectIds)
