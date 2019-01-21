@@ -17,13 +17,13 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly PortalRepository m_portalRepository;
         private readonly AuthenticationManager m_authenticationManager;
-        private readonly AuthorizationManager m_authorizationManager;
+        private readonly UserDetailManager m_userDetailManager;
 
-        public FeedbackManager(PortalRepository portalRepository, AuthenticationManager authenticationManager, AuthorizationManager authorizationManager)
+        public FeedbackManager(PortalRepository portalRepository, AuthenticationManager authenticationManager, UserDetailManager userDetailManager)
         {
             m_portalRepository = portalRepository;
             m_authenticationManager = authenticationManager;
-            m_authorizationManager = authorizationManager;
+            m_userDetailManager = userDetailManager;
         }
 
         public long CreateFeedback(CreateFeedbackContract data)
@@ -72,7 +72,7 @@ namespace Vokabular.MainService.Core.Managers
 
             return new PagedResultList<FeedbackContract>
             {
-                List = Mapper.Map<List<FeedbackContract>>(result.List),
+                List = m_userDetailManager.GetUserDetailContracts(Mapper.Map<List<FeedbackContract>>(result.List)),
                 TotalCount = result.Count,
             };
         }

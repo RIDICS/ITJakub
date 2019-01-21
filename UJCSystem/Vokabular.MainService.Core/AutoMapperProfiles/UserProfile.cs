@@ -14,7 +14,7 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.FirstName, opt => opt.Ignore())
                 .ForMember(dest => dest.LastName, opt => opt.Ignore())
                 .ForMember(dest => dest.AvatarUrl, opt => opt.MapFrom(src => src.AvatarUrl))
-                .ForMember(dest => dest.ExternalId, opt => opt.Ignore());
+                .ForMember(dest => dest.ExternalId, opt => opt.MapFrom(src => src.ExternalId));
 
             CreateMap<User, UserDetailContract>()
                 .IncludeBase<User, UserContract>()

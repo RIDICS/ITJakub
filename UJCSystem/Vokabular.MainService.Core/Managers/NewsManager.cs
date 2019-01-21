@@ -15,11 +15,13 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly PortalRepository m_portalRepository;
         private readonly AuthorizationManager m_authorizationManager;
+        private readonly UserDetailManager m_userDetailManager;
 
-        public NewsManager(PortalRepository portalRepository, AuthorizationManager authorizationManager)
+        public NewsManager(PortalRepository portalRepository, AuthorizationManager authorizationManager, UserDetailManager userDetailManager)
         {
             m_portalRepository = portalRepository;
             m_authorizationManager = authorizationManager;
+            m_userDetailManager = userDetailManager;
         }
 
         public PagedResultList<NewsSyndicationItemContract> GetNewsSyndicationItems(int? start, int? count, NewsTypeEnumContract? itemType)
@@ -33,7 +35,7 @@ namespace Vokabular.MainService.Core.Managers
 
             return new PagedResultList<NewsSyndicationItemContract>
             {
-                List = Mapper.Map<List<NewsSyndicationItemContract>>(result.List),
+                List = m_userDetailManager.GetUserDetailContracts(Mapper.Map<List<NewsSyndicationItemContract>>(result.List)),
                 TotalCount = result.Count
             };
         }

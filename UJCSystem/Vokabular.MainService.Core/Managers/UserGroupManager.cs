@@ -18,11 +18,13 @@ namespace Vokabular.MainService.Core.Managers
 
         private readonly PermissionRepository m_permissionRepository;
         private readonly AuthorizationManager m_authorizationManager;
+        private readonly UserDetailManager m_userDetailManager;
 
-        public UserGroupManager(PermissionRepository permissionRepository, AuthorizationManager authorizationManager)
+        public UserGroupManager(PermissionRepository permissionRepository, AuthorizationManager authorizationManager, UserDetailManager userDetailManager)
         {
             m_permissionRepository = permissionRepository;
             m_authorizationManager = authorizationManager;
+            m_userDetailManager = userDetailManager;
         }
 
         public List<UserGroupContract> GetGroupsByUser(int userId)
@@ -44,7 +46,7 @@ namespace Vokabular.MainService.Core.Managers
         public List<UserContract> GetUsersByGroup(int groupId)
         {
             var users = m_permissionRepository.InvokeUnitOfWork(x => x.GetUsersByGroup(groupId));
-            return Mapper.Map<List<UserContract>>(users);
+            return m_userDetailManager.GetUserDetailContracts(Mapper.Map<List<UserContract>>(users));
         }
 
         public int CreateGroup(string groupName, string description)

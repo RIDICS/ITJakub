@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.Feedback;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -22,6 +24,21 @@ namespace Vokabular.MainService.Core.Managers
         public UserContract GetUserContractForUser(User user)
         {
             var authUser = GetDetailForUser(user.ExternalId);
+            if (authUser == null)
+                return null;
+
+            var userDetailContract = Mapper.Map<UserContract>(authUser);
+            userDetailContract.Id = user.Id;
+            userDetailContract.AvatarUrl = user.AvatarUrl;
+            return userDetailContract;
+        }
+
+        public UserContract GetUserContractForUser(UserContract user)
+        {
+            var authUser = GetDetailForUser(user.ExternalId);
+            if (authUser == null)
+                return user;
+
             var userDetailContract = Mapper.Map<UserContract>(authUser);
             userDetailContract.Id = user.Id;
             userDetailContract.AvatarUrl = user.AvatarUrl;
@@ -31,13 +48,28 @@ namespace Vokabular.MainService.Core.Managers
         public UserDetailContract GetUserDetailContractForUser(User user)
         {
             var authUser = GetDetailForUser(user.ExternalId);
+            if (authUser == null)
+                return null;
+
             var userDetailContract = Mapper.Map<UserDetailContract>(authUser);
             userDetailContract.Id = user.Id;
             userDetailContract.AvatarUrl = user.AvatarUrl;
             return userDetailContract;
         }
 
-        public IList<UserDetailContract> GetIdForExternalUsers(IList<UserDetailContract> userDetailContracts)
+        public UserDetailContract GetUserDetailContractForUser(UserDetailContract user)
+        {
+            var authUser = GetDetailForUser(user.ExternalId);
+            if (authUser == null)
+                return user;
+
+            var userDetailContract = Mapper.Map<UserDetailContract>(authUser);
+            userDetailContract.Id = user.Id;
+            userDetailContract.AvatarUrl = user.AvatarUrl;
+            return userDetailContract;
+        }
+
+        public List<UserDetailContract> GetIdForExternalUsers(List<UserDetailContract> userDetailContracts)
         {
             foreach (var userDetailContract in userDetailContracts)
             {
@@ -50,6 +82,37 @@ namespace Vokabular.MainService.Core.Managers
             }
 
             return userDetailContracts;
+        }
+
+        public List<UserContract> GetUserDetailContracts(List<UserContract> list)
+        {
+            var users = new List<UserContract>();
+            foreach (var user in list)
+            {
+                users.Add(GetUserContractForUser(user));
+            }
+
+            return users;
+        }
+
+        public List<NewsSyndicationItemContract> GetUserDetailContracts(List<NewsSyndicationItemContract> list)
+        {
+            foreach (var newsItem in list)
+            {
+                newsItem.CreatedByUser = GetUserDetailContractForUser(newsItem.CreatedByUser);
+            }
+
+            return list;
+        }
+
+        public List<FeedbackContract> GetUserDetailContracts(List<FeedbackContract> list)
+        {
+            foreach (var feedback in list)
+            {
+                feedback.AuthorUser = GetUserDetailContractForUser(feedback.AuthorUser);
+            }
+
+            return list;
         }
 
         private Vokabular.Authentication.DataContracts.User.UserContract GetDetailForUser(int userId)

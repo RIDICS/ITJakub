@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
@@ -61,7 +62,7 @@ namespace Vokabular.MainService.Core.Managers
 
                 return new PagedResultList<UserDetailContract>
                 {
-                    List = Mapper.Map<List<UserDetailContract>>(result),
+                    List = m_userDetailManager.GetIdForExternalUsers(Mapper.Map<List<UserDetailContract>>(result)),
                     TotalCount = result.Count,
                 };
             }
