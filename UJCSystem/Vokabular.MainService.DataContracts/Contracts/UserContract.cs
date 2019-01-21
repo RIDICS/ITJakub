@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 
 namespace Vokabular.MainService.DataContracts.Contracts
 {
@@ -13,6 +13,9 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public string LastName { get; set; }
 
         public string AvatarUrl { get; set; }
+
+        [JsonIgnore]
+        public int ExternalId { get; set; }
     }
 
     public class UserDetailContract : UserContract

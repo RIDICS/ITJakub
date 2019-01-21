@@ -16,12 +16,14 @@ namespace Vokabular.MainService.Core.Managers
         private readonly UserRepository m_userRepository;
         private readonly CommunicationProvider m_communicationProvider;
         private readonly AuthenticationManager m_authenticationManager;
+        private readonly UserDetailManager m_userDetailManager;
 
-        public UserManager(UserRepository userRepository, CommunicationProvider communicationProvider, AuthenticationManager authenticationManager)
+        public UserManager(UserRepository userRepository, CommunicationProvider communicationProvider, AuthenticationManager authenticationManager, UserDetailManager userDetailManager)
         {
             m_userRepository = userRepository;
             m_communicationProvider = communicationProvider;
             m_authenticationManager = authenticationManager;
+            m_userDetailManager = userDetailManager;
         }
 
         public int CreateNewUser(CreateUserContract data)
@@ -65,7 +67,7 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
-        public List<UserDetailContract> GetUserAutocomplete(string query, int? count)
+        public IList<UserDetailContract> GetUserAutocomplete(string query, int? count)
         {
            if (query == null)
                 query = string.Empty;
@@ -75,7 +77,8 @@ namespace Vokabular.MainService.Core.Managers
             using (var client = m_communicationProvider.GetAuthenticationServiceClient())
             {
                 var result = client.GetUserAutocomplete(query, null, countValue);
-                return Mapper.Map<List<UserDetailContract>>(result);
+                var userDetailContracts = Mapper.Map<List<UserDetailContract>>(result);
+                return m_userDetailManager.GetIdForExternalUsers(userDetailContracts);
             }
         }
 
@@ -83,13 +86,7 @@ namespace Vokabular.MainService.Core.Managers
         {
             var dbResult = m_userRepository.InvokeUnitOfWork(x => x.FindById<User>(userId));
 
-            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
-            {
-                var user = client.GetUser(dbResult.ExternalId);
-
-                var result = Mapper.Map<UserDetailContract>(user);
-                return result;
-            }
+            return m_userDetailManager.GetUserDetailContractForUser(dbResult);
         }
     }
 }

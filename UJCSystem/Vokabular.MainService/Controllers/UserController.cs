@@ -108,7 +108,7 @@ namespace Vokabular.MainService.Controllers
 
         [Authorize(PermissionNames.ManagePermissions)]
         [HttpGet("autocomplete")]
-        public List<UserDetailContract> GetAutocomplete([FromQuery] string query, [FromQuery] int? count)
+        public IList<UserDetailContract> GetAutocomplete([FromQuery] string query, [FromQuery] int? count)
         {
             var result = m_userManager.GetUserAutocomplete(query, count);
             return result;
