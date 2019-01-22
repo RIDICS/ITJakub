@@ -30,7 +30,15 @@ VALUES
 ('card-file:17', 'Permission to view card file Stabilní katastr'),
 ('card-file:18', 'Permission to view card file Sajtl'),
 ('card-file:19', 'Permission to view card file Dodatky PSJC'),
-('card-file:20', 'Permission to view card file Grepl - archiv');
+('card-file:20', 'Permission to view card file Grepl - archiv'),
+('autoimport:0', 'Permission to automatically obtain permission to view Editions'),
+('autoimport:1', 'Permission to automatically obtain permission to view Dictionaries'),
+('autoimport:2', 'Permission to automatically obtain permission to view Grammar'),
+('autoimport:3', 'Permission to automatically obtain permission to view ProfessionalLiterature'),
+('autoimport:4', 'Permission to automatically obtain permission to view Textbank'),
+('autoimport:5', 'Permission to automatically obtain permission to view BibliographicalItems'),
+('autoimport:6', 'Permission to automatically obtain permission to view CardFiles'),
+('autoimport:7', 'Permission to automatically obtain permission to view AudioBook');
 
 INSERT INTO public."VersionInfo"("Version", "AppliedOn", "Description") 
 VALUES 

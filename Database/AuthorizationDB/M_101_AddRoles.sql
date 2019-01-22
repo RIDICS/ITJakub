@@ -2,8 +2,8 @@
 
 INSERT INTO public."Role"("Name", "Description", "AuthenticationServiceOnly")
 VALUES 
-('Admin', 'Role for administrators', 'false'),
-('Unregistered', 'default user group', 'false');
+('PortalAdmin', 'Role for Vokabular administrators', 'false'),
+('Unregistered', 'Default user group', 'false');
 
 INSERT INTO public."VersionInfo"("Version", "AppliedOn", "Description") 
 VALUES 
