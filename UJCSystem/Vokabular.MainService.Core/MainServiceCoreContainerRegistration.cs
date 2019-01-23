@@ -49,6 +49,9 @@ namespace Vokabular.MainService.Core
             container.AddPerWebRequest<IFulltextStorage, ExistDbStorage>();
             container.AddPerWebRequest<IFulltextStorage, ElasticSearchStorage>();
 
+            container.AddSingleton<Profile, AuthUserProfile>();
+            container.AddSingleton<Profile, RoleProfile>();
+
             container.AddSingleton<Profile, AudioProfile>();
             container.AddSingleton<Profile, BookProfile>();
             container.AddSingleton<Profile, CategoryProfile>();
@@ -79,7 +82,6 @@ namespace Vokabular.MainService.Core
             container.AddSingleton<Profile, TransformationProfile>();
             container.AddSingleton<Profile, UserGroupProfile>();
             container.AddSingleton<Profile, UserProfile>();
-            container.AddSingleton<Profile, AuthUserProfile>();
 
             container.AddSingleton<Profile, BucketContractProfile>();
             container.AddSingleton<Profile, BucketShortContractProfile>();

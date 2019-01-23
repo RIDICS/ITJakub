@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Reflection;
 using AutoMapper;
 using log4net;
+using Vokabular.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -18,18 +20,21 @@ namespace Vokabular.MainService.Core.Managers
 
         private readonly PermissionRepository m_permissionRepository;
         private readonly AuthorizationManager m_authorizationManager;
-        private readonly UserDetailManager m_userDetailManager;
+        private readonly UserRepository m_userRepository;
+        private readonly CommunicationProvider m_communicationProvider;
 
-        public UserGroupManager(PermissionRepository permissionRepository, AuthorizationManager authorizationManager, UserDetailManager userDetailManager)
+        public UserGroupManager(PermissionRepository permissionRepository, AuthorizationManager authorizationManager,
+             UserRepository userRepository, CommunicationProvider communicationProvider)
         {
             m_permissionRepository = permissionRepository;
             m_authorizationManager = authorizationManager;
-            m_userDetailManager = userDetailManager;
+            m_userRepository = userRepository;
+            m_communicationProvider = communicationProvider;
         }
 
         public List<UserGroupContract> GetGroupsByUser(int userId)
         {
-            var user = m_permissionRepository.InvokeUnitOfWork(x => x.GetUserWithGroups(userId));
+            var user = m_userRepository.InvokeUnitOfWork(x => x.GetUserById(userId));
 
             if (user == null)
             {
@@ -39,29 +44,51 @@ namespace Vokabular.MainService.Core.Managers
                 throw new ArgumentException(message);
             }
 
-            var groups = user.Groups;
-            return Mapper.Map<List<UserGroupContract>>(groups);
+            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
+            {
+                var authUser = client.GetUser(user.ExternalId);
+                return Mapper.Map<List<UserGroupContract>>(authUser.Roles);
+            }
         }
 
         public List<UserContract> GetUsersByGroup(int groupId)
         {
-            var users = m_permissionRepository.InvokeUnitOfWork(x => x.GetUsersByGroup(groupId));
-            return m_userDetailManager.AddUserDetails(Mapper.Map<List<UserContract>>(users));
+            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
+            {
+                var members = client.GetUsersByRole(groupId);
+                return Mapper.Map<List<UserContract>>(members);
+            }
         }
 
         public int CreateGroup(string groupName, string description)
         {
-            var userId = m_authorizationManager.GetCurrentUserId();
-            var result = new CreateGroupWork(m_permissionRepository, groupName, description, userId).Execute();
-            return result;
+            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
+            {
+                var roleContract = new RoleContract
+                {
+                    Description = description,
+                    Name = groupName,
+                };
+
+                var roleId = client.CreateRole(roleContract);
+                return roleId;
+            }
         }
 
         public UserGroupDetailContract GetGroupDetail(int groupId)
         {
-            var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupById(groupId));
-            if (group == null) return null;
-            var groupContract = m_userDetailManager.AddUserDetails(Mapper.Map<UserGroupDetailContract>(group));
-            return groupContract;
+            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
+            {
+                var role = client.GetRole(groupId);
+                if (role == null)
+                    return null;
+
+                var members = client.GetUsersByRole(groupId);
+
+                var group = Mapper.Map<UserGroupDetailContract>(role);
+                group.Members = Mapper.Map<IList<UserContract>>(members);
+                return group;
+            }
         }
 
         public void DeleteGroup(int groupId)

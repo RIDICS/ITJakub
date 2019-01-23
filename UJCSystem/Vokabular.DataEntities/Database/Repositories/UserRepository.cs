@@ -12,6 +12,13 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
         }
 
+        public User GetUserById(int userId)
+        {
+            return GetSession().QueryOver<User>()
+                .Where(x => x.Id == userId)
+                .SingleOrDefault();
+        }
+
         public User GetUserByExternalId(int externalUserId)
         {
             return GetSession().QueryOver<User>()

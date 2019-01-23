@@ -31,6 +31,8 @@ namespace Vokabular.Authentication.Client
         {
         }
 
+        #region User
+
         public UserContract CreateUser(CreateUserContract contract)
         {
             try
@@ -109,6 +111,25 @@ namespace Vokabular.Authentication.Client
             }
         }
 
+        public IList<UserContract> GetUsersByRole(int roleId)
+        {
+            try
+            {
+                return Get<IList<UserContract>>($"{ApiBasePath}/user/roles/list?roleId={roleId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region Roles
+
         public IList<RoleContract> GetAllRoles()
         {
             try
@@ -124,6 +145,39 @@ namespace Vokabular.Authentication.Client
             }
         }
 
+        public RoleContract GetRole(int roleId)
+        {
+            try
+            {
+                return Get<RoleContract>($"{ApiBasePath}/role/{roleId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public int CreateRole(RoleContract roleContract)
+        {
+            try
+            {
+                return Post<int>($"{ApiBasePath}/role/create/", roleContract);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region Permissions
 
         public IList<PermissionContract> GetAllPermissions()
         {
@@ -139,5 +193,7 @@ namespace Vokabular.Authentication.Client
                 throw;
             }
         }
+
+        #endregion
     }
 }
