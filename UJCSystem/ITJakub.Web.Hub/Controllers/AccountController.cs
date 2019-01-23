@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Errors;
+using Vokabular.Shared.AspNetCore.Extensions;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -22,6 +23,20 @@ namespace ITJakub.Web.Hub.Controllers
         [RequireHttps]
         public ActionResult Login(string returnUrl = null)
         {
+            try
+            {
+                using (var client = GetRestClient())
+                {
+                    client.CreateUserIfNotExist(HttpContext.User.GetId());
+                }
+
+                return RedirectToLocal("");
+            }
+            catch (HttpErrorCodeException e)
+            {
+                AddErrors(e);
+            }
+
             return RedirectToLocal(returnUrl);
         }
 

@@ -33,6 +33,12 @@ namespace Vokabular.MainService.Core.Managers
             return userId;
         }
 
+        public object CreateUserIfNotExist(int externalId)
+        {
+            var userId = new CreateUserIfNotExistWork(m_userRepository, externalId).Execute();
+            return userId;
+        }
+
         public void UpdateCurrentUser(UpdateUserContract data)
         {
             var userId = m_authenticationManager.GetCurrentUserId();

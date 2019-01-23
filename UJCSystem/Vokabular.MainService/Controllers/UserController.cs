@@ -45,6 +45,21 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
+        [HttpPost("external")]
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        public IActionResult CreateUserIfNotExist([FromBody] int externalId)
+        {
+            try
+            {
+                var userId = m_userManager.CreateUserIfNotExist(externalId);
+                return Ok(userId);
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Message);
+            }
+        }
+
         [HttpPut("current")]
         public IActionResult UpdateCurrentUser([FromBody] UpdateUserContract data)
         {
