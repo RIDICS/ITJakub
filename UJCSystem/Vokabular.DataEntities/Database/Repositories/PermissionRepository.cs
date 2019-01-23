@@ -35,6 +35,13 @@ namespace Vokabular.DataEntities.Database.Repositories
             return group;
         }
 
+        public virtual UserGroup GetGroupByName(string groupName)
+        {
+            return GetSession().QueryOver<UserGroup>()
+                .Where(g => g.Name == groupName)
+                .SingleOrDefault();
+        }
+
         public virtual IList<UserGroup> GetGroupsAutocomplete(string queryString, int recordCount)
         {
             queryString = EscapeQuery(queryString);

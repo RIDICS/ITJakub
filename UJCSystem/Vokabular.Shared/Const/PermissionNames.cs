@@ -12,5 +12,6 @@
         public const string EditionPrintText = "edition-print-text";
         public const string EditStaticText = "edit-static-text";
         public const string CardFile = "card-file:";
+        public const string AutoImport = "autoimport:";
     }
 }

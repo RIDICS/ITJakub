@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ITJakub.FileProcessing.Core.Communication;
 using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext;
 using ITJakub.FileProcessing.Core.Sessions.Works;
@@ -22,10 +23,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
         private readonly CatalogValueRepository m_catalogValueRepository;
         private readonly PersonRepository m_personRepository;
         private readonly PermissionRepository m_permissionRepository;
+        private readonly FileProcessingCommunicationProvider m_communicationProvider;
 
         public RelationalDbStoreProcessor(ProjectRepository projectRepository, MetadataRepository metadataRepository,
             ResourceRepository resourceRepository, IFulltextResourceProcessor fulltextResourceProcessor, CatalogValueRepository catalogValueRepository, PersonRepository personRepository, 
-            PermissionRepository permissionRepository)
+            PermissionRepository permissionRepository, FileProcessingCommunicationProvider communicationProvider)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
@@ -34,6 +36,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             m_catalogValueRepository = catalogValueRepository;
             m_personRepository = personRepository;
             m_permissionRepository = permissionRepository;
+            m_communicationProvider = communicationProvider;
         }
 
         public void Process(ResourceSessionDirector resourceDirector)
@@ -83,7 +86,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             //    }
             //}
 
-            var processAutoImportPermission = new ProcessAutoImportPermissionWork(m_permissionRepository, projectId, createNewSnapshot.BookTypes);
+            var processAutoImportPermission = new ProcessAutoImportPermissionWork(m_permissionRepository, projectId, createNewSnapshot.BookTypes, m_communicationProvider);
             processAutoImportPermission.Execute();
             
             //var specialPermissions = m_permissionRepository.GetAutoimportPermissionsByCategoryIdList(allBookVersionCategoryIds);

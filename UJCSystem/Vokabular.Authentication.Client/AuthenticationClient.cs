@@ -97,7 +97,8 @@ namespace Vokabular.Authentication.Client
         {
             try
             {
-                return Get<IList<UserContract>>($"{ApiBasePath}/user/search?nameStart={query}{(start.HasValue ? "&start=" + start : "")}{(count.HasValue ? "&count=" + count : "")}");
+                return Get<IList<UserContract>>(
+                    $"{ApiBasePath}/user/search?nameStart={query}{(start.HasValue ? "&start=" + start : "")}{(count.HasValue ? "&count=" + count : "")}");
             }
             catch (HttpRequestException e)
             {
@@ -113,6 +114,22 @@ namespace Vokabular.Authentication.Client
             try
             {
                 return Get<IList<RoleContract>>($"{ApiBasePath}/role/allroles");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+
+        public IList<PermissionContract> GetAllPermissions()
+        {
+            try
+            {
+                return Get<IList<PermissionContract>>($"{ApiBasePath}/permission/allpermissions");
             }
             catch (HttpRequestException e)
             {

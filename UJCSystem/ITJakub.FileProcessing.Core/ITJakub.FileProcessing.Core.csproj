@@ -217,6 +217,18 @@
       <Project>{c1753d1a-9d38-4a6f-aa01-bdadecb2eac8}</Project>
       <Name>Ujc.Ovj.Ooxml.Conversion</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vokabular.Authentication.Client\Vokabular.Authentication.Client.csproj">
+      <Project>{424a2f1a-942e-4c7a-b770-45d83e5574de}</Project>
+      <Name>Vokabular.Authentication.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vokabular.Authentication.DataContracts\Vokabular.Authentication.DataContracts.csproj">
+      <Project>{262c4038-0208-4376-afe0-350ec0be1a60}</Project>
+      <Name>Vokabular.Authentication.DataContracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vokabular.Authentication.Structures\Vokabular.Authentication.Structures.csproj">
+      <Project>{a7b06278-36b9-4ce3-beda-691521b40e89}</Project>
+      <Name>Vokabular.Authentication.Structures</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vokabular.Core\Vokabular.Core.csproj">
       <Project>{88ef00d2-ce46-4054-a764-9093ba9dde4e}</Project>
       <Name>Vokabular.Core</Name>
