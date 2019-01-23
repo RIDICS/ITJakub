@@ -72,8 +72,6 @@ namespace Vokabular.MainService.Core.Managers
 
         public UserGroupDetailContract AddUserDetails(UserGroupDetailContract userGroupDetailContract)
         {
-            userGroupDetailContract.CreatedBy = GetUserContractForUser(userGroupDetailContract.CreatedBy);
-
             var members = userGroupDetailContract.Members.Select(GetUserContractForUser).ToList();
 
             userGroupDetailContract.Members = members;

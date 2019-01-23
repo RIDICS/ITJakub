@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Vokabular.MainService.DataContracts.Contracts.Permission
 {
@@ -14,10 +13,6 @@ namespace Vokabular.MainService.DataContracts.Contracts.Permission
 
     public class UserGroupDetailContract : UserGroupContract
     {
-        public DateTime CreateTime { get; set; }
-
-        public UserContract CreatedBy { get; set; }
-
         public IList<UserContract> Members { get; set; }
     }
 }
