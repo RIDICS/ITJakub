@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.Extensions.Logging;
+using Vokabular.Authentication.DataContracts;
 using Vokabular.Authentication.DataContracts.User;
 using Vokabular.RestClient;
 using Vokabular.Shared;
@@ -97,6 +98,21 @@ namespace Vokabular.Authentication.Client
             try
             {
                 return Get<IList<UserContract>>($"{ApiBasePath}/user/search?nameStart={query}{(start.HasValue ? "&start=" + start : "")}{(count.HasValue ? "&count=" + count : "")}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public IList<RoleContract> GetAllRoles()
+        {
+            try
+            {
+                return Get<IList<RoleContract>>($"{ApiBasePath}/role/allroles");
             }
             catch (HttpRequestException e)
             {

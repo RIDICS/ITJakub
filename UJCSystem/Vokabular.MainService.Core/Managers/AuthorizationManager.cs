@@ -51,7 +51,7 @@ namespace Vokabular.MainService.Core.Managers
         {
             var user = m_authenticationManager.GetCurrentUser(true);
 
-            var currentUserPermissions = m_authenticationManager.GetCurrentUserPermissions();
+            var currentUserPermissions = m_authenticationManager.GetCurrentUserPermissions(true);
             if (currentUserPermissions.All(x => x.Value != PermissionNames.CardFile + cardFileId))
             {
                 throw new UnauthorizedException(
@@ -66,8 +66,8 @@ namespace Vokabular.MainService.Core.Managers
                 return;
             }
 
-            var permissions = m_authenticationManager.GetCurrentUserPermissions();
-            cardFilesContracts = cardFilesContracts.Where(x => permissions.Any(y => y.Value == PermissionNames.CardFile + x.Id)).ToList();
+            var currentUserPermissions = m_authenticationManager.GetCurrentUserPermissions(true);
+            cardFilesContracts = cardFilesContracts.Where(x => currentUserPermissions.Any(y => y.Value == PermissionNames.CardFile + x.Id)).ToList();
         }
 
         public void FilterProjectIdList(ref IList<long> projectIds)

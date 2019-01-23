@@ -56,11 +56,14 @@ namespace Vokabular.MainService.Core.Managers
             return GetCurrentUser(false).Id;
         }
 
-        public IList<Claim> GetCurrentUserPermissions(bool returnDefaultIfNull = false)
+        public IList<Claim> GetCurrentUserPermissions(bool returnDefaultIfNull)
         {
-            //TODO check for null
-            return m_httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == CustomClaimTypes.Permission).ToList();
-            //TODO get default permissions            
+            if (m_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated || returnDefaultIfNull == false)
+            {
+                return m_httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == CustomClaimTypes.Permission).ToList();
+            }
+            
+            return m_defaultUserProvider.GetDefaultUserPermissions();
         }
     }
 }
