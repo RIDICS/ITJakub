@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Security.Claims;
@@ -16,6 +17,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Swashbuckle.AspNetCore.Swagger;
 using Vokabular.Core;
@@ -159,19 +161,29 @@ namespace Vokabular.MainService
                 var content = client.GetStringAsync(userInfoEndpoint).Result;
                 IList<Claim> claims = new List<Claim>();
 
+                var arrayName = new[] {CustomClaimTypes.Permission, CustomClaimTypes.ResourcePermissionType, CustomClaimTypes.ResourcePermission};
+
                 foreach (var property in JToken.Parse(content).Children<JProperty>())
                 {
-                    if (!property.Name.Equals(CustomClaimTypes.Permission))
+                    if (arrayName.Contains(property.Name))
                     {
-                        claims.Add(new Claim(property.Name, property.Value.ToString()));
+                        try
+                        {
+                            var permArray = JArray.Parse(property.Value.ToString());
+                            foreach (var permission in permArray)
+                            {
+                                claims.Add(new Claim(property.Name, permission.ToString(), context.SecurityToken.Issuer));
+                            }
+                        }
+                        catch (JsonReaderException)
+                        {
+                            claims.Add(new Claim(property.Name, property.Value.ToString()));
+                        } 
+
                     }
                     else
                     {
-                        var permArray = JArray.Parse(property.Value.ToString());
-                        foreach (var permission in permArray)
-                        {
-                            claims.Add(new Claim(property.Name, permission.ToString(), context.SecurityToken.Issuer));
-                        }
+                        claims.Add(new Claim(property.Name, property.Value.ToString()));
                     }
                 }
 

@@ -80,6 +80,8 @@ namespace ITJakub.Web.Hub
                     options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
                     options.ClaimActions.MapJsonKey(ClaimTypes.DateOfBirth, "birthdate");
                     options.ClaimActions.MapJsonKey(CustomClaimTypes.Permission, CustomClaimTypes.Permission);
+                    options.ClaimActions.MapJsonKey(CustomClaimTypes.ResourcePermission, CustomClaimTypes.ResourcePermission);
+                    options.ClaimActions.MapJsonKey(CustomClaimTypes.ResourcePermissionType, CustomClaimTypes.ResourcePermissionType);
 
                     options.GetClaimsFromUserInfoEndpoint = true;
                     options.SaveTokens = true;
