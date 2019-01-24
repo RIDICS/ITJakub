@@ -19,8 +19,6 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual IList<Permission> Permissions { get; set; }
 
-        public virtual IList<SpecialPermission> SpecialPermissions { get; set; }
-
         public virtual bool Equals(UserGroup other)
         {
             if (ReferenceEquals(null, other)) return false;

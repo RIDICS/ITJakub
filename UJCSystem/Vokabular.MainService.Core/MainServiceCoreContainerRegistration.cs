@@ -75,7 +75,6 @@ namespace Vokabular.MainService.Core
             container.AddSingleton<Profile, ProjectProfile>();
             container.AddSingleton<Profile, ResourceProfile>();
             container.AddSingleton<Profile, ResponsiblePersonProfile>();
-            container.AddSingleton<Profile, SpecialPermissionProfile>();
             container.AddSingleton<Profile, TermProfile>();
             container.AddSingleton<Profile, TextCommentProfile>();
             container.AddSingleton<Profile, TextProfile>();
