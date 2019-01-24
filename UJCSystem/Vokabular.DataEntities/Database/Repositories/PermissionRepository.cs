@@ -24,56 +24,11 @@ namespace Vokabular.DataEntities.Database.Repositories
             return group;
         }
 
-        public virtual UserGroup FindGroupWithSpecialPermissionsById(int groupId)
-        {
-            var group = GetSession().QueryOver<UserGroup>()
-                .Fetch(g => g.CreatedBy).Eager
-                .Fetch(g => g.SpecialPermissions).Eager
-                .Where(g => g.Id == groupId)
-                .SingleOrDefault();
-
-            return group;
-        }
-
         public virtual UserGroup GetGroupByName(string groupName)
         {
             return GetSession().QueryOver<UserGroup>()
                 .Where(g => g.Name == groupName)
                 .SingleOrDefault();
-        }
-
-        public virtual IList<UserGroup> GetGroupsAutocomplete(string queryString, int recordCount)
-        {
-            queryString = EscapeQuery(queryString);
-
-            return GetSession().QueryOver<UserGroup>()
-                .Where(Restrictions.On<UserGroup>(x => x.Name).IsInsensitiveLike(queryString, MatchMode.Anywhere))
-                .OrderBy(x => x.Name).Asc
-                .Take(recordCount)
-                .List<UserGroup>();
-        }
-
-        public virtual IList<User> GetUsersByGroup(int groupId)
-        {
-            User userAlias = null;
-            UserGroup groupAlias = null;
-
-            var users = GetSession().QueryOver(() => userAlias)
-                .JoinQueryOver(x => x.Groups, () => groupAlias)
-                .Where(x => groupAlias.Id == groupId)
-                .List<User>();
-
-            return users;
-        }
-
-        public virtual User GetUserWithGroups(int userId)
-        {
-            var user = GetSession().QueryOver<User>()
-                .Fetch(x => x.Groups).Eager
-                .Where(x => x.Id == userId)
-                .SingleOrDefault();
-
-            return user;
         }
 
         public virtual int CreateGroup(UserGroup group)
@@ -169,97 +124,6 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List<Permission>();
 
             return permissions;
-        }
-        
-        public virtual IList<SpecialPermission> GetSpecialPermissionsByUser(int userId)
-        {
-            SpecialPermission specPermissionAlias = null;
-            UserGroup groupAlias = null;
-            User userAlias = null;
-
-            var permissions = GetSession().QueryOver(() => specPermissionAlias)
-                .JoinQueryOver(x => specPermissionAlias.UserGroups, () => groupAlias)
-                .JoinQueryOver(x => groupAlias.Users, () => userAlias)
-                .Where(() => userAlias.Id == userId)
-                .List<SpecialPermission>();
-
-            return permissions;
-        }
-        
-        public virtual IList<SpecialPermission> GetSpecialPermissionsByUserAndType(int userId, SpecialPermissionCategorization type)
-        {
-            SpecialPermission specPermissionAlias = null;
-            UserGroup groupAlias = null;
-            User userAlias = null;
-
-            var permissions = GetSession().QueryOver(() => specPermissionAlias)
-                .JoinQueryOver(x => specPermissionAlias.UserGroups, () => groupAlias)
-                .JoinQueryOver(x => groupAlias.Users, () => userAlias)
-                .Where(() => userAlias.Id == userId)
-                .And(()=> specPermissionAlias.PermissionCategorization == type)
-                .List<SpecialPermission>();
-
-            return permissions;
-        }
-
-        public virtual IList<SpecialPermission> GetSpecialPermissions()
-        {
-            SpecialPermission specPermissionAlias = null;
-
-            var permissions = GetSession().QueryOver(() => specPermissionAlias)
-                .List<SpecialPermission>();
-
-            return permissions;
-        }
-
-        public virtual IList<SpecialPermission> GetSpecialPermissionsByGroup(int groupId)
-        {
-            SpecialPermission specPermissionAlias = null;
-            UserGroup groupAlias = null;
-
-            var permissions = GetSession().QueryOver(() => specPermissionAlias)
-                .JoinQueryOver(x => specPermissionAlias.UserGroups, () => groupAlias)
-                .Where(() => groupAlias.Id == groupId)
-                .List<SpecialPermission>();
-
-            return permissions;
-        }
-
-        public virtual IList<SpecialPermission> GetSpecialPermissionsByIds(IEnumerable<int> specialPermissionIds)
-        {
-            SpecialPermission specPermissionAlias = null;
-
-            var permissions = GetSession().QueryOver(() => specPermissionAlias)
-                .AndRestrictionOn(() => specPermissionAlias.Id).IsInG(specialPermissionIds)
-                .List<SpecialPermission>();
-
-            return permissions;
-        }
-
-        public virtual IList<AutoImportBookTypePermission> GetAutoimportPermissionsByBookTypeList(IEnumerable<BookTypeEnum> bookTypes)
-        {
-            AutoImportBookTypePermission autoimportPermissionAlias = null;
-            BookType bookTypeAlias = null;
-
-            var permissions = GetSession().QueryOver(() => autoimportPermissionAlias)
-                .JoinQueryOver(x => autoimportPermissionAlias.BookType, () => bookTypeAlias)
-                .AndRestrictionOn(() => bookTypeAlias.Type).IsInG(bookTypes)
-                .List<AutoImportBookTypePermission>();
-
-            return permissions;
-        }
-
-        public virtual IList<UserGroup> GetGroupsBySpecialPermissionIds(IEnumerable<int> specialPermissionIds)
-        {
-            UserGroup groupAlias = null;
-            SpecialPermission specialPermissionAlias = null;
-
-            var groups = GetSession().QueryOver(() => groupAlias)
-                .JoinQueryOver(x => groupAlias.SpecialPermissions, () => specialPermissionAlias)
-                .AndRestrictionOn(() => specialPermissionAlias.Id).IsInG(specialPermissionIds)
-                .List<UserGroup>();
-
-            return groups;
         }
 
         public virtual void CreatePermissionIfNotExist(Permission permission)
