@@ -10,7 +10,6 @@ using Vokabular.RestClient.Headers;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Attributes;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
 using Vokabular.Shared.Const;
-using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -20,13 +19,11 @@ namespace Vokabular.MainService.Controllers
     public class UserController : BaseController
     {
         private readonly UserManager m_userManager;
-        private readonly PermissionManager m_permissionManager;
         private readonly UserGroupManager m_userGroupManager;
 
-        public UserController(UserManager userManager, PermissionManager permissionManager, UserGroupManager userGroupManager)
+        public UserController(UserManager userManager, UserGroupManager userGroupManager)
         {
             m_userManager = userManager;
-            m_permissionManager = permissionManager;
             m_userGroupManager = userGroupManager;
         }
 
@@ -111,13 +108,6 @@ namespace Vokabular.MainService.Controllers
         public List<UserGroupContract> GetGroupsByUser(int userId)
         {
             var result = m_userGroupManager.GetGroupsByUser(userId);
-            return result;
-        }
-
-        [HttpGet("current/permission/special")]
-        public IList<SpecialPermissionContract> GetSpecialPermissionsForUser(SpecialPermissionCategorizationEnumContract? filterByType)
-        {
-            var result = m_permissionManager.GetSpecialPermissionsForUser(filterByType);
             return result;
         }
 

@@ -235,6 +235,21 @@ namespace Vokabular.Authentication.Client
             }
         }
 
+        public void AssignPermissionsToRole(int roleId, IEnumerable<int> permissions)
+        {
+            try
+            {
+                Post<IEnumerable<int>>($"{ApiBasePath}/role/{roleId}/permissions", permissions);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         #endregion
 
         #region Permissions

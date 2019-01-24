@@ -45,6 +45,7 @@ namespace Vokabular.MainService.Core
             container.AddPerWebRequest<CommunicationConfigurationProvider>();
             container.AddPerWebRequest<CommunicationProvider>();
             container.AddPerWebRequest<DefaultUserProvider>();
+            container.AddPerWebRequest<PermissionConverter>();
             container.AddPerWebRequest<FulltextStorageProvider>();
             container.AddPerWebRequest<IFulltextStorage, ExistDbStorage>();
             container.AddPerWebRequest<IFulltextStorage, ElasticSearchStorage>();

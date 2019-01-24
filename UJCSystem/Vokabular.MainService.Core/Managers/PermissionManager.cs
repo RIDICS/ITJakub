@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
-using AutoMapper;
 using log4net;
-using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.MainService.Core.Communication;
+using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
-using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -15,37 +14,34 @@ namespace Vokabular.MainService.Core.Managers
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private readonly AuthenticationManager m_authenticationManager;
         private readonly PermissionRepository m_permissionRepository;
+        private readonly CommunicationProvider m_communicationProvider;
+        private readonly PermissionConverter m_permissionConverter;
 
-        public PermissionManager(AuthenticationManager authenticationManager, PermissionRepository permissionRepository)
+        public PermissionManager(PermissionRepository permissionRepository, CommunicationProvider communicationProvider,
+            PermissionConverter permissionConverter)
         {
-            m_authenticationManager = authenticationManager;
             m_permissionRepository = permissionRepository;
-        }
-        
-        public List<SpecialPermissionContract> GetSpecialPermissionsForUser(SpecialPermissionCategorizationEnumContract? filterByType)
-        {
-            var userId = m_authenticationManager.GetCurrentUserId();
-            var categorizationType = Mapper.Map<SpecialPermissionCategorization?>(filterByType);
-
-            var specPermissions = m_permissionRepository.InvokeUnitOfWork(x =>
-                categorizationType == null
-                    ? x.GetSpecialPermissionsByUser(userId)
-                    : x.GetSpecialPermissionsByUserAndType(userId, categorizationType.Value));
-            return Mapper.Map<List<SpecialPermissionContract>>(specPermissions);
+            m_communicationProvider = communicationProvider;
+            m_permissionConverter = permissionConverter;
         }
 
         public List<SpecialPermissionContract> GetSpecialPermissions()
         {
-            var specPermissions = m_permissionRepository.InvokeUnitOfWork(x => x.GetSpecialPermissions());
-            return Mapper.Map<List<SpecialPermissionContract>>(specPermissions);
+            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
+            {
+                var permissions = client.GetAllPermissions();
+                return m_permissionConverter.Convert(permissions);
+            }
         }
 
         public List<SpecialPermissionContract> GetSpecialPermissionsForGroup(int groupId)
         {
-            var specPermissions = m_permissionRepository.InvokeUnitOfWork(x => x.GetSpecialPermissionsByGroup(groupId));
-            return Mapper.Map<List<SpecialPermissionContract>>(specPermissions);
+            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
+            {
+                var permissions = client.GetRole(groupId).Permissions;
+                return m_permissionConverter.Convert(permissions);
+            }
         }
 
         public void AddSpecialPermissionsToGroup(int groupId, IList<int> specialPermissionsIds)
@@ -55,7 +51,19 @@ namespace Vokabular.MainService.Core.Managers
                 return;
             }
 
-            new AddSpecialPermissionsToGroupWork(m_permissionRepository, groupId, specialPermissionsIds).Execute();
+            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
+            {
+                var permissions = client.GetRole(groupId).Permissions;
+                var permissionsId = permissions.Select(x => x.Id).ToList();
+                foreach (var permissionToAdd in specialPermissionsIds)
+                {
+                    if (!permissionsId.Contains(permissionToAdd))
+                    {
+                        permissionsId.Add(permissionToAdd);
+                    }
+                }
+                client.AssignPermissionsToRole(groupId, permissionsId);
+            }
         }
 
         public void RemoveSpecialPermissionsFromGroup(int groupId, IList<int> specialPermissionsIds)
@@ -65,7 +73,17 @@ namespace Vokabular.MainService.Core.Managers
                 return;
             }
 
-            new RemoveSpecialPermissionsFromGroupWork(m_permissionRepository, groupId, specialPermissionsIds).Execute();
+            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
+            {
+                var permissions = client.GetRole(groupId).Permissions;
+                var permissionsId = permissions.Select(x => x.Id).ToList();
+                foreach (var permissionToRemove in specialPermissionsIds)
+                {
+                    permissionsId.Remove(permissionToRemove);
+                }
+                
+                client.AssignPermissionsToRole(groupId, permissionsId);
+            }
         }
 
         public void AddBooksAndCategoriesToGroup(int groupId, IList<long> bookIds)
