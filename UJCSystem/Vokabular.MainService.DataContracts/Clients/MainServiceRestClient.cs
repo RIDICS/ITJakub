@@ -2474,11 +2474,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public UserGroupDetailContract GetUserGroupDetail(int groupId)
+        public UserGroupContract GetUserGroupDetail(int groupId)
         {
             try
             {
-                var result = Get<UserGroupDetailContract>($"usergroup/{groupId}/detail");
+                var result = Get<UserGroupContract>($"usergroup/{groupId}/detail");
                 return result;
             }
             catch (HttpRequestException e)

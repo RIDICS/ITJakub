@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
@@ -7,7 +6,6 @@ using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
-using Vokabular.MainService.DataContracts.Contracts.Permission;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -68,14 +66,6 @@ namespace Vokabular.MainService.Core.Managers
             userDetailContract.Id = user.Id;
             userDetailContract.AvatarUrl = user.AvatarUrl;
             return userDetailContract;
-        }
-
-        public UserGroupDetailContract AddUserDetails(UserGroupDetailContract userGroupDetailContract)
-        {
-            var members = userGroupDetailContract.Members.Select(GetUserContractForUser).ToList();
-
-            userGroupDetailContract.Members = members;
-            return userGroupDetailContract;
         }
 
         public List<UserDetailContract> GetIdForExternalUsers(List<UserDetailContract> userDetailContracts)

@@ -69,7 +69,7 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
-        public UserGroupDetailContract GetGroupDetail(int groupId)
+        public UserGroupContract GetGroupDetail(int groupId)
         {
             using (var client = m_communicationProvider.GetAuthenticationServiceClient())
             {
@@ -77,11 +77,7 @@ namespace Vokabular.MainService.Core.Managers
                 if (role == null)
                     return null;
 
-                var members = client.GetUsersByRole(groupId);
-
-                var group = Mapper.Map<UserGroupDetailContract>(role);
-                group.Members = Mapper.Map<IList<UserContract>>(members);
-                return group;
+                return Mapper.Map<UserGroupContract>(role);
             }
         }
 

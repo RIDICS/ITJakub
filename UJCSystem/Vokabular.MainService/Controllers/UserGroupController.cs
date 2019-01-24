@@ -40,7 +40,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("{groupId}/detail")]
-        public UserGroupDetailContract GetGroupDetail(int groupId)
+        public UserGroupContract GetGroupDetail(int groupId)
         {
             var result = m_userGroupManager.GetGroupDetail(groupId);
             return result;

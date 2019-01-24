@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Vokabular.MainService.DataContracts.Contracts.Permission
+﻿namespace Vokabular.MainService.DataContracts.Contracts.Permission
 {
     public class UserGroupContract
     {
@@ -9,10 +7,5 @@ namespace Vokabular.MainService.DataContracts.Contracts.Permission
         public string Name { get; set; }
 
         public string Description { get; set; }
-    }
-
-    public class UserGroupDetailContract : UserGroupContract
-    {
-        public IList<UserContract> Members { get; set; }
     }
 }
