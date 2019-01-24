@@ -7,7 +7,7 @@ BEGIN
 INSERT INTO public."ApiAccessKey"(
 	"ApiKeyHash", "HashAlgorithm", "Name")
 	VALUES
-   ('2BB80D537B1DA3E38BD30361AA855686BDE0EACD7162FEF6A25FE97BF527A25B' -- ApiKeyHash (hash is 'secret')
+   ('D55CE0C2E0594B71636FAF04DE7E686120562459914CC30E291256A66420AB88' -- ApiKeyHash (hash is 'secret')
    ,'sha256' 
     ,'Vokabular');
 
@@ -30,6 +30,6 @@ END $$;
 
 INSERT INTO public."VersionInfo"("Version", "AppliedOn", "Description") 
 VALUES 
-(105, now(), 'M_105_AddApiAccessKey');
+(104, now(), 'M_104_AddApiAccessKey');
 
 COMMIT;
