@@ -96,6 +96,15 @@ namespace ITJakub.Web.Hub.Controllers
             return new SignOutResult(new[] { CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme });
         }
 
+
+        //
+        // POST: /Account/ClientLogOut
+        [HttpPost]
+        public IActionResult ClientLogOut()
+        {
+            return new SignOutResult(new[] { CookieAuthenticationDefaults.AuthenticationScheme });
+        }
+
         [AllowAnonymous]
         public IActionResult AccessDenied()
         {
