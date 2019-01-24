@@ -220,11 +220,11 @@ namespace Vokabular.Authentication.Client
             }
         }
 
-        public IList<RoleContract> GetListRole(string query, int count)
+        public ListContract<RoleContract> GetListRole(string query, int count)
         {
             try
             {
-                return Get<IList<RoleContract>>($"{ApiBasePath}/role/list?search={query}&count={count}");
+                return Get<ListContract<RoleContract>>($"{ApiBasePath}/role/list?search={query}&count={count}");
             }
             catch (HttpRequestException e)
             {

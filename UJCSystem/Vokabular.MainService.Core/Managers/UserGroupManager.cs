@@ -115,7 +115,7 @@ namespace Vokabular.MainService.Core.Managers
             using (var client = m_communicationProvider.GetAuthenticationServiceClient())
             {
                 var result = client.GetListRole(query, countValue);
-                return Mapper.Map<List<UserGroupContract>>(result);
+                return Mapper.Map<List<UserGroupContract>>(result.Items);
             }
         }
     }
