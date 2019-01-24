@@ -8,7 +8,6 @@ using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Utils;
-using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 
@@ -18,16 +17,11 @@ namespace Vokabular.MainService.Core.Managers
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private readonly PermissionRepository m_permissionRepository;
-        private readonly AuthorizationManager m_authorizationManager;
         private readonly UserRepository m_userRepository;
         private readonly CommunicationProvider m_communicationProvider;
 
-        public UserGroupManager(PermissionRepository permissionRepository, AuthorizationManager authorizationManager,
-             UserRepository userRepository, CommunicationProvider communicationProvider)
+        public UserGroupManager(UserRepository userRepository, CommunicationProvider communicationProvider)
         {
-            m_permissionRepository = permissionRepository;
-            m_authorizationManager = authorizationManager;
             m_userRepository = userRepository;
             m_communicationProvider = communicationProvider;
         }
@@ -93,17 +87,26 @@ namespace Vokabular.MainService.Core.Managers
 
         public void DeleteGroup(int groupId)
         {
-            new DeleteGroupWork(m_permissionRepository, groupId).Execute();
+            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
+            {
+                client.DeleteRole(groupId);
+            }
         }
 
         public void RemoveUserFromGroup(int userId, int groupId)
         {
-            new RemoveUserFromGroupWork(m_permissionRepository, userId, groupId).Execute();
+            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
+            {
+                client.RemoveRoleFromUser(userId, groupId);
+            }
         }
 
         public void AddUserToGroup(int userId, int groupId)
         {
-            new AddUserToGroupWork(m_permissionRepository, userId, groupId).Execute();
+            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
+            {
+                client.AddRoleToUser(userId, groupId);
+            }
         }
 
         public List<UserGroupContract> GetUserGroupAutocomplete(string query, int? count)
@@ -113,8 +116,11 @@ namespace Vokabular.MainService.Core.Managers
 
             var countValue = PagingHelper.GetAutocompleteCount(count);
 
-            var result = m_permissionRepository.InvokeUnitOfWork(x => x.GetGroupsAutocomplete(query, countValue));
-            return Mapper.Map<List<UserGroupContract>>(result);
+            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
+            {
+                var result = client.GetListRole(query, countValue);
+                return Mapper.Map<List<UserGroupContract>>(result);
+            }
         }
     }
 }

@@ -175,6 +175,66 @@ namespace Vokabular.Authentication.Client
             }
         }
 
+        public void DeleteRole(int roleId)
+        {
+            try
+            {
+                Delete($"{ApiBasePath}/role/{roleId}/delete");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void RemoveRoleFromUser(int userId, int roleId)
+        {
+            try
+            {
+                Delete($"{ApiBasePath}/user/{userId}/role/{roleId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void AddRoleToUser(int userId, int roleId)
+        {
+            try
+            {
+                Put<object>($"{ApiBasePath}/user/{userId}/role/{roleId}", null);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public IList<RoleContract> GetListRole(string query, int count)
+        {
+            try
+            {
+                return Get<IList<RoleContract>>($"{ApiBasePath}/role/list?search={query}&count={count}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         #endregion
 
         #region Permissions
