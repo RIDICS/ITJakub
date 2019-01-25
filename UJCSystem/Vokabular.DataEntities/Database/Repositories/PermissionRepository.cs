@@ -24,6 +24,17 @@ namespace Vokabular.DataEntities.Database.Repositories
             return group;
         }
 
+        public virtual UserGroup FindGroupByExternalId(int externalId)
+        {
+            var group = GetSession().QueryOver<UserGroup>()
+                .Fetch(g => g.Users).Eager
+                .Fetch(g => g.CreatedBy).Eager
+                .Where(g => g.ExternalId == externalId)
+                .SingleOrDefault();
+
+            return group;
+        }
+
         public virtual UserGroup GetGroupByName(string groupName)
         {
             return GetSession().QueryOver<UserGroup>()
