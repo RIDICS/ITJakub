@@ -32,7 +32,7 @@ namespace Vokabular.MainService.Core.Works.Permission
 
             using (var client = m_communicationProvider.GetAuthenticationServiceClient())
             {
-                client.RemoveRoleFromUser(m_userId, m_roleId);
+                client.RemoveRoleFromUser(user.ExternalId, m_roleId);
             }
             
             //TODO switch logic: remove group from user (fetch lower amount of data)

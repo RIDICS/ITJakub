@@ -24,13 +24,13 @@ namespace Vokabular.MainService.Core.Works.Permission
 
         protected override void ExecuteWorkImplementation()
         {
-            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
-            {
-                client.AddRoleToUser(m_userId, m_roleId);
-            }
-
             var group = m_permissionRepository.FindGroupByExternalId(m_roleId);
             var user = m_permissionRepository.Load<User>(m_userId);
+
+            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
+            {
+                client.AddRoleToUser(user.ExternalId, m_roleId);
+            }
             
             if (group.Users == null)
             {
