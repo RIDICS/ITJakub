@@ -7,7 +7,8 @@ BEGIN TRAN;
 		[Name] varchar(255) NOT NULL UNIQUE,
 		[Description] varchar(500) NULL,
 		[CreateTime] datetime NOT NULL,
-		[CreatedBy] int NULL CONSTRAINT [FK_UserGroup(CreatedBy)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id)
+		[CreatedBy] int NULL CONSTRAINT [FK_UserGroup(CreatedBy)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
+		[ExternalId] int NULL,
 	);
 
 	CREATE TABLE [dbo].[User_UserGroup](

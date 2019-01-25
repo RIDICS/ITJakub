@@ -17,6 +17,8 @@
       <column name="CreatedBy" sql-type="bigint" />
     </many-to-one>
     
+    <property name="ExternalId" not-null="false" />
+
     <bag name="Users" table="User_UserGroup" lazy="true">
       <key column="[UserGroup]" />
       <many-to-many class="User" column="[User]" />
