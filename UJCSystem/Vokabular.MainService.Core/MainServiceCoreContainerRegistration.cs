@@ -39,7 +39,7 @@ namespace Vokabular.MainService.Core
             container.AddPerWebRequest<ProjectResourceManager>();
             container.AddPerWebRequest<TermManager>();
             container.AddPerWebRequest<UserDetailManager>();
-            container.AddPerWebRequest<UserGroupManager>();
+            container.AddPerWebRequest<RoleManager>();
             container.AddPerWebRequest<UserManager>();
 
             container.AddPerWebRequest<CommunicationConfigurationProvider>();

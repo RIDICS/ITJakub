@@ -19,12 +19,12 @@ namespace Vokabular.MainService.Controllers
     public class UserController : BaseController
     {
         private readonly UserManager m_userManager;
-        private readonly UserGroupManager m_userGroupManager;
+        private readonly RoleManager m_roleManager;
 
-        public UserController(UserManager userManager, UserGroupManager userGroupManager)
+        public UserController(UserManager userManager, RoleManager roleManager)
         {
             m_userManager = userManager;
-            m_userGroupManager = userGroupManager;
+            m_roleManager = roleManager;
         }
 
         [HttpPost("")]
@@ -104,10 +104,10 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
         
-        [HttpGet("{userId}/group")]
-        public List<UserGroupContract> GetGroupsByUser(int userId)
+        [HttpGet("{userId}/role")]
+        public List<UserGroupContract> GetRolesByUser(int userId)
         {
-            var result = m_userGroupManager.GetGroupsByUser(userId);
+            var result = m_roleManager.GetRolesByUser(userId);
             return result;
         }
 

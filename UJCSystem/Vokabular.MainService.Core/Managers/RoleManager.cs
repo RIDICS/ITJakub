@@ -13,7 +13,7 @@ using Vokabular.MainService.DataContracts.Contracts.Permission;
 
 namespace Vokabular.MainService.Core.Managers
 {
-    public class UserGroupManager
+    public class RoleManager
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -22,7 +22,7 @@ namespace Vokabular.MainService.Core.Managers
         private readonly AuthorizationManager m_authorizationManager;
         private readonly CommunicationProvider m_communicationProvider;
 
-        public UserGroupManager(UserRepository userRepository, PermissionRepository permissionRepository, AuthorizationManager authorizationManager, CommunicationProvider communicationProvider)
+        public RoleManager(UserRepository userRepository, PermissionRepository permissionRepository, AuthorizationManager authorizationManager, CommunicationProvider communicationProvider)
         {
             m_userRepository = userRepository;
             m_permissionRepository = permissionRepository;
@@ -30,7 +30,7 @@ namespace Vokabular.MainService.Core.Managers
             m_communicationProvider = communicationProvider;
         }
 
-        public List<UserGroupContract> GetGroupsByUser(int userId)
+        public List<UserGroupContract> GetRolesByUser(int userId)
         {
             var user = m_userRepository.InvokeUnitOfWork(x => x.GetUserById(userId));
 
@@ -49,26 +49,26 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
-        public List<UserContract> GetUsersByGroup(int groupId)
+        public List<UserContract> GetUsersByRole(int roleId)
         {
             using (var client = m_communicationProvider.GetAuthenticationServiceClient())
             {
-                var members = client.GetUsersByRole(groupId);
+                var members = client.GetUsersByRole(roleId);
                 return Mapper.Map<List<UserContract>>(members);
             }
         }
 
-        public int CreateGroup(string groupName, string description)
+        public int CreateRole(string roleName, string description)
         {
             var userId = m_authorizationManager.GetCurrentUserId();
-            return new CreateRoleWork(m_permissionRepository, m_communicationProvider, groupName, description, userId).Execute();
+            return new CreateRoleWork(m_permissionRepository, m_communicationProvider, roleName, description, userId).Execute();
         }
 
-        public UserGroupContract GetGroupDetail(int groupId)
+        public UserGroupContract GetRoleDetail(int roleId)
         {
             using (var client = m_communicationProvider.GetAuthenticationServiceClient())
             {
-                var role = client.GetRole(groupId);
+                var role = client.GetRole(roleId);
                 if (role == null)
                     return null;
 
@@ -76,22 +76,22 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
-        public void DeleteGroup(int groupId)
+        public void DeleteRole(int roleId)
         {
-            new DeleteRoleWork(m_permissionRepository, m_communicationProvider, groupId).Execute();
+            new DeleteRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
         }
 
-        public void RemoveUserFromGroup(int userId, int groupId)
+        public void RemoveUserFromRole(int userId, int roleId)
         {
-            new RemoveUserFromRoleWork(m_permissionRepository, m_communicationProvider, userId, groupId).Execute();
+            new RemoveUserFromRoleWork(m_permissionRepository, m_communicationProvider, userId, roleId).Execute();
         }
 
-        public void AddUserToGroup(int userId, int groupId)
+        public void AddUserToRole(int userId, int roleId)
         {
-            new AddUserToRoleWork(m_permissionRepository, m_communicationProvider, userId, groupId).Execute();
+            new AddUserToRoleWork(m_permissionRepository, m_communicationProvider, userId, roleId).Execute();
         }
 
-        public List<UserGroupContract> GetUserGroupAutocomplete(string query, int? count)
+        public List<UserGroupContract> GetRoleAutocomplete(string query, int? count)
         {
             if (query == null)
                 query = string.Empty;

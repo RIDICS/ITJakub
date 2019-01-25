@@ -35,16 +35,16 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
-        public List<SpecialPermissionContract> GetSpecialPermissionsForGroup(int groupId)
+        public List<SpecialPermissionContract> GetSpecialPermissionsForRole(int roleId)
         {
             using (var client = m_communicationProvider.GetAuthenticationServiceClient())
             {
-                var permissions = client.GetRole(groupId).Permissions;
+                var permissions = client.GetRole(roleId).Permissions;
                 return m_permissionConverter.Convert(permissions);
             }
         }
 
-        public void AddSpecialPermissionsToGroup(int groupId, IList<int> specialPermissionsIds)
+        public void AddSpecialPermissionsToRole(int roleId, IList<int> specialPermissionsIds)
         {
             if (specialPermissionsIds == null || specialPermissionsIds.Count == 0)
             {
@@ -53,7 +53,7 @@ namespace Vokabular.MainService.Core.Managers
 
             using (var client = m_communicationProvider.GetAuthenticationServiceClient())
             {
-                var permissions = client.GetRole(groupId).Permissions;
+                var permissions = client.GetRole(roleId).Permissions;
                 var permissionsId = permissions.Select(x => x.Id).ToList();
                 foreach (var permissionToAdd in specialPermissionsIds)
                 {
@@ -62,11 +62,11 @@ namespace Vokabular.MainService.Core.Managers
                         permissionsId.Add(permissionToAdd);
                     }
                 }
-                client.AssignPermissionsToRole(groupId, permissionsId);
+                client.AssignPermissionsToRole(roleId, permissionsId);
             }
         }
 
-        public void RemoveSpecialPermissionsFromGroup(int groupId, IList<int> specialPermissionsIds)
+        public void RemoveSpecialPermissionsFromRole(int roleId, IList<int> specialPermissionsIds)
         {
             if (specialPermissionsIds == null || specialPermissionsIds.Count == 0)
             {
@@ -75,25 +75,25 @@ namespace Vokabular.MainService.Core.Managers
 
             using (var client = m_communicationProvider.GetAuthenticationServiceClient())
             {
-                var permissions = client.GetRole(groupId).Permissions;
+                var permissions = client.GetRole(roleId).Permissions;
                 var permissionsId = permissions.Select(x => x.Id).ToList();
                 foreach (var permissionToRemove in specialPermissionsIds)
                 {
                     permissionsId.Remove(permissionToRemove);
                 }
                 
-                client.AssignPermissionsToRole(groupId, permissionsId);
+                client.AssignPermissionsToRole(roleId, permissionsId);
             }
         }
 
-        public void AddBooksAndCategoriesToGroup(int groupId, IList<long> bookIds)
+        public void AddBooksAndCategoriesToGroup(int roleId, IList<long> bookIds)
         {
-            new AddProjectsToUserGroupWork(m_permissionRepository, groupId, bookIds).Execute();
+            new AddProjectsToUserGroupWork(m_permissionRepository, roleId, bookIds).Execute();
         }
 
-        public void RemoveBooksAndCategoriesFromGroup(int groupId, IList<long> bookIds)
+        public void RemoveBooksAndCategoriesFromGroup(int roleId, IList<long> bookIds)
         {
-            new RemoveProjectsFromUserGroupWork(m_permissionRepository, groupId, bookIds).Execute();
+            new RemoveProjectsFromUserGroupWork(m_permissionRepository, roleId, bookIds).Execute();
         }
     }
 }
