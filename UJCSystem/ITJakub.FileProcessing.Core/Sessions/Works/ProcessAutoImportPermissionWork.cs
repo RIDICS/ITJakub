@@ -46,7 +46,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
             var groups = new List<UserGroup>();
             foreach (var role in roles)
             {
-                groups.Add(m_permissionRepository.GetGroupByName(role.Name));
+                var permission = m_permissionRepository.FindGroupByExternalId(role.Id);
+                if(permission != null)
+                    groups.Add(permission);
             }
             
             var newPermissions = groups.Select(group => new Permission
