@@ -1,6 +1,6 @@
 ﻿namespace Vokabular.MainService.DataContracts.Contracts.Permission
 {
-    public class UserGroupContract
+    public class RoleContract
     {
         public int Id { get; set; }
         

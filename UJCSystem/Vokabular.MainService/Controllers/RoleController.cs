@@ -33,14 +33,14 @@ namespace Vokabular.MainService.Controllers
 
         [Authorize(PermissionNames.ManagePermissions)]
         [HttpPost("")]
-        public int CreateRole([FromBody] UserGroupContract data)
+        public int CreateRole([FromBody] RoleContract data)
         {
             var resultId = m_roleManager.CreateRole(data.Name, data.Description);
             return resultId;
         }
 
         [HttpGet("{roleId}/detail")]
-        public UserGroupContract GetRoleDetail(int roleId)
+        public RoleContract GetRoleDetail(int roleId)
         {
             var result = m_roleManager.GetRoleDetail(roleId);
             return result;
@@ -65,14 +65,14 @@ namespace Vokabular.MainService.Controllers
 
         [Authorize(PermissionNames.ManagePermissions)]
         [HttpPost("{roleId}/permission/book")]
-        public void AddBooksToGroup(int roleId, [FromBody] AddBookToUserGroupRequestContract request)
+        public void AddBooksToGroup(int roleId, [FromBody] AddBookToRoleRequestContract request)
         {
             m_permissionManager.AddBooksAndCategoriesToGroup(roleId, request.BookIdList);
         }
 
         [Authorize(PermissionNames.ManagePermissions)]
         [HttpDelete("{roleId}/permission/book")]
-        public void RemoveBooksFromGroup(int roleId, [FromBody] AddBookToUserGroupRequestContract request)
+        public void RemoveBooksFromGroup(int roleId, [FromBody] AddBookToRoleRequestContract request)
         {
             m_permissionManager.RemoveBooksAndCategoriesFromGroup(roleId, request.BookIdList);
         }
@@ -131,7 +131,7 @@ namespace Vokabular.MainService.Controllers
 
         [Authorize(PermissionNames.ManagePermissions)]
         [HttpGet("autocomplete")]
-        public List<UserGroupContract> GetAutocomplete([FromQuery] string query, [FromQuery] int? count)
+        public List<RoleContract> GetAutocomplete([FromQuery] string query, [FromQuery] int? count)
         {
             var result = m_roleManager.GetRoleAutocomplete(query, count);
             return result;

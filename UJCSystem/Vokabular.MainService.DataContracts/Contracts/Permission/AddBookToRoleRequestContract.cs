@@ -2,7 +2,7 @@
 
 namespace Vokabular.MainService.DataContracts.Contracts.Permission
 {
-    public class AddBookToUserGroupRequestContract
+    public class AddBookToRoleRequestContract
     {
         public IList<long> BookIdList { get; set; }
     }

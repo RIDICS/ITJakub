@@ -29,7 +29,7 @@ namespace Vokabular.MainService.Core.Managers
             m_communicationProvider = communicationProvider;
         }
 
-        public List<UserGroupContract> GetRolesByUser(int userId)
+        public List<RoleContract> GetRolesByUser(int userId)
         {
             var user = m_userRepository.InvokeUnitOfWork(x => x.GetUserById(userId));
 
@@ -44,7 +44,7 @@ namespace Vokabular.MainService.Core.Managers
             using (var client = m_communicationProvider.GetAuthenticationServiceClient())
             {
                 var authUser = client.GetUser(user.ExternalId);
-                return Mapper.Map<List<UserGroupContract>>(authUser.Roles);
+                return Mapper.Map<List<RoleContract>>(authUser.Roles);
             }
         }
 
@@ -62,7 +62,7 @@ namespace Vokabular.MainService.Core.Managers
             return new CreateRoleWork(m_permissionRepository, m_communicationProvider, roleName, description).Execute();
         }
 
-        public UserGroupContract GetRoleDetail(int roleId)
+        public RoleContract GetRoleDetail(int roleId)
         {
             using (var client = m_communicationProvider.GetAuthenticationServiceClient())
             {
@@ -70,7 +70,7 @@ namespace Vokabular.MainService.Core.Managers
                 if (role == null)
                     return null;
 
-                return Mapper.Map<UserGroupContract>(role);
+                return Mapper.Map<RoleContract>(role);
             }
         }
 
@@ -89,7 +89,7 @@ namespace Vokabular.MainService.Core.Managers
             new AddUserToRoleWork(m_permissionRepository, m_communicationProvider, userId, roleId).Execute();
         }
 
-        public List<UserGroupContract> GetRoleAutocomplete(string query, int? count)
+        public List<RoleContract> GetRoleAutocomplete(string query, int? count)
         {
             if (query == null)
                 query = string.Empty;
@@ -99,7 +99,7 @@ namespace Vokabular.MainService.Core.Managers
             using (var client = m_communicationProvider.GetAuthenticationServiceClient())
             {
                 var result = client.GetListRole(query, countValue);
-                return Mapper.Map<List<UserGroupContract>>(result.Items);
+                return Mapper.Map<List<RoleContract>>(result.Items);
             }
         }
     }

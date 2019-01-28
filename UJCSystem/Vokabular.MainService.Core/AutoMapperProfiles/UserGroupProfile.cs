@@ -8,7 +8,7 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
     {
         public UserGroupProfile()
         {
-            CreateMap<UserGroup, UserGroupContract>()
+            CreateMap<UserGroup, RoleContract>()
                 .ForMember(m => m.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(m => m.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(m => m.Description, opt => opt.MapFrom(src => src.Description));
