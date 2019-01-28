@@ -19,14 +19,13 @@ namespace Vokabular.MainService.Core.Managers
 
         private readonly UserRepository m_userRepository;
         private readonly PermissionRepository m_permissionRepository;
-        private readonly AuthorizationManager m_authorizationManager;
+
         private readonly CommunicationProvider m_communicationProvider;
 
-        public RoleManager(UserRepository userRepository, PermissionRepository permissionRepository, AuthorizationManager authorizationManager, CommunicationProvider communicationProvider)
+        public RoleManager(UserRepository userRepository, PermissionRepository permissionRepository, CommunicationProvider communicationProvider)
         {
             m_userRepository = userRepository;
             m_permissionRepository = permissionRepository;
-            m_authorizationManager = authorizationManager;
             m_communicationProvider = communicationProvider;
         }
 
@@ -60,8 +59,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public int CreateRole(string roleName, string description)
         {
-            var userId = m_authorizationManager.GetCurrentUserId();
-            return new CreateRoleWork(m_permissionRepository, m_communicationProvider, roleName, description, userId).Execute();
+            return new CreateRoleWork(m_permissionRepository, m_communicationProvider, roleName, description).Execute();
         }
 
         public UserGroupContract GetRoleDetail(int roleId)

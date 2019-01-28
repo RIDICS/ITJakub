@@ -12,10 +12,6 @@
     <property name="Description" not-null="false" />
 
     <property name="CreateTime" not-null="true" type="UtcDateTime" />
-
-    <many-to-one name="CreatedBy" not-null="false">
-      <column name="CreatedBy" sql-type="bigint" />
-    </many-to-one>
     
     <property name="ExternalId" not-null="false" />
 

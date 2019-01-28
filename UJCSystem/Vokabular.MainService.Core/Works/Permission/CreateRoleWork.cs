@@ -13,21 +13,18 @@ namespace Vokabular.MainService.Core.Works.Permission
         private readonly CommunicationProvider m_communicationProvider;
         private readonly string m_roleName;
         private readonly string m_description;
-        private readonly int m_userId;
 
-        public CreateRoleWork(PermissionRepository permissionRepository, CommunicationProvider communicationProvider, string roleName, string description, int userId) : base(permissionRepository)
+        public CreateRoleWork(PermissionRepository permissionRepository, CommunicationProvider communicationProvider, string roleName, string description) : base(permissionRepository)
         {
             m_permissionRepository = permissionRepository;
             m_communicationProvider = communicationProvider;
             m_roleName = roleName;
             m_description = description;
-            m_userId = userId;
         }
 
         protected override int ExecuteWorkImplementation()
         {
             var now = DateTime.UtcNow;
-            var user = m_permissionRepository.Load<User>(m_userId);
 
             using (var client = m_communicationProvider.GetAuthenticationServiceClient())
             {
@@ -44,7 +41,6 @@ namespace Vokabular.MainService.Core.Works.Permission
                     Name = m_roleName,
                     Description = m_description,
                     CreateTime = now,
-                    CreatedBy = user,
                     ExternalId = roleId
                 };
 

@@ -17,7 +17,6 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             var group = GetSession().QueryOver<UserGroup>()
                 .Fetch(g => g.Users).Eager
-                .Fetch(g => g.CreatedBy).Eager
                 .Where(g => g.Id == groupId)
                 .SingleOrDefault();
 
@@ -28,7 +27,6 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             var group = GetSession().QueryOver<UserGroup>()
                 .Fetch(g => g.Users).Eager
-                .Fetch(g => g.CreatedBy).Eager
                 .Where(g => g.ExternalId == externalId)
                 .SingleOrDefault();
 

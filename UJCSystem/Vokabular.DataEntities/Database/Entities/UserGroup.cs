@@ -13,8 +13,6 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual DateTime CreateTime { get; set; }
 
-        public virtual User CreatedBy { get; set; }
-
         public virtual int ExternalId { get; set; }
 
         public virtual IList<User> Users { get; set; }
