@@ -51,9 +51,22 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
+        public User GetCurrentUser()
+        {
+            var externalUser = m_httpContextAccessor.HttpContext.User;
+            var user = m_userRepository.InvokeUnitOfWork(x => x.GetUserByExternalId(externalUser.GetId()));
+
+            if (user == null)
+            {
+                throw new AuthenticationException("Invalid external user id.");
+            }
+
+            return user;
+        }
+
         public int GetCurrentUserId()
         {
-            return GetCurrentUser(false).Id;
+            return GetCurrentUser().Id;
         }
 
         public IList<Claim> GetCurrentUserPermissions(bool returnDefaultIfNull)
@@ -62,7 +75,7 @@ namespace Vokabular.MainService.Core.Managers
             {
                 return m_httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == CustomClaimTypes.Permission).ToList();
             }
-            
+
             return m_defaultUserProvider.GetDefaultUserPermissions();
         }
     }

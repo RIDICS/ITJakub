@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using NHibernate.Util;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
@@ -12,8 +11,6 @@ namespace Vokabular.MainService.Core.Managers.Authentication
 {
     public class DefaultUserProvider
     {
-        private const string RegisteredUsersGroupName = "RegisteredUsersGroup";
-        private const string UnregisteredUsersGroupName = "UnregisteredUsersGroup";
         private const string Unregistered = "Unregistered";
 
         private readonly UserRepository m_userRepository;
@@ -35,15 +32,8 @@ namespace Vokabular.MainService.Core.Managers.Authentication
         public UserGroup GetDefaultUnregisteredUserGroup()
         {
             return m_userRepository.UnitOfWork.CurrentSession == null
-                ? m_userRepository.InvokeUnitOfWork(x => x.GetDefaultGroupOrCreate(UnregisteredUsersGroupName))
-                : m_userRepository.GetDefaultGroupOrCreate(UnregisteredUsersGroupName);
-        }
-        
-        public UserGroup GetDefaultRegisteredUserGroup()
-        {
-            return m_userRepository.UnitOfWork.CurrentSession == null
-                ? m_userRepository.InvokeUnitOfWork(x => x.GetDefaultGroupOrCreate(RegisteredUsersGroupName))
-                : m_userRepository.GetDefaultGroupOrCreate(RegisteredUsersGroupName);
+                ? m_userRepository.InvokeUnitOfWork(x => x.GetDefaultGroupOrCreate(Unregistered))
+                : m_userRepository.GetDefaultGroupOrCreate(Unregistered);
         }
 
         public IList<Claim> GetDefaultUserPermissions()

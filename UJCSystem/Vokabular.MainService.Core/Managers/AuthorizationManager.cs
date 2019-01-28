@@ -49,13 +49,21 @@ namespace Vokabular.MainService.Core.Managers
 
         public void CheckUserCanViewCardFile(string cardFileId)
         {
-            var user = m_authenticationManager.GetCurrentUser(true);
-
             var currentUserPermissions = m_authenticationManager.GetCurrentUserPermissions(true);
             if (currentUserPermissions.All(x => x.Value != PermissionNames.CardFile + cardFileId))
             {
-                throw new UnauthorizedException(
-                    $"User with id '{user.Id}' (external id '{user.ExternalId}')  does not have permission to read cardfile with id '{cardFileId}'");
+                try
+                {
+                    var user = m_authenticationManager.GetCurrentUser();
+
+                    throw new UnauthorizedException(
+                        $"User with id '{user.Id}' (external id '{user.ExternalId}')  does not have permission to read cardfile with id '{cardFileId}'");
+                }
+                catch (AuthenticationException)
+                {
+                    throw new UnauthorizedException(
+                        $"Unregistered user does not have permission to read cardfile with id '{cardFileId}'");
+                }
             }
         }
 
