@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using ITJakub.Web.Hub.Authentication;
 using ITJakub.Web.Hub.Authorization;
 using Localization.AspNetCore.Service.Extensions;
 using Localization.CoreLibrary.Dictionary.Factory;
@@ -61,6 +62,7 @@ namespace ITJakub.Web.Hub
                     options.AccessDeniedPath = "/Account/AccessDenied/";
                     options.LoginPath = "/Account/Login";
                 })
+                .AddAutomaticTokenManagement()
                 .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
                 {
                     options.Authority = openIdConnectConfig.Url;
@@ -72,6 +74,7 @@ namespace ITJakub.Web.Hub
                     options.Scope.Clear();
                     options.Scope.Add("openid");
                     options.Scope.Add("profile");
+                    options.Scope.Add("offline_access");
 
                     options.ClaimActions.MapJsonKey(ClaimTypes.Role, "role");
                     options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");

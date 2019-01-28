@@ -1,5 +1,6 @@
 using System.ServiceModel;
 using ITJakub.Lemmatization.Shared.Contracts;
+using ITJakub.Web.Hub.Authentication;
 using ITJakub.Web.Hub.Core.Managers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -14,7 +15,6 @@ namespace ITJakub.Web.Hub.Core.Communication
 
         private const string MainServiceEndpointName = "MainService";
         private const string LemmatizationServiceEndpointName = "LemmatizationService";
-        private const string AuthenticationTokenName = "access_token";
 
         public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider, IHttpContextAccessor httpContextAccessor)
         {
@@ -24,7 +24,7 @@ namespace ITJakub.Web.Hub.Core.Communication
 
         private string GetCommunicationToken()
         {
-            var communicationToken = m_httpContextAccessor.HttpContext.GetTokenAsync(AuthenticationTokenName)
+            var communicationToken = m_httpContextAccessor.HttpContext.GetTokenAsync(OidcConstants.AccessToken)
                 .GetAwaiter().GetResult();
             return communicationToken;
         }
