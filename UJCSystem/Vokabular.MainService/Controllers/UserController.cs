@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,11 +21,16 @@ namespace Vokabular.MainService.Controllers
     {
         private readonly UserManager m_userManager;
         private readonly RoleManager m_roleManager;
+        private readonly AuthenticationManager m_authenticationManager;
+        private readonly UserDetailManager m_userDetailManager;
 
-        public UserController(UserManager userManager, RoleManager roleManager)
+        public UserController(UserManager userManager, RoleManager roleManager, AuthenticationManager authenticationManager,
+            UserDetailManager userDetailManager)
         {
             m_userManager = userManager;
             m_roleManager = roleManager;
+            m_authenticationManager = authenticationManager;
+            m_userDetailManager = userDetailManager;
         }
 
         [HttpPost("")]
@@ -55,6 +61,13 @@ namespace Vokabular.MainService.Controllers
             {
                 return StatusCode(exception.StatusCode, exception.Message);
             }
+        }
+
+        [HttpGet("current")]
+        public UserDetailContract GetCurrentUser()
+        {
+            var user = m_authenticationManager.GetCurrentUser();
+            return m_userDetailManager.GetUserDetailContractForUser(user);
         }
 
         [HttpPut("current")]
@@ -96,14 +109,14 @@ namespace Vokabular.MainService.Controllers
             return result.List;
         }
 
-        [Authorize(PermissionNames.ManagePermissions)]
+        //[Authorize(PermissionNames.ManagePermissions)]
         [HttpGet("{userId}/detail")]
         public UserDetailContract GetUserDetail(int userId)
         {
             var result = m_userManager.GetUserDetail(userId);
             return result;
         }
-        
+
         [HttpGet("{userId}/role")]
         public List<RoleContract> GetRolesByUser(int userId)
         {

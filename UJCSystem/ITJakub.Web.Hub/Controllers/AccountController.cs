@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using AutoMapper;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -15,7 +16,7 @@ namespace ITJakub.Web.Hub.Controllers
     public class AccountController : BaseController
     {
         public AccountController(CommunicationProvider communicationProvider) : base(communicationProvider)
-        {  
+        {
         }
 
         //
@@ -88,12 +89,75 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         //
+        // GET: /Account/AccountDetail
+        public IActionResult AccountSettings()
+        {
+            using (var client = GetRestClient())
+            {
+                var user = client.GetCurrentUser();
+                return View(Mapper.Map<AccountDetailViewModel>(user));
+            }
+        }
+
+        //
+        // POST: /Account/UpdateAccount
+        [HttpPost]
+        [RequireHttps]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdateAccount(UpdateAccountViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var client = GetRestClient())
+                {
+                    UpdateUserContract updateUserContract = new UpdateUserContract
+                    {
+                        AvatarUrl = null, //TODO
+                        Email = model.Email,
+                        FirstName = model.FirstName,
+                        LastName = model.LastName
+                    };
+
+                    client.UpdateCurrentUser(updateUserContract);
+                    return Ok();
+                }
+            }
+
+            return PartialView("Settings/_UpdateAccount", model);
+        }
+
+        //
+        // POST: /Account/UpdatePassword
+        [HttpPost]
+        [RequireHttps]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdatePassword(UpdatePasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var client = GetRestClient())
+                {
+                    UpdateUserPasswordContract updateUserPasswordContract = new UpdateUserPasswordContract
+                    {
+                        NewPassword = model.Password,
+                        OldPassword = model.OldPassword
+                    };
+
+                    client.UpdateCurrentPassword(updateUserPasswordContract);
+                    return Ok();
+                }
+            }
+
+            return PartialView("Settings/_UpdatePassword", model);
+        }
+
+        //
         // POST: /Account/LogOut
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult LogOut()
         {
-            return new SignOutResult(new[] { CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme });
+            return new SignOutResult(new[] {CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme});
         }
 
 
@@ -102,7 +166,7 @@ namespace ITJakub.Web.Hub.Controllers
         [HttpPost]
         public IActionResult ClientLogOut()
         {
-            return new SignOutResult(new[] { CookieAuthenticationDefaults.AuthenticationScheme });
+            return new SignOutResult(new[] {CookieAuthenticationDefaults.AuthenticationScheme});
         }
 
         [AllowAnonymous]
@@ -118,6 +182,7 @@ namespace ITJakub.Web.Hub.Controllers
                 ModelState.AddModelError(string.Empty, exception.Message);
                 return;
             }
+
             foreach (var error in exception.ValidationErrors)
             {
                 ModelState.AddModelError(string.Empty, error.Message);
@@ -130,6 +195,7 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 return Redirect(returnUrl);
             }
+
             return RedirectToAction("Index", "Home");
         }
     }

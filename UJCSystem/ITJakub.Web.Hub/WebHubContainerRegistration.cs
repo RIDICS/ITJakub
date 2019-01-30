@@ -20,6 +20,7 @@ namespace ITJakub.Web.Hub
             container.AddPerWebRequest<IMarkdownToHtmlConverter, MarkdigMarkdownToHtmlConverter>();
 
             // AutoMapper profiles
+            container.AddSingleton<Profile, AccountDetailProfile>();
             container.AddSingleton<Profile, ConditionCriteriaDescriptionProfile>();
             container.AddSingleton<Profile, DatingCriteriaDescriptionProfile>();
             container.AddSingleton<Profile, DatingListCriteriaDescriptionProfile>();
