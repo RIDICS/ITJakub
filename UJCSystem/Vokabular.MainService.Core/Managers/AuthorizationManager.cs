@@ -10,6 +10,7 @@ using Vokabular.MainService.DataContracts.Contracts.CardFile;
 using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Types;
+using AuthenticationException = System.Security.Authentication.AuthenticationException;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -80,36 +81,73 @@ namespace Vokabular.MainService.Core.Managers
 
         public void FilterProjectIdList(ref IList<long> projectIds)
         {
-            var user = m_authenticationManager.GetCurrentUser(true);
-
             if (projectIds == null || projectIds.Count == 0)
             {
                 return;
             }
 
-            var filtered = m_permissionRepository.GetFilteredBookIdListByUserPermissions(user.Id, projectIds);
+            IList<long> filtered;
+            try
+            {
+                var user = m_authenticationManager.GetCurrentUser();
+                filtered = m_permissionRepository.GetFilteredBookIdListByUserPermissions(user.Id, projectIds);
+            }
+            catch (AuthenticationException)
+            {
+                var role = m_authenticationManager.GetUnregisteredRole();
+                var group = m_permissionRepository.FindGroupByExternalId(role.Id);
+                filtered = m_permissionRepository.GetFilteredBookIdListByGroupPermissions(group.Id, projectIds);                
+            }
+
             projectIds = filtered;
         }
 
         public void AuthorizeBook(long projectId)
         {
-            var user = m_authenticationManager.GetCurrentUser(true);
-            var filtered = m_permissionRepository.InvokeUnitOfWork(x => x.GetFilteredBookIdListByUserPermissions(user.Id, new List<long> { projectId }));
-
-            if (filtered == null || filtered.Count == 0)
+            try
             {
-                throw new UnauthorizedException($"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission on book with id '{projectId}'");
+                var user = m_authenticationManager.GetCurrentUser();
+                var filtered = m_permissionRepository.InvokeUnitOfWork(x => x.GetFilteredBookIdListByUserPermissions(user.Id, new List<long> { projectId }));
+                if (filtered == null || filtered.Count == 0)
+                {
+                    throw new UnauthorizedException($"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission on book with id '{projectId}'");
+                }
+            }
+            catch (AuthenticationException)
+            {
+                var role = m_authenticationManager.GetUnregisteredRole();
+                var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalId(role.Id));
+                var filtered = m_permissionRepository.InvokeUnitOfWork(x => x.GetFilteredBookIdListByGroupPermissions(group.Id, new List<long> { projectId }));
+
+                if (filtered == null || filtered.Count == 0)
+                {
+                    throw new UnauthorizedException($"Unregistered user does not have permission on book with id '{projectId}'");
+                }
             }
         }
 
         public void AuthorizeResource(long resourceId)
         {
-            var user = m_authenticationManager.GetCurrentUser(true);
-            var filtered = m_permissionRepository.InvokeUnitOfWork(x => x.GetResourceByUserPermissions(user.Id, resourceId));
-
-            if (filtered == null)
+            try
             {
-                throw new UnauthorizedException($"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission on book with resource with id '{resourceId}'");
+                var user = m_authenticationManager.GetCurrentUser();
+                var filtered = m_permissionRepository.InvokeUnitOfWork(x => x.GetResourceByUserPermissions(user.Id, resourceId));
+
+                if (filtered == null)
+                {
+                    throw new UnauthorizedException($"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission on book with resource with id '{resourceId}'");
+                }
+            }
+            catch (AuthenticationException)
+            {
+                var role = m_authenticationManager.GetUnregisteredRole();
+                var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalId(role.Id));
+                var filtered = m_permissionRepository.InvokeUnitOfWork(x => x.GetResourceByUserGroupPermissions(group.Id, resourceId));
+
+                if (filtered == null)
+                {
+                    throw new UnauthorizedException($"Unregistered user does not have permission on book with resource with id '{resourceId}'");
+                }
             }
         }
     }

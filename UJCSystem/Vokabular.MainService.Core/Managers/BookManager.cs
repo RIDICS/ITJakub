@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using AutoMapper;
 using Vokabular.Core.Storage;
 using Vokabular.DataEntities.Database.Entities;
@@ -27,12 +28,14 @@ namespace Vokabular.MainService.Core.Managers
         private readonly FileSystemManager m_fileSystemManager;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
         private readonly AuthorizationManager m_authorizationManager;
+        private readonly AuthenticationManager m_authenticationManager;
         private readonly CategoryRepository m_categoryRepository;
         private readonly BookTypeEnum[] m_filterBookType;
 
         public BookManager(MetadataRepository metadataRepository, CategoryRepository categoryRepository,
             BookRepository bookRepository, ResourceRepository resourceRepository, PermissionRepository permissionRepository,
-            FileSystemManager fileSystemManager, FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager)
+            FileSystemManager fileSystemManager, FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager,
+            AuthenticationManager authenticationManager)
         {
             m_metadataRepository = metadataRepository;
             m_bookRepository = bookRepository;
@@ -41,6 +44,7 @@ namespace Vokabular.MainService.Core.Managers
             m_fileSystemManager = fileSystemManager;
             m_fulltextStorageProvider = fulltextStorageProvider;
             m_authorizationManager = authorizationManager;
+            m_authenticationManager = authenticationManager;
             m_categoryRepository = categoryRepository;
             m_filterBookType = new[] {BookTypeEnum.CardFile};
         }
@@ -48,8 +52,19 @@ namespace Vokabular.MainService.Core.Managers
         public List<BookWithCategoriesContract> GetBooksByTypeForUser(BookTypeEnumContract bookType)
         {
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
-            var userId = m_authorizationManager.GetCurrentUserId();
-            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByBookType(bookTypeEnum, userId));
+            IList<MetadataResource> dbMetadataList;
+            try
+            {
+                var userId = m_authenticationManager.GetCurrentUserId();
+                dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByBookType(bookTypeEnum, userId));
+            }
+            catch (AuthenticationException)
+            {
+                var role = m_authenticationManager.GetUnregisteredRole();
+                var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalId(role.Id));
+                dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataForUserGroup(bookTypeEnum, group.Id));
+            }
+            
             var resultList = Mapper.Map<List<BookWithCategoriesContract>>(dbMetadataList);
             return resultList;
         }

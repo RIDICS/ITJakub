@@ -6,6 +6,7 @@ using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using System.Security.Authentication;
 using System.Security.Claims;
+using Vokabular.Authentication.DataContracts;
 using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.Shared.AspNetCore.Extensions;
 using Vokabular.Shared.Const;
@@ -62,6 +63,11 @@ namespace Vokabular.MainService.Core.Managers
             }
 
             return user;
+        }
+
+        public RoleContract GetUnregisteredRole()
+        {
+            return m_defaultUserProvider.GetDefaultUnregisteredRole();
         }
 
         public int GetCurrentUserId()

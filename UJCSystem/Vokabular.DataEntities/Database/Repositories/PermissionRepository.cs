@@ -118,7 +118,24 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             return filteredResource;
         }
-        
+
+        public virtual Resource GetResourceByUserGroupPermissions(int groupId, long resourceId)
+        {
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+            Permission permissionAlias = null;
+            UserGroup groupAlias = null;
+
+            var filteredResource = GetSession().QueryOver(() => resourceAlias)
+                .JoinQueryOver(x => x.Project, () => projectAlias)
+                .JoinQueryOver(x => x.Permissions, () => permissionAlias)
+                .JoinQueryOver(x => x.UserGroup, () => groupAlias)
+                .Where(() => groupAlias.Id == groupId && resourceAlias.Id == resourceId)
+                .SingleOrDefault();
+
+            return filteredResource;
+        }
+
         public virtual IList<Permission> FindPermissionsByGroupAndBooks(int groupId, IList<long> bookIds)
         {
             Project projectAlias = null;

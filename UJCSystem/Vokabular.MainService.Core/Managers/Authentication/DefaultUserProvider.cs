@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using Vokabular.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
@@ -43,6 +44,15 @@ namespace Vokabular.MainService.Core.Managers.Authentication
             {
                 var permissions = client.GetAllRoles().First(role => role.Name == Unregistered).Permissions;
                 return permissions.Select(perm => new Claim(CustomClaimTypes.Permission, perm.Name)).ToList();
+            }
+        }
+
+        public RoleContract GetDefaultUnregisteredRole()
+        {
+            //TODO get role by name
+            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
+            {
+                return client.GetAllRoles().First(role => role.Name == Unregistered);
             }
         }
     }
