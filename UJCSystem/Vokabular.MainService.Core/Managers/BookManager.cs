@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Authentication;
 using AutoMapper;
 using Vokabular.Core.Storage;
 using Vokabular.DataEntities.Database.Entities;
@@ -53,18 +52,18 @@ namespace Vokabular.MainService.Core.Managers
         {
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
             IList<MetadataResource> dbMetadataList;
-            try
+            var user = m_authenticationManager.GetCurrentUser();
+            if (user != null)
             {
-                var userId = m_authenticationManager.GetCurrentUserId();
-                dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByBookType(bookTypeEnum, userId));
+                dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByBookType(bookTypeEnum, user.Id));
             }
-            catch (AuthenticationException)
+            else
             {
                 var role = m_authenticationManager.GetUnregisteredRole();
                 var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalId(role.Id));
                 dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataForUserGroup(bookTypeEnum, group.Id));
             }
-            
+
             var resultList = Mapper.Map<List<BookWithCategoriesContract>>(dbMetadataList);
             return resultList;
         }

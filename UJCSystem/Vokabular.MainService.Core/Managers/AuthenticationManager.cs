@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
-using System.Security.Authentication;
 using System.Security.Claims;
 using Vokabular.Authentication.DataContracts;
 using Vokabular.MainService.Core.Managers.Authentication;
@@ -29,40 +28,26 @@ namespace Vokabular.MainService.Core.Managers
 
         public User GetCurrentUser(bool returnDefaultIfNull)
         {
-            try
+            var id = m_httpContextAccessor.HttpContext.User.GetId();
+
+            if (id.HasValue)
             {
-                var externalUser = m_httpContextAccessor.HttpContext.User;
-                var user = m_userRepository.InvokeUnitOfWork(x => x.GetUserByExternalId(externalUser.GetId()));
-
-                if (user == null)
-                {
-                    throw new AuthenticationException("Invalid external user id.");
-                }
-
-                return user;
+                return m_userRepository.InvokeUnitOfWork(x => x.GetUserByExternalId(id.Value));
             }
-            catch (AuthenticationException)
+
+            if (returnDefaultIfNull)
             {
-                if (returnDefaultIfNull)
-                {
-                    return m_defaultUserProvider.GetDefaultUser();
-                }
-
-                throw;
+                return m_defaultUserProvider.GetDefaultUser();
             }
+
+            return null;
         }
 
         public User GetCurrentUser()
         {
-            var externalUser = m_httpContextAccessor.HttpContext.User;
-            var user = m_userRepository.InvokeUnitOfWork(x => x.GetUserByExternalId(externalUser.GetId()));
+            var id = m_httpContextAccessor.HttpContext.User.GetId();
 
-            if (user == null)
-            {
-                throw new AuthenticationException("Invalid external user id.");
-            }
-
-            return user;
+            return id.HasValue ? m_userRepository.InvokeUnitOfWork(x => x.GetUserByExternalId(id.Value)) : null;
         }
 
         public RoleContract GetUnregisteredRole()

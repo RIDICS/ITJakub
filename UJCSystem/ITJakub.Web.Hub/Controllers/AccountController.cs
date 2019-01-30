@@ -27,7 +27,7 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 using (var client = GetRestClient())
                 {
-                    client.CreateUserIfNotExist(HttpContext.User.GetId());
+                    client.CreateUserIfNotExist(HttpContext.User.GetId().GetValueOrDefault());
                 }
 
                 return RedirectToLocal("");
