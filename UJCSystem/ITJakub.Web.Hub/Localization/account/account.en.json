@@ -16,7 +16,11 @@
 
     "Detail": "Account detail",
     "Settings": "Account settings",
+
     "DataChange": "Update data",
-    "PasswordChange": "Update password"
+    "UpdateAccountSubmit": "Save changes",
+
+    "PasswordChange": "Update password",
+    "UpdatePasswordSubmit": "Change password"
   }
 }

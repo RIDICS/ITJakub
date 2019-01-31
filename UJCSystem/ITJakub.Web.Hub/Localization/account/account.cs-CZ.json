@@ -16,7 +16,11 @@
 
     "Detail": "Detail účtu",
     "Settings": "Nastavení účtu",
+
     "DataChange": "Změna údajů",
-    "PasswordChange": "Změna hesla"
+    "UpdateAccountSubmit": "Uložit změny",
+
+    "PasswordChange": "Změna hesla",
+    "UpdatePasswordSubmit": "Změnit heslo"
   }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models;
@@ -89,13 +90,16 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         //
-        // GET: /Account/AccountDetail
+        // GET: /Account/AccountSettings
         public IActionResult AccountSettings()
         {
             using (var client = GetRestClient())
             {
                 var user = client.GetCurrentUser();
-                return View(Mapper.Map<AccountDetailViewModel>(user));
+                var viewmodel = Mapper.Map<AccountDetailViewModel>(user);
+                viewmodel.UpdateAccountViewModel = Mapper.Map<UpdateAccountViewModel>(user);
+                viewmodel.UpdatePasswordViewModel = null;
+                return View(viewmodel);
             }
         }
 
@@ -108,22 +112,30 @@ namespace ITJakub.Web.Hub.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (var client = GetRestClient())
+                try
                 {
-                    UpdateUserContract updateUserContract = new UpdateUserContract
+                    using (var client = GetRestClient())
                     {
-                        AvatarUrl = null, //TODO
-                        Email = model.Email,
-                        FirstName = model.FirstName,
-                        LastName = model.LastName
-                    };
+                        UpdateUserContract updateUserContract = new UpdateUserContract
+                        {
+                            AvatarUrl = null, //TODO
+                            Email = model.Email,
+                            FirstName = model.FirstName,
+                            LastName = model.LastName
+                        };
 
-                    client.UpdateCurrentUser(updateUserContract);
-                    return Ok();
+                        client.UpdateCurrentUser(updateUserContract);
+                        return Ok();
+                    }
+                }
+                catch (HttpErrorCodeException e)
+                {
+                    AddErrors(e);
                 }
             }
 
-            return PartialView("Settings/_UpdateAccount", model);
+            var viewModel = new AccountDetailViewModel {UpdateAccountViewModel = model};
+            return View("AccountSettings", viewModel);
         }
 
         //
@@ -135,20 +147,28 @@ namespace ITJakub.Web.Hub.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (var client = GetRestClient())
+                try
                 {
-                    UpdateUserPasswordContract updateUserPasswordContract = new UpdateUserPasswordContract
+                    using (var client = GetRestClient())
                     {
-                        NewPassword = model.Password,
-                        OldPassword = model.OldPassword
-                    };
+                        UpdateUserPasswordContract updateUserPasswordContract = new UpdateUserPasswordContract
+                        {
+                            NewPassword = model.Password,
+                            OldPassword = model.OldPassword
+                        };
 
-                    client.UpdateCurrentPassword(updateUserPasswordContract);
-                    return Ok();
+                        client.UpdateCurrentPassword(updateUserPasswordContract);
+                        return Ok();
+                    }
+                }
+                catch (HttpErrorCodeException e)
+                {
+                    AddErrors(e);
                 }
             }
 
-            return PartialView("Settings/_UpdatePassword", model);
+            var viewModel = new AccountDetailViewModel { UpdatePasswordViewModel = model };
+            return View("AccountSettings", viewModel);
         }
 
         //

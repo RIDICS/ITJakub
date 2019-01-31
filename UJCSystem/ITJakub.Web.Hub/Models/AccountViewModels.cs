@@ -63,6 +63,10 @@ namespace ITJakub.Web.Hub.Models
 
         [Display(Name = "LastName")]
         public string LastName { get; set; }
+
+        public UpdateAccountViewModel UpdateAccountViewModel;
+
+        public UpdatePasswordViewModel UpdatePasswordViewModel;
     }
 
     public class UpdateAccountViewModel

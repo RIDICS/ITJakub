@@ -42,16 +42,12 @@ namespace Vokabular.MainService.Core.Managers
         {
             var userId = m_authenticationManager.GetCurrentUserId();
 
-            // TODO add data validation
-
             new UpdateCurrentUserWork(m_userRepository, userId, data, m_communicationProvider).Execute();
         }
 
         public void UpdateUserPassword(UpdateUserPasswordContract data)
         {
             var userId = m_authenticationManager.GetCurrentUserId();
-
-            // TODO add data validation
 
             new UpdateUserPasswordWork(m_userRepository, userId, data, m_communicationProvider).Execute();
         }

@@ -392,10 +392,18 @@ namespace Vokabular.RestClient
             var responseStatusCode = response.StatusCode;
             var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
-            if (responseStatusCode == HttpStatusCode.BadRequest && TryDeserializeValidationResult(responseContent, out var validationResult))
+            if (responseStatusCode == HttpStatusCode.BadRequest &&
+                TryDeserializeValidationResult(responseContent, out var validationResult))
             {
                 throw new HttpErrorCodeException(validationResult.Message, responseStatusCode, validationResult.Errors);
             }
+
+            if (responseStatusCode == HttpStatusCode.BadRequest &&
+                TryDeserializeExceptionContract(responseContent, out var exceptionContract))
+            {
+                throw new HttpErrorCodeException(exceptionContract.Description, responseStatusCode, null);
+            }
+
 
             var exceptionMessage = GetExceptionMessage(responseContent, responseStatusCode);
             throw new HttpErrorCodeException(exceptionMessage, response.StatusCode);
@@ -403,7 +411,27 @@ namespace Vokabular.RestClient
 
         private bool TryDeserializeValidationResult(string responseContent, out ValidationResultContract validationResult)
         {
-            validationResult = null;
+            if (TryDeserialize(responseContent, out validationResult))
+            {
+                return !string.IsNullOrEmpty(validationResult.Message) || validationResult.Errors != null;
+            }
+
+            return false;
+        }
+
+        private bool TryDeserializeExceptionContract(string responseContent, out ContractException validationResult)
+        {
+            if(TryDeserialize(responseContent, out validationResult))
+            {
+                return !string.IsNullOrEmpty(validationResult.Code) || !string.IsNullOrEmpty(validationResult.Description);
+            }
+
+            return false;
+        }
+
+        private bool TryDeserialize<T>(string responseContent, out T validationResult)
+        {
+            validationResult = default(T);
             if (!(responseContent.StartsWith("{") && responseContent.EndsWith("}")))
             {
                 return false;
@@ -411,7 +439,7 @@ namespace Vokabular.RestClient
 
             try
             {
-                var result = responseContent.Deserialize<ValidationResultContract>();
+                var result = responseContent.Deserialize<T>();
                 validationResult = result;
                 return true;
             }
