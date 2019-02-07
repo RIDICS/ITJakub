@@ -4,20 +4,20 @@
 
 @inject ILocalization Localizer
 @{
-    ViewBag.Title = Localizer.Translate("Settings", "account");
+    ViewBag.Title = Localizer.Translate("Settings", "Account");
 }
 
 <div class="content-container top-offset-without-submenu">
     <h2>@ViewBag.Title</h2>
     <ul class="nav nav-tabs" role="tablist" id="project-work-tabs">
         <li role="presentation" @(Context.Request.GetDisplayUrl().Contains("AccountSettings") ? "class=\"active\"" : string.Empty)>
-            <a href="#account-settings" data-toggle="tab" role="tab">@Localizer.Translate("Detail", "account")</a>
+            <a href="#account-settings" data-toggle="tab" role="tab">@Localizer.Translate("Detail", "Account")</a>
         </li>
         <li role="presentation" @(Context.Request.GetDisplayUrl().Contains("UpdateAccount") ? "class=\"active\"" : string.Empty)>
-            <a href="#update-account" data-toggle="tab" role="tab">@Localizer.Translate("DataChange", "account")</a>
+            <a href="#update-account" data-toggle="tab" role="tab">@Localizer.Translate("DataChange", "Account")</a>
         </li>
         <li role="presentation" @(Context.Request.GetDisplayUrl().Contains("UpdatePassword") ? "class=\"active\"" : string.Empty)>
-            <a href="#update-password" data-toggle="tab" role="tab">@Localizer.Translate("PasswordChange", "account")</a>
+            <a href="#update-password" data-toggle="tab" role="tab">@Localizer.Translate("PasswordChange", "Account")</a>
         </li>
     </ul>
 

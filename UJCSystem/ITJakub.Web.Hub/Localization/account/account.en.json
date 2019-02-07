@@ -1,6 +1,6 @@
 {
 	"culture":"en",
-	"scope":"account",
+	"scope":"Account",
   "dictionary": {
     "UseExternalLoginService": "Use another service for login",
     "UseExternalLoginService-placeholder": "You should be able to register using another accounts here",

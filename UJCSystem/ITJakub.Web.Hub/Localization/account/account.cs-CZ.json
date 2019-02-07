@@ -1,6 +1,6 @@
 {
 	"culture":"cs-CZ",
-	"scope":"account",
+	"scope":"Account",
   "dictionary": {
     "UseExternalLoginService": "Použít jinou službu pro přihlášení",
     "UseExternalLoginService-placeholder": "Zde by mělo být možné se zaregistrovat pomocí jiných účtu",
