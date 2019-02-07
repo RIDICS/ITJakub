@@ -1,37 +1,36 @@
 ﻿@using Localization.AspNetCore.Service
-@using Microsoft.AspNetCore.Http.Extensions
 @model ITJakub.Web.Hub.Models.AccountDetailViewModel
 
 @inject ILocalization Localizer
 @{
     ViewBag.Title = Localizer.Translate("Settings", "Account");
+    ViewData.TryGetValue("ActualTab", out var value);
+    var actualTab = (string) value;
 }
 
 <div class="content-container top-offset-without-submenu">
     <h2>@ViewBag.Title</h2>
     <ul class="nav nav-tabs" role="tablist" id="project-work-tabs">
-        <li role="presentation" @(Context.Request.GetDisplayUrl().Contains("AccountSettings") ? "class=\"active\"" : string.Empty)>
+        <li role="presentation" @(!ViewData.ContainsKey("ActualTab") ? "class=active" : string.Empty)>
             <a href="#account-settings" data-toggle="tab" role="tab">@Localizer.Translate("Detail", "Account")</a>
         </li>
-        <li role="presentation" @(Context.Request.GetDisplayUrl().Contains("UpdateAccount") ? "class=\"active\"" : string.Empty)>
+        <li role="presentation" @(actualTab == "UpdateAccount" ? "class=active" : string.Empty)>
             <a href="#update-account" data-toggle="tab" role="tab">@Localizer.Translate("DataChange", "Account")</a>
         </li>
-        <li role="presentation" @(Context.Request.GetDisplayUrl().Contains("UpdatePassword") ? "class=\"active\"" : string.Empty)>
+        <li role="presentation" @(actualTab == "UpdatePassword" ? "class=active" : string.Empty)>
             <a href="#update-password" data-toggle="tab" role="tab">@Localizer.Translate("PasswordChange", "Account")</a>
         </li>
     </ul>
 
     <div class="tab-content">
-        <div role="tabpanel" class="tab-pane @(Context.Request.GetDisplayUrl().Contains("AccountSettings") ? "active" : string.Empty)" id="account-settings">
+        <div role="tabpanel" class="tab-pane @(!ViewData.ContainsKey("ActualTab") ? "active" : string.Empty)" id="account-settings">
             @Html.Partial("Settings/_Detail", Model)
         </div>
-        <div role="tabpanel" class="tab-pane @(Context.Request.GetDisplayUrl().Contains("UpdateAccount") ? "active" : string.Empty)" id="update-account">
+        <div role="tabpanel" class="tab-pane @(actualTab == "UpdateAccount" ? "active" : string.Empty)" id="update-account">
             @Html.Partial("Settings/_UpdateAccount", Model.UpdateAccountViewModel)
         </div>
-        <div role="tabpanel" class="tab-pane @(Context.Request.GetDisplayUrl().Contains("UpdatePassword") ? "active" : string.Empty)" id="update-password">
+        <div role="tabpanel" class="tab-pane @(actualTab == "UpdatePassword" ? "active" : string.Empty)" id="update-password">
             @Html.Partial("Settings/_UpdatePassword", Model.UpdatePasswordViewModel)
         </div>
     </div>
 </div>
-
-<script></script>

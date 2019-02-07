@@ -19,8 +19,10 @@
 
     "DataChange": "Změna údajů",
     "UpdateAccountSubmit": "Uložit změny",
+    "SuccessUpdateAccount": "Údaje byly úspěšně změněny.",
 
     "PasswordChange": "Změna hesla",
-    "UpdatePasswordSubmit": "Změnit heslo"
+    "UpdatePasswordSubmit": "Změnit heslo",
+    "SuccessPasswordChange": "Heslo bylo úspěšně změněno."
   }
 }

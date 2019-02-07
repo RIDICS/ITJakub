@@ -41,10 +41,12 @@ namespace ITJakub.Web.Hub.Models
         [Compare("Password", ErrorMessage = "PasswordsNotEqual")]
         public string ConfirmPassword { get; set; }
 
+        [Required(AllowEmptyStrings = false, ErrorMessage = "NotEmpty")]
         [DataType(DataType.Text)]
         [Display(Name = "FirstName")]
         public string FirstName { get; set; }
 
+        [Required(AllowEmptyStrings = false, ErrorMessage = "NotEmpty")]
         [DataType(DataType.Text)]
         [Display(Name = "LastName")]
         public string LastName { get; set; }
@@ -71,20 +73,17 @@ namespace ITJakub.Web.Hub.Models
 
     public class UpdateAccountViewModel
     {
-        [Required(AllowEmptyStrings = false, ErrorMessage = "NotEmpty")]
-        [DataType(DataType.Text)]
-        [Display(Name = "UserName")]
-        public string UserName { get; set; }
-
         [Required(AllowEmptyStrings = false, ErrorMessage = "MustBeFilled")]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
+        [Required(AllowEmptyStrings = false, ErrorMessage = "NotEmpty")]
         [DataType(DataType.Text)]
         [Display(Name = "FirstName")]
         public string FirstName { get; set; }
 
+        [Required(AllowEmptyStrings = false, ErrorMessage = "NotEmpty")]
         [DataType(DataType.Text)]
         [Display(Name = "LastName")]
         public string LastName { get; set; }

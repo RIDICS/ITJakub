@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Errors;
 using Vokabular.Shared.AspNetCore.Extensions;
@@ -110,6 +111,8 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult UpdateAccount(UpdateAccountViewModel model)
         {
+            ViewData.Add("ActualTab", "UpdateAccount");
+
             if (ModelState.IsValid)
             {
                 try
@@ -125,7 +128,7 @@ namespace ITJakub.Web.Hub.Controllers
                         };
 
                         client.UpdateCurrentUser(updateUserContract);
-                        return Ok();
+                        ViewData.Add("SuccessUpdateAccount", true);
                     }
                 }
                 catch (HttpErrorCodeException e)
@@ -145,6 +148,8 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult UpdatePassword(UpdatePasswordViewModel model)
         {
+            ViewData.Add("ActualTab", "UpdatePassword");
+
             if (ModelState.IsValid)
             {
                 try
@@ -158,7 +163,7 @@ namespace ITJakub.Web.Hub.Controllers
                         };
 
                         client.UpdateCurrentPassword(updateUserPasswordContract);
-                        return Ok();
+                        ViewData.Add("SuccessPasswordChange", true);
                     }
                 }
                 catch (HttpErrorCodeException e)

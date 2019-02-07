@@ -4,37 +4,38 @@
 
 <div class="row" style="margin-left: 5px; width: 80%;">
     <div class="col-md-12">
-        @using (Html.BeginForm("UpdateAccount", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        @if (ViewData.TryGetValue("SuccessUpdateAccount", out var success) && (bool) success)
+        {
+            <div class="alert alert-success" role="alert">
+                @Localizer.Translate("SuccessUpdateAccount", "Account")
+            </div>
+            @ViewData.Remove("SuccessUpdateAccount")
+        }
+        @using (Html.BeginForm("UpdateAccount", "Account", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
         {
             @Html.AntiForgeryToken()
-            @Html.ValidationSummary("", new { @class = "text-danger" })
+            @Html.ValidationSummary("", new {@class = "text-danger"})
             <div class="form-group">
-                @Html.LabelFor(m => m.UserName, new { @class = "col-md-3 control-label" })
+                @Html.LabelFor(m => m.Email, new {@class = "col-md-3 control-label"})
                 <div class="col-md-8">
-                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                    @Html.TextBoxFor(m => m.Email, new {@class = "form-control"})
                 </div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(m => m.Email, new { @class = "col-md-3 control-label" })
+                @Html.LabelFor(m => m.FirstName, new {@class = "col-md-3 control-label"})
                 <div class="col-md-8">
-                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                    @Html.TextBoxFor(m => m.FirstName, new {@class = "form-control"})
                 </div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(m => m.FirstName, new { @class = "col-md-3 control-label" })
+                @Html.LabelFor(m => m.LastName, new {@class = "col-md-3 control-label"})
                 <div class="col-md-8">
-                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.LastName, new { @class = "col-md-3 control-label" })
-                <div class="col-md-8">
-                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+                    @Html.TextBoxFor(m => m.LastName, new {@class = "form-control"})
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-md-offset-3 col-md-9">
-                    <input type="submit" class="btn btn-default" value="@Localizer.Translate("UpdateAccountSubmit", "account")" />
+                    <input type="submit" class="btn btn-default" value="@Localizer.Translate("UpdateAccountSubmit", "Account")"/>
                 </div>
             </div>
         }

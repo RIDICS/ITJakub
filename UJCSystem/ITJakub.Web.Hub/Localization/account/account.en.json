@@ -19,8 +19,10 @@
 
     "DataChange": "Update data",
     "UpdateAccountSubmit": "Save changes",
+    "SuccessUpdateAccount": "Data was successfully updated.",
 
     "PasswordChange": "Update password",
-    "UpdatePasswordSubmit": "Change password"
+    "UpdatePasswordSubmit": "Change password",
+    "SuccessPasswordChange": "The password was successfully updated."
   }
 }
