@@ -11,7 +11,7 @@ VALUES
    ('PortalAdmin' -- Username
 	,'PortalAdmin' -- FirstName
     ,'PortalAdmin' -- LastName
-    ,'AQAAAAEAACcQAAAAEMmJB8Wd5WUJlww2+qO1ClJ7+nrFKxt5gm73qaiDqUmBSyjTXv2Vjw87lsG14XldAw==' -- PasswordHash (password is 'bob')
+    ,'AQAAAAEAACcQAAAAEHve6H+CKYTaPpzu9nf+EDVwS78aGTYnFpjKbMu3hjdv6X+PeAsZCUZE2gsPaZZcxg==' -- PasswordHash (password is 'Administrator915.')
     ,'7cda8f60-01de-447f-91e9-a497aa6b2146' -- SecurityStamp (random)
     ,false --TwoFactorEnabled
     ,NULL -- LockoutEndDateUtc
