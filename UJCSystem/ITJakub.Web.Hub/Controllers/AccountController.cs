@@ -77,8 +77,7 @@ namespace ITJakub.Web.Hub.Controllers
                     {
                         client.CreateNewUser(user);
                     }
-
-                    return RedirectToLocal("");
+                    ViewData.Add("SuccessRegistration", true);
                 }
                 catch (HttpErrorCodeException e)
                 {

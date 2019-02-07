@@ -9,7 +9,6 @@
             <div class="alert alert-success" role="alert">
                 @Localizer.Translate("SuccessUpdateAccount", "Account")
             </div>
-            @ViewData.Remove("SuccessUpdateAccount")
         }
         @using (Html.BeginForm("UpdateAccount", "Account", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
         {
