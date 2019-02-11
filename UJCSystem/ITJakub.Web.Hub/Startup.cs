@@ -50,6 +50,7 @@ namespace ITJakub.Web.Hub
             // Configuration options
             services.AddOptions();
             services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
+            services.Configure<GoogleCalendarConfiguration>(Configuration.GetSection("GoogleCalendarConfiguration"));
 
             services.Configure<FormOptions>(options =>
             {

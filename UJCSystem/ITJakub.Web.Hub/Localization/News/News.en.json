@@ -1,14 +1,17 @@
 {
 	"culture":"en",
 	"scope":"News",
-	"dictionary": {
-		"NewsManagementTitle" : "Administration - Add news",
-		"AddNews":"Add news",
-		"NewsTextPlaceholder":"Write the news here...",
-		"Max":"Max.",
-		"Remaining":"Remaining",
-		"Characters":"characters",
-		"DiacriticsAllowed":"You can use diacritics",
-		"Submit":"Submit"
-		}
+  "dictionary": {
+    "NewsManagementTitle": "Administration - Add news",
+    "AddNews": "Add news",
+    "NewsTextPlaceholder": "Write the news here...",
+    "Max": "Max.",
+    "Remaining": "Remaining",
+    "Characters": "characters",
+    "DiacriticsAllowed": "You can use diacritics",
+    "Submit": "Submit",
+    "Events": "Events",
+    "ErrorNoCalendar": "No available calendar.",
+    "CalendarLanguage" : "en_GB"
+  }
 }

@@ -341,6 +341,11 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li id="events">
+                                <a href='@Url.Action("Calendar", "News", new {area = "News"})'>
+                                    <span>@Localizer.Translate("Events", "News", LocTranslationSource.File)</span>
+                                </a>
+                            </li>
                             @if (User.Identity.IsAuthenticated)
                             {
                                 <li id="admin-menu" class="has-sub last">
