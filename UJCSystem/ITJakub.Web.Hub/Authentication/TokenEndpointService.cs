@@ -48,7 +48,7 @@ namespace ITJakub.Web.Hub.Authentication
         public async void RevokeTokenAsync(string refreshToken)
         {
             var oidcOptions = await GetOidcOptionsAsync();
-            var configuration = await oidcOptions.ConfigurationManager.GetConfigurationAsync(default(CancellationToken));
+            var configuration = await oidcOptions.ConfigurationManager.GetConfigurationAsync(CancellationToken.None);
             var revocationEndpoint = configuration.AdditionalData["revocation_endpoint"].ToString();
 
             var data = new Dictionary<string, string>

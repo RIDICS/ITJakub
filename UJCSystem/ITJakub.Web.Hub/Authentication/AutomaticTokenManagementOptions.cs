@@ -6,6 +6,6 @@ namespace ITJakub.Web.Hub.Authentication
     {
         public string Scheme { get; set; }
         public TimeSpan RefreshBeforeExpiration { get; set; } = TimeSpan.FromMinutes(1);
-        public bool RevokeRefreshTokenOnSignOut { get; set; } = true;
+        public bool RevokeRefreshTokenOnSignOut { get; set; } = false;
     }
 }
