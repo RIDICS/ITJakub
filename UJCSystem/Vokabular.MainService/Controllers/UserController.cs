@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
@@ -14,6 +15,7 @@ using Vokabular.Shared.Const;
 
 namespace Vokabular.MainService.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [CustomRequireHttps]
     [ValidateModel]
@@ -33,6 +35,7 @@ namespace Vokabular.MainService.Controllers
             m_userDetailManager = userDetailManager;
         }
 
+        [AllowAnonymous]
         [HttpPost("")]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         public IActionResult CreateNewUser([FromBody] CreateUserContract data)
@@ -48,6 +51,7 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("external")]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         public IActionResult CreateUserIfNotExist([FromBody] int externalId)
@@ -109,7 +113,7 @@ namespace Vokabular.MainService.Controllers
             return result.List;
         }
 
-        //[Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.ManagePermissions)]
         [HttpGet("{userId}/detail")]
         public UserDetailContract GetUserDetail(int userId)
         {
