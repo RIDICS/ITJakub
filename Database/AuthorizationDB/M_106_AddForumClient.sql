@@ -16,7 +16,8 @@ INSERT INTO public."Uri"(
 	VALUES ('https://localhost:50165/auth.aspx?auth=vokabular', clientId);
 
 INSERT INTO public."Uri_UriType"("UriId", "UriTypeId")
-	VALUES ((SELECT "Id" FROM public."Uri" WHERE "Uri" = 'http://localhost:50165/auth.aspx?auth=vokabular'), (SELECT "Id" FROM public."UriType" WHERE "Value" = 'Redirect'));
+	VALUES ((SELECT "Id" FROM public."Uri" WHERE "Uri" = 'http://localhost:50165/auth.aspx?auth=vokabular'), (SELECT "Id" FROM public."UriType" WHERE "Value" = 'Redirect')),
+	((SELECT "Id" FROM public."Uri" WHERE "Uri" = 'http://localhost:50165/client_logout.aspx'), (SELECT "Id" FROM public."UriType" WHERE "Value" = 'FrontChannelLogout'));
 
 INSERT INTO public."Secret"(
 	"Value", "Description", "Expiration", "ResourceId", "ClientId", "Discriminator")
