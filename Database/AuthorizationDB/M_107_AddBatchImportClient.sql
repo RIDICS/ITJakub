@@ -16,7 +16,8 @@ INSERT INTO public."Uri"(
 	VALUES ('https://127.0.0.1:7890/', clientId);
 
 INSERT INTO public."Uri_UriType"("UriId", "UriTypeId")
-	VALUES ((SELECT "Id" FROM public."Uri" WHERE "Uri" = 'https://127.0.0.1:7890/'), (SELECT "Id" FROM public."UriType" WHERE "Value" = 'Redirect'));
+	VALUES ((SELECT "Id" FROM public."Uri" WHERE "Uri" = 'https://127.0.0.1:7890/'), (SELECT "Id" FROM public."UriType" WHERE "Value" = 'Redirect')),
+	((SELECT "Id" FROM public."Uri" WHERE "Uri" = 'https://127.0.0.1:7890/logout'), (SELECT "Id" FROM public."UriType" WHERE "Value" = 'FrontChannelLogout'));
 	
 INSERT INTO public."Client_ApiResource"(
 	"ClientId", "ApiResourceId")
