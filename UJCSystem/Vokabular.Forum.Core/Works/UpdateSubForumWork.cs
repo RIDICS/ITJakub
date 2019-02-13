@@ -1,13 +1,11 @@
 ﻿using Vokabular.ForumSite.Core.Helpers;
-using Vokabular.ForumSite.DataEntities.Database.Entities;
 using Vokabular.ForumSite.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
-using Category = Vokabular.ForumSite.DataEntities.Database.Entities.Category;
 
 namespace Vokabular.ForumSite.Core.Works
 {
-    class UpdateSubForumWork : UnitOfWorkBase
+    public class UpdateSubForumWork : UnitOfWorkBase
     {
         private readonly ForumRepository m_forumRepository;
         private readonly CategoryRepository m_categoryRepository;
@@ -25,11 +23,11 @@ namespace Vokabular.ForumSite.Core.Works
 
         protected override void ExecuteWorkImplementation()
         {
-            foreach (UrlBookTypeEnum bookType in BookTypeHelper.GetBookTypeEnumsWithCategories())
+            foreach (var bookType in BookTypeHelper.GetBookTypeEnumsWithCategories())
             {
-                Category category = m_categoryRepository.GetCategoryByExternalId((short) bookType);
+                var category = m_categoryRepository.GetCategoryByExternalId((short) bookType);
 
-                Forum forum = m_forumRepository.GetForumByExternalCategoryIdAndCategory(m_oldCategory.Id, category);
+                var forum = m_forumRepository.GetForumByExternalCategoryIdAndCategory(m_oldCategory.Id, category);
                 forum.Name = m_updatedCategory.Description;
 
                 if (m_oldCategory.ParentCategoryId != m_updatedCategory.ParentCategoryId)

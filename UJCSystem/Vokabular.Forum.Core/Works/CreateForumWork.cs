@@ -6,11 +6,10 @@ using Vokabular.ForumSite.DataEntities.Database.Enums;
 using Vokabular.ForumSite.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
-using Category = Vokabular.ForumSite.DataEntities.Database.Entities.Category;
 
 namespace Vokabular.ForumSite.Core.Works
 {
-    class CreateForumWork : UnitOfWorkBase<int>
+    public class CreateForumWork : UnitOfWorkBase<int>
     {
         private const string FirstTopicName = "Základní informace";
         private readonly ForumRepository m_forumRepository;
@@ -44,26 +43,26 @@ namespace Vokabular.ForumSite.Core.Works
 
         protected override int ExecuteWorkImplementation()
         {
-            Category category = m_categoryRepository.GetCategoryByExternalId(m_bookTypeIds.First());
-
-            Forum forum = new Forum(m_project.Name, category, (short) ForumTypeEnum.Forum) {ExternalProjectId = m_project.Id};
+            var category = m_categoryRepository.GetCategoryByExternalId(m_bookTypeIds.First());
+            
+            var forum = new Forum(m_project.Name, category, (short) ForumTypeEnum.Forum) {ExternalProjectId = m_project.Id};
             m_forumRepository.Create(forum);
             m_forumAccessRepository.SetAdminAccessToForumForAdminGroup(forum);
             m_forumAccessRepository.SetMemberAccessToForumForRegisteredGroup(forum);
 
-            User user = m_userRepository.GetUserByEmail("info@ridics.cz");
+            var user = m_userRepository.GetUserByEmail("info@ridics.cz");
             CreateFirstTopicWithMessage(forum, user, m_messageText);
 
             CreateVirtualForumsForOtherBookTypes(forum);
             
             return forum.ForumID;
         }
-
+        
         private void CreateVirtualForumsForOtherBookTypes(Forum forum)
         {
-            for (int i = 1; i < m_bookTypeIds.Length; i++)
+            for (var i = 1; i < m_bookTypeIds.Length; i++)
             {
-                Forum tempForum = new Forum(m_project.Name, m_categoryRepository.GetCategoryByExternalId(m_bookTypeIds[i]),
+                var tempForum = new Forum(m_project.Name, m_categoryRepository.GetCategoryByExternalId(m_bookTypeIds[i]),
                     (short) ForumTypeEnum.Forum)
                 {
                     ExternalProjectId = m_project.Id,
@@ -77,7 +76,7 @@ namespace Vokabular.ForumSite.Core.Works
 
         private void CreateFirstTopicWithMessage(Forum forum, User user, string messageText)
         {
-            Topic firstTopic = new Topic(forum, DateTime.UtcNow, FirstTopicName,
+            var firstTopic = new Topic(forum, DateTime.UtcNow, FirstTopicName,
                 (short) TopicTypeEnum.Announcement, user);
             m_topicRepository.Create(firstTopic);
 
@@ -89,7 +88,7 @@ namespace Vokabular.ForumSite.Core.Works
 
         private void PostMessageInTopic(Topic topic, User user, string messageText)
         {
-            Message message = new Message(topic, user, DateTime.UtcNow, messageText);
+            var message = new Message(topic, user, DateTime.UtcNow, messageText);
             m_messageRepository.Create(message);
         }
     }

@@ -9,7 +9,7 @@ using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.ForumSite.Core.Works
 {
-    class CreateVirtualForumsForCategories : UnitOfWorkBase
+    public class CreateVirtualForumsForCategories : UnitOfWorkBase
     {
         private readonly ForumRepository m_forumRepository;
         private readonly ForumAccessRepository m_forumAccessRepository;
@@ -37,8 +37,8 @@ namespace Vokabular.ForumSite.Core.Works
 
             var mainForum = m_forumRepository.GetMainForumByExternalProjectId(m_projectId);
 
-            IList<Forum> forumCategoriesToDelete = m_forumRepository.GetForumsByExternalCategoryIds((ICollection) deletedCategories);
-            IList<Forum> forums = m_forumRepository.GetForumsByExternalProjectId(m_projectId);
+            var forumCategoriesToDelete = m_forumRepository.GetForumsByExternalCategoryIds((ICollection) deletedCategories);
+            var forums = m_forumRepository.GetForumsByExternalProjectId(m_projectId);
             foreach (var forum in forums)
             {
                 if (forumCategoriesToDelete.Contains(forum.ParentForum))
@@ -47,11 +47,11 @@ namespace Vokabular.ForumSite.Core.Works
                     m_forumRepository.Delete(forum);
                 }
             }
-            
-            IList<Forum> forumsToCreate = m_forumRepository.GetForumsByExternalCategoryIds((ICollection) newCategories);
+
+            var forumsToCreate = m_forumRepository.GetForumsByExternalCategoryIds((ICollection) newCategories);
             foreach (var forum in forumsToCreate)
             {
-                Forum tempForum = new Forum(mainForum.Name, forum.Category, (short) ForumTypeEnum.Forum)
+                var tempForum = new Forum(mainForum.Name, forum.Category, (short) ForumTypeEnum.Forum)
                 {
                     ExternalProjectId = m_projectId,
                     ParentForum = forum,

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Vokabular.ForumSite.DataEntities.Database.Entities;
 using Vokabular.ForumSite.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -7,7 +6,7 @@ using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.ForumSite.Core.Works
 {
-    class UpdateForumWork : UnitOfWorkBase
+    public class UpdateForumWork : UnitOfWorkBase
     {
         private readonly ForumRepository m_forumRepository;
         private readonly TopicRepository m_topicRepository;
@@ -30,10 +29,10 @@ namespace Vokabular.ForumSite.Core.Works
 
         protected override void ExecuteWorkImplementation()
         {
-            Forum mainForum = m_forumRepository.GetMainForumByExternalProjectId(m_project.Id);
+            var mainForum = m_forumRepository.GetMainForumByExternalProjectId(m_project.Id);
 
-            Topic infoTopic = m_topicRepository.GetFirstTopicInForum(mainForum);
-            User user = m_userRepository.GetUserByEmail("info@ridics.cz");
+            var infoTopic = m_topicRepository.GetFirstTopicInForum(mainForum);
+            var user = m_userRepository.GetUserByEmail("info@ridics.cz");
             PostMessageInTopic(infoTopic, user, m_messageText);
             
             if (mainForum.Name != m_project.Name)
@@ -41,8 +40,8 @@ namespace Vokabular.ForumSite.Core.Works
                 mainForum.Name = m_project.Name;
                 m_forumRepository.Update(mainForum);
 
-                IList<Forum> forums = m_forumRepository.GetForumsByExternalProjectId(m_project.Id);
-                foreach (Forum forum in forums)
+                var forums = m_forumRepository.GetForumsByExternalProjectId(m_project.Id);
+                foreach (var forum in forums)
                 {
                     forum.Name = m_project.Name;
                     m_forumRepository.Update(forum);
@@ -52,7 +51,7 @@ namespace Vokabular.ForumSite.Core.Works
 
         private void PostMessageInTopic(Topic topic, User user, string messageText)
         {
-            Message message = new Message(topic, user, DateTime.UtcNow, messageText);
+            var message = new Message(topic, user, DateTime.UtcNow, messageText);
             m_messageRepository.Create(message);
         }
     }

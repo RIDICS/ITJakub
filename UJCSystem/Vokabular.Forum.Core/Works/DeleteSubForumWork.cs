@@ -1,14 +1,12 @@
 ﻿using System.Net;
 using Vokabular.ForumSite.Core.Helpers;
-using Vokabular.ForumSite.DataEntities.Database.Entities;
 using Vokabular.ForumSite.DataEntities.Database.Repositories;
 using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataEntities.UnitOfWork;
-using Category = Vokabular.ForumSite.DataEntities.Database.Entities.Category;
 
 namespace Vokabular.ForumSite.Core.Works
 {
-    class DeleteSubForumWork : UnitOfWorkBase
+    public class DeleteSubForumWork : UnitOfWorkBase
     {
         private readonly ForumRepository m_forumRepository;
         private readonly CategoryRepository m_categoryRepository;
@@ -27,8 +25,8 @@ namespace Vokabular.ForumSite.Core.Works
         {
             foreach (UrlBookTypeEnum bookType in BookTypeHelper.GetBookTypeEnumsWithCategories())
             {
-                Category category = m_categoryRepository.GetCategoryByExternalId((short)bookType);
-                Forum forum = m_forumRepository.GetForumByExternalCategoryIdAndCategory(m_categoryId, category);
+                var category = m_categoryRepository.GetCategoryByExternalId((short)bookType);
+                var forum = m_forumRepository.GetForumByExternalCategoryIdAndCategory(m_categoryId, category);
 
                 if (forum == null)
                     throw new HttpErrorCodeException(ErrorMessages.NotFound, HttpStatusCode.NotFound);

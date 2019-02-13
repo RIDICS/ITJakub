@@ -4,11 +4,10 @@ using Vokabular.ForumSite.DataEntities.Database.Enums;
 using Vokabular.ForumSite.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
-using Category = Vokabular.ForumSite.DataEntities.Database.Entities.Category;
 
 namespace Vokabular.ForumSite.Core.Works
 {
-    class CreateSubForumWork : UnitOfWorkBase
+    public class CreateSubForumWork : UnitOfWorkBase
     {
         private readonly ForumRepository m_forumRepository;
         private readonly CategoryRepository m_categoryRepository;
@@ -26,9 +25,9 @@ namespace Vokabular.ForumSite.Core.Works
 
         protected override void ExecuteWorkImplementation()
         {
-            foreach (UrlBookTypeEnum bookType in BookTypeHelper.GetBookTypeEnumsWithCategories())
+            foreach (var bookType in BookTypeHelper.GetBookTypeEnumsWithCategories())
             {
-                Category category = m_categoryRepository.GetCategoryByExternalId((short) bookType);
+                var category = m_categoryRepository.GetCategoryByExternalId((short) bookType);
 
                 Forum parentForum = null;
                 if (m_category.ParentCategoryId != null)
@@ -36,7 +35,7 @@ namespace Vokabular.ForumSite.Core.Works
                     parentForum = m_forumRepository.GetForumByExternalCategoryIdAndCategory((int) m_category.ParentCategoryId, category);
                 }
 
-                Forum forum = new Forum(m_category.Description, category, (short) ForumTypeEnum.SubCategory)
+                var forum = new Forum(m_category.Description, category, (short) ForumTypeEnum.SubCategory)
                 {
                     ExternalId = m_category.Id,
                     ParentForum = parentForum
