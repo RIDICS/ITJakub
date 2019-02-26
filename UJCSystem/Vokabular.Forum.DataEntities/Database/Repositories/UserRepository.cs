@@ -16,6 +16,13 @@ namespace Vokabular.ForumSite.DataEntities.Database.Repositories
                 .Where(x => x.Email == email)
                 .SingleOrDefault();
         }
+
+        public virtual User GetUserByUserName(string username)
+        {
+            return GetSession().QueryOver<User>()
+                .Where(x => x.Name == username)
+                .SingleOrDefault();
+        }
     }
 }
 

@@ -14,10 +14,11 @@ namespace Vokabular.ForumSite.Core.Works
         private readonly UserRepository m_userRepository;
         private readonly ProjectDetailContract m_project;
         private readonly string m_messageText;
+        private readonly string m_defaultAuthorUsername;
 
 
         public UpdateForumWork(ForumRepository forumRepository, TopicRepository topicRepository, MessageRepository messageRepository,
-            UserRepository userRepository, ProjectDetailContract project, string messageText) : base(forumRepository)
+            UserRepository userRepository, ProjectDetailContract project, string messageText, string defaultAuthorUsername) : base(forumRepository)
         {
             m_forumRepository = forumRepository;
             m_topicRepository = topicRepository;
@@ -25,6 +26,7 @@ namespace Vokabular.ForumSite.Core.Works
             m_userRepository = userRepository;
             m_project = project;
             m_messageText = messageText;
+            m_defaultAuthorUsername = defaultAuthorUsername;
         }
 
         protected override void ExecuteWorkImplementation()
@@ -32,7 +34,7 @@ namespace Vokabular.ForumSite.Core.Works
             var mainForum = m_forumRepository.GetMainForumByExternalProjectId(m_project.Id);
 
             var infoTopic = m_topicRepository.GetFirstTopicInForum(mainForum);
-            var user = m_userRepository.GetUserByEmail("info@ridics.cz");
+            var user = m_userRepository.GetUserByUserName(m_defaultAuthorUsername);
             PostMessageInTopic(infoTopic, user, m_messageText);
             
             if (mainForum.Name != m_project.Name)

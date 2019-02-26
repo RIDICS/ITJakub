@@ -3,5 +3,7 @@
     public class ForumOption
     {
         public string ForumBaseUrl { get; set; }
+        public string DefaultAuthorUsername { get; set; }
+        public string FirstTopicName { get; set; }
     }
 }

@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Microsoft.Extensions.Options;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.ForumSite.Core.Helpers;
 using Vokabular.ForumSite.Core.Managers;
+using Vokabular.ForumSite.Core.Options;
 using Vokabular.MainService.Core.Errors;
 using Vokabular.MainService.Core.Works;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.Shared;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -34,16 +35,16 @@ namespace Vokabular.MainService.Core.Managers
         public int CreateForums(long projectId, string hostUrl)
         {
             var work = new GetProjectWork(m_projectRepository, m_metadataRepository, projectId, true, true, false, true);
-            Project project = work.Execute();
+            var project = work.Execute();
 
             if (project == null)
             {
                 throw new ForumException("Create of forum failed. The project does not exist.");
             }
 
-            ProjectDetailContract projectDetailContract = Mapper.Map<ProjectDetailContract>(project);
+            var projectDetailContract = Mapper.Map<ProjectDetailContract>(project);
             projectDetailContract.PageCount = work.GetPageCount();
-            short[] bookTypeIds = project.LatestPublishedSnapshot.BookTypes.Select(x => (short) x.Type).ToArray();
+            var bookTypeIds = project.LatestPublishedSnapshot.BookTypes.Select(x => (short) x.Type).ToArray();
 
             if (project.ForumId != null)
             {
@@ -55,7 +56,7 @@ namespace Vokabular.MainService.Core.Managers
             if (forum == null)
             {
                 //Create forum
-                int forumId = m_forumManager.CreateNewForum(projectDetailContract, bookTypeIds, hostUrl);
+                var forumId = m_forumManager.CreateNewForum(projectDetailContract, bookTypeIds, hostUrl);
                 new SetForumIdToProjectWork(m_projectRepository, projectId, forumId).Execute();
                 return forumId;
             }
@@ -68,16 +69,16 @@ namespace Vokabular.MainService.Core.Managers
         public void UpdateForums(long projectId, string hostUrl)
         {
             var work = new GetProjectWork(m_projectRepository, m_metadataRepository, projectId, true, true, false, true);
-            Project project = work.Execute();
+            var project = work.Execute();
 
             if (project == null)
             {
                 throw new ForumException("Update of forum failed. Project does not exist.");
             }
 
-            ProjectDetailContract projectDetailContract = Mapper.Map<ProjectDetailContract>(project);
+            var projectDetailContract = Mapper.Map<ProjectDetailContract>(project);
             projectDetailContract.PageCount = work.GetPageCount();
-            short[] bookTypeIds = project.LatestPublishedSnapshot.BookTypes.Select(x => (short) x.Type).ToArray();
+            var bookTypeIds = project.LatestPublishedSnapshot.BookTypes.Select(x => (short) x.Type).ToArray();
 
             if (project.ForumId != null)
             {
