@@ -1,0 +1,26 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Vokabular.ProjectParsing.Model.Entities;
+
+namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
+{
+    public class OriginDateProcessor : IDataFieldProcessor
+    {
+        private const string NotAfterAndNotBeforeCode = "a";
+
+        public IList<string> Tags { get; } = new List<string> {"648"};
+
+        public void Process(dataFieldType dataField, Project project)
+        {
+            var date = dataField.subfield.First(x => x.code == NotAfterAndNotBeforeCode).Value;
+            if (date != null)
+            {
+                var dates = date.Split('-');
+                project.MetadataResource.NotBefore = new DateTime(int.Parse(dates[0]), 1, 1);
+                if (dates.Length > 1 && dates[1].Length > 0 && dates[1].All(char.IsDigit))
+                    project.MetadataResource.NotAfter = new DateTime(int.Parse(dates[1]), 1, 1);
+            }
+        }
+    }
+}
