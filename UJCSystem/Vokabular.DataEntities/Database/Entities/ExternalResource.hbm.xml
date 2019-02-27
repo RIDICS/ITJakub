@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="Vokabular.DataEntities" namespace="Vokabular.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="ExternalResource" table="[ExternalResource]" >
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+    
+    <property name="Name" not-null="true" />
+
+    <property name="Description" />
+
+    <property name="Url" not-null="true" />
+
+    <property name="License" />
+
+    <property name="Configuration" />
+
+    <many-to-one name="CreatedByUser" class="User" lazy="proxy" not-null="true" />
+    
+    <bag name="ImportHistories" lazy="true">
+      <key column="ExternalResource" />
+      <one-to-many class="ImportHistory" />
+    </bag>
+  </class>
+</hibernate-mapping>

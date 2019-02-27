@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="Vokabular.DataEntities" namespace="Vokabular.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="ImportHistory" table="[ImportHistory]" >
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+    
+    <property name="Date" not-null="true" />
+
+    <property name="Status" not-null="true" />
+
+    <property name="Message" />
+
+    <property name="UpdatedItems" not-null="true" />
+
+    <property name="NewItems" not-null="true" />
+
+    <property name="FailedItems" not-null="true" />
+
+    <many-to-one name="ExternalResource" class="ExternalResource" lazy="proxy" not-null="true" />
+
+    <many-to-one name="UpdatedByUser" class="User" lazy="proxy" not-null="true" />
+    
+    <bag name="ImportedProjects" lazy="true">
+      <key column="LastUpdate" />
+      <one-to-many class="ProjectImportMetadata" />
+    </bag>
+
+  </class>
+</hibernate-mapping>
