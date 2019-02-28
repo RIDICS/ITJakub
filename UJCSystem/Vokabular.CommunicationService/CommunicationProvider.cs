@@ -1,20 +1,21 @@
 ﻿using Microsoft.Extensions.Options;
 using Vokabular.CommunicationService.OAIPMH;
+using Vokabular.Shared.Options;
 
 namespace Vokabular.CommunicationService
 {
     public class CommunicationProvider
     {
-        private readonly OaiPmhClientSettings m_oaiPmhClientSettings;
+        private readonly OaiPmhClientOption m_oaiPmhClientOption;
 
-        public CommunicationProvider(IOptions<OaiPmhClientSettings> oaiPmhOptions)
+        public CommunicationProvider(IOptions<OaiPmhClientOption> oaiPmhOptions)
         {
-            m_oaiPmhClientSettings = oaiPmhOptions.Value;
+            m_oaiPmhClientOption = oaiPmhOptions.Value;
         }
 
         public OaiPmhCommunicationClient GetOaiPmhCommunicationClient(string url)
         {
-            return new OaiPmhCommunicationClient(m_oaiPmhClientSettings, url);
+            return new OaiPmhCommunicationClient(m_oaiPmhClientOption, url);
         }
     }
 }

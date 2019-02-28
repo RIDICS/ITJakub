@@ -1,6 +1,6 @@
-﻿namespace Vokabular.CommunicationService.OAIPMH
+﻿namespace Vokabular.Shared.Options
 {
-    public class OaiPmhClientSettings
+    public class OaiPmhClientOption
     {
         public int RetryCount { get; set; }
         public int Delay { get; set; }

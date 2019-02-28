@@ -45,6 +45,7 @@ namespace Vokabular.MainService
             services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
             services.Configure<List<CredentialsOption>>(Configuration.GetSection("Credentials"));
             services.Configure<PathConfiguration>(Configuration.GetSection("PathConfiguration"));
+            services.Configure<PathConfiguration>(Configuration.GetSection("OaiPmhClientOption"));
 
             services.Configure<FormOptions>(options =>
             {

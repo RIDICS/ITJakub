@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Vokabular.Shared.Options;
 
 namespace Vokabular.CommunicationService.OAIPMH
 {
@@ -19,10 +20,10 @@ namespace Vokabular.CommunicationService.OAIPMH
         private readonly int m_retryCount;
         private readonly int m_delay;
 
-        public OaiPmhCommunicationClient(OaiPmhClientSettings settings, string url)
+        public OaiPmhCommunicationClient(OaiPmhClientOption option, string url)
         {
-            m_retryCount = settings.RetryCount;
-            m_delay = settings.Delay;
+            m_retryCount = option.RetryCount;
+            m_delay = option.Delay;
             Url = url;
             m_httpClient = new HttpClient();
             m_oaiPmhXmlSerializer = new XmlSerializer(typeof(OAIPMHType));

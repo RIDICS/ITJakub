@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Vokabular.ProjectImport.DataEntities\Vokabular.ProjectImport.DataEntities.csproj" />
+    <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj" />
   </ItemGroup>
 
 </Project>
