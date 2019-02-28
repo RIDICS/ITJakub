@@ -15,10 +15,5 @@
 
     <many-to-one name="Project" class="Project" lazy="proxy" not-null="true" />
 
-    <bag name="ImportedProjects" lazy="true">
-      <key column="LastUpdate" />
-      <one-to-many class="ProjectImportMetadata" />
-    </bag>
-
   </class>
 </hibernate-mapping>
