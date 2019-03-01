@@ -2,15 +2,29 @@ SET XACT_ABORT ON;
 
 BEGIN TRAN
 
+	CREATE TABLE[dbo].[ExternalResourceType]
+	(
+		[Id][int] IDENTITY(1,1) NOT NULL CONSTRAINT[PK_ExternalResourceType(Id)] PRIMARY KEY CLUSTERED,
+		[Name] [varchar] (50) NOT NULL CONSTRAINT[UQ_ExternalResourceType(Name)] UNIQUE
+	)
+
+	CREATE TABLE [dbo].[ParserType]
+	(
+		[Id] [int] IDENTITY(1,1) NOT NULL CONSTRAINT [PK_ParserType(Id)] PRIMARY KEY CLUSTERED,
+		[Name] [varchar](50) NOT NULL CONSTRAINT [UQ_ParserType(Name)] UNIQUE
+	)	
+
 	CREATE TABLE [dbo].[ExternalResource]
 	(
-		[Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_ImportHistory(Id)] PRIMARY KEY CLUSTERED,
+		[Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_ExternalResource(Id)] PRIMARY KEY CLUSTERED,
 		[Name] nvarchar(255) NOT NULL,
 		[Description] nvarchar(MAX) NULL,
 		[Url] varchar(255) NOT NULL,
 		[License] nvarchar(MAX) NULL,
 		[Configuration] nvarchar(MAX) NULL,
-		[CreatedByUser] int NOT NULL CONSTRAINT [FK_ExternalResource(CreatedByUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User] (Id)
+		[CreatedByUser] int NOT NULL CONSTRAINT [FK_ExternalResource(CreatedByUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User] (Id),
+		[ParserType] int NOT NULL CONSTRAINT [FK_ExternalResource(ParserType)_ParserType(Id)] FOREIGN KEY REFERENCES [dbo].[ParserType] (Id),
+		[ExternalResourceType] int NOT NULL CONSTRAINT [FK_ExternalResource(ExternalResourceType)_ExternalResourceType(Id)] FOREIGN KEY REFERENCES [dbo].[ExternalResourceType] (Id)
 	)
     
 	CREATE TABLE [dbo].[ImportHistory]
