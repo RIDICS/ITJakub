@@ -74,7 +74,7 @@ namespace ITJakub.Web.Hub.Controllers
                 {
                     Comment = request.UploadMessage,
                     ProjectId = request.ProjectId
-                }, HttpContext.Request.Scheme + @"://" + HttpContext.Request.Host.Value);
+                });
                 return Json(new {success = true});
             }
         }

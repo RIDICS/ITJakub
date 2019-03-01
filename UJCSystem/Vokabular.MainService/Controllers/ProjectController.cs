@@ -196,9 +196,9 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPost("{projectId}/forum")]
-        public int CreateProject(long projectId)
+        public int CreateForum(long projectId)
         {
-            return m_forumSiteManager.CreateForums(projectId, HttpContext.Request.Scheme + @"://" + HttpContext.Request.Host.Value);
+            return m_forumSiteManager.CreateForums(projectId);
         }
     }
 }

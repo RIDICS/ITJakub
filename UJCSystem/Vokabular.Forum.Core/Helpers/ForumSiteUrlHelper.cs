@@ -6,7 +6,7 @@ namespace Vokabular.ForumSite.Core.Helpers
     public class ForumSiteUrlHelper
     {
         private readonly IOptions<ForumOption> m_forumOptions;
-        private const string TopicsUrlPart = "/topics";
+        private const string TopicsUrlPart = "topics";
 
         public ForumSiteUrlHelper(IOptions<ForumOption> forumOptions)
         {

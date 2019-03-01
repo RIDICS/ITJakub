@@ -276,12 +276,12 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void ProcessSessionAsImport(string sessionId, NewBookImportContract request, string hostUrl = "")
+        public void ProcessSessionAsImport(string sessionId, NewBookImportContract request)
         {
             try
             {
                 HttpClient.Timeout = new TimeSpan(0, 10, 0); // Import is long running operation
-                Post<object>($"session/{sessionId}".AddQueryString("hostUrl", hostUrl),request);
+                Post<object>($"session/{sessionId}",request);
             }
             catch (HttpRequestException e)
             {

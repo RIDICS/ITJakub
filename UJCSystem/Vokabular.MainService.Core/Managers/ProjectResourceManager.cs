@@ -36,7 +36,7 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
-        public void ProcessSessionAsImport(string sessionId, long? projectId, string comment, string hostUrl)
+        public void ProcessSessionAsImport(string sessionId, long? projectId, string comment)
         {
             var permissionResult = m_authorizationManager.CheckUserCanUploadBook();
 
@@ -49,10 +49,10 @@ namespace Vokabular.MainService.Core.Managers
                     throw new InvalidOperationException("Import failed");
                 }
             }
-
+   
             try
             {
-                 m_forumSiteManager.CreateForums(importResult.ProjectId, hostUrl);
+                 m_forumSiteManager.CreateForums(importResult.ProjectId);
              }
              catch (ForumException e)
              {

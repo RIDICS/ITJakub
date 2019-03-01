@@ -32,7 +32,7 @@ namespace Vokabular.MainService.Core.Managers
             m_forumSiteUrlHelper = forumSiteUrlHelper;
         }
 
-        public int CreateForums(long projectId, string hostUrl)
+        public int CreateForums(long projectId)
         {
             var work = new GetProjectWork(m_projectRepository, m_metadataRepository, projectId, true, true, false, true);
             var project = work.Execute();
@@ -56,7 +56,7 @@ namespace Vokabular.MainService.Core.Managers
             if (forum == null)
             {
                 //Create forum
-                var forumId = m_forumManager.CreateNewForum(projectDetailContract, bookTypeIds, hostUrl);
+                var forumId = m_forumManager.CreateNewForum(projectDetailContract, bookTypeIds);
                 new SetForumIdToProjectWork(m_projectRepository, projectId, forumId).Execute();
                 return forumId;
             }
