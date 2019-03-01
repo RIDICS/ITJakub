@@ -4,19 +4,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Vokabular.ProjectImport.DataEntities;
-using Vokabular.ProjectImport.DataEntities.Database;
+using Microsoft.Extensions.DependencyInjection;
+using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.ProjectImport.Model;
 
 namespace Vokabular.ProjectImport
 {
     public class ImportManager
     {
-        private IList<Resource> m_importList;
+        private readonly IServiceScopeFactory m_serviceScopeFactory;
+        private readonly IList<ExternalResource> m_importList;
         private readonly SemaphoreSlim m_signal;
         private readonly object m_updateListLock = new object();
 
-        public ImportManager()
+        public ImportManager(IServiceScopeFactory serviceScopeFactory)
         {
+            m_serviceScopeFactory = serviceScopeFactory;
+            m_importList = new List<ExternalResource>();
             m_signal = new SemaphoreSlim(0);
             ActualProgress = new ConcurrentDictionary<string, ProjectImportProgressInfo>();
             CancellationTokens = new ConcurrentDictionary<string, CancellationTokenSource>();
@@ -27,7 +32,7 @@ namespace Vokabular.ProjectImport
         public readonly ConcurrentDictionary<string, CancellationTokenSource> CancellationTokens;
         public bool IsImportRunning { get; private set; }
 
-        public void ImportFromResources(IList<Resource> resources)
+        public void ImportFromResources(IList<int> externalResourcesId)
         {
             if (IsImportRunning)
             {
@@ -35,12 +40,22 @@ namespace Vokabular.ProjectImport
                 throw new Exception();
             }
 
-            if (resources == null || resources.Count == 0)
+            if (externalResourcesId == null || externalResourcesId.Count == 0)
             {
-                throw new ArgumentNullException(nameof(resources));
+                throw new ArgumentNullException(nameof(externalResourcesId));
             }
 
-            m_importList = resources;
+            m_importList.Clear();
+
+            using (var scope = m_serviceScopeFactory.CreateScope())
+            {
+                var externalResourceRepository = scope.ServiceProvider.GetRequiredService<ExternalResourceRepository>();
+                foreach (var id in externalResourcesId)
+                {
+                    var externalResource = externalResourceRepository.GetExternalResource(id);
+                    m_importList.Add(externalResource);
+                }
+            }
 
             //TODO count updated, new, deleted items
             m_signal.Release();
@@ -65,15 +80,15 @@ namespace Vokabular.ProjectImport
             }
         }
 
-        public async Task<IEnumerable<Resource>> GetResources(CancellationToken cancellationToken)
+        public async Task<IEnumerable<ExternalResource>> GetExternalResources(CancellationToken cancellationToken)
         {
             await m_signal.WaitAsync(cancellationToken);
             IsImportRunning = true;
             lock (m_updateListLock)
             {
-                foreach (var resource in m_importList)
+                foreach (var externalResource in m_importList)
                 {
-                    ActualProgress.TryAdd(resource.Name, new ProjectImportProgressInfo(resource.Name));
+                    ActualProgress.TryAdd(externalResource.Name, new ProjectImportProgressInfo(externalResource.Name));
                 }
             }
 

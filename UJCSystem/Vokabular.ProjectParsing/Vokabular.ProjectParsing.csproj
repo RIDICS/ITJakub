@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Vokabular.ProjectImport.DataEntities\Vokabular.ProjectImport.DataEntities.csproj" />
+    <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj" />
     <ProjectReference Include="..\Vokabular.ProjectParsing.Model\Vokabular.ProjectParsing.Model.csproj" />
   </ItemGroup>
 

@@ -1,4 +1,4 @@
-﻿namespace Vokabular.ProjectImport.DataEntities.Database
+﻿namespace Vokabular.ProjectImport.Model
 {
     public class OaiPmhResource
     {

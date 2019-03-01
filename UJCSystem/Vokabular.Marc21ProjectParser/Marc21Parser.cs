@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
-using Vokabular.ProjectImport.DataEntities.Database;
 using Vokabular.ProjectParsing;
 using Vokabular.ProjectParsing.Model.Entities;
 using Vokabular.ProjectParsing.Parsers;
 
 namespace Vokabular.Marc21ProjectParser
 {
-    public class Marc21Parser : ParserBase
+    public class Marc21Parser : IParser
     {
+        public string ParserTypeName { get; } = "Marc21";
         private readonly IDictionary<string, IDataFieldProcessor> m_dataFieldProcessors;
         private readonly IDictionary<string, IControlFieldProcessor> m_controlFieldProcessors;
 
         public Marc21Parser(IEnumerable<IDataFieldProcessor> dataFieldProcessors,
-            IEnumerable<IControlFieldProcessor> controlFieldProcessors) : base(ParserType.Marc21)
+            IEnumerable<IControlFieldProcessor> controlFieldProcessors)
         {
             m_dataFieldProcessors = new Dictionary<string, IDataFieldProcessor>();
             m_controlFieldProcessors = new Dictionary<string, IControlFieldProcessor>();
@@ -34,7 +34,7 @@ namespace Vokabular.Marc21ProjectParser
             }
         }
 
-        public override Project Parse(string xml, Dictionary<ParserHelperTypes, string> config)
+        public Project Parse(string xml, Dictionary<ParserHelperTypes, string> config)
         {
             var project = new Project();
             var record = xml.XmlDeserializeFromString<MARC21record>();
