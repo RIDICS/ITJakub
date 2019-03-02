@@ -19,13 +19,13 @@ namespace Vokabular.ProjectImport
         {
             m_importList = new List<ExternalResource>();
             m_signal = new SemaphoreSlim(0);
-            ActualProgress = new ConcurrentDictionary<string, ProjectImportProgressInfo>();
-            CancellationTokens = new ConcurrentDictionary<string, CancellationTokenSource>();
+            ActualProgress = new ConcurrentDictionary<int, ProjectImportProgressInfo>();
+            CancellationTokens = new ConcurrentDictionary<int, CancellationTokenSource>();
             IsImportRunning = false;
         }
 
-        public readonly ConcurrentDictionary<string, ProjectImportProgressInfo> ActualProgress;
-        public readonly ConcurrentDictionary<string, CancellationTokenSource> CancellationTokens;
+        public readonly ConcurrentDictionary<int, ProjectImportProgressInfo> ActualProgress;
+        public readonly ConcurrentDictionary<int, CancellationTokenSource> CancellationTokens;
         public bool IsImportRunning { get; private set; }
 
         public void ImportFromResources(IList<ExternalResource> externalResources)
@@ -50,8 +50,8 @@ namespace Vokabular.ProjectImport
             lock (m_updateListLock)
             {
                 //TODO own class in ConcDic instead of ProgressInfo
-                ActualProgress.TryGetValue(progressInfo.ResourceName, out var progress);
-                ActualProgress.TryUpdate(progressInfo.ResourceName, progressInfo, progress);
+                ActualProgress.TryGetValue(progressInfo.ExternalResourceId, out var progress);
+                ActualProgress.TryUpdate(progressInfo.ExternalResourceId, progressInfo, progress);
                 IsImportRunning = ActualProgress.Any(x => !x.Value.IsCompleted);
 
                 if (!IsImportRunning)
@@ -70,7 +70,7 @@ namespace Vokabular.ProjectImport
             {
                 foreach (var externalResource in m_importList)
                 {
-                    ActualProgress.TryAdd(externalResource.Name, new ProjectImportProgressInfo(externalResource.Name));
+                    ActualProgress.TryAdd(externalResource.Id, new ProjectImportProgressInfo(externalResource.Id));
                 }
             }
 

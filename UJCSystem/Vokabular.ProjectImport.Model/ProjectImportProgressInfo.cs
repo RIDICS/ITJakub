@@ -5,7 +5,7 @@ namespace Vokabular.ProjectImport.Model
     public class ProjectImportProgressInfo
     {
         public int TotalProjectsCount { get; set; }
-        public string ResourceName { get; }
+        public int ExternalResourceId { get; }
         public bool IsCompleted { get; set; }
         public string FaultedMessage { get; set; }
 
@@ -13,20 +13,15 @@ namespace Vokabular.ProjectImport.Model
         public int UnusedProjectsCount => m_unusedProjectsCount;
         public int IncrementUnusedProjectsCount() { return Interlocked.Increment(ref m_unusedProjectsCount); }
 
-        private int m_updatedProjectsCount;
-        public int UpdatedProjectsCount => m_updatedProjectsCount;
-        public int IncrementUpdatedProjectsCount() { return Interlocked.Increment(ref m_updatedProjectsCount); }
+        private int m_processedProjectsCount;
+        public int ProcessedProjectsCount => m_processedProjectsCount;
+        public int IncrementProcessedProjectsCount() { return Interlocked.Increment(ref m_processedProjectsCount); }
 
-        private int m_newProjectsCount;
-        public int NewProjectsCount => m_newProjectsCount;
-        public int IncrementNewProjectsCount() { return Interlocked.Increment(ref m_newProjectsCount); }
-
-        public ProjectImportProgressInfo(string resourceName)
+        public ProjectImportProgressInfo(int externalResourceId)
         {
-            ResourceName = resourceName;
+            ExternalResourceId = externalResourceId;
             m_unusedProjectsCount = 0;
-            m_updatedProjectsCount = 0;
-            m_newProjectsCount = 0;
+            m_processedProjectsCount = 0;
             //TODO remove
             TotalProjectsCount = 5000;
         }

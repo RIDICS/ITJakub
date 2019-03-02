@@ -53,7 +53,7 @@ namespace Vokabular.ProjectImport
                 foreach (var externalResource in externalResources)
                 {
                     var cts = new CancellationTokenSource();
-                    m_importManager.CancellationTokens.TryAdd(externalResource.Name, cts);
+                    m_importManager.CancellationTokens.TryAdd(externalResource.Id, cts);
                     importTasks.Add(
                         Import(externalResource, new Progress<ProjectImportProgressInfo>(m_importManager.UpdateList), cts.Token));
                 }
@@ -67,7 +67,7 @@ namespace Vokabular.ProjectImport
         private async Task Import(ExternalResource externalResource, IProgress<ProjectImportProgressInfo> progress,
             CancellationToken cancellationToken)
         {
-            var progressInfo = new ProjectImportProgressInfo(externalResource.Name);
+            var progressInfo = new ProjectImportProgressInfo(externalResource.Id);
 
             try
             {
@@ -97,7 +97,7 @@ namespace Vokabular.ProjectImport
                 var saveBlock = new ActionBlock<ProjectImportMetadata>(projectImportMetadata =>
                     {
                         //TODO save to DB
-                        progressInfo.IncrementNewProjectsCount();
+                        progressInfo.IncrementProcessedProjectsCount();
                         progress.Report(progressInfo);
                     }, new ExecutionDataflowBlockOptions {CancellationToken = cancellationToken}
                 );
