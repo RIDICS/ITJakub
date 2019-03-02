@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using Vokabular.ProjectImport.DataEntities.Database;
-using Vokabular.ProjectParsing.Model.Entities;
+using Project = Vokabular.ProjectParsing.Model.Entities.Project;
 
 namespace Vokabular.ProjectParsing.Parsers
 {
@@ -8,6 +7,6 @@ namespace Vokabular.ProjectParsing.Parsers
     {
         Project Parse(string input, Dictionary<ParserHelperTypes, string> config);
 
-        ParserType ParserType { get; }
+        string ParserTypeName { get; }
     }
 }

@@ -6,38 +6,37 @@ using System.Threading.Tasks.Dataflow;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Vokabular.ProjectImport.DataEntities;
-using Vokabular.ProjectImport.DataEntities.Database;
+using Vokabular.DataEntities.Database.Entities;
 using Vokabular.ProjectImport.Managers;
-using Vokabular.ProjectParsing;
-using Vokabular.ProjectParsing.Model.Entities;
+using Vokabular.ProjectImport.Model;
 using Vokabular.ProjectParsing.Parsers;
+using Project = Vokabular.ProjectParsing.Model.Entities.Project;
 
 namespace Vokabular.ProjectImport
 {
     public class ProjectImportHostedService : BackgroundService
     {
-        private readonly IDictionary<ResourceType, IProjectImportManager> m_projectImportManagers;
-        private readonly IDictionary<ParserType, IParser> m_parsers;
+        private readonly IDictionary<string, IProjectImportManager> m_projectImportManagers;
+        private readonly IDictionary<string, IParser> m_parsers;
         private readonly ImportManager m_importManager;
         private readonly ILogger<ProjectImportHostedService> m_logger;
 
         public ProjectImportHostedService(IEnumerable<IProjectImportManager> importManagers, IEnumerable<IParser> parsers,
             ImportManager importManager, ILogger<ProjectImportHostedService> logger)
         {
-            m_projectImportManagers = new Dictionary<ResourceType, IProjectImportManager>();
-            m_parsers = new Dictionary<ParserType, IParser>();
+            m_projectImportManagers = new Dictionary<string, IProjectImportManager>();
+            m_parsers = new Dictionary<string, IParser>();
             m_importManager = importManager;
             m_logger = logger;
 
             foreach (var manager in importManagers)
             {
-                m_projectImportManagers.Add(manager.ResourceType, manager);
+                m_projectImportManagers.Add(manager.ExternalResourceTypeName, manager);
             }
 
             foreach (var parser in parsers)
             {
-                m_parsers.Add(parser.ParserType, parser);
+                m_parsers.Add(parser.ParserTypeName, parser);
             }
         }
 
@@ -47,14 +46,15 @@ namespace Vokabular.ProjectImport
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                var resources = await m_importManager.GetResources(cancellationToken);
+                var externalResources = await m_importManager.GetExternalResources(cancellationToken);
 
                 var importTasks = new List<Task>();
-                foreach (var resource in resources)
+                foreach (var externalResource in externalResources)
                 {
                     var cts = new CancellationTokenSource();
-                    m_importManager.CancellationTokens.TryAdd(resource.Name, cts);
-                    importTasks.Add(Import(resource, new Progress<ProjectImportProgressInfo>(m_importManager.UpdateList), cts.Token));
+                    m_importManager.CancellationTokens.TryAdd(externalResource.Name, cts);
+                    importTasks.Add(
+                        Import(externalResource, new Progress<ProjectImportProgressInfo>(m_importManager.UpdateList), cts.Token));
                 }
 
                 await Task.WhenAll(importTasks);
@@ -63,21 +63,22 @@ namespace Vokabular.ProjectImport
             m_logger.LogInformation("Project import hosted service stopped.");
         }
 
-        private async Task Import(Resource resource, IProgress<ProjectImportProgressInfo> progress, CancellationToken cancellationToken)
+        private async Task Import(ExternalResource externalResource, IProgress<ProjectImportProgressInfo> progress,
+            CancellationToken cancellationToken)
         {
-            var progressInfo = new ProjectImportProgressInfo(resource.Name);
+            var progressInfo = new ProjectImportProgressInfo(externalResource.Name);
 
             try
             {
                 var buffer = new BufferBlock<string>(new DataflowBlockOptions {CancellationToken = cancellationToken});
 
-                var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhResource>(resource.Configuration);
+                var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhResource>(externalResource.Configuration);
                 var config = new Dictionary<ParserHelperTypes, string> {{ParserHelperTypes.TemplateUrl, oaiPmhResource.TemplateUrl}};
-                m_parsers.TryGetValue(resource.ParserType, out var parser);
+                m_parsers.TryGetValue(externalResource.ParserType.Name, out var parser);
 
                 if (parser == null)
                 {
-                    throw new NotImplementedException($"Parser manager was not found for resource {resource.Name}.");
+                    throw new NotImplementedException($"Parser manager was not found for resource {externalResource.Name}.");
                 }
 
                 var parserBlock = new TransformBlock<string, Project>(
@@ -95,26 +96,27 @@ namespace Vokabular.ProjectImport
                 buffer.LinkTo(parserBlock, new DataflowLinkOptions {PropagateCompletion = true});
                 parserBlock.LinkTo(saveBlock, new DataflowLinkOptions {PropagateCompletion = true});
 
-                m_projectImportManagers.TryGetValue(resource.ResourceType, out var importManager);
+                m_projectImportManagers.TryGetValue(externalResource.ExternalResourceType.Name, out var importManager);
 
                 if (importManager == null)
                 {
-                    throw new NotImplementedException($"Import manager was not found for resource {resource.Name}.");
+                    throw new NotImplementedException($"Import manager was not found for resource {externalResource.Name}.");
                 }
 
-                await importManager.ImportFromResource(resource, buffer, cancellationToken);
+                await importManager.ImportFromResource(externalResource, buffer, cancellationToken);
                 buffer.Complete();
 
                 saveBlock.Completion.Wait(cancellationToken);
             }
             catch (Exception e)
             {
+                var message = $"Error occurred executing import task. Error message: {e.Message}";
                 if (!(e is OperationCanceledException))
                 {
-                    m_logger.LogWarning($"Error occurred executing import task. Error message: {e.Message}");
+                    m_logger.LogWarning(message);
                 }
-                
-                progressInfo.FaultedMessage = e.Message;
+
+                progressInfo.FaultedMessage = message;
             }
             finally
             {

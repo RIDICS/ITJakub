@@ -20,6 +20,7 @@
     <None Remove="Database\Entities\BookType.hbm.xml" />
     <None Remove="Database\Entities\Category.hbm.xml" />
     <None Remove="Database\Entities\ExternalResource.hbm.xml" />
+    <None Remove="Database\Entities\ExternalResourceType.hbm.xml" />
     <None Remove="Database\Entities\FavoriteBase.hbm.xml" />
     <None Remove="Database\Entities\FavoriteLabel.hbm.xml" />
     <None Remove="Database\Entities\Feedback.hbm.xml" />
@@ -32,6 +33,7 @@
     <None Remove="Database\Entities\NamedResourceGroup.hbm.xml" />
     <None Remove="Database\Entities\NewsSyndicationItem.hbm.xml" />
     <None Remove="Database\Entities\OriginalAuthor.hbm.xml" />
+    <None Remove="Database\Entities\ParserType.hbm.xml" />
     <None Remove="Database\Entities\Permission.hbm.xml" />
     <None Remove="Database\Entities\Project.hbm.xml" />
     <None Remove="Database\Entities\ProjectImportMetadata.hbm.xml" />
@@ -51,6 +53,8 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Database\Entities\BookType.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\ParserType.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\ExternalResourceType.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\ProjectImportMetadata.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\ImportHistory.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\ExternalResource.hbm.xml" />

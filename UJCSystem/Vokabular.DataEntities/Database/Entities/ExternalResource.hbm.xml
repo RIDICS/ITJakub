@@ -16,6 +16,10 @@
     <property name="Configuration" />
 
     <many-to-one name="CreatedByUser" class="User" lazy="proxy" not-null="true" />
+
+    <many-to-one name="ExternalResourceType" class="ExternalResourceType" lazy="proxy" not-null="true" />
+
+    <many-to-one name="ParserType" class="ParserType" lazy="proxy" not-null="true" />
     
     <bag name="ImportHistories" lazy="true">
       <key column="ExternalResource" />

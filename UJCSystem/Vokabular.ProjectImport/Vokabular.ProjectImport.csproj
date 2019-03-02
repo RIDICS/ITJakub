@@ -12,8 +12,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Vokabular.CommunicationService\Vokabular.CommunicationService.csproj" />
+    <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj" />
     <ProjectReference Include="..\Vokabular.Marc21ProjectParser\Vokabular.Marc21ProjectParser.csproj" />
-    <ProjectReference Include="..\Vokabular.ProjectImport.DataEntities\Vokabular.ProjectImport.DataEntities.csproj" />
+    <ProjectReference Include="..\Vokabular.ProjectImport.Model\Vokabular.ProjectImport.Model.csproj" />
     <ProjectReference Include="..\Vokabular.ProjectParsing.Model\Vokabular.ProjectParsing.Model.csproj" />
     <ProjectReference Include="..\Vokabular.ProjectParsing\Vokabular.ProjectParsing.csproj" />
   </ItemGroup>

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using Vokabular.ProjectImport.DataEntities;
-using Vokabular.ProjectImport.DataEntities.Database;
+using Vokabular.ProjectImport.Model;
 
 namespace Vokabular.ProjectImport
 {
@@ -17,11 +16,12 @@ namespace Vokabular.ProjectImport
         public IReadOnlyDictionary<string, ProjectImportProgressInfo> ActualProgress => m_importManager.ActualProgress;
         public bool IsImportRunning => m_importManager.IsImportRunning;
 
-        public void ImportFromResources(IList<Resource> resources)
+        public void ImportFromResources(IList<int> externalResourcesId)
         {
-            m_importManager.ImportFromResources(resources);
+            m_importManager.ImportFromResources(externalResourcesId);
         }
 
+        //TODO change to Id?
         public void CancelTask(string resourceName)
         {
             m_importManager.CancellationTokens.TryGetValue(resourceName, out var tokenSource);

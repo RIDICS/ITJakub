@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace Vokabular.ProjectImport.DataEntities
+namespace Vokabular.ProjectImport.Model
 {
     public class ProjectImportProgressInfo
     {

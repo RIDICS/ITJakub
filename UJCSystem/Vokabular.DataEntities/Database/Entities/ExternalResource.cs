@@ -19,6 +19,10 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual User CreatedByUser { get; set; }
 
+        public virtual ParserType ParserType { get; set; }
+
+        public virtual ExternalResourceType ExternalResourceType { get; set; }
+
         public virtual IList<ImportHistory> ImportHistories { get; set; }
 
         public virtual bool Equals(ExternalResource other)

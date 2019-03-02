@@ -5,21 +5,23 @@ using System.Threading.Tasks.Dataflow;
 using Newtonsoft.Json;
 using Vokabular.CommunicationService;
 using Vokabular.CommunicationService.OAIPMH;
-using Vokabular.ProjectImport.DataEntities.Database;
-using Vokabular.ProjectParsing.Model.Entities;
+using Vokabular.DataEntities.Database.Entities;
+using Vokabular.ProjectImport.Model;
+using Project = Vokabular.ProjectParsing.Model.Entities.Project;
 
 namespace Vokabular.ProjectImport.Managers
 {
-    public class OaiPmhProjectImportManager : ProjectImportManagerBase
+    public class OaiPmhProjectImportManager : IProjectImportManager
     {
+        public string ExternalResourceTypeName { get; } = "OaiPmh";
         private readonly CommunicationProvider m_communicationProvider;
 
-        public OaiPmhProjectImportManager(CommunicationProvider communicationProvider) : base(ResourceType.Oaipmh)
+        public OaiPmhProjectImportManager(CommunicationProvider communicationProvider)
         {
             m_communicationProvider = communicationProvider;
         }
 
-        public override async Task ImportFromResource(Resource resource, ITargetBlock<string> buffer, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task ImportFromResource(ExternalResource resource, ITargetBlock<string> buffer, CancellationToken cancellationToken = default(CancellationToken))
         {
             var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhResource>(resource.Configuration);
 
@@ -43,6 +45,7 @@ namespace Vokabular.ProjectImport.Managers
 
                     foreach (var recordType in records.record)
                     {
+                        //TODO post recordType or special object
                         buffer.Post(recordType.metadata.OuterXml);
                     }
 
@@ -55,7 +58,7 @@ namespace Vokabular.ProjectImport.Managers
             }
         }
 
-        public override Project ImportRecord(Resource resource, string id)
+        public Project ImportRecord(ExternalResource resource, string id)
         {
             throw new NotImplementedException();
         }
