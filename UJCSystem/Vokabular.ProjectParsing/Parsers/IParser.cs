@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using Project = Vokabular.ProjectParsing.Model.Entities.Project;
+using Vokabular.ProjectParsing.Model.Entities;
 
 namespace Vokabular.ProjectParsing.Parsers
 {
     public interface IParser
     {
-        Project Parse(string input, Dictionary<ParserHelperTypes, string> config);
+        ProjectImportMetadata Parse(ProjectImportMetadata projectImportMetadata, Dictionary<ParserHelperTypes, string> config);
 
         string ParserTypeName { get; }
     }

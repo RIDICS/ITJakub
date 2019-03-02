@@ -8,6 +8,7 @@ using Vokabular.CommunicationService.OAIPMH;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.ProjectImport.Model;
 using Project = Vokabular.ProjectParsing.Model.Entities.Project;
+using ProjectImportMetadata = Vokabular.ProjectParsing.Model.Entities.ProjectImportMetadata;
 
 namespace Vokabular.ProjectImport.Managers
 {
@@ -25,7 +26,6 @@ namespace Vokabular.ProjectImport.Managers
         {
             var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhResource>(resource.Configuration);
 
-            //TODO where to set ID? 
             using (var client = m_communicationProvider.GetOaiPmhCommunicationClient(oaiPmhResource.Url))
             {
                 var records = await client.GetVerbAsync<ListRecordsType>(verbType.ListRecords, oaiPmhResource.DataFormat, oaiPmhResource.SetName);
@@ -56,6 +56,25 @@ namespace Vokabular.ProjectImport.Managers
                     }
                 }
             }
+        }
+
+        public ProjectImportMetadata ParseResponse(object response)
+        {
+            var projectImportMetadata = new ProjectImportMetadata();
+            try
+            {
+                var record = (recordType) response;
+                projectImportMetadata.ExternalId = record.header.identifier;
+                projectImportMetadata.RawData = record.metadata.OuterXml;
+                
+            }
+            catch (Exception e)
+            {
+                projectImportMetadata.IsFaulted = true;
+                projectImportMetadata.FaultedMessage = e.Message;
+            }
+
+            return projectImportMetadata;
         }
 
         public Project ImportRecord(ExternalResource resource, string id)

@@ -11,6 +11,7 @@ using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
 using Vokabular.ProjectParsing.Parsers;
 using Project = Vokabular.ProjectParsing.Model.Entities.Project;
+using ProjectImportMetadata = Vokabular.ProjectParsing.Model.Entities.ProjectImportMetadata;
 
 namespace Vokabular.ProjectImport
 {
@@ -70,22 +71,30 @@ namespace Vokabular.ProjectImport
 
             try
             {
-                var buffer = new BufferBlock<string>(new DataflowBlockOptions {CancellationToken = cancellationToken});
-
                 var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhResource>(externalResource.Configuration);
                 var config = new Dictionary<ParserHelperTypes, string> {{ParserHelperTypes.TemplateUrl, oaiPmhResource.TemplateUrl}};
-                m_parsers.TryGetValue(externalResource.ParserType.Name, out var parser);
+                
+                m_projectImportManagers.TryGetValue(externalResource.ExternalResourceType.Name, out var importManager);
+                if (importManager == null)
+                {
+                    throw new NotImplementedException($"Import manager was not found for resource {externalResource.Name}.");
+                }
 
+                var responseParserBlock = new TransformBlock<object, ProjectImportMetadata>(
+                    response => importManager.ParseResponse(response), new ExecutionDataflowBlockOptions { CancellationToken = cancellationToken }
+                );
+
+                m_parsers.TryGetValue(externalResource.ParserType.Name, out var parser);
                 if (parser == null)
                 {
                     throw new NotImplementedException($"Parser manager was not found for resource {externalResource.Name}.");
                 }
 
-                var parserBlock = new TransformBlock<string, Project>(
-                    xml => parser.Parse(xml, config), new ExecutionDataflowBlockOptions {CancellationToken = cancellationToken}
+                var projectParserBlock = new TransformBlock<ProjectImportMetadata, ProjectImportMetadata>(
+                    projectImportMetadata => parser.Parse(projectImportMetadata, config), new ExecutionDataflowBlockOptions {CancellationToken = cancellationToken}
                 );
 
-                var saveBlock = new ActionBlock<Project>(project =>
+                var saveBlock = new ActionBlock<ProjectImportMetadata>(projectImportMetadata =>
                     {
                         //TODO save to DB
                         progressInfo.IncrementNewProjectsCount();
@@ -93,15 +102,10 @@ namespace Vokabular.ProjectImport
                     }, new ExecutionDataflowBlockOptions {CancellationToken = cancellationToken}
                 );
 
-                buffer.LinkTo(parserBlock, new DataflowLinkOptions {PropagateCompletion = true});
-                parserBlock.LinkTo(saveBlock, new DataflowLinkOptions {PropagateCompletion = true});
-
-                m_projectImportManagers.TryGetValue(externalResource.ExternalResourceType.Name, out var importManager);
-
-                if (importManager == null)
-                {
-                    throw new NotImplementedException($"Import manager was not found for resource {externalResource.Name}.");
-                }
+                var buffer = new BufferBlock<string>(new DataflowBlockOptions { CancellationToken = cancellationToken });
+                buffer.LinkTo(responseParserBlock, new DataflowLinkOptions { PropagateCompletion = true });
+                responseParserBlock.LinkTo(projectParserBlock, new DataflowLinkOptions {PropagateCompletion = true});
+                projectParserBlock.LinkTo(saveBlock, new DataflowLinkOptions {PropagateCompletion = true});
 
                 await importManager.ImportFromResource(externalResource, buffer, cancellationToken);
                 buffer.Complete();

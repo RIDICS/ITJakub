@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Vokabular.ProjectParsing;
 using Vokabular.ProjectParsing.Model.Entities;
 using Vokabular.ProjectParsing.Parsers;
@@ -34,24 +35,39 @@ namespace Vokabular.Marc21ProjectParser
             }
         }
 
-        public Project Parse(string xml, Dictionary<ParserHelperTypes, string> config)
+        public ProjectImportMetadata Parse(ProjectImportMetadata projectImportMetadata, Dictionary<ParserHelperTypes, string> config)
         {
-            var project = new Project();
-            var record = xml.XmlDeserializeFromString<MARC21record>();
-
-            foreach (var dataField in record.datafield)
+            if (projectImportMetadata.IsFaulted)
             {
-                m_dataFieldProcessors.TryGetValue(dataField.tag, out var dataFieldProcessor);
-                dataFieldProcessor?.Process(dataField, project);
+                return projectImportMetadata;
             }
 
-            foreach (var controlField in record.controlfield)
+            try
             {
-                m_controlFieldProcessors.TryGetValue(controlField.tag, out var controlFieldProcessor);
-                controlFieldProcessor?.Process(controlField, project, config);
-            }
+                var record = ((string)projectImportMetadata.RawData).XmlDeserializeFromString<MARC21record>();
+                var project = new Project();
 
-            return project;
+                foreach (var dataField in record.datafield)
+                {
+                    m_dataFieldProcessors.TryGetValue(dataField.tag, out var dataFieldProcessor);
+                    dataFieldProcessor?.Process(dataField, project);
+                }
+
+                foreach (var controlField in record.controlfield)
+                {
+                    m_controlFieldProcessors.TryGetValue(controlField.tag, out var controlFieldProcessor);
+                    controlFieldProcessor?.Process(controlField, project, config);
+                }
+
+                projectImportMetadata.Project = project;
+            }
+            catch (Exception e)
+            {
+                projectImportMetadata.IsFaulted = true;
+                projectImportMetadata.FaultedMessage = e.Message;
+            }
+         
+            return projectImportMetadata;
         }
     }
 }
