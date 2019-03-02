@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Vokabular.DataEntities.Database.Entities;
 using Vokabular.ProjectImport.Model;
 
 namespace Vokabular.ProjectImport
@@ -16,9 +17,9 @@ namespace Vokabular.ProjectImport
         public IReadOnlyDictionary<string, ProjectImportProgressInfo> ActualProgress => m_importManager.ActualProgress;
         public bool IsImportRunning => m_importManager.IsImportRunning;
 
-        public void ImportFromResources(IList<int> externalResourcesId)
+        public void ImportFromResources(IList<ExternalResource> externalResources)
         {
-            m_importManager.ImportFromResources(externalResourcesId);
+            m_importManager.ImportFromResources(externalResources);
         }
 
         //TODO change to Id?
