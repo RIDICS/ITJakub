@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Vokabular.CommunicationService;
 using Vokabular.Marc21ProjectParser;
-using Vokabular.ProjectImport.Managers;
+using Vokabular.ProjectImport.ImportManagers;
 
 namespace Vokabular.ProjectImport
 {

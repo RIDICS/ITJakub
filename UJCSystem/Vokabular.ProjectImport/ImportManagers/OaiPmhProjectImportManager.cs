@@ -10,7 +10,7 @@ using Vokabular.ProjectImport.Model;
 using Project = Vokabular.ProjectParsing.Model.Entities.Project;
 using ProjectImportMetadata = Vokabular.ProjectParsing.Model.Entities.ProjectImportMetadata;
 
-namespace Vokabular.ProjectImport.Managers
+namespace Vokabular.ProjectImport.ImportManagers
 {
     public class OaiPmhProjectImportManager : IProjectImportManager
     {

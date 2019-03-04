@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.ProjectImport.ImportManagers;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
 using Vokabular.ProjectParsing.Parsers;
