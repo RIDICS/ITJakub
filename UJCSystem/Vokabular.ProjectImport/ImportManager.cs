@@ -27,8 +27,9 @@ namespace Vokabular.ProjectImport
         public readonly ConcurrentDictionary<int, ProjectImportProgressInfo> ActualProgress;
         public readonly ConcurrentDictionary<int, CancellationTokenSource> CancellationTokens;
         public bool IsImportRunning { get; private set; }
+        public int UserId { get; private set; }
 
-        public void ImportFromResources(IList<ExternalResource> externalResources)
+        public void ImportFromResources(IList<ExternalResource> externalResources, int userId)
         {
             if (IsImportRunning)
             {
@@ -42,6 +43,7 @@ namespace Vokabular.ProjectImport
             }
 
             m_importList = externalResources;
+            UserId = userId;
             m_signal.Release();
         }
 

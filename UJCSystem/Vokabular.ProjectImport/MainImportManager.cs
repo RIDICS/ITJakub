@@ -7,7 +7,6 @@ namespace Vokabular.ProjectImport
     public class MainImportManager
     {
         private readonly ImportManager m_importManager;
-        //TODO set who starts importing
 
         public MainImportManager(ImportManager importManager)
         {
@@ -17,9 +16,9 @@ namespace Vokabular.ProjectImport
         public IReadOnlyDictionary<int, ProjectImportProgressInfo> ActualProgress => m_importManager.ActualProgress;
         public bool IsImportRunning => m_importManager.IsImportRunning;
 
-        public void ImportFromResources(IList<ExternalResource> externalResources)
+        public void ImportFromResources(IList<ExternalResource> externalResources, int userId)
         {
-            m_importManager.ImportFromResources(externalResources);
+            m_importManager.ImportFromResources(externalResources, userId);
         }
 
         public void CancelTask(int externalResourceId)
