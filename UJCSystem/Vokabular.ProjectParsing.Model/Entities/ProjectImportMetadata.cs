@@ -6,6 +6,8 @@
 
         public object RawData { get; set; }
 
+        public bool IsNew { get; set; }
+
         public bool IsFaulted { get; set; }
 
         public string FaultedMessage { get; set; }
