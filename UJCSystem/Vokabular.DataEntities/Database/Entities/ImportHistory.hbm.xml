@@ -11,19 +11,13 @@
 
     <property name="Message" />
 
-    <property name="UpdatedItems" not-null="true" />
-
-    <property name="NewItems" not-null="true" />
-
-    <property name="FailedItems" not-null="true" />
-
     <many-to-one name="ExternalResource" class="ExternalResource" lazy="proxy" not-null="true" />
 
     <many-to-one name="UpdatedByUser" class="User" lazy="proxy" not-null="true" />
     
-    <bag name="ImportedProjects" lazy="true">
+    <bag name="ImportMetadata" lazy="true">
       <key column="LastUpdate" />
-      <one-to-many class="ProjectImportMetadata" />
+      <one-to-many class="ImportMetadata" />
     </bag>
 
   </class>

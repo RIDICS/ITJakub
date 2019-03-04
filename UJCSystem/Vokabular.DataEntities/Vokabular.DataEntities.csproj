@@ -27,6 +27,7 @@
     <None Remove="Database\Entities\HeadwordItem.hbm.xml" />
     <None Remove="Database\Entities\HistoryLogBase.hbm.xml" />
     <None Remove="Database\Entities\ImportHistory.hbm.xml" />
+    <None Remove="Database\Entities\ImportMetadata.hbm.xml" />
     <None Remove="Database\Entities\Keyword.hbm.xml" />
     <None Remove="Database\Entities\LiteraryGenre.hbm.xml" />
     <None Remove="Database\Entities\LiteraryKind.hbm.xml" />
@@ -36,7 +37,6 @@
     <None Remove="Database\Entities\ParserType.hbm.xml" />
     <None Remove="Database\Entities\Permission.hbm.xml" />
     <None Remove="Database\Entities\Project.hbm.xml" />
-    <None Remove="Database\Entities\ProjectImportMetadata.hbm.xml" />
     <None Remove="Database\Entities\ProjectOriginalAuthor.hbm.xml" />
     <None Remove="Database\Entities\ProjectResponsiblePerson.hbm.xml" />
     <None Remove="Database\Entities\Resource.hbm.xml" />
@@ -55,7 +55,7 @@
     <EmbeddedResource Include="Database\Entities\BookType.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\ParserType.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\ExternalResourceType.hbm.xml" />
-    <EmbeddedResource Include="Database\Entities\ProjectImportMetadata.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\ImportMetadata.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\ImportHistory.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\ExternalResource.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\UserGroup.hbm.xml" />

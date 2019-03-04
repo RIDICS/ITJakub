@@ -2,7 +2,9 @@
 {
     public enum ImportStatusEnum : byte
     {
-        Success = 0,
-        Failed = 1
+        Completed = 0,
+        Failed = 1,
+        CompletedWithWarnings = 2,
+        Running = 3,
     }
 }

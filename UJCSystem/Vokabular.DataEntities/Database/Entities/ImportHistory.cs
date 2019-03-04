@@ -14,17 +14,11 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual string Message { get; set; }
 
-        public virtual int UpdatedItems { get; set; }
-
-        public virtual int NewItems { get; set; }
-
-        public virtual int FailedItems { get; set; }
-
         public virtual ExternalResource ExternalResource { get; set; }
 
         public virtual User UpdatedByUser { get; set; }
 
-        public virtual IList<ProjectImportMetadata> ImportedProjects { get; set; }
+        public virtual IList<ImportMetadata> ImportMetadata { get; set; }
 
         public virtual bool Equals(ImportHistory other)
         {
