@@ -229,7 +229,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.CardFile.Core", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.Shared.AspNetCore", "Vokabular.Shared.AspNetCore\Vokabular.Shared.AspNetCore.csproj", "{0BF4E3B2-F834-400F-90A0-FC5ACB22FE13}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Vokabular.ExternalResourceImporting", "Vokabular.ExternalResourceImporting", "{4206D29E-4A6A-43CA-828F-DEF265DA86D6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Vokabular.ExternalRepositoryImporting", "Vokabular.ExternalRepositoryImporting", "{4206D29E-4A6A-43CA-828F-DEF265DA86D6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.Marc21ProjectParser", "Vokabular.Marc21ProjectParser\Vokabular.Marc21ProjectParser.csproj", "{FF09379B-1745-4923-AA10-90C1E8E180BF}"
 EndProject
@@ -241,7 +241,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.ProjectParsing.Mo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.CommunicationService", "Vokabular.CommunicationService\Vokabular.CommunicationService.csproj", "{9142FBC6-7444-4B0F-90BC-71434BEC08EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vokabular.ProjectImport.Model", "Vokabular.ProjectImport.Model\Vokabular.ProjectImport.Model.csproj", "{946C064F-B195-4C41-81C8-B1498093E173}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.ProjectImport.Model", "Vokabular.ProjectImport.Model\Vokabular.ProjectImport.Model.csproj", "{946C064F-B195-4C41-81C8-B1498093E173}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
