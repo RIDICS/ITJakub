@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Vokabular.DataEntities.Database.Entities
 {
-    public class ExternalResource : IEquatable<ExternalResource>
+    public class ExternalRepository : IEquatable<ExternalRepository>
     {
         public virtual int Id { get; set; }
 
@@ -19,13 +19,15 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual User CreatedByUser { get; set; }
 
-        public virtual ParserType ParserType { get; set; }
+        public virtual BibliographicFormat BibliographicFormat { get; set; }
 
-        public virtual ExternalResourceType ExternalResourceType { get; set; }
+        public virtual ExternalRepositoryType ExternalRepositoryType { get; set; }
 
         public virtual IList<ImportHistory> ImportHistories { get; set; }
 
-        public virtual bool Equals(ExternalResource other)
+        public virtual IList<FilteringExpressionSet> FilteringExpressionSets { get; set; }
+
+        public virtual bool Equals(ExternalRepository other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -37,7 +39,7 @@ namespace Vokabular.DataEntities.Database.Entities
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((ExternalResource) obj);
+            return Equals((ExternalRepository) obj);
         }
 
         public override int GetHashCode()

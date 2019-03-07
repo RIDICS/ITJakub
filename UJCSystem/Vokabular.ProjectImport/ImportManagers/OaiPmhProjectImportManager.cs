@@ -14,7 +14,7 @@ namespace Vokabular.ProjectImport.ImportManagers
 {
     public class OaiPmhProjectImportManager : IProjectImportManager
     {
-        public string ExternalResourceTypeName { get; } = "OaiPmh";
+        public string ExternalRepositoryTypeName { get; } = "OaiPmh";
         private readonly CommunicationProvider m_communicationProvider;
 
         public OaiPmhProjectImportManager(CommunicationProvider communicationProvider)
@@ -22,9 +22,9 @@ namespace Vokabular.ProjectImport.ImportManagers
             m_communicationProvider = communicationProvider;
         }
 
-        public async Task ImportFromResource(ExternalResource resource, ITargetBlock<string> buffer, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task ImportFromResource(ExternalRepository repository, ITargetBlock<string> buffer, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhResource>(resource.Configuration);
+            var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhResource>(repository.Configuration);
 
             using (var client = m_communicationProvider.GetOaiPmhCommunicationClient(oaiPmhResource.Url))
             {
@@ -77,7 +77,7 @@ namespace Vokabular.ProjectImport.ImportManagers
             return projectImportMetadata;
         }
 
-        public Project ImportRecord(ExternalResource resource, string id)
+        public Project ImportRecord(ExternalRepository repository, string id)
         {
             throw new NotImplementedException();
         }
@@ -91,7 +91,7 @@ namespace Vokabular.ProjectImport.ImportManagers
             {
                 var record = client.GetRecord(oaiPmhResource.DataFormat, id);
 
-                m_parsers.TryGetValue(resource.ParserType, out var parser);
+                m_parsers.TryGetValue(resource.BibliographicFormat, out var parser);
                 var result = parser?.Parse(record.metadata.OuterXml, config);
 
                 return result;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <hibernate-mapping assembly="Vokabular.DataEntities" namespace="Vokabular.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
-  <class name="ExternalResource" table="[ExternalResource]" >
+  <class name="ExternalRepository" table="[ExternalRepository]" >
     <id name="Id" column="Id">
       <generator class="identity" />
     </id>
@@ -17,13 +17,19 @@
 
     <many-to-one name="CreatedByUser" class="User" lazy="proxy" not-null="true" />
 
-    <many-to-one name="ExternalResourceType" class="ExternalResourceType" lazy="proxy" not-null="true" />
+    <many-to-one name="ExternalRepositoryType" class="ExternalRepositoryType" lazy="proxy" not-null="true" />
 
-    <many-to-one name="ParserType" class="ParserType" lazy="proxy" not-null="true" />
+    <many-to-one name="BibliographicFormat" class="BibliographicFormat" lazy="proxy" not-null="true" />
     
     <bag name="ImportHistories" lazy="true">
-      <key column="ExternalResource" />
+      <key column="ExternalRepository" />
       <one-to-many class="ImportHistory" />
     </bag>
+
+    <bag name="FilteringExpressionSets" table="FilteringExpressionSet_ExternalRepository" lazy="true">
+      <key column="[ExternalRepository]" />
+      <many-to-many class="User" column="[FilteringExpressionSet]" />
+    </bag>
+
   </class>
 </hibernate-mapping>

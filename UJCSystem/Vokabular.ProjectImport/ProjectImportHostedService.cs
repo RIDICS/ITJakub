@@ -37,12 +37,12 @@ namespace Vokabular.ProjectImport
 
             foreach (var manager in importManagers)
             {
-                m_projectImportManagers.Add(manager.ExternalResourceTypeName, manager);
+                m_projectImportManagers.Add(manager.ExternalRepositoryTypeName, manager);
             }
 
             foreach (var parser in parsers)
             {
-                m_parsers.Add(parser.ParserTypeName, parser);
+                m_parsers.Add(parser.BibliographicFormatName, parser);
             }
         }
 
@@ -52,15 +52,15 @@ namespace Vokabular.ProjectImport
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                var externalResources = await m_importManager.GetExternalResources(cancellationToken);
+                var externalRepositories = await m_importManager.GetExternalRepositories(cancellationToken);
 
                 var importTasks = new List<Task>();
-                foreach (var externalResource in externalResources)
+                foreach (var externalRepository in externalRepositories)
                 {
                     var cts = new CancellationTokenSource();
-                    m_importManager.CancellationTokens.TryAdd(externalResource.Id, cts);
+                    m_importManager.CancellationTokens.TryAdd(externalRepository.Id, cts);
                     importTasks.Add(
-                        Import(externalResource, new Progress<ProjectImportProgressInfo>(m_importManager.UpdateList), cts.Token));
+                        Import(externalRepository, new Progress<ProjectImportProgressInfo>(m_importManager.UpdateList), cts.Token));
                 }
 
                 await Task.WhenAll(importTasks);
@@ -69,10 +69,10 @@ namespace Vokabular.ProjectImport
             m_logger.LogInformation("Project import hosted service stopped.");
         }
 
-        private async Task Import(ExternalResource externalResource, IProgress<ProjectImportProgressInfo> progress,
+        private async Task Import(ExternalRepository externalRepository, IProgress<ProjectImportProgressInfo> progress,
             CancellationToken cancellationToken)
         {
-            var progressInfo = new ProjectImportProgressInfo(externalResource.Id);
+            var progressInfo = new ProjectImportProgressInfo(externalRepository.Id);
 
             using (var scope = m_serviceScopeFactory.CreateScope())
             {
@@ -80,15 +80,15 @@ namespace Vokabular.ProjectImport
                 {
                     //TODO move to MainService?
                     var importHistoryManager = scope.ServiceProvider.GetRequiredService<ImportHistoryManager>();
-                    importHistoryManager.CreateImportHistory(externalResource, m_importManager.UserId);
+                    importHistoryManager.CreateImportHistory(externalRepository, m_importManager.UserId);
 
-                    var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhResource>(externalResource.Configuration);
+                    var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhResource>(externalRepository.Configuration);
                     var config = new Dictionary<ParserHelperTypes, string> {{ParserHelperTypes.TemplateUrl, oaiPmhResource.TemplateUrl}};
 
-                    m_projectImportManagers.TryGetValue(externalResource.ExternalResourceType.Name, out var importManager);
+                    m_projectImportManagers.TryGetValue(externalRepository.ExternalRepositoryType.Name, out var importManager);
                     if (importManager == null)
                     {
-                        throw new ArgumentNullException($"Import manager was not found for resource {externalResource.Name}.");
+                        throw new ArgumentNullException($"Import manager was not found for repository {externalRepository.Name}.");
                     }
 
                     var responseParserBlock = new TransformBlock<object, ProjectImportMetadata>(
@@ -96,10 +96,10 @@ namespace Vokabular.ProjectImport
                         new ExecutionDataflowBlockOptions {CancellationToken = cancellationToken}
                     );
 
-                    m_parsers.TryGetValue(externalResource.ParserType.Name, out var parser);
+                    m_parsers.TryGetValue(externalRepository.BibliographicFormat.Name, out var parser);
                     if (parser == null)
                     {
-                        throw new ArgumentNullException($"Parser manager was not found for resource {externalResource.Name}.");
+                        throw new ArgumentNullException($"Parser manager was not found for repository {externalRepository.Name}.");
                     }
 
                     var projectParserBlock = new TransformBlock<ProjectImportMetadata, ProjectImportMetadata>(
@@ -136,7 +136,7 @@ namespace Vokabular.ProjectImport
                     responseParserBlock.LinkTo(projectParserBlock, new DataflowLinkOptions {PropagateCompletion = true});
                     projectParserBlock.LinkTo(saveBlock, new DataflowLinkOptions {PropagateCompletion = true});
 
-                    await importManager.ImportFromResource(externalResource, buffer, cancellationToken);
+                    await importManager.ImportFromResource(externalRepository, buffer, cancellationToken);
                     buffer.Complete();
 
                     saveBlock.Completion.Wait(cancellationToken);

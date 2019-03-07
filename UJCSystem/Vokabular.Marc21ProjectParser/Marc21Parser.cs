@@ -8,7 +8,7 @@ namespace Vokabular.Marc21ProjectParser
 {
     public class Marc21Parser : IParser
     {
-        public string ParserTypeName { get; } = "Marc21";
+        public string BibliographicFormatName { get; } = "Marc21";
         private readonly IDictionary<string, IDataFieldProcessor> m_dataFieldProcessors;
         private readonly IDictionary<string, IControlFieldProcessor> m_controlFieldProcessors;
 

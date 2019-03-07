@@ -2,13 +2,13 @@ using System;
 
 namespace Vokabular.DataEntities.Database.Entities
 {
-    public class ParserType : IEquatable<ParserType>
+    public class BibliographicFormat : IEquatable<BibliographicFormat>
     {
         public virtual int Id { get; set; }
 
         public virtual string Name { get; set; }
 
-        public virtual bool Equals(ParserType other)
+        public virtual bool Equals(BibliographicFormat other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -20,7 +20,7 @@ namespace Vokabular.DataEntities.Database.Entities
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((ParserType) obj);
+            return Equals((BibliographicFormat) obj);
         }
 
         public override int GetHashCode()

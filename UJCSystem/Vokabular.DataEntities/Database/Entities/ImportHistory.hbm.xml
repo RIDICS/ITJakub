@@ -11,9 +11,9 @@
 
     <property name="Message" />
 
-    <many-to-one name="ExternalResource" class="ExternalResource" lazy="proxy" not-null="true" />
+    <many-to-one name="ExternalRepository" class="ExternalRepository" lazy="proxy" not-null="true" />
 
-    <many-to-one name="UpdatedByUser" class="User" lazy="proxy" not-null="true" />
+    <many-to-one name="CreatedByUser" class="User" lazy="proxy" not-null="true" />
     
     <bag name="ImportMetadata" lazy="true">
       <key column="LastUpdate" />

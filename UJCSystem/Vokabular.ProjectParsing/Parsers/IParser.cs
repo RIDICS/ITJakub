@@ -7,6 +7,6 @@ namespace Vokabular.ProjectParsing.Parsers
     {
         ProjectImportMetadata Parse(ProjectImportMetadata projectImportMetadata, Dictionary<ParserHelperTypes, string> config);
 
-        string ParserTypeName { get; }
+        string BibliographicFormatName { get; }
     }
 }

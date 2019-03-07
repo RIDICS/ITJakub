@@ -16,14 +16,14 @@ namespace Vokabular.ProjectImport
         public IReadOnlyDictionary<int, ProjectImportProgressInfo> ActualProgress => m_importManager.ActualProgress;
         public bool IsImportRunning => m_importManager.IsImportRunning;
 
-        public void ImportFromResources(IList<ExternalResource> externalResources, int userId)
+        public void ImportFromResources(IList<ExternalRepository> externalRepositories, int userId)
         {
-            m_importManager.ImportFromResources(externalResources, userId);
+            m_importManager.ImportFromResources(externalRepositories, userId);
         }
 
-        public void CancelTask(int externalResourceId)
+        public void CancelTask(int externalRepositoryId)
         {
-            m_importManager.CancellationTokens.TryGetValue(externalResourceId, out var tokenSource);
+            m_importManager.CancellationTokens.TryGetValue(externalRepositoryId, out var tokenSource);
             tokenSource?.Cancel();
         }
     }

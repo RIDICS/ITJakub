@@ -9,12 +9,12 @@ namespace Vokabular.ProjectImport.ImportManagers
 {
     public interface IProjectImportManager
     {
-        Task ImportFromResource(ExternalResource resource, ITargetBlock<string> buffer, CancellationToken cancellationToken = default(CancellationToken));
+        Task ImportFromResource(ExternalRepository repository, ITargetBlock<string> buffer, CancellationToken cancellationToken = default(CancellationToken));
 
-        Project ImportRecord(ExternalResource resource, string id);
+        Project ImportRecord(ExternalRepository repository, string id);
 
         ProjectImportMetadata ParseResponse(object response);
 
-        string ExternalResourceTypeName { get; }
+        string ExternalRepositoryTypeName { get; }
     }
 }

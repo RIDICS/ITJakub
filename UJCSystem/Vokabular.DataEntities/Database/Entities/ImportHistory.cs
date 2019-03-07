@@ -14,9 +14,9 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual string Message { get; set; }
 
-        public virtual ExternalResource ExternalResource { get; set; }
+        public virtual ExternalRepository ExternalRepository { get; set; }
 
-        public virtual User UpdatedByUser { get; set; }
+        public virtual User CreatedByUser { get; set; }
 
         public virtual IList<ImportMetadata> ImportMetadata { get; set; }
 

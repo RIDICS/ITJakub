@@ -11,8 +11,6 @@
 
     <many-to-one name="LastUpdate" class="ImportHistory" lazy="proxy" not-null="true" />
 
-    <many-to-one name="LastSuccessfulUpdate" class="ImportHistory" lazy="proxy" />
-
     <many-to-one name="Snapshot" class="Snapshot" lazy="proxy" not-null="true" />
 
   </class>
