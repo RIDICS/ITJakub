@@ -24,16 +24,16 @@ namespace Vokabular.ProjectImport
         private readonly IDictionary<string, IParser> m_parsers;
         private readonly ImportManager m_importManager;
         private readonly ILogger<ProjectImportHostedService> m_logger;
-        private readonly IServiceScopeFactory m_serviceScopeFactory;
+        private readonly IServiceProvider m_serviceProvider;
 
         public ProjectImportHostedService(IEnumerable<IProjectImportManager> importManagers, IEnumerable<IParser> parsers,
-            ImportManager importManager, ILogger<ProjectImportHostedService> logger, IServiceScopeFactory serviceScopeFactory)
+            ImportManager importManager, ILogger<ProjectImportHostedService> logger, IServiceProvider serviceProvider)
         {
             m_projectImportManagers = new Dictionary<string, IProjectImportManager>();
             m_parsers = new Dictionary<string, IParser>();
             m_importManager = importManager;
             m_logger = logger;
-            m_serviceScopeFactory = serviceScopeFactory;
+            m_serviceProvider = serviceProvider;
 
             foreach (var manager in importManagers)
             {
@@ -74,7 +74,7 @@ namespace Vokabular.ProjectImport
         {
             var progressInfo = new ProjectImportProgressInfo(externalRepository.Id);
 
-            using (var scope = m_serviceScopeFactory.CreateScope())
+            using (var scope = m_serviceProvider.CreateScope())
             {
                 try
                 {
