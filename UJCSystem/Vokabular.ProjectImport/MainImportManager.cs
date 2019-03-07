@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Vokabular.DataEntities.Database.Entities;
 using Vokabular.ProjectImport.Model;
 
 namespace Vokabular.ProjectImport
@@ -16,9 +15,9 @@ namespace Vokabular.ProjectImport
         public IReadOnlyDictionary<int, RepositoryImportProgressInfo> ActualProgress => m_importManager.ActualProgress;
         public bool IsImportRunning => m_importManager.IsImportRunning;
 
-        public void ImportFromResources(IList<ExternalRepository> externalRepositories, int userId)
+        public void ImportFromResources(IList<int> externalRepositoryIds, int userId)
         {
-            m_importManager.ImportFromResources(externalRepositories, userId);
+            m_importManager.ImportFromResources(externalRepositoryIds, userId);
         }
 
         public void CancelTask(int externalRepositoryId)
