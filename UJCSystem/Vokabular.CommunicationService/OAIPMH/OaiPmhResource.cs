@@ -1,4 +1,4 @@
-﻿namespace Vokabular.ProjectImport.Model
+﻿namespace Vokabular.CommunicationService.OAIPMH
 {
     public class OaiPmhResource
     {
