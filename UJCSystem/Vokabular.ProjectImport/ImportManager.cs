@@ -19,12 +19,12 @@ namespace Vokabular.ProjectImport
         {
             m_importList = new List<ExternalRepository>();
             m_signal = new SemaphoreSlim(0);
-            ActualProgress = new ConcurrentDictionary<int, ProjectImportProgressInfo>();
+            ActualProgress = new ConcurrentDictionary<int, RepositoryImportProgressInfo>();
             CancellationTokens = new ConcurrentDictionary<int, CancellationTokenSource>();
             IsImportRunning = false;
         }
 
-        public readonly ConcurrentDictionary<int, ProjectImportProgressInfo> ActualProgress;
+        public readonly ConcurrentDictionary<int, RepositoryImportProgressInfo> ActualProgress;
         public readonly ConcurrentDictionary<int, CancellationTokenSource> CancellationTokens;
         public bool IsImportRunning { get; private set; }
         public int UserId { get; private set; }
@@ -47,7 +47,7 @@ namespace Vokabular.ProjectImport
             m_signal.Release();
         }
 
-        public void UpdateList(ProjectImportProgressInfo progressInfo)
+        public void UpdateList(RepositoryImportProgressInfo progressInfo)
         {
             lock (m_updateListLock)
             {
@@ -72,7 +72,7 @@ namespace Vokabular.ProjectImport
             {
                 foreach (var externalRepository in m_importList)
                 {
-                    ActualProgress.TryAdd(externalRepository.Id, new ProjectImportProgressInfo(externalRepository.Id));
+                    ActualProgress.TryAdd(externalRepository.Id, new RepositoryImportProgressInfo(externalRepository.Id));
                 }
             }
 

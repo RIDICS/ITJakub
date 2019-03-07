@@ -60,7 +60,7 @@ namespace Vokabular.ProjectImport
                     var cts = new CancellationTokenSource();
                     m_importManager.CancellationTokens.TryAdd(externalRepository.Id, cts);
                     importTasks.Add(
-                        Import(externalRepository, new Progress<ProjectImportProgressInfo>(m_importManager.UpdateList), cts.Token));
+                        Import(externalRepository, new Progress<RepositoryImportProgressInfo>(m_importManager.UpdateList), cts.Token));
                 }
 
                 await Task.WhenAll(importTasks);
@@ -69,10 +69,10 @@ namespace Vokabular.ProjectImport
             m_logger.LogInformation("Project import hosted service stopped.");
         }
 
-        private async Task Import(ExternalRepository externalRepository, IProgress<ProjectImportProgressInfo> progress,
+        private async Task Import(ExternalRepository externalRepository, IProgress<RepositoryImportProgressInfo> progress,
             CancellationToken cancellationToken)
         {
-            var progressInfo = new ProjectImportProgressInfo(externalRepository.Id);
+            var progressInfo = new RepositoryImportProgressInfo(externalRepository.Id);
 
             using (var scope = m_serviceProvider.CreateScope())
             {
