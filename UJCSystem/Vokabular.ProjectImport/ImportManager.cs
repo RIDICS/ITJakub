@@ -52,12 +52,9 @@ namespace Vokabular.ProjectImport
             lock (m_updateListLock)
             {
                 //TODO own class in ConcDic instead of ProgressInfo
-                ActualProgress.TryGetValue(progressInfo.ExternalRepositoryId, out var progress);
-                ActualProgress.TryUpdate(progressInfo.ExternalRepositoryId, progressInfo, progress);
-                IsImportRunning = ActualProgress.Any(x => !x.Value.IsCompleted);
-
-                if (!IsImportRunning)
+                if (ActualProgress.All(x => x.Value.IsCompleted))
                 {
+                    IsImportRunning = false;
                     ActualProgress.Clear();
                     CancellationTokens.Clear();
                 }
@@ -68,12 +65,10 @@ namespace Vokabular.ProjectImport
         {
             await m_signal.WaitAsync(cancellationToken);
             IsImportRunning = true;
-            lock (m_updateListLock)
+
+            foreach (var externalRepository in m_importList)
             {
-                foreach (var externalRepository in m_importList)
-                {
-                    ActualProgress.TryAdd(externalRepository.Id, new RepositoryImportProgressInfo(externalRepository.Id));
-                }
+                ActualProgress.TryAdd(externalRepository.Id, new RepositoryImportProgressInfo(externalRepository.Id));
             }
 
             return m_importList;
