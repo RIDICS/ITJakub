@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Vokabular.ProjectImport.ImportManagers;
+using Vokabular.ProjectImport.Model;
 
 namespace Vokabular.OaiPmhImportManager
 {

@@ -10,7 +10,6 @@ using Newtonsoft.Json;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.OaiPmhImportManager;
-using Vokabular.ProjectImport.ImportManagers;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
 using Vokabular.ProjectImport.Works;
@@ -161,7 +160,7 @@ namespace Vokabular.ProjectImport
 
                     var linkOptions = new DataflowLinkOptions {PropagateCompletion = true};
 
-                    var buffer = new BufferBlock<string>(executionOptions);
+                    var buffer = new BufferBlock<object>(executionOptions);
                     buffer.LinkTo(responseParserBlock, linkOptions);
 
                     responseParserBlock.LinkTo(filterBlock, linkOptions);

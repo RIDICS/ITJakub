@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using Vokabular.ProjectImport.ImportManagers;
+using Vokabular.ProjectImport.Model;
 using Vokabular.Shared.Options;
 using Project = Vokabular.ProjectParsing.Model.Entities.Project;
 using ProjectImportMetadata = Vokabular.ProjectParsing.Model.Entities.ProjectImportMetadata;
@@ -27,7 +27,7 @@ namespace Vokabular.OaiPmhImportManager
             return new OaiPmhCommunicationClient(m_oaiPmhClientOption, url);
         }
 
-        public async Task ImportFromResource(string configuration, ITargetBlock<string> buffer, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task ImportFromResource(string configuration, ITargetBlock<object> buffer, CancellationToken cancellationToken = default(CancellationToken))
         {
             var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhRepositoryConfiguration>(configuration);
 
@@ -38,10 +38,8 @@ namespace Vokabular.OaiPmhImportManager
                
                 foreach (var recordType in records.record)
                 {
-                    buffer.Post(recordType.metadata.OuterXml);
+                    buffer.Post(recordType);
                 }
-
-                var testCount = 1; //TODO remove
 
                 while (resumptionToken != null && !cancellationToken.IsCancellationRequested)
                 {
@@ -50,15 +48,7 @@ namespace Vokabular.OaiPmhImportManager
 
                     foreach (var recordType in records.record)
                     {
-                        //TODO FIXXX
-                        //TODO post recordType or special object 
-                        buffer.Post(recordType.metadata.OuterXml);
-                    }
-
-                    testCount++; //TODO remove
-                    if (testCount == 100)
-                    {
-                        break;
+                        buffer.Post(recordType);
                     }
                 }
             }
@@ -87,21 +77,5 @@ namespace Vokabular.OaiPmhImportManager
         {
             throw new NotImplementedException();
         }
-        /*public override Project ImportRecord(Resource resource, string id)
-        {
-            var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhRepositoryConfiguration>(resource.Configuration);
-            var config = new Dictionary<ParserHelperTypes, string>
-                {{ParserHelperTypes.TemplateUrl, oaiPmhResource.TemplateUrl}};
-
-            using (var client = m_communicationProvider.GetOaiPmhCommunicationClient(resource))
-            {
-                var record = client.GetRecord(oaiPmhResource.DataFormat, id);
-
-                m_parsers.TryGetValue(resource.BibliographicFormat, out var parser);
-                var result = parser?.Parse(record.metadata.OuterXml, config);
-
-                return result;
-            }
-        }*/
     }
 }
