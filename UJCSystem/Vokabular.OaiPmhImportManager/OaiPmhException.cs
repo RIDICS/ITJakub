@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vokabular.CommunicationService.OAIPMH
+namespace Vokabular.OaiPmhImportManager
 {
     public class OaiPmhException : Exception
     {

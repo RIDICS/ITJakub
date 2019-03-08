@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Vokabular.CommunicationService;
 using Vokabular.Marc21ProjectParser;
-using Vokabular.ProjectImport.ImportManagers;
+using Vokabular.OaiPmhImportManager;
+using Vokabular.ProjectImport.Managers;
 
 namespace Vokabular.ProjectImport
 {
@@ -9,15 +9,15 @@ namespace Vokabular.ProjectImport
     {
         public static void AddProjectImportServices(this IServiceCollection container)
         {
+            container.AddScoped<ImportHistoryManager>();
+            container.AddScoped<FilteringExpressionSetManager>();
+            
             container.AddHostedService<ProjectImportHostedService>();
             container.AddSingleton<MainImportManager>();
-
             container.AddSingleton<ImportManager>();
-            
-            container.AddSingleton<IProjectImportManager, OaiPmhProjectImportManager>();
 
             container.AddMarc21ProjectParsingServices();
-            container.AddCommunicationServices();
+            container.AddOaiPmhImportManager();
         }
     }
 }

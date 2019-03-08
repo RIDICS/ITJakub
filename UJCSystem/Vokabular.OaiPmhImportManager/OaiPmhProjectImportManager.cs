@@ -2,31 +2,36 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using Vokabular.CommunicationService;
-using Vokabular.CommunicationService.OAIPMH;
-using Vokabular.DataEntities.Database.Entities;
-using Vokabular.ProjectImport.Model;
+using Vokabular.ProjectImport.ImportManagers;
+using Vokabular.Shared.Options;
 using Project = Vokabular.ProjectParsing.Model.Entities.Project;
 using ProjectImportMetadata = Vokabular.ProjectParsing.Model.Entities.ProjectImportMetadata;
 
-namespace Vokabular.ProjectImport.ImportManagers
+namespace Vokabular.OaiPmhImportManager
 {
     public class OaiPmhProjectImportManager : IProjectImportManager
     {
-        public string ExternalRepositoryTypeName { get; } = "OaiPmh";
-        private readonly CommunicationProvider m_communicationProvider;
+        private readonly OaiPmhClientOption m_oaiPmhClientOption;
 
-        public OaiPmhProjectImportManager(CommunicationProvider communicationProvider)
+        public OaiPmhProjectImportManager(IOptions<OaiPmhClientOption> oaiPmhOptions)
         {
-            m_communicationProvider = communicationProvider;
+            m_oaiPmhClientOption = oaiPmhOptions.Value;
         }
 
-        public async Task ImportFromResource(ExternalRepository repository, ITargetBlock<string> buffer, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhResource>(repository.Configuration);
+        public string ExternalRepositoryTypeName { get; } = "OaiPmh";
 
-            using (var client = m_communicationProvider.GetOaiPmhCommunicationClient(oaiPmhResource.Url))
+        public OaiPmhCommunicationClient GetOaiPmhCommunicationClient(string url)
+        {
+            return new OaiPmhCommunicationClient(m_oaiPmhClientOption, url);
+        }
+
+        public async Task ImportFromResource(string configuration, ITargetBlock<string> buffer, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhRepositoryConfiguration>(configuration);
+
+            using (var client = GetOaiPmhCommunicationClient(oaiPmhResource.Url))
             {
                 var records = await client.GetVerbAsync<ListRecordsType>(verbType.ListRecords, oaiPmhResource.DataFormat, oaiPmhResource.SetName);
                 var resumptionToken = records.resumptionToken;
@@ -45,7 +50,8 @@ namespace Vokabular.ProjectImport.ImportManagers
 
                     foreach (var recordType in records.record)
                     {
-                        //TODO post recordType or special object
+                        //TODO FIXXX
+                        //TODO post recordType or special object 
                         buffer.Post(recordType.metadata.OuterXml);
                     }
 
@@ -77,13 +83,13 @@ namespace Vokabular.ProjectImport.ImportManagers
             return projectImportMetadata;
         }
 
-        public Project ImportRecord(ExternalRepository repository, string id)
+        public Project ImportRecord(string configuration, string id)
         {
             throw new NotImplementedException();
         }
         /*public override Project ImportRecord(Resource resource, string id)
         {
-            var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhResource>(resource.Configuration);
+            var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhRepositoryConfiguration>(resource.Configuration);
             var config = new Dictionary<ParserHelperTypes, string>
                 {{ParserHelperTypes.TemplateUrl, oaiPmhResource.TemplateUrl}};
 

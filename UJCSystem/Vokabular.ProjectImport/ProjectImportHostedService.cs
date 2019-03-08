@@ -7,9 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Vokabular.CommunicationService.OAIPMH;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.OaiPmhImportManager;
 using Vokabular.ProjectImport.ImportManagers;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
@@ -92,7 +92,7 @@ namespace Vokabular.ProjectImport
                     importHistoryManager.CreateImportHistory(externalRepository, m_importManager.UserId);
 
                     //TODO move to ???
-                    var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhResource>(externalRepository.Configuration);
+                    var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhRepositoryConfiguration>(externalRepository.Configuration);
                     var config = new Dictionary<ParserHelperTypes, string> {{ParserHelperTypes.TemplateUrl, oaiPmhResource.TemplateUrl}};
 
                     m_projectImportManagers.TryGetValue(externalRepository.ExternalRepositoryType.Name, out var importManager);
@@ -169,7 +169,7 @@ namespace Vokabular.ProjectImport
                     filterBlock.LinkTo(DataflowBlock.NullTarget<ProjectImportMetadata>(), linkOptions);
                     projectParserBlock.LinkTo(saveBlock, linkOptions);
 
-                    await importManager.ImportFromResource(externalRepository, buffer, cancellationToken);
+                    await importManager.ImportFromResource(externalRepository.Configuration, buffer, cancellationToken);
                     buffer.Complete();
 
                     saveBlock.Completion.Wait(cancellationToken);

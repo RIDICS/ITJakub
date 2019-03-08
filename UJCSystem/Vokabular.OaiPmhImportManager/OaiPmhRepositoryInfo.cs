@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Vokabular.CommunicationService.OAIPMH
+namespace Vokabular.OaiPmhImportManager
 {
-    public class OaiPmhResourceInfo
+    public class OaiPmhRepositoryInfo
     {
         public string[] AdminMails { get; set; }
         public string Description { get; set; }

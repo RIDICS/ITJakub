@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Vokabular.Shared.Options;
 
-namespace Vokabular.CommunicationService.OAIPMH
+namespace Vokabular.OaiPmhImportManager
 {
     public class OaiPmhCommunicationClient : IDisposable
     {
@@ -121,11 +121,11 @@ namespace Vokabular.CommunicationService.OAIPMH
             return await GetResumptionTokenAsync<ListRecordsType>(verbType.ListIdentifiers, resumptionToken);
         }
 
-        public async Task<OaiPmhResourceInfo> IdentifyAsync()
+        public async Task<OaiPmhRepositoryInfo> IdentifyAsync()
         {
             var identify = await GetVerbAsync<IdentifyType>(verbType.Identify);
 
-            return new OaiPmhResourceInfo
+            return new OaiPmhRepositoryInfo
             {
                 AdminMails = identify.adminEmail,
                 Description = identify.description?.ToString(),
