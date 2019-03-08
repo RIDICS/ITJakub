@@ -87,7 +87,7 @@ namespace Vokabular.ProjectImport
             {
                 try
                 {
-                    //TODO move to MainService?
+                    //TODO move to ImportManager?
                     var importHistoryManager = scope.ServiceProvider.GetRequiredService<ImportHistoryManager>();
                     importHistoryManager.CreateImportHistory(externalRepository, m_importManager.UserId);
 
@@ -108,6 +108,10 @@ namespace Vokabular.ProjectImport
                         executionOptions
                     );
 
+
+                    var filteringExpressionSetRepository = scope.ServiceProvider.GetRequiredService<FilteringExpressionSetManager>();
+                    var filteringExpressions = filteringExpressionSetRepository.GetFilteringExpressionsByExternalRepository(externalRepository.Id);
+           
                     m_projectFilters.TryGetValue(externalRepository.BibliographicFormat.Name, out var projectFilter);
                     if (projectFilter == null)
                     {
@@ -115,7 +119,7 @@ namespace Vokabular.ProjectImport
                     }
 
                     var filterBlock = new TransformBlock<ProjectImportMetadata, ProjectImportMetadata>(
-                        metadata => projectFilter.Filter(metadata),
+                        metadata => projectFilter.Filter(metadata, filteringExpressions),
                         executionOptions
                     );
 
