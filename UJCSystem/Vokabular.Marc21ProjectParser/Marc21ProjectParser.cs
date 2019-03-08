@@ -6,13 +6,13 @@ using Vokabular.ProjectParsing.Parsers;
 
 namespace Vokabular.Marc21ProjectParser
 {
-    public class Marc21Parser : IParser
+    public class Marc21ProjectParser : IProjectParser
     {
         public string BibliographicFormatName { get; } = "Marc21";
         private readonly IDictionary<string, IDataFieldProcessor> m_dataFieldProcessors;
         private readonly IDictionary<string, IControlFieldProcessor> m_controlFieldProcessors;
 
-        public Marc21Parser(IEnumerable<IDataFieldProcessor> dataFieldProcessors,
+        public Marc21ProjectParser(IEnumerable<IDataFieldProcessor> dataFieldProcessors,
             IEnumerable<IControlFieldProcessor> controlFieldProcessors)
         {
             m_dataFieldProcessors = new Dictionary<string, IDataFieldProcessor>();

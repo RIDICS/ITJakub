@@ -8,6 +8,8 @@
 
         public bool IsNew { get; set; }
 
+        public bool IsSuitable { get; set; }
+
         public bool IsFaulted { get; set; }
 
         public string FaultedMessage { get; set; }

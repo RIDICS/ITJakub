@@ -14,6 +14,7 @@ using Vokabular.ProjectImport.ImportManagers;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
 using Vokabular.ProjectImport.Works;
+using Vokabular.ProjectParsing;
 using Vokabular.ProjectParsing.Parsers;
 using ProjectImportMetadata = Vokabular.ProjectParsing.Model.Entities.ProjectImportMetadata;
 
@@ -22,16 +23,18 @@ namespace Vokabular.ProjectImport
     public class ProjectImportHostedService : BackgroundService
     {
         private readonly IDictionary<string, IProjectImportManager> m_projectImportManagers;
-        private readonly IDictionary<string, IParser> m_parsers;
+        private readonly IDictionary<string, IProjectParser> m_projectParsers;
+        private readonly IDictionary<string, IProjectFilter> m_projectFilters;
         private readonly ImportManager m_importManager;
         private readonly ILogger<ProjectImportHostedService> m_logger;
         private readonly IServiceProvider m_serviceProvider;
 
-        public ProjectImportHostedService(IEnumerable<IProjectImportManager> importManagers, IEnumerable<IParser> parsers,
+        public ProjectImportHostedService(IEnumerable<IProjectImportManager> importManagers, IEnumerable<IProjectParser> parsers, IEnumerable<IProjectFilter> filters,
             ImportManager importManager, ILogger<ProjectImportHostedService> logger, IServiceProvider serviceProvider)
         {
             m_projectImportManagers = new Dictionary<string, IProjectImportManager>();
-            m_parsers = new Dictionary<string, IParser>();
+            m_projectParsers = new Dictionary<string, IProjectParser>();
+            m_projectFilters = new Dictionary<string, IProjectFilter>();
             m_importManager = importManager;
             m_logger = logger;
             m_serviceProvider = serviceProvider;
@@ -43,7 +46,12 @@ namespace Vokabular.ProjectImport
 
             foreach (var parser in parsers)
             {
-                m_parsers.Add(parser.BibliographicFormatName, parser);
+                m_projectParsers.Add(parser.BibliographicFormatName, parser);
+            }
+
+            foreach (var filter in filters)
+            {
+                m_projectFilters.Add(filter.BibliographicFormatName, filter);
             }
         }
 
@@ -83,31 +91,46 @@ namespace Vokabular.ProjectImport
                     var importHistoryManager = scope.ServiceProvider.GetRequiredService<ImportHistoryManager>();
                     importHistoryManager.CreateImportHistory(externalRepository, m_importManager.UserId);
 
+                    //TODO move to ???
                     var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhResource>(externalRepository.Configuration);
                     var config = new Dictionary<ParserHelperTypes, string> {{ParserHelperTypes.TemplateUrl, oaiPmhResource.TemplateUrl}};
 
                     m_projectImportManagers.TryGetValue(externalRepository.ExternalRepositoryType.Name, out var importManager);
                     if (importManager == null)
                     {
-                        throw new ArgumentNullException($"Import manager was not found for repository {externalRepository.Name}.");
+                        throw new ArgumentNullException($"Import manager was not found for repository type {externalRepository.ExternalRepositoryType.Name}.");
                     }
+
+                    var executionOptions = new ExecutionDataflowBlockOptions {CancellationToken = cancellationToken};
 
                     var responseParserBlock = new TransformBlock<object, ProjectImportMetadata>(
                         response => importManager.ParseResponse(response),
-                        new ExecutionDataflowBlockOptions {CancellationToken = cancellationToken}
+                        executionOptions
                     );
 
-                    m_parsers.TryGetValue(externalRepository.BibliographicFormat.Name, out var parser);
+                    m_projectFilters.TryGetValue(externalRepository.BibliographicFormat.Name, out var projectFilter);
+                    if (projectFilter == null)
+                    {
+                        throw new ArgumentNullException($"Project filter was not found for bibliographic format {externalRepository.BibliographicFormat.Name}.");
+                    }
+
+                    var filterBlock = new TransformBlock<ProjectImportMetadata, ProjectImportMetadata>(
+                        metadata => projectFilter.Filter(metadata),
+                        executionOptions
+                    );
+
+
+                    m_projectParsers.TryGetValue(externalRepository.BibliographicFormat.Name, out var parser);
                     if (parser == null)
                     {
-                        throw new ArgumentNullException($"Parser manager was not found for repository {externalRepository.Name}.");
+                        throw new ArgumentNullException($"Project parser was not found for bibliographic format {externalRepository.BibliographicFormat.Name}.");
                     }
 
                     var projectParserBlock = new TransformBlock<ProjectImportMetadata, ProjectImportMetadata>(
                         projectImportMetadata => parser.Parse(projectImportMetadata, config),
-                        new ExecutionDataflowBlockOptions {CancellationToken = cancellationToken}
+                        executionOptions
                     );
-
+                 
 
                     var projectRepository = scope.ServiceProvider.GetRequiredService<ProjectRepository>();
 
@@ -132,10 +155,15 @@ namespace Vokabular.ProjectImport
                         }, new ExecutionDataflowBlockOptions {CancellationToken = cancellationToken}
                     );
 
-                    var buffer = new BufferBlock<string>(new DataflowBlockOptions {CancellationToken = cancellationToken});
-                    buffer.LinkTo(responseParserBlock, new DataflowLinkOptions {PropagateCompletion = true});
-                    responseParserBlock.LinkTo(projectParserBlock, new DataflowLinkOptions {PropagateCompletion = true});
-                    projectParserBlock.LinkTo(saveBlock, new DataflowLinkOptions {PropagateCompletion = true});
+                    var linkOptions = new DataflowLinkOptions {PropagateCompletion = true};
+
+                    var buffer = new BufferBlock<string>(executionOptions);
+                    buffer.LinkTo(responseParserBlock, linkOptions);
+
+                    responseParserBlock.LinkTo(filterBlock, linkOptions);
+                    filterBlock.LinkTo(projectParserBlock, linkOptions, projectMetadata => projectMetadata.IsSuitable);
+                    filterBlock.LinkTo(DataflowBlock.NullTarget<ProjectImportMetadata>(), linkOptions);
+                    projectParserBlock.LinkTo(saveBlock, linkOptions);
 
                     await importManager.ImportFromResource(externalRepository, buffer, cancellationToken);
                     buffer.Complete();
@@ -144,7 +172,7 @@ namespace Vokabular.ProjectImport
                 }
                 catch (Exception e)
                 {
-                    var message = $"Error occurred executing import task. Error message: {e.Message}";
+                    var message = $"Error occurred executing import task (import from repository {externalRepository.Name}). Error message: {e.Message}";
                     if (!(e is OperationCanceledException))
                     {
                         m_logger.LogWarning(message);

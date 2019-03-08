@@ -10,7 +10,7 @@ namespace Vokabular.Marc21ProjectParser
     {
         public static void AddMarc21ProjectParsingServices(this IServiceCollection services)
         {
-            services.AddSingleton<IParser, Marc21Parser>();
+            services.AddSingleton<IProjectParser, Marc21ProjectParser>();
 
             services.AddSingleton<IControlFieldProcessor, OriginalResourceUrlProcessor>();
 
