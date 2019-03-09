@@ -133,7 +133,15 @@ namespace Vokabular.ProjectImport
                         projectImportMetadata => parser.Parse(projectImportMetadata, config),
                         executionOptions
                     );
-                 
+
+
+                    var nullTargetBlock = new ActionBlock<ProjectImportMetadata>(
+                        projectImportMetadata =>
+                        {
+                            progressInfo.IncrementProcessedProjectsCount();
+                            progress.Report(progressInfo);
+                        }, executionOptions
+                    );
 
                     var projectRepository = scope.ServiceProvider.GetRequiredService<ProjectRepository>();
 
@@ -165,7 +173,7 @@ namespace Vokabular.ProjectImport
 
                     responseParserBlock.LinkTo(filterBlock, linkOptions);
                     filterBlock.LinkTo(projectParserBlock, linkOptions, projectMetadata => projectMetadata.IsSuitable);
-                    filterBlock.LinkTo(DataflowBlock.NullTarget<ProjectImportMetadata>(), linkOptions);
+                    filterBlock.LinkTo(nullTargetBlock, linkOptions);
                     projectParserBlock.LinkTo(saveBlock, linkOptions);
 
                     await importManager.ImportFromResource(externalRepository.Configuration, buffer, cancellationToken);
