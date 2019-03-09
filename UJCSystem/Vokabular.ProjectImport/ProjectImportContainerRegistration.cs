@@ -9,8 +9,9 @@ namespace Vokabular.ProjectImport
     {
         public static void AddProjectImportServices(this IServiceCollection container)
         {
-            container.AddScoped<ImportHistoryManager>();
+            container.AddScoped<ExternalRepositoryManager>();
             container.AddScoped<FilteringExpressionSetManager>();
+            container.AddScoped<ImportHistoryManager>();
             
             container.AddHostedService<ProjectImportHostedService>();
             container.AddSingleton<MainImportManager>();

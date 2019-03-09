@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Vokabular.DataEntities.Database.Entities;
-using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
 
 namespace Vokabular.ProjectImport
@@ -52,11 +52,11 @@ namespace Vokabular.ProjectImport
             {
                 foreach (var externalRepositoryId in externalRepositoryIds)
                 {
-                    var externalRepositoryRepository = scope.ServiceProvider.GetRequiredService<ExternalRepositoryRepository>();
-                    m_importList.Add(externalRepositoryRepository.GetExternalRepository(externalRepositoryId));
+                    var externalRepositoryManager = scope.ServiceProvider.GetRequiredService<ExternalRepositoryManager>();
+                    m_importList.Add(externalRepositoryManager.GetExternalRepository(externalRepositoryId));
                 }
             }
-               
+
             UserId = userId;
             m_signal.Release();
         }
