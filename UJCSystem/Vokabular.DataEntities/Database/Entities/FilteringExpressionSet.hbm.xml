@@ -11,14 +11,14 @@
 
     <many-to-one name="BibliographicFormat" class="BibliographicFormat" lazy="proxy" not-null="true" />
 
-    <bag name="FilteringExpressions" lazy="true">
+    <bag name="FilteringExpressions" inverse="true">
       <key column="FilteringExpressionSet" />
       <one-to-many class="FilteringExpression" />
     </bag>
-
+   
     <bag name="ExternalRepositories" table="ExternalRepository_FilteringExpressionSet" lazy="true">
-      <key column="[FilteringExpressionSet]" />
-      <many-to-many class="User" column="[ExternalRepository]" />
+      <key column="FilteringExpressionSet" />
+      <many-to-many class="ExternalRepository" column="ExternalRepository" />
     </bag>
   </class>
 </hibernate-mapping>

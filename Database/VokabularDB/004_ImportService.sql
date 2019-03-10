@@ -24,7 +24,7 @@ BEGIN TRAN
 		[Configuration] nvarchar(MAX) NULL,
 		[CreatedByUser] int NOT NULL CONSTRAINT [FK_ExternalRepository(CreatedByUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User] (Id),
 		[BibliographicFormat] int NOT NULL CONSTRAINT [FK_ExternalRepository(BibliographicFormat)_BibliographicFormat(Id)] FOREIGN KEY REFERENCES [dbo].[BibliographicFormat] (Id),
-		[ExternalResourceType] int NOT NULL CONSTRAINT [FK_ExternalRepository(ExternalResourceType)_ExternalRepositoryType(Id)] FOREIGN KEY REFERENCES [dbo].[ExternalRepositoryType] (Id)
+		[ExternalRepositoryType] int NOT NULL CONSTRAINT [FK_ExternalRepository(ExternalResourceType)_ExternalRepositoryType(Id)] FOREIGN KEY REFERENCES [dbo].[ExternalRepositoryType] (Id)
 	)
     
 	CREATE TABLE [dbo].[ImportHistory]
@@ -64,7 +64,7 @@ BEGIN TRAN
 	(
 		[Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_FilteringExpressiony(Id)] PRIMARY KEY CLUSTERED,
 		[Key] nvarchar(255) NOT NULL,
-		[Value] nvarchar(255) NOT NULL,
+		[Field] nvarchar(255) NOT NULL,
 		[FilteringExpressionSet] int NOT NULL CONSTRAINT [FK_FilteringExpression(FilteringExpressionSet)_FilteringExpressionSet(Id)] FOREIGN KEY REFERENCES [dbo].[FilteringExpression] (Id)
 	)
 
