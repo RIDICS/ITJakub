@@ -2,6 +2,7 @@
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.ProjectImport.Works;
+using Vokabular.ProjectParsing.Model.Entities;
 
 namespace Vokabular.ProjectImport.Managers
 {
@@ -20,11 +21,10 @@ namespace Vokabular.ProjectImport.Managers
             return result;
         }
 
-       /* public ImportMetadata GetImportMetadataByExternalId(string externalId)
+        public int CreateImportMetadata(ProjectImportMetadata projectImportMetadata, ImportHistory importHistory)
         {
-            var result = new CreateImportedMetadataWork(projectRepository, projectImportMetadata, userId).Execute();
+            var result = new CreateImportMetadataWork(m_importMetadataRepository, projectImportMetadata, importHistory).Execute();
             return result;
-        }*/
-        
+        }
     }
 }

@@ -5,17 +5,15 @@ using ProjectImportMetadata = Vokabular.ProjectParsing.Model.Entities.ProjectImp
 
 namespace Vokabular.ProjectImport.Works
 {
-    public class CreateImportedMetadataWork : UnitOfWorkBase
+    public class UpdateImportedProjectWork : UnitOfWorkBase
     {
         private readonly ProjectRepository m_projectRepository;
         private readonly ProjectImportMetadata m_metadata;
-        private readonly int m_userId;
 
-        public CreateImportedMetadataWork(ProjectRepository projectRepository, ProjectImportMetadata metadata, int userId) : base(projectRepository)
+        public UpdateImportedProjectWork(ProjectRepository projectRepository, ProjectImportMetadata metadata) : base(projectRepository)
         {
             m_projectRepository = projectRepository;
             m_metadata = metadata;
-            m_userId = userId;
         }
 
         protected override void ExecuteWorkImplementation()

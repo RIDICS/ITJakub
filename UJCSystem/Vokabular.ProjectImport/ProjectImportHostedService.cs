@@ -90,7 +90,8 @@ namespace Vokabular.ProjectImport
                 try
                 {
                     var importHistoryManager = scope.ServiceProvider.GetRequiredService<ImportHistoryManager>();
-                    importHistoryManager.CreateImportHistory(externalRepository, m_importManager.UserId);
+                    var importHistoryId = importHistoryManager.CreateImportHistory(externalRepository, m_importManager.UserId);
+                    var importHistory = importHistoryManager.GetImportHistory(importHistoryId);
 
                     //TODO move to ???
                     var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhRepositoryConfiguration>(externalRepository.Configuration);
@@ -171,26 +172,33 @@ namespace Vokabular.ProjectImport
                         }, executionOptions
                     );
 
-                    var projectRepository = scope.ServiceProvider.GetRequiredService<ProjectRepository>();
 
                     var userId = m_importManager.UserId;
 
+                    var projectManager = scope.ServiceProvider.GetRequiredService<ProjectManager>();
                     var saveBlock = new ActionBlock<ProjectImportMetadata>(projectImportMetadata =>
                         {
-                            if (!projectImportMetadata.IsFaulted)
+                            try
                             {
-                                if (projectImportMetadata.IsNew)
+                                if (!projectImportMetadata.IsFaulted)
                                 {
-                                    var projectId = new CreateImportedProjectWork(projectRepository, projectImportMetadata, userId).Execute();
+                                    if (projectImportMetadata.IsNew)
+                                    {
+                                        var projectId = projectManager.CreateProject(projectImportMetadata, userId);
+                                    }
+                                    //TODO create new snapshot
                                 }
-
-                                new CreateImportedMetadataWork(projectRepository, projectImportMetadata, userId).Execute();
+                            }
+                            catch (Exception e)
+                            {
+                                m_logger.LogWarning(e.Message);
+                                projectImportMetadata.FaultedMessage = e.Message;
                             }
 
-                            //TODO save to DB ProjectImportMetadata - to separated block
-
+                            importMetadataManager.CreateImportMetadata(projectImportMetadata, importHistory);
                             progressInfo.IncrementProcessedProjectsCount();
-                        }, new ExecutionDataflowBlockOptions {CancellationToken = cancellationToken}
+                        },
+                        new ExecutionDataflowBlockOptions {CancellationToken = cancellationToken}
                     );
 
                     var linkOptions = new DataflowLinkOptions {PropagateCompletion = true};

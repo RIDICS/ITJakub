@@ -1,5 +1,6 @@
 ﻿using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.ProjectImport.Works;
 
 namespace Vokabular.ProjectImport.Managers
@@ -17,6 +18,11 @@ namespace Vokabular.ProjectImport.Managers
         {
             var resultId = new CreateImportHistoryWork(m_importHistoryRepository, externalRepository, userId).Execute();
             return resultId;
+        }
+
+        public ImportHistory GetImportHistory(int importHistoryId)
+        {
+            return m_importHistoryRepository.InvokeUnitOfWork(x => x.FindById<ImportHistory>(importHistoryId));
         }
     }
 }
