@@ -2,7 +2,6 @@
 {
     internal static class StringHelper
     {
-        //TODO doc
         public static string RemoveUnnecessaryCharacters(this string text)
         {
             var isLastUnnecessary = !char.IsLetterOrDigit(text[text.Length - 1]);

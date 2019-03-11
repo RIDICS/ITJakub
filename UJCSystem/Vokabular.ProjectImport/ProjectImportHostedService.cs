@@ -71,7 +71,6 @@ namespace Vokabular.ProjectImport
                 }
 
                 await Task.WhenAll(importTasks);
-                //TODO ends here?
 
                 m_importManager.IsImportRunning = false;
                 m_importManager.ActualProgress.Clear();
@@ -90,7 +89,6 @@ namespace Vokabular.ProjectImport
             {
                 try
                 {
-                    //TODO move to ImportManager?
                     var importHistoryManager = scope.ServiceProvider.GetRequiredService<ImportHistoryManager>();
                     importHistoryManager.CreateImportHistory(externalRepository, m_importManager.UserId);
 
