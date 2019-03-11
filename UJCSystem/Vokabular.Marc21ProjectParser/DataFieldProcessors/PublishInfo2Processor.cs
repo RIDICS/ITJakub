@@ -16,38 +16,88 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
             var publishInfo = dataField.subfield.FirstOrDefault(x => x.code == PublishInfoCode);
             if (publishInfo != null)
             {
-                var index = publishInfo.Value.IndexOf(':'); //kdyz neni, tak zbytek jestli je n2jak7 tak je bud rok (cisla nebo mesto)
-                        
+                var index = publishInfo.Value.IndexOf(':');
+
                 if (index > 0)
                 {
                     var publishPlace = publishInfo.Value.Substring(0, index);
+                    project.MetadataResource.PublishPlace = publishPlace.RemoveUnnecessaryCharacters();
                     var rest = publishInfo.Value.Substring(index);
 
                     if (!string.IsNullOrEmpty(rest))
                     {
-                        index = rest.IndexOf(",", StringComparison.Ordinal);//TODO kdz6 nen9 tak zbytek je text, kdyz neobsahuje cilsa, kdyz obsahuje je to text
-                        var publisherText = rest.Substring(0, index);
-                        var publishDate = rest.Substring(index);
+                        index = rest.IndexOf(",", StringComparison.Ordinal);
 
-
-                        if (!string.IsNullOrEmpty(publisherText) && publisherText.Length > 1)
+                        if (index > 0)
                         {
-                            project.MetadataResource.PublisherText = publisherText.RemoveUnnecessaryCharacters();
+                            var publisherText = rest.Substring(0, index);
+                            var publishDate = rest.Substring(index);
+
+                            if (!string.IsNullOrEmpty(publisherText) && publisherText.Length > 1)
+                            {
+                                project.MetadataResource.PublisherText = publisherText.RemoveUnnecessaryCharacters();
+                            }
+
+                            if (!string.IsNullOrEmpty(publishDate) && publishDate.Length > 1)
+                            {
+                                project.MetadataResource.PublishDate = publishDate.RemoveUnnecessaryCharacters();
+                            }
+                        }
+                        else
+                        {
+                            if (int.TryParse(rest, out int publishDate))
+                            {
+                                project.MetadataResource.PublishDate = publishDate.ToString();
+                            }
+                            else
+                            {
+                                project.MetadataResource.PublisherText = rest;
+                            }
                         }
 
-                        if (!string.IsNullOrEmpty(publishDate) && publishDate.Length > 1)
+                    }
+                }
+                else
+                {
+                    index = publishInfo.Value.IndexOf(',');
+
+                    if (index > 0)
+                    {
+                        var publishPlace = publishInfo.Value.Substring(0, index);
+                        project.MetadataResource.PublishPlace = publishPlace.RemoveUnnecessaryCharacters();
+                        var rest = publishInfo.Value.Substring(index);
+
+                        index = rest.IndexOf(";", StringComparison.Ordinal);
+
+                        if (index > 0)
                         {
-                            project.MetadataResource.PublishDate = publishDate.RemoveUnnecessaryCharacters();
+                            var publisherText = rest.Substring(0, index);
+                            var publishDate = rest.Substring(index);
+
+                            if (!string.IsNullOrEmpty(publisherText) && publisherText.Length > 1)
+                            {
+                                project.MetadataResource.PublisherText = publisherText.RemoveUnnecessaryCharacters();
+                            }
+
+                            if (!string.IsNullOrEmpty(publishDate) && publishDate.Length > 1)
+                            {
+                                project.MetadataResource.PublishDate = publishDate.RemoveUnnecessaryCharacters();
+                            }
+                        }
+                        else
+                        {
+                            if (int.TryParse(rest, out int publishDate))
+                            {
+                                project.MetadataResource.PublishDate = publishDate.ToString();
+                            }
+                            else
+                            {
+                                project.MetadataResource.PublisherText = rest;
+                            }
                         }
                     }
-
-                    project.MetadataResource.PublishPlace = publishPlace.RemoveUnnecessaryCharacters();
                 }
             }
-            
-
-            //Praha: Horizont
-            //Brno: Muzejní a vlastivědná společnost v Brně, 1990
         }
     }
 }
