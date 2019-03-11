@@ -34,8 +34,9 @@ namespace Vokabular.Marc21ProjectParser.Filtering
 
                         foreach (var expression in filterExpressions)
                         {
-                            var expr = expression.Replace("%", ".*");
-                            expr = Regex.Escape(expr);
+                            var expr = Regex.Escape(expression);
+                            expr = expr.Replace("%", ".*");
+                            
                             if (Regex.IsMatch(subField.Value, expr))
                             {
                                 projectImportMetadata.IsSuitable = true;
