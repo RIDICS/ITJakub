@@ -16,7 +16,6 @@ namespace Vokabular.ProjectImport
         private readonly IServiceProvider m_serviceProvider;
         private readonly IList<ExternalRepository> m_importList;
         private readonly SemaphoreSlim m_signal;
-        private readonly object m_updateListLock = new object();
 
         public ImportManager(IServiceProvider serviceProvider)
         {
@@ -30,7 +29,7 @@ namespace Vokabular.ProjectImport
 
         public readonly ConcurrentDictionary<int, RepositoryImportProgressInfo> ActualProgress;
         public readonly ConcurrentDictionary<int, CancellationTokenSource> CancellationTokens;
-        public bool IsImportRunning { get; private set; }
+        public bool IsImportRunning { get; set; }
         public int UserId { get; private set; }
 
         public void ImportFromResources(IList<int> externalRepositoryIds, int userId)
@@ -61,29 +60,10 @@ namespace Vokabular.ProjectImport
             m_signal.Release();
         }
 
-        public void UpdateList(RepositoryImportProgressInfo progressInfo)
-        {
-            lock (m_updateListLock)
-            {
-                //TODO own class in ConcDic instead of ProgressInfo
-                if (ActualProgress.All(x => x.Value.IsCompleted))
-                {
-                    IsImportRunning = false;
-                    ActualProgress.Clear();
-                    CancellationTokens.Clear();
-                }
-            }
-        }
-
         public async Task<IEnumerable<ExternalRepository>> GetExternalRepositories(CancellationToken cancellationToken)
         {
             await m_signal.WaitAsync(cancellationToken);
             IsImportRunning = true;
-
-            foreach (var externalRepository in m_importList)
-            {
-                ActualProgress.TryAdd(externalRepository.Id, new RepositoryImportProgressInfo(externalRepository.Id));
-            }
 
             return m_importList;
         }

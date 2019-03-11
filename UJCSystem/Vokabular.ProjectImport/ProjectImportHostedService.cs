@@ -67,20 +67,24 @@ namespace Vokabular.ProjectImport
                 {
                     var cts = new CancellationTokenSource();
                     m_importManager.CancellationTokens.TryAdd(externalRepository.Id, cts);
-                    importTasks.Add(
-                        Import(externalRepository, new Progress<RepositoryImportProgressInfo>(m_importManager.UpdateList), cts.Token));
+                    importTasks.Add(Import(externalRepository, cts.Token));
                 }
 
                 await Task.WhenAll(importTasks);
+                //TODO ends here?
+
+                m_importManager.IsImportRunning = false;
+                m_importManager.ActualProgress.Clear();
+                m_importManager.CancellationTokens.Clear();
             }
 
             m_logger.LogInformation("Project import hosted service stopped.");
         }
 
-        private async Task Import(ExternalRepository externalRepository, IProgress<RepositoryImportProgressInfo> progress,
-            CancellationToken cancellationToken)
+        private async Task Import(ExternalRepository externalRepository, CancellationToken cancellationToken)
         {
             var progressInfo = new RepositoryImportProgressInfo(externalRepository.Id);
+            m_importManager.ActualProgress.TryAdd(externalRepository.Id, progressInfo);
 
             using (var scope = m_serviceProvider.CreateScope())
             {
@@ -139,7 +143,6 @@ namespace Vokabular.ProjectImport
                         projectImportMetadata =>
                         {
                             progressInfo.IncrementProcessedProjectsCount();
-                            progress.Report(progressInfo);
                         }, executionOptions
                     );
 
@@ -162,7 +165,6 @@ namespace Vokabular.ProjectImport
                             //TODO save to DB ProjectImportMetadata - to separated block
 
                             progressInfo.IncrementProcessedProjectsCount();
-                            progress.Report(progressInfo);
                         }, new ExecutionDataflowBlockOptions {CancellationToken = cancellationToken}
                     );
 
@@ -194,8 +196,7 @@ namespace Vokabular.ProjectImport
                 finally
                 {
                     progressInfo.IsCompleted = true;
-                    progress.Report(progressInfo);
-                    //TODO count: updated, new, deleted - own entity? - save to DB (return from this method?)
+                    //TODO save progressInfo to DB
                 }
             }
         }
