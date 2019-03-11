@@ -10,7 +10,7 @@ namespace Vokabular.ProjectImport.Model
     {
         string ExternalRepositoryTypeName { get; }
 
-        Task ImportFromResource(string repository, ITargetBlock<object> buffer, CancellationToken cancellationToken = default(CancellationToken));
+        Task ImportFromResource(string repository, ITargetBlock<object> buffer, RepositoryImportProgressInfo progressInfo, CancellationToken cancellationToken = default(CancellationToken));
 
         Project ImportRecord(string repository, string id);
 

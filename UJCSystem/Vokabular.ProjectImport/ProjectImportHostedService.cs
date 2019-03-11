@@ -178,7 +178,7 @@ namespace Vokabular.ProjectImport
                     filterBlock.LinkTo(nullTargetBlock, linkOptions);
                     projectParserBlock.LinkTo(saveBlock, linkOptions);
 
-                    await importManager.ImportFromResource(externalRepository.Configuration, buffer, cancellationToken);
+                    await importManager.ImportFromResource(externalRepository.Configuration, buffer, progressInfo, cancellationToken);
                     buffer.Complete();
 
                     saveBlock.Completion.Wait(cancellationToken);

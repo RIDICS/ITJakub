@@ -27,7 +27,7 @@ namespace Vokabular.OaiPmhImportManager
             return new OaiPmhCommunicationClient(m_oaiPmhClientOption, url);
         }
 
-        public async Task ImportFromResource(string configuration, ITargetBlock<object> buffer, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task ImportFromResource(string configuration, ITargetBlock<object> buffer, RepositoryImportProgressInfo progressInfo, CancellationToken cancellationToken = default(CancellationToken))
         {
             var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhRepositoryConfiguration>(configuration);
 
@@ -35,6 +35,7 @@ namespace Vokabular.OaiPmhImportManager
             {
                 var records = await client.GetVerbAsync<ListRecordsType>(verbType.ListRecords, oaiPmhResource.DataFormat, oaiPmhResource.SetName);
                 var resumptionToken = records.resumptionToken;
+                progressInfo.TotalProjectsCount = Convert.ToInt32(resumptionToken.completeListSize);
                
                 foreach (var recordType in records.record)
                 {
