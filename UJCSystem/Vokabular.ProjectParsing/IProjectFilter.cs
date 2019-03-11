@@ -5,7 +5,7 @@ namespace Vokabular.ProjectParsing
 {
     public interface IProjectFilter
     {
-        ProjectImportMetadata Filter(ProjectImportMetadata projectImport, IDictionary<string, List<string>> filteringExpressions);
+        bool Filter(ProjectImportMetadata projectImport, IDictionary<string, List<string>> filteringExpressions);
 
         string BibliographicFormatName { get; }
     }

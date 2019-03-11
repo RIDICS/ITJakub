@@ -15,5 +15,7 @@
         public string FaultedMessage { get; set; }
 
         public Project Project { get; set; }
+
+        public long ProjectId { get; set; }
     }
 }

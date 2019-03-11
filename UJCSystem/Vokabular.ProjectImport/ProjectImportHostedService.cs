@@ -119,9 +119,36 @@ namespace Vokabular.ProjectImport
                         throw new ArgumentNullException($"Project filter was not found for bibliographic format {externalRepository.BibliographicFormat.Name}.");
                     }
 
-                    var filterBlock = new TransformBlock<ProjectImportMetadata, ProjectImportMetadata>(
-                        metadata => projectFilter.Filter(metadata, filteringExpressions),
-                        executionOptions
+                    var importMetadataManager = scope.ServiceProvider.GetRequiredService<ImportMetadataManager>();
+                    var filterBlock = new TransformBlock<ProjectImportMetadata, ProjectImportMetadata>(metadata =>
+                        {
+                            if (metadata.IsFaulted)
+                            {
+                                return metadata;
+                            }
+
+                            try
+                            {
+                                var metadataDb = importMetadataManager.GetImportMetadataByExternalId(metadata.ExternalId);
+                                metadata.IsNew = metadataDb == null;
+
+                                if (metadata.IsNew)
+                                {
+                                    metadata.IsSuitable = projectFilter.Filter(metadata, filteringExpressions);
+                                }
+                                else
+                                {
+                                    metadata.ProjectId = metadataDb.Snapshot.Project.Id;
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                metadata.IsFaulted = true;
+                                metadata.FaultedMessage = e.Message;
+                            }
+
+                            return metadata;
+                        }, executionOptions
                     );
 
 
