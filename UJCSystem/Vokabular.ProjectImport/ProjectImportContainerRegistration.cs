@@ -12,6 +12,8 @@ namespace Vokabular.ProjectImport
             container.AddScoped<ExternalRepositoryManager>();
             container.AddScoped<FilteringExpressionSetManager>();
             container.AddScoped<ImportHistoryManager>();
+            container.AddScoped<ImportMetadataManager>();
+            container.AddScoped<ProjectManager>();
             
             container.AddHostedService<ProjectImportHostedService>();
             container.AddSingleton<MainImportManager>();

@@ -19,6 +19,7 @@ namespace Vokabular.DataEntities
             container.AddPerWebRequest<FavoritesRepository>();
             container.AddPerWebRequest<FilteringExpressionSetRepository>();
             container.AddPerWebRequest<ImportHistoryRepository>();
+            container.AddPerWebRequest<ImportMetadataRepository>();
             container.AddPerWebRequest<MetadataRepository>();
             container.AddPerWebRequest<PermissionRepository>();
             container.AddPerWebRequest<PersonRepository>();
