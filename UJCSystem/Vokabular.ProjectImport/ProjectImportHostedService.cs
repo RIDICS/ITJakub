@@ -108,8 +108,8 @@ namespace Vokabular.ProjectImport
                     );
 
 
-                    var filteringExpressionSetRepository = scope.ServiceProvider.GetRequiredService<FilteringExpressionSetManager>();
-                    var filteringExpressions = filteringExpressionSetRepository.GetFilteringExpressionsByExternalRepository(externalRepository.Id);
+                    var filteringExpressionSetManager = scope.ServiceProvider.GetRequiredService<FilteringExpressionSetManager>();
+                    var filteringExpressions = filteringExpressionSetManager.GetFilteringExpressionsByExternalRepository(externalRepository.Id);
            
                     m_projectFilters.TryGetValue(externalRepository.BibliographicFormat.Name, out var projectFilter);
                     if (projectFilter == null)

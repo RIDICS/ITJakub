@@ -21,7 +21,6 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.FilteringExpressionSet, () => setAlias)
                 .JoinAlias(() => setAlias.ExternalRepositories, () => repositoryAlias)
                 .Where(() => repositoryAlias.Id == externalRepositoryId)
-                .OrderBy(x => x.Key).Asc
                 .List();
         }
     }

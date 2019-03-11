@@ -17,7 +17,7 @@ namespace Vokabular.ProjectImport.Managers
         public IDictionary<string, List<string>> GetFilteringExpressionsByExternalRepository(int externalRepositoryId)
         {
             var result = m_filteringExpressionSetRepository.InvokeUnitOfWork(x => x.GetFilteringExpressionsByExternalRepository(externalRepositoryId));
-            return result.GroupBy(expr => expr.Key).ToDictionary(group => group.Key, group => group.Select(expr => expr.Value).ToList());
+            return result.GroupBy(expr => expr.Field).ToDictionary(group => group.Key, group => group.Select(expr => expr.Value).ToList());
         }
     }
 }
