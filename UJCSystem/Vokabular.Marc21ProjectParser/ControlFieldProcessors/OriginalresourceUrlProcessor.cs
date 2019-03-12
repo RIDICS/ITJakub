@@ -14,7 +14,7 @@ namespace Vokabular.Marc21ProjectParser.ControlFieldProcessors
 
             if (urlTemplate != null)
             {
-                project.MetadataResource.OriginalResourceUrl = urlTemplate.Replace("{id}", dataField.Value);
+                project.ProjectMetadata.OriginalResourceUrl = urlTemplate.Replace("{id}", dataField.Value);
             }
         }
     }

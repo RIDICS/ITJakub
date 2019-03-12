@@ -13,7 +13,7 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
         {
             var genre = dataField.subfield.First(x => x.code == GenreCode).Value;
 
-            project.Genres.Add(genre);
+            project.LiteraryGenres.Add(genre);
         }
     }
 }

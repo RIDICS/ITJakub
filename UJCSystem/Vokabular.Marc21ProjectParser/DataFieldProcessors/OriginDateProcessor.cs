@@ -17,9 +17,9 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
             if (date != null)
             {
                 var dates = date.Split('-');
-                project.MetadataResource.NotBefore = new DateTime(int.Parse(dates[0]), 1, 1);
+                project.ProjectMetadata.ManuscriptDescriptionData.NotBefore = new DateTime(int.Parse(dates[0]), 1, 1);
                 if (dates.Length > 1 && dates[1].Length > 0 && dates[1].All(char.IsDigit))
-                    project.MetadataResource.NotAfter = new DateTime(int.Parse(dates[1]), 1, 1);
+                    project.ProjectMetadata.ManuscriptDescriptionData.NotAfter = new DateTime(int.Parse(dates[1]), 1, 1);
             }
         }
     }

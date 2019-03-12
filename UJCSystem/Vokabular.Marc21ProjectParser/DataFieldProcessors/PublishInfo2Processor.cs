@@ -21,7 +21,7 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
                 if (index > 0)
                 {
                     var publishPlace = publishInfo.Value.Substring(0, index);
-                    project.MetadataResource.PublishPlace = publishPlace.RemoveUnnecessaryCharacters();
+                    project.ProjectMetadata.PublishPlace = publishPlace.RemoveUnnecessaryCharacters();
                     var rest = publishInfo.Value.Substring(index);
 
                     if (!string.IsNullOrEmpty(rest))
@@ -35,23 +35,23 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
 
                             if (!string.IsNullOrEmpty(publisherText) && publisherText.Length > 1)
                             {
-                                project.MetadataResource.PublisherText = publisherText.RemoveUnnecessaryCharacters();
+                                project.ProjectMetadata.PublisherText = publisherText.RemoveUnnecessaryCharacters();
                             }
 
                             if (!string.IsNullOrEmpty(publishDate) && publishDate.Length > 1)
                             {
-                                project.MetadataResource.PublishDate = publishDate.RemoveUnnecessaryCharacters();
+                                project.ProjectMetadata.PublishDate = publishDate.RemoveUnnecessaryCharacters();
                             }
                         }
                         else
                         {
                             if (int.TryParse(rest, out int publishDate))
                             {
-                                project.MetadataResource.PublishDate = publishDate.ToString();
+                                project.ProjectMetadata.PublishDate = publishDate.ToString();
                             }
                             else
                             {
-                                project.MetadataResource.PublisherText = rest;
+                                project.ProjectMetadata.PublisherText = rest;
                             }
                         }
 
@@ -64,7 +64,7 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
                     if (index > 0)
                     {
                         var publishPlace = publishInfo.Value.Substring(0, index);
-                        project.MetadataResource.PublishPlace = publishPlace.RemoveUnnecessaryCharacters();
+                        project.ProjectMetadata.PublishPlace = publishPlace.RemoveUnnecessaryCharacters();
                         var rest = publishInfo.Value.Substring(index);
 
                         index = rest.IndexOf(";", StringComparison.Ordinal);
@@ -76,23 +76,23 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
 
                             if (!string.IsNullOrEmpty(publisherText) && publisherText.Length > 1)
                             {
-                                project.MetadataResource.PublisherText = publisherText.RemoveUnnecessaryCharacters();
+                                project.ProjectMetadata.PublisherText = publisherText.RemoveUnnecessaryCharacters();
                             }
 
                             if (!string.IsNullOrEmpty(publishDate) && publishDate.Length > 1)
                             {
-                                project.MetadataResource.PublishDate = publishDate.RemoveUnnecessaryCharacters();
+                                project.ProjectMetadata.PublishDate = publishDate.RemoveUnnecessaryCharacters();
                             }
                         }
                         else
                         {
                             if (int.TryParse(rest, out int publishDate))
                             {
-                                project.MetadataResource.PublishDate = publishDate.ToString();
+                                project.ProjectMetadata.PublishDate = publishDate.ToString();
                             }
                             else
                             {
-                                project.MetadataResource.PublisherText = rest;
+                                project.ProjectMetadata.PublisherText = rest;
                             }
                         }
                     }

@@ -1,9 +1,12 @@
-﻿using System;
-
-namespace Vokabular.ProjectParsing.Model.Entities
+﻿namespace Vokabular.ProjectParsing.Model.Entities
 {
-    public class MetadataResource
+    public class ProjectMetadata
     {
+        public ProjectMetadata()
+        {
+            ManuscriptDescriptionData = new ManuscriptDescriptionData();
+        }
+
         public string Title { get; set; }
         public string SubTitle { get; set; }
         public string AuthorsLabel { get; set; }
@@ -16,14 +19,7 @@ namespace Vokabular.ProjectParsing.Model.Entities
         public string Copyright { get; set; }
         public string BiblText { get; set; }
         public string OriginDate { get; set; }
-        public DateTime? NotBefore { get; set; }
-        public DateTime? NotAfter { get; set; }
-        public string ManuscriptIdno { get; set; }
-        public string ManuscriptSettlement { get; set; }
-        public string ManuscriptCountry { get; set; }
-        public string ManuscriptRepository { get; set; }
-        public string ManuscriptExtent { get; set; }
-        public string ManuscriptTitle { get; set; }
+        public ManuscriptDescriptionData ManuscriptDescriptionData { get; set; }
         public string OriginalResourceUrl { get; set; }
     }
 }

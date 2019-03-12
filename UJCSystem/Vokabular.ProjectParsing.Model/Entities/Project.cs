@@ -8,20 +8,31 @@ namespace Vokabular.ProjectParsing.Model.Entities
 
         public IList<Author> Authors { get; }
 
-        public IList<Keyword> Keywords { get; }
+        public IList<string> Keywords { get; }
 
-        public IList<string> Genres { get; }
+        public IList<string> LiteraryGenres { get; }
 
-        public MetadataResource MetadataResource { get; set; }
+        public IList<string> LiteraryKinds { get; }
+
+        public IList<string> LiteraryOriginals { get; set; }
+
+        public List<ResponsibleData> Responsibles { get; set; }
+
+        public IList<CategoryData> AllCategoriesHierarchy { get; }
+
+        public ProjectMetadata ProjectMetadata { get; }
 
         public string EditionNote { get; set; }
 
         public Project()
         {
             Authors = new List<Author>();
-            Keywords = new List<Keyword>();
-            Genres = new List<string>();
-            MetadataResource = new MetadataResource();
+            Keywords = new List<string>();
+            LiteraryGenres = new List<string>();
+            LiteraryKinds = new List<string>();
+            LiteraryOriginals = new List<string>();
+            AllCategoriesHierarchy = new List<CategoryData>();
+            ProjectMetadata = new ProjectMetadata();
         }
     }
 }
