@@ -8,11 +8,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Vokabular.DataEntities.Database.Entities;
-using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.OaiPmhImportManager;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
-using Vokabular.ProjectImport.Works;
 using Vokabular.ProjectParsing;
 using Vokabular.ProjectParsing.Parsers;
 using ProjectImportMetadata = Vokabular.ProjectParsing.Model.Entities.ProjectImportMetadata;
@@ -28,7 +26,8 @@ namespace Vokabular.ProjectImport
         private readonly ILogger<ProjectImportHostedService> m_logger;
         private readonly IServiceProvider m_serviceProvider;
 
-        public ProjectImportHostedService(IEnumerable<IProjectImportManager> importManagers, IEnumerable<IProjectParser> parsers, IEnumerable<IProjectFilter> filters,
+        public ProjectImportHostedService(IEnumerable<IProjectImportManager> importManagers, IEnumerable<IProjectParser> parsers,
+            IEnumerable<IProjectFilter> filters,
             ImportManager importManager, ILogger<ProjectImportHostedService> logger, IServiceProvider serviceProvider)
         {
             m_projectImportManagers = new Dictionary<string, IProjectImportManager>();
@@ -85,51 +84,61 @@ namespace Vokabular.ProjectImport
             var progressInfo = new RepositoryImportProgressInfo(externalRepository.Id);
             m_importManager.ActualProgress.TryAdd(externalRepository.Id, progressInfo);
 
-            using (var scope = m_serviceProvider.CreateScope())
+            try
             {
-                try
+                ImportHistory importHistory;
+                IDictionary<string, List<string>> filteringExpressions;
+
+                using (var scope = m_serviceProvider.CreateScope())
                 {
                     var importHistoryManager = scope.ServiceProvider.GetRequiredService<ImportHistoryManager>();
                     var importHistoryId = importHistoryManager.CreateImportHistory(externalRepository, m_importManager.UserId);
-                    var importHistory = importHistoryManager.GetImportHistory(importHistoryId);
-
-                    //TODO move to ???
-                    var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhRepositoryConfiguration>(externalRepository.Configuration);
-                    var config = new Dictionary<ParserHelperTypes, string> {{ParserHelperTypes.TemplateUrl, oaiPmhResource.TemplateUrl}};
-
-                    m_projectImportManagers.TryGetValue(externalRepository.ExternalRepositoryType.Name, out var importManager);
-                    if (importManager == null)
-                    {
-                        throw new ArgumentNullException($"Import manager was not found for repository type {externalRepository.ExternalRepositoryType.Name}.");
-                    }
-
-                    var executionOptions = new ExecutionDataflowBlockOptions {CancellationToken = cancellationToken};
-
-                    var responseParserBlock = new TransformBlock<object, ProjectImportMetadata>(
-                        response => importManager.ParseResponse(response),
-                        executionOptions
-                    );
-
+                    importHistory = importHistoryManager.GetImportHistory(importHistoryId);
 
                     var filteringExpressionSetManager = scope.ServiceProvider.GetRequiredService<FilteringExpressionSetManager>();
-                    var filteringExpressions = filteringExpressionSetManager.GetFilteringExpressionsByExternalRepository(externalRepository.Id);
-           
-                    m_projectFilters.TryGetValue(externalRepository.BibliographicFormat.Name, out var projectFilter);
-                    if (projectFilter == null)
+                    filteringExpressions =
+                        filteringExpressionSetManager.GetFilteringExpressionsByExternalRepository(externalRepository.Id);
+                }
+
+                //TODO move to ???
+                var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhRepositoryConfiguration>(externalRepository.Configuration);
+                var config = new Dictionary<ParserHelperTypes, string> {{ParserHelperTypes.TemplateUrl, oaiPmhResource.TemplateUrl}};
+
+                m_projectImportManagers.TryGetValue(externalRepository.ExternalRepositoryType.Name, out var importManager);
+                if (importManager == null)
+                {
+                    throw new ArgumentNullException(
+                        $"Import manager was not found for repository type {externalRepository.ExternalRepositoryType.Name}.");
+                }
+
+                var executionOptions = new ExecutionDataflowBlockOptions {CancellationToken = cancellationToken};
+
+                var responseParserBlock = new TransformBlock<object, ProjectImportMetadata>(
+                    response => importManager.ParseResponse(response),
+                    executionOptions
+                );
+
+
+                m_projectFilters.TryGetValue(externalRepository.BibliographicFormat.Name, out var projectFilter);
+                if (projectFilter == null)
+                {
+                    throw new ArgumentNullException(
+                        $"Project filter was not found for bibliographic format {externalRepository.BibliographicFormat.Name}.");
+                }
+
+
+                var filterBlock = new TransformBlock<ProjectImportMetadata, ProjectImportMetadata>(metadata =>
                     {
-                        throw new ArgumentNullException($"Project filter was not found for bibliographic format {externalRepository.BibliographicFormat.Name}.");
-                    }
-
-                    var importMetadataManager = scope.ServiceProvider.GetRequiredService<ImportMetadataManager>();
-                    var filterBlock = new TransformBlock<ProjectImportMetadata, ProjectImportMetadata>(metadata =>
+                        if (metadata.IsFaulted)
                         {
-                            if (metadata.IsFaulted)
-                            {
-                                return metadata;
-                            }
+                            return metadata;
+                        }
 
-                            try
+                        try
+                        {
+                            using (var scope = m_serviceProvider.CreateScope())
                             {
+                                var importMetadataManager = scope.ServiceProvider.GetRequiredService<ImportMetadataManager>();
                                 var metadataDb = importMetadataManager.GetImportMetadataByExternalId(metadata.ExternalId);
                                 metadata.IsNew = metadataDb == null;
 
@@ -142,42 +151,46 @@ namespace Vokabular.ProjectImport
                                     metadata.ProjectId = metadataDb.Snapshot.Project.Id;
                                 }
                             }
-                            catch (Exception e)
-                            {
-                                metadata.IsFaulted = true;
-                                metadata.FaultedMessage = e.Message;
-                            }
+                        }
+                        catch (Exception e)
+                        {
+                            metadata.IsFaulted = true;
+                            metadata.FaultedMessage = e.Message;
+                        }
 
-                            return metadata;
-                        }, executionOptions
-                    );
+                        return metadata;
+                    }, executionOptions
+                );
 
 
-                    m_projectParsers.TryGetValue(externalRepository.BibliographicFormat.Name, out var parser);
-                    if (parser == null)
+                m_projectParsers.TryGetValue(externalRepository.BibliographicFormat.Name, out var parser);
+                if (parser == null)
+                {
+                    throw new ArgumentNullException(
+                        $"Project parser was not found for bibliographic format {externalRepository.BibliographicFormat.Name}.");
+                }
+
+                var projectParserBlock = new TransformBlock<ProjectImportMetadata, ProjectImportMetadata>(
+                    projectImportMetadata => parser.Parse(projectImportMetadata, config),
+                    executionOptions
+                );
+
+
+                var nullTargetBlock = new ActionBlock<ProjectImportMetadata>(
+                    projectImportMetadata => { progressInfo.IncrementProcessedProjectsCount(); }, executionOptions
+                );
+
+
+                var userId = m_importManager.UserId;
+
+
+                var saveBlock = new ActionBlock<ProjectImportMetadata>(projectImportMetadata =>
                     {
-                        throw new ArgumentNullException($"Project parser was not found for bibliographic format {externalRepository.BibliographicFormat.Name}.");
-                    }
-
-                    var projectParserBlock = new TransformBlock<ProjectImportMetadata, ProjectImportMetadata>(
-                        projectImportMetadata => parser.Parse(projectImportMetadata, config),
-                        executionOptions
-                    );
-
-
-                    var nullTargetBlock = new ActionBlock<ProjectImportMetadata>(
-                        projectImportMetadata =>
+                        using (var scope = m_serviceProvider.CreateScope())
                         {
-                            progressInfo.IncrementProcessedProjectsCount();
-                        }, executionOptions
-                    );
+                            var projectManager = scope.ServiceProvider.GetRequiredService<ProjectManager>();
+                            var importMetadataManager = scope.ServiceProvider.GetRequiredService<ImportMetadataManager>();
 
-
-                    var userId = m_importManager.UserId;
-
-                    var projectManager = scope.ServiceProvider.GetRequiredService<ProjectManager>();
-                    var saveBlock = new ActionBlock<ProjectImportMetadata>(projectImportMetadata =>
-                        {
                             try
                             {
                                 if (!projectImportMetadata.IsFaulted)
@@ -185,7 +198,9 @@ namespace Vokabular.ProjectImport
                                     if (projectImportMetadata.IsNew)
                                     {
                                         var projectId = projectManager.CreateProject(projectImportMetadata, userId);
+                                        projectImportMetadata.ProjectId = projectId;
                                     }
+
                                     //TODO create new snapshot
                                 }
                             }
@@ -197,40 +212,58 @@ namespace Vokabular.ProjectImport
 
                             importMetadataManager.CreateImportMetadata(projectImportMetadata, importHistory);
                             progressInfo.IncrementProcessedProjectsCount();
-                        },
-                        new ExecutionDataflowBlockOptions {CancellationToken = cancellationToken}
-                    );
+                        }
+                    },
+                    new ExecutionDataflowBlockOptions {CancellationToken = cancellationToken}
+                );
 
-                    var linkOptions = new DataflowLinkOptions {PropagateCompletion = true};
+                var linkOptions = new DataflowLinkOptions {PropagateCompletion = true};
 
-                    var buffer = new BufferBlock<object>(executionOptions);
-                    buffer.LinkTo(responseParserBlock, linkOptions);
+                var buffer = new BufferBlock<object>(executionOptions);
+                buffer.LinkTo(responseParserBlock, linkOptions);
 
-                    responseParserBlock.LinkTo(filterBlock, linkOptions);
-                    filterBlock.LinkTo(projectParserBlock, linkOptions, projectMetadata => projectMetadata.IsSuitable);
-                    filterBlock.LinkTo(nullTargetBlock, linkOptions);
-                    projectParserBlock.LinkTo(saveBlock, linkOptions);
+                responseParserBlock.LinkTo(filterBlock, linkOptions);
+                filterBlock.LinkTo(projectParserBlock, linkOptions, projectMetadata => projectMetadata.IsSuitable);
+                filterBlock.LinkTo(nullTargetBlock, linkOptions);
+                projectParserBlock.LinkTo(saveBlock, linkOptions);
 
-                    await importManager.ImportFromResource(externalRepository.Configuration, buffer, progressInfo, cancellationToken);
-                    buffer.Complete();
+                await importManager.ImportFromResource(externalRepository.Configuration, buffer, progressInfo, cancellationToken);
+                buffer.Complete();
 
-                    saveBlock.Completion.Wait(cancellationToken);
-                }
-                catch (Exception e)
+                saveBlock.Completion.Wait(cancellationToken);
+            }
+            catch (Exception e)
+            {
+                string message;
+                if (e is AggregateException aggregateException)
                 {
-                    var message = $"Error occurred executing import task (import from repository {externalRepository.Name}). Error message: {e.Message}";
-                    if (!(e is OperationCanceledException))
+                    var errorMessages = string.Empty;
+                    var exceptions = aggregateException.InnerExceptions;
+                    for (var i = 1; i <= exceptions.Count; i++)
                     {
-                        m_logger.LogWarning(message);
+                        errorMessages += $"Error #{i}: {exceptions[i].Message}";
                     }
 
-                    progressInfo.FaultedMessage = message;
+                    message =
+                        $"Errors occurred executing import task (import from repository {externalRepository.Name}). Error messages: {errorMessages}";
                 }
-                finally
+                else
                 {
-                    progressInfo.IsCompleted = true;
-                    //TODO save progressInfo to DB
+                    message =
+                        $"Error occurred executing import task (import from repository {externalRepository.Name}). Error message: {e.Message}";
                 }
+
+                if (!(e is OperationCanceledException))
+                {
+                    m_logger.LogWarning(message);
+                }
+
+                progressInfo.FaultedMessage = message;
+            }
+            finally
+            {
+                progressInfo.IsCompleted = true;
+                //TODO save progressInfo to DB
             }
         }
     }
