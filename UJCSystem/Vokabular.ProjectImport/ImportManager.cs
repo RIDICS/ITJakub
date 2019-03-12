@@ -36,8 +36,7 @@ namespace Vokabular.ProjectImport
         {
             if (IsImportRunning)
             {
-                //TODO check if import running -> exception
-                throw new Exception();
+                throw new ImportRunningException();
             }
 
             if (externalRepositoryIds == null || externalRepositoryIds.Count == 0)
