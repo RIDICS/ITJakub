@@ -149,6 +149,7 @@ namespace Vokabular.ProjectImport
                                 else
                                 {
                                     metadata.ProjectId = metadataDb.Snapshot.Project.Id;
+                                    metadata.IsSuitable = true;
                                 }
                             }
                         }
