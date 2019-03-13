@@ -17,7 +17,7 @@ namespace Vokabular.ProjectImport.Managers
 
         public ImportMetadata GetImportMetadataByExternalId(string externalId)
         {
-            var result = m_importMetadataRepository.InvokeUnitOfWork(x => x.GetExternalRepository(externalId));
+            var result = m_importMetadataRepository.InvokeUnitOfWork(x => x.GetImportMetadata(externalId));
             return result;
         }
 

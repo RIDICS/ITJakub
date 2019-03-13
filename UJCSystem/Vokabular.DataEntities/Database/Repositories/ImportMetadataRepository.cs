@@ -10,10 +10,11 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
         }
 
-        public virtual ImportMetadata GetExternalRepository(string externalId)
+        public virtual ImportMetadata GetImportMetadata(string externalId)
         {
             return GetSession().QueryOver<ImportMetadata>()
                 .Where(x => x.ExternalId == externalId)
+                .Fetch(x => x.Snapshot).Eager
                 .SingleOrDefault();
         }
     }
