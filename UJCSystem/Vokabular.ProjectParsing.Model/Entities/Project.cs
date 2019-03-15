@@ -22,8 +22,6 @@ namespace Vokabular.ProjectParsing.Model.Entities
 
         public ProjectMetadata ProjectMetadata { get; }
 
-        public string EditionNote { get; set; }
-
         public Project()
         {
             Authors = new List<Author>();
