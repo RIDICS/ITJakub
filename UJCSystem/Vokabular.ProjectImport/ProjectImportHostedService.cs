@@ -233,31 +233,29 @@ namespace Vokabular.ProjectImport
 
                 saveBlock.Completion.Wait(cancellationToken);
             }
+            catch (OperationCanceledException)
+            {
+                progressInfo.FaultedMessage = $"Import from repository {externalRepository.Name} was canceled.";
+            }
+            catch (AggregateException e)
+            {
+                var errorMessages = string.Empty;
+                var exceptions = e.InnerExceptions;
+                for (var i = 1; i <= exceptions.Count; i++)
+                {
+                    errorMessages += $"Error #{i}: {exceptions[i].Message}";
+                }
+
+                var message =
+                    $"Errors occurred executing import task (import from repository {externalRepository.Name}). Error messages: {errorMessages}";
+                m_logger.LogWarning(message);
+                progressInfo.FaultedMessage = message;
+            }
             catch (Exception e)
             {
-                string message;
-                if (e is AggregateException aggregateException)
-                {
-                    var errorMessages = string.Empty;
-                    var exceptions = aggregateException.InnerExceptions;
-                    for (var i = 1; i <= exceptions.Count; i++)
-                    {
-                        errorMessages += $"Error #{i}: {exceptions[i].Message}";
-                    }
-
-                    message =
-                        $"Errors occurred executing import task (import from repository {externalRepository.Name}). Error messages: {errorMessages}";
-                }
-                else
-                {
-                    message =
-                        $"Error occurred executing import task (import from repository {externalRepository.Name}). Error message: {e.Message}";
-                }
-
-                if (!(e is OperationCanceledException))
-                {
-                    m_logger.LogWarning(message);
-                }
+                var message =
+                    $"Error occurred executing import task (import from repository {externalRepository.Name}). Error message: {e.Message}";
+                m_logger.LogWarning(message);
 
                 progressInfo.FaultedMessage = message;
             }
