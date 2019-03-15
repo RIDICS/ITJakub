@@ -6,30 +6,22 @@ namespace Vokabular.ProjectParsing.Model.Entities
     {
         public string Name { get; set; }
 
-        public IList<Author> Authors { get; }
+        public HashSet<Author> Authors { get; set; }
 
-        public IList<string> Keywords { get; }
+        public IList<string> Keywords { get; set; }
 
-        public IList<string> LiteraryGenres { get; }
-
-        public IList<string> LiteraryKinds { get; }
+        public IList<string> LiteraryGenres { get; set; }
 
         public IList<string> LiteraryOriginals { get; set; }
 
-        public List<ResponsibleData> Responsibles { get; set; }
-
-        public IList<CategoryData> AllCategoriesHierarchy { get; }
-
-        public ProjectMetadata ProjectMetadata { get; }
+        public ProjectMetadata ProjectMetadata { get; set; }
 
         public Project()
         {
-            Authors = new List<Author>();
+            Authors = new HashSet<Author>();
             Keywords = new List<string>();
             LiteraryGenres = new List<string>();
-            LiteraryKinds = new List<string>();
             LiteraryOriginals = new List<string>();
-            AllCategoriesHierarchy = new List<CategoryData>();
             ProjectMetadata = new ProjectMetadata();
         }
     }
