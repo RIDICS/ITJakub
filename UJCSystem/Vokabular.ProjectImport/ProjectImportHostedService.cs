@@ -202,7 +202,7 @@ namespace Vokabular.ProjectImport
                                         projectImportMetadata.ProjectId = projectId;
                                     }
 
-                                    //TODO create new snapshot
+                                    projectManager.CreateProjectMetadata(projectImportMetadata, userId); 
                                 }
                             }
                             catch (Exception e)
