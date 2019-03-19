@@ -36,13 +36,13 @@ namespace Vokabular.Marc21ProjectParser
             }
         }
 
-        public IList<PairIdValue> GetListPairIdValue(ProjectImportMetadata projectImportMetadata)
+        public IList<KeyValuePair<string, string>> GetListPairIdValue(ProjectImportMetadata projectImportMetadata)
         {
             var record = ((string)projectImportMetadata.RawData).XmlDeserializeFromString<MARC21record>();
 
             return record.datafield
                 .SelectMany(p => p.subfield,
-                    (dataField, subfield) => new PairIdValue(dataField.tag + subfield.code, subfield.Value)).ToList();
+                    (dataField, subfield) => new KeyValuePair<string, string>(dataField.tag + subfield.code, subfield.Value)).ToList();
         }
 
         public ProjectImportMetadata Parse(ProjectImportMetadata projectImportMetadata)

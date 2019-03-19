@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -131,7 +132,7 @@ namespace Vokabular.ProjectImport
                                 {
                                     foreach (var item in parser.GetListPairIdValue(metadata))
                                     {
-                                        filteringExpressions.TryGetValue(item.Id, out var filterExpressions);
+                                        filteringExpressions.TryGetValue(item.Key, out var filterExpressions);
                                         if (filterExpressions == null)
                                         {
                                             continue;
