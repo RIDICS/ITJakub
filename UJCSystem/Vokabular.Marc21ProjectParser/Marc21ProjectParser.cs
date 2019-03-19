@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Vokabular.ProjectParsing;
 using Vokabular.ProjectParsing.Model.Entities;
 using Vokabular.ProjectParsing.Parsers;
@@ -33,6 +34,15 @@ namespace Vokabular.Marc21ProjectParser
                     m_controlFieldProcessors.Add(tag, controlFieldProcessor);
                 }
             }
+        }
+
+        public IList<PairIdValue> GetListPairIdValue(ProjectImportMetadata projectImportMetadata)
+        {
+            var record = ((string)projectImportMetadata.RawData).XmlDeserializeFromString<MARC21record>();
+
+            return record.datafield
+                .SelectMany(p => p.subfield,
+                    (dataField, subfield) => new PairIdValue(dataField.tag + subfield.code, subfield.Value)).ToList();
         }
 
         public ProjectImportMetadata Parse(ProjectImportMetadata projectImportMetadata, Dictionary<ParserHelperTypes, string> config)

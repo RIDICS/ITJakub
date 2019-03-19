@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
@@ -11,7 +12,6 @@ using Vokabular.DataEntities.Database.Entities;
 using Vokabular.OaiPmhImportManager;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
-using Vokabular.ProjectParsing;
 using Vokabular.ProjectParsing.Parsers;
 using ProjectImportMetadata = Vokabular.ProjectParsing.Model.Entities.ProjectImportMetadata;
 
@@ -21,18 +21,15 @@ namespace Vokabular.ProjectImport
     {
         private readonly IDictionary<string, IProjectImportManager> m_projectImportManagers;
         private readonly IDictionary<string, IProjectParser> m_projectParsers;
-        private readonly IDictionary<string, IProjectFilter> m_projectFilters;
         private readonly ImportManager m_importManager;
         private readonly ILogger<ProjectImportHostedService> m_logger;
         private readonly IServiceProvider m_serviceProvider;
 
         public ProjectImportHostedService(IEnumerable<IProjectImportManager> importManagers, IEnumerable<IProjectParser> parsers,
-            IEnumerable<IProjectFilter> filters,
             ImportManager importManager, ILogger<ProjectImportHostedService> logger, IServiceProvider serviceProvider)
         {
             m_projectImportManagers = new Dictionary<string, IProjectImportManager>();
             m_projectParsers = new Dictionary<string, IProjectParser>();
-            m_projectFilters = new Dictionary<string, IProjectFilter>();
             m_importManager = importManager;
             m_logger = logger;
             m_serviceProvider = serviceProvider;
@@ -45,11 +42,6 @@ namespace Vokabular.ProjectImport
             foreach (var parser in parsers)
             {
                 m_projectParsers.Add(parser.BibliographicFormatName, parser);
-            }
-
-            foreach (var filter in filters)
-            {
-                m_projectFilters.Add(filter.BibliographicFormatName, filter);
             }
         }
 
@@ -118,14 +110,12 @@ namespace Vokabular.ProjectImport
                     executionOptions
                 );
 
-
-                m_projectFilters.TryGetValue(externalRepository.BibliographicFormat.Name, out var projectFilter);
-                if (projectFilter == null)
+                m_projectParsers.TryGetValue(externalRepository.BibliographicFormat.Name, out var parser);
+                if (parser == null)
                 {
                     throw new ArgumentNullException(
-                        $"Project filter was not found for bibliographic format {externalRepository.BibliographicFormat.Name}.");
+                        $"Project parser was not found for bibliographic format {externalRepository.BibliographicFormat.Name}.");
                 }
-
 
                 var filterBlock = new TransformBlock<ProjectImportMetadata, ProjectImportMetadata>(metadata =>
                     {
@@ -144,7 +134,33 @@ namespace Vokabular.ProjectImport
 
                                 if (metadata.IsNew)
                                 {
-                                    metadata.IsSuitable = projectFilter.Filter(metadata, filteringExpressions);
+                                    foreach (var item in parser.GetListPairIdValue(metadata))
+                                    {
+                                        filteringExpressions.TryGetValue(item.Id, out var filterExpressions);
+                                        if (filterExpressions == null)
+                                        {
+                                            continue;
+                                        }
+
+                                        foreach (var expression in filterExpressions)
+                                        {
+                                            var expr = Regex.Escape(expression);
+                                            expr = expr.Replace("%", ".*");
+
+                                            if (Regex.IsMatch(item.Value, expr))
+                                            {
+                                                metadata.IsSuitable = true;
+                                                break;
+                                            }
+                                        }
+
+                                        if (metadata.IsSuitable)
+                                        {
+                                            break;
+                                        }
+                                    }
+
+                                    metadata.IsSuitable = false;
                                 }
                                 else
                                 {
@@ -162,14 +178,6 @@ namespace Vokabular.ProjectImport
                         return metadata;
                     }, executionOptions
                 );
-
-
-                m_projectParsers.TryGetValue(externalRepository.BibliographicFormat.Name, out var parser);
-                if (parser == null)
-                {
-                    throw new ArgumentNullException(
-                        $"Project parser was not found for bibliographic format {externalRepository.BibliographicFormat.Name}.");
-                }
 
                 var projectParserBlock = new TransformBlock<ProjectImportMetadata, ProjectImportMetadata>(
                     projectImportMetadata => parser.Parse(projectImportMetadata, config),
@@ -202,7 +210,7 @@ namespace Vokabular.ProjectImport
                                         projectImportMetadata.ProjectId = projectId;
                                     }
 
-                                    projectManager.CreateProjectMetadata(projectImportMetadata, userId); 
+                                    projectManager.CreateProjectMetadata(projectImportMetadata, userId);
                                 }
                             }
                             catch (Exception e)
