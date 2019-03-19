@@ -7,9 +7,7 @@ using System.Threading.Tasks.Dataflow;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Vokabular.DataEntities.Database.Entities;
-using Vokabular.OaiPmhImportManager;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
 using Vokabular.ProjectParsing.Parsers;
@@ -92,9 +90,6 @@ namespace Vokabular.ProjectImport
                         filteringExpressionSetManager.GetFilteringExpressionsByExternalRepository(externalRepository.Id);
                 }
 
-                //TODO move to ???
-                var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhRepositoryConfiguration>(externalRepository.Configuration);
-                var config = new Dictionary<ParserHelperTypes, string> {{ParserHelperTypes.TemplateUrl, oaiPmhResource.TemplateUrl}};
 
                 m_projectImportManagers.TryGetValue(externalRepository.ExternalRepositoryType.Name, out var importManager);
                 if (importManager == null)
@@ -180,7 +175,7 @@ namespace Vokabular.ProjectImport
                 );
 
                 var projectParserBlock = new TransformBlock<ProjectImportMetadata, ProjectImportMetadata>(
-                    projectImportMetadata => parser.Parse(projectImportMetadata, config),
+                    projectImportMetadata => parser.Parse(projectImportMetadata),
                     executionOptions
                 );
 

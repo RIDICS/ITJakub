@@ -45,7 +45,7 @@ namespace Vokabular.Marc21ProjectParser
                     (dataField, subfield) => new PairIdValue(dataField.tag + subfield.code, subfield.Value)).ToList();
         }
 
-        public ProjectImportMetadata Parse(ProjectImportMetadata projectImportMetadata, Dictionary<ParserHelperTypes, string> config)
+        public ProjectImportMetadata Parse(ProjectImportMetadata projectImportMetadata)
         {
             if (projectImportMetadata.IsFaulted)
             {
@@ -66,7 +66,7 @@ namespace Vokabular.Marc21ProjectParser
                 foreach (var controlField in record.controlfield)
                 {
                     m_controlFieldProcessors.TryGetValue(controlField.tag, out var controlFieldProcessor);
-                    controlFieldProcessor?.Process(controlField, project, config);
+                    controlFieldProcessor?.Process(controlField, project);
                 }
 
                 projectImportMetadata.Project = project;
