@@ -5,6 +5,7 @@ namespace Vokabular.ProjectImport.Model
     public class RepositoryImportProgressInfo
     {
         private int m_processedProjectsCount;
+        private int m_failedProjectsCount;
 
         public RepositoryImportProgressInfo(int externalRepositoryId)
         {
@@ -16,9 +17,11 @@ namespace Vokabular.ProjectImport.Model
         public int ExternalRepositoryId { get; }
         public bool IsCompleted { get; set; }
         public string FaultedMessage { get; set; }
-
-
         public int ProcessedProjectsCount => m_processedProjectsCount;
+        public int FailedProjectsCount => m_failedProjectsCount;
+
         public int IncrementProcessedProjectsCount() { return Interlocked.Increment(ref m_processedProjectsCount); }
+        public int IncrementFailedProjectsCount() { return Interlocked.Increment(ref m_failedProjectsCount); }
+
     }
 }
