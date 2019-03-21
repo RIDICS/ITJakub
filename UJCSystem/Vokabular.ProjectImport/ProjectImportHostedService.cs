@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
 using Vokabular.ProjectParsing.Parsers;
@@ -75,23 +76,24 @@ namespace Vokabular.ProjectImport
             var progressInfo = new RepositoryImportProgressInfo(externalRepository.Id);
             m_importManager.ActualProgress.TryAdd(externalRepository.Id, progressInfo);
 
+            int importHistoryId;
+            ImportHistory importHistory;
+            IDictionary<string, List<string>> filteringExpressions;
+
+            using (var scope = m_serviceProvider.CreateScope())
+            {
+                var importHistoryManager = scope.ServiceProvider.GetRequiredService<ImportHistoryManager>();
+                importHistoryId = importHistoryManager.CreateImportHistory(externalRepository, m_importManager.UserId);
+                importHistory = importHistoryManager.GetImportHistory(importHistoryId);
+
+                var filteringExpressionSetManager = scope.ServiceProvider.GetRequiredService<FilteringExpressionSetManager>();
+                filteringExpressions =
+                    filteringExpressionSetManager.GetFilteringExpressionsByExternalRepository(externalRepository.Id);
+            }
+
+
             try
             {
-                ImportHistory importHistory;
-                IDictionary<string, List<string>> filteringExpressions;
-
-                using (var scope = m_serviceProvider.CreateScope())
-                {
-                    var importHistoryManager = scope.ServiceProvider.GetRequiredService<ImportHistoryManager>();
-                    var importHistoryId = importHistoryManager.CreateImportHistory(externalRepository, m_importManager.UserId);
-                    importHistory = importHistoryManager.GetImportHistory(importHistoryId);
-
-                    var filteringExpressionSetManager = scope.ServiceProvider.GetRequiredService<FilteringExpressionSetManager>();
-                    filteringExpressions =
-                        filteringExpressionSetManager.GetFilteringExpressionsByExternalRepository(externalRepository.Id);
-                }
-
-
                 m_projectImportManagers.TryGetValue(externalRepository.ExternalRepositoryType.Name, out var importManager);
                 if (importManager == null)
                 {
@@ -191,6 +193,12 @@ namespace Vokabular.ProjectImport
 
                 var saveBlock = new ActionBlock<ProjectImportMetadata>(projectImportMetadata =>
                     {
+                        if (!projectImportMetadata.IsFaulted) //TODO rename to IsFailed
+                        {
+                            progressInfo.IncrementFailedProjectsCount();
+                            return;
+                        }
+
                         using (var scope = m_serviceProvider.CreateScope())
                         {
                             var projectManager = scope.ServiceProvider.GetRequiredService<ProjectManager>();
@@ -198,8 +206,7 @@ namespace Vokabular.ProjectImport
 
                             try
                             {
-                                if (!projectImportMetadata.IsFaulted)
-                                {
+                                
                                     if (projectImportMetadata.IsNew)
                                     {
                                         var projectId = projectManager.CreateProject(projectImportMetadata, userId);
@@ -207,7 +214,7 @@ namespace Vokabular.ProjectImport
                                     }
 
                                     projectManager.CreateProjectMetadata(projectImportMetadata, userId);
-                                }
+                                
                             }
                             catch (Exception e)
                             {
@@ -266,7 +273,26 @@ namespace Vokabular.ProjectImport
             finally
             {
                 progressInfo.IsCompleted = true;
-                //TODO save progressInfo to DB
+                using (var scope = m_serviceProvider.CreateScope())
+                {
+                    var importHistoryManager = scope.ServiceProvider.GetRequiredService<ImportHistoryManager>();
+                    
+                    if (!string.IsNullOrEmpty(progressInfo.FaultedMessage))
+                    {
+                        importHistory.Message = progressInfo.FaultedMessage;
+                        importHistory.Status = ImportStatusEnum.Failed;
+                    }
+                    else if(progressInfo.FailedProjectsCount > 0)
+                    {
+                        importHistory.Status = ImportStatusEnum.CompletedWithWarnings;
+                    }
+                    else
+                    {
+                        importHistory.Status = ImportStatusEnum.Completed;
+                    }
+
+                    importHistoryManager.UpdateImportHistory(importHistory);
+                }
             }
         }
     }

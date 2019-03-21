@@ -20,6 +20,11 @@ namespace Vokabular.ProjectImport.Managers
             return resultId;
         }
 
+        public void UpdateImportHistory(ImportHistory importHistory)
+        {
+            m_importHistoryRepository.InvokeUnitOfWork(x => x.Update(importHistory));
+        }
+
         public ImportHistory GetImportHistory(int importHistoryId)
         {
             return m_importHistoryRepository.InvokeUnitOfWork(x => x.FindById<ImportHistory>(importHistoryId));
