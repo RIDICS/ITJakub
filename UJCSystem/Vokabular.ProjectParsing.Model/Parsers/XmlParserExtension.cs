@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml.Serialization;
 
-namespace Vokabular.ProjectParsing
+namespace Vokabular.ProjectParsing.Model.Parsers
 {
     public static class XmlParserExtension
     {

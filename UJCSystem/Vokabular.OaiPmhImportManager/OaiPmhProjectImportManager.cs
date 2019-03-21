@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Vokabular.OaiPmhImportManager.Model;
 using Vokabular.ProjectImport.Model;
 using Vokabular.Shared.Options;
 using Project = Vokabular.ProjectParsing.Model.Entities.Project;

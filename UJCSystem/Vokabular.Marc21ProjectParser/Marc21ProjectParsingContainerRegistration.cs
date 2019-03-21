@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Vokabular.Marc21ProjectParser.DataFieldProcessors;
-using Vokabular.ProjectParsing.Parsers;
+using Vokabular.ProjectParsing.Model.Parsers;
 
 namespace Vokabular.Marc21ProjectParser
 {

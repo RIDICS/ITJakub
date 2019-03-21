@@ -12,7 +12,7 @@ using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
-using Vokabular.ProjectParsing.Parsers;
+using Vokabular.ProjectParsing.Model.Parsers;
 using ProjectImportMetadata = Vokabular.ProjectParsing.Model.Entities.ProjectImportMetadata;
 
 namespace Vokabular.ProjectImport

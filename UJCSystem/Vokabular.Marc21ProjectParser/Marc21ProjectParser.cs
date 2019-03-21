@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Vokabular.ProjectParsing;
 using Vokabular.ProjectParsing.Model.Entities;
-using Vokabular.ProjectParsing.Parsers;
+using Vokabular.ProjectParsing.Model.Parsers;
 
 namespace Vokabular.Marc21ProjectParser
 {

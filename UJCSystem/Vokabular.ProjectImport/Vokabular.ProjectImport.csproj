@@ -14,7 +14,6 @@
     <ProjectReference Include="..\Vokabular.OaiPmhImportManager\Vokabular.OaiPmhImportManager.csproj" />
     <ProjectReference Include="..\Vokabular.ProjectImport.Model\Vokabular.ProjectImport.Model.csproj" />
     <ProjectReference Include="..\Vokabular.ProjectParsing.Model\Vokabular.ProjectParsing.Model.csproj" />
-    <ProjectReference Include="..\Vokabular.ProjectParsing\Vokabular.ProjectParsing.csproj" />
   </ItemGroup>
 
 </Project>

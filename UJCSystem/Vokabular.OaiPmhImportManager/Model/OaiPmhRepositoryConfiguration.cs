@@ -1,4 +1,4 @@
-﻿namespace Vokabular.OaiPmhImportManager
+﻿namespace Vokabular.OaiPmhImportManager.Model
 {
     public class OaiPmhRepositoryConfiguration
     {

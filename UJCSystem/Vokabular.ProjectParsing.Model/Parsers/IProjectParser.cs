@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Vokabular.ProjectParsing.Model.Entities;
 
-namespace Vokabular.ProjectParsing.Parsers
+namespace Vokabular.ProjectParsing.Model.Parsers
 {
     public interface IProjectParser
     {
