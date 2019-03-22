@@ -4,13 +4,13 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Vokabular.OaiPmhImportManager.Model;
 using Vokabular.Shared.Options;
 
 namespace Vokabular.OaiPmhImportManager
 {
     public class OaiPmhCommunicationClient : IDisposable
     {
-        private string Url { get; }
         private const string Verb = "?verb=";
         private const string Set = "&set=";
         private const string MetadataPrefix = "&metadataPrefix=";
@@ -28,6 +28,8 @@ namespace Vokabular.OaiPmhImportManager
             m_httpClient = new HttpClient();
             m_oaiPmhXmlSerializer = new XmlSerializer(typeof(OAIPMHType));
         }
+
+        private string Url { get; set; }
 
         public async Task<IList<metadataFormatType>> GetMetadataFormatsListAsync()
         {
@@ -131,7 +133,7 @@ namespace Vokabular.OaiPmhImportManager
                 Description = identify.description?.ToString(),
                 Url = identify.baseURL,
                 EarliestDateTime = DateTime.Parse(identify.earliestDatestamp),
-                Granularity = identify.granularity.ToString(),
+                Granularity = identify.granularity,
                 Name = identify.repositoryName
             };
         }

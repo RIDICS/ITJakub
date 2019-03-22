@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vokabular.OaiPmhImportManager
+namespace Vokabular.OaiPmhImportManager.Model
 {
     public class OaiPmhRepositoryInfo
     {
@@ -8,7 +8,7 @@ namespace Vokabular.OaiPmhImportManager
         public string Description { get; set; }
         public string Url { get; set; }
         public DateTime EarliestDateTime { get; set; }
-        public string Granularity { get; set; }
+        public granularityType Granularity { get; set; }
         public string Name { get; set; }
     }
 }

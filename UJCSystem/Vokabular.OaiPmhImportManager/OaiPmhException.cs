@@ -1,14 +1,19 @@
 ﻿using System;
+using Vokabular.OaiPmhImportManager.Model;
 
 namespace Vokabular.OaiPmhImportManager
 {
     public class OaiPmhException : Exception
     {
-        public OAIPMHerrorcodeType ErrorCode { get; }
-
         public OaiPmhException(string message, OAIPMHerrorcodeType errorCode) : base(message)
         {
             ErrorCode = errorCode;
         }
+
+        public OaiPmhException(string message) : base(message)
+        {
+        }
+
+        public OAIPMHerrorcodeType ErrorCode { get; }
     }
 }

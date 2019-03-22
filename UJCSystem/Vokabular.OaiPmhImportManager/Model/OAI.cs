@@ -14,7 +14,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Vokabular.OaiPmhImportManager
+namespace Vokabular.OaiPmhImportManager.Model
 {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
