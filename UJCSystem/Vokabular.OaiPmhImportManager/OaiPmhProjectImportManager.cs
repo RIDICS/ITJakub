@@ -28,24 +28,25 @@ namespace Vokabular.OaiPmhImportManager
             return new OaiPmhCommunicationClient(m_oaiPmhClientOption, url);
         }
 
-        public async Task ImportFromResource(string configuration, ITargetBlock<object> buffer, RepositoryImportProgressInfo progressInfo, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task ImportFromResource(string configuration, ITargetBlock<object> buffer, RepositoryImportProgressInfo progressInfo,
+            DateTime? lastImport = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhRepositoryConfiguration>(configuration);
 
             using (var client = GetOaiPmhCommunicationClient(oaiPmhResource.Url))
             {
-                var records = await client.GetVerbAsync<ListRecordsType>(verbType.ListRecords, oaiPmhResource.DataFormat, oaiPmhResource.SetName);
+                var records = await client.GetRecordsListAsync(oaiPmhResource.DataFormat, oaiPmhResource.SetName, lastImport);
                 var resumptionToken = records.resumptionToken;
                 progressInfo.TotalProjectsCount = Convert.ToInt32(resumptionToken.completeListSize);
-               
+
                 foreach (var recordType in records.record)
                 {
                     buffer.Post(recordType);
                 }
 
-                while (resumptionToken != null && !cancellationToken.IsCancellationRequested)
+                while (resumptionToken.Value != null && !cancellationToken.IsCancellationRequested)
                 {
-                    records = await client.GetVerbAsync<ListRecordsType>(verbType.ListRecords, oaiPmhResource.DataFormat, oaiPmhResource.SetName);
+                    records = await client.GetRecordsListAsync(resumptionToken.Value);
                     resumptionToken = records.resumptionToken;
 
                     foreach (var recordType in records.record)
@@ -64,7 +65,6 @@ namespace Vokabular.OaiPmhImportManager
                 var record = (recordType) response;
                 projectImportMetadata.ExternalId = record.header.identifier;
                 projectImportMetadata.RawData = record.metadata.OuterXml;
-                
             }
             catch (Exception e)
             {

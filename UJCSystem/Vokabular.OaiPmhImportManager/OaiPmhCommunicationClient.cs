@@ -15,6 +15,11 @@ namespace Vokabular.OaiPmhImportManager
         private const string Set = "&set=";
         private const string MetadataPrefix = "&metadataPrefix=";
         private const string ResumptionToken = "&resumptionToken=";
+        private const string From = "&from=";
+        private const string Until = "&until=";
+        private const string DateGranularity = "yyyy-MM-dd";
+        private const string DateTimeGranularity = "yyyy-MM-ddTHH:mm:ssZ";
+        private readonly string m_granularityFormat;
         private readonly HttpClient m_httpClient;
         private readonly XmlSerializer m_oaiPmhXmlSerializer;
         private readonly int m_retryCount;
@@ -27,6 +32,7 @@ namespace Vokabular.OaiPmhImportManager
             Url = url;
             m_httpClient = new HttpClient();
             m_oaiPmhXmlSerializer = new XmlSerializer(typeof(OAIPMHType));
+            m_granularityFormat = DateGranularity;
         }
 
         private string Url { get; set; }
@@ -101,9 +107,10 @@ namespace Vokabular.OaiPmhImportManager
             return list;
         }
 
-        public async Task<IList<recordType>> GetRecordsListAsync(string format, string set, bool fetchCompleteList)
+        public async Task<IList<recordType>> GetRecordsListAsync(string format, string set, bool fetchCompleteList, DateTime? from = null,
+            DateTime? until = null)
         {
-            var records = await GetVerbAsync<ListRecordsType>(verbType.ListRecords, format, set);
+            var records = await GetVerbAsync<ListRecordsType>(verbType.ListRecords, format, set, from, until);
             var resumptionToken = records.resumptionToken;
             var list = new List<recordType>(records.record);
 
@@ -117,10 +124,16 @@ namespace Vokabular.OaiPmhImportManager
             return list;
         }
 
+        public async Task<ListRecordsType> GetRecordsListAsync(string format, string set, DateTime? from = null,
+            DateTime? until = null)
+        {
+            return await GetVerbAsync<ListRecordsType>(verbType.ListRecords, format, set, from, until);
+        }
+
 
         public async Task<ListRecordsType> GetRecordsListAsync(string resumptionToken)
         {
-            return await GetResumptionTokenAsync<ListRecordsType>(verbType.ListIdentifiers, resumptionToken);
+            return await GetResumptionTokenAsync<ListRecordsType>(verbType.ListRecords, resumptionToken);
         }
 
         public async Task<OaiPmhRepositoryInfo> IdentifyAsync()
@@ -154,7 +167,7 @@ namespace Vokabular.OaiPmhImportManager
                 try
                 {
                     var streamResult = await m_httpClient.GetStreamAsync(Url + query);
-                    var oaiPmhRecordResponse = (OAIPMHType)m_oaiPmhXmlSerializer.Deserialize(streamResult);
+                    var oaiPmhRecordResponse = (OAIPMHType) m_oaiPmhXmlSerializer.Deserialize(streamResult);
 
                     //Validate response
                     if (oaiPmhRecordResponse.Items.First().GetType() == typeof(OAIPMHerrorType))
@@ -165,28 +178,33 @@ namespace Vokabular.OaiPmhImportManager
 
                     return oaiPmhRecordResponse;
                 }
-                catch (HttpRequestException)
+                catch (HttpRequestException e)
                 {
                     currentRetry++;
 
                     if (currentRetry > m_retryCount)
                     {
-                        throw;
+                        throw new OaiPmhException(e.Message);
                     }
                 }
 
-                await Task.Delay(m_delay); 
+                await Task.Delay(m_delay);
             }
         }
-      
-        public async Task<T> GetVerbAsync<T>(verbType verbType, string format = null, string set = null)
+
+        private async Task<T> GetVerbAsync<T>(verbType verbType, string format = null, string set = null, DateTime? from = null,
+            DateTime? until = null)
         {
-            return (T) (await GetResponseAsync(Verb + verbType + (string.IsNullOrEmpty(format) ? "" : MetadataPrefix + format) + (string.IsNullOrEmpty(set) ? "" : Set + set))).Items.First();
+            return (T) (await GetResponseAsync(Verb + verbType
+                                                    + (string.IsNullOrEmpty(format) ? "" : MetadataPrefix + format)
+                                                    + (string.IsNullOrEmpty(set) ? "" : Set + set)
+                                                    + (from.HasValue ? From + from.Value.ToString(m_granularityFormat) : "")
+                                                    + (until.HasValue ? Until + until.Value.ToString(m_granularityFormat) : ""))).Items.First();
         }
 
         private async Task<T> GetResumptionTokenAsync<T>(verbType verbType, string resumptionToken)
         {
-            return (T)(await GetResponseAsync(Verb + verbType + ResumptionToken + resumptionToken)).Items.First();
+            return (T) (await GetResponseAsync(Verb + verbType + ResumptionToken + resumptionToken)).Items.First();
         }
 
         public void Dispose()

@@ -78,11 +78,15 @@ namespace Vokabular.ProjectImport
 
             int importHistoryId;
             ImportHistory importHistory;
+            ImportHistory latestImportHistory;
             IDictionary<string, List<string>> filteringExpressions;
 
             using (var scope = m_serviceProvider.CreateScope())
             {
                 var importHistoryManager = scope.ServiceProvider.GetRequiredService<ImportHistoryManager>();
+
+                latestImportHistory = importHistoryManager.GetLatestSuccessfulImportHistory(externalRepository.Id);
+
                 importHistoryId = importHistoryManager.CreateImportHistory(externalRepository, m_importManager.UserId);
                 importHistory = importHistoryManager.GetImportHistory(importHistoryId);
 
@@ -94,6 +98,8 @@ namespace Vokabular.ProjectImport
 
             try
             {
+                var executionOptions = new ExecutionDataflowBlockOptions { CancellationToken = cancellationToken };
+
                 m_projectImportManagers.TryGetValue(externalRepository.ExternalRepositoryType.Name, out var importManager);
                 if (importManager == null)
                 {
@@ -101,12 +107,11 @@ namespace Vokabular.ProjectImport
                         $"Import manager was not found for repository type {externalRepository.ExternalRepositoryType.Name}.");
                 }
 
-                var executionOptions = new ExecutionDataflowBlockOptions {CancellationToken = cancellationToken};
-
                 var responseParserBlock = new TransformBlock<object, ProjectImportMetadata>(
                     response => importManager.ParseResponse(response),
                     executionOptions
                 );
+
 
                 m_projectParsers.TryGetValue(externalRepository.BibliographicFormat.Name, out var parser);
                 if (parser == null)
@@ -206,15 +211,13 @@ namespace Vokabular.ProjectImport
 
                             try
                             {
-                                
-                                    if (projectImportMetadata.IsNew)
-                                    {
-                                        var projectId = projectManager.CreateProject(projectImportMetadata, userId);
-                                        projectImportMetadata.ProjectId = projectId;
-                                    }
+                                if (projectImportMetadata.IsNew)
+                                {
+                                    var projectId = projectManager.CreateProject(projectImportMetadata, userId);
+                                    projectImportMetadata.ProjectId = projectId;
+                                }
 
-                                    projectManager.CreateProjectMetadata(projectImportMetadata, userId);
-                                
+                                projectManager.CreateProjectMetadata(projectImportMetadata, userId);
                             }
                             catch (Exception e)
                             {
@@ -239,7 +242,7 @@ namespace Vokabular.ProjectImport
                 filterBlock.LinkTo(nullTargetBlock, linkOptions);
                 projectParserBlock.LinkTo(saveBlock, linkOptions);
 
-                await importManager.ImportFromResource(externalRepository.Configuration, buffer, progressInfo, cancellationToken);
+                await importManager.ImportFromResource(externalRepository.Configuration, buffer, progressInfo, latestImportHistory?.Date, cancellationToken);
                 buffer.Complete();
 
                 saveBlock.Completion.Wait(cancellationToken);
