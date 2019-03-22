@@ -47,7 +47,7 @@ namespace Vokabular.Marc21ProjectParser
 
         public ProjectImportMetadata Parse(ProjectImportMetadata projectImportMetadata)
         {
-            if (projectImportMetadata.IsFaulted)
+            if (projectImportMetadata.IsFailed)
             {
                 return projectImportMetadata;
             }
@@ -73,7 +73,7 @@ namespace Vokabular.Marc21ProjectParser
             }
             catch (Exception e)
             {
-                projectImportMetadata.IsFaulted = true;
+                projectImportMetadata.IsFailed = true;
                 projectImportMetadata.FaultedMessage = e.Message;
             }
          

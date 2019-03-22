@@ -43,7 +43,7 @@ BEGIN TRAN
 		[ExternalId] varchar(50) NOT NULL,
 		[LastUpdateMessage] nvarchar(255) NULL,
 		[LastUpdate] int NOT NULL CONSTRAINT [FK_ImportMetadata(LastUpdate)_ImportHistory(Id)] FOREIGN KEY REFERENCES [dbo].[ImportHistory] (Id),
-		[Snapshot] bigint NOT NULL CONSTRAINT [FK_ImportMetadata(Snapshot)_Snapshot(Id)] FOREIGN KEY REFERENCES [dbo].[Snapshot] (Id),
+		[Snapshot] bigint NULL CONSTRAINT [FK_ImportMetadata(Snapshot)_Snapshot(Id)] FOREIGN KEY REFERENCES [dbo].[Snapshot] (Id),
 	)
 
 	CREATE TABLE [dbo].[FilteringExpressionSet]

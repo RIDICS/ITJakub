@@ -15,6 +15,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return GetSession().QueryOver<ImportMetadata>()
                 .Where(x => x.ExternalId == externalId)
                 .Fetch(x => x.Snapshot).Eager
+                .Take(1)
                 .SingleOrDefault();
         }
     }

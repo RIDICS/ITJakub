@@ -10,7 +10,7 @@
 
         public bool IsSuitable { get; set; }
 
-        public bool IsFaulted { get; set; }
+        public bool IsFailed { get; set; }
 
         public string FaultedMessage { get; set; }
 

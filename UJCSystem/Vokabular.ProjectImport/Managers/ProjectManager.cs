@@ -11,8 +11,8 @@ namespace Vokabular.ProjectImport.Managers
         private readonly PersonRepository m_personRepository;
         private readonly MetadataRepository m_metadataRepository;
 
-        public ProjectManager(ProjectRepository projectRepository, CatalogValueRepository catalogValueRepository, PersonRepository personRepository,
-            MetadataRepository metadataRepository)
+        public ProjectManager(ProjectRepository projectRepository, CatalogValueRepository catalogValueRepository,
+            PersonRepository personRepository, MetadataRepository metadataRepository)
         {
             m_projectRepository = projectRepository;
             m_catalogValueRepository = catalogValueRepository;
@@ -20,12 +20,23 @@ namespace Vokabular.ProjectImport.Managers
             m_metadataRepository = metadataRepository;
         }
 
-        public long CreateProject(ProjectImportMetadata projectImportMetadata, int userId)
+        public void SaveImportedProject(ProjectImportMetadata projectImportMetadata, int userId)
+        {
+            if (projectImportMetadata.IsNew)
+            {
+                var projectId = CreateProject(projectImportMetadata, userId);
+                projectImportMetadata.ProjectId = projectId;
+            }
+
+            CreateProjectMetadata(projectImportMetadata, userId);
+        }
+
+        private long CreateProject(ProjectImportMetadata projectImportMetadata, int userId)
         {
             return new CreateImportedProjectWork(m_projectRepository, projectImportMetadata, userId).Execute();
         }
 
-        public void CreateProjectMetadata(ProjectImportMetadata projectImportMetadata, int userId)
+        private void CreateProjectMetadata(ProjectImportMetadata projectImportMetadata, int userId)
         {
             new SaveImportedDataWork(m_projectRepository, m_metadataRepository, m_catalogValueRepository,
                 m_personRepository, projectImportMetadata, userId).Execute();

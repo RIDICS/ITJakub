@@ -68,7 +68,7 @@ namespace Vokabular.OaiPmhImportManager
             }
             catch (Exception e)
             {
-                projectImportMetadata.IsFaulted = true;
+                projectImportMetadata.IsFailed = true;
                 projectImportMetadata.FaultedMessage = e.Message;
             }
 

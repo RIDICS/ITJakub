@@ -122,63 +122,16 @@ namespace Vokabular.ProjectImport
 
                 var filterBlock = new TransformBlock<ProjectImportMetadata, ProjectImportMetadata>(metadata =>
                     {
-                        if (metadata.IsFaulted)
+                        if (metadata.IsFailed)
                         {
                             return metadata;
                         }
 
-                        try
+                        using (var scope = m_serviceProvider.CreateScope())
                         {
-                            using (var scope = m_serviceProvider.CreateScope())
-                            {
-                                var importMetadataManager = scope.ServiceProvider.GetRequiredService<ImportMetadataManager>();
-                                var metadataDb = importMetadataManager.GetImportMetadataByExternalId(metadata.ExternalId);
-                                metadata.IsNew = metadataDb == null;
-
-                                if (metadata.IsNew)
-                                {
-                                    foreach (var item in parser.GetListPairIdValue(metadata))
-                                    {
-                                        filteringExpressions.TryGetValue(item.Key, out var filterExpressions);
-                                        if (filterExpressions == null)
-                                        {
-                                            continue;
-                                        }
-
-                                        foreach (var expression in filterExpressions)
-                                        {
-                                            var expr = Regex.Escape(expression);
-                                            expr = expr.Replace("%", ".*");
-
-                                            if (Regex.IsMatch(item.Value, expr))
-                                            {
-                                                metadata.IsSuitable = true;
-                                                break;
-                                            }
-                                        }
-
-                                        if (metadata.IsSuitable)
-                                        {
-                                            break;
-                                        }
-                                    }
-
-                                    metadata.IsSuitable = false;
-                                }
-                                else
-                                {
-                                    metadata.ProjectId = metadataDb.Snapshot.Project.Id;
-                                    metadata.IsSuitable = true;
-                                }
-                            }
+                            var filteringManager = scope.ServiceProvider.GetRequiredService<FilteringManager>();
+                            return filteringManager.Filter(metadata, filteringExpressions, parser);
                         }
-                        catch (Exception e)
-                        {
-                            metadata.IsFaulted = true;
-                            metadata.FaultedMessage = e.Message;
-                        }
-
-                        return metadata;
                     }, executionOptions
                 );
 
@@ -198,33 +151,15 @@ namespace Vokabular.ProjectImport
 
                 var saveBlock = new ActionBlock<ProjectImportMetadata>(projectImportMetadata =>
                     {
-                        if (!projectImportMetadata.IsFaulted) //TODO rename to IsFailed
-                        {
-                            progressInfo.IncrementFailedProjectsCount();
-                            return;
-                        }
-
                         using (var scope = m_serviceProvider.CreateScope())
                         {
-                            var projectManager = scope.ServiceProvider.GetRequiredService<ProjectManager>();
+                            if (!projectImportMetadata.IsFailed)
+                            {
+                                var projectManager = scope.ServiceProvider.GetRequiredService<ProjectManager>();
+                                projectManager.SaveImportedProject(projectImportMetadata, userId);
+                            }
+                           
                             var importMetadataManager = scope.ServiceProvider.GetRequiredService<ImportMetadataManager>();
-
-                            try
-                            {
-                                if (projectImportMetadata.IsNew)
-                                {
-                                    var projectId = projectManager.CreateProject(projectImportMetadata, userId);
-                                    projectImportMetadata.ProjectId = projectId;
-                                }
-
-                                projectManager.CreateProjectMetadata(projectImportMetadata, userId);
-                            }
-                            catch (Exception e)
-                            {
-                                m_logger.LogWarning(e.Message);
-                                projectImportMetadata.FaultedMessage = e.Message;
-                            }
-
                             importMetadataManager.CreateImportMetadata(projectImportMetadata, importHistory);
                             progressInfo.IncrementProcessedProjectsCount();
                         }
@@ -278,14 +213,12 @@ namespace Vokabular.ProjectImport
                 progressInfo.IsCompleted = true;
                 using (var scope = m_serviceProvider.CreateScope())
                 {
-                    var importHistoryManager = scope.ServiceProvider.GetRequiredService<ImportHistoryManager>();
-                    
                     if (!string.IsNullOrEmpty(progressInfo.FaultedMessage))
                     {
                         importHistory.Message = progressInfo.FaultedMessage;
                         importHistory.Status = ImportStatusEnum.Failed;
                     }
-                    else if(progressInfo.FailedProjectsCount > 0)
+                    else if (progressInfo.FailedProjectsCount > 0)
                     {
                         importHistory.Status = ImportStatusEnum.CompletedWithWarnings;
                     }
@@ -294,6 +227,7 @@ namespace Vokabular.ProjectImport
                         importHistory.Status = ImportStatusEnum.Completed;
                     }
 
+                    var importHistoryManager = scope.ServiceProvider.GetRequiredService<ImportHistoryManager>();
                     importHistoryManager.UpdateImportHistory(importHistory);
                 }
             }
