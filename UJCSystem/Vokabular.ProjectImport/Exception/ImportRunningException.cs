@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Vokabular.ProjectImport
+﻿namespace Vokabular.ProjectImport.Exception
 {
-    public class ImportRunningException : Exception
+    public class ImportRunningException : System.Exception
     {
         public ImportRunningException()
         {

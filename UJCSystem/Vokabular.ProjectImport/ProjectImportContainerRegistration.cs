@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Vokabular.Marc21ProjectParser;
 using Vokabular.OaiPmhImportManager;
+using Vokabular.ProjectImport.ImportPipeline;
 using Vokabular.ProjectImport.Managers;
 
 namespace Vokabular.ProjectImport
@@ -19,6 +20,8 @@ namespace Vokabular.ProjectImport
             container.AddHostedService<ProjectImportHostedService>();
             container.AddSingleton<MainImportManager>();
             container.AddSingleton<ImportManager>();
+
+            container.AddScoped<ImportPipelineBuilder>();
 
             container.AddMarc21ProjectParsingServices();
             container.AddOaiPmhImportManager();
