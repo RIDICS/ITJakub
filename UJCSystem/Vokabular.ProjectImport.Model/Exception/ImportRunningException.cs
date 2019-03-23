@@ -1,4 +1,4 @@
-﻿namespace Vokabular.ProjectImport.Exception
+﻿namespace Vokabular.ProjectImport.Model.Exception
 {
     public class ImportRunningException : System.Exception
     {
