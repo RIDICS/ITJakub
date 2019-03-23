@@ -11,9 +11,11 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
 
         public void Process(dataFieldType dataField, Project project)
         {
-            var genre = dataField.subfield.First(x => x.code == GenreCode).Value;
-
-            project.LiteraryGenres.Add(genre);
+            var genreSubfield = dataField.subfield.FirstOrDefault(x => x.code == GenreCode);
+            if (genreSubfield != null)
+            {
+                project.LiteraryGenres.Add(genreSubfield.Value);
+            }
         }
     }
 }

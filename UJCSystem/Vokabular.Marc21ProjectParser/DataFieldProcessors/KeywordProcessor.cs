@@ -11,7 +11,11 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
 
         public void Process(dataFieldType dataField, Project project)
         {
-            project.Keywords.Add(dataField.subfield.First(x => x.code == KeywordCode).Value);
+            var keywordSubfield = dataField.subfield.FirstOrDefault(x => x.code == KeywordCode);
+            if (keywordSubfield != null)
+            {
+                project.Keywords.Add(keywordSubfield.Value);
+            }
         }
     }
 }

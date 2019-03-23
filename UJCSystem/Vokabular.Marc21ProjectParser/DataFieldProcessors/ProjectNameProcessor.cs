@@ -13,7 +13,13 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
 
         public void Process(dataFieldType dataField, Project project)
         {
-            project.Name = dataField.subfield.First(x => x.code == ProjectNameFirstLineCode).Value;
+            var projectSubfield = dataField.subfield.FirstOrDefault(x => x.code == ProjectNameFirstLineCode);
+            if (projectSubfield == null)
+            {
+                return;
+            }
+
+            project.Name = projectSubfield.Value;
             var nameSecondLine = dataField.subfield.FirstOrDefault(x => x.code == ProjectNameSecondLineCode);
 
             if (nameSecondLine != null)

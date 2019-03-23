@@ -13,14 +13,16 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
 
         public void Process(dataFieldType dataField, Project project)
         {
-            var date = dataField.subfield.First(x => x.code == NotAfterAndNotBeforeCode).Value;
-            if (date != null)
+            var dateSubfield = dataField.subfield.FirstOrDefault(x => x.code == NotAfterAndNotBeforeCode);
+            if (dateSubfield == null)
             {
-                var dates = date.Split('-');
-                project.ProjectMetadata.ManuscriptDescriptionData.NotBefore = new DateTime(int.Parse(dates[0]), 1, 1);
-                if (dates.Length > 1 && dates[1].Length > 0 && dates[1].All(char.IsDigit))
-                    project.ProjectMetadata.ManuscriptDescriptionData.NotAfter = new DateTime(int.Parse(dates[1]), 1, 1);
+                return;
             }
+
+            var dates = dateSubfield.Value.Split('-');
+            project.ProjectMetadata.ManuscriptDescriptionData.NotBefore = new DateTime(int.Parse(dates[0]), 1, 1);
+            if (dates.Length > 1 && dates[1].Length > 0 && dates[1].All(char.IsDigit))
+                project.ProjectMetadata.ManuscriptDescriptionData.NotAfter = new DateTime(int.Parse(dates[1]), 1, 1);
         }
     }
 }

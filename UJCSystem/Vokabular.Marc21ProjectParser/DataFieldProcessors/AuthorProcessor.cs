@@ -11,8 +11,14 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
 
         public void Process(dataFieldType dataField, Project project)
         {
-            var author = dataField.subfield.First(x => x.code == AuthorCode).Value;
+            var authorSubfield = dataField.subfield.FirstOrDefault(x => x.code == AuthorCode);
 
+            if (authorSubfield == null)
+            {
+                return;
+            }
+
+            var author = authorSubfield.Value;
             var lastName = author;
             var firstName = "";
             var index = author.IndexOf(',');
