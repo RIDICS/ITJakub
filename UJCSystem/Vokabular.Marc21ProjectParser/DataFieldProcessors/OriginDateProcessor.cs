@@ -19,10 +19,18 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
                 return;
             }
 
+            project.ProjectMetadata.OriginDate = dateSubfield.Value;
             var dates = dateSubfield.Value.Split('-');
-            project.ProjectMetadata.ManuscriptDescriptionData.NotBefore = new DateTime(int.Parse(dates[0]), 1, 1);
-            if (dates.Length > 1 && dates[1].Length > 0 && dates[1].All(char.IsDigit))
-                project.ProjectMetadata.ManuscriptDescriptionData.NotAfter = new DateTime(int.Parse(dates[1]), 1, 1);
+
+            if (int.TryParse(dates[0], out var year) && year > 0)
+            {
+                project.ProjectMetadata.ManuscriptDescriptionData.NotBefore = new DateTime(year, 1, 1);
+            }
+
+            if (dates.Length > 1 && dates[1].Length > 0 && int.TryParse(dates[0], out year) && year > 0)
+            {
+                project.ProjectMetadata.ManuscriptDescriptionData.NotAfter = new DateTime(year, 1, 1);
+            }
         }
     }
 }
