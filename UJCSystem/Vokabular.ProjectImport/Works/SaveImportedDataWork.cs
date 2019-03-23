@@ -20,10 +20,11 @@ namespace Vokabular.ProjectImport.Works
         private readonly ProjectImportMetadata m_projectImportMetadata;
         private readonly int m_userId;
         private readonly long m_projectId;
-        
+
 
         public SaveImportedDataWork(ProjectRepository projectRepository, MetadataRepository metadataRepository,
-            CatalogValueRepository catalogValueRepository, PersonRepository personRepository, ProjectImportMetadata projectImportMetadata, int userId) : base(projectRepository)
+            CatalogValueRepository catalogValueRepository, PersonRepository personRepository, ProjectImportMetadata projectImportMetadata,
+            int userId) : base(projectRepository)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
@@ -55,7 +56,6 @@ namespace Vokabular.ProjectImport.Works
             var lastMetadata = m_metadataRepository.GetLatestMetadataResource(m_projectId);
             var firstManuscript = m_projectImportMetadata.Project.ProjectMetadata.ManuscriptDescriptionData;
 
-            //TODO check length insted of null?
             var authorsString = m_projectImportMetadata.Project.Authors != null
                 ? string.Join(", ", m_projectImportMetadata.Project.Authors.Select(x => $"{x.LastName} {x.FirstName}"))
                 : null;
@@ -130,8 +130,7 @@ namespace Vokabular.ProjectImport.Works
 
         private void UpdateKeywords(Project project)
         {
-            if (m_projectImportMetadata.Project.Keywords == null || m_projectImportMetadata.Project.Keywords.Count == 0)
-                return;
+            project.Keywords.Clear();
 
             foreach (var newKeywordName in m_projectImportMetadata.Project.Keywords)
             {
@@ -144,10 +143,10 @@ namespace Vokabular.ProjectImport.Works
                     {
                         Text = newKeywordName
                     };
-                    project.Keywords.Add(dbKeyword);
+                    m_catalogValueRepository.Create(dbKeyword);
                 }
                 // Assign existing Keyword to project
-                else if (project.Keywords.All(x => x.Id != dbKeyword.Id))
+                if (project.Keywords.All(x => x.Id != dbKeyword.Id))
                 {
                     project.Keywords.Add(dbKeyword);
                 }
@@ -156,9 +155,7 @@ namespace Vokabular.ProjectImport.Works
 
         private void UpdateLiteraryOriginals(Project project)
         {
-            if (m_projectImportMetadata.Project.LiteraryOriginals == null)
-                return;
-
+            project.LiteraryOriginals.Clear();
             var dbOriginalList = m_catalogValueRepository.GetLiteraryOriginalList();
 
             foreach (var newOriginalName in m_projectImportMetadata.Project.LiteraryOriginals)
@@ -186,11 +183,9 @@ namespace Vokabular.ProjectImport.Works
 
         private void UpdateLiteraryGenres(Project project)
         {
-            if (m_projectImportMetadata.Project.LiteraryGenres == null)
-                return;
-
+            project.LiteraryGenres.Clear();
             var dbGenreList = m_catalogValueRepository.GetLiteraryGenreList();
-            
+
             foreach (var newGenreName in m_projectImportMetadata.Project.LiteraryGenres)
             {
                 var dbGenre = dbGenreList.FirstOrDefault(x => x.Name == newGenreName);
@@ -205,7 +200,7 @@ namespace Vokabular.ProjectImport.Works
                     m_catalogValueRepository.Create(dbGenre);
                     dbGenreList.Add(dbGenre);
                 }
-                //TODO add delete?
+
                 // Assign Literary Genre to project
                 if (project.LiteraryGenres.All(x => x.Id != dbGenre.Id))
                 {
@@ -217,7 +212,9 @@ namespace Vokabular.ProjectImport.Works
         private void UpdateAuthors(IList<ProjectOriginalAuthor> dbProjectAuthors)
         {
             var dbAuthors = dbProjectAuthors.Select(x => x.OriginalAuthor).ToList();
-            var newAuthors = m_projectImportMetadata.Project.Authors.Select(x => new OriginalAuthor { FirstName = x.FirstName, LastName = x.LastName }).ToList() ?? new List<OriginalAuthor>();
+            var newAuthors =
+                m_projectImportMetadata.Project.Authors.Select(x => new OriginalAuthor {FirstName = x.FirstName, LastName = x.LastName})
+                    .ToList() ?? new List<OriginalAuthor>();
 
             var comparer = new AuthorNameEqualityComparer();
             var authorsToAdd = newAuthors.Except(dbAuthors, comparer).ToList();
@@ -252,7 +249,8 @@ namespace Vokabular.ProjectImport.Works
                 }
                 else
                 {
-                    var projectAuthor = dbProjectAuthors.Single(x => x.OriginalAuthor.FirstName == newAuthor.FirstName && x.OriginalAuthor.LastName == newAuthor.LastName);
+                    var projectAuthor = dbProjectAuthors.Single(x =>
+                        x.OriginalAuthor.FirstName == newAuthor.FirstName && x.OriginalAuthor.LastName == newAuthor.LastName);
                     projectAuthor.Sequence = i + 1;
                     m_projectRepository.Update(projectAuthor);
                 }
