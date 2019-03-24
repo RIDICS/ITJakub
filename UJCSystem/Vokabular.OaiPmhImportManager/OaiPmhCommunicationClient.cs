@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Vokabular.OaiPmhImportManager.Model;
+using Vokabular.ProjectImport.Model.Exception;
 using Vokabular.Shared.Options;
 
 namespace Vokabular.OaiPmhImportManager
@@ -173,7 +174,8 @@ namespace Vokabular.OaiPmhImportManager
                     if (oaiPmhRecordResponse.Items.First().GetType() == typeof(OAIPMHerrorType))
                     {
                         var error = (OAIPMHerrorType) oaiPmhRecordResponse.Items.First();
-                        throw new OaiPmhException(error.Value, error.code);
+                        throw new ImportFailedException(
+                            error.Value + $"Error while requesting: {Url + query}. {error.code} : {error.Value}");
                     }
 
                     return oaiPmhRecordResponse;
@@ -184,7 +186,7 @@ namespace Vokabular.OaiPmhImportManager
 
                     if (currentRetry > m_retryCount)
                     {
-                        throw new OaiPmhException(e.Message);
+                        throw new ImportFailedException($"Error while requesting: {Url + query}", e);
                     }
                 }
 
@@ -199,7 +201,8 @@ namespace Vokabular.OaiPmhImportManager
                                                     + (string.IsNullOrEmpty(format) ? "" : MetadataPrefix + format)
                                                     + (string.IsNullOrEmpty(set) ? "" : Set + set)
                                                     + (from.HasValue ? From + from.Value.ToString(m_granularityFormat) : "")
-                                                    + (until.HasValue ? Until + until.Value.ToString(m_granularityFormat) : ""))).Items.First();
+                                                    + (until.HasValue ? Until + until.Value.ToString(m_granularityFormat) : ""))).Items
+                .First();
         }
 
         private async Task<T> GetResumptionTokenAsync<T>(verbType verbType, string resumptionToken)

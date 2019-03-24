@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -15,7 +12,7 @@ using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
 using Vokabular.ProjectImport.Model.Exception;
 using Vokabular.ProjectParsing.Model.Parsers;
-using ProjectImportMetadata = Vokabular.ProjectParsing.Model.Entities.ProjectImportMetadata;
+using Vokabular.Shared.Extensions;
 
 namespace Vokabular.ProjectImport
 {
@@ -78,71 +75,80 @@ namespace Vokabular.ProjectImport
             var progressInfo = new RepositoryImportProgressInfo(externalRepository.Id);
             m_importManager.ActualProgress.TryAdd(externalRepository.Id, progressInfo);
 
-            ImportHistory importHistory;
-            ImportHistory latestImportHistory;
-
             using (var scope = m_serviceProvider.CreateScope())
             {
                 var importHistoryManager = scope.ServiceProvider.GetRequiredService<ImportHistoryManager>();
-                latestImportHistory = importHistoryManager.GetLatestSuccessfulImportHistory(externalRepository.Id);
+                var latestImportHistory = importHistoryManager.GetLatestSuccessfulImportHistory(externalRepository.Id);
 
                 var importHistoryId = importHistoryManager.CreateImportHistory(externalRepository, m_importManager.UserId);
-                importHistory = importHistoryManager.GetImportHistory(importHistoryId);
-            }
+                var importHistory = importHistoryManager.GetImportHistory(importHistoryId);
 
+                ImportPipeline.ImportPipeline importPipeline = null;
 
-            try
-            {
-                m_projectImportManagers.TryGetValue(externalRepository.ExternalRepositoryType.Name, out var importManager);
-                if (importManager == null)
+                try
                 {
-                    throw new ArgumentNullException(
-                        $"Import manager was not found for repository type {externalRepository.ExternalRepositoryType.Name}.");
-                }
+                    m_projectImportManagers.TryGetValue(externalRepository.ExternalRepositoryType.Name, out var importManager);
+                    if (importManager == null)
+                    {
+                        throw new ArgumentNullException(
+                            $"Import manager was not found for repository type {externalRepository.ExternalRepositoryType.Name}.");
+                    }
 
-                using (var scope = m_serviceProvider.CreateScope())
-                {
+
                     var builder = scope.ServiceProvider.GetRequiredService<ImportPipelineBuilder>();
-                    var importPipeline = builder.Build(externalRepository, importHistory, progressInfo, cancellationToken);
+                    importPipeline = builder.Build(externalRepository, importHistory, progressInfo, cancellationToken);
 
                     await importManager.ImportFromResource(externalRepository.Configuration, importPipeline.BufferBlock, progressInfo,
                         latestImportHistory?.Date, cancellationToken);
                     importPipeline.BufferBlock.Complete();
 
-                    importPipeline.LastBlock.Completion.Wait(cancellationToken);
+                    importPipeline.LastBlock.Completion.Wait(cancellationToken); //TODO check throw exception 
                 }
-            }
-            catch (OperationCanceledException)
-            {
-                progressInfo.FaultedMessage = $"Import from repository {externalRepository.Name} was canceled.";
-            }
-            catch (AggregateException e)
-            {
-                var errorMessages = string.Empty;
-                var exceptions = e.InnerExceptions;
-                for (var i = 1; i <= exceptions.Count; i++)
+                catch (OperationCanceledException)
                 {
-                    errorMessages += $"Error #{i}: {exceptions[i].Message}";
+                    progressInfo.FaultedMessage = $"Import from repository {externalRepository.Name} was canceled.";
                 }
-
-                var message =
-                    $"Errors occurred executing import task (import from repository {externalRepository.Name}). Error messages: {errorMessages}";
-                m_logger.LogWarning(message);
-                progressInfo.FaultedMessage = message;
-            }
-            catch (System.Exception e) //TODO remove
-            {
-                var message =
-                    $"Error occurred executing import task (import from repository {externalRepository.Name}). Error message: {e.Message}";
-                m_logger.LogWarning(message);
-
-                progressInfo.FaultedMessage = message;
-            }
-            finally
-            {
-                progressInfo.IsCompleted = true;
-                using (var scope = m_serviceProvider.CreateScope())
+                catch (AggregateException e)
                 {
+                    var errorMessages = string.Empty;
+                    var exceptions = e.InnerExceptions;
+                    for (var i = 1; i <= exceptions.Count; i++)
+                    {
+                        errorMessages += $"Error #{i}: {exceptions[i].Message}";
+                    }
+
+                    var message =
+                        $"Errors occurred executing import task (import from repository {externalRepository.Name}). Error messages: {errorMessages}";
+
+                    if(m_logger.IsErrorEnabled())
+                        m_logger.LogError(e, message);
+
+                    progressInfo.FaultedMessage = message;
+                }
+                catch (ImportFailedException e)
+                {
+                    var message =
+                        $"Error occurred executing import task (import from repository {externalRepository.Name}). Error message: {e.Message}";
+
+                    if (m_logger.IsErrorEnabled())
+                        m_logger.LogError(e, message);
+
+                    progressInfo.FaultedMessage = message;
+                }
+                catch (Exception e)
+                {
+                    var message =
+                        $"Error occurred executing import task (import from repository {externalRepository.Name}). Error message: {e.Message}";
+                    if (m_logger.IsErrorEnabled())
+                        m_logger.LogError(e, message, null);
+
+                    progressInfo.FaultedMessage = message;
+                }
+                finally
+                {
+                    importPipeline?.LastBlock.Completion.Wait(cancellationToken);
+                    progressInfo.IsCompleted = true;
+
                     if (!string.IsNullOrEmpty(progressInfo.FaultedMessage))
                     {
                         importHistory.Message = progressInfo.FaultedMessage;
@@ -157,7 +163,6 @@ namespace Vokabular.ProjectImport
                         importHistory.Status = ImportStatusEnum.Completed;
                     }
 
-                    var importHistoryManager = scope.ServiceProvider.GetRequiredService<ImportHistoryManager>();
                     importHistoryManager.UpdateImportHistory(importHistory);
                 }
             }

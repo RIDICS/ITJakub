@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Threading;
 using System.Threading.Tasks.Dataflow;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
 using Vokabular.ProjectImport.Model.Exception;
 using Vokabular.ProjectParsing.Model.Entities;
 using Vokabular.ProjectParsing.Model.Parsers;
+using Vokabular.Shared.Extensions;
 
 namespace Vokabular.ProjectImport.ImportPipeline
 {
@@ -17,17 +18,25 @@ namespace Vokabular.ProjectImport.ImportPipeline
         private readonly IDictionary<string, IProjectImportManager> m_projectImportManagers;
         private readonly IDictionary<string, IProjectParser> m_projectParsers;
         private readonly ImportManager m_importManager;
-        private readonly IServiceProvider m_serviceProvider;
         private readonly FilteringExpressionSetManager m_filteringExpressionSetManager;
+        private readonly ImportMetadataManager m_importMetadataManager;
+        private readonly ProjectManager m_projectManager;
+        private readonly ILogger<ImportPipelineBuilder> m_logger;
+        private readonly FilteringManager m_filteringManager;
 
         public ImportPipelineBuilder(IEnumerable<IProjectImportManager> importManagers, IEnumerable<IProjectParser> parsers,
-            ImportManager importManager, IServiceProvider serviceProvider, FilteringExpressionSetManager filteringExpressionSetManager)
+            ImportManager importManager, FilteringExpressionSetManager filteringExpressionSetManager,
+            ImportMetadataManager importMetadataManager, ProjectManager projectManager, ILogger<ImportPipelineBuilder> logger,
+            FilteringManager filteringManager)
         {
             m_projectImportManagers = new Dictionary<string, IProjectImportManager>();
             m_projectParsers = new Dictionary<string, IProjectParser>();
             m_importManager = importManager;
-            m_serviceProvider = serviceProvider;
             m_filteringExpressionSetManager = filteringExpressionSetManager;
+            m_importMetadataManager = importMetadataManager;
+            m_projectManager = projectManager;
+            m_logger = logger;
+            m_filteringManager = filteringManager;
 
             foreach (var manager in importManagers)
             {
@@ -82,11 +91,7 @@ namespace Vokabular.ProjectImport.ImportPipeline
                         return metadata;
                     }
 
-                    using (var scope = m_serviceProvider.CreateScope())
-                    {
-                        var filteringManager = scope.ServiceProvider.GetRequiredService<FilteringManager>();
-                        return filteringManager.Filter(metadata, filteringExpressions, parser);
-                    }
+                    return m_filteringManager.Filter(metadata, filteringExpressions, parser);
                 }, executionOptions
             );
         }
@@ -126,16 +131,27 @@ namespace Vokabular.ProjectImport.ImportPipeline
         {
             return new ActionBlock<ProjectImportMetadata>(projectImportMetadata =>
                 {
-                    using (var scope = m_serviceProvider.CreateScope())
+                    try
                     {
                         if (!projectImportMetadata.IsFailed)
                         {
-                            var projectManager = scope.ServiceProvider.GetRequiredService<ProjectManager>();
-                            projectManager.SaveImportedProject(projectImportMetadata, userId);
+                            m_projectManager.SaveImportedProject(projectImportMetadata, userId);
                         }
 
-                        var importMetadataManager = scope.ServiceProvider.GetRequiredService<ImportMetadataManager>();
-                        importMetadataManager.CreateImportMetadata(projectImportMetadata, importHistory);
+                        m_importMetadataManager.CreateImportMetadata(projectImportMetadata, importHistory);
+                        progressInfo.IncrementProcessedProjectsCount();
+                    }
+                    catch (DataException e)
+                    {
+                        projectImportMetadata.IsFailed = true;
+                        projectImportMetadata.FaultedMessage = e.Message;
+
+                        if (m_logger.IsErrorEnabled())
+                            m_logger.LogError(e, e.Message);
+                    }
+                    finally
+                    {
+                        m_importMetadataManager.CreateImportMetadata(projectImportMetadata, importHistory);
                         progressInfo.IncrementProcessedProjectsCount();
                     }
                 },
