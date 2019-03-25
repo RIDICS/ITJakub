@@ -14,9 +14,9 @@ namespace Vokabular.ProjectImport.Managers
             m_importHistoryRepository = importHistoryRepository;
         }
 
-        public int CreateImportHistory(ExternalRepository externalRepository, int userId)
+        public int CreateImportHistory(int externalRepositoryId, int userId)
         {
-            var resultId = new CreateImportHistoryWork(m_importHistoryRepository, externalRepository, userId).Execute();
+            var resultId = new CreateImportHistoryWork(m_importHistoryRepository, externalRepositoryId, userId).Execute();
             return resultId;
         }
 

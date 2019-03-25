@@ -3,24 +3,19 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Vokabular.DataEntities.Database.Entities;
-using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
 using Vokabular.ProjectImport.Model.Exceptions;
 
-namespace Vokabular.ProjectImport
+namespace Vokabular.ProjectImport.Managers
 {
     public class ImportManager
     {
-        private readonly IServiceProvider m_serviceProvider;
-        private readonly IList<ExternalRepository> m_importList;
+        private IList<int> m_importList;
         private readonly SemaphoreSlim m_signal;
 
-        public ImportManager(IServiceProvider serviceProvider)
+        public ImportManager()
         {
-            m_serviceProvider = serviceProvider;
-            m_importList = new List<ExternalRepository>();
+            m_importList = new List<int>();
             m_signal = new SemaphoreSlim(0);
             ActualProgress = new ConcurrentDictionary<int, RepositoryImportProgressInfo>();
             CancellationTokens = new ConcurrentDictionary<int, CancellationTokenSource>();
@@ -45,21 +40,13 @@ namespace Vokabular.ProjectImport
             }
 
             m_importList.Clear();
-
-            using (var scope = m_serviceProvider.CreateScope())
-            {
-                foreach (var externalRepositoryId in externalRepositoryIds)
-                {
-                    var externalRepositoryManager = scope.ServiceProvider.GetRequiredService<ExternalRepositoryManager>();
-                    m_importList.Add(externalRepositoryManager.GetExternalRepository(externalRepositoryId));
-                }
-            }
-
+            m_importList = externalRepositoryIds;
             UserId = userId;
+
             m_signal.Release();
         }
 
-        public async Task<IEnumerable<ExternalRepository>> GetExternalRepositories(CancellationToken cancellationToken)
+        public async Task<IEnumerable<int>> GetExternalRepositories(CancellationToken cancellationToken)
         {
             await m_signal.WaitAsync(cancellationToken);
             IsImportRunning = true;

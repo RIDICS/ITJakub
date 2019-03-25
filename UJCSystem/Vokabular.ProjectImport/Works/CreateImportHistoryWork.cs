@@ -9,13 +9,13 @@ namespace Vokabular.ProjectImport.Works
     public class CreateImportHistoryWork : UnitOfWorkBase<int>
     {
         private readonly ImportHistoryRepository m_importHistoryRepository;
-        private readonly ExternalRepository m_externalRepository;
+        private readonly int m_externalRepositoryId;
         private readonly int m_userId;
 
-        public CreateImportHistoryWork(ImportHistoryRepository importHistoryRepository, ExternalRepository externalRepository, int userId) : base(importHistoryRepository)
+        public CreateImportHistoryWork(ImportHistoryRepository importHistoryRepository, int externalRepositoryId, int userId) : base(importHistoryRepository)
         {
             m_importHistoryRepository = importHistoryRepository;
-            m_externalRepository = externalRepository;
+            m_externalRepositoryId = externalRepositoryId;
             m_userId = userId;
         }
 
@@ -23,11 +23,12 @@ namespace Vokabular.ProjectImport.Works
         {
             var now = DateTime.UtcNow;
             var user = m_importHistoryRepository.Load<User>(m_userId);
+            var externalRepository = m_importHistoryRepository.Load<ExternalRepository>(m_externalRepositoryId);
 
             var importHistory = new ImportHistory
             {
                 Date = now,
-                ExternalRepository = m_externalRepository,
+                ExternalRepository = externalRepository,
                 Status = ImportStatusEnum.Running,
                 CreatedByUser = user
             };

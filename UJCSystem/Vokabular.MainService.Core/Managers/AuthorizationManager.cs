@@ -117,6 +117,24 @@ namespace Vokabular.MainService.Core.Managers
             };
         }
 
+        public PermissionResult CheckUserCanManageRepositoryImport()
+        {
+            var user = m_authenticationManager.GetCurrentUser(true);
+            var specialPermissions = m_permissionRepository.InvokeUnitOfWork(x => x.GetSpecialPermissionsByUserAndType(user.Id,
+                SpecialPermissionCategorization.Action));
+            var manageRepositoryImportPermissions = specialPermissions.OfType<ManageRepositoryImportPermission>();
+            if (!manageRepositoryImportPermissions.Any(x => x.CanManageRepositoryImport))
+            {
+                throw new UnauthorizedException(
+                    $"User with username '{user.UserName}' does not have permission to manage import from repositories.");
+            }
+
+            return new PermissionResult
+            {
+                UserId = user.Id,
+            };
+        }
+
         public void CheckUserCanViewCardFile(string cardFileId)
         {
             var user = m_authenticationManager.GetCurrentUser(true);

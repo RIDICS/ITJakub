@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
+using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.ProjectImport.ImportPipeline;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
 using Vokabular.ProjectImport.Model.Exceptions;
-using Vokabular.ProjectParsing.Model.Parsers;
 using Vokabular.Shared.Extensions;
 
 namespace Vokabular.ProjectImport
@@ -46,11 +46,11 @@ namespace Vokabular.ProjectImport
                 var externalRepositories = await m_importManager.GetExternalRepositories(cancellationToken);
 
                 var importTasks = new List<Task>();
-                foreach (var externalRepository in externalRepositories)
+                foreach (var externalRepositoryId in externalRepositories)
                 {
                     var cts = new CancellationTokenSource();
-                    m_importManager.CancellationTokens.TryAdd(externalRepository.Id, cts);
-                    importTasks.Add(Import(externalRepository, cts.Token));
+                    m_importManager.CancellationTokens.TryAdd(externalRepositoryId, cts);
+                    importTasks.Add(Import(externalRepositoryId, cts.Token));
                 }
 
                 await Task.WhenAll(importTasks);
@@ -63,18 +63,21 @@ namespace Vokabular.ProjectImport
             m_logger.LogInformation("Project import hosted service stopped.");
         }
 
-        private async Task Import(ExternalRepository externalRepository, CancellationToken cancellationToken)
+        private async Task Import(int externalRepositoryId, CancellationToken cancellationToken)
         {
-            var progressInfo = new RepositoryImportProgressInfo(externalRepository.Id);
-            m_importManager.ActualProgress.TryAdd(externalRepository.Id, progressInfo);
+            var progressInfo = new RepositoryImportProgressInfo(externalRepositoryId);
+            m_importManager.ActualProgress.TryAdd(externalRepositoryId, progressInfo);
 
             using (var scope = m_serviceProvider.CreateScope())
             {
                 var importHistoryManager = scope.ServiceProvider.GetRequiredService<ImportHistoryManager>();
-                var latestImportHistory = importHistoryManager.GetLatestSuccessfulImportHistory(externalRepository.Id);
+                var latestImportHistory = importHistoryManager.GetLatestSuccessfulImportHistory(externalRepositoryId);
 
-                var importHistoryId = importHistoryManager.CreateImportHistory(externalRepository, m_importManager.UserId);
+                var importHistoryId = importHistoryManager.CreateImportHistory(externalRepositoryId, m_importManager.UserId);
                 var importHistory = importHistoryManager.GetImportHistory(importHistoryId);
+
+                var externalRepositoryRepository = scope.ServiceProvider.GetRequiredService<ExternalRepositoryRepository>();
+                var externalRepository = externalRepositoryRepository.InvokeUnitOfWork(x => x.GetExternalRepository(externalRepositoryId));
 
                 ImportPipeline.ImportPipeline importPipeline = null;
 

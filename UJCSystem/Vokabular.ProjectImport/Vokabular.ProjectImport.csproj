@@ -5,11 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj" />
+    <ProjectReference Include="..\Vokabular.MainService.Core\Vokabular.MainService.Core.csproj" />
+    <ProjectReference Include="..\Vokabular.MainService.DataContracts\Vokabular.MainService.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.Marc21ProjectParser\Vokabular.Marc21ProjectParser.csproj" />
     <ProjectReference Include="..\Vokabular.OaiPmhImportManager\Vokabular.OaiPmhImportManager.csproj" />
     <ProjectReference Include="..\Vokabular.ProjectImport.Model\Vokabular.ProjectImport.Model.csproj" />
