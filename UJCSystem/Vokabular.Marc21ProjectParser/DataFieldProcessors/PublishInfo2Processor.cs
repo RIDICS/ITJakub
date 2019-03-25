@@ -19,88 +19,48 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
                 return;
             }
 
-            var index = publishInfo.Value.IndexOf(':');
+            var index = publishInfo.Value.IndexOfAny(new[] {':', ','});
+            if (index <= 0)
+            {
+                return;
+            }
+
+            var publishPlace = publishInfo.Value.Substring(0, index);
+            project.ProjectMetadata.PublishPlace = publishPlace.RemoveUnnecessaryCharacters();
+            var rest = publishInfo.Value.Substring(index);
+
+            if (string.IsNullOrEmpty(rest))
+            {
+                return;
+            }
+
+            rest = rest.RemoveUnnecessaryCharacters();
+            index = rest.LastIndexOf(',');
 
             if (index > 0)
             {
-                var publishPlace = publishInfo.Value.Substring(0, index);
-                project.ProjectMetadata.PublishPlace = publishPlace.RemoveUnnecessaryCharacters();
-                var rest = publishInfo.Value.Substring(index);
+                var publisherText = rest.Substring(0, index);
+                var publishDate = rest.Substring(index);
 
-                if (string.IsNullOrEmpty(rest))
+                if (!string.IsNullOrEmpty(publisherText) && publisherText.Length > 1)
                 {
-                    return;
+                    project.ProjectMetadata.PublisherText = publisherText.RemoveUnnecessaryCharacters();
                 }
 
-                index = rest.IndexOf(",", StringComparison.Ordinal);
-
-                if (index > 0)
+                if (!string.IsNullOrEmpty(publishDate) && publishDate.Length > 1)
                 {
-                    var publisherText = rest.Substring(0, index);
-                    var publishDate = rest.Substring(index);
-
-                    if (!string.IsNullOrEmpty(publisherText) && publisherText.Length > 1)
-                    {
-                        project.ProjectMetadata.PublisherText = publisherText.RemoveUnnecessaryCharacters();
-                    }
-
-                    if (!string.IsNullOrEmpty(publishDate) && publishDate.Length > 1)
-                    {
-                        project.ProjectMetadata.PublishDate = publishDate.RemoveUnnecessaryCharacters();
-                    }
-                }
-                else
-                {
-                    if (int.TryParse(rest, out int publishDate))
-                    {
-                        project.ProjectMetadata.PublishDate = publishDate.ToString();
-                    }
-                    else
-                    {
-                        project.ProjectMetadata.PublisherText = rest;
-                    }
+                    project.ProjectMetadata.PublishDate = publishDate.RemoveUnnecessaryCharacters();
                 }
             }
             else
             {
-                index = publishInfo.Value.IndexOf(',');
-
-                if (index <= 0)
+                if (int.TryParse(rest, out var publishDate))
                 {
-                    return;
-                }
-
-                var publishPlace = publishInfo.Value.Substring(0, index);
-                project.ProjectMetadata.PublishPlace = publishPlace.RemoveUnnecessaryCharacters();
-                var rest = publishInfo.Value.Substring(index);
-
-                index = rest.IndexOf(";", StringComparison.Ordinal);
-
-                if (index > 0)
-                {
-                    var publisherText = rest.Substring(0, index);
-                    var publishDate = rest.Substring(index);
-
-                    if (!string.IsNullOrEmpty(publisherText) && publisherText.Length > 1)
-                    {
-                        project.ProjectMetadata.PublisherText = publisherText.RemoveUnnecessaryCharacters();
-                    }
-
-                    if (!string.IsNullOrEmpty(publishDate) && publishDate.Length > 1)
-                    {
-                        project.ProjectMetadata.PublishDate = publishDate.RemoveUnnecessaryCharacters();
-                    }
+                    project.ProjectMetadata.PublishDate = publishDate.ToString();
                 }
                 else
                 {
-                    if (int.TryParse(rest, out int publishDate))
-                    {
-                        project.ProjectMetadata.PublishDate = publishDate.ToString();
-                    }
-                    else
-                    {
-                        project.ProjectMetadata.PublisherText = rest;
-                    }
+                    project.ProjectMetadata.PublisherText = rest;
                 }
             }
         }
