@@ -8,7 +8,7 @@
 
             if (isLastUnnecessary)
             {
-                for (int i = text.Length - 1; i > 0; i--)
+                for (var i = text.Length - 1; i > 0; i--)
                 {
                     if (char.IsLetterOrDigit(text[i]))
                     {
@@ -22,7 +22,7 @@
 
             if (isFirstUnnecessary)
             {
-                for (int i = 0; i < text.Length-1; i++)
+                for (var i = 0; i < text.Length-1; i++)
                 {
                     if (char.IsLetterOrDigit(text[i]))
                     {

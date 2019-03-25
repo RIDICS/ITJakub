@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Vokabular.ProjectParsing;
 using Vokabular.ProjectParsing.Model.Entities;
 using Vokabular.ProjectParsing.Model.Parsers;
 
@@ -38,7 +36,7 @@ namespace Vokabular.Marc21ProjectParser
 
         public IList<KeyValuePair<string, string>> GetListPairIdValue(ProjectImportMetadata projectImportMetadata)
         {
-            var record = ((string)projectImportMetadata.RawData).XmlDeserializeFromString<MARC21record>();
+            var record = ((string) projectImportMetadata.RawData).XmlDeserializeFromString<MARC21record>();
 
             return record.datafield
                 .SelectMany(p => p.subfield,
@@ -52,31 +50,23 @@ namespace Vokabular.Marc21ProjectParser
                 return projectImportMetadata;
             }
 
-            try
+            var record = ((string) projectImportMetadata.RawData).XmlDeserializeFromString<MARC21record>();
+            var project = new Project();
+
+            foreach (var dataField in record.datafield)
             {
-                var record = ((string)projectImportMetadata.RawData).XmlDeserializeFromString<MARC21record>();
-                var project = new Project();
-
-                foreach (var dataField in record.datafield)
-                {
-                    m_dataFieldProcessors.TryGetValue(dataField.tag, out var dataFieldProcessor);
-                    dataFieldProcessor?.Process(dataField, project);
-                }
-
-                foreach (var controlField in record.controlfield)
-                {
-                    m_controlFieldProcessors.TryGetValue(controlField.tag, out var controlFieldProcessor);
-                    controlFieldProcessor?.Process(controlField, project);
-                }
-
-                projectImportMetadata.Project = project;
+                m_dataFieldProcessors.TryGetValue(dataField.tag, out var dataFieldProcessor);
+                dataFieldProcessor?.Process(dataField, project);
             }
-            catch (Exception e)
+
+            foreach (var controlField in record.controlfield)
             {
-                projectImportMetadata.IsFailed = true;
-                projectImportMetadata.FaultedMessage = e.Message;
+                m_controlFieldProcessors.TryGetValue(controlField.tag, out var controlFieldProcessor);
+                controlFieldProcessor?.Process(controlField, project);
             }
-         
+
+            projectImportMetadata.Project = project;
+
             return projectImportMetadata;
         }
     }

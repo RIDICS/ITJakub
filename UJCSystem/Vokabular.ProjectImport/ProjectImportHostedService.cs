@@ -19,16 +19,14 @@ namespace Vokabular.ProjectImport
     public class ProjectImportHostedService : BackgroundService
     {
         private readonly IDictionary<string, IProjectImportManager> m_projectImportManagers;
-        private readonly IDictionary<string, IProjectParser> m_projectParsers;
         private readonly ImportManager m_importManager;
         private readonly ILogger<ProjectImportHostedService> m_logger;
         private readonly IServiceProvider m_serviceProvider;
 
-        public ProjectImportHostedService(IEnumerable<IProjectImportManager> importManagers, IEnumerable<IProjectParser> parsers,
-            ImportManager importManager, ILogger<ProjectImportHostedService> logger, IServiceProvider serviceProvider)
+        public ProjectImportHostedService(IEnumerable<IProjectImportManager> importManagers, ImportManager importManager,
+            ILogger<ProjectImportHostedService> logger, IServiceProvider serviceProvider)
         {
             m_projectImportManagers = new Dictionary<string, IProjectImportManager>();
-            m_projectParsers = new Dictionary<string, IProjectParser>();
             m_importManager = importManager;
             m_logger = logger;
             m_serviceProvider = serviceProvider;
@@ -36,11 +34,6 @@ namespace Vokabular.ProjectImport
             foreach (var manager in importManagers)
             {
                 m_projectImportManagers.Add(manager.ExternalRepositoryTypeName, manager);
-            }
-
-            foreach (var parser in parsers)
-            {
-                m_projectParsers.Add(parser.BibliographicFormatName, parser);
             }
         }
 
@@ -102,7 +95,7 @@ namespace Vokabular.ProjectImport
                         latestImportHistory?.Date, cancellationToken);
                     importPipeline.BufferBlock.Complete();
 
-                    importPipeline.LastBlock.Completion.Wait(cancellationToken); //TODO check throw exception 
+                    importPipeline.LastBlock.Completion.Wait(cancellationToken);
                 }
                 catch (OperationCanceledException)
                 {
@@ -120,7 +113,7 @@ namespace Vokabular.ProjectImport
                     var message =
                         $"Errors occurred executing import task (import from repository {externalRepository.Name}). Error messages: {errorMessages}";
 
-                    if(m_logger.IsErrorEnabled())
+                    if (m_logger.IsErrorEnabled())
                         m_logger.LogError(e, message);
 
                     progressInfo.FaultedMessage = message;
