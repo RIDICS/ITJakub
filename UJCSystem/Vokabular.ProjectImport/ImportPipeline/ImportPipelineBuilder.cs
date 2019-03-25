@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
-using Vokabular.ProjectImport.Model.Exception;
+using Vokabular.ProjectImport.Model.Exceptions;
 using Vokabular.ProjectParsing.Model.Entities;
 using Vokabular.ProjectParsing.Model.Parsers;
 using Vokabular.Shared.Extensions;

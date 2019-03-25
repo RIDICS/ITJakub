@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Vokabular.OaiPmhImportManager.Model;
-using Vokabular.ProjectImport.Model.Exception;
+using Vokabular.ProjectImport.Model.Exceptions;
 using Vokabular.Shared.Options;
 
 namespace Vokabular.OaiPmhImportManager

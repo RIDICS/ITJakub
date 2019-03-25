@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
-using Vokabular.ProjectImport.Model.Exception;
+using Vokabular.ProjectImport.Model.Exceptions;
 
 namespace Vokabular.ProjectImport
 {

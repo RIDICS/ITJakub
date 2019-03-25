@@ -1,4 +1,4 @@
-﻿namespace Vokabular.ProjectImport.Model.Exception
+﻿namespace Vokabular.ProjectImport.Model.Exceptions
 {
     public class ImportFailedException : System.Exception
     {
