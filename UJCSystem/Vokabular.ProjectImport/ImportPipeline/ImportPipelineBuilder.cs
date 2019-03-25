@@ -137,9 +137,6 @@ namespace Vokabular.ProjectImport.ImportPipeline
                         {
                             m_projectManager.SaveImportedProject(projectImportMetadata, userId);
                         }
-
-                        m_importMetadataManager.CreateImportMetadata(projectImportMetadata, importHistory);
-                        progressInfo.IncrementProcessedProjectsCount();
                     }
                     catch (DataException e)
                     {
