@@ -144,6 +144,11 @@ namespace Vokabular.MainService.Core.Managers
                 roles.Add(CustomRole.CanEditStaticText);
             }
 
+            if (actionSpecialPermissions.OfType<ManageRepositoryImportPermission>().Count() != 0)
+            {
+                roles.Add(CustomRole.CanManageRepositoryImport);
+            }
+
             return roles;
         }
     }

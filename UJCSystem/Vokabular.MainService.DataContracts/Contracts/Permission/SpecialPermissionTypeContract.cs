@@ -17,5 +17,6 @@ namespace Vokabular.MainService.DataContracts.Contracts.Permission
         DerivateLemmatization,
         EditionPrint,
         EditStaticText,
+        ManagerRepositoryImport
     }
 }

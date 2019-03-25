@@ -150,4 +150,14 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual bool CanEditStaticText { get; set; }
     }
+
+    public class ManageRepositoryImportPermission : SpecialPermission
+    {
+        public ManageRepositoryImportPermission()
+        {
+            PermissionCategorization = SpecialPermissionCategorization.Action;
+        }
+
+        public virtual bool CanManageRepositoryImport { get; set; }
+    }
 }

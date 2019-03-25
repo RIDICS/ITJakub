@@ -71,6 +71,8 @@ namespace Vokabular.MainService.DataContracts.Utils
                     return typeof(EditionPrintPermissionContract);
                 case SpecialPermissionTypeContract.EditStaticText:
                     return typeof(EditStaticTextPermissionContract);
+                case SpecialPermissionTypeContract.ManagerRepositoryImport:
+                    return typeof(ManageRepositoryImportPermissionContract);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(key), key, null);
             }

@@ -12,5 +12,6 @@ namespace Vokabular.Shared.Const
         public const string CanDerivateLemmatization = "CanDerivateLemmatization";
         public const string CanEditionPrint = "CanEditionPrint";
         public const string CanEditStaticText = "CanEditStaticText";
+        public const string CanManageRepositoryImport = "CanManageRepositoryImport";
     }
 }

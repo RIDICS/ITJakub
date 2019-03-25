@@ -24,6 +24,7 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .Include<DerivateLemmatizationPermission, DerivateLemmatizationPermissionContract>()
                 .Include<EditionPrintTextPermission, EditionPrintPermissionContract>()
                 .Include<EditStaticTextPermission, EditStaticTextPermissionContract>()
+                .Include<ManageRepositoryImportPermission, ManageRepositoryImportPermissionContract>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id));
 
             CreateMap<UploadBookPermission, UploadBookPermissionContract>()
@@ -61,6 +62,9 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
 
             CreateMap<EditStaticTextPermission, EditStaticTextPermissionContract>()
                 .ForMember(dest => dest.CanEditStaticText, opts => opts.MapFrom(src => src.CanEditStaticText));
+
+            CreateMap<ManageRepositoryImportPermission, ManageRepositoryImportPermissionContract>()
+                .ForMember(dest => dest.CanManagerRepositoryImport, opts => opts.MapFrom(src => src.CanManageRepositoryImport));
         }
     }
 }

@@ -94,4 +94,11 @@ namespace Vokabular.MainService.DataContracts.Contracts.Permission
 
         public bool CanEditStaticText { get; set; }
     }
+
+    public class ManageRepositoryImportPermissionContract : SpecialPermissionContract
+    {
+        public override SpecialPermissionTypeContract Key => SpecialPermissionTypeContract.ManagerRepositoryImport;
+
+        public bool CanManagerRepositoryImport { get; set; }
+    }
 }

@@ -97,6 +97,12 @@
       <property name="CanEditStaticText" not-null="true" />
 
     </subclass>
+
+    <subclass name="ManageRepositoryImportPermission" discriminator-value="ManageRepositoryImport">
+
+      <property name="CanManageRepositoryImport" not-null="true" />
+
+    </subclass>
     
   </class>
 </hibernate-mapping>

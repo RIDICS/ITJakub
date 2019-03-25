@@ -68,6 +68,8 @@ BEGIN TRAN
 		[FilteringExpressionSet] int NOT NULL CONSTRAINT [FK_FilteringExpression(FilteringExpressionSet)_FilteringExpressionSet(Id)] FOREIGN KEY REFERENCES [dbo].[FilteringExpression] (Id)
 	)
 
+	ALTER TABLE [dbo].[SpecialPermission] ADD [CanManageRepositoryImport] bit NULL;  
+
     INSERT INTO [dbo].[DatabaseVersion]
 		(DatabaseVersion)
     VALUES
