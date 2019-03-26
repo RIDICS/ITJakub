@@ -113,7 +113,8 @@ namespace Vokabular.MainService.DataContracts.Clients
         }
 
         public ProjectMetadataResultContract GetProjectMetadata(long projectId, bool includeAuthor,
-            bool includeResponsiblePerson, bool includeKind, bool includeGenre, bool includeOriginal, bool includeKeyword, bool includeCategory)
+            bool includeResponsiblePerson, bool includeKind, bool includeGenre, bool includeOriginal, bool includeKeyword,
+            bool includeCategory)
         {
             try
             {
@@ -653,7 +654,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        #endregion       
+        #endregion
 
         #region Responsible person
 
@@ -661,7 +662,8 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = GetPagedList<ProjectDetailContract>($"responsibleperson/{responsiblePersonId}/project?start={start}&count={count}");
+                var result = GetPagedList<ProjectDetailContract>(
+                    $"responsibleperson/{responsiblePersonId}/project?start={start}&count={count}");
                 return result;
             }
             catch (HttpRequestException e)
@@ -968,7 +970,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
-        
+
         public PagedResultList<KeywordContract> GetKeywordList(int? start, int? count)
         {
             try
@@ -1817,7 +1819,8 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = Get<List<FavoriteLabelContract>>(UrlQueryBuilder.Create("favorite/label").AddParameter("count", count).ToQuery());
+                var result = Get<List<FavoriteLabelContract>>(UrlQueryBuilder.Create("favorite/label").AddParameter("count", count)
+                    .ToQuery());
                 return result;
             }
             catch (HttpRequestException e)
@@ -1875,7 +1878,8 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public PagedResultList<FavoriteBaseInfoContract> GetFavoriteItems(int start, int count, long? filterByLabelId, FavoriteTypeEnumContract? filterByType, string filterByTitle, FavoriteSortEnumContract? sort)
+        public PagedResultList<FavoriteBaseInfoContract> GetFavoriteItems(int start, int count, long? filterByLabelId,
+            FavoriteTypeEnumContract? filterByType, string filterByTitle, FavoriteSortEnumContract? sort)
         {
             try
             {
@@ -1887,7 +1891,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                     .AddParameter("filterByTitle", filterByTitle)
                     .AddParameter("sort", sort)
                     .ToQuery();
-                    
+
                 var result = GetPagedList<FavoriteBaseInfoContract>(url);
                 return result;
             }
@@ -1900,7 +1904,8 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public PagedResultList<FavoriteQueryContract> GetFavoriteQueries(int start, int count, long? filterByLabelId, BookTypeEnumContract? bookType, QueryTypeEnumContract? queryType, string filterByTitle)
+        public PagedResultList<FavoriteQueryContract> GetFavoriteQueries(int start, int count, long? filterByLabelId,
+            BookTypeEnumContract? bookType, QueryTypeEnumContract? queryType, string filterByTitle)
         {
             try
             {
@@ -2028,7 +2033,8 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = Get<List<FavoriteLabelWithBooksAndCategories>>($"favorite/label/with-books-and-categories?bookType={bookType.ToString()}");
+                var result = Get<List<FavoriteLabelWithBooksAndCategories>>(
+                    $"favorite/label/with-books-and-categories?bookType={bookType.ToString()}");
                 return result;
             }
             catch (HttpRequestException e)
@@ -2087,7 +2093,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
-        
+
         public long CreateFavoritePage(CreateFavoritePageContract data)
         {
             try
@@ -2438,7 +2444,8 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public FileResultData GetCardImage(string cardFileId, string bucketId, string cardId, string imageId, CardImageSizeEnumContract imageSize)
+        public FileResultData GetCardImage(string cardFileId, string bucketId, string cardId, string imageId,
+            CardImageSizeEnumContract imageSize)
         {
             try
             {
@@ -2752,5 +2759,89 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+
+        #region ExternalRepository
+
+        public PagedResultList<ExternalRepositoryContract> GetExternalRepositoryList(int start, int count, bool fetchPageCount = false)
+        {
+            try
+            {
+                var result =
+                    GetPagedList<ExternalRepositoryContract>(
+                        $"externalRepository?start={start}&count={count}&fetchPageCount={fetchPageCount}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public ExternalRepositoryDetailContract GetExternalRepositoryDetail(int externalRepositoryId)
+        {
+            try
+            {
+                var result = Get<ExternalRepositoryDetailContract>($"externalRepository/{externalRepositoryId}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public int CreateExternalRepository(ExternalRepositoryDetailContract externalRepository)
+        {
+            try
+            {
+                var externalRepositoryId = Post<int>("externalRepository", externalRepository);
+                return externalRepositoryId;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void DeleteExternalRepository(int externalRepositoryId)
+        {
+            try
+            {
+                Delete($"externalRepository/{externalRepositoryId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void UpdateExternalRepository(int externalRepositoryId, ExternalRepositoryDetailContract externalRepository)
+        {
+            try
+            {
+                Put<object>($"externalRepository/{externalRepositoryId}", externalRepository);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
     }
 }
