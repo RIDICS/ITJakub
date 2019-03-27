@@ -5,7 +5,7 @@ namespace Vokabular.ProjectParsing.Model.Parsers
 {
     public interface IProjectParser
     {
-        ProjectImportMetadata Parse(ProjectImportMetadata projectImportMetadata);
+        ProjectImportMetadata AddParsedProject(ProjectImportMetadata projectImportMetadata);
 
         IList<KeyValuePair<string, string>> GetListPairIdValue(ProjectImportMetadata projectImportMetadata);
 

@@ -91,7 +91,7 @@ namespace Vokabular.ProjectImport.ImportPipeline
                         return metadata;
                     }
 
-                    return m_filteringManager.Filter(metadata, filteringExpressions, parser);
+                    return m_filteringManager.SetFilterData(metadata, filteringExpressions, parser);
                 }, executionOptions
             );
         }
@@ -121,7 +121,7 @@ namespace Vokabular.ProjectImport.ImportPipeline
             }
 
             return new TransformBlock<ProjectImportMetadata, ProjectImportMetadata>(
-                projectImportMetadata => parser.Parse(projectImportMetadata),
+                projectImportMetadata => parser.AddParsedProject(projectImportMetadata),
                 executionOptions
             );
         }

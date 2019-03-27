@@ -15,7 +15,7 @@ namespace Vokabular.ProjectImport.Managers
             m_importMetadataManager = importMetadataManager;
         }
 
-        public ProjectImportMetadata Filter(ProjectImportMetadata metadata, IDictionary<string, List<string>> filteringExpressions,
+        public ProjectImportMetadata SetFilterData(ProjectImportMetadata metadata, IDictionary<string, List<string>> filteringExpressions,
             IProjectParser parser)
         {
             var metadataDb = m_importMetadataManager.GetImportMetadataByExternalId(metadata.ExternalId);

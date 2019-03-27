@@ -43,7 +43,7 @@ namespace Vokabular.Marc21ProjectParser
                     (dataField, subfield) => new KeyValuePair<string, string>(dataField.tag + subfield.code, subfield.Value)).ToList();
         }
 
-        public ProjectImportMetadata Parse(ProjectImportMetadata projectImportMetadata)
+        public ProjectImportMetadata AddParsedProject(ProjectImportMetadata projectImportMetadata)
         {
             if (projectImportMetadata.IsFailed)
             {
