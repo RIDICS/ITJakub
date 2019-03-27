@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.Core.Managers;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.RestClient.Errors;
@@ -13,16 +15,21 @@ namespace Vokabular.MainService.Controllers
     public class ExternalRepositoryController : BaseController
     {
         private readonly ExternalRepositoryManager m_externalRepositoryManager;
+        private readonly AuthenticationManager m_authenticationManager;
+        private readonly AuthorizationManager m_authorizationManager;
 
-        public ExternalRepositoryController(ExternalRepositoryManager externalRepositoryManager)
+        public ExternalRepositoryController(ExternalRepositoryManager externalRepositoryManager, AuthenticationManager authenticationManager, AuthorizationManager authorizationManager)
         {
             m_externalRepositoryManager = externalRepositoryManager;
+            m_authenticationManager = authenticationManager;
+            m_authorizationManager = authorizationManager;
         }
 
         [HttpPost("")]
         public int CreateExternalRepository([FromBody] ExternalRepositoryDetailContract data)
         {
-            var resultId = m_externalRepositoryManager.CreateExternalRepository(data);
+            m_authorizationManager.CheckUserCanManageRepositoryImport();
+            var resultId = m_externalRepositoryManager.CreateExternalRepository(data, m_authenticationManager.GetCurrentUserId());
             return resultId;
         }
 
@@ -31,6 +38,7 @@ namespace Vokabular.MainService.Controllers
         {
             try
             {
+                m_authorizationManager.CheckUserCanManageRepositoryImport();
                 m_externalRepositoryManager.UpdateExternalRepository(externalRepositoryId, data);
                 return Ok();
             }
@@ -45,6 +53,7 @@ namespace Vokabular.MainService.Controllers
         {
             try
             {
+                m_authorizationManager.CheckUserCanManageRepositoryImport();
                 m_externalRepositoryManager.DeleteExternalRepository(externalRepositoryId);
                 return Ok();
             }
@@ -58,6 +67,7 @@ namespace Vokabular.MainService.Controllers
         [ProducesResponseType(typeof(ExternalRepositoryDetailContract), StatusCodes.Status200OK)]
         public IActionResult GetExternalRepository(int externalRepositoryId)
         {
+            m_authorizationManager.CheckUserCanManageRepositoryImport();
             var result = m_externalRepositoryManager.GetExternalRepository(externalRepositoryId);
             if (result == null)
                 return NotFound();
@@ -69,7 +79,12 @@ namespace Vokabular.MainService.Controllers
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
         public List<ExternalRepositoryDetailContract> GetExternalRepositoryList([FromQuery] int? start, [FromQuery] int? count)
         {
-            var result = m_externalRepositoryManager.GetExternalRepositoryList(start, count);
+            m_authorizationManager.CheckUserCanManageRepositoryImport();
+
+            var startValue = PagingHelper.GetStart(start);
+            var countValue = PagingHelper.GetCount(count);
+
+            var result = m_externalRepositoryManager.GetExternalRepositoryList(startValue, countValue);
             SetTotalCountHeader(result.TotalCount);
 
             return result.List;

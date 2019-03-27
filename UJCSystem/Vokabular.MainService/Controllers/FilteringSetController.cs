@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.Core.Managers;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.RestClient.Errors;
@@ -13,16 +15,21 @@ namespace Vokabular.MainService.Controllers
     public class FilteringExpressionSetController : BaseController
     {
         private readonly FilteringExpressionSetManager m_filteringExpressionSetManager;
+        private readonly AuthenticationManager m_authenticationManager;
+        private readonly AuthorizationManager m_authorizationManager;
 
-        public FilteringExpressionSetController(FilteringExpressionSetManager filteringExpressionSetManager)
+        public FilteringExpressionSetController(FilteringExpressionSetManager filteringExpressionSetManager, AuthenticationManager authenticationManager, AuthorizationManager authorizationManager)
         {
             m_filteringExpressionSetManager = filteringExpressionSetManager;
+            m_authenticationManager = authenticationManager;
+            m_authorizationManager = authorizationManager;
         }
 
         [HttpPost("")]
         public int CreateFilteringExpressionSet([FromBody] FilteringExpressionSetDetailContract data)
         {
-            var resultId = m_filteringExpressionSetManager.CreateFilteringExpressionSet(data);
+            m_authorizationManager.CheckUserCanManageRepositoryImport();
+            var resultId = m_filteringExpressionSetManager.CreateFilteringExpressionSet(data, m_authenticationManager.GetCurrentUserId());
             return resultId;
         }
 
@@ -31,6 +38,7 @@ namespace Vokabular.MainService.Controllers
         {
             try
             {
+                m_authorizationManager.CheckUserCanManageRepositoryImport();
                 m_filteringExpressionSetManager.UpdateFilteringExpressionSet(filteringExpressionSetId, data);
                 return Ok();
             }
@@ -45,6 +53,7 @@ namespace Vokabular.MainService.Controllers
         {
             try
             {
+                m_authorizationManager.CheckUserCanManageRepositoryImport();
                 m_filteringExpressionSetManager.DeleteFilteringExpressionSet(filteringExpressionSetId);
                 return Ok();
             }
@@ -58,6 +67,7 @@ namespace Vokabular.MainService.Controllers
         [ProducesResponseType(typeof(FilteringExpressionSetDetailContract), StatusCodes.Status200OK)]
         public IActionResult GetFilteringExpressionSet(int filteringExpressionSetId)
         {
+            m_authorizationManager.CheckUserCanManageRepositoryImport();
             var result = m_filteringExpressionSetManager.GetFilteringExpressionSet(filteringExpressionSetId);
             if (result == null)
                 return NotFound();
@@ -69,7 +79,12 @@ namespace Vokabular.MainService.Controllers
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
         public List<FilteringExpressionSetContract> GetExternalRepositoryList([FromQuery] int? start, [FromQuery] int? count)
         {
-            var result = m_filteringExpressionSetManager.GetFilteringExpressionSetList(start, count);
+            m_authorizationManager.CheckUserCanManageRepositoryImport();
+
+            var startValue = PagingHelper.GetStart(start);
+            var countValue = PagingHelper.GetCount(count);
+
+            var result = m_filteringExpressionSetManager.GetFilteringExpressionSetList(startValue, countValue);
             SetTotalCountHeader(result.TotalCount);
 
             return result.List;

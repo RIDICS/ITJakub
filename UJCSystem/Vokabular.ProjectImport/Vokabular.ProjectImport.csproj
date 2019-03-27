@@ -11,7 +11,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj" />
-    <ProjectReference Include="..\Vokabular.MainService.Core\Vokabular.MainService.Core.csproj" />
     <ProjectReference Include="..\Vokabular.MainService.DataContracts\Vokabular.MainService.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.Marc21ProjectParser\Vokabular.Marc21ProjectParser.csproj" />
     <ProjectReference Include="..\Vokabular.OaiPmhImportManager\Vokabular.OaiPmhImportManager.csproj" />
