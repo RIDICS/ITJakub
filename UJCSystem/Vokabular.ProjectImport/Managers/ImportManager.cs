@@ -22,8 +22,8 @@ namespace Vokabular.ProjectImport.Managers
             IsImportRunning = false;
         }
 
-        public readonly ConcurrentDictionary<int, RepositoryImportProgressInfo> ActualProgress;
-        public readonly ConcurrentDictionary<int, CancellationTokenSource> CancellationTokens;
+        public ConcurrentDictionary<int, RepositoryImportProgressInfo> ActualProgress { get; }
+        public ConcurrentDictionary<int, CancellationTokenSource> CancellationTokens { get; }
         public bool IsImportRunning { get; set; }
         public int UserId { get; private set; }
 

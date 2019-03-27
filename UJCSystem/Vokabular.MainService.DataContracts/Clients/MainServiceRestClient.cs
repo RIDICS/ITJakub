@@ -2927,5 +2927,55 @@ namespace Vokabular.MainService.DataContracts.Clients
         }
 
         #endregion
+
+        #region Import
+
+        public void StartImport(IList<int> externalRepositoryIds)
+        {
+            try
+            {
+                Post<object>($"import", externalRepositoryIds);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void CancelImportTask(int externalRepositoryId)
+        {
+            try
+            {
+                Delete($"import/{externalRepositoryId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+
+        public IList<RepositoryImportProgressInfoContract> GetActualProgress(int externalRepositoryId)
+        {
+            try
+            {
+                return Get<IList<RepositoryImportProgressInfoContract>>($"import/actualProgress");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
     }
 }
