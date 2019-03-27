@@ -23,7 +23,8 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public virtual ListWithTotalCountResult<ExternalRepository> GetExternalRepositoryList(int start, int count)
         {
-            var query = GetSession().QueryOver<ExternalRepository>();
+            var query = GetSession().QueryOver<ExternalRepository>()
+                .Fetch(x => x.CreatedByUser).Eager;
 
             var list = query.Skip(start)
                 .Take(count)

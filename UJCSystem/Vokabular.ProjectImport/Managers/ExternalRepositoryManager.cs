@@ -51,7 +51,7 @@ namespace Vokabular.ProjectImport.Managers
             new DeleteExternalRepositoryWork(m_externalRepositoryRepository, externalRepositoryId).Execute();
         }
 
-        public PagedResultList<ExternalRepositoryContract> GetExternalRepositoryList(int? start, int? count)
+        public PagedResultList<ExternalRepositoryDetailContract> GetExternalRepositoryList(int? start, int? count)
         {
             m_authorizationManager.CheckUserCanManageRepositoryImport();
 
@@ -60,9 +60,9 @@ namespace Vokabular.ProjectImport.Managers
 
             var result = m_externalRepositoryRepository.InvokeUnitOfWork(x =>  x.GetExternalRepositoryList(startValue, countValue));
 
-            return new PagedResultList<ExternalRepositoryContract>
+            return new PagedResultList<ExternalRepositoryDetailContract>
             {
-                List = Mapper.Map<List<ExternalRepositoryContract>>(result.List),
+                List = Mapper.Map<List<ExternalRepositoryDetailContract>>(result.List),
                 TotalCount = result.Count,
             };
         }

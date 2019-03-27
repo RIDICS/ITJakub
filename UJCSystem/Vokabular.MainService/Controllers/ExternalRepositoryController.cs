@@ -67,7 +67,7 @@ namespace Vokabular.MainService.Controllers
 
         [HttpGet("")]
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
-        public List<ExternalRepositoryContract> GetExternalRepositoryList([FromQuery] int? start, [FromQuery] int? count)
+        public List<ExternalRepositoryDetailContract> GetExternalRepositoryList([FromQuery] int? start, [FromQuery] int? count)
         {
             var result = m_externalRepositoryManager.GetExternalRepositoryList(start, count);
             SetTotalCountHeader(result.TotalCount);

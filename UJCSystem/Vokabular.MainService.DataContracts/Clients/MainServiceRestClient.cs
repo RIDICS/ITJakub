@@ -2762,12 +2762,12 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         #region ExternalRepository
 
-        public PagedResultList<ExternalRepositoryContract> GetExternalRepositoryList(int start, int count, bool fetchPageCount = false)
+        public PagedResultList<ExternalRepositoryDetailContract> GetExternalRepositoryList(int start, int count, bool fetchPageCount = false)
         {
             try
             {
                 var result =
-                    GetPagedList<ExternalRepositoryContract>(
+                    GetPagedList<ExternalRepositoryDetailContract>(
                         $"externalRepository?start={start}&count={count}&fetchPageCount={fetchPageCount}");
                 return result;
             }
