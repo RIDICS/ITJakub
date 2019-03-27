@@ -9,13 +9,13 @@ namespace Vokabular.DataEntities.Database.Repositories
     {
         public ImportHistoryRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
-
         }
 
         public ImportHistory GetLatestSuccessfulImportHistory(int externalRepositoryId)
         {
             return GetSession().QueryOver<ImportHistory>()
-                .Where(x => x.ExternalRepository.Id == externalRepositoryId &&  x.Status == ImportStatusEnum.Completed)
+                .Where(x => x.ExternalRepository.Id == externalRepositoryId)
+                .AndRestrictionOn(x => x.Status).IsInG(new []{ImportStatusEnum.Completed, ImportStatusEnum.CompletedWithWarnings})
                 .OrderBy(x => x.Date).Desc
                 .Take(1)
                 .SingleOrDefault();
