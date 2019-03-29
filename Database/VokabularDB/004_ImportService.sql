@@ -36,15 +36,28 @@ BEGIN TRAN
 		[ExternalRepository] int NOT NULL CONSTRAINT [FK_ImportHistory(ExternalRepository)_ExternalRepository(Id)] FOREIGN KEY REFERENCES [dbo].[ExternalRepository] (Id),
 		[CreatedByUser] int NOT NULL CONSTRAINT [FK_ImportHistory(CreatedByUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User] (Id)
 	)
-	
-	CREATE TABLE [dbo].[ImportMetadata]
+
+	CREATE TABLE [dbo].[ImportedProjectMetadata]
 	(
-		[Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_ImportMetadata(Id)] PRIMARY KEY CLUSTERED,
+		[Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_ImportedProjectMetadata(Id)] PRIMARY KEY CLUSTERED,
 		[ExternalId] varchar(50) NOT NULL,
-		[LastUpdateMessage] nvarchar(255) NULL,
-		[LastUpdate] int NOT NULL CONSTRAINT [FK_ImportMetadata(LastUpdate)_ImportHistory(Id)] FOREIGN KEY REFERENCES [dbo].[ImportHistory] (Id),
-		[Snapshot] bigint NULL CONSTRAINT [FK_ImportMetadata(Snapshot)_Snapshot(Id)] FOREIGN KEY REFERENCES [dbo].[Snapshot] (Id),
+		[ExternalRepository] int NOT NULL CONSTRAINT [FK_ImportedProjectMetadata(ExternalRepository)_ExternalRepository(Id)] FOREIGN KEY REFERENCES [dbo].[ExternalRepository] (Id),
+		[Project] bigint NOT NULL CONSTRAINT [FK_ImportedProjectMetadata(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project] (Id),
 	)
+	
+	CREATE TABLE [dbo].[ImportedRecordMetadata]
+	(
+		[Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_ImportedRecordMetadata(Id)] PRIMARY KEY CLUSTERED,
+		[LastUpdateMessage] nvarchar(255) NULL,
+		[LastUpdate] int NOT NULL CONSTRAINT [FK_ImportedRecordMetadata(LastUpdate)_ImportHistory(Id)] FOREIGN KEY REFERENCES [dbo].[ImportHistory] (Id),
+		[ImportedProjectMetadata] int NOT NULL CONSTRAINT [FK_ImportedRecordMetadata(ImportedProjectMetadata)_ImportedProjectMetadata(Id)] FOREIGN KEY REFERENCES [dbo].[ImportedProjectMetadata] (Id),
+		[Snapshot] bigint NULL CONSTRAINT [FK_ImportedRecordMetadata(Snapshot)_Snapshot(Id)] FOREIGN KEY REFERENCES [dbo].[Snapshot] (Id),
+	)
+
+	ALTER TABLE [dbo].[ImportedProjectMetadata] 
+    ADD CONSTRAINT UNIQUE_ExternalId_ExternalRepository
+    UNIQUE ([ExternalId], [ExternalRepository]); 
+
 
 	CREATE TABLE [dbo].[FilteringExpressionSet]
 	(

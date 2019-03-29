@@ -2,17 +2,18 @@
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
-using ProjectImportMetadata = Vokabular.ProjectParsing.Model.Entities.ProjectImportMetadata;
+using Vokabular.ProjectParsing.Model.Entities;
+using Project = Vokabular.DataEntities.Database.Entities.Project;
 
 namespace Vokabular.ProjectImport.Works
 {
     public class CreateImportedProjectWork : UnitOfWorkBase<long>
     {
         private readonly ProjectRepository m_projectRepository;
-        private readonly ProjectImportMetadata m_metadata;
+        private readonly ImportedRecord m_metadata;
         private readonly int m_userId;
 
-        public CreateImportedProjectWork(ProjectRepository projectRepository, ProjectImportMetadata metadata, int userId) : base(projectRepository)
+        public CreateImportedProjectWork(ProjectRepository projectRepository, ImportedRecord metadata, int userId) : base(projectRepository)
         {
             m_projectRepository = projectRepository;
             m_metadata = metadata;

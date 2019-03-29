@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <hibernate-mapping assembly="Vokabular.DataEntities" namespace="Vokabular.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
   <class name="ImportHistory" table="[ImportHistory]" >
     <id name="Id" column="Id">
@@ -15,9 +15,9 @@
 
     <many-to-one name="CreatedByUser" class="User" lazy="proxy" not-null="true" />
     
-    <bag name="ImportMetadata" lazy="true">
+    <bag name="ImportedRecordMetadata" lazy="true">
       <key column="LastUpdate" />
-      <one-to-many class="ImportMetadata" />
+      <one-to-many class="ImportedRecordMetadata" />
     </bag>
 
   </class>

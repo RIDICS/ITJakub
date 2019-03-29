@@ -5,9 +5,9 @@ namespace Vokabular.ProjectParsing.Model.Parsers
 {
     public interface IProjectParser
     {
-        ProjectImportMetadata AddParsedProject(ProjectImportMetadata projectImportMetadata);
+        ImportedRecord AddParsedProject(ImportedRecord importedRecord);
 
-        IList<KeyValuePair<string, string>> GetListPairIdValue(ProjectImportMetadata projectImportMetadata);
+        IList<KeyValuePair<string, string>> GetPairKeyValueList(ImportedRecord importedRecord);
 
         string BibliographicFormatName { get; }
     }

@@ -2,19 +2,17 @@
 
 namespace Vokabular.DataEntities.Database.Entities
 {
-    public class ImportMetadata : IEquatable<ImportMetadata>
+    public class ImportedProjectMetadata : IEquatable<ImportedProjectMetadata>
     {
         public virtual int Id { get; set; }
 
         public virtual string ExternalId { get; set; }
 
-        public virtual string LastUpdateMessage { get; set; }
+        public virtual ExternalRepository ExternalRepository { get; set; }
 
-        public virtual ImportHistory LastUpdate { get; set; }
+        public virtual Project Project { get; set; }
 
-        public virtual Snapshot Snapshot { get; set; }
-
-        public virtual bool Equals(ImportMetadata other)
+        public virtual bool Equals(ImportedProjectMetadata other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -26,7 +24,7 @@ namespace Vokabular.DataEntities.Database.Entities
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((ImportMetadata) obj);
+            return Equals((ImportedProjectMetadata) obj);
         }
 
         public override int GetHashCode()

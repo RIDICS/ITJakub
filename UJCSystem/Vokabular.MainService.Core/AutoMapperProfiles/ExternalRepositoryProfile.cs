@@ -19,8 +19,7 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .IncludeBase<ExternalRepository, ExternalRepositoryContract>()
                 .ForMember(dest => dest.Configuration, opt => opt.MapFrom(src => src.Configuration))
                 .ForMember(dest => dest.License, opt => opt.MapFrom(src => src.License))
-                .ForMember(dest => dest.Url, opt => opt.MapFrom(src => src.Url))
-                .ForMember(dest => dest.CreatedByUser, opt => opt.MapFrom(src => src.CreatedByUser));
+                .ForMember(dest => dest.Url, opt => opt.MapFrom(src => src.Url));
         }
     }
 }

@@ -20,18 +20,18 @@ namespace Vokabular.ProjectImport.ImportPipeline
         private readonly ImportManager m_importManager;
         private readonly ILogger<ImportPipelineManager> m_logger;
         private readonly ImportPipelineBuilder m_importPipelineBuilder;
-        private readonly ExternalRepositoryRepository m_externalRepositoryRepository;
+        private readonly ExternalRepositoryManager m_externalRepositoryManager;
         private readonly ImportHistoryManager m_importHistoryManager;
 
         public ImportPipelineManager(IEnumerable<IProjectImportManager> importManagers, ImportManager importManager,
             ILogger<ImportPipelineManager> logger, ImportPipelineBuilder importPipelineBuilder,
-            ExternalRepositoryRepository externalRepositoryRepository, ImportHistoryManager importHistoryManager)
+            ExternalRepositoryManager externalRepositoryManager, ImportHistoryManager importHistoryManager)
         {
             m_projectImportManagers = new Dictionary<string, IProjectImportManager>();
             m_importManager = importManager;
             m_logger = logger;
             m_importPipelineBuilder = importPipelineBuilder;
-            m_externalRepositoryRepository = externalRepositoryRepository;
+            m_externalRepositoryManager = externalRepositoryManager;
             m_importHistoryManager = importHistoryManager;
 
             foreach (var manager in importManagers)
@@ -50,8 +50,7 @@ namespace Vokabular.ProjectImport.ImportPipeline
             var importHistoryId = m_importHistoryManager.CreateImportHistory(externalRepositoryId, m_importManager.UserId);
             var importHistory = m_importHistoryManager.GetImportHistory(importHistoryId);
 
-
-            var externalRepository = m_externalRepositoryRepository.InvokeUnitOfWork(x => x.GetExternalRepository(externalRepositoryId));
+            var externalRepository = m_externalRepositoryManager.GetExternalRepository(externalRepositoryId);
 
             ImportPipeline importPipeline = null;
 

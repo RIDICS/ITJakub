@@ -10,38 +10,44 @@ namespace Vokabular.ProjectImport.Managers
         private readonly CatalogValueRepository m_catalogValueRepository;
         private readonly PersonRepository m_personRepository;
         private readonly MetadataRepository m_metadataRepository;
+        private readonly ImportedProjectMetadataManager m_importedProjectMetadataManager;
 
         public ProjectManager(ProjectRepository projectRepository, CatalogValueRepository catalogValueRepository,
-            PersonRepository personRepository, MetadataRepository metadataRepository)
+            PersonRepository personRepository, MetadataRepository metadataRepository, ImportedProjectMetadataManager importedProjectMetadataManager)
         {
             m_projectRepository = projectRepository;
             m_catalogValueRepository = catalogValueRepository;
             m_personRepository = personRepository;
             m_metadataRepository = metadataRepository;
+            m_importedProjectMetadataManager = importedProjectMetadataManager;
         }
 
-        public void SaveImportedProject(ProjectImportMetadata projectImportMetadata, int userId)
+        public void SaveImportedProject(ImportedRecord importedRecord, int userId, int externalRepositoryId)
         {
-            if (projectImportMetadata.IsNew)
+            if (importedRecord.IsNew)
             {
-                var projectId = CreateProject(projectImportMetadata, userId);
-                projectImportMetadata.ProjectId = projectId;
+                var projectId = CreateProject(importedRecord, userId);
+                importedRecord.ProjectId = projectId;
+
+                var id = m_importedProjectMetadataManager.CreateImportedProjectMetadata(importedRecord, externalRepositoryId);
+                importedRecord.ImportedProjectMetadataId = id;
             }
 
-            CreateProjectMetadata(projectImportMetadata, userId);
+            CreateProjectMetadata(importedRecord, userId);
         }
 
-        private long CreateProject(ProjectImportMetadata projectImportMetadata, int userId)
+        private long CreateProject(ImportedRecord importedRecord, int userId)
         {
-            return new CreateImportedProjectWork(m_projectRepository, projectImportMetadata, userId).Execute();
+            var work = new CreateImportedProjectWork(m_projectRepository, importedRecord, userId);
+            return work.Execute();
         }
 
-        private void CreateProjectMetadata(ProjectImportMetadata projectImportMetadata, int userId)
+        private void CreateProjectMetadata(ImportedRecord importedRecord, int userId)
         {
             new SaveImportedDataWork(m_projectRepository, m_metadataRepository, m_catalogValueRepository,
-                m_personRepository, projectImportMetadata, userId).Execute();
+                m_personRepository, importedRecord, userId).Execute();
 
-            new CreateSnapshotForImportedMetadataWork(m_projectRepository, projectImportMetadata.ProjectId, userId).Execute();
+            new CreateSnapshotForImportedMetadataWork(m_projectRepository, importedRecord.ProjectId, userId).Execute();
         }
     }
 }

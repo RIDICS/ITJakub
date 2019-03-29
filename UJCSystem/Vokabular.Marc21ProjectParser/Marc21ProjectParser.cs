@@ -34,23 +34,23 @@ namespace Vokabular.Marc21ProjectParser
             }
         }
 
-        public IList<KeyValuePair<string, string>> GetListPairIdValue(ProjectImportMetadata projectImportMetadata)
+        public IList<KeyValuePair<string, string>> GetPairKeyValueList(ImportedRecord importedRecord)
         {
-            var record = ((string) projectImportMetadata.RawData).XmlDeserializeFromString<MARC21record>();
+            var record = ((string) importedRecord.RawData).XmlDeserializeFromString<MARC21record>();
 
             return record.datafield
                 .SelectMany(p => p.subfield,
                     (dataField, subfield) => new KeyValuePair<string, string>(dataField.tag + subfield.code, subfield.Value)).ToList();
         }
 
-        public ProjectImportMetadata AddParsedProject(ProjectImportMetadata projectImportMetadata)
+        public ImportedRecord AddParsedProject(ImportedRecord importedRecord)
         {
-            if (projectImportMetadata.IsFailed)
+            if (importedRecord.IsFailed)
             {
-                return projectImportMetadata;
+                return importedRecord;
             }
 
-            var record = ((string) projectImportMetadata.RawData).XmlDeserializeFromString<MARC21record>();
+            var record = ((string) importedRecord.RawData).XmlDeserializeFromString<MARC21record>();
             var project = new Project();
 
             foreach (var dataField in record.datafield)
@@ -65,9 +65,9 @@ namespace Vokabular.Marc21ProjectParser
                 controlFieldProcessor?.Process(controlField, project);
             }
 
-            projectImportMetadata.Project = project;
+            importedRecord.Project = project;
 
-            return projectImportMetadata;
+            return importedRecord;
         }
     }
 }

@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <hibernate-mapping assembly="Vokabular.DataEntities" namespace="Vokabular.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
-  <class name="ImportMetadata" table="[ImportMetadata]" >
+  <class name="ImportedRecordMetadata" table="[ImportedRecordMetadata]" >
     <id name="Id" column="Id">
       <generator class="identity" />
     </id>
-    
-    <property name="ExternalId" not-null="true" />
 
     <property name="LastUpdateMessage" />
 
     <many-to-one name="LastUpdate" class="ImportHistory" lazy="proxy" not-null="true" />
 
-    <many-to-one name="Snapshot" class="Snapshot" lazy="proxy" />
+    <many-to-one name="ImportedProjectMetadata" class="ImportedProjectMetadata" lazy="proxy" not-null="true" />
+
+    <many-to-one name="Snapshot" class="Snapshot" cascade="save-update" lazy="proxy" />
 
   </class>
 </hibernate-mapping>

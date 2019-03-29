@@ -1,16 +1,16 @@
-﻿using Vokabular.DataEntities.Database.Entities;
-using Vokabular.DataEntities.Database.Repositories;
+﻿using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
-using ProjectImportMetadata = Vokabular.ProjectParsing.Model.Entities.ProjectImportMetadata;
+using Vokabular.ProjectParsing.Model.Entities;
+using Project = Vokabular.DataEntities.Database.Entities.Project;
 
 namespace Vokabular.ProjectImport.Works
 {
     public class UpdateImportedProjectWork : UnitOfWorkBase
     {
         private readonly ProjectRepository m_projectRepository;
-        private readonly ProjectImportMetadata m_metadata;
+        private readonly ImportedRecord m_metadata;
 
-        public UpdateImportedProjectWork(ProjectRepository projectRepository, ProjectImportMetadata metadata) : base(projectRepository)
+        public UpdateImportedProjectWork(ProjectRepository projectRepository, ImportedRecord metadata) : base(projectRepository)
         {
             m_projectRepository = projectRepository;
             m_metadata = metadata;

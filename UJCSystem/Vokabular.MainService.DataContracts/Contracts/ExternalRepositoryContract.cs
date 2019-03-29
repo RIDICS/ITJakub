@@ -20,7 +20,5 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public string License { get; set; }
 
         public string Configuration { get; set; }
-
-        public UserContract CreatedByUser { get; set; }
     }
 }

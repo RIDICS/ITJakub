@@ -18,7 +18,8 @@ namespace Vokabular.ProjectImport
             container.AddScoped<FilteringExpressionSetManager>();
             container.AddScoped<FilteringManager>();
             container.AddScoped<ImportHistoryManager>();
-            container.AddScoped<ImportMetadataManager>();
+            container.AddScoped<ImportedProjectMetadataManager>();
+            container.AddScoped<ImportedRecordMetadataManager>();
             container.AddScoped<ProjectManager>();
             
             container.AddHostedService<ProjectImportHostedService>();
@@ -26,6 +27,7 @@ namespace Vokabular.ProjectImport
             container.AddSingleton<ImportManager>();
 
             container.AddScoped<ImportPipelineBuilder>();
+            container.AddScoped<ImportPipelineManager>();
 
             container.AddMarc21ProjectParsingServices();
             container.AddOaiPmhImportManager();

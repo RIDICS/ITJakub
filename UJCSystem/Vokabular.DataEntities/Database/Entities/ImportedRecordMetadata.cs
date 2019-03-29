@@ -1,26 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using Vokabular.DataEntities.Database.Entities.Enums;
 
 namespace Vokabular.DataEntities.Database.Entities
 {
-    public class ImportHistory : IEquatable<ImportHistory>
+    public class ImportedRecordMetadata : IEquatable<ImportedRecordMetadata>
     {
         public virtual int Id { get; set; }
 
-        public virtual DateTime Date { get; set; }
+        public virtual string LastUpdateMessage { get; set; }
 
-        public virtual ImportStatusEnum Status { get; set; }
+        public virtual ImportHistory LastUpdate { get; set; }
 
-        public virtual string Message { get; set; }
+        public virtual ImportedProjectMetadata ImportedProjectMetadata { get; set; }
 
-        public virtual ExternalRepository ExternalRepository { get; set; }
+        public virtual Snapshot Snapshot { get; set; }
 
-        public virtual User CreatedByUser { get; set; }
-
-        public virtual IList<ImportedRecordMetadata> ImportedRecordMetadata { get; set; }
-
-        public virtual bool Equals(ImportHistory other)
+        public virtual bool Equals(ImportedRecordMetadata other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -32,7 +26,7 @@ namespace Vokabular.DataEntities.Database.Entities
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((ImportHistory)obj);
+            return Equals((ImportedRecordMetadata) obj);
         }
 
         public override int GetHashCode()

@@ -17,22 +17,22 @@ namespace Vokabular.ProjectImport.Works
         private readonly MetadataRepository m_metadataRepository;
         private readonly CatalogValueRepository m_catalogValueRepository;
         private readonly PersonRepository m_personRepository;
-        private readonly ProjectImportMetadata m_projectImportMetadata;
+        private readonly ImportedRecord m_importedRecord;
         private readonly int m_userId;
         private readonly long m_projectId;
 
 
         public SaveImportedDataWork(ProjectRepository projectRepository, MetadataRepository metadataRepository,
-            CatalogValueRepository catalogValueRepository, PersonRepository personRepository, ProjectImportMetadata projectImportMetadata,
+            CatalogValueRepository catalogValueRepository, PersonRepository personRepository, ImportedRecord importedRecord,
             int userId) : base(projectRepository)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
             m_catalogValueRepository = catalogValueRepository;
             m_personRepository = personRepository;
-            m_projectImportMetadata = projectImportMetadata;
+            m_importedRecord = importedRecord;
             m_userId = userId;
-            m_projectId = projectImportMetadata.ProjectId;
+            m_projectId = importedRecord.ProjectId;
         }
 
         protected override void ExecuteWorkImplementation()
@@ -54,13 +54,13 @@ namespace Vokabular.ProjectImport.Works
         {
             var now = DateTime.UtcNow;
             var lastMetadata = m_metadataRepository.GetLatestMetadataResource(m_projectId);
-            var firstManuscript = m_projectImportMetadata.Project.ProjectMetadata.ManuscriptDescriptionData;
+            var firstManuscript = m_importedRecord.Project.ProjectMetadata.ManuscriptDescriptionData;
 
-            var authorsString = m_projectImportMetadata.Project.Authors != null
-                ? string.Join(", ", m_projectImportMetadata.Project.Authors.Select(x => $"{x.LastName} {x.FirstName}"))
+            var authorsString = m_importedRecord.Project.Authors != null
+                ? string.Join(", ", m_importedRecord.Project.Authors.Select(x => $"{x.LastName} {x.FirstName}"))
                 : null;
 
-            var projectMetadata = m_projectImportMetadata.Project.ProjectMetadata;
+            var projectMetadata = m_importedRecord.Project.ProjectMetadata;
             var metadata = new MetadataResource
             {
                 AuthorsLabel = authorsString,
@@ -121,7 +121,7 @@ namespace Vokabular.ProjectImport.Works
             {
                 Project = project,
                 CreateTime = DateTime.UtcNow,
-                ExternalId = m_projectImportMetadata.ExternalId,
+                ExternalId = m_importedRecord.ExternalId,
                 Text = "New book metadata import from external repository",
                 User = m_projectRepository.Load<User>(m_userId)
             };
@@ -132,7 +132,7 @@ namespace Vokabular.ProjectImport.Works
         {
             project.Keywords.Clear();
 
-            foreach (var newKeywordName in m_projectImportMetadata.Project.Keywords)
+            foreach (var newKeywordName in m_importedRecord.Project.Keywords)
             {
                 var dbKeyword = m_catalogValueRepository.GetKeywordByName(newKeywordName);
 
@@ -158,7 +158,7 @@ namespace Vokabular.ProjectImport.Works
             project.LiteraryOriginals.Clear();
             var dbOriginalList = m_catalogValueRepository.GetLiteraryOriginalList();
 
-            foreach (var newOriginalName in m_projectImportMetadata.Project.LiteraryOriginals)
+            foreach (var newOriginalName in m_importedRecord.Project.LiteraryOriginals)
             {
                 var dbOriginal = dbOriginalList.FirstOrDefault(x => x.Name == newOriginalName);
 
@@ -186,7 +186,7 @@ namespace Vokabular.ProjectImport.Works
             project.LiteraryGenres.Clear();
             var dbGenreList = m_catalogValueRepository.GetLiteraryGenreList();
 
-            foreach (var newGenreName in m_projectImportMetadata.Project.LiteraryGenres)
+            foreach (var newGenreName in m_importedRecord.Project.LiteraryGenres)
             {
                 var dbGenre = dbGenreList.FirstOrDefault(x => x.Name == newGenreName);
 
@@ -213,7 +213,7 @@ namespace Vokabular.ProjectImport.Works
         {
             var dbAuthors = dbProjectAuthors.Select(x => x.OriginalAuthor).ToList();
             var newAuthors =
-                m_projectImportMetadata.Project.Authors.Select(x => new OriginalAuthor {FirstName = x.FirstName, LastName = x.LastName})
+                m_importedRecord.Project.Authors.Select(x => new OriginalAuthor {FirstName = x.FirstName, LastName = x.LastName})
                     .ToList() ?? new List<OriginalAuthor>();
 
             var comparer = new AuthorNameEqualityComparer();

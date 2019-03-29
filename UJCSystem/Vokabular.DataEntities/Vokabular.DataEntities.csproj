@@ -29,8 +29,9 @@
     <None Remove="Database\Entities\FilteringExpressionSet.hbm.xml" />
     <None Remove="Database\Entities\HeadwordItem.hbm.xml" />
     <None Remove="Database\Entities\HistoryLogBase.hbm.xml" />
+    <None Remove="Database\Entities\ImportedProjectMetadata.hbm.xml" />
+    <None Remove="Database\Entities\ImportedRecordMetadata.hbm.xml" />
     <None Remove="Database\Entities\ImportHistory.hbm.xml" />
-    <None Remove="Database\Entities\ImportMetadata.hbm.xml" />
     <None Remove="Database\Entities\Keyword.hbm.xml" />
     <None Remove="Database\Entities\LiteraryGenre.hbm.xml" />
     <None Remove="Database\Entities\LiteraryKind.hbm.xml" />
@@ -59,7 +60,8 @@
     <EmbeddedResource Include="Database\Entities\FilteringExpression.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\FilteringExpressionSet.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\ExternalRepositoryType.hbm.xml" />
-    <EmbeddedResource Include="Database\Entities\ImportMetadata.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\ImportedProjectMetadata.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\ImportedRecordMetadata.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\ImportHistory.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\ExternalRepository.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\UserGroup.hbm.xml" />

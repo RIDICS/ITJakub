@@ -2,8 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using Vokabular.ProjectParsing.Model.Entities;
 using Project = Vokabular.ProjectParsing.Model.Entities.Project;
-using ProjectImportMetadata = Vokabular.ProjectParsing.Model.Entities.ProjectImportMetadata;
 
 namespace Vokabular.ProjectImport.Model
 {
@@ -15,6 +15,6 @@ namespace Vokabular.ProjectImport.Model
 
         Project ImportRecord(string repository, string id);
 
-        ProjectImportMetadata ParseResponse(object response);
+        ImportedRecord ParseResponse(object response);
     }
 }

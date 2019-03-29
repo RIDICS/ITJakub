@@ -8,22 +8,22 @@ namespace Vokabular.ProjectImport.Managers
 {
     public class FilteringManager
     {
-        private readonly ImportMetadataManager m_importMetadataManager;
+        private readonly ImportedProjectMetadataManager m_importedProjectMetadataManager;
 
-        public FilteringManager(ImportMetadataManager importMetadataManager)
+        public FilteringManager(ImportedProjectMetadataManager importedProjectMetadataManager)
         {
-            m_importMetadataManager = importMetadataManager;
+            m_importedProjectMetadataManager = importedProjectMetadataManager;
         }
 
-        public ProjectImportMetadata SetFilterData(ProjectImportMetadata metadata, IDictionary<string, List<string>> filteringExpressions,
+        public ImportedRecord SetFilterData(ImportedRecord importedRecord, IDictionary<string, List<string>> filteringExpressions,
             IProjectParser parser)
         {
-            var metadataDb = m_importMetadataManager.GetImportMetadataByExternalId(metadata.ExternalId);
-            metadata.IsNew = metadataDb == null;
+            var importedRecordDb = m_importedProjectMetadataManager.GetImportedProjectMetadataByExternalId(importedRecord.ExternalId);
+            importedRecord.IsNew = importedRecordDb == null;
 
-            if (metadata.IsNew)
+            if (importedRecord.IsNew)
             {
-                foreach (var item in parser.GetListPairIdValue(metadata))
+                foreach (var item in parser.GetPairKeyValueList(importedRecord))
                 {
                     filteringExpressions.TryGetValue(item.Key, out var filterExpressions);
                     if (filterExpressions == null)
@@ -34,20 +34,20 @@ namespace Vokabular.ProjectImport.Managers
                     if (filterExpressions.Select(Regex.Escape).Select(expr => expr.Replace("%", ".*"))
                         .Any(expr => Regex.IsMatch(item.Value, expr)))
                     {
-                        metadata.IsSuitable = true;
-                        return metadata;
+                        importedRecord.IsSuitable = true;
+                        return importedRecord;
                     }
                 }
 
-                metadata.IsSuitable = false;
+                importedRecord.IsSuitable = false;
             }
             else
             {
-                metadata.ProjectId = metadataDb.Snapshot.Project.Id;
-                metadata.IsSuitable = true;
+                importedRecord.ProjectId = importedRecordDb.Project.Id;
+                importedRecord.IsSuitable = true;
             }
 
-            return metadata;
+            return importedRecord;
         }
     }
 }

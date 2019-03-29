@@ -6,9 +6,9 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Vokabular.OaiPmhImportManager.Model;
 using Vokabular.ProjectImport.Model;
+using Vokabular.ProjectParsing.Model.Entities;
 using Vokabular.Shared.Options;
 using Project = Vokabular.ProjectParsing.Model.Entities.Project;
-using ProjectImportMetadata = Vokabular.ProjectParsing.Model.Entities.ProjectImportMetadata;
 
 namespace Vokabular.OaiPmhImportManager
 {
@@ -57,9 +57,9 @@ namespace Vokabular.OaiPmhImportManager
             }
         }
 
-        public ProjectImportMetadata ParseResponse(object response)
+        public ImportedRecord ParseResponse(object response)
         {
-            var projectImportMetadata = new ProjectImportMetadata();
+            var projectImportMetadata = new ImportedRecord();
             try
             {
                 var record = (recordType) response;
