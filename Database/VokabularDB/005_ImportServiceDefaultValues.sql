@@ -2,12 +2,12 @@ SET XACT_ABORT ON;
 
 BEGIN TRAN
 
-	INSERT INTO [dbo].[ExternalResourceType]
+	INSERT INTO [dbo].[ExternalRepositoryType]
            ([Name])
      VALUES
            ('OaiPmh')
 
-	INSERT INTO [dbo].[ParserType]
+	INSERT INTO [dbo].[BibliographicFormat]
            ([Name])
      VALUES
            ('Marc21')
