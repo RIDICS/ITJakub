@@ -103,7 +103,6 @@ namespace Vokabular.ProjectImport.ImportPipeline
             }
             finally
             {
-                m_importManager.CancelTask(externalRepositoryId);
                 progressInfo.IsCompleted = true;
                 var importHistory = m_importHistoryManager.GetImportHistory(importHistoryId);
 
@@ -112,6 +111,7 @@ namespace Vokabular.ProjectImport.ImportPipeline
                     progressInfo.FaultedMessage = $"Error occurred executing import task (import from repository {externalRepository.Name}). Error message: {progressInfo.FaultedMessage}";
                     importHistory.Message = progressInfo.FaultedMessage;
                     importHistory.Status = ImportStatusEnum.Failed;
+                    m_importManager.CancelTask(externalRepositoryId);
                 }
                 else if (progressInfo.FailedProjectsCount > 0)
                 {
@@ -123,7 +123,11 @@ namespace Vokabular.ProjectImport.ImportPipeline
                 }
 
                 m_importHistoryManager.UpdateImportHistory(importHistory);
-                importPipeline?.LastBlock.Completion.Wait(cancellationToken);
+                
+                if (!string.IsNullOrEmpty(progressInfo.FaultedMessage))
+                {
+                    importPipeline?.LastBlock.Completion.Wait(cancellationToken);   
+                }
             }
         }
     }

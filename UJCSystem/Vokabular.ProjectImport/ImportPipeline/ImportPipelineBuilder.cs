@@ -151,6 +151,8 @@ namespace Vokabular.ProjectImport.ImportPipeline
                             {
                                 projectManager.SaveImportedProject(importedRecord, userId, externalRepositoryId);
                             }
+
+                            progressInfo.IncrementFailedProjectsCount();
                         }
                         catch (DataException e)
                         {
