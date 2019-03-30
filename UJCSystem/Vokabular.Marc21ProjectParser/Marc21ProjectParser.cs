@@ -45,11 +45,6 @@ namespace Vokabular.Marc21ProjectParser
 
         public ImportedRecord AddParsedProject(ImportedRecord importedRecord)
         {
-            if (importedRecord.IsFailed)
-            {
-                return importedRecord;
-            }
-
             var record = ((string) importedRecord.RawData).XmlDeserializeFromString<MARC21record>();
             var project = new Project();
 
@@ -66,7 +61,6 @@ namespace Vokabular.Marc21ProjectParser
             }
 
             importedRecord.Project = project;
-
             return importedRecord;
         }
     }

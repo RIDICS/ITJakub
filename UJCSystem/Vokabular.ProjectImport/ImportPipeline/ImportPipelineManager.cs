@@ -5,8 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Vokabular.DataEntities.Database.Entities.Enums;
-using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
 using Vokabular.ProjectImport.Model.Exceptions;
@@ -48,7 +46,6 @@ namespace Vokabular.ProjectImport.ImportPipeline
             var latestImportHistory = m_importHistoryManager.GetLatestSuccessfulImportHistory(externalRepositoryId);
 
             var importHistoryId = m_importHistoryManager.CreateImportHistory(externalRepositoryId, m_importManager.UserId);
-            var importHistory = m_importHistoryManager.GetImportHistory(importHistoryId);
 
             var externalRepository = m_externalRepositoryManager.GetExternalRepository(externalRepositoryId);
 
@@ -63,7 +60,7 @@ namespace Vokabular.ProjectImport.ImportPipeline
                         $"Import manager was not found for repository type {externalRepository.ExternalRepositoryType.Name}.");
                 }
 
-                importPipeline = m_importPipelineBuilder.Build(externalRepository, importHistory, progressInfo, cancellationToken);
+                importPipeline = m_importPipelineBuilder.Build(externalRepository, importHistoryId, progressInfo, cancellationToken);
 
                 await importManager.ImportFromResource(externalRepository.Configuration, importPipeline.BufferBlock, progressInfo,
                     latestImportHistory?.Date, cancellationToken);
@@ -106,8 +103,9 @@ namespace Vokabular.ProjectImport.ImportPipeline
             }
             finally
             {
-                importPipeline?.LastBlock.Completion.Wait(cancellationToken);
+                m_importManager.CancelTask(externalRepositoryId);
                 progressInfo.IsCompleted = true;
+                var importHistory = m_importHistoryManager.GetImportHistory(importHistoryId);
 
                 if (!string.IsNullOrEmpty(progressInfo.FaultedMessage))
                 {
@@ -125,6 +123,7 @@ namespace Vokabular.ProjectImport.ImportPipeline
                 }
 
                 m_importHistoryManager.UpdateImportHistory(importHistory);
+                importPipeline?.LastBlock.Completion.Wait(cancellationToken);
             }
         }
     }

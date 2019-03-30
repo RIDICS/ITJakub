@@ -53,5 +53,11 @@ namespace Vokabular.ProjectImport.Managers
 
             return m_importList;
         }
+
+        public void CancelTask(int externalRepositoryId)
+        {
+            CancellationTokens.TryGetValue(externalRepositoryId, out var tokenSource);
+            tokenSource?.Cancel();
+        }
     }
 }

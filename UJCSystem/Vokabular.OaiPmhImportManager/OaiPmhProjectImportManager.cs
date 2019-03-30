@@ -60,18 +60,11 @@ namespace Vokabular.OaiPmhImportManager
         public ImportedRecord ParseResponse(object response)
         {
             var projectImportMetadata = new ImportedRecord();
-            try
-            {
-                var record = (recordType) response;
-                projectImportMetadata.ExternalId = record.header.identifier;
-                projectImportMetadata.RawData = record.metadata.OuterXml;
-            }
-            catch (Exception e)
-            {
-                projectImportMetadata.IsFailed = true;
-                projectImportMetadata.FaultedMessage = e.Message;
-            }
 
+            var record = (recordType) response;
+            projectImportMetadata.ExternalId = record.header.identifier;
+            projectImportMetadata.RawData = record.metadata.OuterXml;
+            
             return projectImportMetadata;
         }
 

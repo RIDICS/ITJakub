@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks.Dataflow;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Vokabular.DataEntities.Database.Entities;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
@@ -22,27 +21,18 @@ namespace Vokabular.ProjectImport.ImportPipeline
         private readonly IDictionary<string, IProjectParser> m_projectParsers;
         private readonly ImportManager m_importManager;
         private readonly FilteringExpressionSetManager m_filteringExpressionSetManager;
-        private readonly ImportedProjectMetadataManager m_importedProjectMetadataManager;
-        private readonly ImportedRecordMetadataManager m_importedRecordMetadataManager;
-        private readonly ProjectManager m_projectManager;
         private readonly ILogger<ImportPipelineBuilder> m_logger;
-        private readonly FilteringManager m_filteringManager;
         private readonly IServiceProvider m_serviceProvider;
 
         public ImportPipelineBuilder(IEnumerable<IProjectImportManager> importManagers, IEnumerable<IProjectParser> parsers,
             ImportManager importManager, FilteringExpressionSetManager filteringExpressionSetManager,
-            ImportedProjectMetadataManager importedProjectMetadataManager, ImportedRecordMetadataManager importedRecordMetadataManager,
-            ProjectManager projectManager, ILogger<ImportPipelineBuilder> logger, FilteringManager filteringManager, IServiceProvider serviceProvider)
+            ILogger<ImportPipelineBuilder> logger, IServiceProvider serviceProvider)
         {
             m_projectImportManagers = new Dictionary<string, IProjectImportManager>();
             m_projectParsers = new Dictionary<string, IProjectParser>();
             m_importManager = importManager;
             m_filteringExpressionSetManager = filteringExpressionSetManager;
-            m_importedProjectMetadataManager = importedProjectMetadataManager;
-            m_importedRecordMetadataManager = importedRecordMetadataManager;
-            m_projectManager = projectManager;
             m_logger = logger;
-            m_filteringManager = filteringManager;
             m_serviceProvider = serviceProvider;
 
             foreach (var manager in importManagers)
@@ -56,7 +46,7 @@ namespace Vokabular.ProjectImport.ImportPipeline
             }
         }
 
-        public ImportPipeline Build(ExternalRepositoryDetailContract externalRepository, ImportHistory importHistory,
+        public ImportPipeline Build(ExternalRepositoryDetailContract externalRepository, int importHistoryId,
             RepositoryImportProgressInfo progressInfo, CancellationToken cancellationToken)
         {
             var executionOptions = new ExecutionDataflowBlockOptions {CancellationToken = cancellationToken};
@@ -66,7 +56,7 @@ namespace Vokabular.ProjectImport.ImportPipeline
             var filterBlock = BuildFilterBlock(externalRepository.Id, externalRepository.BibliographicFormat.Name, executionOptions);
             var projectParserBlock = BuildProjectParserBlock(externalRepository.BibliographicFormat.Name, executionOptions);
             var nullTargetBlock = BuildNullTargetBlock(progressInfo, executionOptions);
-            var saveBlock = BuildSaveBlock(m_importManager.UserId, importHistory, progressInfo, executionOptions);
+            var saveBlock = BuildSaveBlock(m_importManager.UserId, importHistoryId, externalRepository.Id, progressInfo, executionOptions);
 
             var linkOptions = new DataflowLinkOptions {PropagateCompletion = true};
 
@@ -77,6 +67,21 @@ namespace Vokabular.ProjectImport.ImportPipeline
             projectParserBlock.LinkTo(saveBlock, linkOptions);
 
             return new ImportPipeline {BufferBlock = bufferBlock, LastBlock = saveBlock};
+        }
+        
+        public TransformBlock<object, ImportedRecord> BuildResponseParserBlock(string repositoryType,
+            ExecutionDataflowBlockOptions executionOptions)
+        {
+            m_projectImportManagers.TryGetValue(repositoryType, out var importManager);
+            if (importManager == null)
+            {
+                throw new ImportFailedException($"Import manager was not found for repository type {repositoryType}.");
+            }
+
+            return new TransformBlock<object, ImportedRecord>(
+                response => importManager.ParseResponse(response),
+                executionOptions
+            );
         }
 
         public TransformBlock<ImportedRecord, ImportedRecord> BuildFilterBlock(int externalRepositoryId, string formatName,
@@ -93,35 +98,20 @@ namespace Vokabular.ProjectImport.ImportPipeline
 
             return new TransformBlock<ImportedRecord, ImportedRecord>(importedRecord =>
                 {
+                    if (importedRecord.IsFailed)
+                    {
+                        return importedRecord;
+                    }
+
                     using (var scope = m_serviceProvider.CreateScope())
                     {
                         var filteringManager = scope.ServiceProvider.GetRequiredService<FilteringManager>();
-
-                        if (importedRecord.IsFailed)
-                        {
-                            return importedRecord;
-                        }
-
                         return filteringManager.SetFilterData(importedRecord, filteringExpressions, parser);
                     }
                 }, executionOptions
             );
         }
 
-        public TransformBlock<object, ImportedRecord> BuildResponseParserBlock(string repositoryType,
-            ExecutionDataflowBlockOptions executionOptions)
-        {
-            m_projectImportManagers.TryGetValue(repositoryType, out var importManager);
-            if (importManager == null)
-            {
-                throw new ImportFailedException($"Import manager was not found for repository type {repositoryType}.");
-            }
-
-            return new TransformBlock<object, ImportedRecord>(
-                response => importManager.ParseResponse(response),
-                executionOptions
-            );
-        }
 
         public TransformBlock<ImportedRecord, ImportedRecord> BuildProjectParserBlock(string bibliographicFormat,
             ExecutionDataflowBlockOptions executionOptions)
@@ -132,19 +122,24 @@ namespace Vokabular.ProjectImport.ImportPipeline
                 throw new ImportFailedException($"Project parser was not found for bibliographic format {bibliographicFormat}.");
             }
 
-            return new TransformBlock<ImportedRecord, ImportedRecord>(
-                importedRecord => parser.AddParsedProject(importedRecord),
+            return new TransformBlock<ImportedRecord, ImportedRecord>(importedRecord =>
+                {
+                    if (importedRecord.IsFailed)
+                    {
+                        return importedRecord;
+                    }
+
+                    return parser.AddParsedProject(importedRecord);
+                },
                 executionOptions
             );
         }
 
-        public ActionBlock<ImportedRecord> BuildSaveBlock(int userId, ImportHistory importHistory,
+        public ActionBlock<ImportedRecord> BuildSaveBlock(int userId, int importHistoryId, int externalRepositoryId,
             RepositoryImportProgressInfo progressInfo, ExecutionDataflowBlockOptions executionOptions)
         {
             return new ActionBlock<ImportedRecord>(importedRecord =>
                 {
-                    //TODO shorter
-                    //TODO history and repository only int
                     using (var scope = m_serviceProvider.CreateScope())
                     {
                         var projectManager = scope.ServiceProvider.GetRequiredService<ProjectManager>();
@@ -154,7 +149,7 @@ namespace Vokabular.ProjectImport.ImportPipeline
                         {
                             if (!importedRecord.IsFailed)
                             {
-                                projectManager.SaveImportedProject(importedRecord, userId, importHistory.ExternalRepository.Id);
+                                projectManager.SaveImportedProject(importedRecord, userId, externalRepositoryId);
                             }
                         }
                         catch (DataException e)
@@ -167,7 +162,7 @@ namespace Vokabular.ProjectImport.ImportPipeline
                         }
                         finally
                         {
-                            importedRecordMetadataManager.CreateImportedRecordMetadata(importedRecord, importHistory.Id);
+                            importedRecordMetadataManager.CreateImportedRecordMetadata(importedRecord, importHistoryId);
                             progressInfo.IncrementProcessedProjectsCount();
                         }
                     }

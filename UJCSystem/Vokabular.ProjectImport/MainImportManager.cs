@@ -23,8 +23,7 @@ namespace Vokabular.ProjectImport
 
         public void CancelTask(int externalRepositoryId)
         {
-            m_importManager.CancellationTokens.TryGetValue(externalRepositoryId, out var tokenSource);
-            tokenSource?.Cancel();
+            m_importManager.CancelTask(externalRepositoryId);
         }
     }
 }
