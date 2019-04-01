@@ -147,12 +147,14 @@ namespace Vokabular.ProjectImport.ImportPipeline
 
                         try
                         {
-                            if (!importedRecord.IsFailed)
+                            if (importedRecord.IsFailed)
+                            {
+                                progressInfo.IncrementFailedProjectsCount();
+                            }
+                            else
                             {
                                 projectManager.SaveImportedProject(importedRecord, userId, externalRepositoryId);
                             }
-
-                            progressInfo.IncrementFailedProjectsCount();
                         }
                         catch (DataException e)
                         {
