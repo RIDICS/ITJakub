@@ -19,7 +19,7 @@ namespace Vokabular.ProjectImport.Managers
             IProjectParser parser)
         {
             var importedRecordDb = m_importedProjectMetadataManager.GetImportedProjectMetadataByExternalId(importedRecord.ExternalId);
-            importedRecord.IsNew = importedRecordDb == null;
+            importedRecord.IsNew = importedRecordDb?.Project == null;
 
             if (importedRecord.IsNew)
             {
@@ -44,6 +44,7 @@ namespace Vokabular.ProjectImport.Managers
             else
             {
                 importedRecord.ProjectId = importedRecordDb.Project.Id;
+                importedRecord.ImportedProjectMetadataId = importedRecordDb.Id;
                 importedRecord.IsSuitable = true;
             }
 
