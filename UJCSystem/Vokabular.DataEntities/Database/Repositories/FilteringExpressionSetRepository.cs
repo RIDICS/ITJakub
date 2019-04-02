@@ -27,7 +27,8 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public ListWithTotalCountResult<FilteringExpressionSet> GetFilteringExpressionSetList(int start, int count)
         {
-            var query = GetSession().QueryOver<FilteringExpressionSet>();
+            var query = GetSession().QueryOver<FilteringExpressionSet>()
+                .Fetch(x => x.BibliographicFormat).Eager;
 
             var list = query.Skip(start)
                 .Take(count)

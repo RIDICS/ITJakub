@@ -88,6 +88,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\RepositoryImport\Models\" />
+    <Folder Include="Areas\RepositoryImport\Views\RepositoryImport\" />
     <Folder Include="Controllers\Plugins\Localization\" />
     <Folder Include="Localization\" />
   </ItemGroup>

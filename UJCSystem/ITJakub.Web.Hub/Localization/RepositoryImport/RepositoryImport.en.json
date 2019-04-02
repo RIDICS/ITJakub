@@ -1,0 +1,9 @@
+{
+  "culture": "en",
+  "scope": "RepositoryImport",
+  "dictionary": {
+    "ExternalRepositoriesTitle": "translate[Externí repozitáře]",
+    "ProjectTitle": "translate[TTTT]",
+    "Test": "Test"
+  }
+}

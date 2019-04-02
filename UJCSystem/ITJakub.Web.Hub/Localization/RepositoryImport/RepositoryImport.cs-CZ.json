@@ -1,0 +1,14 @@
+{
+	"culture":"cs-CZ",
+	"scope":"RepositoryImport",
+  "dictionary": {
+    "ExternalRepositoriesTitle": "Externí repozitáře",
+    "FilteringSetsTitle": "Filtrační sety",
+    "ImportTitle": "Import",
+    "MenuTitle": "Nastavení",
+    "Test": "Test",
+    "BibliographicFormat": "Bibliografický formát",
+    "RepositoryType": "Typ rozhraní repozitáře",
+    "License": "Licence" 
+  }
+}

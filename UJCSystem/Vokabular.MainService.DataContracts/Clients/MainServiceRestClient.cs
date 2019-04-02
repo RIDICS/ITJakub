@@ -2852,7 +2852,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             {
                 var result =
                     GetPagedList<FilteringExpressionSetDetailContract>(
-                        $"start={start}&count={count}&fetchPageCount={fetchPageCount}");
+                        $"filteringExpressionSet?start={start}&count={count}&fetchPageCount={fetchPageCount}");
                 return result;
             }
             catch (HttpRequestException e)

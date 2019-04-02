@@ -386,6 +386,12 @@
                                             <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     }
+                                    else if (User.IsInRole(CustomRole.CanManageRepositoryImport))
+                                    {
+                                        <a href='@Url.Action("ExternalRepositoryList", "ExternalRepository", new {area = "RepositoryImport"})'>
+                                            <span>@Localizer.Translate("RepositoryImport", "layout", LocTranslationSource.File)</span>
+                                        </a>
+                                    }
                                     else
                                     {
                                         <a href='@Url.Action("Management", "Favorite", new {area = ""})'>
@@ -459,6 +465,15 @@
                                             <li>
                                                 <a href='@Url.Action("Add", "News", new {area = ""})'>
                                                     <span>@Localizer.Translate("AddNews", "layout", LocTranslationSource.File)</span>
+                                                </a>
+                                            </li>
+                                        }
+                                        
+                                        @if (User.IsInRole(CustomRole.CanManageRepositoryImport))
+                                        {
+                                            <li>
+                                                <a href='@Url.Action("ExternalRepositoryList", "ExternalRepository", new {area = "RepositoryImport"})'>
+                                                    <span>@Localizer.Translate("RepositoryImport", "layout", LocTranslationSource.File)</span>
                                                 </a>
                                             </li>
                                         }

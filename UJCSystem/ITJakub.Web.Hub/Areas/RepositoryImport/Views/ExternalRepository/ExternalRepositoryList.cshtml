@@ -1,0 +1,73 @@
+﻿@using Localization.AspNetCore.Service
+@using Localization.CoreLibrary.Util
+@using Microsoft.AspNetCore.Http.Extensions
+@using Microsoft.Net.Http
+@model Vokabular.RestClient.Results.PagedResultList<Vokabular.MainService.DataContracts.Contracts.ExternalRepositoryDetailContract>
+
+@inject ILocalization Localizer
+
+@{
+    ViewBag.Title = Localizer.Translate("ExternalRepositoriesTitle", "RepositoryImport", LocTranslationSource.File);
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/Areas/Admin/css/ridics.repositoryImport.css" />
+}
+
+<div class="content-container">
+    <div class="row project-layout">
+        @Html.Partial("~/Areas/RepositoryImport/Views/_LeftMenu.cshtml")
+        <div class="vertical-splitter"></div>
+
+        <div class="content" id="project-layout-content">
+            <ul class="bib-listing">
+                @foreach (var repository in Model.List)
+                {
+                    <li class="list-item">
+                        <div class="visible-content">
+                            <div class="visible-wrapper">
+                                <div class="left-panel"></div>
+                                <div class="middle-panel">
+                                    <div class="heading">@repository.Name</div>
+                                    <div class="body">@repository.Description</div>
+                                </div>
+                                <div class="right-panel">
+                                    <a class="btn btn-sm book-button button" href="#">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </a>
+                                    <a type="button" class="btn btn-sm information-button button" href="#">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </a>-
+                                    <button type="button" class="btn btn-sm content-button" data-toggle="collapse" aria-expanded="false" data-target="#@repository.Id">
+                                        <span class="glyphicon glyphicon-chevron-down"></span>
+                                        <span class="glyphicon glyphicon-chevron-up"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hidden-content collapse" id="@repository.Id">
+                            <div class="bottom-panel">
+                                <div class="body">
+                                    <div class="bib-table">
+                                        <div class="bib-table-row">
+                                            <div class="bib-table-cell bib-label">@Localizer.Translate("RepositoryType", "RepositoryImport")</div>
+                                            <div class="bib-table-cell">@repository.ExternalRepositoryType.Name</div>
+                                        </div>
+                                        <div class="bib-table-row">
+                                            <div class="bib-table-cell bib-label">@Localizer.Translate("BibliographicFormat", "RepositoryImport")</div>
+                                            <div class="bib-table-cell">@repository.BibliographicFormat.Name</div>
+                                        </div>
+                                        <div class="bib-table-row">
+                                            <div class="bib-table-cell bib-label">@Localizer.Translate("License", "RepositoryImport")</div>
+                                            <div class="bib-table-cell">@repository.License</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

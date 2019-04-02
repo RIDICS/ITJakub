@@ -1,0 +1,48 @@
+﻿@using Localization.AspNetCore.Service
+@using Localization.CoreLibrary.Util
+@using Microsoft.AspNetCore.Http.Extensions
+@model Vokabular.RestClient.Results.PagedResultList<Vokabular.MainService.DataContracts.Contracts.FilteringExpressionSetDetailContract>
+
+@inject ILocalization Localizer
+
+@{
+    ViewBag.Title = Localizer.Translate("ExternalRepositoriesTitle", "RepositoryImport", LocTranslationSource.File);
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/Areas/Admin/css/ridics.repositoryImport.css" />
+}
+
+<div class="content-container">
+    <div class="row project-layout">
+        @Html.Partial("~/Areas/RepositoryImport/Views/_LeftMenu.cshtml")
+        <div class="vertical-splitter"></div>
+
+        <div class="content" id="project-layout-content">
+            <ul class="bib-listing">
+                @foreach (var filteringSet in Model.List)
+                {
+                    <li class="list-item">
+                        <div class="visible-content">
+                            <div class="visible-wrapper">
+                                <div class="left-panel"></div>
+                                <div class="middle-panel">
+                                    <div class="heading">@filteringSet.Name</div>
+                                    <div class="body">@filteringSet.BibliographicFormat.Name</div>
+                                </div>
+                                <div class="right-panel">
+                                    <a class="btn btn-sm book-button button">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </a>
+                                    <a type="button" class="btn btn-sm information-button button" href="#">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

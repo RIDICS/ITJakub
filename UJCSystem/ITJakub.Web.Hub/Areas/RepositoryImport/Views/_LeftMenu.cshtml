@@ -1,0 +1,19 @@
+﻿@using Localization.AspNetCore.Service
+@using Microsoft.AspNetCore.Http.Extensions
+
+@inject ILocalization Localizer
+
+<div class="left-menu" id="left-menu">
+    <div class="project-title">@Localizer.Translate("MenuTitle", "RepositoryImport")</div>
+    <div class="list-group" id="left-menu-navigation">
+        <a href="@Url.Action("ExternalRepositoryList", "ExternalRepository", new {area = "RepositoryImport"})" class="list-group-item @(Context.Request.GetDisplayUrl().Contains("ExternalRepository") ? "active" : "")" id="project-navigation-image">
+            @Localizer.Translate("ExternalRepositoriesTitle", "RepositoryImport")
+        </a>
+        <a href="@Url.Action("ExternalRepositoryList", "ExternalRepository", new {area = "RepositoryImport"})" class="list-group-item @(Context.Request.GetDisplayUrl().Contains("ExternalRepository") ? "active" : "")" id="project-navigation-image">
+            @Localizer.Translate("ImportTitle", "RepositoryImport")
+        </a>
+        <a href="@Url.Action("FilteringExpressionSetList", "FilteringExpression", new {area = "RepositoryImport"})" class="list-group-item @(Context.Request.GetDisplayUrl().Contains("FilteringExpression") ? "active" : "")" id="project-navigation-image">
+            @Localizer.Translate("FilteringSetsTitle", "RepositoryImport")
+        </a>
+    </div>
+</div>
