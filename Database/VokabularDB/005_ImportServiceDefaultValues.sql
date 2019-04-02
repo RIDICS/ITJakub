@@ -45,6 +45,18 @@ BEGIN TRAN
 		1 -- CanManageRepositoryImport - bit
 	)
 
+	DECLARE @AdminGroupId INT
+
+	SELECT @AdminGroupId = [Id] FROM [dbo].[UserGroup] WHERE [dbo].[UserGroup].[Name]= 'AdminGroup'
+
+	INSERT INTO dbo.SpecialPermission_UserGroup
+	(
+	    SpecialPermission,
+	    [UserGroup]
+	)
+	SELECT sp.Id, @AdminGroupId FROM dbo.SpecialPermission sp WHERE sp.PermissionType = 'ManageRepositoryImport'
+
+
     INSERT INTO [dbo].[DatabaseVersion]
 		(DatabaseVersion)
     VALUES
