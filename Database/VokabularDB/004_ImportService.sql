@@ -78,7 +78,7 @@ BEGIN TRAN
 		[Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_FilteringExpressiony(Id)] PRIMARY KEY CLUSTERED,
 		[Value] nvarchar(255) NOT NULL,
 		[Field] nvarchar(255) NOT NULL,
-		[FilteringExpressionSet] int NOT NULL CONSTRAINT [FK_FilteringExpression(FilteringExpressionSet)_FilteringExpressionSet(Id)] FOREIGN KEY REFERENCES [dbo].[FilteringExpression] (Id)
+		[FilteringExpressionSet] int NOT NULL CONSTRAINT [FK_FilteringExpression(FilteringExpressionSet)_FilteringExpressionSet(Id)] FOREIGN KEY REFERENCES [dbo].[FilteringExpressionSet] (Id)
 	)
 
 	ALTER TABLE [dbo].[SpecialPermission] ADD [CanManageRepositoryImport] bit NULL;  
