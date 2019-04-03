@@ -1,6 +1,6 @@
 ﻿@using Localization.AspNetCore.Service
 @using Localization.CoreLibrary.Util
-@model ITJakub.Web.Hub.Areas.RepositoryImport.Models.FilteringSetViewModel
+@model ITJakub.Web.Hub.Areas.RepositoryImport.Models.CreateFilteringExpressionSetViewModel
 
 @inject ILocalization Localizer
 
@@ -12,50 +12,73 @@
     <link rel="stylesheet" href="~/Areas/RepositoryImport/css/ridics.repositoryImport.css" />
 }
 
+@section scripts {
+    <script src="~/Areas/RepositoryImport/js/ridics.repositoryImport.js" type="text/javascript"></script>
+}
+
 <div class="content-container">
     <div class="row project-import-layout">
         @Html.Partial("~/Areas/RepositoryImport/Views/_LeftMenu.cshtml")
         <div class="vertical-splitter"></div>
 
         <div class="content" id="project-import-layout-content">
-
-            <h1>@Localizer.Translate("AddNews", "News", LocTranslationSource.File)</h1>
+            <div class="col-md-offset-2 col-md-11">
+                <h1>@Localizer.Translate("CreateFilteringSet", "RepositoryImport", LocTranslationSource.File)</h1>
+            </div>
 
             <p>
-                @using (Html.BeginForm("Add", "News", FormMethod.Post))
+                @using (Html.BeginForm("UpdateSet", "FilteringExpression", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
                 {
                     @Html.AntiForgeryToken()
-
-                    <div class="form-horizontal">
-                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.FilteringExpressionSet.Name, htmlAttributes: new { @class = "control-label col-md-1", @required = true })
-                            <div class="col-md-10">
-                                @Html.EditorFor(model => model.FilteringExpressionSet.Name, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.FilteringExpressionSet.Name, "", new { @class = "text-danger" })
-                            </div>
+                    @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+                    @Html.HiddenFor(model => model.Id)
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name, htmlAttributes: new {@class = "control-label col-md-2"})
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.Name,  new {@class = "form-control"})
+                            @Html.ValidationMessageFor(model => model.Name, "", new {@class = "text-danger"})
                         </div>
+                    </div>
 
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.FilteringExpressionSet.BibliographicFormat, htmlAttributes: new { @class = "control-label col-md-1" })
-                            <div class="col-md-10">
-                                @Html.DropDownListFor(model => model.FilteringExpressionSet.BibliographicFormat, Model.AvailableBibliographicFormats, htmlAttributes: new { @class = "form-control" })
-                            </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.BibliographicFormatId, htmlAttributes: new {@class = "control-label col-md-2"})
+                        <div class="col-md-9">
+                            @Html.DropDownListFor(model => model.BibliographicFormatId, (SelectList) ViewData["selectList"], new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.BibliographicFormatId, "", new {@class = "text-danger"})
                         </div>
+                    </div>
 
-                        <div class="form-group">
-                            <div class="col-md-offset-10 col-md-1">
-                                <input type="submit" value="@Localizer.Translate("Submit","News", LocTranslationSource.File)" class="btn btn-default" />
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-9">
+                            <div class="table-responsive">
+                                <table id="filteringExpressions" class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Pole</th>
+                                        <th>Hodnota</th>
+                                        <th>Smazat</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach (var expr in Model.FilteringExpressions)
+                                    {
+                                        @Html.Partial("_FilteringExpressionRow", expr)
+                                    }
+                                    </tbody>
+
+                                </table>
                             </div>
+                            <button type="button" id="addFilteringExpressionRow" class="btn btn-default">@Localizer.Translate("AddFilteringExpression", "RepositoryImport", LocTranslationSource.File)</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-10 col-md-1">
+                            <input type="submit" value="@Localizer.Translate("Submit", "RepositoryImport", LocTranslationSource.File)" class="btn btn-default"/>
                         </div>
                     </div>
                 }
             </p>
-            
-            @foreach (var expr in Model.FilteringExpressionSet.FilteringExpressions)
-            {
-                @Html.TextBoxFor(m => m.FilteringExpressionSet.FilteringExpressions)
-            }
         </div>
     </div>
 </div>

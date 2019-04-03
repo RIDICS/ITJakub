@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
@@ -30,8 +31,12 @@ namespace Vokabular.ProjectImport.Works.FilteringExpressionSetManagement
             
             filteringExpressionSet.Name = m_data.Name;
             filteringExpressionSet.BibliographicFormat = bibliographicFormat;
-
-            //TODO update FilteringExpressions
+            filteringExpressionSet.FilteringExpressions.Clear();
+            var list = m_data.FilteringExpressions.Select(x => new FilteringExpression{Field = x.Field, Value = x.Value, FilteringExpressionSet = filteringExpressionSet}).ToList();
+            foreach (var expression in list)
+            {
+                filteringExpressionSet.FilteringExpressions.Add(expression);
+            }
 
             m_filteringExpressionSetRepository.Update(filteringExpressionSet);
         }

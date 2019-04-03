@@ -9,6 +9,9 @@
     "Test": "Test",
     "BibliographicFormat": "Bibliografický formát",
     "RepositoryType": "Typ rozhraní repozitáře",
-    "License": "Licence" 
+    "License": "Licence",
+    "CreateFilteringSet": "Vytvoření filtračního setu",
+    "Submit": "Vytvořit",
+    "AddFilteringExpression": "Přidat výraz"
   }
 }

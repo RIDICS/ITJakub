@@ -12,12 +12,12 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
     [Authorize]
     [Area("RepositoryImport")]
     public class FilteringExpressionController : BaseController
-    { 
+    {
         private const int FilteringExpressionSetCount = 5;
 
         public FilteringExpressionController(CommunicationProvider communicationProvider) : base(communicationProvider)
         {
-          
+
         }
 
         public IActionResult FilteringExpressionSetList()
@@ -34,10 +34,69 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
             using (var client = GetRestClient())
             {
                 var filteringExpressionSet = client.GetFilteringExpressionSetDetail(id);
-                var bibliographicFormats = client.GetAllBibliographicFormats();
-                var selectList = new SelectList(bibliographicFormats, nameof(BibliographicFormatContract.Id), nameof(BibliographicFormatContract.Name), filteringExpressionSet.BibliographicFormat.Id);
-                var model = new FilteringSetViewModel{FilteringExpressionSet = filteringExpressionSet, AvailableBibliographicFormats = selectList};
+                SetAvailableBibliographicFormats(filteringExpressionSet.BibliographicFormat.Id);
+                var model = new CreateFilteringExpressionSetViewModel
+                {
+                    Name = filteringExpressionSet.Name,
+                    FilteringExpressions = filteringExpressionSet.FilteringExpressions,
+                    Id = filteringExpressionSet.Id,
+                };
                 return View("FilteringExpressionSetDetail", model);
+            }
+        }
+
+        public IActionResult CreateSet(CreateFilteringExpressionSetViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                SetAvailableBibliographicFormats(model.BibliographicFormatId);
+                return View("FilteringExpressionSetDetail", model);
+            }
+
+            using (var client = GetRestClient())
+            {
+                client.CreateFilteringExpressionSet(new FilteringExpressionSetDetailContract
+                {
+                    Name = model.Name,
+                    BibliographicFormat = new BibliographicFormatContract{Id = model.BibliographicFormatId}, 
+                    FilteringExpressions = model.FilteringExpressions
+                });
+                return RedirectToAction("FilteringExpressionSetList");
+            }
+        }
+
+        public IActionResult UpdateSet(CreateFilteringExpressionSetViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("FilteringExpressionSetDetail", model);
+            }
+
+            using (var client = GetRestClient())
+            {
+                client.UpdateFilteringExpressionSet(model.Id, new FilteringExpressionSetDetailContract
+                {
+                    Name = model.Name,
+                    BibliographicFormat = new BibliographicFormatContract { Id = model.BibliographicFormatId },
+                    FilteringExpressions = model.FilteringExpressions
+                });
+                return RedirectToAction("FilteringExpressionSetList");
+            }
+        }
+
+        public IActionResult AddFilteringExpressionRow()
+        {
+            return PartialView("_FilteringExpressionRow", new FilteringExpressionContract());
+        }
+
+        private void SetAvailableBibliographicFormats(int selectBibliographicFormatId)
+        {
+            using (var client = GetRestClient())
+            {
+                var bibliographicFormats = client.GetAllBibliographicFormats();
+                var selectList = new SelectList(bibliographicFormats, nameof(BibliographicFormatContract.Id),
+                    nameof(BibliographicFormatContract.Name), selectBibliographicFormatId);
+                ViewData["selectList"] = selectList;
             }
         }
     }

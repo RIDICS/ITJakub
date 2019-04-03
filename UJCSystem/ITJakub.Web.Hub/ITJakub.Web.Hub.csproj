@@ -41,6 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="BeginCollectionItemCore" Version="1.0.8" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.4.0" />
     <PackageReference Include="Scalesoft.Localization.AspNetCore.Service" Version="1.0.1" />
     <PackageReference Include="Scalesoft.Localization.CoreLibrary" Version="1.0.2" />
@@ -90,7 +91,6 @@
   <ItemGroup>
     <Folder Include="Areas\RepositoryImport\Views\RepositoryImport\" />
     <Folder Include="Controllers\Plugins\Localization\" />
-    <Folder Include="Localization\" />
   </ItemGroup>
 
   <ItemGroup>

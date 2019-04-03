@@ -11,7 +11,7 @@
 
     <many-to-one name="BibliographicFormat" class="BibliographicFormat" lazy="false" not-null="true" />
 
-    <bag name="FilteringExpressions" inverse="true">
+    <bag name="FilteringExpressions" inverse="true" cascade="all-delete-orphan">
       <key column="FilteringExpressionSet" />
       <one-to-many class="FilteringExpression" />
     </bag>

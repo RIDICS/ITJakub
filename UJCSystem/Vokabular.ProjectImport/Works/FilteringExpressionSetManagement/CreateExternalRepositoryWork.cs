@@ -1,4 +1,5 @@
-﻿using Vokabular.DataEntities.Database.Entities;
+﻿using System.Linq;
+using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -22,15 +23,15 @@ namespace Vokabular.ProjectImport.Works.FilteringExpressionSetManagement
         {
             var bibliographicFormat = m_filteringExpressionSetRepository.Load<BibliographicFormat>(m_data.BibliographicFormat.Id);
             var user = m_filteringExpressionSetRepository.Load<User>(m_userId);
-
-            //TODO create FiltrExpression
             
             var externalRepository = new FilteringExpressionSet
             {
                 Name = m_data.Name,
                 CreatedByUser = user,
-                BibliographicFormat = bibliographicFormat
+                BibliographicFormat = bibliographicFormat,
+                FilteringExpressions = m_data.FilteringExpressions.Select(x => new FilteringExpression { Field = x.Field, Value = x.Value }).ToList()
             };
+
             var resultId = (int)m_filteringExpressionSetRepository.Create(externalRepository);
             return resultId;
         }

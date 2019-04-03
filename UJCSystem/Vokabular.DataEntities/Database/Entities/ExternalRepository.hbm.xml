@@ -26,7 +26,7 @@
       <one-to-many class="ImportHistory" />
     </bag>
 
-    <bag name="FilteringExpressionSets" table="FilteringExpressionSet_ExternalRepository" lazy="true">
+    <bag name="FilteringExpressionSets" table="FilteringExpressionSet_ExternalRepository" inverse="true" lazy="true">
       <key column="ExternalRepository" />
       <many-to-many class="FilteringExpressionSet" column="FilteringExpressionSet" />
     </bag>
