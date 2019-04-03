@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
+using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -48,6 +49,12 @@ namespace Vokabular.ProjectImport.Managers
                 List = Mapper.Map<List<ExternalRepositoryDetailContract>>(result.List),
                 TotalCount = result.Count,
             };
+        }
+
+        public IList<TotalImportStatistics> GetExternalRepositoryStatisticsList()
+        {
+            var result = m_externalRepositoryRepository.InvokeUnitOfWork(x =>  x.GetExternalRepositoryStatisticsList());
+            return result;
         }
     }
 }

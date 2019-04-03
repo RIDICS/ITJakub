@@ -31,5 +31,9 @@
       <many-to-many class="FilteringExpressionSet" column="FilteringExpressionSet" />
     </bag>
 
+    <bag name="ImportedProjectMetadata" lazy="true">
+      <key column="ExternalRepository" />
+      <one-to-many class="ImportedProjectMetadata" />
+    </bag>
   </class>
 </hibernate-mapping>

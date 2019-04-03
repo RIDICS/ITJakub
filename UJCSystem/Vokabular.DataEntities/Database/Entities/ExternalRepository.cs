@@ -25,6 +25,8 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual IList<ImportHistory> ImportHistories { get; set; }
 
+        public virtual IList<ImportedProjectMetadata> ImportedProjectMetadata { get; set; }
+
         public virtual IList<FilteringExpressionSet> FilteringExpressionSets { get; set; }
 
         public virtual bool Equals(ExternalRepository other)
