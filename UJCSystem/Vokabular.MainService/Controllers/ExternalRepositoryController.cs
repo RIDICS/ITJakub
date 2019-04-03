@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.ProjectImport;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Headers;
@@ -17,12 +18,15 @@ namespace Vokabular.MainService.Controllers
         private readonly ExternalRepositoryManager m_externalRepositoryManager;
         private readonly AuthenticationManager m_authenticationManager;
         private readonly AuthorizationManager m_authorizationManager;
+        private readonly MainImportManager m_mainImportManager;
 
-        public ExternalRepositoryController(ExternalRepositoryManager externalRepositoryManager, AuthenticationManager authenticationManager, AuthorizationManager authorizationManager)
+        public ExternalRepositoryController(ExternalRepositoryManager externalRepositoryManager,
+            AuthenticationManager authenticationManager, AuthorizationManager authorizationManager, MainImportManager mainImportManager)
         {
             m_externalRepositoryManager = externalRepositoryManager;
             m_authenticationManager = authenticationManager;
             m_authorizationManager = authorizationManager;
+            m_mainImportManager = mainImportManager;
         }
 
         [HttpPost("")]
@@ -44,7 +48,7 @@ namespace Vokabular.MainService.Controllers
             }
             catch (HttpErrorCodeException exception)
             {
-                return StatusCode((int)exception.StatusCode, exception.Message);
+                return StatusCode((int) exception.StatusCode, exception.Message);
             }
         }
 
@@ -59,7 +63,7 @@ namespace Vokabular.MainService.Controllers
             }
             catch (HttpErrorCodeException exception)
             {
-                return StatusCode((int)exception.StatusCode, exception.Message);
+                return StatusCode((int) exception.StatusCode, exception.Message);
             }
         }
 
@@ -88,6 +92,21 @@ namespace Vokabular.MainService.Controllers
             SetTotalCountHeader(result.TotalCount);
 
             return result.List;
+        }
+
+        [HttpDelete("{externalRepositoryId}/importStatus")]
+        public IActionResult CancelImportTask(int externalRepositoryId)
+        {
+            try
+            {
+                m_authorizationManager.CheckUserCanManageRepositoryImport();
+                m_mainImportManager.CancelTask(externalRepositoryId);
+                return Ok();
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode((int) exception.StatusCode, exception.Message);
+            }
         }
     }
 }

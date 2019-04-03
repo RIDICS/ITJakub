@@ -9,13 +9,13 @@ using Vokabular.RestClient.Errors;
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
-    public class ImportController : BaseController
+    public class RepositoryImportController : BaseController
     {
         private readonly MainImportManager m_mainImportManager;
         private readonly AuthenticationManager m_authenticationManager;
         private readonly AuthorizationManager m_authorizationManager;
 
-        public ImportController(MainImportManager mainImportManager, AuthenticationManager authenticationManager, AuthorizationManager authorizationManager)
+        public RepositoryImportController(MainImportManager mainImportManager, AuthenticationManager authenticationManager, AuthorizationManager authorizationManager)
         {
             m_mainImportManager = mainImportManager;
             m_authenticationManager = authenticationManager;
@@ -23,12 +23,12 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPost("")]
-        public IActionResult StartImport([FromBody] IList<int> data)
+        public IActionResult StartImport([FromBody] IList<int> externalRepositoryIds)
         {
             try
             {
                 m_authorizationManager.CheckUserCanManageRepositoryImport();
-                m_mainImportManager.ImportFromResources(data, m_authenticationManager.GetCurrentUserId());
+                m_mainImportManager.ImportFromResources(externalRepositoryIds, m_authenticationManager.GetCurrentUserId());
                 return Ok();
             }
             catch (HttpErrorCodeException exception)
@@ -36,23 +36,8 @@ namespace Vokabular.MainService.Controllers
                 return StatusCode((int) exception.StatusCode, exception.Message);
             }
         }
-
-        [HttpDelete("{externalRepositoryId}")]
-        public IActionResult CancelImportTask(int externalRepositoryId)
-        {
-            try
-            {
-                m_authorizationManager.CheckUserCanManageRepositoryImport();
-                m_mainImportManager.CancelTask(externalRepositoryId);
-                return Ok();
-            }
-            catch (HttpErrorCodeException exception)
-            {
-                return StatusCode((int) exception.StatusCode, exception.Message);
-            }
-        }
-
-        [HttpGet("actualProgress")]
+       
+        [HttpGet("importStatus")]
         public IList<RepositoryImportProgressInfo> GetActualProgress()
         {
             m_authorizationManager.CheckUserCanManageRepositoryImport();

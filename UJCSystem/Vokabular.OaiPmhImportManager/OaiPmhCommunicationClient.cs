@@ -188,7 +188,7 @@ namespace Vokabular.OaiPmhImportManager
                     {
                         var error = (OAIPMHerrorType) oaiPmhRecordResponse.Items.First();
                         throw new ImportFailedException(
-                            error.Value + $"Error while requesting: {uriBuilder.Uri}. {error.code} : {error.Value}");
+                            $"Error while requesting: {uriBuilder.Uri}. {error.code} : {error.Value}");
                     }
 
                     return oaiPmhRecordResponse;

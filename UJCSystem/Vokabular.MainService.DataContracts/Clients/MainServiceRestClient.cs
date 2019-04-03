@@ -2842,6 +2842,21 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public void CancelImportTask(int externalRepositoryId)
+        {
+            try
+            {
+                Delete($"externalRepository/{externalRepositoryId}/importStatus");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         #endregion
 
         #region FilteringExpressionSet
@@ -2949,7 +2964,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Post<object>($"import", externalRepositoryIds);
+                Post<object>($"repositoryImport", externalRepositoryIds);
             }
             catch (HttpRequestException e)
             {
@@ -2959,28 +2974,12 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
-
-        public void CancelImportTask(int externalRepositoryId)
-        {
-            try
-            {
-                Delete($"import/{externalRepositoryId}");
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
 
         public IList<RepositoryImportProgressInfoContract> GetActualProgress(int externalRepositoryId)
         {
             try
             {
-                return Get<IList<RepositoryImportProgressInfoContract>>($"import/actualProgress");
+                return Get<IList<RepositoryImportProgressInfoContract>>($"repositoryImport/importStatus");
             }
             catch (HttpRequestException e)
             {
