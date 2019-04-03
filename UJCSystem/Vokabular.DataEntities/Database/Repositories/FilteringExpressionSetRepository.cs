@@ -52,5 +52,11 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Fetch(x => x.FilteringExpressions).Eager
                 .SingleOrDefault();
         }
+
+        public IList<BibliographicFormat> GetAllBibliographicFormats()
+        {
+            return GetSession().QueryOver<BibliographicFormat>()
+                .List();
+        }
     }
 }

@@ -11,15 +11,15 @@
 }
 
 @section styles {
-    <link rel="stylesheet" href="~/Areas/Admin/css/ridics.repositoryImport.css" />
+    <link rel="stylesheet" href="~/Areas/RepositoryImport/css/ridics.repositoryImport.css" />
 }
 
 <div class="content-container">
-    <div class="row project-layout">
+    <div class="row project-import-layout">
         @Html.Partial("~/Areas/RepositoryImport/Views/_LeftMenu.cshtml")
         <div class="vertical-splitter"></div>
 
-        <div class="content" id="project-layout-content">
+        <div class="content" id="project-import-layout-content">
             <ul class="bib-listing">
                 @foreach (var repository in Model.List)
                 {

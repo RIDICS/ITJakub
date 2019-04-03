@@ -2926,6 +2926,21 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public IList<BibliographicFormatContract> GetAllBibliographicFormats()
+        {
+            try
+            {
+                return Get<IList<BibliographicFormatContract>>($"filteringExpressionSet/allBibliographicFormats");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         #endregion
 
         #region Import

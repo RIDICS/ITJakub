@@ -10,15 +10,15 @@
 }
 
 @section styles {
-    <link rel="stylesheet" href="~/Areas/Admin/css/ridics.repositoryImport.css" />
+    <link rel="stylesheet" href="~/Areas/RepositoryImport/css/ridics.repositoryImport.css" />
 }
 
 <div class="content-container">
-    <div class="row project-layout">
+    <div class="row project-import-layout">
         @Html.Partial("~/Areas/RepositoryImport/Views/_LeftMenu.cshtml")
         <div class="vertical-splitter"></div>
 
-        <div class="content" id="project-layout-content">
+        <div class="content" id="project-import-layout-content">
             <ul class="bib-listing">
                 @foreach (var filteringSet in Model.List)
                 {
@@ -31,7 +31,7 @@
                                     <div class="body">@filteringSet.BibliographicFormat.Name</div>
                                 </div>
                                 <div class="right-panel">
-                                    <a class="btn btn-sm book-button button">
+                                    <a class="btn btn-sm book-button button" href="@Url.Action("FilteringExpressionSetDetail", "FilteringExpression", new {area = "RepositoryImport", id = filteringSet.Id})">
                                         <span class="glyphicon glyphicon-pencil"></span>
                                     </a>
                                     <a type="button" class="btn btn-sm information-button button" href="#">

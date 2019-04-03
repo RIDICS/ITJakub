@@ -56,5 +56,11 @@ namespace Vokabular.ProjectImport.Managers
                 TotalCount = result.Count,
             };
         }
+
+        public IList<BibliographicFormatContract> GetAllBibliographicFormats()
+        {
+            var result = m_filteringExpressionSetRepository.InvokeUnitOfWork(x => x.GetAllBibliographicFormats());
+            return Mapper.Map<IList<BibliographicFormatContract>>(result);
+        }
     }
 }

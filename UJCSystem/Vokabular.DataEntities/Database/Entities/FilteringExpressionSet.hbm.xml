@@ -9,7 +9,7 @@
 
     <many-to-one name="CreatedByUser" class="User" lazy="proxy" not-null="true" />
 
-    <many-to-one name="BibliographicFormat" class="BibliographicFormat" lazy="proxy" not-null="true" />
+    <many-to-one name="BibliographicFormat" class="BibliographicFormat" lazy="false" not-null="true" />
 
     <bag name="FilteringExpressions" inverse="true">
       <key column="FilteringExpressionSet" />

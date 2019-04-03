@@ -89,5 +89,12 @@ namespace Vokabular.MainService.Controllers
 
             return result.List;
         }
+
+        [HttpGet("allBibliographicFormats")]
+        public IList<BibliographicFormatContract> GetAllBibliographicFormats()
+        {
+            //  m_authorizationManager.CheckUserCanManageRepositoryImport();
+            return m_filteringExpressionSetManager.GetAllBibliographicFormats();
+        }
     }
 }
