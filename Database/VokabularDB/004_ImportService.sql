@@ -76,7 +76,7 @@ BEGIN TRAN
 	CREATE TABLE [dbo].[FilteringExpression]
 	(
 		[Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_FilteringExpressiony(Id)] PRIMARY KEY CLUSTERED,
-		[Key] nvarchar(255) NOT NULL,
+		[Value] nvarchar(255) NOT NULL,
 		[Field] nvarchar(255) NOT NULL,
 		[FilteringExpressionSet] int NOT NULL CONSTRAINT [FK_FilteringExpression(FilteringExpressionSet)_FilteringExpressionSet(Id)] FOREIGN KEY REFERENCES [dbo].[FilteringExpression] (Id)
 	)
