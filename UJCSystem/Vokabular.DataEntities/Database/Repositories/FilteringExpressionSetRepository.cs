@@ -49,6 +49,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return GetSession().QueryOver<FilteringExpressionSet>()
                 .Where(x => x.Id == filteringExpressionSetId)
                 .Fetch(x => x.CreatedByUser).Eager
+                .Fetch(x => x.BibliographicFormat).Eager
                 .Fetch(x => x.FilteringExpressions).Eager
                 .SingleOrDefault();
         }

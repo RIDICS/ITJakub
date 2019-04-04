@@ -16,19 +16,22 @@ namespace Vokabular.DataEntities.Database.Repositories
         public ExternalRepositoryRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
-      
 
         public virtual ExternalRepository GetExternalRepository(int externalRepositoryId)
         {
             return GetSession().QueryOver<ExternalRepository>()
                 .Where(x => x.Id == externalRepositoryId)
+                .Fetch(x => x.BibliographicFormat).Eager
+                .Fetch(x => x.ExternalRepositoryType).Eager
                 .SingleOrDefault();
         }
 
         public virtual ListWithTotalCountResult<ExternalRepository> GetExternalRepositoryList(int start, int count)
         {
             var query = GetSession().QueryOver<ExternalRepository>()
-                .Fetch(x => x.CreatedByUser).Eager;
+                .Fetch(x => x.CreatedByUser).Eager
+                .Fetch(x => x.BibliographicFormat).Eager
+                .Fetch(x => x.ExternalRepositoryType).Eager;
 
             var list = query.Skip(start)
                 .Take(count)

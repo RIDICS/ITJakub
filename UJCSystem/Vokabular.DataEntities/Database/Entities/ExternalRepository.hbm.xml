@@ -17,9 +17,9 @@
 
     <many-to-one name="CreatedByUser" class="User" lazy="proxy" not-null="true" />
 
-    <many-to-one name="ExternalRepositoryType" class="ExternalRepositoryType" lazy="false" not-null="true" />
+    <many-to-one name="ExternalRepositoryType" class="ExternalRepositoryType" lazy="proxy" not-null="true" />
 
-    <many-to-one name="BibliographicFormat" class="BibliographicFormat" lazy="false" not-null="true" />
+    <many-to-one name="BibliographicFormat" class="BibliographicFormat" lazy="proxy" not-null="true" />
     
     <bag name="ImportHistories" lazy="true">
       <key column="ExternalRepository" />
