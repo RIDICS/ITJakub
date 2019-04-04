@@ -19,13 +19,12 @@
         <div class="vertical-splitter"></div>
 
         <div class="content" id="project-import-layout-content">
-    <h1>Seznam filtračních setů</h1>
-                <div class="col-md-offset-11 col-md-1" style="    text-align: right;
-                                      float: right;
-                                      padding-bottom: 10px;
-                                      padding-right: 0px;">
-                    <input type="submit" value="@Localizer.Translate("Submit", "RepositoryImport", LocTranslationSource.File)" class="btn btn-default"/>
-                </div>
+            <h1> @Localizer.Translate("FilteringSetList", "RepositoryImport", LocTranslationSource.File)</h1>
+            <div class="col-md-offset-11 col-md-1" style="text-align: right; float: right; padding-bottom: 10px; padding-right: 0px;">
+                <a class="btn btn-default" href="@Url.Action("Create", "FilteringExpressionSet", new {area = "RepositoryImport"})">
+                    @Localizer.Translate("CreateFilteringSetButton", "RepositoryImport", LocTranslationSource.File)
+                </a> 
+            </div>
      
             <ul class="bib-listing">
                 @foreach (var filteringSet in Model.List)
@@ -39,10 +38,10 @@
                                     <div class="body">@filteringSet.BibliographicFormat.Name</div>
                                 </div>
                                 <div class="right-panel">
-                                    <a class="btn btn-sm book-button button" href="@Url.Action("FilteringExpressionSetDetail", "FilteringExpression", new {area = "RepositoryImport", id = filteringSet.Id})">
+                                    <a class="btn btn-sm book-button button" href="@Url.Action("Detail", "FilteringExpressionSet", new {area = "RepositoryImport", id = filteringSet.Id})">
                                         <span class="glyphicon glyphicon-pencil"></span>
                                     </a>
-                                    <a type="button" class="btn btn-sm information-button button" href="#">
+                                    <a type="button" class="btn btn-sm information-button button" href="@Url.Action("Delete", "FilteringExpressionSet", new {area = "RepositoryImport", id = filteringSet.Id})">
                                         <span class="glyphicon glyphicon-trash"></span>
                                     </a>
                                 </div>

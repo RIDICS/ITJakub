@@ -24,15 +24,16 @@ namespace Vokabular.ProjectImport.Works.FilteringExpressionSetManagement
             var bibliographicFormat = m_filteringExpressionSetRepository.Load<BibliographicFormat>(m_data.BibliographicFormat.Id);
             var user = m_filteringExpressionSetRepository.Load<User>(m_userId);
             
-            var externalRepository = new FilteringExpressionSet
+            var filteringExpressionSet = new FilteringExpressionSet
             {
                 Name = m_data.Name,
                 CreatedByUser = user,
                 BibliographicFormat = bibliographicFormat,
-                FilteringExpressions = m_data.FilteringExpressions.Select(x => new FilteringExpression { Field = x.Field, Value = x.Value }).ToList()
             };
+            filteringExpressionSet.FilteringExpressions = m_data.FilteringExpressions.Select(x => new FilteringExpression
+                {Field = x.Field, Value = x.Value, FilteringExpressionSet = filteringExpressionSet}).ToList();
 
-            var resultId = (int)m_filteringExpressionSetRepository.Create(externalRepository);
+            var resultId = (int)m_filteringExpressionSetRepository.Create(filteringExpressionSet);
             return resultId;
         }
     }

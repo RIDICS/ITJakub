@@ -388,7 +388,7 @@
                                     }
                                     else if (User.IsInRole(CustomRole.CanManageRepositoryImport))
                                     {
-                                        <a href='@Url.Action("ExternalRepositoryList", "ExternalRepository", new {area = "RepositoryImport"})'>
+                                        <a href='@Url.Action("List", "ExternalRepository", new {area = "RepositoryImport"})'>
                                             <span>@Localizer.Translate("RepositoryImport", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     }
@@ -472,7 +472,7 @@
                                         @if (User.IsInRole(CustomRole.CanManageRepositoryImport))
                                         {
                                             <li>
-                                                <a href='@Url.Action("ExternalRepositoryList", "ExternalRepository", new {area = "RepositoryImport"})'>
+                                                <a href='@Url.Action("List", "ExternalRepository", new {area = "RepositoryImport"})'>
                                                     <span>@Localizer.Translate("RepositoryImport", "layout", LocTranslationSource.File)</span>
                                                 </a>
                                             </li>

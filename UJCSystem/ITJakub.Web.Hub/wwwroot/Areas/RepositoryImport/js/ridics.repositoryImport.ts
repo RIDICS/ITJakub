@@ -9,7 +9,7 @@ class FilteringExpressionTable {
             $.ajax({
                 type: "GET",
                 dataType: "html",
-                url: `${getBaseUrl()}RepositoryImport/FilteringExpression/AddFilteringExpressionRow`,
+                url: `${getBaseUrl()}RepositoryImport/FilteringExpressionSet/AddFilteringExpressionRow`,
                 success: (partialView) => {
                     $('#filteringExpressions> tbody:last-child').append(partialView);
                     this.initRemoveButtons();

@@ -19,12 +19,12 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
         }
 
 
-        public IActionResult ExternalRepositoryList()
+        public IActionResult List()
         {
             using (var client = GetRestClient())
             {
                 var externalRepositories = client.GetExternalRepositoryList(0, RepositoryCount, true);
-                return View("ExternalRepositoryList", externalRepositories);
+                return View(externalRepositories);
             }
         }
     }

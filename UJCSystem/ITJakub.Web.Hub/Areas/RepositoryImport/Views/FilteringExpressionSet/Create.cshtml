@@ -1,0 +1,37 @@
+﻿@using Localization.AspNetCore.Service
+@using Localization.CoreLibrary.Util
+@model ITJakub.Web.Hub.Areas.RepositoryImport.Models.CreateFilteringExpressionSetViewModel
+
+@inject ILocalization Localizer
+
+@{
+    ViewBag.Title = Localizer.Translate("ExternalRepositoriesTitle", "RepositoryImport", LocTranslationSource.File);
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/Areas/RepositoryImport/css/ridics.repositoryImport.css" />
+}
+
+@section scripts {
+    <script src="~/Areas/RepositoryImport/js/ridics.repositoryImport.js" type="text/javascript"></script>
+}
+
+<div class="content-container">
+    <div class="row project-import-layout">
+        @Html.Partial("~/Areas/RepositoryImport/Views/_LeftMenu.cshtml")
+        <div class="vertical-splitter"></div>
+
+        <div class="content" id="project-import-layout-content">
+            <div class="col-md-offset-2 col-md-11">
+                <h1>@Localizer.Translate("CreateFilteringSet", "RepositoryImport", LocTranslationSource.File)</h1>
+            </div>
+
+            <p>
+                @using (Html.BeginForm("Create", "FilteringExpressionSet", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+                {
+                    @Html.Partial("_FilteringExpressionSetForm")
+                }
+            </p>
+        </div>
+    </div>
+</div>

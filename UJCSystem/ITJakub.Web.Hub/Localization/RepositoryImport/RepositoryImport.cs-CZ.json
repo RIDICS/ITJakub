@@ -11,7 +11,13 @@
     "RepositoryType": "Typ rozhraní repozitáře",
     "License": "Licence",
     "CreateFilteringSet": "Vytvoření filtračního setu",
-    "Submit": "Vytvořit",
-    "AddFilteringExpression": "Přidat výraz"
+    "UpdateFilteringSet": "Úprava filtračního setu",
+    "Submit": "Uložit",
+    "AddFilteringExpression": "Přidat výraz",
+    "Field": "Pole",
+    "Value": "Hodnota",
+    "Delete": "Smazat",
+    "CreateFilteringSetButton": "Vytvořit",
+    "FilteringSetList": "Seznam filtračních setů"
   }
 }

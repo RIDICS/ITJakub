@@ -3,7 +3,20 @@
   "scope": "RepositoryImport",
   "dictionary": {
     "ExternalRepositoriesTitle": "translate[Externí repozitáře]",
-    "ProjectTitle": "translate[TTTT]",
-    "Test": "Test"
+    "FilteringSetsTitle": "translate[Filtrační sety]",
+    "ImportTitle": "translate[Import]",
+    "MenuTitle": "translate[Nastavení]",
+    "BibliographicFormat": "translate[Bibliografický formát]",
+    "RepositoryType": "translate[Typ rozhraní repozitáře]",
+    "License": "translate[Licence]",
+    "CreateFilteringSet": "translate[Vytvoření filtračního setu]",
+    "UpdateFilteringSet": "translate[Úprava filtračního setu]",
+    "Submit": "translate[Uložit]",
+    "AddFilteringExpression": "translate[Přidat výraz]",
+    "Field": "translate[Pole]",
+    "Value": "translate[Hodnota]",
+    "Delete": "translate[Smazat]",
+    "CreateFilteringSetButton": "translate[Vytvořit]",
+    "FilteringSetList": "translate[Seznam filtračních setů]"
   }
 }
