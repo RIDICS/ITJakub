@@ -21,6 +21,8 @@ namespace Vokabular.ProjectImport
             container.AddScoped<ImportedProjectMetadataManager>();
             container.AddScoped<ImportedRecordMetadataManager>();
             container.AddScoped<ProjectManager>();
+
+            container.AddScoped<CommunicationManager>();
             
             container.AddHostedService<ProjectImportHostedService>();
             container.AddSingleton<MainImportManager>();

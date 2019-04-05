@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.OaiPmh;
 using Vokabular.ProjectImport.Works.ExternalRepositoryManagement;
 using Vokabular.RestClient.Results;
 
@@ -12,10 +14,12 @@ namespace Vokabular.ProjectImport.Managers
     public class ExternalRepositoryManager
     {
         private readonly ExternalRepositoryRepository m_externalRepositoryRepository;
+        private readonly CommunicationManager m_communicationManager;
 
-        public ExternalRepositoryManager(ExternalRepositoryRepository externalRepositoryRepository)
+        public ExternalRepositoryManager(ExternalRepositoryRepository externalRepositoryRepository, CommunicationManager communicationManager)
         {
             m_externalRepositoryRepository = externalRepositoryRepository;
+            m_communicationManager = communicationManager;
         }
 
         public int CreateExternalRepository(ExternalRepositoryDetailContract externalRepository, int userId)
@@ -55,6 +59,21 @@ namespace Vokabular.ProjectImport.Managers
         {
             var result = m_externalRepositoryRepository.InvokeUnitOfWork(x =>  x.GetExternalRepositoryStatisticsList());
             return result;
+        }  
+        
+        public IList<ExternalRepositoryTypeContract> GetAllExternalRepositoryTypes()
+        {
+            var result = m_externalRepositoryRepository.InvokeUnitOfWork(x =>  x.GetAllExternalRepositoryTypes());
+            return Mapper.Map<IList<ExternalRepositoryTypeContract>>(result);
+        }
+
+        public async Task<OaiPmhRepositoryInfoContract> GetOaiPmhRepositoryInfo(string url)
+        {
+            using (var client = m_communicationManager.GetOaiPmhCommunicationClient(url))
+            {
+                var result = await client.GetRepositoryInfoAsync();
+                return Mapper.Map<OaiPmhRepositoryInfoContract>(result);
+            }
         }
     }
 }

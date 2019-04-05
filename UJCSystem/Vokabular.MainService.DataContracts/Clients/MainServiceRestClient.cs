@@ -8,6 +8,7 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.CardFile;
 using Vokabular.MainService.DataContracts.Contracts.Favorite;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
+using Vokabular.MainService.DataContracts.Contracts.OaiPmh;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
@@ -2847,6 +2848,36 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 Delete($"externalRepository/{externalRepositoryId}/importStatus");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public IList<ExternalRepositoryTypeContract> GetAllExternalRepositoryTypes()
+        {
+            try
+            {
+                return Get<IList<ExternalRepositoryTypeContract>>($"externalRepository/allExternalRepositoryTypes");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }  
+        
+        public OaiPmhRepositoryInfoContract GetOaiPmhRepositoryInfo(string url)
+        {
+            try
+            {
+                return Get<OaiPmhRepositoryInfoContract>($"externalRepository/oaiPmhRepositoryInfo/{url}");
             }
             catch (HttpRequestException e)
             {

@@ -26,6 +26,12 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SingleOrDefault();
         }
 
+        public virtual IList<ExternalRepositoryType> GetAllExternalRepositoryTypes()
+        {
+            return GetSession().QueryOver<ExternalRepositoryType>()
+                .List();
+        }
+
         public virtual ListWithTotalCountResult<ExternalRepository> GetExternalRepositoryList(int start, int count)
         {
             var query = GetSession().QueryOver<ExternalRepository>()

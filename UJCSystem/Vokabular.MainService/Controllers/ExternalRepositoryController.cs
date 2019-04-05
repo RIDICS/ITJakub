@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System.Web;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.OaiPmh;
 using Vokabular.ProjectImport;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.RestClient.Errors;
@@ -108,5 +111,23 @@ namespace Vokabular.MainService.Controllers
                 return StatusCode((int) exception.StatusCode, exception.Message);
             }
         }
+
+        [HttpGet("allExternalRepositoryTypes")]
+        public IList<ExternalRepositoryTypeContract> GetAllExternalRepositoryTypes()
+        {
+            m_authorizationManager.CheckUserCanManageRepositoryImport();
+            return m_externalRepositoryManager.GetAllExternalRepositoryTypes();
+        }
+
+        #region OAI-PMH
+
+        [HttpGet("oaiPmhRepositoryInfo/{url}")]
+        public async Task<OaiPmhRepositoryInfoContract> GetOaiPmhRepositoryInfoAsync(string url)
+        {
+            m_authorizationManager.CheckUserCanManageRepositoryImport();
+            return await m_externalRepositoryManager.GetOaiPmhRepositoryInfo(HttpUtility.UrlDecode(url));
+        }
+
+        #endregion
     }
 }

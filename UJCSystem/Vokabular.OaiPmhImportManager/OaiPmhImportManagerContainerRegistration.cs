@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
+using Vokabular.OaiPmhImportManager.AutoMapperProfiles;
 using Vokabular.ProjectImport.Model;
 
 namespace Vokabular.OaiPmhImportManager
@@ -7,6 +9,10 @@ namespace Vokabular.OaiPmhImportManager
     {
         public static void AddOaiPmhImportManager(this IServiceCollection services)
         {
+            services.AddSingleton<Profile, MetadataFormatContractProfile>();
+            services.AddSingleton<Profile, OaiPmhRepositoryInfoProfile>();
+            services.AddSingleton<Profile, SetContractProfile>();
+
            services.AddSingleton<IProjectImportManager, OaiPmhProjectImportManager>();
         }
     }

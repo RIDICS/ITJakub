@@ -39,6 +39,30 @@ namespace Vokabular.OaiPmhImportManager
             m_granularityFormat = DateGranularity;
         }
 
+        public async Task<OaiPmhRepositoryInfo> GetRepositoryInfoAsync()
+        {
+            var identify = await  IdentifyAsync();
+            var metadataFormats = await GetMetadataFormatsListAsync();
+            var sets = await GetSetsListAsync(true);
+
+            return new OaiPmhRepositoryInfo
+            {
+                AdminMails = identify.adminEmail,
+                Description = identify.description?.ToString(),
+                Url = identify.baseURL,
+                EarliestDateTime = DateTime.Parse(identify.earliestDatestamp),
+                Granularity = identify.granularity,
+                Name = identify.repositoryName,
+                MetadataFormatTypes = metadataFormats,
+                SetTypes = sets
+            };
+        }
+
+        public async Task<IdentifyType> IdentifyAsync()
+        {
+            return await GetVerbAsync<IdentifyType>(verbType.Identify);
+        }
+
         public async Task<IList<metadataFormatType>> GetMetadataFormatsListAsync()
         {
             var list = await GetVerbAsync<ListMetadataFormatsType>(verbType.ListMetadataFormats);
@@ -77,7 +101,7 @@ namespace Vokabular.OaiPmhImportManager
             return await GetResumptionTokenAsync<ListIdentifiersType>(verbType.ListIdentifiers, resumptionToken);
         }
 
-        public async Task<IList<headerType>> GetIdentifiersList(string format, string set, bool fetchCompleteList = false)
+        public async Task<IList<headerType>> GetIdentifiersListAsync(string format, string set, bool fetchCompleteList = false)
         {
             var identifiers = await GetVerbAsync<ListIdentifiersType>(verbType.ListIdentifiers, format, set);
             var resumptionToken = identifiers.resumptionToken;
@@ -88,22 +112,6 @@ namespace Vokabular.OaiPmhImportManager
                 identifiers = await GetListIdentifiersTypeAsync(resumptionToken.Value);
                 list.AddRange(identifiers.header);
                 resumptionToken = identifiers.resumptionToken;
-            }
-
-            return list;
-        }
-
-        public async Task<IList<recordType>> GetRecordsListAsync(string format, bool fetchCompleteList)
-        {
-            var records = await GetVerbAsync<ListRecordsType>(verbType.ListRecords, format);
-            var resumptionToken = records.resumptionToken;
-            var list = new List<recordType>(records.record);
-
-            while (fetchCompleteList && resumptionToken != null)
-            {
-                records = await GetRecordsListAsync(resumptionToken.Value);
-                list.AddRange(records.record);
-                resumptionToken = records.resumptionToken;
             }
 
             return list;
@@ -136,21 +144,6 @@ namespace Vokabular.OaiPmhImportManager
         public async Task<ListRecordsType> GetRecordsListAsync(string resumptionToken)
         {
             return await GetResumptionTokenAsync<ListRecordsType>(verbType.ListRecords, resumptionToken);
-        }
-
-        public async Task<OaiPmhRepositoryInfo> IdentifyAsync()
-        {
-            var identify = await GetVerbAsync<IdentifyType>(verbType.Identify);
-
-            return new OaiPmhRepositoryInfo
-            {
-                AdminMails = identify.adminEmail,
-                Description = identify.description?.ToString(),
-                Url = identify.baseURL,
-                EarliestDateTime = DateTime.Parse(identify.earliestDatestamp),
-                Granularity = identify.granularity,
-                Name = identify.repositoryName
-            };
         }
 
         public async Task<recordType> GetRecordAsync(string format, string identifier)
