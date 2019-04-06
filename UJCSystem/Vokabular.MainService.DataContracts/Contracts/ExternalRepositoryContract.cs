@@ -21,4 +21,15 @@ namespace Vokabular.MainService.DataContracts.Contracts
 
         public string Configuration { get; set; }
     }
+
+    public class ExternalRepositoryStatisticsContract
+    {
+        public int TotalImportedItems { get; set; }
+
+        public int TotalItemsInLastUpdate { get; set; }
+
+        public int NewItemsInLastUpdate { get; set; }
+
+        public int UpdatedItemsInLastUpdate { get; set; }
+    }
 }

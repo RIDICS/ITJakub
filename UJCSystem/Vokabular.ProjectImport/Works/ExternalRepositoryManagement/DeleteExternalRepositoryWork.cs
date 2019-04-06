@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
@@ -24,7 +25,10 @@ namespace Vokabular.ProjectImport.Works.ExternalRepositoryManagement
             if (externalRepository == null)
                 throw new HttpErrorCodeException(ErrorMessages.NotFound, HttpStatusCode.NotFound);
 
-            //TODO really delete?
+            if (externalRepository.ImportHistories == null || externalRepository.ImportHistories.Count > 0)
+            {
+                throw new InvalidOperationException($"External repository {externalRepository.Name} cannot be deleted. The external repository contains history.");
+            }
 
             m_externalRepositoryRepository.Delete(externalRepository);
         }

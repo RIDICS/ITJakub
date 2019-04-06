@@ -4,9 +4,9 @@ using Vokabular.OaiPmhImportManager.Model;
 
 namespace Vokabular.OaiPmhImportManager.AutoMapperProfiles
 {
-    public class MetadataFormatContractProfile : Profile
+    public class MetadataFormatProfile : Profile
     {
-        public MetadataFormatContractProfile()
+        public MetadataFormatProfile()
         {
             CreateMap<metadataFormatType, MetadataFormatContract> ()
                 .ForMember(dest => dest.MetadataNamespace, opt => opt.MapFrom(src => src.metadataNamespace))

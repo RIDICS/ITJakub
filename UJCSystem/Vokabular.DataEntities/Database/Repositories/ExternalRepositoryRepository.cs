@@ -70,6 +70,23 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
+        public virtual TotalImportStatistics GetExternalRepositoryStatistics(int repositoryId)
+        {
+            ExternalRepository externalRepository = null;
+            ImportedProjectMetadata importedProjectMetadata = null;
+            TotalImportStatistics totalImportStatistics = null;
+
+            var result = GetSession().QueryOver(() => externalRepository)
+                .JoinAlias(x => x.ImportedProjectMetadata, () => importedProjectMetadata, JoinType.LeftOuterJoin)
+                .Where(() => externalRepository.Id == repositoryId)
+                .SelectList(list => list
+                    .SelectCount(() => importedProjectMetadata.Id).WithAlias(() => totalImportStatistics.NewItems))
+                .TransformUsing(Transformers.AliasToBean<TotalImportStatistics>())
+                .SingleOrDefault<TotalImportStatistics>();
+
+            return result;
+        }
+
         public virtual LastImportStatisticsResult GetLastUpdateExternalRepositoryStatistics(int repositoryId)
         {
             ExternalRepository externalRepository = null;

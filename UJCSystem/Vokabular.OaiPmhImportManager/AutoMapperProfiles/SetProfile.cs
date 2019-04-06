@@ -4,9 +4,9 @@ using Vokabular.OaiPmhImportManager.Model;
 
 namespace Vokabular.OaiPmhImportManager.AutoMapperProfiles
 {
-    public class SetContractProfile : Profile
+    public class SetProfile : Profile
     {
-        public SetContractProfile()
+        public SetProfile()
         {
             CreateMap<setType, SetContract>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.setSpec))

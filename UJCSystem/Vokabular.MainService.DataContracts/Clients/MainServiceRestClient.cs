@@ -2797,6 +2797,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public ExternalRepositoryStatisticsContract GetExternalRepositoryStatistics(int externalRepositoryId)
+        {
+            try
+            {
+                var result = Get<ExternalRepositoryStatisticsContract>($"externalRepository/{externalRepositoryId}/statistics");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public int CreateExternalRepository(ExternalRepositoryDetailContract externalRepository)
         {
             try

@@ -82,6 +82,18 @@ namespace Vokabular.MainService.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{externalRepositoryId}/statistics")]
+        [ProducesResponseType(typeof(ExternalRepositoryStatisticsContract), StatusCodes.Status200OK)]
+        public IActionResult GetExternalRepositoryStatistics(int externalRepositoryId)
+        {
+            m_authorizationManager.CheckUserCanManageRepositoryImport();
+            var result = m_externalRepositoryManager.GetExternalRepositoryStatistics(externalRepositoryId);
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
         [HttpGet("")]
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
         public List<ExternalRepositoryDetailContract> GetExternalRepositoryList([FromQuery] int? start, [FromQuery] int? count)

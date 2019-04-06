@@ -1,6 +1,6 @@
-﻿namespace Vokabular.OaiPmhImportManager.Model
+﻿namespace Vokabular.MainService.DataContracts.Contracts.OaiPmh
 {
-    public class OaiPmhRepositoryConfiguration
+    public class OaiPmhRepositoryConfigurationContract
     {
         public string Url { get; set; }
         public string DataFormat { get; set; }

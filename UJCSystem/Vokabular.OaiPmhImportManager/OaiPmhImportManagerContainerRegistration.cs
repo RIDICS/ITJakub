@@ -9,9 +9,9 @@ namespace Vokabular.OaiPmhImportManager
     {
         public static void AddOaiPmhImportManager(this IServiceCollection services)
         {
-            services.AddSingleton<Profile, MetadataFormatContractProfile>();
+            services.AddSingleton<Profile, MetadataFormatProfile>();
             services.AddSingleton<Profile, OaiPmhRepositoryInfoProfile>();
-            services.AddSingleton<Profile, SetContractProfile>();
+            services.AddSingleton<Profile, SetProfile>();
 
            services.AddSingleton<IProjectImportManager, OaiPmhProjectImportManager>();
         }
