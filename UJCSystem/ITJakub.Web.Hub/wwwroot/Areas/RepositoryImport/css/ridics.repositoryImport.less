@@ -50,62 +50,69 @@ ul.bib-listing li.list-item .hidden-content {
     }
 }
 
-    .project-import-layout {
-        display: table-row;
+.project-import-layout {
+    display: table-row;
 
-        .left-menu, .vertical-splitter, .vertical-splitter-control, .content {
-            display: table-cell;
-        }
+    .left-menu, .vertical-splitter, .vertical-splitter-control, .content {
+        display: table-cell;
+    }
 
-        .left-menu {
-            width: 200px;
-            padding-right: 10px;
-        }
+    .left-menu {
+        width: 200px;
+        padding-right: 10px;
+    }
 
-        .vertical-splitter-control {
-            vertical-align: middle;
+    .vertical-splitter-control {
+        vertical-align: middle;
 
-            button {
-                padding: 10px 2px;
-                margin-right: 3px;
-                transform: scaleY(2);
-            }
-        }
-
-        .vertical-splitter {
-            border: 1px solid #ccc;
-        }
-
-        .content {
-            width: 100%;
-        }
-
-        .tab-content {
-            border: @box-border;
-            border-top-width: 0;
-            padding: 1rem 0.5rem 1rem 0.5rem;
-        }
-
-        .modal .tab-content {
-            height: auto;
-            overflow: initial;
-            border-width: 0;
-            padding: 1rem 0;
-        }
-
-        table {
-            width: 100%;
-        }
-
-        td, th {
-            border: @box-border;
-            text-align: center;
-        }
-
-        th {
-            background-color: #eee;
+        button {
+            padding: 10px 2px;
+            margin-right: 3px;
+            transform: scaleY(2);
         }
     }
+
+    .vertical-splitter {
+        border: 1px solid #ccc;
+    }
+
+    .content {
+        width: 100%;
+    }
+
+    .create-btn {
+        text-align: right;
+        float: right;
+        padding-bottom: 10px;
+        padding-right: 0px;
+    }
+
+    .tab-content {
+        border: @box-border;
+        border-top-width: 0;
+        padding: 1rem 0.5rem 1rem 0.5rem;
+    }
+
+    .modal .tab-content {
+        height: auto;
+        overflow: initial;
+        border-width: 0;
+        padding: 1rem 0;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    td, th {
+        border: @box-border;
+        text-align: center;
+    }
+
+    th {
+        background-color: #eee;
+    }
+}
 
     .project-import-title {
         font-weight: bold;

@@ -13,6 +13,9 @@
 @section styles {
     <link rel="stylesheet" href="~/Areas/RepositoryImport/css/ridics.repositoryImport.css" />
 }
+@section scripts {
+    <script src="~/Areas/RepositoryImport/js/ridics.repositoryImport.js" type="text/javascript"></script>
+}
 
 <div class="content-container">
     <div class="row project-import-layout">
@@ -20,6 +23,12 @@
         <div class="vertical-splitter"></div>
 
         <div class="content" id="project-import-layout-content">
+            <h1>@Localizer.Translate("ExternalRepositoryList", "RepositoryImport", LocTranslationSource.File)</h1>
+            <div class="col-md-offset-11 col-md-1 create-btn">
+                <a class="btn btn-default" href="@Url.Action("Create", "ExternalRepository", new {area = "RepositoryImport"})">
+                    @Localizer.Translate("CreateButton", "RepositoryImport", LocTranslationSource.File)
+                </a>
+            </div>
             <ul class="bib-listing">
                 @foreach (var repository in Model.List)
                 {
@@ -32,20 +41,20 @@
                                     <div class="body">@repository.Description</div>
                                 </div>
                                 <div class="right-panel">
-                                    <a class="btn btn-sm book-button button" href="#">
+                                    <a class="btn btn-sm book-button button" href="@Url.Action("Update", "ExternalRepository", new {area = "RepositoryImport", id = repository.Id})">
                                         <span class="glyphicon glyphicon-pencil"></span>
                                     </a>
-                                    <a type="button" class="btn btn-sm information-button button" href="#">
+                                    <a type="button" class="btn btn-sm information-button button" href="@Url.Action("Delete", "ExternalRepository", new {area = "RepositoryImport", id = repository.Id})">
                                         <span class="glyphicon glyphicon-trash"></span>
-                                    </a>-
-                                    <button type="button" class="btn btn-sm content-button" data-toggle="collapse" aria-expanded="false" data-target="#@repository.Id">
-                                        <span class="glyphicon glyphicon-chevron-down"></span>
+                                    </a>
+                                    <button type="button" class="btn btn-sm content-button" data-toggle="collapse" aria-expanded="false" data-target="#repository-@repository.Id">
+                                        <span class="glyphicon glyphicon-chevron-down repository-detail" data-repository-id="@repository.Id"></span>
                                         <span class="glyphicon glyphicon-chevron-up"></span>
                                     </button>
                                 </div>
                             </div>
                         </div>
-                        <div class="hidden-content collapse" id="@repository.Id">
+                        <div class="hidden-content collapse" id="repository-@repository.Id">
                             <div class="bottom-panel">
                                 <div class="body">
                                     <div class="bib-table">

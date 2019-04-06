@@ -36,11 +36,11 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                 var filteringExpressionSet = client.GetFilteringExpressionSetDetail(id);
 
                 var bibliographicFormats = client.GetAllBibliographicFormats();
-                var selectList = new SelectList(bibliographicFormats, 
+                var availableBibliographicFormats = new SelectList(bibliographicFormats, 
                     nameof(BibliographicFormatContract.Id),
                     nameof(BibliographicFormatContract.Name),
                     filteringExpressionSet.BibliographicFormat.Id);
-                ViewData["selectList"] = selectList;
+                ViewData["availableBibliographicFormats"] = availableBibliographicFormats;
 
                 var model = new CreateFilteringExpressionSetViewModel
                 {
@@ -57,10 +57,10 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
             using (var client = GetRestClient())
             {
                 var bibliographicFormats = client.GetAllBibliographicFormats();
-                var selectList = new SelectList(bibliographicFormats, 
+                var availableBibliographicFormats = new SelectList(bibliographicFormats, 
                     nameof(BibliographicFormatContract.Id),
                     nameof(BibliographicFormatContract.Name));
-                ViewData["selectList"] = selectList;
+                ViewData["availableBibliographicFormats"] = availableBibliographicFormats;
             }
             return View(new CreateFilteringExpressionSetViewModel());
         }

@@ -1,0 +1,69 @@
+﻿@using Localization.AspNetCore.Service
+@using Localization.CoreLibrary.Util
+@model ITJakub.Web.Hub.Areas.RepositoryImport.Models.CreateExternalRepositoryViewModel
+
+@inject ILocalization Localizer
+
+@Html.AntiForgeryToken()
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+@Html.HiddenFor(model => model.Id)
+<div class="form-group">
+    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-9">
+        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-9">
+        @Html.TextBoxFor(model => model.Description, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Url, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-9">
+        @Html.TextBoxFor(model => model.Url, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Url, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+
+<div class="form-group">
+    @Html.LabelFor(model => model.License, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-9">
+        @Html.TextBoxFor(model => model.License, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.License, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.BibliographicFormatId, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-9">
+        @Html.DropDownListFor(model => model.BibliographicFormatId, (SelectList)ViewData["availableBibliographicFormats"], new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.BibliographicFormatId, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.ExternalRepositoryTypeId, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-9">
+        @Html.DropDownListFor(model => model.ExternalRepositoryTypeId, (SelectList)ViewData["availableExternalRepositoryTypes"], new { @class = "form-control ResourceType" })
+        @Html.ValidationMessageFor(model => model.ExternalRepositoryTypeId, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<input type="hidden" name="apiType" id="ApiType"/>
+<div id="apiOptions">
+
+</div>
+
+<div class="form-group">
+    <div class="col-md-offset-10 col-md-1">
+        <input type="submit" value="@Localizer.Translate("Submit", "RepositoryImport", LocTranslationSource.File)" class="btn btn-default" />
+    </div>
+</div>

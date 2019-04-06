@@ -1,0 +1,14 @@
+{
+  "culture": "en",
+  "scope": "CreateExternalRepositoryViewModel",
+  "dictionary": {
+    "Name": "translate[Název: ]",
+    "Description": "translate[Popis: ]",
+    "ApiType": "translate[Typ API: ]",
+    "ApiTypeRequired": "translate[Typ API musí být vybrán.]",
+    "Url": "translate[URL: ]",
+    "License": "translate[Licence: ]",
+    "Required": "translate[Pole musí být vyplněno.]",
+    "BibliographicFormat": "translate[Bibliografický formát: ]"
+  }
+}

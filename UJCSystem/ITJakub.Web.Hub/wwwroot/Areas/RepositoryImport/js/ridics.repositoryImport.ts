@@ -1,6 +1,9 @@
 ﻿$(document.documentElement).ready(() => {
     var filteringExpressionTable = new FilteringExpressionTable();
     filteringExpressionTable.init();
+
+    var externalRepositoryConfiguration = new ExternalRepositoryConfiguration();
+    externalRepositoryConfiguration.init();
 });
 
 class FilteringExpressionTable {
@@ -11,7 +14,7 @@ class FilteringExpressionTable {
                 dataType: "html",
                 url: `${getBaseUrl()}RepositoryImport/FilteringExpressionSet/AddFilteringExpressionRow`,
                 success: (partialView) => {
-                    $('#filteringExpressions> tbody:last-child').append(partialView);
+                    $("#filteringExpressions> tbody:last-child").append(partialView);
                     this.initRemoveButtons();
                 }
             });
@@ -25,6 +28,51 @@ class FilteringExpressionTable {
             const targetEl = $(event.target as Node as Element);
             const row = targetEl.closest("tr");
             row.remove();
+        });
+    }
+}
+
+class ExternalRepositoryConfiguration {
+    init() {  
+        $(".repository-detail").click((e) => {
+            const repositoryId = $(e.target as Node as Element).data("repository-id");
+            $.ajax({
+                type: "GET",
+                dataType: "html",
+                url: `${getBaseUrl()}RepositoryImport/ExternalRepository/Detail?id=${repositoryId}`,
+                success: (partialView) => {
+                    $(`#repository-${repositoryId} .bib-table:last-child`).append(partialView);
+                }
+            });
+        });
+
+        $(".ResourceType").change((e) => {
+            const api = $(e.target as Node as Element).children("option:selected").text();
+            $.ajax({
+                type: "GET",
+                url: `${getBaseUrl()}RepositoryImport/ExternalRepository/LoadApiConfiguration?api=${api}`,
+                dataType: "html",
+                success: (data) => {
+                    $("ApiType").val(api);
+                    $("#apiOptions").html(data);
+                    this.initOaiPmh();
+                }
+            });
+        });
+
+        $(".ResourceType").change();
+    }
+
+    initOaiPmh() {
+        $("#OaiPmhConnect").click(() => {
+            $.ajax({
+                type: "GET",
+                url: `${getBaseUrl()}RepositoryImport/ExternalRepository/OaiPmhConnect?url=${$("#OaiPmhResourceUrl").val()}`,
+                dataType: "html",
+                success: (data) => {
+                    $("#oaiPmhConfig").html(data);
+                }
+            });
         });
     }
 }

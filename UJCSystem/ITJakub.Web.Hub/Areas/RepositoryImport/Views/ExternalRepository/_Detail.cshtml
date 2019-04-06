@@ -1,0 +1,25 @@
+﻿@using Localization.AspNetCore.Service
+@model Vokabular.MainService.DataContracts.Contracts.ExternalRepositoryStatisticsContract
+
+@inject ILocalization Localizer
+
+<div class="bib-table-row">
+    <div class="bib-table-cell bib-label">@Localizer.Translate("TotalImportedItems", "RepositoryImport")</div>
+    <div class="bib-table-cell">@Model.TotalImportedItems</div>
+</div>
+
+<div class="bib-table-row">
+    <div class="bib-table-cell bib-label">@Localizer.Translate("LastImport", "RepositoryImport")</div>
+</div>
+<div class="bib-table-row">
+    <div class="bib-table-cell bib-label">@Localizer.Translate("TotalItemsInLastUpdate", "RepositoryImport")</div>
+    <div class="bib-table-cell">@Model.TotalItemsInLastUpdate</div>
+</div>
+<div class="bib-table-row">
+    <div class="bib-table-cell bib-label">@Localizer.Translate("NewItemsInLastUpdate", "RepositoryImport")</div>
+    <div class="bib-table-cell">@Model.NewItemsInLastUpdate</div>
+</div>
+<div class="bib-table-row">
+    <div class="bib-table-cell bib-label">@Localizer.Translate("UpdatedItemsInLastUpdate", "RepositoryImport")</div>
+    <div class="bib-table-cell">@Model.UpdatedItemsInLastUpdate</div>
+</div>
