@@ -48,12 +48,13 @@ class ExternalRepositoryConfiguration {
 
         $(".ResourceType").change((e) => {
             const api = $(e.target as Node as Element).children("option:selected").text();
+            const config = $(".repository-configuration").val();
             $.ajax({
                 type: "GET",
-                url: `${getBaseUrl()}RepositoryImport/ExternalRepository/LoadApiConfiguration?api=${api}`,
+                url: `${getBaseUrl()}RepositoryImport/ExternalRepository/LoadApiConfiguration?api=${api}&config=${config}`,
                 dataType: "html",
                 success: (data) => {
-                    $("ApiType").val(api);
+                    $("#apiType").val(api);
                     $("#apiOptions").html(data);
                     this.initOaiPmh();
                 }
@@ -65,9 +66,10 @@ class ExternalRepositoryConfiguration {
 
     initOaiPmh() {
         $("#OaiPmhConnect").click(() => {
+            const config = $(".repository-configuration").val();
             $.ajax({
                 type: "GET",
-                url: `${getBaseUrl()}RepositoryImport/ExternalRepository/OaiPmhConnect?url=${$("#OaiPmhResourceUrl").val()}`,
+                url: `${getBaseUrl()}RepositoryImport/ExternalRepository/OaiPmhConnect?url=${$("#OaiPmhResourceUrl").val()}&config=${config}`,
                 dataType: "html",
                 success: (data) => {
                     $("#oaiPmhConfig").html(data);

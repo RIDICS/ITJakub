@@ -19,6 +19,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
     public class ExternalRepositoryController : BaseController
     {
         private const int RepositoryCount = 5;
+        private const string OaiPmh = "OaiPmh";
 
         public ExternalRepositoryController(CommunicationProvider communicationProvider) : base(communicationProvider)
         {
@@ -86,22 +87,6 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
             }
         }
 
-        private string GetConfiguration(IFormCollection requestForm)
-        {
-            switch (requestForm["apiType"])
-            {
-                case "OaiPmh":
-                    return JsonConvert.SerializeObject(new OaiPmhRepositoryConfigurationContract
-                    {
-                        DataFormat = Request.Form["OaiPmhMetadataFormat"],
-                        SetName = Request.Form["OaiPmhSet"],
-                        Url = Request.Form["OaiPmhResourceUrl"],
-                    });
-                default:
-                    throw new ArgumentException($"API type {requestForm["apiType"]} cannot be found.");
-            }
-        }
-
         public IActionResult Update(int id)
         {
             using (var client = GetRestClient())
@@ -122,8 +107,6 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                     externalRepositoryDetail.ExternalRepositoryType.Id);
                 ViewData["availableExternalRepositoryTypes"] = availableExternalRepositoryTypes;
 
-                //TODO load configuration
-
                 var model = new CreateExternalRepositoryViewModel
                 {
                     Name = externalRepositoryDetail.Name,
@@ -132,7 +115,8 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                     License = externalRepositoryDetail.License,
                     Url = externalRepositoryDetail.Url,
                     BibliographicFormatId = externalRepositoryDetail.BibliographicFormat.Id,
-                    ExternalRepositoryTypeId = externalRepositoryDetail.ExternalRepositoryType.Id
+                    ExternalRepositoryTypeId = externalRepositoryDetail.ExternalRepositoryType.Id,
+                    Configration = externalRepositoryDetail.Configuration
                 };
 
                 return View(model);
@@ -173,11 +157,12 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
             }
         }
 
-        public IActionResult LoadApiConfiguration(string api)
+        public IActionResult LoadApiConfiguration(string api, string config)
         {
             switch (api)
             {
-                case "OaiPmh":
+                case OaiPmh:
+                    SetConfiguration(OaiPmh, config);
                     return PartialView("_OaiPmh");
                 default:
                     throw new ArgumentException($"API type {api} cannot be found.");
@@ -185,8 +170,9 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
         }
 
         [HttpGet]
-        public IActionResult OaiPmhConnect(string url)
+        public IActionResult OaiPmhConnect(string url, string config)
         {
+            SetConfiguration(OaiPmh, config);
             using (var client = GetRestClient())
             {
                 var result = client.GetOaiPmhRepositoryInfo(HttpUtility.UrlEncode(HttpUtility.UrlEncode(url)));
@@ -201,6 +187,39 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                 };
 
                 return PartialView("_OaiPmhConfiguration", model);
+            }
+        }
+
+        private string GetConfiguration(IFormCollection requestForm)
+        {
+            switch (requestForm["apiType"])
+            {
+                case OaiPmh:
+                    return JsonConvert.SerializeObject(new OaiPmhRepositoryConfigurationContract
+                    {
+                        DataFormat = Request.Form["OaiPmhMetadataFormat"],
+                        SetName = Request.Form["OaiPmhSet"],
+                        Url = Request.Form["OaiPmhResourceUrl"],
+                    });
+                default:
+                    throw new ArgumentException($"API type {requestForm["apiType"]} cannot be found.");
+            }
+        }
+
+        private void SetConfiguration(string apiType, string configuration)
+        {
+            switch (apiType)
+            {
+                case OaiPmh:
+                {
+                    var config = JsonConvert.DeserializeObject<OaiPmhRepositoryConfigurationContract>(configuration);
+                    ViewData["oaiPmhUrl"] = config.Url;
+                    ViewData["selectedSet"] = config.SetName;
+                    ViewData["selectedMetadataFormat"] = config.DataFormat;
+                    break;
+                }
+                default:
+                    throw new ArgumentException($"API type {apiType} cannot be found.");
             }
         }
     }

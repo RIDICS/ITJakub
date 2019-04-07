@@ -28,5 +28,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Models
         [Required(AllowEmptyStrings = false, ErrorMessage = "Required")]
         [Display(Name = "BibliographicFormat")]
         public int BibliographicFormatId { get; set; }
+
+        public string Configration { get; set; }
     }
 }

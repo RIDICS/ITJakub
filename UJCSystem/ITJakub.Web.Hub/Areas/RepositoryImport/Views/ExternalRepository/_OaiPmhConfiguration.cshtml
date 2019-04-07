@@ -19,10 +19,10 @@
 <div class="form-group">
     <label for="OaiPmhSet" class="control-label col-md-3">@Localizer.Translate("Set", "RepositoryImport")</label>
     <div class="col-md-8">
-        <select type="text" id="OaiPmhSet" name="OaiPmhSet" class="form-control">
+        <select type="text" id="OaiPmhSet" name="OaiPmhSet" class="form-control" value="@(ViewData.TryGetValue("selectedSet", out var selectedSet) ? selectedSet : string.Empty)">
             @foreach (var set in Model.Sets)
             {
-                <option value="@set.Id">@set.Name</option>
+                <option value="@set.Id" @((string) selectedSet == set.Id ? "selected=\"selected\"" : "")>@set.Name</option>
             }
         </select>
     </div>
@@ -30,10 +30,10 @@
 <div class="form-group">
     <label for="OaiPmhMetadataFormat" class="control-label col-md-3">@Localizer.Translate("MetadataFormat", "RepositoryImport")</label>
     <div class="col-md-8">
-        <select type="text" id="OaiPmhMetadataFormat" name="OaiPmhMetadataFormat" class="form-control">
+        <select type="text" id="OaiPmhMetadataFormat" name="OaiPmhMetadataFormat" class="form-control" value="@(ViewData.TryGetValue("selectedMetadataFormat", out var selectedFormat) ? selectedFormat : string.Empty)">
             @foreach (var metadataFormat in Model.MetadataFormats)
             {
-                <option value="@metadataFormat.MetadataPrefix">@metadataFormat.MetadataPrefix</option>
+                <option value="@metadataFormat.MetadataPrefix" @((string) selectedFormat == metadataFormat.MetadataPrefix ? "selected=\"selected\"" : "")>@metadataFormat.MetadataPrefix</option>
             }
         </select>
     </div>
