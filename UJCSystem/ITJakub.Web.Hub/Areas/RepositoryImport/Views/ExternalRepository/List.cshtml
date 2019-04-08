@@ -40,7 +40,21 @@
                                 <div class="left-panel"></div>
                                 <div class="middle-panel">
                                     <div class="heading">@repository.Name</div>
-                                    <div class="body">@repository.Description</div>
+                                    <div class="body">
+                                        @repository.Description
+                                        <div>
+                                            <b>@Localizer.Translate("RepositoryType", "RepositoryImport")</b>
+                                            @repository.ExternalRepositoryType.Name
+                                        </div>
+                                        <div>
+                                            <b>@Localizer.Translate("BibliographicFormat", "RepositoryImport")</b>
+                                            @repository.BibliographicFormat.Name
+                                        </div>
+                                        <div>
+                                            <b>@Localizer.Translate("License", "RepositoryImport")</b>
+                                            @repository.License
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="right-panel">
                                     <a class="btn btn-sm book-button button" href="@Url.Action("Update", "ExternalRepository", new {area = "RepositoryImport", id = repository.Id})">
@@ -60,18 +74,7 @@
                             <div class="bottom-panel">
                                 <div class="body">
                                     <div class="bib-table">
-                                        <div class="bib-table-row">
-                                            <div class="bib-table-cell bib-label">@Localizer.Translate("RepositoryType", "RepositoryImport")</div>
-                                            <div class="bib-table-cell">@repository.ExternalRepositoryType.Name</div>
-                                        </div>
-                                        <div class="bib-table-row">
-                                            <div class="bib-table-cell bib-label">@Localizer.Translate("BibliographicFormat", "RepositoryImport")</div>
-                                            <div class="bib-table-cell">@repository.BibliographicFormat.Name</div>
-                                        </div>
-                                        <div class="bib-table-row">
-                                            <div class="bib-table-cell bib-label">@Localizer.Translate("License", "RepositoryImport")</div>
-                                            <div class="bib-table-cell">@repository.License</div>
-                                        </div>
+                                       
                                     </div>
                                 </div>
                             </div>

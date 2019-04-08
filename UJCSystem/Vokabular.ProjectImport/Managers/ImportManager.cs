@@ -39,6 +39,8 @@ namespace Vokabular.ProjectImport.Managers
                 throw new ArgumentNullException(nameof(externalRepositoryIds));
             }
 
+            ActualProgress.Clear();
+            CancellationTokens.Clear();
             m_importList.Clear();
             m_importList = externalRepositoryIds;
             UserId = userId;

@@ -2763,6 +2763,22 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         #region ExternalRepository
 
+        public IList<ExternalRepositoryDetailContract> GetAllExternalRepositories()
+        {
+            try
+            {
+                var result = Get<IList<ExternalRepositoryDetailContract>>($"externalRepository/allExternalRepositories");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public PagedResultList<ExternalRepositoryDetailContract> GetExternalRepositoryList(int start, int count, bool fetchPageCount = false)
         {
             try
@@ -3022,7 +3038,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public IList<RepositoryImportProgressInfoContract> GetActualProgress(int externalRepositoryId)
+        public IList<RepositoryImportProgressInfoContract> GetImportStatus()
         {
             try
             {

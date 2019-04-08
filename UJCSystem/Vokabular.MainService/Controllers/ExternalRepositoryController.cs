@@ -109,6 +109,15 @@ namespace Vokabular.MainService.Controllers
             return result.List;
         }
 
+        [HttpGet("allExternalRepositories")]
+        public IList<ExternalRepositoryDetailContract> GetAllExternalRepositories()
+        {
+            m_authorizationManager.CheckUserCanManageRepositoryImport();
+
+            var result = m_externalRepositoryManager.GetAllExternalRepositories();
+            return result;
+        }
+
         [HttpDelete("{externalRepositoryId}/importStatus")]
         public IActionResult CancelImportTask(int externalRepositoryId)
         {

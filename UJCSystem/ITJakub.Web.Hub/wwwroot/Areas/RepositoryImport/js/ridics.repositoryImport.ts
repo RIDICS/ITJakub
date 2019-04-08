@@ -7,7 +7,7 @@
 });
 
 class FilteringExpressionTable {
-    init() {    
+    init() {
         $("#addFilteringExpressionRow").click(() => {
             $.ajax({
                 type: "GET",
@@ -33,7 +33,7 @@ class FilteringExpressionTable {
 }
 
 class ExternalRepositoryConfiguration {
-    init() {  
+    init() {
         $(".repository-detail").click((e) => {
             const repositoryId = $(e.target as Node as Element).data("repository-id");
             $.ajax({
@@ -41,7 +41,7 @@ class ExternalRepositoryConfiguration {
                 dataType: "html",
                 url: `${getBaseUrl()}RepositoryImport/ExternalRepository/Detail?id=${repositoryId}`,
                 success: (partialView) => {
-                    $(`#repository-${repositoryId} .bib-table:last-child`).append(partialView);
+                    $(`#repository-${repositoryId} .bib-table:last-child`).html(partialView);
                 }
             });
         });
@@ -69,7 +69,8 @@ class ExternalRepositoryConfiguration {
             const config = $(".repository-configuration").val();
             $.ajax({
                 type: "GET",
-                url: `${getBaseUrl()}RepositoryImport/ExternalRepository/OaiPmhConnect?url=${$("#OaiPmhResourceUrl").val()}&config=${config}`,
+                url: `${getBaseUrl()}RepositoryImport/ExternalRepository/OaiPmhConnect?url=${$("#OaiPmhResourceUrl")
+                    .val()}&config=${config}`,
                 dataType: "html",
                 success: (data) => {
                     $("#oaiPmhConfig").html(data);

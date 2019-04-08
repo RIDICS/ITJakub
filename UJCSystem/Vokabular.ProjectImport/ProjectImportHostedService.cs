@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Vokabular.ProjectImport.ImportPipeline;
 using Vokabular.ProjectImport.Managers;
+using Vokabular.Shared.Extensions;
 
 namespace Vokabular.ProjectImport
 {
@@ -32,23 +33,36 @@ namespace Vokabular.ProjectImport
                 var externalRepositories = await m_importManager.GetExternalRepositories(cancellationToken);
 
                 var importTasks = new List<Task>();
-                using (var scope = m_serviceProvider.CreateScope())
+                try
                 {
-                    var importPipelineManager = scope.ServiceProvider.GetRequiredService<ImportPipelineManager>();
-                    foreach (var externalRepositoryId in externalRepositories)
+                    using (var scope = m_serviceProvider.CreateScope())
                     {
-                        var cts = new CancellationTokenSource();
-                        m_importManager.CancellationTokens.TryAdd(externalRepositoryId, cts);
-                        importTasks.Add(importPipelineManager.ImportAsync(externalRepositoryId, cts.Token));
-                    }
-                    //TODO catch exceptions?
-                    await Task.WhenAll(importTasks);
-                }
+                        var importPipelineManager = scope.ServiceProvider.GetRequiredService<ImportPipelineManager>();
+                        foreach (var externalRepositoryId in externalRepositories)
+                        {
+                            var cts = new CancellationTokenSource();
+                            m_importManager.CancellationTokens.TryAdd(externalRepositoryId, cts);
+                            importTasks.Add(importPipelineManager.ImportAsync(externalRepositoryId, cts.Token));
+                        }
 
-                //TODO to finally 
-                m_importManager.IsImportRunning = false;
-                m_importManager.ActualProgress.Clear();
-                m_importManager.CancellationTokens.Clear();
+                        await Task.WhenAll(importTasks);
+                    }
+                }
+                catch (Exception e)
+                {
+                    if (m_logger.IsErrorEnabled())
+                        m_logger.LogError(e, e.Message);
+
+                    throw;
+                }
+                finally
+                {
+                    foreach (var cancellationTokenSource in m_importManager.CancellationTokens)
+                    {
+                        cancellationTokenSource.Value.Cancel();
+                    }
+                    m_importManager.IsImportRunning = false;
+                }
             }
 
             m_logger.LogInformation("Project import hosted service stopped.");

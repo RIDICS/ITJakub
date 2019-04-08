@@ -53,6 +53,15 @@ namespace Vokabular.DataEntities.Database.Repositories
             };
         }
 
+        public IList<ExternalRepository> GetAllExternalRepositories()
+        {
+            return GetSession().QueryOver<ExternalRepository>()
+                .Fetch(x => x.CreatedByUser).Eager
+                .Fetch(x => x.BibliographicFormat).Eager
+                .Fetch(x => x.ExternalRepositoryType).Eager
+                .List();
+        }
+
         public virtual IList<TotalImportStatistics> GetExternalRepositoryStatisticsList()
         {
             ExternalRepository externalRepository = null;

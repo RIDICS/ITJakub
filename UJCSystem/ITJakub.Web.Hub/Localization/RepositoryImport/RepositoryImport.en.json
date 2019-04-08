@@ -32,6 +32,10 @@
     "AdminEmailAddresses": "translate[Emailové adresy administrátorů: ]",
     "Set": "translate[Set: ]",
     "MetadataFormat": "translate[Metadatový formát: ]",
-    "Connect": "translate[Připojit]"
+    "Connect": "translate[Připojit]",
+    "ImportRunning": "translate[Probíhá import]",
+    "ImportExternalRepositoryList": "translate[Import z externích repozitářů]",
+    "CancelImportTask": "translate[Zrušit import]",
+    "Import": "translate[Importovat]"
   }
 }

@@ -6,13 +6,13 @@
 <div class="left-menu" id="left-menu">
     <div class="project-import-title">@Localizer.Translate("MenuTitle", "RepositoryImport")</div>
     <div class="list-group" id="left-menu-navigation">
-        <a href="@Url.Action("List", "ExternalRepository", new {area = "RepositoryImport"})" class="list-group-item @(Context.Request.GetDisplayUrl().Contains("ExternalRepository") ? "active" : "")" id="project-navigation-image">
+        <a href="@Url.Action("List", "ExternalRepository", new {area = "RepositoryImport"})" class="list-group-item @(Context.Request.GetDisplayUrl().Contains("ExternalRepository") ? "active" : "")">
             @Localizer.Translate("ExternalRepositoriesTitle", "RepositoryImport")
         </a>
-        <a href="@Url.Action("List", "ExternalRepository", new {area = "RepositoryImport"})" class="list-group-item @(Context.Request.GetDisplayUrl().Contains("ExternalRepository") ? "active" : "")" id="project-navigation-image">
+        <a href="@Url.Action("List", "RepositoryImport", new {area = "RepositoryImport"})" class="list-group-item @(Context.Request.GetDisplayUrl().Contains("RepositoryImport/RepositoryImport") ? "active" : "")">
             @Localizer.Translate("ImportTitle", "RepositoryImport")
         </a>
-        <a href="@Url.Action("List", "FilteringExpressionSet", new {area = "RepositoryImport"})" class="list-group-item @(Context.Request.GetDisplayUrl().Contains("FilteringExpression") ? "active" : "")" id="project-navigation-image">
+        <a href="@Url.Action("List", "FilteringExpressionSet", new {area = "RepositoryImport"})" class="list-group-item @(Context.Request.GetDisplayUrl().Contains("FilteringExpression") ? "active" : "")">
             @Localizer.Translate("FilteringSetsTitle", "RepositoryImport")
         </a>
     </div>

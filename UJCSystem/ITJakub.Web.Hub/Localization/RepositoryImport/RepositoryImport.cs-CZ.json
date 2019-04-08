@@ -6,9 +6,9 @@
     "FilteringSetsTitle": "Filtrační sety",
     "ImportTitle": "Import",
     "MenuTitle": "Nastavení",
-    "BibliographicFormat": "Bibliografický formát",
-    "RepositoryType": "Typ rozhraní repozitáře",
-    "License": "Licence",
+    "BibliographicFormat": "Bibliografický formát: ",
+    "RepositoryType": "Typ rozhraní repozitáře: ",
+    "License": "Licence: ",
     "FilteringSetList": "Seznam filtračních setů",
     "CreateFilteringSet": "Vytvoření filtračního setu",
     "UpdateFilteringSet": "Úprava filtračního setu",
@@ -32,6 +32,10 @@
     "AdminEmailAddresses": "Emailové adresy administrátorů: ",
     "Set": "Set: ",
     "MetadataFormat": "Metadatový formát: ",
-    "Connect": "Připojit"
+    "Connect": "Připojit",
+    "ImportRunning": "Probíhá import",
+    "ImportExternalRepositoryList": "Import z externích repozitářů",
+    "CancelImportTask": "Zrušit import",
+    "Import": "Importovat"
   }
 }

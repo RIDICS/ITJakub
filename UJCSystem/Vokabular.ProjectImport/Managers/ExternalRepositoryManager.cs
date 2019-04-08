@@ -57,6 +57,12 @@ namespace Vokabular.ProjectImport.Managers
             };
         }
 
+        public IList<ExternalRepositoryDetailContract> GetAllExternalRepositories()
+        {
+            var result = m_externalRepositoryRepository.InvokeUnitOfWork(x => x.GetAllExternalRepositories());
+            return Mapper.Map<IList<ExternalRepositoryDetailContract>>(result);
+        }
+
         public ExternalRepositoryStatisticsContract GetExternalRepositoryStatistics(int externalRepositoryId)
         {
             var work = new GetExternalRepositoryStatisticsWork(m_externalRepositoryRepository, externalRepositoryId);
