@@ -8,7 +8,6 @@ using Vokabular.OaiPmhImportManager.Model;
 using Vokabular.ProjectImport.Model;
 using Vokabular.ProjectParsing.Model.Entities;
 using Vokabular.Shared.Options;
-using Project = Vokabular.ProjectParsing.Model.Entities.Project;
 
 namespace Vokabular.OaiPmhImportManager
 {
@@ -64,13 +63,9 @@ namespace Vokabular.OaiPmhImportManager
             var record = (recordType) response;
             projectImportMetadata.ExternalId = record.header.identifier;
             projectImportMetadata.RawData = record.metadata.OuterXml;
+            projectImportMetadata.IsDeleted = record.header.status == statusType.deleted;
             
             return projectImportMetadata;
-        }
-
-        public Project ImportRecord(string configuration, string id)
-        {
-            throw new NotImplementedException();
         }
     }
 }

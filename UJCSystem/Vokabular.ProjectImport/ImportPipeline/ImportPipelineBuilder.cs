@@ -61,8 +61,9 @@ namespace Vokabular.ProjectImport.ImportPipeline
             var linkOptions = new DataflowLinkOptions {PropagateCompletion = true};
 
             bufferBlock.LinkTo(responseParserBlock, linkOptions);
-            responseParserBlock.LinkTo(filterBlock, linkOptions);
-            filterBlock.LinkTo(projectParserBlock, linkOptions, projectMetadata => projectMetadata.IsSuitable);
+            responseParserBlock.LinkTo(filterBlock, linkOptions, importedRecord => !importedRecord.IsDeleted);
+            responseParserBlock.LinkTo(nullTargetBlock, linkOptions);
+            filterBlock.LinkTo(projectParserBlock, linkOptions, importedRecord => importedRecord.IsSuitable);
             filterBlock.LinkTo(nullTargetBlock, linkOptions);
             projectParserBlock.LinkTo(saveBlock, linkOptions);
 

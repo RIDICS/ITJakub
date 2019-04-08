@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using Vokabular.ProjectParsing.Model.Entities;
-using Project = Vokabular.ProjectParsing.Model.Entities.Project;
 
 namespace Vokabular.ProjectImport.Model
 {
@@ -11,9 +10,8 @@ namespace Vokabular.ProjectImport.Model
     {
         string ExternalRepositoryTypeName { get; }
 
-        Task ImportFromResource(string repository, ITargetBlock<object> buffer, RepositoryImportProgressInfo progressInfo, DateTime? lastImport = null, CancellationToken cancellationToken = default(CancellationToken));
-
-        Project ImportRecord(string repository, string id);
+        Task ImportFromResource(string repository, ITargetBlock<object> buffer, RepositoryImportProgressInfo progressInfo,
+            DateTime? lastImport = null, CancellationToken cancellationToken = default(CancellationToken));
 
         ImportedRecord ParseResponse(object response);
     }

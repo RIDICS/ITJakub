@@ -12,6 +12,8 @@
 
         public bool IsFailed { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public string FaultedMessage { get; set; }
 
         public Project Project { get; set; }
