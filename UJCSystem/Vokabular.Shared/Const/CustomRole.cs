@@ -13,5 +13,6 @@ namespace Vokabular.Shared.Const
         public const string CanEditionPrint = "CanEditionPrint";
         public const string CanEditStaticText = "CanEditStaticText";
         public const string CanManageRepositoryImport = "CanManageRepositoryImport";
+        public const string CanReadExternalProject = "CanReadExternalProject";
     }
 }

@@ -11,15 +11,17 @@ namespace Vokabular.ProjectImport.Managers
         private readonly PersonRepository m_personRepository;
         private readonly MetadataRepository m_metadataRepository;
         private readonly ImportedProjectMetadataManager m_importedProjectMetadataManager;
+        private readonly PermissionRepository m_permissionRepository;
 
         public ProjectManager(ProjectRepository projectRepository, CatalogValueRepository catalogValueRepository,
-            PersonRepository personRepository, MetadataRepository metadataRepository, ImportedProjectMetadataManager importedProjectMetadataManager)
+            PersonRepository personRepository, MetadataRepository metadataRepository, ImportedProjectMetadataManager importedProjectMetadataManager, PermissionRepository permissionRepository)
         {
             m_projectRepository = projectRepository;
             m_catalogValueRepository = catalogValueRepository;
             m_personRepository = personRepository;
             m_metadataRepository = metadataRepository;
             m_importedProjectMetadataManager = importedProjectMetadataManager;
+            m_permissionRepository = permissionRepository;
         }
 
         public void SaveImportedProject(ImportedRecord importedRecord, int userId, int externalRepositoryId)
@@ -34,6 +36,7 @@ namespace Vokabular.ProjectImport.Managers
             }
 
             CreateProjectMetadata(importedRecord, userId);
+            new ProcessExternalImportPermissionWork(m_permissionRepository, importedRecord.ProjectId).Execute();
         }
 
         private long CreateProject(ImportedRecord importedRecord, int userId)

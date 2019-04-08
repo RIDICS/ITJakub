@@ -159,5 +159,15 @@ namespace Vokabular.DataEntities.Database.Entities
         }
 
         public virtual bool CanManageRepositoryImport { get; set; }
+    } 
+    
+    public class ReadExternalProjectPermission : SpecialPermission
+    {
+        public ReadExternalProjectPermission()
+        {
+            PermissionCategorization = SpecialPermissionCategorization.Action;
+        }
+
+        public virtual bool CanReadExternalProject { get; set; }
     }
 }

@@ -100,5 +100,12 @@ namespace Vokabular.MainService.DataContracts.Contracts.Permission
         public override SpecialPermissionTypeContract Key => SpecialPermissionTypeContract.ManagerRepositoryImport;
 
         public bool CanManagerRepositoryImport { get; set; }
+    } 
+    
+    public class ReadExternalProjectPermissionContract : SpecialPermissionContract
+    {
+        public override SpecialPermissionTypeContract Key => SpecialPermissionTypeContract.ManagerRepositoryImport;
+
+        public bool CanReadExternalProject { get; set; }
     }
 }

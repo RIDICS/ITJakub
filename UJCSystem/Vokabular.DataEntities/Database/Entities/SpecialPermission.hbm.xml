@@ -103,6 +103,12 @@
       <property name="CanManageRepositoryImport" not-null="true" />
 
     </subclass>
+
+    <subclass name="ReadExternalProjectPermission" discriminator-value="ReadExternalProject">
+
+      <property name="CanReadExternalProject" not-null="true" />
+
+    </subclass>
     
   </class>
 </hibernate-mapping>

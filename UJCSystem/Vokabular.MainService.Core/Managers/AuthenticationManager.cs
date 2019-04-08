@@ -149,6 +149,11 @@ namespace Vokabular.MainService.Core.Managers
                 roles.Add(CustomRole.CanManageRepositoryImport);
             }
 
+            if (actionSpecialPermissions.OfType<ReadExternalProjectPermission>().Count() != 0)
+            {
+                roles.Add(CustomRole.CanReadExternalProject);
+            }
+
             return roles;
         }
     }
