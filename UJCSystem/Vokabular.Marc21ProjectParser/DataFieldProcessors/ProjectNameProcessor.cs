@@ -19,15 +19,15 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
                 return;
             }
 
-            project.Name = projectSubfield.Value;
+            project.ProjectMetadata.Title = projectSubfield.Value;
             var nameSecondLine = dataField.subfield.FirstOrDefault(x => x.code == ProjectNameSecondLineCode);
 
             if (nameSecondLine != null)
             {
-                project.Name = string.Concat(project.Name, " ", nameSecondLine.Value);
+                project.ProjectMetadata.Title= string.Concat(project.ProjectMetadata.Title, " ", nameSecondLine.Value);
             }
 
-            project.Name = project.Name.RemoveUnnecessaryCharacters();
+            project.ProjectMetadata.Title = project.ProjectMetadata.Title.RemoveUnnecessaryCharacters();
         }
     }
 }

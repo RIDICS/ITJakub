@@ -63,7 +63,7 @@ namespace Vokabular.OaiPmhImportManager
             var record = (recordType) response;
             projectImportMetadata.ExternalId = record.header.identifier;
             projectImportMetadata.RawData = record.metadata.OuterXml;
-            projectImportMetadata.IsDeleted = record.header.status == statusType.deleted;
+            projectImportMetadata.IsDeleted = record.header.statusSpecified;
             
             return projectImportMetadata;
         }

@@ -18,7 +18,7 @@ namespace Vokabular.ProjectImport.Works
 
         protected override void ExecuteWorkImplementation()
         {
-            var specialPermissions = m_permissionRepository.InvokeUnitOfWork(x => x.GetSpecialPermissions());
+            var specialPermissions = m_permissionRepository.GetSpecialPermissions();
             var importPermissions = specialPermissions.OfType<ReadExternalProjectPermission>();
 
             var groupsWithPermission = m_permissionRepository.GetGroupsBySpecialPermissionIds(importPermissions.Select(x => x.Id));

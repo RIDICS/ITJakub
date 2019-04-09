@@ -4,8 +4,6 @@ namespace Vokabular.ProjectParsing.Model.Entities
 {
     public class Project
     {
-        public string Name { get; set; }
-
         public HashSet<Author> Authors { get; set; }
 
         public IList<string> Keywords { get; set; }

@@ -192,7 +192,7 @@ namespace Vokabular.OaiPmhImportManager
 
                     if (currentRetry > m_retryCount)
                     {
-                        throw new ImportFailedException($"Error while requesting: {uriBuilder.Uri}", e);
+                        throw new ImportFailedException($"Error while requesting: {uriBuilder.Uri}. Error message: {e.Message}", e);
                     }
                 }
 

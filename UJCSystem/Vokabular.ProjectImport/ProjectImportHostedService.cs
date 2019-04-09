@@ -48,12 +48,15 @@ namespace Vokabular.ProjectImport
                         await Task.WhenAll(importTasks);
                     }
                 }
+                catch (OperationCanceledException e)
+                {
+                    if (m_logger.IsErrorEnabled())
+                        m_logger.LogError(e, e.Message);
+                }
                 catch (Exception e)
                 {
                     if (m_logger.IsErrorEnabled())
                         m_logger.LogError(e, e.Message);
-
-                    throw;
                 }
                 finally
                 {

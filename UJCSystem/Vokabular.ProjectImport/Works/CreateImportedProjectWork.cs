@@ -27,7 +27,7 @@ namespace Vokabular.ProjectImport.Works
 
             var project = new Project
             {
-                Name = m_metadata.Project.Name,
+                Name = m_metadata.Project.ProjectMetadata.Title,
                 CreateTime = now,
                 CreatedByUser = user
             };
