@@ -145,6 +145,7 @@ namespace Vokabular.ProjectImport.ImportPipeline
             RepositoryImportProgressInfo progressInfo, ExecutionDataflowBlockOptions executionOptions)
         {
             int bookTypeId;
+            IList<int> groupsWithPermissionIds;
             using (var scope = m_serviceProvider.CreateScope())
             {
                 var projectRepository = scope.ServiceProvider.GetRequiredService<ProjectRepository>();
@@ -154,7 +155,7 @@ namespace Vokabular.ProjectImport.ImportPipeline
                 var specialPermissions = permissionRepository.InvokeUnitOfWork(x => x.GetSpecialPermissions());
                 var importPermissions = specialPermissions.OfType<ReadExternalProjectPermission>();
                 
-                var groupsWithPermissionIds = permissionRepository.InvokeUnitOfWork(x => x.GetGroupsBySpecialPermissionIds(importPermissions.Select(y => y.Id))).Select(x => x.Id).ToList();
+                groupsWithPermissionIds = permissionRepository.InvokeUnitOfWork(x => x.GetGroupsBySpecialPermissionIds(importPermissions.Select(y => y.Id))).Select(x => x.Id).ToList();
             }
 
             return new ActionBlock<ImportedRecord>(importedRecord =>
@@ -172,7 +173,7 @@ namespace Vokabular.ProjectImport.ImportPipeline
                             }
                             else
                             {
-                                projectManager.SaveImportedProject(importedRecord, userId, externalRepositoryId, bookTypeId);
+                                projectManager.SaveImportedProject(importedRecord, userId, externalRepositoryId, bookTypeId, groupsWithPermissionIds);
                             }
                         }
                         catch (DataException e)
