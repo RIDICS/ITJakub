@@ -22,6 +22,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.FilteringExpressionSet, () => setAlias)
                 .JoinAlias(() => setAlias.ExternalRepositories, () => repositoryAlias)
                 .Where(() => repositoryAlias.Id == externalRepositoryId)
+                .OrderBy(x => x.Id).Asc
                 .List();
         }
 
@@ -30,7 +31,8 @@ namespace Vokabular.DataEntities.Database.Repositories
             var query = GetSession().QueryOver<FilteringExpressionSet>()
                 .Fetch(x => x.BibliographicFormat).Eager;
 
-            var list = query.Skip(start)
+            var list = query.OrderBy(x => x.Name).Asc
+                .Skip(start)
                 .Take(count)
                 .Future();
 

@@ -29,6 +29,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         public virtual IList<ExternalRepositoryType> GetAllExternalRepositoryTypes()
         {
             return GetSession().QueryOver<ExternalRepositoryType>()
+                .OrderBy(x => x.Name).Asc
                 .List();
         }
 
@@ -39,7 +40,8 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Fetch(x => x.BibliographicFormat).Eager
                 .Fetch(x => x.ExternalRepositoryType).Eager;
 
-            var list = query.Skip(start)
+            var list = query.OrderBy(x => x.Name).Asc
+                .Skip(start)
                 .Take(count)
                 .Future();
 
@@ -59,24 +61,8 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Fetch(x => x.CreatedByUser).Eager
                 .Fetch(x => x.BibliographicFormat).Eager
                 .Fetch(x => x.ExternalRepositoryType).Eager
+                .OrderBy(x => x.Name).Asc
                 .List();
-        }
-
-        public virtual IList<TotalImportStatistics> GetExternalRepositoryStatisticsList()
-        {
-            ExternalRepository externalRepository = null;
-            ImportedProjectMetadata importedProjectMetadata = null;
-            TotalImportStatistics totalImportStatistics = null;
-
-            var result = GetSession().QueryOver(() => externalRepository)
-                .JoinAlias(x => x.ImportedProjectMetadata, () => importedProjectMetadata, JoinType.LeftOuterJoin)
-                .SelectList(list => list
-                    .SelectGroup(() => externalRepository.Id).WithAlias(() => totalImportStatistics.RepositoryId)
-                    .SelectCount(() => importedProjectMetadata.Id).WithAlias(() => totalImportStatistics.NewItems))
-                .TransformUsing(Transformers.AliasToBean<TotalImportStatistics>())
-                .List<TotalImportStatistics>();
-
-            return result;
         }
 
         public virtual TotalImportStatistics GetExternalRepositoryStatistics(int repositoryId)
