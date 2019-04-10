@@ -18,25 +18,39 @@ namespace Vokabular.ProjectImport.Works
         private readonly CatalogValueRepository m_catalogValueRepository;
         private readonly PersonRepository m_personRepository;
         private readonly ImportedRecord m_importedRecord;
+        private readonly PermissionRepository m_permissionRepository;
         private readonly int m_userId;
-        private readonly long m_projectId;
+        private readonly int m_externalRepositoryId;
+        private long m_projectId;
+        private readonly int m_bookTypeId;
+        private readonly IList<int> m_groupsWithPermission;
 
 
         public SaveImportedDataWork(ProjectRepository projectRepository, MetadataRepository metadataRepository,
-            CatalogValueRepository catalogValueRepository, PersonRepository personRepository, ImportedRecord importedRecord,
-            int userId) : base(projectRepository)
+            CatalogValueRepository catalogValueRepository, PersonRepository personRepository, PermissionRepository permissionRepository,
+            ImportedRecord importedRecord, int userId, int externalRepositoryId, int bookTypeId, IList<int> groupsWithPermission) : base(projectRepository)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
             m_catalogValueRepository = catalogValueRepository;
             m_personRepository = personRepository;
+            m_permissionRepository = permissionRepository;
             m_importedRecord = importedRecord;
             m_userId = userId;
-            m_projectId = importedRecord.ProjectId;
+            m_externalRepositoryId = externalRepositoryId;
+            m_bookTypeId = bookTypeId;
+            m_groupsWithPermission = groupsWithPermission;
         }
 
         protected override void ExecuteWorkImplementation()
         {
+            if (m_importedRecord.IsNew)
+            {
+                m_importedRecord.ProjectId = CreateProject();
+                m_importedRecord.ImportedProjectMetadataId = CreateImportedProjectMetadata();
+            }
+
+            m_projectId = m_importedRecord.ProjectId;
             var project = m_metadataRepository.GetAdditionalProjectMetadata(m_projectId, true, false, false, true, true, true, false);
 
             UpdateLiteraryGenres(project);
@@ -47,7 +61,39 @@ namespace Vokabular.ProjectImport.Works
 
             UpdateAuthors(project.Authors);
             UpdateMetadata(project);
-            UpdateHistoryLog(project);
+
+            CreateSnapshot();
+            ProcessExternalImportPermission();
+        }
+
+        private int CreateImportedProjectMetadata()
+        {
+            var project = m_projectRepository.Load<Project>(m_importedRecord.ProjectId);
+            var externalRepository = m_projectRepository.Load<ExternalRepository>(m_externalRepositoryId);
+
+            var importedProjectMetadata = new ImportedProjectMetadata
+            {
+                ExternalId = m_importedRecord.ExternalId,
+                Project = project,
+                ExternalRepository = externalRepository
+            };
+
+            return (int)m_projectRepository.Create(importedProjectMetadata);
+        }
+
+        private long CreateProject()
+        {
+            var now = DateTime.UtcNow;
+            var user = m_projectRepository.Load<User>(m_userId);
+
+            var project = new Project
+            {
+                Name = m_importedRecord.Project.ProjectMetadata.Title,
+                CreateTime = now,
+                CreatedByUser = user
+            };
+
+            return (long)m_projectRepository.Create(project);
         }
 
         private void UpdateMetadata(Project project)
@@ -113,19 +159,6 @@ namespace Vokabular.ProjectImport.Works
             }
 
             m_metadataRepository.Create(metadata);
-        }
-
-        private void UpdateHistoryLog(Project project)
-        {
-            var newLog = new FullProjectImportLog
-            {
-                Project = project,
-                CreateTime = DateTime.UtcNow,
-                ExternalId = m_importedRecord.ExternalId,
-                Text = "New book metadata import from external repository",
-                User = m_projectRepository.Load<User>(m_userId)
-            };
-            m_projectRepository.Create(newLog);
         }
 
         private void UpdateKeywords(Project project)
@@ -274,6 +307,48 @@ namespace Vokabular.ProjectImport.Works
             newDbAuthor = m_projectRepository.Load<OriginalAuthor>(newDbAuthor.Id);
 
             return newDbAuthor;
+        }
+
+        private void CreateSnapshot()
+        {
+            var now = DateTime.UtcNow;
+            var user = m_projectRepository.Load<User>(m_userId);
+            var project = m_projectRepository.Load<Project>(m_projectId);
+            var latestSnapshot = m_projectRepository.GetLatestSnapshot(m_projectId);
+            var dbBookType = m_projectRepository.Load<BookType>(m_bookTypeId);
+
+            var versionNumber = latestSnapshot?.VersionNumber ?? 0;
+            var newDbSnapshot = new Snapshot
+            {
+                Project = project,
+                BookTypes = new List<BookType> { dbBookType },
+                DefaultBookType = dbBookType,
+                CreateTime = now,
+                PublishTime = now,
+                CreatedByUser = user,
+                VersionNumber = versionNumber + 1
+            };
+
+            m_projectRepository.Create(newDbSnapshot);
+
+            project.LatestPublishedSnapshot = newDbSnapshot;
+            m_projectRepository.Update(project);
+        }
+
+        private void ProcessExternalImportPermission()
+        {
+            var project = m_permissionRepository.Load<Project>(m_projectId);
+
+            var newPermissions = m_groupsWithPermission.Select(groupId => new Permission
+            {
+                Project = project,
+                UserGroup = m_projectRepository.Load<UserGroup>(groupId)
+            });
+
+            foreach (var newPermission in newPermissions)
+            {
+                m_permissionRepository.CreatePermissionIfNotExist(newPermission);
+            }
         }
     }
 }

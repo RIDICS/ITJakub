@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks.Dataflow;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
+using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
@@ -139,6 +144,19 @@ namespace Vokabular.ProjectImport.ImportPipeline
         public ActionBlock<ImportedRecord> BuildSaveBlock(int userId, int importHistoryId, int externalRepositoryId,
             RepositoryImportProgressInfo progressInfo, ExecutionDataflowBlockOptions executionOptions)
         {
+            int bookTypeId;
+            using (var scope = m_serviceProvider.CreateScope())
+            {
+                var projectRepository = scope.ServiceProvider.GetRequiredService<ProjectRepository>();
+                bookTypeId = projectRepository.InvokeUnitOfWork(x => x.GetBookTypeByEnum(BookTypeEnum.BibliographicalItem)).Id;
+
+                var permissionRepository = scope.ServiceProvider.GetRequiredService<PermissionRepository>();
+                var specialPermissions = permissionRepository.InvokeUnitOfWork(x => x.GetSpecialPermissions());
+                var importPermissions = specialPermissions.OfType<ReadExternalProjectPermission>();
+                
+                var groupsWithPermissionIds = permissionRepository.InvokeUnitOfWork(x => x.GetGroupsBySpecialPermissionIds(importPermissions.Select(y => y.Id))).Select(x => x.Id).ToList();
+            }
+
             return new ActionBlock<ImportedRecord>(importedRecord =>
                 {
                     using (var scope = m_serviceProvider.CreateScope())
@@ -154,7 +172,7 @@ namespace Vokabular.ProjectImport.ImportPipeline
                             }
                             else
                             {
-                                projectManager.SaveImportedProject(importedRecord, userId, externalRepositoryId);
+                                projectManager.SaveImportedProject(importedRecord, userId, externalRepositoryId, bookTypeId);
                             }
                         }
                         catch (DataException e)
