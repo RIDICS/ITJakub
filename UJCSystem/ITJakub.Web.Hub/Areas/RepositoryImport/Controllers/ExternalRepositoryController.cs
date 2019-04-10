@@ -208,6 +208,11 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
 
         private void SetConfiguration(string apiType, string configuration)
         {
+            if (string.IsNullOrEmpty(configuration))
+            {
+                return;
+            }
+
             switch (apiType)
             {
                 case OaiPmh:

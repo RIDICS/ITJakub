@@ -26,7 +26,7 @@
     "TotalItemsInLastUpdate": "Celkem položek: ",
     "NewItemsInLastUpdate": "Nových položek: ",
     "UpdatedItemsInLastUpdate": "Aktualizovaných položek: ",
-    "RepositoryUrl": "URL repozitáře: " ,
+    "RepositoryUrl": "URL repozitáře: ",
     "Name": "Název: ",
     "Description": "Popis: ",
     "AdminEmailAddresses": "Emailové adresy administrátorů: ",
@@ -35,6 +35,7 @@
     "Connect": "Připojit",
     "ImportRunning": "Probíhá import",
     "ImportExternalRepositoryList": "Import z externích repozitářů",
+    "ImportStatusLoading": "Načítání informací o průběhu import",
     "CancelImportTask": "Zrušit import",
     "Import": "Importovat"
   }

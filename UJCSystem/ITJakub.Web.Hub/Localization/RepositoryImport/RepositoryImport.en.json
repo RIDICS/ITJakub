@@ -26,7 +26,7 @@
     "TotalItemsInLastUpdate": "translate[Celkem položek: ]",
     "NewItemsInLastUpdate": "translate[Nových položek: ]",
     "UpdatedItemsInLastUpdate": "translate[Aktualizovaných položek: ]",
-    "RepositoryUrl": "translate[URL repozitáře: ]" ,
+    "RepositoryUrl": "translate[URL repozitáře: ]",
     "Name": "translate[Název: ]",
     "Description": "translate[Popis: ]",
     "AdminEmailAddresses": "translate[Emailové adresy administrátorů: ]",
@@ -35,6 +35,7 @@
     "Connect": "translate[Připojit]",
     "ImportRunning": "translate[Probíhá import]",
     "ImportExternalRepositoryList": "translate[Import z externích repozitářů]",
+    "ImportStatusLoading": "translate[Načítání informací o průběhu import]",
     "CancelImportTask": "translate[Zrušit import]",
     "Import": "translate[Importovat]"
   }

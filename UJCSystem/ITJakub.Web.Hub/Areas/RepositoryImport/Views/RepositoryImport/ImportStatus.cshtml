@@ -41,7 +41,9 @@
                         </div>
                         <div class="row">
                             <div class="col-md-10">
-                                <div id="alert-@repository.Id" class="alert alert-info import-alert" role="alert"></div>
+                                <div id="alert-@repository.Id" class="alert alert-info import-alert" role="alert">
+                                    @Localizer.Translate("ImportStatusLoading", "RepositoryImport", LocTranslationSource.File)
+                                </div>
                             </div>
                             <div class="col-md-2">
                                 <a class="btn btn-default cancel-import-button" data-id="@repository.Id">

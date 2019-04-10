@@ -4,6 +4,9 @@
 
     var externalRepositoryConfiguration = new ExternalRepositoryConfiguration();
     externalRepositoryConfiguration.init();
+
+    var externalRepositoryImportList = new ExternalRepositoryImportList();
+    externalRepositoryImportList.init();
 });
 
 class FilteringExpressionTable {
@@ -76,6 +79,29 @@ class ExternalRepositoryConfiguration {
                     $("#oaiPmhConfig").html(data);
                 }
             });
+        });
+    }
+}
+
+class ExternalRepositoryImportList {
+    init() {
+        const checkboxes = $(".repositories input:checkbox");
+
+        $("#select-all-repositories").click(() => {
+            if ($(".repositories input:checkbox:not(:checked)").length > 0) {
+                checkboxes.prop('checked', true);
+            } else {
+                checkboxes.prop('checked', false);
+            }
+        });
+            
+        checkboxes.click(() => {
+            const button = $("#start-import-btn");
+            if ($(".repositories input:checkbox:checked").length > 0) {
+                button.removeClass("disabled");
+            } else {
+                button.addClass("disabled");
+            }
         });
     }
 }

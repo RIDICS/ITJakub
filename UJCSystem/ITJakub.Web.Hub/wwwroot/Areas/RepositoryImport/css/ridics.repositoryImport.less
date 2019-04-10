@@ -22,21 +22,78 @@
     display: none;
 }
 
-ul.bib-listing li.list-item .collapse .bottom-panel .body {
-    padding: 0;
+ul.bib-listing li.list-item {
+    .visible-content {
+        border-top: 1px solid #E5E5E5;
+    }
+
+    .hidden-content {
+        border-top: none;
+        border-bottom: 1px solid #E5E5E5;
+        display: inherit;
+        overflow-y: hidden;
+    }
+
+    .collapse .bottom-panel {
+        border-right: 1px solid #E5E5E5;
+
+        .body {
+            padding: 0;
+        }
+    }
+
+    .collapse.in .bottom-panel .body {
+        padding: 1rem;
+    }
+
+    .right-panel .checkbox {
+        label {
+            padding-left: 8px;  
+            
+            &:after {
+            content: '';
+            display: table;
+            clear: both;
+            }
+        }
+
+        .cr {
+            position: relative;
+            display: inline-block;
+            border: 1px solid white;
+            width: 1.5em;
+            height: 1.5em;
+            float: left;
+            margin-right: .5em;
+
+            .cr-icon {
+                position: absolute;
+                color: white;
+                font-size: 1.1em;
+                line-height: 0;
+                top: 50%;
+                left: 14%;
+            }
+        }
+
+        input[type="checkbox"] {
+            display: none;
+        }
+
+        input[type="checkbox"] + .cr > .cr-icon {
+            opacity: 0;
+        }
+
+        input[type="checkbox"]:checked + .cr > .cr-icon {
+            opacity: 1;
+        }
+
+        input[type="checkbox"]:disabled + .cr {
+            opacity: .5;
+        }
+    }
 }
 
-ul.bib-listing li.list-item .collapse.in .bottom-panel .body {
-    padding: 1rem;
-}
-
-
-ul.bib-listing li.list-item .hidden-content {
-    border-top: none;
-    border-bottom: 1px solid #E5E5E5;
-    display: inherit;
-    overflow-y: hidden;
-}
 
 .import-alert {
     word-break: break-all;
@@ -95,7 +152,7 @@ ul.bib-listing li.list-item .hidden-content {
         width: 100%;
     }
 
-    .create-btn {
+    .right-align-btn {
         text-align: right;
         float: right;
         padding-bottom: 10px;
@@ -259,96 +316,6 @@ ul.bib-listing li.list-item .hidden-content {
     }
 
     @page-list-panel-height: 470px;
-
-   /* .project-pages-dialog {
-
-        .page-list-actions-row {
-            margin-top: 5px;
-        }
-
-        .left-panel {
-            height: @page-list-panel-height + 40px;
-
-            select {
-                height: @page-list-panel-height;
-            }
-
-            button {
-                margin-top: 8px;
-            }
-
-
-            .page-list-container {
-                height: inherit;
-                width: 100%;
-
-                .page-list-edit-textarea {
-                    height: inherit;
-                    width: inherit;
-                }
-
-                .page-list {
-                    list-style-type: none;
-                    overflow-y: auto;
-                    height: inherit;
-                    padding-left: 0;
-
-                    .ui-selected {
-                        background: @page-list-element-selected-color;
-                        color: white;
-                    }
-
-                    .ui-selecting {
-                        background: @page-list-element-selecting-color;
-                        color: white;
-                    }
-
-                    .page-list-item {
-                        min-height: 20px; //some pages don't have a name
-                    }
-                }
-            }
-        }
-
-        .right-panel {
-            height: @page-list-panel-height;
-
-            .page-list-editor-controls-label {
-                margin-left: 5px;
-            }
-
-            .generate-list-inputs {
-
-                .generate-list-numberic-input-group {
-                    margin-top: 2px;
-                    margin-bottom: 2px;
-
-                    &-heading {
-                        margin-top: 2px;
-                        margin-bottom: 4px;
-                    }
-                }
-
-                .generate-list-from-book-input-group {
-                    margin-top: 10px;
-                    margin-bottom: 4px;
-                }
-            }
-        }
-
-        .control-label {
-            font-weight: normal;
-        }
-
-        .form-group {
-            margin-bottom: 7px;
-        }
-
-        .bottom-buttons button {
-            margin-top: 3px;
-        }
-    }*/
-
 
     table {
         select {
