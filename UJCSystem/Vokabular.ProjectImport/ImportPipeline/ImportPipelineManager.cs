@@ -40,14 +40,15 @@ namespace Vokabular.ProjectImport.ImportPipeline
 
         public async Task ImportAsync(int externalRepositoryId, CancellationToken cancellationToken)
         {
-            var progressInfo = new RepositoryImportProgressInfo(externalRepositoryId);
+            var externalRepository = m_externalRepositoryManager.GetExternalRepository(externalRepositoryId);
+            var progressInfo = new RepositoryImportProgressInfo(externalRepositoryId, externalRepository.Name);
             m_importManager.ActualProgress.TryAdd(externalRepositoryId, progressInfo);
 
             var latestImportHistory = m_importHistoryManager.GetLatestSuccessfulImportHistory(externalRepositoryId);
 
             var importHistoryId = m_importHistoryManager.CreateImportHistory(externalRepositoryId, m_importManager.UserId);
 
-            var externalRepository = m_externalRepositoryManager.GetExternalRepository(externalRepositoryId);
+            
 
             ImportPipeline importPipeline = null;
 

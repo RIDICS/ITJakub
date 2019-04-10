@@ -10,6 +10,7 @@ namespace Vokabular.ProjectImport.AutoMapperProfiles
         {
             CreateMap<RepositoryImportProgressInfo, RepositoryImportProgressInfoContract> ()
                 .ForMember(dest => dest.ExternalRepositoryId, opt => opt.MapFrom(src => src.ExternalRepositoryId))
+                .ForMember(dest => dest.ExternalRepositoryName, opt => opt.MapFrom(src => src.ExternalRepositoryName))
                 .ForMember(dest => dest.FailedProjectsCount, opt => opt.MapFrom(src => src.FailedProjectsCount))
                 .ForMember(dest => dest.FaultedMessage, opt => opt.MapFrom(src => src.FaultedMessage))
                 .ForMember(dest => dest.IsCompleted, opt => opt.MapFrom(src => src.IsCompleted))
