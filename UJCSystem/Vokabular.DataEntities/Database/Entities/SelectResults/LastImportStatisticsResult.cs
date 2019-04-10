@@ -9,5 +9,7 @@ namespace Vokabular.DataEntities.Database.Entities.SelectResults
         public int UpdatedItems { get; set; }
 
         public int FailedItems { get; set; }
+        
+        public User UpdatedByUser { get; set; }
     }
 }

@@ -20,5 +20,14 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Take(1)
                 .SingleOrDefault();
         }
+
+        public ImportHistory GetLastImportHistory(int externalRepositoryId)
+        {
+            return GetSession().QueryOver<ImportHistory>()
+                .Where(x => x.ExternalRepository.Id == externalRepositoryId)
+                .OrderBy(x => x.Date).Desc
+                .Take(1)
+                .SingleOrDefault();
+        }
     }
 }

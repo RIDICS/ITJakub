@@ -1,3 +1,5 @@
+using System;
+
 namespace Vokabular.MainService.DataContracts.Contracts
 {
     public class ExternalRepositoryContract
@@ -31,5 +33,11 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public int NewItemsInLastUpdate { get; set; }
 
         public int UpdatedItemsInLastUpdate { get; set; }
+
+        public DateTime LastUpdateDate { get; set; }
+
+        public UserContract UpdatedBy { get; set; }
+        
+        public bool IsSuccessful { get; set; }
     }
 }

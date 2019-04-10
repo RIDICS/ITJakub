@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Vokabular.DataEntities.Database.Entities.SelectResults;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -14,12 +14,14 @@ namespace Vokabular.ProjectImport.Managers
     public class ExternalRepositoryManager
     {
         private readonly ExternalRepositoryRepository m_externalRepositoryRepository;
+        private readonly ImportHistoryRepository m_importHistoryRepository;
         private readonly CommunicationManager m_communicationManager;
 
-        public ExternalRepositoryManager(ExternalRepositoryRepository externalRepositoryRepository,
+        public ExternalRepositoryManager(ExternalRepositoryRepository externalRepositoryRepository, ImportHistoryRepository importHistoryRepository,
             CommunicationManager communicationManager)
         {
             m_externalRepositoryRepository = externalRepositoryRepository;
+            m_importHistoryRepository = importHistoryRepository;
             m_communicationManager = communicationManager;
         }
 
@@ -65,14 +67,17 @@ namespace Vokabular.ProjectImport.Managers
 
         public ExternalRepositoryStatisticsContract GetExternalRepositoryStatistics(int externalRepositoryId)
         {
-            var work = new GetExternalRepositoryStatisticsWork(m_externalRepositoryRepository, externalRepositoryId);
+            var work = new GetExternalRepositoryStatisticsWork(m_externalRepositoryRepository, m_importHistoryRepository,externalRepositoryId);
             work.Execute();
             return new ExternalRepositoryStatisticsContract
             {
                 TotalImportedItems = work.TotalImportStatistics.NewItems,
                 TotalItemsInLastUpdate = work.LastImportStatisticsResult.TotalItems,
                 NewItemsInLastUpdate = work.LastImportStatisticsResult.NewItems,
-                UpdatedItemsInLastUpdate = work.LastImportStatisticsResult.UpdatedItems
+                UpdatedItemsInLastUpdate = work.LastImportStatisticsResult.UpdatedItems,
+                UpdatedBy = Mapper.Map<UserContract>(work.LastImportHistory.CreatedByUser),
+                LastUpdateDate = work.LastImportHistory.Date,
+                IsSuccessful = work.LastImportHistory.Status != ImportStatusEnum.Failed
             };
         }
 

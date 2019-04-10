@@ -9,7 +9,15 @@
 </div>
 
 <div class="bib-table-row">
-    <div class="bib-table-cell bib-label">@Localizer.Translate("LastImport", "RepositoryImport")</div>
+    <div class="bib-table-cell bib-label">@Localizer.Translate("LastImport", "RepositoryImport") @Model.LastUpdateDate</div>
+</div>
+<div class="bib-table-row">
+    <div class="bib-table-cell bib-label">@Localizer.Translate("LastUpdateBy", "RepositoryImport")</div>
+    <div class="bib-table-cell">@Model.UpdatedBy.FirstName @Model.UpdatedBy.LastName</div>
+</div>)
+<div class="bib-table-row">
+    <div class="bib-table-cell bib-label">@(Model.IsSuccessful ? Localizer.Translate("UnsuccessfulLastImport", "RepositoryImport")
+                                                : Localizer.Translate("SuccessfulLastImport", "RepositoryImport"))</div>
 </div>
 <div class="bib-table-row">
     <div class="bib-table-cell bib-label">@Localizer.Translate("TotalItemsInLastUpdate", "RepositoryImport")</div>

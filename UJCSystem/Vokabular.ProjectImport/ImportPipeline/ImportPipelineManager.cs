@@ -106,8 +106,15 @@ namespace Vokabular.ProjectImport.ImportPipeline
             {
                 progressInfo.IsCompleted = true;
                 var importHistory = m_importHistoryManager.GetImportHistory(importHistoryId);
+                m_importManager.CancellationTokens.TryGetValue(externalRepositoryId, out var cancellationTokenSource);
 
-                if (!string.IsNullOrEmpty(progressInfo.FaultedMessage))
+                if (cancellationTokenSource != null && cancellationTokenSource.IsCancellationRequested)
+                {
+                    progressInfo.FaultedMessage = $"Error occurred executing import task (import from repository {externalRepository.Name}). Error message: Import was cancelled.";
+                    importHistory.Message = progressInfo.FaultedMessage;
+                    importHistory.Status = ImportStatusEnum.Failed;
+                }
+                else if (!string.IsNullOrEmpty(progressInfo.FaultedMessage))
                 {
                     progressInfo.FaultedMessage = $"Error occurred executing import task (import from repository {externalRepository.Name}). Error message: {progressInfo.FaultedMessage}";
                     importHistory.Message = progressInfo.FaultedMessage;

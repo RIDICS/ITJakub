@@ -10,17 +10,22 @@ namespace Vokabular.ProjectImport.Works.ExternalRepositoryManagement
     public class GetExternalRepositoryStatisticsWork : UnitOfWorkBase
     {
         private readonly ExternalRepositoryRepository m_externalRepositoryRepository;
+        private readonly ImportHistoryRepository m_importHistoryRepository;
         private readonly int m_externalRepositoryId;
 
-        public GetExternalRepositoryStatisticsWork(ExternalRepositoryRepository externalRepositoryRepository, int externalRepositoryId) : base(externalRepositoryRepository)
+        public GetExternalRepositoryStatisticsWork(ExternalRepositoryRepository externalRepositoryRepository,
+            ImportHistoryRepository importHistoryRepository, int externalRepositoryId) : base(externalRepositoryRepository)
         {
             m_externalRepositoryRepository = externalRepositoryRepository;
+            m_importHistoryRepository = importHistoryRepository;
             m_externalRepositoryId = externalRepositoryId;
         }
 
         public TotalImportStatistics TotalImportStatistics { get; private set; }
 
-        public  LastImportStatisticsResult LastImportStatisticsResult { get; private set; }
+        public LastImportStatisticsResult LastImportStatisticsResult { get; private set; }
+        
+        public ImportHistory LastImportHistory { get; private set; }
 
         protected override void ExecuteWorkImplementation()
         {
@@ -30,6 +35,7 @@ namespace Vokabular.ProjectImport.Works.ExternalRepositoryManagement
 
             TotalImportStatistics = m_externalRepositoryRepository.GetExternalRepositoryStatistics(m_externalRepositoryId);
             LastImportStatisticsResult = m_externalRepositoryRepository.GetLastUpdateExternalRepositoryStatistics(m_externalRepositoryId);
+            LastImportHistory = m_importHistoryRepository.GetLastImportHistory(m_externalRepositoryId);
         }
     }
 }
