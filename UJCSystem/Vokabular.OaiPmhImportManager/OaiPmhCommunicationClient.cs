@@ -196,7 +196,7 @@ namespace Vokabular.OaiPmhImportManager
                     }
                 }
 
-                await Task.Delay(m_delay);
+                await Task.Delay(m_delay * currentRetry);
             }
         }
 
