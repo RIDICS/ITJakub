@@ -2908,8 +2908,8 @@ namespace Vokabular.MainService.DataContracts.Clients
         public OaiPmhRepositoryInfoContract GetOaiPmhRepositoryInfo(string url)
         {
             try
-            {
-                return Get<OaiPmhRepositoryInfoContract>($"externalRepository/oaiPmhRepositoryInfo/{url}");
+            {               
+                return Get<OaiPmhRepositoryInfoContract>($"externalRepository/oaiPmhRepositoryInfo?url={url.EncodeQueryString()}");
             }
             catch (HttpRequestException e)
             {

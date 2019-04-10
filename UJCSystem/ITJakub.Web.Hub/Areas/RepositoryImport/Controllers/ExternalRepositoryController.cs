@@ -175,7 +175,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
             SetConfiguration(OaiPmh, config);
             using (var client = GetRestClient())
             {
-                var result = client.GetOaiPmhRepositoryInfo(HttpUtility.UrlEncode(HttpUtility.UrlEncode(url)));
+                var result = client.GetOaiPmhRepositoryInfo(url);
                 var model = new OaiPmhConfigurationViewModel
                 {
                     AdminMails = result.AdminMails,

@@ -142,11 +142,11 @@ namespace Vokabular.MainService.Controllers
 
         #region OAI-PMH
 
-        [HttpGet("oaiPmhRepositoryInfo/{url}")]
-        public async Task<OaiPmhRepositoryInfoContract> GetOaiPmhRepositoryInfoAsync(string url)
+        [HttpGet("oaiPmhRepositoryInfo")]
+        public async Task<OaiPmhRepositoryInfoContract> GetOaiPmhRepositoryInfoAsync([FromQuery] string url)
         {
             m_authorizationManager.CheckUserCanManageRepositoryImport();
-            return await m_externalRepositoryManager.GetOaiPmhRepositoryInfo(HttpUtility.UrlDecode(url));
+            return await m_externalRepositoryManager.GetOaiPmhRepositoryInfo(url);
         }
 
         #endregion
