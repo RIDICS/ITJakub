@@ -84,7 +84,8 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                     Configuration = GetConfiguration(Request.Form),
                     BibliographicFormat = new BibliographicFormatContract {Id = model.BibliographicFormatId},
                     ExternalRepositoryType = new ExternalRepositoryTypeContract {Id = model.ExternalRepositoryTypeId},
-                    FilteringExpressionSets = model.FilteringExpressionSets.Where(x => x.IsChecked).Select(x => new FilteringExpressionSetContract{Id = x.Id}).ToList()
+                    FilteringExpressionSets = model.FilteringExpressionSets.Where(x => x.IsChecked)
+                        .Select(x => new FilteringExpressionSetContract {Id = x.Id}).ToList()
                 });
                 return RedirectToAction("List");
             }
@@ -141,16 +142,18 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
 
             using (var client = GetRestClient())
             {
+                var config = GetConfiguration(Request.Form);
                 client.UpdateExternalRepository(model.Id, new ExternalRepositoryDetailContract
                 {
                     Name = model.Name,
                     Description = model.Description,
                     License = model.License,
                     Url = model.Url,
-                    Configuration = GetConfiguration(Request.Form),
+                    Configuration = string.IsNullOrEmpty(config) ? model.Configuration : config,
                     BibliographicFormat = new BibliographicFormatContract {Id = model.BibliographicFormatId},
                     ExternalRepositoryType = new ExternalRepositoryTypeContract {Id = model.ExternalRepositoryTypeId},
-                    FilteringExpressionSets = model.FilteringExpressionSets.Where(x => x.IsChecked).Select(x => new FilteringExpressionSetContract{Id = x.Id}).ToList()
+                    FilteringExpressionSets = model.FilteringExpressionSets.Where(x => x.IsChecked)
+                        .Select(x => new FilteringExpressionSetContract {Id = x.Id}).ToList()
                 });
                 return RedirectToAction("List");
             }
@@ -204,6 +207,11 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
             switch (requestForm["apiType"])
             {
                 case OaiPmh:
+                    if (string.IsNullOrEmpty(Request.Form["OaiPmhMetadataFormat"]) ||
+                        string.IsNullOrEmpty(Request.Form["OaiPmhSet"]) ||
+                        string.IsNullOrEmpty(Request.Form["OaiPmhResourceUrl"]))
+                        return null;
+
                     return JsonConvert.SerializeObject(new OaiPmhRepositoryConfigurationContract
                     {
                         DataFormat = Request.Form["OaiPmhMetadataFormat"],
@@ -217,7 +225,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
 
         private void SetConfiguration(string apiType, string configuration)
         {
-            if (string.IsNullOrEmpty(configuration) || configuration == "undefined")
+            if (string.IsNullOrEmpty(configuration))
             {
                 return;
             }

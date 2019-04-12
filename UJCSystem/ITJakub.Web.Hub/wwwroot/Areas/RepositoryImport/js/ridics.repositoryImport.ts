@@ -52,16 +52,22 @@ class ExternalRepositoryConfiguration {
         $(".ResourceType").change((e) => {
             const api = $(e.target as Node as Element).children("option:selected").text();
             const config = $(".repository-configuration").val();
+            
+            let configParam = "";
+            if (config !== "undefined") {
+                configParam = `&config=${config}`;
+            }
+
             $.ajax({
-                type: "GET",
-                url: `${getBaseUrl()}RepositoryImport/ExternalRepository/LoadApiConfiguration?api=${api}&config=${config}`,
-                dataType: "html",
-                success: (data) => {
-                    $("#apiType").val(api);
-                    $("#apiOptions").html(data);
-                    this.initOaiPmh();
-                }
-            });
+                    type: "GET",
+                    url: `${getBaseUrl()}RepositoryImport/ExternalRepository/LoadApiConfiguration?api=${api}${configParam}`,
+                    dataType: "html",
+                    success: (data) => {
+                        $("#apiType").val(api);
+                        $("#apiOptions").html(data);
+                        this.initOaiPmh();
+                    }
+                });
         });
 
         $(".ResourceType").change();
