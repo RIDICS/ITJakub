@@ -25,15 +25,14 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                 if (status == null || status.All(x => x.IsCompleted))
                 {
                     var externalRepositories = client.GetAllExternalRepositories();
-                    var list = externalRepositories.Select(x => new ExternalRepositoryCheckBox { Id = x.Id, Name = x.Name, IsChecked = false }).ToList();
+                    var list = externalRepositories.Select(x => new CheckBoxEntity (x.Id,x.Name)).ToList();
                     return View(new ImportViewModel { ExternalRepositoryCheckBoxes = list });
                 }
 
                 return View("ImportStatus",
                     new ImportViewModel
                     {
-                        ExternalRepositoryCheckBoxes = status.Select(x => new ExternalRepositoryCheckBox
-                            {Id = x.ExternalRepositoryId, Name = x.ExternalRepositoryName}).ToList()
+                        ExternalRepositoryCheckBoxes = status.Select(x => new CheckBoxEntity(x.ExternalRepositoryId, x.ExternalRepositoryName)).ToList()
                     });
             }
         }

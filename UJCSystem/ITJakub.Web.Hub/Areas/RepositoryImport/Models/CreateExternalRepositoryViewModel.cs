@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ITJakub.Web.Hub.Areas.RepositoryImport.Models
 {
@@ -29,6 +30,8 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Models
         [Display(Name = "BibliographicFormat")]
         public int BibliographicFormatId { get; set; }
 
-        public string Configration { get; set; }
+        public IList<CheckBoxEntity> FilteringExpressionSets { get; set; }
+
+        public string Configuration { get; set; }
     }
 }

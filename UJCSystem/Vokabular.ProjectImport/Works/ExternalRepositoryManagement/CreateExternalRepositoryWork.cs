@@ -1,4 +1,5 @@
-﻿using Vokabular.DataEntities.Database.Entities;
+﻿using System.Collections.Generic;
+using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -33,8 +34,15 @@ namespace Vokabular.ProjectImport.Works.ExternalRepositoryManagement
                 License = m_data.License,
                 BibliographicFormat = bibliographicFormat,
                 ExternalRepositoryType = externalRepositoryType,
-                CreatedByUser = user
+                CreatedByUser = user,
+                FilteringExpressionSets = new List<FilteringExpressionSet>()
             };
+
+            foreach (var filteringExpressionSet in m_data.FilteringExpressionSets)
+            {
+                externalRepository.FilteringExpressionSets.Add(m_externalRepositoryRepository.Load<FilteringExpressionSet>(filteringExpressionSet.Id));
+            }
+
             var resultId = (int) m_externalRepositoryRepository.Create(externalRepository);
             return resultId;
         }

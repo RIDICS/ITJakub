@@ -62,5 +62,11 @@ namespace Vokabular.ProjectImport.Managers
             var result = m_filteringExpressionSetRepository.InvokeUnitOfWork(x => x.GetAllBibliographicFormats());
             return Mapper.Map<IList<BibliographicFormatContract>>(result);
         }
+
+        public IList<FilteringExpressionSetContract> GetAllFilteringExpressionSets()
+        {
+            var result = m_filteringExpressionSetRepository.InvokeUnitOfWork(x => x.GetAllFilteringExpressionSets());
+            return Mapper.Map<IList<FilteringExpressionSetContract>>(result);
+        }
     }
 }

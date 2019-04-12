@@ -27,16 +27,15 @@
             </div>
             
             <div class="col-md-offset-10 col-md-2 right-align-btn">
-                <input type="button" id="select-all-repositories" value="Test" class="btn btn-default" />
+                <input type="button" id="select-all-repositories" value="@Localizer.Translate("SelectAll", "RepositoryImport", LocTranslationSource.File)" class="btn btn-default" />
             </div>
 
             <div class="col-md-12">
                 @using (Html.BeginForm("StartImport", "RepositoryImport", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                 {
-
                     <div class="form-group repositories">
                         <ul class="bib-listing">
-                            @for (int idx = 0; idx < Model.ExternalRepositoryCheckBoxes.Count; idx++)
+                            @for (var idx = 0; idx < Model.ExternalRepositoryCheckBoxes.Count; idx++)
                             {
                                 <li class="list-item">
                                     <div class="visible-content">

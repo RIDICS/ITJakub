@@ -9,6 +9,7 @@
     "Url": "translate[URL: ]",
     "License": "translate[Licence: ]",
     "Required": "translate[Pole musí být vyplněno.]",
-    "BibliographicFormat": "translate[Bibliografický formát: ]"
+    "BibliographicFormat": "translate[Bibliografický formát: ]",
+    "FilteringExpressionSets": "translate[Filtrační sety: ]"
   }
 }

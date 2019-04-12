@@ -9,6 +9,7 @@
     "Url": "URL: ",
     "License": "Licence: ",
     "Required": "Pole musí být vyplněno.",
-    "BibliographicFormat": "Bibliografický formát: "
+    "BibliographicFormat": "Bibliografický formát: ",
+    "FilteringExpressionSets": "Filtrační sety: "
   }
 }

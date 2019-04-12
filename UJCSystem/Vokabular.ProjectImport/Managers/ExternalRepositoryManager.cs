@@ -48,21 +48,21 @@ namespace Vokabular.ProjectImport.Managers
             new DeleteExternalRepositoryWork(m_externalRepositoryRepository, externalRepositoryId).Execute();
         }
 
-        public PagedResultList<ExternalRepositoryDetailContract> GetExternalRepositoryList(int start, int count)
+        public PagedResultList<ExternalRepositoryContract> GetExternalRepositoryList(int start, int count)
         {
             var result = m_externalRepositoryRepository.InvokeUnitOfWork(x => x.GetExternalRepositoryList(start, count));
 
-            return new PagedResultList<ExternalRepositoryDetailContract>
+            return new PagedResultList<ExternalRepositoryContract>
             {
-                List = Mapper.Map<List<ExternalRepositoryDetailContract>>(result.List),
+                List = Mapper.Map<List<ExternalRepositoryContract>>(result.List),
                 TotalCount = result.Count,
             };
         }
 
-        public IList<ExternalRepositoryDetailContract> GetAllExternalRepositories()
+        public IList<ExternalRepositoryContract> GetAllExternalRepositories()
         {
             var result = m_externalRepositoryRepository.InvokeUnitOfWork(x => x.GetAllExternalRepositories());
-            return Mapper.Map<IList<ExternalRepositoryDetailContract>>(result);
+            return Mapper.Map<IList<ExternalRepositoryContract>>(result);
         }
 
         public ExternalRepositoryStatisticsContract GetExternalRepositoryStatistics(int externalRepositoryId)

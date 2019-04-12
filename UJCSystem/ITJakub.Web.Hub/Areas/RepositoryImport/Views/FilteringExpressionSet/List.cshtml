@@ -31,25 +31,26 @@
                 <ul class="bib-listing">
                     @foreach (var filteringSet in Model.List)
                     {
-                        <li class="list-item">
-                            <div class="visible-content">
-                                <div class="visible-wrapper">
-                                    <div class="left-panel"></div>
-                                    <div class="middle-panel">
-                                        <div class="heading">@filteringSet.Name</div>
-                                        <div class="body">@filteringSet.BibliographicFormat.Name</div>
-                                    </div>
-                                    <div class="right-panel">
-                                        <a class="btn btn-sm book-button button" href="@Url.Action("Detail", "FilteringExpressionSet", new {area = "RepositoryImport", id = filteringSet.Id})">
-                                            <span class="glyphicon glyphicon-pencil"></span>
-                                        </a>
-                                        <a type="button" class="btn btn-sm information-button button" href="@Url.Action("Delete", "FilteringExpressionSet", new {area = "RepositoryImport", id = filteringSet.Id})">
-                                            <span class="glyphicon glyphicon-trash"></span>
-                                        </a>
-                                    </div>
+                    <li class="list-item">
+                        <div class="visible-content">
+                            <div class="visible-wrapper">
+                                <div class="left-panel"></div>
+                                <div class="middle-panel">
+                                    <div class="heading">@filteringSet.Name</div>
+                                    <div class="body">@filteringSet.BibliographicFormat.Name</div>
+                                </div>
+                                <div class="right-panel">
+                                    <a class="btn btn-sm book-button button" href="@Url.Action("Detail", "FilteringExpressionSet", new {area = "RepositoryImport", id = filteringSet.Id})">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </a>
+                                    <a type="button" class="btn btn-sm information-button button" href="@Url.Action("Delete", "FilteringExpressionSet", new {area = "RepositoryImport", id = filteringSet.Id})">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </a>
                                 </div>
                             </div>
-                        </li>
+                        </div>
+                        <div class="hidden-content"></div>
+                    </li>
                     }
                 </ul>
             </div>

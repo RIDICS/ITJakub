@@ -56,9 +56,19 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SingleOrDefault();
         }
 
+        public IList<FilteringExpressionSet> GetAllFilteringExpressionSets()
+        {
+            
+            return GetSession().QueryOver<FilteringExpressionSet>()
+                .OrderBy(x => x.Name).Asc
+                .Fetch(x => x.BibliographicFormat).Eager
+                .List();
+        }
+
         public IList<BibliographicFormat> GetAllBibliographicFormats()
         {
             return GetSession().QueryOver<BibliographicFormat>()
+                .OrderBy(x => x.Name).Asc
                 .List();
         }
     }

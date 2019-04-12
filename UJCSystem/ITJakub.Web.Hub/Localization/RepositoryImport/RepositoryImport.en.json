@@ -37,6 +37,7 @@
     "MetadataFormat": "translate[Metadatový formát: ]",
     "Connect": "translate[Připojit]",
     "ImportRunning": "translate[Probíhá import]",
+    "SelectAll": "translate[Vybrat vše]",
     "ImportExternalRepositoryList": "translate[Import z externích repozitářů]",
     "ImportStatusLoading": "translate[Načítání informací o průběhu import]",
     "CancelImportTask": "translate[Zrušit import]",

@@ -96,7 +96,7 @@ namespace Vokabular.MainService.Controllers
 
         [HttpGet("")]
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
-        public List<ExternalRepositoryDetailContract> GetExternalRepositoryList([FromQuery] int? start, [FromQuery] int? count)
+        public List<ExternalRepositoryContract> GetExternalRepositoryList([FromQuery] int? start, [FromQuery] int? count)
         {
             m_authorizationManager.CheckUserCanManageRepositoryImport();
 
@@ -110,7 +110,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("allExternalRepositories")]
-        public IList<ExternalRepositoryDetailContract> GetAllExternalRepositories()
+        public IList<ExternalRepositoryContract> GetAllExternalRepositories()
         {
             m_authorizationManager.CheckUserCanManageRepositoryImport();
 

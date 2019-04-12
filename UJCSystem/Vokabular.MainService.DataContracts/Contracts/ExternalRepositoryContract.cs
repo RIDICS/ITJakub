@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Vokabular.MainService.DataContracts.Contracts
 {
@@ -9,6 +10,12 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        public string Url { get; set; }
+
+        public string License { get; set; }
+
+        public string Configuration { get; set; }
         
         public BibliographicFormatContract BibliographicFormat { get; set; }
 
@@ -17,11 +24,7 @@ namespace Vokabular.MainService.DataContracts.Contracts
 
     public class ExternalRepositoryDetailContract : ExternalRepositoryContract
     {
-        public string Url { get; set; }
-
-        public string License { get; set; }
-
-        public string Configuration { get; set; }
+        public IList<FilteringExpressionSetContract> FilteringExpressionSets { get; set; }
     }
 
     public class ExternalRepositoryStatisticsContract

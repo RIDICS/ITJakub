@@ -23,6 +23,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => x.Id == externalRepositoryId)
                 .Fetch(x => x.BibliographicFormat).Eager
                 .Fetch(x => x.ExternalRepositoryType).Eager
+                .Fetch(x => x.FilteringExpressionSets).Eager
                 .SingleOrDefault();
         }
 

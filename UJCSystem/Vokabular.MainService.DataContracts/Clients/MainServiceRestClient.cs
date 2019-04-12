@@ -2763,11 +2763,11 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         #region ExternalRepository
 
-        public IList<ExternalRepositoryDetailContract> GetAllExternalRepositories()
+        public IList<ExternalRepositoryContract> GetAllExternalRepositories()
         {
             try
             {
-                var result = Get<IList<ExternalRepositoryDetailContract>>($"externalRepository/allExternalRepositories");
+                var result = Get<IList<ExternalRepositoryContract>>($"externalRepository/allExternalRepositories");
                 return result;
             }
             catch (HttpRequestException e)
@@ -2779,12 +2779,12 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public PagedResultList<ExternalRepositoryDetailContract> GetExternalRepositoryList(int start, int count, bool fetchPageCount = false)
+        public PagedResultList<ExternalRepositoryContract> GetExternalRepositoryList(int start, int count, bool fetchPageCount = false)
         {
             try
             {
                 var result =
-                    GetPagedList<ExternalRepositoryDetailContract>(
+                    GetPagedList<ExternalRepositoryContract>(
                         $"externalRepository?start={start}&count={count}&fetchPageCount={fetchPageCount}");
                 return result;
             }
@@ -2931,6 +2931,22 @@ namespace Vokabular.MainService.DataContracts.Clients
                 var result =
                     GetPagedList<FilteringExpressionSetDetailContract>(
                         $"filteringExpressionSet?start={start}&count={count}&fetchPageCount={fetchPageCount}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+        
+        public IList<FilteringExpressionSetDetailContract> GetAllFilteringExpressionSets()
+        {
+            try
+            {
+                var result = Get<IList<FilteringExpressionSetDetailContract>>($"filteringExpressionSet/allFilteringExpressionSets");
                 return result;
             }
             catch (HttpRequestException e)

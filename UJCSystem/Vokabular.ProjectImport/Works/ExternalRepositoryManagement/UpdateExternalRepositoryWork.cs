@@ -37,6 +37,13 @@ namespace Vokabular.ProjectImport.Works.ExternalRepositoryManagement
             externalRepository.BibliographicFormat = bibliographicFormat;
             externalRepository.ExternalRepositoryType = externalRepositoryType;
 
+            externalRepository.FilteringExpressionSets.Clear();
+
+            foreach (var filteringExpressionSet in m_data.FilteringExpressionSets)
+            {
+                externalRepository.FilteringExpressionSets.Add(m_externalRepositoryRepository.Load<FilteringExpressionSet>(filteringExpressionSet.Id));
+            }
+
             m_externalRepositoryRepository.Update(externalRepository);
         }
     }

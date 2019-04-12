@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Web;
+using System.Linq;
 using ITJakub.Web.Hub.Areas.RepositoryImport.Models;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
@@ -58,9 +58,11 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                     nameof(BibliographicFormatContract.Id),
                     nameof(BibliographicFormatContract.Name));
                 ViewData["availableExternalRepositoryTypes"] = availableExternalRepositoryTypes;
-            }
 
-            return View(new CreateExternalRepositoryViewModel());
+                var filteringExpressionSets = client.GetAllFilteringExpressionSets();
+                return View(new CreateExternalRepositoryViewModel()
+                    {FilteringExpressionSets = filteringExpressionSets.Select(x => new CheckBoxEntity(x.Id, x.Name)).ToList()});
+            }
         }
 
         [HttpPost]
@@ -81,7 +83,8 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                     Url = model.Url,
                     Configuration = GetConfiguration(Request.Form),
                     BibliographicFormat = new BibliographicFormatContract {Id = model.BibliographicFormatId},
-                    ExternalRepositoryType = new ExternalRepositoryTypeContract {Id = model.ExternalRepositoryTypeId}
+                    ExternalRepositoryType = new ExternalRepositoryTypeContract {Id = model.ExternalRepositoryTypeId},
+                    FilteringExpressionSets = model.FilteringExpressionSets.Where(x => x.IsChecked).Select(x => new FilteringExpressionSetContract{Id = x.Id}).ToList()
                 });
                 return RedirectToAction("List");
             }
@@ -107,6 +110,10 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                     externalRepositoryDetail.ExternalRepositoryType.Id);
                 ViewData["availableExternalRepositoryTypes"] = availableExternalRepositoryTypes;
 
+                var filteringExpressionSets = client.GetAllFilteringExpressionSets();
+                var availableFilteringExpressionSets = filteringExpressionSets.Select(x =>
+                    new CheckBoxEntity(x.Id, x.Name, externalRepositoryDetail.FilteringExpressionSets.Any(y => y.Id == x.Id))).ToList();
+
                 var model = new CreateExternalRepositoryViewModel
                 {
                     Name = externalRepositoryDetail.Name,
@@ -116,7 +123,8 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                     Url = externalRepositoryDetail.Url,
                     BibliographicFormatId = externalRepositoryDetail.BibliographicFormat.Id,
                     ExternalRepositoryTypeId = externalRepositoryDetail.ExternalRepositoryType.Id,
-                    Configration = externalRepositoryDetail.Configuration
+                    Configuration = externalRepositoryDetail.Configuration,
+                    FilteringExpressionSets = availableFilteringExpressionSets
                 };
 
                 return View(model);
@@ -141,7 +149,8 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                     Url = model.Url,
                     Configuration = GetConfiguration(Request.Form),
                     BibliographicFormat = new BibliographicFormatContract {Id = model.BibliographicFormatId},
-                    ExternalRepositoryType = new ExternalRepositoryTypeContract {Id = model.ExternalRepositoryTypeId}
+                    ExternalRepositoryType = new ExternalRepositoryTypeContract {Id = model.ExternalRepositoryTypeId},
+                    FilteringExpressionSets = model.FilteringExpressionSets.Where(x => x.IsChecked).Select(x => new FilteringExpressionSetContract{Id = x.Id}).ToList()
                 });
                 return RedirectToAction("List");
             }
@@ -208,7 +217,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
 
         private void SetConfiguration(string apiType, string configuration)
         {
-            if (string.IsNullOrEmpty(configuration))
+            if (string.IsNullOrEmpty(configuration) || configuration == "undefined")
             {
                 return;
             }
