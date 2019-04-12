@@ -33,6 +33,7 @@
             <div class="col-md-12">
                 @using (Html.BeginForm("StartImport", "RepositoryImport", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                 {
+                    @Html.AntiForgeryToken()
                     <div class="form-group repositories">
                         <ul class="bib-listing">
                             @for (var idx = 0; idx < Model.ExternalRepositoryCheckBoxes.Count; idx++)
@@ -68,9 +69,9 @@
                         <input type="submit" id="start-import-btn" value="@Localizer.Translate("Import", "RepositoryImport", LocTranslationSource.File)" class="btn btn-default disabled" />
                     </div>
 
-                      
-                        }
-                    </div>
+
+                }
+            </div>
                 </div>
     </div>
 </div>

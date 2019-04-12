@@ -66,6 +66,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(CreateExternalRepositoryViewModel model)
         {
             if (!ModelState.IsValid)
@@ -133,6 +134,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Update(CreateExternalRepositoryViewModel model)
         {
             if (!ModelState.IsValid)

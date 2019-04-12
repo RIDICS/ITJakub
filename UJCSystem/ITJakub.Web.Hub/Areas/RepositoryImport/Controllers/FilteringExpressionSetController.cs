@@ -66,6 +66,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(CreateFilteringExpressionSetViewModel model)
         {
             if (!ModelState.IsValid)
@@ -86,6 +87,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Update(CreateFilteringExpressionSetViewModel model)
         {
             if (!ModelState.IsValid)
