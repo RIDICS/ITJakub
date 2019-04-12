@@ -9,15 +9,23 @@ namespace Vokabular.ProjectImport.Managers
     public class FilteringManager
     {
         private readonly ImportedProjectMetadataManager m_importedProjectMetadataManager;
+        private readonly ImportHistoryManager m_importHistoryManager;
 
-        public FilteringManager(ImportedProjectMetadataManager importedProjectMetadataManager)
+        public FilteringManager(ImportedProjectMetadataManager importedProjectMetadataManager, ImportHistoryManager importHistoryManager)
         {
             m_importedProjectMetadataManager = importedProjectMetadataManager;
+            m_importHistoryManager = importHistoryManager;
         }
 
         public ImportedRecord SetFilterData(ImportedRecord importedRecord, IDictionary<string, List<string>> filteringExpressions,
             IProjectParser parser)
         {
+            if (importedRecord.IsDeleted.HasValue && importedRecord.IsDeleted.Value)
+            {
+                importedRecord.IsSuitable = false;
+                return importedRecord;
+            }
+
             var importedRecordDb = m_importedProjectMetadataManager.GetImportedProjectMetadataByExternalId(importedRecord.ExternalId);
             importedRecord.IsNew = importedRecordDb?.Project == null;
 
@@ -43,9 +51,18 @@ namespace Vokabular.ProjectImport.Managers
             }
             else
             {
-                importedRecord.ProjectId = importedRecordDb.Project.Id;
-                importedRecord.ImportedProjectMetadataId = importedRecordDb.Id;
-                importedRecord.IsSuitable = true;
+                var importHistory = m_importHistoryManager.GetLastImportHistoryForImportedProjectMetadata(importedRecordDb.Id);
+
+                if (importedRecord.TimeStamp.HasValue && importHistory.Date >= importedRecord.TimeStamp.Value)
+                {
+                    importedRecord.IsSuitable = false;
+                }
+                else
+                {
+                    importedRecord.ProjectId = importedRecordDb.Project.Id;
+                    importedRecord.ImportedProjectMetadataId = importedRecordDb.Id;
+                    importedRecord.IsSuitable = true;
+                }
             }
 
             return importedRecord;

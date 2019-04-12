@@ -30,6 +30,11 @@ namespace Vokabular.ProjectImport.Managers
             return m_importHistoryRepository.InvokeUnitOfWork(x => x.FindById<ImportHistory>(importHistoryId));
         }
 
+        public ImportHistory GetLastImportHistoryForImportedProjectMetadata(int importedProjectMetadataId)
+        {
+            return m_importHistoryRepository.InvokeUnitOfWork(x => x.GetLastImportHistoryForImportedProjectMetadata(importedProjectMetadataId));
+        }
+
         public ImportHistory GetLatestSuccessfulImportHistory(int externalRepositoryId)
         {
             return m_importHistoryRepository.InvokeUnitOfWork(x => x.GetLatestSuccessfulImportHistory(externalRepositoryId));

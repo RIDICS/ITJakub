@@ -1,4 +1,6 @@
-﻿namespace Vokabular.ProjectParsing.Model.Entities
+﻿using System;
+
+namespace Vokabular.ProjectParsing.Model.Entities
 {
     public class ImportedRecord
     {
@@ -12,7 +14,9 @@
 
         public bool IsFailed { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public bool? IsDeleted { get; set; }
+
+        public DateTime? TimeStamp { get; set; }
 
         public string FaultedMessage { get; set; }
 

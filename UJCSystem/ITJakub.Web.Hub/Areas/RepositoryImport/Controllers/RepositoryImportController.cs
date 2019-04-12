@@ -38,6 +38,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult StartImport(ImportViewModel model)
         {
             using (var client = GetRestClient())

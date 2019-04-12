@@ -29,5 +29,17 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Take(1)
                 .SingleOrDefault();
         }
+
+        public ImportHistory GetLastImportHistoryForImportedProjectMetadata(int importedProjectMetadataId)
+        {
+            ImportedProjectMetadata importedProjectMetadata = null;
+
+            return GetSession().QueryOver<ImportHistory>()
+                .JoinAlias(x => x.ImportedRecordMetadata, () => importedProjectMetadata)
+                .Where(() => importedProjectMetadata.Id == importedProjectMetadataId)
+                .OrderBy(x => x.Date).Desc
+                .Take(1)
+                .SingleOrDefault();
+        }
     }
 }
