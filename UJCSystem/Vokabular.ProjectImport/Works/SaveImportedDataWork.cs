@@ -59,7 +59,7 @@ namespace Vokabular.ProjectImport.Works
 
             m_catalogValueRepository.Update(project);
 
-            UpdateAuthors(project.Authors);
+            UpdateAuthors(project);
             UpdateMetadata(project);
 
             CreateSnapshot();
@@ -163,7 +163,14 @@ namespace Vokabular.ProjectImport.Works
 
         private void UpdateKeywords(Project project)
         {
-            project.Keywords.Clear();
+            if (project.Keywords == null)
+            {
+                project.Keywords = new List<Keyword>();
+            }
+            else
+            {
+                project.Keywords.Clear();
+            }
 
             foreach (var newKeywordName in m_importedRecord.Project.Keywords)
             {
@@ -188,7 +195,15 @@ namespace Vokabular.ProjectImport.Works
 
         private void UpdateLiteraryOriginals(Project project)
         {
-            project.LiteraryOriginals.Clear();
+            if (project.LiteraryOriginals == null)
+            {
+                project.LiteraryOriginals = new List<LiteraryOriginal>();
+            }
+            else
+            {
+                project.LiteraryOriginals.Clear();
+            }
+            
             var dbOriginalList = m_catalogValueRepository.GetLiteraryOriginalList();
 
             foreach (var newOriginalName in m_importedRecord.Project.LiteraryOriginals)
@@ -216,7 +231,15 @@ namespace Vokabular.ProjectImport.Works
 
         private void UpdateLiteraryGenres(Project project)
         {
-            project.LiteraryGenres.Clear();
+            if (project.LiteraryGenres == null)
+            {
+                project.LiteraryGenres = new List<LiteraryGenre>();
+            }
+            else
+            {
+                project.LiteraryGenres.Clear();
+            }
+            
             var dbGenreList = m_catalogValueRepository.GetLiteraryGenreList();
 
             foreach (var newGenreName in m_importedRecord.Project.LiteraryGenres)
@@ -242,9 +265,14 @@ namespace Vokabular.ProjectImport.Works
             }
         }
 
-        private void UpdateAuthors(IList<ProjectOriginalAuthor> dbProjectAuthors)
+        private void UpdateAuthors(Project project)
         {
-            var dbAuthors = dbProjectAuthors.Select(x => x.OriginalAuthor).ToList();
+            if (project.Authors == null)
+            {
+                project.Authors = new List<ProjectOriginalAuthor>();
+            }
+
+            var dbAuthors = project.Authors.Select(x => x.OriginalAuthor).ToList();
             var newAuthors =
                 m_importedRecord.Project.Authors.Select(x => new OriginalAuthor {FirstName = x.FirstName, LastName = x.LastName})
                     .ToList() ?? new List<OriginalAuthor>();
@@ -261,7 +289,7 @@ namespace Vokabular.ProjectImport.Works
 
             foreach (var author in authorsToRemove)
             {
-                var projectAuthor = dbProjectAuthors.Single(x => x.OriginalAuthor.Id == author.Id);
+                var projectAuthor = project.Authors.Single(x => x.OriginalAuthor.Id == author.Id);
                 m_projectRepository.Delete(projectAuthor);
             }
 
@@ -282,7 +310,7 @@ namespace Vokabular.ProjectImport.Works
                 }
                 else
                 {
-                    var projectAuthor = dbProjectAuthors.Single(x =>
+                    var projectAuthor = project.Authors.Single(x =>
                         x.OriginalAuthor.FirstName == newAuthor.FirstName && x.OriginalAuthor.LastName == newAuthor.LastName);
                     projectAuthor.Sequence = i + 1;
                     m_projectRepository.Update(projectAuthor);

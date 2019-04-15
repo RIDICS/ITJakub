@@ -53,7 +53,7 @@ namespace Vokabular.ProjectImport.Managers
             {
                 var importHistory = m_importHistoryManager.GetLastImportHistoryForImportedProjectMetadata(importedRecordDb.Id);
 
-                if (importedRecord.TimeStamp.HasValue && importHistory.Date >= importedRecord.TimeStamp.Value)
+                if (importedRecord.TimeStamp.HasValue && importHistory != null && importHistory.Date >= importedRecord.TimeStamp.Value)
                 {
                     importedRecord.IsSuitable = false;
                 }

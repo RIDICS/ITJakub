@@ -25,6 +25,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             return GetSession().QueryOver<ImportHistory>()
                 .Where(x => x.ExternalRepository.Id == externalRepositoryId)
+                .Fetch(x => x.CreatedByUser).Eager
                 .OrderBy(x => x.Date).Desc
                 .Take(1)
                 .SingleOrDefault();
