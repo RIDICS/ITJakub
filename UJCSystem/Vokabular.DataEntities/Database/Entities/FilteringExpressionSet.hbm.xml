@@ -16,7 +16,7 @@
       <one-to-many class="FilteringExpression" />
     </bag>
 
-    <bag name="ExternalRepositories" table="ExternalRepository_FilteringExpressionSet" cascade="all" lazy="true">
+    <bag name="ExternalRepositories" table="ExternalRepository_FilteringExpressionSet" lazy="true">
       <key column="FilteringExpressionSet" />
       <many-to-many class="ExternalRepository" column="ExternalRepository" />
     </bag>

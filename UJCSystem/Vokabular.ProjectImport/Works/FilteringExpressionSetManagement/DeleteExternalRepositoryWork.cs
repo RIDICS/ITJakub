@@ -24,10 +24,6 @@ namespace Vokabular.ProjectImport.Works.FilteringExpressionSetManagement
             if (filteringExpressionSet == null)
                 throw new HttpErrorCodeException(ErrorMessages.NotFound, HttpStatusCode.NotFound);
 
-            //TODO delete?
-            //TODO what with connestinons to filtexpress
-            //TODO what with conn to extRepo
-
             m_filteringExpressionSetRepository.Delete(filteringExpressionSet);
         }
     }
