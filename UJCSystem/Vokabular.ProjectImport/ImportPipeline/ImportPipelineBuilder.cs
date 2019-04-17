@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks.Dataflow;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
@@ -16,7 +14,6 @@ using Vokabular.ProjectImport.Model;
 using Vokabular.ProjectImport.Model.Exceptions;
 using Vokabular.ProjectParsing.Model.Entities;
 using Vokabular.ProjectParsing.Model.Parsers;
-using Vokabular.Shared.Extensions;
 
 namespace Vokabular.ProjectImport.ImportPipeline
 {
@@ -26,19 +23,21 @@ namespace Vokabular.ProjectImport.ImportPipeline
         private readonly IDictionary<string, IProjectParser> m_projectParsers;
         private readonly ImportManager m_importManager;
         private readonly FilteringExpressionSetManager m_filteringExpressionSetManager;
-        private readonly ILogger<ImportPipelineBuilder> m_logger;
+        private readonly ProjectRepository m_projectRepository;
+        private readonly PermissionRepository m_permissionRepository;
         private readonly IServiceProvider m_serviceProvider;
 
         public ImportPipelineBuilder(IEnumerable<IProjectImportManager> importManagers, IEnumerable<IProjectParser> parsers,
             ImportManager importManager, FilteringExpressionSetManager filteringExpressionSetManager,
-            ILogger<ImportPipelineBuilder> logger, IServiceProvider serviceProvider)
+            ProjectRepository projectRepository, PermissionRepository permissionRepository, IServiceProvider serviceProvider)
         {
             m_projectImportManagers = new Dictionary<string, IProjectImportManager>();
             m_projectParsers = new Dictionary<string, IProjectParser>();
             m_importManager = importManager;
             m_filteringExpressionSetManager = filteringExpressionSetManager;
-            m_logger = logger;
             m_serviceProvider = serviceProvider;
+            m_projectRepository = projectRepository;
+            m_permissionRepository = permissionRepository;
 
             foreach (var manager in importManagers)
             {
@@ -73,7 +72,7 @@ namespace Vokabular.ProjectImport.ImportPipeline
 
             return new ImportPipeline {BufferBlock = bufferBlock, LastBlock = saveBlock};
         }
-        
+
         public TransformBlock<object, ImportedRecord> BuildResponseParserBlock(string repositoryType,
             ExecutionDataflowBlockOptions executionOptions)
         {
@@ -143,52 +142,19 @@ namespace Vokabular.ProjectImport.ImportPipeline
         public ActionBlock<ImportedRecord> BuildSaveBlock(int userId, int importHistoryId, int externalRepositoryId,
             RepositoryImportProgressInfo progressInfo, ExecutionDataflowBlockOptions executionOptions)
         {
-            int bookTypeId;
-            IList<int> groupsWithPermissionIds;
-            using (var scope = m_serviceProvider.CreateScope())
-            {
-                var projectRepository = scope.ServiceProvider.GetRequiredService<ProjectRepository>();
-                bookTypeId = projectRepository.InvokeUnitOfWork(x => x.GetBookTypeByEnum(BookTypeEnum.BibliographicalItem)).Id;
+            var bookTypeId = m_projectRepository.InvokeUnitOfWork(x => x.GetBookTypeByEnum(BookTypeEnum.BibliographicalItem)).Id;
 
-                var permissionRepository = scope.ServiceProvider.GetRequiredService<PermissionRepository>();
-                var specialPermissions = permissionRepository.InvokeUnitOfWork(x => x.GetSpecialPermissions());
-                var importPermissions = specialPermissions.OfType<ReadExternalProjectPermission>();
-                
-                groupsWithPermissionIds = permissionRepository.InvokeUnitOfWork(x => x.GetGroupsBySpecialPermissionIds(importPermissions.Select(y => y.Id))).Select(x => x.Id).ToList();
-            }
+            var specialPermissions = m_permissionRepository.InvokeUnitOfWork(x => x.GetSpecialPermissions());
+            var importPermissions = specialPermissions.OfType<ReadExternalProjectPermission>();
+            var groupsWithPermissionIds = m_permissionRepository.InvokeUnitOfWork(x => x.GetGroupsBySpecialPermissionIds(importPermissions.Select(y => y.Id))).Select(x => x.Id).ToList();
 
             return new ActionBlock<ImportedRecord>(importedRecord =>
                 {
                     using (var scope = m_serviceProvider.CreateScope())
                     {
                         var projectManager = scope.ServiceProvider.GetRequiredService<ProjectManager>();
-                        var importedRecordMetadataManager = scope.ServiceProvider.GetRequiredService<ImportedRecordMetadataManager>();
-
-                        try
-                        {
-                            if (importedRecord.IsFailed)
-                            {
-                                progressInfo.IncrementFailedProjectsCount();
-                            }
-                            else
-                            {
-                                projectManager.SaveImportedProject(importedRecord, userId, externalRepositoryId, bookTypeId, groupsWithPermissionIds);
-                            }
-                        }
-                        catch (DataException e)
-                        {
-                            importedRecord.IsFailed = true;
-                            importedRecord.FaultedMessage = e.Message;
-                            progressInfo.IncrementFailedProjectsCount();
-
-                            if (m_logger.IsErrorEnabled())
-                                m_logger.LogError(e, e.Message);
-                        }
-                        finally
-                        {
-                            importedRecordMetadataManager.CreateImportedRecordMetadata(importedRecord, importHistoryId);
-                            progressInfo.IncrementProcessedProjectsCount();
-                        }
+                        projectManager.SaveImportedProject(importedRecord, userId, externalRepositoryId, bookTypeId,
+                            groupsWithPermissionIds, importHistoryId, progressInfo);
                     }
                 },
                 executionOptions
