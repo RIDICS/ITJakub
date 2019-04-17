@@ -12,6 +12,7 @@ namespace Vokabular.ProjectImport.Model
             ExternalRepositoryId = externalRepositoryId;
             ExternalRepositoryName = externalRepositoryName;
             m_processedProjectsCount = 0;
+            m_failedProjectsCount = 0;
         }
 
         public int TotalProjectsCount { get; set; }

@@ -32,3 +32,7 @@
     <div class="bib-table-cell bib-label">@Localizer.Translate("UpdatedItemsInLastUpdate", "RepositoryImport")</div>
     <div class="bib-table-cell">@Model.UpdatedItemsInLastUpdate</div>
 </div>
+<div class="bib-table-row">
+    <div class="bib-table-cell bib-label">@Localizer.Translate("FailedItemsInLastUpdate", "RepositoryImport")</div>
+    <div class="bib-table-cell">@(Model.TotalItemsInLastUpdate - Model.UpdatedItemsInLastUpdate - Model.NewItemsInLastUpdate)</div>
+</div>

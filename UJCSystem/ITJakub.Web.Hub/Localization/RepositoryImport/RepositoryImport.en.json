@@ -29,6 +29,7 @@
     "TotalItemsInLastUpdate": "translate[Celkem položek: ]",
     "NewItemsInLastUpdate": "translate[Nových položek: ]",
     "UpdatedItemsInLastUpdate": "translate[Aktualizovaných položek: ]",
+    "FailedItemsInLastUpdate": "translate[Neúspěšných položek: ]",
     "RepositoryUrl": "translate[URL repozitáře: ]",
     "Name": "translate[Název: ]",
     "Description": "translate[Popis: ]",
@@ -39,7 +40,7 @@
     "ImportRunning": "translate[Probíhá import]",
     "SelectAll": "translate[Vybrat vše]",
     "ImportExternalRepositoryList": "translate[Import z externích repozitářů]",
-    "ImportStatusLoading": "translate[Načítání informací o průběhu import]",
+    "ImportStatusLoading": "translate[Načítání informací o průběhu importu]",
     "CancelImportTask": "translate[Zrušit import]",
     "Import": "translate[Importovat]"
   }

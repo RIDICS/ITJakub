@@ -179,6 +179,7 @@ namespace Vokabular.ProjectImport.ImportPipeline
                         {
                             importedRecord.IsFailed = true;
                             importedRecord.FaultedMessage = e.Message;
+                            progressInfo.IncrementFailedProjectsCount();
 
                             if (m_logger.IsErrorEnabled())
                                 m_logger.LogError(e, e.Message);
