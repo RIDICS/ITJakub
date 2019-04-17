@@ -13,7 +13,7 @@ namespace Vokabular.Marc21ProjectParser.Test
     public class Marc21ProjectParserTest
     {
         private Marc21ProjectParser m_parser;
-        private string m_metadata;
+        private ImportedRecord m_importedRecord;
 
         [TestInitialize]
         public void Init()
@@ -21,59 +21,54 @@ namespace Vokabular.Marc21ProjectParser.Test
             var serviceProvider = MockIocFactory.CreateMockIocContainer();
             var parsers = serviceProvider.GetServices<IProjectParser>();
             m_parser = (Marc21ProjectParser) parsers.First(x => x.BibliographicFormatName == "Marc21");
-            m_metadata = GetRecord("OaiPmh_Marc21_JanHus.xml");
+            m_importedRecord = new ImportedRecord { RawData = GetRecord("OaiPmh_Marc21_JanHus.xml") };
         }
 
         [TestMethod]
         public void ParseProjectIdTest()
         {
-            var importedRecord = new ImportedRecord { RawData = m_metadata };
-            m_parser.AddParsedProject(importedRecord);
+            m_parser.AddParsedProject(m_importedRecord);
 
-            Assert.AreEqual("kpm01361543", importedRecord.Project.Id);
+            Assert.AreEqual("kpm01361543", m_importedRecord.Project.Id);
         }
 
         [TestMethod]
         public void ParseAuthorTest()
         {
-            var importedRecord = new ImportedRecord {RawData = m_metadata};
-            m_parser.AddParsedProject(importedRecord);
+            m_parser.AddParsedProject(m_importedRecord);
 
-            Assert.AreEqual(1, importedRecord.Project.Authors.Count);
-            Assert.AreEqual("Jan", importedRecord.Project.Authors.First().FirstName);
-            Assert.AreEqual("Hus", importedRecord.Project.Authors.First().LastName);
+            Assert.AreEqual(1, m_importedRecord.Project.Authors.Count);
+            Assert.AreEqual("Jan", m_importedRecord.Project.Authors.First().FirstName);
+            Assert.AreEqual("Hus", m_importedRecord.Project.Authors.First().LastName);
         }
 
         [TestMethod]
         public void ParseLiteraryGenreTest()
         {
-            var importedRecord = new ImportedRecord { RawData = m_metadata };
-            m_parser.AddParsedProject(importedRecord);
+            m_parser.AddParsedProject(m_importedRecord);
 
-            Assert.AreEqual(3, importedRecord.Project.LiteraryGenres.Count);
-            Assert.AreEqual("pojednání", importedRecord.Project.LiteraryGenres[0]);
-            Assert.AreEqual("edice", importedRecord.Project.LiteraryGenres[1]);
-            Assert.AreEqual("studie", importedRecord.Project.LiteraryGenres[2]);
+            Assert.AreEqual(3, m_importedRecord.Project.LiteraryGenres.Count);
+            Assert.AreEqual("pojednání", m_importedRecord.Project.LiteraryGenres[0]);
+            Assert.AreEqual("edice", m_importedRecord.Project.LiteraryGenres[1]);
+            Assert.AreEqual("studie", m_importedRecord.Project.LiteraryGenres[2]);
         }
 
         [TestMethod]
         public void ParseProjectNameTest()
         {
-            var importedRecord = new ImportedRecord { RawData = m_metadata };
-            m_parser.AddParsedProject(importedRecord);
+            m_parser.AddParsedProject(m_importedRecord);
 
-            Assert.AreEqual("Knihy kacířů se mají číst", importedRecord.Project.ProjectMetadata.Title);
+            Assert.AreEqual("Knihy kacířů se mají číst", m_importedRecord.Project.ProjectMetadata.Title);
         }
 
         [TestMethod]
         public void ParsePublishInfoTest()
         {
-            var importedRecord = new ImportedRecord { RawData = m_metadata };
-            m_parser.AddParsedProject(importedRecord);
+            m_parser.AddParsedProject(m_importedRecord);
 
-            Assert.AreEqual("2015", importedRecord.Project.ProjectMetadata.PublishDate);
-            Assert.AreEqual("Praha", importedRecord.Project.ProjectMetadata.PublishPlace);
-            Assert.AreEqual("Kalich", importedRecord.Project.ProjectMetadata.PublisherText);
+            Assert.AreEqual("2015", m_importedRecord.Project.ProjectMetadata.PublishDate);
+            Assert.AreEqual("Praha", m_importedRecord.Project.ProjectMetadata.PublishPlace);
+            Assert.AreEqual("Kalich", m_importedRecord.Project.ProjectMetadata.PublisherText);
         }
 
         [TestMethod]
