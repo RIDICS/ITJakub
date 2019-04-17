@@ -1,4 +1,5 @@
-﻿using Vokabular.DataEntities.Database.Daos;
+﻿using System;
+using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.UnitOfWork;
@@ -33,14 +34,14 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public ImportHistory GetLastImportHistoryForImportedProjectMetadata(int importedProjectMetadataId)
         {
-            ImportedProjectMetadata importedProjectMetadata = null;
+            ImportedRecordMetadata importedRecordMetadata = null;
 
-            return GetSession().QueryOver<ImportHistory>()
-                .JoinAlias(x => x.ImportedRecordMetadata, () => importedProjectMetadata)
-                .Where(() => importedProjectMetadata.Id == importedProjectMetadataId)
+            return  GetSession().QueryOver<ImportHistory>()
+                .JoinAlias(x => x.ImportedRecordMetadata, () => importedRecordMetadata)
+                .Where(() => importedRecordMetadata.ImportedProjectMetadata.Id == importedProjectMetadataId)
                 .OrderBy(x => x.Date).Desc
                 .Take(1)
-                .SingleOrDefault();
+                .SingleOrDefault();           
         }
     }
 }
