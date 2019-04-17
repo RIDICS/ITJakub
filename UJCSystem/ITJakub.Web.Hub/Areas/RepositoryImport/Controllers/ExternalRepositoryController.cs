@@ -18,7 +18,6 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
     [Area("RepositoryImport")]
     public class ExternalRepositoryController : BaseController
     {
-        private const int RepositoryCount = 5;
         private const string OaiPmh = "OaiPmh";
 
         public ExternalRepositoryController(CommunicationProvider communicationProvider) : base(communicationProvider)
@@ -29,7 +28,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
         {
             using (var client = GetRestClient())
             {
-                var externalRepositories = client.GetExternalRepositoryList(0, RepositoryCount, true);
+                var externalRepositories = client.GetAllExternalRepositories();
                 return View(externalRepositories);
             }
         }

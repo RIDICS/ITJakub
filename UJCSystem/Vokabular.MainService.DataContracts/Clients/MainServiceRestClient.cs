@@ -2942,11 +2942,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
         
-        public IList<FilteringExpressionSetDetailContract> GetAllFilteringExpressionSets()
+        public IList<FilteringExpressionSetContract> GetAllFilteringExpressionSets()
         {
             try
             {
-                var result = Get<IList<FilteringExpressionSetDetailContract>>($"filteringExpressionSet/allFilteringExpressionSets");
+                var result = Get<IList<FilteringExpressionSetContract>>($"filteringExpressionSet/allFilteringExpressionSets");
                 return result;
             }
             catch (HttpRequestException e)

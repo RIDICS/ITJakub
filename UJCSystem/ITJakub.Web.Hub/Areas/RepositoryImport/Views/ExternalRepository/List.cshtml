@@ -2,7 +2,7 @@
 @using Localization.CoreLibrary.Util
 @using Microsoft.AspNetCore.Http.Extensions
 @using Microsoft.Net.Http
-@model Vokabular.RestClient.Results.PagedResultList<Vokabular.MainService.DataContracts.Contracts.ExternalRepositoryContract>
+@model IList<Vokabular.MainService.DataContracts.Contracts.ExternalRepositoryContract>
 
 @inject ILocalization Localizer
 
@@ -32,7 +32,7 @@
                 </a>
             </div>
             <ul class="bib-listing">
-                @foreach (var repository in Model.List)
+                @foreach (var repository in Model)
                 {
                     <li class="list-item">
                         <div class="visible-content">
