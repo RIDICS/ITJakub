@@ -18,8 +18,9 @@ namespace Vokabular.Marc21ProjectParser.Test
         [TestInitialize]
         public void Init()
         {
-            var serviceProvider = MockIocFactory.CreateMockIocContainer(); 
-            m_parser = new Marc21ProjectParser(serviceProvider.GetServices<IDataFieldProcessor>(), serviceProvider.GetServices<IControlFieldProcessor>());
+            var serviceProvider = MockIocFactory.CreateMockIocContainer();
+            var parsers = serviceProvider.GetServices<IProjectParser>();
+            m_parser = (Marc21ProjectParser) parsers.First(x => x.BibliographicFormatName == "Marc21");
             m_metadata = GetRecord("OaiPmh_Marc21_JanHus.xml");
         }
 
