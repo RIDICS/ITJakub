@@ -33,6 +33,13 @@
     </div>
 </div>
 
+<div class="form-group">
+    @Html.LabelFor(model => model.UrlTemplate, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-9">
+        @Html.TextBoxFor(model => model.UrlTemplate, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.UrlTemplate, "", new { @class = "text-danger" })
+    </div>
+</div>
 
 <div class="form-group">
     @Html.LabelFor(model => model.License, htmlAttributes: new {@class = "control-label col-md-2"})

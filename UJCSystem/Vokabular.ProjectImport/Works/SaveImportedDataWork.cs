@@ -85,12 +85,14 @@ namespace Vokabular.ProjectImport.Works
         {
             var now = DateTime.UtcNow;
             var user = m_projectRepository.Load<User>(m_userId);
+            var externalRepository = m_projectRepository.Load<ExternalRepository>(m_externalRepositoryId);
 
             var project = new Project
             {
                 Name = m_importedRecord.Project.ProjectMetadata.Title,
                 CreateTime = now,
-                CreatedByUser = user
+                CreatedByUser = user,
+                OriginalUrl = string.Format(externalRepository.UrlTemplate, m_importedRecord.Project.Id)
             };
 
             return (long)m_projectRepository.Create(project);

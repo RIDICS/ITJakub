@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Vokabular.Marc21ProjectParser.ControlFieldProcessor;
 using Vokabular.Marc21ProjectParser.DataFieldProcessors;
 using Vokabular.ProjectParsing.Model.Parsers;
 
@@ -9,6 +10,8 @@ namespace Vokabular.Marc21ProjectParser
         public static void AddMarc21ProjectParsingServices(this IServiceCollection services)
         {
             services.AddSingleton<IProjectParser, Marc21ProjectParser>();
+
+            services.AddSingleton<IControlFieldProcessor, ProjectIdProcessor>();
 
             services.AddSingleton<IDataFieldProcessor, AuthorProcessor>();
             services.AddSingleton<IDataFieldProcessor, GenreProcessor>();

@@ -32,6 +32,7 @@ namespace Vokabular.ProjectImport.Works.ExternalRepositoryManagement
             externalRepository.Name = m_data.Name;
             externalRepository.Description = m_data.Description;
             externalRepository.Url = m_data.Url;
+            externalRepository.UrlTemplate = m_data.UrlTemplate;
             externalRepository.Configuration = m_data.Configuration;
             externalRepository.License = m_data.License;
             externalRepository.BibliographicFormat = bibliographicFormat;

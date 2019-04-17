@@ -17,6 +17,8 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual string Configuration { get; set; }
 
+        public virtual string UrlTemplate { get; set; }
+
         public virtual User CreatedByUser { get; set; }
 
         public virtual BibliographicFormat BibliographicFormat { get; set; }

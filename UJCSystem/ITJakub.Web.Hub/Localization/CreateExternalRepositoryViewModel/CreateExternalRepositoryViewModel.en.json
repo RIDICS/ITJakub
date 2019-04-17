@@ -7,6 +7,7 @@
     "ApiType": "translate[Typ API: ]",
     "ApiTypeRequired": "translate[Typ API musí být vybrán.]",
     "Url": "translate[URL: ]",
+    "UrlTemplate": "translate[Šablona URL díla: ]",
     "License": "translate[Licence: ]",
     "Required": "translate[Pole musí být vyplněno.]",
     "BibliographicFormat": "translate[Bibliografický formát: ]",

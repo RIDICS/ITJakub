@@ -7,6 +7,7 @@
     "ApiType": "Typ API: ",
     "ApiTypeRequired": "Typ API musí být vybrán",
     "Url": "URL: ",
+    "UrlTemplate": "Šablona URL díla: ",
     "License": "Licence: ",
     "Required": "Pole musí být vyplněno.",
     "BibliographicFormat": "Bibliografický formát: ",
