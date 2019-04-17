@@ -14,7 +14,7 @@ namespace Vokabular.Marc21ProjectParser
             services.AddSingleton<IControlFieldProcessor, ProjectIdProcessor>();
 
             services.AddSingleton<IDataFieldProcessor, AuthorProcessor>();
-            services.AddSingleton<IDataFieldProcessor, GenreProcessor>();
+            services.AddSingleton<IDataFieldProcessor, LiteraryGenreProcessor>();
             services.AddSingleton<IDataFieldProcessor, KeywordProcessor>();
             services.AddSingleton<IDataFieldProcessor, OriginDateProcessor>();
             services.AddSingleton<IDataFieldProcessor, ProjectNameProcessor>();

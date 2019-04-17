@@ -4,7 +4,7 @@ using Vokabular.ProjectParsing.Model.Entities;
 
 namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
 {
-    public class GenreProcessor : IDataFieldProcessor
+    public class LiteraryGenreProcessor : IDataFieldProcessor
     {
         private const string GenreCode = "a";
         public IList<string> Tags { get; } = new List<string> {"655"};
