@@ -46,7 +46,6 @@ namespace Vokabular.ProjectImport.Managers
                     new SaveImportedDataWork(m_projectRepository, m_metadataRepository, m_catalogValueRepository,
                         m_personRepository, m_permissionRepository, importedRecord, userId, externalRepositoryId, bookTypeId,
                         groupsWithPermissionIds).Execute();
-                    progressInfo.IncrementSavedProjectsCount();
                 }
             }
             catch (DataException e)
