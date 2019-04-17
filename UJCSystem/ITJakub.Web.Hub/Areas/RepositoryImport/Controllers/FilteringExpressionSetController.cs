@@ -13,8 +13,6 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
     [Area("RepositoryImport")]
     public class FilteringExpressionSetController : BaseController
     {
-        private const int FilteringExpressionSetCount = 5;
-
         public FilteringExpressionSetController(CommunicationProvider communicationProvider) : base(communicationProvider)
         {
 
@@ -24,7 +22,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
         {
             using (var client = GetRestClient())
             {
-                var filteringExpressionSetList = client.GetFilteringExpressionSetList(0, FilteringExpressionSetCount, true);
+                var filteringExpressionSetList = client.GetAllFilteringExpressionSets();
                 return View(filteringExpressionSetList);
             }
         }

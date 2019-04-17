@@ -13,6 +13,8 @@ namespace Vokabular.MainService.DataContracts.Contracts
 
         public string Url { get; set; }
 
+        public string UrlTemplate { get; set; }
+
         public string License { get; set; }
 
         public string Configuration { get; set; }

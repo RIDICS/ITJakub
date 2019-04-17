@@ -19,6 +19,10 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Models
         [Display(Name = "Url")] 
         public string Url { get; set; }
 
+        [DataType(DataType.Text)]
+        [Display(Name = "UrlTemplate")]
+        public string UrlTemplate { get; set; }
+
         [Display(Name = "License")] 
         public string License { get; set; }
 

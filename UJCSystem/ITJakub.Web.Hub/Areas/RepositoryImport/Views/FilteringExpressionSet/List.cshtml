@@ -1,7 +1,7 @@
 ﻿@using Localization.AspNetCore.Service
 @using Localization.CoreLibrary.Util
 @using Microsoft.AspNetCore.Http.Extensions
-@model Vokabular.RestClient.Results.PagedResultList<Vokabular.MainService.DataContracts.Contracts.FilteringExpressionSetDetailContract>
+@model IList<Vokabular.MainService.DataContracts.Contracts.FilteringExpressionSetContract>
 
 @inject ILocalization Localizer
 
@@ -29,7 +29,7 @@
                 </div>
 
                 <ul class="bib-listing">
-                    @foreach (var filteringSet in Model.List)
+                    @foreach (var filteringSet in Model)
                     {
                     <li class="list-item">
                         <div class="visible-content">

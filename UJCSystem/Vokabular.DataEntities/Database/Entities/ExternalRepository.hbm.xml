@@ -11,6 +11,8 @@
 
     <property name="Url" not-null="true" />
 
+    <property name="UrlTemplate" not-null="false" />
+
     <property name="License" />
 
     <property name="Configuration" />

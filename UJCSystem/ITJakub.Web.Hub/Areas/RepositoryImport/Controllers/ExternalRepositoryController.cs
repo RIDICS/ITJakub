@@ -18,7 +18,6 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
     [Area("RepositoryImport")]
     public class ExternalRepositoryController : BaseController
     {
-        private const int RepositoryCount = 5;
         private const string OaiPmh = "OaiPmh";
 
         public ExternalRepositoryController(CommunicationProvider communicationProvider) : base(communicationProvider)
@@ -29,7 +28,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
         {
             using (var client = GetRestClient())
             {
-                var externalRepositories = client.GetExternalRepositoryList(0, RepositoryCount, true);
+                var externalRepositories = client.GetAllExternalRepositories();
                 return View(externalRepositories);
             }
         }
@@ -82,6 +81,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                     Description = model.Description,
                     License = model.License,
                     Url = model.Url,
+                    UrlTemplate = model.UrlTemplate,
                     Configuration = GetConfiguration(Request.Form),
                     BibliographicFormat = new BibliographicFormatContract {Id = model.BibliographicFormatId},
                     ExternalRepositoryType = new ExternalRepositoryTypeContract {Id = model.ExternalRepositoryTypeId},
@@ -123,6 +123,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                     Description = externalRepositoryDetail.Description,
                     License = externalRepositoryDetail.License,
                     Url = externalRepositoryDetail.Url,
+                    UrlTemplate = externalRepositoryDetail.UrlTemplate,
                     BibliographicFormatId = externalRepositoryDetail.BibliographicFormat.Id,
                     ExternalRepositoryTypeId = externalRepositoryDetail.ExternalRepositoryType.Id,
                     Configuration = externalRepositoryDetail.Configuration,
@@ -151,6 +152,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                     Description = model.Description,
                     License = model.License,
                     Url = model.Url,
+                    UrlTemplate = model.UrlTemplate,
                     Configuration = string.IsNullOrEmpty(config) ? model.Configuration : config,
                     BibliographicFormat = new BibliographicFormatContract {Id = model.BibliographicFormatId},
                     ExternalRepositoryType = new ExternalRepositoryTypeContract {Id = model.ExternalRepositoryTypeId},

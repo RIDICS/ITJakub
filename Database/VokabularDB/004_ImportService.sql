@@ -20,6 +20,7 @@ BEGIN TRAN
 		[Name] nvarchar(255) NOT NULL,
 		[Description] nvarchar(MAX) NULL,
 		[Url] varchar(255) NOT NULL,
+		[UrlTemplate] varchar(512) NULL,
 		[License] nvarchar(MAX) NULL,
 		[Configuration] nvarchar(MAX) NULL,
 		[CreatedByUser] int NOT NULL CONSTRAINT [FK_ExternalRepository(CreatedByUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User] (Id),
@@ -83,6 +84,7 @@ BEGIN TRAN
 
 	ALTER TABLE [dbo].[SpecialPermission] ADD [CanManageRepositoryImport] bit NULL; 
 	ALTER TABLE [dbo].[SpecialPermission] ADD [CanReadExternalProject] bit NULL;  
+	ALTER TABLE [dbo].[Project] ADD [OriginalUrl] nvarchar(512) NULL;  
 
     INSERT INTO [dbo].[DatabaseVersion]
 		(DatabaseVersion)
