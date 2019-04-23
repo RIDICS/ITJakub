@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Vokabular.DataEntities;
 using Vokabular.DataEntities.Database.Repositories;
@@ -26,7 +27,10 @@ namespace Vokabular.MainService.Test
         {
             var container = new DryIocContainer();
             container.Install<MainServiceCoreContainerRegistration>();
-            container.Install<DataEntitiesContainerRegistration>();
+
+            var services = new ServiceCollection();
+            services.AddDataEntitiesServices();
+            container.Populate(services);
 
             container.AddPerWebRequest<IHttpContextAccessor, MockHttpContextAccessor>();
             container.ReplacePerWebRequest<PermissionRepository, MockPermissionRepository>();

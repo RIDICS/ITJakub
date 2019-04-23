@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using DryIoc;
+using DryIoc.Microsoft.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Vokabular.Shared.Container;
 
@@ -126,6 +127,11 @@ namespace Vokabular.MainService.Test.Containers
         public void ReplacePerWebRequest<TService, TImplementation>() where TService : class where TImplementation : class, TService
         {
             m_container.Register<TService, TImplementation>(Reuse.Singleton, ifAlreadyRegistered: IfAlreadyRegistered.Replace);
+        }
+
+        public void Populate(IServiceCollection services)
+        {
+            m_container.Populate(services);
         }
     }
 }

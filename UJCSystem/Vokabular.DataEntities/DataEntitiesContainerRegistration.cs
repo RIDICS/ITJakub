@@ -1,4 +1,5 @@
-﻿using Vokabular.DataEntities.Database.Repositories;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.SearchCriteria;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.Shared.Container;
@@ -6,37 +7,37 @@ using Vokabular.Shared.DataContracts.Search.QueryBuilder;
 
 namespace Vokabular.DataEntities
 {
-    public class DataEntitiesContainerRegistration : IContainerInstaller
+    public static class DataEntitiesContainerRegistration
     {
-        public void Install(IIocContainer container)
+        public static void AddDataEntitiesServices(this IServiceCollection container)
         {
-            container.AddPerWebRequest<IUnitOfWork, UnitOfWork>();
+            container.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            container.AddPerWebRequest<BookRepository>();
-            container.AddPerWebRequest<CatalogValueRepository>();
-            container.AddPerWebRequest<CategoryRepository>();
-            container.AddPerWebRequest<ExternalRepositoryRepository>();
-            container.AddPerWebRequest<FavoritesRepository>();
-            container.AddPerWebRequest<FilteringExpressionSetRepository>();
-            container.AddPerWebRequest<ImportHistoryRepository>();
-            container.AddPerWebRequest<ImportedProjectMetadataRepository>();
-            container.AddPerWebRequest<ImportedRecordMetadataRepository>();
-            container.AddPerWebRequest<MetadataRepository>();
-            container.AddPerWebRequest<PermissionRepository>();
-            container.AddPerWebRequest<PersonRepository>();
-            container.AddPerWebRequest<PortalRepository>();
-            container.AddPerWebRequest<ProjectRepository>();
-            container.AddPerWebRequest<ResourceRepository>();
-            container.AddPerWebRequest<UserRepository>();
+            container.AddScoped<BookRepository>();
+            container.AddScoped<CatalogValueRepository>();
+            container.AddScoped<CategoryRepository>();
+            container.AddScoped<ExternalRepositoryRepository>();
+            container.AddScoped<FavoritesRepository>();
+            container.AddScoped<FilteringExpressionSetRepository>();
+            container.AddScoped<ImportHistoryRepository>();
+            container.AddScoped<ImportedProjectMetadataRepository>();
+            container.AddScoped<ImportedRecordMetadataRepository>();
+            container.AddScoped<MetadataRepository>();
+            container.AddScoped<PermissionRepository>();
+            container.AddScoped<PersonRepository>();
+            container.AddScoped<PortalRepository>();
+            container.AddScoped<ProjectRepository>();
+            container.AddScoped<ResourceRepository>();
+            container.AddScoped<UserRepository>();
 
-            container.AddPerWebRequest<ICriteriaImplementationBase, AuthorCriteriaImplementation>();
-            container.AddPerWebRequest<ICriteriaImplementationBase, AuthorizationCriteriaImplementation>();
-            container.AddPerWebRequest<ICriteriaImplementationBase, CategoryCriteriaImplementation>();
-            container.AddPerWebRequest<ICriteriaImplementationBase, DatingCriteriaImplementation>();
-            container.AddPerWebRequest<ICriteriaImplementationBase, EditorCriteriaImplementation>();
-            container.AddPerWebRequest<ICriteriaImplementationBase, HeadwordCriteriaImplementation>();
-            container.AddPerWebRequest<ICriteriaImplementationBase, TermCriteriaImplementation>();
-            container.AddPerWebRequest<ICriteriaImplementationBase, TitleCriteriaImplementation>();
+            container.AddScoped<ICriteriaImplementationBase, AuthorCriteriaImplementation>();
+            container.AddScoped<ICriteriaImplementationBase, AuthorizationCriteriaImplementation>();
+            container.AddScoped<ICriteriaImplementationBase, CategoryCriteriaImplementation>();
+            container.AddScoped<ICriteriaImplementationBase, DatingCriteriaImplementation>();
+            container.AddScoped<ICriteriaImplementationBase, EditorCriteriaImplementation>();
+            container.AddScoped<ICriteriaImplementationBase, HeadwordCriteriaImplementation>();
+            container.AddScoped<ICriteriaImplementationBase, TermCriteriaImplementation>();
+            container.AddScoped<ICriteriaImplementationBase, TitleCriteriaImplementation>();
         }
     }
 }

@@ -21,5 +21,6 @@ namespace Vokabular.Shared.Container
         T Resolve<T>();
         T[] ResolveAll<T>();
         IServiceProvider CreateServiceProvider(IServiceCollection services);
+        void Populate(IServiceCollection services);
     }
 }

@@ -7,6 +7,7 @@ using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
+using Castle.Windsor.MsDependencyInjection;
 using log4net;
 using log4net.Config;
 using Microsoft.Extensions.DependencyInjection;
@@ -228,6 +229,11 @@ namespace ITJakub.ITJakubService
         public IServiceProvider CreateServiceProvider(IServiceCollection services)
         {
             throw new NotSupportedException();
+        }
+
+        public void Populate(IServiceCollection services)
+        {
+            this.AddServices(services);
         }
     }
 }

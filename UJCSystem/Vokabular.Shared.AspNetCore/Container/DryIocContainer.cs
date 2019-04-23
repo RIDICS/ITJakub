@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using DryIoc;
@@ -118,6 +119,11 @@ namespace Vokabular.Shared.AspNetCore.Container
         {
             m_container.Populate(services);
             return m_container.Resolve<IServiceProvider>();
+        }
+
+        public void Populate(IServiceCollection services)
+        {
+            m_container.Populate(services);
         }
     }
 }

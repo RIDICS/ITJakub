@@ -7,6 +7,7 @@ using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
+using Castle.Windsor.MsDependencyInjection;
 using log4net;
 using log4net.Config;
 using Microsoft.Extensions.DependencyInjection;
@@ -64,7 +65,9 @@ namespace ITJakub.FileProcessing.Service
 
             Install<NHibernateInstaller>();
             Install<CoreContainerRegistration>();
-            Install<DataEntitiesContainerRegistration>();
+            var services = new ServiceCollection();
+            services.AddDataEntitiesServices();
+            Populate(services);
 
             AddSingleton<IOptions<PathConfiguration>, PathConfigImplementation>(); // TODO after switch to ASP.NET Core use framework options handler
         }
@@ -236,6 +239,11 @@ namespace ITJakub.FileProcessing.Service
         public IServiceProvider CreateServiceProvider(IServiceCollection services)
         {
             throw new NotSupportedException();
+        }
+
+        public void Populate(IServiceCollection services)
+        {
+            this.AddServices(services);
         }
     }
 }
