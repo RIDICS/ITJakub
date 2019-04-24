@@ -2,37 +2,30 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Vokabular.OaiPmhImportManager.Model;
 using Vokabular.ProjectImport.Model;
 using Vokabular.ProjectParsing.Model.Entities;
-using Vokabular.Shared.Options;
 
 namespace Vokabular.OaiPmhImportManager
 {
     public class OaiPmhProjectImportManager : IProjectImportManager
     {
-        private readonly IOptions<OaiPmhClientOption> m_oaiPmhClientOption;
+        private readonly OaiPmhCommunicationFactory m_oaiPmhCommunicationFactory;
 
-        public OaiPmhProjectImportManager(IOptions<OaiPmhClientOption> oaiPmhOptions)
+        public OaiPmhProjectImportManager(OaiPmhCommunicationFactory oaiPmhCommunicationFactory)
         {
-            m_oaiPmhClientOption = oaiPmhOptions;
+            m_oaiPmhCommunicationFactory = oaiPmhCommunicationFactory;
         }
 
         public string ExternalRepositoryTypeName { get; } = "OaiPmh";
-
-        public OaiPmhCommunicationClient GetOaiPmhCommunicationClient(string url)
-        {
-            return new OaiPmhCommunicationClient(m_oaiPmhClientOption.Value, url);
-        }
 
         public virtual async Task ImportFromResource(string configuration, ITargetBlock<object> buffer, RepositoryImportProgressInfo progressInfo,
             DateTime? lastImport = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhRepositoryConfiguration>(configuration);
 
-            using (var client = GetOaiPmhCommunicationClient(oaiPmhResource.Url))
+            using (var client = m_oaiPmhCommunicationFactory.CreateClient(oaiPmhResource.Url))
             {
                 var records = await client.GetRecordsListAsync(oaiPmhResource.DataFormat, oaiPmhResource.SetName, lastImport);
                 var resumptionToken = records.resumptionToken;
@@ -45,7 +38,7 @@ namespace Vokabular.OaiPmhImportManager
 
                 while (resumptionToken.Value != null && !cancellationToken.IsCancellationRequested)
                 {
-                    records = await client.GetRecordsListAsync(resumptionToken.Value);
+                    records = await client.GetRecordsListWithRetryAsync(resumptionToken.Value);
                     resumptionToken = records.resumptionToken;
 
                     foreach (var recordType in records.record)

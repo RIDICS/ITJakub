@@ -15,14 +15,14 @@ namespace Vokabular.ProjectImport.Managers
     {
         private readonly ExternalRepositoryRepository m_externalRepositoryRepository;
         private readonly ImportHistoryRepository m_importHistoryRepository;
-        private readonly CommunicationManager m_communicationManager;
+        private readonly CommunicationFactory m_communicationFactory;
 
         public ExternalRepositoryManager(ExternalRepositoryRepository externalRepositoryRepository, ImportHistoryRepository importHistoryRepository,
-            CommunicationManager communicationManager)
+            CommunicationFactory communicationFactory)
         {
             m_externalRepositoryRepository = externalRepositoryRepository;
             m_importHistoryRepository = importHistoryRepository;
-            m_communicationManager = communicationManager;
+            m_communicationFactory = communicationFactory;
         }
 
         public int CreateExternalRepository(ExternalRepositoryDetailContract externalRepository, int userId)
@@ -89,7 +89,7 @@ namespace Vokabular.ProjectImport.Managers
 
         public async Task<OaiPmhRepositoryInfoContract> GetOaiPmhRepositoryInfo(string url)
         {
-            using (var client = m_communicationManager.GetOaiPmhCommunicationClient(url))
+            using (var client = m_communicationFactory.CreateOaiPmhCommunicationClient(url))
             {
                 var result = await client.GetRepositoryInfoAsync();
                 return Mapper.Map<OaiPmhRepositoryInfoContract>(result);

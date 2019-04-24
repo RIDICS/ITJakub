@@ -14,6 +14,7 @@ namespace Vokabular.OaiPmhImportManager
             services.AddSingleton<Profile, SetProfile>();
 
            services.AddSingleton<IProjectImportManager, OaiPmhProjectImportManager>();
+           services.AddSingleton<OaiPmhCommunicationFactory>();
         }
     }
 }

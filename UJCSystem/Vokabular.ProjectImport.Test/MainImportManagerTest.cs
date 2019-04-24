@@ -37,7 +37,7 @@ namespace Vokabular.ProjectImport.Test
         {
             var mockFactory = new MockRepository(MockBehavior.Loose) {CallBase = true};
 
-            var oaiPmhProjectImportManagerMock = mockFactory.Create<OaiPmhProjectImportManager>(new object[2]);
+            var oaiPmhProjectImportManagerMock = mockFactory.Create<OaiPmhProjectImportManager>(new object[1]);
 
             oaiPmhProjectImportManagerMock.Setup(x => x.ImportFromResource(
                     It.IsAny<string>(),

@@ -22,7 +22,7 @@ namespace Vokabular.ProjectImport
             container.AddScoped<ImportedRecordMetadataManager>();
             container.AddScoped<ProjectManager>();
 
-            container.AddScoped<CommunicationManager>();
+            container.AddScoped<CommunicationFactory>();
             
             container.AddHostedService<ProjectImportBackgroundService>();
             container.AddSingleton<MainImportManager>();
