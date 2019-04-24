@@ -1,5 +1,4 @@
-﻿using System;
-using Vokabular.DataEntities.Database.Daos;
+﻿using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.UnitOfWork;

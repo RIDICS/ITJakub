@@ -24,7 +24,7 @@ namespace Vokabular.ProjectImport
 
             container.AddScoped<CommunicationManager>();
             
-            container.AddHostedService<ProjectImportHostedService>();
+            container.AddHostedService<ProjectImportBackgroundService>();
             container.AddSingleton<MainImportManager>();
             container.AddSingleton<ImportManager>();
 

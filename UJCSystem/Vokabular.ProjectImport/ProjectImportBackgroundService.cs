@@ -11,13 +11,14 @@ using Vokabular.Shared.Extensions;
 
 namespace Vokabular.ProjectImport
 {
-    public class ProjectImportHostedService : BackgroundService
+    public class ProjectImportBackgroundService : BackgroundService
     {
         private readonly ImportManager m_importManager;
-        private readonly ILogger<ProjectImportHostedService> m_logger;
+        private readonly ILogger<ProjectImportBackgroundService> m_logger;
         private readonly IServiceProvider m_serviceProvider;
 
-        public ProjectImportHostedService(ImportManager importManager, ILogger<ProjectImportHostedService> logger, IServiceProvider serviceProvider)
+        public ProjectImportBackgroundService(ImportManager importManager, ILogger<ProjectImportBackgroundService> logger,
+            IServiceProvider serviceProvider)
         {
             m_importManager = importManager;
             m_logger = logger;
@@ -26,13 +27,13 @@ namespace Vokabular.ProjectImport
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            m_logger.LogInformation("Project import hosted service started.");
+            m_logger.LogInformation("Information Project import hosted service started.");
 
             while (!cancellationToken.IsCancellationRequested)
             {
                 var externalRepositories = await m_importManager.GetExternalRepositories(cancellationToken);
-
                 var importTasks = new List<Task>();
+
                 try
                 {
                     using (var scope = m_serviceProvider.CreateScope())
@@ -53,6 +54,19 @@ namespace Vokabular.ProjectImport
                     if (m_logger.IsErrorEnabled())
                         m_logger.LogError(e, e.Message);
                 }
+                catch (AggregateException e)
+                {
+                    if (m_logger.IsErrorEnabled())
+                        m_logger.LogError(e, e.Message);
+
+                    m_logger.LogDebug("Separate exceptions:");
+
+                    foreach (var exception in e.InnerExceptions)
+                    {
+                        if (m_logger.IsErrorEnabled())
+                            m_logger.LogError(exception, exception.Message);
+                    }
+                }
                 catch (Exception e)
                 {
                     if (m_logger.IsErrorEnabled())
@@ -64,6 +78,7 @@ namespace Vokabular.ProjectImport
                     {
                         cancellationTokenSource.Value.Cancel();
                     }
+
                     m_importManager.IsImportRunning = false;
                 }
             }

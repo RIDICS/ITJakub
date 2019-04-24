@@ -27,7 +27,7 @@ namespace Vokabular.ProjectImport.Managers
         public bool IsImportRunning { get; set; }
         public int UserId { get; private set; }
 
-        public void ImportFromResources(IList<int> externalRepositoryIds, int userId)
+        public void ImportFromExternalRepositories(IList<int> externalRepositoryIds, int userId)
         {
             if (IsImportRunning)
             {

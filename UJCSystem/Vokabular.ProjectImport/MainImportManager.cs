@@ -16,9 +16,9 @@ namespace Vokabular.ProjectImport
         public IReadOnlyDictionary<int, RepositoryImportProgressInfo> ActualProgress => m_importManager.ActualProgress;
         public bool IsImportRunning => m_importManager.IsImportRunning;
 
-        public void ImportFromResources(IList<int> externalRepositoryIds, int userId)
+        public virtual void ImportFromResources(IList<int> externalRepositoryIds, int userId)
         {
-            m_importManager.ImportFromResources(externalRepositoryIds, userId);
+            m_importManager.ImportFromExternalRepositories(externalRepositoryIds, userId);
         }
 
         public void CancelTask(int externalRepositoryId)

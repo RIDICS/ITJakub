@@ -2,7 +2,6 @@
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.SearchCriteria;
 using Vokabular.DataEntities.Database.UnitOfWork;
-using Vokabular.Shared.Container;
 using Vokabular.Shared.DataContracts.Search.QueryBuilder;
 
 namespace Vokabular.DataEntities
