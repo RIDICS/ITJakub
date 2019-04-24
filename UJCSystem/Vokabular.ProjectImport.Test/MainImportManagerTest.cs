@@ -10,18 +10,13 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
-using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
-using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.OaiPmhImportManager;
 using Vokabular.OaiPmhImportManager.Model;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
 using Vokabular.ProjectImport.Test.Mock;
 using Vokabular.ProjectParsing.Model.Parsers;
-using Vokabular.Shared.Const;
 
 namespace Vokabular.ProjectImport.Test
 {
@@ -29,16 +24,13 @@ namespace Vokabular.ProjectImport.Test
     public class MainImportManagerTest
     {
         private MainImportManager m_mainImportManager;
-        private ExternalRepositoryManager m_externalRepositoryManager;
-        private FilteringExpressionSetManager m_filteringExpressionSetManager;
         private ImportHistoryManager m_importHistoryManager;
-        private UserRepository m_userRepository;
+        private MockDataFactory m_mockDataFactory;
 
         [TestInitialize]
         public async Task Init()
         {
             var mockFactory = new MockRepository(MockBehavior.Loose) {CallBase = true};
-
             var oaiPmhProjectImportManagerMock = mockFactory.Create<OaiPmhProjectImportManager>(new object[1]);
 
             oaiPmhProjectImportManagerMock.Setup(x => x.ImportFromResource(
@@ -62,10 +54,9 @@ namespace Vokabular.ProjectImport.Test
             var serviceProvider = mockIoc.CreateServiceProvider();
 
             m_mainImportManager = serviceProvider.GetRequiredService<MainImportManager>();
-            m_externalRepositoryManager = serviceProvider.GetRequiredService<ExternalRepositoryManager>();
-            m_filteringExpressionSetManager = serviceProvider.GetRequiredService<FilteringExpressionSetManager>();
             m_importHistoryManager = serviceProvider.GetRequiredService<ImportHistoryManager>();
-            m_userRepository = serviceProvider.GetRequiredService<UserRepository>();
+            m_mockDataFactory= serviceProvider.GetRequiredService<MockDataFactory>();
+
             var backgroundService = serviceProvider.GetService<IHostedService>();
             await backgroundService.StartAsync(CancellationToken.None);
         }
@@ -87,8 +78,8 @@ namespace Vokabular.ProjectImport.Test
         [TestMethod]
         public void StartImportWithOneRepository()
         {
-            var userId = InitUser();
-            var externalRepositoryId = InitRepository(userId);
+            var userId = m_mockDataFactory.CreateUser();
+            var externalRepositoryId = m_mockDataFactory.CreateExternalRepository(userId);
 
             m_mainImportManager.ImportFromResources(new List<int> {externalRepositoryId}, userId);
            
@@ -117,61 +108,9 @@ namespace Vokabular.ProjectImport.Test
 
         private recordType GetRecord(string name)
         {
-            var xml = File.ReadAllText(Directory.GetCurrentDirectory() + "\\" + name);
+            var xml = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), name));
             var oaiPmhRecord = xml.XmlDeserializeFromString<OAIPMHType>();
             return ((GetRecordType) oaiPmhRecord.Items.First()).record;
-        }
-
-        private int InitRepository(int userId)
-        {
-            var bibliographicFormatContract = new BibliographicFormatContract
-            {
-                Id = (int) m_userRepository.InvokeUnitOfWork(x => x.Create(new BibliographicFormat
-                {
-                    Name = BibliographicFormatNameConstant.Marc21
-                }))
-            };
-
-            var externalRepositoryTypeId = (int) m_userRepository.InvokeUnitOfWork(x => x.Create(new ExternalRepositoryType
-            {
-                Name = ExternalRepositoryTypeNameConstant.OaiPhm
-            }));
-
-            var filterId = m_filteringExpressionSetManager.CreateFilteringExpressionSet(
-                new FilteringExpressionSetDetailContract
-                {
-                    Name = "TestFilterSet",
-                    BibliographicFormat = bibliographicFormatContract,
-                    CreatedByUser = new UserContract {Id = userId},
-                    FilteringExpressions = new List<FilteringExpressionContract>
-                    {
-                        new FilteringExpressionContract {Field = "100a", Value = "%Hus%"}
-                    }
-                }, userId);
-
-            m_userRepository.InvokeUnitOfWork(x => x.Create(new BookType {Type = BookTypeEnum.BibliographicalItem}));
-
-           return m_externalRepositoryManager.CreateExternalRepository(new ExternalRepositoryDetailContract
-            {
-                BibliographicFormat = bibliographicFormatContract,
-                Configuration = "Configuration",
-                Description = "Desc",
-                ExternalRepositoryType = new ExternalRepositoryTypeContract {Id = externalRepositoryTypeId},
-                Name = "RepoTest",
-                Url = "test.cz",
-                UrlTemplate = "test.cz/{0}",
-                FilteringExpressionSets = new List<FilteringExpressionSetContract> {new FilteringExpressionSetContract {Id = filterId}}
-            }, userId);
-
-        }
-
-        private int InitUser()
-        {
-             return (int) m_userRepository.InvokeUnitOfWork(x => x.Create(new User
-            {
-                FirstName = "Test", LastName = "Test", Email = "Test@test.cz", AuthenticationProvider = AuthenticationProvider.ItJakub,
-                CommunicationToken = "test", CreateTime = DateTime.UtcNow, UserName = "Test"
-            }));
         }
     }
 }

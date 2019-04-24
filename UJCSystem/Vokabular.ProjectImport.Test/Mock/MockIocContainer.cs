@@ -75,6 +75,7 @@ namespace Vokabular.ProjectImport.Test.Mock
 
             ServiceCollection.RemoveAll<IUnitOfWork>();
             ServiceCollection.AddScoped<IUnitOfWork, MockUnitOfWork>();
+            ServiceCollection.AddScoped<MockDataFactory>();
         }
 
         private void InitAutoMapper(IServiceProvider serviceProvider)
