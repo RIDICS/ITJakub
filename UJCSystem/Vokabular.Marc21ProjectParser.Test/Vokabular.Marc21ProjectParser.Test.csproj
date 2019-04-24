@@ -7,14 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="oai.xml" />
     <None Remove="OaiPmh_Marc21_JanHus.xml" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="oai.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="OaiPmh_Marc21_JanHus.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
