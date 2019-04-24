@@ -22,16 +22,13 @@ namespace Vokabular.ProjectImport.Works
         protected override int ExecuteWorkImplementation()
         {
             var importHistory = m_importedRecordMetadataRepository.Load<ImportHistory>(m_importHistoryId);
-            Project project = null;
-            if (m_data.ImportedProjectMetadataId.HasValue)
-            {
-                project = m_importedRecordMetadataRepository.Load<Project>(m_data.ProjectId);
-            }
-            
+            Project project = null;          
             ImportedProjectMetadata importedProjectMetadata = null;
-            if (m_data.ImportedProjectMetadataId.HasValue)
+
+            if (!(m_data.IsNew && m_data.IsFailed) && m_data.ImportedProjectMetadataId.HasValue)
             {
                 importedProjectMetadata = m_importedRecordMetadataRepository.Load<ImportedProjectMetadata>(m_data.ImportedProjectMetadataId.Value);
+                project = m_importedRecordMetadataRepository.Load<Project>(m_data.ProjectId);
             }
 
             var importMetadata = new ImportedRecordMetadata

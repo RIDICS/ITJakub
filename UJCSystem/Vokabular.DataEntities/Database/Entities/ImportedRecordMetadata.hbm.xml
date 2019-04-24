@@ -9,7 +9,7 @@
 
     <many-to-one name="LastUpdate" class="ImportHistory" lazy="proxy" not-null="true" />
 
-    <many-to-one name="ImportedProjectMetadata" class="ImportedProjectMetadata" lazy="proxy" not-null="true" />
+    <many-to-one name="ImportedProjectMetadata" class="ImportedProjectMetadata" lazy="proxy" not-null="false" />
 
     <many-to-one name="Snapshot" class="Snapshot" cascade="save-update" lazy="proxy" />
 

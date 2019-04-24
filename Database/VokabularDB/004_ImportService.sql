@@ -51,7 +51,7 @@ BEGIN TRAN
 		[Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_ImportedRecordMetadata(Id)] PRIMARY KEY CLUSTERED,
 		[LastUpdateMessage] nvarchar(MAX) NULL,
 		[LastUpdate] int NOT NULL CONSTRAINT [FK_ImportedRecordMetadata(LastUpdate)_ImportHistory(Id)] FOREIGN KEY REFERENCES [dbo].[ImportHistory] (Id),
-		[ImportedProjectMetadata] int NOT NULL CONSTRAINT [FK_ImportedRecordMetadata(ImportedProjectMetadata)_ImportedProjectMetadata(Id)] FOREIGN KEY REFERENCES [dbo].[ImportedProjectMetadata] (Id),
+		[ImportedProjectMetadata] int NULL CONSTRAINT [FK_ImportedRecordMetadata(ImportedProjectMetadata)_ImportedProjectMetadata(Id)] FOREIGN KEY REFERENCES [dbo].[ImportedProjectMetadata] (Id),
 		[Snapshot] bigint NULL CONSTRAINT [FK_ImportedRecordMetadata(Snapshot)_Snapshot(Id)] FOREIGN KEY REFERENCES [dbo].[Snapshot] (Id),
 	)
 
