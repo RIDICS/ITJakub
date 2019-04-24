@@ -2,12 +2,12 @@
 using System.Linq;
 using Vokabular.ProjectParsing.Model.Entities;
 using Vokabular.ProjectParsing.Model.Parsers;
+using Vokabular.Shared.Const;
 
 namespace Vokabular.Marc21ProjectParser
 {
     public class Marc21ProjectParser : IProjectParser
     {
-        public string BibliographicFormatName { get; } = "Marc21";
         private readonly IDictionary<string, IDataFieldProcessor> m_dataFieldProcessors;
         private readonly IDictionary<string, IControlFieldProcessor> m_controlFieldProcessors;
 
@@ -33,6 +33,8 @@ namespace Vokabular.Marc21ProjectParser
                 }
             }
         }
+
+        public string BibliographicFormatName { get; } = BibliographicFormatNameConstant.Marc21;
 
         public IList<KeyValuePair<string, string>> GetPairKeyValueList(ImportedRecord importedRecord)
         {

@@ -19,7 +19,9 @@ using Vokabular.OaiPmhImportManager;
 using Vokabular.OaiPmhImportManager.Model;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
+using Vokabular.ProjectImport.Test.Mock;
 using Vokabular.ProjectParsing.Model.Parsers;
+using Vokabular.Shared.Const;
 
 namespace Vokabular.ProjectImport.Test
 {
@@ -126,13 +128,13 @@ namespace Vokabular.ProjectImport.Test
             {
                 Id = (int) m_userRepository.InvokeUnitOfWork(x => x.Create(new BibliographicFormat
                 {
-                    Name = "Marc21"
+                    Name = BibliographicFormatNameConstant.Marc21
                 }))
             };
 
             var externalRepositoryTypeId = (int) m_userRepository.InvokeUnitOfWork(x => x.Create(new ExternalRepositoryType
             {
-                Name = "OaiPmh"
+                Name = ExternalRepositoryTypeNameConstant.OaiPhm
             }));
 
             var filterId = m_filteringExpressionSetManager.CreateFilteringExpressionSet(

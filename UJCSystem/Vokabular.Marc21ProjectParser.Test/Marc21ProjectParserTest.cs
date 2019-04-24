@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Vokabular.OaiPmhImportManager.Model;
 using Vokabular.ProjectParsing.Model.Entities;
 using Vokabular.ProjectParsing.Model.Parsers;
+using Vokabular.Shared.Const;
 
 namespace Vokabular.Marc21ProjectParser.Test
 {
@@ -20,7 +21,7 @@ namespace Vokabular.Marc21ProjectParser.Test
         {
             var serviceProvider = MockIocFactory.CreateMockIocContainer();
             var parsers = serviceProvider.GetServices<IProjectParser>();
-            m_parser = (Marc21ProjectParser) parsers.First(x => x.BibliographicFormatName == "Marc21");
+            m_parser = (Marc21ProjectParser) parsers.First(x => x.BibliographicFormatName == BibliographicFormatNameConstant.Marc21);
             m_importedRecord = new ImportedRecord { RawData = GetRecord("OaiPmh_Marc21_JanHus.xml") };
         }
 
@@ -79,7 +80,7 @@ namespace Vokabular.Marc21ProjectParser.Test
 
         private string GetRecord(string name)
         {
-            var xml = File.ReadAllText(Directory.GetCurrentDirectory() + "\\" + name);
+            var xml = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), name));
             var oaiPmhRecord = xml.XmlDeserializeFromString<OAIPMHType>();
             var record = ((GetRecordType)oaiPmhRecord.Items.First()).record;
             return record.metadata.OuterXml;

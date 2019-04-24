@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.OaiPmh;
+using Vokabular.Shared.Const;
 
 namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
 {
@@ -18,8 +19,6 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
     [Area("RepositoryImport")]
     public class ExternalRepositoryController : BaseController
     {
-        private const string OaiPmh = "OaiPmh";
-
         public ExternalRepositoryController(CommunicationProvider communicationProvider) : base(communicationProvider)
         {
         }
@@ -177,8 +176,8 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
         {
             switch (api)
             {
-                case OaiPmh:
-                    SetConfiguration(OaiPmh, config);
+                case ExternalRepositoryTypeNameConstant.OaiPhm:
+                    SetConfiguration(ExternalRepositoryTypeNameConstant.OaiPhm, config);
                     return PartialView("_OaiPmh");
                 default:
                     throw new ArgumentException($"API type {api} cannot be found.");
@@ -188,7 +187,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
         [HttpGet]
         public IActionResult OaiPmhConnect(string url, string config)
         {
-            SetConfiguration(OaiPmh, config);
+            SetConfiguration(ExternalRepositoryTypeNameConstant.OaiPhm, config);
             using (var client = GetRestClient())
             {
                 var result = client.GetOaiPmhRepositoryInfo(url);
@@ -210,7 +209,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
         {
             switch (requestForm["apiType"])
             {
-                case OaiPmh:
+                case ExternalRepositoryTypeNameConstant.OaiPhm:
                     if (string.IsNullOrEmpty(Request.Form["OaiPmhMetadataFormat"]) ||
                         string.IsNullOrEmpty(Request.Form["OaiPmhSet"]) ||
                         string.IsNullOrEmpty(Request.Form["OaiPmhResourceUrl"]))
@@ -236,7 +235,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
 
             switch (apiType)
             {
-                case OaiPmh:
+                case ExternalRepositoryTypeNameConstant.OaiPhm:
                 {
                     var config = JsonConvert.DeserializeObject<OaiPmhRepositoryConfigurationContract>(configuration);
                     ViewData["oaiPmhUrl"] = config.Url;

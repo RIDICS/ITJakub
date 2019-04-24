@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Vokabular.OaiPmhImportManager.Model;
 using Vokabular.ProjectImport.Model;
 using Vokabular.ProjectParsing.Model.Entities;
+using Vokabular.Shared.Const;
 
 namespace Vokabular.OaiPmhImportManager
 {
@@ -18,7 +19,7 @@ namespace Vokabular.OaiPmhImportManager
             m_oaiPmhCommunicationFactory = oaiPmhCommunicationFactory;
         }
 
-        public string ExternalRepositoryTypeName { get; } = "OaiPmh";
+        public string ExternalRepositoryTypeName { get; } = ExternalRepositoryTypeNameConstant.OaiPhm;
 
         public virtual async Task ImportFromResource(string configuration, ITargetBlock<object> buffer, RepositoryImportProgressInfo progressInfo,
             DateTime? lastImport = null, CancellationToken cancellationToken = default(CancellationToken))
