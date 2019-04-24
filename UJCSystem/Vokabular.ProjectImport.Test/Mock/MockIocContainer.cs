@@ -13,12 +13,11 @@ using NHibernate.Tool.hbm2ddl;
 using Vokabular.DataEntities;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.UnitOfWork;
-using Vokabular.ProjectImport.ImportPipeline;
 using Vokabular.Shared.Options;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
 
-namespace Vokabular.ProjectImport.Test
+namespace Vokabular.ProjectImport.Test.Mock
 {
     public class MockIocContainer
     {

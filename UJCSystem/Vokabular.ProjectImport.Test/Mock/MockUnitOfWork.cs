@@ -1,7 +1,7 @@
 ﻿using NHibernate;
 using Vokabular.DataEntities.Database.UnitOfWork;
 
-namespace Vokabular.ProjectImport.Test
+namespace Vokabular.ProjectImport.Test.Mock
 {
     public class MockUnitOfWork : IUnitOfWork
     {
@@ -27,7 +27,7 @@ namespace Vokabular.ProjectImport.Test
 
         public ISession CurrentSession { get; private set; }
 
-       public virtual void Dispose()
+        public virtual void Dispose()
         {
         }
 
@@ -46,6 +46,7 @@ namespace Vokabular.ProjectImport.Test
                 {
                     m_transaction.Rollback();
                 }
+
                 throw;
             }
             finally

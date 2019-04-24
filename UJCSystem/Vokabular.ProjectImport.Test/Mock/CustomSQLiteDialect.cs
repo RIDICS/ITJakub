@@ -3,7 +3,7 @@ using NHibernate;
 using NHibernate.Dialect;
 using NHibernate.Dialect.Function;
 
-namespace Vokabular.ProjectImport.Test
+namespace Vokabular.ProjectImport.Test.Mock
 {
     public class CustomSQLiteDialect : SQLiteDialect
     {

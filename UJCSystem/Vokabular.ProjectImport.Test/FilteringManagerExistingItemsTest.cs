@@ -1,12 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Vokabular.DataEntities.Database.Entities;
-using Vokabular.OaiPmhImportManager.Model;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectParsing.Model.Entities;
 using Vokabular.ProjectParsing.Model.Parsers;
@@ -35,9 +31,14 @@ namespace Vokabular.ProjectImport.Test
 
             m_filteringManager = new FilteringManager(m_importedProjectMetadataManagerMock.Object, m_importHistoryManagerMock.Object);
 
-            var serviceProvider = new MockIocContainer().CreateServiceProvider();
-            m_parser = serviceProvider.GetService<IProjectParser>();
-            m_importedRecord = new ImportedRecord { RawData =  GetRecord("OaiPmh_Marc21_JanHus.xml") };
+            var parserMock = new Mock<IProjectParser>();
+            parserMock.Setup(x => x.GetPairKeyValueList(It.IsAny<ImportedRecord>())).Returns(new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("100a", "Èapek, Karel"),
+                new KeyValuePair<string, string>("100a", "Hus, Jan,")
+            });
+            m_parser = parserMock.Object;
+            m_importedRecord = new ImportedRecord();
         }
 
         [TestMethod]
@@ -77,14 +78,6 @@ namespace Vokabular.ProjectImport.Test
 
             Assert.AreEqual(false, m_importedRecord.IsNew);
             Assert.AreEqual(false, m_importedRecord.IsSuitable);
-        }
-
-        private string GetRecord(string name)
-        {
-            var xml = File.ReadAllText(Directory.GetCurrentDirectory() + "\\" + name);
-            var oaiPmhRecord = xml.XmlDeserializeFromString<OAIPMHType>();
-            var record = ((GetRecordType)oaiPmhRecord.Items.First()).record;
-            return record.metadata.OuterXml;
         }
     }
 }
