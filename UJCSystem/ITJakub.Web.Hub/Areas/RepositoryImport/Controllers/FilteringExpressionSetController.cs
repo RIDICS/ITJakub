@@ -38,7 +38,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                     nameof(BibliographicFormatContract.Id),
                     nameof(BibliographicFormatContract.Name),
                     filteringExpressionSet.BibliographicFormat.Id);
-                ViewData["availableBibliographicFormats"] = availableBibliographicFormats;
+                ViewData[RepositoryImportConstants.AvailableBibliographicFormats] = availableBibliographicFormats;
 
                 var model = new CreateFilteringExpressionSetViewModel
                 {
@@ -58,7 +58,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                 var availableBibliographicFormats = new SelectList(bibliographicFormats, 
                     nameof(BibliographicFormatContract.Id),
                     nameof(BibliographicFormatContract.Name));
-                ViewData["availableBibliographicFormats"] = availableBibliographicFormats;
+                ViewData[RepositoryImportConstants.AvailableBibliographicFormats] = availableBibliographicFormats;
             }
             return View(new CreateFilteringExpressionSetViewModel());
         }

@@ -1,4 +1,5 @@
-﻿@using Localization.AspNetCore.Service
+﻿@using ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
+@using Localization.AspNetCore.Service
 @using Localization.CoreLibrary.Util
 @model ITJakub.Web.Hub.Areas.RepositoryImport.Models.CreateExternalRepositoryViewModel
 
@@ -52,7 +53,7 @@
 <div class="form-group">
     @Html.LabelFor(model => model.BibliographicFormatId, htmlAttributes: new {@class = "control-label col-md-2"})
     <div class="col-md-9">
-        @Html.DropDownListFor(model => model.BibliographicFormatId, (SelectList) ViewData["availableBibliographicFormats"], new {@class = "form-control"})
+        @Html.DropDownListFor(model => model.BibliographicFormatId, (SelectList) ViewData[RepositoryImportConstants.AvailableBibliographicFormats], new {@class = "form-control"})
         @Html.ValidationMessageFor(model => model.BibliographicFormatId, "", new {@class = "text-danger"})
     </div>
 </div>
@@ -60,7 +61,7 @@
 <div class="form-group">
     @Html.LabelFor(model => model.ExternalRepositoryTypeId, htmlAttributes: new {@class = "control-label col-md-2"})
     <div class="col-md-9">
-        @Html.DropDownListFor(model => model.ExternalRepositoryTypeId, (SelectList) ViewData["availableExternalRepositoryTypes"], new {@class = "form-control ResourceType"})
+        @Html.DropDownListFor(model => model.ExternalRepositoryTypeId, (SelectList) ViewData[RepositoryImportConstants.AvailableExternalRepositoryTypes], new {@class = "form-control ResourceType"})
         @Html.ValidationMessageFor(model => model.ExternalRepositoryTypeId, "", new {@class = "text-danger"})
     </div>
 </div>

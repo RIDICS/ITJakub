@@ -50,13 +50,13 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                 var availableBibliographicFormats = new SelectList(bibliographicFormats,
                     nameof(BibliographicFormatContract.Id),
                     nameof(BibliographicFormatContract.Name));
-                ViewData["availableBibliographicFormats"] = availableBibliographicFormats;
+                ViewData[RepositoryImportConstants.AvailableBibliographicFormats] = availableBibliographicFormats;
 
                 var externalRepositoryTypes = client.GetAllExternalRepositoryTypes();
                 var availableExternalRepositoryTypes = new SelectList(externalRepositoryTypes,
                     nameof(BibliographicFormatContract.Id),
                     nameof(BibliographicFormatContract.Name));
-                ViewData["availableExternalRepositoryTypes"] = availableExternalRepositoryTypes;
+                ViewData[RepositoryImportConstants.AvailableExternalRepositoryTypes] = availableExternalRepositoryTypes;
 
                 var filteringExpressionSets = client.GetAllFilteringExpressionSets();
                 return View(new CreateExternalRepositoryViewModel()
@@ -103,14 +103,14 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                     nameof(BibliographicFormatContract.Id),
                     nameof(BibliographicFormatContract.Name),
                     externalRepositoryDetail.BibliographicFormat.Id);
-                ViewData["availableBibliographicFormats"] = availableBibliographicFormats;
+                ViewData[RepositoryImportConstants.AvailableBibliographicFormats] = availableBibliographicFormats;
 
                 var externalRepositoryTypes = client.GetAllExternalRepositoryTypes();
                 var availableExternalRepositoryTypes = new SelectList(externalRepositoryTypes,
                     nameof(BibliographicFormatContract.Id),
                     nameof(BibliographicFormatContract.Name),
                     externalRepositoryDetail.ExternalRepositoryType.Id);
-                ViewData["availableExternalRepositoryTypes"] = availableExternalRepositoryTypes;
+                ViewData[RepositoryImportConstants.AvailableExternalRepositoryTypes] = availableExternalRepositoryTypes;
 
                 var filteringExpressionSets = client.GetAllFilteringExpressionSets();
                 var availableFilteringExpressionSets = filteringExpressionSets.Select(x =>
