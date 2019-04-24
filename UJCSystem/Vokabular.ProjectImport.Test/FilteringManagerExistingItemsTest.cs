@@ -35,7 +35,7 @@ namespace Vokabular.ProjectImport.Test
 
             m_filteringManager = new FilteringManager(m_importedProjectMetadataManagerMock.Object, m_importHistoryManagerMock.Object);
 
-            var serviceProvider = MockIocFactory.CreateMockIocContainer();
+            var serviceProvider = new MockIocContainer().CreateServiceProvider();
             m_parser = serviceProvider.GetService<IProjectParser>();
             m_importedRecord = new ImportedRecord { RawData =  GetRecord("OaiPmh_Marc21_JanHus.xml") };
         }

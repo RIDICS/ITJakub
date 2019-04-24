@@ -21,20 +21,19 @@ namespace Vokabular.ProjectImport.Test
         [TestInitialize]
         public void Init()
         {
-            var mockFactory = new MockRepository(MockBehavior.Loose) { CallBase = true };
+            var mockFactory = new MockRepository(MockBehavior.Loose) {CallBase = true};
             var importedProjectMetadataManagerMock = mockFactory.Create<ImportedProjectMetadataManager>(new object[1]);
             var importHistoryManagerMock = mockFactory.Create<ImportHistoryManager>(new object[1]);
-            
-            importedProjectMetadataManagerMock.Setup(x => x.GetImportedProjectMetadataByExternalId(It.IsAny<string>())).
-                Returns(() => null);
+
+            importedProjectMetadataManagerMock.Setup(x => x.GetImportedProjectMetadataByExternalId(It.IsAny<string>())).Returns(() => null);
 
             importHistoryManagerMock.Setup(x => x.GetLastImportHistoryForImportedProjectMetadata(It.IsAny<int>())).Returns(() => null);
 
             m_filteringManager = new FilteringManager(importedProjectMetadataManagerMock.Object, importHistoryManagerMock.Object);
 
-            var serviceProvider = MockIocFactory.CreateMockIocContainer();
+            var serviceProvider = new MockIocContainer().CreateServiceProvider();
             m_parser = serviceProvider.GetService<IProjectParser>();
-            m_importedRecord = new ImportedRecord { RawData =  GetRecord("OaiPmh_Marc21_JanHus.xml") };
+            m_importedRecord = new ImportedRecord {RawData = GetRecord("OaiPmh_Marc21_JanHus.xml")};
         }
 
         [TestMethod]
@@ -101,7 +100,7 @@ namespace Vokabular.ProjectImport.Test
         {
             var xml = File.ReadAllText(Directory.GetCurrentDirectory() + "\\" + name);
             var oaiPmhRecord = xml.XmlDeserializeFromString<OAIPMHType>();
-            var record = ((GetRecordType)oaiPmhRecord.Items.First()).record;
+            var record = ((GetRecordType) oaiPmhRecord.Items.First()).record;
             return record.metadata.OuterXml;
         }
     }
