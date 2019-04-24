@@ -13,21 +13,21 @@ namespace Vokabular.OaiPmhImportManager
 {
     public class OaiPmhProjectImportManager : IProjectImportManager
     {
-        private readonly OaiPmhClientOption m_oaiPmhClientOption;
+        private readonly IOptions<OaiPmhClientOption> m_oaiPmhClientOption;
 
         public OaiPmhProjectImportManager(IOptions<OaiPmhClientOption> oaiPmhOptions)
         {
-            m_oaiPmhClientOption = oaiPmhOptions.Value;
+            m_oaiPmhClientOption = oaiPmhOptions;
         }
 
         public string ExternalRepositoryTypeName { get; } = "OaiPmh";
 
         public OaiPmhCommunicationClient GetOaiPmhCommunicationClient(string url)
         {
-            return new OaiPmhCommunicationClient(m_oaiPmhClientOption, url);
+            return new OaiPmhCommunicationClient(m_oaiPmhClientOption.Value, url);
         }
 
-        public async Task ImportFromResource(string configuration, ITargetBlock<object> buffer, RepositoryImportProgressInfo progressInfo,
+        public virtual async Task ImportFromResource(string configuration, ITargetBlock<object> buffer, RepositoryImportProgressInfo progressInfo,
             DateTime? lastImport = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             var oaiPmhResource = JsonConvert.DeserializeObject<OaiPmhRepositoryConfiguration>(configuration);

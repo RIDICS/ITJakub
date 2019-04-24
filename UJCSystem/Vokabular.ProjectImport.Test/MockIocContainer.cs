@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NHibernate;
 using NHibernate.Cfg;
@@ -12,8 +13,10 @@ using NHibernate.Tool.hbm2ddl;
 using Vokabular.DataEntities;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.ProjectImport.ImportPipeline;
 using Vokabular.Shared.Options;
-using ILoggerFactory = NHibernate.ILoggerFactory;
+using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
+
 
 namespace Vokabular.ProjectImport.Test
 {
@@ -41,10 +44,8 @@ namespace Vokabular.ProjectImport.Test
             ServiceCollection.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
 
             var loggerFactoryMock = new Mock<ILoggerFactory>();
+            loggerFactoryMock.Setup(x => x.CreateLogger(It.IsAny<string>())).Returns(NullLogger.Instance);
             ServiceCollection.AddSingleton(typeof(ILoggerFactory), loggerFactoryMock.Object);
-
-            var logger = new Mock<ILogger<ProjectImportBackgroundService>>();
-            ServiceCollection.AddSingleton(typeof(ILogger<ProjectImportBackgroundService>), logger.Object);
         }
 
         private void InitDatabase()

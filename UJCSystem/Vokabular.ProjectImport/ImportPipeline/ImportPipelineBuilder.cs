@@ -146,7 +146,13 @@ namespace Vokabular.ProjectImport.ImportPipeline
 
             var specialPermissions = m_permissionRepository.InvokeUnitOfWork(x => x.GetSpecialPermissions());
             var importPermissions = specialPermissions.OfType<ReadExternalProjectPermission>();
-            var groupsWithPermissionIds = m_permissionRepository.InvokeUnitOfWork(x => x.GetGroupsBySpecialPermissionIds(importPermissions.Select(y => y.Id))).Select(x => x.Id).ToList();
+            var groupsWithPermissionIds = new List<int>();
+
+            if (importPermissions.Count() != 0)
+            {
+                groupsWithPermissionIds = m_permissionRepository.InvokeUnitOfWork(x => x.GetGroupsBySpecialPermissionIds(importPermissions.Select(y => y.Id))).Select(x => x.Id).ToList();
+            }
+            
 
             return new ActionBlock<ImportedRecord>(importedRecord =>
                 {
