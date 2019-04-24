@@ -64,7 +64,11 @@ namespace Vokabular.OaiPmhImportManager
             projectImportMetadata.ExternalId = record.header.identifier;
             projectImportMetadata.RawData = record.metadata.OuterXml;
             projectImportMetadata.IsDeleted = record.header.statusSpecified;
-            projectImportMetadata.TimeStamp = DateTime.Parse(record.header.datestamp);
+
+            if (!string.IsNullOrEmpty(record.header.datestamp))
+            {
+                projectImportMetadata.TimeStamp =  DateTime.Parse(record.header.datestamp);
+            }
             
             return projectImportMetadata;
         }
