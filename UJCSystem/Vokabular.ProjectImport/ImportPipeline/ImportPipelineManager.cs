@@ -104,7 +104,6 @@ namespace Vokabular.ProjectImport.ImportPipeline
             }
             finally
             {
-                progressInfo.IsCompleted = true;
                 var importHistory = m_importHistoryManager.GetImportHistory(importHistoryId);
                 m_importManager.CancellationTokens.TryGetValue(externalRepositoryId, out var cancellationTokenSource);
 
@@ -130,6 +129,7 @@ namespace Vokabular.ProjectImport.ImportPipeline
                     importHistory.Status = ImportStatusEnum.Completed;
                 }
 
+                progressInfo.IsCompleted = true;
                 m_importHistoryManager.UpdateImportHistory(importHistory);
                 
                 if (!string.IsNullOrEmpty(progressInfo.FaultedMessage))

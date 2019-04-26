@@ -57,10 +57,24 @@ namespace Vokabular.ProjectImport.Managers
                 if (m_logger.IsErrorEnabled())
                     m_logger.LogError(e, e.Message);
             }
-            finally
+
+
+            try
             {
-                m_importedRecordMetadataManager.CreateImportedRecordMetadata(importedRecord, importHistoryId);
                 progressInfo.IncrementProcessedProjectsCount();
+                m_importedRecordMetadataManager.CreateImportedRecordMetadata(importedRecord, importHistoryId);
+            }
+            catch (DataException e)
+            {
+                if (!importedRecord.IsFailed)
+                {
+                    importedRecord.IsFailed = true;
+                    importedRecord.FaultedMessage = e.Message;
+                    progressInfo.IncrementFailedProjectsCount();
+                }
+
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError(e, e.Message);
             }
         }
     }

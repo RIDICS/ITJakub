@@ -61,7 +61,13 @@ namespace Vokabular.OaiPmhImportManager
 
             if (!string.IsNullOrEmpty(record.header.datestamp))
             {
-                projectImportMetadata.TimeStamp =  DateTime.Parse(record.header.datestamp);
+                try
+                {
+                    projectImportMetadata.TimeStamp =  DateTime.Parse(record.header.datestamp);
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                }
             }
             
             return projectImportMetadata;

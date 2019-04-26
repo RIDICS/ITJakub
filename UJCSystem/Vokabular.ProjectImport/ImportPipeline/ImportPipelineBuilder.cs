@@ -145,10 +145,10 @@ namespace Vokabular.ProjectImport.ImportPipeline
             var bookTypeId = m_projectRepository.InvokeUnitOfWork(x => x.GetBookTypeByEnum(BookTypeEnum.BibliographicalItem)).Id;
 
             var specialPermissions = m_permissionRepository.InvokeUnitOfWork(x => x.GetSpecialPermissions());
-            var importPermissions = specialPermissions.OfType<ReadExternalProjectPermission>();
+            var importPermissions = specialPermissions.OfType<ReadExternalProjectPermission>().ToList();
             var groupsWithPermissionIds = new List<int>();
 
-            if (importPermissions.Count() != 0)
+            if (importPermissions.Count != 0)
             {
                 groupsWithPermissionIds = m_permissionRepository.InvokeUnitOfWork(x => x.GetGroupsBySpecialPermissionIds(importPermissions.Select(y => y.Id))).Select(x => x.Id).ToList();
             }
