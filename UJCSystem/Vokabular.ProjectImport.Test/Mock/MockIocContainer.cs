@@ -59,7 +59,9 @@ namespace Vokabular.ProjectImport.Test.Mock
                     db.Driver<SQLite20Driver>();
                     db.ConnectionProvider<DriverConnectionProvider>();
                     db.BatchSize = 200;
-                    db.ConnectionReleaseMode = ConnectionReleaseMode.OnClose;                     
+                    db.ConnectionReleaseMode = ConnectionReleaseMode.OnClose;        
+                    //db.LogFormattedSql = true;
+                    //db.LogSqlInConsole = true;   
                 })
                 .AddAssembly(typeof(NHibernateDao).Assembly);
            

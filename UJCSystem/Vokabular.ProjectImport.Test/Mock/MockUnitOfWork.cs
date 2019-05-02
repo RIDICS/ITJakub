@@ -21,7 +21,7 @@ namespace Vokabular.ProjectImport.Test.Mock
             }
 
             CurrentSession = m_sessionFactory.OpenSession();
-            CurrentSession.FlushMode = FlushMode.Commit;
+            CurrentSession.FlushMode = FlushMode.Always;
             m_transaction = CurrentSession.BeginTransaction();
         }
 

@@ -56,14 +56,14 @@ namespace Vokabular.ProjectImport.Works
             UpdateLiteraryGenres(project);
             UpdateLiteraryOriginals(project);
             UpdateKeywords(project);
-
-            m_catalogValueRepository.Update(project);
-
             UpdateAuthors(project);
             UpdateMetadata(project);
 
+            m_catalogValueRepository.Update(project);
+
             CreateSnapshot();
             ProcessExternalImportPermission();
+            m_projectRepository.UnitOfWork.CurrentSession.Evict(project); //because of unit tests - unit test is running in one session
         }
 
         private int CreateImportedProjectMetadata()
@@ -277,7 +277,7 @@ namespace Vokabular.ProjectImport.Works
             var dbAuthors = project.Authors.Select(x => x.OriginalAuthor).ToList();
             var newAuthors =
                 m_importedRecord.Project.Authors.Select(x => new OriginalAuthor {FirstName = x.FirstName, LastName = x.LastName})
-                    .ToList() ?? new List<OriginalAuthor>();
+                    .ToList();
 
             var comparer = new AuthorNameEqualityComparer();
             var authorsToAdd = newAuthors.Except(dbAuthors, comparer).ToList();
