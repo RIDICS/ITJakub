@@ -7,7 +7,7 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
     public class AuthorProcessor : IDataFieldProcessor
     {
         private const string AuthorCode = "a";
-        public IList<string> Tags { get; } = new List<string> { "100", "600"};
+        public IList<string> Tags { get; } = new List<string> { "100"};
 
         public void Process(dataFieldType dataField, Project project)
         {
