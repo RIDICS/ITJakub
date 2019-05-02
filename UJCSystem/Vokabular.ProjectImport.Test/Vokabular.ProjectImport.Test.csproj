@@ -8,10 +8,14 @@
 
   <ItemGroup>
     <None Remove="OaiPmh_Marc21_JanHus.xml" />
+    <None Remove="OaiPmh_Marc21_JosefPekar.xml" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="OaiPmh_Marc21_JanHus.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="OaiPmh_Marc21_JosefPekar.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
