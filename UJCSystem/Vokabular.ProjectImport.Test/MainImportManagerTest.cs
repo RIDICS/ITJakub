@@ -11,10 +11,12 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Vokabular.DataEntities.Database.Entities.Enums;
+using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.OaiPmhImportManager;
 using Vokabular.OaiPmhImportManager.Model;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
+using Vokabular.ProjectImport.Model.Exceptions;
 using Vokabular.ProjectImport.Test.Mock;
 using Vokabular.ProjectParsing.Model.Parsers;
 
@@ -25,7 +27,10 @@ namespace Vokabular.ProjectImport.Test
     {
         private MainImportManager m_mainImportManager;
         private ImportHistoryManager m_importHistoryManager;
-        private MockDataFactory m_mockDataFactory;
+        private MockDataConstant m_mockDataConstant;
+        private MockDataManager m_mockDataManager;
+
+        private const string ThrowExc = "ThrowException";
 
         [TestInitialize]
         public async Task Init()
@@ -42,7 +47,12 @@ namespace Vokabular.ProjectImport.Test
                 .Callback<string, ITargetBlock<object>, RepositoryImportProgressInfo, DateTime?, CancellationToken>(
                     (config, target, progressInfo, dateTime, cancellationToken) =>
                     {
-                        target.Post(GetRecord("OaiPmh_Marc21_JanHus.xml"));
+                        if (config == ThrowExc)
+                        {
+                            throw new ImportFailedException("ImportFailed");
+                        }
+
+                        target.Post(GetRecord(config));
                         progressInfo.TotalProjectsCount = 1;
                     })
                 .Returns(Task.CompletedTask);
@@ -50,12 +60,13 @@ namespace Vokabular.ProjectImport.Test
             var mockIoc = new MockIocContainer(true);
             mockIoc.ServiceCollection.Replace(new ServiceDescriptor(typeof(IProjectImportManager),
                 oaiPmhProjectImportManagerMock.Object));
-            
+
             var serviceProvider = mockIoc.CreateServiceProvider();
 
             m_mainImportManager = serviceProvider.GetRequiredService<MainImportManager>();
             m_importHistoryManager = serviceProvider.GetRequiredService<ImportHistoryManager>();
-            m_mockDataFactory= serviceProvider.GetRequiredService<MockDataFactory>();
+            m_mockDataConstant = serviceProvider.GetRequiredService<MockDataConstant>();
+            m_mockDataManager = serviceProvider.GetRequiredService<MockDataManager>();
 
             var backgroundService = serviceProvider.GetService<IHostedService>();
             await backgroundService.StartAsync(CancellationToken.None);
@@ -78,11 +89,14 @@ namespace Vokabular.ProjectImport.Test
         [TestMethod]
         public void StartImportWithOneRepository()
         {
-            var userId = m_mockDataFactory.CreateUser();
-            var externalRepositoryId = m_mockDataFactory.CreateExternalRepository(userId);
+            var userId = m_mockDataManager.GetOrCreateUser();
+            var externalRepositoryId = m_mockDataManager.CreateExternalRepository(m_mockDataConstant.RecordOaiPmhMarc21JanHus, new List<FilteringExpressionContract>
+            {
+                new FilteringExpressionContract {Field = "100a", Value = "%Hus%"}
+            });
 
             m_mainImportManager.ImportFromResources(new List<int> {externalRepositoryId}, userId);
-           
+
             Thread.Sleep(5000);
 
             while (m_mainImportManager.IsImportRunning)
@@ -101,9 +115,111 @@ namespace Vokabular.ProjectImport.Test
             Assert.AreEqual(1, info.ProcessedProjectsCount);
             Assert.AreEqual(null, info.FaultedMessage);
 
-            var importHistory = m_importHistoryManager.GetLatestSuccessfulImportHistory(externalRepositoryId);
+            var importHistory = m_importHistoryManager.GetLatestImportHistory(externalRepositoryId);
             Assert.AreNotEqual(null, importHistory);
+            Assert.AreEqual(null, importHistory.Message);
             Assert.AreEqual(ImportStatusEnum.Completed, importHistory.Status);
+        }
+
+        [TestMethod]
+        public void StartImportWithTwoRepositories()
+        {
+            var userId = m_mockDataManager.GetOrCreateUser();
+
+            var externalRepositoryId1 = m_mockDataManager.CreateExternalRepository(m_mockDataConstant.RecordOaiPmhMarc21JanHus, new List<FilteringExpressionContract>
+            {
+                new FilteringExpressionContract {Field = "100a", Value = "%Hus%"}
+            });
+
+            var externalRepositoryId2 = m_mockDataManager.CreateExternalRepository(m_mockDataConstant.RecordOaiPmhMarc21JosefPekar, new List<FilteringExpressionContract>
+            {
+                new FilteringExpressionContract {Field = "100a", Value = "%Josef%"}
+            });
+
+            m_mainImportManager.ImportFromResources(new List<int> {externalRepositoryId1, externalRepositoryId2}, userId);
+
+            Thread.Sleep(5000);
+
+            while (m_mainImportManager.IsImportRunning)
+            {
+                Thread.Sleep(1000);
+            }
+
+            Assert.AreEqual(false, m_mainImportManager.IsImportRunning);
+            Assert.AreEqual(2, m_mainImportManager.ActualProgress.Count);
+
+            foreach (var info in m_mainImportManager.ActualProgress)
+            {
+                Assert.AreEqual(true, info.Value.IsCompleted);
+                Assert.AreEqual(1, info.Value.TotalProjectsCount);
+                Assert.AreEqual(0, info.Value.FailedProjectsCount);
+                Assert.AreEqual(1, info.Value.ProcessedProjectsCount);
+                Assert.AreEqual(null, info.Value.FaultedMessage);
+            }
+
+            var importHistory = m_importHistoryManager.GetLatestImportHistory(externalRepositoryId1);
+            Assert.AreNotEqual(null, importHistory);
+            Assert.AreEqual(null, importHistory.Message);
+            Assert.AreEqual(ImportStatusEnum.Completed, importHistory.Status);
+
+            var importHistory2 = m_importHistoryManager.GetLatestImportHistory(externalRepositoryId2);
+            Assert.AreNotEqual(null, importHistory2);
+            Assert.AreEqual(null, importHistory2.Message);
+            Assert.AreEqual(ImportStatusEnum.Completed, importHistory2.Status);
+        }
+
+        [TestMethod]
+        public void StartImportWithTwoRepositoriesOneFailed()
+        {
+            var userId = m_mockDataManager.GetOrCreateUser();
+
+            var externalRepositoryId1 = m_mockDataManager.CreateExternalRepository(m_mockDataConstant.RecordOaiPmhMarc21JanHus, new List<FilteringExpressionContract>
+            {
+                new FilteringExpressionContract {Field = "100a", Value = "%Hus%"}
+            });
+
+            var externalRepositoryId2 = m_mockDataManager.CreateExternalRepository(ThrowExc, new List<FilteringExpressionContract>
+            {
+                new FilteringExpressionContract {Field = "100a", Value = "%Josef%"}
+            });
+
+            m_mainImportManager.ImportFromResources(new List<int> {externalRepositoryId1, externalRepositoryId2}, userId);
+
+            Thread.Sleep(5000);
+
+            while (m_mainImportManager.IsImportRunning)
+            {
+                Thread.Sleep(1000);
+            }
+
+            Assert.AreEqual(false, m_mainImportManager.IsImportRunning);
+            Assert.AreEqual(2, m_mainImportManager.ActualProgress.Count);
+
+            var info = m_mainImportManager.ActualProgress.First().Value;
+
+            Assert.AreEqual(true, info.IsCompleted);
+            Assert.AreEqual(1, info.TotalProjectsCount);
+            Assert.AreEqual(0, info.FailedProjectsCount);
+            Assert.AreEqual(1, info.ProcessedProjectsCount);
+            Assert.AreEqual(null, info.FaultedMessage);
+
+            info = m_mainImportManager.ActualProgress.First(x => x.Key == externalRepositoryId2).Value;
+
+            Assert.AreEqual(true, info.IsCompleted);
+            Assert.AreEqual(0, info.TotalProjectsCount);
+            Assert.AreEqual(0, info.FailedProjectsCount);
+            Assert.AreEqual(0, info.ProcessedProjectsCount);
+            Assert.AreNotEqual(null, info.FaultedMessage);
+
+            var importHistory = m_importHistoryManager.GetLatestImportHistory(externalRepositoryId1);
+            Assert.AreNotEqual(null, importHistory);
+            Assert.AreEqual(null, importHistory.Message);
+            Assert.AreEqual(ImportStatusEnum.Completed, importHistory.Status);
+
+            var importHistory2 = m_importHistoryManager.GetLatestImportHistory(externalRepositoryId2);
+            Assert.AreNotEqual(null, importHistory2);
+            Assert.AreNotEqual(null, importHistory2.Message);
+            Assert.AreEqual(ImportStatusEnum.Failed, importHistory2.Status);
         }
 
         private recordType GetRecord(string name)
