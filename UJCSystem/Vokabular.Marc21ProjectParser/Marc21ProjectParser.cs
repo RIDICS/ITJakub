@@ -48,7 +48,7 @@ namespace Vokabular.Marc21ProjectParser
         public ImportedRecord AddParsedProject(ImportedRecord importedRecord)
         {
             var record = ((string) importedRecord.RawData).XmlDeserializeFromString<MARC21record>();
-            var project = new Project();
+            var project = new ImportedProject();
 
             foreach (var dataField in record.datafield)
             {
@@ -62,7 +62,7 @@ namespace Vokabular.Marc21ProjectParser
                 controlFieldProcessor?.Process(controlField, project);
             }
 
-            importedRecord.Project = project;
+            importedRecord.ImportedProject = project;
             return importedRecord;
         }
     }

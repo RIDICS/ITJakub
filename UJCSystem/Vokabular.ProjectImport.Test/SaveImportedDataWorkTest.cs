@@ -44,7 +44,7 @@ namespace Vokabular.ProjectImport.Test
                 IsNew = true,
                 IsFailed = false,
                 IsDeleted = false,
-                Project = new Project
+                ImportedProject = new ImportedProject
                 {
                     Id = "1",
                     ProjectMetadata = new ProjectMetadata
@@ -80,25 +80,25 @@ namespace Vokabular.ProjectImport.Test
 
             var externalRepository = m_externalRepositoryRepository.GetExternalRepository(externalRepositoryId);
 
-            Assert.AreEqual(m_importedRecord.Project.ProjectMetadata.Title, project.Name);
-            Assert.AreEqual(string.Format(externalRepository.UrlTemplate, m_importedRecord.Project.Id), project.OriginalUrl);
+            Assert.AreEqual(m_importedRecord.ImportedProject.ProjectMetadata.Title, project.Name);
+            Assert.AreEqual(string.Format(externalRepository.UrlTemplate, m_importedRecord.ImportedProject.Id), project.OriginalUrl);
             Assert.AreEqual(userId, project.CreatedByUser.Id);
             Assert.AreEqual(1, project.Snapshots.Count);
 
-            CollectionAssert.AreEquivalent(m_importedRecord.Project.Keywords.ToList(), project.Keywords.Select(x => x.Text).ToList());
-            CollectionAssert.AreEquivalent(m_importedRecord.Project.LiteraryGenres.ToList(),
+            CollectionAssert.AreEquivalent(m_importedRecord.ImportedProject.Keywords.ToList(), project.Keywords.Select(x => x.Text).ToList());
+            CollectionAssert.AreEquivalent(m_importedRecord.ImportedProject.LiteraryGenres.ToList(),
                 project.LiteraryGenres.Select(x => x.Name).ToList());
 
-            Assert.AreEqual(m_importedRecord.Project.Authors.Count, project.Authors.Count);
-            Assert.AreEqual(m_importedRecord.Project.Authors.First().FirstName, project.Authors.First().OriginalAuthor.FirstName);
-            Assert.AreEqual(m_importedRecord.Project.Authors.First().LastName, project.Authors.First().OriginalAuthor.LastName);
+            Assert.AreEqual(m_importedRecord.ImportedProject.Authors.Count, project.Authors.Count);
+            Assert.AreEqual(m_importedRecord.ImportedProject.Authors.First().FirstName, project.Authors.First().OriginalAuthor.FirstName);
+            Assert.AreEqual(m_importedRecord.ImportedProject.Authors.First().LastName, project.Authors.First().OriginalAuthor.LastName);
 
             var metadataResource = m_metadataRepository.GetLatestMetadataResource(m_importedRecord.ProjectId);
 
-            Assert.AreEqual(m_importedRecord.Project.ProjectMetadata.Title, metadataResource.Title);
-            Assert.AreEqual(m_importedRecord.Project.ProjectMetadata.PublisherText, metadataResource.PublisherText);
-            Assert.AreEqual(m_importedRecord.Project.ProjectMetadata.PublishDate, metadataResource.PublishDate);
-            Assert.AreEqual(m_importedRecord.Project.ProjectMetadata.PublishPlace, metadataResource.PublishPlace);
+            Assert.AreEqual(m_importedRecord.ImportedProject.ProjectMetadata.Title, metadataResource.Title);
+            Assert.AreEqual(m_importedRecord.ImportedProject.ProjectMetadata.PublisherText, metadataResource.PublisherText);
+            Assert.AreEqual(m_importedRecord.ImportedProject.ProjectMetadata.PublishDate, metadataResource.PublishDate);
+            Assert.AreEqual(m_importedRecord.ImportedProject.ProjectMetadata.PublishPlace, metadataResource.PublishPlace);
 
             var importedProjectMetadata = m_importedProjectMetadataManager.GetImportedProjectMetadataByExternalId(m_importedRecord.ExternalId);
 
@@ -126,20 +126,20 @@ namespace Vokabular.ProjectImport.Test
                 true,
                 false);
 
-            CollectionAssert.AreEquivalent(m_importedRecord.Project.Keywords.ToList(), project.Keywords.Select(x => x.Text).ToList());
-            CollectionAssert.AreEquivalent(m_importedRecord.Project.LiteraryGenres.ToList(),
+            CollectionAssert.AreEquivalent(m_importedRecord.ImportedProject.Keywords.ToList(), project.Keywords.Select(x => x.Text).ToList());
+            CollectionAssert.AreEquivalent(m_importedRecord.ImportedProject.LiteraryGenres.ToList(),
                 project.LiteraryGenres.Select(x => x.Name).ToList());
 
-            Assert.AreEqual(m_importedRecord.Project.Authors.Count, project.Authors.Count);
-            Assert.AreEqual(m_importedRecord.Project.Authors.First().FirstName, project.Authors.First().OriginalAuthor.FirstName);
-            Assert.AreEqual(m_importedRecord.Project.Authors.First().LastName, project.Authors.First().OriginalAuthor.LastName);
+            Assert.AreEqual(m_importedRecord.ImportedProject.Authors.Count, project.Authors.Count);
+            Assert.AreEqual(m_importedRecord.ImportedProject.Authors.First().FirstName, project.Authors.First().OriginalAuthor.FirstName);
+            Assert.AreEqual(m_importedRecord.ImportedProject.Authors.First().LastName, project.Authors.First().OriginalAuthor.LastName);
 
             var metadataResource = m_metadataRepository.GetLatestMetadataResource(m_importedRecord.ProjectId);
 
-            Assert.AreEqual(m_importedRecord.Project.ProjectMetadata.Title, metadataResource.Title);
-            Assert.AreEqual(m_importedRecord.Project.ProjectMetadata.PublisherText, metadataResource.PublisherText);
-            Assert.AreEqual(m_importedRecord.Project.ProjectMetadata.PublishDate, metadataResource.PublishDate);
-            Assert.AreEqual(m_importedRecord.Project.ProjectMetadata.PublishPlace, metadataResource.PublishPlace);
+            Assert.AreEqual(m_importedRecord.ImportedProject.ProjectMetadata.Title, metadataResource.Title);
+            Assert.AreEqual(m_importedRecord.ImportedProject.ProjectMetadata.PublisherText, metadataResource.PublisherText);
+            Assert.AreEqual(m_importedRecord.ImportedProject.ProjectMetadata.PublishDate, metadataResource.PublishDate);
+            Assert.AreEqual(m_importedRecord.ImportedProject.ProjectMetadata.PublishPlace, metadataResource.PublishPlace);
 
             var importedProjectMetadata = m_importedProjectMetadataManager.GetImportedProjectMetadataByExternalId(m_importedRecord.ExternalId);
 
@@ -150,11 +150,11 @@ namespace Vokabular.ProjectImport.Test
 
             //Update project
             m_importedRecord.IsNew = false;
-            m_importedRecord.Project.ProjectMetadata.Title = "UpdatedTitle";
-            m_importedRecord.Project.ProjectMetadata.PublisherText = "UpdatedPublisherText";
-            m_importedRecord.Project.Keywords.Add("Keyword2");
-            m_importedRecord.Project.LiteraryGenres.Add("LiteraryGenre2");
-            m_importedRecord.Project.Authors.Add(new Author("FirstName2", "LastName2"));
+            m_importedRecord.ImportedProject.ProjectMetadata.Title = "UpdatedTitle";
+            m_importedRecord.ImportedProject.ProjectMetadata.PublisherText = "UpdatedPublisherText";
+            m_importedRecord.ImportedProject.Keywords.Add("Keyword2");
+            m_importedRecord.ImportedProject.LiteraryGenres.Add("LiteraryGenre2");
+            m_importedRecord.ImportedProject.Authors.Add(new Author("FirstName2", "LastName2"));
 
             new SaveImportedDataWork(m_projectRepository, m_metadataRepository, m_catalogValueRepository,
                 m_personRepository, m_permissionRepository, m_importedRecord, userId, externalRepositoryId,
@@ -169,20 +169,20 @@ namespace Vokabular.ProjectImport.Test
 
             Assert.AreEqual(2, project.Snapshots.Count);
 
-            CollectionAssert.AreEquivalent(m_importedRecord.Project.Keywords.ToList(), project.Keywords.Select(x => x.Text).ToList());
-            CollectionAssert.AreEquivalent(m_importedRecord.Project.LiteraryGenres.ToList(),
+            CollectionAssert.AreEquivalent(m_importedRecord.ImportedProject.Keywords.ToList(), project.Keywords.Select(x => x.Text).ToList());
+            CollectionAssert.AreEquivalent(m_importedRecord.ImportedProject.LiteraryGenres.ToList(),
                 project.LiteraryGenres.Select(x => x.Name).ToList());
 
-            Assert.AreEqual(m_importedRecord.Project.Authors.Count, project.Authors.Count);
-            Assert.AreEqual(m_importedRecord.Project.Authors.First().FirstName, project.Authors.First().OriginalAuthor.FirstName);
-            Assert.AreEqual(m_importedRecord.Project.Authors.First().LastName, project.Authors.First().OriginalAuthor.LastName);
+            Assert.AreEqual(m_importedRecord.ImportedProject.Authors.Count, project.Authors.Count);
+            Assert.AreEqual(m_importedRecord.ImportedProject.Authors.First().FirstName, project.Authors.First().OriginalAuthor.FirstName);
+            Assert.AreEqual(m_importedRecord.ImportedProject.Authors.First().LastName, project.Authors.First().OriginalAuthor.LastName);
 
             metadataResource = m_metadataRepository.GetLatestMetadataResource(m_importedRecord.ProjectId);
 
-            Assert.AreEqual(m_importedRecord.Project.ProjectMetadata.Title, metadataResource.Title);
-            Assert.AreEqual(m_importedRecord.Project.ProjectMetadata.PublisherText, metadataResource.PublisherText);
-            Assert.AreEqual(m_importedRecord.Project.ProjectMetadata.PublishDate, metadataResource.PublishDate);
-            Assert.AreEqual(m_importedRecord.Project.ProjectMetadata.PublishPlace, metadataResource.PublishPlace);
+            Assert.AreEqual(m_importedRecord.ImportedProject.ProjectMetadata.Title, metadataResource.Title);
+            Assert.AreEqual(m_importedRecord.ImportedProject.ProjectMetadata.PublisherText, metadataResource.PublisherText);
+            Assert.AreEqual(m_importedRecord.ImportedProject.ProjectMetadata.PublishDate, metadataResource.PublishDate);
+            Assert.AreEqual(m_importedRecord.ImportedProject.ProjectMetadata.PublishPlace, metadataResource.PublishPlace);
 
             importedProjectMetadata = m_importedProjectMetadataManager.GetImportedProjectMetadataByExternalId(m_importedRecord.ExternalId);
 
@@ -210,20 +210,20 @@ namespace Vokabular.ProjectImport.Test
                 true,
                 false);
 
-            CollectionAssert.AreEquivalent(m_importedRecord.Project.Keywords.ToList(), project.Keywords.Select(x => x.Text).ToList());
-            CollectionAssert.AreEquivalent(m_importedRecord.Project.LiteraryGenres.ToList(),
+            CollectionAssert.AreEquivalent(m_importedRecord.ImportedProject.Keywords.ToList(), project.Keywords.Select(x => x.Text).ToList());
+            CollectionAssert.AreEquivalent(m_importedRecord.ImportedProject.LiteraryGenres.ToList(),
                 project.LiteraryGenres.Select(x => x.Name).ToList());
 
-            Assert.AreEqual(m_importedRecord.Project.Authors.Count, project.Authors.Count);
-            Assert.AreEqual(m_importedRecord.Project.Authors.First().FirstName, project.Authors.First().OriginalAuthor.FirstName);
-            Assert.AreEqual(m_importedRecord.Project.Authors.First().LastName, project.Authors.First().OriginalAuthor.LastName);
+            Assert.AreEqual(m_importedRecord.ImportedProject.Authors.Count, project.Authors.Count);
+            Assert.AreEqual(m_importedRecord.ImportedProject.Authors.First().FirstName, project.Authors.First().OriginalAuthor.FirstName);
+            Assert.AreEqual(m_importedRecord.ImportedProject.Authors.First().LastName, project.Authors.First().OriginalAuthor.LastName);
 
             var metadataResource = m_metadataRepository.GetLatestMetadataResource(m_importedRecord.ProjectId);
 
-            Assert.AreEqual(m_importedRecord.Project.ProjectMetadata.Title, metadataResource.Title);
-            Assert.AreEqual(m_importedRecord.Project.ProjectMetadata.PublisherText, metadataResource.PublisherText);
-            Assert.AreEqual(m_importedRecord.Project.ProjectMetadata.PublishDate, metadataResource.PublishDate);
-            Assert.AreEqual(m_importedRecord.Project.ProjectMetadata.PublishPlace, metadataResource.PublishPlace);
+            Assert.AreEqual(m_importedRecord.ImportedProject.ProjectMetadata.Title, metadataResource.Title);
+            Assert.AreEqual(m_importedRecord.ImportedProject.ProjectMetadata.PublisherText, metadataResource.PublisherText);
+            Assert.AreEqual(m_importedRecord.ImportedProject.ProjectMetadata.PublishDate, metadataResource.PublishDate);
+            Assert.AreEqual(m_importedRecord.ImportedProject.ProjectMetadata.PublishPlace, metadataResource.PublishPlace);
 
             var importedProjectMetadata = m_importedProjectMetadataManager.GetImportedProjectMetadataByExternalId(m_importedRecord.ExternalId);
 
@@ -234,10 +234,10 @@ namespace Vokabular.ProjectImport.Test
 
             //Update project
             m_importedRecord.IsNew = false;
-            m_importedRecord.Project.ProjectMetadata.Title = "UpdatedTitle";
-            m_importedRecord.Project.ProjectMetadata.PublisherText = "UpdatedPublisherText";
-            m_importedRecord.Project.Keywords = new List<string>{"Keyword2"};
-            m_importedRecord.Project.LiteraryGenres = new List<string> {"LiteraryGenre2"};
+            m_importedRecord.ImportedProject.ProjectMetadata.Title = "UpdatedTitle";
+            m_importedRecord.ImportedProject.ProjectMetadata.PublisherText = "UpdatedPublisherText";
+            m_importedRecord.ImportedProject.Keywords = new List<string>{"Keyword2"};
+            m_importedRecord.ImportedProject.LiteraryGenres = new List<string> {"LiteraryGenre2"};
 
             new SaveImportedDataWork(m_projectRepository, m_metadataRepository, m_catalogValueRepository,
                 m_personRepository, m_permissionRepository, m_importedRecord, userId, externalRepositoryId,
@@ -252,20 +252,20 @@ namespace Vokabular.ProjectImport.Test
 
             Assert.AreEqual(2, project.Snapshots.Count);
 
-            CollectionAssert.AreEquivalent(m_importedRecord.Project.Keywords.ToList(), project.Keywords.Select(x => x.Text).ToList());
-            CollectionAssert.AreEquivalent(m_importedRecord.Project.LiteraryGenres.ToList(),
+            CollectionAssert.AreEquivalent(m_importedRecord.ImportedProject.Keywords.ToList(), project.Keywords.Select(x => x.Text).ToList());
+            CollectionAssert.AreEquivalent(m_importedRecord.ImportedProject.LiteraryGenres.ToList(),
                 project.LiteraryGenres.Select(x => x.Name).ToList());
 
-            Assert.AreEqual(m_importedRecord.Project.Authors.Count, project.Authors.Count);
-            Assert.AreEqual(m_importedRecord.Project.Authors.First().FirstName, project.Authors.First().OriginalAuthor.FirstName);
-            Assert.AreEqual(m_importedRecord.Project.Authors.First().LastName, project.Authors.First().OriginalAuthor.LastName);
+            Assert.AreEqual(m_importedRecord.ImportedProject.Authors.Count, project.Authors.Count);
+            Assert.AreEqual(m_importedRecord.ImportedProject.Authors.First().FirstName, project.Authors.First().OriginalAuthor.FirstName);
+            Assert.AreEqual(m_importedRecord.ImportedProject.Authors.First().LastName, project.Authors.First().OriginalAuthor.LastName);
 
             metadataResource = m_metadataRepository.GetLatestMetadataResource(m_importedRecord.ProjectId);
             
-            Assert.AreEqual(m_importedRecord.Project.ProjectMetadata.Title, metadataResource.Title);
-            Assert.AreEqual(m_importedRecord.Project.ProjectMetadata.PublisherText, metadataResource.PublisherText);
-            Assert.AreEqual(m_importedRecord.Project.ProjectMetadata.PublishDate, metadataResource.PublishDate);
-            Assert.AreEqual(m_importedRecord.Project.ProjectMetadata.PublishPlace, metadataResource.PublishPlace);
+            Assert.AreEqual(m_importedRecord.ImportedProject.ProjectMetadata.Title, metadataResource.Title);
+            Assert.AreEqual(m_importedRecord.ImportedProject.ProjectMetadata.PublisherText, metadataResource.PublisherText);
+            Assert.AreEqual(m_importedRecord.ImportedProject.ProjectMetadata.PublishDate, metadataResource.PublishDate);
+            Assert.AreEqual(m_importedRecord.ImportedProject.ProjectMetadata.PublishPlace, metadataResource.PublishPlace);
 
             importedProjectMetadata = m_importedProjectMetadataManager.GetImportedProjectMetadataByExternalId(m_importedRecord.ExternalId);
 

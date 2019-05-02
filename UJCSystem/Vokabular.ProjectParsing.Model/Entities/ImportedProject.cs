@@ -2,7 +2,7 @@
 
 namespace Vokabular.ProjectParsing.Model.Entities
 {
-    public class Project
+    public class ImportedProject
     {
         public string Id { get; set; }
 
@@ -16,7 +16,7 @@ namespace Vokabular.ProjectParsing.Model.Entities
 
         public ProjectMetadata ProjectMetadata { get; set; }
 
-        public Project()
+        public ImportedProject()
         {
             Authors = new HashSet<Author>();
             Keywords = new List<string>();

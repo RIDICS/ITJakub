@@ -4,6 +4,6 @@ namespace Vokabular.Marc21ProjectParser
 {
     public interface IControlFieldProcessor : IFieldProcessor
     {
-        void Process(controlFieldType dataField, Project project);
+        void Process(controlFieldType dataField, ImportedProject importedProject);
     }
 }

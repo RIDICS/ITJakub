@@ -11,7 +11,7 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
 
         public IList<string> Tags { get; } = new List<string> {"773"};
 
-        public void Process(dataFieldType dataField, Project project)
+        public void Process(dataFieldType dataField, ImportedProject importedProject)
         {
             var publishInfo = dataField.subfield.FirstOrDefault(x => x.code == PublishInfoCode);
             if (publishInfo == null)
@@ -26,7 +26,7 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
             }
 
             var publishPlace = publishInfo.Value.Substring(0, index);
-            project.ProjectMetadata.PublishPlace = publishPlace.RemoveUnnecessaryCharacters();
+            importedProject.ProjectMetadata.PublishPlace = publishPlace.RemoveUnnecessaryCharacters();
             var rest = publishInfo.Value.Substring(index);
 
             if (string.IsNullOrEmpty(rest))
@@ -44,23 +44,23 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
 
                 if (!string.IsNullOrEmpty(publisherText) && publisherText.Length > 1)
                 {
-                    project.ProjectMetadata.PublisherText = publisherText.RemoveUnnecessaryCharacters();
+                    importedProject.ProjectMetadata.PublisherText = publisherText.RemoveUnnecessaryCharacters();
                 }
 
                 if (!string.IsNullOrEmpty(publishDate) && publishDate.Length > 1)
                 {
-                    project.ProjectMetadata.PublishDate = publishDate.RemoveUnnecessaryCharacters();
+                    importedProject.ProjectMetadata.PublishDate = publishDate.RemoveUnnecessaryCharacters();
                 }
             }
             else
             {
                 if (int.TryParse(rest, out var publishDate))
                 {
-                    project.ProjectMetadata.PublishDate = publishDate.ToString();
+                    importedProject.ProjectMetadata.PublishDate = publishDate.ToString();
                 }
                 else
                 {
-                    project.ProjectMetadata.PublisherText = rest;
+                    importedProject.ProjectMetadata.PublisherText = rest;
                 }
             }
         }

@@ -7,9 +7,9 @@ namespace Vokabular.Marc21ProjectParser.ControlFieldProcessor
     {
         public IList<string> Tags { get; } = new List<string> { "001"};
 
-        public void Process(controlFieldType dataField, Project project)
+        public void Process(controlFieldType dataField, ImportedProject importedProject)
         {
-            project.Id = dataField.Value;
+            importedProject.Id = dataField.Value;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
 
         public IList<string> Tags { get; } = new List<string> {"648"};
 
-        public void Process(dataFieldType dataField, Project project)
+        public void Process(dataFieldType dataField, ImportedProject importedProject)
         {
             var dateSubfield = dataField.subfield.FirstOrDefault(x => x.code == NotAfterAndNotBeforeCode);
             if (dateSubfield == null)
@@ -19,17 +19,17 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
                 return;
             }
 
-            project.ProjectMetadata.OriginDate = dateSubfield.Value;
+            importedProject.ProjectMetadata.OriginDate = dateSubfield.Value;
             var dates = dateSubfield.Value.Split('-');
 
             if (int.TryParse(dates[0], out var year) && year > 0)
             {
-                project.ProjectMetadata.ManuscriptDescriptionData.NotBefore = new DateTime(year, 1, 1);
+                importedProject.ProjectMetadata.ManuscriptDescriptionData.NotBefore = new DateTime(year, 1, 1);
             }
 
             if (dates.Length > 1 && dates[1].Length > 0 && int.TryParse(dates[0], out year) && year > 0)
             {
-                project.ProjectMetadata.ManuscriptDescriptionData.NotAfter = new DateTime(year, 1, 1);
+                importedProject.ProjectMetadata.ManuscriptDescriptionData.NotAfter = new DateTime(year, 1, 1);
             }
         }
     }

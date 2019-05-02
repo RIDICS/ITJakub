@@ -20,7 +20,7 @@ namespace Vokabular.ProjectImport.Works
         {
             var project = new Project
             {
-                Name = m_metadata.Project.ProjectMetadata.Title,
+                Name = m_metadata.ImportedProject.ProjectMetadata.Title,
             };
 
             m_projectRepository.Update(project);

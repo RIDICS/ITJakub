@@ -9,7 +9,7 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
         private const string AuthorCode = "a";
         public IList<string> Tags { get; } = new List<string> { "100"};
 
-        public void Process(dataFieldType dataField, Project project)
+        public void Process(dataFieldType dataField, ImportedProject importedProject)
         {
             var authorSubfield = dataField.subfield.FirstOrDefault(x => x.code == AuthorCode);
 
@@ -33,7 +33,7 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
                 }
             }
 
-            project.Authors.Add(new Author(firstName, lastName));
+            importedProject.Authors.Add(new Author(firstName, lastName));
         }
     }
 }

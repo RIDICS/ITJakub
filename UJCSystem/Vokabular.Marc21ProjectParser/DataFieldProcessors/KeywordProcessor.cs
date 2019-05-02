@@ -9,12 +9,12 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
         private const string KeywordCode = "a";
         public IList<string> Tags { get; } = new List<string> {"653"};
 
-        public void Process(dataFieldType dataField, Project project)
+        public void Process(dataFieldType dataField, ImportedProject importedProject)
         {
             var keywordSubfield = dataField.subfield.FirstOrDefault(x => x.code == KeywordCode);
             if (keywordSubfield != null)
             {
-                project.Keywords.Add(keywordSubfield.Value);
+                importedProject.Keywords.Add(keywordSubfield.Value);
             }
         }
     }

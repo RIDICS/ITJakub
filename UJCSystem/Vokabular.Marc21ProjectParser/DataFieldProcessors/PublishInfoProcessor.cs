@@ -12,15 +12,15 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
 
         public IList<string> Tags { get; } = new List<string> {"260", "264"};
 
-        public void Process(dataFieldType dataField, Project project)
+        public void Process(dataFieldType dataField, ImportedProject importedProject)
         {
             var publishPlace = dataField.subfield.FirstOrDefault(x => x.code == PublishPlaceCode);
-            project.ProjectMetadata.PublishPlace = publishPlace?.Value.RemoveUnnecessaryCharacters();
+            importedProject.ProjectMetadata.PublishPlace = publishPlace?.Value.RemoveUnnecessaryCharacters();
 
             var publisherText = dataField.subfield.FirstOrDefault(x => x.code == PublisherTextCode);
-            project.ProjectMetadata.PublisherText = publisherText?.Value.RemoveUnnecessaryCharacters();
+            importedProject.ProjectMetadata.PublisherText = publisherText?.Value.RemoveUnnecessaryCharacters();
 
-            project.ProjectMetadata.PublishDate = dataField.subfield.FirstOrDefault(x => x.code == PublishDateCode)?.Value;
+            importedProject.ProjectMetadata.PublishDate = dataField.subfield.FirstOrDefault(x => x.code == PublishDateCode)?.Value;
         }
     }
 }

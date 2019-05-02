@@ -11,7 +11,7 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
 
         public IList<string> Tags { get; } = new List<string> {"245"};
 
-        public void Process(dataFieldType dataField, Project project)
+        public void Process(dataFieldType dataField, ImportedProject importedProject)
         {
             var projectSubfield = dataField.subfield.FirstOrDefault(x => x.code == ProjectNameFirstLineCode);
             if (projectSubfield == null)
@@ -19,15 +19,15 @@ namespace Vokabular.Marc21ProjectParser.DataFieldProcessors
                 return;
             }
 
-            project.ProjectMetadata.Title = projectSubfield.Value;
+            importedProject.ProjectMetadata.Title = projectSubfield.Value;
             var nameSecondLine = dataField.subfield.FirstOrDefault(x => x.code == ProjectNameSecondLineCode);
 
             if (nameSecondLine != null)
             {
-                project.ProjectMetadata.Title= string.Concat(project.ProjectMetadata.Title, " ", nameSecondLine.Value);
+                importedProject.ProjectMetadata.Title= string.Concat(importedProject.ProjectMetadata.Title, " ", nameSecondLine.Value);
             }
 
-            project.ProjectMetadata.Title = project.ProjectMetadata.Title.RemoveUnnecessaryCharacters();
+            importedProject.ProjectMetadata.Title = importedProject.ProjectMetadata.Title.RemoveUnnecessaryCharacters();
         }
     }
 }

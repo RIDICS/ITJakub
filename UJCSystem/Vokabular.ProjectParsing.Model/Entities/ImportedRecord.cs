@@ -20,7 +20,7 @@ namespace Vokabular.ProjectParsing.Model.Entities
 
         public string FaultedMessage { get; set; }
 
-        public Project Project { get; set; }
+        public ImportedProject ImportedProject { get; set; }
 
         public long ProjectId { get; set; }
 

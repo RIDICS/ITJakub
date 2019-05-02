@@ -9,7 +9,6 @@ using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
 using Vokabular.ProjectImport.Test.Mock;
 using Vokabular.ProjectParsing.Model.Entities;
-using Project = Vokabular.ProjectParsing.Model.Entities.Project;
 
 namespace Vokabular.ProjectImport.Test
 {
@@ -42,7 +41,7 @@ namespace Vokabular.ProjectImport.Test
                 IsNew = true,
                 IsFailed = false,
                 IsDeleted = false,
-                Project = new Project
+                ImportedProject = new ImportedProject
                 {
                     Id = "1",
                     ProjectMetadata = new ProjectMetadata
@@ -131,7 +130,7 @@ namespace Vokabular.ProjectImport.Test
 
             //Update 
             m_importedRecord.IsNew = false;
-            m_importedRecord.Project.ProjectMetadata.Title = "UpdatedTitle";
+            m_importedRecord.ImportedProject.ProjectMetadata.Title = "UpdatedTitle";
 
             var historyId2 = m_mockDataManager.CreateImportHistory();
             m_projectManager.SaveImportedProject(m_importedRecord, userId, externalRepositoryId, m_mockDataManager.GetOrCreateBookType(),
@@ -174,7 +173,7 @@ namespace Vokabular.ProjectImport.Test
 
             m_importedRecord.IsNew = false;
             m_importedRecord.IsFailed = true;
-            m_importedRecord.Project = null;
+            m_importedRecord.ImportedProject = null;
             m_importedRecord.FaultedMessage = "Message";
 
             var historyId = m_mockDataManager.CreateImportHistory();

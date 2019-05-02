@@ -30,7 +30,7 @@ namespace Vokabular.Marc21ProjectParser.Test
         {
             m_parser.AddParsedProject(m_importedRecord);
 
-            Assert.AreEqual("kpm01361543", m_importedRecord.Project.Id);
+            Assert.AreEqual("kpm01361543", m_importedRecord.ImportedProject.Id);
         }
 
         [TestMethod]
@@ -38,9 +38,9 @@ namespace Vokabular.Marc21ProjectParser.Test
         {
             m_parser.AddParsedProject(m_importedRecord);
 
-            Assert.AreEqual(1, m_importedRecord.Project.Authors.Count);
-            Assert.AreEqual("Jan", m_importedRecord.Project.Authors.First().FirstName);
-            Assert.AreEqual("Hus", m_importedRecord.Project.Authors.First().LastName);
+            Assert.AreEqual(1, m_importedRecord.ImportedProject.Authors.Count);
+            Assert.AreEqual("Jan", m_importedRecord.ImportedProject.Authors.First().FirstName);
+            Assert.AreEqual("Hus", m_importedRecord.ImportedProject.Authors.First().LastName);
         }
 
         [TestMethod]
@@ -48,10 +48,10 @@ namespace Vokabular.Marc21ProjectParser.Test
         {
             m_parser.AddParsedProject(m_importedRecord);
 
-            Assert.AreEqual(3, m_importedRecord.Project.LiteraryGenres.Count);
-            Assert.AreEqual("pojednání", m_importedRecord.Project.LiteraryGenres[0]);
-            Assert.AreEqual("edice", m_importedRecord.Project.LiteraryGenres[1]);
-            Assert.AreEqual("studie", m_importedRecord.Project.LiteraryGenres[2]);
+            Assert.AreEqual(3, m_importedRecord.ImportedProject.LiteraryGenres.Count);
+            Assert.AreEqual("pojednání", m_importedRecord.ImportedProject.LiteraryGenres[0]);
+            Assert.AreEqual("edice", m_importedRecord.ImportedProject.LiteraryGenres[1]);
+            Assert.AreEqual("studie", m_importedRecord.ImportedProject.LiteraryGenres[2]);
         }
 
         [TestMethod]
@@ -59,7 +59,7 @@ namespace Vokabular.Marc21ProjectParser.Test
         {
             m_parser.AddParsedProject(m_importedRecord);
 
-            Assert.AreEqual("Knihy kacířů se mají číst", m_importedRecord.Project.ProjectMetadata.Title);
+            Assert.AreEqual("Knihy kacířů se mají číst", m_importedRecord.ImportedProject.ProjectMetadata.Title);
         }
 
         [TestMethod]
@@ -67,9 +67,9 @@ namespace Vokabular.Marc21ProjectParser.Test
         {
             m_parser.AddParsedProject(m_importedRecord);
 
-            Assert.AreEqual("2015", m_importedRecord.Project.ProjectMetadata.PublishDate);
-            Assert.AreEqual("Praha", m_importedRecord.Project.ProjectMetadata.PublishPlace);
-            Assert.AreEqual("Kalich", m_importedRecord.Project.ProjectMetadata.PublisherText);
+            Assert.AreEqual("2015", m_importedRecord.ImportedProject.ProjectMetadata.PublishDate);
+            Assert.AreEqual("Praha", m_importedRecord.ImportedProject.ProjectMetadata.PublishPlace);
+            Assert.AreEqual("Kalich", m_importedRecord.ImportedProject.ProjectMetadata.PublisherText);
         }
 
         [TestMethod]
