@@ -9,7 +9,7 @@ using Vokabular.Shared.Extensions;
 
 namespace Vokabular.ProjectImport.Managers
 {
-    public class ProjectManager
+    public class ImportedProjectManager
     {
         private readonly ProjectRepository m_projectRepository;
         private readonly CatalogValueRepository m_catalogValueRepository;
@@ -17,11 +17,11 @@ namespace Vokabular.ProjectImport.Managers
         private readonly MetadataRepository m_metadataRepository;
         private readonly PermissionRepository m_permissionRepository;
         private readonly ImportedRecordMetadataManager m_importedRecordMetadataManager;
-        private ILogger<ProjectManager> m_logger;
+        private ILogger<ImportedProjectManager> m_logger;
 
-        public ProjectManager(ProjectRepository projectRepository, CatalogValueRepository catalogValueRepository,
+        public ImportedProjectManager(ProjectRepository projectRepository, CatalogValueRepository catalogValueRepository,
             PersonRepository personRepository, MetadataRepository metadataRepository, PermissionRepository permissionRepository,
-            ImportedRecordMetadataManager importedRecordMetadataManager, ILogger<ProjectManager> logger)
+            ImportedRecordMetadataManager importedRecordMetadataManager, ILogger<ImportedProjectManager> logger)
         {
             m_projectRepository = projectRepository;
             m_catalogValueRepository = catalogValueRepository;

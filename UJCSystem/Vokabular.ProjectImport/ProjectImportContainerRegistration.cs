@@ -20,7 +20,7 @@ namespace Vokabular.ProjectImport
             container.AddScoped<ImportHistoryManager>();
             container.AddScoped<ImportedProjectMetadataManager>();
             container.AddScoped<ImportedRecordMetadataManager>();
-            container.AddScoped<ProjectManager>();
+            container.AddScoped<ImportedProjectManager>();
 
             container.AddScoped<CommunicationFactory>();
             

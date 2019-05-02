@@ -20,7 +20,7 @@ namespace Vokabular.ProjectImport.Test
         private MetadataRepository m_metadataRepository;
         private ImportedRecordMetadataRepository m_importedRecordMetadataRepository;
         private ImportedProjectMetadataManager m_importedProjectMetadataManager;
-        private ProjectManager m_projectManager;
+        private ImportedProjectManager m_importedProjectManager;
         private ImportedRecord m_importedRecord;
 
         [TestInitialize]
@@ -34,7 +34,7 @@ namespace Vokabular.ProjectImport.Test
             m_metadataRepository = serviceProvider.GetRequiredService<MetadataRepository>();
             m_importedRecordMetadataRepository = serviceProvider.GetRequiredService<ImportedRecordMetadataRepository>();
             m_importedProjectMetadataManager = serviceProvider.GetRequiredService<ImportedProjectMetadataManager>();
-            m_projectManager = serviceProvider.GetRequiredService<ProjectManager>();
+            m_importedProjectManager = serviceProvider.GetRequiredService<ImportedProjectManager>();
 
             m_importedRecord = new ImportedRecord
             {
@@ -67,7 +67,7 @@ namespace Vokabular.ProjectImport.Test
             var historyId = m_mockDataManager.CreateImportHistory();
             var info = new RepositoryImportProgressInfo(externalRepositoryId, "Test");
 
-             m_projectManager.SaveImportedProject(m_importedRecord, userId, externalRepositoryId, m_mockDataManager.GetOrCreateBookType(),
+             m_importedProjectManager.SaveImportedProject(m_importedRecord, userId, externalRepositoryId, m_mockDataManager.GetOrCreateBookType(),
                 new List<int>(), historyId, info);
 
             Assert.AreEqual(false, info.IsCompleted);
@@ -102,7 +102,7 @@ namespace Vokabular.ProjectImport.Test
             var historyId = m_mockDataManager.CreateImportHistory();
             var info = new RepositoryImportProgressInfo(externalRepositoryId, "Test");
 
-            m_projectManager.SaveImportedProject(m_importedRecord, userId, externalRepositoryId, m_mockDataManager.GetOrCreateBookType(),
+            m_importedProjectManager.SaveImportedProject(m_importedRecord, userId, externalRepositoryId, m_mockDataManager.GetOrCreateBookType(),
                 new List<int>(), historyId, info);
 
             Assert.AreEqual(false, info.IsCompleted);
@@ -133,7 +133,7 @@ namespace Vokabular.ProjectImport.Test
             m_importedRecord.ImportedProject.ProjectMetadata.Title = "UpdatedTitle";
 
             var historyId2 = m_mockDataManager.CreateImportHistory();
-            m_projectManager.SaveImportedProject(m_importedRecord, userId, externalRepositoryId, m_mockDataManager.GetOrCreateBookType(),
+            m_importedProjectManager.SaveImportedProject(m_importedRecord, userId, externalRepositoryId, m_mockDataManager.GetOrCreateBookType(),
                 new List<int>(), historyId2, info);
 
             Assert.AreEqual(false, info.IsCompleted);
@@ -168,7 +168,7 @@ namespace Vokabular.ProjectImport.Test
            
             var info = new RepositoryImportProgressInfo(externalRepositoryId, "Test");
 
-            m_projectManager.SaveImportedProject(m_importedRecord, userId, externalRepositoryId, m_mockDataManager.GetOrCreateBookType(),
+            m_importedProjectManager.SaveImportedProject(m_importedRecord, userId, externalRepositoryId, m_mockDataManager.GetOrCreateBookType(),
                 new List<int>(), m_mockDataManager.CreateImportHistory(), info);
 
             m_importedRecord.IsNew = false;
@@ -178,7 +178,7 @@ namespace Vokabular.ProjectImport.Test
 
             var historyId = m_mockDataManager.CreateImportHistory();
 
-            m_projectManager.SaveImportedProject(m_importedRecord, userId, externalRepositoryId, m_mockDataManager.GetOrCreateBookType(),
+            m_importedProjectManager.SaveImportedProject(m_importedRecord, userId, externalRepositoryId, m_mockDataManager.GetOrCreateBookType(),
                 new List<int>(), historyId, info);
 
             Assert.AreEqual(false, info.IsCompleted);

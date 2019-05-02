@@ -158,8 +158,8 @@ namespace Vokabular.ProjectImport.ImportPipeline
                 {
                     using (var scope = m_serviceProvider.CreateScope())
                     {
-                        var projectManager = scope.ServiceProvider.GetRequiredService<ProjectManager>();
-                        projectManager.SaveImportedProject(importedRecord, userId, externalRepositoryId, bookTypeId,
+                        var importedProjectManager = scope.ServiceProvider.GetRequiredService<ImportedProjectManager>();
+                        importedProjectManager.SaveImportedProject(importedRecord, userId, externalRepositoryId, bookTypeId,
                             groupsWithPermissionIds, importHistoryId, progressInfo);
                     }
                 },
