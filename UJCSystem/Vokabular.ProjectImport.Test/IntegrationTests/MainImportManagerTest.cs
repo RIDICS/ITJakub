@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Vokabular.DataEntities.Database.Entities.Enums;
+using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.OaiPmhImportManager;
 using Vokabular.OaiPmhImportManager.Model;
@@ -29,6 +30,7 @@ namespace Vokabular.ProjectImport.Test.IntegrationTests
         private ImportHistoryManager m_importHistoryManager;
         private MockDataConstant m_mockDataConstant;
         private MockDataManager m_mockDataManager;
+        private ProjectRepository m_projectRepository;
 
         private const string ThrowExc = "ThrowException";
 
@@ -67,6 +69,7 @@ namespace Vokabular.ProjectImport.Test.IntegrationTests
             m_importHistoryManager = serviceProvider.GetRequiredService<ImportHistoryManager>();
             m_mockDataConstant = serviceProvider.GetRequiredService<MockDataConstant>();
             m_mockDataManager = serviceProvider.GetRequiredService<MockDataManager>();
+            m_projectRepository = serviceProvider.GetRequiredService<ProjectRepository>();
 
             var backgroundService = serviceProvider.GetService<IHostedService>();
             await backgroundService.StartAsync(CancellationToken.None);
@@ -119,6 +122,9 @@ namespace Vokabular.ProjectImport.Test.IntegrationTests
             Assert.AreNotEqual(null, importHistory);
             Assert.AreEqual(null, importHistory.Message);
             Assert.AreEqual(ImportStatusEnum.Completed, importHistory.Status);
+
+            var projects = m_projectRepository.GetProjectList(0, 5);
+            Assert.AreEqual(1, projects.Count);
         }
 
         [TestMethod]
@@ -155,17 +161,15 @@ namespace Vokabular.ProjectImport.Test.IntegrationTests
                 Assert.AreEqual(0, info.Value.FailedProjectsCount);
                 Assert.AreEqual(1, info.Value.ProcessedProjectsCount);
                 Assert.AreEqual(null, info.Value.FaultedMessage);
+
+                var importHistory = m_importHistoryManager.GetLatestImportHistory(info.Key);
+                Assert.AreNotEqual(null, importHistory);
+                Assert.AreEqual(null, importHistory.Message);
+                Assert.AreEqual(ImportStatusEnum.Completed, importHistory.Status);
             }
 
-            var importHistory = m_importHistoryManager.GetLatestImportHistory(externalRepositoryId1);
-            Assert.AreNotEqual(null, importHistory);
-            Assert.AreEqual(null, importHistory.Message);
-            Assert.AreEqual(ImportStatusEnum.Completed, importHistory.Status);
-
-            var importHistory2 = m_importHistoryManager.GetLatestImportHistory(externalRepositoryId2);
-            Assert.AreNotEqual(null, importHistory2);
-            Assert.AreEqual(null, importHistory2.Message);
-            Assert.AreEqual(ImportStatusEnum.Completed, importHistory2.Status);
+            var projects = m_projectRepository.GetProjectList(0, 5);
+            Assert.AreEqual(2, projects.Count);
         }
 
         [TestMethod]
@@ -220,6 +224,9 @@ namespace Vokabular.ProjectImport.Test.IntegrationTests
             Assert.AreNotEqual(null, importHistory2);
             Assert.AreNotEqual(null, importHistory2.Message);
             Assert.AreEqual(ImportStatusEnum.Failed, importHistory2.Status);
+
+            var projects = m_projectRepository.GetProjectList(0, 5);
+            Assert.AreEqual(1, projects.Count);
         }
 
         private recordType GetRecord(string name)
