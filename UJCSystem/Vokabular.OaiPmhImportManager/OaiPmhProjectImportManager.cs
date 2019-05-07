@@ -67,6 +67,7 @@ namespace Vokabular.OaiPmhImportManager
                 }
                 catch (ArgumentOutOfRangeException)
                 {
+                    //The date is set to zero - we are omitting this information
                 }
             }
             
