@@ -8,7 +8,7 @@ using Vokabular.ProjectParsing.Model.Entities;
 using Vokabular.ProjectParsing.Model.Parsers;
 using Project = Vokabular.DataEntities.Database.Entities.Project;
 
-namespace Vokabular.ProjectImport.Test
+namespace Vokabular.ProjectImport.Test.UnitTests
 {
     [TestClass]
     public class FilteringManagerExistingItemsTest

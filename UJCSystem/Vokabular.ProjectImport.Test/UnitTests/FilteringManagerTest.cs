@@ -5,7 +5,7 @@ using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectParsing.Model.Entities;
 using Vokabular.ProjectParsing.Model.Parsers;
 
-namespace Vokabular.ProjectImport.Test
+namespace Vokabular.ProjectImport.Test.UnitTests
 {
     [TestClass]
     public class FilteringManagerTest

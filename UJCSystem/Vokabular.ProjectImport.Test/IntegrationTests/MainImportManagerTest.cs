@@ -20,7 +20,7 @@ using Vokabular.ProjectImport.Model.Exceptions;
 using Vokabular.ProjectImport.Test.Mock;
 using Vokabular.ProjectParsing.Model.Parsers;
 
-namespace Vokabular.ProjectImport.Test
+namespace Vokabular.ProjectImport.Test.IntegrationTests
 {
     [TestClass]
     public class MainImportManagerTest

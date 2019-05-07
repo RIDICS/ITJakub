@@ -9,7 +9,7 @@ using Vokabular.ProjectImport.Test.Mock;
 using Vokabular.ProjectImport.Works;
 using Vokabular.ProjectParsing.Model.Entities;
 
-namespace Vokabular.ProjectImport.Test
+namespace Vokabular.ProjectImport.Test.UnitTests
 {
     [TestClass]
     public class SaveImportedDataWorkTest
