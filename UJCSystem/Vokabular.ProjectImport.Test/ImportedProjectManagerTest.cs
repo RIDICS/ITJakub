@@ -13,7 +13,7 @@ using Vokabular.ProjectParsing.Model.Entities;
 namespace Vokabular.ProjectImport.Test
 {
     [TestClass]
-    public class ProjectManagerTest
+    public class ImportedProjectManagerTest
     {
         private MockDataManager m_mockDataManager;
         private ProjectRepository m_projectRepository;
@@ -105,28 +105,7 @@ namespace Vokabular.ProjectImport.Test
             m_importedProjectManager.SaveImportedProject(m_importedRecord, userId, externalRepositoryId, m_mockDataManager.GetOrCreateBookType(),
                 new List<int>(), historyId, info);
 
-            Assert.AreEqual(false, info.IsCompleted);
-            Assert.AreEqual(0, info.FailedProjectsCount);
-            Assert.AreEqual(1, info.ProcessedProjectsCount);
-            Assert.AreEqual(null, info.FaultedMessage);
-
             Assert.AreNotEqual(null, m_importedRecord.ProjectId);
-
-            var project = m_metadataRepository.GetAdditionalProjectMetadata(m_importedRecord.ProjectId, true, true, false, true, true, true,
-                false);
-           
-            var snapshot = m_projectRepository.GetLatestSnapshot(m_importedRecord.ProjectId);
-            var importedRecordMetadata = m_importedRecordMetadataRepository.InvokeUnitOfWork(x => x.GetImportedRecordMetadataBySnapshot(snapshot.Id));
-
-            var importedProjectMetadata = m_importedProjectMetadataManager.GetImportedProjectMetadataByExternalId(m_importedRecord.ExternalId);
-
-            Assert.AreNotEqual(null, importedProjectMetadata.Id);
-            Assert.AreEqual(m_importedRecord.ExternalId, importedProjectMetadata.ExternalId);
-            Assert.AreEqual(project.Id, importedProjectMetadata.Project.Id);
-
-            Assert.AreEqual(historyId, importedRecordMetadata.LastUpdate.Id);
-            Assert.AreEqual(null, importedRecordMetadata.LastUpdateMessage);
-            Assert.AreEqual(importedProjectMetadata.Id, importedRecordMetadata.ImportedProjectMetadata.Id);
 
             //Update 
             m_importedRecord.IsNew = false;
@@ -149,7 +128,7 @@ namespace Vokabular.ProjectImport.Test
             var newSnapshot = m_projectRepository.GetLatestSnapshot(m_importedRecord.ProjectId);
             var newImportedRecordMetadata = m_importedRecordMetadataRepository.InvokeUnitOfWork(x => x.GetImportedRecordMetadataBySnapshot(newSnapshot.Id));
 
-            importedProjectMetadata = m_importedProjectMetadataManager.GetImportedProjectMetadataByExternalId(m_importedRecord.ExternalId);
+            var importedProjectMetadata = m_importedProjectMetadataManager.GetImportedProjectMetadataByExternalId(m_importedRecord.ExternalId);
 
             Assert.AreNotEqual(null, importedProjectMetadata.Id);
             Assert.AreEqual(m_importedRecord.ExternalId, importedProjectMetadata.ExternalId);
