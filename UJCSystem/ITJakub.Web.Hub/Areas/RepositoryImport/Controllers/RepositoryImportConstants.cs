@@ -2,7 +2,7 @@
 {
     public static class RepositoryImportConstants
     {
-        public static string AvailableBibliographicFormats { get; } = "availableBibliographicFormats";
-        public static string AvailableExternalRepositoryTypes { get; } = "availableExternalRepositoryTypes";
+        public const string AvailableBibliographicFormats = "availableBibliographicFormats";
+        public const string AvailableExternalRepositoryTypes  = "availableExternalRepositoryTypes";
     }
 }
