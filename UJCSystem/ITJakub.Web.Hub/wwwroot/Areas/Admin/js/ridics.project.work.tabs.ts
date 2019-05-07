@@ -59,7 +59,7 @@
                     id: id
                 });
         };
-        return $.post(url, { request: payload });
+        return $.post(url, { request: payload } as JQuery.PlainObject);
     }
 
     private initKeywords() {

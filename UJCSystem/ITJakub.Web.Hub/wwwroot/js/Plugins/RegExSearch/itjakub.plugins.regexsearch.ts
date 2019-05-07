@@ -8,7 +8,7 @@
         return optionEl;
     }
 
-    public static createOptionGroup(label: string): HTMLOptionElement {
+    public static createOptionGroup(label: string): HTMLOptGroupElement {
         var conditionOption: HTMLOptGroupElement = document.createElement("optgroup");
         conditionOption.label = label;
         return conditionOption;
