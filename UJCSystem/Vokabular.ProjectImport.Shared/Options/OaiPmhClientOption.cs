@@ -1,4 +1,4 @@
-﻿namespace Vokabular.Shared.Options
+﻿namespace Vokabular.ProjectImport.Shared.Options
 {
     public class OaiPmhClientOption
     {

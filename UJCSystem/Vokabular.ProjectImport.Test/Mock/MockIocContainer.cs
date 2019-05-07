@@ -13,7 +13,7 @@ using NHibernate.Tool.hbm2ddl;
 using Vokabular.DataEntities;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.UnitOfWork;
-using Vokabular.Shared.Options;
+using Vokabular.ProjectImport.Shared.Options;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
 

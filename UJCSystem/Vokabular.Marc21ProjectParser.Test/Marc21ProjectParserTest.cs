@@ -4,9 +4,9 @@ using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Vokabular.OaiPmhImportManager.Model;
+using Vokabular.ProjectImport.Shared.Const;
 using Vokabular.ProjectParsing.Model.Entities;
 using Vokabular.ProjectParsing.Model.Parsers;
-using Vokabular.Shared.Const;
 
 namespace Vokabular.Marc21ProjectParser.Test
 {

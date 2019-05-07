@@ -16,6 +16,7 @@ using Vokabular.Log4Net;
 using Vokabular.MainService.Core;
 using Vokabular.MainService.Middleware;
 using Vokabular.ProjectImport;
+using Vokabular.ProjectImport.Shared.Options;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;

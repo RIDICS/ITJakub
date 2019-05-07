@@ -5,8 +5,8 @@ using System.Threading.Tasks.Dataflow;
 using Newtonsoft.Json;
 using Vokabular.OaiPmhImportManager.Model;
 using Vokabular.ProjectImport.Model;
+using Vokabular.ProjectImport.Shared.Const;
 using Vokabular.ProjectParsing.Model.Entities;
-using Vokabular.Shared.Const;
 
 namespace Vokabular.OaiPmhImportManager
 {

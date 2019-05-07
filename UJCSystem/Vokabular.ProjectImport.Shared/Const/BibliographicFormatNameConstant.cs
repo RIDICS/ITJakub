@@ -1,4 +1,4 @@
-﻿namespace Vokabular.Shared.Const
+﻿namespace Vokabular.ProjectImport.Shared.Const
 {
     public static class BibliographicFormatNameConstant
     {

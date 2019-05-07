@@ -32,6 +32,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj" />
     <ProjectReference Include="..\Vokabular.ProjectImport.Model\Vokabular.ProjectImport.Model.csproj" />
+    <ProjectReference Include="..\Vokabular.ProjectImport.Shared\Vokabular.ProjectImport.Shared.csproj" />
     <ProjectReference Include="..\Vokabular.ProjectImport\Vokabular.ProjectImport.csproj" />
   </ItemGroup>
 

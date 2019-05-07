@@ -6,7 +6,7 @@ using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.ProjectImport.Managers;
-using Vokabular.Shared.Const;
+using Vokabular.ProjectImport.Shared.Const;
 
 namespace Vokabular.ProjectImport.Test.Mock
 {

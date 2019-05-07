@@ -27,6 +27,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Vokabular.Marc21ProjectParser\Vokabular.Marc21ProjectParser.csproj" />
     <ProjectReference Include="..\Vokabular.OaiPmhImportManager\Vokabular.OaiPmhImportManager.csproj" />
+    <ProjectReference Include="..\Vokabular.ProjectImport.Shared\Vokabular.ProjectImport.Shared.csproj" />
   </ItemGroup>
 
 </Project>

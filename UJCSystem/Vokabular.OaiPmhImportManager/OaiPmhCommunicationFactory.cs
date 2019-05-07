@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Vokabular.Shared.Options;
+using Vokabular.ProjectImport.Shared.Options;
 
 namespace Vokabular.OaiPmhImportManager
 {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Vokabular.OaiPmhImportManager.Model;
 using Vokabular.ProjectImport.Model.Exceptions;
-using Vokabular.Shared.Options;
+using Vokabular.ProjectImport.Shared.Options;
 
 namespace Vokabular.OaiPmhImportManager
 {

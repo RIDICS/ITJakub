@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.OaiPmh;
-using Vokabular.Shared.Const;
+using Vokabular.ProjectImport.Shared.Const;
 
 namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
 {

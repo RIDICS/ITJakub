@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Vokabular.ProjectImport.Shared.Const;
 using Vokabular.ProjectParsing.Model.Entities;
 using Vokabular.ProjectParsing.Model.Parsers;
-using Vokabular.Shared.Const;
 
 namespace Vokabular.Marc21ProjectParser
 {
