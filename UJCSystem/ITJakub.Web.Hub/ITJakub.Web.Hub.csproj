@@ -11,7 +11,8 @@
     <VersionSuffix></VersionSuffix>
     <GeneratedItemPatterns>wwwroot/css/**/*.css;wwwroot/js/**/*.js;wwwroot/Areas/**/*.css;wwwroot/Areas/**/*.js</GeneratedItemPatterns>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(GeneratedItemPatterns)</DefaultItemExcludes>
-    <TypeScriptToolsVersion>2.4</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
   </PropertyGroup>
 
   <ItemGroup>
