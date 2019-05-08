@@ -15,6 +15,11 @@ namespace Vokabular.OaiPmhImportManager
             m_logger = logger;
         }
         
+        /// <summary>
+        /// Creates a disposable client to communicate with the OAI-PMH API of the given resource.
+        /// </summary>
+        /// <param name="url">URL of resource with OAI-PMH API.</param>
+        /// <returns></returns>
         public OaiPmhCommunicationClientWrapper CreateClient(string url)
         {
             return new OaiPmhCommunicationClientWrapper(m_oaiPmhClientOption.Value, url, m_logger);
