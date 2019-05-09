@@ -112,7 +112,7 @@ class ReaderLayout {
         this.newFavoriteDialog.make();
         this.newFavoriteDialog.setSaveCallback(this.createBookmarks.bind(this));
 
-        $(window).resize(() => {
+        $(window as any).resize(() => {
             this.addResponsiveBehavior(bookHeader);
         });
     }
@@ -160,7 +160,7 @@ class ReaderLayout {
         readerLayout.on("stateChanged", () => {
             this.moveToPageNumber(this.actualPageIndex, true);
         });
-        $(window).resize(() => {
+        $(window as any).resize(() => {
             readerLayout.updateSize();
         });
         return readerLayout;
@@ -342,7 +342,7 @@ class ReaderLayout {
             const $bookmarksContainer = $(".reader-bookmarks-container");
             if (this.bookmarksPanel !== undefined && $bookmarksContainer.length > 0) {
                 this.bookmarksPanel.createBookmarkList(
-                    $bookmarksContainer.parent().get(0),
+                    $bookmarksContainer.parent().get(0) as Node as HTMLElement,
                     this.bookmarksPanel
                 );
             }
@@ -532,7 +532,7 @@ class ReaderLayout {
             const $bookmarksContainer = $(".reader-bookmarks-container");
             if (this.bookmarksPanel !== undefined && $bookmarksContainer.length > 0) {
                 this.bookmarksPanel.createBookmarkList(
-                    $bookmarksContainer.parent().get(0),
+                    $bookmarksContainer.parent().get(0) as Node as HTMLElement,
                     this.bookmarksPanel
                 );
             }
@@ -630,7 +630,7 @@ class ReaderLayout {
         $(displayedPages).css("display", "inline-block");
         $(actualPage).addClass("page-active");
         if (actualPage.data("page-index") !== prevActualPage) { //WORKAROUND notify view panels in different windows
-            actualPage.children()[0].click();
+            actualPage.children().first().click();
         }
     }
 
@@ -686,7 +686,7 @@ class ReaderLayout {
             this.createDesktopToolPanel(this.searchPanelId, "Výsledky vyhledávání");    
         }
         
-        var searchButton = $(document).find(".search-button");
+        var searchButton = $(document as any).find(".search-button");
         searchButton.prop("disabled", false);
         return this.searchPanel;
     }

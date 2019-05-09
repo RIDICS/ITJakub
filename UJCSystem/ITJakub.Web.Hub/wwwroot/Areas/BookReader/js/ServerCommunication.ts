@@ -3,7 +3,7 @@
         return $.ajax({
             type: "GET",
             traditional: true,
-            data: { projectId: bookId, format: "Html" },
+            data: { projectId: bookId, format: "Html" } as JQuery.PlainObject,
             url: getBaseUrl() + "Reader/GetEditionNote",
             dataType: "json",
             contentType: "application/json"            
@@ -14,7 +14,7 @@
         return $.ajax({
             type: "GET",
             traditional: true,
-            data: { projectId: bookId },
+            data: { projectId: bookId } as JQuery.PlainObject,
             url: getBaseUrl() + "Reader/GetProjectDetail",
             dataType: "json",
             contentType: "application/json"
@@ -25,7 +25,7 @@
         return $.ajax({
             type: "GET",
             traditional: true,
-            data: { bookId: bookId },
+            data: { bookId: bookId } as JQuery.PlainObject,
             url: getBaseUrl() + "Reader/GetBookContent",
             dataType: "json",
             contentType: "application/json"
@@ -36,7 +36,7 @@
         return $.ajax({
             type: "GET",
             traditional: true,
-            data: { projectId: bookId, trackId: trackId },
+            data: { projectId: bookId, trackId: trackId } as JQuery.PlainObject,
             url: getBaseUrl() + "Reader/GetAudioBookTrack",
             dataType: "json",
             contentType: "application/json"
@@ -46,7 +46,7 @@
         return $.ajax({
             type: "GET",
             traditional: true,
-            data: { snapshotId: bookId, pageId: pageId },
+            data: { snapshotId: bookId, pageId: pageId } as JQuery.PlainObject,
             url: getBaseUrl() + "Reader/GetTermsOnPage",
             dataType: "json",
             contentType: "application/json"
@@ -57,7 +57,7 @@
         return $.ajax({
             type: "GET",
             traditional: true,
-            data: { snapshotId: versionId, pageId: pageId },
+            data: { snapshotId: versionId, pageId: pageId } as JQuery.PlainObject,
             url: getBaseUrl() + "Reader/GetBookPage",
             dataType: "json",
             contentType: "application/json"
@@ -68,7 +68,7 @@
         return $.ajax({
             type: "GET",
             traditional: true,
-            data: { query: query, isQueryJson: queryIsJson, snapshotId: versionId, pageId: pageId },
+            data: { query: query, isQueryJson: queryIsJson, snapshotId: versionId, pageId: pageId } as JQuery.PlainObject,
             url: getBaseUrl() + "Reader/GetBookSearchPageByXmlId",
             dataType: "json",
             contentType: "application/json"
@@ -79,7 +79,7 @@
         return $.ajax({
             type: "GET",
             traditional: true,
-            data: { projectId: bookId },
+            data: { projectId: bookId } as JQuery.PlainObject,
             url: getBaseUrl() + "Reader/GetAudioBook",
             dataType: "json",
             contentType: "application/json"
@@ -90,7 +90,7 @@
         return $.ajax({
             type: "GET",
             traditional: true,
-            data: { bookId: bookId, snapshotId: bookVersionId },
+            data: { bookId: bookId, snapshotId: bookVersionId } as JQuery.PlainObject,
             url: getBaseUrl() + "Reader/HasBookText",
             dataType: "json",
             contentType: "application/json"
@@ -102,7 +102,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "BookReader/BookReader/TextSearchInBookCount",
-            data: { text: text, projectId: bookId, snapshotId: versionId },
+            data: { text: text, projectId: bookId, snapshotId: versionId } as JQuery.PlainObject,
             dataType: 'json',
             contentType: 'application/json'
         });
@@ -113,7 +113,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "BookReader/BookReader/AdvancedSearchInBookCount",
-            data: { json: json, projectId: bookId, snapshotId: versionId },
+            data: { json: json, projectId: bookId, snapshotId: versionId } as JQuery.PlainObject,
             dataType: 'json',
             contentType: 'application/json'
         });
@@ -124,7 +124,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "BookReader/BookReader/TextSearchInBookPagesWithMatchHit",
-            data: { text: text, projectId: bookId, snapshotId: versionId },
+            data: { text: text, projectId: bookId, snapshotId: versionId } as JQuery.PlainObject,
             dataType: 'json',
             contentType: 'application/json'
         });
@@ -136,7 +136,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "BookReader/BookReader/AdvancedSearchInBookPagesWithMatchHit",
-            data: { json: json, projectId: bookId, snapshotId: versionId },
+            data: { json: json, projectId: bookId, snapshotId: versionId } as JQuery.PlainObject,
             dataType: 'json',
             contentType: 'application/json'
         });
@@ -148,7 +148,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "BookReader/BookReader/TextSearchInBookPaged",
-            data: { text: text, start: start, count: count, projectId: bookId, snapshotId: versionId },
+            data: { text: text, start: start, count: count, projectId: bookId, snapshotId: versionId } as JQuery.PlainObject,
             dataType: 'json',
             contentType: 'application/json'
         });
@@ -159,7 +159,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "BookReader/BookReader/AdvancedSearchInBookPaged",
-            data: { json: json, start: start, count: count, projectId: bookId, snapshotId: versionId },
+            data: { json: json, start: start, count: count, projectId: bookId, snapshotId: versionId } as JQuery.PlainObject,
             dataType: 'json',
             contentType: 'application/json'
         });
@@ -169,7 +169,7 @@
         return $.ajax({
             type: "GET",
             traditional: true,
-            data: { bookId: bookId, snapshotId: versionId },
+            data: { bookId: bookId, snapshotId: versionId } as JQuery.PlainObject,
             url: getBaseUrl() + "Reader/HasBookImage",
             dataType: "json",
             contentType: "application/json"

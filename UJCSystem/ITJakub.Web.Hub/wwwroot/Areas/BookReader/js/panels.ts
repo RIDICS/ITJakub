@@ -99,14 +99,14 @@ class ContentPanel extends ToolPanel {
         hrefElement.href = "#";
         $(hrefElement).click(() => {
             if (this.parentReader.deviceType === Device.Mobile && !$(".lm_popin").is("div")) {
-                $(".view-control button")[1].click();
+                $($(".view-control button")[1] as Node as HTMLElement).click();
             }
             this.parentReader.readerLayout.eventHub.emit("navigationClicked", contentItem.referredPageId);
         });
         this.parentReader.readerLayout.on("itemCreated", () => {
             $(hrefElement).click(() => {
                 if (this.parentReader.deviceType === Device.Mobile && !$(".lm_popin").is("div")) {
-                    $(".view-control button")[1].click();
+                    $($(".view-control button")[1] as Node as HTMLElement).click();
                 }
                 this.parentReader.readerLayout.eventHub.emit("navigationClicked", contentItem.referredPageId);
             });   
@@ -205,7 +205,7 @@ class SearchResultPanel extends ToolPanel {
         $(resultItemDiv).addClass("reader-search-result-item");
         $(resultItemDiv).click(() => {
             if (this.parentReader.deviceType === Device.Mobile && !$(".lm_popin").is("div")) {
-                $(".view-control button")[1].click();
+                $($(".view-control button")[1] as Node as HTMLElement).click();
             }
             var pageId = Number(result.pageId);
             this.parentReader.readerLayout.eventHub.emit("navigationClicked", pageId);
@@ -213,7 +213,7 @@ class SearchResultPanel extends ToolPanel {
         this.parentReader.readerLayout.on("itemCreated", () => {
             $(resultItemDiv).click(() => {
                 if (this.parentReader.deviceType === Device.Mobile && !$(".lm_popin").is("div")) {
-                    $(".view-control button")[1].click();
+                    $($(".view-control button")[1] as Node as HTMLElement).click();
                 }
                 var pageId = Number(result.pageId);
                 this.parentReader.readerLayout.eventHub.emit("navigationClicked", pageId);
@@ -294,7 +294,7 @@ class BookmarksPanel extends ToolPanel {
         }
         else {
             $bookmarksContainer.empty();
-            bookmarksContainer = <HTMLDivElement>$bookmarksContainer.get(0);
+            bookmarksContainer = <HTMLDivElement>($bookmarksContainer.get(0) as Node);
         }
 
         var bookmarksHead = document.createElement("h2");
@@ -530,14 +530,14 @@ class TermsSearchPanel extends TermsPanel {
         hrefElement.href = "#";
         $(hrefElement).click(() => {
             if (this.parentReader.deviceType === Device.Mobile && !$(".lm_popin").is("div")) {
-                $(".view-control button")[1].click();
+                $($(".view-control button")[1] as Node as HTMLElement).click();
             }
             this.parentReader.readerLayout.eventHub.emit("navigationClicked", page.pageId);
         });
         this.parentReader.readerLayout.on("itemCreated", () => {
             $(hrefElement).click(() => {
                 if (this.parentReader.deviceType === Device.Mobile && !$(".lm_popin").is("div")) {
-                    $(".view-control button")[1].click();
+                    $($(".view-control button")[1] as Node as HTMLElement).click();
                 }
                 this.parentReader.readerLayout.eventHub.emit("navigationClicked", page.pageId);
             });
@@ -682,14 +682,14 @@ class TextPanel extends ContentViewPanel {
         var textContainerDiv: HTMLDivElement = window.document.createElement("div");
         $(textContainerDiv).addClass("reader-text-container");
 
-        $(textContainerDiv).scroll((event: Event) => {
+        $(textContainerDiv).scroll((event) => {
             this.parentReader.clickedMoveToPage = false;
 
-            var pages = $(event.target).find(".page");
+            var pages = $(event.target as Node as HTMLElement).find(".page");
             var minOffset = Number.MAX_VALUE;
             var pageWithMinOffset;
-            $.each(pages, (index, page) => {
-                var pageOfsset = Math.abs($(page).offset().top - $(event.target).offset().top);
+            $.each(pages, (index, page: HTMLElement) => {
+                var pageOfsset = Math.abs($(page).offset().top - $(event.target as Node as HTMLElement).offset().top);
                 if (minOffset > pageOfsset) {
                     minOffset = pageOfsset;
                     pageWithMinOffset = page;
@@ -703,7 +703,7 @@ class TextPanel extends ContentViewPanel {
         $(textAreaDiv).addClass("reader-text");
 
         for (var i = 0; i < rootReference.parentReader.pages.length; i++) {
-            var page: BookPage = rootReference.parentReader.pages[i];
+            let page: BookPage = rootReference.parentReader.pages[i];
 
             var pageTextDiv: HTMLDivElement = window.document.createElement("div");
             $(pageTextDiv).addClass("page");
@@ -884,7 +884,7 @@ class ImagePanel extends ContentViewPanel {
 
                 var lastWidth = $innerContent.width();
                 var lastHeight = $innerContent.height();
-                $(window).resize(() => {
+                $(window as any).resize(() => {
                     var newWidth = $innerContent.width();
                     var newHeight = $innerContent.height();
 
@@ -947,7 +947,7 @@ class AudioPanel extends ContentViewPanel {
         });
 
         trackSelect.addEventListener("change", () => {
-            this.trackId = $(trackSelect).val();
+            this.trackId = Number($(trackSelect).val());
             this.reloadTrack();
         });
 
@@ -1004,8 +1004,7 @@ class AudioPanel extends ContentViewPanel {
             $(".track-name").html(response.track.Name);
             $("#track-select").val(this.trackId);
             $(".audio-text").html(response.track.Text);
-            var audioPlayer = $("audio");
-            audioPlayer.load();
+            var audioPlayer = $("audio"); // TODO why audio object is wrapped in JQuery twice?
             $(audioPlayer).empty();
             $(".track").html("Stáhnout kapitolu:");
             for (var recording  of response.track.Recordings) {

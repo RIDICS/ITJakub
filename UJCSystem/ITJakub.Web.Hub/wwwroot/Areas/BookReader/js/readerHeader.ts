@@ -83,9 +83,9 @@
             detailTable.makeTableRow("Literární žánr", detailData.LiteraryGenre);
             detailTable.makeTableRow("Poslední úprava edice	", detailData.CreateTimeString);
 
-            $(detailTable.build()).find(".bib-table-cell").each(function () {
-                if (this.innerHTML === "" || this.innerHTML === "undefined") {
-                    this.innerHTML = "&lt;Nezadáno&gt;";
+            $(detailTable.build()).find(".bib-table-cell").each((index, element) => {
+                if (element.innerHTML === "" || element.innerHTML === "undefined") {
+                    element.innerHTML = "&lt;Nezadáno&gt;";
                 }
             });
 
@@ -164,20 +164,20 @@
             $(toolButtonsDiv).addClass("buttons");
             var showPanelButton = button.createButton("display-panel", "wrench");
             $(showPanelButton).click(() => {
-                if ($(showPanelButton.firstChild).hasClass("glyphicon-chevron-left")) {
-                    $(showPanelButton.firstChild)
+                if ($(showPanelButton.firstChild as Element).hasClass("glyphicon-chevron-left")) {
+                    $(showPanelButton.firstChild as Element)
                         .removeClass("glyphicon-chevron-left")
                         .addClass("glyphicon-wrench");
                     $(toolButtonsDiv).animate({
                         "left": "-116.5"
-                    });
-                } else if ($(showPanelButton.firstChild).hasClass("glyphicon-wrench")) {
-                    $(showPanelButton.firstChild)
+                    } as JQuery.PlainObject);
+                } else if ($(showPanelButton.firstChild as Element).hasClass("glyphicon-wrench")) {
+                    $(showPanelButton.firstChild as Element)
                         .removeClass("glyphicon-wrench")
                         .addClass("glyphicon-chevron-left");
                     $(toolButtonsDiv).animate({
                         "left": "0"
-                    });
+                    } as JQuery.PlainObject);
                 }
             });
             
@@ -283,9 +283,9 @@
         var showPageNameCheckbox: HTMLInputElement = window.document.createElement("input");
         showPageNameCheckbox.type = "checkbox";
 
-        $(showPageNameCheckbox).change((eventData: Event) => {
+        $(showPageNameCheckbox).change((eventData) => {
             var readerText: JQuery = $("#" + this.parentReader.textPanelId).find(".reader-text");
-            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
+            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget as Node);
             if (currentTarget.checked) {
                 readerText.addClass("reader-text-show-page-names");
             } else {
@@ -310,9 +310,9 @@
         var showPageOnNewLineCheckbox: HTMLInputElement = window.document.createElement("input");
         showPageOnNewLineCheckbox.type = "checkbox";
 
-        $(showPageOnNewLineCheckbox).change((eventData: Event) => {
+        $(showPageOnNewLineCheckbox).change((eventData) => {
             var readerText = $("#" + this.parentReader.textPanelId).find(".reader-text");
-            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
+            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget as Node);
             if (currentTarget.checked) {
                 $(readerText).addClass("reader-text-page-new-line");
             } else {
@@ -337,9 +337,9 @@
         var showCommentCheckbox: HTMLInputElement = window.document.createElement("input");
         showCommentCheckbox.type = "checkbox";
 
-        $(showCommentCheckbox).change((eventData: Event) => {
+        $(showCommentCheckbox).change((eventData) => {
             var readerText = $("#" + this.parentReader.textPanelId).find(".reader-text");
-            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
+            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget as Node);
             if (currentTarget.checked) {
                 $(readerText).addClass("show-notes");
             } else {
@@ -457,16 +457,16 @@
             max: this.parentReader.pages.length - 1,
             value: 0,
             start: (event) => {
-                $(event.target).find(".ui-slider-handle").find(".slider-tip").show();
+                $(event.target as Node as HTMLElement).find(".ui-slider-handle").find(".slider-tip").show();
             },
             stop: (event) => {
-                $(event.target).find(".ui-slider-handle").find(".slider-tip").fadeOut(1000);
+                $(event.target as Node as HTMLElement).find(".ui-slider-handle").find(".slider-tip").fadeOut(1000);
             },
             slide: (event, ui) => {
-                $(event.target).find(".ui-slider-handle").find(".slider-tip").stop(true, true);
-                $(event.target).find(".ui-slider-handle").find(".slider-tip").show();
+                $(event.target as Node as HTMLElement).find(".ui-slider-handle").find(".slider-tip").stop(true, true);
+                $(event.target as Node as HTMLElement).find(".ui-slider-handle").find(".slider-tip").show();
                 if (this.parentReader.pages[ui.value] !== undefined) {
-                    $(event.target).find(".ui-slider-handle").find(".tooltip-inner").html("Strana: " + this.parentReader.pages[ui.value].text);
+                    $(event.target as Node as HTMLElement).find(".ui-slider-handle").find(".tooltip-inner").html("Strana: " + this.parentReader.pages[ui.value].text);
                 } else {
                     console.error("missing page " + ui.value);
                 }
@@ -515,14 +515,15 @@
         var editionNoteDiv = this.getEditionNote(true);
         var fullscreenButton = buttonObject.createButton("fullscreen", "fullscreen");
         $(fullscreenButton).click(() => {
-            if ($(fullscreenButton.firstChild).hasClass("glyphicon-fullscreen")) {
+            var $fullscreenButtonFirstChild = $(fullscreenButton.firstChild as Node as HTMLElement);
+            if ($fullscreenButtonFirstChild.hasClass("glyphicon-fullscreen")) {
                 $("#ReaderDiv").addClass("fullscreen");
-                $(fullscreenButton.firstChild).removeClass("glyphicon-fullscreen");
-                $(fullscreenButton.firstChild).addClass("glyphicon-remove");
+                $fullscreenButtonFirstChild.removeClass("glyphicon-fullscreen");
+                $fullscreenButtonFirstChild.addClass("glyphicon-remove");
             } else {
                 $("#ReaderDiv").removeClass("fullscreen");
-                $(fullscreenButton.firstChild).removeClass("glyphicon-remove");
-                $(fullscreenButton.firstChild).addClass("glyphicon-fullscreen");
+                $fullscreenButtonFirstChild.removeClass("glyphicon-remove");
+                $fullscreenButtonFirstChild.addClass("glyphicon-fullscreen");
             }
             this.parentReader.readerLayout.updateSize();
 
@@ -538,7 +539,7 @@
             
             var detailsButton = buttonObject.createButton("more", "info-sign");
             $(detailsButton).click((event) => {
-                var target: JQuery = $(event.target);
+                var target: JQuery = $(event.target as Node as HTMLInputElement);
 
                 var title = target.parents(".book-details").find(".title");
                 title.toggleClass("full");
@@ -603,7 +604,7 @@
         var anchor: HTMLAnchorElement = document.createElement("a");
         anchor.href = "#";
         anchor.innerHTML = "|<";
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event) => {
             event.stopPropagation();
             this.parentReader.readerLayout.eventHub.emit("moveToPageNumber", 0);
             return false;
@@ -616,7 +617,7 @@
         anchor = document.createElement("a");
         anchor.href = "#";
         anchor.innerHTML = "<<";
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event) => {
             event.stopPropagation();
             this.parentReader.readerLayout.eventHub.emit("moveToPageNumber", this.parentReader.actualPageIndex - 5);
             return false;
@@ -629,7 +630,7 @@
         anchor = document.createElement("a");
         anchor.href = "#";
         anchor.innerHTML = "<";
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event) => {
             event.stopPropagation();
             this.parentReader.readerLayout.eventHub.emit("moveToPageNumber", this.parentReader.actualPageIndex - 1);
             return false;
@@ -645,7 +646,7 @@
         anchor = document.createElement("a");
         anchor.href = "#";
         anchor.innerHTML = ">";
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event) => {
             event.stopPropagation();
             this.parentReader.readerLayout.eventHub.emit("moveToPageNumber", this.parentReader.actualPageIndex + 1);
             return false;
@@ -658,7 +659,7 @@
         anchor = document.createElement("a");
         anchor.href = "#";
         anchor.innerHTML = ">>";
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event) => {
             event.stopPropagation();
             this.parentReader.readerLayout.eventHub.emit("moveToPageNumber", this.parentReader.actualPageIndex + 5);
             return false;
@@ -671,7 +672,7 @@
         anchor = document.createElement("a");
         anchor.href = "#";
         anchor.innerHTML = ">|";
-        $(anchor).click((event: Event) => {
+        $(anchor).click((event) => {
             event.stopPropagation();
             this.parentReader.readerLayout.eventHub.emit("moveToPageNumber", this.parentReader.actualPageIndex - 1);
             return false;
@@ -691,7 +692,7 @@
             anchor = document.createElement("a");
             anchor.href = "#";
             anchor.innerHTML = page.text;
-            $(anchor).click((event: Event) => {
+            $(anchor).click((event) => {
                 event.stopPropagation();
                 this.parentReader.readerLayout.eventHub.emit("navigationClicked", page.pageId);
                 return false;
@@ -769,7 +770,7 @@ class ButtonFactory {
         
         $(button).click(() => {
             if (buttonId === this.readerLayout.searchPanelId) {
-                $(".searchbar-button")[0].click(); //WORKAROUND recreating of search result panel
+                $(".searchbar-button").first().click(); //WORKAROUND recreating of search result panel
             } else {
             if (this.deviceType === Device.Desktop) {
                 this.readerLayout.createDesktopToolPanel(buttonId, spanText.innerHTML);
