@@ -3,13 +3,12 @@ using AutoMapper;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core.Communication;
-using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.BookReader.Controllers
@@ -17,13 +16,8 @@ namespace ITJakub.Web.Hub.Areas.BookReader.Controllers
     [Area("BookReader")]
     public class BookReaderController : AreaController
     {
-        private StaticTextManager MStaticTextManager { get; }
-        private FeedbacksManager MFeedbacksManager { get; }
-
-        public BookReaderController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager, CommunicationProvider communicationProvider) : base(communicationProvider)
+        public BookReaderController(CommunicationProvider communicationProvider) : base(communicationProvider)
         {
-            MStaticTextManager = staticTextManager;
-            MFeedbacksManager = feedbacksManager;
         }
 
         protected override BookTypeEnumContract AreaBookType => BookTypeEnumContract.Edition;

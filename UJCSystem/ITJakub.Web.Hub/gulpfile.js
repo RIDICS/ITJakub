@@ -356,7 +356,7 @@ gulp.task("bundle:ridics_admin_composition-key-table-editor", ["build:ts"], func
         .pipe(gulp.dest(paths.webroot + "Areas/Admin/js"));
 });
 
-gulp.task("bundle:new_reader", function() {
+gulp.task("bundle:ridics_new_reader", function() {
     return gulp.src([
         paths.webroot + "Areas/BookReader/js/initReader.js",
         paths.webroot + "Areas/BookReader/js/readerLayout.js",
@@ -388,7 +388,7 @@ gulp.task("bundlejs_areas",
     "bundle:ridics_admin_page-image-viewer",
     "bundle:ridics_admin_page-list-editor",
     "bundle:ridics_admin_composition-key-table-editor",
-    "bundle:new_reader"
+    "bundle:ridics_new_reader"
 ]);
 
 //Download yarn dependencies
