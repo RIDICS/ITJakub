@@ -1,8 +1,10 @@
 ﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ProjectListViewModel
-@using System.Threading.Tasks
 @using ITJakub.Web.Hub.Core
+@using Localization.AspNetCore.Service
+@inject ILocalization Localizer
+
 @{
-    ViewBag.Title = "Projekty - Seznam";
+    ViewBag.Title = Localizer.Translate("ProjectList", "Admin");
 }
 @section styles {
     <link rel="stylesheet" href="~/Areas/Admin/css/ridics.project.css" />
@@ -15,7 +17,7 @@
 <div class="content-container project-list">
     <div class="row project-list-new">
         <div class="col-md-4">
-            <button type="button" class="btn btn-default" id="new-project-button">Založit nové dílo</button>
+            <button type="button" class="btn btn-default" id="new-project-button">@Localizer.Translate("CreateNewProject", "Admin")</button>
         </div>
     </div>
     
@@ -23,17 +25,17 @@
 
     <div class="row project-list-header">
         <div class="col-md-2">
-            <label for="filter">Filtrovat:</label>
+            <label for="filter">@Localizer.Translate("Filter", "Admin"):</label>
             <select class="form-control input-sm" id="filter">
-                <option>Vše</option>
-                <option>Moje díla</option>
-                <option>Cizí díla</option>
+                <option>@Localizer.Translate("All", "Admin")</option>
+                <option>@Localizer.Translate("MyProjects", "Admin")</option>
+                <option>@Localizer.Translate("ForeignProjects", "Admin")</option>
             </select>
         </div>
         <div class="col-md-2 col-md-offset-8">
-            <label for="name-filter">Vyhledat podle názvu:</label>
+            <label for="name-filter">@Localizer.Translate("FindByName", "Admin"):</label>
             <div class="input-group input-group-sm">
-                <input type="text" class="form-control" id="name-filter" placeholder="Název projektu" title="Vyhledat podle názvu" />
+                <input type="text" class="form-control" id="name-filter" placeholder="@Localizer.Translate("NewProjectName", "Admin")" title="@Localizer.Translate("FindByName", "Admin")" />
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-default" id="name-filter-button"><span class="glyphicon glyphicon-search"></span></button>
                 </span>
@@ -42,7 +44,7 @@
     </div>
     
     <div class="project-list-subheader">
-        <a href="#">Pokročilé vyhledávání <span class="glyphicon glyphicon-chevron-down"></span></a>
+        <a href="#">@Localizer.Translate("AdvancedSearch", "Admin") <span class="glyphicon glyphicon-chevron-down"></span></a>
     </div>
 
     <hr/>
@@ -59,12 +61,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Nové dílo</h4>
+                <h4 class="modal-title">@Localizer.Translate("NewProject", "Admin")</h4>
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <label for="new-project-name" class="col-md-3 control-label">Název díla</label>
+                        <label for="new-project-name" class="col-md-3 control-label">@Localizer.Translate("NewProjectName", "Admin")</label>
                         <div class="col-md-8">
                             <input class="form-control" id="new-project-name" type="text" maxlength="@Projects.MaxNameLength">
                         </div>
@@ -72,8 +74,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="dialog-error alert alert-danger true-inline-alert">Chyba při ukládání</div>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
+                <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("ErrorDuringSave", "Admin")</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close2", "Admin")</button>
                 <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>Vytvořit</button>
             </div>
         </div>
@@ -85,15 +87,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Smazat dílo</h4>
+                <h4 class="modal-title">@Localizer.Translate("DeleteProject", "Admin")</h4>
             </div>
             <div class="modal-body">
-                Opravdu chcete smazat dílo "<span id="delete-project-name"></span>"?
+                @Localizer.Translate("DeleteProjectAreYouSure", "Admin") "<span id="delete-project-name"></span>"?
             </div>
             <div class="modal-footer">
-                <div class="dialog-error alert alert-danger true-inline-alert">Chyba při mazání</div>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
-                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>Smazat</button>
+                <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("ErrorDuringDelete", "Admin")</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Cancel", "Admin")</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>@Localizer.Translate("Delete", "Admin")</button>
             </div>
         </div>
     </div>

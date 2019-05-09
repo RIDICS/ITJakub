@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="XslTransformations\commonToHtml-block.xsl" />
+    <None Remove="XslTransformations\commonToHtml-inline.xsl" />
+    <None Remove="XslTransformations\pageToHtml.xsl" />
+    <None Remove="XslTransformations\pageToPlainText.xsl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="XslTransformations\pageToPlainText.xsl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

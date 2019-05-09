@@ -1,9 +1,12 @@
 ﻿@using ITJakub.Web.Hub.Areas.Admin.Models
 @using ITJakub.Web.Hub.Areas.Admin.Models.Type
+@using Localization.AspNetCore.Service
+@inject ILocalization Localizer
+
 <div>
     <ul class="nav nav-tabs" role="tablist" id="project-resource-tabs">
-        <li role="presentation" class="active"><a href="#project-resource-discussion" aria-controls="project-resource-publications" role="tab">Diskuze</a></li>
-        <li role="presentation"><a href="#project-resource-metadata" aria-controls="project-resource-metadata" role="tab">Metadata</a></li>
+        <li role="presentation" class="active"><a href="#project-resource-discussion" aria-controls="project-resource-publications" role="tab">@Localizer.Translate("Discussion", "Admin")</a></li>
+        <li role="presentation"><a href="#project-resource-metadata" aria-controls="project-resource-metadata" role="tab">@Localizer.Translate("Metadata", "Admin")</a></li>
     </ul>
     
     <div class="tab-content" id="resource-tab-content">

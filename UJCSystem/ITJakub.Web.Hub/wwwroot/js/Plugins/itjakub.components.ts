@@ -9,17 +9,17 @@
             parallelUploads: 5,
             acceptedFiles: this.acceptedFiles,
 
-            dictInvalidFileType: "Tento formát není podporovaný. Vyberte prosím jiný soubor s příponou " + this.acceptedFiles,
-            dictDefaultMessage: "Pro nahrávání sem přesuňte soubory",
-            dictFallbackMessage: "Váš prohlížeč nepodporuje nahrávání souborů pomocí drag'n'drop.",
-            dictFallbackText: "Použijte prosím záložní formulář umíštěný níže.",
-            dictFileTooBig: "Velikost souboru ({{filesize}}MB) překročila maximální povolenou velikost {{maxFilesize}}MB.",
-            dictResponseError: "Chyba při nahrávání souboru (stavový kód {{statusCode}}).",
-            dictCancelUpload: "Zrušit nahrávání",
-            dictCancelUploadConfirmation: "Opravdu chcete zrušit nahrávání tohoto souboru?",
-            dictRemoveFile: "Odstranit soubor",
+            dictInvalidFileType: localization.translate("FormatNotSupported", "PluginsJs").value + this.acceptedFiles,
+            dictDefaultMessage: localization.translate("DropFilesForUpload", "PluginsJs").value,
+            dictFallbackMessage: localization.translate("BrowserDoesntSupportDragNDrop", "PluginsJs").value,
+            dictFallbackText: localization.translate("UseBackupForm", "PluginsJs").value,
+            dictFileTooBig: localization.translate("FileTooBig", "PluginsJs").value,
+            dictResponseError: localization.translate("UploadFileError", "PluginsJs").value,
+            dictCancelUpload: localization.translate("CancelUpload", "PluginsJs").value,
+            dictCancelUploadConfirmation: localization.translate("CancelUploadModalConfirm", "PluginsJs").value,
+            dictRemoveFile: localization.translate("DeleteFile", "PluginsJs").value,
             dictRemoveFileConfirmation: null,
-            dictMaxFilesExceeded: "Nelze nahrát žádné další soubory."
+            dictMaxFilesExceeded: localization.translate("CannotUploadMoreFiles", "PluginsJs").value
         };
         return options;
     }
@@ -143,36 +143,39 @@ class AlertComponentBuilder {
     }
 
     public buildElement(): HTMLDivElement {
-        var alertDiv = document.createElement("div");
-        var $alertDiv = $(alertDiv);
+        const $alertDiv = $("<div></div>");
         $alertDiv.addClass("alert");
 
         switch (this.alertType) {
             case AlertType.Success:
                 $alertDiv.addClass("alert-success");
+                break;
             case AlertType.Info:
                 $alertDiv.addClass("alert-info");
+                break;
             case AlertType.Warning:
                 $alertDiv.addClass("alert-warning");
+                break;
             case AlertType.Error:
                 $alertDiv.addClass("alert-danger");
+                break;
         }
 
-        if (this.heading != null) {
-            var headingElement = document.createElement("h3");
-            $(headingElement)
+        if (this.heading) {
+            const headingElement = $("<h3></h3>");
+            headingElement
                 .text(this.heading)
-                .appendTo(alertDiv);
+                .appendTo($alertDiv);
         }
 
-        if (this.content != null) {
-            var contentDiv = document.createElement("div");
-            $(contentDiv)
+        if (this.content) {
+            const contentDiv = $("<div></div>");
+            contentDiv
                 .text(this.content)
-                .appendTo(alertDiv);
+                .appendTo($alertDiv);
         }
 
-        return alertDiv;
+        return $alertDiv.get(0) as Node as HTMLDivElement;
     }
 }
 

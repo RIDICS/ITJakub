@@ -2,7 +2,7 @@
   "Edition": {
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
-      "body": "{PublishPlace}, {PublishDate}, {PublisherText} <br> {$manuscript} <br> Počet stran: {PageCount}",
+      "body": "{PublishPlace}, {PublishDate}, {PublisherText} <br> {$manuscript} <br> {@NumberOfPages}: {PageCount}",
       "favorites": {
         "maxCount": 5
       },
@@ -61,7 +61,7 @@
         },
         "$century": {
           "type": "basic",
-          "pattern": ", {Century}. století",
+          "pattern": ", {Century}. {@Century}",
           "printIfNullValue": false
         },
         "$pages": {
@@ -72,39 +72,39 @@
       }
     },
     "bottom-panel": {
-      "body": "{$printSearchResultsCondition}{$editionTable}<a href='/EditionNote/EditionNote?bookId={BookId}'>Ediční poznámka</a> <br> Copyright: {Copyright}",
+      "body": "{$printSearchResultsCondition}{$editionTable}<a href='/EditionNote/EditionNote?bookId={BookId}'>{@EditionNote}</a> <br> {@Copyright}: {Copyright}",
       "variables": {
         "$editionTable": {
           "type": "table",
           "printRowIfNullValue": true,
-          "replaceNullValueBy": "&lt;Nezadáno&gt;",
+          "replaceNullValueBy": "NotFilled",
           "rows": [
             {
               "label": "Editor",
               "pattern": "{$editor}"
             },
             {
-              "label": "Předloha",
+              "label": "Pattern",
               "pattern": "{$literaryOriginal}"
             },
             {
-              "label": "Zkratka památky",
+              "label": "RelicAbbrevitation",
               "pattern": "{RelicAbbreviation}"
             },
             {
-              "label": "Zkratka pramene",
+              "label": "SourceAbbrevitation",
               "pattern": "{SourceAbbreviation}"
             },
             {
-              "label": "Literární druh",
+              "label": "LiteraryType",
               "pattern": "{$literaryType}"
             },
             {
-              "label": "Literární žánr",
+              "label": "LiteraryGenre",
               "pattern": "{$literaryGenre}"
             },
             {
-              "label": "Poslední úprava edice",
+              "label": "EditionLastModification",
               "pattern": "{CreateTimeString}"
             }
           ]
@@ -190,8 +190,8 @@
         "$linked": {
           "type": "if",
           "pattern": "{Linked}",
-          "onTrue": "zapojený slovník",
-          "onFalse": "nezapojený slovník"
+          "onTrue": "LinkedDictionary",
+          "onFalse": "UnlinkedDictionary"
         },
         "$authors": {
           "type": "basic",
@@ -225,7 +225,7 @@
   "TextBank": {
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
-      "body": "{PublishPlace}, {PublishDate}, {PublisherText} <br> {$manuscript} <br> Počet stran: {PageCount}",
+      "body": "{PublishPlace}, {PublishDate}, {PublisherText} <br> {$manuscript} <br> {@NumberOfPages}: {PageCount}",
       "favorites": {
         "maxCount": 5
       },
@@ -284,7 +284,7 @@
         },
         "$century": {
           "type": "basic",
-          "pattern": ", {Century}. století",
+          "pattern": ", {Century}. {@Century}",
           "printIfNullValue": false
         },
         "$pages": {
@@ -295,39 +295,39 @@
       }
     },
     "bottom-panel": {
-      "body": "{$printSearchResultsCondition}{$editionTable}<a href='/EditionNote/EditionNote?bookId={BookId}'>Ediční poznámka</a> <br> Copyright: {Copyright}",
+      "body": "{$printSearchResultsCondition}{$editionTable}<a href='/EditionNote/EditionNote?bookId={BookId}'>{@EditionNote}</a> <br> {@Copyright}: {Copyright}",
       "variables": {
         "$editionTable": {
           "type": "table",
           "printRowIfNullValue": true,
-          "replaceNullValueBy": "&lt;Nezadáno&gt;",
+          "replaceNullValueBy": "NotFilled",
           "rows": [
             {
               "label": "Editor",
               "pattern": "{$editor}"
             },
             {
-              "label": "Předloha",
+              "label": "Pattern",
               "pattern": "{$literaryOriginal}"
             },
             {
-              "label": "Zkratka památky",
+              "label": "RelicAbbreviation",
               "pattern": "{RelicAbbreviation}"
             },
             {
-              "label": "Zkratka pramene",
+              "label": "SourceAbbreviation",
               "pattern": "{SourceAbbreviation}"
             },
             {
-              "label": "Literární druh",
+              "label": "LiteraryType",
               "pattern": "{$literaryType}"
             },
             {
-              "label": "Literární žánr",
+              "label": "LiteraryGenre",
               "pattern": "{$literaryGenre}"
             },
             {
-              "label": "Poslední úprava edice",
+              "label": "EditionLastModification",
               "pattern": "{CreateTimeString}"
             }
           ]
@@ -458,7 +458,7 @@
   "AudioBook": {
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
-      "body": "{PublishPlace}, {PublishDate}, {PublisherText} <br> {$manuscript} <br> Stáhnout celou audioknihu: {$fullRecords}",
+      "body": "{PublishPlace}, {PublishDate}, {PublisherText} <br> {$manuscript} <br> {@DownloadFullAudioBook}: {$fullRecords}",
       "favorites": {
         "maxCount": 5
       },
@@ -514,7 +514,7 @@
         "$tracks": {
           "type": "array",
           "scope": "Tracks",
-          "pattern": "<li class='track'>{Name}<div class='audio'><div class='audio-text'>{Text}</div><audio controls='controls' preload='none'>{$trackRecordings}Váš prohlížeč nepodporuje html audio<code>audio</code></audio><div class='audio-length'>Délka: <div class='audio-length-value'>{$trackLength}</div></div><div class='audio-download'>Stáhnout kapitolu: {$trackRecordingsDownload}</div></div></li>",
+          "pattern": "<li class='track'>{Name}<div class='audio'><div class='audio-text'>{Text}</div><audio controls='controls' preload='none'>{$trackRecordings}{@BrowserDoesNotSupportHtmlAudio}<code>audio</code></audio><div class='audio-length'>{@Length}: <div class='audio-length-value'>{$trackLength}</div></div><div class='audio-download'>{@DownloadChapter}: {$trackRecordingsDownload}</div></div></li>",
           "delimeter": ""
         },
         "$trackLength": {
@@ -555,7 +555,7 @@
   "Grammar": {
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
-      "body": "{PublishPlace}, {PublishDate}, {PublisherText} <br> {$manuscript} <br> Počet stran: {PageCount}",
+      "body": "{PublishPlace}, {PublishDate}, {PublisherText} <br> {$manuscript} <br> {@NumberOfPages}: {PageCount}",
       "favorites": {
         "maxCount": 5
       },
@@ -625,39 +625,39 @@
       }
     },
     "bottom-panel": {
-      "body": "{$printSearchResultsCondition}{$editionTable}<a href='/EditionNote/EditionNote?bookId={BookId}'>Ediční poznámka</a> <br> Copyright: {Copyright}",
+      "body": "{$printSearchResultsCondition}{$editionTable}<a href='/EditionNote/EditionNote?bookId={BookId}'>{@EditionNote}</a> <br> {@Copyright}: {Copyright}",
       "variables": {
         "$editionTable": {
           "type": "table",
           "printRowIfNullValue": true,
-          "replaceNullValueBy": "&lt;Nezadáno&gt;",
+          "replaceNullValueBy": "NotFilled",
           "rows": [
             {
               "label": "Editor",
               "pattern": "{$editor}"
             },
             {
-              "label": "Předloha",
+              "label": "Pattern",
               "pattern": "{$literaryOriginal}"
             },
             {
-              "label": "Zkratka památky",
+              "label": "RelicAbbreviation",
               "pattern": "{RelicAbbreviation}"
             },
             {
-              "label": "Zkratka pramene",
+              "label": "SourceAbbreviation",
               "pattern": "{SourceAbbreviation}"
             },
             {
-              "label": "Literární druh",
+              "label": "LiteraryType",
               "pattern": "{$literaryType}"
             },
             {
-              "label": "Literární žánr",
+              "label": "LiteraryGenre",
               "pattern": "{$literaryGenre}"
             },
             {
-              "label": "Poslední úprava edice",
+              "label": "EditionLastModification",
               "pattern": "{CreateTimeString}"
             }
           ]
@@ -734,7 +734,7 @@
   "ProfessionalLiterature": {
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
-      "body": "{PublishPlace}, {PublishDate}, {PublisherText} <br> {$manuscript} <br> Počet stran: {PageCount}",
+      "body": "{PublishPlace}, {PublishDate}, {PublisherText} <br> {$manuscript} <br> {@NumberOfPages}: {PageCount}",
       "favorites": {
         "maxCount": 5
       },
@@ -793,7 +793,7 @@
         },
         "$century": {
           "type": "basic",
-          "pattern": ", {Century}. století",
+          "pattern": ", {Century}. {@Century}",
           "printIfNullValue": false
         },
         "$pages": {
@@ -804,39 +804,39 @@
       }
     },
     "bottom-panel": {
-      "body": "{$printSearchResultsCondition}{$editionTable}<a href='/EditionNote/EditionNote?bookId={BookId}'>Ediční poznámka</a> <br> Copyright: {Copyright}",
+      "body": "{$printSearchResultsCondition}{$editionTable}<a href='/EditionNote/EditionNote?bookId={BookId}'>{@EditionNote}</a> <br> {@Copyright}: {Copyright}",
       "variables": {
         "$editionTable": {
           "type": "table",
           "printRowIfNullValue": true,
-          "replaceNullValueBy": "&lt;Nezadáno&gt;",
+          "replaceNullValueBy": "NotFilled",
           "rows": [
             {
               "label": "Editor",
               "pattern": "{$editor}"
             },
             {
-              "label": "Předloha",
+              "label": "Pattern",
               "pattern": "{$literaryOriginal}"
             },
             {
-              "label": "Zkratka památky",
+              "label": "RelicAbbreviation",
               "pattern": "{RelicAbbreviation}"
             },
             {
-              "label": "Zkratka pramene",
+              "label": "SourceAbbreviation",
               "pattern": "{SourceAbbreviation}"
             },
             {
-              "label": "Literární druh",
+              "label": "LiteraryType",
               "pattern": "{$literaryType}"
             },
             {
-              "label": "Literární žánr",
+              "label": "LiteraryGenre",
               "pattern": "{$literaryGenre}"
             },
             {
-              "label": "Poslední úprava edice",
+              "label": "EditionLastModification",
               "pattern": "{CreateTimeString}"
             }
           ]
@@ -913,7 +913,7 @@
   "BibliographicalItem": {
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
-      "body": "{PublishPlace}, {PublishDate}, {PublisherText} <br> {$manuscript} <br> Počet stran: {PageCount}",
+      "body": "{PublishPlace}, {PublishDate}, {PublisherText} <br> {$manuscript} <br> {@NumberOfPages}: {PageCount}",
       "favorites": {
         "maxCount": 5
       },
@@ -972,7 +972,7 @@
         },
         "$century": {
           "type": "basic",
-          "pattern": ", {Century}. století",
+          "pattern": ", {Century}. {@Century}",
           "printIfNullValue": false
         },
         "$pages": {
@@ -983,39 +983,39 @@
       }
     },
     "bottom-panel": {
-      "body": "{$printSearchResultsCondition}{$editionTable}<a href='/EditionNote/EditionNote?bookId={BookId}'>Ediční poznámka</a> <br> Copyright: {Copyright}",
+      "body": "{$printSearchResultsCondition}{$editionTable}<a href='/EditionNote/EditionNote?bookId={BookId}'>{@EditionNote}</a> <br> {@Copyright}: {Copyright}",
       "variables": {
         "$editionTable": {
           "type": "table",
           "printRowIfNullValue": true,
-          "replaceNullValueBy": "&lt;Nezadáno&gt;",
+          "replaceNullValueBy": "NotFilled",
           "rows": [
             {
               "label": "Editor",
               "pattern": "{$editor}"
             },
             {
-              "label": "Předloha",
+              "label": "Pattern",
               "pattern": "{$literaryOriginal}"
             },
             {
-              "label": "Zkratka památky",
+              "label": "RelicAbbreviation",
               "pattern": "{RelicAbbreviation}"
             },
             {
-              "label": "Zkratka pramene",
+              "label": "SourceAbbreviation",
               "pattern": "{SourceAbbreviation}"
             },
             {
-              "label": "Literární druh",
+              "label": "LiteraryType",
               "pattern": "{$literaryType}"
             },
             {
-              "label": "Literární žánr",
+              "label": "LiteraryGenre",
               "pattern": "{$literaryGenre}"
             },
             {
-              "label": "Poslední úprava edice",
+              "label": "EditionLastModification",
               "pattern": "{CreateTimeString}"
             }
           ]

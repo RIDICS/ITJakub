@@ -5,19 +5,24 @@
     private storage: IStorage;
     private isUserLoggedIn: boolean;
 
+    //private localization : Localization;
+	private localizationScope = "FavoriteJs";
+
     constructor() {
-        this.storage = StorageManager.getInstance().getStorage(StorageTypeEnum.Local);
+        this.storage = MyStorageManager.getInstance().getStorage(StorageTypeEnum.Local);
         this.isUserLoggedIn = isUserLoggedIn();
 
         if (!this.isUserLoggedIn) {
             this.updateLocalStorage();
         }
+
+       // this.localization = new Localization();
     }
 
     private getDefaultFavoriteLabel(): IFavoriteLabel {
         return {
             id: 0,
-            name: "Všechny položky",
+            name: localization.translate("AllItems", this.localizationScope).value,
             color: "#CC9900",
             isDefault: true,
             lastUseTime: null
@@ -179,7 +184,7 @@
                 sort: sort,
                 start: start,
                 count: count
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (favorites: Array<IFavoriteBaseInfo>) => {
@@ -201,7 +206,7 @@
                 labelId: labelId,
                 filterByType: filterByType,
                 filterByTitle: filterByTitle
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (count: number) => {
@@ -317,7 +322,7 @@
             url: getBaseUrl() + "Favorite/GetFavoriteLabelsWithBooksAndCategories",
             data: {
                 bookType: bookType
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (favoriteLabels) => {
@@ -367,7 +372,7 @@
                 filterByTitle: filterByTitle,
                 start: start,
                 count: count
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (queries) => {
@@ -391,7 +396,7 @@
                 bookType: bookType,
                 queryType: queryType,
                 filterByTitle: filterByTitle
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (count) => {
@@ -425,7 +430,7 @@
             url: getBaseUrl() + "Favorite/GetPageBookmarks",
             data: {
                 bookId: bookId
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (bookmarks) => {

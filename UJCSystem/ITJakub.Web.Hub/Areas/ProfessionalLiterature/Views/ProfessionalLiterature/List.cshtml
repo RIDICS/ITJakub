@@ -1,5 +1,8 @@
-﻿@{
-    ViewBag.Title = "Odborná literatura - Seznam";
+﻿@using Localization.AspNetCore.Service
+@inject ILocalization Localizer
+
+@{
+    ViewBag.Title = @Localizer.Translate("ProfessionalLiteratureList", "ProfessionalLiterature");
 }
 
 @section styles{

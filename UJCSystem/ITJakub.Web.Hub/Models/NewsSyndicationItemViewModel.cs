@@ -5,37 +5,37 @@ namespace ITJakub.Web.Hub.Models
     public class NewsSyndicationItemViewModel
     {
         [DataType(DataType.Text)]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Název nemùže být prázdný")]
-        [Display(Name = "Název: ")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "NameNotEmpty")]
+        [Display(Name = "Name:")]
         public string Title { get; set; }
 
         [DataType(DataType.Text)]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Text nemùže být prázdný")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "TextNotEmpty")]
         [MaxLength(2000)]
-        [Display(Name = "Text: ")]
+        [Display(Name = "Text:")]
         public string Content { get; set; }
 
-        [Url(ErrorMessage = "Vyplnìná URL není validní. Musí být zapsána v úplné formì podobného formátu http://nazev.domena")]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "URL nemùže být prázdná")]
+        [Url(ErrorMessage = "UrlNotValid")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "UrlNotEmpty")]
         [DataType(DataType.Url)]
-        [Display(Name = "Url: ")]        
+        [Display(Name = "Url:")]        
         public string Url { get; set; }    
         
         [EnumDataType(typeof(NewsTypeContractViewEnum))]
         [Required]
-        [Display(Name="Typ: ")]
+        [Display(Name="Type")]
         public NewsTypeContractViewEnum ItemType { get; set; }
     }
 
     public enum NewsTypeContractViewEnum
     {
-        [Display(Name = "Web i mobilní aplikace")]
+        //[Display(Name = "WebAndMobileApp")] // TODO determine why attribute usage cause exception in CSHTML
         Combined = 0,
         
-        [Display(Name = "Pouze web")]
+        //[Display(Name = "OnlyWeb")]
         Web = 1,
         
-        [Display(Name = "Pouze mobilní aplikace")]
+        //[Display(Name = "OnlyMobileApp")]
         MobileApps = 2,
     }
 

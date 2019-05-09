@@ -1,4 +1,4 @@
-﻿$(document).ready(() => {
+﻿$(document.documentElement).ready(() => {
     var projectList = new ProjectList();
     projectList.init();
 });
@@ -41,7 +41,7 @@ class ProjectList {
         });
 
         $(".project-item .delete-button").click((event) => {
-            var $projectItem = $(event.currentTarget).closest(".project-item");
+            var $projectItem = $(event.currentTarget as Node as Element).closest(".project-item");
             this.projectIdForDelete = Number($projectItem.data("project-id"));
             var projectName = $projectItem.data("project-name");
 
@@ -59,7 +59,7 @@ class ProjectList {
     }
 
     private createNewProject() {
-        var projectName = $("#new-project-name").val();
+        const projectName = $("#new-project-name").val() as string;
         this.projectClient.createProject(projectName, (newId, error) => {
             if (error != null) {
                 this.newProjectDialog.showError();
@@ -94,7 +94,7 @@ class ProjectList {
             .html("<div class=\"loader\"></div>")
             .load(url, null, (responseText, textStatus, xmlHttpRequest) => {
                 if (xmlHttpRequest.status !== HttpStatusCode.Success) {
-                    var alert = new AlertComponentBuilder(AlertType.Error).addContent("Chyba při načítání strany se seznamem projektů");
+                    var alert = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("ListError", "Admin").value);
                     $listContainer
                         .empty()
                         .append(alert.buildElement());

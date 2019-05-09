@@ -1,17 +1,22 @@
-﻿<div class="modal fade" role="dialog">
+﻿@using Localization.AspNetCore.Service
+@using Localization.CoreLibrary.Util
+
+@inject ILocalization Localizer
+
+<div class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Default title</h4>
+                <h4 class="modal-title">@Localizer.Translate("DefaultTitle","global", LocTranslationSource.File)</h4>
             </div>
             <div class="modal-body">
                 
             </div>
             <div class="modal-footer">
-                <div class="error hidden">Error</div>
-                <button type="button" class="btn btn-default close-button" data-dismiss="modal">Zavřít</button>
-                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button hidden"></span>Uložit</button>
+                <div class="error hidden">@Localizer.Translate("Error", "global", LocTranslationSource.File)</div>
+                <button type="button" class="btn btn-default close-button" data-dismiss="modal">@Localizer.Translate("Close", "global", LocTranslationSource.File)</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button hidden"></span>@Localizer.Translate("Save", "global", LocTranslationSource.File)</button>
             </div>
         </div>
     </div>

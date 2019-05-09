@@ -10,9 +10,9 @@ using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.Editions.Controllers
@@ -91,13 +91,13 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
         public ActionResult Information()
         {
-            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextEditionInfo);
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextEditionInfo, "edition");
             return View(pageStaticText);
         }
 
         public ActionResult Feedback()
         {
-            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, IsUserLoggedIn());
+            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, IsUserLoggedIn(), "home");
             return View(viewModel);
         }
 
@@ -108,7 +108,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         {
             if (!ModelState.IsValid)
             {
-                m_feedbacksManager.FillViewModel(model, StaticTexts.TextHomeFeedback, GetFeedbackFormIdentification());
+                m_feedbacksManager.FillViewModel(model, StaticTexts.TextHomeFeedback, "home", GetFeedbackFormIdentification());
                 return View(model);
             }
 
@@ -118,13 +118,13 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
         public ActionResult Help()
         {
-            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextEditionHelp);
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextEditionHelp, "edition");
             return View(pageStaticText);
         }
 
         public ActionResult EditionPrinciples()
         {
-            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextEditionPrinciples);
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextEditionPrinciples, "edition");
             return View(pageStaticText);
         }
 

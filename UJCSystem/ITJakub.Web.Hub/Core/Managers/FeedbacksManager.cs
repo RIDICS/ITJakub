@@ -16,9 +16,9 @@ namespace ITJakub.Web.Hub.Core.Managers
             m_communicationProvider = communicationProvider;
         }
 
-        public FeedbackViewModel GetBasicViewModel(FeedbackFormIdentification formIdentification, string staticTextName, bool isAuthenticated)
+        public FeedbackViewModel GetBasicViewModel(FeedbackFormIdentification formIdentification, string staticTextName, bool isAuthenticated, string scope)
         {
-            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(staticTextName);
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(staticTextName, scope);
 
             if (!isAuthenticated)
             {
@@ -46,9 +46,9 @@ namespace ITJakub.Web.Hub.Core.Managers
             }
         }
 
-        public void FillViewModel(FeedbackViewModel viewModel, string staticTextName, FeedbackFormIdentification formIdentification)
+        public void FillViewModel(FeedbackViewModel viewModel, string staticTextName, string scope, FeedbackFormIdentification formIdentification)
         {
-            viewModel.PageStaticText = m_staticTextManager.GetRenderedHtmlText(staticTextName);
+            viewModel.PageStaticText = m_staticTextManager.GetRenderedHtmlText(staticTextName, scope);
             viewModel.FormIdentification = formIdentification;
         }
 

@@ -1,0 +1,34 @@
+{
+	"culture":"cs-CZ",
+	"scope":"Dictionaries",
+	"dictionary": {
+		"DictionaryTerms" : "Slovníková hesla",
+		"NoEntryFound" : "Žádné výsledky k zobrazení",
+		"Feedback" : "Připomínky",
+		"ImageTermLoadError" : "Chyba při načítání obrázku k heslu '{0}'.",
+		"TermLoadError" : "Chyba při náčítání hesla '{0}'.",
+
+		"DictionariesFeedback" : "Slovníky - Připomínky",
+		"Send" : "Odeslat",
+		"DictionariesHelp" : "Slovníky - Nápověda",
+		"DictionariesInformation" : "Slovníky - Informace",
+		"DictionariesList" : "Slovníky - Seznam",
+		"DictionariesListing" : "Slovníky - Listování",
+		"Search" : "Vyhledat",
+		"Find" : "Hledat",
+		"SavedKeywords" : "Uložená hesla",
+		"KeywordList" : "Seznam hesel",
+		"KeywordStates" : "Heslové stati",
+		"CancelFilter" : "Zrušit filtr",
+		"LoadingKeywordStates" : "Načítání heslových statí",
+		"LoadingKeywordStatesPrint" : "Probíhá načítání heslových statí pro tisk",
+
+		"DictionariesSearch" : "Slovníky - Vyhledávání",
+		"Keywords" : "Hesla",
+		"Fulltext" : "Fulltext",
+		"AdvancedSearch" : "Pokročilé vyhledávání",
+
+		"Print" : "Tisk"
+		
+	}
+}

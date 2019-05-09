@@ -6,6 +6,8 @@
     private favoriteManager: FavoriteManager;
     private loading: boolean;
 
+	private localizationScope = "FavoriteJs";
+
     constructor(container: JQuery, bookType: BookTypeEnum, dropdownSelect: DropDownSelect2) {
         this.dropdownSelect = dropdownSelect;
         this.bookType = bookType;
@@ -24,7 +26,7 @@
             .addClass("glyphicon")
             .addClass("glyphicon-star-empty");
         $(buttonContentSpan)
-            .text(" Vybrat oblíbené knihy a kategorie");
+            .text(localization.translate("ChooseFav", this.localizationScope).value);
         $(headerButton)
             .attr("type", "button")
             .addClass("favorite-book-select-button")
@@ -50,9 +52,9 @@
 
         this.container.append(innerContainer);
         
-        $(document).unbind("click.favoriteBooks");
-        $(document).bind("click.favoriteBooks", (event) => {
-            var parents = $(event.target).parents();
+        $(document.documentElement).unbind("click.favoriteBooks");
+        $(document.documentElement).bind("click.favoriteBooks", (event) => {
+            var parents = $(event.target as Node as Element).parents();
             if (!parents.is(this.container)) {
                 this.hide();
             }
@@ -101,7 +103,7 @@
                 var emptyDiv = document.createElement("div");
                 $(emptyDiv)
                     .addClass("text-center")
-                    .text("Žádný štítek neobsahuje oblíbenou knihu nebo kategorii");
+                    .text(localization.translate("NoTagsHasFav", this.localizationScope).value);
                 this.bodyDiv.appendChild(emptyDiv);
             }
 

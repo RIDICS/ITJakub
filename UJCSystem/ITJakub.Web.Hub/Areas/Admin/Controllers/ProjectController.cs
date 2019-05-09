@@ -11,6 +11,7 @@ using ITJakub.Web.Hub.Areas.Admin.Models.Type;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Helpers;
+using Localization.AspNetCore.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
@@ -18,6 +19,7 @@ using Microsoft.Net.Http.Headers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
+using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.AspNetCore.Helpers;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
@@ -26,9 +28,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
     public class ProjectController : BaseController
     {
         private const int ProjectListPageSize = 5;
+        private readonly ILocalization m_localizer;
 
-        public ProjectController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        public ProjectController(CommunicationProvider communicationProvider, ILocalization localizer) : base(communicationProvider)
         {
+            this.m_localizer = localizer;
         }
 
         private ProjectListViewModel CreateProjectListViewModel(PagedResultList<ProjectDetailContract> data, int start)
@@ -111,11 +115,13 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                         var literaryGenres = client.GetLiteraryGenreList();
                         var literaryOriginals = client.GetLiteraryOriginalList();
                         var responsibleTypes = client.GetResponsibleTypeList();
-                        var projectMetadata = client.GetProjectMetadata(projectId.Value, true, true, true, true, true, true);
+                        var categories = client.GetCategoryList();
+                        var projectMetadata = client.GetProjectMetadata(projectId.Value, true, true, true, true, true, true, true);
                         var workMetadaViewModel = Mapper.Map<ProjectWorkMetadataViewModel>(projectMetadata);
                         workMetadaViewModel.AllLiteraryKindList = literaryKinds;
                         workMetadaViewModel.AllLiteraryGenreList = literaryGenres;
                         workMetadaViewModel.AllLiteraryOriginalList = literaryOriginals;
+                        workMetadaViewModel.AllCategoryList = categories;
                         workMetadaViewModel.AllResponsibleTypeList =
                             Mapper.Map<List<ResponsibleTypeViewModel>>(responsibleTypes);
                         return PartialView("Work/_Metadata", workMetadaViewModel);
@@ -179,7 +185,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 var resources = client.GetResourceList(projectId);
                 // TODO
             }
-            var viewModel = ProjectMock.GetNewPulication();
+            var viewModel = ProjectMock.GetNewPulication(m_localizer);
             return PartialView("Work/_PublicationsNew", viewModel);
         }
 
@@ -336,6 +342,36 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult GetProjectsByAuthor(int authorId, int? start, int? count)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetProjectsByAuthor(authorId, start, count);
+                return Json(result);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetProjectsByResponsiblePerson(int responsiblePersonId, int? start, int? count)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetProjectsByResponsiblePerson(responsiblePersonId, start, count);
+                return Json(result);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult KeywordTypeahead([FromQuery] string keyword, [FromQuery] int? count)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetKeywordAutocomplete(keyword, count);
+                return Json(result);
+            }
+        }
+
         [HttpPost]
         public IActionResult DeleteResource([FromBody] DeleteResourceRequest request)
         {
@@ -371,12 +407,12 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         [HttpGet]
         public IActionResult GetProjectMetadata([FromQuery] long projectId, [FromQuery] bool includeAuthor, [FromQuery] bool includeResponsiblePerson,
-            [FromQuery] bool includeKind, [FromQuery] bool includeGenre, [FromQuery] bool includeOriginal, [FromQuery] bool includeKeyword)
+            [FromQuery] bool includeKind, [FromQuery] bool includeGenre, [FromQuery] bool includeOriginal, [FromQuery] bool includeKeyword, [FromQuery] bool includeCategory)
         {
             using (var client = GetRestClient())
             {
                 var response = client.GetProjectMetadata(projectId, includeAuthor,
-                includeResponsiblePerson, includeKind, includeGenre, includeOriginal, includeKeyword);
+                includeResponsiblePerson, includeKind, includeGenre, includeOriginal, includeKeyword, includeCategory);
                 return Json(response);
             }
         }
@@ -457,6 +493,16 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
                 try
                 {
+                    client.SetProjectCategories(projectId,
+                        new IntegerIdListContract { IdList = request.CategoryIdList });
+                }
+                catch (HttpRequestException)
+                {
+                    unsuccessRequestCount++;
+                }
+
+                try
+                {
                     client.SetProjectLiteraryGenres(projectId,
                         new IntegerIdListContract {IdList = request.LiteraryGenreIdList});
                 }
@@ -513,47 +559,58 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
+        public IActionResult GetTypeaheadPublisher(string query)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetPublisherAutoComplete(query);
+                return Json(result);
+            }
+        }
+
         #endregion
     }
 
     public static class ProjectMock
     {
-        public static NewPublicationViewModel GetNewPulication()
+        public static NewPublicationViewModel GetNewPulication(ILocalization localizer)
         {
             return new NewPublicationViewModel
             {
                 ResourceList = new List<ResourceViewModel>
                 {
-                    GetResourceViewModel(1),
-                    GetResourceViewModel(2),
-                    GetResourceViewModel(3),
-                    GetResourceViewModel(4),
-                    GetResourceViewModel(5)
+                    GetResourceViewModel(1, localizer),
+                    GetResourceViewModel(2, localizer),
+                    GetResourceViewModel(3, localizer),
+                    GetResourceViewModel(4, localizer),
+                    GetResourceViewModel(5, localizer)
                 },
                 VisibilityForGroups = new List<GroupInfoViewModel>
                 {
-                    GetVisibilityForGroup(1),
-                    GetVisibilityForGroup(2),
-                    GetVisibilityForGroup(3),
+                    GetVisibilityForGroup(1, localizer),
+                    GetVisibilityForGroup(2, localizer),
+                    GetVisibilityForGroup(3, localizer),
                 }
             };
         }
 
-        private static GroupInfoViewModel GetVisibilityForGroup(int id)
+        private static GroupInfoViewModel GetVisibilityForGroup(int id, ILocalization localizer)
         {
             return new GroupInfoViewModel
             {
                 GroupId = id,
-                Name = string.Format("Skupina {0}", id)
+                //Name = string.Format("Skupina {0}", id)
+                Name = localizer.TranslateFormat("Group", new object[]{id}, "Admin")
             };
         }
 
-        private static ResourceViewModel GetResourceViewModel(int id)
+        private static ResourceViewModel GetResourceViewModel(int id, ILocalization localizer)
         {
             return new ResourceViewModel
             {
                 Id = id,
-                Name = string.Format("Strana {0}", id),
+                //Name = string.Format("Strana {0}", id),
+                Name = localizer.TranslateFormat("Page", new object[]{id}, "Admin"),
                 VersionList = new List<VersionNumberViewModel>
                 {
                     GetVersionNumber(1),

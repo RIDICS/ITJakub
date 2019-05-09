@@ -3,7 +3,7 @@
     var keyboardMap: { [key: string]: KeyboardComponent } = {};
 
     function findContainer(key: string) {
-        return $(`.component.keyboard-component[data-keyboard-id="${key}"]`).get(0);
+        return $(`.component.keyboard-component[data-keyboard-id="${key}"]`).get(0) as Node as HTMLElement;
     }
     
     export function getKeyboard(keyboard: string, lazy: boolean=true): KeyboardComponent {

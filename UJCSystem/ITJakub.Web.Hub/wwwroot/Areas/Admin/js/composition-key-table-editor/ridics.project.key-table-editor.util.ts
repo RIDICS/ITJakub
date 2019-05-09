@@ -14,7 +14,7 @@
             parentCategoryId: parentCategoryId,
             description: description
         };
-        const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/CreateCategory`, { category: category });
+        const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/CreateCategory`, { category: category } as JQuery.PlainObject);
         return ajax;
     }
 
@@ -30,12 +30,12 @@
             {
                 categoryId: categoryId,
                 category: category
-            });
+            } as JQuery.PlainObject);
         return ajax;
     }
 
     deleteCategory(categoryId: number): JQueryXHR {
-        const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/DeleteCategory`, { categoryId: categoryId });
+        const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/DeleteCategory`, { categoryId: categoryId } as JQuery.PlainObject);
         return ajax;
     }
     //category section end
@@ -48,7 +48,7 @@
             name: name,
             id: id
         };
-        return $.post(url, { request: payload });
+        return $.post(url, { request: payload } as JQuery.PlainObject);
     }
 
     getLiteraryGenreList() {
@@ -65,7 +65,7 @@
             {
                 literaryGenreId: genreId,
                 data: genre
-            });
+            } as JQuery.PlainObject);
         return ajax;
     }
 
@@ -74,7 +74,7 @@
         const ajax = $.post(url,
             {
                 literaryGenreId: literaryGenreId
-            });
+            } as JQuery.PlainObject);
         return ajax;
     }
     //genre section end
@@ -86,7 +86,7 @@
     }
 
     deleteLiteraryKind(literaryKindId: number): JQueryXHR {
-        const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/DeleteLiteraryKind`, { literaryKindId: literaryKindId });
+        const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/DeleteLiteraryKind`, { literaryKindId: literaryKindId } as JQuery.PlainObject);
         return ajax;
     }
 
@@ -97,7 +97,7 @@
             name: name,
             id: id
         };
-        return $.post(url, { request: payload });
+        return $.post(url, { request: payload } as JQuery.PlainObject);
     }
 
     renameLiteraryKind(literaryKindId: number, name: string): JQueryXHR {
@@ -109,7 +109,7 @@
             {
                 literaryKindId: literaryKindId,
                 request: literaryKind
-            });
+            } as JQuery.PlainObject);
         return ajax;
     }
     //kind section end
@@ -129,7 +129,7 @@
             {
                 responsibleTypeId: responsibleTypeId,
                 data: responsibleTypeBody
-            });
+            } as JQuery.PlainObject);
         return ajax;
     }
     deleteResponsiblePersonType(responsibleTypeId: number): JQueryXHR {
@@ -137,7 +137,7 @@
         const ajax = $.post(url,
             {
                 responsibleTypeId: responsibleTypeId
-            });
+            } as JQuery.PlainObject);
         return ajax;
     }
     createNewResponsiblePersonType(responsibleType: ResponsibleTypeEnum, text: string): JQueryXHR {
@@ -148,16 +148,16 @@
             id: id,
             type: responsibleType
         };
-        return $.post(url, { request: payload });
+        return $.post(url, { request: payload } as JQuery.PlainObject);
     }
     //responsible person type section end
     //responsible person section start
-    getResponsiblePersonList(start?: number, count?: number): JQueryXHR {
+    getResponsiblePersonList(start: number, count: number): JQueryXHR {
         const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetResponsiblePersonList`,
             {
                 start: start,
                 count: count
-            });
+            } as JQuery.PlainObject);
         return ajax;
     }
 
@@ -169,7 +169,7 @@
             firstName: name,
             lastName: surname
         };
-        return $.post(url, { request: payload });
+        return $.post(url, { request: payload } as JQuery.PlainObject);
     }
     renameResponsiblePerson(responsiblePersonId: number, name: string, surname: string): JQueryXHR {
         const responsiblePerson: IResponsiblePerson = {
@@ -181,11 +181,11 @@
             {
                 responsiblePersonId: responsiblePersonId,
                 request: responsiblePerson
-            });
+            } as JQuery.PlainObject);
         return ajax;
     }
     deleteResponsiblePerson(responsiblePersonId: number): JQueryXHR {
-        const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/DeleteResponsiblePerson`, { responsiblePersonId: responsiblePersonId });
+        const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/DeleteResponsiblePerson`, { responsiblePersonId: responsiblePersonId } as JQuery.PlainObject);
         return ajax;
     }
     //responsible person section end
@@ -198,7 +198,7 @@
 
     deleteLiteraryOriginal(literaryOriginalId: number): JQueryXHR {
         const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/DeleteLiteraryOriginal`,
-            { literaryOriginalId: literaryOriginalId });
+            { literaryOriginalId: literaryOriginalId } as JQuery.PlainObject);
         return ajax;
     }
 
@@ -209,7 +209,7 @@
             name: name,
             id: id
         };
-        return $.post(url, { request: payload });
+        return $.post(url, { request: payload } as JQuery.PlainObject);
     }
 
     renameLiteraryOriginal(literaryOriginalId: number, name: string): JQueryXHR {
@@ -221,7 +221,7 @@
             {
                 literaryOriginalId: literaryOriginalId,
                 request: literaryOriginal
-            });
+            } as JQuery.PlainObject);
         return ajax;
     }
 
@@ -232,7 +232,7 @@
             {
                 start: start,
                 count: count
-            });
+            } as JQuery.PlainObject);
         return ajax;
     }
 
@@ -244,7 +244,7 @@
             firstName: name,
             lastName: surname
         };
-        return $.post(url, { request: payload });
+        return $.post(url, { request: payload } as JQuery.PlainObject);
     }
     renameOriginalAuthor(authorId: number, name: string, surname: string): JQueryXHR {
         const originalAuthor: IOriginalAuthor = {
@@ -256,23 +256,26 @@
             {
                 authorId: authorId,
                 request: originalAuthor
-            });
+            } as JQuery.PlainObject);
         return ajax;
     }
     deleteOriginalAuthor(authorId: number): JQueryXHR {
-        const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/DeleteOriginalAuthor`, { authorId: authorId });
+        const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/DeleteOriginalAuthor`, { authorId: authorId } as JQuery.PlainObject);
         return ajax;
     }
     //original author section end
 
     //keyword section start
-    getKeywordList(): JQueryXHR {
-        const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetKeywordList`);
+    getKeywordList(start?: number, count?: number): JQueryXHR {
+        const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetKeywordList`, {
+            start: start,
+            count: count
+        } as JQuery.PlainObject);
         return ajax;
     }
 
     deleteKeyword(keywordId: number): JQueryXHR {
-        const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/DeleteKeyword`, { keywordId: keywordId });
+        const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/DeleteKeyword`, { keywordId: keywordId } as JQuery.PlainObject);
         return ajax;
     }
 
@@ -283,7 +286,7 @@
             name: name,
             id: id
         };
-        return $.post(url, { request: payload });
+        return $.post(url, { request: payload } as JQuery.PlainObject);
     }
 
     renameKeyword(keywordId: number, name: string): JQueryXHR {
@@ -295,7 +298,7 @@
             {
                 keywordId: keywordId,
                 request: keyword
-            });
+            } as JQuery.PlainObject);
         return ajax;
     }
 

@@ -1,4 +1,7 @@
-﻿@section styles{
+﻿@using Localization.AspNetCore.Service
+@inject ILocalization Localizer
+
+@section styles{
     <link href="~/Areas/AudioBooks/css/itjakub.audiobooks.css" rel="stylesheet" />
 }
 @section scripts{
@@ -6,7 +9,7 @@
 }
 
 @{
-    ViewBag.Title = "Audioknihy - Seznam";
+    ViewBag.Title = @Localizer.Translate("AudioBooksList", "AudioBooks");
 }
 
 @Html.Partial("_BibliographySearch")

@@ -1,4 +1,4 @@
-﻿/// <reference path="../../../lib/s-pagination/dist/pagination.d.ts" />
+﻿/// <reference path="../../../../wwwroot/lib/s-pagination/dist/pagination.d.ts" />
 class DictionaryViewer {
     private headwordDescriptionContainer: string;
     private paginationContainer: string;
@@ -20,6 +20,8 @@ class DictionaryViewer {
     private isCriteriaJson: boolean;
     private defaultPageNumber: number;
 
+    private localization : Localization;
+
     constructor(headwordListContainer: string, paginationContainer: string, headwordDescriptionContainer: string, lazyLoad: boolean) {
         this.headwordDescriptionContainer = headwordDescriptionContainer;
         this.paginationContainer = paginationContainer;
@@ -32,6 +34,8 @@ class DictionaryViewer {
             maxVisibleElements: 11,
             showInput: true
         });
+
+        this.localization = new Localization();
     }
 
     public createViewer(recordCount: number, showPageCallback: (pageNumber: number) => void, pageSize: number, searchCriteria: string = null,
@@ -107,7 +111,7 @@ class DictionaryViewer {
             $(this.headwordDescriptionContainer).empty();
 
             var noEntryFoundDiv = document.createElement("div");
-            noEntryFoundDiv.innerHTML = "Žádné výsledky k zobrazení";
+            noEntryFoundDiv.innerHTML = this.localization.translate("NoEntryFound", "Dictionaries").value;
             noEntryFoundDiv.classList.add("dictionary-list-empty");
             $(this.headwordListContainer).append(noEntryFoundDiv);
 
@@ -169,7 +173,7 @@ class DictionaryViewer {
                     .addClass(isFavorite ? "glyphicon-star" : "glyphicon-star-empty")
                     .addClass("dictionary-result-headword-favorite");
                 $(favoriteGlyphSpan).click(event => {
-                    this.favoriteHeadwordClick(event.target);
+                    this.favoriteHeadwordClick(event.target as Node as Element);
                 });
 
                 headwordLi.appendChild(favoriteGlyphSpan);
@@ -195,7 +199,7 @@ class DictionaryViewer {
                     imageCheckBox.type = "checkbox";
                     imageCheckBox.autocomplete = "off";
                     $(imageCheckBox).change(event => {
-                        this.updateImageVisibility(<HTMLInputElement>event.target);
+                        this.updateImageVisibility(event.target as Node as HTMLInputElement);
                     });
 
                     imageCheckBoxDiv.setAttribute("data-toggle", "buttons");
@@ -224,7 +228,7 @@ class DictionaryViewer {
                 
                 var commentsDiv = document.createElement("div");
                 var commentsLink = document.createElement("a");
-                $(commentsLink).text("Připomínky");
+                $(commentsLink).text(this.localization.translate("Feedback", "Dictionaries").value);
                 commentsLink.href = "Feedback?bookId=" + dictionaryMetadata.id
                     + "&headwordVersionId=" + dictionary.headwordVersionId
                     + "&headword=" + record.headword
@@ -308,7 +312,8 @@ class DictionaryViewer {
                 $(imageContainer).empty();
 
                 var errorDiv = document.createElement("div");
-                $(errorDiv).text("Chyba při načítání obrázku k heslu '" + this.headwordList[index] + "'.");
+                //$(errorDiv).text("Chyba při načítání obrázku k heslu '" + this.headwordList[index] + "'.");
+                $(errorDiv).text(this.localization.translateFormat("ImageTermLoadError", new Array<string>(this.headwordList[index]) , "Dictionaries").value);
                 $(errorDiv).addClass("entry-load-error");
 
                 imageContainer.append(errorDiv);
@@ -338,7 +343,7 @@ class DictionaryViewer {
     private createLinkListener(aLink: HTMLAnchorElement, headword: string, headwordInfo: IHeadwordBookInfo, container: HTMLDivElement) {
         $(aLink).click(event => {
             event.preventDefault();
-            var index: number = $(event.target).data("entry-index");
+            var index: number = $(event.target as Node as Element).data("entry-index");
             var headwordDiv = this.headwordDescriptionDivs[index];
 
             for (var k = 0; k < this.headwordDescriptionDivs.length; k++) {
@@ -351,7 +356,7 @@ class DictionaryViewer {
                 this.loadHeadwordDescription(index);
             }
 
-            var headwordItem = $(event.target).closest("li");
+            var headwordItem = $(event.target as Node as Element).closest("li");
             $(headwordItem).siblings().removeClass("dictionary-headword-highlight");
             $(headwordItem).addClass("dictionary-headword-highlight");
         });
@@ -361,7 +366,7 @@ class DictionaryViewer {
         $(mainDescriptionElement).addClass("lazy-loading");
         $(mainDescriptionElement).bind("appearing", event => {
             var descriptionDiv = event.target;
-            var index = $(descriptionDiv).data("entry-index");
+            var index = $(descriptionDiv as Node as Element).data("entry-index");
             this.loadHeadwordDescription(index);
         });
     }
@@ -379,7 +384,8 @@ class DictionaryViewer {
         $(container).parent().removeClass("loading-background");
 
         var errorDiv = document.createElement("div");
-        $(errorDiv).text("Chyba při náčítání hesla '" + headword + "'.");
+        //$(errorDiv).text("Chyba při náčítání hesla '" + headword + "'.");
+        $(errorDiv).text(this.localization.translateFormat("ImageTermLoadError", new Array<string>(headword), "Dictionaries").value);
         $(errorDiv).addClass("entry-load-error");
 
         container.appendChild(errorDiv);
@@ -402,7 +408,7 @@ class DictionaryViewer {
         $(headwordLabelSpan).text(this.headwordList[index]);
         headwordDescriptionContainer.append(headwordLabelSpan);
 
-        if (checkBox.length !== 0 && !(<HTMLInputElement>checkBox.get(0)).checked) {
+        if (checkBox.length !== 0 && !(checkBox.get(0) as Node as HTMLInputElement).checked) {
             toggleButtonLabel.trigger("click");
         }
 
@@ -426,7 +432,7 @@ class DictionaryViewer {
             url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordDescription",
             data: {
                 headwordId: headwordInfo.headwordId
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (response) => {
@@ -453,7 +459,7 @@ class DictionaryViewer {
                 criteria: this.searchCriteria,
                 isCriteriaJson: this.isCriteriaJson,
                 headwordId: headwordInfo.headwordId
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (response) => {
@@ -475,7 +481,7 @@ class DictionaryViewer {
         
         $(mainDescriptionDiv).unbind("appearing");
         $(mainDescriptionDiv).removeClass("lazy-loading");
-        this.getAndShowHeadwordDescription(index, <HTMLDivElement>descriptionContainer);
+        this.getAndShowHeadwordDescription(index, descriptionContainer as Node as HTMLDivElement);
     }
 
     private isAllLoaded(): boolean {
@@ -548,7 +554,7 @@ class DictionaryViewer {
         $(".pagination-input input", doc).val(this.pagination.getCurrentPage());
         
         $("link, style").each((index, element) => {
-            $(doc.head).append($(element).clone());
+            $(doc.head).append($(element as Node as Element).clone());
         });
 
         var css = "body { background-color: white; padding: 0 10px; }"
@@ -562,7 +568,7 @@ class DictionaryViewer {
         
         printWindow.focus();
 
-        $(printWindow.document).ready(() => {
+        $(printWindow.document.documentElement).ready(() => {
             //hack: not exist event CSSready
             setTimeout(()=> { printWindow.print(); }, 2000);
         });

@@ -3,6 +3,7 @@
     var cardfileSelector = new DropDownSelect("div.cardfile-selects", getBaseUrl() +"CardFiles/CardFiles/CardFiles", false, callbackDelegate);
     var cardFileManager = new CardFileManager("div.cardfile-result-area");
     cardfileSelector.makeDropdown();
+    
 
     $("#searchbox").keypress((event: any) => {
         var keyCode = event.which || event.keyCode;
@@ -26,7 +27,7 @@
 
         cardFileManager.clearContainer();
         var selectedCardFiles = cardfileSelector.getState().SelectedItems;
-        var searchedHeadword = $("#searchbox").val();
+        var searchedHeadword = $("#searchbox").val() as string;
 
         if (selectedCardFiles.length === 0) {
             $(nothingSelectedDiv).show();
@@ -49,7 +50,7 @@
                 $.ajax({
                     type: "GET",
                     traditional: true,
-                    data: { cardFileId: selectedCardFileItem.Id, headword: searchedHeadword },
+                    data: { cardFileId: selectedCardFileItem.Id, headword: searchedHeadword } as JQuery.PlainObject,
                     url: getBaseUrl()+"CardFiles/CardFiles/Buckets",
                     dataType: "json",
                     contentType: "application/json",
@@ -84,6 +85,8 @@
 };
 
 function createDelegate() {
+    var localization = new Localization();
+
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.getCategoriesFromResponseCallback = (response) => {
         return null;
@@ -111,7 +114,7 @@ function createDelegate() {
 
     callbackDelegate.getRootCategoryCallback = (categories): any => {
         var rootCategory = new Object();
-        rootCategory["Name"] = "Kartotéky";
+        rootCategory["Name"] = "kartoteky";
         return rootCategory;
     };
 
@@ -167,20 +170,29 @@ function createListing() {
             var cardFileId = getQueryStringParameterByName("cardFileId");
             if(cardFileId){
             $(cardFileSelector).find("option:selected").removeAttr("selected");
-            $(cardFileSelector).find("option[value =" + cardFileId + "]").prop("selected", "selected");
+            $(cardFileSelector).find(`option[value = ${cardFileId}]`).prop("selected", "selected");
             }
 
             $(cardFileSelector).show();
             $(cardFileSelector).change();
         },
         error: (response) => {
-            //TODO resolve error
+            $(cardFileLoadingDiv).hide();
+            bootbox.alert({
+                title: "Error",
+                message: "Not enough permissions to access card files",
+                buttons:{
+                    ok: {
+                        className: "btn-default"
+            }
+            }
+            });
         }
     });
 
     $(cardFileSelector).change(function() {
         var optionSelected = $("option:selected", this);
-        cardFileIdListed = optionSelected.val();
+        cardFileIdListed = optionSelected.val() as string;
         cardFileNameListed = optionSelected.text();
         $(bucketSelector).empty();
         $(bucketSelector).hide();
@@ -189,7 +201,7 @@ function createListing() {
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { cardFileId: cardFileIdListed},
+            data: { cardFileId: cardFileIdListed } as JQuery.PlainObject,
             url: getBaseUrl()+"CardFiles/CardFiles/Buckets",
             dataType: "json",
             contentType: "application/json",
@@ -211,14 +223,23 @@ function createListing() {
                 $(bucketSelector).change();
             },
             error: (response) => {
-                //TODO resolve error
+                $(bucketLoadingDiv).hide();
+                bootbox.alert({
+                    title: "Error",
+                    message: "Not enough permissions to access card files",
+                    buttons: {
+                        ok: {
+                            className: "btn-default"
+                        }
+                    }
+                });
             }
         });
     });
 
     $(bucketSelector).change(function() {
         var optionSelected = $("option:selected", this);
-        var bucketId = optionSelected.val();
+        var bucketId = optionSelected.val() as string;
         var bucketText = optionSelected.text();
         cardFileManager.clearContainer();
         cardFileManager.makeCardFile(cardFileIdListed, cardFileNameListed, bucketId, bucketText);
@@ -234,14 +255,14 @@ function initCardList() {
     var bibliographyModule = new BibliographyModule("#cardFilesListResults", "#cardFilesResultsHeader", sortOrderChanged);
 
     $("#searchButton").click(() => {
-        var text = $("#searchbox").val();
+        var text = $("#searchbox").val() as string;
         bibliographyModule.clearBooks();
         bibliographyModule.showLoading();
         $.ajax({
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "CardFiles/CardFiles/SearchList",
-            data: { term: text },
+            data: { term: text } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success(response) {

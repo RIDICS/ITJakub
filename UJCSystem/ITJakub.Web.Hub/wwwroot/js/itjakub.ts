@@ -1,10 +1,23 @@
 ﻿/// <reference path="Plugins/Bibliography/itjakub.plugins.bibliography.ts"/>
 /// <reference path="Plugins/DropdownSelect/itjakub.plugins.dropdownselect.ts"/>
 /// <reference path="../../node_modules/@types/dropzone/index.d.ts"/>
+/// <reference path="../../node_modules/@types/jquery/index.d.ts" />
+/// <reference path="../../node_modules/@types/jqueryui/index.d.ts" />
+/// <reference path="../../node_modules/@types/jquery.validation/index.d.ts" />
+/// <reference path="../../node_modules/@types/typeahead/index.d.ts" />
+/// <reference path="../../node_modules/@types/simplemde/index.d.ts" />
+/// <reference path="../../node_modules/@types/codemirror/index.d.ts" />
+/// <reference path="../lib/s-pagination/dist/pagination.d.ts" />
 
+var localization: Localization;
+
+// Disable Dropzone auto-initializing
+Dropzone.autoDiscover = false;
 
 //sets state to main plugins menu
-$(document).ready(() => {
+$(document as Node as Element).ready(() => {
+    localization = new Localization();
+
     $('#main-plugins-menu').find('li').removeClass('active');
     var href = window.location.pathname;
     var liTargetingActualPage = $('#main-plugins-menu').find("a[href='" + href.toString() + "']").parent('li');
@@ -14,21 +27,18 @@ $(document).ready(() => {
     // Fix navigation menu behavior for touch devices
     $("#main-plugins-menu > ul > li > a").on("touchstart", (event) => {
         event.preventDefault();
-        var $liElement = $(event.currentTarget).closest(".has-sub");
+        var $liElement = $(event.currentTarget as Node as Element).closest(".has-sub");
         $liElement.siblings().removeClass("hover");
         $liElement.toggleClass("hover");
     });
     $(".secondary-navbar-toggle").on("touchstart", (event) => {
-        if ($(event.target).is("a")) {
+        if ($(event.target as Node as Element).is("a")) {
             return;
         }
-        var $buttonElement = $(event.currentTarget);
+        var $buttonElement = $(event.currentTarget as Node as Element);
         $buttonElement.siblings(".secondary-navbar-toggle").removeClass("hover");
         $buttonElement.toggleClass("hover");
     });
-
-    // Disable Dropzone auto-initializing
-    Dropzone.autoDiscover = false;
 });
 
 function getQueryStringParameterByName(name) {
@@ -99,8 +109,8 @@ function isUserInRole(role: RoleEnum) {
     return rolesString.indexOf(paramRoleString) >= 0;
 }
 
-function onClickHref(event:JQueryEventObject, targetUrl) {
-    if (event.ctrlKey || event.which == 2) {
+function onClickHref(event:JQuery.Event, targetUrl) {
+    if (event.ctrlKey || event.which === 2) {
         event.preventDefault();
 
         window.open(targetUrl, '_blank');
@@ -111,21 +121,40 @@ function onClickHref(event:JQueryEventObject, targetUrl) {
     }
 }
 
-// jQuery case-insensitive contains
-jQuery.expr[':'].containsCI = (a, i, m) => (jQuery(a).text().toLowerCase()
-    .indexOf(m[3].toLowerCase()) >= 0);
+interface JQueryStatic {
+    expr: any;
+}
+
+// An implementation of a case-insensitive contains pseudo
+// made for all versions of jQuery
+($ => {//TODO requires testing
+
+    function icontains(elem, text) {
+        return (
+            elem.textContent ||
+                elem.innerText ||
+                $(elem).text() ||
+                ""
+        ).toLowerCase().indexOf((text || "").toLowerCase()) > -1;
+    }
+
+    $.expr.pseudos.containsCI = $.expr.createPseudo ?
+        $.expr.createPseudo(text => elem => icontains(elem, text)) :
+        (elem, i, match) => icontains(elem, match[3]);
+
+})(jQuery);
 
 function getImageResourcePath(): string {
     return getBaseUrl() + "images/";
 }
 
 // Automatic popover close, fix 2 clicks for reopening problem
-$(document).on('click', (e) => {
+$(document as Node as Element).on("click", (e) => {
     $('[data-toggle="popover"],[data-original-title]').each(function () {
         //the 'is' for buttons that trigger popups
         //the 'has' for icons within a button that triggers a popup
-        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-            (($(this).popover('hide').data('bs.popover') || {}).inState || {}).click = false; // fix for BS 3.3.6
+        if (!$(this as Node as Element).is(e.target as Node as Element) && $(this as Node as Element).has(e.target as Node as Element).length === 0 && $('.popover').has(e.target as Node as Element).length === 0) {
+            (($(this as Node as Element).popover("hide").data("bs.popover") || {}).inState || {}).click = false; // fix for BS 3.3.6
         }
     });
 });

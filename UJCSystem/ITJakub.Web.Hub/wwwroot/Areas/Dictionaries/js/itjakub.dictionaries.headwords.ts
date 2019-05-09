@@ -2,6 +2,8 @@
     var selectedCategoryIds: Array<number> = [];
     var selectedBookIds: Array<number> = [];
     var defaultPageNumber: number = Number(pageNumber);
+
+    var localization = new Localization();
     
     try {
         selectedCategoryIds = JSON.parse(categoryIdList);
@@ -15,11 +17,11 @@
     var dictionaryViewerWrapper = new DictionaryViewerListWrapper(dictionaryViewer, pageSize);
 
     var searchBox = new SearchBox("#searchbox", "Dictionaries/Dictionaries");
-    searchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
+    searchBox.addDataSet("DictionaryHeadword", localization.translate("DictionaryTerms", "Dictionaries").value);
     searchBox.create();
 
-    var inputElement = <HTMLInputElement>$("#searchbox").get(0);
-    var keyboardButton = <HTMLButtonElement>$("#keyboard-button").get(0);
+    var inputElement = $("#searchbox").get(0) as Node as HTMLInputElement;
+    var keyboardButton = $("#keyboard-button").get(0) as Node as HTMLButtonElement;
     var keyboardComponent = KeyboardManager.getKeyboard("0");
     //keyboardComponent.registerInput($("#searchbox")[0]);
     keyboardComponent.registerButton(keyboardButton, inputElement, newQuery => searchBox.value(newQuery));
@@ -27,7 +29,7 @@
     var updateSearchBox = (state: State) => {
         var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
         searchBox.clearAndDestroy();
-        searchBox.addDataSet("DictionaryHeadword", "Slovníková hesla", parametersUrl);
+        searchBox.addDataSet("DictionaryHeadword", localization.translate("DictionaryTerms", "Dictionaries").value, parametersUrl);
         searchBox.create();
     }
 
@@ -61,7 +63,7 @@
     });
 
     $("#searchButton").click(() => {
-        var query = $("#searchbox").val();
+        var query = $("#searchbox").val() as string;
         var selectedIds = dictionarySelector.getSelectedIds();
         $.ajax({
             type: "GET",
@@ -72,7 +74,7 @@
                 selectedCategoryIds: selectedIds.isOnlyRootSelected ? [] : selectedIds.selectedCategoryIds,
                 query: query,
                 pageSize: pageSize
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (response) => {
@@ -132,7 +134,7 @@ class DictionaryViewerListWrapper {
                 headwordBookId: bookId,
                 headwordEntryXmlId: entryXmlId,
                 pageSize: this.pageSize
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (response) => {
@@ -179,7 +181,7 @@ class DictionaryViewerListWrapper {
             data: {
                 selectedBookIds: this.selectedBookIds,
                 selectedCategoryIds: this.selectedCategoryIds
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (response) => {
@@ -206,7 +208,7 @@ class DictionaryViewerListWrapper {
                 selectedCategoryIds: this.selectedCategoryIds,
                 page: pageNumber,
                 pageSize: this.pageSize
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (response) => {

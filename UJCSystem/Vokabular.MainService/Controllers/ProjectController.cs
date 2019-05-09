@@ -5,6 +5,7 @@ using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Parameter;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Headers;
+using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
 
 namespace Vokabular.MainService.Controllers
@@ -74,7 +75,7 @@ namespace Vokabular.MainService.Controllers
         [HttpGet("{projectId}/metadata")]
         [ProducesResponseType(typeof(ProjectMetadataResultContract), StatusCodes.Status200OK)]
         public IActionResult GetProjectMetadata(long projectId, [FromQuery] bool includeAuthor, [FromQuery] bool includeResponsiblePerson,
-            [FromQuery] bool includeKind, [FromQuery] bool includeGenre, [FromQuery] bool includeOriginal, [FromQuery] bool includeKeyword)
+            [FromQuery] bool includeKind, [FromQuery] bool includeGenre, [FromQuery] bool includeOriginal, [FromQuery] bool includeKeyword, [FromQuery] bool includeCategory)
         {
             var parameters = new GetProjectMetadataParameter
             {
@@ -83,7 +84,8 @@ namespace Vokabular.MainService.Controllers
                 IncludeOriginal = includeOriginal,
                 IncludeResponsiblePerson = includeResponsiblePerson,
                 IncludeAuthor = includeAuthor,
-                IncludeKeyword = includeKeyword
+                IncludeKeyword = includeKeyword,
+                IncludeCategory = includeCategory
             };
             var resultData = m_projectMetadataManager.GetProjectMetadata(projectId, parameters);
 

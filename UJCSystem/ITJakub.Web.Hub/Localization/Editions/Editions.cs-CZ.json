@@ -1,0 +1,13 @@
+{
+	"culture":"cs-CZ",
+	"scope":"Editions",
+	"dictionary": {
+		"EditionsPrinciples" : "Edice - Ediční zásady",
+		"EditionsFeedback" : "Edice - Připomínky",
+		"EditionsHelp" : "Edice - Nápověda",
+		"EditionsInformation" : "Edice - Informace",
+		"EditionsList" : "Edice - Seznam",
+		"EditionsListing" : "Edice - Čtečka děl",
+		"EditionsSearch" : "Edice - Vyhledávání"
+	}
+}

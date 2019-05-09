@@ -1,4 +1,4 @@
-﻿$(document).ready(
+﻿$(document.documentElement).ready(
     () => {
         const modulInicializator = new SearchModulInicializator({
             bibliographyModule: {

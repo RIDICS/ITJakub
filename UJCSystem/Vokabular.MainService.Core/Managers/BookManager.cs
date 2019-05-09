@@ -12,8 +12,8 @@ using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Search;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
-using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
+using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Core.Managers
@@ -87,6 +87,20 @@ namespace Vokabular.MainService.Core.Managers
             return result;
         }
 
+        public BookContract GetBookInfoByExternalId(string projectExternalId)
+        {
+            // Authorize after getting projectId
+
+            var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetLatestMetadataResourceByExternalId(projectExternalId));
+            if (metadataResult == null)
+                return null;
+
+            m_authorizationManager.AuthorizeBook(metadataResult.Resource.Project.Id);
+
+            var result = Mapper.Map<BookContract>(metadataResult);
+            return result;
+        }
+        
         public SearchResultDetailContract GetBookDetail(long projectId)
         {
             m_authorizationManager.AuthorizeBook(projectId);

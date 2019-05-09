@@ -13,7 +13,7 @@
     const leftPanelButtons = [PanelButtonEnum.Pin, PanelButtonEnum.Close];
     const mainPanelButtons = [PanelButtonEnum.Pin];
     
-    var readerPlugin = new ReaderModule(<HTMLDivElement>$("#ReaderDiv")[0], readerPageChangedCallback, readerPanels, leftPanelButtons, mainPanelButtons);
+    var readerPlugin = new ReaderModule($("#ReaderDiv")[0] as Node as HTMLDivElement, readerPageChangedCallback, readerPanels, leftPanelButtons, mainPanelButtons);
     readerPlugin.makeReader(bookXmlId, versionXmlId, bookTitle, pageList);
     readerPlugin.setTermPanelCallback((termId: number, text: string) => {
         window.location.href = getBaseUrl() + "OldGrammar/OldGrammar/Search?search=" + text;
@@ -48,7 +48,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "OldGrammar/OldGrammar/TextSearchInBook",
-            data: { text: text, projectId: readerPlugin.getBookXmlId(), snapshotId: readerPlugin.getVersionXmlId() },
+            data: { text: text, projectId: readerPlugin.getBookXmlId(), snapshotId: readerPlugin.getVersionXmlId() } as JQuery.PlainObject,
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
@@ -71,7 +71,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "OldGrammar/OldGrammar/AdvancedSearchInBook",
-            data: { json: json, projectId: readerPlugin.getBookXmlId(), snapshotId: readerPlugin.getVersionXmlId() },
+            data: { json: json, projectId: readerPlugin.getBookXmlId(), snapshotId: readerPlugin.getVersionXmlId() } as JQuery.PlainObject,
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
@@ -94,7 +94,7 @@
     search.makeSearch(enabledOptions);
 
     var typeaheadSearchBox = new SearchBox(".searchbar-input", "OldGrammar/OldGrammar");
-    typeaheadSearchBox.addDataSet("Term", "Téma", `selectedBookIds=${bookId}`);
+    typeaheadSearchBox.addDataSet("Term", this.localization.translate("Term", "Lemmatization").value, `selectedBookIds=${bookId}`);
     typeaheadSearchBox.create();
     typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
 

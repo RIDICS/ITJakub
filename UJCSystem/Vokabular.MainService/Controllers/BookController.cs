@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
-using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.DataContracts.Search;
+using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -420,6 +421,17 @@ namespace Vokabular.MainService.Controllers
                 return NotFound();
 
             return Content(result);
+        }
+
+        [HttpGet("info")]
+        [ProducesResponseType(typeof(BookContract), StatusCodes.Status200OK)]
+        public IActionResult GetBookByExternalId([FromQuery] string externalId)
+        {
+            if (string.IsNullOrEmpty(externalId))
+                return BadRequest("Required ExternalId parameter is null");
+
+            var result = m_bookManager.GetBookInfoByExternalId(externalId);
+            return result != null ? (IActionResult) Ok(result) : NotFound();
         }
     }
 }

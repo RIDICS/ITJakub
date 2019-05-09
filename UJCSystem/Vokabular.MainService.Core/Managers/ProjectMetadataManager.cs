@@ -65,6 +65,10 @@ namespace Vokabular.MainService.Core.Managers
                 {
                     resultContract.KeywordList = Mapper.Map<List<KeywordContract>>(project.Keywords);
                 }
+                if (parameters.IncludeCategory)
+                {
+                    resultContract.CategoryList = Mapper.Map<List<CategoryContract>>(project.Categories);
+                }
             }
 
             return resultContract;

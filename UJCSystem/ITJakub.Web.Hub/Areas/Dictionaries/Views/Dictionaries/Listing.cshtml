@@ -1,4 +1,7 @@
-﻿@section styles{
+﻿@using Localization.AspNetCore.Service
+@inject ILocalization Localizer
+
+@section styles{
     <link href="~/Areas/Dictionaries/css/itjakub.dictionaries.css" rel="stylesheet" />
 }
 @section scripts{
@@ -6,7 +9,7 @@
 }
 
 @{
-    ViewBag.Title = "Slovníky - Listování";
+    ViewBag.Title = @Localizer.Translate("DictionariesListing", "Dictionaries");
 }
 
 <script type="text/javascript">
@@ -23,11 +26,11 @@
                     <div class="form-group searchbar">
                         <div class="searchbar-buttons">
                             <button id="searchButton" type="button" class="btn btn-default searchbar-button">
-                                Vyhledat
+                                @Localizer.Translate("Search", "Dictionaries")
                             </button>
                         </div>
                         <div class="searchbar-inputs input_container">
-                            <input type="text" class="form-control searchbar-input" id="searchbox" placeholder="Hledat..." style="max-width: 100%;" />
+                            <input type="text" class="form-control searchbar-input" id="searchbox" placeholder="@Localizer.Translate("Search...", "PluginsJs")" style="max-width: 100%;" />
                             <button type="button" class="btn regexsearch-input-button" id="keyboard-button">
                                 <div class="custom-glyphicon-keyboard" style="height: 100%;"></div>
                             </button>
@@ -39,7 +42,7 @@
         </div>
         <div class="saved-word-area hidden" id="saved-word-area">
             <div class="dictionary-header">
-                <span>Uložená hesla</span>
+                <span>@Localizer.Translate("SavedKeywords", "Dictionaries")</span>
                 <span class="saved-word-area-more"><span class="glyphicon glyphicon-collapse-down"></span></span>
             </div>
             <div class="saved-words-body">
@@ -55,9 +58,9 @@
     <div class="dictionary-result-area transparent-content-container">
         <div class="dictionary-result-word-search-list">
             <div class="dictionary-header">
-                <span>Seznam hesel</span>
+                <span>@Localizer.Translate("KeywordList", "Dictionaries")</span>
                 <div class="dictionary-header-buttons">
-                    <a href="#" title="Tisk" id="printList">
+                    <a href="#" title="@Localizer.Translate("Print", "Dictionaries")" id="printList">
                         <span class="glyphicon glyphicon-print"></span>
                     </a>
                 </div>
@@ -69,13 +72,13 @@
         </div>
         <div class="dictionary-result-word-search-description">
             <div class="dictionary-header">
-                <span>Heslové stati</span>
+                <span>@Localizer.Translate("KeywordStates", "Dictionaries")</span>
                 <div class="dictionary-header-buttons">
                     <a href="#" id="cancelFilter" class="hidden">
                         <span class="glyphicon glyphicon-remove"></span>
-                        <span>Zrušit filtr</span>
+                        <span>@Localizer.Translate("CancelFilter", "Dictionaries")</span>
                     </a>
-                    <a href="#" title="Tisk" id="printDescription">
+                    <a href="#" title="@Localizer.Translate("Print", "Dictionaries")" id="printDescription">
                         <span class="glyphicon glyphicon-print"></span>
                     </a>
                 </div>
@@ -89,10 +92,10 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Načítání heslových statí</h4>
+                    <h4 class="modal-title">@Localizer.Translate("LoadingKeywordStates", "Dictionaries")</h4>
                 </div>
                 <div class="modal-body">
-                    <span>Probíhá načítání heslových statí pro tisk</span>
+                    <span>@Localizer.Translate("LoadingKeywordStatesPrint", "Dictionaries")</span>
                     <div class="loading loading-modal"></div>
                 </div>
             </div>

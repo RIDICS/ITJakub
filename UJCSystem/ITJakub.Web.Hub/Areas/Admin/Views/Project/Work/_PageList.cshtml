@@ -1,7 +1,10 @@
-﻿<div class="project-page-list">
+﻿@using Localization.AspNetCore.Service
+@inject ILocalization Localizer
+
+<div class="project-page-list">
     <div class="row resource-tab-row-fix">
         <div class="col-md-2">
-            <button type="button" class="btn btn-default form-control" id="project-pages-edit-button">Upravit seznam stránek</button>
+            <button type="button" class="btn btn-default form-control" id="project-pages-edit-button">@Localizer.Translate("EditPageList", "Admin")</button>
         </div>
 
         <div class="col-md-2">
@@ -13,8 +16,8 @@
         </div>
 
         <div class="col-md-2 main-buttons">
-            <button type="button" class="btn btn-default form-control">Spárovat</button>
-            <button type="button" class="btn btn-default form-control">Rozdělit</button>
+            <button type="button" class="btn btn-default form-control">@Localizer.Translate("Pair", "Admin")</button>
+            <button type="button" class="btn btn-default form-control">@Localizer.Translate("Split", "Admin")</button>
             <div class="bottom-buttons">
                 <button type="button" class="btn btn-default">
                     <span class="glyphicon glyphicon-arrow-up"></span>
@@ -39,7 +42,7 @@
     </div>
 
     <div class="project-bottom-buttons">
-        <button type="button" class="btn btn-default">Uložit</button>
+        <button type="button" class="btn btn-default">@Localizer.Translate("Save", "Admin")</button>
     </div>
 
     <div class="modal fade project-pages-dialog" role="dialog" id="project-pages-dialog">
@@ -47,7 +50,7 @@
             <div class="modal-content page-list-editor-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Upravit seznam stránek</h4>
+                    <h4 class="modal-title">@Localizer.Translate("EditPageList", "Admin")</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -59,12 +62,12 @@
                                 <div class="col-md-12">
                                     <div class="checkbox">
                                         <label>
-                                            <input disabled class="book-cover-checkbox" type="checkbox"/><span class="page-list-editor-controls-label">Obal [FC]</span>
+                                            <input disabled class="book-cover-checkbox" type="checkbox"/><span class="page-list-editor-controls-label">@Localizer.Translate("Cover", "Admin")</span>
                                         </label>
                                     </div>
                                     <div class="checkbox">
                                         <label>
-                                            <input disabled class="book-startpage-checkbox" type="checkbox"/><span class="page-list-editor-controls-label">Úvodní strana [FS]</span>
+                                            <input disabled class="book-startpage-checkbox" type="checkbox"/><span class="page-list-editor-controls-label">@Localizer.Translate("FrontPage", "Admin")</span>
                                         </label>
                                     </div>
                                 </div>
@@ -74,18 +77,18 @@
                                             <div class="col-md-12">
                                                 <div class="radio">
                                                     <label>
-                                                        <input type="radio" name="page-type" checked="checked" /><span class="page-list-editor-controls-label">Jednostránka</span>
+                                                        <input type="radio" name="page-type" checked="checked" /><span class="page-list-editor-controls-label">@Localizer.Translate("SinglePage", "Admin")</span>
                                                     </label>
                                                 </div>
                                                 <div class="radio">
                                                     <label>
-                                                        <input class="doublepage-radiobutton" type="radio" name="page-type" /><span class="page-list-editor-controls-label">Dvojstránka</span>
+                                                        <input class="doublepage-radiobutton" type="radio" name="page-type" /><span class="page-list-editor-controls-label">@Localizer.Translate("DoublePage", "Admin")</span>
                                                     </label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-md-2 control-label" for="project-pages-format">Formát</label>
+                                            <label class="col-md-2 control-label" for="project-pages-format">@Localizer.Translate("Format", "Admin")</label>
                                             <div class="col-md-7">
                                                 <select class="form-control input-sm" id="project-pages-format">
                                                     <option data-format-value="1r">1r, 1v, 2r, 2v, ...</option>
@@ -96,15 +99,15 @@
                                             </div>
                                         </div>
                                         <div class="form-group-section generate-list-numberic-input-group">
-                                            <div class="generate-list-numberic-input-group-heading">Generovat stránky</div>
+                                            <div class="generate-list-numberic-input-group-heading">@Localizer.Translate("GeneratePages", "Admin")</div>
                                             <div class="form-group">
-                                                <label class="col-md-1 control-label" for="project-pages-generate-from">Od:</label>
+                                                <label class="col-md-1 control-label" for="project-pages-generate-from">@Localizer.Translate("From", "Admin"):</label>
                                                 <div class="col-md-6">
                                                     <input type="text" class="form-control input-sm" id="project-pages-generate-from" />
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-md-1 control-label" for="project-pages-generate-to">Do:</label>
+                                                <label class="col-md-1 control-label" for="project-pages-generate-to">@Localizer.Translate("To", "Admin"):</label>
                                                 <div class="col-md-6">
                                                     <input type="text" class="form-control input-sm" id="project-pages-generate-to" />
                                                 </div>
@@ -113,7 +116,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-md-6">
-                                    <button type="button" class="btn btn-default generate-page-list">Generovat</button>
+                                    <button type="button" class="btn btn-default generate-page-list">@Localizer.Translate("Generate", "Admin")</button>
                                 </div>
                             </div>
 
@@ -136,9 +139,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <div class="dialog-error alert alert-danger true-inline-alert">Chyba při ukládání</div>
-                    <button type="button" class="btn btn-default cancel-page-list">Zrušit</button>
-                    <button type="button" class="btn btn-default save-page-list"><span class="saving-icon loading-small-button"></span>Uložit</button>
+                    <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("SaveError", "Admin")</div>
+                    <button type="button" class="btn btn-default cancel-page-list">@Localizer.Translate("Cancel", "Admin")</button>
+                    <button type="button" class="btn btn-default save-page-list"><span class="saving-icon loading-small-button"></span>@Localizer.Translate("Save", "Admin")</button>
                 </div>
             </div>
         </div>

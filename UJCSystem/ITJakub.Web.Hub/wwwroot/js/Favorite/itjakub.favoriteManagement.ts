@@ -1,4 +1,4 @@
-﻿$(document).ready(() => {
+﻿$(document.documentElement).ready(() => {
     var favoriteManager = new FavoriteManager();
     var favoriteManagement = new FavoriteManagement(favoriteManager);
     favoriteManagement.init();
@@ -19,6 +19,8 @@ class FavoriteManagement {
     private currentSortOrder: number;
     private currentTypeFilter: number;
     private currentNameFilter: string;
+
+	private localizationScope = "FavoriteJs";
 
     constructor(favoriteManager: FavoriteManager) {
         this.favoriteManager = favoriteManager;
@@ -41,8 +43,8 @@ class FavoriteManagement {
         this.labelColorInput.setColorChangedCallback(this.renderNewLabelPreview.bind(this));
         $("#favorite-label-name").change(this.renderNewLabelPreview.bind(this));
 
-        $(".favorite-label-management").each((index, element) => {
-            this.renderLabelColor($(element));
+        $(".favorite-label-management").each((index, element : Node) => {
+            this.renderLabelColor($(element as Element));
         });
         
         $("#add-new-label").click(() => {
@@ -54,17 +56,17 @@ class FavoriteManagement {
         });
 
         $(".favorite-label-management .favorite-label-link").click((event) => {
-            var activeElement = $(event.target).closest(".favorite-label-management");
+            var activeElement = $(event.target as Node as HTMLElement).closest(".favorite-label-management");
             this.setActiveLabel(activeElement);
         });
 
         $(".favorite-label-management .favorite-label-remove-link").click((event) => {
-            var item = $(event.target).closest(".favorite-label-management");
+            var item = $(event.target as Node as HTMLElement).closest(".favorite-label-management");
             this.showRemoveDialog(item);
         });
 
         $(".favorite-label-management .favorite-label-edit-link").click((event) => {
-            var item = $(event.target).closest(".favorite-label-management");
+            var item = $(event.target as Node as HTMLElement).closest(".favorite-label-management");
             var name = item.data("name");
             var color = item.data("color");
             this.showEditLabelDialog(name, color, item);
@@ -93,7 +95,7 @@ class FavoriteManagement {
 
     private renderNewLabelPreview() {
         var color = this.labelColorInput.getValue();
-        var name = $("#favorite-label-name").val();
+        var name = $("#favorite-label-name").val() as string;
         var hexColor = new HexColor(color);
 
         $("#label-preview").text(name);
@@ -156,7 +158,7 @@ class FavoriteManagement {
     private filterLabels() {
         this.setInactiveLabel();
 
-        var filterValue = $("#label-name-filter").val().toLocaleLowerCase();
+        var filterValue = ($("#label-name-filter").val() as string).toLocaleLowerCase();
         if (!filterValue) {
             $(".favorite-label-management").show();
             $("#no-label").hide();
@@ -166,7 +168,7 @@ class FavoriteManagement {
 
         var isAnyVisible = false;
         $(".favorite-label-management").each((index, element) => {
-            var item = $(element);
+            var item = $(element as Node as Element);
             var name = String(item.data("name")).toLocaleLowerCase();
             var inactiveBackgroundColor = item.data("inactive-background");
             var inactiveBorderColor = item.data("inactive-border");
@@ -204,9 +206,9 @@ class FavoriteManagement {
     }
 
     private loadFavoriteItems() {
-        this.currentSortOrder = $("#sort-select").val();
-        this.currentTypeFilter = $("#type-filter-select").val();
-        this.currentNameFilter = $("#name-filter").val();
+        this.currentSortOrder = parseInt($("#sort-select").val() as string);
+        this.currentTypeFilter = parseInt($("#type-filter-select").val() as string);
+        this.currentNameFilter = $("#name-filter").val() as string;
         
         this.showLoader();
 
@@ -251,8 +253,8 @@ class FavoriteManagement {
 
         $(".favorite-label-management")
             .removeClass("active")
-            .each((index, element) => {
-                var elementJQuery = $(element);
+            .each((index, element : Node) => {
+                var elementJQuery = $(element as Element);
                 let fontColor = FavoriteHelper.getInactiveFontColor();
                 let backgroundColor = elementJQuery.data("inactive-background");
                 let borderColor = elementJQuery.data("inactive-border");
@@ -290,7 +292,8 @@ class FavoriteManagement {
         var labelName = item.data("name");
 
         $("#remove-dialog .modal-body")
-            .text("Opravdu chcete smazat vybraný štítek (" + labelName + ")? Štítek bude smazán včetně všech přiřazených oblíbených položek.");
+            //.text("Opravdu chcete smazat vybraný štítek (" + labelName + ")? Štítek bude smazán včetně všech přiřazených oblíbených položek.");
+            .text(localization.translateFormat("DeleteModalText", new Array<string>(labelName), this.localizationScope).value)
 
         $("#remove-dialog .remove-button")
             .off("click")
@@ -318,7 +321,7 @@ class FavoriteManagement {
         this.removeDialog.showSaving();
         this.favoriteManager.deleteFavoriteLabel(labelId, (error) => {
             if (error) {
-                this.removeDialog.showError("Chyba při odstraňování štítku");
+                this.removeDialog.showError(localization.translate("DeleteTagError", this.localizationScope).value);
                 return;
             }
 
@@ -335,7 +338,7 @@ class FavoriteManagement {
         this.newFavoriteLabelDialog.showSaving();
         this.favoriteManager.createFavoriteLabel(name, color, (id, error) => {
             if (error) {
-                this.newFavoriteLabelDialog.showError("Chyba při ukládání štítku");
+                this.newFavoriteLabelDialog.showError(localization.translate("SaveTagError", this.localizationScope).value);
                 return;
             }
 
@@ -363,7 +366,7 @@ class FavoriteManagement {
         this.newFavoriteLabelDialog.showSaving();
         this.favoriteManager.updateFavoriteLabel(labelId, name, color, (error) => {
             if (error) {
-                this.newFavoriteLabelDialog.showError("Chyba při ukládání štítku");
+                this.newFavoriteLabelDialog.showError(localization.translate("SaveTagError", this.localizationScope).value);
                 return;
             }
 
@@ -380,15 +383,15 @@ class FavoriteManagement {
     }
 
     private saveFavoriteLabel() {
-        var name = $("#favorite-label-name").val();
+        var name = $("#favorite-label-name").val() as string;
         var color = this.labelColorInput.getValue();
 
         var error = "";
         if (!name) {
-            error = "Nebylo zadáno jméno.";
+            error = localization.translate("MissingName", this.localizationScope).value;
         }
         if (!FavoriteHelper.isValidHexColor(color)) {
-            error += " Nesprávný formát barvy (požadovaný formát: #000000).";
+            error += localization.translate("IncorrectColorFormat", this.localizationScope).value;
         }
         if (error.length > 0) {
             this.newFavoriteLabelDialog.showError(error);
@@ -448,6 +451,8 @@ class FavoriteManagementItem {
     private removeDialog: FavoriteManagementDialog;
     private onRemoveCallback: (id: number) => void;
 
+    private localizationScope = "FavoriteJs";
+
     constructor(container: JQuery, type: FavoriteType, id: number, name: string, createTime: string, favoriteManager: FavoriteManager) {
         this.favoriteManager = favoriteManager;
         this.createTime = createTime;
@@ -478,7 +483,7 @@ class FavoriteManagementItem {
         var nameLink = document.createElement("a");
         var nameDiv = document.createElement("div");
         $(nameDiv)
-            .text(this.name != null && this.name !== "" ? this.name : "<bez názvu>")
+            .text(this.name != null && this.name !== "" ? this.name : localization.translate("NoName", this.localizationScope).value)
             .addClass("favorite-item-name");
         $(nameLink)
             .attr("href", getBaseUrl() + "Favorite/Favorite?id=" + this.id)
@@ -509,11 +514,12 @@ class FavoriteManagementItem {
             .append(editIcon);
         $(removeLink)
             .attr("href", "#")
-            .attr("title", "Smazat oblíbenou položku")
+            .attr("title", localization.translate("DeleteFav", this.localizationScope).value)
             .append(removeIconContainer)
             .click(() => {
                 $("#remove-dialog .modal-body")
-                    .text("Opravdu chcete smazat vybranou oblíbenou položku (" + this.name + ")?");
+                    //.text("Opravdu chcete smazat vybranou oblíbenou položku (" + this.name + ")?");
+                    .text(localization.translateFormat("DeleteItemModalText", new Array<string>(this.name), this.localizationScope).value);
 
                 $("#remove-dialog .remove-button")
                     .off("click")
@@ -524,7 +530,7 @@ class FavoriteManagementItem {
             });
         $(editLink)
             .attr("href", "#")
-            .attr("title", "Upravit oblíbenou položku")
+            .attr("title", localization.translate("ModifyFavItem", this.localizationScope).value)
             .append(editIconContainer)
             .click(() => {
                 $("#favorite-item-name").val(this.name);
@@ -563,7 +569,7 @@ class FavoriteManagementItem {
         this.removeDialog.showSaving();
         this.favoriteManager.deleteFavoriteItem(this.id, (error) => {
             if (error) {
-                this.removeDialog.showError("Chyba při odstraňování položky");
+                this.removeDialog.showError(localization.translate("DeleteItemError", this.localizationScope).value);
                 return;
             }
 
@@ -579,12 +585,12 @@ class FavoriteManagementItem {
     }
 
     private edit() {
-        var newName = $("#favorite-item-name").val();
+        var newName = $("#favorite-item-name").val() as string;
 
         this.editFavoriteDialog.showSaving();
         this.favoriteManager.updateFavoriteItem(this.id, newName, (error) => {
             if (error) {
-                this.editFavoriteDialog.showError("Chyba při ukládání položky");
+                this.editFavoriteDialog.showError(localization.translate("SaveItemError", this.localizationScope).value);
                 return;
             }
 
@@ -602,27 +608,27 @@ class FavoriteManagementItem {
         switch (this.type) {
             case FavoriteType.Project:
                 $(icon).addClass("glyphicon-book")
-                    .attr("title", "Kniha");
+                    .attr("title", localization.translate("Book", this.localizationScope).value);
                 break;
             case FavoriteType.Page:
                 $(icon).addClass("glyphicon-bookmark")
-                    .attr("title", "Záložka na stránku v knize");
+                    .attr("title", localization.translate("PageBookmarkInBook", this.localizationScope).value);
                 break;
             case FavoriteType.Category:
                 $(icon).addClass("glyphicon-list")
-                    .attr("title", "Kategorie");
+                    .attr("title", localization.translate("Category", this.localizationScope).value);
                 break;
             case FavoriteType.Query:
                 $(icon).addClass("glyphicon-search")
-                    .attr("title", "Vyhledávací dotaz");
+                    .attr("title", localization.translate("SearchingQuery", this.localizationScope).value);
                 break;
             case FavoriteType.Snapshot:
                 $(icon).addClass("glyphicon-tags")
-                    .attr("title", "Verze knihy");
+                    .attr("title", localization.translate("BookVersion", this.localizationScope).value);
                 break;
             default:
                 $(icon).addClass("glyphicon-question-sign")
-                    .attr("title", "Neznámý typ oblíbené položky");
+                    .attr("title", localization.translate("UnknownFavItemType", this.localizationScope).value);
                 break;
         }
         return icon;

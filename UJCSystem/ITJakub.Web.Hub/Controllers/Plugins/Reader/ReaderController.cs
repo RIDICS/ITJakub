@@ -6,11 +6,10 @@ using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Vokabular.MainService.DataContracts.Contracts.Search;
-using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
+using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Controllers.Plugins.Reader

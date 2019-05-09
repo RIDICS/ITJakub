@@ -114,6 +114,10 @@ interface IResponsibleType {
     type: ResponsibleTypeEnum;
 }
 
+interface IProjectResponsiblePersonContract extends IResponsiblePerson{
+    responsibleType: IResponsibleType;
+}
+
 interface ISaveProjectResponsiblePerson {
     responsiblePersonId: number;
     responsibleTypeId: number;
@@ -135,14 +139,27 @@ interface IProject {
     name: string;
 }
 
+interface IGetProjectContract extends IProject {
+    createdByUser: IUser;
+    createTime: string;//DateTime
+}
+
+interface IProjectDetailContract extends IGetProjectContract {
+    latestMetadata: IMetadataResource;
+    pageCount?: number;
+    authors: IOriginalAuthor[];
+    responsiblePersons: IProjectResponsiblePersonContract[];
+}
+
 interface IMetadataResource {
     title: string;
     subTitle: string;
     relicAbbreviation: string;
     sourceAbbreviation: string;
-    publisherId: number;
+    publisherText: string;
     publishPlace: string;
     publishDate: string;
+    publisherEmail: string;
     copyright: string;
     biblText: string;
     originDate: string;
@@ -286,8 +303,18 @@ interface IChapterHieararchyContract {
     subChapters: Array<IChapterHieararchyContract>;
 }
 
+interface IOnlySaveMetadataResource {
+    keywordIdList: Array<number>;
+    categoryIdList: Array<number>;
+    literaryKindIdList: Array<number>;
+    literaryGenreIdList: Array<number>;
+    authorIdList: Array<number>;
+    projectResponsiblePersonIdList: Array<ISaveProjectResponsiblePerson>;
+}
+
 interface ISaveMetadataResource extends IMetadataResource {
     keywordIdList: Array<number>;
+    categoryIdList: Array<number>;
     literaryKindIdList: Array<number>;
     literaryGenreIdList: Array<number>;
     authorIdList: Array<number>;
@@ -296,6 +323,7 @@ interface ISaveMetadataResource extends IMetadataResource {
 
 interface IGetMetadataResource extends IMetadataResource {
     keywordList?: Array<IKeywordContract>;
+    categoryList?: Array<ICategoryContract>;
     literaryKindList?: Array<ILiteraryKindContract>;
     literaryGenreList?: Array<ILiteraryGenreContract>;
     authorIdList?: Array<IOriginalAuthor>;
@@ -307,6 +335,12 @@ interface IMetadataSaveResult {
     newResourceVersionId: number;
     literaryOriginalText: string;
     lastModificationText: string;
+}
+
+interface ILocalizedString {
+    name: string;
+    resourceNotFound: boolean;
+    value : string;
 }
 
 enum FavoriteType {
@@ -429,19 +463,98 @@ interface ICategoryContract {
     description: string;
 }
 
+interface ICategoryTreeContract {
+    text: string;
+    id: number;
+    children?: ICategoryTreeContract[];
+}
+
 interface IEditionNote { //TODO expand after server functionality is done
     projectId: number;
     content: string;
 }
 
-interface IResponsiblePersonPagedResult {
+interface IPagedResult<T> {
     totalCount: number;
-    list: IResponsiblePerson[];
+    list: T[];
 }
 
-interface IOriginalAuthorPagedResult {
+interface ICorpusSearchViewingPageHistoryEntry {
+    compositionResultListStart: number;
+    bookId: number;
+    hitResultStart: number;
+}
+
+interface ICorpusLookupBase {
+        start: number;
+        count: number;
+        contextLength: number;
+        snapshotId: number;
+        selectedBookIds: number[];
+        selectedCategoryIds: number[];
+}
+
+interface ICorpusLookupBasicSearch extends ICorpusLookupBase
+{
+    text: string;
+}
+
+interface ICorpusLookupAdvancedSearch extends ICorpusLookupBase {
+    json: string;
+}
+
+interface ICorpusListLookupContractBase {
+sortBooksBy : SortEnum;
+sortDirection : SortDirection;
+selectedBookIds: number[];
+selectedCategoryIds: number[];
+}
+
+interface ICorpusListLookupBasicSearchParams extends ICorpusListLookupContractBase{
+    text : string;
+}
+
+interface ICorpusListLookupAdvancedSearchParams extends ICorpusListLookupContractBase {
+    json: string;
+}
+
+interface ICorpusListPageLookupBasicSearch extends ICorpusListLookupBasicSearchParams {
+    start: number;
+    count: number;
+}
+
+interface ICorpusListPageLookupAdvancedSearch extends ICorpusListLookupAdvancedSearchParams {
+    start: number;
+    count: number;
+}
+
+interface ISnapshotSearchResultStructure {
+    resultCount: number;
+    snapshotId: number;
+}
+
+interface ICoprusSearchSnapshotResult {
+    snapshotList: ISnapshotSearchResultStructure[];
     totalCount: number;
-    list: IOriginalAuthor[];
+}
+
+interface CorpusSearchTotalResultCountBase {
+    selectedSnapshotIds: any[];
+    selectedCategoryIds: any[];
+}
+
+interface CorpusSearchTotalResultCountBasic extends CorpusSearchTotalResultCountBase{
+    text: string;
+}
+
+interface CorpusSearchTotalResultCountAdvanced extends CorpusSearchTotalResultCountBase{
+    json: string;
+}
+
+interface CorpusSearchPagePosition {
+    compositionListStart: number;
+    bookId: number;
+    hitResultStart: number;
 }
 
 enum AudioType {
@@ -455,7 +568,6 @@ enum TextFormatEnumContract {
     Raw = 0,
     Html = 1
 }
-
 
 //TODO Switch TypeScript to version 2.4 and use enums with String values
 //enum ResourceType {

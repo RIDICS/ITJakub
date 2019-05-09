@@ -34,6 +34,13 @@ namespace ITJakub.Web.Hub.Models.FeedResults
             {
                 var writer = new AtomFeedWriter(xmlWriter);
 
+                var uniqueFeedIdBuilder = new UriBuilder(m_feedRequestUrl)
+                {
+                    Scheme = Uri.UriSchemeHttp,
+                    Query = string.Empty
+                };
+                var uniqueFeedId = uniqueFeedIdBuilder.ToString();
+                await writer.WriteId(uniqueFeedId);
                 await writer.WriteTitle(m_feedTitle);
                 //await writer.WriteDescription(m_feedTitle);
                 await writer.Write(new SyndicationLink(m_feedRequestUrl));
@@ -41,6 +48,7 @@ namespace ITJakub.Web.Hub.Models.FeedResults
 
                 foreach (var syndicationItem in m_feedItems)
                 {
+                    syndicationItem.Id = $"{uniqueFeedId}?itemId={syndicationItem.Id}";
                     await writer.Write(syndicationItem);
                 }
 

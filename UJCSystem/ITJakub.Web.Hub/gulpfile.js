@@ -1,4 +1,4 @@
-﻿/// <binding AfterBuild='default, bundle:new_reader' Clean='clean' ProjectOpened='watch:less' />
+﻿/// <binding BeforeBuild='yarn-runtime' AfterBuild='default' Clean='clean' ProjectOpened='watch, yarn-runtime' />
 /*
 This file in the main entry point for defining Gulp tasks and using Gulp plugins.
 Click here to learn more. http://go.microsoft.com/fwlink/?LinkId=518007
@@ -12,7 +12,8 @@ var gulp = require("gulp"),
   watch = require("gulp-watch"),
   sourcemaps = require('gulp-sourcemaps'),
   uglify = require("gulp-uglify"),
-  ts = require("gulp-typescript");
+  ts = require("gulp-typescript"),
+  yarn = require("gulp-yarn");
 var tsProject = ts.createProject("tsconfig.json");
 
 var paths = {
@@ -23,10 +24,12 @@ paths.less = paths.webroot + "css/**/*.less";
 paths.css = paths.webroot + "css/**/*.css";
 paths.js = paths.webroot + "js/**/*.js";
 paths.jsMap = paths.webroot + "js/**/*.js.map";
+paths.ts = paths.webroot + "js/**/*.ts";
 paths.areaLess = paths.webroot + "Areas/*/css/**/*.less";
 paths.areaCss = paths.webroot + "Areas/*/css/**/*.css";
 paths.areaJs = paths.webroot + "Areas/*/js/**/*.js";
 paths.areaJsMap = paths.webroot + "Areas/*/js/**/*.js.map";
+paths.areaTs = paths.webroot + "Areas/*/js/**/*.ts";
 
 
 // Clean-up
@@ -97,10 +100,19 @@ gulp.task("build:ts", function () {
     return tsResult.js.pipe(gulp.dest(paths.webroot));
 });
 
+gulp.task("watch:ts_root", function () {
+	return gulp.watch(paths.ts, ["build:ts"]);
+});
+
+gulp.task("watch:ts_areas", function () {
+	return gulp.watch(paths.areaTs, ["build:ts"]);
+});
+
+gulp.task("watch:ts", ["watch:ts_root", "watch:ts_areas"]);
 
 // Bundle JavaScript
 
-gulp.task("bundle:itjakub", function () {
+gulp.task("bundle:itjakub", ["build:ts"], function () {
     return gulp.src([
             paths.webroot + "js/itjakub.js",
             paths.webroot + "js/itjakub.dataContracts.js",
@@ -115,7 +127,7 @@ gulp.task("bundle:itjakub", function () {
         .pipe(gulp.dest(paths.webroot + "js/bundles"));
 });
 
-gulp.task("bundle:itjakub_plugins", function () {
+gulp.task("bundle:itjakub_plugins", ["build:ts"], function () {
     return gulp.src([
             paths.webroot + "js/Plugins/Progress/itjakub.plugins.progress.js",
             paths.webroot + "js/Plugins/itjakub.modul.inicializator.js",
@@ -141,7 +153,7 @@ gulp.task("bundle:itjakub_plugins", function () {
         .pipe(gulp.dest(paths.webroot + "js/bundles"));
 });
 
-gulp.task("bundle:itjakub_keyboard", function () {
+gulp.task("bundle:itjakub_keyboard", ["build:ts"], function () {
     return gulp.src([
             paths.webroot + "js/Plugins/Keyboard/itjakub.plugins.keyboard.js",
             paths.webroot + "js/Plugins/Keyboard/itjakub.plugins.keyboardComponent.js",
@@ -154,7 +166,7 @@ gulp.task("bundle:itjakub_keyboard", function () {
         .pipe(gulp.dest(paths.webroot + "js/bundles"));
 });
 
-gulp.task("bundle:itjakub_storage", function () {
+gulp.task("bundle:itjakub_storage", ["build:ts"], function () {
     return gulp.src([
             paths.webroot + "js/Plugins/Storage/itjakub.plugins.storage.manager.js",
             paths.webroot + "js/Plugins/Storage/itjakub.plugins.storage.cookiestorage.js",
@@ -167,7 +179,7 @@ gulp.task("bundle:itjakub_storage", function () {
         .pipe(gulp.dest(paths.webroot + "js/bundles"));
 });
 
-gulp.task("bundle:itjakub_favorite", function () {
+gulp.task("bundle:itjakub_favorite", ["build:ts"], function () {
     return gulp.src([
             paths.webroot + "js/Favorite/itjakub.favoriteBook.js",
             paths.webroot + "js/Favorite/itjakub.favoriteManager.js",
@@ -188,7 +200,7 @@ gulp.task("bundlejs", ["bundle:itjakub", "bundle:itjakub_plugins", "bundle:itjak
 
 // Bundle JavaScript in Areas
 
-gulp.task("bundle:itjakub_audiobooks", function () {
+gulp.task("bundle:itjakub_audiobooks", ["build:ts"], function () {
     return gulp.src([
             paths.webroot + "Areas/AudioBooks/js/itjakub.audiobooks.modul.inicializator.js",
             paths.webroot + "Areas/AudioBooks/js/itjakub.audiobooks.js"
@@ -200,11 +212,12 @@ gulp.task("bundle:itjakub_audiobooks", function () {
         .pipe(gulp.dest(paths.webroot + "Areas/AudioBooks/js"));
 });
 
-gulp.task("bundle:itjakub_bohemiantextbank", function () {
+gulp.task("bundle:itjakub_bohemiantextbank", ["build:ts"], function () {
     return gulp.src([
             paths.webroot + "Areas/BohemianTextBank/js/itjakub.bohemiantextbank.modul.inicializator.js",
             paths.webroot + "Areas/BohemianTextBank/js/itjakub.bohemiantextbank.search.js",
-            paths.webroot + "Areas/BohemianTextBank/js/itjakub.bohemiantextbank.list.js"
+            paths.webroot + "Areas/BohemianTextBank/js/itjakub.bohemiantextbank.list.js",
+            paths.webroot + "Areas/BohemianTextBank/js/corpus-search-viewer/ridics.bohemiantextbank.*.js"
         ])
         .pipe(sourcemaps.init())
         .pipe(concat("itjakub.bohemiantextbank.bundle.js"))
@@ -213,7 +226,7 @@ gulp.task("bundle:itjakub_bohemiantextbank", function () {
         .pipe(gulp.dest(paths.webroot + "Areas/BohemianTextBank/js"));
 });
 
-gulp.task("bundle:itjakub_cardfiles", function () {
+gulp.task("bundle:itjakub_cardfiles", ["build:ts"], function () {
     return gulp.src([
             paths.webroot + "Areas/CardFiles/js/itjakub.cardfiles.js",
             paths.webroot + "Areas/CardFiles/js/itjakub.cardfileManager.js"
@@ -225,7 +238,7 @@ gulp.task("bundle:itjakub_cardfiles", function () {
         .pipe(gulp.dest(paths.webroot + "Areas/CardFiles/js"));
 });
 
-gulp.task("bundle:itjakub_derivation", function () {
+gulp.task("bundle:itjakub_derivation", ["build:ts"], function () {
     return gulp.src([
             paths.webroot + "Areas/Derivation/js/itjakub.derivation.js",
             paths.webroot + "js/Plugins/Lemmatization/itjakub.lemmatization.shared.js"
@@ -237,7 +250,7 @@ gulp.task("bundle:itjakub_derivation", function () {
         .pipe(gulp.dest(paths.webroot + "Areas/Derivation/js"));
 });
 
-gulp.task("bundle:itjakub_dictionary_search", function () {
+gulp.task("bundle:itjakub_dictionary_search", ["build:ts"], function () {
     return gulp.src([
             paths.webroot + "Areas/Dictionaries/js/itjakub.dictionaries.search.js",
             paths.webroot + "Areas/Dictionaries/js/itjakub.dictionariesViewer.js"
@@ -249,7 +262,7 @@ gulp.task("bundle:itjakub_dictionary_search", function () {
         .pipe(gulp.dest(paths.webroot + "Areas/Dictionaries/js"));
 });
 
-gulp.task("bundle:itjakub_dictionary_headwords", function () {
+gulp.task("bundle:itjakub_dictionary_headwords", ["build:ts"], function () {
     return gulp.src([
             paths.webroot + "Areas/Dictionaries/js/itjakub.dictionaries.headwords.js",
             paths.webroot + "Areas/Dictionaries/js/itjakub.dictionariesFavoriteHeadwords.js",
@@ -262,7 +275,7 @@ gulp.task("bundle:itjakub_dictionary_headwords", function () {
         .pipe(gulp.dest(paths.webroot + "Areas/Dictionaries/js"));
 });
 
-gulp.task("bundle:itjakub_lemmatization", function () {
+gulp.task("bundle:itjakub_lemmatization", ["build:ts"], function () {
     return gulp.src([
             paths.webroot + "Areas/Lemmatization/js/itjakub.lemmatization.js",
             paths.webroot + "Areas/Lemmatization/js/itjakub.lemmatization.list.js",
@@ -275,7 +288,7 @@ gulp.task("bundle:itjakub_lemmatization", function () {
         .pipe(gulp.dest(paths.webroot + "Areas/Lemmatization/js"));
 });
 
-gulp.task("bundle:itjakub_professionalliterature_list", function () {
+gulp.task("bundle:itjakub_professionalliterature_list", ["build:ts"], function () {
     return gulp.src([
             paths.webroot + "Areas/ProfessionalLiterature/js/itjakub.professionalliterature.modul.inicializator.js",
             paths.webroot + "Areas/ProfessionalLiterature/js/itjakub.professionalliterature.list.js"
@@ -287,7 +300,7 @@ gulp.task("bundle:itjakub_professionalliterature_list", function () {
         .pipe(gulp.dest(paths.webroot + "Areas/ProfessionalLiterature/js"));
 });
 
-gulp.task("bundle:ridics_admin_text-editor", function () {
+gulp.task("bundle:ridics_admin_text-editor", ["build:ts"], function () {
     return gulp.src([
             paths.webroot + "Areas/Admin/js/text-editor/ridics.project.text-editor*.js"
         ])
@@ -298,7 +311,7 @@ gulp.task("bundle:ridics_admin_text-editor", function () {
         .pipe(gulp.dest(paths.webroot + "Areas/Admin/js"));
 });
 
-gulp.task("bundle:ridics_admin_page-image-viewer", function () {
+gulp.task("bundle:ridics_admin_page-image-viewer", ["build:ts"], function () {
     return gulp.src([
         paths.webroot + "Areas/Admin/js/page-image-viewer/ridics.project.page-image-viewer*.js"
         ])
@@ -309,7 +322,7 @@ gulp.task("bundle:ridics_admin_page-image-viewer", function () {
         .pipe(gulp.dest(paths.webroot + "Areas/Admin/js"));
 });
 
-gulp.task("bundle:ridics_admin_page-list-editor", function () {
+gulp.task("bundle:ridics_admin_page-list-editor", ["build:ts"], function () {
     return gulp.src([
         paths.webroot + "Areas/Admin/js/page-list-editor/ridics.project.page-list-editor*.js"
         ])
@@ -320,7 +333,7 @@ gulp.task("bundle:ridics_admin_page-list-editor", function () {
         .pipe(gulp.dest(paths.webroot + "Areas/Admin/js"));
 });
 
-gulp.task("bundle:ridics_admin_editors-common-base", function () {
+gulp.task("bundle:ridics_admin_editors-common-base", ["build:ts"], function () {
     return gulp.src([
         paths.webroot + "Areas/Admin/js/editors-common-base/ridics.project.editors*.js"
         ])
@@ -331,7 +344,7 @@ gulp.task("bundle:ridics_admin_editors-common-base", function () {
         .pipe(gulp.dest(paths.webroot + "Areas/Admin/js"));
 });
 
-gulp.task("bundle:ridics_admin_composition-key-table-editor", function () {
+gulp.task("bundle:ridics_admin_composition-key-table-editor", ["build:ts"], function () {
     return gulp.src([
         paths.webroot + "Areas/Admin/js/composition-key-table-editor/ridics.project.key-table-editor.table-base.js",
         paths.webroot + "Areas/Admin/js/composition-key-table-editor/ridics.project.key-table-editor!(table-base)*.js"
@@ -378,7 +391,15 @@ gulp.task("bundlejs_areas",
     "bundle:new_reader"
 ]);
 
+//Download yarn dependencies
+
+gulp.task("yarn-runtime", function () {
+    return gulp.src(["./wwwroot/package.json", "./wwwroot/yarn.lock"])
+        .pipe(yarn());
+});
 
 // Main build
 
 gulp.task("default", ["build:less", "bundlejs", "bundlejs_areas"]);
+
+gulp.task("watch", ["watch:less", "watch:ts"]);

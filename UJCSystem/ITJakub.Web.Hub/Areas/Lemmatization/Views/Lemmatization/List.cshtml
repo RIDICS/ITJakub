@@ -1,5 +1,8 @@
-﻿@{
-    ViewBag.Title = "Lemmatizace - procházení";
+﻿@using Localization.AspNetCore.Service
+@inject ILocalization Localizer
+
+@{
+    ViewBag.Title = @Localizer.Translate("LemmatizationList", "Lemmatization");
 }
 @section styles{
     <link href="~/Areas/Lemmatization/css/itjakub.lemmatization.css" rel="stylesheet" />
@@ -15,7 +18,7 @@
     });
 </script>
 
-<h2>Lemmatizace - procházení</h2>
+<h2>@Localizer.Translate("LemmatizationList", "Lemmatization")</h2>
 
 <div class="content" id="mainContainer">
 

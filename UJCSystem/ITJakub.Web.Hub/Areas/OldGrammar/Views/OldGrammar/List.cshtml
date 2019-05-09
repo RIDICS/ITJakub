@@ -1,4 +1,7 @@
-﻿@section styles{
+﻿@using Localization.AspNetCore.Service
+@inject ILocalization Localizer
+
+@section styles{
     <link href="~/Areas/OldGrammar/css/itjakub.oldgrammar.css" rel="stylesheet" />
 }
 @section scripts{
@@ -7,7 +10,7 @@
 }
 
 @{
-    ViewBag.Title = "Mluvnice - Seznam";
+    ViewBag.Title = @Localizer.Translate("OldGrammarList", "OldGrammar");
 }
 
 @Html.Partial("_BibliographySearch")

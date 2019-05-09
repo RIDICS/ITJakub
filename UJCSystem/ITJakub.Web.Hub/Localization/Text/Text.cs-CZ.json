@@ -1,0 +1,29 @@
+{
+	"culture":"cs-CZ",
+	"scope":"Text",
+	"dictionary": {
+		"InsertImage":"Vložit obrázek",
+		"UrlAddress":"URL Adresa",
+		"Label":"Popisek",
+		"Insert":"Vložit",
+		
+		"InsertLink":"Vložit odkaz",
+		"Close" : "Zavřít",
+		
+		"TextManagementTitle":"Administrace - Upravit statický text",
+		"TextEditor":"Textový editor",
+		"PageName":"Název stránky",
+		"PageText":"Text stránky",
+		"UsesMarkdown":"Editor používá syntaxi Markdown",
+		"LastModificationAuthor":"Autor poslední modifikace",
+		"Anonymous":"anonym",
+		"AnonymousVar2":"{0}anonym{1}",
+		"LastModificationTime":"Čas poslední modifikace",
+		"TextSavingError":"Chyba při ukládání textu",
+		"TextSaved":"Text uložen",
+		"Save":"Uložit",
+		"CloseEditor":"Zavřít editor",
+		"NoTextSelected":"Nebyl zvolen žádný text pro editaci.",
+		"Category" : "Kategorie"
+	}
+}

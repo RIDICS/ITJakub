@@ -1,6 +1,6 @@
 ﻿using ITJakub.Web.Hub.Core.Communication;
 using Microsoft.AspNetCore.Mvc;
-using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Controllers
 {

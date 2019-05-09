@@ -51,7 +51,7 @@ class BibliographyFactory {
         return leftPanel;
     }
 
-    protected runEvalResponse(event: JQueryEventObject, callback: (context:Object)=>any) {
+    protected runEvalResponse(event: JQuery.Event, callback: (context:Object)=>any) {
         callback({ search: this.modulInicializator.getSearch(), event: event });
     }
     
@@ -72,7 +72,7 @@ class BibliographyFactory {
             $(spanBook).addClass('glyphicon glyphicon-book');
             bookButton.appendChild(spanBook);
             $bookButton.attr("href", "#");
-            $bookButton.click((event: JQueryEventObject) => {
+            $bookButton.click((event: JQuery.Event) => {
                 var buttonScript = config.getReadButtonOnClick(bookInfo);
                 var buttonScriptCallable = config.getReadButtonOnClickCallable(bookInfo);
                 if (typeof buttonScript !== "undefined" && buttonScript != null && buttonScript !== "") {
@@ -97,7 +97,7 @@ class BibliographyFactory {
             $(spanInfo).addClass('glyphicon glyphicon-info-sign');
             infoButton.appendChild(spanInfo);
             $infoButton.attr("href", "#");
-            $infoButton.click((event: JQueryEventObject) => {
+            $infoButton.click((event: JQuery.Event) => {
                 var buttonScript = config.getInfoButtonOnClick(bookInfo);
                 var buttonScriptCallable = config.getInfoButtonOnClickCallable(bookInfo);
                 if (typeof buttonScript !== "undefined" && buttonScript != null && buttonScript !== "") {
@@ -236,7 +236,7 @@ class BibliographyFactory {
                 .attr("href", "#")
                 .append(showAllSpan)
                 .click(event => {
-                    var $item = $(event.currentTarget);
+                    var $item = $(event.currentTarget as Node as Element);
                     $item.siblings().show();
                     $item.hide();
                 });
@@ -245,7 +245,7 @@ class BibliographyFactory {
                 .css("font-weight", "bold")
                 .css("margin-left", "3px")
                 .text("...")
-                .attr("title", "Zobrazit všechny přiřazené štítky")
+                .attr("title", localization.translate("ShowAllAssignedLabels", "PluginsJs").value)
                 .attr("data-toggle", "tooltip")
                 .tooltip();
             resultList.push(showAllLink);
@@ -288,7 +288,7 @@ class BibliographyFactory {
             .height(height)
             .animate({
                 height: newHeight
-            }, null, null, () => {
+            } as JQuery.PlainObject, null, null, () => {
                 $container.css("height", "");
             });
     }
@@ -303,7 +303,7 @@ class BibliographyFactory {
             .css("border-color", colorData.borderColor)
             .text(labelName)
             .attr("data-toggle", "tooltip")
-            .attr("title", "Uloženo jako: " + favoriteTitle)
+            .attr("title", localization.translateFormat("SavedAs:", new Array<string>(favoriteTitle), "PluginsJs").value)
             .tooltip();
         return label;
     }

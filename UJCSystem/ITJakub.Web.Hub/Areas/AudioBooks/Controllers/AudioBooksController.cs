@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
-using ITJakub.ITJakubService.DataContracts.Contracts.AudioBooks;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core;
@@ -11,9 +10,9 @@ using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
@@ -44,13 +43,13 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
 
         public ActionResult Information()
         {
-            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextAudioBooksInfo);
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextAudioBooksInfo, "audio");
             return View(pageStaticText);
         }
 
         public ActionResult Feedback()
         {
-            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, IsUserLoggedIn());
+            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, IsUserLoggedIn(), "home");
             return View(viewModel);
         }
 
@@ -61,7 +60,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
         {
             if (!ModelState.IsValid)
             {
-                m_feedbacksManager.FillViewModel(model, StaticTexts.TextHomeFeedback, GetFeedbackFormIdentification());
+                m_feedbacksManager.FillViewModel(model, StaticTexts.TextHomeFeedback, "home", GetFeedbackFormIdentification());
                 return View(model);
             }
 
@@ -138,7 +137,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             }
         }
 
-        public FileResult DownloadAudio(long audioId, AudioTypeContract audioType)
+        public FileResult DownloadAudio(long audioId)
         {
             using (var client = GetRestClient())
             {

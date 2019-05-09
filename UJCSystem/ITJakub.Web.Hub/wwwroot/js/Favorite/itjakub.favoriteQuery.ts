@@ -22,6 +22,8 @@
     private paginationOptions: Pagination.Options;
     private overrideSetQueryCallback: (text: string) => void;
 
+    private localizationScope = "FavoriteJs";
+
     constructor(renderContainer: JQuery, inputTextbox: JQuery, bookType: BookTypeEnum, queryType: QueryTypeEnum) {
         this.inputTextbox = inputTextbox;
         this.renderContainer = renderContainer;
@@ -130,11 +132,11 @@
             //.addClass("col-md-5")
             .addClass("favorite-query-header")
             .addClass("favorite-query-header-label")
-            .text("Filtrovat:");
+            .text(localization.translate("Filter", this.localizationScope).value);
         $(filterInput)
             .attr("type", "text")
-            .attr("placeholder", "Název štítku")
-            .attr("title", "Filtrovat štítky podle názvu")
+            .attr("placeholder", localization.translate("TagName", this.localizationScope).value)
+            .attr("title", localization.translate("FilterTagsByName", this.localizationScope).value)
             .addClass("form-control")
             .addClass("input-sm");
         $(filterInputContainer)
@@ -152,14 +154,14 @@
             .attr("href", "#")
             .addClass("favorite-query-label")
             .data("id", 0)
-            .data("name", "Zobrazeno vše")
+            .data("name", localization.translate("AllShowed", this.localizationScope).value)
             .data("color", "#0000DD")
-            .text("Zobrazit vše");
+            .text(localization.translate("ShowAll", this.localizationScope).value);
         this.displayAllLink = displayAllLink;
 
         $(noFilteredLabel)
             .addClass("text-center")
-            .text("Žádný štítek odpovídající zadanému filtru")
+            .text(localization.translate("NoTagsInFilter", this.localizationScope).value)
             .hide();
         this.noFilteredLabel = noFilteredLabel;
 
@@ -175,14 +177,14 @@
             .append(filterContainer);
 
         this.renderFavoriteLabels(favoriteLabels);
-        
+
         $(listHeaderSpan)
-            .text("Vložit dotaz z oblíbených: ");
+            .text(localization.translate("InsertQueryFromFav", this.localizationScope).value);
         $(listHeaderLabel)
             .addClass("label")
             .addClass("favorite-query-label-selected")
             .css("background-color", "#0000DD")
-            .text("Zobrazeno vše");
+            .text(localization.translate("AllShowed", this.localizationScope).value);
 
         $(listHeaderContainer)
             .addClass("col-md-8")
@@ -215,12 +217,12 @@
         var noQueryDiv = document.createElement("div");
         $(noQueryDiv)
             .css("margin-left", "15px")
-            .text("Žádný oblíbený dotaz odpovídající zvoleným filtrům")
+            .text(localization.translate("NoQueryInFilter", this.localizationScope).value)
             .hide();
         var noSelectedLabelDiv = document.createElement("div");
         $(noSelectedLabelDiv)
             .css("margin-left", "15px")
-            .text("Pro zobrazení oblíbených dotazů vyberte štítek ze seznamu")
+            .text(localization.translate("ChooseTag", this.localizationScope).value)
             .hide();
         this.noQueryDiv = noQueryDiv;
         this.noSelectedLabelDiv = noSelectedLabelDiv;
@@ -260,7 +262,7 @@
             .addClass("glyphicon")
             .addClass("glyphicon-star-empty");
         $(buttonText)
-            .text(" Uložit stávající dotaz");
+            .text(localization.translate("SaveCurrentQuery", this.localizationScope).value);
 
         $(saveButton)
             .addClass("btn")
@@ -418,7 +420,7 @@
 
     private bindEvents() {
         $(".favorite-query-label", this.renderContainer).click((event) => {
-            var elementJquery = $(event.currentTarget);
+            var elementJquery = $(event.currentTarget as Node as Element);
             var labelId = elementJquery.data("id");
             var labelName = elementJquery.data("name");
             var labelColor = elementJquery.data("color");
@@ -447,7 +449,7 @@
         });
 
         $(".favorite-query-save-button", this.renderContainer).click(() => {
-            this.favoriteDialog.show("Nový oblíbený dotaz");
+            this.favoriteDialog.show(localization.translate("NewFavQuery", this.localizationScope).value);
         });
 
         $(this.filterLabelInput).on("change keyup paste", () => {
@@ -456,7 +458,7 @@
         });
 
         this.filterQuerySearchBox.submit(() => {
-            var value = this.filterQuerySearchBox.val();
+            var value = this.filterQuerySearchBox.val() as string;
             this.selectedFilterName = value.toLocaleLowerCase();
             this.loadQueries();
         });
@@ -473,7 +475,7 @@
 
     private bindLabelEvents() {
         $(".favorite-query-item", this.renderContainer).click((event) => {
-            var elementJquery = $(event.currentTarget);
+            var elementJquery = $(event.currentTarget as Node as Element);
             var query = elementJquery.data("query");
 
             this.insertQueryToSearchField(query);
@@ -482,7 +484,7 @@
         $(".favorite-query-remove", this.renderContainer).click((event) => {
             event.stopPropagation();
 
-            var elementJQuery = $(event.currentTarget);
+            var elementJQuery = $(event.currentTarget as Node as Element);
             var favoriteId = elementJQuery.data("id");
             this.favoriteManager.deleteFavoriteItem(favoriteId, () => {
                 //elementJQuery.closest(".favorite-query-item").remove();
@@ -492,7 +494,7 @@
     }
 
     private insertQueryToSearchField(newQuery: string) {
-        var originalQuery = this.inputTextbox.val();
+        var originalQuery = this.inputTextbox.val() as string;
         
         if (originalQuery) {
             this.insertDialog.show(() => {
@@ -516,15 +518,15 @@
     private filterLabels(filter: string) {
         filter = filter.toLocaleLowerCase();
         var anyVisible = false;
-        $(".favorite-query-label", this.renderContainer).each((index, element) => {
+        $(".favorite-query-label", this.renderContainer).each((index, element:Node) => {
             if (index === 0) return;
 
-            var labelName = String($(element).data("name")).toLocaleLowerCase();
+            var labelName = String($(element as Element).data("name")).toLocaleLowerCase();
             if (labelName.indexOf(filter) !== -1) {
-                $(element).show();
+                $(element as Element).show();
                 anyVisible = true;
             } else {
-                $(element).hide();
+                $(element as Element).hide();
             }
         });
 
@@ -547,10 +549,10 @@
     }
     
     private saveFavoriteQuery(itemName: string, labelIds: number[]) {
-        var query = this.inputTextbox.val();
+        var query = this.inputTextbox.val() as string;
         this.favoriteManager.createFavoriteQuery(this.bookType, this.queryType, query, itemName, labelIds, (id, error) => {
             if (error) {
-                this.favoriteDialog.showError("Chyba při vytváření oblíbeného dotazu");
+                this.favoriteDialog.showError(localization.translate("CreateFavQueryError", this.localizationScope).value);
                 return;
             }
 
@@ -563,7 +565,10 @@
 class InsertQueryDialog {
     private container: HTMLDivElement;
     private submitCallback: () => void;
-    
+
+    private localizationScope = "FavoriteJs";
+
+
     public make() {
         this.container = document.createElement("div");
         var dialog = document.createElement("div");
@@ -578,7 +583,7 @@ class InsertQueryDialog {
 
         $(title)
             .addClass("modal-title")
-            .text("Vložit dotaz");
+            .text(localization.translate("InsertQuery", this.localizationScope).value);
         $(closeButton)
             .attr("type", "button")
             .attr("data-dismiss", "modal")
@@ -587,20 +592,20 @@ class InsertQueryDialog {
 
         $(body)
             .addClass("modal-body")
-            .text("Opravdu chcete vložit zvolený dotaz a nahradit ním stávající?");
+            .text(localization.translate("ReplaceQuery", this.localizationScope).value);
 
         $(noButton)
             .attr("type", "button")
             .attr("data-dismiss", "modal")
             .addClass("btn")
             .addClass("btn-default")
-            .text("Zavřít");
+            .text(localization.translate("Close", this.localizationScope).value);
 
         $(yesButton)
             .attr("type", "button")
             .addClass("btn")
             .addClass("btn-default")
-            .text("Vložit")
+            .text(localization.translate("Insert", this.localizationScope).value)
             .click(this.onSubmitClick.bind(this));
 
         $(header)
@@ -652,6 +657,8 @@ class FilterSearchBox{
     private input: HTMLInputElement;
     private searchButton: HTMLButtonElement;
 
+    private localizationScope = "FavoriteJs";
+
     public make() {
         this.groupContainer = document.createElement("div");
         var input = document.createElement("input");
@@ -676,8 +683,8 @@ class FilterSearchBox{
         $(input)
             .attr("type", "text")
             .addClass("form-control")
-            .attr("placeholder", "Vyhledat dotaz")
-            .attr("title", "Vyhledat dotaz podle názvu");
+            .attr("placeholder", localization.translate("SearchQuery", this.localizationScope).value)
+            .attr("title", localization.translate("SearchByName", this.localizationScope).value);
         this.input = input;
 
         $(this.groupContainer)
@@ -691,11 +698,11 @@ class FilterSearchBox{
         return this.groupContainer;
     }
 
-    public change(handler: (eventObject: JQueryEventObject) => any) {
+    public change(handler: (eventObject: JQuery.Event) => any) {
         return $(this.input).change(handler);
     }
 
-    public submit(handler: (eventObject: JQueryEventObject) => any) {
+    public submit(handler: (eventObject: JQuery.Event) => any) {
         $(this.input).keypress(event => {
             if (event.keyCode === 13) {
                 handler(null);
@@ -705,7 +712,7 @@ class FilterSearchBox{
     }
 
     public val(): string {
-        return $(this.input).val();
+        return $(this.input).val() as string;
     }
 
     public clear() {

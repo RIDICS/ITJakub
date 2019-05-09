@@ -1,4 +1,4 @@
-﻿$(document).ready(() => {
+﻿$(document.documentElement).ready(() => {
     var dictionarySearch = new DictionarySearch();
     dictionarySearch.create();
 });
@@ -16,8 +16,12 @@ class DictionarySearch {
     private disabledShowOptions: Array<SearchTypeEnum>;
     private typeaheadSearchBox: SearchBox;
 
+    private localization : Localization;
+
     constructor() {
         var pageSize = 25;
+
+        this.localization = new Localization();
 
         this.tabs = new DictionarySearchTabs();
         this.callbackDelegate = new DropDownSelectCallbackDelegate();
@@ -66,7 +70,7 @@ class DictionarySearch {
         this.dictionarySelector.makeDropdown();
         this.search.makeSearch(enabledOptions);
 
-        this.typeaheadSearchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
+        this.typeaheadSearchBox.addDataSet("DictionaryHeadword", this.localization.translate("DictionaryTerms", "Dictionaries").value);
         this.typeaheadSearchBox.create();
 
         $("#cancelFilter").click(() => {
@@ -92,7 +96,7 @@ class DictionarySearch {
     private updateTypeaheadSearchBox(state: State) {
         var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
         this.typeaheadSearchBox.clearAndDestroy();
-        this.typeaheadSearchBox.addDataSet("DictionaryHeadword", "Slovníková hesla", parametersUrl);
+        this.typeaheadSearchBox.addDataSet("DictionaryHeadword", this.localization.translate("DictionaryTerms", "Dictionaries").value, parametersUrl);
         this.typeaheadSearchBox.create();
     }
 
@@ -143,9 +147,9 @@ class DictionarySearchTabs {
         $("#search-tabs li").addClass("hidden");
         $("#search-tabs a").click(e => {
             e.preventDefault();
-            $(e.target).tab("show");
-            this.show(e.target.getAttribute("href"));
-            $(window).trigger("scroll");
+            $(e.target as Node as Element).tab("show");
+            this.show($(e.target as Node as Element).attr("href"));
+            $(window.document.documentElement).trigger("scroll");
         });
     }
 
@@ -313,7 +317,7 @@ class DictionaryViewerTextWrapper {
                 text: text,
                 selectedBookIds: this.selectedIds.selectedBookIds,
                 selectedCategoryIds: this.selectedIds.selectedCategoryIds
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (resultCount: number) => {
@@ -333,7 +337,7 @@ class DictionaryViewerTextWrapper {
                 text: text,
                 selectedBookIds: this.selectedIds.selectedBookIds,
                 selectedCategoryIds: this.selectedIds.selectedCategoryIds
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (resultCount: number) => {
@@ -363,7 +367,7 @@ class DictionaryViewerTextWrapper {
                 count: this.pageSize,
                 selectedBookIds: this.selectedIds.selectedBookIds,
                 selectedCategoryIds: this.selectedIds.selectedCategoryIds
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (response) => {
@@ -383,7 +387,7 @@ class DictionaryViewerTextWrapper {
                 count: this.pageSize,
                 selectedBookIds: this.selectedIds.selectedBookIds,
                 selectedCategoryIds: this.selectedIds.selectedCategoryIds
-            },
+            } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (response) => {

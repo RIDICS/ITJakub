@@ -6,7 +6,7 @@ using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 {
@@ -83,17 +83,16 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateComment(CreateTextCommentContract comment, long textId)
+        public void UpdateComment(CreateTextCommentContract comment, long commentId)
         {
             using (var client = GetRestClient())
             {
-                var result = client.UpdateComment(textId, comment);
-                return Json(result);
+                client.UpdateComment(commentId, comment);
             }
         }
 
         [HttpPost]
-        public void DeleteComment(long commentId)//TODO needs response code
+        public void DeleteComment(long commentId)
         {
             using (var client = GetRestClient())
             {

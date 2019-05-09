@@ -10,6 +10,8 @@
     private selectedRadioButton: HTMLInputElement;
     private isInitialized;
     private pendingShow: boolean|string;
+
+	private localizationScope = "FavoriteJs";
     
     constructor(favoriteManager: FavoriteManager, allowMultipleLabels: boolean) {
         this.allowMultipleLabels = allowMultipleLabels;
@@ -36,8 +38,8 @@
 
     private finishInitialization() {
         var dialogHeading = this.allowMultipleLabels
-            ? "Přiřadit nové štítky k vybrané záložce"
-            : "Přiřadit nový štítek k vybrané záložce";
+            ? localization.translate("AttachNewTags", this.localizationScope).value
+            : localization.translate("AttachNewTag", this.localizationScope).value;
         $(".modal-title", this.container).text(dialogHeading);
 
         var saveIcon = document.createElement("span");
@@ -74,7 +76,7 @@
         var url = getBaseUrl() + "Favorite/NewFavorite?" + queryString;
 
         $(this.saveTitle)
-            .text("Potvrdit");
+            .text(localization.translate("Confirm", this.localizationScope).value);
         $(".modal-body", this.container)
             .addClass("loading")
             .empty();
@@ -108,7 +110,7 @@
 
             var defaultLabel = $("[data-isdefault=true]", this.container);
             if (defaultLabel.length > 0) {
-                var radioButton = <HTMLInputElement>defaultLabel[0];
+                var radioButton = defaultLabel[0] as Node as HTMLInputElement;
                 radioButton.checked = true;
                 this.selectedRadioButton = radioButton;
             } else {
@@ -117,9 +119,9 @@
         }
 
         $("[name=favorite-label]", this.container).change(event => {
-            var checkbox = <HTMLInputElement>event.target;
+            var checkbox = event.target as Node as HTMLInputElement;
             var checkboxJQuery = $(checkbox);
-            var labelId = checkboxJQuery.val();
+            var labelId = checkboxJQuery.val() as string;
 
             if (!this.allowMultipleLabels) {
                 var $radioButton = $(this.selectedRadioButton);
@@ -161,13 +163,13 @@
         });
 
         $(".favorite-select-label-item", this.container).each((index, element) => {
-            var backgroundColor = $("input", element).data("color");
+            var backgroundColor = $("input", element as Node as Element).data("color");
             var color = new HexColor(backgroundColor);
             var borderColor = FavoriteHelper.getDefaultBorderColor(color);
             var inactiveBackground = color.getIncreasedHexColor(NewFavoriteDialog.increaseBackgroundColorPercent);
             var inactiveBorder = new HexColor(borderColor).getIncreasedHexColor(NewFavoriteDialog.increaseBackgroundColorPercent);
 
-            $(element)
+            $(element as Node as Element)
                 .css("color", FavoriteHelper.getInactiveFontColor())
                 .css("border-color", inactiveBorder)
                 .css("background-color", inactiveBackground);
@@ -178,22 +180,22 @@
         this.setActiveTab("tab-favorite-label-assign");
         $(".nav-tabs a", this.container).click((event) => {
             $(".nav-tabs li, .tab-pane").removeClass("active");
-            var navLinkJQuery = $(event.currentTarget);
+            var navLinkJQuery = $(event.currentTarget as Node as Element);
             var tabClass = navLinkJQuery.data("tab-class");
             
             this.setActiveTab(tabClass);
         });
 
         $(".favorite-label-filter", this.container).on("change keyup paste", (event) => {
-            var filter = $(event.currentTarget).val().toLocaleLowerCase();
+            var filter = ($(event.currentTarget as Node as Element).val() as string).toLocaleLowerCase();
             var isAnyVisible = false;
             $(".favorite-select-label .radio").each((index, element) => {
-                var name = String($("input", element).data("name")).toLocaleLowerCase();
+                var name = String($("input", element as Node as Element).data("name")).toLocaleLowerCase();
                 if (name.indexOf(filter) !== -1) {
-                    $(element).show();
+                    $(element as Node as Element).show();
                     isAnyVisible = true;
                 } else {
-                    $(element).hide();
+                    $(element as Node as Element).hide();
                 }
             });
 
@@ -222,13 +224,14 @@
         var newSaveTitle: string;
         switch (tabClass) {
             case "tab-favorite-label-assign":
-                newSaveTitle = this.allowMultipleLabels ? "Potvrdit přiřazení štítků" : "Potvrdit přiřazení štítku";
+                newSaveTitle = this.allowMultipleLabels ? localization.translate("ConfirmTagsAttachment", this.localizationScope).value : 
+                                                          localization.translate("ConfirmTagAttachment", this.localizationScope).value;
                 break;
             case "tab-favorite-label-create":
-                newSaveTitle = "Vytvořit a přiřadit štítek";
+                newSaveTitle = localization.translate("CreateAndAttachTag", this.localizationScope).value;
                 break;
             default:
-                newSaveTitle = "Uložit";
+                newSaveTitle = localization.translate("Save", this.localizationScope).value;
         }
         $(this.saveTitle).text(newSaveTitle);
     }
@@ -256,8 +259,8 @@
     }
 
     private updateLabelPreview() {
-        var labelName = $(".favorite-label-name", this.container).val();
-        var hexColor = $(".favorite-label-color", this.container).val();
+        var labelName = $(".favorite-label-name", this.container).val() as string;
+        var hexColor = $(".favorite-label-color", this.container).val() as string;
         var color = new HexColor(hexColor);
 
         var $labelPreview = $(".label-preview", this.container);
@@ -283,7 +286,7 @@
             $(emptyLabel)
                 .addClass("label")
                 .addClass("label-default")
-                .text("Žádný štítek");
+                .text(localization.translate("NoTag", this.localizationScope).value);
             $(".favorite-selected-label-info", this.container)
                 .append(emptyLabel);
         } else {
@@ -309,16 +312,16 @@
     }
 
     private createFavoriteLabel() {
-        var itemName = $(".favorite-name-2", this.container).val();
-        var labelName = $(".favorite-label-name", this.container).val();
+        var itemName = $(".favorite-name-2", this.container).val() as string;
+        var labelName = $(".favorite-label-name", this.container).val() as string;
         var color = this.labelColorInput.getValue();
 
         var error = "";
         if (!labelName) {
-            error = "Nebylo zadáno jméno.";
+            error = localization.translate("MissingName", this.localizationScope).value;
         }
         if (!FavoriteHelper.isValidHexColor(color)) {
-            error += " Nesprávný formát barvy (požadovaný formát: #000000).";
+            error += localization.translate("IncorrectColorFormat", this.localizationScope).value;
         }
         if (error.length > 0) {
             this.showError(error);
@@ -327,7 +330,7 @@
 
         this.favoriteManager.createFavoriteLabel(labelName, color, (id, error) => {
             if (error) {
-                this.showError("Chyba při vytváření nového štítku");
+                this.showError(localization.translate("CreateNewTagError", this.localizationScope).value);
                 return;
             }
 
@@ -362,13 +365,13 @@
     }
 
     private getData(): INewFavoriteItemData {
-        var itemName: string = $(".favorite-name", this.container).val();
+        var itemName: string = $(".favorite-name", this.container).val() as string;
         var labels = new Array<INewFavoriteItemDataLabel>();
 
         $("[name=favorite-label]:checked", this.container).each((index, element) => {
-            var elementJQuery = $(element);
+            var elementJQuery = $(element as Node as Element);
             var label: INewFavoriteItemDataLabel = {
-                labelId: elementJQuery.val(),
+                labelId: parseInt(elementJQuery.val() as string),
                 labelName: elementJQuery.data("name"),
                 labelColor: elementJQuery.data("color")
             };
@@ -406,7 +409,7 @@ class ColorInput {
             this.setValue(color);
         });
 
-        this.inputElement.change(() => this.setValue(this.inputElement.val()));
+        this.inputElement.change(() => this.setValue(this.inputElement.val() as string));
     }
 
     public setValue(value: string) {
@@ -420,11 +423,11 @@ class ColorInput {
     }
 
     public getValue(): string {
-        return this.inputElement.val();
+        return this.inputElement.val() as string;
     }
 
     private updateBackground() {
-        var value = this.inputElement.val();
+        var value = this.inputElement.val() as string;
         if (value.length !== 7) {
             value = "#FFFFFF";
         }

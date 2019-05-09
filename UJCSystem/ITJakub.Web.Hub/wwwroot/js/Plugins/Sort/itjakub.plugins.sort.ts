@@ -23,13 +23,13 @@
         var select: HTMLSelectElement = document.createElement('select');
 
         $(select).change(() => {
-            var selectedOptionValue: string = this.sortBarContainer.find('div.bib-sortbar').find('select').find("option:selected").val();
+            var selectedOptionValue: string = this.sortBarContainer.find('div.bib-sortbar').find('select').find("option:selected").val() as string;
             this.changeSortCriteria(parseInt(selectedOptionValue));
         });
 
-        this.addOption(select, "Název", SortEnum.Title.toString());
-        this.addOption(select, "Datace", SortEnum.Dating.toString());
-        this.addOption(select, "Autor", SortEnum.Author.toString());
+        this.addOption(select, localization.translate("TitleSort", "PluginsJs").value, SortEnum.Title.toString());
+        this.addOption(select, localization.translate("DatingSort", "PluginsJs").value, SortEnum.Dating.toString());
+        this.addOption(select, localization.translate("AuthorSort", "PluginsJs").value, SortEnum.Author.toString());
 
         sortBarDiv.appendChild(select);
 
@@ -43,7 +43,7 @@
 
         $(sortOrderButton).click((event) => {
             this.changeSortOrder();
-            $(event.currentTarget).children('span').toggleClass('glyphicon-arrow-up glyphicon-arrow-down');
+            $(event.currentTarget as Node as Element).children('span').toggleClass('glyphicon-arrow-up glyphicon-arrow-down');
         });
 
         sortBarDiv.appendChild(sortOrderButton);
@@ -135,4 +135,9 @@ enum SortEnum {
     Author = 0,
     Title = 1,
     Dating = 2,
+}
+
+enum SortDirection {
+    Asc = 0,
+    Desc = 1,
 }

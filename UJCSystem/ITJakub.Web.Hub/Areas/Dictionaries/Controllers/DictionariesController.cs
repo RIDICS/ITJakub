@@ -17,8 +17,10 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
+using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
@@ -52,14 +54,17 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return View();
         }
 
-        public ActionResult Listing(string xmlId, string[] books)
+        public ActionResult Listing(string xmlId, string externalId) // string[] books - this parameter is used in JavaScript
         {
-            if (!string.IsNullOrEmpty(xmlId))
+            // xmlId paramater is for already existing hyperlinks, new parameter is externalId
+            externalId = externalId ?? xmlId;
+
+            if (!string.IsNullOrEmpty(externalId)) // request to one specific book using externalId
             {
-                using (var client = GetMainServiceClient())
+                using (var client = GetRestClient())
                 {
-                    var bookId = client.GetBookIdByXmlId(xmlId);
-                    var bookArrId = string.Format("[{0}]", bookId);
+                    var book = client.GetBookInfoByExternalId(externalId);
+                    var bookArrId = $"[{book.Id}]";
 
                     return RedirectToAction("Listing", "Dictionaries", new { books = bookArrId });
                 }
@@ -70,7 +75,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult Help()
         {
-            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextDictionaryHelp);
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextDictionaryHelp, "dict");
             return View(pageStaticText);
         }
 
@@ -82,13 +87,13 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult Information()
         {
-            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextDictionaryInfo);
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextDictionaryInfo, "dict");
             return View(pageStaticText);
         }
 
         public ActionResult Feedback(long? bookId, long? headwordVersionId, string headword, string dictionary)
         {
-            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback, "home");
             var viewModel = new HeadwordFeedbackViewModel
             {
                 BookId = bookId,
@@ -120,7 +125,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             if (!ModelState.IsValid)
             {
-                model.PageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
+                model.PageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback, "home");
                 return View(model);
             }
 
@@ -385,16 +390,45 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             }
         }
 
-        public ActionResult GetHeadwordPageNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string headwordBookId,
-            string headwordEntryXmlId, int pageSize)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var rowNumber = client.GetHeadwordRowNumberById(selectedCategoryIds, selectedBookIds, headwordBookId, headwordEntryXmlId, AreaBookType);
-                var resultPageNumber = (rowNumber - 1)/pageSize + 1;
-                return Json(resultPageNumber);
-            }
-        }
+        // Favorite headwords are not currently supported
+
+        //public ActionResult GetHeadwordPageNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string headwordBookId,
+        //    string headwordEntryXmlId, int pageSize)
+        //{
+        //    using (var client = GetMainServiceClient())
+        //    {
+        //        var rowNumber = client.GetHeadwordRowNumberById(selectedCategoryIds, selectedBookIds, headwordBookId, headwordEntryXmlId, AreaBookType);
+        //        var resultPageNumber = (rowNumber - 1)/pageSize + 1;
+        //        return Json(resultPageNumber);
+        //    }
+        //}
+
+        //public ActionResult GetHeadwordBookmarks()
+        //{
+        //    using (var client = GetMainServiceClient())
+        //    {
+        //        var list = client.GetHeadwordBookmarks();
+        //        return Json(list);
+        //    }
+        //}
+        
+        //public ActionResult AddHeadwordBookmark([FromBody] AddHeadwordBookmarkRequest request)
+        //{
+        //    using (var client = GetMainServiceClient())
+        //    {
+        //        client.AddHeadwordBookmark(request.BookId, request.EntryXmlId);
+        //        return Json(new {});
+        //    }
+        //}
+
+        //public ActionResult RemoveHeadwordBookmark([FromBody] RemoveHeadwordBookmarkRequest request)
+        //{
+        //    using (var client = GetMainServiceClient())
+        //    {
+        //        client.RemoveHeadwordBookmark(request.BookId, request.EntryXmlId);
+        //        return Json(new {});
+        //    }
+        //}
 
         public ActionResult GetTypeaheadDictionaryHeadword(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
@@ -402,33 +436,6 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             {
                 var result = client.GetHeadwordAutocomplete(query, AreaBookType, selectedCategoryIds, selectedBookIds);
                 return Json(result);
-            }
-        }
-        
-        public ActionResult GetHeadwordBookmarks()
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var list = client.GetHeadwordBookmarks();
-                return Json(list);
-            }
-        }
-        
-        public ActionResult AddHeadwordBookmark([FromBody] AddHeadwordBookmarkRequest request)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                client.AddHeadwordBookmark(request.BookId, request.EntryXmlId);
-                return Json(new {});
-            }
-        }
-
-        public ActionResult RemoveHeadwordBookmark([FromBody] RemoveHeadwordBookmarkRequest request)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                client.RemoveHeadwordBookmark(request.BookId, request.EntryXmlId);
-                return Json(new {});
             }
         }
 
@@ -492,15 +499,6 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             var results = SearchByCriteriaText(CriteriaKey.Title, text, start, count, sortingEnum, sortAsc, selectedBookIds, selectedCategoryIds);
             return Json(new { books = results }, GetJsonSerializerSettingsForBiblModule());
-        }
-
-        public ActionResult GetDictionaryInfo(string bookXmlId)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var result = client.GetBookInfoWithPages(bookXmlId);
-                return Json(result);
-            }
         }
     }
 }

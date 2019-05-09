@@ -1,0 +1,9 @@
+{
+	"culture":"cs-CZ",
+	"scope":"Tools",
+	"dictionary": {
+		"ToolsFeedback" : "Pomůcky - Připomínky",
+		"ToolsInformation" : "Pomůcky - Informace",
+		"ToolsList" : "Pomůcky - Seznam"
+	}
+}

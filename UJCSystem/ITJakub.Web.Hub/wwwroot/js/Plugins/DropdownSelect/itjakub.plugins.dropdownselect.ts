@@ -159,9 +159,9 @@ class DropDownSelect {
         this.makeHeader(dropDownDiv);
         this.makeBody(dropDownDiv);
 
-        $(document).unbind("click.dropdown");
-        $(document).bind("click.dropdown", (event) => {
-            var parents = $(event.target).parents();
+        $(document.documentElement).off("click.dropdown");
+        $(document.documentElement).on("click.dropdown", (event) => {
+            var parents = $(event.target as Node as Element).parents();
             if (!parents.is(dropDownDiv) && !parents.is(".popover")) {
                 this.hideBody();
             }
@@ -243,7 +243,7 @@ class DropDownSelect {
 
         var filterInput = document.createElement("input");
         $(filterInput).addClass("dropdown-filter-input");
-        filterInput.placeholder = "Filtrovat podle názvu..";
+        filterInput.placeholder = localization.translate("FilterByName", "PluginsJs").value;
 
         $(filterInput).keyup(function() {
             $(this).change();
@@ -323,9 +323,10 @@ class DropDownSelect {
         }
 
         $(".concrete-item", dropdownItemsDiv).each((index, element) => {
-            var id = $(element).data("id");
-            var type = $(element).data("type");
-            var itemName = $(element).data("name");
+            const jqEl = $(element as Node as Element);
+            var id = jqEl.data("id");
+            var type = jqEl.data("type");
+            var itemName = jqEl.data("name");
 
             var favoriteItem: IDropdownFavoriteItem = null;
             var favoriteType: FavoriteType = FavoriteType.Unknown;
@@ -338,7 +339,7 @@ class DropDownSelect {
                 favoriteType = FavoriteType.Project;
             }
 
-            var favoriteStarContainer = $(element).children(".save-item");
+            var favoriteStarContainer = jqEl.children(".save-item");
             var favoriteStar = new FavoriteStar(favoriteStarContainer, favoriteType, id, itemName, this.favoriteDialog, this.favoriteManager, () => this.onFavoritesChanged(favoriteType, id));
 
             if (favoriteItem != null) {
@@ -365,33 +366,32 @@ class DropDownSelect {
         $(selectHeader).data("name", this.getCategoryName(rootCategory));
         $(selectHeader).data("type", "category");
 
-        var checkbox = $(selectHeader).children("span.dropdown-select-checkbox").children("input");
+        var checkbox = $(selectHeader).children("span.dropdown-select-checkbox").children("input")[0] as Node as HTMLInputElement;
         var info = this.createCallbackInfo(this.getCategoryId(rootCategory), this.getCategoryName(rootCategory), selectHeader);
-        var self = this;
-        $(checkbox).change(function(event: Event, propagate: boolean) {
+        $(checkbox).change((event: JQuery.Event, propagate: boolean) => {
             var items = $(dropDownItemsDiv).children(".concrete-item").children("input");
-            if (this.checked) {
+            if (checkbox.checked) {
                 if (typeof info.ItemId !== "undefined" && info.ItemId !== null) {
-                    self.addToSelectedCategories(info);
-                    $(items).prop("checked", false);
-                    $(items).prop("indeterminate", false);
-                    $(items).trigger("change",[false]);
+                    this.addToSelectedCategories(info);
+                    items.prop("checked", false);
+                    items.prop("indeterminate", false);
+                    items.trigger("change",[false]);
                     $(dropDownItemsDiv).find(".concrete-item").find("input").prop("checked", true);
                 } else {
-                    $(items).prop("checked", false);
-                    $(items).prop("indeterminate", false);
-                    $(items).trigger("change", [false]);
-                    $(items).prop("checked", true);
-                    $(items).trigger("change", [false]);
+                    items.prop("checked", false);
+                    items.prop("indeterminate", false);
+                    items.trigger("change", [false]);
+                    items.prop("checked", true);
+                    items.trigger("change", [false]);
                 }
             } else {
-                self.removeFromSelectedCategories(info);
-                $(items).prop("checked", false);
-                $(items).trigger("change", [false]);
+                this.removeFromSelectedCategories(info);
+                items.prop("checked", false);
+                items.trigger("change", [false]);
             }
 
             if (typeof propagate === "undefined" || propagate === null || propagate) { //Deafault behaviour is to propagate change
-                self.propagateRootSelectChange(this);
+                this.propagateRootSelectChange(checkbox);
             }
         });
 
@@ -486,7 +486,7 @@ class DropDownSelect {
         }
 
         if (!actualItem.hasClass("dropdown-select-header")) {
-            this.propagateSelectChange(<HTMLDivElement>actualItem[0]);    
+            this.propagateSelectChange(actualItem[0] as Node as HTMLDivElement);    
         }
         
     }
@@ -505,14 +505,13 @@ class DropDownSelect {
         this.onCreateCategoryCheckBox(this.getCategoryId(currentCategory), checkbox);
 
         var info = this.createCallbackInfo(this.getCategoryId(currentCategory), this.getCategoryName(currentCategory), itemDiv);
-        var self = this;
 
-        $(checkbox).change(function(event: Event, propagate: boolean) {
+        $(checkbox).change((event: JQuery.Event, propagate: boolean) => {
             var items = $(itemDiv).children(".child-items").children(".concrete-item").children("input");
 
-            if (this.checked) {
+            if (checkbox.checked) {
                 if (typeof info.ItemId !== "undefined" && info.ItemId !== null) {
-                    self.addToSelectedCategories(info);
+                    this.addToSelectedCategories(info);
                     $(items).prop("checked", false);
                     $(items).prop("indeterminate", false);
                     $(items).trigger("change", [false]);
@@ -525,15 +524,15 @@ class DropDownSelect {
                     $(items).trigger("change", [false]);
                 }
             } else {
-                self.removeFromSelectedCategories(info);
+                this.removeFromSelectedCategories(info);
                 $(items).prop("checked", false);
                 $(items).prop("indeterminate", false);
                 $(items).trigger("change", [false]);
             }
 
             if (typeof propagate === "undefined" || propagate === null || propagate) { //Deafault behaviour is to propagate change
-                self.propagateSelectChange(<HTMLDivElement>$(this).parent(".concrete-item")[0]);
-                self.propagateCategorySelectChange(this, info);
+                this.propagateSelectChange($(checkbox).parent(".concrete-item")[0] as Node as HTMLDivElement);
+                this.propagateCategorySelectChange(checkbox, info);
             }
         });
 
@@ -613,17 +612,16 @@ class DropDownSelect {
         checkbox.type = "checkbox";
 
         var info = this.createCallbackInfo(this.getLeafItemId(currentLeafItem), this.getLeafItemName(currentLeafItem), itemDiv);
-        var self = this;
-        $(checkbox).change(function(event: Event, propagate: boolean) {
-            if (this.checked) {
-                self.addToSelectedItems(info);
+        $(checkbox).change((event: JQuery.Event, propagate: boolean) => {
+            if (checkbox.checked) {
+                this.addToSelectedItems(info);
             } else {
-                self.removeFromSelectedItems(info);
+                this.removeFromSelectedItems(info);
             }
 
             if (typeof propagate === "undefined" || propagate === null || propagate) { //Deafault behaviour is to propagate change
-                self.propagateSelectChange(<HTMLDivElement>$(this).parent(".concrete-item")[0]);
-                self.propagateLeafSelectChange(this, info);
+                this.propagateSelectChange($(checkbox).parent(".concrete-item")[0] as Node as HTMLDivElement);
+                this.propagateLeafSelectChange(checkbox, info);
             }
 
         });

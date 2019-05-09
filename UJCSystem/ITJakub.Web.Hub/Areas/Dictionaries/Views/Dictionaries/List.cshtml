@@ -1,4 +1,7 @@
-﻿@section styles{
+﻿@using Localization.AspNetCore.Service
+@inject ILocalization Localizer
+
+@section styles{
     <link href="~/Areas/Dictionaries/css/itjakub.dictionaries.css" rel="stylesheet" />
 }
 @section scripts{
@@ -6,7 +9,7 @@
 }
 
 @{
-    ViewBag.Title = "Slovníky - Seznam";
+    ViewBag.Title = @Localizer.Translate("DictionariesList", "Dictionaries");
 }
 
 <script type="text/javascript">

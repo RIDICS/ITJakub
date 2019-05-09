@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Errors;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -37,9 +37,12 @@ namespace Vokabular.MainService.Controllers
 
         [HttpPost("text/{textId}")]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-        public IActionResult CreateNewTextResourceVersion([FromBody] TextContract request)
+        public IActionResult CreateNewTextResourceVersion([FromBody] CreateTextRequestContract request)
         {
-            return StatusCode(StatusCodes.Status409Conflict); // Version conflict
+            var result = m_projectContentManager.CreateNewTextResourceVersion(request);
+            return Ok(result);
+            //TODO check result
+            //return StatusCode(StatusCodes.Status409Conflict); // Version conflict
         }
 
         [HttpGet("text/{textId}/comment")]

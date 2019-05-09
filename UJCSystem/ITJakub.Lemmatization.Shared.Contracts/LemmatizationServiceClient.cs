@@ -7,7 +7,7 @@ using log4net;
 
 namespace ITJakub.Lemmatization.Shared.Contracts
 {
-    public class LemmatizationServiceClient : ClientBase<ILemmatizationService>, ILemmatizationService
+    public class LemmatizationServiceClient : ClientBase<ILemmatizationService>, ILemmatizationService, IDisposable
     {
         private static readonly ILog m_log = LogManager.GetLogger(typeof(LemmatizationServiceClient));
 
@@ -594,6 +594,11 @@ namespace ITJakub.Lemmatization.Shared.Contracts
         private string GetCurrentMethod([CallerMemberName] string methodName = null)
         {
             return methodName;
+        }
+
+        public void Dispose()
+        {
+            ((ICommunicationObject)this).Close();
         }
     }
 }

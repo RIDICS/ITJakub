@@ -11,6 +11,8 @@ namespace ITJakub.Web.Hub.Models
 
         public string Name { get; set; }
 
+        public string Scope { get; set; }
+
         public string Text { get; set; }
 
         public DateTime LastModificationTime { get; set; }

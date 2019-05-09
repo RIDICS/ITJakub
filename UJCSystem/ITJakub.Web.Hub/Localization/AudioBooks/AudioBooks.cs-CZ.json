@@ -1,0 +1,9 @@
+{
+	"culture":"cs-CZ",
+	"scope":"AudioBooks",
+	"dictionary": {
+		"AudioBooksFeedback" : "Audioknihy - Připomínky",
+		"AudioBooksInformation" : "Audioknihy - Informace",
+		"AudioBooksList" : "Audioknihy - Seznam"
+	}
+}

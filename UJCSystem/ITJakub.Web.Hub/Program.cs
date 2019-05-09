@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Vokabular.Log4Net;
 
 namespace ITJakub.Web.Hub
 {
@@ -38,13 +40,14 @@ namespace ITJakub.Web.Hub
                         .AddEnvironmentVariables();
 
                 })
-                // TODO switch logging to following configuration:
-                //.ConfigureLogging((builderContext, builder) =>
-                //{
-                //    builderContext.HostingEnvironment.ConfigureLog4Net("log4net.config");
-                //    builder.AddConfiguration(builderContext.Configuration.GetSection("Logging"));
-                //    builder.AddLog4Net();
-                //})
+                .ConfigureLogging((builderContext, builder) =>
+                {
+                    builderContext.HostingEnvironment.ConfigureLog4Net("log4net.config");
+                    builder.AddConfiguration(builderContext.Configuration.GetSection("Logging"));
+                    //builder.AddConsole();
+                    //builder.AddDebug();
+                    builder.AddLog4Net();
+                })
                 .UseStartup<Startup>()
                 .Build();
         }

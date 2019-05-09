@@ -1,0 +1,12 @@
+{
+	"culture":"cs-CZ",
+	"scope":"ProfessionalLiterature",
+	"dictionary": {
+		"ProfessionalLiteratureFeedback" : "Odborná literatura - Připomínky",
+		"ProfessionalLiteratureHelp" : "Odborná literatura - Nápověda",
+		"ProfessionalLiteratureInformation" : "Odborná literatura - Informace",
+		"ProfessionalLiteratureList" : "Odborná literatura - Seznam",
+		"ProfessionalLiteratureListing" : "Odborná literatura - Čtečka děl",
+		"ProfessionalLiteratureSearch" : "Odborná literatura - Vyhledávání"
+	}
+}

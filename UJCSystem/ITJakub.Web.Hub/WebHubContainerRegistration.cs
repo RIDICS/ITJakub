@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using ITJakub.Web.DataEntities;
-using ITJakub.Web.Hub.AppStart;
 using ITJakub.Web.Hub.Areas.Admin.AutomapperProfiles;
 using ITJakub.Web.Hub.AutoMapperProfiles;
 using ITJakub.Web.Hub.Core.Communication;
@@ -27,7 +25,6 @@ namespace ITJakub.Web.Hub
             container.AddSingleton<Profile, DatingCriteriaDescriptionProfile>();
             container.AddSingleton<Profile, DatingListCriteriaDescriptionProfile>();
             container.AddSingleton<Profile, FavoriteProfile>();
-            container.AddSingleton<Profile, StaticTextProfile>();
             container.AddSingleton<Profile, TokenDistanceCriteriaDescriptionProfile>();
             container.AddSingleton<Profile, TokenDistanceListCriteriaDescriptionProfile>();
             container.AddSingleton<Profile, WordCriteriaDescriptionProfile>();
@@ -37,13 +34,12 @@ namespace ITJakub.Web.Hub
             container.AddSingleton<Profile, LiteraryGenreProfile>();
             container.AddSingleton<Profile, LiteraryKindProfile>();
             container.AddSingleton<Profile, LiteraryOriginalProfile>();
+            container.AddSingleton<Profile, CategoryProfile>();
             container.AddSingleton<Profile, ProjectProfile>();
             container.AddSingleton<Profile, ResourceProfile>();
             container.AddSingleton<Profile, ResponsibleTypeProfile>();
             container.AddSingleton<Profile, SnapshotProfile>();
             container.AddSingleton<Profile, UserProfile>();
-
-            container.Install(new NHibernateInstaller(), new WebDataEntitiesContainerRegistration());
         }
     }
 }

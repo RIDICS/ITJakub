@@ -1,9 +1,11 @@
-﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ResourcesViewModel
+﻿@using Localization.AspNetCore.Service
+@model ITJakub.Web.Hub.Areas.Admin.Models.ResourcesViewModel
+@inject ILocalization Localizer
 
 <div class="project-dropdown-panel" data-resource-type="@Html.Raw((int) Model.ResourceType)">
     <div class="dropdown-select-header project-dropdown-header">
         <div class="project-dropdown-controls">
-            <a href="#">Zařadit vše v nejnovější verzi</a>
+            <a href="#">@Localizer.Translate("ListAllInLatestVersion", "Admin")</a>
             <a href="#"><span class="glyphicon glyphicon-menu-down"></span></a>
         </div>
         <div>@Model.Title</div>
@@ -11,21 +13,21 @@
     <div class="project-dropdown-body">
         <table>
             <tr class="header">
-                <th>Zdroj</th>
-                <th>Zahrnout</th>
-                <th>Verze</th>
+                <th>@Localizer.Translate("Source", "Admin")</th>
+                <th>@Localizer.Translate("Include", "Admin")</th>
+                <th>@Localizer.Translate("Version", "Admin")</th>
                 <th></th>
-                <th>Mluvnice</th>
-                <th>Edice</th>
-                <th>Korpusy</th>
-                <th>Slovníky</th>
+                <th>@Localizer.Translate("Grammar", "Admin")</th>
+                <th>@Localizer.Translate("Edition", "Admin")</th>
+                <th>@Localizer.Translate("Corporas", "Admin")</th>
+                <th>@Localizer.Translate("Dictionaries", "Admin")</th>
             </tr>
             <tr class="subheader">
                 <th></th>
                 <th>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" /> Vše
+                            <input type="checkbox" /> @Localizer.Translate("All", "Admin")
                         </label>
                     </div>
                 </th>
@@ -34,28 +36,28 @@
                 <th>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" /> Vše
+                            <input type="checkbox" /> @Localizer.Translate("All", "Admin")
                         </label>
                     </div>
                 </th>
                 <th>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" /> Vše
+                            <input type="checkbox" /> @Localizer.Translate("All", "Admin")
                         </label>
                     </div>
                 </th>
                 <th>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" /> Vše
+                            <input type="checkbox" /> @Localizer.Translate("All", "Admin")
                         </label>
                     </div>
                 </th>
                 <th>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" /> Vše
+                            <input type="checkbox" /> @Localizer.Translate("All", "Admin")
                         </label>
                     </div>
                 </th>
@@ -77,7 +79,7 @@
                         </select>
                     </td>
                     <td>
-                        <a href="#">Náhled</a>
+                        <a href="#">@Localizer.Translate("Preview", "Admin")</a>
                     </td>
                     <td>
                         <input type="checkbox" />

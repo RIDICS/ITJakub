@@ -1,0 +1,9 @@
+{
+	"culture":"en",
+	"scope":"AudioBooks",
+	"dictionary": {
+		"AudioBooksFeedback" : "translate[Audioknihy - Připomínky]",
+		"AudioBooksInformation" : "translate[Audioknihy - Informace]",
+		"AudioBooksList" : "translate[Audioknihy - Seznam]"
+		}
+}

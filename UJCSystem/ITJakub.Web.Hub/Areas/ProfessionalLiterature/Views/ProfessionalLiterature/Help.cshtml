@@ -1,7 +1,9 @@
-﻿@model ITJakub.Web.Hub.Models.StaticTextViewModel
+﻿@using Localization.AspNetCore.Service
+@model ITJakub.Web.Hub.Models.StaticTextViewModel
+@inject ILocalization Localizer
 
 @{
-    ViewBag.Title = "Odborná literatura - Nápověda";
+    ViewBag.Title = @Localizer.Translate("ProfessionalLiteratureHelp", "ProfessionalLiterature");
 }
 
 @section styles{

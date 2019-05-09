@@ -1,13 +1,17 @@
 ﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ProjectItemViewModel
-@using System.Threading.Tasks
 @using ITJakub.Web.Hub.Core
+@using Localization.AspNetCore.Service
+
+@inject ILocalization Localizer
+
 @{
-    ViewBag.Title = "Projekt - " + Model.Name;
+    ViewBag.Title = Localizer.Translate("ProjectHeader", "Admin") + Model.Name;
 }
 
 @section styles {
     <link rel="stylesheet" href="~/Areas/Admin/css/ridics.project.css"/>
     <link rel="stylesheet" href="~/lib/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.css"/>
+    <link rel="stylesheet" href="~/lib/gijgo/combined/css/gijgo.css"/>
 }
 @section scripts {
     <script src="~/Areas/Admin/js/ridics.project.module.js"></script>
@@ -21,6 +25,7 @@
     <script src="~/Areas/Admin/js/edition-note/ridics.project.edition-note.main.js"></script>
     <script type="text/javascript" src="~/lib/lazysizes/lazysizes.min.js"></script>
     <script type="text/javascript" src="~/lib/bootstrap-tokenfield/dist/bootstrap-tokenfield.js"></script>
+    <script type="text/javascript" src="~/lib/gijgo/combined/js/gijgo.min.js"></script>
 }
 
 <div id="project-id" class="hidden">@Model.Id</div>
@@ -28,25 +33,25 @@
 <div class="content-container">
     <div class="row project-layout">
         <div class="left-menu" id="left-menu">
-            <div class="project-title">Název díla</div>
+            <div class="project-title">@Localizer.Translate("ProjectTitle", "Admin")</div>
             <div class="list-group list-group-root" id="project-navigation">
-                <a href="#" class="list-group-item active" id="project-navigation-root">Dílo</a>
+                <a href="#" class="list-group-item active" id="project-navigation-root">@Localizer.Translate("Project", "Admin")</a>
                 <div class="list-group">
-                    <a href="#" class="list-group-item" id="project-navigation-image">Obrazové skeny</a>
-                    <a href="#" class="list-group-item" id="project-navigation-text">Texty</a>
-                    <a href="#" class="list-group-item" id="project-navigation-audio">Audio</a>
-                    <a href="#" class="list-group-item" id="project-navigation-video">Video</a>
+                    <a href="#" class="list-group-item" id="project-navigation-image">@Localizer.Translate("ImageScan", "Admin")</a>
+                    <a href="#" class="list-group-item" id="project-navigation-text">@Localizer.Translate("Texts", "Admin")</a>
+                    <a href="#" class="list-group-item" id="project-navigation-audio">@Localizer.Translate("Audio", "Admin")</a>
+                    <a href="#" class="list-group-item" id="project-navigation-video">@Localizer.Translate("Video", "Admin")</a>
                 </div>
             </div>
 
             <div class="resource-panel" id="resource-panel">
 
                 <div>
-                    <button type="button" class="btn btn-default" id="add-resource-button">Přidat zdroj</button>
-                    <button type="button" class="btn btn-default" id="delete-resource-button">Smazat zdroj</button>
-                    <button type="button" class="btn btn-default" id="rename-resource-button">Přejmenovat zdroj</button>
-                    <button type="button" class="btn btn-default" id="duplicate-resource-button">Duplikovat zdroj</button>
-                    <button type="button" class="btn btn-default" id="create-resource-version-button">Vytvořit novou verzi</button>
+                    <button type="button" class="btn btn-default" id="add-resource-button">@Localizer.Translate("AddResource", "Admin")</button>
+                    <button type="button" class="btn btn-default" id="delete-resource-button">@Localizer.Translate("DeleteResource", "Admin")</button>
+                    <button type="button" class="btn btn-default" id="rename-resource-button">@Localizer.Translate("RenameResource", "Admin")</button>
+                    <button type="button" class="btn btn-default" id="duplicate-resource-button">@Localizer.Translate("DuplicateResource", "Admin")</button>
+                    <button type="button" class="btn btn-default" id="create-resource-version-button">@Localizer.Translate("CreateNewVersion", "Admin")</button>
                 </div>
             </div>
         </div>
@@ -70,7 +75,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Nové soubory</h4>
+                <h4 class="modal-title">@Localizer.Translate("NewFiles", "Admin")</h4>
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
@@ -85,16 +90,16 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-12">
-                            <label for="new-resource-comment">Komentář k první verzi</label>
+                            <label for="new-resource-comment">@Localizer.Translate("FirstVersionComment", "Admin")</label>
                             <textarea class="form-control" id="new-resource-comment" maxlength="@Projects.MaxResourceCommentLength"></textarea>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="dialog-error alert alert-danger true-inline-alert">Chyba při ukládání</div>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
-                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>Hotovo</button>
+                <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("ErrorDuringSave", "Admin")</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Cancel", "Admin")</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>@Localizer.Translate("Done", "Admin")</button>
             </div>
         </div>
     </div>
@@ -105,18 +110,18 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Přejmenovat zdroj</h4>
+                <h4 class="modal-title">@Localizer.Translate("RenameSource", "Admin")</h4>
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <label for="rename-resource-original" class="col-md-3 control-label">Původní název</label>
+                        <label for="rename-resource-original" class="col-md-3 control-label">@Localizer.Translate("OriginalTitle", "Admin")</label>
                         <div class="col-md-8">
                             <input type="text" id="rename-resource-original" class="form-control" disabled="disabled"/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="rename-resource-new" class="col-md-3 control-label">Nový název</label>
+                        <label for="rename-resource-new" class="col-md-3 control-label">@Localizer.Translate("NewTitle", "Admin")</label>
                         <div class="col-md-8">
                             <input type="text" id="rename-resource-new" class="form-control">
                         </div>
@@ -124,9 +129,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="dialog-error alert alert-danger true-inline-alert">Chyba při ukládání</div>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
-                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>Uložit</button>
+                <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("ErrorDuringSave", "Admin")</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Cancel", "Admin")</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>@Localizer.Translate("Save", "Admin")</button>
             </div>
         </div>
     </div>
@@ -137,15 +142,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Smazat zdroj</h4>
+                <h4 class="modal-title">@Localizer.Translate("DeleteResource", "Admin")</h4>
             </div>
             <div class="modal-body">
-                Opravdu chcete smazat zdroj "<span id="delete-resource-name"></span>"?
+                @Localizer.Translate("DeleteResourceModal", "Admin")"<span id="delete-resource-name"></span>"?
             </div>
             <div class="modal-footer">
-                <div class="dialog-error alert alert-danger true-inline-alert">Chyba při mazání</div>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
-                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>Smazat</button>
+                <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("ErrorDuringDelete", "Admin")</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Cancel", "Admin")</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>@Localizer.Translate("Delete", "Admin")</button>
             </div>
         </div>
     </div>
@@ -156,15 +161,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Duplikovat zdroj</h4>
+                <h4 class="modal-title">@Localizer.Translate("DuplicateResource", "Admin")</h4>
             </div>
             <div class="modal-body">
-                Opravdu chcete duplikovat zdroj "<span id="duplicate-resource-name"></span>"?
+                @Localizer.Translate("ResourceDuplicateModal", "Admin")"<span id="duplicate-resource-name"></span>"?
             </div>
             <div class="modal-footer">
-                <div class="dialog-error alert alert-danger true-inline-alert">Chyba při duplikování</div>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
-                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>Duplikovat</button>
+                <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("ErrorDuringDuplicate", "Admin")</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Cancel", "Admin")</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>@Localizer.Translate("Duplicate", "Admin")</button>
             </div>
         </div>
     </div>
@@ -175,7 +180,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Nová verze zdroje <span id="new-resource-version-original"></span></h4>
+                <h4 class="modal-title">@Localizer.Translate("ResourceNewVersion", "Admin")<span id="new-resource-version-original"></span></h4>
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
@@ -190,16 +195,16 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-12">
-                            <label for="new-resource-comment">Komentář k nové verzi</label>
+                            <label for="new-resource-comment">@Localizer.Translate("NewVersionComment", "Admin")</label>
                             <textarea class="form-control" id="new-resource-version-comment" maxlength="@Projects.MaxResourceCommentLength"></textarea>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="dialog-error alert alert-danger true-inline-alert">Chyba při ukládání</div>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
-                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>Uložit</button>
+                <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("ErrorDuringSave", "Admin")</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Cancel", "Admin")</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>@Localizer.Translate("Save", "Admin")</button>
             </div>
         </div>
     </div>

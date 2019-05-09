@@ -1,6 +1,6 @@
 ﻿///<reference path="../editors-common-base/ridics.project.editors.util.ts" />
 
-$(document).ready(() => {
+$(document.documentElement).ready(() => {
     const main = new KeyTableEditorMain();
     main.init();
 });
@@ -32,7 +32,7 @@ class KeyTableEditorMain {
         $(".left-menu").on("click",
             ".key-table-editor-selection",
             (event) => {
-                const targetEl = $(event.target);
+                const targetEl = $(event.target as Node as Element);
                 const target: KeyTableEditorType = targetEl.data("editor-type");
                 targetEl.addClass("active");
                 targetEl.siblings(".key-table-editor-selection").removeClass("active");

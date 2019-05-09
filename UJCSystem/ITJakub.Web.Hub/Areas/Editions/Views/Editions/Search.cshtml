@@ -1,5 +1,8 @@
-﻿@{
-    ViewBag.Title = "Edice - Vyhledávání";
+﻿@using Localization.AspNetCore.Service
+@inject ILocalization Localizer
+
+@{
+    ViewBag.Title = Localizer.Translate("EditionsSearch", "Editions");
 }
 @section styles{
     <link href="~/Areas/Editions/css/itjakub.editions.css" rel="stylesheet" />

@@ -2,28 +2,28 @@
 {
     public static class StaticTexts
     {
-        public const string TextHomeAbout = "home-about";
-        public const string TextHomeCopyright = "home-copyright";
-        public const string TextHomeContacts = "home-contacts";
-        public const string TextHomeLinks = "home-links";
-        public const string TextHomeSupport = "home-support";
-        public const string TextHomeHowToCite = "home-howtocite";
-        public const string TextHomeFeedback = "home-feedback";
-        public const string TextDictionaryInfo = "dict-info";
-        public const string TextDictionaryHelp = "dict-help";
-        public const string TextEditionInfo = "edition-info";
-        public const string TextEditionHelp = "edition-help";
-        public const string TextEditionPrinciples = "edition-principles";
-        public const string TextTextBankInfo = "textbank-info";
-        public const string TextTextBankHelp = "textbank-help";
-        public const string TextGrammarInfo = "grammar-info";
-        public const string TextGrammarHelp = "grammar-help";
-        public const string TextProfessionalInfo = "professional-info";
-        public const string TextProfessionalHelp = "professional-help";
-        public const string TextBibliographiesInfo = "bibliographies-info";
-        public const string TextCardFilesInfo = "cardfiles-info";
-        public const string TextAudioBooksInfo = "audio-info";
-        public const string TextToolsInfo = "tools-info";
-        public const string TextToolsList = "tools-list";
+        public const string TextHomeAbout = "about";
+        public const string TextHomeCopyright = "copyright";
+        public const string TextHomeContacts = "contacts";
+        public const string TextHomeLinks = "links";
+        public const string TextHomeSupport = "support";
+        public const string TextHomeHowToCite = "howtocite";
+        public const string TextHomeFeedback = "feedback";
+        public const string TextDictionaryInfo = "info";
+        public const string TextDictionaryHelp = "help";
+        public const string TextEditionInfo = "info";
+        public const string TextEditionHelp = "help";
+        public const string TextEditionPrinciples = "principles";
+        public const string TextTextBankInfo = "info";
+        public const string TextTextBankHelp = "help";
+        public const string TextGrammarInfo = "info";
+        public const string TextGrammarHelp = "help";
+        public const string TextProfessionalInfo = "info";
+        public const string TextProfessionalHelp = "help";
+        public const string TextBibliographiesInfo = "info";
+        public const string TextCardFilesInfo = "info";
+        public const string TextAudioBooksInfo = "info";
+        public const string TextToolsInfo = "info";
+        public const string TextToolsList = "list";
     }
 }

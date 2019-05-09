@@ -1,5 +1,8 @@
-﻿@{
-    ViewBag.Title = "Lemmatizace";
+﻿@using Localization.AspNetCore.Service
+@inject ILocalization Localizer
+
+@{
+    ViewBag.Title = @Localizer.Translate("Lemmatization", "Lemmatization");
 }
 @section styles{
     <link href="~/Areas/Lemmatization/css/itjakub.lemmatization.css" rel="stylesheet" />
@@ -18,8 +21,8 @@
 
 <div class="lemmatization-search-bar">
     <div class="lemmatization-main-buttons">
-        <button id="addNewTokenButton" class="hidden btn btn-default lemmatization-button">Vytvořit</button>
-        <button id="loadButton" class="btn btn-default lemmatization-button hidden">Načíst</button>
+        <button id="addNewTokenButton" class="hidden btn btn-default lemmatization-button">@Localizer.Translate("Create", "Lemmatization")</button>
+        <button id="loadButton" class="btn btn-default lemmatization-button hidden">@Localizer.Translate("Load", "Lemmatization")</button>
     </div>
     <div class="lemmatization-search input_container">
         <input type="text" class="form-control lemmatization-search-input keyboard-input" id="mainSearchInput" data-keyboard-id="0"/>
@@ -34,18 +37,18 @@
         <span class="lemmatization-token" id="specificToken"></span>
     </div>
     <div>
-        <span class="lemmatization-label lemmatization-label-description">Popis: </span>
+        <span class="lemmatization-label lemmatization-label-description">@Localizer.Translate("Description", "Lemmatization"): </span>
         <span class="lemmatization-description" id="specificTokenDescription"></span>
     </div>
     <div>
-        <button class="lemmatization-edit lemmatiazation-small-left-space" id="showEditToken">Upravit</button>
+        <button class="lemmatization-edit lemmatiazation-small-left-space" id="showEditToken">@Localizer.Translate("Modify", "Lemmatization")</button>
     </div>
 </div>
 <div class="content hidden">
-    <h3>Charakteristiky</h3>
+    <h3>@Localizer.Translate("Characteristics", "Lemmatization")</h3>
     <div id="mainContainer"></div>
     <div>
-        <button class="btn btn-default lemmatization-button" id="addNewCharacteristic">Přidat novou charakteristiku</button>
+        <button class="btn btn-default lemmatization-button" id="addNewCharacteristic">@Localizer.Translate("AddNewCharacteristics", "Lemmatization")</button>
     </div>
 </div>
 
@@ -55,18 +58,18 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Nový token</h4>
+                <h4 class="modal-title">@Localizer.Translate("Newtoken", "Lemmatization")</h4>
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <label for="new-token" class="col-md-3 control-label">Token</label>
+                        <label for="new-token" class="col-md-3 control-label">@Localizer.Translate("Token", "Lemmatization")</label>
                         <div class="col-md-8">
                             <input class="form-control" id="new-token" name="new-text" type="text" disabled="disabled">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="new-token-description" class="col-md-3 control-label">Popis</label>
+                        <label for="new-token-description" class="col-md-3 control-label">@Localizer.Translate("Description", "Lemmatization")</label>
                         <div class="col-md-8">
                             <input class="form-control" id="new-token-description" name="new-description" type="text">
                         </div>
@@ -74,8 +77,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default lemmatization-button" data-dismiss="modal">Zavřít</button>
-                <button type="button" class="btn btn-default lemmatization-button" id="save-token">Uložit</button>
+                <button type="button" class="btn btn-default lemmatization-button" data-dismiss="modal">@Localizer.Translate("Close", "Lemmatization")</button>
+                <button type="button" class="btn btn-default lemmatization-button" id="save-token">@Localizer.Translate("Save", "Lemmatization")</button>
             </div>
         </div>
     </div>
@@ -86,18 +89,18 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Upravit token</h4>
+                <h4 class="modal-title">@Localizer.Translate("ModifyToken", "Lemmatization")</h4>
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <label for="edit-token-text" class="col-md-3 control-label">Token</label>
+                        <label for="edit-token-text" class="col-md-3 control-label">@Localizer.Translate("Token", "Lemmatization")</label>
                         <div class="col-md-8">
                             <input class="form-control" id="edit-token-text" type="text" disabled="disabled">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="edit-token-description" class="col-md-3 control-label">Popis</label>
+                        <label for="edit-token-description" class="col-md-3 control-label">@Localizer.Translate("Description", "Lemmatization")</label>
                         <div class="col-md-8">
                             <input class="form-control" id="edit-token-description" type="text">
                         </div>
@@ -105,8 +108,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default lemmatization-button" data-dismiss="modal">Zavřít</button>
-                <button type="button" class="btn btn-default lemmatization-button" id="save-edited-token">Uložit</button>
+                <button type="button" class="btn btn-default lemmatization-button" data-dismiss="modal">@Localizer.Translate("Close", "Lemmatization")</button>
+                <button type="button" class="btn btn-default lemmatization-button" id="save-edited-token">@Localizer.Translate("Save", "Lemmatization")</button>
             </div>
         </div>
     </div>
@@ -117,251 +120,251 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Morfologická charakteristika</h4>
+                <h4 class="modal-title">@Localizer.Translate("MorfologicCharacteristic", "Lemmatization")</h4>
             </div>
             <div class="modal-body">
                 <div class="form-horizontal form-characteristic">
                     <div class="form-group">
-                        <label for="new-token-text-description" class="col-md-4 control-label">Popis</label>
+                        <label for="new-token-text-description" class="col-md-4 control-label">@Localizer.Translate("Description", "Lemmatization")</label>
                         <div class="col-md-7">
                             <textarea class="form-control" id="new-token-text-description" name="new-token-text-description"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="description-0" class="col-md-4 control-label">Slovní druh</label>
+                        <label for="description-0" class="col-md-4 control-label">@Localizer.Translate("WordKind", "Lemmatization")</label>
                         <div class="col-md-7">
                             <select id="description-0" name="description-0" class="form-control">
                                 <option selected value="-"> - </option>
-                                <option value="N">N - substantivum (podstatné jméno)</option>
-                                <option value="A">A - adjektivum (přídavné jméno)</option>
-                                <option value="P">P - pronomen (zájmeno)</option>
-                                <option value="C">C - numerál (číslovka, nebo číselný výraz s číslicemi)</option>
-                                <option value="V">V - verbum (sloveso)</option>
-                                <option value="D">D - adverbium (příslovce)</option>
-                                <option value="R">R - prepozice (předložka)</option>
-                                <option value="J">J - konjunkce (spojka)</option>
-                                <option value="T">T - partikule (částice)</option>
-                                <option value="I">I - interjekce (citoslovce)</option>
-                                <option value="Z">Z - interpunkce</option>
-                                <option value="X">X - neznámý nebo neurčený slovní druh</option>
+                                <option value="N">@Localizer.Translate("WordKind/N", "Lemmatization")</option>
+                                <option value="A">@Localizer.Translate("WordKind/A", "Lemmatization")</option>
+                                <option value="P">@Localizer.Translate("WordKind/P", "Lemmatization")</option>
+                                <option value="C">@Localizer.Translate("WordKind/C", "Lemmatization")</option>
+                                <option value="V">@Localizer.Translate("WordKind/V", "Lemmatization")</option>
+                                <option value="D">@Localizer.Translate("WordKind/D", "Lemmatization")</option>
+                                <option value="R">@Localizer.Translate("WordKind/R", "Lemmatization")</option>
+                                <option value="J">@Localizer.Translate("WordKind/J", "Lemmatization")</option>
+                                <option value="T">@Localizer.Translate("WordKind/T", "Lemmatization")</option>
+                                <option value="I">@Localizer.Translate("WordKind/I", "Lemmatization")</option>
+                                <option value="Z">@Localizer.Translate("WordKind/Z", "Lemmatization")</option>
+                                <option value="X">@Localizer.Translate("WordKind/X", "Lemmatization")</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="description-1" class="col-md-4 control-label">Detail slovního druhu</label>
+                        <label for="description-1" class="col-md-4 control-label">@Localizer.Translate("WordKindDetail", "Lemmatization")</label>
                         <div class="col-md-7">
                             <select id="description-1" name="description-1" class="form-control">
                                 <option selected value="-"> - </option>
-                                <option value="!">! – zkratka jako adverbium</option>
-                                <option value="#"># – hranice věty (jen u "virtuálního" slova "###")</option>
-                                <option value="*">* - slovo "krát" (slovní druh: spojka)</option>
-                                <option value=",">, - spojka podřadicí (vč. "aby", "kdyby" ve všech tvarech)</option>
-                                <option value=".">. – zkratka jako adjektivum</option>
-                                <option value=":">: – interpunkce všeobecně (ne však "virtuální" slovo ### jako hranice věty)</option>
-                                <option value=";">; – zkratka jako substantivum</option>
-                                <option value="=">= – číslo psané číslicemi (značkováno jako slovní druh: číslovka – 'C')</option>
-                                <option value="?">? – číslovka "kolik"</option>
-                                <option value="^">^ – spojka souřadicí</option>
-                                <option value="}">} – číslovka psaná římskými číslicemi</option>
-                                <option value="~">~ – zkratka jako sloveso</option>
-                                <option value="@Html.Raw("@")">@@ - nerozpoznaný slovní tvar (značkováno jako neznámý slovní druh)</option>
-                                <option value="0">0 - předložka s připojeným "-ň"(něj): "proň", "naň", atd. (značkováno jako zájmeno)</option>
-                                <option value="1">1 - vztažné přivlastňovací zájmeno "jehož", "jejíž", ...</option>
-                                <option value="2">2 - slovo před pomlčkou</option>
-                                <option value="3">3 – zkratka jako číslovka</option>
-                                <option value="4">4 - vztažné nebo tázací zájmeno s adjektivním skloňováním (obou typů: "jaký", "který", "čí", ...)</option>
-                                <option value="5">5 - zájmeno "on" ve tvarech po předložce (tj. "n-": "něj", "něho", ...)</option>
-                                <option value="6">6 - reflexívní zájmeno "se" v dlouhých tvarech ("sebe", "sobě", "sebou")</option>
-                                <option value="7">7 - reflexívní zájmeno "se", "si" pouze v těchto tvarech, a dále "ses", "sis"</option>
-                                <option value="8">8 - přivlastňovací zájmeno "svůj"</option>
-                                <option value="9">9 - vztažné zájmeno "jenž", "již", ... po předložce ("n-": "něhož", "níž", ...)</option>
-                                <option value="A">A - adjektivum obyčejné</option>
-                                <option value="B">B - sloveso, tvar přítomného nebo budoucího času</option>
-                                <option value="C">C - adjektivum, jmenný tvar</option>
-                                <option value="D">D - zájmeno ukazovací ("ten", "onen", ...)</option>
-                                <option value="E">E - vztažné zájmeno "což"</option>
-                                <option value="F">F - součást předložky, která nikdy nestojí samostatně ("nehledě", "vzhledem", ...)</option>
-                                <option value="G">G - přídavné jméno odvozené od slovesného tvaru přítomného přechodníku</option>
-                                <option value="H">H - krátké tvary osobních zájmen ("mě", "mi", "ti", "mu", ...)</option>
-                                <option value="I">I - citoslovce</option>
-                                <option value="J">J - vztažné zájmeno "jenž" ("již", ...), ne po předložce</option>
-                                <option value="K">K - zájmeno tázací nebo vztažné "kdo", vč. tvarů s "ž" a "s"</option>
-                                <option value="L">L - zájmeno neurčité "všechen", "sám"</option>
-                                <option value="M">M - přídavné jméno odvozené od slovesného tvaru minulého přechodníku</option>
-                                <option value="N">N - substantivum, obyčejné</option>
-                                <option value="O">O - samostatně stojící zájmeno "svůj", "nesvůj", "tentam"</option>
-                                <option value="P">P - osobní zájmeno (vč. tvaru "tys")</option>
-                                <option value="Q">Q - zájmeno tázací nebo vztažné "co", "copak", "cožpak"</option>
-                                <option value="R">R - předložka, obyčejná</option>
-                                <option value="S">S - zájmeno přivlastňovací "můj", "tvůj", "jeho" (vč. plurálu)</option>
-                                <option value="T">T - částice</option>
-                                <option value="U">U - adjektivum přivlastňovací (na "-ův" a "-in")</option>
-                                <option value="V">V - předložka vokalizovaná ("ve", "pode", "ku", ...)</option>
-                                <option value="W">W - zájmena záporná ("nic", "nikdo", "nijaký", "žádný", ...)</option>
-                                <option value="X">X - slovní tvar, který byl rozpoznán, ale značka ve slovníku zatím chybí</option>
-                                <option value="Y">Y - zájmeno "co" spojené s předložkou ("oč", "nač", "zač")</option>
-                                <option value="Z">Z - zájmeno neurčité ("nějaký", "některý", "číkoli", "cosi", ...)</option>
-                                <option value="a">a - číslovka neurčitá ("mnoho", "málo", "tolik", "několik", "kdovíkolik", ...)</option>
-                                <option value="b">b - příslovce, bez určení stupně a negace ("pozadu", "naplocho", ...)</option>
-                                <option value="c">c - kondicionál slovesa být ("by", "bych", "bys", "bychom", "byste")</option>
-                                <option value="d">d - číslovka druhová, adjektivní skloňování ("jedny", "dvojí", "desaterý", ...)</option>
-                                <option value="e">e - slovesný tvar přechodníku přítomného ("-e", "-íc", "-íce")</option>
-                                <option value="f">f - infinitiv</option>
-                                <option value="g">g - příslovce, s určením stupně a negace ("velký", "zajímavý", ...)</option>
-                                <option value="h">h - číslovka druhová "jedny" a "nejedny"</option>
-                                <option value="i">i - způsob rozkazovací</option>
-                                <option value="j">j - číslovka druhová &gt;= 4, substantivní postavení ("čtvero", "desatero", ...)</option>
-                                <option value="k">k - číslovka druhová &gt;= 4, adjektivní postavení, krátký tvar ("čtvery", ...)</option>
-                                <option value="l">l - číslovka základní 1-4, "půl", ...; "sto" a "tisíc" v nesubstantivním skloňování</option>
-                                <option value="m">m - slovesný tvar přechodníku minulého, příp. (zastarale) přechodník přítomný dokonavý</option>
-                                <option value="n">n - číslovky základní >= 5</option>
-                                <option value="o">o - číslovka násobná neurčitá ("-krát": "mnohokrát", "tolikrát", ...)</option>
-                                <option value="p">p - slovesný tvar minulého aktivního příčestí (včetně přidaného "-s")</option>
-                                <option value="q">q - archaický slovesný tvar minulého aktivního příčestí (zakončení "-ť")</option>
-                                <option value="r">r - číslovka řadová</option>
-                                <option value="s">s - slovesný tvar pasivního příčestí (vč. přidaného "-s")</option>
-                                <option value="t">t - archaický slovesný tvar přítomného a budoucího času (zakončení "-ť")</option>
-                                <option value="u">u - číslovka tázací násobná "kolikrát"</option>
-                                <option value="v">v - číslovka násobná ("-krát": "pětkrát", "poprvé"...)</option>
-                                <option value="w">w - číslovka neurčitá s adjektivním skloňováním ("nejeden", "tolikátý", "několikátý"...)</option>
-                                <option value="x">x - zkratka, neznámý nebo neurčený slovní druh</option>
-                                <option value="y">y - zlomek zakončený na "-ina" (značkováno jako číslovka)</option>
-                                <option value="z">z - číslovka tázací řadová "kolikátý"</option>
-                                <option value="$">$ – slovesný tvar: supinum (tvar po slovesech pohybu, např. šel spat)</option>
+                                <option value="!">@Localizer.Translate("WordKindDetail/!", "Lemmatization")</option>
+                                <option value="#">@Localizer.Translate("WordKindDetail/#", "Lemmatization")</option>
+                                <option value="*">@Localizer.Translate("WordKindDetail/*", "Lemmatization")</option>
+                                <option value=",">@Localizer.Translate("WordKindDetail/,", "Lemmatization")</option>
+                                <option value=".">@Localizer.Translate("WordKindDetail/.", "Lemmatization")</option>
+                                <option value=":">@Localizer.Translate("WordKindDetail/:", "Lemmatization")</option>
+                                <option value=";">@Localizer.Translate("WordKindDetail/;", "Lemmatization")</option>
+                                <option value="=">@Localizer.Translate("WordKindDetail/=", "Lemmatization")</option>
+                                <option value="?">@Localizer.Translate("WordKindDetail/?", "Lemmatization")</option>
+                                <option value="^">@Localizer.Translate("WordKindDetail/^", "Lemmatization")</option>
+                                <option value="}">@Localizer.Translate("WordKindDetail/}", "Lemmatization")</option>
+                                <option value="~">@Localizer.Translate("WordKindDetail/~", "Lemmatization")</option>
+                                <option value="@Html.Raw("@")">@Localizer.Translate("WordKindDetail/@@", "Lemmatization")</option>
+                                <option value="0">@Localizer.Translate("WordKindDetail/0", "Lemmatization")</option>
+                                <option value="1">@Localizer.Translate("WordKindDetail/1", "Lemmatization")</option>
+                                <option value="2">@Localizer.Translate("WordKindDetail/2", "Lemmatization")</option>
+                                <option value="3">@Localizer.Translate("WordKindDetail/3", "Lemmatization")</option>
+                                <option value="4">@Localizer.Translate("WordKindDetail/4", "Lemmatization")</option>
+                                <option value="5">@Localizer.Translate("WordKindDetail/5", "Lemmatization")</option>
+                                <option value="6">@Localizer.Translate("WordKindDetail/6", "Lemmatization")</option>
+                                <option value="7">@Localizer.Translate("WordKindDetail/7", "Lemmatization")</option>
+                                <option value="8">@Localizer.Translate("WordKindDetail/8", "Lemmatization")</option>
+                                <option value="9">@Localizer.Translate("WordKindDetail/9", "Lemmatization")</option>
+                                <option value="A">@Localizer.Translate("WordKindDetail/A", "Lemmatization")</option>
+                                <option value="B">@Localizer.Translate("WordKindDetail/B", "Lemmatization")</option>
+                                <option value="C">@Localizer.Translate("WordKindDetail/C", "Lemmatization")</option>
+                                <option value="D">@Localizer.Translate("WordKindDetail/D", "Lemmatization")</option>
+                                <option value="E">@Localizer.Translate("WordKindDetail/E", "Lemmatization")</option>
+                                <option value="F">@Localizer.Translate("WordKindDetail/F", "Lemmatization")</option>
+                                <option value="G">@Localizer.Translate("WordKindDetail/G", "Lemmatization")</option>
+                                <option value="H">@Localizer.Translate("WordKindDetail/H", "Lemmatization")</option>
+                                <option value="I">@Localizer.Translate("WordKindDetail/I", "Lemmatization")</option>
+                                <option value="J">@Localizer.Translate("WordKindDetail/J", "Lemmatization")</option>
+                                <option value="K">@Localizer.Translate("WordKindDetail/K", "Lemmatization")</option>
+                                <option value="L">@Localizer.Translate("WordKindDetail/L", "Lemmatization")</option>
+                                <option value="M">@Localizer.Translate("WordKindDetail/M", "Lemmatization")</option>
+                                <option value="N">@Localizer.Translate("WordKindDetail/N", "Lemmatization")</option>
+                                <option value="O">@Localizer.Translate("WordKindDetail/O", "Lemmatization")</option>
+                                <option value="P">@Localizer.Translate("WordKindDetail/P", "Lemmatization")</option>
+                                <option value="Q">@Localizer.Translate("WordKindDetail/Q", "Lemmatization")</option>
+                                <option value="R">@Localizer.Translate("WordKindDetail/R", "Lemmatization")</option>
+                                <option value="S">@Localizer.Translate("WordKindDetail/S", "Lemmatization")</option>
+                                <option value="T">@Localizer.Translate("WordKindDetail/T", "Lemmatization")</option>
+                                <option value="U">@Localizer.Translate("WordKindDetail/U", "Lemmatization")</option>
+                                <option value="V">@Localizer.Translate("WordKindDetail/V", "Lemmatization")</option>
+                                <option value="W">@Localizer.Translate("WordKindDetail/W", "Lemmatization")</option>
+                                <option value="X">@Localizer.Translate("WordKindDetail/X", "Lemmatization")</option>
+                                <option value="Y">@Localizer.Translate("WordKindDetail/Y", "Lemmatization")</option>
+                                <option value="Z">@Localizer.Translate("WordKindDetail/Z", "Lemmatization")</option>
+                                <option value="a">@Localizer.Translate("WordKindDetail/a", "Lemmatization")</option>
+                                <option value="b">@Localizer.Translate("WordKindDetail/b", "Lemmatization")</option>
+                                <option value="c">@Localizer.Translate("WordKindDetail/c", "Lemmatization")</option>
+                                <option value="d">@Localizer.Translate("WordKindDetail/d", "Lemmatization")</option>
+                                <option value="e">@Localizer.Translate("WordKindDetail/e", "Lemmatization")</option>
+                                <option value="f">@Localizer.Translate("WordKindDetail/f", "Lemmatization")</option>
+                                <option value="g">@Localizer.Translate("WordKindDetail/g", "Lemmatization")</option>
+                                <option value="h">@Localizer.Translate("WordKindDetail/h", "Lemmatization")</option>
+                                <option value="i">@Localizer.Translate("WordKindDetail/i", "Lemmatization")</option>
+                                <option value="j">@Localizer.Translate("WordKindDetail/j", "Lemmatization")</option>
+                                <option value="k">@Localizer.Translate("WordKindDetail/k", "Lemmatization")</option>
+                                <option value="l">@Localizer.Translate("WordKindDetail/l", "Lemmatization")</option>
+                                <option value="m">@Localizer.Translate("WordKindDetail/m", "Lemmatization")</option>
+                                <option value="n">@Localizer.Translate("WordKindDetail/n", "Lemmatization")</option>
+                                <option value="o">@Localizer.Translate("WordKindDetail/o", "Lemmatization")</option>
+                                <option value="p">@Localizer.Translate("WordKindDetail/p", "Lemmatization")</option>
+                                <option value="q">@Localizer.Translate("WordKindDetail/q", "Lemmatization")</option>
+                                <option value="r">@Localizer.Translate("WordKindDetail/r", "Lemmatization")</option>
+                                <option value="s">@Localizer.Translate("WordKindDetail/s", "Lemmatization")</option>
+                                <option value="t">@Localizer.Translate("WordKindDetail/t", "Lemmatization")</option>
+                                <option value="u">@Localizer.Translate("WordKindDetail/u", "Lemmatization")</option>
+                                <option value="v">@Localizer.Translate("WordKindDetail/v", "Lemmatization")</option>
+                                <option value="w">@Localizer.Translate("WordKindDetail/w", "Lemmatization")</option>
+                                <option value="x">@Localizer.Translate("WordKindDetail/x", "Lemmatization")</option>
+                                <option value="y">@Localizer.Translate("WordKindDetail/y", "Lemmatization")</option>
+                                <option value="z">@Localizer.Translate("WordKindDetail/z", "Lemmatization")</option>
+                                <option value="$">@Localizer.Translate("WordKindDetail/$", "Lemmatization")</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="description-2" class="col-md-4 control-label">Jmenný rod</label>
+                        <label for="description-2" class="col-md-4 control-label">@Localizer.Translate("JmennyRod", "Lemmatization")</label>
                         <div class="col-md-7">
                             <select id="description-2" name="description-2" class="form-control">
                                 <option selected value="-"> - </option>
-                                <option value="M">M - maskulinum animatum (rod mužský životný)</option>
-                                <option value="I">I - maskulinum inanimatum (rod mužský neživotný)</option>
-                                <option value="F">F - femininum (ženský rod)</option>
-                                <option value="N">N - neutrum (střední rod)</option>
-                                <option value="H">H – femininum nebo neutrum (tedy nikoli maskulinum)</option>
-                                <option value="Q">Q – femininum singuláru nebo neutrum plurálu (pouze u příčestí a jmenných adjektiv)</option>
-                                <option value="T">T – masculinum inanimatum nebo femininum (jen plurál u příčestí a jmenných adjektiv)</option>
-                                <option value="Y">Y – masculinum (animatum nebo inanimatum)</option>
-                                <option value="Z">Z – 'nikoli femininum' (tj. M/I/N; především u příslovcí)</option>
-                                <option value="X">X - libovolný rod (F/M/I/N)</option>
+                                <option value="M">@Localizer.Translate("JmennyRod/M", "Lemmatization")</option>
+                                <option value="I">@Localizer.Translate("JmennyRod/I", "Lemmatization")</option>
+                                <option value="F">@Localizer.Translate("JmennyRod/F", "Lemmatization")</option>
+                                <option value="N">@Localizer.Translate("JmennyRod/N", "Lemmatization")</option>
+                                <option value="H">@Localizer.Translate("JmennyRod/H", "Lemmatization")</option>
+                                <option value="Q">@Localizer.Translate("JmennyRod/Q", "Lemmatization")</option>
+                                <option value="T">@Localizer.Translate("JmennyRod/T", "Lemmatization")</option>
+                                <option value="Y">@Localizer.Translate("JmennyRod/Y", "Lemmatization")</option>
+                                <option value="Z">@Localizer.Translate("JmennyRod/Z", "Lemmatization")</option>
+                                <option value="X">@Localizer.Translate("JmennyRod/X", "Lemmatization")</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="description-3" class="col-md-4 control-label">Číslo</label>
+                        <label for="description-3" class="col-md-4 control-label">@Localizer.Translate("Cislo", "Lemmatization")</label>
                         <div class="col-md-7">
                             <select id="description-3" name="description-3" class="form-control">
                                 <option selected value="-"> - </option>
-                                <option value="S">S - singulár (jednotné číslo)</option>
-                                <option value="P">P - plurál (množné číslo)</option>
-                                <option value="D">D - duál (pouze 7. pád feminin)</option>
-                                <option value="W">W – pouze v kombinaci s jmenným rodem 'Q' (singulár pro feminina, plurál pro neutra) </option>
-                                <option value="X">X - libovolné číslo (P/S/D)</option>
+                                <option value="S">@Localizer.Translate("Cislo/S", "Lemmatization")</option>
+                                <option value="P">@Localizer.Translate("Cislo/P", "Lemmatization")</option>
+                                <option value="D">@Localizer.Translate("Cislo/D", "Lemmatization")</option>
+                                <option value="W">@Localizer.Translate("Cislo/W", "Lemmatization") </option>
+                                <option value="X">@Localizer.Translate("Cislo/X", "Lemmatization")</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="description-4" class="col-md-4 control-label">Pád</label>
+                        <label for="description-4" class="col-md-4 control-label">@Localizer.Translate("Pad", "Lemmatization")</label>
                         <div class="col-md-7">
                             <select id="description-4" name="description-4" class="form-control">
                                 <option selected value="-"> - </option>
-                                <option value="1">1 - nominativ (1. pád)</option>
-                                <option value="2">2 - genitiv (2. pád)</option>
-                                <option value="3">3 - dativ (3. pád)</option>
-                                <option value="4">4 - akuzativ (4. pád)</option>
-                                <option value="5">5 - vokativ (5. pád)</option>
-                                <option value="6">6 - lokativ (6. pád)</option>
-                                <option value="7">7 - instrumentál (7. pád)</option>
-                                <option value="X">X – libovolný pád (1/2/3/4/5/6/7)</option>
+                                <option value="1">@Localizer.Translate("Pad/1", "Lemmatization")</option>
+                                <option value="2">@Localizer.Translate("Pad/2", "Lemmatization")</option>
+                                <option value="3">@Localizer.Translate("Pad/3", "Lemmatization")</option>
+                                <option value="4">@Localizer.Translate("Pad/4", "Lemmatization")</option>
+                                <option value="5">@Localizer.Translate("Pad/5", "Lemmatization")</option>
+                                <option value="6">@Localizer.Translate("Pad/6", "Lemmatization")</option>
+                                <option value="7">@Localizer.Translate("Pad/7", "Lemmatization")</option>
+                                <option value="X">@Localizer.Translate("Pad/X", "Lemmatization")</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="description-5" class="col-md-4 control-label">Přivlastňovací rod</label>
+                        <label for="description-5" class="col-md-4 control-label">@Localizer.Translate("PrivlastnovaciRod", "Lemmatization")</label>
                         <div class="col-md-7">
                             <select id="description-5" name="description-5" class="form-control">
                                 <option selected value="-"> - </option>
-                                <option value="M">M - maskulinum animatum (rod mužský životný)</option>
-                                <option value="F">F - femininum (ženský rod)</option>
-                                <option value="Z">Z – 'nikoli femininum' (tj. M/I/N; u přivlastňovacích adjektiv)</option>
-                                <option value="X">X - libovolný rod (F/M/I/N)</option>
+                                <option value="M">@Localizer.Translate("PrivlastnovaciRod/M", "Lemmatization")</option>
+                                <option value="F">@Localizer.Translate("PrivlastnovaciRod/F", "Lemmatization")</option>
+                                <option value="Z">@Localizer.Translate("PrivlastnovaciRod/Z", "Lemmatization")</option>
+                                <option value="X">@Localizer.Translate("PrivlastnovaciRod/X", "Lemmatization")</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="description-6" class="col-md-4 control-label">Přivlastňovací číslo</label>
+                        <label for="description-6" class="col-md-4 control-label">@Localizer.Translate("PrivlastnovaciCislo", "Lemmatization")</label>
                         <div class="col-md-7">
                             <select id="description-6" name="description-6" class="form-control">
                                 <option selected value="-"> - </option>
-                                <option value="S">S - singulár (jednotné číslo)</option>
-                                <option value="P">P - plurál (množné číslo)</option>
+                                <option value="S">@Localizer.Translate("PrivlastnovaciCislo/S", "Lemmatization")</option>
+                                <option value="P">@Localizer.Translate("PrivlastnovaciCislo/P", "Lemmatization")</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="description-7" class="col-md-4 control-label">Osoba</label>
+                        <label for="description-7" class="col-md-4 control-label">@Localizer.Translate("Osoba", "Lemmatization")</label>
                         <div class="col-md-7">
                             <select id="description-7" name="description-7" class="form-control">
                                 <option selected value="-"> - </option>
-                                <option value="1">1 - 1. osoba</option>
-                                <option value="2">2 - 2. osoba</option>
-                                <option value="3">3 - 3. osoba</option>
-                                <option value="X">X – libovolná osoba (1/2/3)</option>
+                                <option value="1">@Localizer.Translate("Osoba/1", "Lemmatization")</option>
+                                <option value="2">@Localizer.Translate("Osoba/2", "Lemmatization")</option>
+                                <option value="3">@Localizer.Translate("Osoba/3", "Lemmatization")</option>
+                                <option value="X">@Localizer.Translate("Osoba/X", "Lemmatization")</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="description-8" class="col-md-4 control-label">Čas</label>
+                        <label for="description-8" class="col-md-4 control-label">@Localizer.Translate("Cas", "Lemmatization")</label>
                         <div class="col-md-7">
                             <select id="description-8" name="description-8" class="form-control">
                                 <option selected value="-"> - </option>
-                                <option value="R">R - minulý čas</option>
-                                <option value="H">H – minulost nebo přítomnost (P/R)</option>
-                                <option value="P">P - prézens (přítomný čas)</option>
-                                <option value="F">F - futurum (budoucí čas)</option>
-                                <option value="X">X – libovolný čas (F/R/P)</option>
-                                <option value="A">A – aorist</option>
-                                <option value="I">I – imperfektum</option>
-                                <option value="E">E – perfektum</option>
-                                <option value="Q">Q – plusquamperfektum</option>
+                                <option value="R">@Localizer.Translate("Cas/R", "Lemmatization")</option>
+                                <option value="H">@Localizer.Translate("Cas/H", "Lemmatization")</option>
+                                <option value="P">@Localizer.Translate("Cas/P", "Lemmatization")</option>
+                                <option value="F">@Localizer.Translate("Cas/F", "Lemmatization")</option>
+                                <option value="X">@Localizer.Translate("Cas/X", "Lemmatization")</option>
+                                <option value="A">@Localizer.Translate("Cas/A", "Lemmatization")</option>
+                                <option value="I">@Localizer.Translate("Cas/I", "Lemmatization")</option>
+                                <option value="E">@Localizer.Translate("Cas/E", "Lemmatization")</option>
+                                <option value="Q">@Localizer.Translate("Cas/Q", "Lemmatization")</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="description-9" class="col-md-4 control-label">Stupeň</label>
+                        <label for="description-9" class="col-md-4 control-label">@Localizer.Translate("Stupen", "Lemmatization")</label>
                         <div class="col-md-7">
                             <select id="description-9" name="description-9" class="form-control">
                                 <option selected value="-"> - </option>
-                                <option value="1">1 - 1. stupeň</option>
-                                <option value="2">2 - 2. stupeň</option>
-                                <option value="3">3 - 3. stupeň</option>
+                                <option value="1">@Localizer.Translate("Stupen/1", "Lemmatization")</option>
+                                <option value="2">@Localizer.Translate("Stupen/2", "Lemmatization")</option>
+                                <option value="3">@Localizer.Translate("Stupen/3", "Lemmatization")</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="description-10" class="col-md-4 control-label">Negace</label>
+                        <label for="description-10" class="col-md-4 control-label">@Localizer.Translate("Negace", "Lemmatization")</label>
                         <div class="col-md-7">
                             <select id="description-10" name="description-10" class="form-control">
                                 <option selected value="-"> - </option>
-                                <option value="A">A - afirmativ (bez negativní předpony "ne-")</option>
-                                <option value="N">N - negace (tvar s negativní předponou "ne-")</option>
+                                <option value="A">@Localizer.Translate("Negace/A", "Lemmatization")</option>
+                                <option value="N">@Localizer.Translate("Negace/N", "Lemmatization")</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="description-11" class="col-md-4 control-label">Aktivum/pasivum</label>
+                        <label for="description-11" class="col-md-4 control-label">@Localizer.Translate("AktivumPasivum", "Lemmatization")</label>
                         <div class="col-md-7">
                             <select id="description-11" name="description-11" class="form-control">
                                 <option selected value="-"> - </option>
-                                <option value="A">A - aktivum nebo 'nikoli pasivum'</option>
-                                <option value="P">P - pasivum</option>
+                                <option value="A">@Localizer.Translate("AktivumPasivum/A", "Lemmatization")</option>
+                                <option value="P">@Localizer.Translate("AktivumPasivum/P", "Lemmatization")</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="description-12" class="col-md-4 control-label">Nepoužito</label>
+                        <label for="description-12" class="col-md-4 control-label">@Localizer.Translate("Unused", "Lemmatization")</label>
                         <div class="col-md-7">
                             <select id="description-12" name="description-12" class="form-control">
                                 <option selected value="-"> - </option>
@@ -369,7 +372,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="description-13" class="col-md-4 control-label">Nepoužito</label>
+                        <label for="description-13" class="col-md-4 control-label">@Localizer.Translate("Unused", "Lemmatization")</label>
                         <div class="col-md-7">
                             <select id="description-13" name="description-13" class="form-control">
                                 <option selected value="-"> - </option>
@@ -377,40 +380,40 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="description-14" class="col-md-4 control-label">Varianta</label>
+                        <label for="description-14" class="col-md-4 control-label">@Localizer.Translate("Varianta", "Lemmatization")</label>
                         <div class="col-md-7">
                             <select id="description-14" name="description-14" class="form-control">
                                 <option selected value="-"> - </option>
-                                <option value="1">1 - varianta, víceméně rovnocenná ("méně častá")</option>
-                                <option value="2">2 - řídká, archaická nebo knižní varianta</option>
-                                <option value="3">3 - velmi archaický tvar, též archaický a hovorový</option>
-                                <option value="4">4 - velmi archaický nebo knižní tvar, pouze spisovný (ve své době)</option>
-                                <option value="5">5 - hovorový tvar, ale tolerovaný ve veřejných projevech</option>
-                                <option value="6">6 - hovorový tvar (koncovka standardní obecné češtiny)</option>
-                                <option value="7">7 - hovorový tvar (koncovka standardní obecné češtiny), varianta k '6'</option>
-                                <option value="8">8 - zkratky</option>
-                                <option value="9">9 - speciální použití (tvary zájmen po předložkách apod.)</option>
+                                <option value="1">@Localizer.Translate("Varianta/1", "Lemmatization")</option>
+                                <option value="2">@Localizer.Translate("Varianta/2", "Lemmatization")</option>
+                                <option value="3">@Localizer.Translate("Varianta/3", "Lemmatization")</option>
+                                <option value="4">@Localizer.Translate("Varianta/4", "Lemmatization")</option>
+                                <option value="5">@Localizer.Translate("Varianta/5", "Lemmatization")</option>
+                                <option value="6">@Localizer.Translate("Varianta/6", "Lemmatization")</option>
+                                <option value="7">@Localizer.Translate("Varianta/7", "Lemmatization")</option>
+                                <option value="8">@Localizer.Translate("Varianta/8", "Lemmatization")</option>
+                                <option value="9">@Localizer.Translate("Varianta/9", "Lemmatization")</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="description-15" class="col-md-4 control-label">Vid</label>
+                        <label for="description-15" class="col-md-4 control-label">@Localizer.Translate("Vid", "Lemmatization")</label>
                         <div class="col-md-7">
                             <select id="description-15" name="description-15" class="form-control">
                                 <option selected value="-"> - </option>
-                                <option value="P">P - perfektivum (dokonavé sloveso)</option>
-                                <option value="I">I - imperfektivum (nedokonavé sloveso)</option>
-                                <option value="B">B - obouvidé sloveso</option>
+                                <option value="P">@Localizer.Translate("Vid/P", "Lemmatization")</option>
+                                <option value="I">@Localizer.Translate("Vid/I", "Lemmatization")</option>
+                                <option value="B">@Localizer.Translate("Vid/B", "Lemmatization")</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="description-16" class="col-md-4 control-label">Typ slovesa</label>
+                        <label for="description-16" class="col-md-4 control-label">@Localizer.Translate("TypSlovesa", "Lemmatization")</label>
                         <div class="col-md-7">
                             <select id="description-16" name="description-16" class="form-control">
                                 <option selected value="-"> - </option>
-                                <option value="S">S – plnovýznamové</option>
-                                <option value="H">H – pomocné</option>
+                                <option value="S">@Localizer.Translate("TypSlovesa/S", "Lemmatization")</option>
+                                <option value="H">@Localizer.Translate("TypSlovesa/H", "Lemmatization")</option>
                             </select>
                         </div>
                     </div>
@@ -421,8 +424,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default lemmatization-button" data-dismiss="modal">Zavřít</button>
-                <button type="button" class="btn btn-default lemmatization-button" id="saveCharacteristic">Uložit</button>
+                <button type="button" class="btn btn-default lemmatization-button" data-dismiss="modal">@Localizer.Translate("Close", "Lemmatization")</button>
+                <button type="button" class="btn btn-default lemmatization-button" id="saveCharacteristic">@Localizer.Translate("Save", "Lemmatization")</button>
             </div>
         </div>
     </div>
@@ -433,15 +436,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Nová kanonická forma</h4>
+                <h4 class="modal-title">@Localizer.Translate("NewCannonicalForm", "Lemmatization")</h4>
             </div>
             <div class="modal-body">
                 <ul class="nav nav-tabs">
                     <li class="active">
-                        <a href="#tab-select-existing" data-toggle="tab">Výběr existujícího</a>
+                        <a href="#tab-select-existing" data-toggle="tab">@Localizer.Translate("ExistingSelection", "Lemmatization")</a>
                     </li>
                     <li>
-                        <a href="#tab-create-new" data-toggle="tab">Vytvoření nového</a>
+                        <a href="#tab-create-new" data-toggle="tab">@Localizer.Translate("NewCreation", "Lemmatization")</a>
                     </li>
                 </ul>
 
@@ -449,19 +452,19 @@
                     <div id="tab-select-existing" class="tab-pane active">
                         <div class="form-horizontal">
                             <div class="form-group">
-                                <label for="new-form-existing-type" class="col-md-3 control-label">Typ</label>
+                                <label for="new-form-existing-type" class="col-md-3 control-label">@Localizer.Translate("Type", "Lemmatization")</label>
                                 <div class="col-md-8">
                                     <select class="form-control" id="new-form-existing-type"></select>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="new-form-existing-input" class="col-md-3 control-label">Vyberte existující</label>
+                                <label for="new-form-existing-input" class="col-md-3 control-label">@Localizer.Translate("SelectExisting", "Lemmatization")</label>
                                 <div class="col-md-8">
                                     <input class="form-control" id="new-form-existing-input" type="text">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="new-form-existing-description" class="col-md-3 control-label">Popis</label>
+                                <label for="new-form-existing-description" class="col-md-3 control-label">@Localizer.Translate("Description", "Lemmatization")</label>
                                 <div class="col-md-8">
                                     <textarea class="form-control" id="new-form-existing-description" disabled="disabled"></textarea>
                                 </div>
@@ -471,19 +474,19 @@
                     <div id="tab-create-new" class="tab-pane">
                         <div class="form-horizontal">
                             <div class="form-group">
-                                <label for="new-form" class="col-md-3 control-label">Kanonická forma</label>
+                                <label for="new-form" class="col-md-3 control-label">@Localizer.Translate("CannonicalForm", "Lemmatization")</label>
                                 <div class="col-md-8">
                                     <input class="form-control" id="new-form" type="text">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="new-form-type" class="col-md-3 control-label">Typ</label>
+                                <label for="new-form-type" class="col-md-3 control-label">@Localizer.Translate("Type", "Lemmatization")</label>
                                 <div class="col-md-8">
                                     <select class="form-control" id="new-form-type"></select>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="new-form-description" class="col-md-3 control-label">Popis</label>
+                                <label for="new-form-description" class="col-md-3 control-label">@Localizer.Translate("Description", "Lemmatization")</label>
                                 <div class="col-md-8">
                                     <textarea class="form-control" id="new-form-description"></textarea>
                                 </div>
@@ -493,8 +496,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default lemmatization-button" data-dismiss="modal">Zavřít</button>
-                <button type="button" class="btn btn-default lemmatization-button" id="save-form">Uložit</button>
+                <button type="button" class="btn btn-default lemmatization-button" data-dismiss="modal">@Localizer.Translate("Close", "Lemmatization")</button>
+                <button type="button" class="btn btn-default lemmatization-button" id="save-form">@Localizer.Translate("Save", "Lemmatization")</button>
             </div>
         </div>
     </div>
@@ -505,25 +508,25 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Úprava kanonické formy</h4>
+                <h4 class="modal-title">@Localizer.Translate("ModifyCannonicalForm", "Lemmatization")</h4>
             </div>
             <div class="modal-body">
-                <h5>Varování: Změna se projeví u všech charakteristik, které mají tuto kanonickou formu</h5>
+                <h5>@Localizer.Translate("WarningCannonicalForm", "Lemmatization")</h5>
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <label for="edit-form-text" class="col-md-3 control-label">Kanonická forma</label>
+                        <label for="edit-form-text" class="col-md-3 control-label">@Localizer.Translate("Description", "Lemmatization")</label>
                         <div class="col-md-8">
                             <input class="form-control" id="edit-form-text" type="text">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="edit-form-type" class="col-md-3 control-label">Typ</label>
+                        <label for="edit-form-type" class="col-md-3 control-label">@Localizer.Translate("Type", "Lemmatization")</label>
                         <div class="col-md-8">
                             <select class="form-control" id="edit-form-type"></select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="edit-form-description" class="col-md-3 control-label">Popis</label>
+                        <label for="edit-form-description" class="col-md-3 control-label">@Localizer.Translate("Description", "Lemmatization")</label>
                         <div class="col-md-8">
                             <textarea class="form-control" id="edit-form-description" type="text"></textarea>
                         </div>
@@ -531,8 +534,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default lemmatization-button" data-dismiss="modal">Zavřít</button>
-                <button type="button" class="btn btn-default lemmatization-button" id="save-edited-form">Uložit</button>
+                <button type="button" class="btn btn-default lemmatization-button" data-dismiss="modal">@Localizer.Translate("Close", "Lemmatization")</button>
+                <button type="button" class="btn btn-default lemmatization-button" id="save-edited-form">@Localizer.Translate("Save", "Lemmatization")</button>
             </div>
         </div>
     </div>
@@ -543,18 +546,18 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Nastavit hyperkanonickou formu</h4>
+                <h4 class="modal-title">@Localizer.Translate("SetupHyperCannonicalForm", "Lemmatization")</h4>
             </div>
             <div class="modal-body">
                 <ul class="nav nav-tabs">
                     <li class="active">
-                        <a href="#tab2-select-existing" data-toggle="tab">Výběr existující</a>
+                        <a href="#tab2-select-existing" data-toggle="tab">@Localizer.Translate("ExistingSelectionF", "Lemmatization")</a>
                     </li>
                     <li>
-                        <a href="#tab2-create-new" data-toggle="tab">Vytvoření nové</a>
+                        <a href="#tab2-create-new" data-toggle="tab">@Localizer.Translate("NewCreationF", "Lemmatization")</a>
                     </li>
                     <li>
-                        <a href="#tab2-remove" data-toggle="tab">Odebrat</a>
+                        <a href="#tab2-remove" data-toggle="tab">@Localizer.Translate("Remove", "Lemmatization")</a>
                     </li>
                 </ul>
 
@@ -562,19 +565,19 @@
                     <div id="tab2-select-existing" class="tab-pane active">
                         <div class="form-horizontal">
                             <div class="form-group">
-                                <label for="new-hyper-existing-type" class="col-md-3 control-label">Typ</label>
+                                <label for="new-hyper-existing-type" class="col-md-3 control-label">@Localizer.Translate("Type", "Lemmatization")</label>
                                 <div class="col-md-8">
                                     <select class="form-control" id="new-hyper-existing-type"></select>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="new-hyper-existing-input" class="col-md-3 control-label">Vyberte existující</label>
+                                <label for="new-hyper-existing-input" class="col-md-3 control-label">@Localizer.Translate("SelectExisting", "Lemmatization")</label>
                                 <div class="col-md-8">
                                     <input class="form-control" id="new-hyper-existing-input" type="text">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="new-hyper-existing-description" class="col-md-3 control-label">Popis</label>
+                                <label for="new-hyper-existing-description" class="col-md-3 control-label">@Localizer.Translate("Description", "Lemmatization")</label>
                                 <div class="col-md-8">
                                     <textarea class="form-control" id="new-hyper-existing-description" disabled="disabled"></textarea>
                                 </div>
@@ -584,19 +587,19 @@
                     <div id="tab2-create-new" class="tab-pane">
                         <div class="form-horizontal">
                             <div class="form-group">
-                                <label for="new-hyper" class="col-md-3 control-label">Kanonická forma</label>
+                                <label for="new-hyper" class="col-md-3 control-label">@Localizer.Translate("CannonicalForm", "Lemmatization")</label>
                                 <div class="col-md-8">
                                     <input class="form-control" id="new-hyper" type="text">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="new-hyper-type" class="col-md-3 control-label">Typ</label>
+                                <label for="new-hyper-type" class="col-md-3 control-label">@Localizer.Translate("Type", "Lemmatization")</label>
                                 <div class="col-md-8">
                                     <select class="form-control" id="new-hyper-type"></select>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="new-hyper-description" class="col-md-3 control-label">Popis</label>
+                                <label for="new-hyper-description" class="col-md-3 control-label">@Localizer.Translate("Description", "Lemmatization")</label>
                                 <div class="col-md-8">
                                     <textarea class="form-control" id="new-hyper-description"></textarea>
                                 </div>
@@ -608,7 +611,7 @@
                             <div class="form-group">
                                 <div class="col-md-3 control-label"></div>
                                 <div>
-                                    <button type="button" class="btn btn-default lemmatization-button" id="remove-hyper">Odebrat hyperkanonickou formu</button>
+                                    <button type="button" class="btn btn-default lemmatization-button" id="remove-hyper">@Localizer.Translate("RemoveHyperCannonicalForm", "Lemmatization")</button>
                                 </div>
                             </div>
                         </div>
@@ -616,8 +619,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default lemmatization-button" data-dismiss="modal">Zavřít</button>
-                <button type="button" class="btn btn-default lemmatization-button" id="save-hyper">Uložit</button>
+                <button type="button" class="btn btn-default lemmatization-button" data-dismiss="modal">@Localizer.Translate("Close", "Lemmatization")</button>
+                <button type="button" class="btn btn-default lemmatization-button" id="save-hyper">@Localizer.Translate("Save", "Lemmatization")</button>
             </div>
         </div>
     </div>
@@ -628,25 +631,25 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Úprava hyperkanonické formy</h4>
+                <h4 class="modal-title">@Localizer.Translate("ModifyHyperCannonicalForm", "Lemmatization")y</h4>
             </div>
             <div class="modal-body">
-                <h5>Varování: Změna se projeví u všech kanonických forem, které mají tuto hyperkanonickou formu</h5>
+                <h5>@Localizer.Translate("WarningHyperCannonicalForm", "Lemmatization")</h5>
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <label for="edit-hyper-text" class="col-md-3 control-label">Kanonická forma</label>
+                        <label for="edit-hyper-text" class="col-md-3 control-label">@Localizer.Translate("CannonicalForm", "Lemmatization")</label>
                         <div class="col-md-8">
                             <input class="form-control" id="edit-hyper-text" type="text">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="edit-hyper-type" class="col-md-3 control-label">Typ</label>
+                        <label for="edit-hyper-type" class="col-md-3 control-label">@Localizer.Translate("Type", "Lemmatization")</label>
                         <div class="col-md-8">
                             <select class="form-control" id="edit-hyper-type"></select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="edit-hyper-description" class="col-md-3 control-label">Popis</label>
+                        <label for="edit-hyper-description" class="col-md-3 control-label">@Localizer.Translate("Description", "Lemmatization")</label>
                         <div class="col-md-8">
                             <textarea class="form-control" id="edit-hyper-description" type="text"></textarea>
                         </div>
@@ -654,8 +657,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default lemmatization-button" data-dismiss="modal">Zavřít</button>
-                <button type="button" class="btn btn-default lemmatization-button" id="save-edited-hyper">Uložit</button>
+                <button type="button" class="btn btn-default lemmatization-button" data-dismiss="modal">@Localizer.Translate("Close", "Lemmatization")t</button>
+                <button type="button" class="btn btn-default lemmatization-button" id="save-edited-hyper">@Localizer.Translate("Save", "Lemmatization")</button>
             </div>
         </div>
     </div>

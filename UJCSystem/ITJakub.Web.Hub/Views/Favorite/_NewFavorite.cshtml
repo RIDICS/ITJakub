@@ -1,12 +1,16 @@
-﻿@using ITJakub.Web.Hub.Core
+﻿@using Localization.AspNetCore.Service
+@using Localization.CoreLibrary.Util
+@using ITJakub.Web.Hub.Core
 @model ITJakub.Web.Hub.Models.Favorite.NewFavoriteViewModel
+    
+@inject ILocalization Localizer
 
 <ul class="nav nav-tabs">
     <li class="active">
-        <a href="#" data-tab-class="tab-favorite-label-assign">Přiřadit štítky</a>
+        <a href="#" data-tab-class="tab-favorite-label-assign">@Localizer.Translate("AssignLabels", "Favorite", LocTranslationSource.File)</a>
     </li>
     <li>
-        <a href="#" data-tab-class="tab-favorite-label-create">Vytvořit a přiřadit nový štítek</a>
+        <a href="#" data-tab-class="tab-favorite-label-create">@Localizer.Translate("CreateLabel", "Favorite", LocTranslationSource.File)</a>
     </li>
 </ul>
 
@@ -14,17 +18,17 @@
     <div class="tab-pane tab-favorite-label-assign active">
         <div class="form-horizontal new-favorite">
             <div class="form-group">
-                <label class="col-md-3 control-label">Název položky</label>
+                <label class="col-md-3 control-label">@Localizer.Translate("ControlLabel", "Favorite", LocTranslationSource.File)</label>
                 <div class="col-md-8">
                     <input class="form-control favorite-name" type="text" value="@Favorites.ShortenTitle(Model.ItemName)" maxlength="@Favorites.MaxTitleLength">
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="col-md-3 control-label">Vyberte štítek</label>
+                <label class="col-md-3 control-label">@Localizer.Translate("ChooseLabel", "Favorite", LocTranslationSource.File)</label>
                 <div class="col-md-8">
                     <div class="input-group-vertical">
-                        <input class="form-control favorite-label-filter" type="text" placeholder="Filtrovat štítky" />
+                        <input class="form-control favorite-label-filter" type="text" placeholder="@Localizer.Translate("FilterLabels", "Favorite", LocTranslationSource.File)" />
 
                         <div class="form-control favorite-select-label">
                             @foreach (var label in Model.Labels)
@@ -36,17 +40,17 @@
                                 </div>
                             }
 
-                            <div class="text-center no-label-info">Žádný štítek odpovídající zadanému filtru</div>
+                            <div class="text-center no-label-info">@Localizer.Translate("NoLabelGivenFilter", "Favorite", LocTranslationSource.File)</div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="col-md-3 control-label">Vybrané štítky</label>
+                <label class="col-md-3 control-label">@Localizer.Translate("ChosenLabels", "Favorite", LocTranslationSource.File)</label>
                 <div class="col-md-8">
                     <div class="favorite-selected-label-info">
-                        <span class="label label-default">Žádný štítek</span>
+                        <span class="label label-default">@Localizer.Translate("NoLabel", "Favorite", LocTranslationSource.File)</span>
                     </div>
                 </div>
             </div>
@@ -66,14 +70,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="col-md-3 control-label">Název štítku</label>
+                    <label class="col-md-3 control-label">@Localizer.Translate("LabelName", "Favorite", LocTranslationSource.File)</label>
                     <div class="col-md-8">
                         <input class="form-control favorite-label-name" type="text" maxlength="@Favorites.MaxLabelLength">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-md-3 control-label">Barva</label>
+                    <label class="col-md-3 control-label">@Localizer.Translate("Color", "Favorite", LocTranslationSource.File)</label>
                     <div class="col-md-8">
                         <div class="input-group">
                             <span class="input-group-btn">
@@ -85,7 +89,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="col-md-3 control-label">Náhled štítku</label>
+                    <label class="col-md-3 control-label">@Localizer.Translate("LabelView", "Favorite", LocTranslationSource.File)</label>
                     <div class="col-md-8">
                         <div class="favorite-selected-label-info-2">
                             <span class="label label-default label-preview"></span>
@@ -97,9 +101,9 @@
         else
         {
             <div class="alert alert-warning">
-                <strong>Tato funkcionalita je dostupná pouze pro přihlášené uživatele</strong>
+                <strong>@Localizer.Translate("FunctionLoggedOnly", "Favorite", LocTranslationSource.File)</strong>
                 <br/>
-                <span>Funkcionalita přidávání nových štítků je dostupná pouze pro přihlášené uživatele. Pro nepřihlášené uživatele je k dispozici pouze zjednodušená varianta pracující pouze s jedním přednastaveným štítkem.</span>
+                <span>@Localizer.Translate("FunctionLoggedOnlySimple", "Favorite", LocTranslationSource.File)</span>
             </div>
         }
     </div>

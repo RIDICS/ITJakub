@@ -2,7 +2,7 @@
   "Grammar": {
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
-      "body": "{PublishPlace}, {PublishDate}, {PublisherText} <br> {$manuscript} <br> Počet stran: {PageCount}",
+      "body": "{PublishPlace}, {PublishDate}, {PublisherText} <br> {$manuscript} <br> {@NumberOfPages}: {PageCount}",
       "favorites": {
         "maxCount": 5
       },
@@ -61,7 +61,7 @@
         },
         "$century": {
           "type": "basic",
-          "pattern": ", {Century}. století",
+          "pattern": ", {Century}. {@Century}",
           "printIfNullValue": false
         },
         "$pages": {
@@ -72,39 +72,39 @@
       }
     },
     "bottom-panel": {
-      "body": "{$printSearchResultsCondition}{$editionTable}<a href='/EditionNote/EditionNote?bookId={BookId}'>Ediční poznámka</a> <br> Copyright: {Copyright}",
+      "body": "{$printSearchResultsCondition}{$editionTable}<a href='/EditionNote/EditionNote?bookId={BookId}'>{@EditionNote}</a> <br> {@Copyright}: {Copyright}",
       "variables": {
         "$editionTable": {
           "type": "table",
           "printRowIfNullValue": true,
-          "replaceNullValueBy": "&lt;Nezadáno&gt;",
+          "replaceNullValueBy": "&lt;{@Nezadáno}&gt;",
           "rows": [
             {
-              "label": "Editor",
+              "label": "Editon",
               "pattern": "{$editor}"
             },
             {
-              "label": "Předloha",
+              "label": "Pattern",
               "pattern": "{$literaryOriginal}"
             },
             {
-              "label": "Zkratka památky",
+              "label": "RelicAbbreviation",
               "pattern": "{RelicAbbreviation}"
             },
             {
-              "label": "Zkratka pramene",
+              "label": "SourceAbbreviation",
               "pattern": "{SourceAbbreviation}"
             },
             {
-              "label": "Literární druh",
+              "label": "LiteraryType",
               "pattern": "{$literaryType}"
             },
             {
-              "label": "Literární žánr",
+              "label": "LiteraryGenre",
               "pattern": "{$literaryGenre}"
             },
             {
-              "label": "Poslední úprava edice",
+              "label": "EditionLastModification",
               "pattern": "{CreateTimeString}"
             }
           ]

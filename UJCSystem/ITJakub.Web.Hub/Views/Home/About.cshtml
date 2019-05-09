@@ -1,8 +1,13 @@
 ﻿@using ITJakub.Web.Hub.Core
+@using Localization.AspNetCore.Service
+@using Localization.CoreLibrary.Util
+
 @model ITJakub.Web.Hub.Models.StaticTextViewModel
 
+@inject ILocalization Localizer
+
 @{
-    ViewBag.Title = "O Vokabuláři webovém";
+    ViewBag.Title = Localizer.Translate("AboutTitle", "Home", LocTranslationSource.File);
 }
 
 <div class="content-container top-offset-without-submenu">
@@ -43,6 +48,6 @@
     </p>*@
 
     <div class="version-info">
-        Verze Vokabuláře webového: @VersionInfo.Version
+        @Localizer.TranslateFormat("VokabularVersion", new object[]{ VersionInfo.Version }, "Home", LocTranslationSource.File)
     </div>
 </div>

@@ -1,0 +1,9 @@
+{
+	"culture":"en",
+	"scope":"ResponsibleTypeViewModel",
+    "dictionary": {
+		"Unknown": "translate[Neznámý]",
+		"Editor" : "translate[Editor]",
+		"Kolace" : "translate[Kolace]"
+  }
+}

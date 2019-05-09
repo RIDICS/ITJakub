@@ -1,8 +1,12 @@
-﻿@{
-    ViewBag.Title = "Chyba přesměrování na oblíbenou položku";
+﻿@using Localization.AspNetCore.Service
+@using Localization.CoreLibrary.Util
+@inject ILocalization Localizer
+
+@{
+    ViewBag.Title = Localizer.Translate("FavoriteItemRedirectError", "Favorite", LocTranslationSource.File);
 }
 
 <div class="alert alert-danger">
-    Pro zvolenou oblíbenou položku není jednoznačně určeno, co se má zobrazit.
+    Localizer.Translate("FavoriteItemRedirectText", "Favorite", LocTranslationSource.File);
 </div>
 

@@ -1,4 +1,7 @@
-﻿@section styles{
+﻿@using Localization.AspNetCore.Service
+@inject ILocalization Localizer
+
+@section styles{
     <link href="~/Areas/CardFiles/css/itjakub.cardfiles.bundle.css" rel="stylesheet" />
 }
 @section scripts{
@@ -6,14 +9,14 @@
 }
 
 @{
-    ViewBag.Title = "Kartotéky - Listování";
+    ViewBag.Title = @Localizer.Translate("CardFilesListing", "CardFiles");
 }
 
 
     <div class="card-file-listing">
         <div class="card-file-select">
             <div class="select-header">
-                Kartotéka
+                @Localizer.Translate("CardFile", "CardFiles")
             </div>
             <div class="select-body">
                 <select name="cardFile" id="card-file-select">
@@ -24,7 +27,7 @@
 
         <div class="bucket-select">
             <div class="select-header">
-                Zásuvka
+                @Localizer.Translate("Drawer", "CardFiles")
             </div>
             <div class="select-body">
                 <select name="bucket" id="bucket-select">

@@ -1,0 +1,11 @@
+{
+	"culture":"cs-CZ",
+	"scope":"Bibliographies",
+	"dictionary": {
+		"Titles" : "Názvy",
+		"Authors" : "Autoři",
+		"BibliographiesFeedback" : "Bibliografie - Připomínky",
+		"BibliographiesInformation" : "Bibliografie - Informace",
+		"BibliographiesSearch" : "Bibliografie - Vyhledávání"
+		}
+}

@@ -2,7 +2,7 @@
 /// <reference path="itjakub.plugins.bibliography.factories.ts" />
 /// <reference path="itjakub.plugins.bibliography.configuration.ts" />
 /// <reference path="../Sort/itjakub.plugins.sort.ts" />
-/// <reference path="../../../lib/s-pagination/dist/pagination.d.ts" />
+/// <reference path="../../../../wwwroot/lib/s-pagination/dist/pagination.d.ts" />
 
 class BibliographyModule {
 
@@ -104,7 +104,7 @@ class BibliographyModule {
         } else {
             var divElement: HTMLDivElement = document.createElement('div');
             $(divElement).addClass('bib-listing-empty');
-            divElement.innerHTML = "Žádné výsledky k zobrazení";
+            divElement.innerHTML = localization.translate("NoResultsToShow", "PluginsJs").value;
             this.booksContainer.appendChild(divElement);
         }
 
@@ -185,14 +185,14 @@ class BibliographyModule {
     }
 
     public showSearchError() {
-        var errorDiv = BibliographyFactory.makeError("Chyba při vyhledávání.");
+        var errorDiv = BibliographyFactory.makeError(localization.translate("SearchError", "PluginsJs").value);
         $(this.booksContainer)
             .removeClass("loader")
             .append(errorDiv);
     }
 
     public showPageLoadError() {
-        var errorDiv = BibliographyFactory.makeError("Chyba při načítání seznamu děl.");
+        var errorDiv = BibliographyFactory.makeError(localization.translate("LoadingBookListError", "PluginsJs").value);
         $(this.booksContainer)
             .removeClass("loader")
             .append(errorDiv);
@@ -350,7 +350,7 @@ function translateAudioType(audioType: AudioType): string {
         case AudioType.Wav:
             return "Wav";
         default:
-            return "Neznámý";
+            return localization.translate("Unknown", "PluginsJs").value;
     }
 }
 

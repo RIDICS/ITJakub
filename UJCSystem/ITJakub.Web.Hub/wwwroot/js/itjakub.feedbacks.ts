@@ -12,16 +12,16 @@
 }
 
 var categoryTranslation = new DictionaryWrapper<string>();
-categoryTranslation.add(FeedbackCategoryEnum.None, "Žádná");
-categoryTranslation.add(FeedbackCategoryEnum.Dictionaries, "Slovníky");
-categoryTranslation.add(FeedbackCategoryEnum.Editions, "Edice");
-categoryTranslation.add(FeedbackCategoryEnum.BohemianTextBank, "Korpusy");
-categoryTranslation.add(FeedbackCategoryEnum.OldGrammar, "Mluvnice");
-categoryTranslation.add(FeedbackCategoryEnum.ProfessionalLiterature, "Odborná literatura");
-categoryTranslation.add(FeedbackCategoryEnum.Bibliographies, "Bibliografie");
-categoryTranslation.add(FeedbackCategoryEnum.CardFiles, "Kartotéky");
-categoryTranslation.add(FeedbackCategoryEnum.AudioBooks, "Audioknihy");
-categoryTranslation.add(FeedbackCategoryEnum.Tools, "Pomůcky");
+categoryTranslation.add(FeedbackCategoryEnum.None, "None");
+categoryTranslation.add(FeedbackCategoryEnum.Dictionaries, "Dictionaries");
+categoryTranslation.add(FeedbackCategoryEnum.Editions, "Editions");
+categoryTranslation.add(FeedbackCategoryEnum.BohemianTextBank, "BohemianTextBank");
+categoryTranslation.add(FeedbackCategoryEnum.OldGrammar, "OldGrammar");
+categoryTranslation.add(FeedbackCategoryEnum.ProfessionalLiterature, "ProfessionalLiterature");
+categoryTranslation.add(FeedbackCategoryEnum.Bibliographies, "Bibliographies");
+categoryTranslation.add(FeedbackCategoryEnum.CardFiles, "CardFiles");
+categoryTranslation.add(FeedbackCategoryEnum.AudioBooks, "AudioBooks");
+categoryTranslation.add(FeedbackCategoryEnum.Tools, "Tools");
 
 enum FeedbackSortEnum {
     Date = 0,
@@ -39,9 +39,9 @@ var categories = new Array<number>();
 var paginator: Pagination;
 var feedbacksOnPage = 5;
 
-$(document).ready(() => {
+$(document.documentElement).ready(() => {
 
-    var notFilledMessage = "&lt;Nezadáno&gt;";
+    var notFilledMessage = localization.translateFormat("NotFilled", new Array<string>("&lt;", "&gt;"), "ItJakubJs").value;
 
 
     paginator = new Pagination({
@@ -71,7 +71,7 @@ $(document).ready(() => {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Feedback/GetFeedbacks",
-            data: { categories: categories, start: start, count: count, sortCriteria: sortCriteria, sortAsc: sortOrderAsc },
+            data: { categories: categories, start: start, count: count, sortCriteria: sortCriteria, sortAsc: sortOrderAsc } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: (results: IFeedback[]) => {
@@ -103,11 +103,11 @@ $(document).ready(() => {
                     if (typeof user !== "undefined" && user !== null) {
                         name = user.firstName + " " + user.lastName;
                         email = user.email;
-                        signed = "ano";
+                        signed = localization.translate("Yes", "ItJakubJs").value;
                     } else {
                         name = actualFeedback.authorName;
                         email = actualFeedback.authorEmail;
-                        signed = "ne";
+                        signed = localization.translate("No", "ItJakubJs").value;
                     }
 
                     if (typeof name === "undefined" || name === null || name === "") {
@@ -120,37 +120,46 @@ $(document).ready(() => {
 
                     var feedbackNameSpan = document.createElement("span");
                     $(feedbackNameSpan).addClass("feedback-name");
-                    feedbackNameSpan.innerHTML = `Jméno: ${name}`;
+                    feedbackNameSpan.innerHTML =
+                        localization.translateFormat("Name:", new Array<string>(name), "ItJakubJs").value;
 
                     feedbackHeaderInfosDiv.appendChild(feedbackNameSpan);
 
                     var feedbackEmailSpan = document.createElement("span");
                     $(feedbackEmailSpan).addClass("feedback-email");
-                    feedbackEmailSpan.innerHTML = `E-mail: ${email}`;
+                    feedbackEmailSpan.innerHTML = 
+                        localization.translateFormat("Email:", new Array<string>(email), "ItJakubJs").value;
 
                     feedbackHeaderInfosDiv.appendChild(feedbackEmailSpan);
 
                     var feedbackSignedUserSpan = document.createElement("span");
                     $(feedbackSignedUserSpan).addClass("feedback-signed");
-                    feedbackSignedUserSpan.innerHTML = `Přihlášený uživatel: ${signed}`;
+                    feedbackSignedUserSpan.innerHTML =
+                        localization.translateFormat("LoggedUser:", new Array<string>(signed), "ItJakubJs").value;
 
                     feedbackHeaderInfosDiv.appendChild(feedbackSignedUserSpan);
 
                     var feedbackCategorySpan = document.createElement("span");
                     $(feedbackCategorySpan).addClass("feedback-category");
-                    feedbackCategorySpan.innerHTML = `Kategorie: ${categoryTranslation.get(category)}`;
+                    var categoryParams = [categoryTranslation.get(category)];
+                    var translation = localization.translateFormat("Category:", categoryParams, "ItJakubJs").value;
+                    feedbackCategorySpan.innerHTML = translation;
+                        
 
                     feedbackHeaderInfosDiv.appendChild(feedbackCategorySpan);
 
                     var feedbackDateSpan = document.createElement("span");
                     $(feedbackDateSpan).addClass("feedback-date");
-                    feedbackDateSpan.innerHTML = `Datum: ${date.toLocaleDateString()}`;
+                    feedbackDateSpan.innerHTML = 
+                        localization.translateFormat("Date:", new Array<string>(date.toLocaleDateString()), "ItJakubJs").value;
+
 
                     feedbackHeaderInfosDiv.appendChild(feedbackDateSpan);
 
                     var feedbackTimeSpan = document.createElement("span");
                     $(feedbackTimeSpan).addClass("feedback-time");
-                    feedbackTimeSpan.innerHTML = `Čas: ${date.toLocaleTimeString()}`;
+                    feedbackTimeSpan.innerHTML = 
+                        localization.translateFormat("Time:", new Array<string>(date.toLocaleTimeString()), "ItJakubJs").value;
 
                     feedbackHeaderInfosDiv.appendChild(feedbackTimeSpan);
 
@@ -164,8 +173,8 @@ $(document).ready(() => {
                     $(removeGlyph).addClass("glyphicon glyphicon-trash");
                     feedbackDeleteButton.appendChild(removeGlyph);
 
-                    $(feedbackDeleteButton).click((event: Event) => {
-                        var elementId = $(event.target).parents(".feedback")[0].id;
+                    $(feedbackDeleteButton).click((event: JQuery.Event) => {
+                        var elementId = $(event.target as Element).parents(".feedback").attr("id");
                         deleteFeedback(elementId);
                     });
 
@@ -185,10 +194,11 @@ $(document).ready(() => {
                         var separator = document.createElement("hr");
 
                         var feedbackHeadwordDiv = document.createElement("div");
-                        $(feedbackHeadwordDiv).text("Slovníkové heslo: " + actualFeedback.headwordInfo.defaultHeadword);
+                        $(feedbackHeadwordDiv).text(localization.translateFormat("DictionaryHeadword:", new Array<string>(actualFeedback.headwordInfo.defaultHeadword), "ItJakubJs").value);
 
                         var feedbackDictionaryDiv = document.createElement("div");
-                        $(feedbackDictionaryDiv).text("Slovník: " + actualFeedback.projectInfo.name);
+                        $(feedbackHeadwordDiv).text(localization.translateFormat("Dictionary:", new Array<string>(actualFeedback.projectInfo.name), "ItJakubJs").value);
+
 
                         $(feedbackBodyDiv)
                             .append(separator)
@@ -218,7 +228,7 @@ $(document).ready(() => {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Feedback/GetFeedbacksCount",
-            data: { categories: categories },
+            data: { categories: categories } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: response => {

@@ -1,29 +1,33 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
-    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <!--<PreserveCompilationContext>true</PreserveCompilationContext>-->
     <AssemblyName>ITJakub.Web.Hub</AssemblyName>
-    <OutputType>Exe</OutputType>
+    <!--<OutputType>Exe</OutputType>-->
     <PackageId>ITJakub.Web.Hub</PackageId>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <VersionPrefix>1.0.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
-    <GeneratedItemPatterns>wwwroot/css/**/*.css;wwwroot/js/**/*.js;wwwroot/Areas/**/*.css;wwwroot/Areas/**/*.js</GeneratedItemPatterns>
-    <DefaultItemExcludes>$(DefaultItemExcludes);$(GeneratedItemPatterns)</DefaultItemExcludes>
-    <TypeScriptToolsVersion>2.4</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
   </PropertyGroup>
 
-    <ItemGroup>
-    <None Include="App.config" />
-    <None Update="wwwroot\**\*;Views\**\*;Areas\**\Views\**\*.cshtml;Content\**\*;log4net.config">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </None>
-    <ProjectReference Include="..\ITJakub.ITJakubService.DataContracts\ITJakub.ITJakubService.DataContracts.csproj" />
+  <ItemGroup>
+    <Content Update="Localization\**.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\**\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ITJakub.Lemmatization.Shared.Contracts\ITJakub.Lemmatization.Shared.Contracts.csproj" />
     <ProjectReference Include="..\ITJakub.SearchService.DataContracts\ITJakub.SearchService.DataContracts.csproj" />
-    <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj" />
-    <ProjectReference Include="..\ITJakub.Web.DataEntities\ITJakub.Web.DataEntities.csproj" />
     <ProjectReference Include="..\Vokabular.Jewelry\Vokabular.Jewelry.csproj" />
     <ProjectReference Include="..\Vokabular.Log4Net\Vokabular.Log4Net.csproj" />
     <ProjectReference Include="..\Vokabular.MainService.DataContracts\Vokabular.MainService.DataContracts.csproj" />
@@ -33,6 +37,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.4.0" />
+    <PackageReference Include="Scalesoft.Localization.AspNetCore.Service" Version="1.0.1" />
+    <PackageReference Include="Scalesoft.Localization.CoreLibrary" Version="1.0.2" />
+    <PackageReference Include="Scalesoft.Localization.Database.EFCore" Version="1.0.2" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.0.1" />
@@ -46,6 +54,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="2.0.4" />
     <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="2.0.1" />
@@ -60,6 +69,8 @@
     <PackageReference Include="Markdig" Version="0.14.9" />
     <PackageReference Include="Microsoft.SyndicationFeed.ReaderWriter" Version="1.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.4.0" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
     <PackageReference Include="System.Runtime.Serialization.Xml" Version="4.3.0" />
     <PackageReference Include="System.ServiceModel.Http" Version="4.4.1" />
     <PackageReference Include="System.ServiceModel.Primitives" Version="4.4.1" />
@@ -70,11 +81,6 @@
   
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.DotNet.Xdt.Tools" Version="2.0.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
   <Target Name="ApplyXdtConfigTransform" BeforeTargets="MSDeployPublish">
@@ -88,15 +94,9 @@
   
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
     <Exec Command="npm install" />
-    <Exec Command="bower install" />
-    <Exec Command="gulp clean" />
-    <Exec Command="gulp build:ts" />
-    <Exec Command="gulp default" />
-    <!--Workaround for copying generated files (javascript and css) to Publish folder-->
-    <ItemGroup>
-      <_GeneratedFiles Include="$(GeneratedItemPatterns)" />
-      <ContentWithTargetPath Include="@(_GeneratedFiles->'%(FullPath)')" RelativePath="%(_GeneratedFiles.Identity)" TargetPath="%(_GeneratedFiles.Identity)" CopyToPublishDirectory="PreserveNewest" />
-    </ItemGroup>
+    <Exec Command="yarn gulp yarn-runtime" />
+    <Exec Command="yarn gulp clean" />
+    <Exec Command="yarn gulp default" />
   </Target>
 
 </Project>
