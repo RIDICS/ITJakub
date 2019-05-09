@@ -271,7 +271,7 @@
         const pageName = pageRowEl.data("page-name") as string;
         const textId = pageRowEl.data("page") as number;
         const ajax = $.post(`${this.util.getServerAddress()}Admin/ContentEditor/LoadCommentFile`,
-            { textId: textId });
+            { textId: textId } as JQuery.PlainObject);
         ajax.done(
             (fileContent: ICommentSctucture[]) => {
                 if (fileContent.length) {

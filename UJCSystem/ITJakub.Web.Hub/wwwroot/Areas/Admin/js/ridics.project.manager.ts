@@ -102,7 +102,7 @@
             firstName: firstName,
             lastName: lastName
         };
-        return $.post(`${getBaseUrl()}Admin/KeyTable/CreateAuthor`, { request:data });
+        return $.post(`${getBaseUrl()}Admin/KeyTable/CreateAuthor`, { request: data } as JQuery.PlainObject);
     }
 
     createResponsiblePerson(firstName: string, lastName: string):JQueryXHR {
@@ -111,7 +111,7 @@
             firstName: firstName,
             lastName: lastName
         };
-        return $.post(`${getBaseUrl()}Admin/KeyTable/CreateResponsiblePerson`, { request: data });
+        return $.post(`${getBaseUrl()}Admin/KeyTable/CreateResponsiblePerson`, { request: data } as JQuery.PlainObject);
     }
 
     createResponsibleType(type: ResponsibleTypeEnum, text: string):JQueryXHR {
@@ -120,7 +120,7 @@
             type: type,
             text: text
         };
-        return $.post(`${getBaseUrl()}Admin/KeyTable/CreateResponsibleType`, { request: data });
+        return $.post(`${getBaseUrl()}Admin/KeyTable/CreateResponsibleType`, { request: data } as JQuery.PlainObject);
     }
 
     saveMetadata(projectId: number, data: ISaveMetadataResource): JQueryXHR {
