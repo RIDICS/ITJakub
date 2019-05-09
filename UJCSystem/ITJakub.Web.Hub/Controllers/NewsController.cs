@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models;
+using ITJakub.Web.Hub.Models.Config;
 using ITJakub.Web.Hub.Models.FeedResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.SyndicationFeed;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
@@ -16,8 +18,11 @@ namespace ITJakub.Web.Hub.Controllers
     [Authorize(Roles = CustomRole.CanAddNews)]
     public class NewsController : BaseController
     {
-        public NewsController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        private readonly GoogleCalendarConfiguration m_googleCalendarConfiguration;
+
+        public NewsController(CommunicationProvider communicationProvider, IOptions<GoogleCalendarConfiguration> options) : base(communicationProvider)
         {
+            m_googleCalendarConfiguration = options.Value;
         }
 
         [HttpGet]
@@ -86,7 +91,18 @@ namespace ITJakub.Web.Hub.Controllers
             return View("AddNews");
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult Calendar()
+        {
+            var model = new GoogleCalendarViewModel
+            {
+                CalendarId = m_googleCalendarConfiguration.CalendarId
+            };
 
+            return View(model);
+        }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Add(NewsSyndicationItemViewModel model)

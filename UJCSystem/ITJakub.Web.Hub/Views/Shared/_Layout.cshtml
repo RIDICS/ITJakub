@@ -592,8 +592,11 @@
                 <li>
                     <a href='@Url.Action("HowToCite", "Home", new {area = ""})'>@Localizer.Translate("HowToCite", "layout", LocTranslationSource.File)</a>
                 </li>
-                <li class="footer-last">
+                <li>
                     <a href='@Url.Action("Feedback", "Home", new {area = ""})'>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</a>
+                </li>
+                <li class="footer-last">
+                    <a href='@Url.Action("Calendar", "News", new {area = ""})'>@Localizer.Translate("Events", "News", LocTranslationSource.File)</a>
                 </li>
             </ul>
             <div class="footer-text">
