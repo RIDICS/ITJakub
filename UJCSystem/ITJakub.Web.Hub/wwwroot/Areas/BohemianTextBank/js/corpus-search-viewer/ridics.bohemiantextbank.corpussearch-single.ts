@@ -810,6 +810,7 @@ class BohemianTextBankSinglePaged extends BohemianTextBankSingle {
             $(".main-pagination-container").empty();
         }
         this.paginationInitialised = false;
+        this.updateSelectedBooksAndCategoriesInQuery();
     }
 
     /**
@@ -834,6 +835,7 @@ class BohemianTextBankSinglePaged extends BohemianTextBankSingle {
         this.onSearchStartSinglePaged();
         this.corpusAdvancedSearchBookHits(json, firstPage);
     }
+
     /**
      * Reloads search results on change of sort ordering
      */
@@ -981,7 +983,6 @@ class BohemianTextBankSinglePaged extends BohemianTextBankSingle {
             start: start,
             count: count
         };
-
         updateQueryStringParameter(this.urlSearchKey, text);
         updateQueryStringParameter(this.urlSortAscKey, sortAsc);
         updateQueryStringParameter(this.urlSortCriteriaKey, sortingEnum);
