@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ITJakub.Web.Hub.Models.Config;
 using Localization.AspNetCore.Service.Extensions;
 using Localization.CoreLibrary.Dictionary.Factory;
 using Localization.CoreLibrary.Util;
@@ -50,7 +51,7 @@ namespace ITJakub.Web.Hub
             // Configuration options
             services.AddOptions();
             services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
-            services.Configure<GoogleCalendarConfiguration>(Configuration.GetSection("GoogleCalendarConfiguration"));
+            services.Configure<GoogleCalendarConfiguration>(Configuration.GetSection("GoogleCalendar"));
 
             services.Configure<FormOptions>(options =>
             {

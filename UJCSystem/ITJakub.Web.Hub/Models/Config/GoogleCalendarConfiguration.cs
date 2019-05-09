@@ -1,4 +1,4 @@
-﻿namespace ITJakub.Web.Hub
+﻿namespace ITJakub.Web.Hub.Models.Config
 {
     public class GoogleCalendarConfiguration
     {

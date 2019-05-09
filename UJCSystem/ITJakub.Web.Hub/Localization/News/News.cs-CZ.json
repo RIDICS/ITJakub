@@ -1,6 +1,6 @@
 {
-	"culture":"cs-CZ",
-	"scope":"News",
+  "culture": "cs-CZ",
+  "scope": "News",
   "dictionary": {
     "NewsManagementTitle": "Administrace - Přidat novinku",
     "AddNews": "Přidat novinku",
@@ -11,7 +11,9 @@
     "DiacriticsAllowed": "Můžete používat diakritiku",
     "Submit": "Přidat",
     "Events": "Události",
-    "ErrorNoCalendar": "Není dostupný žádný kalendář.",
-    "CalendarLanguage": "cs"
+    "ErrorNoCalendar": "Není dostupný žádný kalendář."
+  },
+  "constants": {
+    "GoogleCalendarLanguage": "cs"
   }
 }

@@ -1,6 +1,6 @@
 {
-	"culture":"en",
-	"scope":"News",
+  "culture": "en",
+  "scope": "News",
   "dictionary": {
     "NewsManagementTitle": "Administration - Add news",
     "AddNews": "Add news",
@@ -11,7 +11,9 @@
     "DiacriticsAllowed": "You can use diacritics",
     "Submit": "Submit",
     "Events": "Events",
-    "ErrorNoCalendar": "No available calendar.",
-    "CalendarLanguage" : "en_GB"
+    "ErrorNoCalendar": "No available calendar."
+  },
+  "constants": {
+    "GoogleCalendarLanguage": "en_GB"
   }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models;
+using ITJakub.Web.Hub.Models.Config;
 using ITJakub.Web.Hub.Models.FeedResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;

@@ -1,27 +1,26 @@
 ﻿@using Localization.AspNetCore.Service
-@using Localization.CoreLibrary.Util
 @model ITJakub.Web.Hub.Models.GoogleCalendarViewModel
 @inject ILocalization Localizer
 
 @{
-    ViewBag.Title = Localizer.Translate("Events", "News", LocTranslationSource.File);
+    ViewBag.Title = Localizer.Translate("Events", "News");
 }
 
 @if (string.IsNullOrEmpty(Model.CalendarId))
 {
-    <div class="alert alert-danger">@Localizer.Translate("ErrorNoCalendar", "News", LocTranslationSource.File)</div>
+    <div class="alert alert-danger">@Localizer.Translate("ErrorNoCalendar", "News")</div>
 }
 else
 {
     string calendarSrc = string.Format("https://calendar.google.com/calendar/b/1/embed?title={0}&amp;height=600&amp;wkst=2&amp;hl={1}&amp;bgcolor=%23ffffff&amp;src={2}&amp;color=%231B887A&amp;ctz=Europe%2FPrague",
-        Localizer.Translate("Events", "News", LocTranslationSource.File),
-        Localizer.Translate("CalendarLanguage", "News", LocTranslationSource.File),
+        Localizer.Translate("Events", "News"),
+        Localizer.TranslateConstant("GoogleCalendarLanguage", "News"),
         Model.CalendarId);
     string calendar = $"<iframe src=\"{calendarSrc}\" style=\"border-width:0\" width=\"100%\" height=\"650px\" frameborder=\"0\" scrolling=\"yes\"></iframe>";
 
     string agendaSrc = string.Format("https://calendar.google.com/calendar/b/1/embed?title={0}&amp;mode=AGENDA&amp;height=400&amp;wkst=2&amp;hl={1}&amp;bgcolor=%23ffffff&amp;src={2}&amp;color=%231B887A&amp;ctz=Europe%2FPrague",
-        Localizer.Translate("Events", "News", LocTranslationSource.File),
-        Localizer.Translate("CalendarLanguage", "News", LocTranslationSource.File),
+        Localizer.Translate("Events", "News"),
+        Localizer.TranslateConstant("GoogleCalendarLanguage", "News"),
         Model.CalendarId);
     string agenda = $"<iframe src=\"{agendaSrc}\" style=\"border-width:0\" width=\"100%\" height=\"400px\" frameborder=\"0\" scrolling=\"yes\"></iframe>";
 
