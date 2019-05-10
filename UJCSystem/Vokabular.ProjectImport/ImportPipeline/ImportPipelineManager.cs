@@ -18,17 +18,20 @@ namespace Vokabular.ProjectImport.ImportPipeline
         private readonly ImportManager m_importManager;
         private readonly ILogger<ImportPipelineManager> m_logger;
         private readonly ImportPipelineBuilder m_importPipelineBuilder;
+        private readonly ImportPipelineDirector m_importPipelineDirector;
         private readonly ExternalRepositoryManager m_externalRepositoryManager;
         private readonly ImportHistoryManager m_importHistoryManager;
 
         public ImportPipelineManager(IEnumerable<IProjectImportManager> importManagers, ImportManager importManager,
             ILogger<ImportPipelineManager> logger, ImportPipelineBuilder importPipelineBuilder,
-            ExternalRepositoryManager externalRepositoryManager, ImportHistoryManager importHistoryManager)
+            ImportPipelineDirector importPipelineDirector, ExternalRepositoryManager externalRepositoryManager,
+            ImportHistoryManager importHistoryManager)
         {
             m_projectImportManagers = new Dictionary<string, IProjectImportManager>();
             m_importManager = importManager;
             m_logger = logger;
             m_importPipelineBuilder = importPipelineBuilder;
+            m_importPipelineDirector = importPipelineDirector;
             m_externalRepositoryManager = externalRepositoryManager;
             m_importHistoryManager = importHistoryManager;
 
@@ -48,7 +51,6 @@ namespace Vokabular.ProjectImport.ImportPipeline
 
             var importHistoryId = m_importHistoryManager.CreateImportHistory(externalRepositoryId, m_importManager.UserId);
 
-            
 
             ImportPipeline importPipeline = null;
 
@@ -61,7 +63,7 @@ namespace Vokabular.ProjectImport.ImportPipeline
                         $"Import manager was not found for repository type {externalRepository.ExternalRepositoryType.Name}.");
                 }
 
-                importPipeline = m_importPipelineBuilder.Build(externalRepository, importHistoryId, progressInfo, cancellationToken);
+                importPipeline = m_importPipelineDirector.Build(m_importPipelineBuilder, externalRepository, importHistoryId, progressInfo, cancellationToken);
 
                 await importManager.ImportFromResource(externalRepository.Configuration, importPipeline.BufferBlock, progressInfo,
                     latestImportHistory?.Date, cancellationToken);
@@ -109,13 +111,15 @@ namespace Vokabular.ProjectImport.ImportPipeline
 
                 if (cancellationTokenSource != null && cancellationTokenSource.IsCancellationRequested)
                 {
-                    progressInfo.FaultedMessage = $"Error occurred executing import task (import from repository {externalRepository.Name}). Error message: Import was cancelled.";
+                    progressInfo.FaultedMessage =
+                        $"Error occurred executing import task (import from repository {externalRepository.Name}). Error message: Import was cancelled.";
                     importHistory.Message = progressInfo.FaultedMessage;
                     importHistory.Status = ImportStatusEnum.Failed;
                 }
                 else if (!string.IsNullOrEmpty(progressInfo.FaultedMessage))
                 {
-                    progressInfo.FaultedMessage = $"Error occurred executing import task (import from repository {externalRepository.Name}). Error message: {progressInfo.FaultedMessage}";
+                    progressInfo.FaultedMessage =
+                        $"Error occurred executing import task (import from repository {externalRepository.Name}). Error message: {progressInfo.FaultedMessage}";
                     importHistory.Message = progressInfo.FaultedMessage;
                     importHistory.Status = ImportStatusEnum.Failed;
                     m_importManager.CancelTask(externalRepositoryId);
@@ -131,10 +135,10 @@ namespace Vokabular.ProjectImport.ImportPipeline
 
                 progressInfo.IsCompleted = true;
                 m_importHistoryManager.UpdateImportHistory(importHistory);
-                
+
                 if (!string.IsNullOrEmpty(progressInfo.FaultedMessage))
                 {
-                    importPipeline?.LastBlock.Completion.Wait(cancellationToken);   
+                    importPipeline?.LastBlock.Completion.Wait(cancellationToken);
                 }
             }
         }

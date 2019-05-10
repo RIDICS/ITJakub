@@ -29,6 +29,7 @@ namespace Vokabular.ProjectImport
             container.AddSingleton<ImportManager>();
 
             container.AddScoped<ImportPipelineBuilder>();
+            container.AddScoped<ImportPipelineDirector>();
             container.AddScoped<ImportPipelineManager>();
 
             container.AddMarc21ProjectParsingServices();
