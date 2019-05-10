@@ -27,7 +27,7 @@ namespace Vokabular.ProjectImport
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            m_logger.LogInformation("Information Project import hosted service started.");
+            m_logger.LogInformation("Project import background service started.");
 
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -67,11 +67,6 @@ namespace Vokabular.ProjectImport
                             m_logger.LogError(exception, exception.Message);
                     }
                 }
-                catch (Exception e)
-                {
-                    if (m_logger.IsErrorEnabled())
-                        m_logger.LogError(e, e.Message);
-                }
                 finally
                 {
                     foreach (var cancellationTokenSource in m_importManager.CancellationTokens)
@@ -83,7 +78,7 @@ namespace Vokabular.ProjectImport
                 }
             }
 
-            m_logger.LogInformation("Project import hosted service stopped.");
+            m_logger.LogInformation("Project import background service stopped.");
         }
     }
 }
