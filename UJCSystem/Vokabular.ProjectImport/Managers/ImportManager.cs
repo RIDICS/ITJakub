@@ -25,7 +25,7 @@ namespace Vokabular.ProjectImport.Managers
         public ConcurrentDictionary<int, RepositoryImportProgressInfo> ActualProgress { get; }
         public ConcurrentDictionary<int, CancellationTokenSource> CancellationTokens { get; }
         public bool IsImportRunning { get; set; }
-        public int UserId { get; private set; }
+        public virtual int UserId { get; private set; }
 
         public void ImportFromExternalRepositories(IList<int> externalRepositoryIds, int userId)
         {
