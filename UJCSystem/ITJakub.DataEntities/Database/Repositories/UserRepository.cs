@@ -6,6 +6,7 @@ using Castle.Transactions;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
+using NHibernate;
 using NHibernate.Criterion;
 
 namespace ITJakub.DataEntities.Database.Repositories
@@ -46,7 +47,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             {
                 return session.QueryOver<User>()
                     .Where(user => user.Id == userId)
-                    .Fetch(user => user.Groups).Eager
+                    .Fetch(SelectMode.Fetch, user => user.Groups)
                     .SingleOrDefault<User>();
             }
         }
