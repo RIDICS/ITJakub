@@ -4,6 +4,9 @@ using Vokabular.ProjectImport.Model;
 
 namespace Vokabular.ProjectImport
 {
+    /// <summary>
+    /// The entry point for starting import from external resources
+    /// </summary>
     public class MainImportManager
     {
         private readonly ImportManager m_importManager;

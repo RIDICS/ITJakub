@@ -6,6 +6,9 @@ using Vokabular.ProjectParsing.Model.Entities;
 
 namespace Vokabular.ProjectImport.Model
 {
+    /// <summary>
+    /// Interface for managers, that provides import of bibliographic records via specified API
+    /// </summary>
     public interface IProjectImportManager
     {
         string ExternalRepositoryTypeName { get; }

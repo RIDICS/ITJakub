@@ -4,6 +4,9 @@ using Vokabular.ProjectImport.Shared.Options;
 
 namespace Vokabular.OaiPmhImportManager
 {
+    /// <summary>
+    /// Factory class for creating OaiPmhCommunicationClients
+    /// </summary>
     public class OaiPmhCommunicationFactory
     {
         private readonly IOptions<OaiPmhClientOption> m_oaiPmhClientOption;

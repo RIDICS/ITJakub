@@ -3,6 +3,9 @@ using Vokabular.ProjectParsing.Model.Entities;
 
 namespace Vokabular.ProjectParsing.Model.Parsers
 {
+    /// <summary>
+    /// Interface for bibliographic format parsers
+    /// </summary>
     public interface IProjectParser
     {
         /// <summary>
