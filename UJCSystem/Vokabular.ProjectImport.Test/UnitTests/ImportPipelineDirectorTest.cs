@@ -17,14 +17,14 @@ namespace Vokabular.ProjectImport.Test.UnitTests
     {
         private ImportPipelineDirector m_importPipelineDirector;
         private Mock<ImportPipelineBuilder> m_importPipelineBuilderMock;
-        private string m_buildCallOrder = string.Empty;
-        private string m_processCallOrder = string.Empty;
+        private readonly List<string> m_buildCallOrder = new List<string>();
+        private readonly List<string> m_processCallOrder = new List<string>();
         private ActionBlock<ImportedRecord> m_saveBlock;
-        private string ResponseParserBlockId = "1";
-        private string FilterBlockId = "2";
-        private string ProjectParserBlockId = "3";
-        private string NullBlockId = "4";
-        private string SaveBlockId = "5";
+        private const string ResponseParserBlockId = "1";
+        private const string FilterBlockId = "2";
+        private const string ProjectParserBlockId = "3";
+        private const string NullBlockId = "4";
+        private const string SaveBlockId = "5";
 
 
         [TestInitialize]
@@ -40,32 +40,32 @@ namespace Vokabular.ProjectImport.Test.UnitTests
                 .Setup(x => x.BuildResponseParserBlock(It.IsAny<string>(), It.IsAny<ExecutionDataflowBlockOptions>()))
                 .Returns(new TransformBlock<object, ImportedRecord>(record =>
                 {
-                    m_processCallOrder += ResponseParserBlockId;
+                    m_processCallOrder.Add(ResponseParserBlockId);
                     return (ImportedRecord) record;
                 }))
-                .Callback(() => m_buildCallOrder += ResponseParserBlockId);
+                .Callback(() => m_buildCallOrder.Add(ResponseParserBlockId));
 
             m_importPipelineBuilderMock
                 .Setup(x => x.BuildFilterBlock(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<ExecutionDataflowBlockOptions>()))
                 .Returns(new TransformBlock<ImportedRecord, ImportedRecord>(record =>
                 {
-                    m_processCallOrder += FilterBlockId;
+                    m_processCallOrder.Add(FilterBlockId);
                     return record;
                 }))
-                .Callback(() => m_buildCallOrder += FilterBlockId);
+                .Callback(() => m_buildCallOrder.Add(FilterBlockId));
 
             m_importPipelineBuilderMock
                 .Setup(x => x.BuildProjectParserBlock(It.IsAny<string>(), It.IsAny<ExecutionDataflowBlockOptions>()))
                 .Returns(new TransformBlock<ImportedRecord, ImportedRecord>(record =>
                 {
-                    m_processCallOrder += ProjectParserBlockId;
+                    m_processCallOrder.Add(ProjectParserBlockId);
                     return record;
                 }))
-                .Callback(() => m_buildCallOrder += ProjectParserBlockId);
+                .Callback(() => m_buildCallOrder.Add(ProjectParserBlockId));
 
             m_saveBlock = new ActionBlock<ImportedRecord>(record =>
             {
-                m_processCallOrder += SaveBlockId;
+                m_processCallOrder.Add(SaveBlockId);
                 m_saveBlock.Complete();
             });
 
@@ -73,16 +73,16 @@ namespace Vokabular.ProjectImport.Test.UnitTests
                 .Setup(x => x.BuildNullTargetBlock(It.IsAny<RepositoryImportProgressInfo>(), It.IsAny<ExecutionDataflowBlockOptions>()))
                 .Returns(new ActionBlock<ImportedRecord>(record =>
                 {
-                    m_processCallOrder += NullBlockId;
+                    m_processCallOrder.Add(NullBlockId);
                     m_saveBlock.Complete();
                 }))
-                .Callback(() => m_buildCallOrder += NullBlockId);
+                .Callback(() => m_buildCallOrder.Add(NullBlockId));
            
             m_importPipelineBuilderMock
                 .Setup(x => x.BuildSaveBlock(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<RepositoryImportProgressInfo>(),
                     It.IsAny<ExecutionDataflowBlockOptions>()))
                 .Returns(m_saveBlock)
-                .Callback(() => m_buildCallOrder += SaveBlockId);
+                .Callback(() => m_buildCallOrder.Add(SaveBlockId));
 
             var importManagerMock = mockFactory.Create<ImportManager>();
             importManagerMock.Setup(x => x.UserId).Returns(1);
@@ -102,7 +102,7 @@ namespace Vokabular.ProjectImport.Test.UnitTests
                 1, new RepositoryImportProgressInfo(1, "Test"), cancellationToken);
             importPipeline.BufferBlock.Post(new object());
 
-            Assert.AreEqual(ResponseParserBlockId + FilterBlockId + ProjectParserBlockId + NullBlockId + SaveBlockId, m_buildCallOrder);
+            CollectionAssert.AreEqual(new List<string>{ResponseParserBlockId, FilterBlockId, ProjectParserBlockId, NullBlockId, SaveBlockId}, m_buildCallOrder);
             Assert.AreSame(m_saveBlock, importPipeline.LastBlock);
         }
 
@@ -119,7 +119,7 @@ namespace Vokabular.ProjectImport.Test.UnitTests
             importPipeline.BufferBlock.Post(new ImportedRecord {IsSuitable = false});
             importPipeline.LastBlock.Completion.Wait();
 
-            Assert.AreEqual(ResponseParserBlockId + FilterBlockId + NullBlockId, m_processCallOrder);
+            CollectionAssert.AreEqual(new List<string>{ResponseParserBlockId, FilterBlockId, NullBlockId}, m_processCallOrder);
         }
 
         [TestMethod]
@@ -135,7 +135,7 @@ namespace Vokabular.ProjectImport.Test.UnitTests
             importPipeline.BufferBlock.Post(new ImportedRecord {IsSuitable = true});
             importPipeline.LastBlock.Completion.Wait();
 
-            Assert.AreEqual(ResponseParserBlockId + FilterBlockId + ProjectParserBlockId + SaveBlockId, m_processCallOrder);
+            CollectionAssert.AreEqual(new List<string>{ResponseParserBlockId, FilterBlockId, ProjectParserBlockId, SaveBlockId}, m_processCallOrder);
         }
     }
 }
