@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Vokabular.MainService.Core</AssemblyName>
     <PackageId>Vokabular.MainService.Core</PackageId>
     <RuntimeIdentifiers>win</RuntimeIdentifiers>
