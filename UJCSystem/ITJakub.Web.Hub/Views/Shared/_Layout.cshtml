@@ -39,7 +39,7 @@
                         <span class="glyphicon glyphicon-menu-hamburger"></span>
                     </button>
                     
-                    @Html.Partial("_LoginPartial")
+                    @await Html.PartialAsync("_LoginPartial")
 
                     <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
                         <img src="@Url.Content("~/images/logo/main_logo.png")" alt="main_logo" class="main_logo" />

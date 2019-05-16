@@ -49,7 +49,7 @@
 
                 @foreach (var favoriteLabel in Model.FavoriteLabels)
                 {
-                    @Html.Partial("_FavoriteLabelManagement", favoriteLabel)
+                    @await Html.PartialAsync("_FavoriteLabelManagement", favoriteLabel)
                 }
 
             </div>

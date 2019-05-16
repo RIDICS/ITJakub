@@ -50,7 +50,7 @@
     <hr/>
     
     <div id="list-container">
-        @Html.Partial("_ProjectListContent", Model)
+        @await Html.PartialAsync("_ProjectListContent", Model)
     </div>
     
     <div id="pagination" class="text-center"></div>

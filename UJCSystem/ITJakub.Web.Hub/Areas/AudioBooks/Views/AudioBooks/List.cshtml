@@ -12,4 +12,4 @@
     ViewBag.Title = @Localizer.Translate("AudioBooksList", "AudioBooks");
 }
 
-@Html.Partial("_BibliographySearch")
+@await Html.PartialAsync("_BibliographySearch")

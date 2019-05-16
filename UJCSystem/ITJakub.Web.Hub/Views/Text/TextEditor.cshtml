@@ -97,8 +97,8 @@
             </div>
         </form>
 
-        @Html.Partial("_TextEditorInsertImage")
-        @Html.Partial("_TextEditorInsertLink")
+        @await Html.PartialAsync("_TextEditorInsertImage")
+        @await Html.PartialAsync("_TextEditorInsertLink")
     }
     else
     {

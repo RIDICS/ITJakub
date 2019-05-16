@@ -19,7 +19,7 @@
             <div class="col-md-4 feedback-field-validation-error" data-valmsg-for="Text" data-valmsg-replace="true"></div>
         </div>
 
-        @Html.Partial("Plugins/_CharRemaining")
+        @await Html.PartialAsync("Plugins/_CharRemaining")
 
         <div class="form-group">
             @Html.LabelFor(m => m.Name, new { @class = "col-md-1 control-label" })
