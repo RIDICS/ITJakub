@@ -1,27 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using ITJakub.Web.Hub.Models.Config;
-using Localization.AspNetCore.Service.Extensions;
-using Localization.CoreLibrary.Dictionary.Factory;
-using Localization.CoreLibrary.Util;
-using Localization.Database.EFCore.Data.Impl;
-using Localization.Database.EFCore.Factory;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Scalesoft.Localization.AspNetCore.IoC;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Core.Util;
+using Scalesoft.Localization.Database.NHibernate;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
 using Vokabular.Shared.Container;
 using Vokabular.Shared.Options;
-using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace ITJakub.Web.Hub
 {
@@ -59,13 +56,10 @@ namespace ITJakub.Web.Hub
             });
 
             // Localization
-            var connectionString = Configuration.GetConnectionString(SettingKeys.WebConnectionString) ??
-                                   throw new ArgumentException("Connection string not found");
-            services.AddDbContext<StaticTextsContext>(options => options
-                .UseSqlServer(connectionString));
+            var localizationConfiguration = Configuration.GetSection("Localization").Get<LocalizationConfiguration>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddLocalizationService();
+            services.AddLocalizationService(localizationConfiguration, new NHibernateDatabaseConfiguration());
 
 
             services.AddMvc()
@@ -81,6 +75,7 @@ namespace ITJakub.Web.Hub
             // IoC
             IIocContainer container = new DryIocContainer();
             container.Install<WebHubContainerRegistration>();
+            container.Install<NHibernateInstaller>();
             Container = container;
             
 
@@ -97,14 +92,7 @@ namespace ITJakub.Web.Hub
             {
                 configuration.DisableTelemetry = true; // Workaround for disabling telemetry
             }
-
-            // Localization
-            Localization.CoreLibrary.Localization.Init(
-                @"localizationsettings.json",
-                new DatabaseServiceFactory(Container.Resolve<StaticTextsContext>()),
-                new JsonDictionaryFactory());
-            Localization.CoreLibrary.Localization.AttachLogger(loggerFactory);
-
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

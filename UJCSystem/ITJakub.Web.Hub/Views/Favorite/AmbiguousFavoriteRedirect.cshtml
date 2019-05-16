@@ -1,6 +1,6 @@
-﻿@using Localization.AspNetCore.Service
-@using Localization.CoreLibrary.Util
-@inject ILocalization Localizer
+﻿@using Scalesoft.Localization.AspNetCore
+@using Scalesoft.Localization.Core.Util
+@inject ILocalizationService Localizer
 
 @{
     ViewBag.Title = Localizer.Translate("FavoriteItemRedirectError", "Favorite", LocTranslationSource.File);

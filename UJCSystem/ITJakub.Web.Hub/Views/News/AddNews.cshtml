@@ -1,9 +1,9 @@
-﻿@using Localization.AspNetCore.Service
-@using Localization.CoreLibrary.Util
-@using ITJakub.Web.Hub.Models
+﻿@using ITJakub.Web.Hub.Models
+@using Scalesoft.Localization.AspNetCore
+@using Scalesoft.Localization.Core.Util
 @model NewsSyndicationItemViewModel
 
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 @{
     ViewBag.Title = Localizer.Translate("NewsManagementTitle", "News", LocTranslationSource.File);

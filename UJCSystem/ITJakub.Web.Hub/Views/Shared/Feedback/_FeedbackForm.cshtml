@@ -1,8 +1,8 @@
-﻿@using Localization.AspNetCore.Service
-@using Localization.CoreLibrary.Util
+﻿@using Scalesoft.Localization.AspNetCore
+@using Scalesoft.Localization.Core.Util
 @model ITJakub.Web.Hub.Models.FeedbackViewModel
 
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 <p>
     @using (Html.BeginForm("Feedback", Model.FormIdentification.Controller, new { area = Model.FormIdentification.Area }, FormMethod.Post, true, new { @class = "form-horizontal", role = "form" }))

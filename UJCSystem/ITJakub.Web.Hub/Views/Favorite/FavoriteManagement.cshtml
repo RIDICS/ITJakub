@@ -1,9 +1,9 @@
 ﻿@using ITJakub.Web.Hub.Core
-@using Localization.AspNetCore.Service
-@using Localization.CoreLibrary.Util
+@using Scalesoft.Localization.AspNetCore
+@using Scalesoft.Localization.Core.Util
 @model ITJakub.Web.Hub.Models.Favorite.FavoriteManagementViewModel
 
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 @{
     ViewBag.Title = Localizer.Translate("FavoriteManagementTitle","Favorite", LocTranslationSource.File);
