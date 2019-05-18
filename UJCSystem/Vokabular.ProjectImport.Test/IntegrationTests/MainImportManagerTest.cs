@@ -33,6 +33,7 @@ namespace Vokabular.ProjectImport.Test.IntegrationTests
         private ProjectRepository m_projectRepository;
 
         private const string ThrowExc = "ThrowException";
+        private const string ImportTwoRecords = "ImportTwoRecords";
 
         [TestInitialize]
         public async Task Init()
@@ -53,9 +54,17 @@ namespace Vokabular.ProjectImport.Test.IntegrationTests
                         {
                             throw new ImportFailedException("ImportFailed");
                         }
-
-                        target.Post(GetRecord(config));
-                        progressInfo.TotalProjectsCount = 1;
+                        else if (config == ImportTwoRecords)
+                        {
+                            target.Post(GetRecord(m_mockDataConstant.RecordOaiPmhMarc21JanHus));
+                            target.Post(GetRecord(m_mockDataConstant.RecordOaiPmhMarc21JosefPekar));
+                            progressInfo.TotalProjectsCount = 2;
+                        }
+                        else
+                        {
+                            target.Post(GetRecord(config));
+                            progressInfo.TotalProjectsCount = 1;
+                        }
                     })
                 .Returns(Task.CompletedTask);
 
@@ -125,6 +134,45 @@ namespace Vokabular.ProjectImport.Test.IntegrationTests
 
             var projects = m_projectRepository.GetProjectList(0, 5);
             Assert.AreEqual(1, projects.Count);
+        }
+
+        [TestMethod]
+        public void StartImportWithOneRepositoryTwoRecords()
+        {
+            var userId = m_mockDataManager.GetOrCreateUser();
+            var externalRepositoryId = m_mockDataManager.CreateExternalRepository(ImportTwoRecords, new List<FilteringExpressionContract>
+            {
+                new FilteringExpressionContract {Field = "100a", Value = "%Hus%"},
+                new FilteringExpressionContract {Field = "100a", Value = "%Josef%"}
+            });
+
+            m_mainImportManager.ImportFromResources(new List<int> {externalRepositoryId}, userId);
+
+            Thread.Sleep(5000);
+
+            while (m_mainImportManager.IsImportRunning)
+            {
+                Thread.Sleep(1000);
+            }
+
+            Assert.AreEqual(false, m_mainImportManager.IsImportRunning);
+            Assert.AreEqual(1, m_mainImportManager.ActualProgress.Count);
+
+            var info = m_mainImportManager.ActualProgress.First().Value;
+
+            Assert.AreEqual(true, info.IsCompleted);
+            Assert.AreEqual(2, info.TotalProjectsCount);
+            Assert.AreEqual(0, info.FailedProjectsCount);
+            Assert.AreEqual(2, info.ProcessedProjectsCount);
+            Assert.AreEqual(null, info.FaultedMessage);
+
+            var importHistory = m_importHistoryManager.GetLatestImportHistory(externalRepositoryId);
+            Assert.AreNotEqual(null, importHistory);
+            Assert.AreEqual(null, importHistory.Message);
+            Assert.AreEqual(ImportStatusEnum.Completed, importHistory.Status);
+
+            var projects = m_projectRepository.GetProjectList(0, 5);
+            Assert.AreEqual(2, projects.Count);
         }
 
         [TestMethod]
