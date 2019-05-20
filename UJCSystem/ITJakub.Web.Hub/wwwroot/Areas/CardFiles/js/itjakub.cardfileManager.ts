@@ -69,7 +69,7 @@ class CardFileViewer {
     private localization: Localization; 
 
     constructor(cardFileId: string, cardFileName: string, bucket: Bucket, initCardPosition?: number) {
-        this.localization = new Localization();
+        this.localization = localization;
 
         this.cardFileId = cardFileId;
         this.cardFileName = cardFileName;

@@ -28,7 +28,7 @@ class ProjectList {
         });
 
         this.pagination = new Pagination({
-            container: $("#pagination"),
+            container: document.getElementById("#pagination") as HTMLDivElement,
             pageClickCallback: this.loadPage.bind(this)
         });
     }
