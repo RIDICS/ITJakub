@@ -1,10 +1,9 @@
 ﻿@using ITJakub.Web.Hub.Helpers
+@using Scalesoft.Localization.AspNetCore
+@using Scalesoft.Localization.Core.Util
 @using Vokabular.Shared.Const
-@using Localization.AspNetCore.Service
-@using Localization.CoreLibrary.Util
-@using Microsoft.AspNetCore.Http
 
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 <!DOCTYPE html>
 <html>
@@ -39,7 +38,7 @@
                         <span class="glyphicon glyphicon-menu-hamburger"></span>
                     </button>
                     
-                    @Html.Partial("_LoginPartial")
+                    @await Html.PartialAsync("_LoginPartial")
 
                     <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
                         <img src="@Url.Content("~/images/logo/main_logo.png")" alt="main_logo" class="main_logo" />
@@ -485,7 +484,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="~/lib/respond.js/dest/respond.min.js"></script>
     <script src="~/lib-custom/typeahead.bundle.js"></script>
-    <script src="~/lib-custom/localization.js"></script>
+    <script src="~/lib/scalesoft-localization-web/dist/localization.js"></script>
     <script src="~/lib/jquery-appear/src/jquery.appear.js"></script>
     <script src="~/lib/jquery-zoom/jquery.zoom.js"></script>
     <script src="~/lib/wheelzoom/wheelzoom.js"></script>
@@ -559,7 +558,7 @@
     @*main page content*@
     <div class="container-header">
         <div class="container">
-            @BreadcrumbsHelper.Create(Context, ViewBag.Title)
+            @BreadcrumbsHelper.Create(Localizer, ViewBag.Title)
         </div>
     </div>
     <div class="container module-content">
@@ -601,9 +600,7 @@
             </ul>
             <div class="footer-text">
                 @{
-                    
-                    //string vokabularStarted = FooterHelper.VokabularStarted(new DateTime(2015, 1, 1)).Value;
-                    string vokabularStartedNew = FooterHelper.VokabularStartedLocalized(new DateTime(2015, 1, 1), Context.Request.Cookies[ServiceBase.CultureCookieName]).Value;
+                    string vokabularStartedNew = FooterHelper.VokabularStartedLocalized(Localizer, new DateTime(2015, 1, 1));
                 }
                 
                 @Localizer.TranslateFormat("FooterText", new object[] {vokabularStartedNew}, "layout", LocTranslationSource.File)

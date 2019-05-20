@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
@@ -34,7 +35,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             return GetSession().QueryOver<Project>()
                 .Where(x => x.Id == projectId)
-                .Fetch(x => x.Categories).Eager
+                .Fetch(SelectMode.Fetch, x => x.Categories)
                 .SingleOrDefault();
         }
 
@@ -49,7 +50,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             return GetSession().QueryOver<Category>()
                 .Where(x => x.Id == categoryId)
-                .Fetch(x => x.Categories).Eager
+                .Fetch(SelectMode.Fetch, x => x.Categories)
                 .SingleOrDefault();
         }
 
@@ -61,7 +62,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Categories, () => subcategoryAlias, JoinType.LeftOuterJoin)
                 .OrderBy(x => x.Description).Asc
                 .OrderBy(() => subcategoryAlias.Description).Asc
-                .Fetch(x => x.Categories).Eager
+                .Fetch(SelectMode.Fetch, x => x.Categories)
                 .TransformUsing(Transformers.DistinctRootEntity)
                 .List()
                 .Where(x => x.ParentCategory == null)

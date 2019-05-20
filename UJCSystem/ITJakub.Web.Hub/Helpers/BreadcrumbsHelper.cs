@@ -1,30 +1,16 @@
-﻿using System.Globalization;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
-using Localization.AspNetCore.Service;
-using Localization.CoreLibrary.Manager;
-using Localization.CoreLibrary.Util;
 using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Http;
+using Scalesoft.Localization.AspNetCore;
 
 namespace ITJakub.Web.Hub.Helpers
 {
     public static class BreadcrumbsHelper
     {
-        public static HtmlString Create(HttpContext httpContext, params string[] path)
+        public static HtmlString Create(ILocalizationService localizer, params string[] path)
         {
-            string cultureName = httpContext.Request.Cookies[ServiceBase.CultureCookieName];
-
-            IAutoLocalizationManager localizer = Localization.CoreLibrary.Localization.Translator;
-            if (string.IsNullOrEmpty(cultureName))
-            {
-                cultureName = localizer.DefaultCulture().ToString();
-            }
-
-            CultureInfo cultureInfo = new CultureInfo(cultureName);
-            string appNameLocalized = localizer.Translate(LocTranslationSource.File, "VokabulářWebový", cultureInfo, "global");
-
-
+            var appNameLocalized = localizer.Translate("VokabulářWebový", "global");
+            
             var sb = new StringBuilder();
             sb.Append("<ul class=\"breadcrumb\">");
 

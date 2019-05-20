@@ -21,7 +21,7 @@ class DictionarySearch {
     constructor() {
         var pageSize = 25;
 
-        this.localization = new Localization();
+        this.localization = localization;
 
         this.tabs = new DictionarySearchTabs();
         this.callbackDelegate = new DropDownSelectCallbackDelegate();

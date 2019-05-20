@@ -1,6 +1,6 @@
-﻿@inject ILocalization Localizer
+﻿@inject ILocalizationService Localizer
 
-@using Localization.AspNetCore.Service
+@using Scalesoft.Localization.AspNetCore
 @model ITJakub.Web.Hub.Areas.Dictionaries.Models.HeadwordFeedbackViewModel
 @section styles{
     <link href="~/Areas/Dictionaries/css/itjakub.dictionaries.css" rel="stylesheet" />
@@ -15,7 +15,7 @@
 
 
 <div class="content-container">
-    @Html.Partial("_StaticText", Model.PageStaticText)
+    @await Html.PartialAsync("_StaticText", Model.PageStaticText)
 
     <p>
         @using (Html.BeginForm("Feedback", "Dictionaries", new {}, FormMethod.Post, true, new {@class = "form-horizontal", role = "form"}))
@@ -49,7 +49,7 @@
                 @Html.TextAreaFor(m => m.Text, new {@class = "form-control feedback-text-area", @style = "margin-left: 15px; width:97%; min-height: 100px; max-width: 97%", @placeholder = @Localizer.Translate("FeedbackFormPlaceholder", "global") })
             </div>
 
-            @Html.Partial("Plugins/_CharRemaining")
+            @await Html.PartialAsync("Plugins/_CharRemaining")
 
             <div class="form-group">
                 @Html.LabelFor(m => m.Name, new { @class = "col-md-1 control-label" })

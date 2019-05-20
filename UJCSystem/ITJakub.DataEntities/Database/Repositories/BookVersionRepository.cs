@@ -212,8 +212,8 @@ namespace ITJakub.DataEntities.Database.Repositories
                     session.QueryOver<BookContentItem>()
                         .JoinAlias(x => x.BookVersion, () => bookVersionAlias)
                         .JoinAlias(() => bookVersionAlias.Book, () => bookAlias)
-                        .Fetch(x => x.Page).Eager
-                        .Fetch(x => x.ChildContentItems).Eager
+                        .Fetch(SelectMode.Fetch, x => x.Page)
+                        .Fetch(SelectMode.Fetch, x => x.ChildContentItems)
                         .Where(x => bookAlias.Guid == bookXmlId && bookAlias.LastVersion.Id == bookVersionAlias.Id)
                         .TransformUsing(Transformers.DistinctRootEntity)
                         .List<BookContentItem>()
@@ -303,7 +303,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                 var query = session.QueryOver(() => trackAlias)
                     .JoinAlias(() => trackAlias.Recordings, () => recordingAlias, JoinType.LeftOuterJoin)
                     .Where(() => trackAlias.BookVersion.Id == bookVersionId)
-                    .Fetch(x => x.Recordings).Eager
+                    .Fetch(SelectMode.Fetch, x => x.Recordings)
                     .OrderBy(x => x.Position).Asc
                     .OrderBy(() => recordingAlias.AudioType).Asc
                     .TransformUsing(Transformers.DistinctRootEntity);
@@ -371,9 +371,9 @@ namespace ITJakub.DataEntities.Database.Repositories
                 }
 
                 var futureResult = query
-                    .Fetch(x => x.Book).Eager
-                    .Fetch(x => x.Publisher).Eager
-                    .Fetch(x => x.DefaultBookType).Eager
+                    .Fetch(SelectMode.Fetch, x => x.Book)
+                    .Fetch(SelectMode.Fetch, x => x.Publisher)
+                    .Fetch(SelectMode.Fetch, x => x.DefaultBookType)
                     .Future<BookVersion>();
 
                 if (sorting == null || sorting.Value != SortEnum.Dating)
@@ -382,7 +382,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                         .JoinAlias(x => x.Book, () => bookAlias)
                         .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
                         .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
-                        .Fetch(x => x.ManuscriptDescriptions).Eager
+                        .Fetch(SelectMode.Fetch, x => x.ManuscriptDescriptions)
                         .Future<BookVersion>();
                 }
 
@@ -392,7 +392,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                         .JoinAlias(x => x.Book, () => bookAlias)
                         .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
                         .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
-                        .Fetch(x => x.Authors).Eager
+                        .Fetch(SelectMode.Fetch, x => x.Authors)
                         .Future<BookVersion>();
                 }
                 
@@ -429,37 +429,37 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .And(x => bookAlias.Id == bookId);
 
                 var futureResult = query
-                    .Fetch(x => x.Book).Eager
-                    .Fetch(x => x.Publisher).Eager
-                    .Fetch(x => x.DefaultBookType).Eager
+                    .Fetch(SelectMode.Fetch, x => x.Book)
+                    .Fetch(SelectMode.Fetch, x => x.Publisher)
+                    .Fetch(SelectMode.Fetch, x => x.DefaultBookType)
                     .FutureValue<BookVersion>();
 
                 session.QueryOver(() => bookVersionAlias)
                     .JoinAlias(x => x.Book, () => bookAlias)
                     .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
                     .And(x => bookAlias.Id == bookId)
-                    .Fetch(x => x.ManuscriptDescriptions).Eager
+                    .Fetch(SelectMode.Fetch, x => x.ManuscriptDescriptions)
                     .FutureValue<BookVersion>();
                 
                 session.QueryOver(() => bookVersionAlias)
                     .JoinAlias(x => x.Book, () => bookAlias)
                     .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
                     .And(x => bookAlias.Id == bookId)
-                    .Fetch(x => x.Authors).Eager
+                    .Fetch(SelectMode.Fetch, x => x.Authors)
                     .FutureValue<BookVersion>();
                 
                 session.QueryOver(() => bookVersionAlias)
                     .JoinAlias(x => x.Book, () => bookAlias)
                     .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
                     .And(x => bookAlias.Id == bookId)
-                    .Fetch(x => x.Keywords).Eager
+                    .Fetch(SelectMode.Fetch, x => x.Keywords)
                     .FutureValue<BookVersion>();
 
                 session.QueryOver(() => bookVersionAlias)
                     .JoinAlias(x => x.Book, () => bookAlias)
                     .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
                     .And(x => bookAlias.Id == bookId)
-                    .Fetch(x => x.FullBookRecordings).Eager
+                    .Fetch(SelectMode.Fetch, x => x.FullBookRecordings)
                     .FutureValue<BookVersion>();
 
                 session.QueryOver(() => bookVersionAlias)
@@ -475,7 +475,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
                     .And(x => bookAlias.Id == bookId)
                     .Left.JoinAlias(() => bookVersionAlias.LiteraryOriginals, () => literaryOriginalAlias)
-                    .Fetch(x => x.LiteraryOriginals).Eager
+                    .Fetch(SelectMode.Fetch, x => x.LiteraryOriginals)
                     .FutureValue<BookVersion>();
 
                 session.QueryOver(() => bookVersionAlias)
@@ -483,7 +483,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
                     .And(x => bookAlias.Id == bookId)
                     .Left.JoinAlias(() => bookVersionAlias.LiteraryKinds, () => literaryKindAlias)
-                    .Fetch(x => x.LiteraryKinds).Eager
+                    .Fetch(SelectMode.Fetch, x => x.LiteraryKinds)
                     .FutureValue<BookVersion>();
 
                 session.QueryOver(() => bookVersionAlias)
@@ -491,7 +491,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
                     .And(x => bookAlias.Id == bookId)
                     .Left.JoinAlias(() => bookVersionAlias.LiteraryGenres, () => genreAlias)
-                    .Fetch(x => x.LiteraryGenres).Eager
+                    .Fetch(SelectMode.Fetch, x => x.LiteraryGenres)
                     .FutureValue<BookVersion>();
 
                 var result = futureResult.Value;
@@ -830,7 +830,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             {
                 return session.QueryOver<Book>()
                     .Where(x => x.Id == bookId)
-                    .Fetch(x => x.LastVersion).Eager
+                    .Fetch(SelectMode.Fetch, x => x.LastVersion)
                     .SingleOrDefault<Book>();
             }
         }
@@ -882,7 +882,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                 var result = session.QueryOver<BookVersion>()
                     .JoinAlias(x => x.Book, () => bookAlias)
                     .Where(x => x.Id == bookAlias.LastVersion.Id && bookAlias.Guid == bookGuid)
-                    .Fetch(x => x.Authors).Eager
+                    .Fetch(SelectMode.Fetch, x => x.Authors)
                     .TransformUsing(Transformers.DistinctRootEntity)
                     .SingleOrDefault();
 

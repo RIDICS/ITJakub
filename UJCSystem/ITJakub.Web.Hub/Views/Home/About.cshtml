@@ -1,17 +1,17 @@
 ﻿@using ITJakub.Web.Hub.Core
-@using Localization.AspNetCore.Service
-@using Localization.CoreLibrary.Util
+@using Scalesoft.Localization.AspNetCore
+@using Scalesoft.Localization.Core.Util
 
 @model ITJakub.Web.Hub.Models.StaticTextViewModel
 
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 @{
     ViewBag.Title = Localizer.Translate("AboutTitle", "Home", LocTranslationSource.File);
 }
 
 <div class="content-container top-offset-without-submenu">
-    @Html.Partial("_StaticText", Model)
+    @await Html.PartialAsync("_StaticText", Model)
 
     @*Original text:
     <h1>O Vokabuláři webovém</h1>

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
 using Vokabular.DataEntities.Database.Daos;
@@ -33,7 +34,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .Where(() => resourceAlias.Project.Id == projectId)
                 .And(x => x.Id == resourceAlias.LatestVersion.Id)
-                .Fetch(x => x.Resource).Eager
+                .Fetch(SelectMode.Fetch, x => x.Resource)
                 .OrderBy(x => x.Position).Asc
                 .List();
         }
@@ -49,7 +50,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 session.QueryOver<PageResource>()
                     .JoinAlias(x => x.Resource, () => resourceAlias)
                     .Where(x => x.Id == resourceAlias.LatestVersion.Id && resourceAlias.Project.Id == projectId)
-                    .Fetch(x => x.Resource).Eager
+                    .Fetch(SelectMode.Fetch, x => x.Resource)
                     .Future();
             }
 
@@ -57,7 +58,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .Where(() => resourceAlias.Project.Id == projectId)
                 .And(x => x.Id == resourceAlias.LatestVersion.Id)
-                .Fetch(x => x.Resource).Eager;
+                .Fetch(SelectMode.Fetch, x => x.Resource);
 
             if (namedResourceGroupId != null)
                 query.And(() => resourceAlias.NamedResourceGroup.Id == namedResourceGroupId.Value);
@@ -77,7 +78,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 session.QueryOver<PageResource>()
                     .JoinAlias(x => x.Resource, () => resourceAlias)
                     .Where(x => x.Id == resourceAlias.LatestVersion.Id && resourceAlias.Project.Id == projectId)
-                    .Fetch(x => x.Resource).Eager
+                    .Fetch(SelectMode.Fetch, x => x.Resource)
                     .Future();
             }
 
@@ -85,7 +86,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .Where(() => resourceAlias.Project.Id == projectId)
                 .And(x => x.Id == resourceAlias.LatestVersion.Id)
-                .Fetch(x => x.Resource).Eager;
+                .Fetch(SelectMode.Fetch, x => x.Resource);
 
             if (namedResourceGroupId != null)
             {
@@ -111,7 +112,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .Where(() => resourceAlias.Project.Id == projectId)
                 .And(x => x.Id == resourceAlias.LatestVersion.Id)
-                .Fetch(x => x.Resource).Eager
+                .Fetch(SelectMode.Fetch, x => x.Resource)
                 .OrderBy(x => x.Position).Asc
                 .List();
         }
@@ -140,7 +141,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.HeadwordItems, () => headwordItemAlias)
                 .Where(x => resourceAlias.Project.Id == projectId && resourceAlias.LatestVersion.Id == x.Id)
                 .And(x => x.ExternalId == externalId)
-                .Fetch(x => x.HeadwordItems).Eager
+                .Fetch(SelectMode.Fetch, x => x.HeadwordItems)
                 .OrderBy(() => headwordItemAlias.Headword).Asc
                 .SingleOrDefault();
         }
@@ -197,9 +198,9 @@ namespace Vokabular.DataEntities.Database.Repositories
             return GetSession().QueryOver<TextResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .Where(x => x.Id == resourceAlias.LatestVersion.Id && resourceAlias.Id == resourceId)
-                .Fetch(x => x.BookVersion).Eager
-                .Fetch(x => x.Resource).Eager
-                .Fetch(x => x.Resource.Project).Eager
+                .Fetch(SelectMode.Fetch, x => x.BookVersion)
+                .Fetch(SelectMode.Fetch, x => x.Resource)
+                .Fetch(SelectMode.Fetch, x => x.Resource.Project)
                 .SingleOrDefault();
         }
 
@@ -222,8 +223,8 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .OrderBy(x => x.CreateTime).Asc
                 .OrderBy(() => subcommentAlias.CreateTime).Asc
                 .Where(x => x.ResourceText.Id == textId)
-                .Fetch(x => x.CreatedByUser).Eager
-                .Fetch(x => x.TextComments).Eager
+                .Fetch(SelectMode.Fetch, x => x.CreatedByUser)
+                .Fetch(SelectMode.Fetch, x => x.TextComments)
                 .TransformUsing(Transformers.DistinctRootEntity)
                 .List()
                 .Where(x => x.ParentComment == null)
@@ -258,7 +259,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .Where(x => x.Id == resourceAlias.LatestVersion.Id && projectAlias.Id == projectId)
                 .OrderBy(x => x.CreateTime).Desc
-                .Fetch(x => x.BookVersion).Eager
+                .Fetch(SelectMode.Fetch, x => x.BookVersion)
                 .Take(1)
                 .SingleOrDefault();
             return result;

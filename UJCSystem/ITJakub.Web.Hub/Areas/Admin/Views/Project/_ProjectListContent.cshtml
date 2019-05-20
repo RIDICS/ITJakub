@@ -1,6 +1,6 @@
-﻿@using Localization.AspNetCore.Service
+﻿@using Scalesoft.Localization.AspNetCore
 @model ITJakub.Web.Hub.Areas.Admin.Models.ProjectListViewModel
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 <div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>
 @foreach (var viewModel in Model.List)

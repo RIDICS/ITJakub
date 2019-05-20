@@ -28,7 +28,7 @@ class FavoriteManagement {
         this.activeLabelId = null;
 
         this.paginationOptions = {
-            container: $("#pagination"),
+            container: document.getElementById("#pagination") as HTMLDivElement,
             pageClickCallback: this.loadFavoriteItemsPage.bind(this)
         }
         this.pagination = new Pagination(this.paginationOptions);

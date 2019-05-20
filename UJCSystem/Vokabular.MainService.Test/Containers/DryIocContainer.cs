@@ -67,29 +67,21 @@ namespace Vokabular.MainService.Test.Containers
         public void AddAllSingletonBasedOn<TService>(Assembly assembly) where TService : class
         {
             var serviceType = typeof(TService);
-            m_container.RegisterMany(new[] { assembly }, (registrator, types, type) =>
+            var implTypes = assembly.GetImplementationTypes(type => serviceType.IsAssignableFrom(type));
+            foreach (var implType in implTypes)
             {
-                if (serviceType.IsAssignableFrom(type))
-                {
-                    registrator.RegisterMany(new[] { type, serviceType }, type, Reuse.Singleton);
-                }
-            });
+                m_container.RegisterMany(new[] { serviceType, implType }, implType, Reuse.Singleton);
+            }
         }
 
         public void AddAllTransientBasedOn<TService>(Assembly assembly) where TService : class
         {
-            //m_container.RegisterMany(new[] { typeof(App).Assembly },
-            //    serviceTypeCondition: type => type.IsSubclassOf(typeof(TService)),
-            //    reuse: Reuse.Transient);
-
             var serviceType = typeof(TService);
-            m_container.RegisterMany(new[] { assembly }, (registrator, types, type) =>
+            var implTypes = assembly.GetImplementationTypes(type => serviceType.IsAssignableFrom(type));
+            foreach (var implType in implTypes)
             {
-                if (serviceType.IsAssignableFrom(type))
-                {
-                    registrator.RegisterMany(new[] { type, serviceType }, type, Reuse.Transient);
-                }
-            });
+                m_container.RegisterMany(new[] { serviceType, implType }, implType, Reuse.Transient);
+            }
         }
 
         public void Install<T>() where T : IContainerInstaller

@@ -1,7 +1,7 @@
-﻿@using Localization.AspNetCore.Service
+﻿@using Scalesoft.Localization.AspNetCore
 @model ITJakub.Web.Hub.Models.LoginViewModel
 
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 @{
     ViewBag.Title = Localizer.Translate("Login", "account");
@@ -55,7 +55,7 @@
         </div>
         @*<div class="col-md-4">
             <section id="socialLoginForm">
-                @Html.Partial("_ExternalLoginsListPartial")
+                @await Html.PartialAsync("_ExternalLoginsListPartial")
             </section>
         </div>*@
     </div>

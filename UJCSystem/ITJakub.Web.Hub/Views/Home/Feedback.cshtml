@@ -1,15 +1,15 @@
-﻿@using Localization.AspNetCore.Service
-@using Localization.CoreLibrary.Util
+﻿@using Scalesoft.Localization.AspNetCore
+@using Scalesoft.Localization.Core.Util
 @model ITJakub.Web.Hub.Models.FeedbackViewModel
 
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 @{
     ViewBag.Title = Localizer.Translate("FeedbackTitle", "Home", LocTranslationSource.File);
 }
 
 <div class="content-container top-offset-without-submenu">
-    @Html.Partial("_StaticText", Model.PageStaticText)
+    @await Html.PartialAsync("_StaticText", Model.PageStaticText)
 
     @*Original text:
     <h1>Připomínky</h1>
@@ -24,6 +24,6 @@
         <a href="http://www.ujc.cas.cz/zakladni-informace/oddeleni/oddeleni-vyvoje-jazyka/">Provozovatel</a> stránek si vyhrazuje právo nereagovat na připomínky, které jsou pro provoz <i>Vokabuláře webového</i> zcela nepřínosné či které jsou v rozporu s dobrými mravy.
     </p>*@
 
-    @Html.Partial("Feedback/_FeedbackForm", Model)
+    @await Html.PartialAsync("Feedback/_FeedbackForm", Model)
     
 </div>

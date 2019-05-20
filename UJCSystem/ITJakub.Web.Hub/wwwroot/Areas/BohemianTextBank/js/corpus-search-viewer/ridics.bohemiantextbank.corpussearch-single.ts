@@ -398,7 +398,7 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
         const bookSectionEl = $(`*[data-snapshotId=${snapshotId}]`);
         const paginationEl = bookSectionEl.find(".pagination-section");
         const paginator = new Pagination({
-            container: paginationEl,
+            container: paginationEl.get(0) as Node as HTMLDivElement,
             pageClickCallback: (pageNumber) => {
                 this.goToResultPage(pageNumber, snapshotId, this.search.getLastQuery(), this.contextLength);
             },
@@ -859,7 +859,7 @@ class BohemianTextBankSinglePaged extends BohemianTextBankSingle {
         if (this.paginationInitialised) {
             return;
         } else {
-            const paginationContainerEl = $(".main-pagination-container");
+            const paginationContainerEl = document.getElementById(".main-pagination-container") as HTMLDivElement;
             const query = this.search.getLastQuery();
             const isAdvancedMode = this.search.isLastQueryJson();
             if (isAdvancedMode) {

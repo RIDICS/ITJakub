@@ -1,7 +1,7 @@
 ﻿@model ITJakub.Web.Hub.Models.Favorite.FavoriteLabelViewModel
-@using Localization.AspNetCore.Service
+@using Scalesoft.Localization.AspNetCore
 
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 <div class="favorite-label-management" style="background-color: @Model.Color;" data-id="@Model.Id" data-name="@Model.Name" data-color="@Model.Color">
     <div class="row">
