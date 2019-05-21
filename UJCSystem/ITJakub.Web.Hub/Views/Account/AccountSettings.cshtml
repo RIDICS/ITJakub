@@ -24,13 +24,13 @@
 
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane @(!ViewData.ContainsKey("ActualTab") ? "active" : string.Empty)" id="account-settings">
-            @Html.Partial("Settings/_Detail", Model)
+            @await Html.PartialAsync("Settings/_Detail", Model)
         </div>
         <div role="tabpanel" class="tab-pane @(actualTab == "UpdateAccount" ? "active" : string.Empty)" id="update-account">
-            @Html.Partial("Settings/_UpdateAccount", Model.UpdateAccountViewModel)
+            @await Html.PartialAsync("Settings/_UpdateAccount", Model.UpdateAccountViewModel)
         </div>
         <div role="tabpanel" class="tab-pane @(actualTab == "UpdatePassword" ? "active" : string.Empty)" id="update-password">
-            @Html.Partial("Settings/_UpdatePassword", Model.UpdatePasswordViewModel)
+            @await Html.PartialAsync("Settings/_UpdatePassword", Model.UpdatePasswordViewModel)
         </div>
     </div>
 </div>

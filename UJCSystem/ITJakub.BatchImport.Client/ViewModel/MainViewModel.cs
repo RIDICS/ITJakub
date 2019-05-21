@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Threading;
@@ -25,7 +24,6 @@ namespace ITJakub.BatchImport.Client.ViewModel
         private readonly IDataService m_dataService;
         private string m_folderPath;
         private int m_threadCount;
-        private string m_userName;
 
         /// <summary>
         ///     Initializes a new instance of the MainViewModel class.
