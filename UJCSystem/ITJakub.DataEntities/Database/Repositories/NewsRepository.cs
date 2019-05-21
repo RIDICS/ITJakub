@@ -4,6 +4,7 @@ using Castle.Facilities.NHibernate;
 using Castle.Transactions;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
+using NHibernate;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
@@ -19,7 +20,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             using (var session = GetSession())
             {
                 var items = session.QueryOver<NewsSyndicationItem>()
-                    .Fetch(x => x.User).Eager
+                    .Fetch(SelectMode.Fetch, x => x.User)
                     .Where(x => x.ItemType == SyndicationItemType.Combined || x.ItemType == SyndicationItemType.Web)
                     .OrderBy(x => x.CreateDate).Desc.Skip(start).Take(count).List<NewsSyndicationItem>();
 
@@ -33,7 +34,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             using (var session = GetSession())
             {
                 var items = session.QueryOver<NewsSyndicationItem>()
-                    .Fetch(x => x.User).Eager
+                    .Fetch(SelectMode.Fetch, x => x.User)
                     .Where(x => x.ItemType == SyndicationItemType.Combined || x.ItemType == SyndicationItemType.MobileApps)
                     .OrderBy(x => x.CreateDate).Desc.Skip(start).Take(count).List<NewsSyndicationItem>();
 

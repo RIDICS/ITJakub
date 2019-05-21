@@ -11,15 +11,14 @@ using ITJakub.Web.Hub.Areas.Admin.Models.Type;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Helpers;
-using Localization.AspNetCore.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
+using Scalesoft.Localization.AspNetCore;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
-using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.AspNetCore.Helpers;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
@@ -28,11 +27,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
     public class ProjectController : BaseController
     {
         private const int ProjectListPageSize = 5;
-        private readonly ILocalization m_localizer;
+        private readonly ILocalizationService m_localizer;
 
-        public ProjectController(CommunicationProvider communicationProvider, ILocalization localizer) : base(communicationProvider)
+        public ProjectController(CommunicationProvider communicationProvider, ILocalizationService localizer) : base(communicationProvider)
         {
-            this.m_localizer = localizer;
+            m_localizer = localizer;
         }
 
         private ProjectListViewModel CreateProjectListViewModel(PagedResultList<ProjectDetailContract> data, int start)
@@ -573,7 +572,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
     public static class ProjectMock
     {
-        public static NewPublicationViewModel GetNewPulication(ILocalization localizer)
+        public static NewPublicationViewModel GetNewPulication(ILocalizationService localizer)
         {
             return new NewPublicationViewModel
             {
@@ -594,7 +593,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             };
         }
 
-        private static GroupInfoViewModel GetVisibilityForGroup(int id, ILocalization localizer)
+        private static GroupInfoViewModel GetVisibilityForGroup(int id, ILocalizationService localizer)
         {
             return new GroupInfoViewModel
             {
@@ -604,7 +603,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             };
         }
 
-        private static ResourceViewModel GetResourceViewModel(int id, ILocalization localizer)
+        private static ResourceViewModel GetResourceViewModel(int id, ILocalizationService localizer)
         {
             return new ResourceViewModel
             {

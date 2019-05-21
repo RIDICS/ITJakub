@@ -22,7 +22,8 @@
     "bootstrap-tokenfield": "https://github.com/tilonet/bootstrap-tokenfield.git#0.12.3",
     "bootbox": "4.4.0",
     "gijgo": "1.8.0",
-    "s-pagination": "1.1.1",
+    "s-pagination": "2.1.0",
+    "scalesoft-localization-web": "2.1.1",
     "jquery-table-fixer": "1.0.0",
     "stickybits": "3.0.4"
   },

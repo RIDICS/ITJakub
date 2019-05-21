@@ -391,7 +391,7 @@ class LemmatizationCharacteristicTable {
         this.container = container;
         this.item = item;
 
-        this.localization = new Localization();
+        this.localization = localization;
     }
 
     make(reloadCallback: () => void) {

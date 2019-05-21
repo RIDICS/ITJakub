@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
@@ -17,7 +18,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         public virtual ListWithTotalCountResult<Project> GetProjectList(int start, int count)
         {
             var query = GetSession().QueryOver<Project>()
-                .Fetch(x => x.CreatedByUser).Eager
+                .Fetch(SelectMode.Fetch, x => x.CreatedByUser)
                 .OrderBy(x => x.Name).Asc
                 .Skip(start)
                 .Take(count);
@@ -36,7 +37,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             return GetSession().QueryOver<Project>()
                 .Where(x => x.Id == projectId)
-                .Fetch(x => x.CreatedByUser).Eager
+                .Fetch(SelectMode.Fetch, x => x.CreatedByUser)
                 .SingleOrDefault();
         }
 
@@ -68,7 +69,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             return GetSession().QueryOver<Snapshot>()
                 .Where(x => x.Project.Id == projectId)
-                .Fetch(x => x.Project).Eager
+                .Fetch(SelectMode.Fetch, x => x.Project)
                 .OrderBy(x => x.VersionNumber).Desc
                 .Take(1)
                 .SingleOrDefault();
@@ -78,7 +79,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             return GetSession().QueryOver<Project>()
                 .Where(x => x.Id == projectId)
-                .Fetch(x => x.Keywords).Eager
+                .Fetch(SelectMode.Fetch, x => x.Keywords)
                 .SingleOrDefault();
         }
 
@@ -90,7 +91,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             if (includeAuthors)
             {
-                query.Fetch(x => x.OriginalAuthor);
+                query.Fetch(SelectMode.Fetch, x => x.OriginalAuthor);
             }
 
             return query.List();
@@ -100,8 +101,8 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             return GetSession().QueryOver<ProjectResponsiblePerson>()
                 .Where(x => x.Project.Id == projectId)
-                .Fetch(x => x.ResponsiblePerson).Eager
-                .Fetch(x => x.ResponsibleType).Eager
+                .Fetch(SelectMode.Fetch, x => x.ResponsiblePerson)
+                .Fetch(SelectMode.Fetch, x => x.ResponsibleType)
                 .List();
         }
 

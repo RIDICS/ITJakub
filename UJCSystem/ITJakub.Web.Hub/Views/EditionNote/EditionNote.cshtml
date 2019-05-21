@@ -1,17 +1,16 @@
-﻿@using Localization.AspNetCore.Service
-@using Localization.CoreLibrary.Util
-@using HtmlString = Microsoft.AspNetCore.Html.HtmlString
+﻿@using Microsoft.AspNetCore.Html
+@using Scalesoft.Localization.AspNetCore
 
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 @{
-    ViewBag.Title = Localizer.Translate("EditionNote", "EditionNote", LocTranslationSource.File);
+    ViewBag.Title = Localizer.Translate("EditionNote", "EditionNote");
 }
 
 <div id="edition-note-content" class="content-container top-offset-without-submenu">
     <h1>@ViewBag.Title</h1>
 
     <p>
-    @(new HtmlString(@ViewData["noteText"].ToString()))
+    @(new HtmlString(ViewData["noteText"].ToString()))
     </p>
 </div>

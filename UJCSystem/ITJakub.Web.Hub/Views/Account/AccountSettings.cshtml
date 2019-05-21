@@ -1,7 +1,7 @@
-﻿@using Localization.AspNetCore.Service
+﻿@using Scalesoft.Localization.AspNetCore
 @model ITJakub.Web.Hub.Models.AccountDetailViewModel
 
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 @{
     ViewBag.Title = Localizer.Translate("Settings", "Account");
     ViewData.TryGetValue("ActualTab", out var value);

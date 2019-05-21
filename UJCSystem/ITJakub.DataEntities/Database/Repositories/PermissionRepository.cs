@@ -5,6 +5,7 @@ using Castle.Transactions;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
+using NHibernate;
 using NHibernate.Criterion;
 
 namespace ITJakub.DataEntities.Database.Repositories
@@ -22,8 +23,8 @@ namespace ITJakub.DataEntities.Database.Repositories
             using (var session = GetSession())
             {
                 var group = session.QueryOver<Group>()
-                    .Fetch(g => g.Users).Eager
-                    .Fetch(g => g.CreatedBy).Eager
+                    .Fetch(SelectMode.Fetch, g => g.Users)
+                    .Fetch(SelectMode.Fetch, g => g.CreatedBy)
                     .Where(g => g.Id == groupId)
                     .SingleOrDefault();
 
@@ -37,8 +38,8 @@ namespace ITJakub.DataEntities.Database.Repositories
             using (var session = GetSession())
             {
                 var group = session.QueryOver<Group>()
-                    .Fetch(g => g.CreatedBy).Eager
-                    .Fetch(g => g.SpecialPermissions).Eager
+                    .Fetch(SelectMode.Fetch, g => g.CreatedBy)
+                    .Fetch(SelectMode.Fetch, g => g.SpecialPermissions)
                     .Where(g => g.Id == groupId)
                     .SingleOrDefault();
 

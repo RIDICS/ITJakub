@@ -1,7 +1,6 @@
 ﻿using System;
-using AutoMapper;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHibernate.Util;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.MainService.Core;

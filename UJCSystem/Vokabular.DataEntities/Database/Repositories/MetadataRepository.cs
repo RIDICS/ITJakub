@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
@@ -26,7 +27,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             var query = GetSession().QueryOver<MetadataResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .Where(x => resourceAlias.Project.Id == projectId && resourceAlias.ResourceType == ResourceTypeEnum.ProjectMetadata && resourceAlias.LatestVersion.Id == x.Id)
-                .Fetch(x => x.Resource).Eager;
+                .Fetch(SelectMode.Fetch, x => x.Resource);
 
             return query.SingleOrDefault();
         }
@@ -40,7 +41,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .Where(x => projectAlias.ExternalId == projectExternalId && resourceAlias.ResourceType == ResourceTypeEnum.ProjectMetadata && resourceAlias.LatestVersion.Id == x.Id)
-                .Fetch(x => x.Resource).Eager;
+                .Fetch(SelectMode.Fetch, x => x.Resource);
 
             return query.SingleOrDefault();
         }
@@ -59,51 +60,51 @@ namespace Vokabular.DataEntities.Database.Repositories
                     .JoinAlias(() => projectAuthorAlias.OriginalAuthor, () => authorAlias, JoinType.LeftOuterJoin)
                     .Where(x => x.Id == projectId)
                     .OrderBy(() => projectAuthorAlias.Sequence).Asc
-                    .Fetch(x => x.Authors).Eager
+                    .Fetch(SelectMode.Fetch, x => x.Authors)
                     .FutureValue();
             }
             if (includeResponsibles)
             {
                 session.QueryOver<Project>()
                     .Where(x => x.Id == projectId)
-                    .Fetch(x => x.ResponsiblePersons).Eager
-                    .Fetch(x => x.ResponsiblePersons[0].ResponsiblePerson).Eager
-                    .Fetch(x => x.ResponsiblePersons[0].ResponsibleType).Eager
+                    .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons)
+                    .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons[0].ResponsiblePerson)
+                    .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons[0].ResponsibleType)
                     .FutureValue();
             }
             if (includeKind)
             {
                 session.QueryOver<Project>()
                     .Where(x => x.Id == projectId)
-                    .Fetch(x => x.LiteraryKinds).Eager
+                    .Fetch(SelectMode.Fetch, x => x.LiteraryKinds)
                     .FutureValue();
             }
             if (includeGenre)
             {
                 session.QueryOver<Project>()
                     .Where(x => x.Id == projectId)
-                    .Fetch(x => x.LiteraryGenres).Eager
+                    .Fetch(SelectMode.Fetch, x => x.LiteraryGenres)
                     .FutureValue();
             }
             if (includeOriginal)
             {
                 session.QueryOver<Project>()
                     .Where(x => x.Id == projectId)
-                    .Fetch(x => x.LiteraryOriginals).Eager
+                    .Fetch(SelectMode.Fetch, x => x.LiteraryOriginals)
                     .FutureValue();
             }
             if (includeKeyword)
             {
                 session.QueryOver<Project>()
                     .Where(x => x.Id == projectId)
-                    .Fetch(x => x.Keywords).Eager
+                    .Fetch(SelectMode.Fetch, x => x.Keywords)
                     .FutureValue();
             }
             if (includeCategory)
             {
                 session.QueryOver<Project>()
                     .Where(x => x.Id == projectId)
-                    .Fetch(x => x.Categories).Eager
+                    .Fetch(SelectMode.Fetch, x => x.Categories)
                     .FutureValue();
             }
             return session.QueryOver<Project>()
@@ -125,7 +126,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => snapshotAlias.BookTypes, () => bookTypeAlias)
                 .Where(x => x.Id == resourceAlias.LatestVersion.Id && bookTypeAlias.Type == bookTypeEnum)
                 .OrderBy(x => x.Title).Asc
-                //.Fetch(x => x.Resource.Project.Categories).Eager
+                //.Fetch(SelectMode.Fetch, x => x.Resource.Project.Categories)
                 .List();
         }
 
@@ -150,7 +151,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => x.Id == resourceAlias.LatestVersion.Id && bookTypeAlias.Type == bookTypeEnum)
                 .And(() => userAlias.Id == userId)
                 .OrderBy(x => x.Title).Asc
-                .Fetch(x => x.Resource.Project.Categories).Eager
+                .Fetch(SelectMode.Fetch, x => x.Resource.Project.Categories)
                 .List();
         }
 
@@ -172,7 +173,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => x.Id == resourceAlias.LatestVersion.Id && bookTypeAlias.Type == bookTypeEnum)
                 .And(() => permissionAlias.UserGroup.Id == userGroupId)
                 .OrderBy(x => x.Title).Asc
-                //.Fetch(x => x.Resource.Project.Categories).Eager
+                //.Fetch(SelectMode.Fetch, x => x.Resource.Project.Categories)
                 .List();
         }
 
@@ -182,11 +183,11 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             var result = session.QueryOver<MetadataResource>()
                 .WhereRestrictionOn(x => x.Id).IsInG(metadataIdList)
-                .Fetch(x => x.Resource).Eager
-                .Fetch(x => x.Resource.Project).Eager
-                //.Fetch(x => x.Resource.Project.Authors).Eager // Authors are used from Metadata
-                .Fetch(x => x.Resource.Project.LatestPublishedSnapshot).Eager
-                .Fetch(x => x.Resource.Project.LatestPublishedSnapshot.DefaultBookType).Eager
+                .Fetch(SelectMode.Fetch, x => x.Resource)
+                .Fetch(SelectMode.Fetch, x => x.Resource.Project)
+                //.Fetch(SelectMode.Fetch, x => x.Resource.Project.Authors) // Authors are used from Metadata
+                .Fetch(SelectMode.Fetch, x => x.Resource.Project.LatestPublishedSnapshot)
+                .Fetch(SelectMode.Fetch, x => x.Resource.Project.LatestPublishedSnapshot.DefaultBookType)
                 .List();
             return result;
         }
@@ -201,10 +202,10 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .WhereRestrictionOn(() => resourceAlias.Project.Id).IsInG(projectIdList)
                 .And(x => x.Id == resourceAlias.LatestVersion.Id)
-                .Fetch(x => x.Resource).Eager
-                .Fetch(x => x.Resource.Project).Eager
-                .Fetch(x => x.Resource.Project.LatestPublishedSnapshot).Eager
-                .Fetch(x => x.Resource.Project.LatestPublishedSnapshot.DefaultBookType).Eager
+                .Fetch(SelectMode.Fetch, x => x.Resource)
+                .Fetch(SelectMode.Fetch, x => x.Resource.Project)
+                .Fetch(SelectMode.Fetch, x => x.Resource.Project.LatestPublishedSnapshot)
+                .Fetch(SelectMode.Fetch, x => x.Resource.Project.LatestPublishedSnapshot.DefaultBookType)
                 .List();
             return result;
         }
@@ -221,10 +222,10 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .WhereRestrictionOn(() => projectAlias.ExternalId).IsInG(projectExternalIdList)
                 .And(x => x.Id == resourceAlias.LatestVersion.Id)
-                .Fetch(x => x.Resource).Eager
-                .Fetch(x => x.Resource.Project).Eager
-                .Fetch(x => x.Resource.Project.LatestPublishedSnapshot).Eager
-                .Fetch(x => x.Resource.Project.LatestPublishedSnapshot.DefaultBookType).Eager
+                .Fetch(SelectMode.Fetch, x => x.Resource)
+                .Fetch(SelectMode.Fetch, x => x.Resource.Project)
+                .Fetch(SelectMode.Fetch, x => x.Resource.Project.LatestPublishedSnapshot)
+                .Fetch(SelectMode.Fetch, x => x.Resource.Project.LatestPublishedSnapshot.DefaultBookType)
                 .List();
             return result;
         }
@@ -234,8 +235,8 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             var result = GetSession().QueryOver<HeadwordResource>()
                 .WhereRestrictionOn(x => x.Id).IsInG(headwordIds)
-                .Fetch(x => x.Resource).Eager
-                .Fetch(x => x.HeadwordItems).Eager
+                .Fetch(SelectMode.Fetch, x => x.Resource)
+                .Fetch(SelectMode.Fetch, x => x.HeadwordItems)
                 .TransformUsing(Transformers.DistinctRootEntity)
                 .List();
             return result;
@@ -250,8 +251,8 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .Where(x => x.ExternalId == headwordExternalId && projectAlias.ExternalId == projectExternalId && x.Id == resourceAlias.LatestVersion.Id)
-                .Fetch(x => x.Resource).Eager
-                .Fetch(x => x.HeadwordItems).Eager
+                .Fetch(SelectMode.Fetch, x => x.Resource)
+                .Fetch(SelectMode.Fetch, x => x.HeadwordItems)
                 .TransformUsing(Transformers.DistinctRootEntity)
                 .SingleOrDefault();
             return result;
@@ -309,30 +310,30 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             session.QueryOver<Project>()
                 .Where(x => x.Id == projectId)
-                .Fetch(x => x.Keywords).Eager
+                .Fetch(SelectMode.Fetch, x => x.Keywords)
                 .Future();
 
             session.QueryOver<Project>()
                 .Where(x => x.Id == projectId)
-                .Fetch(x => x.LiteraryGenres).Eager
+                .Fetch(SelectMode.Fetch, x => x.LiteraryGenres)
                 .Future();
 
             session.QueryOver<Project>()
                 .Where(x => x.Id == projectId)
-                .Fetch(x => x.LiteraryKinds).Eager
+                .Fetch(SelectMode.Fetch, x => x.LiteraryKinds)
                 .Future();
 
             session.QueryOver<Project>()
                 .Where(x => x.Id == projectId)
-                .Fetch(x => x.LiteraryOriginals).Eager
+                .Fetch(SelectMode.Fetch, x => x.LiteraryOriginals)
                 .Future();
 
             session.QueryOver<Project>()
                 .Where(x => x.Id == projectId)
                 .JoinAlias(x => x.Authors, () => projectOriginalAuthorAlias, JoinType.LeftOuterJoin)
                 .JoinAlias(() => projectOriginalAuthorAlias.OriginalAuthor, () => originalAuthorAlias, JoinType.LeftOuterJoin)
-                .Fetch(x => x.Authors).Eager
-                .Fetch(x => x.Authors[0].OriginalAuthor).Eager
+                .Fetch(SelectMode.Fetch, x => x.Authors)
+                .Fetch(SelectMode.Fetch, x => x.Authors[0].OriginalAuthor)
                 .OrderBy(() => projectOriginalAuthorAlias.Sequence).Asc
                 .Future();
 
@@ -341,9 +342,9 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.ResponsiblePersons, () => projectResponsiblePersonAlias, JoinType.LeftOuterJoin)
                 .JoinAlias(() => projectResponsiblePersonAlias.ResponsiblePerson, () => responsiblePersonAlias, JoinType.LeftOuterJoin)
                 .JoinAlias(() => projectResponsiblePersonAlias.ResponsibleType, () => responsibleTypeAlias, JoinType.LeftOuterJoin)
-                .Fetch(x => x.ResponsiblePersons).Eager
-                .Fetch(x => x.ResponsiblePersons[0].ResponsiblePerson).Eager
-                .Fetch(x => x.ResponsiblePersons[0].ResponsibleType).Eager
+                .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons)
+                .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons[0].ResponsiblePerson)
+                .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons[0].ResponsibleType)
                 .Future();
 
             return result.Value;
@@ -453,8 +454,8 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .WhereRestrictionOn(() => projectAlias.Id).IsInG(projectIds)
-                .Fetch(x => x.Resource).Eager
-                .Fetch(x => x.Resource.Project).Eager
+                .Fetch(SelectMode.Fetch, x => x.Resource)
+                .Fetch(SelectMode.Fetch, x => x.Resource.Project)
                 .And(x => x.Id == resourceAlias.LatestVersion.Id)
                 .Future();
 
@@ -463,8 +464,8 @@ namespace Vokabular.DataEntities.Database.Repositories
                 GetSession().QueryOver<Project>()
                     .WhereRestrictionOn(x => x.Id).IsInG(projectIds)
                     .JoinAlias(x => x.Authors, () => projectOriginalAuthorAlias, JoinType.LeftOuterJoin)
-                    .Fetch(x => x.Authors).Eager
-                    .Fetch(x => x.Authors[0].OriginalAuthor).Eager
+                    .Fetch(SelectMode.Fetch, x => x.Authors)
+                    .Fetch(SelectMode.Fetch, x => x.Authors[0].OriginalAuthor)
                     .OrderBy(() => projectOriginalAuthorAlias.Sequence).Asc
                     .Future();
             }
@@ -473,9 +474,9 @@ namespace Vokabular.DataEntities.Database.Repositories
             {
                 GetSession().QueryOver<Project>()
                     .WhereRestrictionOn(x => x.Id).IsInG(projectIds)
-                    .Fetch(x => x.ResponsiblePersons).Eager
-                    .Fetch(x => x.ResponsiblePersons[0].ResponsiblePerson).Eager
-                    .Fetch(x => x.ResponsiblePersons[0].ResponsibleType).Eager
+                    .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons)
+                    .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons[0].ResponsiblePerson)
+                    .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons[0].ResponsibleType)
                     .Future();
             }
 
@@ -568,17 +569,17 @@ namespace Vokabular.DataEntities.Database.Repositories
             GetSession().QueryOver<Project>()
                 .WhereRestrictionOn(x => x.Id).IsInG(projectIds)
                 .JoinAlias(x => x.Authors, () => projectOriginalAuthorAlias, JoinType.LeftOuterJoin)
-                .Fetch(x => x.Authors).Eager
-                .Fetch(x => x.Authors[0].OriginalAuthor).Eager
+                .Fetch(SelectMode.Fetch, x => x.Authors)
+                .Fetch(SelectMode.Fetch, x => x.Authors[0].OriginalAuthor)
                 .OrderBy(x => x.Id).Asc
                 .ThenBy(() => projectOriginalAuthorAlias.Sequence).Asc
                 .Future();
 
             return GetSession().QueryOver<Project>()
                 .WhereRestrictionOn(x => x.Id).IsInG(projectIds)
-                .Fetch(x => x.ResponsiblePersons).Eager
-                .Fetch(x => x.ResponsiblePersons[0].ResponsiblePerson).Eager
-                .Fetch(x => x.ResponsiblePersons[0].ResponsibleType).Eager
+                .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons)
+                .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons[0].ResponsiblePerson)
+                .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons[0].ResponsibleType)
                 .OrderBy(x => x.Id).Asc
                 .Future().ToList();
         }

@@ -8,7 +8,7 @@
 
     protected initPagination(itemsCount: number, itemsOnPage: number, callback : Function) {
         const pagination = new Pagination({
-            container: $(".key-table-pagination"),
+            container: document.getElementById(".key-table-pagination") as HTMLDivElement,
             pageClickCallback: (pageNumber) => {
                 callback(pageNumber);
                 this.currentPage = pageNumber;

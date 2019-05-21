@@ -20,6 +20,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.SwaggerUI;
 using Vokabular.Core;
 using Vokabular.MainService.Authorization;
 using Vokabular.MainService.Core;
@@ -133,7 +134,7 @@ namespace Vokabular.MainService
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("v1/swagger.json", "Vokabular MainService API v1"); // using relative address to Swagger UI
-                c.SupportedSubmitMethods(new[] {"get", "post", "put", "delete", "head"});
+                c.SupportedSubmitMethods(SubmitMethod.Get, SubmitMethod.Post, SubmitMethod.Put, SubmitMethod.Delete, SubmitMethod.Head);
             });
 
             applicationLifetime.ApplicationStopped.Register(OnShutdown);

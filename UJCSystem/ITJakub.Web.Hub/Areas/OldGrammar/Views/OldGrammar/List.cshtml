@@ -1,5 +1,5 @@
-﻿@using Localization.AspNetCore.Service
-@inject ILocalization Localizer
+﻿@using Scalesoft.Localization.AspNetCore
+@inject ILocalizationService Localizer
 
 @section styles{
     <link href="~/Areas/OldGrammar/css/itjakub.oldgrammar.css" rel="stylesheet" />
@@ -13,4 +13,4 @@
     ViewBag.Title = @Localizer.Translate("OldGrammarList", "OldGrammar");
 }
 
-@Html.Partial("_BibliographySearch")
+@await Html.PartialAsync("_BibliographySearch")

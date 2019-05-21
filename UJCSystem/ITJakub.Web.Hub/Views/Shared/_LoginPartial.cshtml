@@ -1,8 +1,8 @@
-﻿@using Localization.AspNetCore.Service
-@using Localization.CoreLibrary.Util
-@using Microsoft.AspNetCore.Http.Extensions
+﻿@using Microsoft.AspNetCore.Http.Extensions
+@using Scalesoft.Localization.AspNetCore
+@using Scalesoft.Localization.Core.Util
 
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 @{
     var requestUrl = Context.Request.GetDisplayUrl();
@@ -13,7 +13,7 @@
 <div class="secondary-navbar-toggle language" title="@Localizer.Translate("Language", "global", LocTranslationSource.File)">
     <span class="glyphicon glyphicon-text-background"></span>
     <ul class="navbar-language">
-        @foreach (var x in Localizer.SupportedCultures())
+        @foreach (var x in Localizer.GetSupportedCultures())
         {
             <li>
                 @Html.ActionLink(x.NativeName, "SetLanguage", "Localization", new { area = "", culture = x.Name, returnUrl = pathAndQuery })
@@ -30,7 +30,7 @@
 
             <ul class="navbar-login">
                 <li><a href="@Url.Action("AccountSettings", "Account", new {area = ""})">@Html.Raw(User.Identity.Name)</a></li>
-                <li><a href="javascript:document.getElementById('logoutForm').submit()">@Localizer.Translate("LogOut","global", LocTranslationSource.File)</a></li>
+                <li><a href="javascript:document.getElementById('logoutForm').submit()">@Localizer.Translate("LogOut", "global", LocTranslationSource.File)</a></li>
             </ul>
         }
     }

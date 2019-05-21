@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NHibernate;
 using NHibernate.Criterion;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
@@ -16,7 +17,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         public virtual UserGroup FindGroupById(int groupId)
         {
             var group = GetSession().QueryOver<UserGroup>()
-                .Fetch(g => g.Users).Eager
+                .Fetch(SelectMode.Fetch, g => g.Users)
                 .Where(g => g.Id == groupId)
                 .SingleOrDefault();
 
@@ -26,7 +27,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         public virtual UserGroup FindGroupByExternalId(int externalId)
         {
             var group = GetSession().QueryOver<UserGroup>()
-                .Fetch(g => g.Users).Eager
+                .Fetch(SelectMode.Fetch, g => g.Users)
                 .Where(g => g.ExternalId == externalId)
                 .SingleOrDefault();
 

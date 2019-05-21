@@ -50,7 +50,7 @@ class CommentInput {
                 {
                     comment: comment,
                     textId: textId
-                }
+                } as JQuery.PlainObject
             );
             sendAjax.done(() => {
                 bootbox.alert({
@@ -208,7 +208,7 @@ class CommentInput {
                             {
                                 comment: comment,
                                 textId: textId
-                            }
+                            } as JQuery.PlainObject
                         );
                         this.onCommentSendRequest(sendAjax, textAreaEl, textId);
                     } else {
@@ -216,7 +216,7 @@ class CommentInput {
                             {
                                 comment: comment,
                                 commentId: commentId
-                            }
+                            } as JQuery.PlainObject
                         );
                         this.onCommentSendRequest(sendAjax, textAreaEl, textId);
                     }

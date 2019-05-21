@@ -5,6 +5,7 @@ using Castle.Transactions;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
+using NHibernate;
 using NHibernate.Criterion;
 
 namespace ITJakub.DataEntities.Database.Repositories
@@ -42,7 +43,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     query.Take(count.Value);
                 }
 
-                return query.Fetch(x => x.User).Eager.List<Feedback>();
+                return query.Fetch(SelectMode.Fetch, x => x.User).List<Feedback>();
             }
         }
 
@@ -80,8 +81,8 @@ namespace ITJakub.DataEntities.Database.Repositories
             {
                 return session.QueryOver<HeadwordFeedback>()
                     .WhereRestrictionOn(x => x.Id).IsInG(feedbackIds)
-                    .Fetch(x => x.BookHeadword).Eager
-                    .Fetch(x => x.BookHeadword.BookVersion).Eager
+                    .Fetch(SelectMode.Fetch, x => x.BookHeadword)
+                    .Fetch(SelectMode.Fetch, x => x.BookHeadword.BookVersion)
                     .List();
             }
         }

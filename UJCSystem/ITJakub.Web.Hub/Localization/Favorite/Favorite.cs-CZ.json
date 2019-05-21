@@ -6,7 +6,7 @@
 		"EditLabel": "Upravit štítek",
 		
 		"AssignLabels":"Přiřadit štítky",
-		"CreateLabel":"Vytvořit a přiřadit nový štítek",
+		"CreateAssignLabel":"Vytvořit a přiřadit nový štítek",
 		"ControlLabel":"Název položky",
 		"ChooseLabel":"Vyberte štítek",
 		"FilerLabels":"Filtrovat štítky",

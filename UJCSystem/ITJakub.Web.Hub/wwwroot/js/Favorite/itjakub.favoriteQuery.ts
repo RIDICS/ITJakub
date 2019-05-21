@@ -291,7 +291,7 @@
         this.renderContainer.append(mainDiv);
 
         this.paginationOptions = {
-            container: $(".favorite-queries-pagination"),
+            container: document.getElementById(".favorite-queries-pagination") as HTMLDivElement,
             maxVisibleElements: 7,
             pageClickCallback: this.loadQueriesPage.bind(this)
         }
