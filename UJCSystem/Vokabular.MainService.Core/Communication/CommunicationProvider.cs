@@ -15,7 +15,7 @@ namespace Vokabular.MainService.Core.Communication
     {
         private readonly CommunicationConfigurationProvider m_configurationProvider;
         private readonly IOptions<List<CredentialsOption>> m_credentialsOptions;
-        private readonly IOptions<AuthServiceApiKey> m_authServiceApiKey;
+        private readonly IOptions<AuthServiceOption> m_authServiceApiKey;
 
         private const string FileProcessingServiceEndpointName = "FileProcessingService";
         private const string FulltextServiceEndpointName = "FulltextService";
@@ -24,7 +24,7 @@ namespace Vokabular.MainService.Core.Communication
         private const string CardFilesEndpointName = "CardFilesService";
         private const string CardFilesCredentials = "CardFiles";
         
-        public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider, IOptions<List<CredentialsOption>> credentialsOptions, IOptions<AuthServiceApiKey> authServiceApiKey)
+        public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider, IOptions<List<CredentialsOption>> credentialsOptions, IOptions<AuthServiceOption> authServiceApiKey)
         {
             m_configurationProvider = communicationConfigurationProvider;
             m_credentialsOptions = credentialsOptions;

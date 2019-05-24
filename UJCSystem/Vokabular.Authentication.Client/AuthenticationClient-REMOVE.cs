@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using Microsoft.Extensions.Logging;
 using Vokabular.Authentication.DataContracts;
 using Vokabular.Authentication.DataContracts.User;
 using Vokabular.RestClient;
 using Vokabular.Shared;
 using Vokabular.Shared.Extensions;
+using Vokabular.Shared.Options;
 
 namespace Vokabular.Authentication.Client
 {
@@ -16,11 +16,9 @@ namespace Vokabular.Authentication.Client
         private static readonly ILogger m_logger = ApplicationLogging.CreateLogger<AuthenticationClient>();
         private readonly string ApiBasePath = "api/v1";
 
-        public AuthenticationClient(Uri baseAddress, string username, string password) : base(baseAddress, true)
+        public AuthenticationClient(Uri baseAddress, AuthServiceOption options) : base(baseAddress, true)
         {
-            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
-                Convert.ToBase64String(
-                    System.Text.Encoding.ASCII.GetBytes($"{username}:{password}")));
+            HttpClient.DefaultRequestHeaders.Add(options.ApiKeyHeader, options.ApiKeyHash);
         }
 
         protected override void FillRequestMessage(HttpRequestMessage requestMessage)
