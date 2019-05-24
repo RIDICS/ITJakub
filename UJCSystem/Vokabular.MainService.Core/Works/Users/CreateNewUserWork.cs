@@ -32,7 +32,7 @@ namespace Vokabular.MainService.Core.Works.Users
                     User = new UserContractBase
                     {
                         FirstName = m_data.FirstName,
-                        FamilyName = m_data.LastName,
+                        LastName = m_data.LastName,
                         Email = m_data.Email,
                         PhoneNumber = "+420749123678" //TODO remove
                     }

@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.CardFile", "ITJakub.CardFile", "{E9E91BD8-38D8-4A14-8CC2-002292F7C355}"
 EndProject
@@ -221,7 +221,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.XmlToMarkdown", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITJakub.SearchService.DataContracts", "ITJakub.SearchService.DataContracts\ITJakub.SearchService.DataContracts.csproj", "{BA58BCA2-F98A-4DDA-934C-B78C10BC0CAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vokabular.MainService.Test", "Vokabular.MainService.Test\Vokabular.MainService.Test.csproj", "{FA71998E-5AEB-4837-8C0B-59A1A1008CA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.MainService.Test", "Vokabular.MainService.Test\Vokabular.MainService.Test.csproj", "{FA71998E-5AEB-4837-8C0B-59A1A1008CA1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.Jewelry", "Vokabular.Jewelry\Vokabular.Jewelry.csproj", "{DE548409-D147-4A8C-904F-CF21C1E7456A}"
 EndProject
@@ -229,9 +229,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.CardFile.Core", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.Shared.AspNetCore", "Vokabular.Shared.AspNetCore\Vokabular.Shared.AspNetCore.csproj", "{0BF4E3B2-F834-400F-90A0-FC5ACB22FE13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vokabular.Authentication.Client", "Vokabular.Authentication.Client\Vokabular.Authentication.Client.csproj", "{424A2F1A-942E-4C7A-B770-45D83E5574DE}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.Authentication.Structures", "Vokabular.Authentication.Structures\Vokabular.Authentication.Structures.csproj", "{A7B06278-36B9-4CE3-BEDA-691521B40E89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.Authentication.Client", "Vokabular.Authentication.Client\Vokabular.Authentication.Client.csproj", "{424A2F1A-942E-4C7A-B770-45D83E5574DE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.Authentication.DataContracts", "Vokabular.Authentication.DataContracts\Vokabular.Authentication.DataContracts.csproj", "{262C4038-0208-4376-AFE0-350EC0BE1A60}"
 EndProject
@@ -2548,36 +2546,6 @@ Global
 		{424A2F1A-942E-4C7A-B770-45D83E5574DE}.Release|x64.Build.0 = Release|Any CPU
 		{424A2F1A-942E-4C7A-B770-45D83E5574DE}.Release|x86.ActiveCfg = Release|Any CPU
 		{424A2F1A-942E-4C7A-B770-45D83E5574DE}.Release|x86.Build.0 = Release|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Debug|ARM.Build.0 = Debug|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Debug|x64.Build.0 = Debug|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Debug|x86.Build.0 = Debug|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Development|Any CPU.ActiveCfg = Debug|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Development|Any CPU.Build.0 = Debug|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Development|ARM.ActiveCfg = Debug|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Development|ARM.Build.0 = Debug|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Development|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Development|Mixed Platforms.Build.0 = Debug|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Development|x64.ActiveCfg = Debug|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Development|x64.Build.0 = Debug|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Development|x86.ActiveCfg = Debug|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Development|x86.Build.0 = Debug|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Release|ARM.ActiveCfg = Release|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Release|ARM.Build.0 = Release|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Release|x64.ActiveCfg = Release|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Release|x64.Build.0 = Release|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Release|x86.ActiveCfg = Release|Any CPU
-		{A7B06278-36B9-4CE3-BEDA-691521B40E89}.Release|x86.Build.0 = Release|Any CPU
 		{262C4038-0208-4376-AFE0-350EC0BE1A60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{262C4038-0208-4376-AFE0-350EC0BE1A60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{262C4038-0208-4376-AFE0-350EC0BE1A60}.Debug|ARM.ActiveCfg = Debug|Any CPU

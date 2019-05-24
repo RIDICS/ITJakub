@@ -31,7 +31,7 @@ namespace Vokabular.MainService.Core.Works.Users
 
                 authUser.Email = m_data.Email;
                 authUser.FirstName = m_data.FirstName;
-                authUser.FamilyName = m_data.LastName;
+                authUser.LastName = m_data.LastName;
 
                 client.EditCurrentUser(user.ExternalId, authUser);
             }

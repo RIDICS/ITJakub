@@ -1,4 +1,6 @@
-﻿namespace Vokabular.Authentication.DataContracts.User
+﻿using Vokabular.Authentication.DataContracts.SharedStructures;
+
+namespace Vokabular.Authentication.DataContracts.User
 {
     public class UserInfoContract
     {
@@ -15,5 +17,9 @@
         public string Email { get; set; }
 
         public string PhoneNumber { get; set; }
+
+        public ContactLevelOfAssuranceEnum EmailLevelOfAssurance { get; set; }
+
+        public ContactLevelOfAssuranceEnum PhoneNumberLevelOfAssurance { get; set; }
     }
 }
