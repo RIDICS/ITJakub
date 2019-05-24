@@ -45,6 +45,8 @@ namespace ITJakub.Web.Hub
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            //IdentityModelEventSource.ShowPII = true; // Enable to debug authentication problems
+
             var openIdConnectConfig = Configuration.GetSection("OpenIdConnect").Get<OpenIdConnect>();
 
             services.AddAuthentication(options =>
