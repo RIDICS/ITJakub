@@ -68,15 +68,16 @@ namespace Vokabular.MainService.Core.Communication
 
         public AuthenticationClient GetAuthenticationServiceClient()
         {
-            var uri = m_configurationProvider.GetEndpointUri(AuthenticationEndpointName);
-            var credentials = m_authServiceApiKey.Value;
-            if (credentials?.Name == null || credentials.ApiKeyHash == null)
-            {
-                throw new ArgumentException("Credentials for Authentication service not found");
-            }
+            throw new InvalidOperationException("This method will no longer be used. It will be replaced by obtaining data Client from IoC.");
+            //var uri = m_configurationProvider.GetEndpointUri(AuthenticationEndpointName);
+            //var credentials = m_authServiceApiKey.Value;
+            //if (credentials?.Name == null || credentials.ApiKeyHash == null)
+            //{
+            //    throw new ArgumentException("Credentials for Authentication service not found");
+            //}
 
-            var client = new AuthenticationClient(uri, credentials.Name, credentials.ApiKeyHash);
-            return client;
+            //var client = new AuthenticationClient(uri, credentials.Name, credentials.ApiKeyHash);
+            //return client;
         }
     }
 }
