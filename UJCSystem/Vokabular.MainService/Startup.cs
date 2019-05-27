@@ -22,6 +22,7 @@ using Newtonsoft.Json.Linq;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Vokabular.Authentication.Client;
+using Vokabular.Authentication.Client.Configuration;
 using Vokabular.Core;
 using Vokabular.MainService.Authorization;
 using Vokabular.MainService.Core;
@@ -105,10 +106,33 @@ namespace Vokabular.MainService
 
             services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
 
-            services.RegisterAuthorizationHttpClientComponents<AuthServiceClientLocalization>();
+            services.RegisterAuthorizationHttpClientComponents<AuthServiceClientLocalization>(new AuthServiceCommunicationConfiguration
+            {
+                TokenName = openIdConnectConfig.ApiKeyHeader,
+                ApiAccessToken = openIdConnectConfig.ApiKey,
+                AuthenticationServiceAddress = openIdConnectConfig.Url,
+            }, new OpenIdConnectConfig
+            {
+                Url = openIdConnectConfig.Url,
+                AuthServiceScopeName = openIdConnectConfig.AuthServiceScopeName,
+                ClientId = null, // not required
+                ClientSecret = null, // not required
+            }, new AuthServiceControllerBasePathsConfiguration
+            {
+                PermissionBasePath = "api/v1/permission/",
+                RoleBasePath = "api/v1/role/",
+                UserBasePath = "api/v1/user/",
+                RegistrationBasePath = "api/v1/registration/",
+                ExternalLoginProviderBasePath = "api/v1/externalLoginProvider/",
+                FileResourceBasePath = "api/v1/fileResource/",
+                NonceBasePath = "api/v1/nonce/",
+                ContactBasePath = "api/v1/contact/",
+                LoginCheckBasePath = "Account/CheckLogin",
+            });
 
             // IoC
             var container = new DryIocContainer();
+            container.RegisterLogger();
             container.Install<MainServiceContainerRegistration>();
             container.Install<NHibernateInstaller>();
             Container = container;
