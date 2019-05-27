@@ -21,10 +21,12 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using Vokabular.Authentication.Client;
 using Vokabular.Core;
 using Vokabular.MainService.Authorization;
 using Vokabular.MainService.Core;
 using Vokabular.MainService.Middleware;
+using Vokabular.MainService.Utils;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
@@ -102,6 +104,8 @@ namespace Vokabular.MainService
                 });
 
             services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
+
+            services.RegisterAuthorizationHttpClientComponents<AuthServiceClientLocalization>();
 
             // IoC
             var container = new DryIocContainer();

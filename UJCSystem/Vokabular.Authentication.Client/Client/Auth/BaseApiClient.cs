@@ -20,5 +20,7 @@ namespace Vokabular.Authentication.Client.Client.Auth
         }
 
         protected abstract string BasePath { get; }
+
+        public AuthorizationServiceHttpClient HttpClient => m_authorizationServiceHttpClient;
     }
 }

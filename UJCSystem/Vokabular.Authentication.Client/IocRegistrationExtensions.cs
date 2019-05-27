@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Extensions.DependencyInjection;
 using Vokabular.Authentication.Client.Client;
 using Vokabular.Authentication.Client.Client.Auth;
@@ -9,9 +8,9 @@ namespace Vokabular.Authentication.Client
 {
     public static class IocRegistrationExtensions
     {
-        public static void RegisterAuthorizationHttpClientComponents(this IServiceCollection services, Type authorizationServiceExceptionLocalizationType)
+        public static void RegisterAuthorizationHttpClientComponents<TClientLocalization>(this IServiceCollection services) where TClientLocalization : class, IAuthorizationServiceClientLocalization
         {
-            services.AddScoped(typeof(IAuthorizationServiceClientLocalization), authorizationServiceExceptionLocalizationType);
+            services.AddScoped<IAuthorizationServiceClientLocalization, TClientLocalization>();
 
             services.AddScoped<AuthorizationServiceHttpClient>();
 

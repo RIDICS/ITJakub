@@ -131,5 +131,16 @@ namespace Vokabular.Authentication.Client.Client.Auth
             var response = await m_authorizationServiceHttpClient.SendRequestAsync<UserWithRolesContract>(HttpMethod.Get, path);
             return response;
         }
+
+        public async Task<UserWithRolesContract> GetUserListByRoleAsync(int roleId, int? start, int? count)
+        {
+            var query = m_authorizationServiceHttpClient.CreateQueryCollection();
+            query.Add("roleId", roleId.ToString());
+            query.Add("start", start?.ToString());
+            query.Add("count", count?.ToString());
+            var path = $"{BasePath}/roles/list?{query}";
+            var response = await m_authorizationServiceHttpClient.SendRequestAsync<UserWithRolesContract>(HttpMethod.Get, path);
+            return response;
+        }
     }
 }

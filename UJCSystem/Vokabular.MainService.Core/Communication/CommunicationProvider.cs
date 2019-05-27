@@ -5,6 +5,7 @@ using ITJakub.FileProcessing.DataContracts;
 using ITJakub.SearchService.DataContracts;
 using Microsoft.Extensions.Options;
 using Vokabular.Authentication.Client;
+using Vokabular.Authentication.Client.Client.Auth;
 using Vokabular.CardFile.Core;
 using Vokabular.FulltextService.DataContracts.Clients;
 using Vokabular.Shared.Options;
@@ -16,6 +17,10 @@ namespace Vokabular.MainService.Core.Communication
         private readonly CommunicationConfigurationProvider m_configurationProvider;
         private readonly IOptions<List<CredentialsOption>> m_credentialsOptions;
         private readonly IOptions<AuthServiceOption> m_authServiceApiKey;
+        private readonly UserApiClient m_userApiClient;
+        private readonly RoleApiClient m_roleApiClient;
+        private readonly PermissionApiClient m_permissionApiClient;
+        private readonly RegistrationApiClient m_registrationApiClient;
 
         private const string FileProcessingServiceEndpointName = "FileProcessingService";
         private const string FulltextServiceEndpointName = "FulltextService";
@@ -24,11 +29,16 @@ namespace Vokabular.MainService.Core.Communication
         private const string CardFilesEndpointName = "CardFilesService";
         private const string CardFilesCredentials = "CardFiles";
         
-        public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider, IOptions<List<CredentialsOption>> credentialsOptions, IOptions<AuthServiceOption> authServiceApiKey)
+        public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider, IOptions<List<CredentialsOption>> credentialsOptions, IOptions<AuthServiceOption> authServiceApiKey,
+            UserApiClient userApiClient, RoleApiClient roleApiClient, PermissionApiClient permissionApiClient, RegistrationApiClient registrationApiClient)
         {
             m_configurationProvider = communicationConfigurationProvider;
             m_credentialsOptions = credentialsOptions;
             m_authServiceApiKey = authServiceApiKey;
+            m_userApiClient = userApiClient;
+            m_roleApiClient = roleApiClient;
+            m_permissionApiClient = permissionApiClient;
+            m_registrationApiClient = registrationApiClient;
         }
 
         public FileProcessingServiceClient GetFileProcessingClient()
@@ -79,5 +89,26 @@ namespace Vokabular.MainService.Core.Communication
             //var client = new AuthenticationClient(uri, credentials.Name, credentials.ApiKeyHash);
             //return client;
         }
+
+        public UserApiClient GetAuthUserApiClient()
+        {
+            return m_userApiClient;
+        }
+
+        public RoleApiClient GetAuthRoleApiClient()
+        {
+            return m_roleApiClient;
+        }
+
+        public PermissionApiClient GetAuthPermissionApiClient()
+        {
+            return m_permissionApiClient;
+        }
+
+        public RegistrationApiClient GetAuthRegistrationApiClient()
+        {
+            return m_registrationApiClient;
+        }
+
     }
 }
