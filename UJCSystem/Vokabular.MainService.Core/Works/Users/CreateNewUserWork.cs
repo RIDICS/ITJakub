@@ -23,41 +23,40 @@ namespace Vokabular.MainService.Core.Works.Users
 
         protected override int ExecuteWorkImplementation()
         {
-            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
+            var client = m_communicationProvider.GetAuthRegistrationApiClient();
+
+            var authUser = new Authentication.DataContracts.User.CreateUserContract
             {
-                var authUser = new Authentication.DataContracts.User.CreateUserContract
+                Password = m_data.NewPassword,
+                UserName = m_data.UserName,
+                User = new UserContractBase
                 {
-                    Password = m_data.NewPassword,
-                    UserName = m_data.UserName,
-                    User = new UserContractBase
-                    {
-                        FirstName = m_data.FirstName,
-                        LastName = m_data.LastName,
-                        Email = m_data.Email,
-                        PhoneNumber = "+420749123678" //TODO remove
-                    }
-                };
+                    FirstName = m_data.FirstName,
+                    LastName = m_data.LastName,
+                    Email = m_data.Email,
+                    PhoneNumber = "+420749123678" //TODO remove
+                }
+            };
 
-                var user = client.CreateUser(authUser);
+            var user = client.CreateUserAsync(authUser).GetAwaiter().GetResult();
 
-                var now = DateTime.UtcNow;
+            var now = DateTime.UtcNow;
 
-                var dbUser = new User
-                {
-                    ExternalId = user.Id,
-                    CreateTime = now,
-                    AvatarUrl = m_data.AvatarUrl
-                    //Groups = new List<Group> { m_defaultMembershipProvider.GetDefaultRegisteredUserGroup(), m_defaultMembershipProvider.GetDefaultUnRegisteredUserGroup() },
-                    //FavoriteLabels = new List<FavoriteLabel> { defaultFavoriteLabel }
-                };
+            var dbUser = new User
+            {
+                ExternalId = user.Id,
+                CreateTime = now,
+                AvatarUrl = m_data.AvatarUrl
+                //Groups = new List<Group> { m_defaultMembershipProvider.GetDefaultRegisteredUserGroup(), m_defaultMembershipProvider.GetDefaultUnRegisteredUserGroup() },
+                //FavoriteLabels = new List<FavoriteLabel> { defaultFavoriteLabel }
+            };
 
-                //defaultFavoriteLabel.User = dbUser;
-                // TODO generate default FavoriteLabel
-                // TODO assign User Groups
+            //defaultFavoriteLabel.User = dbUser;
+            // TODO generate default FavoriteLabel
+            // TODO assign User Groups
 
-                var userId = (int)m_userRepository.Create(dbUser);
-                return userId;
-            }
+            var userId = (int) m_userRepository.Create(dbUser);
+            return userId;
         }
     }
 }

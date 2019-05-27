@@ -31,98 +31,98 @@ namespace Vokabular.Authentication.Client
 
         #region User
 
-        public UserContract CreateUser(CreateUserContract contract)
-        {
-            try
-            {
-                var result = Post<UserContract>($"{ApiBasePath}/registration/create", contract);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+        //public UserContract CreateUser(CreateUserContract contract)
+        //{
+        //    try
+        //    {
+        //        var result = Post<UserContract>($"{ApiBasePath}/registration/create", contract);
+        //        return result;
+        //    }
+        //    catch (HttpRequestException e)
+        //    {
+        //        if (m_logger.IsErrorEnabled())
+        //            m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
 
-                throw;
-            }
-        }
+        //        throw;
+        //    }
+        //}
 
-        public UserContract GetUser(int id)
-        {
-            try
-            {
-                var result = Get<UserContract>($"{ApiBasePath}/user/{id}");
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+        //public UserContract GetUser(int id)
+        //{
+        //    try
+        //    {
+        //        var result = Get<UserContract>($"{ApiBasePath}/user/{id}");
+        //        return result;
+        //    }
+        //    catch (HttpRequestException e)
+        //    {
+        //        if (m_logger.IsErrorEnabled())
+        //            m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
 
-                throw;
-            }
-        }
+        //        throw;
+        //    }
+        //}
 
-        public void EditCurrentUser(int userId, UserContract userContract)
-        {
-            try
-            {
-                Put<object>($"{ApiBasePath}/user/{userId}/editself", userContract);
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+        //public void EditCurrentUser(int userId, UserContract userContract)
+        //{
+        //    try
+        //    {
+        //        Put<object>($"{ApiBasePath}/user/{userId}/editself", userContract);
+        //    }
+        //    catch (HttpRequestException e)
+        //    {
+        //        if (m_logger.IsErrorEnabled())
+        //            m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
 
-                throw;
-            }
-        }
+        //        throw;
+        //    }
+        //}
 
-        public void ChangePassword(int userId, ChangePasswordContract changePasswordContract)
-        {
-            try
-            {
-                Post<object>($"{ApiBasePath}/user/{userId}/changePassword", changePasswordContract);
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+        //public void ChangePassword(int userId, ChangePasswordContract changePasswordContract)
+        //{
+        //    try
+        //    {
+        //        Post<object>($"{ApiBasePath}/user/{userId}/changePassword", changePasswordContract);
+        //    }
+        //    catch (HttpRequestException e)
+        //    {
+        //        if (m_logger.IsErrorEnabled())
+        //            m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
 
-                throw;
-            }
-        }
+        //        throw;
+        //    }
+        //}
 
-        public IList<UserContract> GetUserAutocomplete(string query, int? start, int? count)
-        {
-            try
-            {
-                return Get<IList<UserContract>>(
-                    $"{ApiBasePath}/user/search?nameStart={query}{(start.HasValue ? "&start=" + start : "")}{(count.HasValue ? "&count=" + count : "")}");
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+        //public IList<UserContract> GetUserAutocomplete(string query, int? start, int? count)
+        //{
+        //    try
+        //    {
+        //        return Get<IList<UserContract>>(
+        //            $"{ApiBasePath}/user/search?nameStart={query}{(start.HasValue ? "&start=" + start : "")}{(count.HasValue ? "&count=" + count : "")}");
+        //    }
+        //    catch (HttpRequestException e)
+        //    {
+        //        if (m_logger.IsErrorEnabled())
+        //            m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
 
-                throw;
-            }
-        }
+        //        throw;
+        //    }
+        //}
 
-        public IList<UserContract> GetUsersByRole(int roleId)
-        {
-            try
-            {
-                return Get<IList<UserContract>>($"{ApiBasePath}/user/roles/list?roleId={roleId}");
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+        //public IList<UserContract> GetUsersByRole(int roleId)
+        //{
+        //    try
+        //    {
+        //        return Get<IList<UserContract>>($"{ApiBasePath}/user/roles/list?roleId={roleId}");
+        //    }
+        //    catch (HttpRequestException e)
+        //    {
+        //        if (m_logger.IsErrorEnabled())
+        //            m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
 
-                throw;
-            }
-        }
+        //        throw;
+        //    }
+        //}
 
         #endregion
 

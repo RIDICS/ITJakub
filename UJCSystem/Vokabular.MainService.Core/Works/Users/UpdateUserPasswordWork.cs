@@ -32,10 +32,8 @@ namespace Vokabular.MainService.Core.Works.Users
                 Password = m_data.NewPassword
             };
 
-            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
-            {
-                client.ChangePassword(user.ExternalId, contract);
-            }
+            var client = m_communicationProvider.GetAuthUserApiClient();
+            client.PasswordChangeAsync(user.ExternalId, contract).GetAwaiter().GetResult();
         }
     }
 }

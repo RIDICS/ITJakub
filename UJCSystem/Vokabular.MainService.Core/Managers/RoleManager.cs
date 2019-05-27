@@ -41,18 +41,17 @@ namespace Vokabular.MainService.Core.Managers
                 throw new ArgumentException(message);
             }
 
-            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
-            {
-                var authUser = client.GetUser(user.ExternalId);
-                return Mapper.Map<List<RoleContract>>(authUser.Roles);
-            }
+            var client = m_communicationProvider.GetAuthUserApiClient();
+
+            var authUser = client.GetUserForRoleAssignmentAsync(user.ExternalId).GetAwaiter().GetResult();
+            return Mapper.Map<List<RoleContract>>(authUser.Roles);
         }
 
         public List<UserContract> GetUsersByRole(int roleId)
         {
-            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
+            var client = m_communicationProvider.GetAuthUserApiClient();
             {
-                var members = client.GetUsersByRole(roleId);
+                var members = client.GetUserListByRoleAsync(roleId, null, null).GetAwaiter().GetResult();
                 return Mapper.Map<List<UserContract>>(members);
             }
         }

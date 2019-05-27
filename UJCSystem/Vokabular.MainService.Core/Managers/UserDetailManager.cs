@@ -125,12 +125,11 @@ namespace Vokabular.MainService.Core.Managers
             return list;
         }
 
-        private Vokabular.Authentication.DataContracts.User.UserContract GetDetailForUser(int userId)
+        private Vokabular.Authentication.DataContracts.User.UserContract GetDetailForUser(int userExternalId)
         {
-            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
-            {
-                return client.GetUser(userId);
-            }
+            var client = m_communicationProvider.GetAuthUserApiClient();
+            var result = client.HttpClient.GetItemAsync<Vokabular.Authentication.DataContracts.User.UserContract>(userExternalId).GetAwaiter().GetResult();
+            return result;
         }
     }
 }

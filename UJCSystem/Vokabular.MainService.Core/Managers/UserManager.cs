@@ -57,31 +57,30 @@ namespace Vokabular.MainService.Core.Managers
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
 
-            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
-            {
-                var result = client.GetUserAutocomplete(filterByName, startValue, countValue);
+            var client = m_communicationProvider.GetAuthUserApiClient();
+            
+                var result = client.HttpClient.GetListAsync<UserContract>(startValue, countValue, filterByName).GetAwaiter().GetResult();
+                var userDetailContracts = Mapper.Map<List<UserDetailContract>>(result);
 
                 return new PagedResultList<UserDetailContract>
                 {
-                    List = m_userDetailManager.GetIdForExternalUsers(Mapper.Map<List<UserDetailContract>>(result)),
-                    TotalCount = result.Count,
+                    List = m_userDetailManager.GetIdForExternalUsers(userDetailContracts),
+                    TotalCount = result.ItemsCount,
                 };
-            }
         }
 
         public IList<UserDetailContract> GetUserAutocomplete(string query, int? count)
         {
-           if (query == null)
+            if (query == null)
                 query = string.Empty;
 
             var countValue = PagingHelper.GetAutocompleteCount(count);
 
-            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
-            {
-                var result = client.GetUserAutocomplete(query, null, countValue);
-                var userDetailContracts = Mapper.Map<List<UserDetailContract>>(result);
-                return m_userDetailManager.GetIdForExternalUsers(userDetailContracts);
-            }
+            var client = m_communicationProvider.GetAuthUserApiClient();
+
+            var result = client.HttpClient.GetListAsync<UserContract>(0, countValue, query).GetAwaiter().GetResult();
+            var userDetailContracts = Mapper.Map<List<UserDetailContract>>(result);
+            return m_userDetailManager.GetIdForExternalUsers(userDetailContracts);
         }
 
         public UserDetailContract GetUserDetail(int userId)

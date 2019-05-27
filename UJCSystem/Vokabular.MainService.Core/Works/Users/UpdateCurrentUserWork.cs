@@ -3,6 +3,7 @@ using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.DataContracts.Contracts;
+using AuthUserContract = Vokabular.Authentication.DataContracts.User.UserContract;
 
 namespace Vokabular.MainService.Core.Works.Users
 {
@@ -25,16 +26,16 @@ namespace Vokabular.MainService.Core.Works.Users
         {
             var user = m_userRepository.FindById<User>(m_userId);
 
-            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
-            {
-                var authUser = client.GetUser(user.ExternalId);
+            var client = m_communicationProvider.GetAuthUserApiClient();
 
-                authUser.Email = m_data.Email;
-                authUser.FirstName = m_data.FirstName;
-                authUser.LastName = m_data.LastName;
+            var authUser = client.HttpClient.GetItemAsync<AuthUserContract>(user.ExternalId).GetAwaiter().GetResult();
 
-                client.EditCurrentUser(user.ExternalId, authUser);
-            }
+            authUser.Email = m_data.Email;
+            authUser.FirstName = m_data.FirstName;
+            authUser.LastName = m_data.LastName;
+
+            client.EditSelfAsync(user.ExternalId, authUser).GetAwaiter().GetResult();
+
 
             user.AvatarUrl = m_data.AvatarUrl;
             m_userRepository.Update(user);
