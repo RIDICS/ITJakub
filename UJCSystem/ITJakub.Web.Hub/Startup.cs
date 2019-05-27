@@ -39,7 +39,7 @@ namespace ITJakub.Web.Hub
         }
 
         private IConfiguration Configuration { get; }
-        private IIocContainer Container { get; set; }
+        private DryIocContainer Container { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
@@ -121,7 +121,7 @@ namespace ITJakub.Web.Hub
                 });
 
             // IoC
-            IIocContainer container = new DryIocContainer();
+            var container = new DryIocContainer();
             container.Install<WebHubContainerRegistration>();
             container.Install<NHibernateInstaller>();
             Container = container;

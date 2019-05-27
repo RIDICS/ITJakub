@@ -2,12 +2,13 @@
 using System.Linq;
 using System.Reflection;
 using DryIoc;
+using DryIoc.Microsoft.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Vokabular.Shared.Container;
 
 namespace Vokabular.MainService.Test.Containers
 {
-    public class DryIocContainer : IIocContainer
+    public class DryIocContainer
     {
         private readonly IContainer m_container;
 
@@ -86,16 +87,11 @@ namespace Vokabular.MainService.Test.Containers
 
         public void Install<T>() where T : IContainerInstaller
         {
+            var services = new ServiceCollection();
             var installer = Activator.CreateInstance<T>();
-            installer.Install(this);
-        }
+            installer.Install(services);
 
-        public void Install(params IContainerInstaller[] installers)
-        {
-            foreach (var installer in installers)
-            {
-                installer.Install(this);
-            }
+            m_container.Populate(services);
         }
 
         public T Resolve<T>()

@@ -1,20 +1,20 @@
 ﻿using System;
 using System.IO;
 using AutoMapper;
+using DryIoc;
 using Microsoft.Extensions.Configuration;
 using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
 using Vokabular.DataEntities.Database.Daos;
-using Vokabular.Shared.Container;
 using Vokabular.Shared.Options;
 
 namespace Vokabular.MainService.Test.Containers
 {
     public static class IocExtensions
     {
-        public static void InitAutoMapper(this IIocContainer container)
+        public static void InitAutoMapper(this DryIocContainer container)
         {
             var profiles = container.ResolveAll<Profile>();
 
@@ -45,7 +45,7 @@ namespace Vokabular.MainService.Test.Containers
             return config;
         }
 
-        public static void InitNHibernate(this IIocContainer container)
+        public static void InitNHibernate(this DryIocContainer container)
         {
             var config = GetConfiguration();
             

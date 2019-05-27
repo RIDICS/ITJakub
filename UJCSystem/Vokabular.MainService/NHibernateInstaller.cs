@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Reflection;
 using log4net;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.Dialect;
@@ -18,7 +19,7 @@ namespace Vokabular.MainService
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public void Install(IIocContainer container)
+        public void Install(IServiceCollection services)
         {
             var connectionString =
                 ApplicationConfig.Configuration.GetConnectionString(SettingKeys.MainConnectionString) ??
@@ -42,9 +43,9 @@ namespace Vokabular.MainService
             {
                 var sessionFactory = cfg.BuildSessionFactory();
 
-                container.AddInstance(cfg);
+                services.AddSingleton(cfg);
 
-                container.AddInstance(sessionFactory);
+                services.AddSingleton(sessionFactory);
             }
             catch (SqlException e)
             {
