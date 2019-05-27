@@ -4,42 +4,43 @@ using ITJakub.Web.Hub.AutoMapperProfiles;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Core.Markdown;
+using Microsoft.Extensions.DependencyInjection;
 using Vokabular.Shared.Container;
 
 namespace ITJakub.Web.Hub
 {
     public class WebHubContainerRegistration : IContainerInstaller
     {
-        public void Install(IIocContainer container)
+        public void Install(IServiceCollection services)
         {
-            container.AddPerWebRequest<CommunicationProvider>();
-            container.AddPerWebRequest<CommunicationConfigurationProvider>();
-            container.AddPerWebRequest<StaticTextManager>();
-            container.AddPerWebRequest<FeedbacksManager>();
-            container.AddPerWebRequest<AuthenticationManager>();
+            services.AddScoped<CommunicationProvider>();
+            services.AddScoped<CommunicationConfigurationProvider>();
+            services.AddScoped<StaticTextManager>();
+            services.AddScoped<FeedbacksManager>();
+            services.AddScoped<AuthenticationManager>();
 
-            container.AddPerWebRequest<IMarkdownToHtmlConverter, MarkdigMarkdownToHtmlConverter>();
+            services.AddScoped<IMarkdownToHtmlConverter, MarkdigMarkdownToHtmlConverter>();
 
             // AutoMapper profiles
-            container.AddSingleton<Profile, ConditionCriteriaDescriptionProfile>();
-            container.AddSingleton<Profile, DatingCriteriaDescriptionProfile>();
-            container.AddSingleton<Profile, DatingListCriteriaDescriptionProfile>();
-            container.AddSingleton<Profile, FavoriteProfile>();
-            container.AddSingleton<Profile, TokenDistanceCriteriaDescriptionProfile>();
-            container.AddSingleton<Profile, TokenDistanceListCriteriaDescriptionProfile>();
-            container.AddSingleton<Profile, WordCriteriaDescriptionProfile>();
-            container.AddSingleton<Profile, WordListCriteriaDescriptionProfile>();
+            services.AddSingleton<Profile, ConditionCriteriaDescriptionProfile>();
+            services.AddSingleton<Profile, DatingCriteriaDescriptionProfile>();
+            services.AddSingleton<Profile, DatingListCriteriaDescriptionProfile>();
+            services.AddSingleton<Profile, FavoriteProfile>();
+            services.AddSingleton<Profile, TokenDistanceCriteriaDescriptionProfile>();
+            services.AddSingleton<Profile, TokenDistanceListCriteriaDescriptionProfile>();
+            services.AddSingleton<Profile, WordCriteriaDescriptionProfile>();
+            services.AddSingleton<Profile, WordListCriteriaDescriptionProfile>();
 
             // AutoMapper profiles - Admin area
-            container.AddSingleton<Profile, LiteraryGenreProfile>();
-            container.AddSingleton<Profile, LiteraryKindProfile>();
-            container.AddSingleton<Profile, LiteraryOriginalProfile>();
-            container.AddSingleton<Profile, CategoryProfile>();
-            container.AddSingleton<Profile, ProjectProfile>();
-            container.AddSingleton<Profile, ResourceProfile>();
-            container.AddSingleton<Profile, ResponsibleTypeProfile>();
-            container.AddSingleton<Profile, SnapshotProfile>();
-            container.AddSingleton<Profile, UserProfile>();
+            services.AddSingleton<Profile, LiteraryGenreProfile>();
+            services.AddSingleton<Profile, LiteraryKindProfile>();
+            services.AddSingleton<Profile, LiteraryOriginalProfile>();
+            services.AddSingleton<Profile, CategoryProfile>();
+            services.AddSingleton<Profile, ProjectProfile>();
+            services.AddSingleton<Profile, ResourceProfile>();
+            services.AddSingleton<Profile, ResponsibleTypeProfile>();
+            services.AddSingleton<Profile, SnapshotProfile>();
+            services.AddSingleton<Profile, UserProfile>();
         }
     }
 }

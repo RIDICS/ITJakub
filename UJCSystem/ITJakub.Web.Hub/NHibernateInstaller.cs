@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Reflection;
 using log4net;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Connection;
@@ -20,7 +21,7 @@ namespace ITJakub.Web.Hub
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public void Install(IIocContainer container)
+        public void Install(IServiceCollection services)
         {
             var connectionString =
                 ApplicationConfig.Configuration.GetConnectionString(SettingKeys.WebConnectionString) ??
@@ -45,9 +46,9 @@ namespace ITJakub.Web.Hub
             {
                 var sessionFactory = cfg.BuildSessionFactory();
 
-                container.AddInstance(cfg);
+                services.AddSingleton(cfg);
 
-                container.AddInstance(sessionFactory);
+                services.AddSingleton(sessionFactory);
             }
             catch (SqlException e)
             {

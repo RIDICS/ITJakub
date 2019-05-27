@@ -1,7 +1,9 @@
-﻿namespace Vokabular.Shared.Container
+﻿using Microsoft.Extensions.DependencyInjection;
+
+namespace Vokabular.Shared.Container
 {
     public interface IContainerInstaller
     {
-        void Install(IIocContainer container);
+        void Install(IServiceCollection services);
     }
 }

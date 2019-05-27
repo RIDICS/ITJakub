@@ -19,7 +19,6 @@ using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
-using Vokabular.Shared.Container;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.Options;
 
@@ -34,7 +33,7 @@ namespace Vokabular.MainService
         }
 
         private IConfiguration Configuration { get; }
-        private IIocContainer Container { get; set; }
+        private DryIocContainer Container { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -72,7 +71,7 @@ namespace Vokabular.MainService
             });
 
             // IoC
-            IIocContainer container = new DryIocContainer();
+            var container = new DryIocContainer();
             container.Install<MainServiceContainerRegistration>();
             container.Install<NHibernateInstaller>();
             Container = container;
