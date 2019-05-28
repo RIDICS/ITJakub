@@ -74,6 +74,7 @@ namespace ITJakub.Web.Hub
                     options.Scope.Add("openid");
                     options.Scope.Add("profile");
                     options.Scope.Add("offline_access");
+                    options.Scope.Add("auth_api.Internal");
 
                     options.ClaimActions.MapJsonKey(ClaimTypes.Role, "role");
                     options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");

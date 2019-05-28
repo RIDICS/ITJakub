@@ -88,6 +88,7 @@ namespace Vokabular.MainService
                 .AddJwtBearer(options =>
                 {
                     options.Authority = openIdConnectConfig.Url;
+                    options.Audience = "auth_api";
 
                     // Disable validation (client-app is already authenticated)
                     options.TokenValidationParameters.ValidateAudience = false;
