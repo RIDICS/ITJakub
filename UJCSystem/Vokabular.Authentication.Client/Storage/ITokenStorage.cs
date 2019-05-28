@@ -1,5 +1,5 @@
 ﻿using System;
-using Vokabular.Authentication.Client.Model;
+using Vokabular.Authentication.Client.Storage.Model;
 
 namespace Vokabular.Authentication.Client.Storage
 {

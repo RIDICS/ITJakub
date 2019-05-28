@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vokabular.Authentication.Client.Model
+namespace Vokabular.Authentication.Client.Storage.Model
 {
     public class TokenData
     {
