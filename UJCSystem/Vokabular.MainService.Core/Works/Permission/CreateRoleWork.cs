@@ -4,6 +4,7 @@ using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
+using Vokabular.MainService.Core.Utils;
 
 namespace Vokabular.MainService.Core.Works.Permission
 {
@@ -26,27 +27,27 @@ namespace Vokabular.MainService.Core.Works.Permission
         {
             var now = DateTime.UtcNow;
 
-            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
+            var client = m_communicationProvider.GetAuthRoleApiClient();
+
+            var roleContract = new RoleContract
             {
-                var roleContract = new RoleContract
-                {
-                    Description = m_description,
-                    Name = m_roleName,
-                };
+                Description = m_description,
+                Name = m_roleName,
+            };
 
-                var roleId = client.CreateRole(roleContract);
+            var response = client.HttpClient.CreateItemAsync(roleContract).GetAwaiter().GetResult();
+            var externalRoleId = response.Content.ReadAsInt();
 
-                var group = new UserGroup
-                {
-                    Name = m_roleName,
-                    Description = m_description,
-                    CreateTime = now,
-                    ExternalId = roleId
-                };
+            var group = new UserGroup
+            {
+                Name = m_roleName,
+                Description = m_description,
+                CreateTime = now,
+                ExternalId = externalRoleId,
+            };
 
-                m_permissionRepository.CreateGroup(group);
-                return roleId;
-            }
+            m_permissionRepository.CreateGroup(group);
+            return externalRoleId;
         }
     }
 }

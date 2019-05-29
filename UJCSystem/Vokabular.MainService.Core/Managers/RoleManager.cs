@@ -10,6 +10,7 @@ using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
+using AuthRoleContract = Vokabular.Authentication.DataContracts.RoleContract;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -63,14 +64,13 @@ namespace Vokabular.MainService.Core.Managers
 
         public RoleContract GetRoleDetail(int roleId)
         {
-            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
-            {
-                var role = client.GetRole(roleId);
-                if (role == null)
-                    return null;
+            var client = m_communicationProvider.GetAuthRoleApiClient();
 
-                return Mapper.Map<RoleContract>(role);
-            }
+            var role = client.HttpClient.GetItemAsync<AuthRoleContract>(roleId).GetAwaiter().GetResult();
+            if (role == null)
+                return null;
+
+            return Mapper.Map<RoleContract>(role);
         }
 
         public void DeleteRole(int roleId)
@@ -95,11 +95,10 @@ namespace Vokabular.MainService.Core.Managers
 
             var countValue = PagingHelper.GetAutocompleteCount(count);
 
-            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
-            {
-                var result = client.GetListRole(query, countValue);
-                return Mapper.Map<List<RoleContract>>(result.Items);
-            }
+            var client = m_communicationProvider.GetAuthRoleApiClient();
+
+            var result = client.HttpClient.GetListAsync<AuthRoleContract>(0, countValue, query).GetAwaiter().GetResult();
+            return Mapper.Map<List<RoleContract>>(result.Items);
         }
     }
 }

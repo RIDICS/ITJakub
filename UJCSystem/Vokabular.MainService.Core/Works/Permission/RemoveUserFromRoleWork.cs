@@ -30,11 +30,9 @@ namespace Vokabular.MainService.Core.Works.Permission
             var group = m_permissionRepository.FindGroupByExternalId(m_roleId);
             var user = m_permissionRepository.Load<User>(m_userId);
 
-            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
-            {
-                client.RemoveRoleFromUser(user.ExternalId, m_roleId);
-            }
-            
+            var client = m_communicationProvider.GetAuthUserApiClient();
+            client.RemoveRoleFromUserAsync(user.ExternalId, m_roleId).GetAwaiter().GetResult();
+
             //TODO switch logic: remove group from user (fetch lower amount of data)
             if (group.Users == null)
             {
@@ -43,6 +41,7 @@ namespace Vokabular.MainService.Core.Works.Permission
                     string message = string.Format("Cannot remove user with id '{0}' from group with id '{1}'. Group is empty.", user.Id, group.Id);
                     m_log.Warn(message);
                 }
+
                 return;
             }
 

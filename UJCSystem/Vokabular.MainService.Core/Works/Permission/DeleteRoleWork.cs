@@ -1,4 +1,5 @@
-﻿using Vokabular.DataEntities.Database.Repositories;
+﻿using Vokabular.Authentication.DataContracts;
+using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
 
@@ -19,10 +20,8 @@ namespace Vokabular.MainService.Core.Works.Permission
 
         protected override void ExecuteWorkImplementation()
         {
-            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
-            {
-                client.DeleteRole(m_roleId);
-            }
+            var client = m_communicationProvider.GetAuthRoleApiClient();
+            client.HttpClient.DeleteItemAsync<RoleContract>(m_roleId).GetAwaiter().GetResult();
 
             var group = m_permissionRepository.FindGroupByExternalId(m_roleId);
             m_permissionRepository.Delete(group);

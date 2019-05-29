@@ -7,6 +7,7 @@ using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
+using AuthRoleContract = Vokabular.Authentication.DataContracts.RoleContract;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -28,20 +29,18 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<SpecialPermissionContract> GetSpecialPermissions()
         {
-            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
-            {
-                var permissions = client.GetAllPermissions();
-                return m_permissionConverter.Convert(permissions);
-            }
+            var client = m_communicationProvider.GetAuthPermissionApiClient();
+
+            var permissions = client.GetAllPermissionsAsync().GetAwaiter().GetResult();
+            return m_permissionConverter.Convert(permissions);
         }
 
         public List<SpecialPermissionContract> GetSpecialPermissionsForRole(int roleId)
         {
-            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
-            {
-                var permissions = client.GetRole(roleId).Permissions;
-                return m_permissionConverter.Convert(permissions);
-            }
+            var client = m_communicationProvider.GetAuthRoleApiClient();
+
+            var permissions = client.HttpClient.GetItemAsync<AuthRoleContract>(roleId).GetAwaiter().GetResult().Permissions;
+            return m_permissionConverter.Convert(permissions);
         }
 
         public void AddSpecialPermissionsToRole(int roleId, IList<int> specialPermissionsIds)
@@ -51,19 +50,19 @@ namespace Vokabular.MainService.Core.Managers
                 return;
             }
 
-            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
+            var client = m_communicationProvider.GetAuthRoleApiClient();
+
+            var permissions = client.HttpClient.GetItemAsync<AuthRoleContract>(roleId).GetAwaiter().GetResult().Permissions;
+            var permissionsId = permissions.Select(x => x.Id).ToList();
+            foreach (var permissionToAdd in specialPermissionsIds)
             {
-                var permissions = client.GetRole(roleId).Permissions;
-                var permissionsId = permissions.Select(x => x.Id).ToList();
-                foreach (var permissionToAdd in specialPermissionsIds)
+                if (!permissionsId.Contains(permissionToAdd))
                 {
-                    if (!permissionsId.Contains(permissionToAdd))
-                    {
-                        permissionsId.Add(permissionToAdd);
-                    }
+                    permissionsId.Add(permissionToAdd);
                 }
-                client.AssignPermissionsToRole(roleId, permissionsId);
             }
+
+            client.AssignPermissionsToRoleAsync(roleId, permissionsId).GetAwaiter().GetResult();
         }
 
         public void RemoveSpecialPermissionsFromRole(int roleId, IList<int> specialPermissionsIds)
@@ -73,17 +72,16 @@ namespace Vokabular.MainService.Core.Managers
                 return;
             }
 
-            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
+            var client = m_communicationProvider.GetAuthRoleApiClient();
+
+            var permissions = client.HttpClient.GetItemAsync<AuthRoleContract>(roleId).GetAwaiter().GetResult().Permissions;
+            var permissionsId = permissions.Select(x => x.Id).ToList();
+            foreach (var permissionToRemove in specialPermissionsIds)
             {
-                var permissions = client.GetRole(roleId).Permissions;
-                var permissionsId = permissions.Select(x => x.Id).ToList();
-                foreach (var permissionToRemove in specialPermissionsIds)
-                {
-                    permissionsId.Remove(permissionToRemove);
-                }
-                
-                client.AssignPermissionsToRole(roleId, permissionsId);
+                permissionsId.Remove(permissionToRemove);
             }
+
+            client.AssignPermissionsToRoleAsync(roleId, permissionsId).GetAwaiter().GetResult();
         }
 
         public void AddBooksAndCategoriesToGroup(int roleId, IList<long> bookIds)

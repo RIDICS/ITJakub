@@ -27,11 +27,9 @@ namespace Vokabular.MainService.Core.Works.Permission
             var group = m_permissionRepository.FindGroupByExternalId(m_roleId);
             var user = m_permissionRepository.Load<User>(m_userId);
 
-            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
-            {
-                client.AddRoleToUser(user.ExternalId, m_roleId);
-            }
-            
+            var client = m_communicationProvider.GetAuthUserApiClient();
+            client.AddRoleToUserAsync(user.ExternalId, m_roleId).GetAwaiter().GetResult();
+
             if (group.Users == null)
             {
                 group.Users = new List<User>();
