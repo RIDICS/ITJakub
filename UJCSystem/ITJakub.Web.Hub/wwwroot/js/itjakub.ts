@@ -1,14 +1,5 @@
 ﻿/// <reference path="Plugins/Bibliography/itjakub.plugins.bibliography.ts"/>
 /// <reference path="Plugins/DropdownSelect/itjakub.plugins.dropdownselect.ts"/>
-/// <reference path="../../node_modules/@types/dropzone/index.d.ts"/>
-/// <reference path="../../node_modules/@types/jquery/index.d.ts" />
-/// <reference path="../../node_modules/@types/jqueryui/index.d.ts" />
-/// <reference path="../../node_modules/@types/jquery.validation/index.d.ts" />
-/// <reference path="../../node_modules/@types/typeahead/index.d.ts" />
-/// <reference path="../../node_modules/@types/simplemde/index.d.ts" />
-/// <reference path="../../node_modules/@types/codemirror/index.d.ts" />
-/// <reference path="../lib/s-pagination/dist/pagination.d.ts" />
-/// <reference path="../lib/scalesoft-localization-web/dist/localization.d.ts" />
 
 var localization: Localization;
 
