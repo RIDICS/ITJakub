@@ -59,7 +59,6 @@ namespace Vokabular.MainService
             services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
             services.Configure<List<CredentialsOption>>(Configuration.GetSection("Credentials"));
             services.Configure<PathConfiguration>(Configuration.GetSection("PathConfiguration"));
-            services.Configure<AuthServiceOption>(Configuration.GetSection("AuthService"));
 
             services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = 1048576000; });
 
