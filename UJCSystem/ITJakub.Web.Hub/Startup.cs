@@ -4,6 +4,7 @@ using ITJakub.Web.Hub.Models.Config;
 using System.Security.Claims;
 using ITJakub.Web.Hub.Authentication;
 using ITJakub.Web.Hub.Authorization;
+using ITJakub.Web.Hub.Helpers;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -21,11 +22,12 @@ using Scalesoft.Localization.AspNetCore.IoC;
 using Scalesoft.Localization.Core.Configuration;
 using Scalesoft.Localization.Core.Util;
 using Scalesoft.Localization.Database.NHibernate;
+using Vokabular.Authentication.Client;
+using Vokabular.Authentication.Client.Configuration;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
 using Vokabular.Shared.Const;
-using Vokabular.Shared.Container;
 using Vokabular.Shared.Options;
 
 namespace ITJakub.Web.Hub
@@ -98,6 +100,20 @@ namespace ITJakub.Web.Hub
 
             services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
 
+            // Register Auth service client, because contains components for obtaining access token (for user and also for app)
+            services.RegisterAuthorizationHttpClientComponents<AuthServiceClientLocalization>(new AuthServiceCommunicationConfiguration
+            {
+                TokenName = null, // not required
+                ApiAccessToken = null, // not required
+                AuthenticationServiceAddress = openIdConnectConfig.Url,
+            }, new OpenIdConnectConfig
+            {
+                Url = openIdConnectConfig.Url,
+                AuthServiceScopeName = openIdConnectConfig.AuthServiceScopeName,
+                ClientId = openIdConnectConfig.ClientId,
+                ClientSecret = openIdConnectConfig.ClientSecret,
+            }, new AuthServiceControllerBasePathsConfiguration(/*Not required to fill because client is not used*/));
+
             // Configuration options
             services.AddOptions();
             services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
@@ -123,6 +139,7 @@ namespace ITJakub.Web.Hub
 
             // IoC
             var container = new DryIocContainer();
+            container.RegisterLogger();
             container.Install<WebHubContainerRegistration>();
             container.Install<NHibernateInstaller>();
             Container = container;

@@ -16,6 +16,7 @@ namespace Vokabular.Authentication.Client.Client
     public class AuthorizationServiceHttpClient : ServiceHttpClientBase<ContractException, AuthServiceException, AuthServiceApiException>
     {
         private const string CultureHeader = "X-Culture";
+        private const string ApiAccessTokenHeader = "X-Api-Access-Key";
 
         private readonly AuthServiceControllerBasePathsProvider m_basePathsProvider;
         private readonly IAuthorizationServiceClientLocalization m_localization;
@@ -33,7 +34,7 @@ namespace Vokabular.Authentication.Client.Client
             m_localization = localization;
             m_authApiAccessTokenProvider = authApiAccessTokenProvider;
 
-            DefaultRequestHeaders.Add(interServiceCommunicationConfiguration.TokenName,
+            DefaultRequestHeaders.Add(interServiceCommunicationConfiguration.TokenName ?? ApiAccessTokenHeader,
                 interServiceCommunicationConfiguration.ApiAccessToken);
         }
 

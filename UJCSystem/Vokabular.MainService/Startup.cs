@@ -108,8 +108,8 @@ namespace Vokabular.MainService
 
             services.RegisterAuthorizationHttpClientComponents<AuthServiceClientLocalization>(new AuthServiceCommunicationConfiguration
             {
-                TokenName = openIdConnectConfig.ApiKeyHeader,
-                ApiAccessToken = openIdConnectConfig.ApiKey,
+                TokenName = null, // not required
+                ApiAccessToken = null, // not required
                 AuthenticationServiceAddress = openIdConnectConfig.Url,
             }, new OpenIdConnectConfig
             {
