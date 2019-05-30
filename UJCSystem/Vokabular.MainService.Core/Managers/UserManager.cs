@@ -8,6 +8,7 @@ using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Users;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Results;
+using AuthUserContract = Vokabular.Authentication.DataContracts.User.UserContract;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -59,8 +60,8 @@ namespace Vokabular.MainService.Core.Managers
 
             var client = m_communicationProvider.GetAuthUserApiClient();
             
-                var result = client.HttpClient.GetListAsync<UserContract>(startValue, countValue, filterByName).GetAwaiter().GetResult();
-                var userDetailContracts = Mapper.Map<List<UserDetailContract>>(result);
+                var result = client.HttpClient.GetListAsync<AuthUserContract>(startValue, countValue, filterByName).GetAwaiter().GetResult();
+                var userDetailContracts = Mapper.Map<List<UserDetailContract>>(result.Items);
 
                 return new PagedResultList<UserDetailContract>
                 {
@@ -78,8 +79,8 @@ namespace Vokabular.MainService.Core.Managers
 
             var client = m_communicationProvider.GetAuthUserApiClient();
 
-            var result = client.HttpClient.GetListAsync<UserContract>(0, countValue, query).GetAwaiter().GetResult();
-            var userDetailContracts = Mapper.Map<List<UserDetailContract>>(result);
+            var result = client.HttpClient.GetListAsync<AuthUserContract>(0, countValue, query).GetAwaiter().GetResult();
+            var userDetailContracts = Mapper.Map<List<UserDetailContract>>(result.Items);
             return m_userDetailManager.GetIdForExternalUsers(userDetailContracts);
         }
 
