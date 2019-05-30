@@ -93,15 +93,6 @@ namespace Vokabular.MainService
                     options.TokenValidationParameters.ValidateAudience = false;
                     options.TokenValidationParameters.ValidateIssuer = false;
                     options.TokenValidationParameters.ValidateLifetime = false;
-
-                    options.Events = new JwtBearerEvents
-                    {
-                        OnTokenValidated = context =>
-                        {
-                            AddClaimsToUser(ref context, openIdConnectConfig.UserInfoEndpoint);
-                            return Task.CompletedTask;
-                        }
-                    };
                 });
 
             services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
@@ -177,46 +168,6 @@ namespace Vokabular.MainService
             var appBasePath = AppContext.BaseDirectory;
             var appName = Assembly.GetEntryAssembly().GetName().Name;
             return Path.Combine(appBasePath, $"{appName}.xml");
-        }
-
-        private void AddClaimsToUser(ref TokenValidatedContext context, string userInfoEndpoint)
-        {
-            using (var client = new HttpClient())
-            {
-                var jwtToken = (JwtSecurityToken) context.SecurityToken;
-                client.SetBearerToken(jwtToken.RawData);
-
-                var content = client.GetStringAsync(userInfoEndpoint).Result;
-                IList<Claim> claims = new List<Claim>();
-
-                var arrayName = new[] {CustomClaimTypes.Permission, CustomClaimTypes.ResourcePermissionType, CustomClaimTypes.ResourcePermission};
-
-                foreach (var property in JToken.Parse(content).Children<JProperty>())
-                {
-                    if (arrayName.Contains(property.Name))
-                    {
-                        try
-                        {
-                            var permArray = JArray.Parse(property.Value.ToString());
-                            foreach (var permission in permArray)
-                            {
-                                claims.Add(new Claim(property.Name, permission.ToString(), context.SecurityToken.Issuer));
-                            }
-                        }
-                        catch (JsonReaderException)
-                        {
-                            claims.Add(new Claim(property.Name, property.Value.ToString()));
-                        } 
-
-                    }
-                    else
-                    {
-                        claims.Add(new Claim(property.Name, property.Value.ToString()));
-                    }
-                }
-
-                context.Principal.AddIdentity(new ClaimsIdentity(claims));
-            }
         }
     }
 }

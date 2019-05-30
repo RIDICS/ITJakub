@@ -8,9 +8,11 @@ namespace Vokabular.Shared.AspNetCore.Extensions
     {
         public static int? GetId(this ClaimsPrincipal claimsPrincipal)
         {
-            if (claimsPrincipal.Identity.IsAuthenticated)
+            var idClaim = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (claimsPrincipal.Identity.IsAuthenticated && idClaim != null)
             {
-                return int.Parse(claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier).Value);
+                return int.Parse(idClaim.Value);
             }
 
             return null;
@@ -20,7 +22,7 @@ namespace Vokabular.Shared.AspNetCore.Extensions
         {
             if (claimsPrincipal.Identity.IsAuthenticated)
             {
-                return claimsPrincipal.FindFirst(ClaimTypes.Name).Value;
+                return claimsPrincipal.FindFirst(ClaimTypes.Name)?.Value;
             }
 
             return null;
@@ -30,7 +32,7 @@ namespace Vokabular.Shared.AspNetCore.Extensions
         {
             if (claimsPrincipal.Identity.IsAuthenticated)
             {
-                return claimsPrincipal.FindFirst(ClaimTypes.GivenName).Value;
+                return claimsPrincipal.FindFirst(ClaimTypes.GivenName)?.Value;
             }
 
             return null;
@@ -40,7 +42,7 @@ namespace Vokabular.Shared.AspNetCore.Extensions
         {
             if (claimsPrincipal.Identity.IsAuthenticated)
             {
-                return claimsPrincipal.FindFirst(ClaimTypes.Surname).Value;
+                return claimsPrincipal.FindFirst(ClaimTypes.Surname)?.Value;
             }
 
             return null;
@@ -50,7 +52,7 @@ namespace Vokabular.Shared.AspNetCore.Extensions
         {
             if (claimsPrincipal.Identity.IsAuthenticated)
             {
-                return claimsPrincipal.FindFirst(ClaimTypes.Email).Value;
+                return claimsPrincipal.FindFirst(ClaimTypes.Email)?.Value;
             }
 
             return null;
