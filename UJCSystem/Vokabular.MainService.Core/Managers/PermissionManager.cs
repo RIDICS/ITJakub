@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ITJakub.FileProcessing.DataContracts;
 using log4net;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
+using Vokabular.Shared.Const;
 using AuthRoleContract = Vokabular.Authentication.DataContracts.RoleContract;
 
 namespace Vokabular.MainService.Core.Managers
@@ -33,6 +35,26 @@ namespace Vokabular.MainService.Core.Managers
 
             var permissions = client.GetAllPermissionsAsync().GetAwaiter().GetResult();
             return m_permissionConverter.Convert(permissions);
+        }
+
+        public List<PermissionFromAuthContract> GetAutoImportSpecialPermissions()
+        {
+            var client = m_communicationProvider.GetAuthPermissionApiClient();
+
+            var permissions = client.GetAllPermissionsAsync().GetAwaiter().GetResult();
+
+            var result = permissions.Where(x => x.Name.StartsWith(PermissionNames.AutoImport)).Select(p => new PermissionFromAuthContract
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Roles = p.Roles.Select(r => new RoleFromAuthContract
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                }).ToList()
+            }).ToList();
+
+            return result;
         }
 
         public List<SpecialPermissionContract> GetSpecialPermissionsForRole(int roleId)

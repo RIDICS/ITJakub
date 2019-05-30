@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ITJakub.FileProcessing.Core.Sessions;
 using ITJakub.FileProcessing.DataContracts;
 
@@ -12,9 +13,9 @@ namespace ITJakub.FileProcessing.Service
             m_sessionManager.AddResource(resourceInfoSkeleton.SessionId, resourceInfoSkeleton.FileName, resourceInfoSkeleton.Data);
         }
 
-        public bool ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage)
+        public bool ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage, IList<PermissionFromAuthContract> autoImportPermissions)
         {
-            return m_sessionManager.ProcessSession(sessionId, projectId, userId, uploadMessage);
+            return m_sessionManager.ProcessSession(sessionId, projectId, userId, uploadMessage, autoImportPermissions);
         }
     }
 }

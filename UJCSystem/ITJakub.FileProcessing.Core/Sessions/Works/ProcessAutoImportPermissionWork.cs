@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ITJakub.FileProcessing.Core.Communication;
-using Vokabular.Authentication.DataContracts;
+using ITJakub.FileProcessing.DataContracts;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
@@ -15,40 +14,39 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
         private readonly PermissionRepository m_permissionRepository;
         private readonly long m_projectId;
         private readonly List<BookTypeEnum> m_bookTypes;
-        private readonly FileProcessingCommunicationProvider m_communicationProvider;
+        private readonly IList<PermissionFromAuthContract> m_autoImportPermissions;
 
         public ProcessAutoImportPermissionWork(PermissionRepository permissionRepository, long projectId,
-            List<BookTypeEnum> bookTypes, FileProcessingCommunicationProvider communicationProvider) : base(permissionRepository)
+            List<BookTypeEnum> bookTypes, IList<PermissionFromAuthContract> autoImportPermissions) : base(permissionRepository)
         {
             m_permissionRepository = permissionRepository;
             m_projectId = projectId;
             m_bookTypes = bookTypes;
-            m_communicationProvider = communicationProvider;
+            m_autoImportPermissions = autoImportPermissions;
         }
 
         protected override void ExecuteWorkImplementation()
         {
-            var roles = new List<RoleContract>();
-            using (var client = m_communicationProvider.GetAuthenticationServiceClient())
+            var roles = new List<RoleFromAuthContract>();
+
+            foreach (var bookType in m_bookTypes)
             {
-                var permissions = client.GetAllPermissions();
-                foreach (var bookType in m_bookTypes)
+                foreach (var permission in m_autoImportPermissions.Where(x => x.Name == PermissionNames.AutoImport + (int) bookType).ToList())
                 {
-                    foreach (var permission in permissions.Where(x => x.Name == PermissionNames.AutoImport + (int)bookType).ToList())
-                    {
-                        roles.AddRange(permission.Roles);
-                    }
+                    roles.AddRange(permission.Roles);
                 }
             }
-
+            
             var project = m_permissionRepository.Load<Project>(m_projectId);
 
             var groups = new List<UserGroup>();
             foreach (var role in roles)
             {
                 var permission = m_permissionRepository.FindGroupByExternalId(role.Id);
-                if(permission != null)
+                if (permission != null)
+                {
                     groups.Add(permission);
+                }
             }
             
             var newPermissions = groups.Select(group => new Permission

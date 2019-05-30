@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ITJakub.FileProcessing.Core.Communication;
 using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext;
 using ITJakub.FileProcessing.Core.Sessions.Works;
+using ITJakub.FileProcessing.DataContracts;
 using log4net;
 using Vokabular.Core.Storage.Resources;
 using Vokabular.DataEntities.Database.Repositories;
@@ -23,11 +23,10 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
         private readonly CatalogValueRepository m_catalogValueRepository;
         private readonly PersonRepository m_personRepository;
         private readonly PermissionRepository m_permissionRepository;
-        private readonly FileProcessingCommunicationProvider m_communicationProvider;
 
         public RelationalDbStoreProcessor(ProjectRepository projectRepository, MetadataRepository metadataRepository,
             ResourceRepository resourceRepository, IFulltextResourceProcessor fulltextResourceProcessor, CatalogValueRepository catalogValueRepository, PersonRepository personRepository, 
-            PermissionRepository permissionRepository, FileProcessingCommunicationProvider communicationProvider)
+            PermissionRepository permissionRepository)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
@@ -36,11 +35,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             m_catalogValueRepository = catalogValueRepository;
             m_personRepository = personRepository;
             m_permissionRepository = permissionRepository;
-            m_communicationProvider = communicationProvider;
         }
 
         public void Process(ResourceSessionDirector resourceDirector)
         {
+            var autoImportPermissions = resourceDirector.GetSessionInfoValue<IList<PermissionFromAuthContract>>(SessionInfo.AutoImportPermissions);
             var bookData = resourceDirector.GetSessionInfoValue<BookData>(SessionInfo.BookData);
             bookData.FileNameMapping = new Dictionary<string, FileResource>();
             foreach (var fileResource in resourceDirector.Resources.Where(x => x.NewNameInStorage != null))
@@ -86,7 +85,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             //    }
             //}
 
-            var processAutoImportPermission = new ProcessAutoImportPermissionWork(m_permissionRepository, projectId, createNewSnapshot.BookTypes, m_communicationProvider);
+            var processAutoImportPermission = new ProcessAutoImportPermissionWork(m_permissionRepository, projectId, createNewSnapshot.BookTypes, autoImportPermissions);
             processAutoImportPermission.Execute();
             
             //var specialPermissions = m_permissionRepository.GetAutoimportPermissionsByCategoryIdList(allBookVersionCategoryIds);

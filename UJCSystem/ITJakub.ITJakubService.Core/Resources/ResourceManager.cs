@@ -30,7 +30,7 @@ namespace ITJakub.ITJakubService.Core.Resources
         {
             var userId = m_userManager.GetCurrentUser().Id;
             m_authorizationManager.CheckUserCanUploadBook();
-            return m_resourceClient.ProcessSession(resourceSessionId, projectId, userId, uploadMessage);
+            return m_resourceClient.ProcessSession(resourceSessionId, projectId, userId, uploadMessage, null /*Service is obsolete, so correct fix is not required*/);
         }
     }
 }
