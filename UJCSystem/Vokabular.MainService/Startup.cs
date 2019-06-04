@@ -81,6 +81,21 @@ namespace Vokabular.MainService
 
                 options.DocumentFilter<PolymorphismDocumentFilter<SearchCriteriaContract>>();
                 options.SchemaFilter<PolymorphismSchemaFilter<SearchCriteriaContract>>();
+
+                options.AddSecurityDefinition("implicit-oauth2", new OAuth2Scheme
+                {
+                    Flow = "implicit",
+                    AuthorizationUrl = $"{openIdConnectConfig.Url}connect/authorize",
+                    TokenUrl = $"{openIdConnectConfig.Url}connect/token",
+                    Scopes = new Dictionary<string, string> {
+                        { "auth_api.Internal", "API - internal" },
+                    }
+                });
+
+                options.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
+                {
+                    {"implicit-oauth2", new[] {"auth_api.Internal"}}
+                });
             });
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -153,6 +168,9 @@ namespace Vokabular.MainService
             {
                 c.SwaggerEndpoint("v1/swagger.json", "Vokabular MainService API v1"); // using relative address to Swagger UI
                 c.SupportedSubmitMethods(SubmitMethod.Get, SubmitMethod.Post, SubmitMethod.Put, SubmitMethod.Delete, SubmitMethod.Head);
+
+                c.OAuthConfigObject.ClientId = string.Empty;
+                c.OAuthConfigObject.ClientSecret = string.Empty;
             });
 
             applicationLifetime.ApplicationStopped.Register(OnShutdown);
