@@ -24,6 +24,8 @@ using Scalesoft.Localization.Core.Util;
 using Scalesoft.Localization.Database.NHibernate;
 using Vokabular.Authentication.Client;
 using Vokabular.Authentication.Client.Configuration;
+using Vokabular.Authentication.TicketStore;
+using Vokabular.Authentication.TicketStore.Store;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
@@ -34,7 +36,9 @@ namespace ITJakub.Web.Hub
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        private readonly TimeSpan m_cookieExpireTimeSpan = TimeSpan.FromMinutes(60);
+
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
             ApplicationConfig.Configuration = Configuration;
@@ -58,7 +62,7 @@ namespace ITJakub.Web.Hub
                 })
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
                 {
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                    options.ExpireTimeSpan = m_cookieExpireTimeSpan;
                     options.Cookie.Name = "identity";
                     options.AccessDeniedPath = "/Account/AccessDenied/";
                     options.LoginPath = "/Account/Login";
@@ -99,6 +103,13 @@ namespace ITJakub.Web.Hub
                 });
 
             services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
+
+            //store claims in memory:
+            services.SetAuthenticationTicketStore<MemoryCacheTicketStore>(new CacheTicketStoreConfig
+            {
+                SlidingExpiration = m_cookieExpireTimeSpan
+            });
+            services.RegisterAutomaticTokenManagement();
 
             // Register Auth service client, because contains components for obtaining access token (for user and also for app)
             services.RegisterAuthorizationHttpClientComponents<AuthServiceClientLocalization>(new AuthServiceCommunicationConfiguration
