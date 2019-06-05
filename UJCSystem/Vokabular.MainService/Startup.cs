@@ -104,10 +104,9 @@ namespace Vokabular.MainService
                     options.Authority = openIdConnectConfig.Url;
                     options.Audience = "auth_api";
 
-                    // Disable validation (client-app is already authenticated)
-                    options.TokenValidationParameters.ValidateAudience = false;
-                    options.TokenValidationParameters.ValidateIssuer = false;
-                    options.TokenValidationParameters.ValidateLifetime = false;
+                    options.TokenValidationParameters.ValidateAudience = true;
+                    options.TokenValidationParameters.ValidateIssuer = true;
+                    options.TokenValidationParameters.ValidateLifetime = true;
                 });
 
             services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();

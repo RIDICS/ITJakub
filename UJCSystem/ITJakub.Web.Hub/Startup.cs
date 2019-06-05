@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ITJakub.Web.Hub.Models.Config;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using ITJakub.Web.Hub.Authentication;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Helpers;
@@ -18,6 +19,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Scalesoft.Localization.AspNetCore;
 using Scalesoft.Localization.AspNetCore.IoC;
 using Scalesoft.Localization.Core.Configuration;
 using Scalesoft.Localization.Core.Util;
@@ -29,6 +31,7 @@ using Vokabular.Authentication.TicketStore.Store;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
+using Vokabular.Shared.AspNetCore.Extensions;
 using Vokabular.Shared.Const;
 using Vokabular.Shared.Options;
 
@@ -87,7 +90,7 @@ namespace ITJakub.Web.Hub
                     options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
                     options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
                     options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
-                    options.ClaimActions.MapJsonKey(ClaimTypes.DateOfBirth, "birthdate");
+                    //options.ClaimActions.MapJsonKey(ClaimTypes.DateOfBirth, "birthdate");
                     options.ClaimActions.MapJsonKey(CustomClaimTypes.Permission, CustomClaimTypes.Permission);
                     options.ClaimActions.MapJsonKey(CustomClaimTypes.ResourcePermission, CustomClaimTypes.ResourcePermission);
                     options.ClaimActions.MapJsonKey(CustomClaimTypes.ResourcePermissionType, CustomClaimTypes.ResourcePermissionType);
@@ -99,6 +102,28 @@ namespace ITJakub.Web.Hub
                     {
                         NameClaimType = ClaimTypes.Name,
                         RoleClaimType = ClaimTypes.Role
+                    };
+
+                    //Adds return url address in case of user clicking on "Leave" button on login page
+                    options.Events = new OpenIdConnectEvents
+                    {
+                        OnRedirectToIdentityProvider = context =>
+                        {
+                            var returnUrl = context.Request.GetAppBaseUrl();
+                            context.ProtocolMessage.SetParameter("returnUrlOnCancel", returnUrl.ToString());
+
+                            var culture = context.HttpContext.RequestServices.GetRequiredService<ILocalizationService>().GetRequestCulture();
+                            context.ProtocolMessage.SetParameter("culture", culture.Name);
+
+                            return Task.CompletedTask;
+                        },
+                        OnRedirectToIdentityProviderForSignOut = context =>
+                        {
+                            var culture = context.HttpContext.RequestServices.GetRequiredService<ILocalizationService>().GetRequestCulture();
+                            context.ProtocolMessage.SetParameter("culture", culture.Name);
+
+                            return Task.CompletedTask;
+                        }
                     };
                 });
 
