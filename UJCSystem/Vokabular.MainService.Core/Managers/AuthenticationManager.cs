@@ -45,9 +45,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public User GetCurrentUser()
         {
-            var id = m_httpContextAccessor.HttpContext.User.GetId();
-
-            return id.HasValue ? m_userRepository.InvokeUnitOfWork(x => x.GetUserByExternalId(id.Value)) : null;
+            return GetCurrentUser(false);
         }
 
         public RoleContract GetUnregisteredRole()

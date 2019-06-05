@@ -51,19 +51,8 @@ namespace Vokabular.MainService.Core.Managers
         public List<BookWithCategoriesContract> GetBooksByTypeForUser(BookTypeEnumContract bookType)
         {
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
-            IList<MetadataResource> dbMetadataList;
-            var user = m_authenticationManager.GetCurrentUser();
-            if (user != null)
-            {
-                dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByBookType(bookTypeEnum, user.Id));
-            }
-            else
-            {
-                var role = m_authenticationManager.GetUnregisteredRole();
-                var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalId(role.Id));
-                dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataForUserGroup(bookTypeEnum, group.Id));
-            }
-
+            var user = m_authenticationManager.GetCurrentUser(true);
+            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByBookType(bookTypeEnum, user.Id));
             var resultList = Mapper.Map<List<BookWithCategoriesContract>>(dbMetadataList);
             return resultList;
         }

@@ -51,10 +51,9 @@ namespace Vokabular.MainService.Core.Managers
         public List<UserContract> GetUsersByRole(int roleId)
         {
             var client = m_communicationProvider.GetAuthUserApiClient();
-            {
-                var members = client.GetUserListByRoleAsync(roleId, null, null).GetAwaiter().GetResult();
-                return Mapper.Map<List<UserContract>>(members);
-            }
+
+            var members = client.GetUserListByRoleAsync(roleId, null, null).GetAwaiter().GetResult();
+            return Mapper.Map<List<UserContract>>(members);
         }
 
         public int CreateRole(string roleName, string description)
