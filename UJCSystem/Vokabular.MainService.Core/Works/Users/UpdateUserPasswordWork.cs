@@ -1,4 +1,5 @@
-﻿using Vokabular.Authentication.DataContracts.User;
+﻿using System;
+using Vokabular.Authentication.DataContracts.User;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
@@ -25,6 +26,10 @@ namespace Vokabular.MainService.Core.Works.Users
         protected override void ExecuteWorkImplementation()
         {
             var user = m_userRepository.FindById<User>(m_userId);
+            if (user.ExternalId == null)
+            {
+                throw new ArgumentException($"User with ID {user.Id} has missing ExternalID");
+            }
 
             var contract = new ChangePasswordContract
             {
@@ -33,7 +38,7 @@ namespace Vokabular.MainService.Core.Works.Users
             };
 
             var client = m_communicationProvider.GetAuthUserApiClient();
-            client.PasswordChangeAsync(user.ExternalId, contract).GetAwaiter().GetResult();
+            client.PasswordChangeAsync(user.ExternalId.Value, contract).GetAwaiter().GetResult();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
@@ -19,22 +20,10 @@ namespace Vokabular.MainService.Core.Managers
             m_communicationProvider = communicationProvider;
             m_userRepository = userRepository;
         }
-
-        public UserContract GetUserContractForUser(User user)
-        {
-            var authUser = GetDetailForUser(user.ExternalId);
-            if (authUser == null)
-                return null;
-
-            var userDetailContract = Mapper.Map<UserContract>(authUser);
-            userDetailContract.Id = user.Id;
-            userDetailContract.AvatarUrl = user.AvatarUrl;
-            return userDetailContract;
-        }
-
+        
         public UserContract GetUserContractForUser(UserContract user)
         {
-            var authUser = GetDetailForUser(user.ExternalId);
+            var authUser = GetDetailUserFromAuthService(user.ExternalId);
             if (authUser == null)
                 return user;
 
@@ -46,7 +35,12 @@ namespace Vokabular.MainService.Core.Managers
 
         public UserDetailContract GetUserDetailContractForUser(User user)
         {
-            var authUser = GetDetailForUser(user.ExternalId);
+            if (user.ExternalId == null)
+            {
+                throw new ArgumentException($"User with ID {user.Id} has missing ExternalID");
+            }
+
+            var authUser = GetDetailUserFromAuthService(user.ExternalId.Value);
             if (authUser == null)
                 return null;
 
@@ -58,7 +52,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public UserDetailContract GetUserDetailContractForUser(UserDetailContract user)
         {
-            var authUser = GetDetailForUser(user.ExternalId);
+            var authUser = GetDetailUserFromAuthService(user.ExternalId);
             if (authUser == null)
                 return user;
 
@@ -125,7 +119,7 @@ namespace Vokabular.MainService.Core.Managers
             return list;
         }
 
-        private Vokabular.Authentication.DataContracts.User.UserContract GetDetailForUser(int userExternalId)
+        private Vokabular.Authentication.DataContracts.User.UserContract GetDetailUserFromAuthService(int userExternalId)
         {
             var client = m_communicationProvider.GetAuthUserApiClient();
             var result = client.HttpClient.GetItemAsync<Vokabular.Authentication.DataContracts.User.UserContract>(userExternalId).GetAwaiter().GetResult();

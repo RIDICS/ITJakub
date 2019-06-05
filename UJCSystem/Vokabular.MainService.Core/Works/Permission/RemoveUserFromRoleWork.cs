@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using log4net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
@@ -28,10 +29,14 @@ namespace Vokabular.MainService.Core.Works.Permission
         protected override void ExecuteWorkImplementation()
         {
             var group = m_permissionRepository.FindGroupByExternalId(m_roleId);
-            var user = m_permissionRepository.Load<User>(m_userId);
+            var user = m_permissionRepository.FindById<User>(m_userId);
+            if (user.ExternalId == null)
+            {
+                throw new ArgumentException($"User with ID {user.Id} has missing ExternalID");
+            }
 
             var client = m_communicationProvider.GetAuthUserApiClient();
-            client.RemoveRoleFromUserAsync(user.ExternalId, m_roleId).GetAwaiter().GetResult();
+            client.RemoveRoleFromUserAsync(user.ExternalId.Value, m_roleId).GetAwaiter().GetResult();
 
             //TODO switch logic: remove group from user (fetch lower amount of data)
             if (group.Users == null)

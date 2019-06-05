@@ -33,8 +33,17 @@ namespace Vokabular.MainService.Core.Managers.Authentication
         public UserGroup GetDefaultUnregisteredUserGroup()
         {
             return m_userRepository.UnitOfWork.CurrentSession == null
-                ? m_userRepository.InvokeUnitOfWork(x => x.GetDefaultGroupOrCreate(Unregistered))
-                : m_userRepository.GetDefaultGroupOrCreate(Unregistered);
+                ? m_userRepository.InvokeUnitOfWork(x => x.GetDefaultGroupOrCreate(Unregistered, GetUnregisteredRoleExternalId))
+                : m_userRepository.GetDefaultGroupOrCreate(Unregistered, GetUnregisteredRoleExternalId);
+        }
+
+        private int GetUnregisteredRoleExternalId()
+        {
+            //TODO get role by name
+            var client = m_communicationProvider.GetAuthRoleApiClient();
+
+            var roleResult = client.GetAllRolesAsync().GetAwaiter().GetResult().First(role => role.Name == Unregistered);
+            return roleResult.Id;
         }
 
         public IList<Claim> GetDefaultUserPermissions()

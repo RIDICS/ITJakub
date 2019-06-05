@@ -1,4 +1,5 @@
-﻿using Vokabular.DataEntities.Database.Entities;
+﻿using System;
+using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
@@ -25,16 +26,20 @@ namespace Vokabular.MainService.Core.Works.Users
         protected override void ExecuteWorkImplementation()
         {
             var user = m_userRepository.FindById<User>(m_userId);
+            if (user.ExternalId == null)
+            {
+                throw new ArgumentException($"User with ID {user.Id} has missing ExternalID");
+            }
 
             var client = m_communicationProvider.GetAuthUserApiClient();
 
-            var authUser = client.HttpClient.GetItemAsync<AuthUserContract>(user.ExternalId).GetAwaiter().GetResult();
+            var authUser = client.HttpClient.GetItemAsync<AuthUserContract>(user.ExternalId.Value).GetAwaiter().GetResult();
 
             authUser.Email = m_data.Email;
             authUser.FirstName = m_data.FirstName;
             authUser.LastName = m_data.LastName;
 
-            client.EditSelfAsync(user.ExternalId, authUser).GetAwaiter().GetResult();
+            client.EditSelfAsync(user.ExternalId.Value, authUser).GetAwaiter().GetResult();
 
 
             user.AvatarUrl = m_data.AvatarUrl;

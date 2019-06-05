@@ -8,7 +8,7 @@ BEGIN TRAN;
 		[Description] varchar(500) NULL,
 		[CreateTime] datetime NOT NULL,
 		[CreatedBy] int NULL CONSTRAINT [FK_UserGroup(CreatedBy)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
-		[ExternalId] int NULL,
+		[ExternalId] int NOT NULL,
 	);
 
 	CREATE TABLE [dbo].[User_UserGroup](
@@ -23,48 +23,6 @@ BEGIN TRAN;
 		[Project] bigint NOT NULL CONSTRAINT [FK_Permission(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project](Id),
 		CONSTRAINT [UQ_Permission(UserGroup_Project)] UNIQUE ([UserGroup],[Project])
 	);
-	
-	DECLARE @AdminUserId INT;
-
-	INSERT INTO [dbo].[User] ([CreateTime]
-           ,[AvatarUrl])
-     VALUES
-           ('2017-08-21 00:00:00.000' -- CreateTime
-           ,NULL) -- AvatarUrl
-		  
-	SET @AdminUserId = SCOPE_IDENTITY();
-
-	INSERT INTO dbo.[UserGroup]
-	(
-	    --Id - this column value is auto-generated
-	    Name,
-	    Description,
-	    CreateTime,
-	    CreatedBy
-	)
-	VALUES
-	(
-	    -- Id - int
-	    'AdminGroup', -- Name - varchar
-	    'Group for administrators', -- Description - varchar
-	    '2015-10-01 10:52:35', -- CreateTime - datetime
-	     @AdminUserId -- CreatedBy - int
-	)
-
-	DECLARE @AdminGroupId INT
-
-	SELECT @AdminGroupId = [Id] FROM [dbo].[UserGroup] WHERE [dbo].[UserGroup].[Name]= 'AdminGroup'
-
-	INSERT INTO dbo.User_UserGroup
-	(
-	    [User],
-	    [UserGroup]
-	)
-	VALUES
-	(
-	    @AdminUserId, -- User - int
-	    @AdminGroupId -- Group - int
-	)
 
 
     INSERT INTO [dbo].[DatabaseVersion]

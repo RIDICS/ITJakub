@@ -7,7 +7,7 @@ namespace Vokabular.DataEntities.Database.Entities
     {
         public virtual int Id { get; set; }
 
-        public virtual int ExternalId { get; set; }
+        public virtual int? ExternalId { get; set; }
 
         public virtual DateTime CreateTime { get; set; }
 

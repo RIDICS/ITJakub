@@ -13,7 +13,7 @@
 
     <property name="CreateTime" not-null="true" type="UtcDateTime" />
     
-    <property name="ExternalId" not-null="false" />
+    <property name="ExternalId" not-null="true" />
 
     <bag name="Users" table="User_UserGroup" lazy="true">
       <key column="[UserGroup]" />

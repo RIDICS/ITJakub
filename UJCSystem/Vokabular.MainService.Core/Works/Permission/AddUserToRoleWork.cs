@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
@@ -25,10 +26,14 @@ namespace Vokabular.MainService.Core.Works.Permission
         protected override void ExecuteWorkImplementation()
         {
             var group = m_permissionRepository.FindGroupByExternalId(m_roleId);
-            var user = m_permissionRepository.Load<User>(m_userId);
+            var user = m_permissionRepository.FindById<User>(m_userId);
+            if (user.ExternalId == null)
+            {
+                throw new ArgumentException($"User with ID {user.Id} has missing ExternalID");
+            }
 
             var client = m_communicationProvider.GetAuthUserApiClient();
-            client.AddRoleToUserAsync(user.ExternalId, m_roleId).GetAwaiter().GetResult();
+            client.AddRoleToUserAsync(user.ExternalId.Value, m_roleId).GetAwaiter().GetResult();
 
             if (group.Users == null)
             {

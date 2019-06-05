@@ -42,9 +42,14 @@ namespace Vokabular.MainService.Core.Managers
                 throw new ArgumentException(message);
             }
 
+            if (user.ExternalId == null)
+            {
+                throw new ArgumentException($"User with ID {userId} has missing ExternalID");
+            }
+
             var client = m_communicationProvider.GetAuthUserApiClient();
 
-            var authUser = client.GetUserForRoleAssignmentAsync(user.ExternalId).GetAwaiter().GetResult();
+            var authUser = client.GetUserForRoleAssignmentAsync(user.ExternalId.Value).GetAwaiter().GetResult();
             return Mapper.Map<List<RoleContract>>(authUser.Roles);
         }
 

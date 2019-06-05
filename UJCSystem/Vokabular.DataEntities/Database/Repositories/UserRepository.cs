@@ -54,7 +54,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return defaultUser;
         }
 
-        public virtual UserGroup GetDefaultGroupOrCreate(string defaultRegisteredGroupName)
+        public virtual UserGroup GetDefaultGroupOrCreate(string defaultRegisteredGroupName, Func<int> getExternalId)
         {
             var registeredUsersGroup = GetSession().QueryOver<UserGroup>()
                 .Where(x => x.Name == defaultRegisteredGroupName)
@@ -71,6 +71,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 Name = defaultRegisteredGroupName,
                 CreateTime = now,
                 Description = "Default user group",
+                ExternalId = getExternalId.Invoke(),
             };
 
             GetSession().Save(registeredUsersGroup);
