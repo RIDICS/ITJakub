@@ -1,16 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Errors;
-using Vokabular.Shared.AspNetCore.Extensions;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -26,21 +22,7 @@ namespace ITJakub.Web.Hub.Controllers
         [RequireHttps]
         public ActionResult Login(string returnUrl = null)
         {
-            try
-            {
-                using (var client = GetRestClient())
-                {
-                    client.CreateUserIfNotExist(HttpContext.User.GetId().GetValueOrDefault());
-                }
-
-                return RedirectToLocal("");
-            }
-            catch (HttpErrorCodeException e)
-            {
-                AddErrors(e);
-            }
-
-            return RedirectToLocal(returnUrl);
+            return RedirectToLocal("");
         }
 
         //
