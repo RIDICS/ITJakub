@@ -5,6 +5,7 @@ using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
+using Vokabular.MainService.Core.Works.Users;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
 
@@ -66,12 +67,8 @@ namespace Vokabular.MainService.Core.Managers
         {
             foreach (var userDetailContract in userDetailContracts)
             {
-                var user = m_userRepository.InvokeUnitOfWork(x => x.GetUserByExternalId(userDetailContract.ExternalId));
-                if (user != null)
-                {
-                    userDetailContract.AvatarUrl = user.AvatarUrl;
-                    userDetailContract.Id = user.Id;
-                }
+                var userId = new CreateUserIfNotExistWork(m_userRepository, userDetailContract.ExternalId, null).Execute();
+                userDetailContract.Id = userId;
             }
 
             return userDetailContracts;

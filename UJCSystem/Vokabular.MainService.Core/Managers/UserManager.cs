@@ -33,9 +33,11 @@ namespace Vokabular.MainService.Core.Managers
             return userId;
         }
 
-        public object CreateUserIfNotExist(int externalId)
+        public int CreateUserIfNotExist(int externalId)
         {
-            var userId = new CreateUserIfNotExistWork(m_userRepository, externalId).Execute();
+            var authUserApiClient = m_communicationProvider.GetAuthUserApiClient();
+            var userWithRoles = authUserApiClient.GetUserForRoleAssignmentAsync(externalId).GetAwaiter().GetResult();
+            var userId = new CreateUserIfNotExistWork(m_userRepository, externalId, userWithRoles.Roles).Execute();
             return userId;
         }
 

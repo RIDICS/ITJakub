@@ -78,5 +78,13 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             return registeredUsersGroup;
         }
+
+        public virtual IList<UserGroup> GetUserGroupsByExternalIds(IEnumerable<int> externalIds)
+        {
+            var result = GetSession().QueryOver<UserGroup>()
+                .WhereRestrictionOn(x => x.ExternalId).IsInG(externalIds)
+                .List();
+            return result;
+        }
     }
 }
