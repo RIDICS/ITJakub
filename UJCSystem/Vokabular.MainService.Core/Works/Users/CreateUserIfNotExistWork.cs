@@ -23,30 +23,33 @@ namespace Vokabular.MainService.Core.Works.Users
 
         protected override int ExecuteWorkImplementation()
         {
+            IList<UserGroup> dbUserGroups = null;
+
+            var now = DateTime.UtcNow;
+            
             if (m_roles != null)
             {
-                var dbUserGroups = m_userRepository.GetUserGroupsByExternalIds(m_roles.Select(x => x.Id));
-
-                foreach (var roleContract in m_roles)
-                {
-                    
-                }
-                // TODO update user groups in DB
+                dbUserGroups = UpdateAndGetUserGroups(now);
             }
 
             var user = m_userRepository.GetUserByExternalId(m_userExternalId);
             if (user != null)
             {
+                if (dbUserGroups != null)
+                {
+                    user.Groups = dbUserGroups;
+                    m_userRepository.Update(user);
+                }
+
                 return user.Id;
             }
            
-            var now = DateTime.UtcNow;
-
             var dbUser = new User
             {
                 ExternalId = m_userExternalId,
                 CreateTime = now,
-                AvatarUrl = null
+                AvatarUrl = null,
+                Groups = dbUserGroups,
                 //Groups = new List<Group> { m_defaultMembershipProvider.GetDefaultRegisteredUserGroup(), m_defaultMembershipProvider.GetDefaultUnRegisteredUserGroup() },
                 //FavoriteLabels = new List<FavoriteLabel> { defaultFavoriteLabel }
             };
@@ -57,6 +60,32 @@ namespace Vokabular.MainService.Core.Works.Users
 
             var userId = (int) m_userRepository.Create(dbUser);
             return userId;
+        }
+
+        private IList<UserGroup> UpdateAndGetUserGroups(DateTime now)
+        {
+            var dbUserGroups = m_userRepository.GetUserGroupsByExternalIds(m_roles.Select(x => x.Id));
+
+            foreach (var roleContract in m_roles)
+            {
+                var dbRole = dbUserGroups.FirstOrDefault(x => x.ExternalId == roleContract.Id);
+                if (dbRole == null)
+                {
+                    var newDbRole = new UserGroup
+                    {
+                        ExternalId = roleContract.Id,
+                        Name = roleContract.Name,
+                        Description = roleContract.Description,
+                        CreateTime = now,
+                    };
+
+                    m_userRepository.Create(newDbRole);
+
+                    dbUserGroups.Add(newDbRole);
+                }
+            }
+
+            return dbUserGroups;
         }
     }
 }

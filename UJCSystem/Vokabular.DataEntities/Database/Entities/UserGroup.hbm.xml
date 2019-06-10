@@ -15,7 +15,7 @@
     
     <property name="ExternalId" not-null="true" />
 
-    <bag name="Users" table="User_UserGroup" lazy="true">
+    <bag name="Users" table="User_UserGroup" lazy="true" inverse="true">
       <key column="[UserGroup]" />
       <many-to-many class="User" column="[User]" />
     </bag>
