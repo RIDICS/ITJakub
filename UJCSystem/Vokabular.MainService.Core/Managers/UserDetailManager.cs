@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Works.Users;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -30,7 +29,6 @@ namespace Vokabular.MainService.Core.Managers
 
             var userDetailContract = Mapper.Map<UserContract>(authUser);
             userDetailContract.Id = user.Id;
-            userDetailContract.AvatarUrl = user.AvatarUrl;
             return userDetailContract;
         }
 
@@ -47,7 +45,6 @@ namespace Vokabular.MainService.Core.Managers
 
             var userDetailContract = Mapper.Map<UserDetailContract>(authUser);
             userDetailContract.Id = user.Id;
-            userDetailContract.AvatarUrl = user.AvatarUrl;
             return userDetailContract;
         }
 
@@ -59,7 +56,6 @@ namespace Vokabular.MainService.Core.Managers
 
             var userDetailContract = Mapper.Map<UserDetailContract>(authUser);
             userDetailContract.Id = user.Id;
-            userDetailContract.AvatarUrl = user.AvatarUrl;
             return userDetailContract;
         }
 

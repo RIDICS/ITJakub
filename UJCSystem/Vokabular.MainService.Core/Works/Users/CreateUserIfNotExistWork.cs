@@ -48,7 +48,6 @@ namespace Vokabular.MainService.Core.Works.Users
             {
                 ExternalId = m_userExternalId,
                 CreateTime = now,
-                AvatarUrl = null,
                 Groups = dbUserGroups,
                 //Groups = new List<Group> { m_defaultMembershipProvider.GetDefaultRegisteredUserGroup(), m_defaultMembershipProvider.GetDefaultUnRegisteredUserGroup() },
                 //FavoriteLabels = new List<FavoriteLabel> { defaultFavoriteLabel }
@@ -75,7 +74,6 @@ namespace Vokabular.MainService.Core.Works.Users
                     {
                         ExternalId = roleContract.Id,
                         Name = roleContract.Name,
-                        Description = roleContract.Description,
                         CreateTime = now,
                     };
 

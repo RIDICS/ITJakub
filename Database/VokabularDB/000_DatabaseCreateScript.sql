@@ -28,8 +28,7 @@ BEGIN TRAN
     (
 	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_User(Id)] PRIMARY KEY CLUSTERED,
 	   [CreateTime] datetime NOT NULL,
-	   [AvatarUrl] varchar(255) NULL,
-	   [ExternalId] int NULL,
+	   [ExternalId] int NULL CONSTRAINT [UQ_User(ExternalId)] UNIQUE,
     )
 	
     CREATE TABLE [dbo].[OriginalAuthor]

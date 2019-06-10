@@ -41,9 +41,6 @@ namespace Vokabular.MainService.Core.Works.Users
 
             client.EditSelfAsync(user.ExternalId.Value, authUser).GetAwaiter().GetResult();
 
-
-            user.AvatarUrl = m_data.AvatarUrl;
-            m_userRepository.Update(user);
         }
     }
 }

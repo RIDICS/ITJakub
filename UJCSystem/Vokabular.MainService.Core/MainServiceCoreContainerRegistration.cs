@@ -81,7 +81,6 @@ namespace Vokabular.MainService.Core
             services.AddSingleton<Profile, TextProfile>();
             services.AddSingleton<Profile, TrackProfile>();
             services.AddSingleton<Profile, TransformationProfile>();
-            services.AddSingleton<Profile, UserGroupProfile>();
             services.AddSingleton<Profile, UserProfile>();
 
             services.AddSingleton<Profile, BucketContractProfile>();

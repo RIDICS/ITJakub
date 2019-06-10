@@ -4,11 +4,9 @@ BEGIN TRAN;
 
 	CREATE TABLE [dbo].[UserGroup](
 		[Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_UserGroup(Id)] PRIMARY KEY,
-		[Name] varchar(255) NOT NULL UNIQUE,
-		[Description] varchar(500) NULL,
+		[Name] varchar(255) NULL,
 		[CreateTime] datetime NOT NULL,
-		[CreatedBy] int NULL CONSTRAINT [FK_UserGroup(CreatedBy)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
-		[ExternalId] int NOT NULL,
+		[ExternalId] int NOT NULL CONSTRAINT [UQ_UserGroup(ExternalId)] UNIQUE,
 	);
 
 	CREATE TABLE [dbo].[User_UserGroup](

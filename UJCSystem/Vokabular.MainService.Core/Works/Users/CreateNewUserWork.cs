@@ -46,7 +46,6 @@ namespace Vokabular.MainService.Core.Works.Users
             {
                 ExternalId = user.Id,
                 CreateTime = now,
-                AvatarUrl = m_data.AvatarUrl
                 //Groups = new List<Group> { m_defaultMembershipProvider.GetDefaultRegisteredUserGroup(), m_defaultMembershipProvider.GetDefaultUnRegisteredUserGroup() },
                 //FavoriteLabels = new List<FavoriteLabel> { defaultFavoriteLabel }
             };

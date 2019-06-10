@@ -94,7 +94,7 @@ namespace Vokabular.MainService.Core.Managers
             else
             {
                 var role = m_authenticationManager.GetUnregisteredRole();
-                var group = m_permissionRepository.FindGroupByExternalId(role.Id);
+                var group = m_permissionRepository.FindGroupByExternalIdOrCreate(role.Id);
                 filtered = m_permissionRepository.GetFilteredBookIdListByGroupPermissions(group.Id, projectIds);
             }
 
@@ -117,7 +117,7 @@ namespace Vokabular.MainService.Core.Managers
             else
             {
                 var role = m_authenticationManager.GetUnregisteredRole();
-                var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalId(role.Id));
+                var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalIdOrCreate(role.Id));
                 var filtered = m_permissionRepository.InvokeUnitOfWork(x =>
                     x.GetFilteredBookIdListByGroupPermissions(group.Id, new List<long> {projectId}));
 
@@ -144,7 +144,7 @@ namespace Vokabular.MainService.Core.Managers
             else
             {
                 var role = m_authenticationManager.GetUnregisteredRole();
-                var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalId(role.Id));
+                var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalIdOrCreate(role.Id));
                 var filtered = m_permissionRepository.InvokeUnitOfWork(x => x.GetResourceByUserGroupPermissions(group.Id, resourceId));
 
                 if (filtered == null)

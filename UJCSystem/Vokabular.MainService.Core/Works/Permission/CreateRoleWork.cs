@@ -41,7 +41,6 @@ namespace Vokabular.MainService.Core.Works.Permission
             var group = new UserGroup
             {
                 Name = m_roleName,
-                Description = m_description,
                 CreateTime = now,
                 ExternalId = externalRoleId,
             };

@@ -75,7 +75,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<BookContract> GetBooksForRole(int roleId, BookTypeEnumContract bookType)
         {
-            var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalId(roleId));
+            var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalIdOrCreate(roleId));
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
             var dbResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataForUserGroup(bookTypeEnum, group.Id));
             var result = Mapper.Map<List<BookContract>>(dbResult);

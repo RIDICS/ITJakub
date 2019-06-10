@@ -7,13 +7,11 @@
       <generator class="identity" />
     </id>
     
-    <property name="Name" not-null="true" unique="true" />
+    <property name="Name" not-null="false" />
     
-    <property name="Description" not-null="false" />
-
     <property name="CreateTime" not-null="true" type="UtcDateTime" />
     
-    <property name="ExternalId" not-null="true" />
+    <property name="ExternalId" not-null="true" unique="true" />
 
     <bag name="Users" table="User_UserGroup" lazy="true" inverse="true">
       <key column="[UserGroup]" />

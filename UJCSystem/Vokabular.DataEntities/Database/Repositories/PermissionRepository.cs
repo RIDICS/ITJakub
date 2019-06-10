@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using NHibernate;
+﻿using System;
+using System.Collections.Generic;
 using NHibernate.Criterion;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
-using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
@@ -13,32 +12,34 @@ namespace Vokabular.DataEntities.Database.Repositories
         public PermissionRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
-
-        public virtual UserGroup FindGroupById(int groupId)
-        {
-            var group = GetSession().QueryOver<UserGroup>()
-                .Fetch(SelectMode.Fetch, g => g.Users)
-                .Where(g => g.Id == groupId)
-                .SingleOrDefault();
-
-            return group;
-        }
-
+        
         public virtual UserGroup FindGroupByExternalId(int externalId)
         {
             var group = GetSession().QueryOver<UserGroup>()
-                .Fetch(SelectMode.Fetch, g => g.Users)
+                //.Fetch(SelectMode.Fetch, g => g.Users) // TODO remove this Fetch
                 .Where(g => g.ExternalId == externalId)
                 .SingleOrDefault();
 
             return group;
         }
 
-        public virtual UserGroup GetGroupByName(string groupName)
+        public virtual UserGroup FindGroupByExternalIdOrCreate(int externalId)
         {
-            return GetSession().QueryOver<UserGroup>()
-                .Where(g => g.Name == groupName)
-                .SingleOrDefault();
+            var group = FindGroupByExternalId(externalId);
+            if (group != null)
+            {
+                return group;
+            }
+
+            var newGroup = new UserGroup
+            {
+                ExternalId = externalId,
+                CreateTime = DateTime.UtcNow,
+            };
+
+            CreateGroup(newGroup);
+
+            return newGroup;
         }
 
         public virtual int CreateGroup(UserGroup group)

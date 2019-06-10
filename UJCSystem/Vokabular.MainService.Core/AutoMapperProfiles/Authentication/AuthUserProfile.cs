@@ -12,7 +12,6 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles.Authentication
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName))
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
-                .ForMember(dest => dest.AvatarUrl, opt => opt.Ignore())
                 .ForMember(dest => dest.ExternalId, opt => opt.MapFrom(src => src.Id));
 
             CreateMap<Vokabular.Authentication.DataContracts.User.UserContract, UserDetailContract>()
@@ -25,7 +24,6 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles.Authentication
                 .ForMember(dest => dest.UserName, opt => opt.Ignore()) // Username is missing in source data
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
-                .ForMember(dest => dest.AvatarUrl, opt => opt.Ignore())
                 .ForMember(dest => dest.ExternalId, opt => opt.MapFrom(src => src.UserId));
         }
     }

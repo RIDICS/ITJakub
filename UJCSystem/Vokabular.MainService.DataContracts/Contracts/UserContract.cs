@@ -12,8 +12,6 @@ namespace Vokabular.MainService.DataContracts.Contracts
 
         public string LastName { get; set; }
 
-        public string AvatarUrl { get; set; }
-
         [JsonIgnore]
         public int ExternalId { get; set; }
     }

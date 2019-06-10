@@ -46,7 +46,6 @@ namespace Vokabular.DataEntities.Database.Repositories
             {
                 CreateTime = now,
                 Groups = new List<UserGroup> { unregisteredUserGroup },
-                AvatarUrl = null,
             };
 
             GetSession().Save(defaultUser);
@@ -70,7 +69,6 @@ namespace Vokabular.DataEntities.Database.Repositories
             {
                 Name = defaultRegisteredGroupName,
                 CreateTime = now,
-                Description = "Default user group",
                 ExternalId = getExternalId.Invoke(),
             };
 
