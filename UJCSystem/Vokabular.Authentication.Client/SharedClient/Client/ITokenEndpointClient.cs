@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using IdentityModel.Client;
 
-namespace Vokabular.Authentication.Client.Client
+namespace Vokabular.Authentication.Client.SharedClient.Client
 {
     public interface ITokenEndpointClient
     {

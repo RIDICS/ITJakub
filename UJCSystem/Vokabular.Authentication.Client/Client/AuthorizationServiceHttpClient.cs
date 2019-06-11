@@ -9,6 +9,7 @@ using Vokabular.Authentication.Client.Contract;
 using Vokabular.Authentication.Client.Exceptions;
 using Vokabular.Authentication.Client.Provider;
 using Vokabular.Authentication.Client.SharedClient.Client;
+using Vokabular.Authentication.Client.SharedClient.Provider;
 using Vokabular.Authentication.DataContracts;
 
 namespace Vokabular.Authentication.Client.Client

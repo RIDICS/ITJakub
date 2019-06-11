@@ -34,7 +34,7 @@ namespace Vokabular.Authentication.Client.Client.Auth
             var fullPath = $"{BasePath}verifyUser?code={registrationCode}";
             return await m_authorizationServiceHttpClient.SendRequestAsync<UserContract>(HttpMethod.Post, fullPath, contract);
         }
-
+        
         public async Task<UserContract> SearchUserAsync(string registrationCode)
         {
             var fullPath = $"{BasePath}search?code={registrationCode}";

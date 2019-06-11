@@ -4,10 +4,10 @@ using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Extensions.Options;
-using Vokabular.Authentication.Client.Authentication.Options;
-using Vokabular.Authentication.Client.Client;
+using Vokabular.Authentication.Client.SharedClient.Authentication.Options;
+using Vokabular.Authentication.Client.SharedClient.Client;
 
-namespace Vokabular.Authentication.Client.Authentication.Service
+namespace Vokabular.Authentication.Client.SharedClient.Authentication.Service
 {
     public class TokenEndpointClient : ITokenEndpointClient
     {

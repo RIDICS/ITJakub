@@ -132,6 +132,13 @@ namespace Vokabular.Authentication.Client.Client.Auth
             return response;
         }
 
+        public async Task<IList<RoleContractBase>> GetRolesByUserAsync(int userId)
+        {
+            var path = $"{BasePath}{userId}/role";
+            var response = await m_authorizationServiceHttpClient.SendRequestAsync<IList<RoleContractBase>>(HttpMethod.Get, path);
+            return response;
+        }
+
         public async Task<List<UserWithRolesContract>> GetUserListByRoleAsync(int roleId, int? start, int? count)
         {
             var query = m_authorizationServiceHttpClient.CreateQueryCollection();
@@ -142,6 +149,16 @@ namespace Vokabular.Authentication.Client.Client.Auth
 
             var path = $"{BasePath}roles/list?{query}";
             var response = await m_authorizationServiceHttpClient.SendRequestAsync<List<UserWithRolesContract>>(HttpMethod.Get, path);
+            return response;
+        }
+
+        public async Task<string> GetUserMuidAsync(UserIdentifierTypeContract idType, string id)
+        {
+            var query = m_authorizationServiceHttpClient.CreateQueryCollection();
+            query.Add("idType", idType.ToString());
+            query.Add("id", id);
+            var path = $"{BasePath}muid?{query}";
+            var response = await m_authorizationServiceHttpClient.SendRequestAsync<string>(HttpMethod.Get, path);
             return response;
         }
     }

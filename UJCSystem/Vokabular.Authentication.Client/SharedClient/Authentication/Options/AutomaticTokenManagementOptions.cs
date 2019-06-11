@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vokabular.Authentication.Client.Authentication.Options
+namespace Vokabular.Authentication.Client.SharedClient.Authentication.Options
 {
     public class AutomaticTokenManagementOptions
     {

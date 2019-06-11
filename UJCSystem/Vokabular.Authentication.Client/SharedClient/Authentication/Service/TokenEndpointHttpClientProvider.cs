@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
-namespace Vokabular.Authentication.Client.Authentication.Service
+namespace Vokabular.Authentication.Client.SharedClient.Authentication.Service
 {
     public class TokenEndpointHttpClientProvider : IDisposable
     {

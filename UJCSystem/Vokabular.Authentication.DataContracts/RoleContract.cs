@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Vokabular.Authentication.DataContracts
 {
-    public class RoleContract : ContractBase
+    public class RoleContractBase : ContractBase
     {
         public int Id { get; set; }
 
@@ -11,7 +11,10 @@ namespace Vokabular.Authentication.DataContracts
         public string Name { get; set; }
 
         public string Description { get; set; }
+    }
 
+    public class RoleContract : RoleContractBase
+    {
         public List<PermissionContract> Permissions { get; set; }
     }
 }

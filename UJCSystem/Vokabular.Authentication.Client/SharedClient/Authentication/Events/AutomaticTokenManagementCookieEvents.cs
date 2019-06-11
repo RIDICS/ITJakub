@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Vokabular.Authentication.Client.Authentication.Options;
-using Vokabular.Authentication.Client.Client;
+using Vokabular.Authentication.Client.SharedClient.Authentication.Options;
+using Vokabular.Authentication.Client.SharedClient.Client;
 
-namespace Vokabular.Authentication.Client.Authentication.Events
+namespace Vokabular.Authentication.Client.SharedClient.Authentication.Events
 {
     /// <summary>
     /// This class takes care about refreshing access tokens on each request and revoking refresh tokens on sing out, for more info see: IN2-2314

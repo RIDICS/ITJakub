@@ -4,11 +4,11 @@ using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Vokabular.Authentication.Client.Client;
-using Vokabular.Authentication.Client.Configuration;
-using Vokabular.Authentication.Client.Storage;
+using Vokabular.Authentication.Client.SharedClient.Client;
+using Vokabular.Authentication.Client.SharedClient.Config;
+using Vokabular.Authentication.Client.SharedClient.Storage;
 
-namespace Vokabular.Authentication.Client.Provider
+namespace Vokabular.Authentication.Client.SharedClient.Provider
 {
     public class AuthApiAccessTokenProvider
     {
@@ -17,23 +17,23 @@ namespace Vokabular.Authentication.Client.Provider
 
         private readonly IHttpContextAccessor m_httpContextAccessor;
         private readonly ILogger m_logger;
-        private readonly OpenIdConnectConfig m_openIdConnectConfig;
 
         private readonly ITokenEndpointClient m_tokenClient;
+        private readonly OpenIdConnectConfig m_openIdConnectConfig;
 
         private readonly ITokenStorage m_tokenStorage;
 
         public AuthApiAccessTokenProvider(IHttpContextAccessor httpContextAccessor, 
-            ILogger logger, 
-            OpenIdConnectConfig openIdConnectConfig, 
+            ILogger logger,
             ITokenEndpointClient tokenClient, 
-            ITokenStorage tokenStorage)
+            ITokenStorage tokenStorage, 
+            OpenIdConnectConfig openIdConnectConfig)
         {
             m_httpContextAccessor = httpContextAccessor;
             m_logger = logger;
-            m_openIdConnectConfig = openIdConnectConfig;
             m_tokenClient = tokenClient;
             m_tokenStorage = tokenStorage;
+            m_openIdConnectConfig = openIdConnectConfig;
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Vokabular.Authentication.Client.Provider
                 return clientAccessToken.Token;
             }
 
-            var tokenResponse = await m_tokenClient.GetAccessTokenAsync(m_openIdConnectConfig.AuthServiceScopeName);
+            var tokenResponse = await m_tokenClient.GetAccessTokenAsync(string.Join(" ", m_openIdConnectConfig.Scopes));
 
             if (tokenResponse.IsError)
             {

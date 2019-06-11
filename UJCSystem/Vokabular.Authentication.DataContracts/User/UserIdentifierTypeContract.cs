@@ -9,5 +9,6 @@ namespace Vokabular.Authentication.DataContracts.User
         MasterUserId = 0,
         InsuranceNumber = 1,
         DoctorIdNumber = 2,
+        DatabaseId = 3,
     }
 }

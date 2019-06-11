@@ -1,14 +1,18 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using Vokabular.Authentication.Client.Authentication.Events;
-using Vokabular.Authentication.Client.Authentication.Options;
-using Vokabular.Authentication.Client.Authentication.Service;
 using Vokabular.Authentication.Client.Client;
 using Vokabular.Authentication.Client.Client.Auth;
 using Vokabular.Authentication.Client.Configuration;
 using Vokabular.Authentication.Client.Provider;
-using Vokabular.Authentication.Client.Storage;
+using Vokabular.Authentication.Client.SharedClient.Authentication.Events;
+using Vokabular.Authentication.Client.SharedClient.Authentication.Options;
+using Vokabular.Authentication.Client.SharedClient.Authentication.Service;
+using Vokabular.Authentication.Client.SharedClient.Client;
+using Vokabular.Authentication.Client.SharedClient.Config;
+using Vokabular.Authentication.Client.SharedClient.Provider;
+using Vokabular.Authentication.Client.SharedClient.Storage;
 
 namespace Vokabular.Authentication.Client
 {
@@ -34,12 +38,12 @@ namespace Vokabular.Authentication.Client
             services.AddScoped<RoleApiClient>();
             services.AddScoped<PermissionApiClient>();
             services.AddScoped<ContactApiClient>();
-            services.AddScoped<AuthApiAccessTokenProvider>();
+            services.TryAddScoped<AuthApiAccessTokenProvider>();
 
-            services.AddSingleton<ITokenStorage, InMemoryTokenStorage>();
+            services.TryAddSingleton<ITokenStorage, InMemoryTokenStorage>();
 
-            services.AddTransient<ITokenEndpointClient, TokenEndpointClient>();
-            services.AddSingleton<TokenEndpointHttpClientProvider>();
+            services.TryAddTransient<ITokenEndpointClient, TokenEndpointClient>();
+            services.TryAddSingleton<TokenEndpointHttpClientProvider>();
 
             if (configuration != null)
             {

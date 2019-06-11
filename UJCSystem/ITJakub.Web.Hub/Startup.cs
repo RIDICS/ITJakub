@@ -27,6 +27,7 @@ using Scalesoft.Localization.Core.Util;
 using Scalesoft.Localization.Database.NHibernate;
 using Vokabular.Authentication.Client;
 using Vokabular.Authentication.Client.Configuration;
+using Vokabular.Authentication.Client.SharedClient.Config;
 using Vokabular.Authentication.TicketStore;
 using Vokabular.Authentication.TicketStore.Store;
 using Vokabular.Shared;
@@ -156,7 +157,7 @@ namespace ITJakub.Web.Hub
             }, new OpenIdConnectConfig
             {
                 Url = openIdConnectConfig.Url,
-                AuthServiceScopeName = openIdConnectConfig.AuthServiceScopeName,
+                Scopes = new List<string> { openIdConnectConfig.AuthServiceScopeName },
                 ClientId = openIdConnectConfig.ClientId,
                 ClientSecret = openIdConnectConfig.ClientSecret,
             }, new AuthServiceControllerBasePathsConfiguration(/*Not required to fill because client is not used*/));

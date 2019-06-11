@@ -23,6 +23,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Vokabular.Authentication.Client;
 using Vokabular.Authentication.Client.Configuration;
+using Vokabular.Authentication.Client.SharedClient.Config;
 using Vokabular.Core;
 using Vokabular.MainService.Authorization;
 using Vokabular.MainService.Core;
@@ -119,7 +120,7 @@ namespace Vokabular.MainService
             }, new OpenIdConnectConfig
             {
                 Url = openIdConnectConfig.Url,
-                AuthServiceScopeName = openIdConnectConfig.AuthServiceScopeName,
+                Scopes = new List<string> { openIdConnectConfig.AuthServiceScopeName },
                 ClientId = null, // not required
                 ClientSecret = null, // not required
             }, new AuthServiceControllerBasePathsConfiguration

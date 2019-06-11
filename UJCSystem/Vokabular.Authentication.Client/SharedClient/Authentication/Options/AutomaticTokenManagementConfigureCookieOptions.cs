@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
-using Vokabular.Authentication.Client.Authentication.Events;
+using Vokabular.Authentication.Client.SharedClient.Authentication.Events;
 
-namespace Vokabular.Authentication.Client.Authentication.Options
+namespace Vokabular.Authentication.Client.SharedClient.Authentication.Options
 {
     public class AutomaticTokenManagementConfigureCookieOptions : IConfigureNamedOptions<CookieAuthenticationOptions>
     {

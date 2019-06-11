@@ -1,6 +1,6 @@
 using System.ServiceModel;
 using ITJakub.Lemmatization.Shared.Contracts;
-using Vokabular.Authentication.Client.Provider;
+using Vokabular.Authentication.Client.SharedClient.Provider;
 using Vokabular.MainService.DataContracts.Clients;
 
 namespace ITJakub.Web.Hub.Core.Communication

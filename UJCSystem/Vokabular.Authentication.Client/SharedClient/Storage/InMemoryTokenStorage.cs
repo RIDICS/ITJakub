@@ -1,7 +1,7 @@
 ﻿using System;
-using Vokabular.Authentication.Client.Storage.Model;
+using Vokabular.Authentication.Client.SharedClient.Storage.Model;
 
-namespace Vokabular.Authentication.Client.Storage
+namespace Vokabular.Authentication.Client.SharedClient.Storage
 {
     public class InMemoryTokenStorage : ITokenStorage
     {
