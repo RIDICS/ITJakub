@@ -12,9 +12,9 @@ namespace Vokabular.MainService.Core.Works.Users
     {
         private readonly UserRepository m_userRepository;
         private readonly int m_userExternalId;
-        private readonly List<RoleContract> m_roles;
+        private readonly IList<RoleContractBase> m_roles;
 
-        public CreateUserIfNotExistWork(UserRepository userRepository, int userExternalId, List<RoleContract> roles) : base(userRepository)
+        public CreateUserIfNotExistWork(UserRepository userRepository, int userExternalId, IList<RoleContractBase> roles) : base(userRepository)
         {
             m_userRepository = userRepository;
             m_userExternalId = userExternalId;
