@@ -1,6 +1,6 @@
-﻿namespace Vokabular.MainService
+﻿namespace Vokabular.MainService.Options
 {
-    public class OpenIdConnect
+    public class OpenIdConnectConfiguration
     {
         public string Url { get; set; }
         public string AuthServiceScopeName { get; set; }

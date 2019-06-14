@@ -58,7 +58,7 @@ namespace ITJakub.Web.Hub
         {
             //IdentityModelEventSource.ShowPII = true; // Enable to debug authentication problems
 
-            var openIdConnectConfig = Configuration.GetSection("OpenIdConnect").Get<OpenIdConnect>();
+            var openIdConnectConfig = Configuration.GetSection("OpenIdConnect").Get<OpenIdConnectConfiguration>();
 
             services.AddAuthentication(options =>
                 {
@@ -131,10 +131,9 @@ namespace ITJakub.Web.Hub
                             var communicationProvider = context.HttpContext.RequestServices.GetRequiredService<CommunicationProvider>();
                             var client = communicationProvider.GetMainServiceClient();
 
-                            // TODO this doesn't work now, because at this point we have only app access token which doesn't have permission to get some data from Auth service
                             client.CreateUserIfNotExist(context.Principal.GetId().GetValueOrDefault());
 
-                            return Task.CompletedTask; //3
+                            return Task.CompletedTask;
                         },
                     };
                 });

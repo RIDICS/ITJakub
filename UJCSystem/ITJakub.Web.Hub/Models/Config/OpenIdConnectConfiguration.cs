@@ -1,6 +1,6 @@
-﻿namespace ITJakub.Web.Hub
+﻿namespace ITJakub.Web.Hub.Models.Config
 {
-    public class OpenIdConnect
+    public class OpenIdConnectConfiguration
     {
         public string Url { get; set; }
         public string ClientId { get; set; }

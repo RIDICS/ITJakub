@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.IO;
-using System.Linq;
-using System.Net.Http;
 using System.Reflection;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -17,8 +12,6 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Vokabular.Authentication.Client;
@@ -28,12 +21,12 @@ using Vokabular.Core;
 using Vokabular.MainService.Authorization;
 using Vokabular.MainService.Core;
 using Vokabular.MainService.Middleware;
+using Vokabular.MainService.Options;
 using Vokabular.MainService.Utils;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
-using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.Options;
 
@@ -53,7 +46,7 @@ namespace Vokabular.MainService
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            var openIdConnectConfig = Configuration.GetSection("OpenIdConnect").Get<OpenIdConnect>();
+            var openIdConnectConfig = Configuration.GetSection("OpenIdConnect").Get<OpenIdConnectConfiguration>();
 
             // Configuration options
             services.AddOptions();
