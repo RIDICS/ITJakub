@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using ITJakub.Web.Hub.Models.Config;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using ITJakub.Web.Hub.Authentication;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Helpers;
@@ -72,7 +71,6 @@ namespace ITJakub.Web.Hub
                     options.AccessDeniedPath = "/Account/AccessDenied/";
                     options.LoginPath = "/Account/Login";
                 })
-                .AddAutomaticTokenManagement()
                 .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
                 {
                     options.Authority = openIdConnectConfig.Url;
