@@ -26,7 +26,7 @@ namespace Vokabular.MainService.Core.Managers
             m_httpContextAccessor = httpContextAccessor;
         }
 
-        public User GetCurrentUser(bool returnDefaultIfNull)
+        public User GetCurrentUser(bool returnDefaultUserIfNull)
         {
             var id = m_httpContextAccessor.HttpContext.User.GetId();
 
@@ -35,7 +35,7 @@ namespace Vokabular.MainService.Core.Managers
                 return m_userRepository.InvokeUnitOfWork(x => x.GetUserByExternalId(id.Value));
             }
 
-            if (returnDefaultIfNull)
+            if (returnDefaultUserIfNull)
             {
                 return m_defaultUserProvider.GetDefaultUser();
             }
