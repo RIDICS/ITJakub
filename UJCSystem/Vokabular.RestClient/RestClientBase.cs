@@ -32,7 +32,7 @@ namespace Vokabular.RestClient
             {
                 m_client = new HttpClient();
             }
-            
+
             m_client.BaseAddress = baseAddress;
             m_client.DefaultRequestHeaders.ExpectContinue = false;
             m_client.DefaultRequestHeaders.Accept.Clear();
@@ -73,7 +73,7 @@ namespace Vokabular.RestClient
         private void ProcessResponseInternal(HttpResponseMessage response)
         {
             EnsureSuccessStatusCode(response);
-            
+
             ProcessResponse(response);
         }
 
@@ -303,7 +303,7 @@ namespace Vokabular.RestClient
                     var request = CreateRequestMessage(HttpMethod.Post, uriPath, headers);
                     request.Content = content;
                     request.Headers.TransferEncodingChunked = true;
-                    
+
                     var response = await m_client.SendAsync(request);
 
                     ProcessResponseInternal(response);
@@ -398,40 +398,13 @@ namespace Vokabular.RestClient
                 throw new HttpErrorCodeException(validationResult.Message, responseStatusCode, validationResult.Errors);
             }
 
-            if (responseStatusCode == HttpStatusCode.BadRequest &&
-                TryDeserializeExceptionContract(responseContent, out var exceptionContract))
-            {
-                throw new HttpErrorCodeException(exceptionContract.Description, responseStatusCode, null);
-            }
-
-
             var exceptionMessage = GetExceptionMessage(responseContent, responseStatusCode);
             throw new HttpErrorCodeException(exceptionMessage, response.StatusCode);
         }
 
         private bool TryDeserializeValidationResult(string responseContent, out ValidationResultContract validationResult)
         {
-            if (TryDeserialize(responseContent, out validationResult))
-            {
-                return !string.IsNullOrEmpty(validationResult.Message) || validationResult.Errors != null;
-            }
-
-            return false;
-        }
-
-        private bool TryDeserializeExceptionContract(string responseContent, out ContractException validationResult)
-        {
-            if(TryDeserialize(responseContent, out validationResult))
-            {
-                return !string.IsNullOrEmpty(validationResult.Code) || !string.IsNullOrEmpty(validationResult.Description);
-            }
-
-            return false;
-        }
-
-        private bool TryDeserialize<T>(string responseContent, out T validationResult)
-        {
-            validationResult = default(T);
+            validationResult = null;
             if (!(responseContent.StartsWith("{") && responseContent.EndsWith("}")))
             {
                 return false;
@@ -439,7 +412,7 @@ namespace Vokabular.RestClient
 
             try
             {
-                var result = responseContent.Deserialize<T>();
+                var result = responseContent.Deserialize<ValidationResultContract>();
                 validationResult = result;
                 return true;
             }
