@@ -17,7 +17,7 @@ namespace Vokabular.OaiPmhImportManager
         private readonly string m_url;
         private readonly ILogger<OaiPmhCommunicationClientWrapper> m_logger;
 
-        public OaiPmhCommunicationClientWrapper(OaiPmhClientOption option, string url, ILogger<OaiPmhCommunicationClientWrapper> logger) : base(url)
+        public OaiPmhCommunicationClientWrapper(OaiPmhClientOption option, string url, ILogger<OaiPmhCommunicationClientWrapper> logger) : base(url, option.DisableSslValidation)
         {
             m_retryCount = option.RetryCount;
             m_delay = option.Delay;

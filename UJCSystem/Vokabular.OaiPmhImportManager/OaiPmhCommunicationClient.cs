@@ -20,14 +20,16 @@ namespace Vokabular.OaiPmhImportManager
         private const string Identifier = "identifier";
         private const string DateGranularity = "yyyy-MM-dd";
         private readonly string m_url;
+        private readonly bool m_disabledSslValidation;
         private readonly HttpClient m_httpClient;
         private readonly XmlSerializer m_oaiPmhXmlSerializer;
         private readonly string m_granularityFormat;
 
 
-        public OaiPmhCommunicationClient(string url)
+        public OaiPmhCommunicationClient(string url, bool disabledSslValidation)
         {
             m_url = url;
+            m_disabledSslValidation = disabledSslValidation;
             m_httpClient = new HttpClient();
             m_oaiPmhXmlSerializer = new XmlSerializer(typeof(OAIPMHType));
             m_granularityFormat = DateGranularity;
@@ -51,20 +53,31 @@ namespace Vokabular.OaiPmhImportManager
 
         private async Task<OAIPMHType> GetResponseAsync(string query)
         {
-            var uriBuilder = new UriBuilder(m_url) {Query = query};
-
-            var streamResult = await m_httpClient.GetStreamAsync(uriBuilder.Uri);
-            var oaiPmhRecordResponse = (OAIPMHType) m_oaiPmhXmlSerializer.Deserialize(streamResult);
-
-            //Validate response
-            if (oaiPmhRecordResponse.Items.First().GetType() == typeof(OAIPMHerrorType))
+            using (var httpClientHandler = new HttpClientHandler())
             {
-                var error = (OAIPMHerrorType) oaiPmhRecordResponse.Items.First();
-                throw new ImportFailedException(
-                    $"Error while requesting: {uriBuilder.Uri}. {error.code} : {error.Value}");
-            }
+                if (m_disabledSslValidation)
+                {
+                    httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
+                }
+                
+                using (var client = new HttpClient(httpClientHandler))
+                {
+                    var uriBuilder = new UriBuilder(m_url) { Query = query };
 
-            return oaiPmhRecordResponse;
+                    var streamResult = await client.GetStreamAsync(uriBuilder.Uri);
+                    var oaiPmhRecordResponse = (OAIPMHType)m_oaiPmhXmlSerializer.Deserialize(streamResult);
+
+                    //Validate response
+                    if (oaiPmhRecordResponse.Items.First().GetType() == typeof(OAIPMHerrorType))
+                    {
+                        var error = (OAIPMHerrorType)oaiPmhRecordResponse.Items.First();
+                        throw new ImportFailedException(
+                            $"Error while requesting: {uriBuilder.Uri}. {error.code} : {error.Value}");
+                    }
+
+                    return oaiPmhRecordResponse;
+                }
+            }
         }
 
         protected async Task<T> GetVerbAsync<T>(verbType verbType, string format = null, string set = null, DateTime? from = null,

@@ -4,5 +4,6 @@
     {
         public int RetryCount { get; set; }
         public int Delay { get; set; }
+        public bool DisableSslValidation { get; set; }
     }
 }

@@ -29,7 +29,11 @@ namespace Vokabular.ProjectImport.Test.Mock
             ServiceCollection.AddProjectImportServices();
             ServiceCollection.AddDataEntitiesServices();
             ServiceCollection.AddOptions();
-            ServiceCollection.Configure(new Action<OaiPmhClientOption>(option => option.Delay = 5));
+            ServiceCollection.Configure(new Action<OaiPmhClientOption>(option =>
+            {
+                option.Delay = 5;
+                option.DisableSslValidation = true;
+            }));
             MockLogging();
 
             if (initDatabase)
