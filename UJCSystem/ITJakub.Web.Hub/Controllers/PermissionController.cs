@@ -1,13 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
+using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.DataContracts;
 using ITJakub.Web.Hub.Helpers;
 using ITJakub.Web.Hub.Models.Requests.Permission;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.Authentication.Client.Exceptions;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
+using Vokabular.RestClient.Results;
 using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -16,13 +21,33 @@ namespace ITJakub.Web.Hub.Controllers
     [Authorize(PermissionNames.ManagePermissions)]
     public class PermissionController : BaseController
     {
+        private const int UserListPageSize = 5;
+
         public PermissionController(CommunicationProvider communicationProvider) : base(communicationProvider)
         {
         }
 
-        public ActionResult UserPermission()
+        public ActionResult UserPermission(int start, int count, string query, bool partial)
         {
-            return View();
+            using (var client = GetRestClient())
+            {
+                count = count == 0 ? UserListPageSize : count;
+                var result = client.GetUserList(start, count, string.Empty);
+                var model = new UserListViewModel
+                {
+                    TotalCount = result.TotalCount,
+                    List = result.List,
+                    PageSize = count,
+                    Start = start
+                };
+
+                if (partial)
+                {
+                    return PartialView("_UserList", model);
+                }
+
+                return View(model);
+            }
         }
 
         public ActionResult GroupPermission()
@@ -57,6 +82,24 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        public ActionResult UserList(int start, int count, string query)
+        {
+            using (var client = GetRestClient())
+            {
+                count = count == 0 ? 5 : count;
+                var result = client.GetUserList(start, count, query);
+                var model = new UserListViewModel
+                {
+                    TotalCount = result.TotalCount,
+                    List = result.List,
+                    PageSize = 5,
+                    Start = start
+                };
+                return View(model);
+            }
+        }
+
+
         public ActionResult GetGroup(int groupId)
         {
             using (var client = GetRestClient())
@@ -72,7 +115,7 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetRestClient())
             {
                 client.AddUserToRole(request.UserId, request.GroupId);
-                return Json(new {});
+                return Json(new { });
             }
         }
 
@@ -113,7 +156,7 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetRestClient())
             {
                 client.RemoveUserFromRole(request.UserId, request.GroupId);
-                return Json(new {});
+                return Json(new { });
             }
         }
 
@@ -184,7 +227,7 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetRestClient())
             {
                 client.DeleteRole(request.GroupId);
-                return Json(new {});
+                return Json(new { });
             }
         }
 
@@ -195,7 +238,7 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 client.AddBooksToRole(request.GroupId, request.BookIds);
                 //client.AddBooksAndCategoriesToGroup(request.GroupId, request.BookIds, request.CategoryIds);
-                return Json(new {});
+                return Json(new { });
             }
         }
 
@@ -206,7 +249,7 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 client.RemoveBooksFromRole(request.GroupId, request.BookIds);
                 //client.RemoveBooksAndCategoriesFromGroup(request.GroupId, request.BookIds, request.CategoryIds);
-                return Json(new {});
+                return Json(new { });
             }
         }
 
@@ -237,7 +280,7 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetRestClient())
             {
                 client.AddSpecialPermissionsToRole(request.GroupId, request.SpecialPermissionIds);
-                return Json(new {});
+                return Json(new { });
             }
         }
 
@@ -247,8 +290,20 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetRestClient())
             {
                 client.RemoveSpecialPermissionsFromRole(request.GroupId, request.SpecialPermissionIds);
-                return Json(new {});
+                return Json(new { });
             }
+        }
+
+        private UserListViewModel CreateProjectListViewModel(PagedResultList<UserDetailContract> data, int start)
+        {
+            var listViewModel = Mapper.Map<List<UserDetailContract>>(data.List);
+            return new UserListViewModel
+            {
+                TotalCount = data.TotalCount,
+                List = listViewModel,
+                PageSize = UserListPageSize,
+                Start = start
+            };
         }
     }
 }

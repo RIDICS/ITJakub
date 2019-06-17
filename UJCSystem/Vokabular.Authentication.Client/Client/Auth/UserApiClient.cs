@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Vokabular.Authentication.Client.Configuration;
+using Vokabular.Authentication.Client.Contract;
 using Vokabular.Authentication.DataContracts;
 using Vokabular.Authentication.DataContracts.User;
 

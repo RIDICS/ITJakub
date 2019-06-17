@@ -2455,6 +2455,25 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public PagedResultList<UserDetailContract> GetUserList(int start, int count, string query)
+        {
+            try
+            {
+                var url = "user".AddQueryString("start", start.ToString());
+                url = url.AddQueryString("count", count.ToString());
+                url = url.AddQueryString("filterByName", query);
+                var result = GetPagedList<UserDetailContract>(url);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public List<RoleContract> GetRoleAutocomplete(string query)
         {
             try
