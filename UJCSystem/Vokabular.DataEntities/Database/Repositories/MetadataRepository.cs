@@ -484,8 +484,8 @@ namespace Vokabular.DataEntities.Database.Repositories
             {
                 GetSession().QueryOver<Project>()
                     .WhereRestrictionOn(x => x.Id).IsInG(projectIds)
-                    .Fetch(x => x.LatestPublishedSnapshot).Eager
-                    .Fetch(x => x.LatestPublishedSnapshot.BookTypes).Eager
+                    .Fetch(SelectMode.Fetch, x => x.LatestPublishedSnapshot)
+                    .Fetch(SelectMode.Fetch, x => x.LatestPublishedSnapshot.BookTypes)
                     .Future();
             }
 

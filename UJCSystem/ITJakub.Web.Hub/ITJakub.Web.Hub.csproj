@@ -84,12 +84,6 @@
     <DotNetCliToolReference Include="Microsoft.DotNet.Xdt.Tools" Version="2.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Update="Areas\Admin\Views\Project\Work\_Forum.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-  </ItemGroup>
-
   <Target Name="ApplyXdtConfigTransform" BeforeTargets="MSDeployPublish">
     <PropertyGroup>
       <_SourceWebConfig>$(MSBuildThisFileDirectory)Web.config</_SourceWebConfig>
