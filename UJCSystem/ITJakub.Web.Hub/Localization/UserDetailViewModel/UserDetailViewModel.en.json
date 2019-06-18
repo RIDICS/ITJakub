@@ -1,6 +1,6 @@
 {
   "culture": "en",
-  "scope": "AccountDetailViewModel",
+  "scope": "UserDetailViewModel",
   "dictionary": {
     "UserName": "Username",
     "Email": "Email",

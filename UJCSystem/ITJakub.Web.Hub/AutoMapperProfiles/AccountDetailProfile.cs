@@ -4,11 +4,12 @@ using Vokabular.MainService.DataContracts.Contracts;
 
 namespace ITJakub.Web.Hub.AutoMapperProfiles
 {
-    public class AccountDetailProfile : Profile
+    public class UserDetailProfile : Profile
     {
-        public AccountDetailProfile()
+        public UserDetailProfile()
         {
-            CreateMap<UserDetailContract, AccountDetailViewModel>()
+            CreateMap<UserDetailContract, UserDetailViewModel>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName))

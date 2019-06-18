@@ -54,17 +54,7 @@ namespace ITJakub.Web.Hub.Models
 
     public class AccountDetailViewModel
     {
-        [Display(Name = "UserName")]
-        public string UserName { get; set; }
-
-        [Display(Name = "Email")]
-        public string Email { get; set; }
-
-        [Display(Name = "FirstName")]
-        public string FirstName { get; set; }
-
-        [Display(Name = "LastName")]
-        public string LastName { get; set; }
+        public UserDetailViewModel UserDetailViewModel;
 
         public UpdateAccountViewModel UpdateAccountViewModel;
 
@@ -106,5 +96,22 @@ namespace ITJakub.Web.Hub.Models
         [Display(Name = "ConfirmPassword")]
         [Compare("Password", ErrorMessage = "PasswordsNotEqual")]
         public string ConfirmPassword { get; set; }
+    }
+
+    public class UserDetailViewModel
+    {
+        public int Id { get; }
+
+        [Display(Name = "UserName")]
+        public string UserName { get; set; }
+
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Display(Name = "FirstName")]
+        public string FirstName { get; set; }
+
+        [Display(Name = "LastName")]
+        public string LastName { get; set; }
     }
 }

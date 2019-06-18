@@ -1,6 +1,6 @@
 ﻿{
   "culture": "cs-CZ",
-  "scope": "AccountDetailViewModel",
+  "scope": "UserDetailViewModel",
   "dictionary": {
     "UserName": "Uživatelské jméno",
     "Email": "Email",

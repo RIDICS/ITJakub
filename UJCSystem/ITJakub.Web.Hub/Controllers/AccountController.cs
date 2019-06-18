@@ -78,7 +78,8 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetRestClient())
             {
                 var user = client.GetCurrentUser();
-                var viewmodel = Mapper.Map<AccountDetailViewModel>(user);
+                var viewmodel = new AccountDetailViewModel();
+                viewmodel.UserDetailViewModel = Mapper.Map<UserDetailViewModel>(user);
                 viewmodel.UpdateAccountViewModel = Mapper.Map<UpdateAccountViewModel>(user);
                 viewmodel.UpdatePasswordViewModel = null;
                 return View(viewmodel);

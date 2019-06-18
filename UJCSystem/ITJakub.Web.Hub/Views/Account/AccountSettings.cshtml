@@ -24,7 +24,7 @@
 
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane @(!ViewData.ContainsKey("ActualTab") ? "active" : string.Empty)" id="account-settings">
-            @await Html.PartialAsync("Settings/_Detail", Model)
+            @await Html.PartialAsync("Settings/_Detail", Model.UserDetailViewModel)
         </div>
         <div role="tabpanel" class="tab-pane @(actualTab == "UpdateAccount" ? "active" : string.Empty)" id="update-account">
             @await Html.PartialAsync("Settings/_UpdateAccount", Model.UpdateAccountViewModel)

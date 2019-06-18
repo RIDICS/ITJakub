@@ -21,7 +21,7 @@ namespace ITJakub.Web.Hub
             services.AddScoped<IMarkdownToHtmlConverter, MarkdigMarkdownToHtmlConverter>();
 
             // AutoMapper profiles
-            services.AddSingleton<Profile, AccountDetailProfile>();
+            services.AddSingleton<Profile, UserDetailProfile>();
             services.AddSingleton<Profile, ConditionCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, DatingCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, DatingListCriteriaDescriptionProfile>();
