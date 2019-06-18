@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ITJakub.Lemmatization.DataEntities.Entities;
+using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
@@ -30,7 +31,7 @@ namespace ITJakub.Lemmatization.DataEntities.Repositories
                 .WhereRestrictionOn(x => x.Text).IsLike(query, MatchMode.Start)
                 .And(x => x.Type == type)
                 .OrderBy(x => x.Text).Asc
-                .Fetch(x => x.HyperCanonicalForm).Eager
+                .Fetch(SelectMode.Fetch, x => x.HyperCanonicalForm)
                 .Take(recordCount)
                 .List();
             return result;
@@ -56,7 +57,7 @@ namespace ITJakub.Lemmatization.DataEntities.Repositories
             var result = GetSession().QueryOver(() => tokenCharacteristicAlias)
                 .JoinQueryOver(x => x.CanonicalForms, () => canonicalFormAlias, JoinType.LeftOuterJoin)
                 .JoinQueryOver(x => x.HyperCanonicalForm, () => hyperCanonicalFormAlias, JoinType.LeftOuterJoin)
-                .Fetch(x => x.CanonicalForms).Eager
+                .Fetch(SelectMode.Fetch, x => x.CanonicalForms)
                 .Where(() => tokenCharacteristicAlias.Token.Id == tokenId)
                 .TransformUsing(Transformers.DistinctRootEntity)
                 .List();
@@ -68,7 +69,7 @@ namespace ITJakub.Lemmatization.DataEntities.Repositories
         {
             var result = GetSession().QueryOver<TokenCharacteristic>()
                 .Where(x => x.Id == tokenCharacteristicId)
-                .Fetch(x => x.CanonicalForms).Eager
+                .Fetch(SelectMode.Fetch, x => x.CanonicalForms)
                 .SingleOrDefault();
 
             return result;
@@ -111,7 +112,7 @@ namespace ITJakub.Lemmatization.DataEntities.Repositories
 
             var result = GetSession().QueryOver<CanonicalForm>()
                 .Where(x => x.Id == canonicalFormId)
-                .Fetch(x => x.CanonicalFormFor).Eager
+                .Fetch(SelectMode.Fetch, x => x.CanonicalFormFor)
                 .JoinAlias(x => x.CanonicalFormFor, () => tokenCharacteristicAlias, JoinType.LeftOuterJoin)
                 .JoinAlias(x => tokenCharacteristicAlias.Token, () => tokenAlias, JoinType.LeftOuterJoin)
                 .SingleOrDefault();

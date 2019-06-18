@@ -13,19 +13,19 @@ namespace Vokabular.MainService.Core.Works.Permission
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly PermissionRepository m_permissionRepository;
-        private readonly int m_groupId;
+        private readonly int m_roleId;
         private readonly IList<long> m_bookIds;
 
-        public AddProjectsToUserGroupWork(PermissionRepository permissionRepository, int groupId, IList<long> bookIds) : base(permissionRepository)
+        public AddProjectsToUserGroupWork(PermissionRepository permissionRepository, int roleId, IList<long> bookIds) : base(permissionRepository)
         {
             m_permissionRepository = permissionRepository;
-            m_groupId = groupId;
+            m_roleId = roleId;
             m_bookIds = bookIds;
         }
 
         protected override void ExecuteWorkImplementation()
         {
-            var group = m_permissionRepository.FindGroupById(m_groupId);
+            var group = m_permissionRepository.FindGroupByExternalId(m_roleId);
 
             var allBookIds = new List<long>();
 
@@ -44,7 +44,7 @@ namespace Vokabular.MainService.Core.Works.Permission
 
             foreach (var bookId in allBookIds)
             {
-                var dbPermission = m_permissionRepository.FindPermissionByBookAndGroup(bookId, m_groupId);
+                var dbPermission = m_permissionRepository.FindPermissionByBookAndGroup(bookId, group.Id);
                 if (dbPermission != null)
                     continue; // Permission already exists
 

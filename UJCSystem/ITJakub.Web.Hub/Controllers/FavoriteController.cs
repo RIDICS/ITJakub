@@ -3,9 +3,9 @@ using AutoMapper;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models.Favorite;
 using ITJakub.Web.Hub.Models.Requests.Favorite;
-using Localization.AspNetCore.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Scalesoft.Localization.AspNetCore;
 using Vokabular.MainService.DataContracts.Contracts.Favorite;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataContracts.Types.Favorite;
@@ -15,9 +15,9 @@ namespace ITJakub.Web.Hub.Controllers
     public class FavoriteController : BaseController
     {
         private const int LatestFavoriteCount = 5;
-        private readonly ILocalization m_localizer;
+        private readonly ILocalizationService m_localizer;
 
-        public FavoriteController(CommunicationProvider communicationProvider, ILocalization localizer) : base(communicationProvider)
+        public FavoriteController(CommunicationProvider communicationProvider, ILocalizationService localizer) : base(communicationProvider)
         {
             m_localizer = localizer;
         }

@@ -14,7 +14,6 @@ using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
-using Vokabular.Shared.Container;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.Options;
 
@@ -30,7 +29,7 @@ namespace Vokabular.FulltextService
 
         private IConfiguration Configuration { get; }
 
-        private IIocContainer Container { get; set; }
+        private DryIocContainerWrapper Container { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -60,7 +59,7 @@ namespace Vokabular.FulltextService
             });
 
             // IoC
-            IIocContainer container = new DryIocContainerWrapper();
+            var container = new DryIocContainerWrapper();
             container.Install<FulltextServiceContainerRegistration>();
             Container = container;
 

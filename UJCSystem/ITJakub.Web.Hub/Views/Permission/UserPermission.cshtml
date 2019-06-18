@@ -1,7 +1,7 @@
-﻿@using Localization.AspNetCore.Service
-@using Localization.CoreLibrary.Util
+﻿@using Scalesoft.Localization.AspNetCore
+@using Scalesoft.Localization.Core.Util
 
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 @{
     ViewBag.Title = Localizer.Translate("UserPermissionManagementTitle","Permission", LocTranslationSource.File);

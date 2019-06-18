@@ -8,14 +8,6 @@ namespace Vokabular.Shared.AspNetCore.WebApiUtils.Documentation
 {
     public class PolymorphismDocumentFilter<TBase> : IDocumentFilter
     {
-        private readonly SchemaIdManager m_schemaIdManager;
-
-        public PolymorphismDocumentFilter()
-        {
-            var settings = new SchemaRegistrySettings(); // warning: getting settings directly from Swagger is't possible
-            m_schemaIdManager = new SchemaIdManager(settings.SchemaIdSelector);
-        }
-
         public void Apply(SwaggerDocument swaggerDoc, DocumentFilterContext context)
         {
             RegisterSubClasses(context.SchemaRegistry, typeof(TBase));
@@ -25,7 +17,7 @@ namespace Vokabular.Shared.AspNetCore.WebApiUtils.Documentation
         {
             const string discriminatorName = "key";
             
-            var parentSchema = schemaRegistry.Definitions[m_schemaIdManager.IdFor(abstractType)];
+            var parentSchema = schemaRegistry.Definitions[abstractType.Name];
 
             //set up a discriminator property (it must be required)
             parentSchema.Discriminator = discriminatorName;

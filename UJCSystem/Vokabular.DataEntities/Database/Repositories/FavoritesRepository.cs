@@ -28,7 +28,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => favoritePageAlias.ResourcePage, () => resourcePageAlias)
                 .JoinAlias(() => favoritePageAlias.FavoriteLabel, () => favoriteLabelAlias)
                 .Where(() => resourcePageAlias.Project.Id == projectId && favoriteLabelAlias.User.Id == userId)
-                .Fetch(x => x.FavoriteLabel).Eager
+                .Fetch(SelectMode.Fetch, x => x.FavoriteLabel)
                 .List();
         }
 
@@ -114,7 +114,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => favoriteItemAlias.Project, () => projectAlias)
                 .JoinAlias(() => projectAlias.LatestPublishedSnapshot, () => latestSnapshotAlias)
                 .JoinAlias(() => latestSnapshotAlias.BookTypes, () => bookTypeAlias)
-                .Fetch(x => x.FavoriteLabel).Eager
+                .Fetch(SelectMode.Fetch, x => x.FavoriteLabel)
                 .Where(restriction)
                 .And(() => favoriteLabelAlias.User.Id == userId)
                 .OrderBy(() => favoriteLabelAlias.Name).Asc
@@ -130,7 +130,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             return GetSession().QueryOver(() => favoriteItemAlias)
                 .JoinAlias(() => favoriteItemAlias.FavoriteLabel, () => favoriteLabelAlias)
-                .Fetch(x => x.FavoriteLabel).Eager
+                .Fetch(SelectMode.Fetch, x => x.FavoriteLabel)
                 .And(() => favoriteLabelAlias.User.Id == userId)
                 .OrderBy(() => favoriteLabelAlias.Name).Asc
                 .OrderBy(() => favoriteItemAlias.Title).Asc
@@ -257,8 +257,8 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => favoriteQueryAlias.FavoriteLabel, () => favoriteLabelAlias)
                 .JoinAlias(() => favoriteQueryAlias.BookType, () => bookTypeAlias)
                 .Where(() => bookTypeAlias.Type == bookTypeEnum && favoriteQueryAlias.QueryType == queryTypeEnum && favoriteLabelAlias.User.Id == userId)
-                .Fetch(x => x.FavoriteLabel).Eager
-                .Fetch(x => x.BookType).Eager
+                .Fetch(SelectMode.Fetch, x => x.FavoriteLabel)
+                .Fetch(SelectMode.Fetch, x => x.BookType)
                 .OrderBy(x => x.Title).Asc
                 .OrderBy(() => favoriteLabelAlias.Name).Asc;
 
@@ -300,7 +300,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => projectAlias.LatestPublishedSnapshot, () => latestSnapshotAlias)
                 .JoinAlias(() => latestSnapshotAlias.BookTypes, () => bookTypeAlias)
                 .Where(() => favoriteLabelAlias.User.Id == userId && bookTypeAlias.Type == bookType)
-                .Fetch(x => x.FavoriteLabel).Eager
+                .Fetch(SelectMode.Fetch, x => x.FavoriteLabel)
                 .OrderBy(x => x.Title).Asc
                 .List();
         }
@@ -312,7 +312,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return GetSession().QueryOver<FavoriteCategory>()
                 .JoinAlias(x => x.FavoriteLabel, () => favoriteLabelAlias)
                 .Where(() => favoriteLabelAlias.User.Id == userId )
-                .Fetch(x => x.FavoriteLabel).Eager
+                .Fetch(SelectMode.Fetch, x => x.FavoriteLabel)
                 .OrderBy(x => x.Title).Asc
                 .List();
         }
@@ -321,7 +321,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             return GetSession().QueryOver<FavoriteBase>()
                 .Where(x => x.Id == favoriteId)
-                .Fetch(x => x.FavoriteLabel).Eager
+                .Fetch(SelectMode.Fetch, x => x.FavoriteLabel)
                 .SingleOrDefault();
         }
     }

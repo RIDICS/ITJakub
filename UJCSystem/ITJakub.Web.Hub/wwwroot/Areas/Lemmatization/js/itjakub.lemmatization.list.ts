@@ -34,7 +34,7 @@
             .append(tbody);
 
         this.pagination = new Pagination({
-            container: $(this.paginationContainer),
+            container: $(this.paginationContainer).get(0) as Node as HTMLDivElement,
             maxVisibleElements: 15,
             pageClickCallback: this.loadPage.bind(this),
             callPageClickCallbackOnInit: true

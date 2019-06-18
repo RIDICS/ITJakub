@@ -1,6 +1,4 @@
-﻿/// <reference path="../../../../../node_modules/@types/codemirror/index.d.ts" />
-
-class CommentInput {
+﻿class CommentInput {
     private readonly commentArea: CommentArea;
     private readonly util: EditorsUtil;
 
@@ -50,7 +48,7 @@ class CommentInput {
                 {
                     comment: comment,
                     textId: textId
-                }
+                } as JQuery.PlainObject
             );
             sendAjax.done(() => {
                 bootbox.alert({
@@ -208,7 +206,7 @@ class CommentInput {
                             {
                                 comment: comment,
                                 textId: textId
-                            }
+                            } as JQuery.PlainObject
                         );
                         this.onCommentSendRequest(sendAjax, textAreaEl, textId);
                     } else {
@@ -216,7 +214,7 @@ class CommentInput {
                             {
                                 comment: comment,
                                 commentId: commentId
-                            }
+                            } as JQuery.PlainObject
                         );
                         this.onCommentSendRequest(sendAjax, textAreaEl, textId);
                     }

@@ -1,10 +1,10 @@
-﻿@using Localization.AspNetCore.Service
-@inject ILocalization Localizer
+﻿@using Scalesoft.Localization.AspNetCore
+@inject ILocalizationService Localizer
 
-<h4>@Localizer.Translate("UseExternalLoginService", "account")</h4>
+<h4>@Localizer.Translate("UseExternalLoginService", "Account")</h4>
 <hr />
 <div>
     <p>
-        @Localizer.Translate("UseExternalLoginService-placeholder", "account")
+        @Localizer.Translate("UseExternalLoginService-placeholder", "Account")
     </p>
 </div>

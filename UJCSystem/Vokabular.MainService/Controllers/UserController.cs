@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
@@ -8,26 +9,31 @@ using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Headers;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Attributes;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
-using Vokabular.Shared.DataContracts.Types;
+using Vokabular.Shared.Const;
 
 namespace Vokabular.MainService.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [CustomRequireHttps]
     [ValidateModel]
     public class UserController : BaseController
     {
         private readonly UserManager m_userManager;
-        private readonly PermissionManager m_permissionManager;
-        private readonly UserGroupManager m_userGroupManager;
+        private readonly RoleManager m_roleManager;
+        private readonly AuthenticationManager m_authenticationManager;
+        private readonly UserDetailManager m_userDetailManager;
 
-        public UserController(UserManager userManager, PermissionManager permissionManager, UserGroupManager userGroupManager)
+        public UserController(UserManager userManager, RoleManager roleManager, AuthenticationManager authenticationManager,
+            UserDetailManager userDetailManager)
         {
             m_userManager = userManager;
-            m_permissionManager = permissionManager;
-            m_userGroupManager = userGroupManager;
+            m_roleManager = roleManager;
+            m_authenticationManager = authenticationManager;
+            m_userDetailManager = userDetailManager;
         }
 
+        [AllowAnonymous]
         [HttpPost("")]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         public IActionResult CreateNewUser([FromBody] CreateUserContract data)
@@ -43,21 +49,35 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [HttpGet("current")]
-        public UserDetailContract GetCurrentUser(
-            [FromHeader(Name = CustomHttpHeaders.Authorization)] string authorizationToken)
-        {
-            var result = m_userManager.GetCurrentUserByToken();
-            return result;
-        }
-
-        [HttpPut("current")]
-        public IActionResult UpdateCurrentUser([FromBody] UpdateUserContract data,
-            [FromHeader(Name = CustomHttpHeaders.Authorization)] string authorizationToken)
+        [AllowAnonymous]
+        [HttpPost("external")]
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        public IActionResult CreateUserIfNotExist([FromBody] int externalId)
         {
             try
             {
-                m_userManager.UpdateUser(data);
+                var userId = m_userManager.CreateUserIfNotExist(externalId);
+                return Ok(userId);
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Message);
+            }
+        }
+
+        [HttpGet("current")]
+        public UserDetailContract GetCurrentUser()
+        {
+            var user = m_authenticationManager.GetCurrentUser();
+            return m_userDetailManager.GetUserDetailContractForUser(user);
+        }
+
+        [HttpPut("current")]
+        public IActionResult UpdateCurrentUser([FromBody] UpdateUserContract data)
+        {
+            try
+            {
+                m_userManager.UpdateCurrentUser(data);
                 return Ok();
             }
             catch (HttpErrorCodeException exception)
@@ -67,8 +87,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPut("current/password")]
-        public IActionResult UpdateCurrentPassword([FromBody] UpdateUserPasswordContract data,
-            [FromHeader(Name = CustomHttpHeaders.Authorization)] string authorizationToken)
+        public IActionResult UpdateCurrentPassword([FromBody] UpdateUserPasswordContract data)
         {
             try
             {
@@ -81,6 +100,7 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
+        [Authorize(PermissionNames.ManagePermissions)]
         [HttpGet("")]
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
         public List<UserDetailContract> GetUserList([FromQuery] int? start, [FromQuery] int? count, [FromQuery] string filterByName)
@@ -91,29 +111,24 @@ namespace Vokabular.MainService.Controllers
             return result.List;
         }
 
+        [Authorize(PermissionNames.ManagePermissions)]
         [HttpGet("{userId}/detail")]
         public UserDetailContract GetUserDetail(int userId)
         {
             var result = m_userManager.GetUserDetail(userId);
             return result;
         }
-        
-        [HttpGet("{userId}/group")]
-        public List<UserGroupContract> GetGroupsByUser(int userId)
+
+        [HttpGet("{userId}/role")]
+        public List<RoleContract> GetRolesByUser(int userId)
         {
-            var result = m_userGroupManager.GetGroupsByUser(userId);
+            var result = m_roleManager.GetRolesByUser(userId);
             return result;
         }
 
-        [HttpGet("current/permission/special")]
-        public IList<SpecialPermissionContract> GetSpecialPermissionsForUser(SpecialPermissionCategorizationEnumContract? filterByType)
-        {
-            var result = m_permissionManager.GetSpecialPermissionsForUser(filterByType);
-            return result;
-        }
-
+        [Authorize(PermissionNames.ManagePermissions)]
         [HttpGet("autocomplete")]
-        public List<UserDetailContract> GetAutocomplete([FromQuery] string query, [FromQuery] int? count)
+        public IList<UserDetailContract> GetAutocomplete([FromQuery] string query, [FromQuery] int? count)
         {
             var result = m_userManager.GetUserAutocomplete(query, count);
             return result;

@@ -14,19 +14,19 @@ namespace ITJakub.Web.Hub.Areas.Derivation.Controllers
         {
         }
 
-        [Authorize(Roles = CustomRole.CanDerivateLemmatization)]
+        [Authorize(PermissionNames.DerivateLemmatization)]
         public ActionResult Index()
         {
             return View("Derivation");
         }
         
-        [Authorize(Roles = CustomRole.CanDerivateLemmatization)]
+        [Authorize(PermissionNames.DerivateLemmatization)]
         public ActionResult Derivation()
         {
             return View("Derivation");
         }
         
-        [Authorize(Roles = CustomRole.CanDerivateLemmatization)]
+        [Authorize(PermissionNames.DerivateLemmatization)]
         public ActionResult GetTypeaheadHyperCanonicalForm(HyperCanonicalFormTypeContract type, string query)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -36,7 +36,7 @@ namespace ITJakub.Web.Hub.Areas.Derivation.Controllers
             }
         }
 
-        [Authorize(Roles = CustomRole.CanDerivateLemmatization)]
+        [Authorize(PermissionNames.DerivateLemmatization)]
         public ActionResult GetCanonicalFormIdList(long hyperCanonicalFormId)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -46,7 +46,7 @@ namespace ITJakub.Web.Hub.Areas.Derivation.Controllers
             }
         }
 
-        [Authorize(Roles = CustomRole.CanDerivateLemmatization)]
+        [Authorize(PermissionNames.DerivateLemmatization)]
         public ActionResult GetCanonicalFormDetail(long canonicalFormId)
         {
             using (var client = GetLemmationzationServiceClient())

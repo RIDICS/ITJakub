@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using ITJakub.FileProcessing.DataContracts;
 using log4net;
 using Vokabular.Shared;
 
@@ -66,7 +68,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
             director.AddResourceAndFillResourceTypeByExtension(fileName, data);
         }
 
-        public ImportResult ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage)
+        public ImportResult ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage, IList<PermissionFromAuthContract> autoImportPermissions)
         {
             if (!m_activeSessionManager.ContainsSessionId(sessionId))
             {
@@ -78,6 +80,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
             director.SetSessionInfoValue(SessionInfo.CreateTime, DateTime.UtcNow);
             director.SetSessionInfoValue(SessionInfo.ProjectId, projectId);
             director.SetSessionInfoValue(SessionInfo.UserId, userId);
+            director.SetSessionInfoValue(SessionInfo.AutoImportPermissions, autoImportPermissions);
             bool result = m_resourceProcessorManager.ProcessSessionResources(director);
             ImportResult importResult = new ImportResult(
                 director.GetSessionInfoValue<long>(SessionInfo.ProjectId),

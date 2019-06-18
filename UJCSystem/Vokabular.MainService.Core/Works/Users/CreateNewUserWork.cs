@@ -1,10 +1,9 @@
 ﻿using System;
+using Vokabular.Authentication.DataContracts.User;
 using Vokabular.DataEntities.Database.Entities;
-using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.Jewelry;
-using Vokabular.MainService.Core.Managers.Authentication;
-using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.Core.Communication;
+using CreateUserContract = Vokabular.MainService.DataContracts.Contracts.CreateUserContract;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Users
@@ -12,40 +11,45 @@ namespace Vokabular.MainService.Core.Works.Users
     public class CreateNewUserWork : UnitOfWorkBase<int>
     {
         private readonly UserRepository m_userRepository;
-        private readonly ICommunicationTokenGenerator m_communicationTokenGenerator;
+        private readonly CommunicationProvider m_communicationProvider;
         private readonly CreateUserContract m_data;
 
-        public CreateNewUserWork(UserRepository userRepository, ICommunicationTokenGenerator communicationTokenGenerator, CreateUserContract data) : base(userRepository)
+        public CreateNewUserWork(UserRepository userRepository, CommunicationProvider communicationProvider, CreateUserContract data) : base(userRepository)
         {
             m_userRepository = userRepository;
-            m_communicationTokenGenerator = communicationTokenGenerator;
+            m_communicationProvider = communicationProvider;
             m_data = data;
         }
 
         protected override int ExecuteWorkImplementation()
         {
+            var client = m_communicationProvider.GetAuthRegistrationApiClient();
+
+            var authUser = new Authentication.DataContracts.User.CreateUserContract
+            {
+                Password = m_data.NewPassword,
+                UserName = m_data.UserName,
+                User = new UserContractBase
+                {
+                    FirstName = m_data.FirstName,
+                    LastName = m_data.LastName,
+                    Email = m_data.Email,
+                    PhoneNumber = "+420749123678" //TODO remove
+                }
+            };
+
+            var user = client.CreateUserAsync(authUser).GetAwaiter().GetResult();
+
             var now = DateTime.UtcNow;
-            var passwordHash = CustomPasswordHasher.CreateHash(m_data.NewPassword);
-            
+
             var dbUser = new User
             {
-                UserName = m_data.UserName,
-                Email = m_data.Email,
-                FirstName = m_data.FirstName,
-                LastName = m_data.LastName,
+                ExternalId = user.Id,
                 CreateTime = now,
-                PasswordHash = passwordHash,
-                AvatarUrl = m_data.AvatarUrl,
-                AuthenticationProvider = AuthenticationProvider.ItJakub,
-                CommunicationToken = null,
-                CommunicationTokenCreateTime = null,
                 //Groups = new List<Group> { m_defaultMembershipProvider.GetDefaultRegisteredUserGroup(), m_defaultMembershipProvider.GetDefaultUnRegisteredUserGroup() },
                 //FavoriteLabels = new List<FavoriteLabel> { defaultFavoriteLabel }
             };
 
-            dbUser.CommunicationToken = m_communicationTokenGenerator.GetNewCommunicationToken(dbUser);
-            dbUser.CommunicationTokenCreateTime = now;
-            
             //defaultFavoriteLabel.User = dbUser;
             // TODO generate default FavoriteLabel
             // TODO assign User Groups

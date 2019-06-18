@@ -1,36 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
-    <AssemblyName>Vokabular.MainService.Core</AssemblyName>
-    <PackageId>Vokabular.MainService.Core</PackageId>
-    <RuntimeIdentifiers>win</RuntimeIdentifiers>
-    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
-    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
-    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
-    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
-    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="6.2.2" />
-    <PackageReference Include="FluentValidation" Version="7.4.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.0.1" />
+    <PackageReference Include="AutoMapper" Version="8.1.0" />
+    <PackageReference Include="FluentValidation" Version="8.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="MimeMapping" Version="1.0.1.12" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ITJakub.FileProcessing.DataContracts\ITJakub.FileProcessing.DataContracts.csproj" />
     <ProjectReference Include="..\ITJakub.SearchService.DataContracts\ITJakub.SearchService.DataContracts.csproj" />
+    <ProjectReference Include="..\Vokabular.Authentication.Client\Vokabular.Authentication.Client.csproj" />
     <ProjectReference Include="..\Vokabular.CardFile.Core\Vokabular.CardFile.Core.csproj" />
     <ProjectReference Include="..\Vokabular.Core\Vokabular.Core.csproj" />
     <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj" />
@@ -38,6 +22,7 @@
     <ProjectReference Include="..\Vokabular.FulltextService.DataContracts\Vokabular.FulltextService.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.Jewelry\Vokabular.Jewelry.csproj" />
     <ProjectReference Include="..\Vokabular.MainService.DataContracts\Vokabular.MainService.DataContracts.csproj" />
+    <ProjectReference Include="..\Vokabular.Shared.AspNetCore\Vokabular.Shared.AspNetCore.csproj" />
     <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj" />
   </ItemGroup>

@@ -1,0 +1,11 @@
+﻿{
+  "culture": "cs-CZ",
+  "scope": "AccountDetailViewModel",
+  "dictionary": {
+    "UserName": "Uživatelské jméno",
+    "Email": "Email",
+    "Password": "Heslo",
+    "FirstName": "Křestní jméno",
+    "LastName": "Příjmení"
+  }
+}

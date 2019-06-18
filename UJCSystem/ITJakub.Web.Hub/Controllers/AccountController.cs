@@ -1,69 +1,28 @@
-﻿using System.Net;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Errors;
-using AuthenticationManager = ITJakub.Web.Hub.Core.Managers.AuthenticationManager;
 
 namespace ITJakub.Web.Hub.Controllers
 {
     [Authorize]
     public class AccountController : BaseController
     {
-        private readonly AuthenticationManager m_authenticationManager;
-
-        public AccountController(CommunicationProvider communicationProvider, AuthenticationManager authenticationManager) : base(communicationProvider)
+        public AccountController(CommunicationProvider communicationProvider) : base(communicationProvider)
         {
-            m_authenticationManager = authenticationManager;
         }
 
         //
         // GET: /Account/Login
-        [AllowAnonymous]
         [RequireHttps]
         public ActionResult Login(string returnUrl = null)
         {
-            ViewData["ReturnUrl"] = returnUrl;
-            return View();
-        }
-
-        //
-        // POST: /Account/Login
-        [HttpPost]
-        [RequireHttps]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            try
-            {
-                await m_authenticationManager.SignInAsync(model);
-
-                return RedirectToLocal(returnUrl);
-            }
-            catch (HttpErrorCodeException exception)
-            {
-                switch (exception.StatusCode)
-                {
-                    case HttpStatusCode.Unauthorized:
-                        ModelState.AddModelError("", "Přihlášení se nezdařilo.");
-                        break;
-                    default:
-                        ModelState.AddModelError("", exception.Message);
-                        break;
-                }
-
-                return View(model);
-            }
+            return RedirectToLocal("");
         }
 
         //
@@ -81,7 +40,7 @@ namespace ITJakub.Web.Hub.Controllers
         [RequireHttps]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public ActionResult Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -100,14 +59,7 @@ namespace ITJakub.Web.Hub.Controllers
                     {
                         client.CreateNewUser(user);
                     }
-
-                    await m_authenticationManager.SignInAsync(new LoginViewModel
-                    {
-                        UserName = model.UserName,
-                        Password = model.Password,
-                    });
-
-                    return RedirectToLocal("");
+                    ViewData.Add("SuccessRegistration", true);
                 }
                 catch (HttpErrorCodeException e)
                 {
@@ -120,14 +72,107 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         //
+        // GET: /Account/AccountSettings
+        public IActionResult AccountSettings()
+        {
+            using (var client = GetRestClient())
+            {
+                var user = client.GetCurrentUser();
+                var viewmodel = Mapper.Map<AccountDetailViewModel>(user);
+                viewmodel.UpdateAccountViewModel = Mapper.Map<UpdateAccountViewModel>(user);
+                viewmodel.UpdatePasswordViewModel = null;
+                return View(viewmodel);
+            }
+        }
+
+        //
+        // POST: /Account/UpdateAccount
+        [HttpPost]
+        [RequireHttps]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdateAccount(UpdateAccountViewModel model)
+        {
+            ViewData.Add("ActualTab", "UpdateAccount");
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    using (var client = GetRestClient())
+                    {
+                        UpdateUserContract updateUserContract = new UpdateUserContract
+                        {
+                            AvatarUrl = null, //TODO
+                            Email = model.Email,
+                            FirstName = model.FirstName,
+                            LastName = model.LastName
+                        };
+
+                        client.UpdateCurrentUser(updateUserContract);
+                        ViewData.Add("SuccessUpdateAccount", true);
+                    }
+                }
+                catch (HttpErrorCodeException e)
+                {
+                    AddErrors(e);
+                }
+            }
+
+            var viewModel = new AccountDetailViewModel {UpdateAccountViewModel = model};
+            return View("AccountSettings", viewModel);
+        }
+
+        //
+        // POST: /Account/UpdatePassword
+        [HttpPost]
+        [RequireHttps]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdatePassword(UpdatePasswordViewModel model)
+        {
+            ViewData.Add("ActualTab", "UpdatePassword");
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    using (var client = GetRestClient())
+                    {
+                        UpdateUserPasswordContract updateUserPasswordContract = new UpdateUserPasswordContract
+                        {
+                            NewPassword = model.Password,
+                            OldPassword = model.OldPassword
+                        };
+
+                        client.UpdateCurrentPassword(updateUserPasswordContract);
+                        ViewData.Add("SuccessPasswordChange", true);
+                    }
+                }
+                catch (HttpErrorCodeException e)
+                {
+                    AddErrors(e);
+                }
+            }
+
+            var viewModel = new AccountDetailViewModel { UpdatePasswordViewModel = model };
+            return View("AccountSettings", viewModel);
+        }
+
+        //
         // POST: /Account/LogOut
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> LogOut()
+        public IActionResult LogOut()
         {
-            await m_authenticationManager.SignOutAsync();
-            
-            return RedirectToLocal("");
+            return new SignOutResult(new[] {CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme});
+        }
+
+
+        //
+        // POST: /Account/ClientLogOut
+        [HttpPost]
+        public IActionResult ClientLogOut()
+        {
+            return new SignOutResult(new[] {CookieAuthenticationDefaults.AuthenticationScheme});
         }
 
         [AllowAnonymous]
@@ -143,6 +188,7 @@ namespace ITJakub.Web.Hub.Controllers
                 ModelState.AddModelError(string.Empty, exception.Message);
                 return;
             }
+
             foreach (var error in exception.ValidationErrors)
             {
                 ModelState.AddModelError(string.Empty, error.Message);
@@ -155,6 +201,7 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 return Redirect(returnUrl);
             }
+
             return RedirectToAction("Index", "Home");
         }
     }

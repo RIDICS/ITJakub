@@ -3,25 +3,25 @@ using System.Globalization;
 using ITJakub.Web.Hub.Core.Markdown;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Type;
-using Localization.AspNetCore.Service;
-using DynamicText = Localization.CoreLibrary.Entity.DynamicText;
+using Scalesoft.Localization.AspNetCore;
+using Scalesoft.Localization.Core.Model;
 
 namespace ITJakub.Web.Hub.Core.Managers
 {
     public class StaticTextManager
     {
-        private readonly IDynamicText m_localizationService;
+        private readonly IDynamicTextService m_dynamicTextService;
         private readonly IMarkdownToHtmlConverter m_markdownToHtmlConverter;
 
-        public StaticTextManager(IDynamicText localizationService, IMarkdownToHtmlConverter markdownToHtmlConverter)
+        public StaticTextManager(IDynamicTextService dynamicTextService, IMarkdownToHtmlConverter markdownToHtmlConverter)
         {
-            m_localizationService = localizationService;
+            m_dynamicTextService = dynamicTextService;
             m_markdownToHtmlConverter = markdownToHtmlConverter;
         }
         
         public StaticTextViewModel GetText(string name, string scope)
         {
-            DynamicText staticText = m_localizationService.GetDynamicText(name, scope);           
+            var staticText = m_dynamicTextService.GetDynamicText(name, scope);           
 
             if (staticText == null)
             {
@@ -32,7 +32,7 @@ namespace ITJakub.Web.Hub.Core.Managers
                 };
             }
 
-            StaticTextViewModel staticTextViewModel = new StaticTextViewModel()
+            var staticTextViewModel = new StaticTextViewModel
             {
                 Format = (StaticTextFormatType) staticText.Format,
                 Name = staticText.Name,
@@ -60,7 +60,7 @@ namespace ITJakub.Web.Hub.Core.Managers
         //TODO #Localization
         public StaticTextViewModel GetRenderedHtmlText(string name, string scope)
         {
-            DynamicText staticText = m_localizationService.GetDynamicText(name, scope);
+            var staticText = m_dynamicTextService.GetDynamicText(name, scope);
             if (staticText == null)
             {
                 return new StaticTextViewModel
@@ -71,7 +71,7 @@ namespace ITJakub.Web.Hub.Core.Managers
                 };
             }
 
-            StaticTextViewModel viewModel = new StaticTextViewModel()
+            var viewModel = new StaticTextViewModel
             {
                 Format = (StaticTextFormatType)staticText.Format,
                 IsRecordExists = true,
@@ -98,8 +98,7 @@ namespace ITJakub.Web.Hub.Core.Managers
 
         public ModificationUpdateViewModel SaveText(string name, string scope, string text, string culture, StaticTextFormatType format, string username)
         {
-            //var formatType = Mapper.Map<StaticTextFormat>(format);
-            DynamicText dynamicText = new DynamicText()
+            var dynamicText = new DynamicText
             {
                 Culture = culture,
                 DictionaryScope = scope,
@@ -109,15 +108,14 @@ namespace ITJakub.Web.Hub.Core.Managers
                 Text = text
             };
 
-            m_localizationService.SaveDynamicText(dynamicText);
+            m_dynamicTextService.SaveDynamicText(dynamicText);
 
-            ModificationUpdateViewModel result = new ModificationUpdateViewModel()
+            var result = new ModificationUpdateViewModel
             {
                 ModificationTime = dynamicText.ModificationTime.ToString(new CultureInfo(culture)),
                 User = username
             };
 
-            //var result = new SaveStaticTextWork(m_staticTextRepository, name, text, formatType, username).Execute();
             return result;
         }
     }

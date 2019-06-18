@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
@@ -68,7 +69,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Snapshots, () => snapshotAlias)
                 .JoinAlias(() => snapshotAlias.Project, () => projectAlias)
                 .Where(() => projectAlias.Id == projectId && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
-                .Fetch(x => x.Resource).Eager
+                .Fetch(SelectMode.Fetch, x => x.Resource)
                 .OrderBy(x => x.ResourceTrack).Asc
                 .OrderBy(x => x.AudioType).Asc
                 .List();
@@ -85,7 +86,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Snapshots, () => snapshotAlias)
                 .JoinAlias(() => snapshotAlias.Project, () => projectAlias)
                 .Where(() => projectAlias.Id == projectId && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
-                .Fetch(x => x.Resource).Eager
+                .Fetch(SelectMode.Fetch, x => x.Resource)
                 .OrderBy(x => x.Position).Asc
                 .List();
 
@@ -152,7 +153,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .Where(x => x.ResourcePage.Id == resourcePageId && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
                 .OrderBy(x => x.CreateTime).Desc
-                .Fetch(x => x.BookVersion).Eager
+                .Fetch(SelectMode.Fetch, x => x.BookVersion)
                 .List();
         }
 
@@ -183,11 +184,11 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .Where(x => x.Resource.Id == resourceId && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
-                .Fetch(x => x.BookVersion).Eager;
+                .Fetch(SelectMode.Fetch, x => x.BookVersion);
 
             if (fetchHeadwordItems)
             {
-                query = query.Fetch(x => x.HeadwordItems).Eager;
+                query = query.Fetch(SelectMode.Fetch, x => x.HeadwordItems);
             }
                 
             return query.SingleOrDefault();
@@ -390,7 +391,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             var pageResourceIds = GetSession().QueryOver<PageResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
-                .Fetch(x => x.Resource).Eager
+                .Fetch(SelectMode.Fetch, x => x.Resource)
                 .OrderBy(x => x.Position).Asc
                 .WithSubquery
                 .WhereProperty(() => resourceAlias.Id).In(subquery)
@@ -412,7 +413,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             var query = GetSession().QueryOver<PageResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
-                .Fetch(x => x.Resource).Eager
+                .Fetch(SelectMode.Fetch, x => x.Resource)
                 .OrderBy(x => x.Position).Asc
                 .WithSubquery
                 .WhereProperty(() => resourceAlias.Id).In(subquery)

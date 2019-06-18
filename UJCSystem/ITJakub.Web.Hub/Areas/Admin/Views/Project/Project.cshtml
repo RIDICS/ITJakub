@@ -1,8 +1,8 @@
 ﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ProjectItemViewModel
 @using ITJakub.Web.Hub.Core
-@using Localization.AspNetCore.Service
+@using Scalesoft.Localization.AspNetCore
 
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 @{
     ViewBag.Title = Localizer.Translate("ProjectHeader", "Admin") + Model.Name;

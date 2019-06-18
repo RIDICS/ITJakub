@@ -4,6 +4,7 @@ using System.Reflection;
 using DryIoc;
 using log4net;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Connection;

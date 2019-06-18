@@ -45,7 +45,7 @@ $(document.documentElement).ready(() => {
 
 
     paginator = new Pagination({
-        container: $("#feedbacks-paginator"),
+        container: document.getElementById("feedbacks-paginator") as HTMLDivElement,
         pageClickCallback: paginatorClickedCallback,
         callPageClickCallbackOnInit: true
     });

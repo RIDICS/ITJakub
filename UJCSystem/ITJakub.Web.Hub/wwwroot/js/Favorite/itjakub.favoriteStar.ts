@@ -48,7 +48,7 @@
         }
     }
     
-    public make(placement = "right", fixPosition = false) {
+    public make(placement: BootstrapPlacement = "right", fixPosition = false) {
         var innerContainer = document.createElement("a");
         $(innerContainer)
             .addClass("favorite-star")

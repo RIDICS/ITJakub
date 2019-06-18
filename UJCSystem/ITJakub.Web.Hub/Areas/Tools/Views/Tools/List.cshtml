@@ -1,6 +1,6 @@
-﻿@using Localization.AspNetCore.Service
+﻿@using Scalesoft.Localization.AspNetCore
 @model ITJakub.Web.Hub.Models.StaticTextViewModel
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 @section scripts{
     <script src="~/Areas/Tools/js/itjakub.tools.js"></script>
@@ -11,6 +11,6 @@
 }
 
 <div class="content-container">
-    @Html.Partial("_StaticText", Model)
+    @await Html.PartialAsync("_StaticText", Model)
 
 </div>

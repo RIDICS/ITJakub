@@ -559,7 +559,7 @@ class SpecialPermissionTextResolver {
     private localizationScope = "PermissionJs";
     
     constructor() {
-        this.localization = new Localization();
+        this.localization = localization;
     }
 
 

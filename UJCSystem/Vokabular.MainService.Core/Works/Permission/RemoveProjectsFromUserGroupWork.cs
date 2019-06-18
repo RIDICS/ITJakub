@@ -7,13 +7,13 @@ namespace Vokabular.MainService.Core.Works.Permission
     public class RemoveProjectsFromUserGroupWork : UnitOfWorkBase
     {
         private readonly PermissionRepository m_permissionRepository;
-        private readonly int m_groupId;
+        private readonly int m_roleId;
         private readonly IList<long> m_bookIds;
 
-        public RemoveProjectsFromUserGroupWork(PermissionRepository permissionRepository, int groupId, IList<long> bookIds) : base(permissionRepository)
+        public RemoveProjectsFromUserGroupWork(PermissionRepository permissionRepository, int roleId, IList<long> bookIds) : base(permissionRepository)
         {
             m_permissionRepository = permissionRepository;
-            m_groupId = groupId;
+            m_roleId = roleId;
             m_bookIds = bookIds;
         }
 
@@ -32,7 +32,9 @@ namespace Vokabular.MainService.Core.Works.Permission
                 allBookIds.AddRange(m_bookIds);
             }
 
-            var permissions = m_permissionRepository.FindPermissionsByGroupAndBooks(m_groupId, allBookIds);
+            var group = m_permissionRepository.FindGroupByExternalId(m_roleId);
+
+            var permissions = m_permissionRepository.FindPermissionsByGroupAndBooks(group.Id, allBookIds);
             m_permissionRepository.DeleteAll(permissions);
         }
     }

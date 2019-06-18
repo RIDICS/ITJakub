@@ -85,8 +85,6 @@
 };
 
 function createDelegate() {
-    var localization = new Localization();
-
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.getCategoriesFromResponseCallback = (response) => {
         return null;

@@ -4,6 +4,7 @@ using System.Reflection;
 using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext;
 using ITJakub.FileProcessing.Core.Sessions.Works;
+using ITJakub.FileProcessing.DataContracts;
 using log4net;
 using Vokabular.Core.Storage.Resources;
 using Vokabular.DataEntities.Database.Repositories;
@@ -38,6 +39,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         public void Process(ResourceSessionDirector resourceDirector)
         {
+            var autoImportPermissions = resourceDirector.GetSessionInfoValue<IList<PermissionFromAuthContract>>(SessionInfo.AutoImportPermissions);
             var bookData = resourceDirector.GetSessionInfoValue<BookData>(SessionInfo.BookData);
             bookData.FileNameMapping = new Dictionary<string, FileResource>();
             foreach (var fileResource in resourceDirector.Resources.Where(x => x.NewNameInStorage != null))
@@ -83,7 +85,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             //    }
             //}
 
-            var processAutoImportPermission = new ProcessAutoImportPermissionWork(m_permissionRepository, projectId, createNewSnapshot.BookTypes);
+            var processAutoImportPermission = new ProcessAutoImportPermissionWork(m_permissionRepository, projectId, createNewSnapshot.BookTypes, autoImportPermissions);
             processAutoImportPermission.Execute();
             
             //var specialPermissions = m_permissionRepository.GetAutoimportPermissionsByCategoryIdList(allBookVersionCategoryIds);

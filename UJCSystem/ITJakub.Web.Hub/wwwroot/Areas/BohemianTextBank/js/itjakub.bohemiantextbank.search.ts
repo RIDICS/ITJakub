@@ -36,7 +36,7 @@ class BohemianTextbankSearch {
     private search: Search;
 
     constructor() {
-        this.localization = new Localization();
+        this.localization = localization;
     }
 
     initSearch() {

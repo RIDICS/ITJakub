@@ -1,8 +1,8 @@
-﻿@using Localization.AspNetCore.Service
-@using Localization.CoreLibrary.Util
-@using ITJakub.Web.Hub.Controllers
+﻿@using ITJakub.Web.Hub.Controllers
+@using Scalesoft.Localization.AspNetCore
+@using Scalesoft.Localization.Core.Util
 
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 @{
     ViewBag.Title = Localizer.Translate("IndexTitle", "Home", LocTranslationSource.File);

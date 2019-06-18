@@ -1,14 +1,15 @@
 ﻿@using Microsoft.AspNetCore.Http.Extensions
-@using Localization.AspNetCore.Service
-@using Localization.CoreLibrary.Util
+@using Scalesoft.Localization.AspNetCore
+@using Scalesoft.Localization.Core.Util
+@using Vokabular.Shared.AspNetCore.Extensions
 @using Vokabular.Shared.Const
 @model ITJakub.Web.Hub.Models.StaticTextViewModel
     
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 <div class="static-text-container">
     <div class="static-text-panel">
-        @if (User.IsInRole(CustomRole.CanEditStaticText))
+        @if (User.HasPermission(PermissionNames.EditStaticText))
         {
             if (Model.IsRecordExists)
             {

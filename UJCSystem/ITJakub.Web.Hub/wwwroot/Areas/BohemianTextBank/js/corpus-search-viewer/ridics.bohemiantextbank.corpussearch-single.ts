@@ -275,7 +275,7 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
             selectedCategoryIds: this.categoryIdsInQuery,
             selectedBookIds: this.bookIdsInQuery
         };
-        const getPageAjax = $.get(url, payload);
+        const getPageAjax = $.get(url, payload as JQuery.PlainObject);
         getPageAjax.done((response) => {
             const results: ICorpusSearchResult[] = response["results"];
             const bookSectionEl = $(`*[data-snapshotId=${snapshotId}]`);
@@ -324,7 +324,7 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
             selectedCategoryIds: this.categoryIdsInQuery,
             selectedBookIds: this.bookIdsInQuery
         };
-        const getPageAjax = $.get(url, payload);
+        const getPageAjax = $.get(url, payload as JQuery.PlainObject);
         getPageAjax.done((response) => {
             const results: ICorpusSearchResult[] = response["results"];
             const bookSectionEl = $(`*[data-snapshotId=${snapshotId}]`);
@@ -398,7 +398,7 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
         const bookSectionEl = $(`*[data-snapshotId=${snapshotId}]`);
         const paginationEl = bookSectionEl.find(".pagination-section");
         const paginator = new Pagination({
-            container: paginationEl,
+            container: paginationEl.get(0) as Node as HTMLDivElement,
             pageClickCallback: (pageNumber) => {
                 this.goToResultPage(pageNumber, snapshotId, this.search.getLastQuery(), this.contextLength);
             },
@@ -641,7 +641,7 @@ class BohemianTextBankSingleLazyload extends BohemianTextBankSingle {
         updateQueryStringParameter(this.urlSortCriteriaKey, sortingEnum);
         updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
 
-        $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchGetResultSnapshotListPageOfIdsWithResultNumbers`, payload)
+        $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchGetResultSnapshotListPageOfIdsWithResultNumbers`, payload as JQuery.PlainObject)
             .done((bookIds: ICoprusSearchSnapshotResult) => {
                 const totalCount = bookIds.totalCount;
                 const snapshotStructureArray = bookIds.snapshotList;
@@ -706,7 +706,7 @@ class BohemianTextBankSingleLazyload extends BohemianTextBankSingle {
         updateQueryStringParameter(this.urlSortCriteriaKey, sortingEnum);
         updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
 
-        $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/BasicSearchGetResultSnapshotListPageOfIdsWithResultNumbers`, payload)
+        $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/BasicSearchGetResultSnapshotListPageOfIdsWithResultNumbers`, payload as JQuery.PlainObject)
             .done((bookIds: ICoprusSearchSnapshotResult) => {
                 const totalCount = bookIds.totalCount;
                 const snapshotStructureArray = bookIds.snapshotList;
@@ -810,6 +810,7 @@ class BohemianTextBankSinglePaged extends BohemianTextBankSingle {
             $(".main-pagination-container").empty();
         }
         this.paginationInitialised = false;
+        this.updateSelectedBooksAndCategoriesInQuery();
     }
 
     /**
@@ -834,6 +835,7 @@ class BohemianTextBankSinglePaged extends BohemianTextBankSingle {
         this.onSearchStartSinglePaged();
         this.corpusAdvancedSearchBookHits(json, firstPage);
     }
+
     /**
      * Reloads search results on change of sort ordering
      */
@@ -857,7 +859,7 @@ class BohemianTextBankSinglePaged extends BohemianTextBankSingle {
         if (this.paginationInitialised) {
             return;
         } else {
-            const paginationContainerEl = $(".main-pagination-container");
+            const paginationContainerEl = document.getElementById(".main-pagination-container") as HTMLDivElement;
             const query = this.search.getLastQuery();
             const isAdvancedMode = this.search.isLastQueryJson();
             if (isAdvancedMode) {
@@ -918,7 +920,7 @@ class BohemianTextBankSinglePaged extends BohemianTextBankSingle {
         updateQueryStringParameter(this.urlSortCriteriaKey, sortingEnum);
         updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
 
-        $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchGetResultSnapshotListPageOfIdsWithResultNumbers`, payload)
+        $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchGetResultSnapshotListPageOfIdsWithResultNumbers`, payload as JQuery.PlainObject)
             .done((bookIds: ICoprusSearchSnapshotResult) => {
                 const totalCount = bookIds.totalCount;
                 const snapshotStructureArray = bookIds.snapshotList;
@@ -981,13 +983,12 @@ class BohemianTextBankSinglePaged extends BohemianTextBankSingle {
             start: start,
             count: count
         };
-
         updateQueryStringParameter(this.urlSearchKey, text);
         updateQueryStringParameter(this.urlSortAscKey, sortAsc);
         updateQueryStringParameter(this.urlSortCriteriaKey, sortingEnum);
         updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
 
-        $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/BasicSearchGetResultSnapshotListPageOfIdsWithResultNumbers`, payload)
+        $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/BasicSearchGetResultSnapshotListPageOfIdsWithResultNumbers`, payload as JQuery.PlainObject)
             .done((bookIds: ICoprusSearchSnapshotResult) => {
                 const totalCount = bookIds.totalCount;
                 const snapshotStructureArray = bookIds.snapshotList;

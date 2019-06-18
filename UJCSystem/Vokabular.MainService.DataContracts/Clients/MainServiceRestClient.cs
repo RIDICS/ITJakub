@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using Microsoft.Extensions.Logging;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.CardFile;
@@ -14,10 +15,8 @@ using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Extensions;
-using Vokabular.RestClient.Headers;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared;
-using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
@@ -30,7 +29,8 @@ namespace Vokabular.MainService.DataContracts.Clients
     {
         private static readonly ILogger m_logger = ApplicationLogging.CreateLogger<MainServiceRestClient>();
         private readonly string m_authenticationToken;
-        
+        private const string AuthenticationScheme = "Bearer";
+
         public MainServiceRestClient(Uri baseAddress, string authenticationToken) : base(baseAddress)
         {
             m_authenticationToken = authenticationToken;
@@ -38,7 +38,7 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         protected override void FillRequestMessage(HttpRequestMessage requestMessage)
         {
-            requestMessage.Headers.TryAddWithoutValidation(CustomHttpHeaders.Authorization, m_authenticationToken);
+            requestMessage.Headers.Authorization = new AuthenticationHeaderValue(AuthenticationScheme, m_authenticationToken);
         }
 
         protected override void ProcessResponse(HttpResponseMessage response)
@@ -2269,13 +2269,27 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public UserDetailContract GetCurrentUserInfo()
+        public int CreateUserIfNotExist(int userExternalId)
         {
             try
             {
-                //EnsureSecuredClient();
-                var result = Get<UserDetailContract>("user/current");
+                var result = Post<int>("user/external", userExternalId);
                 return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public UserDetailContract GetCurrentUser()
+        {
+            try
+            {
+                return Get<UserDetailContract>("user/current");
             }
             catch (HttpRequestException e)
             {
@@ -2308,39 +2322,6 @@ namespace Vokabular.MainService.DataContracts.Clients
             {
                 //EnsureSecuredClient();
                 Put<object>("user/current/password", data);
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public SignInResultContract SignIn(SignInContract data)
-        {
-            try
-            {
-                //EnsureSecuredClient();
-                var result = Post<SignInResultContract>("authtoken", data);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void SignOut()
-        {
-            try
-            {
-                //EnsureSecuredClient();
-                Delete("authtoken");
             }
             catch (HttpRequestException e)
             {
@@ -2474,11 +2455,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<UserGroupContract> GetUserGroupAutocomplete(string query)
+        public List<RoleContract> GetRoleAutocomplete(string query)
         {
             try
             {
-                var result = Get<List<UserGroupContract>>("usergroup/autocomplete".AddQueryString("query", query));
+                var result = Get<List<RoleContract>>("role/autocomplete".AddQueryString("query", query));
                 return result;
             }
             catch (HttpRequestException e)
@@ -2506,11 +2487,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public UserGroupDetailContract GetUserGroupDetail(int groupId)
+        public RoleContract GetRoleDetail(int roleId)
         {
             try
             {
-                var result = Get<UserGroupDetailContract>($"usergroup/{groupId}/detail");
+                var result = Get<RoleContract>($"role/{roleId}/detail");
                 return result;
             }
             catch (HttpRequestException e)
@@ -2522,11 +2503,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public int CreateGroup(UserGroupContract request)
+        public int CreateRole(RoleContract request)
         {
             try
             {
-                var result = Post<int>("usergroup", request);
+                var result = Post<int>("role", request);
                 return result;
             }
             catch (HttpRequestException e)
@@ -2538,11 +2519,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void DeleteGroup(int groupId)
+        public void DeleteRole(int roleId)
         {
             try
             {
-                Delete($"usergroup/{groupId}");
+                Delete($"role/{roleId}");
             }
             catch (HttpRequestException e)
             {
@@ -2553,11 +2534,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void AddUserToGroup(int userId, int groupId)
+        public void AddUserToRole(int userId, int roleId)
         {
             try
             {
-                Post<object>($"usergroup/{groupId}/user/{userId}", null);
+                Post<object>($"role/{roleId}/user/{userId}", null);
             }
             catch (HttpRequestException e)
             {
@@ -2568,11 +2549,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void RemoveUserFromGroup(int userId, int groupId)
+        public void RemoveUserFromRole(int userId, int roleId)
         {
             try
             {
-                Delete($"usergroup/{groupId}/user/{userId}");
+                Delete($"role/{roleId}/user/{userId}");
             }
             catch (HttpRequestException e)
             {
@@ -2583,11 +2564,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<UserGroupContract> GetGroupsByUser(int userId)
+        public List<RoleContract> GetRolesByUser(int userId)
         {
             try
             {
-                var result = Get<List<UserGroupContract>>($"user/{userId}/group");
+                var result = Get<List<RoleContract>>($"user/{userId}/role");
                 return result;
             }
             catch (HttpRequestException e)
@@ -2615,11 +2596,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<BookContract> GetBooksForUserGroup(int groupId, BookTypeEnumContract bookType)
+        public List<BookContract> GetBooksForRole(int roleId, BookTypeEnumContract bookType)
         {
             try
             {
-                var result = Get<List<BookContract>>($"usergroup/{groupId}/book?filterByBookType={bookType}");
+                var result = Get<List<BookContract>>($"role/{roleId}/book?filterByBookType={bookType}");
                 return result;
             }
             catch (HttpRequestException e)
@@ -2631,11 +2612,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void AddBooksToGroup(int groupId, IList<long> bookIds)
+        public void AddBooksToRole(int roleId, IList<long> bookIds)
         {
             try
             {
-                Post<object>($"usergroup/{groupId}/permission/book", new AddBookToUserGroupRequestContract
+                Post<object>($"role/{roleId}/permission/book", new AddBookToRoleRequestContract
                 {
                     BookIdList = bookIds
                 });
@@ -2649,11 +2630,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void RemoveBooksFromGroup(int groupId, IList<long> bookIds)
+        public void RemoveBooksFromRole(int roleId, IList<long> bookIds)
         {
             try
             {
-                Delete($"usergroup/{groupId}/permission/book", new AddBookToUserGroupRequestContract
+                Delete($"role/{roleId}/permission/book", new AddBookToRoleRequestContract
                 {
                     BookIdList = bookIds
                 });
@@ -2683,11 +2664,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<SpecialPermissionContract> GetSpecialPermissionsForGroup(int groupId)
+        public List<SpecialPermissionContract> GetSpecialPermissionsForRole(int roleId)
         {
             try
             {
-                var result = Get<List<SpecialPermissionContract>>($"usergroup/{groupId}/permission/special");
+                var result = Get<List<SpecialPermissionContract>>($"role/{roleId}/permission/special");
                 return result;
             }
             catch (HttpRequestException e)
@@ -2699,11 +2680,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void AddSpecialPermissionsToGroup(int groupId, IList<int> specialPermissionsIds)
+        public void AddSpecialPermissionsToRole(int roleId, IList<int> specialPermissionsIds)
         {
             try
             {
-                Post<object>($"usergroup/{groupId}/permission/special", new IntegerIdListContract
+                Post<object>($"role/{roleId}/permission/special", new IntegerIdListContract
                 {
                     IdList = specialPermissionsIds
                 });
@@ -2717,11 +2698,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void RemoveSpecialPermissionsFromGroup(int groupId, IList<int> specialPermissionsIds)
+        public void RemoveSpecialPermissionsFromRole(int roleId, IList<int> specialPermissionsIds)
         {
             try
             {
-                Delete($"usergroup/{groupId}/permission/special", new IntegerIdListContract
+                Delete($"role/{roleId}/permission/special", new IntegerIdListContract
                 {
                     IdList = specialPermissionsIds
                 });

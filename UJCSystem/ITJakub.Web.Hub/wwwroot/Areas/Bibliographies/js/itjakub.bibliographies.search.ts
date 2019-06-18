@@ -25,7 +25,7 @@ class BibliographiesSearch {
     constructor(bookCountPerPage: number) {
         this.bookCountPerPage = bookCountPerPage;
 
-        this.localization = new Localization();
+        this.localization = localization;
     }
 
     create() {

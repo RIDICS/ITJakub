@@ -6,9 +6,11 @@
     "sourceMap": true,
     "target": "es5"
   },
-  "exclude": [
-    "node_modules",
-    "wwwroot/lib"
+  "include": [
+    "wwwroot/js",
+    "wwwroot/Areas",
+    "wwwroot/lib/scalesoft-localization-web",
+    "wwwroot/lib/s-pagination"
   ],
-  "compileOnSave": true
+  "compileOnSave": false
 }

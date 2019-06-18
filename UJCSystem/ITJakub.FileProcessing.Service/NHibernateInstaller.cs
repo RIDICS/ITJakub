@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.Dialect;
@@ -14,7 +15,7 @@ namespace ITJakub.FileProcessing.Service
 {
     public class NHibernateInstaller : IContainerInstaller
     {
-        public void Install(IIocContainer container)
+        public void Install(IServiceCollection services)
         {
             var connectionString = ConfigurationManager.AppSettings[SettingKeys.MainConnectionString] ?? throw new ArgumentException("Connection string not found");
 
@@ -34,11 +35,11 @@ namespace ITJakub.FileProcessing.Service
 
             var sessionFactory = cfg.BuildSessionFactory();
 
-            container.AddInstance(cfg);
+            services.AddSingleton(cfg);
 
-            container.AddInstance(sessionFactory);
+            services.AddSingleton(sessionFactory);
 
-            container.AddPerWebRequest<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
     }
 }

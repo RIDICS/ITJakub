@@ -3,8 +3,6 @@
     var selectedBookIds: Array<number> = [];
     var defaultPageNumber: number = Number(pageNumber);
 
-    var localization = new Localization();
-    
     try {
         selectedCategoryIds = JSON.parse(categoryIdList);
     } catch (e) { }

@@ -1,19 +1,19 @@
-﻿class ValueStorageManager
+﻿class MyStorageManager
 {
-    private static instance: ValueStorageManager = new ValueStorageManager();
+    private static instance: MyStorageManager = new MyStorageManager();
 
     private storage:Array<IStorage>=[];
     
     constructor() {
-        if (ValueStorageManager.instance) {
-            throw new Error("Error: Instantiation failed: Use StorageManager.getInstance() instead of new.");
+        if (MyStorageManager.instance) {
+            throw new Error("Error: Instantiation failed: Use MyStorageManager.getInstance() instead of new.");
         }
 
-        ValueStorageManager.instance = this;
+        MyStorageManager.instance = this;
     }
 
-    public static getInstance(): ValueStorageManager {
-        return ValueStorageManager.instance;
+    public static getInstance(): MyStorageManager {
+        return MyStorageManager.instance;
     }
 
     public getStorage(type: StorageTypeEnum = StorageTypeEnum.Any): IStorage {

@@ -31,7 +31,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return session.QueryOver(() => pageBookmarkAlias)
                     .JoinAlias(() => pageBookmarkAlias.Book, () => bookAlias)
                     .Where(() => bookAlias.Guid == bookXmlId && pageBookmarkAlias.User.Id == userId)
-                    .Fetch(x => x.FavoriteLabel).Eager
+                    .Fetch(SelectMode.Fetch, x => x.FavoriteLabel)
                     .List<PageBookmark>();
             }
         }
@@ -117,7 +117,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             {
                 return session.QueryOver(() => favoriteItemAlias)
                     .JoinAlias(() => favoriteItemAlias.FavoriteLabel, () => favoriteLabelAlias)
-                    .Fetch(x => x.FavoriteLabel).Eager
+                    .Fetch(SelectMode.Fetch, x => x.FavoriteLabel)
                     .WhereRestrictionOn(() => favoriteItemAlias.Book.Id).IsInG(bookIds)
                     .And(() => favoriteLabelAlias.User.Id == userId)
                     .OrderBy(() => favoriteLabelAlias.Name).Asc
@@ -136,7 +136,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             {
                 return session.QueryOver(() => favoriteItemAlias)
                     .JoinAlias(() => favoriteItemAlias.FavoriteLabel, () => favoriteLabelAlias)
-                    .Fetch(x => x.FavoriteLabel).Eager
+                    .Fetch(SelectMode.Fetch, x => x.FavoriteLabel)
                     .WhereRestrictionOn(() => favoriteItemAlias.Category.Id).IsInG(categoryIds)
                     .And(() => favoriteLabelAlias.User.Id == userId)
                     .OrderBy(() => favoriteLabelAlias.Name).Asc
@@ -297,8 +297,8 @@ namespace ITJakub.DataEntities.Database.Repositories
                 var query = CreateFavoriteQueriesQuery(session, labelId, bookTypeEnum, queryTypeEnum, filterByTitle, userId);
 
                 return query.JoinAlias(x => x.FavoriteLabel, () => favoriteLabelAlias)
-                    .Fetch(x => x.FavoriteLabel).Eager
-                    .Fetch(x => x.BookType).Eager
+                    .Fetch(SelectMode.Fetch, x => x.FavoriteLabel)
+                    .Fetch(SelectMode.Fetch, x => x.BookType)
                     .OrderBy(x => x.Title).Asc
                     .OrderBy(() => favoriteLabelAlias.Name).Asc
                     .Skip(start)
@@ -333,7 +333,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinAlias(() => bookVersionAlias.Categories, () => categoryAlias)
                     .JoinAlias(() => categoryAlias.BookType, () => bookTypeAlias)
                     .Where(x => x.User.Id == userId && bookTypeAlias.Type == bookType)
-                    .Fetch(x => x.FavoriteLabel).Eager
+                    .Fetch(SelectMode.Fetch, x => x.FavoriteLabel)
                     .OrderBy(x => x.Title).Asc
                     .List();
             }
@@ -351,7 +351,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinAlias(x => x.Category, () => categoryAlias)
                     .JoinAlias(() => categoryAlias.BookType, () => bookTypeAlias)
                     .Where(x => x.User.Id == userId && bookTypeAlias.Type == bookType)
-                    .Fetch(x => x.FavoriteLabel).Eager
+                    .Fetch(SelectMode.Fetch, x => x.FavoriteLabel)
                     .OrderBy(x => x.Title).Asc
                     .List();
             }

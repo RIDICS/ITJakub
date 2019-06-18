@@ -189,5 +189,10 @@ namespace Vokabular.Shared.DataEntities.Daos
                 Save(o);
             }
         }
+
+        public void Flush()
+        {
+            GetSession().Flush();
+        }
     }
 }

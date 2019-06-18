@@ -18,12 +18,15 @@ namespace Vokabular.MainService.Core.Managers
         private readonly ProjectRepository m_projectRepository;
         private readonly MetadataRepository m_metadataRepository;
         private readonly AuthenticationManager m_authenticationManager;
+        private readonly UserDetailManager m_userDetailManager;
 
-        public ProjectManager(ProjectRepository projectRepository, MetadataRepository metadataRepository, AuthenticationManager authenticationManager)
+        public ProjectManager(ProjectRepository projectRepository, MetadataRepository metadataRepository,
+            AuthenticationManager authenticationManager, UserDetailManager userDetailManager)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
             m_authenticationManager = authenticationManager;
+            m_userDetailManager = userDetailManager;
         }
 
         public long CreateProject(ProjectContract projectData)
@@ -67,13 +70,14 @@ namespace Vokabular.MainService.Core.Managers
                 var metadataContract = Mapper.Map<ProjectMetadataContract>(metadataResource);
                 projectContract.LatestMetadata = metadataContract;
                 projectContract.PageCount = pageCountResult?.PageCount;
+                projectContract.CreatedByUser = m_userDetailManager.GetUserContractForUser(projectContract.CreatedByUser);
 
                 if (fetchAuthors && metadataResource != null)
                     projectContract.Authors = Mapper.Map<List<OriginalAuthorContract>>(metadataResource.Resource.Project.Authors);
 
                 if (fetchResponsiblePersons && metadataResource != null)
-                    projectContract.ResponsiblePersons = Mapper.Map<List<ProjectResponsiblePersonContract>>(metadataResource.Resource.Project.ResponsiblePersons);
-
+                    projectContract.ResponsiblePersons =
+                        Mapper.Map<List<ProjectResponsiblePersonContract>>(metadataResource.Resource.Project.ResponsiblePersons);
             }
 
             return new PagedResultList<ProjectDetailContract>
@@ -95,6 +99,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var metadataResource = work.GetMetadataResource();
             var result = Mapper.Map<ProjectDetailContract>(project);
+            result.CreatedByUser = m_userDetailManager.GetUserContractForUser(result.CreatedByUser);
             result.LatestMetadata = Mapper.Map<ProjectMetadataContract>(metadataResource);
             result.PageCount = work.GetPageCount();
 
@@ -102,7 +107,8 @@ namespace Vokabular.MainService.Core.Managers
                 result.Authors = Mapper.Map<List<OriginalAuthorContract>>(metadataResource.Resource.Project.Authors);
 
             if (fetchResponsiblePersons && metadataResource != null)
-                result.ResponsiblePersons = Mapper.Map<List<ProjectResponsiblePersonContract>>(metadataResource.Resource.Project.ResponsiblePersons);
+                result.ResponsiblePersons =
+                    Mapper.Map<List<ProjectResponsiblePersonContract>>(metadataResource.Resource.Project.ResponsiblePersons);
 
             return result;
         }
@@ -114,6 +120,7 @@ namespace Vokabular.MainService.Core.Managers
             {
                 var project = metadataResource.Resource.Project;
                 var resultItem = Mapper.Map<ProjectDetailContract>(project);
+                resultItem.CreatedByUser = m_userDetailManager.GetUserContractForUser(resultItem.CreatedByUser);
                 resultItem.LatestMetadata = Mapper.Map<ProjectMetadataContract>(metadataResource);
                 resultItem.Authors = Mapper.Map<List<OriginalAuthorContract>>(project.Authors);
                 resultItem.ResponsiblePersons = Mapper.Map<List<ProjectResponsiblePersonContract>>(project.ResponsiblePersons);
@@ -149,7 +156,8 @@ namespace Vokabular.MainService.Core.Managers
         {
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
-            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByResponsiblePerson(responsiblePersonId, startValue, countValue));
+            var dbMetadataList =
+                m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByResponsiblePerson(responsiblePersonId, startValue, countValue));
             var result = MapPagedProjectsToContractList(dbMetadataList);
 
             return result;

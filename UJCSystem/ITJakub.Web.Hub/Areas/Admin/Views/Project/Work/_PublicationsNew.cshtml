@@ -1,15 +1,15 @@
 ﻿@using ITJakub.Web.Hub.Areas.Admin.Models
-@using Localization.AspNetCore.Service
+@using Scalesoft.Localization.AspNetCore
 @using Vokabular.MainService.DataContracts.Contracts.Type
 @model NewPublicationViewModel
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 <div class="project-snapshot-new">
     <div class="project-snapshot-resources">
-        @Html.Partial("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Text, "Textové zdroje", Model.ResourceList))
-        @Html.Partial("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Image, "Obrazové zdroje", Model.ResourceList))
-        @Html.Partial("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Audio, "Audio zdroje", Model.ResourceList))
-        @Html.Partial("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Video, "Video zdroje", Model.ResourceList))
+        @await Html.PartialAsync("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Text, "Textové zdroje", Model.ResourceList))
+        @await Html.PartialAsync("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Image, "Obrazové zdroje", Model.ResourceList))
+        @await Html.PartialAsync("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Audio, "Audio zdroje", Model.ResourceList))
+        @await Html.PartialAsync("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Video, "Video zdroje", Model.ResourceList))
         
         <div class="project-bottom-buttons">
             <button type="button" class="btn btn-default">@Localizer.Translate("Save", "Admin")</button>
