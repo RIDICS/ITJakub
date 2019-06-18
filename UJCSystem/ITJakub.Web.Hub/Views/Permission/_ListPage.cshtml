@@ -1,42 +1,47 @@
-﻿@model ITJakub.Web.Hub.Areas.Admin.Models.UserListViewModel
+﻿@using Scalesoft.Localization.AspNetCore
+@using Vokabular.Shared.AspNetCore.Extensions
+@using Vokabular.Shared.Const
+@model ITJakub.Web.Hub.Areas.Admin.Models.UserListViewModel
+@inject ILocalizationService Localizer
 
 <div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>
 @foreach (var user in Model.List)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => user.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => user.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => user.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => user.Email)
-            </td>
-            <td class="buttons">
-                @{
-                    var deleteFormId = $"delete_{Guid.NewGuid().ToString("N")}";
-                }
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => user.UserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => user.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => user.LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => user.Email)
+        </td>
+        <td class="buttons">
+            @{
+                var deleteFormId = $"delete_{Guid.NewGuid().ToString("N")}";
+            }
 
-                @*<div class="btn-group">
-                <a data-toggle="modal" data-target="@($"#{dialogIdPrefix}-roles-modal")" href="#" data-route="@Url.Action("EditRoleDialogPartial", "User", new {userId = user.Id})" class="btn btn-sm btn-primary @Html.Raw(User.HasAnyPermission(PermissionNames.ManageUserRoles, PermissionNames.AddRolePortalAdmin, PermissionNames.AddRoleTransportationDispatcher, PermissionNames.AddRoleUserDataVerifier) ? "" : "disabled")">
+            <div class="btn-group">
+                @*<a data-toggle="modal" data-target="@($"#{dialogIdPrefix}-roles-modal")" href="#" data-route="@Url.Action("EditRoleDialogPartial", "User", new {userId = user.Id})" class="btn btn-sm btn-primary @Html.Raw(User.HasAnyPermission(PermissionNames.ManageUserRoles, PermissionNames.AddRolePortalAdmin, PermissionNames.AddRoleTransportationDispatcher, PermissionNames.AddRoleUserDataVerifier) ? "" : "disabled")">
                     @Localizer.Translate("roles")
-                </a>
-                <a asp-action="Edit" asp-route-userId="@user.Id" class="btn btn-sm btn-primary @(User.HasPermission(PermissionNames.EditAnyUsersData) ? "" : "disabled")">
-                    @Localizer.Translate("edit")
-                </a>
-
-                <form asp-action="Delete" asp-route-id="@user.Id" id="@deleteFormId" hidden>
-                    <input type="hidden" name="id" value="@user.Id" />
-                </form>
-                <a data-toggle="modal" class="delete btn btn-sm btn-primary @(User.HasPermission(PermissionNames.EditAnyUsersData) ? "" : "disabled")" data-target="@($"#{dialogIdPrefix}-{DialogHelper.DefaultDialogId}")" href="#" data-formid="@deleteFormId" data-info="@user.Username">
-                    @Localizer.Translate("delete")
+                </a>*@
+                <a asp-action="EditUser" asp-route-userId="@user.Id" class="btn btn-sm btn-default @(User.HasPermission(PermissionNames.ManagePermissions) ? "" : "disabled")">
+                    @Localizer.Translate("Edit", "Permission")
                 </a>
 
-            </div>*@
-            </td>
-        </tr>
-    }
+                @*
+                    <form asp-action="Delete" asp-route-id="@user.Id" id="@deleteFormId" hidden>
+                        <input type="hidden" name="id" value="@user.Id" />
+                    </form>
+                    <a data-toggle="modal" class="delete btn btn-sm btn-primary @(User.HasPermission(PermissionNames.ManagePermissions) ? "" : "disabled")" data-target="@($"#{dialogIdPrefix}-{DialogHelper.DefaultDialogId}")" href="#" data-formid="@deleteFormId" data-info="@user.Username">
+                        @Localizer.Translate("delete")
+                    </a>
+                *@
+            </div>
+        </td>
+    </tr>
+}

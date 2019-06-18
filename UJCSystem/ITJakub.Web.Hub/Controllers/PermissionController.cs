@@ -42,6 +42,16 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        public ActionResult EditUser(int userId)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetUserDetail(userId);
+                var model = Mapper.Map<UpdateAccountViewModel>(result);
+                return View(model);
+            }
+        }
+
         public ActionResult GroupPermission()
         {
             return View();
