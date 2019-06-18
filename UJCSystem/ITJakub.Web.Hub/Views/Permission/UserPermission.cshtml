@@ -1,4 +1,5 @@
 ﻿@model ITJakub.Web.Hub.Areas.Admin.Models.UserListViewModel
+@using ITJakub.Web.Hub.Constants
 @using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
 
@@ -9,6 +10,7 @@
 }
 @section styles{
     <link href="~/css/ITJakub.Permission.css" rel="stylesheet" />
+    <link href="~/css/ridics.permissions.css" rel="stylesheet" />
 }
 @section scripts{
     <script src="~/js/Permission/itjakub.permission.user.js"></script>
@@ -18,6 +20,18 @@
 
 <h2>@Localizer.Translate("UserPermissionManagementHeadline", "Permission", LocTranslationSource.File)</h2>
 
+<div class="row page-control">
+    <div class="col-12 col-sm-offset-6 col-sm-6 col-lg-offset-8 col-lg-4 col-xl-offset-9 col-xl-3">
+        <form asp-action="UserPermission" asp-controller="Permission" method="get" class="search-form form-inline">
+            <div class="form-group">
+                <div class="search-button">
+                    <button class="btn btn-default" type="submit">@Localizer.Translate("Search", "Permission")</button>
+                </div>
+                <input class="form-control search-value" name="search" value="@ViewData[PermissionConstants.Search]" />
+            </div>
+        </form>
+    </div>
+</div>
 <div id="list-container">
     @await Html.PartialAsync("_UserList", Model)
 </div>

@@ -1,6 +1,6 @@
 {
-	"culture":"en",
-	"scope":"Permission",
+  "culture": "en",
+  "scope": "Permission",
   "dictionary": {
     "GroupPermissionManagementTitle": "Administration - Group management",
     "GroupPermissionManagementHeadline": "Group management",
@@ -37,6 +37,11 @@
     "CreateNew": "Create new",
     "AddUserToGroup": "Add user to group",
     "Edit": "Edit",
-    "EditUser": "Edit user"
+    "EditUser": "Edit user",
+    "Search": "Search",
+    "NoUsersSearch": "Sorry, but we could not find any user matching ",
+    "NoUsersFound": "Sorry, but no users were found",
+    "SearchQuery": "Showing results for",
+    "ResetSearch": "Reset search"
   }
 }

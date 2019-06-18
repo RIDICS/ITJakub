@@ -1,28 +1,48 @@
-﻿@model ITJakub.Web.Hub.Areas.Admin.Models.UserListViewModel
+﻿@using ITJakub.Web.Hub.Constants
+@using Scalesoft.Localization.AspNetCore
+@model ITJakub.Web.Hub.Areas.Admin.Models.UserListViewModel
+
+@inject ILocalizationService Localizer
+
+
+@if (!string.IsNullOrEmpty((string) ViewData[PermissionConstants.Search]))
+{
+    <div class="row reset-search">
+        <div class="query">
+            <span class="text-nowrap">@Localizer.Translate("SearchQuery", "Permission"): <span class="searched-query">@ViewData[PermissionConstants.Search]</span></span>
+        </div>
+        <div class="reset-search-form">
+            <form asp-action="UserPermission" asp-controller="Permission" method="get" class="">
+                <input type="hidden" class="reset-search-count" name="count"/>
+                <button type="submit" class="btn btn-sm btn-default">@Localizer.Translate("ResetSearch", "Permission")</button>
+            </form>
+        </div>
+    </div>
+}
 
 @if (Model != null && Model.List.Count != 0)
 {
     <div class="table-responsive">
         <table class="table table-hover">
             <thead class="thead-light administration-table-head">
-                <tr>
-                    <th class="align-middle">
-                        @Html.DisplayNameFor(model => model.List[0].UserName)
-                    </th>
-                    <th class="align-middle">
-                        @Html.DisplayNameFor(model => model.List[0].FirstName)
-                    </th>
-                    <th class="align-middle">
-                        @Html.DisplayNameFor(model => model.List[0].LastName)
-                    </th>
-                    <th class="align-middle">
-                        @Html.DisplayNameFor(model => model.List[0].Email)
-                    </th>
-                    <th></th>
-                </tr>
+            <tr>
+                <th class="align-middle">
+                    @Html.DisplayNameFor(model => model.List[0].UserName)
+                </th>
+                <th class="align-middle">
+                    @Html.DisplayNameFor(model => model.List[0].FirstName)
+                </th>
+                <th class="align-middle">
+                    @Html.DisplayNameFor(model => model.List[0].LastName)
+                </th>
+                <th class="align-middle">
+                    @Html.DisplayNameFor(model => model.List[0].Email)
+                </th>
+                <th></th>
+            </tr>
             </thead>
             <tbody>
-                @await Html.PartialAsync("_ListPage", Model)
+            @await Html.PartialAsync("_ListPage", Model)
             </tbody>
         </table>
     </div>
@@ -31,15 +51,14 @@ else
 {
     <div class="alert alert-info">
         <i class="fa fa-info-circle fa-lg"></i>
-        @*
-            @if (!string.IsNullOrEmpty((string)ViewData["search"]))
-            {
-                @(Localizer.Translate("no-users-search", "UserViewModel") + "\"")<span class="searched-query">@ViewData["search"]</span>
-                @("\"")
-            }
-            else
-            {
-                @Localizer.Translate("no-users-found", "UserViewModel")
-            }*@
+        @if (!string.IsNullOrEmpty((string) ViewData[PermissionConstants.Search]))
+        {
+            @(Localizer.Translate("NoUsersSearch", "Permission") + "\"")<span class="searched-query">@ViewData[PermissionConstants.Search]</span>
+            @("\"")
+        }
+        else
+        {
+            @Localizer.Translate("NoUsersFound", "Permission")
+        }
     </div>
 }

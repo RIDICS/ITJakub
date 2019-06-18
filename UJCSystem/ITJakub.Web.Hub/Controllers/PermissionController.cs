@@ -2,6 +2,7 @@
 using System.Linq;
 using AutoMapper;
 using ITJakub.Web.Hub.Areas.Admin.Models;
+using ITJakub.Web.Hub.Constants;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.DataContracts;
 using ITJakub.Web.Hub.Helpers;
@@ -26,13 +27,15 @@ namespace ITJakub.Web.Hub.Controllers
         {
         }
 
-        public ActionResult UserPermission(bool partial, int start, int count = 5, string query = "")
+        public ActionResult UserPermission(bool partial, string search, int start, int count = 5)
         {
             using (var client = GetRestClient())
             {
-                var result = client.GetUserList(start, count, query);
+                search = search ?? string.Empty;
+                var result = client.GetUserList(start, count, search);
                 var model = CreateProjectListViewModel(result, start);
 
+                ViewData[PermissionConstants.Search] = search;
                 if (partial)
                 {
                     return PartialView("_UserList", model);

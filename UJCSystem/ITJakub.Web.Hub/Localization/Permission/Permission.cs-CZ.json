@@ -37,6 +37,11 @@
     "CreateNew": "Vytvoření nové",
     "AddUserToGroup": "Přiřadit",
     "Edit": "Upravit",
-    "EditUser": "Úprava uživatele"
+    "EditUser": "Úprava uživatele",
+    "Search": "Hledat",
+    "NoUsersSearch": "Je nám líto, ale nepodařilo se najít žádné uživatele odpovídající dotazu ",
+    "NoUsersFound": "Je nám líto, ale nebyly nalezeni žádní uživatelé",
+    "SearchQuery": "Zobrazují se výsledky pro",
+    "ResetSearch": "Zrušit hledání"
   }
 }
