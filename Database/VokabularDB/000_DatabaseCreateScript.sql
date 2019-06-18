@@ -27,17 +27,8 @@ BEGIN TRAN
     CREATE TABLE [dbo].[User]
     (
 	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_User(Id)] PRIMARY KEY CLUSTERED,
-	   [FirstName] nvarchar(50) NOT NULL,
-	   [LastName] nvarchar(50) NOT NULL,
-	   [Email] varchar(255) NOT NULL,
-	   [UserName] varchar(50) NOT NULL CONSTRAINT [UQ_User(UserName)] UNIQUE,
-	   [AuthenticationProvider] tinyint NOT NULL,
-	   [CommunicationToken] varchar(255) CONSTRAINT [UQ_User(CommunicationToken)] NOT NULL UNIQUE,
-	   [CommunicationTokenCreateTime] datetime NULL,
-	   [PasswordHash] varchar(255) NULL,
 	   [CreateTime] datetime NOT NULL,
-	   [AvatarUrl] varchar(255) NULL,
-	   CONSTRAINT [UQ_User(Email)(AuthProvider)] UNIQUE ([Email],[AuthenticationProvider])
+	   [ExternalId] int NULL CONSTRAINT [UQ_User(ExternalId)] UNIQUE,
     )
 	
     CREATE TABLE [dbo].[OriginalAuthor]

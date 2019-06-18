@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Vokabular.Core;
 using Vokabular.MainService.Core.AutoMapperProfiles;
+using Vokabular.MainService.Core.AutoMapperProfiles.Authentication;
 using Vokabular.MainService.Core.AutoMapperProfiles.CardFile;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers;
@@ -38,18 +39,20 @@ namespace Vokabular.MainService.Core
             services.AddScoped<ProjectMetadataManager>();
             services.AddScoped<ProjectResourceManager>();
             services.AddScoped<TermManager>();
-            services.AddScoped<UserGroupManager>();
+            services.AddScoped<UserDetailManager>();
+            services.AddScoped<RoleManager>();
             services.AddScoped<UserManager>();
-
-            services.AddScoped<ICommunicationTokenGenerator, GuidCommunicationTokenGenerator>();
-            services.AddScoped<ICommunicationTokenProvider, HttpHeaderCommunicationTokenProvider>();
 
             services.AddScoped<CommunicationConfigurationProvider>();
             services.AddScoped<CommunicationProvider>();
             services.AddScoped<DefaultUserProvider>();
+            services.AddScoped<PermissionConverter>();
             services.AddScoped<FulltextStorageProvider>();
             services.AddScoped<IFulltextStorage, ExistDbStorage>();
             services.AddScoped<IFulltextStorage, ElasticSearchStorage>();
+
+            services.AddSingleton<Profile, AuthUserProfile>();
+            services.AddSingleton<Profile, RoleProfile>();
 
             services.AddSingleton<Profile, AudioProfile>();
             services.AddSingleton<Profile, BookProfile>();
@@ -73,13 +76,11 @@ namespace Vokabular.MainService.Core
             services.AddSingleton<Profile, ProjectProfile>();
             services.AddSingleton<Profile, ResourceProfile>();
             services.AddSingleton<Profile, ResponsiblePersonProfile>();
-            services.AddSingleton<Profile, SpecialPermissionProfile>();
             services.AddSingleton<Profile, TermProfile>();
             services.AddSingleton<Profile, TextCommentProfile>();
             services.AddSingleton<Profile, TextProfile>();
             services.AddSingleton<Profile, TrackProfile>();
             services.AddSingleton<Profile, TransformationProfile>();
-            services.AddSingleton<Profile, UserGroupProfile>();
             services.AddSingleton<Profile, UserProfile>();
 
             services.AddSingleton<Profile, BucketContractProfile>();

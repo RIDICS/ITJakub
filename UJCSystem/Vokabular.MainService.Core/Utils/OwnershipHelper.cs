@@ -20,7 +20,7 @@ namespace Vokabular.MainService.Core.Utils
             if (user.Id != itemOwnerUser.Id)
             {
                 throw new HttpErrorCodeException(
-                    $"Current user ({user.UserName}) doesn't have permission manipulate with specified item owned by user with ID={itemOwnerUser.Id}", HttpStatusCode.Forbidden);
+                    $"Current user with id '{user.Id}' (external id '{user.ExternalId}') doesn't have permission manipulate with specified item owned by user with ID={itemOwnerUser.Id}", HttpStatusCode.Forbidden);
             }
         }
     }

@@ -24,14 +24,14 @@ namespace ITJakub.Web.Hub.Controllers
             m_markdownToHtmlConverter = markdownToHtmlConverter;
         }
 
-        [Authorize(Roles = CustomRole.CanEditStaticText)]
+        [Authorize(PermissionNames.EditStaticText)]
         public ActionResult Editor(string textName, string scope)
         {
             var viewModel = m_staticTextManager.GetText(textName, scope);
             return View("TextEditor", viewModel);
         }
 
-        [Authorize(Roles = CustomRole.CanEditStaticText)]
+        [Authorize(PermissionNames.EditStaticText)]
         public ActionResult SaveText([FromBody] StaticTextViewModel viewModel)
         {
             var username = GetUserName();
@@ -41,7 +41,7 @@ namespace ITJakub.Web.Hub.Controllers
             return Json(modificationUpdate);
         }
 
-        [Authorize(Roles = CustomRole.CanEditStaticText)]
+        [Authorize(PermissionNames.EditStaticText)]
         public ActionResult RenderPreview([FromBody] RenderTextPreviewRequest request)
         {
             string result;

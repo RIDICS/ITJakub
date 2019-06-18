@@ -7,17 +7,13 @@
       <generator class="identity" />
     </id>
     
-    <property name="Name" not-null="true" unique="true" />
+    <property name="Name" not-null="false" />
     
-    <property name="Description" not-null="false" />
-
     <property name="CreateTime" not-null="true" type="UtcDateTime" />
-
-    <many-to-one name="CreatedBy" not-null="false">
-      <column name="CreatedBy" sql-type="bigint" />
-    </many-to-one>
     
-    <bag name="Users" table="User_UserGroup" lazy="true">
+    <property name="ExternalId" not-null="true" unique="true" />
+
+    <bag name="Users" table="User_UserGroup" lazy="true" inverse="true">
       <key column="[UserGroup]" />
       <many-to-many class="User" column="[User]" />
     </bag>
@@ -26,11 +22,5 @@
       <key column="[UserGroup]" />
       <one-to-many class="Permission" />
     </bag>
-
-    <bag name="SpecialPermissions" table="SpecialPermission_UserGroup">
-      <key column="[UserGroup]" />
-      <many-to-many class="SpecialPermission" column="[SpecialPermission]" />
-    </bag>
-    
   </class>
 </hibernate-mapping>

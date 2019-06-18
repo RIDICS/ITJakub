@@ -17,11 +17,11 @@ namespace ITJakub.Web.Hub
             services.AddScoped<CommunicationConfigurationProvider>();
             services.AddScoped<StaticTextManager>();
             services.AddScoped<FeedbacksManager>();
-            services.AddScoped<AuthenticationManager>();
 
             services.AddScoped<IMarkdownToHtmlConverter, MarkdigMarkdownToHtmlConverter>();
 
             // AutoMapper profiles
+            services.AddSingleton<Profile, AccountDetailProfile>();
             services.AddSingleton<Profile, ConditionCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, DatingCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, DatingListCriteriaDescriptionProfile>();

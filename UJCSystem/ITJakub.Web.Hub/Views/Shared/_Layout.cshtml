@@ -2,6 +2,7 @@
 @using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
 @using Vokabular.Shared.Const
+@using Vokabular.Shared.AspNetCore.Extensions
 
 @inject ILocalizationService Localizer
 
@@ -343,43 +344,43 @@
                             @if (User.Identity.IsAuthenticated)
                             {
                                 <li id="admin-menu" class="has-sub last">
-                                    @if (User.IsInRole(CustomRole.CanUploadBooks))
+                                    @if (User.HasPermission(PermissionNames.UploadBook))
                                     {
                                         <a href='@Url.Action("Upload", "Upload", new {area = ""})'>
                                             <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     }
-                                    else if (User.IsInRole(CustomRole.CanEditLemmatization))
+                                    else if (User.HasPermission(PermissionNames.EditLemmatization))
                                     {
                                         <a href="@Url.Action("Index", "Lemmatization", new {area = "Lemmatization"})">
                                             <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     }
-                                    else if (User.IsInRole(CustomRole.CanReadLemmatization))
+                                    else if (User.HasPermission(PermissionNames.ReadLemmatization))
                                     {
                                         <a href="@Url.Action("List", "Lemmatization", new {area = "Lemmatization"})">
                                             <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     }
-                                    else if (User.IsInRole(CustomRole.CanDerivateLemmatization))
+                                    else if (User.HasPermission(PermissionNames.DerivateLemmatization))
                                     {
                                         <a href="@Url.Action("Index", "Derivation", new {area = "Derivation"})">
                                             <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     }
-                                    else if (User.IsInRole(CustomRole.CanManagePermissions))
+                                    else if (User.HasPermission(PermissionNames.ManagePermissions))
                                     {
                                         <a href='@Url.Action("UserPermission", "Permission", new {area = ""})'>
                                             <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     }
-                                    else if (User.IsInRole(CustomRole.CanManageFeedbacks))
+                                    else if (User.HasPermission(PermissionNames.ManageFeedbacks))
                                     {
                                         <a href='@Url.Action("Feedback", "Feedback", new {area = ""})'>
                                             <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     }
-                                    else if (User.IsInRole(CustomRole.CanAddNews))
+                                    else if (User.HasPermission(PermissionNames.AddNews))
                                     {
                                         <a href='@Url.Action("Add", "News", new {area = ""})'>
                                             <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
@@ -392,7 +393,7 @@
                                         </a>
                                     }
                                     <ul>
-                                        @if (User.IsInRole(CustomRole.CanUploadBooks))
+                                        @if (User.HasPermission(PermissionNames.UploadBook))
                                         {
                                             <li>
                                                 <a href='@Url.Action("Upload", "Upload", new {area = ""})'>
@@ -401,7 +402,7 @@
                                             </li>
                                         }
 
-                                        @if (User.IsInRole(CustomRole.CanReadLemmatization) || User.IsInRole(CustomRole.CanEditLemmatization))
+                                        @if (User.HasPermission(PermissionNames.ReadLemmatization) || User.HasPermission(PermissionNames.EditLemmatization))
                                         {
                                             <li>
                                                 <a href="@Url.Action("Index", "Lemmatization", new {area = "Lemmatization"})">
@@ -415,7 +416,7 @@
                                             </li>
                                         }
 
-                                        @if (User.IsInRole(CustomRole.CanDerivateLemmatization))
+                                        @if (User.HasPermission(PermissionNames.DerivateLemmatization))
                                         {
                                             <li>
                                                 <a href="@Url.Action("Index", "Derivation", new {area = "Derivation"})">
@@ -424,7 +425,7 @@
                                             </li>
                                         }
 
-                                        @if (User.IsInRole(CustomRole.CanManagePermissions))
+                                        @if (User.HasPermission(PermissionNames.ManagePermissions))
                                         {
                                             <li>
                                                 <a href='@Url.Action("UserPermission", "Permission", new {area = ""})'>
@@ -438,7 +439,7 @@
                                             </li>
                                         }
 
-                                        @if (User.IsInRole(CustomRole.CanManageFeedbacks))
+                                        @if (User.HasPermission(PermissionNames.ManageFeedbacks))
                                         {
                                             <li>
                                                 <a href='@Url.Action("Feedback", "Feedback", new {area = ""})'>
@@ -453,7 +454,7 @@
                                             </a>
                                         </li>
 
-                                        @if (User.IsInRole(CustomRole.CanAddNews))
+                                        @if (User.HasPermission(PermissionNames.AddNews))
                                         {
                                             <li>
                                                 <a href='@Url.Action("Add", "News", new {area = ""})'>
@@ -474,7 +475,7 @@
     </div>
 
     <div id="baseUrl" data-path="@Url.Content("~/")" style="display: none"></div>
-    <div id="permissions-div" class="hidden" data-is-authenticated="@User.Identity.IsAuthenticated" data-roles="@if (User.IsInRole(CustomRole.CanEditLemmatization))
+    <div id="permissions-div" class="hidden" data-is-authenticated="@User.Identity.IsAuthenticated" data-roles="@if (User.HasPermission(PermissionNames.EditLemmatization))
                                                                                                     {@Html.Raw("EditLemmatization")
                                                                                                     } "></div>
 <div class="page-body-content">

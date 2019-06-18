@@ -54,6 +54,7 @@ function replaceSpecialChars(text : string): string {
 }
 
 function escapeHtmlChars(text: string): string {
+    if (!text) return "";
     var map = {
         "&": "&amp;",
         "<": "&lt;",

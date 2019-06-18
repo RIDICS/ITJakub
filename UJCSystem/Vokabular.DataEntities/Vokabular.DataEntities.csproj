@@ -26,7 +26,6 @@
     <None Remove="Database\Entities\ResourceVersion.hbm.xml" />
     <None Remove="Database\Entities\ResponsiblePerson.hbm.xml" />
     <None Remove="Database\Entities\ResponsibleType.hbm.xml" />
-    <None Remove="Database\Entities\SpecialPermission.hbm.xml" />
     <None Remove="Database\Entities\Term.hbm.xml" />
     <None Remove="Database\Entities\TermCategory.hbm.xml" />
     <None Remove="Database\Entities\Transformation.hbm.xml" />
@@ -38,7 +37,6 @@
     <EmbeddedResource Include="Database\Entities\BookType.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\UserGroup.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Permission.hbm.xml" />
-    <EmbeddedResource Include="Database\Entities\SpecialPermission.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\TextComment.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Category.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\FavoriteBase.hbm.xml" />

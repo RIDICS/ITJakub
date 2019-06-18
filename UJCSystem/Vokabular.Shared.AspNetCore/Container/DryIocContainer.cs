@@ -4,6 +4,7 @@ using System.Reflection;
 using DryIoc;
 using DryIoc.Microsoft.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Vokabular.Shared.Container;
 
 namespace Vokabular.Shared.AspNetCore.Container
@@ -65,6 +66,18 @@ namespace Vokabular.Shared.AspNetCore.Container
         {
             m_container.Populate(services);
             return m_container.Resolve<IServiceProvider>();
+        }
+
+        public void RegisterLogger()
+        {
+            m_container.Register(Made.Of(
+                () => CreateLogger(Arg.Of<ILoggerFactory>(), Arg.Index<Type>(0)),
+                request => request.Parent.ImplementationType));
+        }
+
+        private static ILogger CreateLogger(ILoggerFactory loggerProvider, Type type)
+        {
+            return loggerProvider.CreateLogger(type);
         }
     }
 }

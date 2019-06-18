@@ -23,39 +23,42 @@ namespace Vokabular.MainService.Core.Managers
         private readonly MetadataRepository m_metadataRepository;
         private readonly BookRepository m_bookRepository;
         private readonly ResourceRepository m_resourceRepository;
+        private readonly PermissionRepository m_permissionRepository;
         private readonly FileSystemManager m_fileSystemManager;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
         private readonly AuthorizationManager m_authorizationManager;
+        private readonly AuthenticationManager m_authenticationManager;
         private readonly CategoryRepository m_categoryRepository;
         private readonly BookTypeEnum[] m_filterBookType;
 
         public BookManager(MetadataRepository metadataRepository, CategoryRepository categoryRepository,
-            BookRepository bookRepository, ResourceRepository resourceRepository, FileSystemManager fileSystemManager,
-            FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager)
+            BookRepository bookRepository, ResourceRepository resourceRepository, PermissionRepository permissionRepository,
+            FileSystemManager fileSystemManager, FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager,
+            AuthenticationManager authenticationManager)
         {
             m_metadataRepository = metadataRepository;
             m_bookRepository = bookRepository;
             m_resourceRepository = resourceRepository;
+            m_permissionRepository = permissionRepository;
             m_fileSystemManager = fileSystemManager;
             m_fulltextStorageProvider = fulltextStorageProvider;
             m_authorizationManager = authorizationManager;
+            m_authenticationManager = authenticationManager;
             m_categoryRepository = categoryRepository;
             m_filterBookType = new[] {BookTypeEnum.CardFile};
         }
-        
+
         public List<BookWithCategoriesContract> GetBooksByTypeForUser(BookTypeEnumContract bookType)
         {
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
-            var userId = m_authorizationManager.GetCurrentUserId();
-            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByBookType(bookTypeEnum, userId));
+            var user = m_authenticationManager.GetCurrentUser(true);
+            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByBookType(bookTypeEnum, user.Id));
             var resultList = Mapper.Map<List<BookWithCategoriesContract>>(dbMetadataList);
             return resultList;
         }
 
         public List<BookContract> GetAllBooksByType(BookTypeEnumContract bookType)
-        {
-            m_authorizationManager.CheckUserCanManagePermissions();
-            
+        {           
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
             var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetAllMetadataByBookType(bookTypeEnum));
             var resultList = Mapper.Map<List<BookContract>>(dbMetadataList);
@@ -69,11 +72,12 @@ namespace Vokabular.MainService.Core.Managers
             var result = Mapper.Map<List<BookTypeContract>>(filteredResult);
             return result;
         }
-        
-        public List<BookContract> GetBooksForUserGroup(int groupId, BookTypeEnumContract bookType)
+
+        public List<BookContract> GetBooksForRole(int roleId, BookTypeEnumContract bookType)
         {
+            var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalIdOrCreate(roleId));
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
-            var dbResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataForUserGroup(bookTypeEnum, groupId));
+            var dbResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataForUserGroup(bookTypeEnum, group.Id));
             var result = Mapper.Map<List<BookContract>>(dbResult);
             return result;
         }
@@ -233,7 +237,8 @@ namespace Vokabular.MainService.Core.Managers
                 return null;
             }
 
-            var imageStream = m_fileSystemManager.GetResource(imageResource.Resource.Project.Id, null, imageResource.FileId, ResourceType.Image);
+            var imageStream =
+                m_fileSystemManager.GetResource(imageResource.Resource.Project.Id, null, imageResource.FileId, ResourceType.Image);
             return new FileResultData
             {
                 FileName = imageResource.FileName,
@@ -253,7 +258,8 @@ namespace Vokabular.MainService.Core.Managers
                 return null;
             }
 
-            var fileStream = m_fileSystemManager.GetResource(audioResource.Resource.Project.Id, null, audioResource.FileId, ResourceType.Audio);
+            var fileStream =
+                m_fileSystemManager.GetResource(audioResource.Resource.Project.Id, null, audioResource.FileId, ResourceType.Audio);
 
             return new FileResultData
             {
@@ -282,7 +288,8 @@ namespace Vokabular.MainService.Core.Managers
             return result;
         }
 
-        public List<string> GetHeadwordAutocomplete(string query, BookTypeEnumContract? bookType, IList<int> selectedCategoryIds, IList<long> selectedProjectIds)
+        public List<string> GetHeadwordAutocomplete(string query, BookTypeEnumContract? bookType, IList<int> selectedCategoryIds,
+            IList<long> selectedProjectIds)
         {
             var userId = m_authorizationManager.GetCurrentUserId();
             var bookTypeEnum = Mapper.Map<BookTypeEnum?>(bookType);
@@ -291,7 +298,8 @@ namespace Vokabular.MainService.Core.Managers
                 var allCategoryIds = selectedCategoryIds.Count > 0
                     ? m_categoryRepository.GetAllSubcategoryIds(selectedCategoryIds)
                     : selectedCategoryIds;
-                return x.GetHeadwordAutocomplete(query, bookTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteCount, userId);
+                return x.GetHeadwordAutocomplete(query, bookTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteCount,
+                    userId);
             });
             return result.ToList();
         }
