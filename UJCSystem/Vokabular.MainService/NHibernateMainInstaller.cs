@@ -4,7 +4,6 @@ using System.Reflection;
 using DryIoc;
 using log4net;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Connection;
@@ -17,7 +16,7 @@ using Vokabular.Shared.Options;
 
 namespace Vokabular.MainService
 {
-    public static class NHibernateInstaller
+    public static class NHibernateMainInstaller
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -45,11 +44,11 @@ namespace Vokabular.MainService
             {
                 var sessionFactory = cfg.BuildSessionFactory();
 
-                container.UseInstance(cfg, serviceKey: "default");
+                container.UseInstance(cfg, serviceKey: IocServiceKeys.Main);
 
-                container.UseInstance(sessionFactory, serviceKey: "default");
+                container.UseInstance(sessionFactory, serviceKey: IocServiceKeys.Main);
 
-                container.Register<UnitOfWork>(Reuse.InWebRequest, Made.Of(() => new UnitOfWork(Arg.Of<ISessionFactory>("default"))), serviceKey: "default");
+                container.Register<UnitOfWork>(Reuse.Scoped, Made.Of(() => new UnitOfWork(Arg.Of<ISessionFactory>(IocServiceKeys.Main))), serviceKey: IocServiceKeys.Main);
             }
             catch (SqlException e)
             {

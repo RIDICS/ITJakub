@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Vokabular.Core;
-using Vokabular.ForumSite.Core.Helpers;
 using Vokabular.MainService.Core.AutoMapperProfiles;
 using Vokabular.MainService.Core.AutoMapperProfiles.Authentication;
 using Vokabular.MainService.Core.AutoMapperProfiles.CardFile;
@@ -44,8 +43,6 @@ namespace Vokabular.MainService.Core
             services.AddScoped<UserDetailManager>();
             services.AddScoped<RoleManager>();
             services.AddScoped<UserManager>();
-
-            services.AddScoped<ForumSiteUrlHelper>();
 
             services.AddScoped<CommunicationConfigurationProvider>();
             services.AddScoped<CommunicationProvider>();

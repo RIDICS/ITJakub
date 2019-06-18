@@ -139,7 +139,6 @@ namespace Vokabular.MainService
             container.RegisterLogger();
             Container = container;
 
-            container.Install<MainServiceContainerRegistration>();
             container.InnerContainer.AddNHibernateDefaultDatabase();
             container.InnerContainer.AddNHibernateForumDatabase();
 
@@ -147,6 +146,7 @@ namespace Vokabular.MainService
                 () => GetCorrectUnitOfWork(Arg.Of<IResolver>(), Arg.Index<Type>(0)),
                 request => request.Parent.ImplementationType));
 
+            container.Install<MainServiceContainerRegistration>();
             container.Install<ForumCoreContainerRegistration>();
 
             return container.CreateServiceProvider(services);
@@ -157,10 +157,10 @@ namespace Vokabular.MainService
             // TODO better logic for selecting correct UnitOfWork
             if (parentImplementationType.Namespace != null && parentImplementationType.Namespace.StartsWith("Vokabular.ForumSite"))
             {
-                return resolver.Resolve<UnitOfWork>("forum");
+                return resolver.Resolve<UnitOfWork>(IocServiceKeys.Forum);
             }
 
-            return resolver.Resolve<UnitOfWork>("default");
+            return resolver.Resolve<UnitOfWork>(IocServiceKeys.Main);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Vokabular.ForumSite.DataEntities.Database.Repositories;
 using Vokabular.Shared.Container;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.ForumSite.DataEntities
 {
@@ -8,6 +10,8 @@ namespace Vokabular.ForumSite.DataEntities
     {
         public void Install(IServiceCollection services)
         {
+            services.TryAddScoped<IUnitOfWork, UnitOfWork>();
+
             services.AddScoped<AccessMaskRepository>();
             services.AddScoped<BoardRepository>();
             services.AddScoped<CategoryRepository>();

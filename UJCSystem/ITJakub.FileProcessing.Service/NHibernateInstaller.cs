@@ -38,8 +38,6 @@ namespace ITJakub.FileProcessing.Service
             services.AddSingleton(cfg);
 
             services.AddSingleton(sessionFactory);
-
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
     }
 }

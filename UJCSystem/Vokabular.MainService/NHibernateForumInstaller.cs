@@ -47,11 +47,11 @@ namespace Vokabular.MainService
             {
                 var sessionFactory = cfg.BuildSessionFactory();
 
-                container.UseInstance(cfg, serviceKey: "forum");
+                container.UseInstance(cfg, serviceKey: IocServiceKeys.Forum);
 
-                container.UseInstance(sessionFactory, serviceKey: "forum");
+                container.UseInstance(sessionFactory, serviceKey: IocServiceKeys.Forum);
 
-                container.Register<UnitOfWork>(Reuse.InWebRequest, Made.Of(() => new UnitOfWork(Arg.Of<ISessionFactory>("forum"))), serviceKey: "forum");
+                container.Register<UnitOfWork>(Reuse.Scoped, Made.Of(() => new UnitOfWork(Arg.Of<ISessionFactory>(IocServiceKeys.Forum))), serviceKey: IocServiceKeys.Forum);
             }
             catch (SqlException e)
             {
