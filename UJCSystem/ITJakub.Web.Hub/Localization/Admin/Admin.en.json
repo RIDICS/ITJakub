@@ -188,8 +188,8 @@
     "Forum": "Forum",
     "URL": "URL",
     "Repair": "Repair",
-    "ForumRepairText": "The forum is not created or is not connected with Vokabular!",
+    "ForumRepairText": "The forum is not created or is not connected with Vokabulář webový.",
     "ForumRepairSuccess": "The forum was created",
-    "ForumRepairError": "Error. The forum was not created"
+    "ForumRepairError": "Error, the forum was not created"
   }
 }
