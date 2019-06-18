@@ -100,7 +100,7 @@ namespace ITJakub.Web.Hub.Models
 
     public class UserDetailViewModel
     {
-        public int Id { get; }
+        public int Id { get; set; }
 
         [Display(Name = "UserName")]
         public string UserName { get; set; }
