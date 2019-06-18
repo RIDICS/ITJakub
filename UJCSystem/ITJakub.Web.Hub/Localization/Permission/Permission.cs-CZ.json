@@ -42,6 +42,7 @@
     "NoUsersSearch": "Je nám líto, ale nepodařilo se najít žádné uživatele odpovídající dotazu ",
     "NoUsersFound": "Je nám líto, ale nebyly nalezeni žádní uživatelé",
     "SearchQuery": "Zobrazují se výsledky pro",
-    "ResetSearch": "Zrušit hledání"
+    "ResetSearch": "Zrušit hledání",
+    "Groups": "Skupiny"
   }
 }

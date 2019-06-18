@@ -21,27 +21,12 @@
             @Html.DisplayFor(modelItem => user.Email)
         </td>
         <td class="buttons">
-            @{
-                var deleteFormId = $"delete_{Guid.NewGuid().ToString("N")}";
-            }
-
-            <div class="btn-group">
-                @*<a data-toggle="modal" data-target="@($"#{dialogIdPrefix}-roles-modal")" href="#" data-route="@Url.Action("EditRoleDialogPartial", "User", new {userId = user.Id})" class="btn btn-sm btn-primary @Html.Raw(User.HasAnyPermission(PermissionNames.ManageUserRoles, PermissionNames.AddRolePortalAdmin, PermissionNames.AddRoleTransportationDispatcher, PermissionNames.AddRoleUserDataVerifier) ? "" : "disabled")">
-                    @Localizer.Translate("roles")
-                </a>*@
-                <a asp-action="EditUser" asp-route-userId="@user.Id" class="btn btn-sm btn-default @(User.HasPermission(PermissionNames.ManagePermissions) ? "" : "disabled")">
+        <a asp-action="EditUser" asp-route-userId="@user.Id" class="btn btn-sm btn-default @(User.HasPermission(PermissionNames.ManagePermissions) ? "" : "disabled")">
                     @Localizer.Translate("Edit", "Permission")
                 </a>
-
-                @*
-                    <form asp-action="Delete" asp-route-id="@user.Id" id="@deleteFormId" hidden>
-                        <input type="hidden" name="id" value="@user.Id" />
-                    </form>
-                    <a data-toggle="modal" class="delete btn btn-sm btn-primary @(User.HasPermission(PermissionNames.ManagePermissions) ? "" : "disabled")" data-target="@($"#{dialogIdPrefix}-{DialogHelper.DefaultDialogId}")" href="#" data-formid="@deleteFormId" data-info="@user.Username">
-                        @Localizer.Translate("delete")
-                    </a>
-                *@
-            </div>
+                <a asp-action="EditUserGroups" asp-route-userId="@user.Id" class="btn btn-sm btn-default @(User.HasPermission(PermissionNames.ManagePermissions) ? "" : "disabled")">
+                    @Localizer.Translate("Groups", "Permission")
+                </a>
         </td>
     </tr>
 }

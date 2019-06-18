@@ -55,6 +55,11 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        public ActionResult EditUserGroups(int userId)
+        {
+            return View();
+        }
+
         public ActionResult GroupPermission()
         {
             return View();

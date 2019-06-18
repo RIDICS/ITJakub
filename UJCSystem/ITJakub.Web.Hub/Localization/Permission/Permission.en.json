@@ -42,6 +42,7 @@
     "NoUsersSearch": "Sorry, but we could not find any user matching ",
     "NoUsersFound": "Sorry, but no users were found",
     "SearchQuery": "Showing results for",
-    "ResetSearch": "Reset search"
+    "ResetSearch": "Reset search",
+    "Groups": "Groups"
   }
 }
