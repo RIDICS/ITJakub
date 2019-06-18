@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Core.Communication;
@@ -9,7 +8,6 @@ using ITJakub.Web.Hub.Helpers;
 using ITJakub.Web.Hub.Models.Requests.Permission;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Vokabular.Authentication.Client.Exceptions;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Results;
@@ -32,14 +30,8 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetRestClient())
             {
                 count = count == 0 ? UserListPageSize : count;
-                var result = client.GetUserList(start, count, string.Empty);
-                var model = new UserListViewModel
-                {
-                    TotalCount = result.TotalCount,
-                    List = result.List,
-                    PageSize = count,
-                    Start = start
-                };
+                var result = client.GetUserList(start, count, query);
+                var model = CreateProjectListViewModel(result, start);
 
                 if (partial)
                 {
@@ -81,24 +73,6 @@ namespace ITJakub.Web.Hub.Controllers
                 return Json(result);
             }
         }
-
-        public ActionResult UserList(int start, int count, string query)
-        {
-            using (var client = GetRestClient())
-            {
-                count = count == 0 ? 5 : count;
-                var result = client.GetUserList(start, count, query);
-                var model = new UserListViewModel
-                {
-                    TotalCount = result.TotalCount,
-                    List = result.List,
-                    PageSize = 5,
-                    Start = start
-                };
-                return View(model);
-            }
-        }
-
 
         public ActionResult GetGroup(int groupId)
         {
