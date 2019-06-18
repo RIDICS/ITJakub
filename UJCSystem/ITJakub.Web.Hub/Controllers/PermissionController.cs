@@ -5,6 +5,7 @@ using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.DataContracts;
 using ITJakub.Web.Hub.Helpers;
+using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Requests.Permission;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,11 +26,10 @@ namespace ITJakub.Web.Hub.Controllers
         {
         }
 
-        public ActionResult UserPermission(int start, int count, string query, bool partial)
+        public ActionResult UserPermission(bool partial, int start, int count = 5, string query = "")
         {
             using (var client = GetRestClient())
             {
-                count = count == 0 ? UserListPageSize : count;
                 var result = client.GetUserList(start, count, query);
                 var model = CreateProjectListViewModel(result, start);
 
@@ -270,11 +270,10 @@ namespace ITJakub.Web.Hub.Controllers
 
         private UserListViewModel CreateProjectListViewModel(PagedResultList<UserDetailContract> data, int start)
         {
-            var listViewModel = Mapper.Map<List<UserDetailContract>>(data.List);
             return new UserListViewModel
             {
                 TotalCount = data.TotalCount,
-                List = listViewModel,
+                List = Mapper.Map<List<UserDetailViewModel>>(data.List),
                 PageSize = UserListPageSize,
                 Start = start
             };
