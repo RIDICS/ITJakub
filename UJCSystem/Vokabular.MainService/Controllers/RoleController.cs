@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
+using Vokabular.RestClient.Headers;
+using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
 using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -52,6 +54,18 @@ namespace Vokabular.MainService.Controllers
         {
             m_roleManager.DeleteRole(roleId);
         }
+
+        [Authorize(PermissionNames.ManagePermissions)]
+        [HttpGet("")]
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
+        public List<RoleContract> GetRoleList([FromQuery] int? start, [FromQuery] int? count, [FromQuery] string filterByName)
+        {
+            var result = m_roleManager.GetRoleList(start, count, filterByName);
+
+            SetTotalCountHeader(result.TotalCount);
+            return result.List;
+        }
+
 
         //public void AddBooksAndCategoriesToGroup(int groupId, IList<long> bookIds, IList<int> categoryIds)
         //{

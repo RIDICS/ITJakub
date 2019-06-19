@@ -10,6 +10,7 @@ using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
+using Vokabular.RestClient.Results;
 using AuthRoleContract = Vokabular.Authentication.DataContracts.RoleContract;
 
 namespace Vokabular.MainService.Core.Managers
@@ -103,6 +104,23 @@ namespace Vokabular.MainService.Core.Managers
 
             var result = client.HttpClient.GetListAsync<AuthRoleContract>(0, countValue, query).GetAwaiter().GetResult();
             return Mapper.Map<List<RoleContract>>(result.Items);
+        }
+
+        public PagedResultList<RoleContract> GetRoleList(int? start, int? count, string filterByName)
+        {
+            var startValue = PagingHelper.GetStart(start);
+            var countValue = PagingHelper.GetCount(count);
+
+            var client = m_communicationProvider.GetAuthRoleApiClient();
+
+            var result = client.HttpClient.GetListAsync<AuthRoleContract>(startValue, countValue, filterByName).GetAwaiter().GetResult();
+            var roleContracts = Mapper.Map<List<RoleContract>>(result.Items);
+
+            return new PagedResultList<RoleContract>
+            {
+                List = roleContracts,
+                TotalCount = result.ItemsCount,
+            };
         }
     }
 }
