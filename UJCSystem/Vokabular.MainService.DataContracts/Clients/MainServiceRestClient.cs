@@ -2474,6 +2474,24 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public PagedResultList<UserContract> GetUsersByRole(int roleId, int start, int count)
+        {
+            try
+            {
+                var url = $"role/{roleId}/user".AddQueryString("start", start.ToString());
+                url = url.AddQueryString("count", count.ToString());
+                var result = GetPagedList<UserContract>(url);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public PagedResultList<RoleContract> GetRoleList(int start, int count, string query)
         {
             try

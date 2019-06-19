@@ -70,6 +70,16 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        public ActionResult UsersByRole(int roleId, bool partial, int start, int count = GroupListPageSize)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetUsersByRole(roleId, start, count);
+                var model = CreateListViewModel<UserDetailViewModel, UserContract>(result, start, UserListPageSize);
+                return PartialView("Widget/_UserListWidget", model);
+            }
+        }
+
         public ActionResult EditUser(int userId)
         {
             using (var client = GetRestClient())

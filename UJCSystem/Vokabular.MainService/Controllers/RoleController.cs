@@ -27,10 +27,13 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("{roleId}/user")]
-        public List<UserContract> GetUsersByRole(int roleId)
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
+        public List<UserContract> GetUsersByRole(int roleId, [FromQuery] int? start, [FromQuery] int? count, [FromQuery] string filterByName)
         {
-            var result = m_roleManager.GetUsersByRole(roleId);
-            return result;
+            var result = m_roleManager.GetUsersByRole(roleId, start, count);
+
+            SetTotalCountHeader(result.TotalCount);
+            return result.List;
         }
 
         [Authorize(PermissionNames.ManagePermissions)]
