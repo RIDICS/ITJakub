@@ -104,6 +104,30 @@ namespace ITJakub.Web.Hub.Controllers
             return View();
         }
 
+        public ActionResult EditRolePermissions(bool partial, string search, int start, int count = GroupListPageSize)
+        {
+            using (var client = GetRestClient())
+            {
+                search = search ?? string.Empty;
+                var result = client.GetRoleList(start, count, search);
+                var model = new ListViewModel<RoleContract>
+                {
+                    TotalCount = result.TotalCount,
+                    List = result.List,
+                    PageSize = GroupListPageSize,
+                    Start = start
+                };
+
+                ViewData[PermissionConstants.SearchUser] = search;
+                if (partial)
+                {
+                    return PartialView("_GroupList", model);
+                }
+
+                return View(model);
+            }
+        }
+
         public ActionResult GetTypeaheadUser(string query)
         {
             using (var client = GetRestClient())

@@ -43,6 +43,9 @@
     "NoUsersFound": "Sorry, but no users were found",
     "SearchQuery": "Showing results for",
     "ResetSearch": "Reset search",
-    "Groups": "Groups"
+    "Groups": "Groups",
+    "Group": "Group",
+    "User": "User",
+    "ManagePermissions": "Manage permissions"
   }
 }

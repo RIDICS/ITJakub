@@ -43,6 +43,9 @@
     "NoUsersFound": "Je nám líto, ale nebyly nalezeni žádní uživatelé",
     "SearchQuery": "Zobrazují se výsledky pro",
     "ResetSearch": "Zrušit hledání",
-    "Groups": "Skupiny"
+    "Groups": "Skupiny",
+    "Group": "Skupina",
+    "User": "Uživatel",
+    "ManagePermissions": "Spravovat práva"
   }
 }

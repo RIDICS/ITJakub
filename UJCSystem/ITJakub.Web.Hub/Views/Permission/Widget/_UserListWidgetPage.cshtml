@@ -1,0 +1,22 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@using Vokabular.Shared.AspNetCore.Extensions
+@using Vokabular.Shared.Const
+@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<ITJakub.Web.Hub.Models.UserDetailViewModel>
+@inject ILocalizationService Localizer
+
+<div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>
+@foreach (var user in Model.List)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => user.FirstName)
+            @Html.DisplayFor(modelItem => user.LastName)
+        </td>
+        <td class="buttons">
+            @*TODO js - post remove request, reload only list with users*@
+            <a asp-action="RemoveUserFromGroup" asp-route-userId="@user.Id" class="btn btn-sm btn-default @(User.HasPermission(PermissionNames.ManagePermissions) ? "" : "disabled")">
+                <i class="fa fa-trash"></i>
+            </a>
+        </td>
+    </tr>
+}

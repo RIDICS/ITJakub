@@ -19,7 +19,10 @@
 <h2>@Localizer.Translate("GroupPermissionManagementHeadline", "Permission")</h2>
 
 <div class="row page-control">
-    <div class="col-12 col-sm-offset-6 col-sm-6 col-lg-offset-8 col-lg-4 col-xl-offset-9 col-xl-3">
+    <div class="col col-sm-offset-6 col-sm-6 col-lg-offset-8 col-lg-4 col-xl-offset-9 col-xl-3">
+        <a asp-controller="Permission" asp-action="EditRolePermissions">@Localizer.Translate("ManagePermissions", "Permission")</a>
+    </div>
+    <div class="col col-sm-offset-6 col-sm-6 col-lg-offset-8 col-lg-4 col-xl-offset-9 col-xl-3">
         <form asp-action="GroupPermission" asp-controller="Permission" method="get" class="search-form form-inline">
             <div class="form-group">
                 <div class="search-button">

@@ -1,0 +1,25 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@using Vokabular.Shared.AspNetCore.Extensions
+@using Vokabular.Shared.Const
+@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.Permission.RoleContract>
+@inject ILocalizationService Localizer
+
+@section scripts{
+    <script src="~/Areas/Admin/js/ridics.role.manager.js"></script>
+}
+
+<div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>
+@foreach (var role in Model.List)
+{
+    <tr data-role-id="@role.Id" class="role-row">
+        <td>
+            @Html.DisplayFor(modelItem => role.Name)
+        </td>
+        <td class="buttons">
+            @*TODO ajax post delete *@
+            <a asp-action="DeleteGroup" asp-route-groupId="@role.Id" class="btn btn-sm btn-default @(User.HasPermission(PermissionNames.ManagePermissions) ? "" : "disabled")">
+                <i class="fa fa-trash"></i>
+            </a>
+        </td>
+    </tr>
+}

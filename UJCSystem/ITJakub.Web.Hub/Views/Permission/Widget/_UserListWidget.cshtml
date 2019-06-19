@@ -1,0 +1,55 @@
+﻿@using ITJakub.Web.Hub.Constants
+@using Scalesoft.Localization.AspNetCore
+@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<ITJakub.Web.Hub.Models.UserDetailViewModel>
+
+@inject ILocalizationService Localizer
+
+
+@if (!string.IsNullOrEmpty((string) ViewData[PermissionConstants.SearchUser]))
+{
+    <div class="row reset-search">
+        <div class="query">
+            <span class="text-nowrap">@Localizer.Translate("SearchQuery", "Permission"): <span class="searched-query">@ViewData[PermissionConstants.SearchUser]</span></span>
+        </div>
+        <div class="reset-search-form">
+            <form asp-action="UserPermission" asp-controller="Permission" method="get" class="">
+                <input type="hidden" class="reset-search-count" name="count"/>
+                <button type="submit" class="btn btn-sm btn-default">@Localizer.Translate("ResetSearch", "Permission")</button>
+            </form>
+        </div>
+    </div>
+}
+
+@if (Model != null && Model.List.Count != 0)
+{
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="thead-light administration-table-head">
+            <tr>
+                <th class="align-middle">
+                    @Localizer.Translate("User", "Permission")
+                </th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @await Html.PartialAsync("Widget/_UserListWidgetPage", Model)
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        <i class="fa fa-info-circle fa-lg"></i>
+        @if (!string.IsNullOrEmpty((string) ViewData[PermissionConstants.SearchUser]))
+        {
+            @(Localizer.Translate("NoUsersSearch", "Permission") + "\"")<span class="searched-query">@ViewData[PermissionConstants.SearchUser]</span>
+            @("\"")
+        }
+        else
+        {
+            @Localizer.Translate("NoUsersFound", "Permission")
+        }
+    </div>
+}
