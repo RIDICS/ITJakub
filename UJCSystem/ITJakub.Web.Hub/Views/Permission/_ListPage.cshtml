@@ -1,7 +1,7 @@
 ﻿@using Scalesoft.Localization.AspNetCore
 @using Vokabular.Shared.AspNetCore.Extensions
 @using Vokabular.Shared.Const
-@model ITJakub.Web.Hub.Areas.Admin.Models.UserListViewModel
+@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<ITJakub.Web.Hub.Models.UserDetailViewModel>
 @inject ILocalizationService Localizer
 
 <div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>

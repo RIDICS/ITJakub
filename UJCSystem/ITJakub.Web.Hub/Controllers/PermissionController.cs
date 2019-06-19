@@ -33,7 +33,7 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 search = search ?? string.Empty;
                 var result = client.GetUserList(start, count, search);
-                var model = CreateProjectListViewModel(result, start);
+                var model = CreateListViewModel<UserDetailViewModel>(result, start, UserListPageSize);
 
                 ViewData[PermissionConstants.Search] = search;
                 if (partial)
@@ -286,13 +286,13 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        private UserListViewModel CreateProjectListViewModel(PagedResultList<UserDetailContract> data, int start)
+        private ListViewModel<T> CreateListViewModel<T>(PagedResultList<UserDetailContract> data, int start, int pageSize)
         {
-            return new UserListViewModel
+            return new ListViewModel<T>
             {
                 TotalCount = data.TotalCount,
-                List = Mapper.Map<List<UserDetailViewModel>>(data.List),
-                PageSize = UserListPageSize,
+                List = Mapper.Map<List<T>>(data.List),
+                PageSize = pageSize,
                 Start = start
             };
         }
