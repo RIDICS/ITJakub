@@ -36,7 +36,7 @@ namespace ITJakub.Web.Hub.Controllers
                 var result = client.GetUserList(start, count, search);
                 var model = CreateListViewModel<UserDetailViewModel, UserDetailContract>(result, start, UserListPageSize);
 
-                ViewData[PermissionConstants.Search] = search;
+                ViewData[PermissionConstants.SearchUser] = search;
                 if (partial)
                 {
                     return PartialView("_UserList", model);
@@ -60,7 +60,7 @@ namespace ITJakub.Web.Hub.Controllers
                     Start = start
                 };
 
-                ViewData[PermissionConstants.Search] = search;
+                ViewData[PermissionConstants.SearchUser] = search;
                 if (partial)
                 {
                     return PartialView("_GroupList", model);

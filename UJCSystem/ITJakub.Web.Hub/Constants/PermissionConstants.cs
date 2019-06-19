@@ -2,6 +2,7 @@
 {
     public class PermissionConstants
     {
-        public static string Search = "search";
+        public static string SearchUser = "searchUser";
+        public static string SearchRole = "searchRole";
     }
 }
