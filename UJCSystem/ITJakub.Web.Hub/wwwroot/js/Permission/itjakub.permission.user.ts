@@ -163,7 +163,7 @@ class UserPermissionEditor {
         $(buttonsSpan).addClass("list-item-buttons");
 
         var editAnchor = document.createElement("a");
-        editAnchor.href = "/Permission/GroupPermission?groupId=" + group.id;
+        editAnchor.href = "/Permission/EditGroup?groupId=" + group.id;
 
         var editSpan = document.createElement("span");
         $(editSpan).addClass("glyphicon glyphicon-edit list-item-edit");

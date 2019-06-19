@@ -21,24 +21,49 @@ namespace ITJakub.Web.Hub.Controllers
     [Authorize(PermissionNames.ManagePermissions)]
     public class PermissionController : BaseController
     {
-        private const int UserListPageSize = 5;
+        private const int UserListPageSize = 10;
+        private const int GroupListPageSize = 10;
 
         public PermissionController(CommunicationProvider communicationProvider) : base(communicationProvider)
         {
         }
 
-        public ActionResult UserPermission(bool partial, string search, int start, int count = 5)
+        public ActionResult UserPermission(bool partial, string search, int start, int count = UserListPageSize)
         {
             using (var client = GetRestClient())
             {
                 search = search ?? string.Empty;
                 var result = client.GetUserList(start, count, search);
-                var model = CreateListViewModel<UserDetailViewModel>(result, start, UserListPageSize);
+                var model = CreateListViewModel<UserDetailViewModel, UserDetailContract>(result, start, UserListPageSize);
 
                 ViewData[PermissionConstants.Search] = search;
                 if (partial)
                 {
                     return PartialView("_UserList", model);
+                }
+
+                return View(model);
+            }
+        }
+
+        public ActionResult GroupPermission(bool partial, string search, int start, int count = GroupListPageSize)
+        {
+            using (var client = GetRestClient())
+            {
+                search = search ?? string.Empty;
+                var result = client.GetRoleList(start, count, search);
+                var model = new ListViewModel<RoleContract>
+                {
+                    TotalCount = result.TotalCount,
+                    List = result.List,
+                    PageSize = GroupListPageSize,
+                    Start = start
+                };
+
+                ViewData[PermissionConstants.Search] = search;
+                if (partial)
+                {
+                    return PartialView("_GroupList", model);
                 }
 
                 return View(model);
@@ -55,12 +80,16 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult EditUserGroups(int userId)
+        public ActionResult EditGroup(int groupId)
         {
-            return View();
+            using (var client = GetRestClient())
+            {
+                var result = client.GetRoleDetail(groupId);
+                return View(result);
+            }
         }
 
-        public ActionResult GroupPermission()
+        public ActionResult EditUserGroups(int userId)
         {
             return View();
         }
@@ -286,7 +315,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        private ListViewModel<T> CreateListViewModel<T>(PagedResultList<UserDetailContract> data, int start, int pageSize)
+        private ListViewModel<T> CreateListViewModel<T, T2>(PagedResultList<T2> data, int start, int pageSize)
         {
             return new ListViewModel<T>
             {

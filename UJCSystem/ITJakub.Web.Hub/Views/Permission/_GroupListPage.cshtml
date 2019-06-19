@@ -1,0 +1,23 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@using Vokabular.Shared.AspNetCore.Extensions
+@using Vokabular.Shared.Const
+@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.Permission.RoleContract>
+@inject ILocalizationService Localizer
+
+<div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>
+@foreach (var group in Model.List)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => group.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => group.Description)
+        </td>
+        <td class="buttons">
+        <a asp-action="EditGroup" asp-route-groupId="@group.Id" class="btn btn-sm btn-default @(User.HasPermission(PermissionNames.ManagePermissions) ? "" : "disabled")">
+                    @Localizer.Translate("Edit", "Permission")
+                </a>
+        </td>
+    </tr>
+}
