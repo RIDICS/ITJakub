@@ -1,9 +1,10 @@
 ﻿class ListWithPagination {
     private readonly firstPageNumber = 1;
     private readonly pagingInfoSelector = ".paging-info";
-    private readonly listContainerSelector = "#list-container";
+    private readonly listContainerSelector;
     private readonly defaultPageSize;
     private readonly urlPath;
+    private readonly selector;
  
     private searchForm: JQuery;
     private resetSearchForm: JQuery;
@@ -13,11 +14,13 @@
 
     private search: string;
 
-    constructor(urlPath: string, defaultPageSize: number) {
+    constructor(urlPath: string, defaultPageSize: number, selector: string) {
         this.urlPath = urlPath;
+        this.selector = selector;
+        this.listContainerSelector = `#${this.selector}-list-container`;
         this.defaultPageSize = defaultPageSize;
         this.pagination = new Pagination({
-            container: document.getElementById("pagination") as HTMLDivElement,
+            container: document.getElementById(selector + "-pagination") as HTMLDivElement,
             pageClickCallback: this.loadPage.bind(this)
         });
     }
