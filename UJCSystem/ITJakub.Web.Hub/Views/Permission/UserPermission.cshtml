@@ -13,6 +13,7 @@
     <link href="~/css/ridics.permissions.css" rel="stylesheet" />
 }
 @section scripts{
+    <script src="~/Areas/Admin/js/ridics.list.js"></script>
     <script src="~/Areas/Admin/js/ridics.user.list.js"></script>
 }
 
@@ -33,5 +34,5 @@
 <div id="list-container">
     @await Html.PartialAsync("_UserList", Model)
 </div>
-    
+
 <div id="pagination" class="text-center"></div>
