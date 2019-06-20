@@ -7,10 +7,8 @@
 });
 
 class RoleManager {
-    private readonly roleSelector = ".role-row";
-
     public init() {
-        $(this.roleSelector).click((event) => {
+        $(".role-row").click((event) => {
             const roleId = $(event.currentTarget).data("role-id");
 
             $.ajax({
@@ -21,6 +19,8 @@ class RoleManager {
                 }).toString(),
                 success: (response) => {
                     $("#user-list-container").html(response);
+                    var userList = new ListWithPagination(`Permission/UsersByRole?roleId=${roleId}`, 10, "user", ViewType.Widget);
+                    userList.init();
                     $("#user-section").removeClass('hide');
                 },
             });
