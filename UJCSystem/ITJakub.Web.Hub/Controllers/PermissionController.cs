@@ -28,7 +28,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
         }
 
-        public ActionResult UserPermission(bool partial, string search, int start, int count = UserListPageSize)
+        public ActionResult UserPermission(string search, int start, int count = UserListPageSize, ViewType viewType = ViewType.Full)
         {
             using (var client = GetRestClient())
             {
@@ -37,16 +37,22 @@ namespace ITJakub.Web.Hub.Controllers
                 var model = CreateListViewModel<UserDetailViewModel, UserDetailContract>(result, start, UserListPageSize);
 
                 ViewData[PermissionConstants.SearchUser] = search;
-                if (partial)
-                {
-                    return PartialView("_UserList", model);
-                }
 
-                return View(model);
+                switch (viewType)
+                {
+                    case ViewType.Partial:
+                        return PartialView("_UserList", model);
+                    case ViewType.Widget:
+                        return PartialView("Widget/_UserListWidget", model);
+                    case ViewType.Full:
+                        return View(model);
+                    default:
+                        return View(model);
+                }
             }
         }
 
-        public ActionResult GroupPermission(bool partial, string search, int start, int count = GroupListPageSize)
+        public ActionResult GroupPermission(string search, int start, int count = GroupListPageSize, ViewType viewType = ViewType.Full)
         {
             using (var client = GetRestClient())
             {
@@ -61,12 +67,17 @@ namespace ITJakub.Web.Hub.Controllers
                 };
 
                 ViewData[PermissionConstants.SearchUser] = search;
-                if (partial)
+                switch (viewType)
                 {
-                    return PartialView("_GroupList", model);
+                    case ViewType.Partial:
+                        return PartialView("_GroupList", model);
+                    case ViewType.Widget:
+                        return PartialView("Widget/_GroupListWidget", model);
+                    case ViewType.Full:
+                        return View(model);
+                    default:
+                        return View(model);
                 }
-
-                return View(model);
             }
         }
 

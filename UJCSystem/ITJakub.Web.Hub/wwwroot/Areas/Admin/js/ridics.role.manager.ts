@@ -1,6 +1,9 @@
 ﻿$(document.documentElement).ready(() => {
     var roleManager = new RoleManager();
     roleManager.init();
+
+    var groupList = new ListWithPagination("Permission/GroupPermission", 10, "role", ViewType.Widget, roleManager.init);
+    groupList.init();
 });
 
 class RoleManager {

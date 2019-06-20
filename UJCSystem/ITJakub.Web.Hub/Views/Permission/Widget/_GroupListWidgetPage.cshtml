@@ -4,10 +4,6 @@
 @model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.Permission.RoleContract>
 @inject ILocalizationService Localizer
 
-@section scripts{
-    <script src="~/Areas/Admin/js/ridics.role.manager.js"></script>
-}
-
 <div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>
 @foreach (var role in Model.List)
 {

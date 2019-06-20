@@ -5,20 +5,27 @@
     private readonly defaultPageSize;
     private readonly urlPath;
     private readonly selector;
- 
+
     private searchForm: JQuery;
     private resetSearchForm: JQuery;
     private pagination: Pagination;
     private pageSize: number;
     private totalCount: number;
+    private viewType: ViewType;
+    private pageLoadCallback;
 
     private search: string;
 
-    constructor(urlPath: string, defaultPageSize: number, selector: string) {
+    constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType);
+    constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, pageLoadCallback: () => void);
+    constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, pageLoadCallback?: () => void) {
         this.urlPath = urlPath;
-        this.selector = selector;
-        this.listContainerSelector = `#${this.selector}-list-container`;
         this.defaultPageSize = defaultPageSize;
+        this.selector = selector;
+        this.viewType = viewType;
+        this.pageLoadCallback = pageLoadCallback;
+
+        this.listContainerSelector = `#${this.selector}-list-container`;
         this.pagination = new Pagination({
             container: document.getElementById(selector + "-pagination") as HTMLDivElement,
             pageClickCallback: this.loadPage.bind(this)
@@ -67,23 +74,14 @@
 
     private loadPage(pageNumber: number) {
         const start = this.computeStartItem(this.pageSize, pageNumber);
-        const parameters = {
-            start: start,
-            count: this.pageSize,
-            partial: true,
-            search: this.search
-        }
-
         const url = new URI(getBaseUrl() + this.urlPath).search((query) => {
             query.start = start;
             query.count = this.pageSize;
-            query.partial = true;
+            query.viewType = this.viewType;
             if (this.search != null) {
                 query.search = this.search;
             }
         }).toString();
-
-        //const url = getBaseUrl() + this.urlPath + "?" + $.param(parameters);
 
         const $listContainer = $(this.listContainerSelector);
 
@@ -117,6 +115,7 @@
                         });
                     }
 
+                    this.pageLoadCallback.call();
                 });
     }
 
@@ -146,6 +145,12 @@
     }
 
     private renderPaginationContainer(activePage: number) {
-        this.pagination.make(this.totalCount,this.pageSize, activePage);
+        this.pagination.make(this.totalCount, this.pageSize, activePage);
     }
+}
+
+enum ViewType {
+    Full,
+    Partial,
+    Widget,
 }
