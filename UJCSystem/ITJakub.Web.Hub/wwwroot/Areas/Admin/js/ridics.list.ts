@@ -18,7 +18,7 @@
     private search: string;
 
     constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, saveStateToUrl: boolean);
-    constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, saveStateToUrl: boolean, pageLoadCallback: () => void)
+    constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, saveStateToUrl: boolean, pageLoadCallback: () => void);
     constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, saveStateToUrl: boolean, pageLoadCallback?: () => void) {
         this.urlPath = urlPath;
         this.defaultPageSize = defaultPageSize;
@@ -35,7 +35,7 @@
     }
 
     public init() {
-        this.searchForm = $(".search-form");
+        this.searchForm = $(`.${this.selector}-search-form`);
         this.searchForm.submit((event) => {
             const searchValue = this.searchForm.find(".search-value").val() as string;
             event.preventDefault();
@@ -110,7 +110,7 @@
                     this.renderPaginationContainer(pageNumber);
 
                     if (this.search) {
-                        this.resetSearchForm = $(".reset-search-form");
+                        this.resetSearchForm = $listContainer.find(".reset-search-form");
                         this.resetSearchForm.submit((event) => {
                             this.searchForm.find(".search-value").val("");
                             event.preventDefault();

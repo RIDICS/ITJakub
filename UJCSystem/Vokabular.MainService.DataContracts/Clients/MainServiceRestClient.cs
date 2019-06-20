@@ -2474,12 +2474,13 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public PagedResultList<UserContract> GetUsersByRole(int roleId, int start, int count)
+        public PagedResultList<UserContract> GetUsersByRole(int roleId, int start, int count, string query)
         {
             try
             {
                 var url = $"role/{roleId}/user".AddQueryString("start", start.ToString());
                 url = url.AddQueryString("count", count.ToString());
+                url = url.AddQueryString("filterByName", query);
                 var result = GetPagedList<UserContract>(url);
                 return result;
             }

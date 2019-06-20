@@ -22,7 +22,7 @@
 <div class="col-sm-12 col-md-3">
     <div class="row page-control">
         <div class="col col-sm-12">
-            <form asp-action="GroupPermission" asp-controller="Permission" method="get" class="search-form form-inline">
+            <form asp-action="GroupPermission" asp-controller="Permission" method="get" class="role-search-form form-inline">
                 <div class="form-group">
                     <div class="search-button">
                         <button class="btn btn-default" type="submit">@Localizer.Translate("Search", "Permission")</button>
@@ -42,7 +42,7 @@
 <div class="col-sm-12 col-md-4 hide" id="user-section">
     <div class="row page-control">
         <div class="col-12 col-sm-12">
-            <form asp-action="UsersByRole" asp-controller="Permission" method="get" class="search-form form-inline">
+            <form asp-action="UsersByRole" asp-controller="Permission" method="get" class="user-search-form form-inline">
                 <div class="form-group">
                     <div class="search-button">
                         <button class="btn btn-default" type="submit">@Localizer.Translate("Search", "Permission")</button>

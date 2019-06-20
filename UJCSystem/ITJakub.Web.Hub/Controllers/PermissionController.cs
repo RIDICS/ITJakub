@@ -81,11 +81,13 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult UsersByRole(int roleId, bool partial, int start, int count = GroupListPageSize)
+        public ActionResult UsersByRole(int roleId, string search, int start, int count = GroupListPageSize)
         {
             using (var client = GetRestClient())
             {
-                var result = client.GetUsersByRole(roleId, start, count);
+                search = search ?? string.Empty;
+                ViewData[PermissionConstants.SearchUser] = search;
+                var result = client.GetUsersByRole(roleId, start, count, search);
                 var model = CreateListViewModel<UserDetailViewModel, UserContract>(result, start, UserListPageSize);
                 return PartialView("Widget/_UserListWidget", model);
             }
