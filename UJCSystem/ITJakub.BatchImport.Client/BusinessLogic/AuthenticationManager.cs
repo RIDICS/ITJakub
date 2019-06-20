@@ -1,4 +1,6 @@
-﻿using System.Configuration;
+﻿using System;
+using System.ComponentModel;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -12,10 +14,11 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
 {
     public class AuthenticationManager
     {
-        private const string OIDCUrl = "OIDCUrl";
-        private const string OIDCClientId = "OIDCClientId";
-        private const string OIDCClientSecret = "OIDCClientSecret";
-        public string AuthToken { get; set; }
+        private const string OidcUrl = "OIDCUrl";
+        private const string OidcClientId = "OIDCClientId";
+        private const string OidcClientSecret = "OIDCClientSecret";
+
+        public string AuthToken { get; private set; }
 
         public async Task SignInAsync()
         {
@@ -31,9 +34,9 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
 
             var options = new OidcClientOptions
             {
-                Authority = ConfigurationManager.AppSettings[OIDCUrl],
-                ClientId = ConfigurationManager.AppSettings[OIDCClientId],
-                ClientSecret = ConfigurationManager.AppSettings[OIDCClientSecret],
+                Authority = ConfigurationManager.AppSettings[OidcUrl],
+                ClientId = ConfigurationManager.AppSettings[OidcClientId],
+                ClientSecret = ConfigurationManager.AppSettings[OidcClientSecret],
                 RedirectUri = redirectUri,
                 Scope = "openid profile",
                 FilterClaims = true,
@@ -67,7 +70,7 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
 
         private async Task SendResponseAsync(Response response)
         {
-            var responseString = $"<html><head></head><body>Please return to the app.</body></html>";
+            var responseString = "<html><head></head><body>Please return to the Batch Import client app.</body></html>";
             var buffer = Encoding.UTF8.GetBytes(responseString);
 
             response.ContentLength = buffer.Length;
@@ -83,7 +86,7 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
             {
                 Process.Start(url);
             }
-            catch
+            catch (Exception e) when (e is InvalidOperationException || e is Win32Exception || e is PlatformNotSupportedException)
             {
                 // hack because of this: https://github.com/dotnet/corefx/issues/10361
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))

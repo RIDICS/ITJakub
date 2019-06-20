@@ -35,9 +35,6 @@ namespace Vokabular.MainService.Core.Works.Permission
                 throw new ArgumentException($"User with ID {user.Id} has missing ExternalID");
             }
 
-            var client = m_communicationProvider.GetAuthUserApiClient();
-            client.RemoveRoleFromUserAsync(user.ExternalId.Value, m_roleId).GetAwaiter().GetResult();
-
             //TODO switch logic: remove group from user (fetch lower amount of data)
             if (group.Users == null)
             {
@@ -52,6 +49,11 @@ namespace Vokabular.MainService.Core.Works.Permission
 
             group.Users.Remove(user);
             m_permissionRepository.Save(group);
+            m_permissionRepository.Flush();
+
+
+            var client = m_communicationProvider.GetAuthUserApiClient();
+            client.RemoveRoleFromUserAsync(user.ExternalId.Value, m_roleId).GetAwaiter().GetResult();
         }
     }
 }

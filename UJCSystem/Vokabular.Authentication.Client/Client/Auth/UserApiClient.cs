@@ -140,19 +140,6 @@ namespace Vokabular.Authentication.Client.Client.Auth
             return response;
         }
 
-        public async Task<List<UserWithRolesContract>> GetUserListByRoleAsync(int roleId, int? start, int? count)
-        {
-            var query = m_authorizationServiceHttpClient.CreateQueryCollection();
-            query.Add("roleId", roleId.ToString());
-
-            if (start != null) query.Add("start", start.Value.ToString());
-            if (count != null) query.Add("count", count.Value.ToString());
-
-            var path = $"{BasePath}roles/list?{query}";
-            var response = await m_authorizationServiceHttpClient.SendRequestAsync<List<UserWithRolesContract>>(HttpMethod.Get, path);
-            return response;
-        }
-
         public async Task<string> GetUserMuidAsync(UserIdentifierTypeContract idType, string id)
         {
             var query = m_authorizationServiceHttpClient.CreateQueryCollection();

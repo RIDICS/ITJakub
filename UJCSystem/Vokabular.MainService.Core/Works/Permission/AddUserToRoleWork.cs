@@ -32,9 +32,6 @@ namespace Vokabular.MainService.Core.Works.Permission
                 throw new ArgumentException($"User with ID {user.Id} has missing ExternalID");
             }
 
-            var client = m_communicationProvider.GetAuthUserApiClient();
-            client.AddRoleToUserAsync(user.ExternalId.Value, m_roleId).GetAwaiter().GetResult();
-
             if (group.Users == null)
             {
                 group.Users = new List<User>();
@@ -42,6 +39,11 @@ namespace Vokabular.MainService.Core.Works.Permission
 
             group.Users.Add(user);
             m_permissionRepository.Save(group);
+            m_permissionRepository.Flush();
+
+
+            var client = m_communicationProvider.GetAuthUserApiClient();
+            client.AddRoleToUserAsync(user.ExternalId.Value, m_roleId).GetAwaiter().GetResult();
         }
     }
 }

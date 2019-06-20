@@ -28,5 +28,19 @@ namespace Vokabular.Authentication.Client.Client.Auth
             var fullPath = $"{BasePath}AllRoles";
             return await m_authorizationServiceHttpClient.SendRequestAsync<IList<RoleContract>>(HttpMethod.Get, fullPath);
         }
+
+        public async Task<ListContract<UserWithRolesContract>> GetUserListByRoleAsync(int roleId, int? start, int? count, string search)
+        {
+            var query = m_authorizationServiceHttpClient.CreateQueryCollection();
+
+            if (start != null) query.Add("start", start.Value.ToString());
+            if (count != null) query.Add("count", count.Value.ToString());
+            if (!string.IsNullOrEmpty(search)) query.Add("search", search);
+
+            var path = $"{BasePath}{roleId}/Users?{query}";
+            var response = await m_authorizationServiceHttpClient.SendRequestAsync<ListContract<UserWithRolesContract>>(HttpMethod.Get, path);
+
+            return response;
+        }
     }
 }

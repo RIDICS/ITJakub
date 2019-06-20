@@ -30,7 +30,7 @@ namespace Vokabular.MainService.Controllers
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
         public List<UserContract> GetUsersByRole(int roleId, [FromQuery] int? start, [FromQuery] int? count, [FromQuery] string filterByName)
         {
-            var result = m_roleManager.GetUsersByRole(roleId, start, count);
+            var result = m_roleManager.GetUsersByRole(roleId, start, count, filterByName);
 
             SetTotalCountHeader(result.TotalCount);
             return result.List;

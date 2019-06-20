@@ -54,15 +54,16 @@ namespace Vokabular.MainService.Core.Managers
             return Mapper.Map<List<RoleContract>>(authUser.Roles);
         }
 
-        public PagedResultList<UserContract> GetUsersByRole(int roleId, int? start, int? count)
+
+        public PagedResultList<UserContract> GetUsersByRole(int roleId, int? start, int? count, string filterByName)
         {
-            var client = m_communicationProvider.GetAuthUserApiClient();
-            var members = client.GetUserListByRoleAsync(roleId, start, count).GetAwaiter().GetResult();
-          
+            var client = m_communicationProvider.GetAuthRoleApiClient();
+            var members = client.GetUserListByRoleAsync(roleId, start, count, filterByName).GetAwaiter().GetResult();
+
             return new PagedResultList<UserContract>
             {
                 List = Mapper.Map<List<UserContract>>(members),
-                TotalCount = members.Count
+                TotalCount = members.ItemsCount
             };
         }
 
