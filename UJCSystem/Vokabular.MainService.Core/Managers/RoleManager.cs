@@ -62,7 +62,7 @@ namespace Vokabular.MainService.Core.Managers
 
             return new PagedResultList<UserContract>
             {
-                List = Mapper.Map<List<UserContract>>(members),
+                List = Mapper.Map<List<UserContract>>(members.Items),
                 TotalCount = members.ItemsCount
             };
         }
