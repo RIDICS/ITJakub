@@ -12,17 +12,19 @@
     private pageSize: number;
     private totalCount: number;
     private viewType: ViewType;
+    private saveStateToUrl: boolean;
     private pageLoadCallback;
 
     private search: string;
 
-    constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType);
-    constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, pageLoadCallback: () => void);
-    constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, pageLoadCallback?: () => void) {
+    constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, saveStateToUrl: boolean);
+    constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, saveStateToUrl: boolean, pageLoadCallback: () => void)
+    constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, saveStateToUrl: boolean, pageLoadCallback?: () => void) {
         this.urlPath = urlPath;
         this.defaultPageSize = defaultPageSize;
         this.selector = selector;
         this.viewType = viewType;
+        this.saveStateToUrl = saveStateToUrl;
         this.pageLoadCallback = pageLoadCallback;
 
         this.listContainerSelector = `#${this.selector}-list-container`;
@@ -46,12 +48,15 @@
         this.initPagination();
 
         if (typeof startPage === "undefined") {
+            if (this.saveStateToUrl) {
+                const uriSearch = new URI(window.location.href).search(true);
+                const startItem = uriSearch.start;
+                startPage = this.computeInitPage(this.pageSize, startItem);
 
-            const uriSearch = new URI(window.location.href).search(true);
-            const startItem = uriSearch.start;
-            startPage = this.computeInitPage(this.pageSize, startItem);
-
-            if (isNaN(startPage)) {
+                if (isNaN(startPage)) {
+                    startPage = this.firstPageNumber;
+                }
+            } else {
                 startPage = this.firstPageNumber;
             }
         }
@@ -115,7 +120,9 @@
                         });
                     }
 
-                    this.pageLoadCallback.call();
+                    if (typeof this.pageLoadCallback !== "undefined") {
+                        this.pageLoadCallback.call();
+                    }
                 });
     }
 
@@ -128,20 +135,23 @@
     }
 
     private setUri(startItemNumber: number, itemsOnPageCount: number, search: string = null) {
-        const newUri = new URI(window.location.href).search((query) => {
-            query.start = startItemNumber;
-            query.count = itemsOnPageCount;
-            if (search != null) {
-                query.search = search;
-            }
-        }).toString();
-
-        history.replaceState(null, null, newUri);
+        if (this.saveStateToUrl) {
+            const newUri = new URI(window.location.href).search((query) => {
+                query.start = startItemNumber;
+                query.count = itemsOnPageCount;
+                if (search != null) {
+                    query.search = search;
+                }
+            }).toString();
+            history.replaceState(null, null, newUri);
+        }
     }
 
     private removeSearchFromUri() {
-        const newUri = new URI(window.location.href).removeSearch("search").toString();
-        history.replaceState(null, null, newUri);
+        if (this.saveStateToUrl) {
+            const newUri = new URI(window.location.href).removeSearch("search").toString();
+            history.replaceState(null, null, newUri);
+        }
     }
 
     private renderPaginationContainer(activePage: number) {
