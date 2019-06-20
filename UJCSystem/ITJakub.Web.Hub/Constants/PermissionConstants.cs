@@ -4,5 +4,6 @@
     {
         public static string SearchUser = "searchUser";
         public static string SearchRole = "searchRole";
+        public static string SearchPermission = "searchPermission";
     }
 }

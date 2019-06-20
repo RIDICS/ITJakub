@@ -58,8 +58,24 @@
     <div id="user-pagination" class="text-center"></div>
 </div>
 
-@*TODO load via js*@
-<div class="col-sm-12 col-md-5"></div>
+<div class="col-sm-12 col-md-4 hide" id="permission-section">
+    <div class="row page-control">
+        <div class="col-12 col-sm-12">
+            <form asp-action="GroupPermissionList" asp-controller="Permission" method="get" class="user-search-form form-inline">
+                <div class="form-group">
+                    <div class="search-button">
+                        <button class="btn btn-default" type="submit">@Localizer.Translate("Search", "Permission")</button>
+                    </div>
+                    <input class="form-control search-value" name="search" value="@ViewData[PermissionConstants.SearchPermission]" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="permission-list-container">
+    </div>
+
+    <div id="permission-pagination" class="text-center"></div>
+</div>
 
 <div class="row">
     <div class="permission-left-panel col-md-6">

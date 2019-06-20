@@ -53,6 +53,7 @@ namespace Vokabular.MainService.Core
 
             services.AddSingleton<Profile, AuthUserProfile>();
             services.AddSingleton<Profile, RoleProfile>();
+            services.AddSingleton<Profile, PermissionProfile>();
 
             services.AddSingleton<Profile, AudioProfile>();
             services.AddSingleton<Profile, BookProfile>();

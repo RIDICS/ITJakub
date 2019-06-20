@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -45,7 +46,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("{roleId}/detail")]
-        public RoleContract GetRoleDetail(int roleId)
+        public RoleDetailContract GetRoleDetail(int roleId)
         {
             var result = m_roleManager.GetRoleDetail(roleId);
             return result;

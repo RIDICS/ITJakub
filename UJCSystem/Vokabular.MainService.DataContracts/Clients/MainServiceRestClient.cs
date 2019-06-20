@@ -2544,11 +2544,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public RoleContract GetRoleDetail(int roleId)
+        public RoleDetailContract GetRoleDetail(int roleId)
         {
             try
             {
-                var result = Get<RoleContract>($"role/{roleId}/detail");
+                var result = Get<RoleDetailContract>($"role/{roleId}/detail");
                 return result;
             }
             catch (HttpRequestException e)
@@ -2721,11 +2721,46 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public List<PermissionContract> GetPermissionsForRole(int roleId)
+        {
+            try
+            {
+                var result = Get<List<PermissionContract>>($"role/{roleId}/permission");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public List<SpecialPermissionContract> GetSpecialPermissionsForRole(int roleId)
         {
             try
             {
                 var result = Get<List<SpecialPermissionContract>>($"role/{roleId}/permission/special");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public PagedResultList<PermissionContract> GetPermissions(int start, int count, string query)
+        {
+            try
+            {
+                var url = "role".AddQueryString("start", start.ToString());
+                url = url.AddQueryString("count", count.ToString());
+                url = url.AddQueryString("filterByName", query);
+                var result = GetPagedList<PermissionContract>(url);
                 return result;
             }
             catch (HttpRequestException e)

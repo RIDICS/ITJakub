@@ -23,6 +23,7 @@ namespace ITJakub.Web.Hub.Controllers
     {
         private const int UserListPageSize = 10;
         private const int GroupListPageSize = 10;
+        private const int PermissionListPageSize = 10;
 
         public PermissionController(CommunicationProvider communicationProvider) : base(communicationProvider)
         {
@@ -78,6 +79,33 @@ namespace ITJakub.Web.Hub.Controllers
                     default:
                         return View(model);
                 }
+            }
+        }
+
+        public ActionResult GroupPermissionList(int roleId, string search, int start, int count = PermissionListPageSize, ViewType viewType = ViewType.Full)
+        {
+            using (var client = GetRestClient())
+            {
+                search = search ?? string.Empty;
+                var roleContract = client.GetRoleDetail(roleId);
+                var pagedPermissionsResult = client.GetPermissions(start,count, search);
+
+                foreach (var permission in pagedPermissionsResult.List)
+                {
+                    permission.Selected = roleContract.Permissions.Any(x => x.Id == permission.Id);
+                }
+
+                var model = new ListViewModel<PermissionContract>
+                {
+                    TotalCount = pagedPermissionsResult.TotalCount,
+                    List = pagedPermissionsResult.List,
+                    PageSize = GroupListPageSize,
+                    Start = start
+                };
+
+                ViewData[PermissionConstants.SearchPermission] = search;
+          
+                return PartialView("Widget/_PermissionListWidget", model);
             }
         }
 

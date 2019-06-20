@@ -12,6 +12,7 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Results;
 using AuthRoleContract = Vokabular.Authentication.DataContracts.RoleContract;
+using Exception = System.Exception;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -24,7 +25,8 @@ namespace Vokabular.MainService.Core.Managers
 
         private readonly CommunicationProvider m_communicationProvider;
 
-        public RoleManager(UserRepository userRepository, PermissionRepository permissionRepository, CommunicationProvider communicationProvider)
+        public RoleManager(UserRepository userRepository, PermissionRepository permissionRepository,
+            CommunicationProvider communicationProvider)
         {
             m_userRepository = userRepository;
             m_permissionRepository = permissionRepository;
@@ -72,7 +74,7 @@ namespace Vokabular.MainService.Core.Managers
             return new CreateRoleWork(m_permissionRepository, m_communicationProvider, roleName, description).Execute();
         }
 
-        public RoleContract GetRoleDetail(int roleId)
+        public RoleDetailContract GetRoleDetail(int roleId)
         {
             var client = m_communicationProvider.GetAuthRoleApiClient();
 
@@ -80,7 +82,7 @@ namespace Vokabular.MainService.Core.Managers
             if (role == null)
                 return null;
 
-            return Mapper.Map<RoleContract>(role);
+            return Mapper.Map<RoleDetailContract>(role);
         }
 
         public void DeleteRole(int roleId)

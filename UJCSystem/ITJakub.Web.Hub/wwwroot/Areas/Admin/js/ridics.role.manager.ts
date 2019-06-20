@@ -24,6 +24,20 @@ class RoleManager {
                     $("#user-section").removeClass('hide');
                 },
             });
+
+            $.ajax({
+                type: "GET",
+                traditional: true,
+                url: URI(getBaseUrl() + "Permission/GroupPermissionList").search(query => {
+                    query.roleId = roleId;
+                }).toString(),
+                success: (response) => {
+                    $("#permission-list-container").html(response);
+                    var userList = new ListWithPagination(`Permission/GroupPermissionList?roleId=${roleId}`, 10, "permission", ViewType.Widget, false);
+                    userList.init();
+                    $("#permission-section").removeClass('hide');
+                },
+            });
         });
     }
 }

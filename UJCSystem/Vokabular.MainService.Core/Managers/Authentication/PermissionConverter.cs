@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using log4net;
-using Vokabular.Authentication.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Types;
+using PermissionContract = Vokabular.Authentication.DataContracts.PermissionContract;
 
 namespace Vokabular.MainService.Core.Managers.Authentication
 {
