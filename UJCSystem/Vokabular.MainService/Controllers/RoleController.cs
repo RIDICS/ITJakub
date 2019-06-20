@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
+using Vokabular.RestClient.Headers;
+using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
 using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -25,10 +27,13 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("{roleId}/user")]
-        public List<UserContract> GetUsersByRole(int roleId)
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
+        public List<UserContract> GetUsersByRole(int roleId, [FromQuery] int? start, [FromQuery] int? count, [FromQuery] string filterByName)
         {
-            var result = m_roleManager.GetUsersByRole(roleId);
-            return result;
+            var result = m_roleManager.GetUsersByRole(roleId, start, count, filterByName);
+
+            SetTotalCountHeader(result.TotalCount);
+            return result.List;
         }
 
         [Authorize(PermissionNames.ManagePermissions)]
