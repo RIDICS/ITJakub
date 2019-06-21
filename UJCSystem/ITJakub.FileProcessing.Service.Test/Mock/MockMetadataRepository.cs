@@ -10,7 +10,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
 {
     public class MockMetadataRepository : MetadataRepository
     {
-        public MockMetadataRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public MockMetadataRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
             CreatedObjects = new List<object>();
             UpdatedObjects = new List<object>();

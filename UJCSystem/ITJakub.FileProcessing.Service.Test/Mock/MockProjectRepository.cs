@@ -9,7 +9,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
 {
     public class MockProjectRepository : ProjectRepository
     {
-        public MockProjectRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public MockProjectRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
             CreatedObjects = new List<object>();
             UpdatedObjects = new List<object>();

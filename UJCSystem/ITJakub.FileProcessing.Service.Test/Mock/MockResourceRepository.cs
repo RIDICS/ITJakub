@@ -12,7 +12,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
     {
         public const long HeadwordBookVersionId = 3;
 
-        public MockResourceRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public MockResourceRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
             CreatedObjects = new List<object>();
             UpdatedObjects = new List<object>();

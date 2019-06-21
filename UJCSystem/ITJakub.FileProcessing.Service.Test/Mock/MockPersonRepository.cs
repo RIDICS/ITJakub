@@ -6,7 +6,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
 {
     public class MockPersonRepository : PersonRepository
     {
-        public MockPersonRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public MockPersonRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
         }
 
