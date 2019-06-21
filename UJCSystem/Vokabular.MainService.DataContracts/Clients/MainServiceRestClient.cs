@@ -2757,7 +2757,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var url = "role".AddQueryString("start", start.ToString());
+                var url = "permission".AddQueryString("start", start.ToString());
                 url = url.AddQueryString("count", count.ToString());
                 url = url.AddQueryString("filterByName", query);
                 var result = GetPagedList<PermissionContract>(url);

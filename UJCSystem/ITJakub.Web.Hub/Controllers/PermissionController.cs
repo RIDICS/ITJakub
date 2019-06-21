@@ -375,7 +375,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetRestClient())
             {
-                client.AddSpecialPermissionsToRole(request.GroupId, request.SpecialPermissionIds);
+                client.AddSpecialPermissionsToRole(request.GroupId, new List<int>{request.SpecialPermissionId});
                 return Json(new { });
             }
         }
@@ -385,7 +385,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetRestClient())
             {
-                client.RemoveSpecialPermissionsFromRole(request.GroupId, request.SpecialPermissionIds);
+                client.RemoveSpecialPermissionsFromRole(request.GroupId, new List<int> { request.SpecialPermissionId});
                 return Json(new { });
             }
         }

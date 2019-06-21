@@ -1,5 +1,6 @@
 ﻿.reset-search {
     padding-bottom: 0.5em;
+    padding-top: 0.5em;
     margin-left: 0px;
     margin-right: 0px;
     justify-content: center !important;
@@ -19,6 +20,15 @@
 
     .text-nowrap {
         white-space: nowrap !important;
+    }
+}
+
+#user-list-container,
+#role-list-container,
+#permission-list-container {
+    .alert {
+        margin-top: 40px;
+        margin-bottom: 15px;
     }
 }
 
@@ -42,4 +52,10 @@
 
 .selectable-table {
     cursor: pointer;
+
+    tr.active {
+        td {
+            background-color: #DCDCDC !important;
+        }
+    }
 }

@@ -46,6 +46,7 @@
     "Groups": "Groups",
     "Group": "Group",
     "User": "User",
-    "ManagePermissions": "Manage permissions"
+    "ManagePermissions": "Manage permissions",
+    "Permissions": "Permissions"
   }
 }

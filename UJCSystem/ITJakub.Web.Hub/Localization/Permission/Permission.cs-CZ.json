@@ -46,6 +46,7 @@
     "Groups": "Skupiny",
     "Group": "Skupina",
     "User": "Uživatel",
-    "ManagePermissions": "Spravovat práva"
+    "ManagePermissions": "Spravovat práva",
+    "Permissions": "Oprávnění"
   }
 }

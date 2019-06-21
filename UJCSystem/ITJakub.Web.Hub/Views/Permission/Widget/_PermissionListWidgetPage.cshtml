@@ -6,9 +6,8 @@
 @foreach (var permission in Model.List)
 {
 <tr>
-    @*TODO checkbox *@
-    <td>
-        @Html.DisplayFor(modelItem => permission.Selected)
+    <td class="permission-checkbox" data-permission-id="@permission.Id">
+        @Html.CheckBoxFor(modelItem => permission.Selected)
     </td>
     <td>
         @Html.DisplayFor(modelItem => permission.Name)

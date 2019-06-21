@@ -9,34 +9,77 @@
 class RoleManager {
     public init() {
         $(".role-row").click((event) => {
-            const roleId = $(event.currentTarget).data("role-id");
+            $(event.currentTarget).addClass("active").siblings().removeClass("active");
 
-            $.ajax({
-                type: "GET",
-                traditional: true,
-                url: URI(getBaseUrl() + "Permission/UsersByRole").search(query => {
-                    query.roleId = roleId;
-                }).toString(),
-                success: (response) => {
-                    $("#user-list-container").html(response);
-                    var userList = new ListWithPagination(`Permission/UsersByRole?roleId=${roleId}`, 10, "user", ViewType.Widget, false);
-                    userList.init();
-                    $("#user-section").removeClass('hide');
-                },
+            var selectedRoleId = $(event.currentTarget).data("role-id");
+            this.loadUsers(selectedRoleId);
+            this.loadPermissions(selectedRoleId);
+        });
+    }
+
+    private loadUsers(roleId: number) {
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: URI(getBaseUrl() + "Permission/UsersByRole").search(query => {
+                query.roleId = roleId;
+            }).toString(),
+            success: (response) => {
+                $("#user-list-container").html(response);
+                var userList = new ListWithPagination(`Permission/UsersByRole?roleId=${roleId}`,
+                    10,
+                    "user",
+                    ViewType.Widget,
+                    false);
+                userList.init();
+                $("#user-section .section").removeClass("hide");
+            },
+        });
+    }
+
+    private loadPermissions(roleId: number) {
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: URI(getBaseUrl() + "Permission/GroupPermissionList").search(query => {
+                query.roleId = roleId;
+            }).toString(),
+            success: (response) => {
+                $("#permission-list-container").html(response);
+                var permissionList = new ListWithPagination(`Permission/GroupPermissionList?roleId=${roleId}`,
+                    10,
+                    "permission",
+                    ViewType.Widget,
+                    false,
+                    this.initPermissionManaging);
+                permissionList.init();
+                this.initPermissionManaging();
+                $("#permission-section .section").removeClass("hide");
+            },
+        });
+    }
+
+    private initPermissionManaging() {
+        $(".permission-checkbox input[type=checkbox]").change((event) => {
+            var data = JSON.stringify({
+                groupId: $(".role-row.active").data("role-id"),
+                specialPermissionId: $(event.currentTarget).parent("td").data("permission-id")
             });
 
+            let urlPath: string;
+            if ($(event.currentTarget).is(":checked")) {
+                urlPath = "Permission/AddSpecialPermissionsToGroup";
+            } else {
+                urlPath = "Permission/RemoveSpecialPermissionsFromGroup";
+            }
+
             $.ajax({
-                type: "GET",
+                type: "POST",
                 traditional: true,
-                url: URI(getBaseUrl() + "Permission/GroupPermissionList").search(query => {
-                    query.roleId = roleId;
-                }).toString(),
-                success: (response) => {
-                    $("#permission-list-container").html(response);
-                    var userList = new ListWithPagination(`Permission/GroupPermissionList?roleId=${roleId}`, 10, "permission", ViewType.Widget, false);
-                    userList.init();
-                    $("#permission-section").removeClass('hide');
-                },
+                url: getBaseUrl() + urlPath,
+                data: data,
+                dataType: "json",
+                contentType: "application/json"
             });
         });
     }
