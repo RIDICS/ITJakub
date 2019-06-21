@@ -12,7 +12,6 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Results;
 using AuthRoleContract = Vokabular.Authentication.DataContracts.RoleContract;
-using Exception = System.Exception;
 
 namespace Vokabular.MainService.Core.Managers
 {

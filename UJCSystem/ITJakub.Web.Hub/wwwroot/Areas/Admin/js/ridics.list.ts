@@ -65,6 +65,9 @@
         this.setUri(this.computeStartItem(this.pageSize, startPage), this.pageSize);
     }
 
+    public reloadPage() {
+        this.loadPage(this.pagination.getCurrentPage());
+    }
 
     private initPagination() {
         const pagingInfo = $(this.listContainerSelector + " " + this.pagingInfoSelector);

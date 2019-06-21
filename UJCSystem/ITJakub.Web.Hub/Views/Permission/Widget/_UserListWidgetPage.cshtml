@@ -13,8 +13,7 @@
             @Html.DisplayFor(modelItem => user.LastName)
         </td>
         <td class="buttons">
-            @*TODO js - post remove request, reload only list with users*@
-            <a asp-action="RemoveUserFromGroup" asp-route-userId="@user.Id" class="btn btn-sm btn-default @(User.HasPermission(PermissionNames.ManagePermissions) ? "" : "disabled")">
+            <a data-user-id="@user.Id" class="btn btn-sm btn-default remove-user-from-group @(User.HasPermission(PermissionNames.ManagePermissions) ? "" : "disabled")">
                 <i class="fa fa-trash"></i>
             </a>
         </td>

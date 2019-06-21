@@ -7,6 +7,7 @@
 });
 
 class RoleManager {
+    private userList;
     public init() {
         $(".role-row").click((event) => {
             $(event.currentTarget).addClass("active").siblings().removeClass("active");
@@ -26,12 +27,14 @@ class RoleManager {
             }).toString(),
             success: (response) => {
                 $("#user-list-container").html(response);
-                var userList = new ListWithPagination(`Permission/UsersByRole?roleId=${roleId}`,
+                this.userList = new ListWithPagination(`Permission/UsersByRole?roleId=${roleId}`,
                     10,
                     "user",
                     ViewType.Widget,
-                    false);
-                userList.init();
+                    false,
+                    this.initRemoveUserFromGroupButton);
+                this.userList.init();
+                this.initRemoveUserFromGroupButton();
                 $("#user-section .section").removeClass("hide");
             },
         });
@@ -62,7 +65,7 @@ class RoleManager {
     private initPermissionManaging() {
         $(".permission-checkbox input[type=checkbox]").change((event) => {
             var data = JSON.stringify({
-                groupId: $(".role-row.active").data("role-id"),
+                groupId: this.getSelectedRoleId(),
                 specialPermissionId: $(event.currentTarget).parent("td").data("permission-id")
             });
 
@@ -81,6 +84,37 @@ class RoleManager {
                 dataType: "json",
                 contentType: "application/json"
             });
+        });
+    }
+
+    private getSelectedRoleId(): number {
+        return $(".role-row.active").data("role-id");
+    }
+
+    private initRemoveUserFromGroupButton() {
+        $(".remove-user-from-group").click((event) => {
+            var userId = $(event.currentTarget).data("user-id");
+            var roleId = this.getSelectedRoleId();
+            this.removeUserFromRole(userId, roleId);
+        });
+    }
+
+    private removeUserFromRole(userId: number, roleId: number) {
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Permission/RemoveUserFromGroup",
+            data: JSON.stringify({ userId: userId, groupId: roleId }),
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+                console.log(this.userList);
+                this.userList.reloadPage();
+            },
+            error: (response) => {
+                console.log(this.userList);
+                this.userList.reloadPage();
+            }
         });
     }
 }
