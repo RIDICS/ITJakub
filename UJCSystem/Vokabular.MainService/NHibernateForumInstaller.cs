@@ -51,7 +51,7 @@ namespace Vokabular.MainService
 
                 container.UseInstance(sessionFactory, serviceKey: IocServiceKeys.Forum);
 
-                container.Register<UnitOfWork>(Reuse.Scoped, Made.Of(() => new UnitOfWork(Arg.Of<ISessionFactory>(IocServiceKeys.Forum))), serviceKey: IocServiceKeys.Forum);
+                container.Register<IUnitOfWork>(Reuse.Scoped, Made.Of(() => new UnitOfWork(Arg.Of<ISessionFactory>(IocServiceKeys.Forum))), serviceKey: IocServiceKeys.Forum);
             }
             catch (SqlException e)
             {

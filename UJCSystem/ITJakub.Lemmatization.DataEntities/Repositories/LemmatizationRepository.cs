@@ -11,7 +11,7 @@ namespace ITJakub.Lemmatization.DataEntities.Repositories
 {
     public class LemmatizationRepository : NHibernateDao
     {
-        public LemmatizationRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public LemmatizationRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider, null)
         {
         }
 

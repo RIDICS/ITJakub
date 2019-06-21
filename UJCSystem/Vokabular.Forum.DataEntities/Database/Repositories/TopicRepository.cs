@@ -4,9 +4,9 @@ using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.ForumSite.DataEntities.Database.Repositories
 {
-    public class TopicRepository : NHibernateDao
+    public class TopicRepository : ForumDbRepositoryBase
     {
-        public TopicRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public TopicRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
         }
 

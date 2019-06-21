@@ -18,9 +18,9 @@ namespace Vokabular.Shared.DataEntities.Daos
 
         protected static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public NHibernateDao(IUnitOfWork unitOfWork)
+        public NHibernateDao(UnitOfWorkProvider unitOfWorkProvider, string serviceKey)
         {
-            m_unitOfWork = unitOfWork;
+            m_unitOfWork = unitOfWorkProvider.GetUnitOfWork(serviceKey);
         }
 
         public IUnitOfWork UnitOfWork

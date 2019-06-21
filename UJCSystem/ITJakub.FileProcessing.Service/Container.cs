@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using Castle.Core.Resource;
+using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
@@ -15,6 +18,7 @@ using Vokabular.Core;
 using Vokabular.DataEntities;
 using Vokabular.Log4Net;
 using Vokabular.Shared;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 using Vokabular.Shared.WcfService;
 
 namespace ITJakub.FileProcessing.Service
@@ -69,6 +73,13 @@ namespace ITJakub.FileProcessing.Service
             services.AddSingleton<IOptions<PathConfiguration>, PathConfigImplementation>(); // TODO after switch to ASP.NET Core use framework options handler
 
             this.AddServicesCollection(services);
+
+            // Re-register UnitOfWorkProvider to satisfy dependency
+            Register(Component.For<UnitOfWorkProvider>()
+                .IsDefault()
+                .UsingFactoryMethod(c => new UnitOfWorkProvider(c.ResolveAll<IUnitOfWork>().Select(x => new KeyValuePair<object, IUnitOfWork>(null, x)).ToList()))
+                .LifestylePerWebRequest()
+            );
         }
 
         private void ConfigureAutoMapper()

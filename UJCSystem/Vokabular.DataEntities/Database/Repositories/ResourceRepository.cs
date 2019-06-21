@@ -5,14 +5,13 @@ using NHibernate.SqlCommand;
 using NHibernate.Transform;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
-using Vokabular.Shared.DataEntities.Daos;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
 {
-    public class ResourceRepository : NHibernateDao
+    public class ResourceRepository : MainDbRepositoryBase
     {
-        public ResourceRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public ResourceRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
         }
         

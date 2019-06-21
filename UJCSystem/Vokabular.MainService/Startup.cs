@@ -141,26 +141,11 @@ namespace Vokabular.MainService
 
             container.InnerContainer.AddNHibernateDefaultDatabase();
             container.InnerContainer.AddNHibernateForumDatabase();
-
-            container.InnerContainer.Register<IUnitOfWork>(Made.Of(
-                () => GetCorrectUnitOfWork(Arg.Of<IResolver>(), Arg.Index<Type>(0)),
-                request => request.Parent.ImplementationType));
-
+            
             container.Install<MainServiceContainerRegistration>();
             container.Install<ForumCoreContainerRegistration>();
 
             return container.CreateServiceProvider(services);
-        }
-
-        private static IUnitOfWork GetCorrectUnitOfWork(IResolver resolver, Type parentImplementationType)
-        {
-            // TODO better logic for selecting correct UnitOfWork
-            if (parentImplementationType.Namespace != null && parentImplementationType.Namespace.StartsWith("Vokabular.ForumSite"))
-            {
-                return resolver.Resolve<UnitOfWork>(IocServiceKeys.Forum);
-            }
-
-            return resolver.Resolve<UnitOfWork>(IocServiceKeys.Main);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

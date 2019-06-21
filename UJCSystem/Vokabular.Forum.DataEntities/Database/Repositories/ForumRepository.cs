@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using NHibernate.Criterion;
 using Vokabular.ForumSite.DataEntities.Database.Entities;
-using Vokabular.Shared.DataEntities.Daos;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.ForumSite.DataEntities.Database.Repositories
 {
-    public class ForumRepository : NHibernateDao
+    public class ForumRepository : ForumDbRepositoryBase
     {
-        public ForumRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public ForumRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
         }
 

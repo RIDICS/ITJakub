@@ -9,14 +9,13 @@ using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Search;
-using Vokabular.Shared.DataEntities.Daos;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
 {
-    public class MetadataRepository : NHibernateDao
+    public class MetadataRepository : MainDbRepositoryBase
     {
-        public MetadataRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public MetadataRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
         }
 

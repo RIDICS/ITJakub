@@ -7,14 +7,13 @@ using NHibernate.Transform;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
-using Vokabular.Shared.DataEntities.Daos;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
 {
-    public class CatalogValueRepository : NHibernateDao
+    public class CatalogValueRepository : MainDbRepositoryBase
     {
-        public CatalogValueRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public CatalogValueRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
         }
 

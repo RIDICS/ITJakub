@@ -7,14 +7,13 @@ using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.Shared.DataContracts.Types.Favorite;
-using Vokabular.Shared.DataEntities.Daos;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
 {
-    public class FavoritesRepository : NHibernateDao
+    public class FavoritesRepository : MainDbRepositoryBase
     {
-        public FavoritesRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public FavoritesRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
         }
 

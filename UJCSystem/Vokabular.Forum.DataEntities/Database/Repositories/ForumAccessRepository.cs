@@ -1,17 +1,16 @@
 ﻿using System.Collections.Generic;
 using Vokabular.ForumSite.DataEntities.Database.Entities;
-using Vokabular.Shared.DataEntities.Daos;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.ForumSite.DataEntities.Database.Repositories
 {
-    public class ForumAccessRepository : NHibernateDao
+    public class ForumAccessRepository : ForumDbRepositoryBase
     {
         private readonly AccessMaskRepository m_accessMaskRepository;
         private readonly GroupRepository m_groupRepository;
 
-        public ForumAccessRepository(IUnitOfWork unitOfWork, AccessMaskRepository accessMaskRepository, GroupRepository groupRepository) :
-            base(unitOfWork)
+        public ForumAccessRepository(UnitOfWorkProvider unitOfWorkProvider, AccessMaskRepository accessMaskRepository, GroupRepository groupRepository) :
+            base(unitOfWorkProvider)
         {
             m_accessMaskRepository = accessMaskRepository;
             m_groupRepository = groupRepository;

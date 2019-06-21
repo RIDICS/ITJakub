@@ -1,12 +1,11 @@
 ﻿using Vokabular.ForumSite.DataEntities.Database.Entities;
-using Vokabular.Shared.DataEntities.Daos;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.ForumSite.DataEntities.Database.Repositories
 {
-    public class CategoryRepository : NHibernateDao
+    public class CategoryRepository : ForumDbRepositoryBase
     {
-        public CategoryRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public CategoryRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
         }
 

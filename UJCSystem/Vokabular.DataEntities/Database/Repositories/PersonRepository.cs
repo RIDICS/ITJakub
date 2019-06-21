@@ -6,14 +6,13 @@ using NHibernate.Transform;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
-using Vokabular.Shared.DataEntities.Daos;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
 {
-    public class PersonRepository : NHibernateDao
+    public class PersonRepository : MainDbRepositoryBase
     {
-        public PersonRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public PersonRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
         }
 

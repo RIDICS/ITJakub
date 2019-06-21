@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using Vokabular.DataEntities.Database.Entities;
-using Vokabular.Shared.DataEntities.Daos;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
 {
-    public class UserRepository : NHibernateDao
+    public class UserRepository : MainDbRepositoryBase
     {
-        public UserRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public UserRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
         }
 

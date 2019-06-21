@@ -10,7 +10,7 @@ namespace Vokabular.ForumSite.DataEntities
     {
         public void Install(IServiceCollection services)
         {
-            services.TryAddScoped<IUnitOfWork, UnitOfWork>();
+            services.TryAddScoped<UnitOfWorkProvider>();
 
             services.AddScoped<AccessMaskRepository>();
             services.AddScoped<BoardRepository>();

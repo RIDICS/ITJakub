@@ -192,6 +192,10 @@
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
       <Name>ITJakub.Shared.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vokabular.Shared.DataEntities\Vokabular.Shared.DataEntities.csproj">
+      <Project>{1d302489-8778-4dec-9bcf-ee35f90af87b}</Project>
+      <Name>Vokabular.Shared.DataEntities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vokabular.Shared.WcfService\Vokabular.Shared.WcfService.csproj">
       <Project>{7deba8c4-efd2-472b-9c16-35f8319ff0f5}</Project>
       <Name>Vokabular.Shared.WcfService</Name>

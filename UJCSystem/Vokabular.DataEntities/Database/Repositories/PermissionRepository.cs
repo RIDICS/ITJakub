@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using NHibernate.Criterion;
 using Vokabular.DataEntities.Database.Entities;
-using Vokabular.Shared.DataEntities.Daos;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
 {
-    public class PermissionRepository : NHibernateDao
+    public class PermissionRepository : MainDbRepositoryBase
     {
-        public PermissionRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public PermissionRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
         }
         

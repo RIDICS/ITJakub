@@ -7,6 +7,7 @@ using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
 using Vokabular.Shared.Container;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 using Vokabular.Shared.Options;
 using Configuration = NHibernate.Cfg.Configuration;
 
@@ -37,6 +38,8 @@ namespace ITJakub.Lemmatization.Service
             services.AddSingleton(cfg);
 
             services.AddSingleton(sessionFactory);
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
     }
 }

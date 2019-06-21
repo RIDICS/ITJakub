@@ -4,14 +4,13 @@ using NHibernate;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
-using Vokabular.Shared.DataEntities.Daos;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
 {
-    public class ProjectRepository : NHibernateDao
+    public class ProjectRepository : MainDbRepositoryBase
     {
-        public ProjectRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public ProjectRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
         }
         
