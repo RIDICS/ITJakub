@@ -21,15 +21,17 @@ namespace Vokabular.MainService.Core.Managers
 
         private readonly UserRepository m_userRepository;
         private readonly PermissionRepository m_permissionRepository;
+        private readonly UserDetailManager m_userDetailManager;
 
         private readonly CommunicationProvider m_communicationProvider;
 
         public RoleManager(UserRepository userRepository, PermissionRepository permissionRepository,
-            CommunicationProvider communicationProvider)
+            CommunicationProvider communicationProvider, UserDetailManager userDetailManager)
         {
             m_userRepository = userRepository;
             m_permissionRepository = permissionRepository;
             m_communicationProvider = communicationProvider;
+            m_userDetailManager = userDetailManager;
         }
 
         public List<RoleContract> GetRolesByUser(int userId)
@@ -59,12 +61,14 @@ namespace Vokabular.MainService.Core.Managers
         public PagedResultList<UserContract> GetUsersByRole(int roleId, int? start, int? count, string filterByName)
         {
             var client = m_communicationProvider.GetAuthRoleApiClient();
-            var members = client.GetUserListByRoleAsync(roleId, start, count, filterByName).GetAwaiter().GetResult();
+            var result = client.GetUserListByRoleAsync(roleId, start, count, filterByName).GetAwaiter().GetResult();
+            var users = Mapper.Map<List<UserContract>>(result.Items);
+            m_userDetailManager.AddIdForExternalUsers(users);
 
             return new PagedResultList<UserContract>
             {
-                List = Mapper.Map<List<UserContract>>(members.Items),
-                TotalCount = members.ItemsCount
+                List = users,
+                TotalCount = result.ItemsCount
             };
         }
 

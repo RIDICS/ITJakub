@@ -4,7 +4,7 @@ namespace Vokabular.Authentication.DataContracts
 {
     public class UserWithRolesContract : ContractBase
     {
-        public int UserId { get; set; }
+        public int Id { get; set; }
 
         public string FirstName { get; set; }
 

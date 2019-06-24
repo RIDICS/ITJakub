@@ -24,7 +24,7 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles.Authentication
                 .ForMember(dest => dest.UserName, opt => opt.Ignore()) // Username is missing in source data
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
-                .ForMember(dest => dest.ExternalId, opt => opt.MapFrom(src => src.UserId));
+                .ForMember(dest => dest.ExternalId, opt => opt.MapFrom(src => src.Id));
         }
     }
 }

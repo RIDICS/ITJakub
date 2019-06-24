@@ -70,6 +70,15 @@ namespace Vokabular.MainService.Core.Managers
             return userDetailContracts;
         }
 
+        public void AddIdForExternalUsers(List<UserContract> userDetailContracts)
+        {
+            foreach (var userDetailContract in userDetailContracts)
+            {
+                var userId = new CreateUserIfNotExistWork(m_userRepository, userDetailContract.ExternalId, null).Execute();
+                userDetailContract.Id = userId;
+            }
+        }
+
         public List<UserContract> AddUserDetails(List<UserContract> list)
         {
             var users = new List<UserContract>();
