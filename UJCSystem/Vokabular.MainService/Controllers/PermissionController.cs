@@ -34,19 +34,10 @@ namespace Vokabular.MainService.Controllers
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
         public List<PermissionContract> GetPermissionList([FromQuery] int? start, [FromQuery] int? count, [FromQuery] string filterByName)
         {
-            try
-            {
-                var result = m_permissionManager.GetPermissions(start, count, filterByName);
+            var result = m_permissionManager.GetPermissions(start, count, filterByName);
 
-                SetTotalCountHeader(result.TotalCount);
-                return result.List;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-            
+            SetTotalCountHeader(result.TotalCount);
+            return result.List;
         }
     }
 }

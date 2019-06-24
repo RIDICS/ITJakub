@@ -7,6 +7,7 @@ using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Works.Users;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
+using AuthUserContract = Vokabular.Authentication.DataContracts.User.UserContract;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -59,15 +60,13 @@ namespace Vokabular.MainService.Core.Managers
             return userDetailContract;
         }
 
-        public List<UserDetailContract> GetIdForExternalUsers(List<UserDetailContract> userDetailContracts)
+        public void AddIdForExternalUsers(List<UserDetailContract> userDetailContracts)
         {
             foreach (var userDetailContract in userDetailContracts)
             {
                 var userId = new CreateUserIfNotExistWork(m_userRepository, userDetailContract.ExternalId, null).Execute();
                 userDetailContract.Id = userId;
             }
-
-            return userDetailContracts;
         }
 
         public void AddIdForExternalUsers(List<UserContract> userDetailContracts)
@@ -121,10 +120,10 @@ namespace Vokabular.MainService.Core.Managers
             return list;
         }
 
-        private Vokabular.Authentication.DataContracts.User.UserContract GetDetailUserFromAuthService(int userExternalId)
+        private AuthUserContract GetDetailUserFromAuthService(int userExternalId)
         {
             var client = m_communicationProvider.GetAuthUserApiClient();
-            var result = client.HttpClient.GetItemAsync<Vokabular.Authentication.DataContracts.User.UserContract>(userExternalId).GetAwaiter().GetResult();
+            var result = client.HttpClient.GetItemAsync<AuthUserContract>(userExternalId).GetAwaiter().GetResult();
             return result;
         }
     }

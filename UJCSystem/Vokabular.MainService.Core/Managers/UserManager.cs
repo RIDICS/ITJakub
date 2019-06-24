@@ -64,10 +64,11 @@ namespace Vokabular.MainService.Core.Managers
             
                 var result = client.HttpClient.GetListAsync<AuthUserContract>(startValue, countValue, filterByName).GetAwaiter().GetResult();
                 var userDetailContracts = Mapper.Map<List<UserDetailContract>>(result.Items);
+                m_userDetailManager.AddIdForExternalUsers(userDetailContracts);
 
                 return new PagedResultList<UserDetailContract>
                 {
-                    List = m_userDetailManager.GetIdForExternalUsers(userDetailContracts),
+                    List = userDetailContracts,
                     TotalCount = result.ItemsCount,
                 };
         }
@@ -83,7 +84,8 @@ namespace Vokabular.MainService.Core.Managers
 
             var result = client.HttpClient.GetListAsync<AuthUserContract>(0, countValue, query).GetAwaiter().GetResult();
             var userDetailContracts = Mapper.Map<List<UserDetailContract>>(result.Items);
-            return m_userDetailManager.GetIdForExternalUsers(userDetailContracts);
+            m_userDetailManager.AddIdForExternalUsers(userDetailContracts);
+            return userDetailContracts;
         }
 
         public UserDetailContract GetUserDetail(int userId)
