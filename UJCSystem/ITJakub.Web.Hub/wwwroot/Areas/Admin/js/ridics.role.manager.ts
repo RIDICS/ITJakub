@@ -1,14 +1,16 @@
 ﻿$(document.documentElement).ready(() => {
-    var roleManager = new RoleManager();
-    roleManager.init();
+    var roleList = new ListWithPagination("Permission/RolePermission", 10, "role", ViewType.Widget, true);
+    roleList.init();
 
-    var groupList = new ListWithPagination("Permission/GroupPermission", 10, "role", ViewType.Widget, true, roleManager.init);
-    groupList.init();
+    var roleManager = new RoleManager();
+    roleManager.init(roleList);
 });
 
 class RoleManager {
+    public static roleSectionSelector = "#role-section";
+
     private userList;
-    public init() {
+    public init(roleList: ListWithPagination) {
         $(".role-row").click((event) => {
             $(event.currentTarget).addClass("active").siblings().removeClass("active");
 
@@ -16,6 +18,8 @@ class RoleManager {
             this.loadUsers(selectedRoleId);
             this.loadPermissions(selectedRoleId);
         });
+
+        this.initRemoveRoleButtons(roleList);
     }
 
     private loadUsers(roleId: number) {
@@ -32,9 +36,9 @@ class RoleManager {
                     "user",
                     ViewType.Widget,
                     false,
-                    this.initRemoveUserFromGroupButton);
+                    this.initRemoveUserFromRoleButton);
                 this.userList.init();
-                this.initRemoveUserFromGroupButton();
+                this.initRemoveUserFromRoleButton(this.userList);
                 $("#user-section .section").removeClass("hide");
             },
         });
@@ -44,12 +48,12 @@ class RoleManager {
         $.ajax({
             type: "GET",
             traditional: true,
-            url: URI(getBaseUrl() + "Permission/GroupPermissionList").search(query => {
+            url: URI(getBaseUrl() + "Permission/RolePermissionList").search(query => {
                 query.roleId = roleId;
             }).toString(),
             success: (response) => {
                 $("#permission-list-container").html(response);
-                var permissionList = new ListWithPagination(`Permission/GroupPermissionList?roleId=${roleId}`,
+                var permissionList = new ListWithPagination(`Permission/RolePermissionList?roleId=${roleId}`,
                     10,
                     "permission",
                     ViewType.Widget,
@@ -65,15 +69,15 @@ class RoleManager {
     private initPermissionManaging() {
         $(".permission-checkbox input[type=checkbox]").change((event) => {
             var data = JSON.stringify({
-                groupId: this.getSelectedRoleId(),
+                roleId: $(".role-row.active").data("role-id"),
                 specialPermissionId: $(event.currentTarget).parent("td").data("permission-id")
             });
 
             let urlPath: string;
             if ($(event.currentTarget).is(":checked")) {
-                urlPath = "Permission/AddSpecialPermissionsToGroup";
+                urlPath = "Permission/AddSpecialPermissionsToRole";
             } else {
-                urlPath = "Permission/RemoveSpecialPermissionsFromGroup";
+                urlPath = "Permission/RemoveSpecialPermissionsFromRole";
             }
 
             $.ajax({
@@ -87,34 +91,39 @@ class RoleManager {
         });
     }
 
-    private getSelectedRoleId(): number {
-        return $(".role-row.active").data("role-id");
-    }
-
-    private initRemoveUserFromGroupButton() {
-        $(".remove-user-from-group").click((event) => {
+    private initRemoveUserFromRoleButton(list: ListWithPagination) {
+        $(".remove-user-from-role").click((event) => {
             var userId = $(event.currentTarget).data("user-id");
-            var roleId = this.getSelectedRoleId();
-            this.removeUserFromRole(userId, roleId);
+            var roleId = $(".role-row.active").data("role-id");
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                url: getBaseUrl() + "Permission/RemoveUserFromRole",
+                data: JSON.stringify({ userId: userId, roleId: roleId }),
+                dataType: "json",
+                contentType: "application/json",
+                success: () => {
+                    list.reloadPage();
+                }
+            });
         });
     }
 
-    private removeUserFromRole(userId: number, roleId: number) {
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            url: getBaseUrl() + "Permission/RemoveUserFromGroup",
-            data: JSON.stringify({ userId: userId, groupId: roleId }),
-            dataType: "json",
-            contentType: "application/json",
-            success: (response) => {
-                console.log(this.userList);
-                this.userList.reloadPage();
-            },
-            error: (response) => {
-                console.log(this.userList);
-                this.userList.reloadPage();
-            }
+    private initRemoveRoleButtons(list: ListWithPagination) {
+        $(".remove-role").click((event) => {
+            event.stopPropagation();
+            var roleId = $(event.currentTarget).parents("tr.role-row").data("role-id");
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                url: getBaseUrl() + "Permission/DeleteRole",
+                data: JSON.stringify({ roleId: roleId }),
+                dataType: "json",
+                contentType: "application/json",
+                success: () => {
+                    list.reloadPage();
+                }
+            });
         });
     }
 }

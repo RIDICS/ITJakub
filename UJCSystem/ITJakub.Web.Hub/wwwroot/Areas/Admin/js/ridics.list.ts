@@ -18,8 +18,8 @@
     private search: string;
 
     constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, saveStateToUrl: boolean);
-    constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, saveStateToUrl: boolean, pageLoadCallback: () => void);
-    constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, saveStateToUrl: boolean, pageLoadCallback?: () => void) {
+    constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, saveStateToUrl: boolean, pageLoadCallback: (list: ListWithPagination) => void);
+    constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, saveStateToUrl: boolean, pageLoadCallback?: (list: ListWithPagination) => void) {
         this.urlPath = urlPath;
         this.defaultPageSize = defaultPageSize;
         this.selector = selector;
@@ -124,7 +124,13 @@
                     }
 
                     if (typeof this.pageLoadCallback !== "undefined") {
-                        this.pageLoadCallback.call();
+                        this.pageLoadCallback.apply(this);
+                    }
+                    
+                    var roleSection = $(RoleManager.roleSectionSelector);
+                    if (roleSection) {
+                        var roleManager = new RoleManager();
+                        roleManager.init(this);
                     }
                 });
     }
