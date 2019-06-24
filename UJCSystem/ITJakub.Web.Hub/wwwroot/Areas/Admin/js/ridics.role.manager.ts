@@ -2,6 +2,27 @@
     var roleList = new ListWithPagination("Permission/RolePermission", 10, "role", ViewType.Widget, true);
     roleList.init();
 
+    $("#createRoleButton").click(() => {
+        $("#createRoleModal").modal();
+    });
+
+    $("#role-group").click(() => {
+        var groupName = $("#new-role-name").val() as string;
+        var groupDescription = $("#new-role-description").val() as string;
+
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Permission/CreateRole",
+            data: JSON.stringify({ roleName: groupName, roleDescription: groupDescription }),
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+                $("#createRoleModal").modal('hide');
+                roleList.reloadPage();
+            }
+        });
+    });
     var roleManager = new RoleManager();
     roleManager.init(roleList);
 });

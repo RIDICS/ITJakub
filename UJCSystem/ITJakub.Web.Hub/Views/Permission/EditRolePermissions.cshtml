@@ -14,7 +14,6 @@
 }
 
 @section scripts{
-    <script src="~/js/Permission/itjakub.permission.group.js"></script>
     <script src="~/Areas/Admin/js/ridics.list.js"></script>
     <script src="~/Areas/Admin/js/ridics.role.manager.js"></script>
 }
@@ -23,7 +22,10 @@
 
 <div class="col-sm-12 col-md-3" id="role-section">
     <div class="row page-control">
-        <div class="col col-sm-12">
+        <div class="col col-sm-12 col-md-3">
+            <button id="createRoleButton" class="btn btn-default">+</button>
+        </div>
+        <div class="col col-sm-12 col-md-9">
             <form asp-action="RolePermission" asp-controller="Permission" method="get" class="role-search-form form-inline">
                 <div class="form-group">
                     <div class="search-button">
@@ -83,59 +85,8 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="permission-left-panel col-md-6">
-        <div id="selected-item-div" class="content hidden">
-            <div class="item-details-title">@Localizer.Translate("SelectedGroup", "Permission", LocTranslationSource.File)</div>
-            <div class="item-details">
-                <div class="detail-item">
-                    <span class="detail-item-title">@Localizer.Translate("Name", "Permission", LocTranslationSource.File): </span>
-                    <span id="specificGroupName"></span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-item-title">@Localizer.Translate("Description", "Permission", LocTranslationSource.File): </span>
-                    <span id="specificGroupDescription"></span>
-                </div>
-            </div>
-            <div class="selected-item-buttons">
-                <button id="deleteGroup" class="btn btn-default permission-button">@Localizer.Translate("DeleteGroup", "Permission", LocTranslationSource.File)</button>
-            </div>
-        </div>
-    </div>
-    <div id="right-panel" class="permission-right-panel col-md-6 hidden">
-        <ul class="nav nav-tabs">
-            <li class="active">
-                <a href="#tab-book-permissions" data-toggle="tab">@Localizer.Translate("BookPermissions", "Permission", LocTranslationSource.File)</a>
-            </li>
-            <li>
-                <a href="#tab-special-permission" data-toggle="tab">@Localizer.Translate("SpecialPermissisons", "Permission", LocTranslationSource.File)</a>
-            </li>
-        </ul>
 
-        <div class="tab-content">
-            <div id="tab-book-permissions" class="tab-pane active">
-
-                <div class="right-panel-title">@Localizer.Translate("AllowedBookList", "Permission", LocTranslationSource.File):</div>
-                <ul id="allowedBooksList" class="items-list"></ul>
-
-                <div class="category-buttons">
-                    <button id="addBookToGroup" class="btn btn-default permission-button">+</button>
-                </div>
-            </div>
-            <div id="tab-special-permission" class="tab-pane">
-
-                <div class="right-panel-title">@Localizer.Translate("AllowedSpecialPermissionList", "Permission", LocTranslationSource.File):</div>
-                <ul id="allowedSpecialPermissionList" class="items-list"></ul>
-
-                <div class="category-buttons">
-                    <button id="addSpecialPermissionToGroup" class="btn btn-default permission-button">+</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="createGroupModal" class="modal fade" role="dialog">
+<div id="createRoleModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -145,56 +96,66 @@
             <div class="modal-body">
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <label for="new-group-name" class="col-md-3 control-label">@Localizer.Translate("GroupName", "Permission", LocTranslationSource.File)</label>
+                        <label for="new-role-name" class="col-md-3 control-label">@Localizer.Translate("GroupName", "Permission", LocTranslationSource.File)</label>
                         <div class="col-md-8">
-                            <input class="form-control" id="new-group-name" name="new-text" type="text">
+                            <input class="form-control" id="new-role-name" name="new-text" type="text">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="new-group-description" class="col-md-3 control-label">@Localizer.Translate("Description", "Permission", LocTranslationSource.File)</label>
+                        <label for="new-role-description" class="col-md-3 control-label">@Localizer.Translate("Description", "Permission", LocTranslationSource.File)</label>
                         <div class="col-md-8">
-                            <input class="form-control" id="new-group-description" name="new-text" type="text">
+                            <input class="form-control" id="new-role-description" name="new-text" type="text">
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "Permission", LocTranslationSource.File)</button>
-                <button type="button" class="btn btn-default" id="save-group">@Localizer.Translate("Create", "Permission", LocTranslationSource.File)</button>
+                <button type="button" class="btn btn-default" id="save-role">@Localizer.Translate("Create", "Permission", LocTranslationSource.File)</button>
             </div>
         </div>
     </div>
 </div>
 
-<div id="addBookToGroupDialog" class="modal fade" role="dialog">
+<div id="addToGroupDialog" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">@Localizer.Translate("AddAllowedBooksToGroup", "Permission", LocTranslationSource.File)</h4>
+                <h4 class="modal-title">@Localizer.Translate("AddToGroup", "Permission", LocTranslationSource.File)</h4>
             </div>
-            <div class="modal-body" id="add-books-to-group-form">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "Permission", LocTranslationSource.File)</button>
-                <button type="button" class="btn btn-default" id="add-books-to-group-ok">@Localizer.Translate("Add", "Permission", LocTranslationSource.File)</button>
-            </div>
-        </div>
-    </div>
-</div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#tab2-select-existing" data-toggle="tab">@Localizer.Translate("SelectExisting", "Permission", LocTranslationSource.File)</a>
+                    </li>
+                </ul>
 
-<div id="addSpecialPermissionToGroupDialog" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">@Localizer.Translate("AddSpecialPermissionsToGroup", "Permission", LocTranslationSource.File)</h4>
-            </div>
-            <div class="modal-body" id="add-special-permission-to-group-form">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "Permission", LocTranslationSource.File)</button>
-                <button type="button" class="btn btn-default" id="add-special-permissions-to-group-ok">@Localizer.Translate("Add", "Permission", LocTranslationSource.File)</button>
+                <div class="tab-content">
+                    <div id="tab2-select-existing" class="tab-pane active">
+                        <div class="permission-search">
+                            <input type="text" class="form-control permission-search-input" id="groupSearchInput" placeholder="@Localizer.Translate("SearchGroup","Permission", LocTranslationSource.File)" />
+                        </div>
+
+                        <div class="content">
+                            <div class="item-details-title">@Localizer.Translate("SelectedGroup", "Permission", LocTranslationSource.File)</div>
+                            <div class="item-details">
+                                <div class="detail-item">
+                                    <span class="detail-item-title">@Localizer.Translate("Name", "Permission", LocTranslationSource.File): </span>
+                                    <span id="specificGroupName"></span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-item-title">@Localizer.Translate("GroupDescription", "Permission", LocTranslationSource.File): </span>
+                                    <span id="specificGroupDescription"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "Permission", LocTranslationSource.File)</button>
+                    <button type="button" class="btn btn-default" id="add-user-to-group">@Localizer.Translate("AddUserToGroup", "Permission", LocTranslationSource.File)</button>
+                </div>
             </div>
         </div>
     </div>

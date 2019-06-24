@@ -216,16 +216,16 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateGroup([FromBody] CreateRoleRequest request)
+        public ActionResult CreateRole([FromBody] CreateRoleRequest request)
         {
             using (var client = GetRestClient())
             {
-                var newUserGroupRequest = new RoleContract
+                var newRoleContract = new RoleContract
                 {
                     Name = request.RoleName,
                     Description = request.RoleDescription,
                 };
-                var groupId = client.CreateRole(newUserGroupRequest);
+                var groupId = client.CreateRole(newRoleContract);
                 var group = client.GetRoleDetail(groupId);
                 return Json(group);
             }
