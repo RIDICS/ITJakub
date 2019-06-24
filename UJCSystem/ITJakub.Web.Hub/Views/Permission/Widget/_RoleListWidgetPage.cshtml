@@ -7,12 +7,11 @@
 <div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>
 @foreach (var role in Model.List)
 {
-    <tr data-role-id="@role.Id" class="role-row">
-        <td>
+    <tr data-role-id="@role.Id" data-role-description="@role.Description" class="role-row">
+        <td class="role-name">
             @Html.DisplayFor(modelItem => role.Name)
         </td>
         <td class="buttons">
-            @*TODO ajax post delete *@
             <a class="remove-role btn btn-sm btn-default @(User.HasPermission(PermissionNames.ManagePermissions) ? "" : "disabled")">
                 <i class="fa fa-trash"></i>
             </a>

@@ -206,7 +206,7 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddUserToGroup([FromBody] AddUserToRoleRequest request)
+        public ActionResult AddUserToRole([FromBody] AddUserToRoleRequest request)
         {
             using (var client = GetRestClient())
             {

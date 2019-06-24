@@ -46,7 +46,10 @@
 <div class="col-sm-12 col-md-4" id="user-section">
     <div class="section hide">
         <div class="row page-control">
-            <div class="col-12 col-sm-12">
+            <div class="col col-sm-3">
+                <button id="addRoleButton" class="btn btn-default">+</button>
+            </div>
+            <div class="col col-sm-9">
                 <form asp-action="UsersByRole" asp-controller="Permission" method="get" class="user-search-form form-inline">
                     <div class="form-group">
                         <div class="search-button">
@@ -117,7 +120,7 @@
     </div>
 </div>
 
-<div id="addToGroupDialog" class="modal fade" role="dialog">
+<div id="addToRoleDialog" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -125,37 +128,31 @@
                 <h4 class="modal-title">@Localizer.Translate("AddToGroup", "Permission", LocTranslationSource.File)</h4>
             </div>
             <div class="modal-body">
-                <ul class="nav nav-tabs">
-                    <li class="active">
-                        <a href="#tab2-select-existing" data-toggle="tab">@Localizer.Translate("SelectExisting", "Permission", LocTranslationSource.File)</a>
-                    </li>
-                </ul>
 
-                <div class="tab-content">
-                    <div id="tab2-select-existing" class="tab-pane active">
-                        <div class="permission-search">
-                            <input type="text" class="form-control permission-search-input" id="groupSearchInput" placeholder="@Localizer.Translate("SearchGroup","Permission", LocTranslationSource.File)" />
+                <div class="permission-search">
+                    <input type="text" class="form-control permission-search-input" id="mainSearchInput" placeholder="@Localizer.Translate("SearchUser", "Permission", LocTranslationSource.File)"/>
+                </div>
+
+                <div class="content">
+                    <div class="item-details">
+                        <div class="detail-item">
+                            <span class="detail-item-title">@Localizer.Translate("SelectedGroup", "Permission", LocTranslationSource.File): </span>
+                            <span id="specificRoleName"></span>
                         </div>
-
-                        <div class="content">
-                            <div class="item-details-title">@Localizer.Translate("SelectedGroup", "Permission", LocTranslationSource.File)</div>
-                            <div class="item-details">
-                                <div class="detail-item">
-                                    <span class="detail-item-title">@Localizer.Translate("Name", "Permission", LocTranslationSource.File): </span>
-                                    <span id="specificGroupName"></span>
-                                </div>
-                                <div class="detail-item">
-                                    <span class="detail-item-title">@Localizer.Translate("GroupDescription", "Permission", LocTranslationSource.File): </span>
-                                    <span id="specificGroupDescription"></span>
-                                </div>
-                            </div>
+                        <div class="detail-item">
+                            <span class="detail-item-title">@Localizer.Translate("Description", "Permission", LocTranslationSource.File): </span>
+                            <span id="specificRoleDescription"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-item-title">@Localizer.Translate("SelectedUser", "Permission", LocTranslationSource.File): </span>
+                            <span id="selectedUser"></span>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "Permission", LocTranslationSource.File)</button>
-                    <button type="button" class="btn btn-default" id="add-user-to-group">@Localizer.Translate("AddUserToGroup", "Permission", LocTranslationSource.File)</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "Permission", LocTranslationSource.File)</button>
+                <button type="button" class="btn btn-default" id="add-user-to-role">@Localizer.Translate("AddUserToGroup", "Permission", LocTranslationSource.File)</button>
             </div>
         </div>
     </div>
