@@ -5,19 +5,17 @@
 @inject ILocalizationService Localizer
 
 <div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>
-@foreach (var group in Model.List)
+@foreach (var role in Model.List)
 {
-    <tr>
+    <tr data-role-id="@role.Id" class="role-row">
         <td>
-            @Html.DisplayFor(modelItem => group.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => group.Description)
+            @Html.DisplayFor(modelItem => role.Name)
         </td>
         <td class="buttons">
-        <a asp-action="EditGroup" asp-route-groupId="@group.Id" class="btn btn-sm btn-default @(User.HasPermission(PermissionNames.ManagePermissions) ? "" : "disabled")">
-                    @Localizer.Translate("Edit", "Permission")
-                </a>
+            @*TODO ajax post delete *@
+            <a class="remove-role btn btn-sm btn-default @(User.HasPermission(PermissionNames.ManagePermissions) ? "" : "disabled")">
+                <i class="fa fa-trash"></i>
+            </a>
         </td>
     </tr>
 }

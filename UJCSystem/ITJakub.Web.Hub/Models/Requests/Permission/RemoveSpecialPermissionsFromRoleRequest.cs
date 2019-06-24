@@ -1,8 +1,8 @@
 ﻿namespace ITJakub.Web.Hub.Models.Requests.Permission
 {
-    public class RemoveSpecialPermissionsFromGroupRequest
+    public class RemoveSpecialPermissionsFromRoleRequest
     {
-        public int GroupId { get; set; }
+        public int RoleId { get; set; }
 
         public int SpecialPermissionId { get; set; }
     }

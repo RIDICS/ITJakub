@@ -11,7 +11,7 @@
             <span class="text-nowrap">@Localizer.Translate("SearchQuery", "Permission"): <span class="searched-query">@ViewData[PermissionConstants.SearchUser]</span></span>
         </div>
         <div class="reset-search-form">
-            <form asp-action="GroupPermission" asp-controller="Permission" method="get" class="">
+            <form asp-action="RolePermission" asp-controller="Permission" method="get" class="">
                 <input type="hidden" class="reset-search-count" name="count" />
                 <button type="submit" class="btn btn-sm btn-default">@Localizer.Translate("ResetSearch", "Permission")</button>
             </form>
@@ -32,7 +32,7 @@
                 </tr>
             </thead>
             <tbody>
-                @await Html.PartialAsync("Widget/_GroupListWidgetPage", Model)
+                @await Html.PartialAsync("Widget/_RoleListWidgetPage", Model)
             </tbody>
         </table>
     </div>
