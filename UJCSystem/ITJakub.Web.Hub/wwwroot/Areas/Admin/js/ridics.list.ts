@@ -124,11 +124,11 @@
                     }
 
                     if (typeof this.pageLoadCallback !== "undefined") {
-                        this.pageLoadCallback.apply(this);
+                        this.pageLoadCallback.call(null, this);
                     }
                     
                     var roleSection = $(RoleManager.roleSectionSelector);
-                    if (roleSection) {
+                    if (roleSection && this.selector === "role") {
                         var roleManager = new RoleManager();
                         roleManager.init(this);
                     }

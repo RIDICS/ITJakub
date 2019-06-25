@@ -17,36 +17,42 @@
             data: JSON.stringify({ roleName: groupName, roleDescription: groupDescription }),
             dataType: "json",
             contentType: "application/json",
-            success: (response) => {
-                $("#createRoleModal").modal('hide');
+            success: () => {
+                $("#createRoleModal").modal("hide");
                 roleList.reloadPage();
             }
         });
     });
 
-    
-   
     var roleManager = new RoleManager();
     roleManager.init(roleList);
-
-    var editor = new UserPermissionEdit(roleManager.userList);
-    editor.make();
 });
 
 class RoleManager {
     public static roleSectionSelector = "#role-section";
-
+    private searchBox: SingleSetTypeaheadSearchBox<IUserDetail>;
+    private currentUserSelectedItem: IUserDetail;
     public userList;
+
+    constructor() {
+        this.searchBox = new SingleSetTypeaheadSearchBox<IUserDetail>("#mainSearchInput",
+            "Permission",
+            this.getFullNameString,
+            (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(this.getFullNameString(item),
+                item.email));
+    }
+
     public init(roleList: ListWithPagination) {
         $(".role-row").click((event) => {
-            $(event.currentTarget).addClass("active").siblings().removeClass("active");
+            $((event.currentTarget) as any).addClass("active").siblings().removeClass("active");
 
-            var selectedRoleId = $(event.currentTarget).data("role-id");
+            var selectedRoleId = $((event.currentTarget) as any).data("role-id");
             this.loadUsers(selectedRoleId);
             this.loadPermissions(selectedRoleId);
         });
 
         this.initRemoveRoleButtons(roleList);
+        this.initSearchBox();
     }
 
     private loadUsers(roleId: number) {
@@ -97,11 +103,11 @@ class RoleManager {
         $(".permission-checkbox input[type=checkbox]").change((event) => {
             var data = JSON.stringify({
                 roleId: $(".role-row.active").data("role-id"),
-                specialPermissionId: $(event.currentTarget).parent("td").data("permission-id")
+                specialPermissionId: $((event.currentTarget) as any).parent("td").data("permission-id")
             });
 
             let urlPath: string;
-            if ($(event.currentTarget).is(":checked")) {
+            if ($((event.currentTarget) as any).is(":checked")) {
                 urlPath = "Permission/AddSpecialPermissionsToRole";
             } else {
                 urlPath = "Permission/RemoveSpecialPermissionsFromRole";
@@ -120,7 +126,7 @@ class RoleManager {
 
     private initRemoveUserFromRoleButton(list: ListWithPagination) {
         $(".remove-user-from-role").click((event) => {
-            var userId = $(event.currentTarget).data("user-id");
+            var userId = $((event.currentTarget) as any).data("user-id");
             var roleId = $(".role-row.active").data("role-id");
             $.ajax({
                 type: "POST",
@@ -130,7 +136,12 @@ class RoleManager {
                 dataType: "json",
                 contentType: "application/json",
                 success: () => {
-                    list.reloadPage();
+                    if (typeof this.userList != "undefined") {
+                        this.userList.reloadPage();
+                    }
+                    if (typeof list != "undefined") {
+                        list.reloadPage();
+                    }
                 }
             });
         });
@@ -139,7 +150,7 @@ class RoleManager {
     private initRemoveRoleButtons(list: ListWithPagination) {
         $(".remove-role").click((event) => {
             event.stopPropagation();
-            var roleId = $(event.currentTarget).parents("tr.role-row").data("role-id");
+            var roleId = $((event.currentTarget) as any).parents("tr.role-row").data("role-id");
             $.ajax({
                 type: "POST",
                 traditional: true,
@@ -153,29 +164,12 @@ class RoleManager {
             });
         });
     }
-}
 
-class UserPermissionEdit {
-    private searchBox: SingleSetTypeaheadSearchBox<IUserDetail>;
-    private currentUserSelectedItem: IUserDetail;
-    private list: ListWithPagination
-
-    constructor(list: ListWithPagination) {
-        this.searchBox = new SingleSetTypeaheadSearchBox<IUserDetail>("#mainSearchInput", "Permission",
-            this.getFullNameString,
-            (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(this.getFullNameString(item), item.email));
-        this.list = list;
-    }
-
-    private getFullNameString(user: IUser): string {
-        return user.userName + " - " + user.firstName + " " + user.lastName;
-    }
-
-    public make() {
+    private initSearchBox() {
         this.searchBox.setDataSet("User");
         this.searchBox.create((selectedExists: boolean, selectionConfirmed: boolean) => {
             if (!selectedExists || this.searchBox.getInputValue() === "") {
-              
+
             }
 
             if (selectionConfirmed) {
@@ -183,31 +177,46 @@ class UserPermissionEdit {
                 var userBox = $("#selectedUser");
                 var name = this.getFullNameString(this.currentUserSelectedItem);
                 userBox.text(name);
+                userBox.data("user-id", this.currentUserSelectedItem.id);
             }
         });
 
-        $("#addRoleButton").click(() => {
-            $("#specificRoleName").text($(".role-row.active").children(".role-name").text());
-            $("#specificRoleDescription").text($(".role-row.active").data("role-description"));
-            $("#addToRoleDialog").modal();
-        });
+        const addUserToRoleBtn = $("#add-user-to-role");
+        if (addUserToRoleBtn.data("init") === false) {
+            addUserToRoleBtn.data("init", true);
 
-        $("#add-user-to-role").click(() => {
-            var roleId = $(".role-row.active").data("role-id");
-
-            $.ajax({
-                type: "POST",
-                traditional: true,
-                url: getBaseUrl() + "Permission/AddUserToRole",
-                data: JSON.stringify({ userId: this.currentUserSelectedItem.id, roleId: roleId }),
-                dataType: "json",
-                contentType: "application/json",
-                success: (response) => {
-                    this.list.reloadPage();
-                    $("#addToRoleDialog").modal('hide');
-                }
+            $("#addRoleButton").click(() => {
+                $("#specificRoleName").text($(".role-row.active").children(".role-name").text());
+                $("#specificRoleDescription").text($(".role-row.active").data("role-description"));
+                $("#addToRoleDialog").modal();
             });
-        });
+
+            addUserToRoleBtn.click(() => {
+                var roleId = $(".role-row.active").data("role-id");
+                var userId: number;
+                if (typeof this.currentUserSelectedItem == "undefined")
+                    userId = $("#selectedUser").data("user-id");
+                else {
+                    userId = this.currentUserSelectedItem.id;
+                }
+                
+                $.ajax({
+                    type: "POST",
+                    traditional: true,
+                    url: getBaseUrl() + "Permission/AddUserToRole",
+                    data: JSON.stringify({ userId: userId, roleId: roleId }),
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: () => {
+                        this.userList.reloadPage();
+                        $("#addToRoleDialog").modal("hide");
+                    }
+                });
+            });
+        }
+    }
+
+    private getFullNameString(user: IUser): string {
+        return user.userName + " - " + user.firstName + " " + user.lastName;
     }
 }
-
