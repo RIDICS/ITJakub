@@ -9,7 +9,6 @@
     ViewBag.Title = Localizer.Translate("UserPermissionManagementTitle", "Permission", LocTranslationSource.File);
 }
 @section styles{
-    <link href="~/css/ITJakub.Permission.css" rel="stylesheet" />
     <link href="~/css/ridics.permissions.css" rel="stylesheet" />
 }
 @section scripts{
@@ -20,7 +19,7 @@
 <h2>@Localizer.Translate("UserPermissionManagementHeadline", "Permission", LocTranslationSource.File)</h2>
 
 <div class="row page-control">
-    <div class="col-12 col-sm-offset-6 col-sm-6 col-lg-offset-8 col-lg-4 col-xl-offset-9 col-xl-3">
+    <div class="col-sm-offset-6 col-sm-6 col-lg-offset-8 col-lg-4 col-xl-offset-9 col-xl-3">
         <form asp-action="UserPermission" asp-controller="Permission" method="get" class="user-search-form form-inline">
             <div class="form-group">
                 <div class="search-button">

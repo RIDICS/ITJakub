@@ -9,8 +9,7 @@
 }
 
 @section styles{
-    <link href="~/css/ITJakub.Permission.css" rel="stylesheet"/>
-    <link href="~/css/ridics.permissions.css" rel="stylesheet"/>
+    <link href="~/css/ridics.permissions.css" rel="stylesheet" />
 }
 
 @section scripts{
@@ -33,7 +32,7 @@
                             <i class="fa fa-search"></i>
                         </button>
                     </div>
-                    <input class="form-control search-value" name="search" value="@ViewData[PermissionConstants.SearchRole]"/>
+                    <input class="form-control search-value" name="search" value="@ViewData[PermissionConstants.SearchRole]" />
                 </div>
             </form>
         </div>
@@ -59,7 +58,7 @@
                                 <i class="fa fa-search"></i>
                             </button>
                         </div>
-                        <input class="form-control search-value" name="search" value="@ViewData[PermissionConstants.SearchUser]"/>
+                        <input class="form-control search-value" name="search" value="@ViewData[PermissionConstants.SearchUser]" />
                     </div>
                 </form>
             </div>
@@ -74,7 +73,7 @@
 <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="permission-section">
     <div class="section hide">
         <div class="row page-control">
-            <div class="col-12 col-sm-12">
+            <div class="col-sm-12">
                 <form asp-action="RolePermissionList" asp-controller="Permission" method="get" class="permission-search-form form-inline">
                     <div class="form-group">
                         <div class="search-button">
@@ -82,7 +81,7 @@
                                 <i class="fa fa-search"></i>
                             </button>
                         </div>
-                        <input class="form-control search-value" name="search" value="@ViewData[PermissionConstants.SearchPermission]"/>
+                        <input class="form-control search-value" name="search" value="@ViewData[PermissionConstants.SearchPermission]" />
                     </div>
                 </form>
             </div>
@@ -136,7 +135,7 @@
             <div class="modal-body">
 
                 <div class="permission-search">
-                    <input type="text" class="form-control permission-search-input" id="mainSearchInput" placeholder="@Localizer.Translate("SearchUser", "Permission", LocTranslationSource.File)"/>
+                    <input type="text" class="form-control permission-search-input" id="mainSearchInput" placeholder="@Localizer.Translate("SearchUser", "Permission", LocTranslationSource.File)" />
                 </div>
 
                 <div class="content">

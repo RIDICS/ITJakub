@@ -21,8 +21,8 @@ namespace ITJakub.Web.Hub.Controllers
     [Authorize(PermissionNames.ManagePermissions)]
     public class PermissionController : BaseController
     {
-        private const int UserListPageSize = 1;
-        private const int RoleListPageSize = 3;
+        private const int UserListPageSize = 10;
+        private const int RoleListPageSize = 10;
         private const int PermissionListPageSize = 10;
 
         public PermissionController(CommunicationProvider communicationProvider) : base(communicationProvider)
