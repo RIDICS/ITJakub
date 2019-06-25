@@ -12,7 +12,6 @@
         </div>
         <div class="reset-search-form">
             <form asp-action="RolePermission" asp-controller="Permission" method="get" class="">
-                <input type="hidden" class="reset-search-count" name="count" />
                 <button type="submit" class="btn btn-sm btn-default">@Localizer.Translate("ResetSearch", "Permission")</button>
             </form>
         </div>
@@ -22,16 +21,16 @@
 @if (Model != null && Model.List.Count != 0)
 {
     <div class="table-responsive">
-        <table class="table table-hover selectable-table">
-            <thead class="thead-light administration-table-head">
+        <table class="table table-hover">
+            <thead>
                 <tr>
-                    <th class="align-middle">
+                    <th>
                         @Localizer.Translate("Group", "Permission")
                     </th>
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="selectable-table ">
                 @await Html.PartialAsync("Widget/_RoleListWidgetPage", Model)
             </tbody>
         </table>

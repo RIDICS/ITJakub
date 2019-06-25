@@ -13,7 +13,6 @@
         </div>
         <div class="reset-search-form">
             <form asp-action="UserPermission" asp-controller="Permission" method="get" class="">
-                <input type="hidden" class="reset-search-count" name="count"/>
                 <button type="submit" class="btn btn-sm btn-default">@Localizer.Translate("ResetSearch", "Permission")</button>
             </form>
         </div>
@@ -24,9 +23,9 @@
 {
     <div class="table-responsive">
         <table class="table table-hover">
-            <thead class="thead-light administration-table-head">
+            <thead>
             <tr>
-                <th class="align-middle">
+                <th>
                     @Localizer.Translate("User", "Permission")
                 </th>
                 <th></th>

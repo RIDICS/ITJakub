@@ -20,16 +20,18 @@
 
 <h2>@Localizer.Translate("GroupPermissionManagementHeadline", "Permission", LocTranslationSource.File)</h2>
 
-<div class="col-sm-12 col-md-3" id="role-section">
+<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" id="role-section">
     <div class="row page-control">
-        <div class="col col-sm-12 col-md-3">
+        <div class="col col-xs-2">
             <button id="createRoleButton" class="btn btn-default">+</button>
         </div>
-        <div class="col col-sm-12 col-md-9">
+        <div class="col col-xs-10">
             <form asp-action="RolePermission" asp-controller="Permission" method="get" class="role-search-form form-inline">
                 <div class="form-group">
                     <div class="search-button">
-                        <button class="btn btn-default" type="submit">@Localizer.Translate("Search", "Permission")</button>
+                        <button class="btn btn-default" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
                     </div>
                     <input class="form-control search-value" name="search" value="@ViewData[PermissionConstants.SearchRole]"/>
                 </div>
@@ -43,17 +45,19 @@
     <div id="role-pagination" class="text-center"></div>
 </div>
 
-<div class="col-sm-12 col-md-4" id="user-section">
+<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" id="user-section">
     <div class="section hide">
         <div class="row page-control">
-            <div class="col col-sm-3">
+            <div class="col col-xs-2">
                 <button id="addRoleButton" class="btn btn-default">+</button>
             </div>
-            <div class="col col-sm-9">
+            <div class="col col-xs-10">
                 <form asp-action="UsersByRole" asp-controller="Permission" method="get" class="user-search-form form-inline">
                     <div class="form-group">
                         <div class="search-button">
-                            <button class="btn btn-default" type="submit">@Localizer.Translate("Search", "Permission")</button>
+                            <button class="btn btn-default" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
                         </div>
                         <input class="form-control search-value" name="search" value="@ViewData[PermissionConstants.SearchUser]"/>
                     </div>
@@ -67,14 +71,16 @@
     </div>
 </div>
 
-<div class="col-sm-12 col-md-5" id="permission-section">
+<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="permission-section">
     <div class="section hide">
         <div class="row page-control">
             <div class="col-12 col-sm-12">
                 <form asp-action="RolePermissionList" asp-controller="Permission" method="get" class="permission-search-form form-inline">
                     <div class="form-group">
                         <div class="search-button">
-                            <button class="btn btn-default" type="submit">@Localizer.Translate("Search", "Permission")</button>
+                            <button class="btn btn-default" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
                         </div>
                         <input class="form-control search-value" name="search" value="@ViewData[PermissionConstants.SearchPermission]"/>
                     </div>

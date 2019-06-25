@@ -32,6 +32,12 @@
     }
 }
 
+#user-section,
+#role-section,
+#permission-section {
+    margin: 1.5em 0;
+}
+
 .search-form,
 .user-search-form,
 .role-search-form,
@@ -40,7 +46,16 @@
 
     .search-button {
         float: right;
-        padding-left: 1em;
+
+        @media(min-width: 576px) {
+            padding-left: 1em;
+        }
+    }
+
+    .search-value {
+        display: inline-block;
+        width: 175px;
+        vertical-align: middle;
     }
 }
 
@@ -53,7 +68,7 @@
 .selectable-table {
     cursor: pointer;
 
-    tr.active {
+    .active {
         td {
             background-color: #DCDCDC !important;
         }
