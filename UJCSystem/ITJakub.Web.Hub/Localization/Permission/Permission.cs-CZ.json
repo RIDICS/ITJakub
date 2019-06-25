@@ -3,7 +3,8 @@
 	"scope":"Permission",
   "dictionary": {
     "GroupPermissionManagementTitle": "Administrace - Správa skupin",
-    "GroupPermissionManagementHeadline": "Správa skupin",
+    "GroupManagementHeadline": "Správa skupin",
+    "GroupPermissionManagementHeadline": "Správa oprávnění skupin",
     "SearchGroup": "Hledat skupinu...",
     "SelectedGroup": "Vybraná skupina",
     "Name": "Název",

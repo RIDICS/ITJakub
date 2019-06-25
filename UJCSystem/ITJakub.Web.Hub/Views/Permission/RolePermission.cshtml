@@ -16,11 +16,13 @@
     <script src="~/Areas/Admin/js/ridics.role.list.js"></script>
 }
 
-<h2>@Localizer.Translate("GroupPermissionManagementHeadline", "Permission")</h2>
+<h2>@Localizer.Translate("GroupManagementHeadline", "Permission")</h2>
 
 <div class="row page-control">
     <div class="col col-sm-6 col-lg-8">
-        <a asp-action="EditRolePermissions" asp-controller="Permission" class="btn btn-default">@Localizer.Translate("ManagePermissions", "Permission")</a>
+        <div class="form-group">
+            <a asp-action="EditRolePermissions" asp-controller="Permission" class="btn btn-default">@Localizer.Translate("ManagePermissions", "Permission")</a>
+        </div>
     </div>
     <div class="col col-sm-6 col-lg-4">
         <form asp-action="RolePermission" asp-controller="Permission" method="get" class="role-search-form form-inline">

@@ -3,7 +3,8 @@
   "scope": "Permission",
   "dictionary": {
     "GroupPermissionManagementTitle": "Administration - Group management",
-    "GroupPermissionManagementHeadline": "Group management",
+    "GroupManagementHeadline": "Group management",
+    "GroupPermissionManagementHeadline": "Group's permissions management",
     "SearchGroup": "Search group...",
     "SelectedGroup": "Selected group",
     "Name": "Name",
