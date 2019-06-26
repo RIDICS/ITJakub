@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace ITJakub.Web.Hub.Models
 {
@@ -54,8 +55,6 @@ namespace ITJakub.Web.Hub.Models
 
     public class AccountDetailViewModel
     {
-        public UserDetailViewModel UserDetailViewModel;
-
         public UpdateAccountViewModel UpdateAccountViewModel;
 
         public UpdatePasswordViewModel UpdatePasswordViewModel;
@@ -63,6 +62,13 @@ namespace ITJakub.Web.Hub.Models
 
     public class UpdateAccountViewModel
     {
+        [ReadOnly(true)]
+        public int Id { get; set; }
+
+        [Display(Name = "UserName")]
+        [ReadOnly(true)]
+        public string UserName { get; set; }
+
         [Required(AllowEmptyStrings = false, ErrorMessage = "MustBeFilled")]
         [EmailAddress]
         [Display(Name = "Email")]

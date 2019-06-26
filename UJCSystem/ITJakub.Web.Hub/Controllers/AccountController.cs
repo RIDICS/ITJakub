@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ITJakub.Web.Hub.Constants;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -78,10 +79,11 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetRestClient())
             {
                 var user = client.GetCurrentUser();
-                var viewmodel = new AccountDetailViewModel();
-                viewmodel.UserDetailViewModel = Mapper.Map<UserDetailViewModel>(user);
-                viewmodel.UpdateAccountViewModel = Mapper.Map<UpdateAccountViewModel>(user);
-                viewmodel.UpdatePasswordViewModel = null;
+                var viewmodel = new AccountDetailViewModel
+                {
+                    UpdateAccountViewModel = Mapper.Map<UpdateAccountViewModel>(user),
+                    UpdatePasswordViewModel = null
+                };
                 return View(viewmodel);
             }
         }
@@ -93,24 +95,22 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult UpdateAccount(UpdateAccountViewModel model)
         {
-            ViewData.Add("ActualTab", "UpdateAccount");
-
             if (ModelState.IsValid)
             {
                 try
                 {
                     using (var client = GetRestClient())
                     {
-                        UpdateUserContract updateUserContract = new UpdateUserContract
+                        var updateUserContract = new UpdateUserContract
                         {
-                            AvatarUrl = null, //TODO
+                            AvatarUrl = null, //TODO Avatar
                             Email = model.Email,
                             FirstName = model.FirstName,
                             LastName = model.LastName
                         };
 
                         client.UpdateCurrentUser(updateUserContract);
-                        ViewData.Add("SuccessUpdateAccount", true);
+                        ViewData.Add(AccountConstants.SuccessUpdateAccount, true);
                     }
                 }
                 catch (HttpErrorCodeException e)
@@ -119,8 +119,17 @@ namespace ITJakub.Web.Hub.Controllers
                 }
             }
 
-            var viewModel = new AccountDetailViewModel {UpdateAccountViewModel = model};
-            return View("AccountSettings", viewModel);
+
+            using (var client = GetRestClient())
+            {
+                var user = client.GetCurrentUser();
+                var viewModel = new AccountDetailViewModel
+                {
+                    UpdateAccountViewModel = Mapper.Map<UpdateAccountViewModel>(user),
+                    UpdatePasswordViewModel = null
+                };
+                return View("AccountSettings", viewModel);
+            }
         }
 
         //
@@ -130,22 +139,22 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult UpdatePassword(UpdatePasswordViewModel model)
         {
-            ViewData.Add("ActualTab", "UpdatePassword");
-
+            ViewData.Add(AccountConstants.ActualTab, AccountConstants.UpdatePassword);
             if (ModelState.IsValid)
             {
                 try
                 {
                     using (var client = GetRestClient())
                     {
-                        UpdateUserPasswordContract updateUserPasswordContract = new UpdateUserPasswordContract
+                        var updateUserPasswordContract = new UpdateUserPasswordContract
                         {
                             NewPassword = model.Password,
                             OldPassword = model.OldPassword
                         };
 
                         client.UpdateCurrentPassword(updateUserPasswordContract);
-                        ViewData.Add("SuccessPasswordChange", true);
+                        ViewData.Add(AccountConstants.SuccessPasswordChange, true);
+                       
                     }
                 }
                 catch (HttpErrorCodeException e)
@@ -154,8 +163,16 @@ namespace ITJakub.Web.Hub.Controllers
                 }
             }
 
-            var viewModel = new AccountDetailViewModel { UpdatePasswordViewModel = model };
-            return View("AccountSettings", viewModel);
+            using (var client = GetRestClient())
+            {
+                var user = client.GetCurrentUser();
+                var viewModel = new AccountDetailViewModel
+                {
+                    UpdateAccountViewModel = Mapper.Map<UpdateAccountViewModel>(user),
+                    UpdatePasswordViewModel = model
+                };
+                return View("AccountSettings", viewModel);
+            }
         }
 
         //
