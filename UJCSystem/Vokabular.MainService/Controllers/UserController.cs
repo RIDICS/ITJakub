@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.Authentication.Client.Exceptions;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
@@ -47,6 +48,10 @@ namespace Vokabular.MainService.Controllers
             {
                 return StatusCode(exception.StatusCode, exception.Message);
             }
+            catch (AuthServiceApiException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Description);
+            }
         }
 
         [AllowAnonymous]
@@ -62,6 +67,10 @@ namespace Vokabular.MainService.Controllers
             catch (HttpErrorCodeException exception)
             {
                 return StatusCode(exception.StatusCode, exception.Message);
+            }
+            catch (AuthServiceApiException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Description);
             }
         }
 
@@ -84,6 +93,10 @@ namespace Vokabular.MainService.Controllers
             {
                 return StatusCode(exception.StatusCode, exception.Message);
             }
+            catch (AuthServiceApiException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Description);
+            }
         }
 
         [HttpPut("current/password")]
@@ -97,6 +110,10 @@ namespace Vokabular.MainService.Controllers
             catch (HttpErrorCodeException exception)
             {
                 return StatusCode(exception.StatusCode, exception.Message);
+            }
+            catch (AuthServiceApiException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Description);
             }
         }
 
