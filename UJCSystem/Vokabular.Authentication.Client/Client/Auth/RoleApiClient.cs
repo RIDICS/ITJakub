@@ -42,5 +42,12 @@ namespace Vokabular.Authentication.Client.Client.Auth
 
             return response;
         }
+
+        public async Task UpdateRole(int id, RoleContract roleContract)
+        {
+            var fullPath = $"{BasePath}{id}/edit";
+            await m_authorizationServiceHttpClient.SendRequestAsync(HttpMethod.Post, fullPath, roleContract);
+        }
+
     }
 }

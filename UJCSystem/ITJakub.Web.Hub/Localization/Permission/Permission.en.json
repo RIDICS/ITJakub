@@ -48,6 +48,7 @@
     "Group": "Group",
     "User": "User",
     "ManagePermissions": "Manage permissions",
-    "Permissions": "Permissions"
+    "Permissions": "Permissions",
+    "SuccessGroupUpdate": "Group update was successful."
   }
 }

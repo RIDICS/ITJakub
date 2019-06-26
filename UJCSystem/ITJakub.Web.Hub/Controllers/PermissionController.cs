@@ -136,7 +136,8 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetRestClient())
             {
                 var result = client.GetRoleDetail(roleId);
-                return View(result);
+                var model = Mapper.Map<RoleViewModel>(result);
+                return View(model);
             }
         }
 
@@ -314,6 +315,23 @@ namespace ITJakub.Web.Hub.Controllers
                     Books = books,
                 };
                 return Json(result);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateRole([FromBody] RoleViewModel roleViewModel)
+        {
+            using (var client = GetRestClient())
+            {
+                var roleContract = new RoleContract
+                {
+                    Id = roleViewModel.Id,
+                    Name = roleViewModel.Name,
+                    Description = roleViewModel.Description
+                };
+                client.UpdateRole(roleContract.Id, roleContract);
+                return Json(new { });
             }
         }
 

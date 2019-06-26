@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -43,6 +42,14 @@ namespace Vokabular.MainService.Controllers
         {
             var resultId = m_roleManager.CreateRole(data.Name, data.Description);
             return resultId;
+        }
+
+        [Authorize(PermissionNames.ManagePermissions)]
+        [HttpPut("{roleId}/edit")]
+        public IActionResult UpdateRole([FromBody] RoleContract data)
+        {
+            m_roleManager.UpdateRole(data);
+            return Ok();
         }
 
         [HttpGet("{roleId}/detail")]

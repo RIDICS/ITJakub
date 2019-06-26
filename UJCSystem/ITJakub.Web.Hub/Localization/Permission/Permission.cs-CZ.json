@@ -48,6 +48,7 @@
     "Group": "Skupina",
     "User": "Uživatel",
     "ManagePermissions": "Spravovat práva",
-    "Permissions": "Oprávnění"
+    "Permissions": "Oprávnění",
+    "SuccessGroupUpdate": "Úprava skupiny proběhla úspěšně." 
   }
 }

@@ -2560,6 +2560,21 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public void UpdateRole(int roleId, RoleContract data)
+        {
+            try
+            {
+                Put<object>($"role/{roleId}/edit", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public int CreateRole(RoleContract request)
         {
             try

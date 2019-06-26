@@ -77,6 +77,11 @@ namespace Vokabular.MainService.Core.Managers
             return new CreateRoleWork(m_permissionRepository, m_communicationProvider, roleName, description).Execute();
         }
 
+        public void UpdateRole(RoleContract data)
+        {
+            new UpdateRoleWork(m_permissionRepository, data, m_communicationProvider).Execute();
+        }
+
         public RoleDetailContract GetRoleDetail(int roleId)
         {
             var client = m_communicationProvider.GetAuthRoleApiClient();
