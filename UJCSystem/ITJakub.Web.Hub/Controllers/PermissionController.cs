@@ -386,27 +386,6 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-
-        public ActionResult GetSpecialPermissionsForGroup(int groupId)
-        {
-            using (var client = GetRestClient())
-            {
-                var specialPermissions = client.GetSpecialPermissionsForRole(groupId);
-                var result = specialPermissions.GroupBy(x => x.GetType().FullName).ToDictionary(x => x.Key, x => x.ToList());
-                return Json(result);
-            }
-        }
-
-        public ActionResult GetSpecialPermissions()
-        {
-            using (var client = GetRestClient())
-            {
-                var specialPermissions = client.GetSpecialPermissions();
-                var result = specialPermissions.GroupBy(x => x.GetType().FullName).ToDictionary(x => x.Key, x => x.ToList());
-                return Json(result);
-            }
-        }
-
         [HttpPost]
         public ActionResult AddSpecialPermissionsToRole([FromBody] AddSpecialPermissionsToRoleRequest request)
         {

@@ -46,7 +46,6 @@ namespace Vokabular.MainService.Core
             services.AddScoped<CommunicationConfigurationProvider>();
             services.AddScoped<CommunicationProvider>();
             services.AddScoped<DefaultUserProvider>();
-            services.AddScoped<PermissionConverter>();
             services.AddScoped<FulltextStorageProvider>();
             services.AddScoped<IFulltextStorage, ExistDbStorage>();
             services.AddScoped<IFulltextStorage, ElasticSearchStorage>();

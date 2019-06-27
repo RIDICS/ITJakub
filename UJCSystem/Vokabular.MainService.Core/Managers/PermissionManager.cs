@@ -6,7 +6,6 @@ using ITJakub.FileProcessing.DataContracts;
 using log4net;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
-using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
@@ -23,22 +22,11 @@ namespace Vokabular.MainService.Core.Managers
 
         private readonly PermissionRepository m_permissionRepository;
         private readonly CommunicationProvider m_communicationProvider;
-        private readonly PermissionConverter m_permissionConverter;
-
-        public PermissionManager(PermissionRepository permissionRepository, CommunicationProvider communicationProvider,
-            PermissionConverter permissionConverter)
+        
+        public PermissionManager(PermissionRepository permissionRepository, CommunicationProvider communicationProvider)
         {
             m_permissionRepository = permissionRepository;
             m_communicationProvider = communicationProvider;
-            m_permissionConverter = permissionConverter;
-        }
-
-        public List<SpecialPermissionContract> GetSpecialPermissions()
-        {
-            var client = m_communicationProvider.GetAuthPermissionApiClient();
-
-            var permissions = client.GetAllPermissionsAsync().GetAwaiter().GetResult();
-            return m_permissionConverter.Convert(permissions);
         }
 
         public List<PermissionFromAuthContract> GetAutoImportSpecialPermissions()
@@ -59,14 +47,6 @@ namespace Vokabular.MainService.Core.Managers
             }).ToList();
 
             return result;
-        }
-
-        public List<SpecialPermissionContract> GetSpecialPermissionsForRole(int roleId)
-        {
-            var client = m_communicationProvider.GetAuthRoleApiClient();
-
-            var permissions = client.HttpClient.GetItemAsync<AuthRoleContract>(roleId).GetAwaiter().GetResult().Permissions;
-            return m_permissionConverter.Convert(permissions);
         }
 
         public void AddSpecialPermissionsToRole(int roleId, IList<int> specialPermissionsIds)

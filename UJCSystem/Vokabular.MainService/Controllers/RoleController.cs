@@ -133,14 +133,6 @@ namespace Vokabular.MainService.Controllers
         //}
 
         [Authorize(PermissionNames.ManagePermissions)]
-        [HttpGet("{roleId}/permission/special")]
-        public List<SpecialPermissionContract> GetSpecialPermissionsForRole(int roleId)
-        {
-            var result = m_permissionManager.GetSpecialPermissionsForRole(roleId);
-            return result;
-        }
-
-        [Authorize(PermissionNames.ManagePermissions)]
         [HttpPost("{roleId}/permission/special")]
         public void AddSpecialPermissionsToGroup(int roleId, [FromBody] IntegerIdListContract specialPermissionsIds)
         {

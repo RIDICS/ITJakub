@@ -2739,43 +2739,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<SpecialPermissionContract> GetSpecialPermissions()
-        {
-            try
-            {
-                var result = Get<List<SpecialPermissionContract>>("permission/special");
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
         public List<PermissionContract> GetPermissionsForRole(int roleId)
         {
             try
             {
                 var result = Get<List<PermissionContract>>($"role/{roleId}/permission");
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public List<SpecialPermissionContract> GetSpecialPermissionsForRole(int roleId)
-        {
-            try
-            {
-                var result = Get<List<SpecialPermissionContract>>($"role/{roleId}/permission/special");
                 return result;
             }
             catch (HttpRequestException e)

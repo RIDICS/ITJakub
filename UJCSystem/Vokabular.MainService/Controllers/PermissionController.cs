@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Authorization;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
-using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Headers;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
-using Vokabular.Shared.Const;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -20,14 +16,6 @@ namespace Vokabular.MainService.Controllers
         public PermissionController(PermissionManager permissionManager)
         {
             m_permissionManager = permissionManager;
-        }
-
-        [Authorize(PermissionNames.ManagePermissions)]
-        [HttpGet("special")]
-        public List<SpecialPermissionContract> GetSpecialPermissions()
-        {
-            var result = m_permissionManager.GetSpecialPermissions();
-            return result;
         }
 
         [HttpGet("")]
