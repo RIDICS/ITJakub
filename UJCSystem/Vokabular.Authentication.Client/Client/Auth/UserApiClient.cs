@@ -26,6 +26,12 @@ namespace Vokabular.Authentication.Client.Client.Auth
             return await m_authorizationServiceHttpClient.SendRequestAsync(HttpMethod.Put, fullPath, content);
         }
 
+        public async Task<HttpResponseMessage> EditUserAsync(int id, UserContract content)
+        {
+            var fullPath = $"{BasePath}{id}/edit";
+            return await m_authorizationServiceHttpClient.SendRequestAsync(HttpMethod.Put, fullPath, content);
+        }
+
         public async Task<HttpResponseMessage> AssignRolesToUserAsync(int id, List<int> selectedRoles)
         {
             var fullPath = $"{BasePath}{id}/Roles";

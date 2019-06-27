@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
@@ -46,6 +47,11 @@ namespace Vokabular.MainService.Core.Managers
             var userId = m_authenticationManager.GetCurrentUserId();
 
             new UpdateCurrentUserWork(m_userRepository, userId, data, m_communicationProvider).Execute();
+        }
+
+        public void UpdateUser(int userId, UpdateUserContract data)
+        {
+            new UpdateUserWork(m_userRepository, userId, data, m_communicationProvider).Execute();
         }
 
         public void UpdateUserPassword(UpdateUserPasswordContract data)

@@ -99,6 +99,24 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
+        [HttpPut("{userId}/edit")]
+        public IActionResult UpdateUser(int userId, [FromBody] UpdateUserContract data)
+        {
+            try
+            {
+                m_userManager.UpdateUser(userId, data);
+                return Ok();
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Message);
+            }
+            catch (AuthServiceApiException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Description);
+            }
+        }
+
         [HttpPut("current/password")]
         public IActionResult UpdateCurrentPassword([FromBody] UpdateUserPasswordContract data)
         {

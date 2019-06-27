@@ -131,6 +131,24 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditUser(UpdateUserViewModel model)
+        {
+            using (var client = GetRestClient())
+            {
+                var data = new UpdateUserContract
+                {
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName
+                };
+                ViewData.Add(PermissionConstants.SuccessUserUpdate, true);
+                client.UpdateUser(model.Id, data);
+                return View(model);
+            }
+        }
+
         public ActionResult EditRole(int roleId)
         {
             using (var client = GetRestClient())

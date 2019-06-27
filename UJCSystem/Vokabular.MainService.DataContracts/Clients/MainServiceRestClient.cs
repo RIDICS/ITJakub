@@ -2439,6 +2439,24 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         #region Permissions
 
+        #region User
+
+        public UserDetailContract GetUserDetail(int userId)
+        {
+            try
+            {
+                var result = Get<UserDetailContract>($"user/{userId}/detail");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public List<UserDetailContract> GetUserAutocomplete(string query)
         {
             try
@@ -2493,6 +2511,53 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public void UpdateUser(int userId, UpdateUserContract data)
+        {
+            try
+            {
+                Put<object>($"user/{userId}/edit", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void AddUserToRole(int userId, int roleId)
+        {
+            try
+            {
+                Post<object>($"role/{roleId}/user/{userId}", null);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void RemoveUserFromRole(int userId, int roleId)
+        {
+            try
+            {
+                Delete($"role/{roleId}/user/{userId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
+
         public PagedResultList<RoleContract> GetRoleList(int start, int count, string query)
         {
             try
@@ -2517,22 +2582,6 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 var result = Get<List<RoleContract>>("role/autocomplete".AddQueryString("query", query));
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public UserDetailContract GetUserDetail(int userId)
-        {
-            try
-            {
-                var result = Get<UserDetailContract>($"user/{userId}/detail");
                 return result;
             }
             catch (HttpRequestException e)
@@ -2596,36 +2645,6 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 Delete($"role/{roleId}");
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void AddUserToRole(int userId, int roleId)
-        {
-            try
-            {
-                Post<object>($"role/{roleId}/user/{userId}", null);
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void RemoveUserFromRole(int userId, int roleId)
-        {
-            try
-            {
-                Delete($"role/{roleId}/user/{userId}");
             }
             catch (HttpRequestException e)
             {
