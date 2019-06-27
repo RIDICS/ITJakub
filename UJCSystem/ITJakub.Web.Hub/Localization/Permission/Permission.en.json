@@ -50,5 +50,6 @@
     "ManagePermissions": "Manage permissions",
     "Permissions": "Permissions",
     "SuccessGroupUpdate": "Group update was successful."
+    "GroupEditTitle": "Edit group"
   }
 }
