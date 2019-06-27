@@ -60,7 +60,7 @@ namespace ITJakub.Web.Hub.Controllers
                     {
                         client.CreateNewUser(user);
                     }
-                    ViewData.Add("SuccessRegistration", true);
+                    ViewData.Add(AccountConstants.SuccessRegistration, true);
                 }
                 catch (HttpErrorCodeException e)
                 {

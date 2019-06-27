@@ -5,8 +5,10 @@
 @inject ILocalizationService Localizer
 
 @{
-    ViewBag.Title = Localizer.Translate("EditUser", "Permission", LocTranslationSource.File);
+    ViewBag.Title = Localizer.Translate("EditUserTitle", "Permission", LocTranslationSource.File);
 }
+
+<h2>@Localizer.Translate("EditUserTitle", "Permission", LocTranslationSource.File)</h2>
 
 <div class="row" style="margin-left: 5px; width: 80%;">
     <div class="col-md-12">
