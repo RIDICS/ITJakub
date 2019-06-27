@@ -133,18 +133,21 @@ namespace ITJakub.Web.Hub.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditUser(UpdateUserViewModel model)
+        public ActionResult EditUser(UpdateUserViewModel userViewModel)
         {
             using (var client = GetRestClient())
             {
                 var data = new UpdateUserContract
                 {
-                    Email = model.Email,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName
+                    Email = userViewModel.Email,
+                    FirstName = userViewModel.FirstName,
+                    LastName = userViewModel.LastName
                 };
                 ViewData.Add(PermissionConstants.SuccessUserUpdate, true);
-                client.UpdateUser(model.Id, data);
+                client.UpdateUser(userViewModel.Id, data);
+                var user = client.GetUserDetail(userViewModel.Id);
+                var model = Mapper.Map<UpdateUserViewModel>(user);
+
                 return View(model);
             }
         }
@@ -173,7 +176,11 @@ namespace ITJakub.Web.Hub.Controllers
                 };
                 client.UpdateRole(roleContract.Id, roleContract);
                 ViewData.Add(PermissionConstants.SuccessRoleUpdate, true);
-                return View(roleViewModel);
+
+                var role = client.GetRoleDetail(roleContract.Id);
+                var model = Mapper.Map<RoleViewModel>(role);
+                
+                return View(model);
             }
         }
 
