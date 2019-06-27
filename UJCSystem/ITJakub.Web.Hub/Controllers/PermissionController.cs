@@ -141,6 +141,24 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditRole(RoleViewModel roleViewModel)
+        {
+            using (var client = GetRestClient())
+            {
+                var roleContract = new RoleContract
+                {
+                    Id = roleViewModel.Id,
+                    Name = roleViewModel.Name,
+                    Description = roleViewModel.Description
+                };
+                client.UpdateRole(roleContract.Id, roleContract);
+                ViewData.Add(PermissionConstants.SuccessRoleUpdate, true);
+                return View(roleViewModel);
+            }
+        }
+
         public ActionResult EditUserRoles(int userId)
         {
             return View();
@@ -315,23 +333,6 @@ namespace ITJakub.Web.Hub.Controllers
                     Books = books,
                 };
                 return Json(result);
-            }
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult UpdateRole([FromBody] RoleViewModel roleViewModel)
-        {
-            using (var client = GetRestClient())
-            {
-                var roleContract = new RoleContract
-                {
-                    Id = roleViewModel.Id,
-                    Name = roleViewModel.Name,
-                    Description = roleViewModel.Description
-                };
-                client.UpdateRole(roleContract.Id, roleContract);
-                return Json(new { });
             }
         }
 

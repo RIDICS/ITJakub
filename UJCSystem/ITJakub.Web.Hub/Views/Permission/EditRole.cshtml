@@ -1,4 +1,5 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using ITJakub.Web.Hub.Constants
+@using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
 @model ITJakub.Web.Hub.Models.RoleViewModel
 @inject ILocalizationService Localizer
@@ -6,24 +7,18 @@
 @{
     ViewBag.Title = Localizer.Translate("GroupManagementHeadline", "Permission", LocTranslationSource.File);
 }
-@section styles{
-    <link href="~/css/ITJakub.Permission.css" rel="stylesheet" />
-}
-@section scripts{
-    <script src="~/js/Permission/itjakub.permission.group.js"></script>
-}
 
 <h2>@Localizer.Translate("GroupManagementHeadline", "Permission", LocTranslationSource.File)</h2>
 
 <div class="row" style="margin-left: 5px; width: 80%;">
     <div class="col-md-12">
-        @if (ViewData.TryGetValue("SuccessGroupUpdate", out var success) && (bool)success)
+        @if (ViewData.TryGetValue(PermissionConstants.SuccessRoleUpdate, out var success) && (bool)success)
         {
             <div class="alert alert-success" role="alert">
                 @Localizer.Translate("SuccessGroupUpdate", "Permission")
             </div>
         }
-        @using (Html.BeginForm("UpdateRole", "Permission", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        @using (Html.BeginForm("EditRole", "Permission", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary("", new { @class = "text-danger" })

@@ -2,8 +2,9 @@
 {
     public class PermissionConstants
     {
-        public static string SearchUser = "searchUser";
-        public static string SearchRole = "searchRole";
-        public static string SearchPermission = "searchPermission";
+        public const string SearchUser = "searchUser";
+        public const string SearchRole = "searchRole";
+        public const string SearchPermission = "searchPermission";
+        public const string SuccessRoleUpdate = "successRoleUpdate";
     }
 }
