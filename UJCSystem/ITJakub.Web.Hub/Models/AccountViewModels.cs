@@ -55,12 +55,12 @@ namespace ITJakub.Web.Hub.Models
 
     public class AccountDetailViewModel
     {
-        public UpdateAccountViewModel UpdateAccountViewModel;
+        public UpdateUserViewModel UpdateUserViewModel;
 
         public UpdatePasswordViewModel UpdatePasswordViewModel;
     }
 
-    public class UpdateAccountViewModel
+    public class UpdateUserViewModel
     {
         [ReadOnly(true)]
         public int Id { get; set; }

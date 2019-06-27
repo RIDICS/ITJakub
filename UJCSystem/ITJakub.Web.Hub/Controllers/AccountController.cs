@@ -81,7 +81,7 @@ namespace ITJakub.Web.Hub.Controllers
                 var user = client.GetCurrentUser();
                 var viewmodel = new AccountDetailViewModel
                 {
-                    UpdateAccountViewModel = Mapper.Map<UpdateAccountViewModel>(user),
+                    UpdateUserViewModel = Mapper.Map<UpdateUserViewModel>(user),
                     UpdatePasswordViewModel = null
                 };
                 return View(viewmodel);
@@ -93,7 +93,7 @@ namespace ITJakub.Web.Hub.Controllers
         [HttpPost]
         [RequireHttps]
         [ValidateAntiForgeryToken]
-        public IActionResult UpdateAccount(UpdateAccountViewModel model)
+        public IActionResult UpdateAccount(UpdateUserViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -125,7 +125,7 @@ namespace ITJakub.Web.Hub.Controllers
                 var user = client.GetCurrentUser();
                 var viewModel = new AccountDetailViewModel
                 {
-                    UpdateAccountViewModel = Mapper.Map<UpdateAccountViewModel>(user),
+                    UpdateUserViewModel = Mapper.Map<UpdateUserViewModel>(user),
                     UpdatePasswordViewModel = null
                 };
                 return View("AccountSettings", viewModel);
@@ -168,7 +168,7 @@ namespace ITJakub.Web.Hub.Controllers
                 var user = client.GetCurrentUser();
                 var viewModel = new AccountDetailViewModel
                 {
-                    UpdateAccountViewModel = Mapper.Map<UpdateAccountViewModel>(user),
+                    UpdateUserViewModel = Mapper.Map<UpdateUserViewModel>(user),
                     UpdatePasswordViewModel = model
                 };
                 return View("AccountSettings", viewModel);

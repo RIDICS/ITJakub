@@ -126,7 +126,7 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetRestClient())
             {
                 var result = client.GetUserDetail(userId);
-                var model = Mapper.Map<UpdateAccountViewModel>(result);
+                var model = Mapper.Map<UpdateUserViewModel>(result);
                 return View(model);
             }
         }
