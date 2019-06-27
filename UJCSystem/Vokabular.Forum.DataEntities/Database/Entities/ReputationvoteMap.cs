@@ -27,14 +27,18 @@ namespace Vokabular.ForumSite.DataEntities.Database.Entities {
 				map.Column("ReputationFromUserID");
 				map.PropertyRef("UserID");
 				map.Cascade(Cascade.None);
-			});
+                map.Insert(false);
+                map.Update(false);
+            });
 
 			ManyToOne(x => x.ReputationToUser, map => 
 			{
 				map.Column("ReputationToUserID");
 				map.PropertyRef("UserID");
 				map.Cascade(Cascade.None);
-			});
+                map.Insert(false);
+                map.Update(false);
+            });
 
         }
     }

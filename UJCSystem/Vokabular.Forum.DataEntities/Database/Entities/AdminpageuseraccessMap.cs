@@ -21,10 +21,12 @@ namespace Vokabular.ForumSite.DataEntities.Database.Entities {
 					compId.Property(x => x.UserID, m => m.Column("UserID"));
 					compId.Property(x => x.PageName, m => m.Column("PageName"));
 				});
-			ManyToOne(x => x.User, map => 
+			ManyToOne(x => x.User, map =>
 			{
 				map.Column("UserID");
 				map.Cascade(Cascade.None);
+				map.Insert(false);
+				map.Update(false);
 			});
 
         }

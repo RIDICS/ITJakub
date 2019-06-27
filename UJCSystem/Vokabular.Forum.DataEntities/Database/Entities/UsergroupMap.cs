@@ -25,13 +25,17 @@ namespace Vokabular.ForumSite.DataEntities.Database.Entities {
 			{
 				map.Column("UserID");
 				map.Cascade(Cascade.None);
-			});
+                map.Insert(false);
+                map.Update(false);
+            });
 
 			ManyToOne(x => x.Group, map => 
 			{
 				map.Column("GroupID");
 				map.Cascade(Cascade.None);
-			});
+                map.Insert(false);
+                map.Update(false);
+            });
 
         }
     }

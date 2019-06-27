@@ -29,7 +29,13 @@ namespace Vokabular.ForumSite.DataEntities.Database.Entities {
 			Property(x => x.Platform);
 			Property(x => x.Flags);
 			Property(x => x.ForumPage);
-			ManyToOne(x => x.Board, map => { map.Column("BoardID"); map.Cascade(Cascade.None); });
+			ManyToOne(x => x.Board, map =>
+			{
+				map.Column("BoardID");
+				map.Cascade(Cascade.None);
+				map.Insert(false);
+				map.Update(false);
+			});
 
 			ManyToOne(x => x.User, map => 
 			{

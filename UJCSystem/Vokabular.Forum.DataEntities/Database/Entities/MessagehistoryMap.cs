@@ -32,7 +32,9 @@ namespace Vokabular.ForumSite.DataEntities.Database.Entities {
 				map.Column("MessageID");
 				map.PropertyRef("MessageID");
 				map.Cascade(Cascade.None);
-			});
+                map.Insert(false);
+                map.Update(false);
+            });
 
         }
     }

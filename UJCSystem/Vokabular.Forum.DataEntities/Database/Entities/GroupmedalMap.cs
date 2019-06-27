@@ -30,9 +30,17 @@ namespace Vokabular.ForumSite.DataEntities.Database.Entities {
 				map.Column("GroupID");
 				map.PropertyRef("GroupID");
 				map.Cascade(Cascade.None);
-			});
+                map.Insert(false);
+                map.Update(false);
+            });
 
-			ManyToOne(x => x.Medal, map => { map.Column("MedalID"); map.Cascade(Cascade.None); });
+			ManyToOne(x => x.Medal, map =>
+            {
+                map.Column("MedalID");
+                map.Cascade(Cascade.None);
+                map.Insert(false);
+                map.Update(false);
+            });
 
         }
     }

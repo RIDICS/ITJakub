@@ -27,7 +27,9 @@ namespace Vokabular.ForumSite.DataEntities.Database.Entities {
 			{
 				map.Column("GroupID");
 				map.Cascade(Cascade.None);
-			});
+                map.Insert(false);
+                map.Update(false);
+            });
 
         }
     }
