@@ -14,7 +14,8 @@ namespace Vokabular.ForumSite.Core
             services.AddScoped<SubForumManager>();
 
             services.AddScoped<ForumSiteUrlHelper>();
-            services.AddScoped<MessageGenerator>();
+            services.AddScoped<VokabularUrlHelper>();
+            services.AddScoped<ForumDefaultMessageGenerator>();
 
             new ForumDataEntitiesContainerRegistration().Install(services);
         }

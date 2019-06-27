@@ -4,7 +4,6 @@ using System.IO;
 using System.Reflection;
 using ITJakub.FileProcessing.DataContracts;
 using log4net;
-using Vokabular.Shared;
 
 namespace ITJakub.FileProcessing.Core.Sessions
 {
@@ -68,11 +67,11 @@ namespace ITJakub.FileProcessing.Core.Sessions
             director.AddResourceAndFillResourceTypeByExtension(fileName, data);
         }
 
-        public ImportResult ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage, IList<PermissionFromAuthContract> autoImportPermissions)
+        public ImportResultContract ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage, IList<PermissionFromAuthContract> autoImportPermissions)
         {
             if (!m_activeSessionManager.ContainsSessionId(sessionId))
             {
-                return new ImportResult{Success = false};
+                return new ImportResultContract { Success = false};
             }
 
             ResourceSessionDirector director = m_activeSessionManager.GetDirectorBySessionId(sessionId);
@@ -82,7 +81,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
             director.SetSessionInfoValue(SessionInfo.UserId, userId);
             director.SetSessionInfoValue(SessionInfo.AutoImportPermissions, autoImportPermissions);
             bool result = m_resourceProcessorManager.ProcessSessionResources(director);
-            ImportResult importResult = new ImportResult(
+            ImportResultContract importResult = new ImportResultContract(
                 director.GetSessionInfoValue<long>(SessionInfo.ProjectId),
                 result
             );

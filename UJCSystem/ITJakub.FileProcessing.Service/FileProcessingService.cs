@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using ITJakub.FileProcessing.Core.Sessions;
 using ITJakub.FileProcessing.DataContracts;
-using Vokabular.Shared;
 
 namespace ITJakub.FileProcessing.Service
 {
@@ -14,7 +13,7 @@ namespace ITJakub.FileProcessing.Service
             m_sessionManager.AddResource(resourceInfoSkeleton.SessionId, resourceInfoSkeleton.FileName, resourceInfoSkeleton.Data);
         }
 
-        public ImportResult ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage, IList<PermissionFromAuthContract> autoImportPermissions)
+        public ImportResultContract ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage, IList<PermissionFromAuthContract> autoImportPermissions)
         {
             return m_sessionManager.ProcessSession(sessionId, projectId, userId, uploadMessage, autoImportPermissions);
         }

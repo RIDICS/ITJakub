@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
-using Vokabular.Shared;
 
 namespace ITJakub.FileProcessing.DataContracts
 {
@@ -11,6 +10,6 @@ namespace ITJakub.FileProcessing.DataContracts
         void AddResource(UploadResourceContract resourceInfoSkeleton);
 
         [OperationContract]
-        ImportResult ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage, IList<PermissionFromAuthContract> autoImportPermissions);
+        ImportResultContract ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage, IList<PermissionFromAuthContract> autoImportPermissions);
     }
 }

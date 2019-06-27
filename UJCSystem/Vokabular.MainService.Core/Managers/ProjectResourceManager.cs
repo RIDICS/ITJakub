@@ -3,7 +3,6 @@ using System.IO;
 using ITJakub.FileProcessing.DataContracts;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Errors;
-using Vokabular.Shared;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -41,7 +40,7 @@ namespace Vokabular.MainService.Core.Managers
             var userId = m_authenticationManager.GetCurrentUserId();
             var allAutoImportPermissions = m_permissionManager.GetAutoImportSpecialPermissions();
 
-            ImportResult importResult;
+            ImportResultContract importResult;
             using (var client = m_communicationProvider.GetFileProcessingClient())
             {
                 importResult = client.ProcessSession(sessionId, projectId, userId, comment, allAutoImportPermissions);

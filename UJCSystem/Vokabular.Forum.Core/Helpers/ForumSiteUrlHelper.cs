@@ -15,7 +15,7 @@ namespace Vokabular.ForumSite.Core.Helpers
 
         public string GetTopicsUrl(int forumId)
         {
-            return m_forumOptions.Value.ForumBaseUrl + TopicsUrlPart + "/" + forumId + "-";
+            return $"{m_forumOptions.Value.ForumBaseUrl}{TopicsUrlPart}/{forumId}-";
         }
     }
 }

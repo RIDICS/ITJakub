@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using Vokabular.Shared;
 
 namespace ITJakub.FileProcessing.DataContracts
 {
@@ -36,7 +35,7 @@ namespace ITJakub.FileProcessing.DataContracts
             }
         }
 
-        public ImportResult ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage, IList<PermissionFromAuthContract> autoImportPermissions)
+        public ImportResultContract ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage, IList<PermissionFromAuthContract> autoImportPermissions)
         {
             try
             {

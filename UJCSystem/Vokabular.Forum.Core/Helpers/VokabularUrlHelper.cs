@@ -1,8 +1,8 @@
 ﻿namespace Vokabular.ForumSite.Core.Helpers
 {
-    public static class VokabularUrlHelper
+    public class VokabularUrlHelper
     {
-        public static string GetBookUrl(long bookId, short bookTypeId, string hostUrl)
+        public string GetBookUrl(long bookId, short bookTypeId, string hostUrl)
         {
             UrlBookTypeEnum urlBookType = (UrlBookTypeEnum) bookTypeId == UrlBookTypeEnum.BohemianTextBank
                 ? UrlBookTypeEnum.Editions

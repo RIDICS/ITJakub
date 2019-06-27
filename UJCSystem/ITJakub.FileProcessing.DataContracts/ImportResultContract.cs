@@ -1,20 +1,20 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Vokabular.Shared
+namespace ITJakub.FileProcessing.DataContracts
 {
     [DataContract]
-    public class ImportResult
+    public class ImportResultContract
     {
-       
         [DataMember]
         public long ProjectId { get; set; }
+
         [DataMember]
         public bool Success { get; set; }
 
-        public ImportResult()
+        public ImportResultContract()
         { }
 
-        public ImportResult(long projectId, bool success)
+        public ImportResultContract(long projectId, bool success)
         {
             ProjectId = projectId;
             Success = success;
