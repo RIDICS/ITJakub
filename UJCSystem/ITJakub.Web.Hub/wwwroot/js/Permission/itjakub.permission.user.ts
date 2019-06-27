@@ -44,7 +44,7 @@ class UserPermissionEditor {
             }
         });
 
-        this.groupSearchBox.setDataSet("Group");
+        this.groupSearchBox.setDataSet("Role");
         this.groupSearchBox.create((selectedExists: boolean, selectionConfirmed: boolean) => {
 
             if (!selectedExists || this.searchBox.getInputValue() === "") {
@@ -89,8 +89,8 @@ class UserPermissionEditor {
                 $.ajax({
                     type: "POST",
                     traditional: true,
-                    url: getBaseUrl() + "Permission/CreateGroupWithUser",
-                    data: JSON.stringify({ userId: this.currentUserSelectedItem.id, groupName: groupName, groupDescription: groupDescription }),
+                    url: getBaseUrl() + "Permission/CreateRoleWithUser",
+                    data: JSON.stringify({ userId: this.currentUserSelectedItem.id, roleName: groupName, roleDescription: groupDescription }),
                     dataType: "json",
                     contentType: "application/json",
                     success: (response) => {
@@ -121,7 +121,7 @@ class UserPermissionEditor {
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Permission/GetGroupsByUser",
+            url: getBaseUrl() + "Permission/GetRolesByUser",
             data: { userId: user.id } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",

@@ -82,13 +82,13 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult RolePermissionList(int roleId, string search, int start, int count = PermissionListPageSize, ViewType viewType = ViewType.Full)
+        public ActionResult RolePermissionList(int roleId, string search, int start, int count = PermissionListPageSize)
         {
             using (var client = GetRestClient())
             {
                 search = search ?? string.Empty;
                 var roleContract = client.GetRoleDetail(roleId);
-                var pagedPermissionsResult = client.GetPermissions(start,count, search);
+                var pagedPermissionsResult = client.GetPermissions(start, count, search);
 
                 foreach (var permission in pagedPermissionsResult.List)
                 {
@@ -215,7 +215,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult GetTypeaheadGroup(string query)
+        public ActionResult GetTypeaheadRole(string query)
         {
             using (var client = GetRestClient())
             {
@@ -233,11 +233,11 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult GetGroup(int groupId)
+        public ActionResult GetRole(int roleId)
         {
             using (var client = GetRestClient())
             {
-                var result = client.GetRoleDetail(groupId);
+                var result = client.GetRoleDetail(roleId);
                 return Json(result);
             }
         }
@@ -262,24 +262,24 @@ namespace ITJakub.Web.Hub.Controllers
                     Name = request.RoleName,
                     Description = request.RoleDescription,
                 };
-                var groupId = client.CreateRole(newRoleContract);
-                var group = client.GetRoleDetail(groupId);
-                return Json(group);
+                var roleId = client.CreateRole(newRoleContract);
+                var role = client.GetRoleDetail(roleId);
+                return Json(role);
             }
         }
 
         [HttpPost]
-        public ActionResult CreateGroupWithUser([FromBody] CreateRoleWithUserRequest request)
+        public ActionResult CreateRoleWithUser([FromBody] CreateRoleWithUserRequest request)
         {
             using (var client = GetRestClient())
             {
-                var groupId = client.CreateRole(new RoleContract
+                var roleId = client.CreateRole(new RoleContract
                 {
                     Name = request.RoleName,
                     Description = request.RoleDescription,
                 });
-                client.AddUserToRole(request.UserId, groupId);
-                return Json(groupId);
+                client.AddUserToRole(request.UserId, roleId);
+                return Json(roleId);
             }
         }
 
@@ -293,7 +293,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult GetGroupsByUser(int userId)
+        public ActionResult GetRolesByUser(int userId)
         {
             using (var client = GetRestClient())
             {
@@ -412,7 +412,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetRestClient())
             {
-                client.AddSpecialPermissionsToRole(request.RoleId, new List<int>{request.SpecialPermissionId});
+                client.AddSpecialPermissionsToRole(request.RoleId, new List<int> {request.SpecialPermissionId});
                 return Json(new { });
             }
         }
@@ -422,7 +422,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetRestClient())
             {
-                client.RemoveSpecialPermissionsFromRole(request.RoleId, new List<int> { request.SpecialPermissionId});
+                client.RemoveSpecialPermissionsFromRole(request.RoleId, new List<int> {request.SpecialPermissionId});
                 return Json(new { });
             }
         }

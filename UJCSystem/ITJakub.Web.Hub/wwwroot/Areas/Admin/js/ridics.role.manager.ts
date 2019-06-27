@@ -6,15 +6,15 @@
         $("#createRoleModal").modal();
     });
 
-    $("#role-group").click(() => {
-        var groupName = $("#new-role-name").val() as string;
-        var groupDescription = $("#new-role-description").val() as string;
+    $("#create-role").click(() => {
+        var roleName = $("#new-role-name").val() as string;
+        var roleDescription = $("#new-role-description").val() as string;
 
         $.ajax({
             type: "POST",
             traditional: true,
             url: getBaseUrl() + "Permission/CreateRole",
-            data: JSON.stringify({ roleName: groupName, roleDescription: groupDescription }),
+            data: JSON.stringify({ roleName: roleName, roleDescription: roleDescription }),
             dataType: "json",
             contentType: "application/json",
             success: () => {
