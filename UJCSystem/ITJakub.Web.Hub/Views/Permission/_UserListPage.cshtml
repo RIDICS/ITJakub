@@ -1,6 +1,4 @@
 ﻿@using Scalesoft.Localization.AspNetCore
-@using Vokabular.Shared.AspNetCore.Extensions
-@using Vokabular.Shared.Const
 @model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<ITJakub.Web.Hub.Models.UserDetailViewModel>
 @inject ILocalizationService Localizer
 
@@ -21,12 +19,12 @@
             @Html.DisplayFor(modelItem => user.Email)
         </td>
         <td class="buttons">
-        <a asp-action="EditUser" asp-route-userId="@user.Id" class="btn btn-sm btn-default @(User.HasPermission(PermissionNames.ManagePermissions) ? "" : "disabled")">
-                    @Localizer.Translate("Edit", "Permission")
-                </a>
-                <a asp-action="EditUserRoles" asp-route-userId="@user.Id" class="btn btn-sm btn-default @(User.HasPermission(PermissionNames.ManagePermissions) ? "" : "disabled")">
-                    @Localizer.Translate("Groups", "Permission")
-                </a>
+            <a asp-action="EditUser" asp-route-userId="@user.Id" class="btn btn-sm btn-default">
+                @Localizer.Translate("Edit", "Permission")
+            </a>
+            <a asp-action="EditUserRoles" asp-route-userId="@user.Id" class="btn btn-sm btn-default">
+                @Localizer.Translate("Groups", "Permission")
+            </a>
         </td>
     </tr>
 }
