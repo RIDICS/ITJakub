@@ -1,6 +1,7 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using ITJakub.Web.Hub.Constants
+@using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
-@model ITJakub.Web.Hub.Models.UpdateUserViewModel
+@model ITJakub.Web.Hub.Models.UserDetailViewModel
 @inject ILocalizationService Localizer
 
 @{
@@ -8,44 +9,45 @@
 }
 @section styles{
     <link href="~/css/ITJakub.Permission.css" rel="stylesheet" />
+    <link href="~/css/ridics.permissions.css" rel="stylesheet" />
 }
 @section scripts{
     <script src="~/js/Permission/itjakub.permission.user.js"></script>
+    <script src="~/Areas/Admin/js/ridics.user.edit.js"></script>
 }
 
-<div class="row">
-    <div class="permission-left-panel col-md-6">
-        <div id="selected-item-div" class="content hidden">
-            <div class="item-details-title">@Localizer.Translate("SelectedUser", "Permission", LocTranslationSource.File)</div>
-            <div class="item-details">
-                <div class="detail-item">
-                    <span class="detail-item-title">@Localizer.Translate("FirstName", "Permission", LocTranslationSource.File): </span>
-                    <span id="specificUserFirstName"></span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-item-title">@Localizer.Translate("LastName", "Permission", LocTranslationSource.File): </span>
-                    <span id="specificUserLastName"></span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-item-title">@Localizer.Translate("UserName", "Permission", LocTranslationSource.File): </span>
-                    <span id="specificUserUsername"></span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-item-title">@Localizer.Translate("Email", "Permission", LocTranslationSource.File): </span>
-                    <span id="specificUserEmail"></span>
-                </div>
+<div class="col-sm-6 col-md-4">
+    <div id="selected-item-div" data-user-id="@Model.Id" class="content hidden">
+        <div class="item-details-title">@Localizer.Translate("SelectedUser", "Permission", LocTranslationSource.File)</div>
+        <div class="item-details">
+            <div class="detail-item">
+                <span class="detail-item-title">@Localizer.Translate("FirstName", "Permission", LocTranslationSource.File): </span>
+                <span id="specificUserFirstName">@Model.FirstName</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-item-title">@Localizer.Translate("LastName", "Permission", LocTranslationSource.File): </span>
+                <span id="specificUserLastName">@Model.LastName</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-item-title">@Localizer.Translate("UserName", "Permission", LocTranslationSource.File): </span>
+                <span id="specificUserUsername">@Model.UserName</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-item-title">@Localizer.Translate("Email", "Permission", LocTranslationSource.File): </span>
+                <span id="specificUserEmail">@Model.Email</span>
             </div>
         </div>
     </div>
-
-    <div id="right-panel" class="permission-right-panel col-md-6">
-        <div class="right-panel-title">@Localizer.Translate("UsersGroups", "Permission", LocTranslationSource.File):</div>
-        <ul class="items-list"></ul>
-
-        <div class="groups-buttons">
-            <button id="addGroupButton" class="btn btn-default permission-button">+</button>
-        </div>
+    <div>
+        <button id="addGroupButton" class="btn btn-default permission-button">Přidat do skupiny</button>
     </div>
+</div>
+
+<div class="col-xs-12 col-sm-6 col-md-8 col-lg-8" id="role-section">
+    <div id="role-list-container">
+        @await Html.PartialAsync("Widget/_RoleListWidget", Model.Roles)
+    </div>
+    <div id="role-pagination" class="text-center"></div>
 </div>
 
 <div id="addToGroupDialog" class="modal fade" role="dialog">

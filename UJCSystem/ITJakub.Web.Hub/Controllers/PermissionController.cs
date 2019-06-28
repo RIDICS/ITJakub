@@ -186,7 +186,20 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult EditUserRoles(int userId)
         {
-            return View();
+            using (var client = GetRestClient())
+            {
+                var result = client.GetUserDetail(userId);
+                var model = Mapper.Map<UserDetailViewModel>(result);
+                model.Roles = new ListViewModel<RoleContract>
+                {
+                    TotalCount = result.Roles.Count,
+                    List = result.Roles,
+                    PageSize = RoleListPageSize,
+                    Start = 0
+                };
+
+                return View(model);
+            }
         }
 
         public ActionResult GetTypeaheadUser(string query)

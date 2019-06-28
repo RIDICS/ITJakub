@@ -16,8 +16,8 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles.Authentication
 
             CreateMap<Vokabular.Authentication.DataContracts.User.UserContract, UserDetailContract>()
                 .IncludeBase<Vokabular.Authentication.DataContracts.User.UserContract, UserContract>()
-                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email));
-
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.Roles, opt => opt.MapFrom(src => src.Roles));
 
             CreateMap<Vokabular.Authentication.DataContracts.UserWithRolesContract, UserContract>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())

@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using ITJakub.Web.Hub.Areas.Admin.Models;
+using Vokabular.MainService.DataContracts.Contracts.Permission;
 
 namespace ITJakub.Web.Hub.Models
 {
@@ -119,5 +121,8 @@ namespace ITJakub.Web.Hub.Models
 
         [Display(Name = "LastName")]
         public string LastName { get; set; }
+
+        [Display(Name = "Roles")]
+        public ListViewModel<RoleContract> Roles { get; set; }
     }
 }

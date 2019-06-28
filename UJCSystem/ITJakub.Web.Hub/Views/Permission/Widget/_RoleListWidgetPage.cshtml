@@ -1,4 +1,6 @@
 ﻿@using Scalesoft.Localization.AspNetCore
+@using Vokabular.Shared.AspNetCore.Extensions
+@using Vokabular.Shared.Const
 @model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.Permission.RoleContract>
 @inject ILocalizationService Localizer
 
@@ -10,13 +12,16 @@
             <div class="name">@Html.DisplayFor(modelItem => role.Name)</div>
             <div class="description">@Html.DisplayFor(modelItem => role.Description)</div>
         </td>
-        <td class="buttons">
-            <a asp-action="EditRole" asp-route-roleId="@role.Id" class="btn btn-sm btn-default">
-                <i class="fa fa-pencil"></i>
-            </a>
-            <a class="remove-role btn btn-sm btn-default">
-                <i class="fa fa-trash"></i>
-            </a>
-        </td>
+         @if (User.HasPermission(PermissionNames.ManagePermissions))
+         {
+             <td class="buttons">
+                 <a asp-action="EditRole" asp-route-roleId="@role.Id" class="btn btn-sm btn-default">
+                     <i class="fa fa-pencil"></i>
+                 </a>
+                 <a class="remove-role btn btn-sm btn-default">
+                     <i class="fa fa-trash"></i>
+                 </a>
+             </td>
+         }
     </tr>
 }
