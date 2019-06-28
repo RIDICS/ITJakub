@@ -1,43 +1,164 @@
-﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.Permission.RoleContract>
-@using ITJakub.Web.Hub.Constants
+﻿@using ITJakub.Web.Hub.Constants
 @using Scalesoft.Localization.AspNetCore
-
+@using Scalesoft.Localization.Core.Util
+@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.Permission.RoleContract>
 @inject ILocalizationService Localizer
 
 @{
-    ViewBag.Title = Localizer.Translate("GroupPermissionManagementTitle", "Permission");
+    ViewBag.Title = Localizer.Translate("GroupPermissionManagementTitle", "Permission", LocTranslationSource.File);
 }
 
 @section styles{
-    <link href="~/css/ridics.permissions.css" rel="stylesheet"/>
+    <link href="~/css/ridics.permissions.css" rel="stylesheet" />
 }
 
 @section scripts{
     <script src="~/Areas/Admin/js/ridics.list.js"></script>
-    <script src="~/Areas/Admin/js/ridics.role.list.js"></script>
+    <script src="~/Areas/Admin/js/ridics.role.manager.js"></script>
 }
 
-<h2>@Localizer.Translate("GroupManagementHeadline", "Permission")</h2>
+<h2>@Localizer.Translate("GroupPermissionManagementHeadline", "Permission", LocTranslationSource.File)</h2>
 
-<div class="row page-control">
-    <div class="col col-sm-6 col-lg-8">
-        <div class="form-group">
-            <a asp-action="EditRolePermissions" asp-controller="Permission" class="btn btn-default">@Localizer.Translate("ManagePermissions", "Permission")</a>
+<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" id="role-section">
+    <div class="row page-control">
+        <div class="col col-xs-2">
+            <button id="createRoleButton" class="btn btn-default">+</button>
+        </div>
+        <div class="col col-xs-10">
+            <form asp-action="RolePermission" asp-controller="Permission" method="get" class="role-search-form form-inline">
+                <div class="form-group">
+                    <div class="search-button">
+                        <button class="btn btn-default" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                    <input class="form-control search-value" name="search" value="@ViewData[PermissionConstants.SearchRole]" />
+                </div>
+            </form>
         </div>
     </div>
-    <div class="col col-sm-6 col-lg-4">
-        <form asp-action="RolePermission" asp-controller="Permission" method="get" class="role-search-form form-inline">
-            <div class="form-group">
-                <div class="search-button">
-                    <button class="btn btn-default" type="submit">@Localizer.Translate("Search", "Permission")</button>
-                </div>
-                <input class="form-control search-value" name="search" value="@ViewData[PermissionConstants.SearchRole]"/>
-            </div>
-        </form>
+    <div id="role-list-container">
+        @await Html.PartialAsync("Widget/_RoleListWidget", Model)
     </div>
-</div>
-<div id="role-list-container">
-    @await Html.PartialAsync("_RoleList", Model)
+
+    <div id="role-pagination" class="text-center"></div>
 </div>
 
-<div id="role-pagination" class="text-center"></div>
+<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" id="user-section">
+    <div class="section hide">
+        <div class="row page-control">
+            <div class="col col-xs-2">
+                <button id="addRoleButton" class="btn btn-default">+</button>
+            </div>
+            <div class="col col-xs-10">
+                <form asp-action="UsersByRole" asp-controller="Permission" method="get" class="user-search-form form-inline">
+                    <div class="form-group">
+                        <div class="search-button">
+                            <button class="btn btn-default" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                        <input class="form-control search-value" name="search" value="@ViewData[PermissionConstants.SearchUser]" />
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="user-list-container">
+        </div>
+
+        <div id="user-pagination" class="text-center"></div>
+    </div>
+</div>
+
+<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="permission-section">
+    <div class="section hide">
+        <div class="row page-control">
+            <div class="col-sm-12">
+                <form asp-action="RolePermissionList" asp-controller="Permission" method="get" class="permission-search-form form-inline">
+                    <div class="form-group">
+                        <div class="search-button">
+                            <button class="btn btn-default" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                        <input class="form-control search-value" name="search" value="@ViewData[PermissionConstants.SearchPermission]" />
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="permission-list-container">
+        </div>
+
+        <div id="permission-pagination" class="text-center"></div>
+    </div>
+</div>
+
+
+<div id="createRoleModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">@Localizer.Translate("NewGroup", "Permission", LocTranslationSource.File)</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="new-role-name" class="col-md-3 control-label">@Localizer.Translate("GroupName", "Permission", LocTranslationSource.File)</label>
+                        <div class="col-md-8">
+                            <input class="form-control" id="new-role-name" name="new-text" type="text">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-role-description" class="col-md-3 control-label">@Localizer.Translate("Description", "Permission", LocTranslationSource.File)</label>
+                        <div class="col-md-8">
+                            <input class="form-control" id="new-role-description" name="new-text" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "Permission", LocTranslationSource.File)</button>
+                <button type="button" class="btn btn-default" id="create-role">@Localizer.Translate("Create", "Permission", LocTranslationSource.File)</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="addToRoleDialog" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">@Localizer.Translate("AddToGroup", "Permission", LocTranslationSource.File)</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="permission-search">
+                    <input type="text" class="form-control permission-search-input" id="mainSearchInput" placeholder="@Localizer.Translate("SearchUser", "Permission", LocTranslationSource.File)" />
+                </div>
+
+                <div class="content">
+                    <div class="item-details">
+                        <div class="detail-item">
+                            <span class="detail-item-title">@Localizer.Translate("SelectedGroup", "Permission", LocTranslationSource.File): </span>
+                            <span id="specificRoleName"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-item-title">@Localizer.Translate("Description", "Permission", LocTranslationSource.File): </span>
+                            <span id="specificRoleDescription"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-item-title">@Localizer.Translate("SelectedUser", "Permission", LocTranslationSource.File): </span>
+                            <span id="selectedUser"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "Permission", LocTranslationSource.File)</button>
+                <button type="button" class="btn btn-default" id="add-user-to-role" data-init="false">@Localizer.Translate("AddUserToGroup", "Permission", LocTranslationSource.File)</button>
+            </div>
+        </div>
+    </div>
+</div>

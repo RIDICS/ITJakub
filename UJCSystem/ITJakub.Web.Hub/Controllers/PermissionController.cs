@@ -189,30 +189,6 @@ namespace ITJakub.Web.Hub.Controllers
             return View();
         }
 
-        public ActionResult EditRolePermissions(bool partial, string search, int start, int count = RoleListPageSize)
-        {
-            using (var client = GetRestClient())
-            {
-                search = search ?? string.Empty;
-                var result = client.GetRoleList(start, count, search);
-                var model = new ListViewModel<RoleContract>
-                {
-                    TotalCount = result.TotalCount,
-                    List = result.List,
-                    PageSize = count,
-                    Start = start
-                };
-
-                ViewData[PermissionConstants.SearchRole] = search;
-                if (partial)
-                {
-                    return PartialView("_RoleList", model);
-                }
-
-                return View(model);
-            }
-        }
-
         public ActionResult GetTypeaheadUser(string query)
         {
             using (var client = GetRestClient())
