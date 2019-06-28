@@ -1,4 +1,5 @@
 ﻿using Vokabular.ForumSite.Core.Helpers;
+using Vokabular.ForumSite.Core.Works.Subworks;
 using Vokabular.ForumSite.DataEntities.Database.Entities;
 using Vokabular.ForumSite.DataEntities.Database.Enums;
 using Vokabular.ForumSite.DataEntities.Database.Repositories;
@@ -11,15 +12,15 @@ namespace Vokabular.ForumSite.Core.Works
     {
         private readonly ForumRepository m_forumRepository;
         private readonly CategoryRepository m_categoryRepository;
-        private readonly ForumAccessRepository m_forumAccessRepository;
+        private readonly ForumAccessSubwork m_forumAccessSubwork;
         private readonly CategoryContract m_category;
 
         public CreateSubForumWork(ForumRepository forumRepository, CategoryRepository categoryRepository,
-            ForumAccessRepository forumAccessRepository, CategoryContract category) : base(forumRepository)
+            ForumAccessSubwork forumAccessSubwork, CategoryContract category) : base(forumRepository)
         {
             m_forumRepository = forumRepository;
             m_categoryRepository = categoryRepository;
-            m_forumAccessRepository = forumAccessRepository;
+            m_forumAccessSubwork = forumAccessSubwork;
             m_category = category;
         }
 
@@ -32,7 +33,7 @@ namespace Vokabular.ForumSite.Core.Works
                 Forum parentForum = null;
                 if (m_category.ParentCategoryId != null)
                 {
-                    parentForum = m_forumRepository.GetForumByExternalCategoryIdAndCategory((int) m_category.ParentCategoryId, category);
+                    parentForum = m_forumRepository.GetForumByExternalCategoryIdAndCategory((int) m_category.ParentCategoryId, category.CategoryID);
                 }
 
                 var forum = new Forum(m_category.Description, category, (short) ForumTypeEnum.SubCategory)
@@ -41,7 +42,7 @@ namespace Vokabular.ForumSite.Core.Works
                     ParentForum = parentForum
                 };
                 m_forumRepository.Create(forum);
-                m_forumAccessRepository.SetAdminAccessToForumForAdminGroup(forum);
+                m_forumAccessSubwork.SetAdminAccessToForumForAdminGroup(forum);
             }
         }
     }

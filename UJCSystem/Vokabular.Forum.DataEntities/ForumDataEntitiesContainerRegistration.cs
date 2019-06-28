@@ -18,7 +18,6 @@ namespace Vokabular.ForumSite.DataEntities
             services.AddScoped<ForumAccessRepository>();
             services.AddScoped<ForumRepository>();
             services.AddScoped<GroupRepository>();
-            services.AddScoped<MessageRepository>();
             services.AddScoped<TopicRepository>();
             services.AddScoped<UserRepository>();
         }

@@ -9,11 +9,11 @@ namespace Vokabular.ForumSite.DataEntities.Database.Repositories
         {
         }
 
-        public virtual Group GetGroupByNameAndBoard(string name, Board board)
+        public virtual Group GetGroupByNameAndBoard(string name, int boardId)
         {
             return GetSession().QueryOver<Group>()
                 .Where(x => x.Name == name)
-                .Where(x => x.Board == board)
+                .Where(x => x.Board.BoardID == boardId)
                 .SingleOrDefault();
         }
     }

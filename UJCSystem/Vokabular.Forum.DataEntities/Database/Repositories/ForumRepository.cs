@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using NHibernate.Criterion;
+﻿using System.Collections.Generic;
 using Vokabular.ForumSite.DataEntities.Database.Entities;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
@@ -19,18 +17,18 @@ namespace Vokabular.ForumSite.DataEntities.Database.Repositories
                 .SingleOrDefault();
         }
 
-        public virtual Forum GetForumByExternalCategoryIdAndCategory(int externalCategoryId, Category category)
+        public virtual Forum GetForumByExternalCategoryIdAndCategory(int externalCategoryId, int categoryId)
         {
             return GetSession().QueryOver<Forum>()
                 .Where(x => x.ExternalId == externalCategoryId)
-                .Where(x => x.Category == category)
+                .Where(x => x.Category.CategoryID == categoryId)
                 .SingleOrDefault();
         }
 
-        public virtual IList<Forum> GetForumsByExternalCategoryIds(ICollection categoryIds)
+        public virtual IList<Forum> GetForumsByExternalCategoryIds(IEnumerable<int> categoryIds)
         {
             return GetSession().QueryOver<Forum>()
-                .Where(x => x.ExternalId.IsIn(categoryIds))
+                .WhereRestrictionOn(x => x.ExternalId).IsInG(categoryIds)
                 .List();
         }
 

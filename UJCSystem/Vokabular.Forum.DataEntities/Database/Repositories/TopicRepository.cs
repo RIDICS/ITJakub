@@ -1,5 +1,4 @@
 ﻿using Vokabular.ForumSite.DataEntities.Database.Entities;
-using Vokabular.Shared.DataEntities.Daos;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.ForumSite.DataEntities.Database.Repositories
@@ -10,10 +9,10 @@ namespace Vokabular.ForumSite.DataEntities.Database.Repositories
         {
         }
 
-        public virtual Topic GetFirstTopicInForum(Forum forum)
+        public virtual Topic GetFirstTopicInForum(int forumId)
         {
             return GetSession().QueryOver<Topic>()
-                .Where(x => x.Forum == forum)
+                .Where(x => x.Forum.ForumID == forumId)
                 .OrderBy(x => x.Posted).Asc
                 .Take(1).SingleOrDefault();
         }

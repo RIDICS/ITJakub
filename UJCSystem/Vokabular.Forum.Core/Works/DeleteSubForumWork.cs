@@ -26,7 +26,7 @@ namespace Vokabular.ForumSite.Core.Works
             foreach (UrlBookTypeEnum bookType in BookTypeHelper.GetBookTypeEnumsWithCategories())
             {
                 var category = m_categoryRepository.GetCategoryByExternalId((short)bookType);
-                var forum = m_forumRepository.GetForumByExternalCategoryIdAndCategory(m_categoryId, category);
+                var forum = m_forumRepository.GetForumByExternalCategoryIdAndCategory(m_categoryId, category.CategoryID);
 
                 if (forum == null)
                     throw new HttpErrorCodeException(ErrorMessages.NotFound, HttpStatusCode.NotFound);
@@ -34,7 +34,8 @@ namespace Vokabular.ForumSite.Core.Works
                 if (forum.Forums.Count > 0)
                     throw new HttpErrorCodeException("Category has some sub-categories", HttpStatusCode.BadRequest);
 
-                m_forumAccessRepository.RemoveAllAccessesFromForum(forum);
+                var forumAccesses = m_forumAccessRepository.GetAllAccessesForForum(forum.ForumID);
+                m_forumAccessRepository.DeleteAll(forumAccesses);
                 m_forumRepository.Delete(forum);
             }
         }

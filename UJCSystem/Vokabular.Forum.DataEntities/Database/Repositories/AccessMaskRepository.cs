@@ -9,11 +9,11 @@ namespace Vokabular.ForumSite.DataEntities.Database.Repositories
         {
         }
 
-        public virtual AccessMask GetAccessMaskByNameAndBoard(string name, Board board)
+        public virtual AccessMask GetAccessMaskByNameAndBoard(string name, int boardId)
         {
             return GetSession().QueryOver<AccessMask>()
                 .Where(x => x.Name == name)
-                .Where(x => x.Board == board)
+                .Where(x => x.Board.BoardID == boardId)
                 .SingleOrDefault();
         }
     }

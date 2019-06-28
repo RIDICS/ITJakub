@@ -6,51 +6,14 @@ namespace Vokabular.ForumSite.DataEntities.Database.Repositories
 {
     public class ForumAccessRepository : ForumDbRepositoryBase
     {
-        private readonly AccessMaskRepository m_accessMaskRepository;
-        private readonly GroupRepository m_groupRepository;
-
-        public ForumAccessRepository(UnitOfWorkProvider unitOfWorkProvider, AccessMaskRepository accessMaskRepository, GroupRepository groupRepository) :
-            base(unitOfWorkProvider)
+        public ForumAccessRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
-            m_accessMaskRepository = accessMaskRepository;
-            m_groupRepository = groupRepository;
         }
 
-        public virtual void SetAdminAccessToForumForAdminGroup(Forum forum)
-        {
-            AccessMask accessMask = m_accessMaskRepository.GetAccessMaskByNameAndBoard("Admin Access", forum.Category.Board);
-            Group group = m_groupRepository.GetGroupByNameAndBoard("Administrators", forum.Category.Board); 
-
-            Create(new ForumAccess
-            {
-                Group = group,
-                AccessMask = accessMask,
-                Forum = forum
-            });
-        }
-
-        public virtual void SetMemberAccessToForumForRegisteredGroup(Forum forum)
-        {
-            AccessMask accessMask = m_accessMaskRepository.GetAccessMaskByNameAndBoard("Member Access", forum.Category.Board);
-            Group group = m_groupRepository.GetGroupByNameAndBoard("Registered", forum.Category.Board);
-
-            Create(new ForumAccess
-            {
-                Group = group,
-                AccessMask = accessMask,
-                Forum = forum
-            });
-        }
-
-        public virtual void RemoveAllAccessesFromForum(Forum forum)
-        {
-            DeleteAll(GetAllAccessesForForum(forum));
-        }
-
-        public virtual IList<ForumAccess> GetAllAccessesForForum(Forum forum)
+        public virtual IList<ForumAccess> GetAllAccessesForForum(int forumId)
         {
             return GetSession().QueryOver<ForumAccess>()
-                .Where(x => x.Forum == forum)
+                .Where(x => x.Forum.ForumID == forumId)
                 .List();
         }
     }

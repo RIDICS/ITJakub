@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Vokabular.ForumSite.Core.Helpers;
+using Vokabular.ForumSite.Core.Works.Subworks;
 using Vokabular.ForumSite.DataEntities.Database.Entities;
 using Vokabular.ForumSite.DataEntities.Database.Enums;
 using Vokabular.ForumSite.DataEntities.Database.Repositories;
@@ -14,19 +15,18 @@ namespace Vokabular.ForumSite.Core.Works
         private readonly ForumRepository m_forumRepository;
         private readonly CategoryRepository m_categoryRepository;
         private readonly TopicRepository m_topicRepository;
-        private readonly MessageRepository m_messageRepository;
         private readonly UserRepository m_userRepository;
-        private readonly ForumAccessRepository m_forumAccessRepository;
+        private readonly ForumAccessSubwork m_forumAccessSubwork;
+        private readonly MessageSubwork m_messageSubwork;
         private readonly ForumSiteUrlHelper m_forumSiteUrlHelper;
         private readonly ProjectDetailContract m_project;
         private readonly short[] m_bookTypeIds;
         private readonly string m_messageText;
         private readonly string m_username;
         private readonly string m_firstTopicName;
-
-
+        
         public CreateForumWork(ForumRepository forumRepository, CategoryRepository categoryRepository, TopicRepository topicRepository,
-            MessageRepository messageRepository, UserRepository userRepository, ForumAccessRepository forumAccessRepository,
+            UserRepository userRepository, ForumAccessSubwork forumAccessSubwork, MessageSubwork messageSubwork,
             ForumSiteUrlHelper forumSiteUrlHelper, ProjectDetailContract project, short[] bookTypeIds, string messageText, string username,
             string firstTopicName) : base(
             forumRepository)
@@ -34,9 +34,9 @@ namespace Vokabular.ForumSite.Core.Works
             m_forumRepository = forumRepository;
             m_categoryRepository = categoryRepository;
             m_topicRepository = topicRepository;
-            m_messageRepository = messageRepository;
             m_userRepository = userRepository;
-            m_forumAccessRepository = forumAccessRepository;
+            m_forumAccessSubwork = forumAccessSubwork;
+            m_messageSubwork = messageSubwork;
             m_forumSiteUrlHelper = forumSiteUrlHelper;
             m_project = project;
             m_bookTypeIds = bookTypeIds;
@@ -51,8 +51,8 @@ namespace Vokabular.ForumSite.Core.Works
 
             var forum = new Forum(m_project.Name, category, (short) ForumTypeEnum.Forum) {ExternalProjectId = m_project.Id};
             m_forumRepository.Create(forum);
-            m_forumAccessRepository.SetAdminAccessToForumForAdminGroup(forum);
-            m_forumAccessRepository.SetMemberAccessToForumForRegisteredGroup(forum);
+            m_forumAccessSubwork.SetAdminAccessToForumForAdminGroup(forum);
+            m_forumAccessSubwork.SetMemberAccessToForumForRegisteredGroup(forum);
 
             var user = m_userRepository.GetUserByUserName(m_username);
             CreateFirstTopicWithMessage(forum, user, m_messageText);
@@ -73,8 +73,8 @@ namespace Vokabular.ForumSite.Core.Works
                     RemoteURL = m_forumSiteUrlHelper.GetTopicsUrl(forum.ForumID)
                 };
                 m_forumRepository.Create(tempForum);
-                m_forumAccessRepository.SetAdminAccessToForumForAdminGroup(tempForum);
-                m_forumAccessRepository.SetMemberAccessToForumForRegisteredGroup(tempForum);
+                m_forumAccessSubwork.SetAdminAccessToForumForAdminGroup(tempForum);
+                m_forumAccessSubwork.SetMemberAccessToForumForRegisteredGroup(tempForum);
             }
         }
 
@@ -84,16 +84,10 @@ namespace Vokabular.ForumSite.Core.Works
                 (short) TopicTypeEnum.Announcement, user);
             m_topicRepository.Create(firstTopic);
 
-            PostMessageInTopic(firstTopic, user, messageText);
+            m_messageSubwork.PostMessageInTopic(firstTopic, user, messageText);
 
             forum.NumTopics++;
             m_forumRepository.Update(forum);
-        }
-
-        private void PostMessageInTopic(Topic topic, User user, string messageText)
-        {
-            var message = new Message(topic, user, DateTime.UtcNow, messageText);
-            m_messageRepository.Create(message);
         }
     }
 }
