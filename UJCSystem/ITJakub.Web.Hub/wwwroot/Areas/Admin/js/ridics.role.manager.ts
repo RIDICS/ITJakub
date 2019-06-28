@@ -56,6 +56,9 @@ class RoleManager {
     }
 
     private loadUsers(roleId: number) {
+        var container = $("#user-list-container");
+        container.html("<div class=\"loader\"></div>");
+
         $.ajax({
             type: "GET",
             traditional: true,
@@ -63,7 +66,7 @@ class RoleManager {
                 query.roleId = roleId;
             }).toString(),
             success: (response) => {
-                $("#user-list-container").html(response);
+                container.html(response);
                 this.userList = new ListWithPagination(`Permission/UsersByRole?roleId=${roleId}`,
                     10,
                     "user",
@@ -78,6 +81,9 @@ class RoleManager {
     }
 
     private loadPermissions(roleId: number) {
+        var container = $("#permission-list-container");
+        container.html("<div class=\"loader\"></div>");
+
         $.ajax({
             type: "GET",
             traditional: true,
@@ -85,7 +91,7 @@ class RoleManager {
                 query.roleId = roleId;
             }).toString(),
             success: (response) => {
-                $("#permission-list-container").html(response);
+                container.html(response);
                 var permissionList = new ListWithPagination(`Permission/RolePermissionList?roleId=${roleId}`,
                     10,
                     "permission",
