@@ -4,7 +4,7 @@ using Vokabular.MainService.DataContracts.Contracts;
 namespace Vokabular.ForumSite.Core.Helpers
 {
     /// <summary>
-    /// Provides default messages which will be posted to the forum thread. This messages are hardcoded
+    /// Provides default messages which will be posted to the forum thread. This messages are hardcoded (in one language).
     /// </summary>
     public class ForumDefaultMessageGenerator
     {
