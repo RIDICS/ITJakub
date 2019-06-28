@@ -186,8 +186,9 @@ class RoleManager {
             addUserToRoleBtn.data("init", true);
 
             $("#addRoleButton").click(() => {
-                $("#specificRoleName").text($(".role-row.active").children(".role-name").text());
-                $("#specificRoleDescription").text($(".role-row.active").data("role-description"));
+                var role = $(".role-row.active");
+                $("#specificRoleName").text(role.find(".name").text());
+                $("#specificRoleDescription").text(role.find(".description").text());
                 $("#addToRoleDialog").modal();
             });
 

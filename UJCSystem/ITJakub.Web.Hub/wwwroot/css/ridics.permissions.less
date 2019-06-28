@@ -61,7 +61,24 @@
 
 .buttons {
     .btn-default {
-        margin-left: 0.7em
+        margin-left: 0.5em;
+
+        &:first-of-type {
+            margin-left: 0;
+        }
+    }
+}
+
+.role-row {
+    .description {
+        font-size: 11px;
+        white-space: normal;
+    }
+
+    .buttons {
+        min-width: 90px;
+        vertical-align: middle;
+        text-align: right;
     }
 }
 
@@ -72,5 +89,11 @@
         td {
             background-color: #DCDCDC !important;
         }
+    }
+}
+
+.modal {
+    .content {
+        margin-top: 1em;
     }
 }
