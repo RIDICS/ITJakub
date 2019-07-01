@@ -7,6 +7,7 @@ using Vokabular.ForumSite.Core.Works.Subworks;
 using Vokabular.ForumSite.DataEntities.Database.Entities;
 using Vokabular.ForumSite.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.ForumSite.Core.Managers
 {
@@ -14,7 +15,6 @@ namespace Vokabular.ForumSite.Core.Managers
     {
         private readonly ForumRepository m_forumRepository;
         private readonly CategoryRepository m_categoryRepository;
-        private readonly TopicRepository m_topicRepository;
         private readonly UserRepository m_userRepository;
         private readonly ForumAccessSubwork m_forumAccessSubwork;
         private readonly MessageSubwork m_messageSubwork;
@@ -22,13 +22,12 @@ namespace Vokabular.ForumSite.Core.Managers
         private readonly ForumDefaultMessageGenerator m_forumDefaultMessageGenerator;
         private readonly ForumOption m_forumOptions;
 
-        public ForumManager(ForumRepository forumRepository, CategoryRepository categoryRepository, TopicRepository topicRepository,
+        public ForumManager(ForumRepository forumRepository, CategoryRepository categoryRepository,
             UserRepository userRepository, ForumAccessSubwork forumAccessSubwork, MessageSubwork messageSubwork,
             ForumSiteUrlHelper forumSiteUrlHelper, ForumDefaultMessageGenerator forumDefaultMessageGenerator, IOptions<ForumOption> forumOptions)
         {
             m_forumRepository = forumRepository;
             m_categoryRepository = categoryRepository;
-            m_topicRepository = topicRepository;
             m_userRepository = userRepository;
             m_forumAccessSubwork = forumAccessSubwork;
             m_messageSubwork = messageSubwork;
@@ -40,7 +39,7 @@ namespace Vokabular.ForumSite.Core.Managers
         public int CreateNewForum(ProjectDetailContract project, short[] bookTypeIds)
         {
             var messageText = m_forumDefaultMessageGenerator.GetCreateMessage(project, bookTypeIds.First(), m_forumOptions.WebHubUrl);
-            var work = new CreateForumWork(m_forumRepository, m_categoryRepository, m_topicRepository, m_userRepository,
+            var work = new CreateForumWork(m_categoryRepository, m_userRepository,
                 m_forumAccessSubwork, m_messageSubwork, m_forumSiteUrlHelper, project, bookTypeIds, messageText,
                 m_forumOptions.DefaultAuthorUsername, m_forumOptions.FirstTopicName);
             var resultId = work.Execute();
@@ -50,13 +49,13 @@ namespace Vokabular.ForumSite.Core.Managers
         public void UpdateForum(ProjectDetailContract project, short[] bookTypeIds, string hostUrl)
         {
             var messageText = m_forumDefaultMessageGenerator.GetUpdateMessage(project, bookTypeIds.First(), hostUrl);
-            new UpdateForumWork(m_forumRepository, m_topicRepository, m_messageSubwork,
+            new UpdateForumWork(m_forumRepository, m_messageSubwork,
                 m_userRepository, project, messageText, m_forumOptions.DefaultAuthorUsername).Execute();
         }
 
         public Forum GetForumByExternalId(long projectId)
         {
-            return new GetForumWork(m_forumRepository, projectId).Execute();
+            return m_forumRepository.InvokeUnitOfWork(x => x.GetMainForumByExternalProjectId(projectId));
         }
     }
 }

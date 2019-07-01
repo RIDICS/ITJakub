@@ -46,6 +46,20 @@ namespace Vokabular.ForumSite.DataEntities.Database.Repositories
                 .Where(x => x.ExternalProjectId == externalProjectId)
                 .List();
         }
+
+        public virtual Topic GetFirstTopicInForum(int forumId)
+        {
+            return GetSession().QueryOver<Topic>()
+                .Where(x => x.Forum.ForumID == forumId)
+                .OrderBy(x => x.Posted).Asc
+                .Take(1).SingleOrDefault();
+        }
+
+        public virtual IList<ForumAccess> GetAllAccessesForForum(int forumId)
+        {
+            return GetSession().QueryOver<ForumAccess>()
+                .Where(x => x.Forum.ForumID == forumId)
+                .List();
+        }
     }
 }
-

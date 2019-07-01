@@ -6,18 +6,18 @@ namespace Vokabular.ForumSite.Core.Works.Subworks
 {
     public class MessageSubwork
     {
-        private readonly TopicRepository m_topicRepository;
+        private readonly ForumRepository m_forumRepository;
 
-        public MessageSubwork(TopicRepository topicRepository)
+        public MessageSubwork(ForumRepository forumRepository)
         {
-            m_topicRepository = topicRepository;
+            m_forumRepository = forumRepository;
         }
 
         public void PostMessageInTopic(Topic topic, User user, string messageText)
         {
             var message = new Message(topic, user, DateTime.UtcNow, messageText);
 
-            m_topicRepository.Create(message);
+            m_forumRepository.Create(message);
 
             topic.LastMessage = message;
             topic.LastUser = message.User;
@@ -25,7 +25,7 @@ namespace Vokabular.ForumSite.Core.Works.Subworks
             topic.LastMessageFlags = message.Flags;
             topic.LastUserDisplayName = message.UserDisplayName;
             topic.NumPosts++;
-            m_topicRepository.Update(topic);
+            m_forumRepository.Update(topic);
 
             Forum forum = message.Topic.Forum;
             forum.LastPosted = topic.Posted;
@@ -34,7 +34,7 @@ namespace Vokabular.ForumSite.Core.Works.Subworks
             forum.LastUserDisplayName = topic.UserDisplayName;
             forum.LastMessage = topic.LastMessage;
             forum.NumPosts++;
-            m_topicRepository.Update(forum);
+            m_forumRepository.Update(forum);
         }
     }
 }

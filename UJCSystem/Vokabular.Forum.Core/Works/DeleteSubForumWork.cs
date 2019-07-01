@@ -11,13 +11,11 @@ namespace Vokabular.ForumSite.Core.Works
         private readonly ForumRepository m_forumRepository;
         private readonly CategoryRepository m_categoryRepository;
         private readonly int m_categoryId;
-        private readonly ForumAccessRepository m_forumAccessRepository;
-
-        public DeleteSubForumWork(ForumRepository forumRepository, CategoryRepository categoryRepository, ForumAccessRepository forumAccessRepository, int categoryId) : base(forumRepository)
+        
+        public DeleteSubForumWork(ForumRepository forumRepository, CategoryRepository categoryRepository, int categoryId) : base(forumRepository)
         {
             m_forumRepository = forumRepository;
             m_categoryRepository = categoryRepository;
-            m_forumAccessRepository = forumAccessRepository;
             m_categoryId = categoryId;
         }
 
@@ -34,8 +32,8 @@ namespace Vokabular.ForumSite.Core.Works
                 if (forum.Forums.Count > 0)
                     throw new HttpErrorCodeException("Category has some sub-categories", HttpStatusCode.BadRequest);
 
-                var forumAccesses = m_forumAccessRepository.GetAllAccessesForForum(forum.ForumID);
-                m_forumAccessRepository.DeleteAll(forumAccesses);
+                var forumAccesses = m_forumRepository.GetAllAccessesForForum(forum.ForumID);
+                m_forumRepository.DeleteAll(forumAccesses);
                 m_forumRepository.Delete(forum);
             }
         }

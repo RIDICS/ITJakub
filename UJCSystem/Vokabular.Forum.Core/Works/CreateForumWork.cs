@@ -12,9 +12,7 @@ namespace Vokabular.ForumSite.Core.Works
 {
     public class CreateForumWork : UnitOfWorkBase<int>
     {
-        private readonly ForumRepository m_forumRepository;
         private readonly CategoryRepository m_categoryRepository;
-        private readonly TopicRepository m_topicRepository;
         private readonly UserRepository m_userRepository;
         private readonly ForumAccessSubwork m_forumAccessSubwork;
         private readonly MessageSubwork m_messageSubwork;
@@ -25,15 +23,13 @@ namespace Vokabular.ForumSite.Core.Works
         private readonly string m_username;
         private readonly string m_firstTopicName;
         
-        public CreateForumWork(ForumRepository forumRepository, CategoryRepository categoryRepository, TopicRepository topicRepository,
+        public CreateForumWork(CategoryRepository categoryRepository,
             UserRepository userRepository, ForumAccessSubwork forumAccessSubwork, MessageSubwork messageSubwork,
             ForumSiteUrlHelper forumSiteUrlHelper, ProjectDetailContract project, short[] bookTypeIds, string messageText, string username,
             string firstTopicName) : base(
-            forumRepository)
+            categoryRepository)
         {
-            m_forumRepository = forumRepository;
             m_categoryRepository = categoryRepository;
-            m_topicRepository = topicRepository;
             m_userRepository = userRepository;
             m_forumAccessSubwork = forumAccessSubwork;
             m_messageSubwork = messageSubwork;
@@ -50,7 +46,7 @@ namespace Vokabular.ForumSite.Core.Works
             var category = m_categoryRepository.GetCategoryByExternalId(m_bookTypeIds.First());
 
             var forum = new Forum(m_project.Name, category, (short) ForumTypeEnum.Forum) {ExternalProjectId = m_project.Id};
-            m_forumRepository.Create(forum);
+            m_categoryRepository.Create(forum);
             m_forumAccessSubwork.SetAdminAccessToForumForAdminGroup(forum);
             m_forumAccessSubwork.SetMemberAccessToForumForRegisteredGroup(forum);
 
@@ -72,7 +68,7 @@ namespace Vokabular.ForumSite.Core.Works
                     ExternalProjectId = m_project.Id,
                     RemoteURL = m_forumSiteUrlHelper.GetTopicsUrl(forum.ForumID)
                 };
-                m_forumRepository.Create(tempForum);
+                m_categoryRepository.Create(tempForum);
                 m_forumAccessSubwork.SetAdminAccessToForumForAdminGroup(tempForum);
                 m_forumAccessSubwork.SetMemberAccessToForumForRegisteredGroup(tempForum);
             }
@@ -82,12 +78,12 @@ namespace Vokabular.ForumSite.Core.Works
         {
             var firstTopic = new Topic(forum, DateTime.UtcNow, m_firstTopicName,
                 (short) TopicTypeEnum.Announcement, user);
-            m_topicRepository.Create(firstTopic);
+            m_categoryRepository.Create(firstTopic);
 
             m_messageSubwork.PostMessageInTopic(firstTopic, user, messageText);
 
             forum.NumTopics++;
-            m_forumRepository.Update(forum);
+            m_categoryRepository.Update(forum);
         }
     }
 }

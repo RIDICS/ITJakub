@@ -11,16 +11,14 @@ namespace Vokabular.ForumSite.Core.Managers
     {
         private readonly ForumRepository m_forumRepository;
         private readonly CategoryRepository m_categoryRepository;
-        private readonly ForumAccessRepository m_forumAccessRepository;
         private readonly ForumAccessSubwork m_forumAccessSubwork;
         private readonly ForumSiteUrlHelper m_forumSiteUrlHelper;
 
         public SubForumManager(ForumRepository forumRepository, CategoryRepository categoryRepository,
-            ForumAccessRepository forumAccessRepository, ForumAccessSubwork forumAccessSubwork, ForumSiteUrlHelper forumSiteUrlHelper)
+            ForumAccessSubwork forumAccessSubwork, ForumSiteUrlHelper forumSiteUrlHelper)
         {
             m_forumRepository = forumRepository;
             m_categoryRepository = categoryRepository;
-            m_forumAccessRepository = forumAccessRepository;
             m_forumAccessSubwork = forumAccessSubwork;
             m_forumSiteUrlHelper = forumSiteUrlHelper;
         }
@@ -37,12 +35,12 @@ namespace Vokabular.ForumSite.Core.Managers
 
         public void DeleteSubForum(int categoryId)
         {
-            new DeleteSubForumWork(m_forumRepository, m_categoryRepository, m_forumAccessRepository, categoryId).Execute();
+            new DeleteSubForumWork(m_forumRepository, m_categoryRepository, categoryId).Execute();
         }
 
         public void CreateVirtualForums(long projectId, IList<int> categoryIds, IList<int> oldCategoryIds)
         {
-            new CreateVirtualForumsForCategories(m_forumRepository, m_forumAccessRepository, m_forumAccessSubwork, m_forumSiteUrlHelper, categoryIds, oldCategoryIds, projectId).Execute();
+            new CreateVirtualForumsForCategories(m_forumRepository, m_forumAccessSubwork, m_forumSiteUrlHelper, categoryIds, oldCategoryIds, projectId).Execute();
         }
     }
 }

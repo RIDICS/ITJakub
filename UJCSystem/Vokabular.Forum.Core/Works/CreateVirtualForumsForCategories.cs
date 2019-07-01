@@ -12,19 +12,17 @@ namespace Vokabular.ForumSite.Core.Works
     public class CreateVirtualForumsForCategories : UnitOfWorkBase
     {
         private readonly ForumRepository m_forumRepository;
-        private readonly ForumAccessRepository m_forumAccessRepository;
         private readonly ForumAccessSubwork m_forumAccessSubwork;
         private readonly ForumSiteUrlHelper m_forumSiteUrlHelper;
         private readonly IList<int> m_categoryIds;
         private readonly IList<int> m_oldCategoryIds;
         private readonly long m_projectId;
 
-        public CreateVirtualForumsForCategories(ForumRepository forumRepository, ForumAccessRepository forumAccessRepository, ForumAccessSubwork forumAccessSubwork,
+        public CreateVirtualForumsForCategories(ForumRepository forumRepository, ForumAccessSubwork forumAccessSubwork,
             ForumSiteUrlHelper forumSiteUrlHelper, IList<int> categoryIds, IList<int> oldCategoryIds, long projectId) : base(
             forumRepository)
         {
             m_forumRepository = forumRepository;
-            m_forumAccessRepository = forumAccessRepository;
             m_forumAccessSubwork = forumAccessSubwork;
             m_forumSiteUrlHelper = forumSiteUrlHelper;
             m_categoryIds = categoryIds;
@@ -45,8 +43,8 @@ namespace Vokabular.ForumSite.Core.Works
             {
                 if (forumCategoriesToDelete.Contains(forum.ParentForum))
                 {
-                    var forumAccesses = m_forumAccessRepository.GetAllAccessesForForum(forum.ForumID);
-                    m_forumAccessRepository.DeleteAll(forumAccesses);
+                    var forumAccesses = m_forumRepository.GetAllAccessesForForum(forum.ForumID);
+                    m_forumRepository.DeleteAll(forumAccesses);
                     m_forumRepository.Delete(forum);
                 }
             }
