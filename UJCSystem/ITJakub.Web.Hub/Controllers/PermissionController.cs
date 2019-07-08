@@ -294,7 +294,15 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetRestClient())
             {
                 var result = client.GetRolesByUser(userId);
-                return Json(result);
+                var model = new ListViewModel<RoleContract>
+                {
+                    TotalCount = result.Count,
+                    List = result,
+                    PageSize = result.Count,
+                    Start = 0
+                };
+
+                return PartialView("Widget/_RoleListWidget", model);
             }
         }
 

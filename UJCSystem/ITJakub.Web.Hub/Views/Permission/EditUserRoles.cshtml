@@ -12,12 +12,12 @@
     <link href="~/css/ridics.permissions.css" rel="stylesheet" />
 }
 @section scripts{
-    <script src="~/js/Permission/itjakub.permission.user.js"></script>
+    <script src="~/Areas/Admin/js/ridics.list.js"></script>
     <script src="~/Areas/Admin/js/ridics.user.edit.js"></script>
 }
 
 <div class="col-sm-6 col-md-4">
-    <div id="selected-item-div" data-user-id="@Model.Id" class="content hidden">
+    <div id="selected-item-div" data-user-id="@Model.Id" class="content">
         <div class="item-details-title">@Localizer.Translate("SelectedUser", "Permission", LocTranslationSource.File)</div>
         <div class="item-details">
             <div class="detail-item">
