@@ -14,19 +14,20 @@
     private viewType: ViewType;
     private saveStateToUrl: boolean;
     private pageLoadCallback;
+    private contextForCallback;
 
     private search: string;
 
     constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, saveStateToUrl: boolean);
-    constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, saveStateToUrl: boolean, pageLoadCallback: (list: ListWithPagination) => void);
-    constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, saveStateToUrl: boolean, pageLoadCallback?: (list: ListWithPagination) => void) {
+    constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, saveStateToUrl: boolean, pageLoadCallback: (list?: ListWithPagination) => void, contextForCallback: any);
+    constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, saveStateToUrl: boolean, pageLoadCallback?: (list: ListWithPagination) => void, contextForCallback?: any) {
         this.urlPath = urlPath;
         this.defaultPageSize = defaultPageSize;
         this.selector = selector;
         this.viewType = viewType;
         this.saveStateToUrl = saveStateToUrl;
         this.pageLoadCallback = pageLoadCallback;
-
+        this.contextForCallback = contextForCallback;
         this.listContainerSelector = `#${this.selector}-list-container`;
         this.pagination = new Pagination({
             container: document.getElementById(selector + "-pagination") as HTMLDivElement,
@@ -124,13 +125,16 @@
                     }
 
                     if (typeof this.pageLoadCallback !== "undefined") {
-                        this.pageLoadCallback.call(null, this);
+                        this.pageLoadCallback.call(this.contextForCallback, this);
                     }
-                    
-                    var roleSection = $(RoleManager.roleSectionSelector);
-                    if (roleSection && this.selector === "role") {
-                        var roleManager = new RoleManager();
-                        roleManager.init(this);
+
+                    if (this.selector === "role" && typeof RoleManager !== "undefined") {
+                        if (typeof this.contextForCallback !== "undefined" && this.contextForCallback instanceof RoleManager) {
+                            this.contextForCallback.init(this);
+                        } else {
+                            var roleManager = new RoleManager();
+                            roleManager.init(this);
+                        }
                     }
                 });
     }

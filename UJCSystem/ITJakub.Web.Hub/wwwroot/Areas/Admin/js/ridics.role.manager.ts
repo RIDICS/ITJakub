@@ -1,38 +1,14 @@
 ﻿$(document.documentElement).ready(() => {
-    var roleList = new ListWithPagination("Permission/RolePermission", 10, "role", ViewType.Widget, true);
-    roleList.init();
-
-    $("#createRoleButton").click(() => {
-        $("#createRoleModal").modal();
-    });
-
-    $("#create-role").click(() => {
-        var roleName = $("#new-role-name").val() as string;
-        var roleDescription = $("#new-role-description").val() as string;
-
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            url: getBaseUrl() + "Permission/CreateRole",
-            data: JSON.stringify({ roleName: roleName, roleDescription: roleDescription }),
-            dataType: "json",
-            contentType: "application/json",
-            success: () => {
-                $("#createRoleModal").modal("hide");
-                roleList.reloadPage();
-            }
-        });
-    });
-
     var roleManager = new RoleManager();
-    roleManager.init(roleList);
+    roleManager.init();
 });
 
 class RoleManager {
-    public static roleSectionSelector = "#role-section";
     private searchBox: SingleSetTypeaheadSearchBox<IUserDetail>;
     private currentUserSelectedItem: IUserDetail;
+    public client;
     public userList;
+    public roleList: ListWithPagination;
 
     constructor() {
         this.searchBox = new SingleSetTypeaheadSearchBox<IUserDetail>("#mainSearchInput",
@@ -40,9 +16,18 @@ class RoleManager {
             this.getFullNameString,
             (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(this.getFullNameString(item),
                 item.email));
+        this.client = new WebHubApiClient();
     }
 
-    public init(roleList: ListWithPagination) {
+    public init(list?: ListWithPagination) {
+        if (list == null) {
+            this.roleList = new ListWithPagination("Permission/RolePermission", 10, "role", ViewType.Widget, true, undefined, this);
+            
+        } else {
+            this.roleList = list;
+        }
+        this.roleList.init();
+
         $(".role-row").click((event) => {
             $((event.currentTarget) as any).addClass("active").siblings().removeClass("active");
 
@@ -51,7 +36,8 @@ class RoleManager {
             this.loadPermissions(selectedRoleId);
         });
 
-        this.initRemoveRoleButtons(roleList);
+        this.initCreateRoleModal();
+        this.initRemoveRoleButtons();
         this.initSearchBox();
     }
 
@@ -59,24 +45,18 @@ class RoleManager {
         var container = $("#user-list-container");
         container.html("<div class=\"loader\"></div>");
 
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            url: URI(getBaseUrl() + "Permission/UsersByRole").search(query => {
-                query.roleId = roleId;
-            }).toString(),
-            success: (response) => {
-                container.html(response);
-                this.userList = new ListWithPagination(`Permission/UsersByRole?roleId=${roleId}`,
-                    10,
-                    "user",
-                    ViewType.Widget,
-                    false,
-                    this.initRemoveUserFromRoleButton);
-                this.userList.init();
-                this.initRemoveUserFromRoleButton(this.userList);
-                $("#user-section .section").removeClass("hide");
-            },
+        this.client.getUsersByRole(roleId).then(response => {
+            container.html((response) as any);
+            this.userList = new ListWithPagination(`Permission/UsersByRole?roleId=${roleId}`,
+                10,
+                "user",
+                ViewType.Widget,
+                false,
+                this.initRemoveUserFromRoleButton,
+                this);
+            this.userList.init();
+            this.initRemoveUserFromRoleButton();
+            $("#user-section .section").removeClass("hide");
         });
     }
 
@@ -84,89 +64,50 @@ class RoleManager {
         var container = $("#permission-list-container");
         container.html("<div class=\"loader\"></div>");
 
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            url: URI(getBaseUrl() + "Permission/RolePermissionList").search(query => {
-                query.roleId = roleId;
-            }).toString(),
-            success: (response) => {
-                container.html(response);
-                var permissionList = new ListWithPagination(`Permission/RolePermissionList?roleId=${roleId}`,
-                    10,
-                    "permission",
-                    ViewType.Widget,
-                    false,
-                    this.initPermissionManaging);
-                permissionList.init();
-                this.initPermissionManaging();
-                $("#permission-section .section").removeClass("hide");
-            },
+        this.client.getPermissionsByRole(roleId).then(response => {
+            container.html(response);
+            var permissionList = new ListWithPagination(`Permission/RolePermissionList?roleId=${roleId}`,
+                10,
+                "permission",
+                ViewType.Widget,
+                false,
+                this.initPermissionManaging,
+                this);
+            permissionList.init();
+            this.initPermissionManaging();
+            $("#permission-section .section").removeClass("hide");
         });
     }
 
     private initPermissionManaging() {
         $(".permission-checkbox input[type=checkbox]").change((event) => {
-            var data = JSON.stringify({
-                roleId: $(".role-row.active").data("role-id"),
-                specialPermissionId: $((event.currentTarget) as any).parent("td").data("permission-id")
-            });
+            var roleId = $(".role-row.active").data("role-id");
+            var specialPermissionId = $((event.currentTarget) as any).parent("td").data("permission-id");
 
-            let urlPath: string;
             if ($((event.currentTarget) as any).is(":checked")) {
-                urlPath = "Permission/AddSpecialPermissionsToRole";
+                this.client.addSpecialPermissionToRole(roleId, specialPermissionId);
             } else {
-                urlPath = "Permission/RemoveSpecialPermissionsFromRole";
+                this.client.removeSpecialPermissionToRole(roleId, specialPermissionId);
             }
-
-            $.ajax({
-                type: "POST",
-                traditional: true,
-                url: getBaseUrl() + urlPath,
-                data: data,
-                dataType: "json",
-                contentType: "application/json"
-            });
         });
     }
 
-    private initRemoveUserFromRoleButton(list: ListWithPagination) {
+    private initRemoveUserFromRoleButton() {
         $(".remove-user-from-role").click((event) => {
             var userId = $((event.currentTarget) as any).data("user-id");
             var roleId = $(".role-row.active").data("role-id");
-            $.ajax({
-                type: "POST",
-                traditional: true,
-                url: getBaseUrl() + "Permission/RemoveUserFromRole",
-                data: JSON.stringify({ userId: userId, roleId: roleId }),
-                dataType: "json",
-                contentType: "application/json",
-                success: () => {
-                    if (typeof this.userList != "undefined") {
-                        this.userList.reloadPage();
-                    }
-                    if (typeof list != "undefined") {
-                        list.reloadPage();
-                    }
-                }
+            this.client.removeUserFromRole(userId, roleId).then(() => {
+                this.userList.reloadPage();
             });
         });
     }
 
-    private initRemoveRoleButtons(list: ListWithPagination) {
+    private initRemoveRoleButtons() {
         $(".remove-role").click((event) => {
             event.stopPropagation();
             var roleId = $((event.currentTarget) as any).parents("tr.role-row").data("role-id");
-            $.ajax({
-                type: "POST",
-                traditional: true,
-                url: getBaseUrl() + "Permission/DeleteRole",
-                data: JSON.stringify({ roleId: roleId }),
-                dataType: "json",
-                contentType: "application/json",
-                success: () => {
-                    list.reloadPage();
-                }
+            this.client.deleteRole(roleId).then(() => {
+                this.roleList.reloadPage();
             });
         });
     }
@@ -206,24 +147,31 @@ class RoleManager {
                 else {
                     userId = this.currentUserSelectedItem.id;
                 }
-                
-                $.ajax({
-                    type: "POST",
-                    traditional: true,
-                    url: getBaseUrl() + "Permission/AddUserToRole",
-                    data: JSON.stringify({ userId: userId, roleId: roleId }),
-                    dataType: "json",
-                    contentType: "application/json",
-                    success: () => {
-                        this.userList.reloadPage();
-                        $("#addToRoleDialog").modal("hide");
-                    }
+
+                this.client.addUserToRole(userId, roleId).then(() => {
+                    this.userList.reloadPage();
+                    $("#addToRoleDialog").modal("hide");
                 });
             });
         }
     }
 
     private getFullNameString(user: IUser): string {
-        return user.userName + " - " + user.firstName + " " + user.lastName;
+        return `${user.userName} - ${user.firstName} - ${user.lastName}`;
+    }
+
+    private initCreateRoleModal() {
+        $("#createRoleButton").click(() => {
+            $("#createRoleModal").modal();
+        });
+
+        $("#create-role").click(() => {
+            var roleName = $("#new-role-name").val() as string;
+            var roleDescription = $("#new-role-description").val() as string;
+            this.client.createRole(roleName, roleDescription).then(() => {
+                $("#createRoleModal").modal("hide");
+                this.roleList.reloadPage();
+            });
+        });
     }
 }
