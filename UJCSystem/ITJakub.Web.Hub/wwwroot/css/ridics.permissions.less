@@ -29,6 +29,24 @@
         margin-bottom: 15px;
     }
 
+    .selectable-table {
+        cursor: pointer;
+
+        .active {
+            td {
+                background-color: #DCDCDC !important;
+            }
+        }
+    }
+
+    table {
+        tr:first-of-type {
+            td {
+                border: none
+            }
+        }
+    }
+
     .buttons {
         vertical-align: middle;
         text-align: right;
@@ -81,15 +99,7 @@
     }
 }
 
-.selectable-table {
-    cursor: pointer;
 
-    .active {
-        td {
-            background-color: #DCDCDC !important;
-        }
-    }
-}
 
 .modal {
     .content {

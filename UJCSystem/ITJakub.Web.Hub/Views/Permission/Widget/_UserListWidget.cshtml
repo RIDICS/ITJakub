@@ -22,14 +22,6 @@
 {
     <div class="table-responsive">
         <table class="table table-hover">
-            <thead>
-            <tr>
-                <th>
-                    @Localizer.Translate("User", "Permission")
-                </th>
-                <th></th>
-            </tr>
-            </thead>
             <tbody>
             @await Html.PartialAsync("Widget/_UserListWidgetPage", Model)
             </tbody>
