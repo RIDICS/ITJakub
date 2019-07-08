@@ -23,18 +23,29 @@
     }
 }
 
-#user-list-container,
-#role-list-container,
-#permission-list-container {
+.list-container {
     .alert {
         margin-top: 40px;
         margin-bottom: 15px;
     }
+
+    .buttons {
+        vertical-align: middle;
+        text-align: right;
+
+        .btn-default {
+            margin-left: 0.5em;
+
+            &:first-of-type {
+                margin-left: 0;
+            }
+        }
+    }
 }
 
-#user-section,
-#role-section,
-#permission-section {
+.user-section,
+.role-section,
+.permission-section {
     margin: 1.5em 0;
 }
 
@@ -56,19 +67,6 @@
         display: inline-block;
         width: 175px;
         vertical-align: middle;
-    }
-}
-
-.buttons {
-    vertical-align: middle;
-    text-align: right;
-
-    .btn-default {
-        margin-left: 0.5em;
-
-        &:first-of-type {
-            margin-left: 0;
-        }
     }
 }
 

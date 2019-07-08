@@ -19,7 +19,7 @@
 
 <h2>@Localizer.Translate("GroupPermissionManagementHeadline", "Permission", LocTranslationSource.File)</h2>
 
-<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" id="role-section">
+<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 role-section" id="role-section">
     <div class="row page-control">
         <div class="col col-xs-2">
             <button id="createRoleButton" class="btn btn-default">+</button>
@@ -37,14 +37,14 @@
             </form>
         </div>
     </div>
-    <div id="role-list-container">
+    <div id="role-list-container" class="list-container">
         @await Html.PartialAsync("Widget/_RoleListWidget", Model)
     </div>
 
     <div id="role-pagination" class="text-center"></div>
 </div>
 
-<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" id="user-section">
+<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 user-section" id="user-section">
     <div class="section hide">
         <div class="row page-control">
             <div class="col col-xs-2">
@@ -70,7 +70,7 @@
     </div>
 </div>
 
-<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="permission-section">
+<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 permission-section" id="permission-section">
     <div class="section hide">
         <div class="row page-control">
             <div class="col-sm-12">
@@ -86,7 +86,7 @@
                 </form>
             </div>
         </div>
-        <div id="permission-list-container">
+        <div id="permission-list-container" class="list-container">
         </div>
 
         <div id="permission-pagination" class="text-center"></div>
