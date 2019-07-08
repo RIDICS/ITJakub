@@ -2,7 +2,6 @@
 using System.Linq;
 using AutoMapper;
 using ITJakub.Web.Hub.Areas.Admin.Models;
-using ITJakub.Web.Hub.Constants;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.DataContracts;
 using ITJakub.Web.Hub.Helpers;
@@ -12,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
+using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Types;
@@ -139,11 +139,22 @@ namespace ITJakub.Web.Hub.Controllers
                     FirstName = userViewModel.FirstName,
                     LastName = userViewModel.LastName
                 };
-                ViewData.Add(PermissionConstants.SuccessUserUpdate, true);
-                client.UpdateUser(userViewModel.Id, data);
+
+                bool successfulUpdate;
+                try
+                {
+                    client.UpdateUser(userViewModel.Id, data);
+                    successfulUpdate = true;
+                }
+                catch (HttpErrorCodeException e)
+                {
+                    successfulUpdate = false;
+                    AddErrors(e);
+                }
+                
                 var user = client.GetUserDetail(userViewModel.Id);
                 var model = Mapper.Map<UpdateUserViewModel>(user);
-
+                model.SuccessfulUpdate = successfulUpdate;
                 return View(model);
             }
         }
@@ -171,11 +182,10 @@ namespace ITJakub.Web.Hub.Controllers
                     Description = roleViewModel.Description
                 };
                 client.UpdateRole(roleContract.Id, roleContract);
-                ViewData.Add(PermissionConstants.SuccessRoleUpdate, true);
 
                 var role = client.GetRoleDetail(roleContract.Id);
                 var model = Mapper.Map<RoleViewModel>(role);
-                
+                model.SuccessfulUpdate = true;
                 return View(model);
             }
         }

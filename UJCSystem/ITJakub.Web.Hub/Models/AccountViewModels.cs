@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using ITJakub.Web.Hub.Areas.Admin.Models;
+using ITJakub.Web.Hub.Constants;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 
 namespace ITJakub.Web.Hub.Models
@@ -53,6 +54,8 @@ namespace ITJakub.Web.Hub.Models
         [DataType(DataType.Text)]
         [Display(Name = "LastName")]
         public string LastName { get; set; }
+
+        public bool SuccessfulRegistration { get; set; }
     }
 
     public class AccountDetailViewModel
@@ -60,6 +63,8 @@ namespace ITJakub.Web.Hub.Models
         public UpdateUserViewModel UpdateUserViewModel;
 
         public UpdatePasswordViewModel UpdatePasswordViewModel;
+
+        public AccountTab ActualTab { get; set; }
     }
 
     public class UpdateUserViewModel
@@ -85,6 +90,8 @@ namespace ITJakub.Web.Hub.Models
         [DataType(DataType.Text)]
         [Display(Name = "LastName")]
         public string LastName { get; set; }
+
+        public bool SuccessfulUpdate { get; set; }
     }
 
     public class UpdatePasswordViewModel
@@ -104,6 +111,8 @@ namespace ITJakub.Web.Hub.Models
         [Display(Name = "ConfirmPassword")]
         [Compare("Password", ErrorMessage = "PasswordsNotEqual")]
         public string ConfirmPassword { get; set; }
+
+        public bool SuccessfulUpdate { get; set; }
     }
 
     public class UserDetailViewModel

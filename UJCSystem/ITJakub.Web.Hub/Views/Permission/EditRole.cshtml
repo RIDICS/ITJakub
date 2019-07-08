@@ -1,5 +1,4 @@
-﻿@using ITJakub.Web.Hub.Constants
-@using Scalesoft.Localization.AspNetCore
+﻿@using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
 @model ITJakub.Web.Hub.Models.RoleViewModel
 @inject ILocalizationService Localizer
@@ -12,7 +11,7 @@
 
 <div class="row" style="margin-left: 5px; width: 80%;">
     <div class="col-md-12">
-        @if (ViewData.TryGetValue(PermissionConstants.SuccessRoleUpdate, out var success) && (bool)success)
+        @if (Model.SuccessfulUpdate)
         {
             <div class="alert alert-success" role="alert">
                 @Localizer.Translate("SuccessGroupUpdate", "Permission")

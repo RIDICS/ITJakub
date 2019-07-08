@@ -16,5 +16,7 @@ namespace ITJakub.Web.Hub.Models
         [DataType(DataType.Text)]
         [Display(Name = "Description")]
         public string Description { get; set; }
+
+        public bool SuccessfulUpdate { get; set; }
     }
 }

@@ -43,6 +43,7 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Register(RegisterViewModel model)
         {
+            model.SuccessfulRegistration = false;
             if (ModelState.IsValid)
             {
                 var user = new CreateUserContract
@@ -60,7 +61,8 @@ namespace ITJakub.Web.Hub.Controllers
                     {
                         client.CreateNewUser(user);
                     }
-                    ViewData.Add(AccountConstants.SuccessRegistration, true);
+
+                    model.SuccessfulRegistration = true;
                 }
                 catch (HttpErrorCodeException e)
                 {
@@ -68,7 +70,6 @@ namespace ITJakub.Web.Hub.Controllers
                 }
             }
 
-            // If we got this far, something failed, redisplay form
             return View(model);
         }
 
@@ -82,7 +83,8 @@ namespace ITJakub.Web.Hub.Controllers
                 var viewmodel = new AccountDetailViewModel
                 {
                     UpdateUserViewModel = Mapper.Map<UpdateUserViewModel>(user),
-                    UpdatePasswordViewModel = null
+                    UpdatePasswordViewModel = null,
+                    ActualTab = AccountTab.UpdateAccount
                 };
                 return View(viewmodel);
             }
@@ -95,6 +97,7 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult UpdateAccount(UpdateUserViewModel model)
         {
+            bool successfulUpdate = false;
             if (ModelState.IsValid)
             {
                 try
@@ -110,7 +113,7 @@ namespace ITJakub.Web.Hub.Controllers
                         };
 
                         client.UpdateCurrentUser(updateUserContract);
-                        ViewData.Add(AccountConstants.SuccessUpdateAccount, true);
+                        successfulUpdate = true;
                     }
                 }
                 catch (HttpErrorCodeException e)
@@ -123,9 +126,11 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetRestClient())
             {
                 var user = client.GetCurrentUser();
+                var updateUserViewModel = Mapper.Map<UpdateUserViewModel>(user);
+                updateUserViewModel.SuccessfulUpdate = successfulUpdate;
                 var viewModel = new AccountDetailViewModel
                 {
-                    UpdateUserViewModel = Mapper.Map<UpdateUserViewModel>(user),
+                    UpdateUserViewModel = updateUserViewModel,
                     UpdatePasswordViewModel = null
                 };
                 return View("AccountSettings", viewModel);
@@ -139,7 +144,6 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult UpdatePassword(UpdatePasswordViewModel model)
         {
-            ViewData.Add(AccountConstants.ActualTab, AccountConstants.UpdatePassword);
             if (ModelState.IsValid)
             {
                 try
@@ -153,12 +157,12 @@ namespace ITJakub.Web.Hub.Controllers
                         };
 
                         client.UpdateCurrentPassword(updateUserPasswordContract);
-                        ViewData.Add(AccountConstants.SuccessPasswordChange, true);
-                       
+                        model.SuccessfulUpdate = true;
                     }
                 }
                 catch (HttpErrorCodeException e)
                 {
+                    model.SuccessfulUpdate = false;
                     AddErrors(e);
                 }
             }
@@ -169,7 +173,8 @@ namespace ITJakub.Web.Hub.Controllers
                 var viewModel = new AccountDetailViewModel
                 {
                     UpdateUserViewModel = Mapper.Map<UpdateUserViewModel>(user),
-                    UpdatePasswordViewModel = model
+                    UpdatePasswordViewModel = model,
+                    ActualTab = AccountTab.UpdatePassword
                 };
                 return View("AccountSettings", viewModel);
             }
@@ -197,20 +202,6 @@ namespace ITJakub.Web.Hub.Controllers
         public IActionResult AccessDenied()
         {
             return View();
-        }
-
-        private void AddErrors(HttpErrorCodeException exception)
-        {
-            if (exception.ValidationErrors == null)
-            {
-                ModelState.AddModelError(string.Empty, exception.Message);
-                return;
-            }
-
-            foreach (var error in exception.ValidationErrors)
-            {
-                ModelState.AddModelError(string.Empty, error.Message);
-            }
         }
 
         private ActionResult RedirectToLocal(string returnUrl)
