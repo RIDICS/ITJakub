@@ -35,9 +35,7 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 search = search ?? string.Empty;
                 var result = client.GetUserList(start, count, search);
-                var model = CreateListViewModel<UserDetailViewModel, UserDetailContract>(result, start, count);
-
-                ViewData[PermissionConstants.SearchUser] = search;
+                var model = CreateListViewModel<UserDetailViewModel, UserDetailContract>(result, start, count, search);
 
                 switch (viewType)
                 {
@@ -64,10 +62,10 @@ namespace ITJakub.Web.Hub.Controllers
                     TotalCount = result.TotalCount,
                     List = result.List,
                     PageSize = count,
-                    Start = start
+                    Start = start,
+                    SearchQuery = search
                 };
 
-                ViewData[PermissionConstants.SearchUser] = search;
                 switch (viewType)
                 {
                     case ViewType.Partial:
@@ -100,11 +98,10 @@ namespace ITJakub.Web.Hub.Controllers
                     TotalCount = pagedPermissionsResult.TotalCount,
                     List = pagedPermissionsResult.List,
                     PageSize = count,
-                    Start = start
+                    Start = start,
+                    SearchQuery = search
                 };
 
-                ViewData[PermissionConstants.SearchPermission] = search;
-          
                 return PartialView("Widget/_PermissionListWidget", model);
             }
         }
@@ -114,9 +111,8 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetRestClient())
             {
                 search = search ?? string.Empty;
-                ViewData[PermissionConstants.SearchUser] = search;
                 var result = client.GetUsersByRole(roleId, start, count, search);
-                var model = CreateListViewModel<UserDetailViewModel, UserContract>(result, start, count);
+                var model = CreateListViewModel<UserDetailViewModel, UserContract>(result, start, count, search);
                 return PartialView("Widget/_UserListWidget", model);
             }
         }
@@ -410,14 +406,15 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        private ListViewModel<T> CreateListViewModel<T, T2>(PagedResultList<T2> data, int start, int pageSize)
+        private ListViewModel<TIn> CreateListViewModel<TIn, TOut>(PagedResultList<TOut> data, int start, int pageSize, string search)
         {
-            return new ListViewModel<T>
+            return new ListViewModel<TIn>
             {
                 TotalCount = data.TotalCount,
-                List = Mapper.Map<List<T>>(data.List),
+                List = Mapper.Map<List<TIn>>(data.List),
                 PageSize = pageSize,
-                Start = start
+                Start = start,
+                SearchQuery = search
             };
         }
     }

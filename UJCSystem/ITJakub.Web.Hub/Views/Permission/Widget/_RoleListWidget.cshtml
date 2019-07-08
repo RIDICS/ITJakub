@@ -1,14 +1,13 @@
-﻿@using ITJakub.Web.Hub.Constants
-@using Scalesoft.Localization.AspNetCore
+﻿@using Scalesoft.Localization.AspNetCore
 @model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.Permission.RoleContract>
 
 @inject ILocalizationService Localizer
 
-@if (!string.IsNullOrEmpty((string)ViewData[PermissionConstants.SearchUser]))
+@if (!string.IsNullOrEmpty(Model.SearchQuery))
 {
     <div class="row reset-search">
         <div class="query">
-            <span class="text-nowrap">@Localizer.Translate("SearchQuery", "Permission"): <span class="searched-query">@ViewData[PermissionConstants.SearchUser]</span></span>
+            <span class="text-nowrap">@Localizer.Translate("SearchQuery", "Permission"): <span class="searched-query">@Model.SearchQuery</span></span>
         </div>
         <div class="reset-search-form">
             <form asp-action="RolePermission" asp-controller="Permission" method="get" class="">
@@ -40,9 +39,9 @@ else
 {
     <div class="alert alert-info">
         <i class="fa fa-info-circle fa-lg"></i>
-        @if (!string.IsNullOrEmpty((string)ViewData[PermissionConstants.SearchUser]))
+        @if (!string.IsNullOrEmpty(Model.SearchQuery))
         {
-            @(Localizer.Translate("NoUsersSearch", "Permission") + "\"")<span class="searched-query">@ViewData[PermissionConstants.SearchUser]</span>
+            @(Localizer.Translate("NoUsersSearch", "Permission") + "\"")<span class="searched-query">@Model.SearchQuery</span>
             @("\"")
         }
         else

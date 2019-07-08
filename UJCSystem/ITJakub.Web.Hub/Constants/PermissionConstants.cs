@@ -2,9 +2,6 @@
 {
     public class PermissionConstants
     {
-        public const string SearchUser = "searchUser";
-        public const string SearchRole = "searchRole";
-        public const string SearchPermission = "searchPermission";
         public const string SuccessRoleUpdate = "successRoleUpdate";
         public const string SuccessUserUpdate = "successUserUpdate";
     }
