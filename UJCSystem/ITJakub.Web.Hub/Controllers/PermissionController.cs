@@ -87,16 +87,23 @@ namespace ITJakub.Web.Hub.Controllers
                 search = search ?? string.Empty;
                 var roleContract = client.GetRoleDetail(roleId);
                 var pagedPermissionsResult = client.GetPermissions(start, count, search);
+                var permissionList = new List<PermissionViewModel>();
 
                 foreach (var permission in pagedPermissionsResult.List)
                 {
-                    permission.Selected = roleContract.Permissions.Any(x => x.Id == permission.Id);
+                    permissionList.Add(new PermissionViewModel
+                    {
+                        Id = permission.Id,
+                        Name = permission.Name,
+                        Description = permission.Description,
+                        Selected = roleContract.Permissions.Any(x => x.Id == permission.Id)
+                    });
                 }
 
-                var model = new ListViewModel<PermissionContract>
+                var model = new ListViewModel<PermissionViewModel>
                 {
                     TotalCount = pagedPermissionsResult.TotalCount,
-                    List = pagedPermissionsResult.List,
+                    List = permissionList,
                     PageSize = count,
                     Start = start,
                     SearchQuery = search
