@@ -14,7 +14,7 @@
     "@types/node": "8.5.2",
     "@types/simplemde": "1.11.5",
     "@types/typeahead": "0.11.32",
-    "@types/urijs": "^1.19.1",
+    "@types/urijs": "1.19.1",
     "gulp": "3.9.1",
     "gulp-concat": "2.6.1",
     "gulp-cssmin": "0.2.0",
