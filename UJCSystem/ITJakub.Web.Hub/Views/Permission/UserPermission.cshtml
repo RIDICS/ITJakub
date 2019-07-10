@@ -7,36 +7,39 @@
 @{
     ViewBag.Title = Localizer.Translate("UserPermissionManagementTitle", "Permission", LocTranslationSource.File);
 }
+
 @section styles{
-    <link href="~/css/ridics.permissions.css" rel="stylesheet" />
+    <link href="~/css/ridics.permissions.css" rel="stylesheet"/>
 }
+
 @section scripts{
     <script src="~/Areas/Admin/js/ridics.list.js"></script>
     <script src="~/Areas/Admin/js/ridics.user.list.js"></script>
 }
 
 <h2>@Localizer.Translate("UserPermissionManagementHeadline", "Permission", LocTranslationSource.File)</h2>
-
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <div class="row page-control">
-            <div class="col-sm-offset-6 col-sm-6 col-lg-offset-8 col-lg-4">
-                <form asp-action="UserPermission" asp-controller="Permission" method="get" class="user-search-form form-inline">
-                    <div class="form-group">
-                        <div class="search-button">
-                            <button class="btn btn-default" type="submit">@Localizer.Translate("Search", "Permission")</button>
+<div class="user-section">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row page-control">
+                <div class="col-sm-offset-6 col-sm-6 col-lg-offset-8 col-lg-4">
+                    <form asp-action="UserPermission" asp-controller="Permission" method="get" class="user-search-form form-inline">
+                        <div class="form-group">
+                            <div class="search-button">
+                                <button class="btn btn-default" type="submit">@Localizer.Translate("Search", "Permission")</button>
+                            </div>
+                            <input class="form-control search-value" name="search" value="@Model.SearchQuery"/>
                         </div>
-                        <input class="form-control search-value" name="search" value="@Model.SearchQuery" />
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="panel-body">
-        <div id="user-list-container">
-            @await Html.PartialAsync("_UserList", Model)
-        </div>
+        <div class="panel-body">
+            <div id="user-list-container" class="list-container">
+                @await Html.PartialAsync("_UserList", Model)
+            </div>
 
-        <div id="user-pagination" class="text-center"></div>
+            <div id="user-pagination" class="text-center"></div>
+        </div>
     </div>
 </div>
