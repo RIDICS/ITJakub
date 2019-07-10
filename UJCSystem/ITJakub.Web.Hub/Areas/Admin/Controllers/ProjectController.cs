@@ -8,6 +8,7 @@ using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Areas.Admin.Models.Request;
 using ITJakub.Web.Hub.Areas.Admin.Models.Response;
 using ITJakub.Web.Hub.Areas.Admin.Models.Type;
+using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Helpers;
@@ -19,10 +20,12 @@ using Scalesoft.Localization.AspNetCore;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
+using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Helpers;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 {
+    [LimitedAccess(PortalType.CommunityPortal)]
     [Area("Admin")]
     public class ProjectController : BaseController
     {

@@ -2,6 +2,7 @@
 using System.Linq;
 using AutoMapper;
 using ITJakub.Web.Hub.Areas.Dictionaries.Models;
+using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core;
@@ -17,8 +18,8 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Extensions;
-using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Search.Request;
@@ -26,6 +27,7 @@ using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 {
+    [LimitedAccess(PortalType.ResearchPortal)]
     [Area("Dictionaries")]
     public class DictionariesController : AreaController
     {

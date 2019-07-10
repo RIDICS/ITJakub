@@ -1,4 +1,5 @@
-﻿using ITJakub.Web.Hub.Controllers;
+﻿using ITJakub.Web.Hub.Authorization;
+using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
@@ -6,9 +7,11 @@ using ITJakub.Web.Hub.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared;
 
 namespace ITJakub.Web.Hub.Areas.Tools.Controllers
 {
+    [LimitedAccess(PortalType.ResearchPortal)]
     [Area("Tools")]
     public class ToolsController : BaseController
     {

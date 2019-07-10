@@ -1,11 +1,13 @@
-﻿using ITJakub.Web.Hub.Areas.Admin.Models.Type;
+﻿using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.Shared;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 {
+    [LimitedAccess(PortalType.CommunityPortal)]
     [Area("Admin")]
     public class KeyTableController : BaseController
     {

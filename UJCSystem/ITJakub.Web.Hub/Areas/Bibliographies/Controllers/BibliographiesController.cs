@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Core.Communication;
@@ -8,10 +9,12 @@ using ITJakub.Web.Hub.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
 {
+    [LimitedAccess(PortalType.ResearchPortal)]
     [Area("Bibliographies")]
     public class BibliographiesController : AreaController
     {

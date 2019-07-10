@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 using ITJakub.Web.Hub.Areas.OldGrammar.Models;
+using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core;
@@ -12,12 +13,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 {
+    [LimitedAccess(PortalType.ResearchPortal)]
     [Area("OldGrammar")]
     public class OldGrammarController : AreaController
     {
