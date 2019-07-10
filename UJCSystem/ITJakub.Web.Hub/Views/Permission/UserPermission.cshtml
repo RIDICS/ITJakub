@@ -17,20 +17,26 @@
 
 <h2>@Localizer.Translate("UserPermissionManagementHeadline", "Permission", LocTranslationSource.File)</h2>
 
-<div class="row page-control">
-    <div class="col-sm-offset-6 col-sm-6 col-lg-offset-8 col-lg-4 col-xl-offset-9 col-xl-3">
-        <form asp-action="UserPermission" asp-controller="Permission" method="get" class="user-search-form form-inline">
-            <div class="form-group">
-                <div class="search-button">
-                    <button class="btn btn-default" type="submit">@Localizer.Translate("Search", "Permission")</button>
-                </div>
-                <input class="form-control search-value" name="search" value="@Model.SearchQuery" />
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="row page-control">
+            <div class="col-sm-offset-6 col-sm-6 col-lg-offset-8 col-lg-4">
+                <form asp-action="UserPermission" asp-controller="Permission" method="get" class="user-search-form form-inline">
+                    <div class="form-group">
+                        <div class="search-button">
+                            <button class="btn btn-default" type="submit">@Localizer.Translate("Search", "Permission")</button>
+                        </div>
+                        <input class="form-control search-value" name="search" value="@Model.SearchQuery" />
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div id="user-list-container">
+            @await Html.PartialAsync("_UserList", Model)
+        </div>
+
+        <div id="user-pagination" class="text-center"></div>
     </div>
 </div>
-<div id="user-list-container">
-    @await Html.PartialAsync("_UserList", Model)
-</div>
-
-<div id="user-pagination" class="text-center"></div>
