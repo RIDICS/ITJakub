@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -37,8 +38,22 @@ namespace ITJakub.Web.Hub
                         .AddJsonFile($"appsettings.{environmentConfiguration}.json", optional: true)
                         .AddJsonFile(Path.Combine(secretSettingsPath, "ITJakub.Secrets.json"), optional: true)
                         .AddJsonFile(Path.Combine(secretSettingsPath, $"ITJakub.Secrets.{environmentConfiguration}.json"), optional: true)
+                        .AddJsonFile("portalconfig.json", optional: true, reloadOnChange: true)
                         .AddEnvironmentVariables();
 
+                    if (args.Length == 0)
+                    {
+                        throw new ArgumentException("Portal type is not set.");
+                    }
+
+                    if (args[0] == "CommunityPortal")
+                    {
+                        builder.AddJsonFile("portalconfig.community.json", optional: true, reloadOnChange: true);
+                    }
+                    else
+                    {
+                        builder.AddJsonFile("portalconfig.research.json", optional: true, reloadOnChange: true);
+                    }
                 })
                 .ConfigureLogging((builderContext, builder) =>
                 {
