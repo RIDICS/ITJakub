@@ -34,7 +34,7 @@ namespace Vokabular.MainService.Core.Works.Users
                     FirstName = m_data.FirstName,
                     LastName = m_data.LastName,
                     Email = m_data.Email,
-                    PhoneNumber = "+420749123678" //TODO remove
+                    PhoneNumber = null
                 }
             };
 
