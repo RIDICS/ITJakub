@@ -39,7 +39,7 @@ namespace Vokabular.MainService.Controllers
             return Ok(result);
         }
 
-        [Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpGet("type/{bookType}/all")]
         [ProducesResponseType(typeof(List<BookContract>), StatusCodes.Status200OK)]
         public IActionResult GetAllBooksByType(BookTypeEnumContract? bookType)

@@ -36,7 +36,7 @@ namespace Vokabular.MainService.Controllers
             return result.List;
         }
 
-        [Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpPost("")]
         public int CreateRole([FromBody] RoleContract data)
         {
@@ -44,7 +44,7 @@ namespace Vokabular.MainService.Controllers
             return resultId;
         }
 
-        [Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpPut("{roleId}/edit")]
         public IActionResult UpdateRole([FromBody] RoleContract data)
         {
@@ -59,14 +59,14 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
-        [Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpDelete("{roleId}")]
         public void DeleteRole(int roleId)
         {
             m_roleManager.DeleteRole(roleId);
         }
 
-        [Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpGet("")]
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
         public List<RoleContract> GetRoleList([FromQuery] int? start, [FromQuery] int? count, [FromQuery] string filterByName)
@@ -88,28 +88,28 @@ namespace Vokabular.MainService.Controllers
         //    //TODO split two methods - for books and categories
         //}
 
-        [Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpPost("{roleId}/permission/book")]
         public void AddBooksToGroup(int roleId, [FromBody] AddBookToRoleRequestContract request)
         {
             m_permissionManager.AddBooksAndCategoriesToGroup(roleId, request.BookIdList);
         }
 
-        [Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpDelete("{roleId}/permission/book")]
         public void RemoveBooksFromGroup(int roleId, [FromBody] AddBookToRoleRequestContract request)
         {
             m_permissionManager.RemoveBooksAndCategoriesFromGroup(roleId, request.BookIdList);
         }
 
-        [Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpDelete("{roleId}/user/{userId}")]
         public void RemoveUserFromRole(int userId, int roleId)
         {
             m_roleManager.RemoveUserFromRole(userId, roleId);
         }
 
-        [Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpPost("{roleId}/user/{userId}")]
         public void AddUserToRole(int userId, int roleId)
         {
@@ -132,21 +132,21 @@ namespace Vokabular.MainService.Controllers
         //{
         //}
 
-        [Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpPost("{roleId}/permission/special")]
         public void AddSpecialPermissionsToGroup(int roleId, [FromBody] IntegerIdListContract specialPermissionsIds)
         {
             m_permissionManager.AddSpecialPermissionsToRole(roleId, specialPermissionsIds.IdList);
         }
 
-        [Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpDelete("{roleId}/permission/special")]
         public void RemoveSpecialPermissionsFromGroup(int roleId, [FromBody] IntegerIdListContract specialPermissionsIds)
         {
             m_permissionManager.RemoveSpecialPermissionsFromRole(roleId, specialPermissionsIds.IdList);
         }
 
-        [Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpGet("autocomplete")]
         public List<RoleContract> GetAutocomplete([FromQuery] string query, [FromQuery] int? count)
         {

@@ -19,7 +19,7 @@ using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Controllers
 {
-    [Authorize(PermissionNames.ManagePermissions)]
+    [Authorize(PermissionNames.AssignPermissionsToRoles)]
     public class PermissionController : BaseController
     {
         private const int UserListPageSize = 10;

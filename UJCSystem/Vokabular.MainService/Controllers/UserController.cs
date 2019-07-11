@@ -135,7 +135,7 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpGet("")]
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
         public List<UserDetailContract> GetUserList([FromQuery] int? start, [FromQuery] int? count, [FromQuery] string filterByName)
@@ -146,7 +146,7 @@ namespace Vokabular.MainService.Controllers
             return result.List;
         }
 
-        [Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpGet("{userId}/detail")]
         public UserDetailContract GetUserDetail(int userId)
         {
@@ -161,7 +161,7 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
-        [Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpGet("autocomplete")]
         public IList<UserDetailContract> GetAutocomplete([FromQuery] string query, [FromQuery] int? count)
         {

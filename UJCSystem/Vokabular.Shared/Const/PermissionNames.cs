@@ -2,7 +2,7 @@
 {
     public class PermissionNames
     {
-        public const string ManagePermissions = "manage-permissions";
+        public const string AssignPermissionsToRoles = "auth-assign-permissions-to-roles";
         public const string UploadBook ="upload-book";
         public const string AddNews = "add-news";
         public const string ManageFeedbacks= "manage-feedbacks";

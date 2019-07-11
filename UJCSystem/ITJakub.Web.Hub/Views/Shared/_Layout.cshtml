@@ -368,7 +368,7 @@
                                             <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
                                         </a>
                                     }
-                                    else if (User.HasPermission(PermissionNames.ManagePermissions))
+                                    else if (User.HasPermission(PermissionNames.AssignPermissionsToRoles))
                                     {
                                         <a href='@Url.Action("UserPermission", "Permission", new {area = ""})'>
                                             <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
@@ -425,7 +425,7 @@
                                             </li>
                                         }
 
-                                        @if (User.HasPermission(PermissionNames.ManagePermissions))
+                                        @if (User.HasPermission(PermissionNames.AssignPermissionsToRoles))
                                         {
                                             <li>
                                                 <a href='@Url.Action("UserPermission", "Permission", new {area = ""})'>
