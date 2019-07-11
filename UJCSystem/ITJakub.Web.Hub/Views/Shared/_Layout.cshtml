@@ -12,16 +12,19 @@
 @{
     string mainLogo;
     string secondLogo;
+    string portalName;
 
     if (PortalConfig.Value.PortalType == PortalType.CommunityPortal)
     {
         mainLogo = Url.Content("~/images/logo/logo.CommunityPortal.png");
         secondLogo = Url.Content("~/images/logo/logo.CommunityPortal.png");
+        portalName = "Komunitní portál";
     }
     else
     {
         mainLogo = Url.Content("~/images/logo/logo.CommunityPortal.png");
         secondLogo = Url.Content("~/images/logo/logo.CommunityPortal.png");
+        portalName = "Vokabulář webový";
     }
 }
 
@@ -31,7 +34,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="~/images/favicon.png">
-    <title>UJC - @ViewBag.Title</title>
+    <title>@portalName - @ViewBag.Title</title>
     <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
     <link href="~/lib/dropzone/downloads/css/dropzone.css" rel="stylesheet" />
     <link href="~/lib/jquery-ui-dist/jquery-ui.min.css" rel="stylesheet" />
@@ -191,7 +194,7 @@
         @*main page content*@
         <div class="container-header">
             <div class="container">
-                @BreadcrumbsHelper.Create(Localizer, ViewBag.Title)
+                @BreadcrumbsHelper.Create(Localizer, portalName, ViewBag.Title)
             </div>
         </div>
         <div class="container module-content">
@@ -201,7 +204,7 @@
 
     <footer class="footer">
         <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
-            <img src="@Url.Content("~/images/logo/main_logo.png")" alt="main_logo" /> @*TODO make logo small as this size*@
+            <img src="@mainLogo" alt="main_logo" /> @*TODO make logo small as this size*@
         </a>
 
         <div class="footer-text-area">
