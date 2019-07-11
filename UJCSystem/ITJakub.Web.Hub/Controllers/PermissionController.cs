@@ -87,17 +87,11 @@ namespace ITJakub.Web.Hub.Controllers
                 search = search ?? string.Empty;
                 var roleContract = client.GetRoleDetail(roleId);
                 var pagedPermissionsResult = client.GetPermissions(start, count, search);
-                var permissionList = new List<PermissionViewModel>();
+                var permissionList = Mapper.Map<List<PermissionViewModel>>(pagedPermissionsResult.List);
 
-                foreach (var permission in pagedPermissionsResult.List)
+                foreach (var permission in permissionList)
                 {
-                    permissionList.Add(new PermissionViewModel
-                    {
-                        Id = permission.Id,
-                        Name = permission.Name,
-                        Description = permission.Description,
-                        Selected = roleContract.Permissions.Any(x => x.Id == permission.Id)
-                    });
+                    permission.IsSelected = roleContract.Permissions.Any(x => x.Id == permission.Id);
                 }
 
                 var model = new ListViewModel<PermissionViewModel>
@@ -423,12 +417,12 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        private ListViewModel<TIn> CreateListViewModel<TIn, TOut>(PagedResultList<TOut> data, int start, int pageSize, string search)
+        private ListViewModel<TTarget> CreateListViewModel<TTarget, TSource>(PagedResultList<TSource> data, int start, int pageSize, string search)
         {
-            return new ListViewModel<TIn>
+            return new ListViewModel<TTarget>
             {
                 TotalCount = data.TotalCount,
-                List = Mapper.Map<List<TIn>>(data.List),
+                List = Mapper.Map<List<TTarget>>(data.List),
                 PageSize = pageSize,
                 Start = start,
                 SearchQuery = search

@@ -17,6 +17,6 @@ namespace ITJakub.Web.Hub.Models
         [Display(Name = "Description")]
         public string Description { get; set; }
 
-        public bool Selected { get; set; }
+        public bool IsSelected { get; set; }
     }
 }

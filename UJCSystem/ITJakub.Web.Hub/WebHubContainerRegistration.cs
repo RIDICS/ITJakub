@@ -26,6 +26,7 @@ namespace ITJakub.Web.Hub
             services.AddSingleton<Profile, DatingCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, DatingListCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, FavoriteProfile>();
+            services.AddSingleton<Profile, PermissionProfile>();
             services.AddSingleton<Profile, TokenDistanceCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, TokenDistanceListCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, WordCriteriaDescriptionProfile>();

@@ -7,7 +7,7 @@
 {
 <tr>
     <td class="permission-checkbox" data-permission-id="@permission.Id">
-        @Html.CheckBoxFor(modelItem => permission.Selected)
+        @Html.CheckBoxFor(modelItem => permission.IsSelected)
     </td>
     <td>
         @Html.DisplayFor(modelItem => permission.Name)
