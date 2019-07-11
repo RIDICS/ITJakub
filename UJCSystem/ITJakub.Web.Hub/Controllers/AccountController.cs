@@ -103,7 +103,6 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult UpdateAccount(UpdateUserViewModel model)
         {
-            bool successfulUpdate = false;
             if (ModelState.IsValid)
             {
                 try
@@ -119,7 +118,7 @@ namespace ITJakub.Web.Hub.Controllers
                         };
 
                         client.UpdateCurrentUser(updateUserContract);
-                        successfulUpdate = true;
+                        ViewData.Add(AccountConstants.SuccessUserUpdate, true);
                     }
                 }
                 catch (HttpErrorCodeException e)
@@ -133,7 +132,6 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 var user = client.GetCurrentUser();
                 var updateUserViewModel = Mapper.Map<UpdateUserViewModel>(user);
-                updateUserViewModel.SuccessfulUpdate = successfulUpdate;
                 var viewModel = new AccountDetailViewModel
                 {
                     UpdateUserViewModel = updateUserViewModel,
@@ -163,12 +161,11 @@ namespace ITJakub.Web.Hub.Controllers
                         };
 
                         client.UpdateCurrentPassword(updateUserPasswordContract);
-                        model.SuccessfulUpdate = true;
+                        ViewData.Add(AccountConstants.SuccessPasswordChange, true);
                     }
                 }
                 catch (HttpErrorCodeException e)
                 {
-                    model.SuccessfulUpdate = false;
                     AddErrors(e);
                 }
             }

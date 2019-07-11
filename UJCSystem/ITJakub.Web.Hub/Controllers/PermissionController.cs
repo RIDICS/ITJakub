@@ -2,6 +2,7 @@
 using System.Linq;
 using AutoMapper;
 using ITJakub.Web.Hub.Areas.Admin.Models;
+using ITJakub.Web.Hub.Constants;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.DataContracts;
 using ITJakub.Web.Hub.Helpers;
@@ -141,21 +142,18 @@ namespace ITJakub.Web.Hub.Controllers
                     LastName = userViewModel.LastName
                 };
 
-                bool successfulUpdate;
                 try
                 {
                     client.UpdateUser(userViewModel.Id, data);
-                    successfulUpdate = true;
                 }
                 catch (HttpErrorCodeException e)
                 {
-                    successfulUpdate = false;
                     AddErrors(e);
                 }
                 
                 var user = client.GetUserDetail(userViewModel.Id);
                 var model = Mapper.Map<UpdateUserViewModel>(user);
-                model.SuccessfulUpdate = successfulUpdate;
+                ViewData.Add(AccountConstants.SuccessUserUpdate, true);
                 return View(model);
             }
         }

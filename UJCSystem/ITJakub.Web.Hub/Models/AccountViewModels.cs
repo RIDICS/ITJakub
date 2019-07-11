@@ -88,8 +88,6 @@ namespace ITJakub.Web.Hub.Models
         [DataType(DataType.Text)]
         [Display(Name = "LastName")]
         public string LastName { get; set; }
-
-        public bool SuccessfulUpdate { get; set; }
     }
 
     public class UpdatePasswordViewModel
@@ -109,8 +107,6 @@ namespace ITJakub.Web.Hub.Models
         [Display(Name = "ConfirmPassword")]
         [Compare("Password", ErrorMessage = "PasswordsNotEqual")]
         public string ConfirmPassword { get; set; }
-
-        public bool SuccessfulUpdate { get; set; }
     }
 
     public class UserDetailViewModel
