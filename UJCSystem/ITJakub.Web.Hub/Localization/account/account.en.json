@@ -10,7 +10,8 @@
 
     "RegisterAccount": "Register as new user",
     "Registration": "Registration",
-    "SuccessRegistration": "The registration was successful. You can log in.",
+    "SuccessRegistration1": "The registration was successful. You can ",
+    "SuccessRegistration2": "log in.",
 
     "MakeNewAccount": "New account creation",
     "Registration-submit": "Register",

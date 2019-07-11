@@ -1,0 +1,19 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@model ITJakub.Web.Hub.Models.RegisterViewModel
+
+@inject ILocalizationService Localizer
+
+@{
+    ViewBag.Title = Localizer.Translate("Registration", "Account");
+}
+
+<div class="content-container top-offset-without-submenu">
+    <h2>@ViewBag.Title</h2>
+    <div class="row">
+        <div class="col-xs-12 col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6 col-lg-offset-4 col-lg-4">
+            <div class="alert alert-success" role="alert">
+                <i class="fa fa-check-circle"></i> @Localizer.Translate("SuccessRegistration1", "Account") <a asp-controller="Account" asp-action="Login">@Localizer.Translate("SuccessRegistration2", "Account")</a>
+            </div>
+        </div>
+    </div>
+</div>

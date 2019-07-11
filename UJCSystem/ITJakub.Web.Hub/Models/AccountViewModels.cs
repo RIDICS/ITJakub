@@ -54,8 +54,6 @@ namespace ITJakub.Web.Hub.Models
         [DataType(DataType.Text)]
         [Display(Name = "LastName")]
         public string LastName { get; set; }
-
-        public bool SuccessfulRegistration { get; set; }
     }
 
     public class AccountDetailViewModel

@@ -43,7 +43,6 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Register(RegisterViewModel model)
         {
-            model.SuccessfulRegistration = false;
             if (ModelState.IsValid)
             {
                 var user = new CreateUserContract
@@ -62,7 +61,7 @@ namespace ITJakub.Web.Hub.Controllers
                         client.CreateNewUser(user);
                     }
 
-                    model.SuccessfulRegistration = true;
+                    return RedirectToAction(nameof(SuccessRegistration));
                 }
                 catch (HttpErrorCodeException e)
                 {
@@ -71,6 +70,13 @@ namespace ITJakub.Web.Hub.Controllers
             }
 
             return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult SuccessRegistration()
+        {
+            return View();
         }
 
         //

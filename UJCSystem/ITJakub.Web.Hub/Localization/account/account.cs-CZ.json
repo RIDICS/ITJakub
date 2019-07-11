@@ -10,7 +10,8 @@
 
     "RegisterAccount": "Registrovat se jako nový uživatel",
     "Registration": "Registrace",
-    "SuccessRegistration": "Registrace proběhla úspěšně. Nyní se můžete přihlásit.",
+    "SuccessRegistration1": "Registrace proběhla úspěšně. Nyní se můžete ",
+    "SuccessRegistration2": "přihlásit.",
 
     "MakeNewAccount": "Založení nového účtu",
     "Registration-submit": "Registrovat",
