@@ -1,37 +1,40 @@
 {
 	"culture":"cs-CZ",
 	"scope":"global",
-	"dictionary": {
-		"Vokabulář" : "Vokabulář",
-		"webový": "webový",
-		"VokabulářWebový" : "Vokabulář webový",
-		"and":"a",
+  "dictionary": {
+    "Vokabulář": "Vokabulář",
+    "webový": "webový",
+    "VokabulářWebový": "Vokabulář webový",
+    "and": "a",
 
-		"FeedbackFormPlaceholder":"Zde napište vaši připomínku...",
-		"NameFormPlaceholder":"Zde zadejte Vaše jméno...",
-		"EmailFormPlaceholder":"Zde zadejte Váš e-mail...",
-		"Send":"Odeslat",
-		
-		"FeedbackSentTitle":"Připomínka odeslána",
-		"FeedbackSentAlert":"Připomínka úspěšně odeslána.",
-		
-		"Max":"Max.",
-		"Remaining":"Zbývá",
-		"YouCanUseDiacritics":"Můžete používat diakritiku",
-		"Characters":"znaků",
-		
-		"Close":"Zavřít",
-		"Save":"Uložit",
-		"Error":"Chyba",
-		"DefaultTitle":"Default title",
-		
-		"SortBy":"Řadit podle",
-		"UserAccount":"Uživatelský účet",
-		"Language":"Jazyk",
-		"SignIn":"Přihlášení",
-		"LogOut": "Odhlásit",
-		"SignUp":"Registace",
-		"EditText":"Upravit text",
-		"CreateText":"Vytvořit text"
-		}
+    "Komunitní": "Komunitní",
+    "portál": "portál",
+
+    "FeedbackFormPlaceholder": "Zde napište vaši připomínku...",
+    "NameFormPlaceholder": "Zde zadejte Vaše jméno...",
+    "EmailFormPlaceholder": "Zde zadejte Váš e-mail...",
+    "Send": "Odeslat",
+
+    "FeedbackSentTitle": "Připomínka odeslána",
+    "FeedbackSentAlert": "Připomínka úspěšně odeslána.",
+
+    "Max": "Max.",
+    "Remaining": "Zbývá",
+    "YouCanUseDiacritics": "Můžete používat diakritiku",
+    "Characters": "znaků",
+
+    "Close": "Zavřít",
+    "Save": "Uložit",
+    "Error": "Chyba",
+    "DefaultTitle": "Default title",
+
+    "SortBy": "Řadit podle",
+    "UserAccount": "Uživatelský účet",
+    "Language": "Jazyk",
+    "SignIn": "Přihlášení",
+    "LogOut": "Odhlásit",
+    "SignUp": "Registace",
+    "EditText": "Upravit text",
+    "CreateText": "Vytvořit text"
+  }
 }

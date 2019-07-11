@@ -1,6 +1,7 @@
 {
   "PortalConfig": {
     "UploadDocx": false,
-    "PortalType": "CommunityPortal"
+    "PortalType": "CommunityPortal",
+    "SecondPortalUrl": "https://localhost:44368/"
   }
 }

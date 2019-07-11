@@ -1,10 +1,29 @@
 ﻿@using ITJakub.Web.Hub.Helpers
+@using Microsoft.Extensions.Options;
 @using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
-@using Vokabular.Shared.Const
+@using Vokabular.Shared
 @using Vokabular.Shared.AspNetCore.Extensions
+@using Vokabular.Shared.Const
+@using Vokabular.Shared.Options;
 
 @inject ILocalizationService Localizer
+@inject IOptions<PortalConfigOption> PortalConfig
+@{
+    string mainLogo;
+    string secondLogo;
+
+    if (PortalConfig.Value.PortalType == PortalType.CommunityPortal)
+    {
+        mainLogo = Url.Content("~/images/logo/logo.CommunityPortal.png");
+        secondLogo = Url.Content("~/images/logo/logo.CommunityPortal.png");
+    }
+    else
+    {
+        mainLogo = Url.Content("~/images/logo/logo.CommunityPortal.png");
+        secondLogo = Url.Content("~/images/logo/logo.CommunityPortal.png");
+    }
+}
 
 <!DOCTYPE html>
 <html>
@@ -28,447 +47,60 @@
 </head>
 <body class="eupopup eupopup-fixedtop eupopup-color-inverse" data-has-book-text-url="@Url.Action("HasBookText", "Reader",  new {area = ""})">
 
-<div class="component keyboard-component" data-keyboard-id="0" data-keyboard-api-url="@Url.Action("GetLayoutList", "Keyboard",  new {area = ""})"></div>
+    <div class="component keyboard-component" data-keyboard-id="0" data-keyboard-api-url="@Url.Action("GetLayoutList", "Keyboard",  new {area = ""})"></div>
 
     @*top fixed part*@
     <div class="navbar navbar-inverse navbar-fixed-top header-content">
         <div class="">
             <div class="main-navbar-container">
                 <div class="navbar-header-not">
+                    <a href='@PortalConfig.Value.SecondPortalUrl' class="second_logo_href">
+                        <img src="@secondLogo" alt="second_logo" class="second_logo" />
+                        <div class="second_logo_text">
+                            @if (PortalConfig.Value.PortalType == PortalType.CommunityPortal)
+                            {
+                                <h1>@Localizer.Translate("Vokabulář", "global", LocTranslationSource.File)</h1>
+                                <h2>@Localizer.Translate("webový", "global", LocTranslationSource.File)</h2>
+                            }
+                            else
+                            {
+                                <h1>@Localizer.Translate("Komunitní", "global", LocTranslationSource.File)</h1>
+                                <h2>@Localizer.Translate("portál", "global", LocTranslationSource.File)</h2>
+                            }
+                        </div>
+                    </a>
+
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" title="Menu">
                         <span class="glyphicon glyphicon-menu-hamburger"></span>
                     </button>
-                    
+
                     @await Html.PartialAsync("_LoginPartial")
 
                     <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
-                        <img src="@Url.Content("~/images/logo/main_logo.png")" alt="main_logo" class="main_logo" />
+                        <img src="@mainLogo" alt="main_logo" class="main_logo" />
                         <div class="main_logo_text">
-                            <h1>@Localizer.Translate("Vokabulář", "global", LocTranslationSource.File)</h1>
-                            <h2>@Localizer.Translate("webový", "global", LocTranslationSource.File)</h2>
+                            @if (PortalConfig.Value.PortalType == PortalType.CommunityPortal)
+                            {
+                                <h1>@Localizer.Translate("Komunitní", "global", LocTranslationSource.File)</h1>
+                                <h2>@Localizer.Translate("portál", "global", LocTranslationSource.File)</h2>
+                            }
+                            else
+                            {
+                                <h1>@Localizer.Translate("Vokabulář", "global", LocTranslationSource.File)</h1>
+                                <h2>@Localizer.Translate("webový", "global", LocTranslationSource.File)</h2>
+                            }
                         </div>
                     </a>
-                @*</div>*@
 
-                <div class="navbar-collapse collapse">
-                    <div id="main-plugins-menu" class="main-plugins-menu">
-                        <ul>
-                            <li id="dictionaries-menu" class="has-sub">
-                                <a href='@Url.Action("Search", "Dictionaries", new {area = "Dictionaries"})'>
-                                    <span>@Localizer.Translate("Dictionaries", "layout")</span>
-                                </a>
-                                <ul>
-                                    <li>
-                                        <a href='@Url.Action("Information", "Dictionaries", new {area = "Dictionaries"})'>
-                                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("List", "Dictionaries", new {area = "Dictionaries"})'>
-                                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("Search", "Dictionaries", new {area = "Dictionaries"})'>
-                                            <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("Listing", "Dictionaries", new {area = "Dictionaries"})'>
-                                            <span>@Localizer.Translate("Listing", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("Help", "Dictionaries", new {area = "Dictionaries"})'>
-                                            <span>@Localizer.Translate("Help", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("Feedback", "Dictionaries", new {area = "Dictionaries"})'>
-                                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li id="editions-menu" class="has-sub">
-                                <a href='@Url.Action("List", "Editions", new {area = "Editions"})'>
-                                    <span>@Localizer.Translate("Editions", "layout", LocTranslationSource.File)</span>
-                                </a>
-                                <ul>
-                                    <li>
-                                        <a href='@Url.Action("Information", "Editions", new {area = "Editions"})'>
-                                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("List", "Editions", new {area = "Editions"})'>
-                                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("Search", "Editions", new {area = "Editions"})'>
-                                            <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("EditionPrinciples", "Editions", new {area = "Editions"})'>
-                                            <span>@Localizer.Translate("EditionPrinciples", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("Help", "Editions", new {area = "Editions"})'>
-                                            <span>@Localizer.Translate("Help", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("Feedback", "Editions", new {area = "Editions"})'>
-                                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li id="corpus-menu" class="has-sub">
-                                <a href='@Url.Action("List", "BohemianTextBank", new {area = "BohemianTextBank"})'>
-                                    <span>@Localizer.Translate("Corpora", "layout", LocTranslationSource.File)</span>
-                                </a>
-                                <ul>
-                                    <li>
-                                        <a href='@Url.Action("Information", "BohemianTextBank", new {area = "BohemianTextBank"})'>
-                                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("List", "BohemianTextBank", new {area = "BohemianTextBank"})'>
-                                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    @*<li>//TODO remove old search?
-                                        <a href='@Url.Action("Search", "BohemianTextBank", new {area = "BohemianTextBank"})'>
-                                            <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>*@
-                                    <li>
-                                        <a href='@Url.Action("SearchCombined", "BohemianTextBank", new {area = "BohemianTextBank"})'>
-                                            <span>Vyhledávání kombinované</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("SearchSingleLazyload", "BohemianTextBank", new {area = "BohemianTextBank"})'>
-                                            <span>Vyhledávání podle díla na jedné stránce</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("SearchSinglePaged", "BohemianTextBank", new {area = "BohemianTextBank"})'>
-                                            <span>Vyhledávání podle díla strankované</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("Help", "BohemianTextBank", new {area = "BohemianTextBank"})'>
-                                            <span>@Localizer.Translate("Help", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("Feedback", "BohemianTextBank", new {area = "BohemianTextBank"})'>
-                                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li id="grammars-menu" class="has-sub">
-                                <a href='@Url.Action("List", "OldGrammar", new {area = "OldGrammar"})'>
-                                    <span>@Localizer.Translate("Grammar", "layout", LocTranslationSource.File)</span>
-                                </a>
-                                <ul>
-                                    <li>
-                                        <a href='@Url.Action("Information", "OldGrammar", new {area = "OldGrammar"})'>
-                                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("List", "OldGrammar", new {area = "OldGrammar"})'>
-                                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("Search", "OldGrammar", new {area = "OldGrammar"})'>
-                                            <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("ListTerms", "OldGrammar", new {area = "OldGrammar"})'>
-                                            <span>@Localizer.Translate("ListTerms", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("Help", "OldGrammar", new {area = "OldGrammar"})'>
-                                            <span>@Localizer.Translate("Help", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("Feedback", "OldGrammar", new {area = "OldGrammar"})'>
-                                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li id="professional-menu" class="has-sub">
-                                <a href='@Url.Action("List", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
-                                    <span>@Localizer.Translate("ProfessionalLiterature", "layout", LocTranslationSource.File)</span>
-                                </a>
-                                <ul>
-                                    <li>
-                                        <a href='@Url.Action("Information", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
-                                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("List", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
-                                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("Search", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
-                                            <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("Help", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
-                                            <span>@Localizer.Translate("Help", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("Feedback", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
-                                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li id="bibliographies-menu" class="has-sub">
-                                <a href='@Url.Action("Search", "Bibliographies", new {area = "Bibliographies"})'>
-                                    <span>@Localizer.Translate("Bibliographies", "layout", LocTranslationSource.File)</span>
-                                </a>
-                                <ul>
-                                    <li>
-                                        <a href='@Url.Action("Information", "Bibliographies", new {area = "Bibliographies"})'>
-                                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("Search", "Bibliographies", new {area = "Bibliographies"})'>
-                                            <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("Feedback", "Bibliographies", new {area = "Bibliographies"})'>
-                                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li id="cardifiles-menu" class="has-sub">
-                                <a href='@Url.Action("List", "CardFiles", new {area = "CardFiles"})'>
-                                    <span>@Localizer.Translate("CardFiles", "layout", LocTranslationSource.File)</span>
-                                </a>
-                                <ul>
-                                    <li>
-                                        <a href='@Url.Action("Information", "CardFiles", new {area = "CardFiles"})'>
-                                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("List", "CardFiles", new {area = "CardFiles"})'>
-                                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("Search", "CardFiles", new {area = "CardFiles"})'>
-                                            <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("Listing", "CardFiles", new {area = "CardFiles"})'>
-                                            <span>@Localizer.Translate("Listing", "layout", LocTranslationSource.File)</span>
-                                        </a> @*TODO delete from menu*@
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("Feedback", "CardFiles", new {area = "CardFiles"})'>
-                                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li id="audio-menu" class="has-sub">
-                                <a href='@Url.Action("List", "AudioBooks", new {area = "AudioBooks"})'>
-                                    <span>@Localizer.Translate("AudioBooks", "layout", LocTranslationSource.File)</span>
-                                </a>
-                                <ul>
-                                    <li>
-                                        <a href='@Url.Action("Information", "AudioBooks", new {area = "AudioBooks"})'>
-                                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("List", "AudioBooks", new {area = "AudioBooks"})'>
-                                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("Feedback", "AudioBooks", new {area = "AudioBooks"})'>
-                                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li id="tools-menu" class="has-sub">
-                                <a href='@Url.Action("List", "Tools", new {area = "Tools"})'>
-                                    <span>@Localizer.Translate("Tools", "layout", LocTranslationSource.File)</span>
-                                </a>
-                                <ul>
-                                    <li>
-                                        <a href='@Url.Action("Information", "Tools", new {area = "Tools"})'>
-                                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("List", "Tools", new {area = "Tools"})'>
-                                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("Feedback", "Tools", new {area = "Tools"})'>
-                                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                <li id="admin-menu" class="has-sub last">
-                                    @if (User.HasPermission(PermissionNames.UploadBook))
-                                    {
-                                        <a href='@Url.Action("Upload", "Upload", new {area = ""})'>
-                                            <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    }
-                                    else if (User.HasPermission(PermissionNames.EditLemmatization))
-                                    {
-                                        <a href="@Url.Action("Index", "Lemmatization", new {area = "Lemmatization"})">
-                                            <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    }
-                                    else if (User.HasPermission(PermissionNames.ReadLemmatization))
-                                    {
-                                        <a href="@Url.Action("List", "Lemmatization", new {area = "Lemmatization"})">
-                                            <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    }
-                                    else if (User.HasPermission(PermissionNames.DerivateLemmatization))
-                                    {
-                                        <a href="@Url.Action("Index", "Derivation", new {area = "Derivation"})">
-                                            <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    }
-                                    else if (User.HasPermission(PermissionNames.ManagePermissions))
-                                    {
-                                        <a href='@Url.Action("UserPermission", "Permission", new {area = ""})'>
-                                            <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    }
-                                    else if (User.HasPermission(PermissionNames.ManageFeedbacks))
-                                    {
-                                        <a href='@Url.Action("Feedback", "Feedback", new {area = ""})'>
-                                            <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    }
-                                    else if (User.HasPermission(PermissionNames.AddNews))
-                                    {
-                                        <a href='@Url.Action("Add", "News", new {area = ""})'>
-                                            <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        <a href='@Url.Action("Management", "Favorite", new {area = ""})'>
-                                            <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
-                                        </a>
-                                    }
-                                    <ul>
-                                        @if (User.HasPermission(PermissionNames.UploadBook))
-                                        {
-                                            <li>
-                                                <a href='@Url.Action("Upload", "Upload", new {area = ""})'>
-                                                    <span>@Localizer.Translate("UploadWork", "layout", LocTranslationSource.File)</span>
-                                                </a>
-                                            </li>
-                                        }
+                    @if (PortalConfig.Value.PortalType == PortalType.CommunityPortal)
+                    {
+                        @await Html.PartialAsync("_CommunityPortalMenu")
+                    }
+                    else
+                    {
+                        @await Html.PartialAsync("_ResearchPortalMenu")
+                    }
 
-                                        @if (User.HasPermission(PermissionNames.ReadLemmatization) || User.HasPermission(PermissionNames.EditLemmatization))
-                                        {
-                                            <li>
-                                                <a href="@Url.Action("Index", "Lemmatization", new {area = "Lemmatization"})">
-                                                    <span>@Localizer.Translate("Lemmatisation", "layout", LocTranslationSource.File)</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="@Url.Action("List", "Lemmatization", new {area = "Lemmatization"})">
-                                                    <span>@Localizer.Translate("LemmatisationWalkthrough", "layout", LocTranslationSource.File)</span>
-                                                </a>
-                                            </li>
-                                        }
-
-                                        @if (User.HasPermission(PermissionNames.DerivateLemmatization))
-                                        {
-                                            <li>
-                                                <a href="@Url.Action("Index", "Derivation", new {area = "Derivation"})">
-                                                    <span>@Localizer.Translate("Derivation", "layout", LocTranslationSource.File)</span>
-                                                </a>
-                                            </li>
-                                        }
-
-                                        @if (User.HasPermission(PermissionNames.ManagePermissions))
-                                        {
-                                            <li>
-                                                <a href='@Url.Action("UserPermission", "Permission", new {area = ""})'>
-                                                    <span>@Localizer.Translate("UserManagement", "layout", LocTranslationSource.File)</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href='@Url.Action("GroupPermission", "Permission", new {area = ""})'>
-                                                    <span>@Localizer.Translate("GroupManagement", "layout", LocTranslationSource.File)</span>
-                                                </a>
-                                            </li>
-                                        }
-
-                                        @if (User.HasPermission(PermissionNames.ManageFeedbacks))
-                                        {
-                                            <li>
-                                                <a href='@Url.Action("Feedback", "Feedback", new {area = ""})'>
-                                                    <span>@Localizer.Translate("FeedbackManagement", "layout", LocTranslationSource.File)</span>
-                                                </a>
-                                            </li>
-                                        }
-
-                                        <li>
-                                            <a href='@Url.Action("Management", "Favorite", new {area = ""})'>
-                                                <span>@Localizer.Translate("FavoriteItems", "layout", LocTranslationSource.File)</span>
-                                            </a>
-                                        </li>
-
-                                        @if (User.HasPermission(PermissionNames.AddNews))
-                                        {
-                                            <li>
-                                                <a href='@Url.Action("Add", "News", new {area = ""})'>
-                                                    <span>@Localizer.Translate("AddNews", "layout", LocTranslationSource.File)</span>
-                                                </a>
-                                            </li>
-                                        }
-
-                                    </ul>
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                </div>
                 </div>
             </div>
         </div>
@@ -478,94 +110,94 @@
     <div id="permissions-div" class="hidden" data-is-authenticated="@User.Identity.IsAuthenticated" data-roles="@if (User.HasPermission(PermissionNames.EditLemmatization))
                                                                                                     {@Html.Raw("EditLemmatization")
                                                                                                     } "></div>
-<div class="page-body-content">
+    <div class="page-body-content">
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/jquery-ui-dist/jquery-ui.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="~/lib/respond.js/dest/respond.min.js"></script>
-    <script src="~/lib-custom/typeahead.bundle.js"></script>
-    <script src="~/lib/scalesoft-localization-web/dist/localization.js"></script>
-    <script src="~/lib/jquery-appear/src/jquery.appear.js"></script>
-    <script src="~/lib/jquery-zoom/jquery.zoom.js"></script>
-    <script src="~/lib/wheelzoom/wheelzoom.js"></script>
-    <script src="~/lib/jquery-eu-cookie-law-popup/js/jquery-eu-cookie-law-popup.js"></script>
-    <script src="~/lib/simplemde-custom-markdown-mode/dist/simplemde.min.js"></script>
-    <script src="~/lib-custom/jq-simple-connect/source/jqSimpleConnect.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-    <script src="~/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker.js"></script>
-    <script src="~/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker-plus.js"></script>
-    <script src="~/lib/s-pagination/dist/pagination.js"></script>
-    <script src="~/lib/bootbox/bootbox.js"></script>
-    <script src="~/lib/dropzone/downloads/dropzone.js"></script>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/jquery-ui-dist/jquery-ui.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="~/lib/respond.js/dest/respond.min.js"></script>
+        <script src="~/lib-custom/typeahead.bundle.js"></script>
+        <script src="~/lib/scalesoft-localization-web/dist/localization.js"></script>
+        <script src="~/lib/jquery-appear/src/jquery.appear.js"></script>
+        <script src="~/lib/jquery-zoom/jquery.zoom.js"></script>
+        <script src="~/lib/wheelzoom/wheelzoom.js"></script>
+        <script src="~/lib/jquery-eu-cookie-law-popup/js/jquery-eu-cookie-law-popup.js"></script>
+        <script src="~/lib/simplemde-custom-markdown-mode/dist/simplemde.min.js"></script>
+        <script src="~/lib-custom/jq-simple-connect/source/jqSimpleConnect.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+        <script src="~/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker.js"></script>
+        <script src="~/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker-plus.js"></script>
+        <script src="~/lib/s-pagination/dist/pagination.js"></script>
+        <script src="~/lib/bootbox/bootbox.js"></script>
+        <script src="~/lib/dropzone/downloads/dropzone.js"></script>
 
-    <environment names="Staging,Production">
-        <script src="~/js/bundles/itjakub.keyboard.bundle.js"></script>
-        <script src="~/js/bundles/itjakub.storage.bundle.js"></script>
-        <script src="~/js/bundles/itjakub.bundle.js"></script>
-        <script src="~/js/bundles/itjakub.plugins.bundle.js"></script>
-        <script src="~/js/bundles/itjakub.favorite.bundle.js"></script>
-    </environment>
-    <environment names="Development">
-        @*Bundle keyboard*@
-        <script src="~/js/Plugins/Keyboard/itjakub.plugins.keyboard.js"></script>
-        <script src="~/js/Plugins/Keyboard/itjakub.plugins.keyboardComponent.js"></script>
-        <script src="~/js/Plugins/Keyboard/itjakub.plugins.keyboardManager.js"></script>
+        <environment names="Staging,Production">
+            <script src="~/js/bundles/itjakub.keyboard.bundle.js"></script>
+            <script src="~/js/bundles/itjakub.storage.bundle.js"></script>
+            <script src="~/js/bundles/itjakub.bundle.js"></script>
+            <script src="~/js/bundles/itjakub.plugins.bundle.js"></script>
+            <script src="~/js/bundles/itjakub.favorite.bundle.js"></script>
+        </environment>
+        <environment names="Development">
+            @*Bundle keyboard*@
+            <script src="~/js/Plugins/Keyboard/itjakub.plugins.keyboard.js"></script>
+            <script src="~/js/Plugins/Keyboard/itjakub.plugins.keyboardComponent.js"></script>
+            <script src="~/js/Plugins/Keyboard/itjakub.plugins.keyboardManager.js"></script>
 
-        @*Bundle storage*@
-        <script src="~/js/Plugins/Storage/itjakub.plugins.storage.manager.js"></script>
-        <script src="~/js/Plugins/Storage/itjakub.plugins.storage.cookiestorage.js"></script>
-        <script src="~/js/Plugins/Storage/itjakub.plugins.storage.localstorage.js"></script>
+            @*Bundle storage*@
+            <script src="~/js/Plugins/Storage/itjakub.plugins.storage.manager.js"></script>
+            <script src="~/js/Plugins/Storage/itjakub.plugins.storage.cookiestorage.js"></script>
+            <script src="~/js/Plugins/Storage/itjakub.plugins.storage.localstorage.js"></script>
 
-        @*Bundle itjakub*@
-        <script src="~/js/itjakub.js"></script>
-        <script src="~/js/itjakub.dataContracts.js"></script>
-        <script src="~/js/Plugins/itjakub.tools.js"></script>
-        <script src="~/js/Plugins/itjakub.components.js"></script>
-        <script src="~/js/Plugins/itjakub.eucookiepopup.js"></script>
+            @*Bundle itjakub*@
+            <script src="~/js/itjakub.js"></script>
+            <script src="~/js/itjakub.dataContracts.js"></script>
+            <script src="~/js/Plugins/itjakub.tools.js"></script>
+            <script src="~/js/Plugins/itjakub.components.js"></script>
+            <script src="~/js/Plugins/itjakub.eucookiepopup.js"></script>
             <script src="~/js/Plugins/itjakub.helper.js"></script>
 
-        <script src="~/js/ridics.form-validation.js"></script>
+            <script src="~/js/ridics.form-validation.js"></script>
 
-        @*Bundle plugins*@
-        <script src="~/js/Plugins/Progress/itjakub.plugins.progress.js"></script>
-        <script src="~/js/Plugins/itjakub.modul.inicializator.js"></script>
-        <script src="~/js/Plugins/itjakub.list.modul.inicializator.js"></script>
-        <script src="~/js/Plugins/itjakub.search.modul.inicializator.js"></script>
-        <script src="~/js/Plugins/Reader/itjakub.plugins.reader.js"></script>
-        <script src="~/js/Plugins/Bibliography/itjakub.plugins.bibliography.variableInterpreter.js"></script>
-        <script src="~/js/Plugins/Bibliography/itjakub.plugins.bibliography.factories.js"></script>
-        <script src="~/js/Plugins/Bibliography/itjakub.plugins.bibliography.configuration.js"></script>
-        <script src="~/js/Plugins/Bibliography/itjakub.plugins.bibliography.js"></script>
-        <script src="~/js/Plugins/Sort/itjakub.plugins.sort.js"></script>
-        <script src="~/js/Plugins/DropdownSelect/itjakub.plugins.dropdownselect.js"></script>
-        <script src="~/js/Plugins/DropdownSelect/itjakub.plugins.dropdownselect2.js"></script>
-        <script src="~/js/Plugins/RegExSearch/itjakub.plugins.regexsearch.js"></script>
-        <script src="~/js/Plugins/SearchBox/itjakub.plugins.searchbox.js"></script>
-        <script src="~/js/Plugins/SearchBox/itjakub.plugins.singlesearchbox.js"></script>
+            @*Bundle plugins*@
+            <script src="~/js/Plugins/Progress/itjakub.plugins.progress.js"></script>
+            <script src="~/js/Plugins/itjakub.modul.inicializator.js"></script>
+            <script src="~/js/Plugins/itjakub.list.modul.inicializator.js"></script>
+            <script src="~/js/Plugins/itjakub.search.modul.inicializator.js"></script>
+            <script src="~/js/Plugins/Reader/itjakub.plugins.reader.js"></script>
+            <script src="~/js/Plugins/Bibliography/itjakub.plugins.bibliography.variableInterpreter.js"></script>
+            <script src="~/js/Plugins/Bibliography/itjakub.plugins.bibliography.factories.js"></script>
+            <script src="~/js/Plugins/Bibliography/itjakub.plugins.bibliography.configuration.js"></script>
+            <script src="~/js/Plugins/Bibliography/itjakub.plugins.bibliography.js"></script>
+            <script src="~/js/Plugins/Sort/itjakub.plugins.sort.js"></script>
+            <script src="~/js/Plugins/DropdownSelect/itjakub.plugins.dropdownselect.js"></script>
+            <script src="~/js/Plugins/DropdownSelect/itjakub.plugins.dropdownselect2.js"></script>
+            <script src="~/js/Plugins/RegExSearch/itjakub.plugins.regexsearch.js"></script>
+            <script src="~/js/Plugins/SearchBox/itjakub.plugins.searchbox.js"></script>
+            <script src="~/js/Plugins/SearchBox/itjakub.plugins.singlesearchbox.js"></script>
 
-        @*Bundle favorite*@
-        <script src="~/js/Favorite/itjakub.favoriteBook.js"></script>
-        <script src="~/js/Favorite/itjakub.favoriteManager.js"></script>
-        <script src="~/js/Favorite/itjakub.favoriteQuery.js"></script>
-        <script src="~/js/Favorite/itjakub.favoriteStar.js"></script>
-        <script src="~/js/Favorite/itjakub.newFavoriteDialog.js"></script>
-        <script src="~/js/Favorite/itjakub.newFavoriteNotification.js"></script>
-    </environment>
+            @*Bundle favorite*@
+            <script src="~/js/Favorite/itjakub.favoriteBook.js"></script>
+            <script src="~/js/Favorite/itjakub.favoriteManager.js"></script>
+            <script src="~/js/Favorite/itjakub.favoriteQuery.js"></script>
+            <script src="~/js/Favorite/itjakub.favoriteStar.js"></script>
+            <script src="~/js/Favorite/itjakub.newFavoriteDialog.js"></script>
+            <script src="~/js/Favorite/itjakub.newFavoriteNotification.js"></script>
+        </environment>
 
-    @RenderSection("scripts", false)
+        @RenderSection("scripts", false)
 
-    @*main page content*@
-    <div class="container-header">
-        <div class="container">
-            @BreadcrumbsHelper.Create(Localizer, ViewBag.Title)
+        @*main page content*@
+        <div class="container-header">
+            <div class="container">
+                @BreadcrumbsHelper.Create(Localizer, ViewBag.Title)
+            </div>
+        </div>
+        <div class="container module-content">
+            @RenderBody()
         </div>
     </div>
-    <div class="container module-content">
-        @RenderBody()
-    </div>
-</div>
 
     <footer class="footer">
         <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
@@ -603,8 +235,8 @@
                 @{
                     string vokabularStartedNew = FooterHelper.VokabularStartedLocalized(Localizer, new DateTime(2015, 1, 1));
                 }
-                
-                @Localizer.TranslateFormat("FooterText", new object[] {vokabularStartedNew}, "layout", LocTranslationSource.File)
+
+                @Localizer.TranslateFormat("FooterText", new object[] { vokabularStartedNew }, "layout", LocTranslationSource.File)
             </div>
             <div class="footer-logos">
                 <a href="http://www.ujc.cas.cz/" class="ujc" title="@Localizer.Translate("UjcLong", "layout")">

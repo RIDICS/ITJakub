@@ -1,37 +1,40 @@
 {
 	"culture":"en",
 	"scope":"global",
-	"dictionary": {
-		"Vokabulář" : "Vokabulář",
-		"webový": "webový",
-		"VokabulářWebový" : "Vokabulář webový",
-		"and":"and",
-		
-		"FeedbackFormPlaceholder":"Type your feedback here...",
-		"NameFormPlaceholder":"Type your name here...",
-		"EmailFormPlaceholder":"Type your e-mail here...",
-		"Send":"Send",
-		
-		"FeedbackSentTitle":"Feedback sent",
-		"FeedbackSentAlert":"Feedback successfuly sent.",
-		
-		"Max":"Max.",
-		"Remaining":"Remaining",
-		"YouCanUseDiacritics":"You can use diacritics",
-		"Characters":"characters",
-		
-		"Close":"Close",
-		"Save":"Save",
-		"Error":"Error",
-		"DefaultTitle":"Default title",
-		
-		"SortBy":"Sort by",
-		"UserAccount":"User account",
-		"Language":"Language",
-		"LogOut": "Log out",
-		"SignIn":"Sign in",
-		"SignUp":"Sign up",
-		"EditText":"Edit text",
-		"CreateText":"Create text"
-		}
+  "dictionary": {
+    "Vokabulář": "Vokabulář",
+    "webový": "webový",
+    "VokabulářWebový": "Vokabulář webový",
+    "and": "and",
+
+    "Komunitní": "Komunitní",
+    "portál": "portál",
+
+    "FeedbackFormPlaceholder": "Type your feedback here...",
+    "NameFormPlaceholder": "Type your name here...",
+    "EmailFormPlaceholder": "Type your e-mail here...",
+    "Send": "Send",
+
+    "FeedbackSentTitle": "Feedback sent",
+    "FeedbackSentAlert": "Feedback successfuly sent.",
+
+    "Max": "Max.",
+    "Remaining": "Remaining",
+    "YouCanUseDiacritics": "You can use diacritics",
+    "Characters": "characters",
+
+    "Close": "Close",
+    "Save": "Save",
+    "Error": "Error",
+    "DefaultTitle": "Default title",
+
+    "SortBy": "Sort by",
+    "UserAccount": "User account",
+    "Language": "Language",
+    "LogOut": "Log out",
+    "SignIn": "Sign in",
+    "SignUp": "Sign up",
+    "EditText": "Edit text",
+    "CreateText": "Create text"
+  }
 }

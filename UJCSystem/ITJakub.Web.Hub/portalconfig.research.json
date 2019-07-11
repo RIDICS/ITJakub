@@ -1,6 +1,7 @@
 {
   "PortalConfig": {
     "UploadDocx": true,
-    "PortalType": "ResearchPortal"
-    }
+    "PortalType": "ResearchPortal",
+    "SecondPortalUrl": "https://localhost:44368/"
+  }
 }
