@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using log4net;
-using Vokabular.Authentication.DataContracts;
+using Ridics.Authentication.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Types;

@@ -11,7 +11,7 @@ using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Results;
-using AuthRoleContract = Vokabular.Authentication.DataContracts.RoleContract;
+using AuthRoleContract = Ridics.Authentication.DataContracts.RoleContract;
 
 namespace Vokabular.MainService.Core.Managers
 {

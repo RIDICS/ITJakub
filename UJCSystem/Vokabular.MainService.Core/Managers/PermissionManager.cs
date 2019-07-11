@@ -9,7 +9,7 @@ using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.Shared.Const;
-using AuthRoleContract = Vokabular.Authentication.DataContracts.RoleContract;
+using AuthRoleContract = Ridics.Authentication.DataContracts.RoleContract;
 
 namespace Vokabular.MainService.Core.Managers
 {
