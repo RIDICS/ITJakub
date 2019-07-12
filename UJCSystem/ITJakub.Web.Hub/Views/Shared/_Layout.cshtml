@@ -8,25 +8,7 @@
 @using Vokabular.Shared.Options;
 
 @inject ILocalizationService Localizer
-@inject IOptions<PortalConfigOption> PortalConfig
-@{
-    string mainLogo;
-    string secondLogo;
-    string portalName;
-
-    if (PortalConfig.Value.PortalType == PortalType.CommunityPortal)
-    {
-        mainLogo = Url.Content("~/images/logo/logo.CommunityPortal.png");
-        secondLogo = Url.Content("~/images/logo/logo.ResearchPortal.png");
-        portalName = "Komunitní portál";
-    }
-    else
-    {
-        mainLogo = Url.Content("~/images/logo/logo.ResearchPortal.png");
-        secondLogo = Url.Content("~/images/logo/logo.CommunityPortal.png");
-        portalName = "Vokabulář webový";
-    }
-}
+@inject IOptions<PortalOption> PortalConfig
 
 <!DOCTYPE html>
 <html>
@@ -34,7 +16,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="~/images/favicon.png">
-    <title>@portalName - @ViewBag.Title</title>
+    <title>@PortalConfig.Value.MainPortal.PortalNameFull - @ViewBag.Title</title>
     <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
     <link href="~/lib/dropzone/downloads/css/dropzone.css" rel="stylesheet" />
     <link href="~/lib/jquery-ui-dist/jquery-ui.min.css" rel="stylesheet" />
@@ -58,18 +40,10 @@
             <div class="main-navbar-container">
                 <div class="navbar-header-not">
                     <a href='@PortalConfig.Value.SecondPortalUrl' class="second_logo_href">
-                        <img src="@secondLogo" alt="second_logo" class="second_logo" />
+                        <img src="@Url.Content(PortalConfig.Value.SecondPortal.PortalLogoPath)" alt="second_logo" class="second_logo" />
                         <div class="second_logo_text">
-                            @if (PortalConfig.Value.PortalType == PortalType.CommunityPortal)
-                            {
-                                <h1>@Localizer.Translate("Vokabulář", "global", LocTranslationSource.File)</h1>
-                                <h2>@Localizer.Translate("webový", "global", LocTranslationSource.File)</h2>
-                            }
-                            else
-                            {
-                                <h1>@Localizer.Translate("Komunitní", "global", LocTranslationSource.File)</h1>
-                                <h2>@Localizer.Translate("portál", "global", LocTranslationSource.File)</h2>
-                            }
+                            <h1>@Localizer.Translate(PortalConfig.Value.SecondPortal.PortalName1, "global", LocTranslationSource.File)</h1>
+                            <h2>@Localizer.Translate(PortalConfig.Value.SecondPortal.PortalName2, "global", LocTranslationSource.File)</h2>
                         </div>
                     </a>
 
@@ -80,18 +54,10 @@
                     @await Html.PartialAsync("_LoginPartial")
 
                     <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
-                        <img src="@mainLogo" alt="main_logo" class="main_logo" />
+                        <img src="@Url.Content(PortalConfig.Value.MainPortal.PortalLogoPath)" alt="main_logo" class="main_logo" />
                         <div class="main_logo_text">
-                            @if (PortalConfig.Value.PortalType == PortalType.CommunityPortal)
-                            {
-                                <h1>@Localizer.Translate("Komunitní", "global", LocTranslationSource.File)</h1>
-                                <h2>@Localizer.Translate("portál", "global", LocTranslationSource.File)</h2>
-                            }
-                            else
-                            {
-                                <h1>@Localizer.Translate("Vokabulář", "global", LocTranslationSource.File)</h1>
-                                <h2>@Localizer.Translate("webový", "global", LocTranslationSource.File)</h2>
-                            }
+                            <h1>@Localizer.Translate(PortalConfig.Value.MainPortal.PortalName1, "global", LocTranslationSource.File)</h1>
+                            <h2>@Localizer.Translate(PortalConfig.Value.MainPortal.PortalName2, "global", LocTranslationSource.File)</h2>
                         </div>
                     </a>
 
@@ -194,7 +160,7 @@
         @*main page content*@
         <div class="container-header">
             <div class="container">
-                @BreadcrumbsHelper.Create(Localizer, portalName, ViewBag.Title)
+                @BreadcrumbsHelper.Create(Localizer, PortalConfig.Value.MainPortal.PortalNameFull, ViewBag.Title)
             </div>
         </div>
         <div class="container module-content">
@@ -204,7 +170,7 @@
 
     <footer class="footer">
         <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
-            <img src="@mainLogo" alt="main_logo" /> @*TODO make logo small as this size*@
+            <img src="@Url.Content(PortalConfig.Value.MainPortal.PortalLogoPath)" alt="main_logo" /> @*TODO make logo small as this size*@
         </a>
 
         <div class="footer-text-area">

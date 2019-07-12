@@ -20,18 +20,18 @@ namespace ITJakub.Web.Hub.Authorization
 
         private class LimitedAccessAttributeImpl : IAuthorizationFilter
         {
-            private readonly PortalConfigOption m_portalConfigOption;
+            private readonly PortalOption m_portalOption;
             private readonly PortalType m_requiredPortalType;
 
-            public LimitedAccessAttributeImpl(PortalType requiredPortalType, IOptions<PortalConfigOption> portalConfigOption)
+            public LimitedAccessAttributeImpl(PortalType requiredPortalType, IOptions<PortalOption> portalConfigOption)
             {
                 m_requiredPortalType = requiredPortalType;
-                m_portalConfigOption = portalConfigOption.Value;
+                m_portalOption = portalConfigOption.Value;
             }
 
             public void OnAuthorization(AuthorizationFilterContext context)
             {
-                if (m_requiredPortalType != m_portalConfigOption.PortalType)
+                if (m_requiredPortalType != m_portalOption.PortalType)
                 {
                     context.Result = new UnauthorizedResult();
                 }

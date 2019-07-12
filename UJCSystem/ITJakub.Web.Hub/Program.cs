@@ -41,6 +41,11 @@ namespace ITJakub.Web.Hub
                         .AddJsonFile("portalconfig.json", optional: true, reloadOnChange: true)
                         .AddEnvironmentVariables();
 
+
+
+                    // args = new[] {"CommunityPortal"};
+                    args = new[] { "ResearchPortal" };
+
                     if (args.Length == 0)
                     {
                         throw new ArgumentException("Portal type is not set.");
