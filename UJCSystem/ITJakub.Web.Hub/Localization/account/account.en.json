@@ -4,17 +4,17 @@
   "dictionary": {
     "UseExternalLoginService": "Use another service for login",
     "UseExternalLoginService-placeholder": "You should be able to register using another accounts here",
-    "Login": "Login",
-    "Login-text": "Log in using your account",
-    "Login-submit": "Log in",
+    "Login": "Sign in",
+    "Login-text": "Sign in using your account",
+    "Login-submit": "Sign in",
 
     "RegisterAccount": "Register as new user",
     "Registration": "Registration",
-    "SuccessRegistration1": "The registration was successful. You can ",
-    "SuccessRegistration2": "log in.",
+    "SuccessRegistration1": "The registration was successful. You can {0}",
+    "SuccessRegistration2": "sign in.",
 
     "MakeNewAccount": "New account creation",
-    "Registration-submit": "Register",
+    "Registration-submit": "Sign up",
 
     "Detail": "Account detail",
     "Settings": "Account settings",

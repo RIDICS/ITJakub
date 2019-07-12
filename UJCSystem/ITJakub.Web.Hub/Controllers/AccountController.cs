@@ -61,7 +61,7 @@ namespace ITJakub.Web.Hub.Controllers
                         client.CreateNewUser(user);
                     }
 
-                    return RedirectToAction(nameof(SuccessRegistration));
+                    return RedirectToAction(nameof(SuccessfulRegistration));
                 }
                 catch (HttpErrorCodeException e)
                 {
@@ -74,7 +74,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult SuccessRegistration()
+        public IActionResult SuccessfulRegistration()
         {
             return View();
         }
