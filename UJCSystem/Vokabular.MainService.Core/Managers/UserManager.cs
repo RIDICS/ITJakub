@@ -8,7 +8,7 @@ using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Users;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Results;
-using AuthUserContract = Vokabular.Authentication.DataContracts.User.UserContract;
+using AuthUserContract = Ridics.Authentication.DataContracts.User.UserContract;
 
 namespace Vokabular.MainService.Core.Managers
 {

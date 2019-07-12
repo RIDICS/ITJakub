@@ -4,7 +4,7 @@ using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.DataContracts.Contracts;
-using AuthUserContract = Vokabular.Authentication.DataContracts.User.UserContract;
+using AuthUserContract = Ridics.Authentication.DataContracts.User.UserContract;
 
 namespace Vokabular.MainService.Core.Works.Users
 {
@@ -39,7 +39,7 @@ namespace Vokabular.MainService.Core.Works.Users
             authUser.FirstName = m_data.FirstName;
             authUser.LastName = m_data.LastName;
 
-            client.EditUserAsync(user.ExternalId.Value, authUser).GetAwaiter().GetResult();
+            client.HttpClient.EditItemAsync(user.ExternalId.Value, authUser).GetAwaiter().GetResult();
         }
     }
 }

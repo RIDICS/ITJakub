@@ -7,7 +7,7 @@ using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Works.Users;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
-using AuthUserContract = Vokabular.Authentication.DataContracts.User.UserContract;
+using AuthUserContract = Ridics.Authentication.DataContracts.User.UserContract;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -124,6 +124,7 @@ namespace Vokabular.MainService.Core.Managers
         {
             var client = m_communicationProvider.GetAuthUserApiClient();
             var result = client.HttpClient.GetItemAsync<AuthUserContract>(userExternalId).GetAwaiter().GetResult();
+
             return result;
         }
     }

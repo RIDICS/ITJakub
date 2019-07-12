@@ -15,7 +15,7 @@
             @Html.DisplayFor(modelItem => role.Description)
         </td>
         <td class="buttons">
-            <a asp-action="EditRole" asp-route-roleId="@role.Id" class="btn btn-sm btn-default @(User.HasPermission(PermissionNames.ManagePermissions) ? "" : "disabled")">
+            <a asp-action="EditRole" asp-route-roleId="@role.Id" class="btn btn-sm btn-default @(User.HasPermission(PermissionNames.AssignPermissionsToRoles) ? "" : "disabled")">
                 @Localizer.Translate("Edit", "Permission")
             </a>
         </td>

@@ -1,7 +1,7 @@
 ﻿using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
-using AuthRoleContract = Vokabular.Authentication.DataContracts.RoleContract;
+using AuthRoleContract = Ridics.Authentication.DataContracts.RoleContract;
 using RoleContract = Vokabular.MainService.DataContracts.Contracts.Permission.RoleContract;
 
 namespace Vokabular.MainService.Core.Works.Permission
@@ -31,7 +31,7 @@ namespace Vokabular.MainService.Core.Works.Permission
             authRole.Name = m_data.Name;
             authRole.Description = m_data.Description;
 
-            client.UpdateRole(m_data.Id, authRole).GetAwaiter().GetResult();
+            client.HttpClient.EditItemAsync(m_data.Id, authRole).GetAwaiter().GetResult();
         }
     }
 }

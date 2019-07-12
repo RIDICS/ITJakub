@@ -4,7 +4,7 @@ using System.Linq;
 using ITJakub.FileProcessing.DataContracts;
 using ITJakub.SearchService.DataContracts;
 using Microsoft.Extensions.Options;
-using Vokabular.Authentication.Client.Client.Auth;
+using Ridics.Authentication.HttpClient.Client.Auth;
 using Vokabular.CardFile.Core;
 using Vokabular.FulltextService.DataContracts.Clients;
 using Vokabular.Shared.Options;
