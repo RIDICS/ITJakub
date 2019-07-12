@@ -21,9 +21,9 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             return GetSession().QueryOver<ExternalRepository>()
                 .Where(x => x.Id == externalRepositoryId)
-                .Fetch(x => x.BibliographicFormat).Eager
-                .Fetch(x => x.ExternalRepositoryType).Eager
-                .Fetch(x => x.FilteringExpressionSets).Eager
+                .Fetch(SelectMode.Fetch, x => x.BibliographicFormat)
+                .Fetch(SelectMode.Fetch, x => x.ExternalRepositoryType)
+                .Fetch(SelectMode.Fetch, x => x.FilteringExpressionSets)
                 .SingleOrDefault();
         }
 
@@ -37,9 +37,9 @@ namespace Vokabular.DataEntities.Database.Repositories
         public virtual ListWithTotalCountResult<ExternalRepository> GetExternalRepositoryList(int start, int count)
         {
             var query = GetSession().QueryOver<ExternalRepository>()
-                .Fetch(x => x.CreatedByUser).Eager
-                .Fetch(x => x.BibliographicFormat).Eager
-                .Fetch(x => x.ExternalRepositoryType).Eager;
+                .Fetch(SelectMode.Fetch, x => x.CreatedByUser)
+                .Fetch(SelectMode.Fetch, x => x.BibliographicFormat)
+                .Fetch(SelectMode.Fetch, x => x.ExternalRepositoryType);
 
             var list = query.OrderBy(x => x.Name).Asc
                 .Skip(start)
@@ -59,9 +59,9 @@ namespace Vokabular.DataEntities.Database.Repositories
         public IList<ExternalRepository> GetAllExternalRepositories()
         {
             return GetSession().QueryOver<ExternalRepository>()
-                .Fetch(x => x.CreatedByUser).Eager
-                .Fetch(x => x.BibliographicFormat).Eager
-                .Fetch(x => x.ExternalRepositoryType).Eager
+                .Fetch(SelectMode.Fetch, x => x.CreatedByUser)
+                .Fetch(SelectMode.Fetch, x => x.BibliographicFormat)
+                .Fetch(SelectMode.Fetch, x => x.ExternalRepositoryType)
                 .OrderBy(x => x.Name).Asc
                 .List();
         }

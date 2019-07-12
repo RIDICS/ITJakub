@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NHibernate;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.UnitOfWork;
@@ -15,8 +16,8 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             return GetSession().QueryOver<ImportedRecordMetadata>()
                 .Where(x=> x.Snapshot.Id == snapshotId)
-                .Fetch(x => x.LastUpdate).Eager
-                .Fetch(x => x.ImportedProjectMetadata).Eager
+                .Fetch(SelectMode.Fetch, x => x.LastUpdate)
+                .Fetch(SelectMode.Fetch, x => x.ImportedProjectMetadata)
                 .SingleOrDefault();
         }
 
@@ -24,8 +25,8 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             return GetSession().QueryOver<ImportedRecordMetadata>()
                 .Where(x=> x.ImportedProjectMetadata.Id == importedProjectMetadataId)
-                .Fetch(x => x.LastUpdate).Eager
-                .Fetch(x => x.ImportedProjectMetadata).Eager
+                .Fetch(SelectMode.Fetch, x => x.LastUpdate)
+                .Fetch(SelectMode.Fetch, x => x.ImportedProjectMetadata)
                 .List();
         }
     }

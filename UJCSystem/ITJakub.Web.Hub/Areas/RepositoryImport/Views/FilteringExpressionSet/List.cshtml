@@ -14,7 +14,7 @@
 
 <div class="content-container">
     <div class="row project-import-layout">
-        @Html.Partial("~/Areas/RepositoryImport/Views/_LeftMenu.cshtml")
+        @await Html.PartialAsync("~/Areas/RepositoryImport/Views/_LeftMenu.cshtml")
         <div class="vertical-splitter"></div>
 
         <div class="content" id="project-import-layout-content">

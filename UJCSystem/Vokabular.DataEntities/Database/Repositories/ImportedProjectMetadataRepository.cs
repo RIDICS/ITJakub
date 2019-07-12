@@ -1,4 +1,5 @@
-﻿using Vokabular.DataEntities.Database.Daos;
+﻿using NHibernate;
+using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.UnitOfWork;
 
@@ -14,7 +15,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             return GetSession().QueryOver<ImportedProjectMetadata>()
                 .Where(x => x.ExternalId == externalId)
-                .Fetch(x => x.Project).Eager
+                .Fetch(SelectMode.Fetch, x => x.Project)
                 .SingleOrDefault();
         }
     }

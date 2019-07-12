@@ -40,7 +40,7 @@
                     {
                          foreach (var expr in Model.FilteringExpressions)
                          {
-                            @Html.Partial("_FilteringExpressionRow", expr)
+                            @await Html.PartialAsync("_FilteringExpressionRow", expr)
                          }
                     }
                 </tbody>

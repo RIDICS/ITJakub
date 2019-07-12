@@ -1,4 +1,5 @@
-﻿using Vokabular.DataEntities.Database.Daos;
+﻿using NHibernate;
+using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.UnitOfWork;
@@ -25,7 +26,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             return GetSession().QueryOver<ImportHistory>()
                 .Where(x => x.ExternalRepository.Id == externalRepositoryId)
-                .Fetch(x => x.CreatedByUser).Eager
+                .Fetch(SelectMode.Fetch, x => x.CreatedByUser)
                 .OrderBy(x => x.Date).Desc
                 .Take(1)
                 .SingleOrDefault();

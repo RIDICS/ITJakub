@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
@@ -29,7 +30,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         public ListWithTotalCountResult<FilteringExpressionSet> GetFilteringExpressionSetList(int start, int count)
         {
             var query = GetSession().QueryOver<FilteringExpressionSet>()
-                .Fetch(x => x.BibliographicFormat).Eager;
+                .Fetch(SelectMode.Fetch, x => x.BibliographicFormat);
 
             var list = query.OrderBy(x => x.Name).Asc
                 .Skip(start)
@@ -50,9 +51,9 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             return GetSession().QueryOver<FilteringExpressionSet>()
                 .Where(x => x.Id == filteringExpressionSetId)
-                .Fetch(x => x.CreatedByUser).Eager
-                .Fetch(x => x.BibliographicFormat).Eager
-                .Fetch(x => x.FilteringExpressions).Eager
+                .Fetch(SelectMode.Fetch, x => x.CreatedByUser)
+                .Fetch(SelectMode.Fetch, x => x.BibliographicFormat)
+                .Fetch(SelectMode.Fetch, x => x.FilteringExpressions)
                 .SingleOrDefault();
         }
 
@@ -61,7 +62,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             
             return GetSession().QueryOver<FilteringExpressionSet>()
                 .OrderBy(x => x.Name).Asc
-                .Fetch(x => x.BibliographicFormat).Eager
+                .Fetch(SelectMode.Fetch, x => x.BibliographicFormat)
                 .List();
         }
 
