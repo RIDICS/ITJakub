@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
@@ -95,7 +96,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             return GetSession().QueryOver<TermCategory>()
                 .JoinAlias(x => x.Terms, () => termAlias, JoinType.LeftOuterJoin)
-                .Fetch(x => x.Terms).Eager
+                .Fetch(SelectMode.Fetch, x => x.Terms)
                 .OrderBy(() => termAlias.Position).Asc
                 .TransformUsing(Transformers.DistinctRootEntity)
                 .List();

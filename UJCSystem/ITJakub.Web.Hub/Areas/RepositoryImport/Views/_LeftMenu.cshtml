@@ -1,7 +1,7 @@
-﻿@using Localization.AspNetCore.Service
-@using Microsoft.AspNetCore.Http.Extensions
+﻿@using Microsoft.AspNetCore.Http.Extensions
+@using Scalesoft.Localization.AspNetCore
 
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 <div class="left-menu" id="left-menu">
     <div class="project-import-title">@Localizer.Translate("MenuTitle", "RepositoryImport")</div>

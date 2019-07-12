@@ -1,13 +1,5 @@
 ﻿/// <reference path="Plugins/Bibliography/itjakub.plugins.bibliography.ts"/>
 /// <reference path="Plugins/DropdownSelect/itjakub.plugins.dropdownselect.ts"/>
-/// <reference path="../../node_modules/@types/dropzone/index.d.ts"/>
-/// <reference path="../../node_modules/@types/jquery/index.d.ts" />
-/// <reference path="../../node_modules/@types/jqueryui/index.d.ts" />
-/// <reference path="../../node_modules/@types/jquery.validation/index.d.ts" />
-/// <reference path="../../node_modules/@types/typeahead/index.d.ts" />
-/// <reference path="../../node_modules/@types/simplemde/index.d.ts" />
-/// <reference path="../../node_modules/@types/codemirror/index.d.ts" />
-/// <reference path="../lib/s-pagination/dist/pagination.d.ts" />
 
 var localization: Localization;
 
@@ -17,6 +9,7 @@ Dropzone.autoDiscover = false;
 //sets state to main plugins menu
 $(document as Node as Element).ready(() => {
     localization = new Localization();
+    localization.configureSiteUrl(getBaseUrl());
 
     $('#main-plugins-menu').find('li').removeClass('active');
     var href = window.location.pathname;
@@ -61,6 +54,7 @@ function replaceSpecialChars(text : string): string {
 }
 
 function escapeHtmlChars(text: string): string {
+    if (!text) return "";
     var map = {
         "&": "&amp;",
         "<": "&lt;",

@@ -1,17 +1,29 @@
 {
 	"culture":"cs-CZ",
-	"scope":"account",
-	"dictionary": {
-		"UseExternalLoginService": "Použít jinou službu pro přihlášení",
-		"UseExternalLoginService-placeholder": "Zde by mělo být možné se zaregistrovat pomocí jiných účtu",
-		"Login": "Přihlášení",
-		"Login-text": "Přihlaste se pomocí svého účtu",
-		"Login-submit": "Přihlásit se",
-		
-		"RegisterAccount": "Registrovat se jako nový uživatel",
-		"Registration": "Registrace",
-		
-		"MakeNewAccount": "Založení nového účtu",
-		"Registration-submit": "Registrovat"
-		}
+	"scope":"Account",
+  "dictionary": {
+    "UseExternalLoginService": "Použít jinou službu pro přihlášení",
+    "UseExternalLoginService-placeholder": "Zde by mělo být možné se zaregistrovat pomocí jiných účtu",
+    "Login": "Přihlášení",
+    "Login-text": "Přihlaste se pomocí svého účtu",
+    "Login-submit": "Přihlásit se",
+
+    "RegisterAccount": "Registrovat se jako nový uživatel",
+    "Registration": "Registrace",
+    "SuccessRegistration": "Registrace proběhla úspěšně. Nyní se můžete přihlásit.",
+
+    "MakeNewAccount": "Založení nového účtu",
+    "Registration-submit": "Registrovat",
+
+    "Detail": "Detail účtu",
+    "Settings": "Nastavení účtu",
+
+    "DataChange": "Změna údajů",
+    "UpdateAccountSubmit": "Uložit změny",
+    "SuccessUpdateAccount": "Údaje byly úspěšně změněny.",
+
+    "PasswordChange": "Změna hesla",
+    "UpdatePasswordSubmit": "Změnit heslo",
+    "SuccessPasswordChange": "Heslo bylo úspěšně změněno."
+  }
 }

@@ -1,6 +1,6 @@
-﻿@using Localization.AspNetCore.Service
+﻿@using Scalesoft.Localization.AspNetCore
 @model ITJakub.Web.Hub.Models.StaticTextViewModel
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 @section styles{
     <link href="~/Areas/BohemianTextBank/css/itjakub.bohemiantextbank.css" rel="stylesheet" />
@@ -11,5 +11,5 @@
 }
 
 <div class="content-container">
-    @Html.Partial("_StaticText", Model)
+    @await Html.PartialAsync("_StaticText", Model)
 </div>

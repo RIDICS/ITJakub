@@ -1,6 +1,6 @@
-﻿@using Localization.AspNetCore.Service
+﻿@using Scalesoft.Localization.AspNetCore
 @model ITJakub.Web.Hub.Models.StaticTextViewModel
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 @{
     ViewBag.Title = @Localizer.Translate("ProfessionalLiteratureHelp", "ProfessionalLiterature");
@@ -11,6 +11,6 @@
 }
 
 <div class="content-container">
-    @Html.Partial("_StaticText", Model)
+    @await Html.PartialAsync("_StaticText", Model)
 
 </div>

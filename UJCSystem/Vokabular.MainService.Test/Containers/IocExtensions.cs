@@ -1,20 +1,20 @@
 ﻿using System;
-using System.Configuration;
+using System.IO;
 using AutoMapper;
+using DryIoc;
+using Microsoft.Extensions.Configuration;
 using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
 using Vokabular.DataEntities.Database.Daos;
-using Vokabular.Shared.Container;
 using Vokabular.Shared.Options;
-using Configuration = NHibernate.Cfg.Configuration;
 
 namespace Vokabular.MainService.Test.Containers
 {
     public static class IocExtensions
     {
-        public static void InitAutoMapper(this IIocContainer container)
+        public static void InitAutoMapper(this DryIocContainer container)
         {
             var profiles = container.ResolveAll<Profile>();
 
@@ -28,9 +28,28 @@ namespace Vokabular.MainService.Test.Containers
             });
         }
 
-        public static void InitNHibernate(this IIocContainer container)
+        private static IConfigurationRoot GetConfiguration()
         {
-            var connectionString = ConfigurationManager.AppSettings[SettingKeys.TestDbConnectionString] ?? throw new ArgumentException("Connection string not found");
+            var globalConfiguration = new ConfigurationBuilder()
+                .SetBasePath(AppContext.BaseDirectory)
+                .AddJsonFile("globalsettings.json").Build();
+
+            var secretSettingsPath = globalConfiguration["SecretSettingsPath"];
+
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile(Path.Combine(secretSettingsPath, "ITJakub.Secrets.json"), optional: true)
+                .AddEnvironmentVariables()
+                .Build();
+
+            return config;
+        }
+
+        public static void InitNHibernate(this DryIocContainer container)
+        {
+            var config = GetConfiguration();
+            
+            var connectionString = config.GetConnectionString(SettingKeys.TestDbConnectionString) ?? throw new ArgumentException("Connection string not found");
 
             var cfg = new Configuration()
                 .DataBaseIntegration(db =>

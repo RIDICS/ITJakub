@@ -3,8 +3,6 @@
     staticTextEditor.init();
 });
 
-var localization = new Localization();
-
 class StaticTextEditor {
     private textEditor: TextEditorWrapper;
 

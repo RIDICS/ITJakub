@@ -1,19 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
-    <AssemblyName>Vokabular.DataEntities</AssemblyName>
-    <PackageId>Vokabular.DataEntities</PackageId>
-    <RuntimeIdentifiers>win</RuntimeIdentifiers>
-    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
-    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
-    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
-    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
-    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -46,7 +34,6 @@
     <None Remove="Database\Entities\ResourceVersion.hbm.xml" />
     <None Remove="Database\Entities\ResponsiblePerson.hbm.xml" />
     <None Remove="Database\Entities\ResponsibleType.hbm.xml" />
-    <None Remove="Database\Entities\SpecialPermission.hbm.xml" />
     <None Remove="Database\Entities\Term.hbm.xml" />
     <None Remove="Database\Entities\TermCategory.hbm.xml" />
     <None Remove="Database\Entities\Transformation.hbm.xml" />
@@ -66,7 +53,6 @@
     <EmbeddedResource Include="Database\Entities\ExternalRepository.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\UserGroup.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Permission.hbm.xml" />
-    <EmbeddedResource Include="Database\Entities\SpecialPermission.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\TextComment.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Category.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\FavoriteBase.hbm.xml" />
@@ -96,14 +82,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Iesi.Collections" Version="4.0.3" />
     <PackageReference Include="log4net" Version="2.0.8" />
-    <PackageReference Include="NHibernate" Version="5.0.3" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
+    <PackageReference Include="NHibernate" Version="5.2.5" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 
@@ -34,11 +35,11 @@ namespace ITJakub.FileProcessing.DataContracts
             }
         }
 
-        public bool ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage)
+        public bool ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage, IList<PermissionFromAuthContract> autoImportPermissions)
         {
             try
             {
-                return Channel.ProcessSession(sessionId, projectId, userId, uploadMessage);
+                return Channel.ProcessSession(sessionId, projectId, userId, uploadMessage, autoImportPermissions);
             }
             catch (TimeoutException ex)
             {

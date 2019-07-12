@@ -1,8 +1,8 @@
-﻿@using Localization.AspNetCore.Service
-@using Localization.CoreLibrary.Util
+﻿@using Scalesoft.Localization.AspNetCore
+@using Scalesoft.Localization.Core.Util
 @model ITJakub.Web.Hub.Areas.RepositoryImport.Models.CreateFilteringExpressionSetViewModel
 
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 @{
     ViewBag.Title = Localizer.Translate("ExternalRepositoriesTitle", "RepositoryImport", LocTranslationSource.File);

@@ -6,37 +6,37 @@ using Vokabular.Shared.DataContracts.Search.QueryBuilder;
 
 namespace Vokabular.DataEntities
 {
-    public static class DataEntitiesContainerRegistration
+    public class DataEntitiesContainerRegistration
     {
-        public static void AddDataEntitiesServices(this IServiceCollection container)
+        public void Install(IServiceCollection services)
         {
-            container.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            container.AddScoped<BookRepository>();
-            container.AddScoped<CatalogValueRepository>();
-            container.AddScoped<CategoryRepository>();
-            container.AddScoped<ExternalRepositoryRepository>();
-            container.AddScoped<FavoritesRepository>();
-            container.AddScoped<FilteringExpressionSetRepository>();
-            container.AddScoped<ImportHistoryRepository>();
-            container.AddScoped<ImportedProjectMetadataRepository>();
-            container.AddScoped<ImportedRecordMetadataRepository>();
-            container.AddScoped<MetadataRepository>();
-            container.AddScoped<PermissionRepository>();
-            container.AddScoped<PersonRepository>();
-            container.AddScoped<PortalRepository>();
-            container.AddScoped<ProjectRepository>();
-            container.AddScoped<ResourceRepository>();
-            container.AddScoped<UserRepository>();
+            services.AddScoped<BookRepository>();
+            services.AddScoped<CatalogValueRepository>();
+            services.AddScoped<CategoryRepository>();
+            services.AddScoped<FavoritesRepository>();
+            services.AddScoped<ExternalRepositoryRepository>();
+            services.AddScoped<MetadataRepository>();
+            services.AddScoped<FilteringExpressionSetRepository>();
+            services.AddScoped<ImportHistoryRepository>();
+            services.AddScoped<ImportedProjectMetadataRepository>();
+            services.AddScoped<ImportedRecordMetadataRepository>();
+            services.AddScoped<PermissionRepository>();
+            services.AddScoped<PersonRepository>();
+            services.AddScoped<PortalRepository>();
+            services.AddScoped<ProjectRepository>();
+            services.AddScoped<ResourceRepository>();
+            services.AddScoped<UserRepository>();
 
-            container.AddScoped<ICriteriaImplementationBase, AuthorCriteriaImplementation>();
-            container.AddScoped<ICriteriaImplementationBase, AuthorizationCriteriaImplementation>();
-            container.AddScoped<ICriteriaImplementationBase, CategoryCriteriaImplementation>();
-            container.AddScoped<ICriteriaImplementationBase, DatingCriteriaImplementation>();
-            container.AddScoped<ICriteriaImplementationBase, EditorCriteriaImplementation>();
-            container.AddScoped<ICriteriaImplementationBase, HeadwordCriteriaImplementation>();
-            container.AddScoped<ICriteriaImplementationBase, TermCriteriaImplementation>();
-            container.AddScoped<ICriteriaImplementationBase, TitleCriteriaImplementation>();
+            services.AddScoped<ICriteriaImplementationBase, AuthorCriteriaImplementation>();
+            services.AddScoped<ICriteriaImplementationBase, AuthorizationCriteriaImplementation>();
+            services.AddScoped<ICriteriaImplementationBase, CategoryCriteriaImplementation>();
+            services.AddScoped<ICriteriaImplementationBase, DatingCriteriaImplementation>();
+            services.AddScoped<ICriteriaImplementationBase, EditorCriteriaImplementation>();
+            services.AddScoped<ICriteriaImplementationBase, HeadwordCriteriaImplementation>();
+            services.AddScoped<ICriteriaImplementationBase, TermCriteriaImplementation>();
+            services.AddScoped<ICriteriaImplementationBase, TitleCriteriaImplementation>();
         }
     }
 }

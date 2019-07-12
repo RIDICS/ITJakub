@@ -13,7 +13,7 @@ using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Controllers
 {
-    [Authorize(Roles = CustomRole.CanManagePermissions)]
+    [Authorize(PermissionNames.ManagePermissions)]
     public class PermissionController : BaseController
     {
         public PermissionController(CommunicationProvider communicationProvider) : base(communicationProvider)
@@ -43,7 +43,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetRestClient())
             {
-                var result = client.GetUserGroupAutocomplete(query);
+                var result = client.GetRoleAutocomplete(query);
                 return Json(result);
             }
         }
@@ -61,7 +61,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetRestClient())
             {
-                var result = client.GetUserGroupDetail(groupId);
+                var result = client.GetRoleDetail(groupId);
                 return Json(result);
             }
         }
@@ -71,7 +71,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetRestClient())
             {
-                client.AddUserToGroup(request.UserId, request.GroupId);
+                client.AddUserToRole(request.UserId, request.GroupId);
                 return Json(new {});
             }
         }
@@ -81,13 +81,13 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetRestClient())
             {
-                var newUserGroupRequest = new UserGroupContract
+                var newUserGroupRequest = new RoleContract
                 {
                     Name = request.GroupName,
                     Description = request.GroupDescription,
                 };
-                var groupId = client.CreateGroup(newUserGroupRequest);
-                var group = client.GetUserGroupDetail(groupId);
+                var groupId = client.CreateRole(newUserGroupRequest);
+                var group = client.GetRoleDetail(groupId);
                 return Json(group);
             }
         }
@@ -97,12 +97,12 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetRestClient())
             {
-                var groupId = client.CreateGroup(new UserGroupContract
+                var groupId = client.CreateRole(new RoleContract
                 {
                     Name = request.GroupName,
                     Description = request.GroupDescription,
                 });
-                client.AddUserToGroup(request.UserId, groupId);
+                client.AddUserToRole(request.UserId, groupId);
                 return Json(groupId);
             }
         }
@@ -112,7 +112,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetRestClient())
             {
-                client.RemoveUserFromGroup(request.UserId, request.GroupId);
+                client.RemoveUserFromRole(request.UserId, request.GroupId);
                 return Json(new {});
             }
         }
@@ -121,7 +121,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetRestClient())
             {
-                var result = client.GetGroupsByUser(userId);
+                var result = client.GetRolesByUser(userId);
                 return Json(result);
             }
         }
@@ -149,7 +149,7 @@ namespace ITJakub.Web.Hub.Controllers
 
             using (var client = GetRestClient())
             {
-                var books = client.GetBooksForUserGroup(groupId, bookType.Value);
+                var books = client.GetBooksForRole(groupId, bookType.Value);
                 var result = new CategoryContentContract
                 {
                     Categories = new List<CategoryContract>(), // Categories are currently not used after migration to new MainService
@@ -183,7 +183,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetRestClient())
             {
-                client.DeleteGroup(request.GroupId);
+                client.DeleteRole(request.GroupId);
                 return Json(new {});
             }
         }
@@ -193,7 +193,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetRestClient())
             {
-                client.AddBooksToGroup(request.GroupId, request.BookIds);
+                client.AddBooksToRole(request.GroupId, request.BookIds);
                 //client.AddBooksAndCategoriesToGroup(request.GroupId, request.BookIds, request.CategoryIds);
                 return Json(new {});
             }
@@ -204,7 +204,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetRestClient())
             {
-                client.RemoveBooksFromGroup(request.GroupId, request.BookIds);
+                client.RemoveBooksFromRole(request.GroupId, request.BookIds);
                 //client.RemoveBooksAndCategoriesFromGroup(request.GroupId, request.BookIds, request.CategoryIds);
                 return Json(new {});
             }
@@ -215,7 +215,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetRestClient())
             {
-                var specialPermissions = client.GetSpecialPermissionsForGroup(groupId);
+                var specialPermissions = client.GetSpecialPermissionsForRole(groupId);
                 var result = specialPermissions.GroupBy(x => x.GetType().FullName).ToDictionary(x => x.Key, x => x.ToList());
                 return Json(result);
             }
@@ -236,7 +236,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetRestClient())
             {
-                client.AddSpecialPermissionsToGroup(request.GroupId, request.SpecialPermissionIds);
+                client.AddSpecialPermissionsToRole(request.GroupId, request.SpecialPermissionIds);
                 return Json(new {});
             }
         }
@@ -246,7 +246,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetRestClient())
             {
-                client.RemoveSpecialPermissionsFromGroup(request.GroupId, request.SpecialPermissionIds);
+                client.RemoveSpecialPermissionsFromRole(request.GroupId, request.SpecialPermissionIds);
                 return Json(new {});
             }
         }

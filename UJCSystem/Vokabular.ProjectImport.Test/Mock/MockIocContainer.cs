@@ -21,13 +21,13 @@ namespace Vokabular.ProjectImport.Test.Mock
 {
     public class MockIocContainer
     {
-        public readonly IServiceCollection ServiceCollection;
+        public IServiceCollection ServiceCollection { get; }
 
         public MockIocContainer(bool initDatabase = false)
         {
             ServiceCollection = new ServiceCollection();
             ServiceCollection.AddProjectImportServices();
-            ServiceCollection.AddDataEntitiesServices();
+            new DataEntitiesContainerRegistration().Install(ServiceCollection);
             ServiceCollection.AddOptions();
             ServiceCollection.Configure(new Action<OaiPmhClientOption>(option =>
             {

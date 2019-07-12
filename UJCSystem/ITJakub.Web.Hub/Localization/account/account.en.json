@@ -1,17 +1,29 @@
 {
 	"culture":"en",
-	"scope":"account",
-	"dictionary": {
-		"UseExternalLoginService": "Use another service for login",
-		"UseExternalLoginService-placeholder": "You should be able to register using another accounts here",
-		"Login": "Login",
-		"Login-text": "Log in using your account",
-		"Login-submit": "Log in",
-		
-		"RegisterAccount": "Register as new user",
-		"Registration": "Registration",
-		
-		"MakeNewAccount": "New account creation",
-		"Registration-submit": "Register"
-		}
+	"scope":"Account",
+  "dictionary": {
+    "UseExternalLoginService": "Use another service for login",
+    "UseExternalLoginService-placeholder": "You should be able to register using another accounts here",
+    "Login": "Login",
+    "Login-text": "Log in using your account",
+    "Login-submit": "Log in",
+
+    "RegisterAccount": "Register as new user",
+    "Registration": "Registration",
+    "SuccessRegistration": "The registration was successful. You can log in.",
+
+    "MakeNewAccount": "New account creation",
+    "Registration-submit": "Register",
+
+    "Detail": "Account detail",
+    "Settings": "Account settings",
+
+    "DataChange": "Update data",
+    "UpdateAccountSubmit": "Save changes",
+    "SuccessUpdateAccount": "Data was successfully updated.",
+
+    "PasswordChange": "Update password",
+    "UpdatePasswordSubmit": "Change password",
+    "SuccessPasswordChange": "The password was successfully updated."
+  }
 }

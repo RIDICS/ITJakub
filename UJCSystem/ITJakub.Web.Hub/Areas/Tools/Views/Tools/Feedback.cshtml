@@ -1,14 +1,14 @@
-﻿@using Localization.AspNetCore.Service
+﻿@using Scalesoft.Localization.AspNetCore
 @model ITJakub.Web.Hub.Models.FeedbackViewModel
 
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 @{
     ViewBag.Title = @Localizer.Translate("ToolsFeedback", "Tools");
 }
 
 <div class="content-container">
-    @Html.Partial("_StaticText", Model.PageStaticText)
+    @await Html.PartialAsync("_StaticText", Model.PageStaticText)
     
-    @Html.Partial("Feedback/_FeedbackForm", Model)
+    @await Html.PartialAsync("Feedback/_FeedbackForm", Model)
 </div>

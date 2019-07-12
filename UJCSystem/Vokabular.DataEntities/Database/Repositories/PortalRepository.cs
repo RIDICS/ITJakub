@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
 using NHibernate.Criterion.Lambda;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
@@ -20,7 +21,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         public virtual ListWithTotalCountResult<NewsSyndicationItem> GetNewsSyndicationItems(int start, int count, SyndicationItemType? type)
         {
             var query = GetSession().QueryOver<NewsSyndicationItem>()
-                .Fetch(x => x.User).Eager
+                .Fetch(SelectMode.Fetch, x => x.User)
                 .OrderBy(x => x.CreateTime).Desc;
 
             if (type != null)
@@ -45,7 +46,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         public ListWithTotalCountResult<Feedback> GetFeedbackList(int start, int count, FeedbackSortEnum sort, SortDirectionEnumContract sortDirection, IList<FeedbackCategoryEnum> filterCategories)
         {
             var query = GetSession().QueryOver<Feedback>()
-                .Fetch(x => x.AuthorUser).Eager;
+                .Fetch(SelectMode.Fetch, x => x.AuthorUser);
 
             IQueryOverOrderBuilder<Feedback, Feedback> queryOrder;
 
@@ -101,10 +102,10 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             GetSession().QueryOver<HeadwordFeedback>()
                 .WhereRestrictionOn(x => x.Id).IsInG(feedbackIds)
-                .Fetch(x => x.HeadwordResource).Eager
-                .Fetch(x => x.HeadwordResource.Resource).Eager
-                .Fetch(x => x.HeadwordResource.Resource.Project).Eager
-                .Fetch(x => x.HeadwordResource.HeadwordItems).Eager
+                .Fetch(SelectMode.Fetch, x => x.HeadwordResource)
+                .Fetch(SelectMode.Fetch, x => x.HeadwordResource.Resource)
+                .Fetch(SelectMode.Fetch, x => x.HeadwordResource.Resource.Project)
+                .Fetch(SelectMode.Fetch, x => x.HeadwordResource.HeadwordItems)
                 .List();
         }
     }

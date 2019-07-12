@@ -7,12 +7,10 @@ namespace Vokabular.MainService
 {
     public class MainServiceContainerRegistration : IContainerInstaller
     {
-        public void Install(IIocContainer container)
+        public void Install(IServiceCollection services)
         {
-            new MainServiceCoreContainerRegistration().Install(container);
-            var services = new ServiceCollection();
-            services.AddDataEntitiesServices();
-            container.Populate(services);
+            new MainServiceCoreContainerRegistration().Install(services);
+            new DataEntitiesContainerRegistration().Install(services);
         }
     }
 }

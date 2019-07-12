@@ -1,9 +1,7 @@
-﻿@using Localization.AspNetCore.Service
-@using Localization.CoreLibrary.Util
-@using Microsoft.AspNetCore.Http.Extensions
-@using Microsoft.Net.Http
+﻿@using Scalesoft.Localization.AspNetCore
+@using Scalesoft.Localization.Core.Util
 @model ITJakub.Web.Hub.Areas.RepositoryImport.Models.ImportViewModel
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 @{
     ViewBag.Title = Localizer.Translate("ExternalRepositoriesTitle", "RepositoryImport", LocTranslationSource.File);

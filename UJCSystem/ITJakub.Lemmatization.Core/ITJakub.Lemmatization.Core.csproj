@@ -13,7 +13,7 @@
     <EmbeddedResource Include="ITJakub.Lemmatization.Core.Container.Config" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="6.2.2" />
+    <PackageReference Include="AutoMapper" Version="8.1.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ITJakub.Lemmatization.DataEntities\ITJakub.Lemmatization.DataEntities.csproj" />

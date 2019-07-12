@@ -1,0 +1,15 @@
+{
+  "culture": "en",
+  "scope": "UpdateAccountViewModel",
+  "dictionary": {
+    "UserName": "Username",
+    "Email": "Email",
+    "HasAtLeastNChars": "The {0} must have at least {2} characters.",
+    "FirstName": "First name",
+    "LastName": "Last name",
+    "NotEmpty": "The {0} can not be empty.",
+    "MustBeFilled": "The {0} can not be empty.",
+    "The {0} field is not a valid e-mail address": "The {0} field is not a valid e-mail address",
+    "The {0} field is not a valid e-mail address.": "The {0} field is not a valid e-mail address"
+  }
+}

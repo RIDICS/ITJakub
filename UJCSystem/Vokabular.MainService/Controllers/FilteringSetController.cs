@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
@@ -8,27 +9,26 @@ using Vokabular.ProjectImport.Managers;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Headers;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
+using Vokabular.Shared.Const;
 
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(PermissionNames.ManageBibliographyImport)]
     public class FilteringExpressionSetController : BaseController
     {
         private readonly FilteringExpressionSetManager m_filteringExpressionSetManager;
         private readonly AuthenticationManager m_authenticationManager;
-        private readonly AuthorizationManager m_authorizationManager;
-
-        public FilteringExpressionSetController(FilteringExpressionSetManager filteringExpressionSetManager, AuthenticationManager authenticationManager, AuthorizationManager authorizationManager)
+        
+        public FilteringExpressionSetController(FilteringExpressionSetManager filteringExpressionSetManager, AuthenticationManager authenticationManager)
         {
             m_filteringExpressionSetManager = filteringExpressionSetManager;
             m_authenticationManager = authenticationManager;
-            m_authorizationManager = authorizationManager;
         }
 
         [HttpPost("")]
         public int CreateFilteringExpressionSet([FromBody] FilteringExpressionSetDetailContract data)
         {
-            m_authorizationManager.CheckUserCanManageRepositoryImport();
             var resultId = m_filteringExpressionSetManager.CreateFilteringExpressionSet(data, m_authenticationManager.GetCurrentUserId());
             return resultId;
         }
@@ -38,7 +38,6 @@ namespace Vokabular.MainService.Controllers
         {
             try
             {
-                m_authorizationManager.CheckUserCanManageRepositoryImport();
                 m_filteringExpressionSetManager.UpdateFilteringExpressionSet(filteringExpressionSetId, data);
                 return Ok();
             }
@@ -53,7 +52,6 @@ namespace Vokabular.MainService.Controllers
         {
             try
             {
-                m_authorizationManager.CheckUserCanManageRepositoryImport();
                 m_filteringExpressionSetManager.DeleteFilteringExpressionSet(filteringExpressionSetId);
                 return Ok();
             }
@@ -67,7 +65,6 @@ namespace Vokabular.MainService.Controllers
         [ProducesResponseType(typeof(FilteringExpressionSetDetailContract), StatusCodes.Status200OK)]
         public IActionResult GetFilteringExpressionSet(int filteringExpressionSetId)
         {
-            m_authorizationManager.CheckUserCanManageRepositoryImport();
             var result = m_filteringExpressionSetManager.GetFilteringExpressionSet(filteringExpressionSetId);
             if (result == null)
                 return NotFound();
@@ -79,8 +76,6 @@ namespace Vokabular.MainService.Controllers
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
         public List<FilteringExpressionSetContract> GetFilteringExpressionSetList([FromQuery] int? start, [FromQuery] int? count)
         {
-            m_authorizationManager.CheckUserCanManageRepositoryImport();
-
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
 
@@ -93,8 +88,6 @@ namespace Vokabular.MainService.Controllers
         [HttpGet("allFilteringExpressionSets")]
         public IList<FilteringExpressionSetContract> GetAllFilteringExpressionSets()
         {
-            m_authorizationManager.CheckUserCanManageRepositoryImport();
-
             var result = m_filteringExpressionSetManager.GetAllFilteringExpressionSets();
             return result;
         }
@@ -102,7 +95,6 @@ namespace Vokabular.MainService.Controllers
         [HttpGet("allBibliographicFormats")]
         public IList<BibliographicFormatContract> GetAllBibliographicFormats()
         {
-            m_authorizationManager.CheckUserCanManageRepositoryImport();
             return m_filteringExpressionSetManager.GetAllBibliographicFormats();
         }
     }

@@ -103,8 +103,8 @@ namespace Vokabular.ProjectImport.Test.Mock
             {
                 m_userId = (int) m_userRepository.InvokeUnitOfWork(x => x.Create(new User
                 {
-                    FirstName = "Test", LastName = "Test", Email = "Test@test.cz", AuthenticationProvider = AuthenticationProvider.ItJakub,
-                    CommunicationToken = "test", CreateTime = DateTime.UtcNow, UserName = "Test"
+                    ExternalId = 556,
+                    CreateTime = DateTime.UtcNow,
                 }));
             }
 

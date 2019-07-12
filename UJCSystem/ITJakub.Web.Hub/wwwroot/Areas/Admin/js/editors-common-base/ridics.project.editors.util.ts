@@ -5,7 +5,7 @@
         const pageListAjax = $.get(`${this.serverPath}Admin/ContentEditor/GetPageList`,
             {
                 projectId: projectId
-            });
+            } as JQuery.PlainObject);
         return pageListAjax;
     }
 
@@ -17,7 +17,7 @@
         const pageAjax = $.post(`${this.serverPath}Admin/ContentEditor/SavePageList`,
             {
                 pageList: pageList
-            });
+            } as JQuery.PlainObject);
         return pageAjax;
     }
 
@@ -38,7 +38,7 @@
         const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetProjectContent`,
             {
                 projectId: projectId
-            });
+            } as JQuery.PlainObject);
         return ajax;
     }
 
@@ -46,7 +46,7 @@
         const ajax = $.post(`${this.serverPath}Admin/ContentEditor/DeleteComment`,
             {
                 commentId: commentId
-            });
+            } as JQuery.PlainObject);
         return ajax;
     }
 
@@ -57,7 +57,7 @@
 */
     loadPlainText(textId: number): JQueryXHR {
         const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetTextResource`,
-            { textId: textId, format: TextFormatEnumContract.Raw });
+            { textId: textId, format: TextFormatEnumContract.Raw } as JQuery.PlainObject);
         return ajax;
     }
 
@@ -68,7 +68,7 @@
 */
     loadRenderedText(textId: number): JQueryXHR {
         const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetTextResource`,
-            { textId: textId, format: TextFormatEnumContract.Html });
+            { textId: textId, format: TextFormatEnumContract.Html } as JQuery.PlainObject);
         return ajax;
     }
 
@@ -77,7 +77,7 @@
             {
                 textId: textId,
                 request: request
-            });
+            } as JQuery.PlainObject);
         return ajax;
     }
 
@@ -121,13 +121,13 @@
             {
                 projectId: projectId,
                 format: format
-            });
+            } as JQuery.PlainObject);
         return ajax;
     }
 
     saveEditionNote(noteRequest: IEditionNote) {
         const ajax = $.post(`${this.serverPath}Admin/ContentEditor/SetEditionNote`,
-            noteRequest);
+            noteRequest as JQuery.PlainObject);
         return ajax;
     }
 }

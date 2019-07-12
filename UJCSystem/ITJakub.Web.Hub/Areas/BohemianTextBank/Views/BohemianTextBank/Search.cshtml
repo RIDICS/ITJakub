@@ -1,5 +1,5 @@
-﻿@using Localization.AspNetCore.Service
-@inject ILocalization Localizer
+﻿@using Scalesoft.Localization.AspNetCore
+@inject ILocalizationService Localizer
 
 @section styles{
     <link href="~/Areas/BohemianTextBank/css/itjakub.bohemiantextbank.css" rel="stylesheet" />
@@ -12,7 +12,7 @@
     ViewBag.Title = @Localizer.Translate("BohemianTextBankSearch", "BohemianTextBank");
 }
 
-@Html.Partial("_BibliographySearch")
+@await Html.PartialAsync("_BibliographySearch")
 
 <div class="corpus-search-div" id="corpus-search-div">
     <div class="corpus-search-setting-div">

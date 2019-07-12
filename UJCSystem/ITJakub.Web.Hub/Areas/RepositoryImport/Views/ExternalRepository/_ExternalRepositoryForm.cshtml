@@ -1,9 +1,9 @@
 ﻿@using ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
-@using Localization.AspNetCore.Service
-@using Localization.CoreLibrary.Util
+@using Scalesoft.Localization.AspNetCore
+@using Scalesoft.Localization.Core.Util
 @model ITJakub.Web.Hub.Areas.RepositoryImport.Models.CreateExternalRepositoryViewModel
 
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 @Html.AntiForgeryToken()
 @Html.ValidationSummary(true, "", new {@class = "text-danger"})

@@ -1,5 +1,4 @@
-﻿/// <reference path="../../../../wwwroot/lib/s-pagination/dist/pagination.d.ts" />
-class DictionaryViewer {
+﻿class DictionaryViewer {
     private headwordDescriptionContainer: string;
     private paginationContainer: string;
     private headwordListContainer: string;
@@ -28,14 +27,14 @@ class DictionaryViewer {
         this.headwordListContainer = headwordListContainer;
         this.isLazyLoad = lazyLoad;
         this.pagination = new Pagination({
-            container: $(this.paginationContainer),
+            container: $(this.paginationContainer).get(0) as Node as HTMLDivElement,
             pageClickCallback: this.searchAndDisplay.bind(this),
             callPageClickCallbackOnInit: true,
             maxVisibleElements: 11,
             showInput: true
         });
 
-        this.localization = new Localization();
+        this.localization = localization;
     }
 
     public createViewer(recordCount: number, showPageCallback: (pageNumber: number) => void, pageSize: number, searchCriteria: string = null,

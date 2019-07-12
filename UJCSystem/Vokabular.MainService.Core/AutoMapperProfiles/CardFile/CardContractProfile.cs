@@ -17,9 +17,9 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles.CardFile
                 .ForMember(dest => dest.Images, opts => opts.MapFrom(src => Mapper.Map<image[], IList<CardImageContract>>(src.image)))
                 .ForMember(dest => dest.Notes, opts => opts.MapFrom(src => src.Fields.Where(x => x.id == "comment").Select(x => x.value)))
                 .ForMember(dest => dest.Warnings, opts => opts.MapFrom(src => src.Fields.Where(x => x.id == "warning").Select(x => x.value))) 
-                .ForSourceMember(source => source.headword, opt => opt.Ignore())
-                .ForSourceMember(source => source.note, opt => opt.Ignore())
-                .ForSourceMember(source => source.warning, opt => opt.Ignore());   
+                .ForSourceMember(source => source.headword, opt => opt.DoNotValidate())
+                .ForSourceMember(source => source.note, opt => opt.DoNotValidate())
+                .ForSourceMember(source => source.warning, opt => opt.DoNotValidate());   
         }
     }
 }

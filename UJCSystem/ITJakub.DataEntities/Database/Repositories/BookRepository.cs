@@ -6,6 +6,7 @@ using Castle.Transactions;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
+using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
@@ -89,7 +90,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinAlias(x => x.Book, () => bookAlias)
                     .Where(() => bookAlias.Guid == bookGuid)
                     .And(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
-                    .Fetch(x => x.DefaultBookType).Eager
+                    .Fetch(SelectMode.Fetch, x => x.DefaultBookType)
                     .SingleOrDefault();
 
                 return result;
@@ -108,7 +109,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinAlias(x => x.Book, () => bookAlias)
                     .Where(() => bookAlias.Guid == bookGuid)
                     .And(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
-                    .Fetch(x => x.BookPages).Eager
+                    .Fetch(SelectMode.Fetch, x => x.BookPages)
                     .SingleOrDefault();
 
                 return result;
@@ -232,24 +233,24 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinAlias(x => x.Book, () => bookAlias)
                     .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
                     .AndRestrictionOn(x => x.Title).IsLike(text, MatchMode.Anywhere)
-                    .Fetch(x => x.Book).Eager
-                    .Fetch(x => x.Publisher).Eager
-                    .Fetch(x => x.DefaultBookType).Eager
-                    .Fetch(x => x.ManuscriptDescriptions).Eager
+                    .Fetch(SelectMode.Fetch, x => x.Book)
+                    .Fetch(SelectMode.Fetch, x => x.Publisher)
+                    .Fetch(SelectMode.Fetch, x => x.DefaultBookType)
+                    .Fetch(SelectMode.Fetch, x => x.ManuscriptDescriptions)
                     .Future<BookVersion>();
 
                 session.QueryOver(() => bookVersionAlias)
                     .JoinAlias(x => x.Book, () => bookAlias)
                     .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
                     .AndRestrictionOn(x => x.Title).IsLike(text, MatchMode.Anywhere)
-                    .Fetch(x => x.Keywords).Eager
+                    .Fetch(SelectMode.Fetch, x => x.Keywords)
                     .Future<BookVersion>();
 
                 session.QueryOver(() => bookVersionAlias)
                     .JoinAlias(x => x.Book, () => bookAlias)
                     .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
                     .AndRestrictionOn(x => x.Title).IsLike(text, MatchMode.Anywhere)
-                    .Fetch(x => x.Authors).Eager
+                    .Fetch(SelectMode.Fetch, x => x.Authors)
                     .Future<BookVersion>();
 
                 session.QueryOver(() => bookVersionAlias)
@@ -282,7 +283,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                         .JoinAlias(() => bookVersionAlias.Book, () => bookAlias, JoinType.InnerJoin)
                         .Where(() => bookTypeAlias.Type == bookType && bookVersionAlias.Id == bookAlias.LastVersion.Id)
                         .AndRestrictionOn(() => bookVersionAlias.Title).IsLike(text, MatchMode.Anywhere)
-                        .Fetch(x => x.Authors).Eager
+                        .Fetch(SelectMode.Fetch, x => x.Authors)
                         .TransformUsing(Transformers.DistinctRootEntity)
                         .List<BookVersion>();
                 return bookVersions;
@@ -310,8 +311,8 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .AndRestrictionOn(() => authorAlias.Name).IsLike(query, MatchMode.Anywhere);
 
                 var bookVersions = session.QueryOver(() => bookVersionAlias)
-                    .Fetch(x => x.Book).Eager
-                    .Fetch(x => x.Authors).Eager
+                    .Fetch(SelectMode.Fetch, x => x.Book)
+                    .Fetch(SelectMode.Fetch, x => x.Authors)
                     .WithSubquery
                     .WhereProperty(x => x.Id)
                     .In(bookIds)
@@ -345,7 +346,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                 session.QueryOver(() => bookVersionAlias)
                     .JoinAlias(x => x.Book, () => bookAlias)
                     .Where(() => bookVersionAlias.Id == bookAlias.LastVersion.Id)
-                    .Fetch(x => x.Categories).Eager
+                    .Fetch(SelectMode.Fetch, x => x.Categories)
                     .Future<BookVersion>();
 
                 return bookVersions.ToList();
@@ -367,7 +368,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinAlias(() => categoryAlias.BookType, () => bookTypeAlias)
                     .JoinAlias(() => bookVersionAlias.Book, () => bookAlias)
                     .Where(() => bookTypeAlias.Type == bookType && bookVersionAlias.Id == bookAlias.LastVersion.Id)
-                    .Fetch(x => x.Authors).Eager
+                    .Fetch(SelectMode.Fetch, x => x.Authors)
                     .OrderBy(() => bookVersionAlias.Title).Asc
                     .TransformUsing(Transformers.DistinctRootEntity)
                     .List();
@@ -667,7 +668,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             using (var session = GetSession())
             {
                 var termCategories = session.QueryOver<TermCategory>()
-                    .Fetch(x => x.Terms).Eager
+                    .Fetch(SelectMode.Fetch, x => x.Terms)
                     .TransformUsing(Transformers.DistinctRootEntity)
                     .List<TermCategory>();
                 return termCategories;

@@ -15,18 +15,18 @@ namespace ITJakub.BatchImport.Client.BusinessLogic.Communication
         private const string StreamedServiceEndpointName = "ItJakubServiceStreamed";
         //private const string StreamedServiceEndpointNameAuthenticated = "ItJakubServiceStreamed.Authenticated";
         private const string StreamedServiceEndpointNameAuthenticated = "ItJakubServiceStreamed";
-        private readonly AuthTokenStorage m_authTokenStorage;
+        private readonly AuthenticationManager m_authenticationManager;
 
-        public CommunicationProvider(AuthTokenStorage authTokenStorage)
+        public CommunicationProvider(AuthenticationManager authenticationManager)
         {
-            m_authTokenStorage = authTokenStorage;
+            m_authenticationManager = authenticationManager;
         }
 
         public MainServiceRestClient GetMainServiceClient()
         {
             var endpointAddress = ConfigurationManager.AppSettings[NewMainServiceEndpointName];
             var uri = new Uri(endpointAddress);
-            var authToken = m_authTokenStorage.AuthToken;
+            var authToken = m_authenticationManager.AuthToken;
             return new MainServiceRestClient(uri, authToken);
         }
         

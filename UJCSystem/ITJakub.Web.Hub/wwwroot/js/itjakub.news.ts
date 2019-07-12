@@ -5,7 +5,7 @@
 
     public initNews() {
         this.paginator = new Pagination({
-            container: $("#news-paginator"),
+            container: document.getElementById("news-paginator") as HTMLDivElement,
             pageClickCallback: this.paginatorClickedCallback.bind(this),
             callPageClickCallbackOnInit: false
         });

@@ -3,23 +3,21 @@ using System.IO;
 using System.Reflection;
 using AutoMapper;
 using Castle.Core.Resource;
-using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
-using Castle.Windsor.MsDependencyInjection;
 using ITJakub.Lemmatization.DataEntities;
 using log4net;
 using log4net.Config;
 using Microsoft.Extensions.DependencyInjection;
-using Vokabular.Shared.Container;
+using Vokabular.Shared.WcfService;
 
 namespace ITJakub.Lemmatization.Service
 {
     ///<summary>
     ///Container for IOC
     ///</summary>
-    public class Container : WindsorContainer, IIocContainer
+    public class Container : WindsorContainer
     {
         private static readonly Lazy<WindsorContainer> m_current = new Lazy<WindsorContainer>(() => new Container());
 
@@ -56,8 +54,11 @@ namespace ITJakub.Lemmatization.Service
             Install(Configuration.FromAppConfig());
             //Install(Configuration.FromXml(GetConfigResource()));
 
-            Install<NHibernateInstaller>();
-            Install<LemmatizationDataEntitiesContainerRegistration>();
+            var services = new ServiceCollection();
+            new NHibernateInstaller().Install(services);
+            new LemmatizationDataEntitiesContainerRegistration().Install(services);
+
+            this.AddServicesCollection(services);
         }
 
         private void ConfigureAutoMapper()
@@ -150,88 +151,6 @@ namespace ITJakub.Lemmatization.Service
         {
             //return System.Reflection.Assembly.GetExecutingAssembly();
             return typeof(Container).Assembly;
-        }
-
-        public void AddSingleton<TService>() where TService : class
-        {
-            Register(Component.For<TService>().LifestyleSingleton());
-        }
-
-        public void AddSingleton<TService, TImplementation>() where TService : class where TImplementation : class, TService
-        {
-            Register(Component.For<TService>().ImplementedBy<TImplementation>().LifestyleSingleton());
-        }
-
-        public void AddTransient<TService>() where TService : class
-        {
-            Register(Component.For<TService>().LifestyleTransient());
-        }
-
-        public void AddTransient<TService, TImplementation>() where TService : class where TImplementation : class, TService
-        {
-            Register(Component.For<TService>().ImplementedBy<TImplementation>().LifestyleTransient());
-        }
-
-        public void AddPerWebRequest<TService>() where TService : class
-        {
-            Register(Component.For<TService>().LifestylePerWebRequest());
-        }
-
-        public void AddPerWebRequest<TService, TImplementation>() where TService : class where TImplementation : class, TService
-        {
-            Register(Component.For<TService>().ImplementedBy<TImplementation>().LifestylePerWebRequest());
-        }
-
-        public void AddInstance<TImplementation>(TImplementation instance) where TImplementation : class
-        {
-            Register(Component.For<TImplementation>().Instance(instance));
-        }
-
-        public void AddInstance<TService, TImplementation>(TImplementation instance) where TService : class where TImplementation : class, TService
-        {
-            Register(Component.For<TService>().Instance(instance));
-        }
-
-        public void AddAllSingletonBasedOn<TService>(Assembly assembly) where TService : class
-        {
-            Register(Classes.FromAssembly(assembly)
-                .BasedOn<TService>()
-                .LifestyleSingleton()
-                .WithServiceSelf()
-                .WithServiceBase());
-        }
-
-        public void AddAllTransientBasedOn<TService>(Assembly assembly) where TService : class
-        {
-            Register(Classes.FromAssembly(assembly)
-                .BasedOn<TService>()
-                .LifestyleTransient()
-                .WithServiceSelf()
-                .WithServiceBase());
-        }
-
-        public void Install<T>() where T : IContainerInstaller
-        {
-            var installer = Activator.CreateInstance<T>();
-            installer.Install(this);
-        }
-
-        public void Install(params IContainerInstaller[] installers)
-        {
-            foreach (var installer in installers)
-            {
-                installer.Install(this);
-            }
-        }
-
-        public IServiceProvider CreateServiceProvider(IServiceCollection services)
-        {
-            throw new NotSupportedException();
-        }
-
-        public void Populate(IServiceCollection services)
-        {
-            this.AddServices(services);
         }
     }
 }
