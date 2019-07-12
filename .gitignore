@@ -98,3 +98,5 @@ project.fragment.lock.json
 !Gruntfile.js
 
 !**/lib-custom/jq-simple-connect/source/*
+UJCSystem/ITJakub.Web.Hub/wwwroot/css/ITJakub.Colors-selected.less
+UJCSystem/ITJakub.Web.Hub/wwwroot/css/ITJakub.Images-selected.less

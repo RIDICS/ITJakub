@@ -23,14 +23,14 @@ function getThemeFile {
     $SelectedTheme
   )
 
-  return Join-Path $cssPath "ITJakub.$SelectedTheme.Colors.less"
+  return Join-Path $cssPath "ITJakub.Colors.$SelectedTheme.less"
 }
 function getImagesFile {
   param (
     $SelectedTheme
   )
 
-  return Join-Path $cssPath "ITJakub.$SelectedTheme.Images.less"
+  return Join-Path $cssPath "ITJakub.Images.$SelectedTheme.less"
 }
 
 function copyLessFile {
@@ -63,5 +63,5 @@ $imagesFile = getImagesFile $SelectedTheme
 Write-Output $themeFile
 Write-Output $imagesFile
 
-copyLessFile -OutputFileName "ITJakub.PortalSpecific.Colors.less" -SourceFilePath $themeFile
-copyLessFile -OutputFileName "ITJakub.PortalSpecific.Images.less" -SourceFilePath $imagesFile
+copyLessFile -OutputFileName "ITJakub.Colors-selected.less" -SourceFilePath $themeFile
+copyLessFile -OutputFileName "ITJakub.Images-selected.less" -SourceFilePath $imagesFile
