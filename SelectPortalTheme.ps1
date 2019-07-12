@@ -49,6 +49,15 @@ function getFaviconFile {
 
   return Join-Path $imagesPath "favicon.$SelectedTheme.png"
 }
+function copyLessFile {
+  param (
+    [string]$OutputFileName,
+    [string]$SourceFilePath
+  )
+  
+  Set-Content -Path (Join-Path $cssPath $OutputFileName) -Value "//-----Generated content-----`r`n"
+  Add-Content -Path (Join-Path $cssPath $OutputFileName) -Value (Get-Content -Path $SourceFilePath)
+}
 
 if ($Args.Count -gt 0) {
   setConfig $Args.get(0)
@@ -74,7 +83,7 @@ Write-Output $imagesFile
 Write-Output $logoFile
 Write-Output $faviconFile
 
-Copy-Item -Force $themeFile (Join-Path $cssPath "ITJakub.PortalSpecific.Colors.less")
-Copy-Item -Force $imagesFile (Join-Path $cssPath "ITJakub.PortalSpecific.Images.less")
+copyLessFile -OutputFileName "ITJakub.PortalSpecific.Colors.less" -SourceFilePath $themeFile
+copyLessFile -OutputFileName "ITJakub.PortalSpecific.Images.less" -SourceFilePath $imagesFile
 Copy-Item -Force $logoFile (Join-Path $logoPath "logo.png")
 Copy-Item -Force $faviconFile(Join-Path $imagesPath "favicon.png")
