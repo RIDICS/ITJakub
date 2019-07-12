@@ -616,7 +616,7 @@
                     string vokabularStartedNew = FooterHelper.VokabularStartedLocalized(Localizer, new DateTime(2015, 1, 1));
                 }
                 
-                @Localizer.TranslateFormat("FooterText", new object[] {vokabularStartedNew}, "layout", LocTranslationSource.File)
+                @Localizer.TranslateFormat("FooterText", "layout", LocTranslationSource.File, vokabularStartedNew)
             </div>
             <div class="footer-logos">
                 <a href="http://www.ujc.cas.cz/" class="ujc" title="@Localizer.Translate("UjcLong", "layout")">
