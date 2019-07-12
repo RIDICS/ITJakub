@@ -117,13 +117,15 @@ namespace Vokabular.ProjectImport.ImportPipeline
         {
             var bookTypeId = m_projectRepository.InvokeUnitOfWork(x => x.GetBookTypeByEnum(BookTypeEnum.BibliographicalItem)).Id;
 
+            // TODO don't load role from Database directly, but use Auth service instead
+            // TODO Correct permission will be AutoImport for BookTypeEnum.BibliographicalItem 
             var specialPermissions = m_permissionRepository.InvokeUnitOfWork(x => x.GetSpecialPermissions());
             var importPermissions = specialPermissions.OfType<ReadExternalProjectPermission>().ToList();
-            var groupsWithPermissionIds = new List<int>();
+            var roleIds = new List<int>();
 
             if (importPermissions.Count != 0)
             {
-                groupsWithPermissionIds = m_permissionRepository
+                roleIds = m_permissionRepository
                     .InvokeUnitOfWork(x => x.GetGroupsBySpecialPermissionIds(importPermissions.Select(y => y.Id))).Select(x => x.Id)
                     .ToList();
             }
@@ -135,7 +137,7 @@ namespace Vokabular.ProjectImport.ImportPipeline
                     {
                         var importedProjectManager = scope.ServiceProvider.GetRequiredService<ImportedProjectManager>();
                         importedProjectManager.SaveImportedProject(importedRecord, userId, externalRepositoryId, bookTypeId,
-                            groupsWithPermissionIds, importHistoryId, progressInfo);
+                            roleIds, importHistoryId, progressInfo);
                     }
                 },
                 executionOptions

@@ -33,7 +33,7 @@ namespace Vokabular.ProjectImport.Managers
         }
 
         public void SaveImportedProject(ImportedRecord importedRecord, int userId, int externalRepositoryId, int bookTypeId,
-            IList<int> groupsWithPermissionIds, int importHistoryId, RepositoryImportProgressInfo progressInfo)
+            IList<int> roleIds, int importHistoryId, RepositoryImportProgressInfo progressInfo)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace Vokabular.ProjectImport.Managers
                 {
                     new SaveImportedDataWork(m_projectRepository, m_metadataRepository, m_catalogValueRepository,
                         m_personRepository, m_permissionRepository, importedRecord, userId, externalRepositoryId, bookTypeId,
-                        groupsWithPermissionIds).Execute();
+                        roleIds).Execute();
                 }
             }
             catch (DataException e)

@@ -23,12 +23,12 @@ namespace Vokabular.ProjectImport.Works
         private readonly int m_externalRepositoryId;
         private long m_projectId;
         private readonly int m_bookTypeId;
-        private readonly IList<int> m_groupsWithPermission;
+        private readonly IList<int> m_roleIds;
 
 
         public SaveImportedDataWork(ProjectRepository projectRepository, MetadataRepository metadataRepository,
             CatalogValueRepository catalogValueRepository, PersonRepository personRepository, PermissionRepository permissionRepository,
-            ImportedRecord importedRecord, int userId, int externalRepositoryId, int bookTypeId, IList<int> groupsWithPermission) : base(projectRepository)
+            ImportedRecord importedRecord, int userId, int externalRepositoryId, int bookTypeId, IList<int> roleIds) : base(projectRepository)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
@@ -39,7 +39,7 @@ namespace Vokabular.ProjectImport.Works
             m_userId = userId;
             m_externalRepositoryId = externalRepositoryId;
             m_bookTypeId = bookTypeId;
-            m_groupsWithPermission = groupsWithPermission;
+            m_roleIds = roleIds;
         }
 
         protected override void ExecuteWorkImplementation()
@@ -369,7 +369,7 @@ namespace Vokabular.ProjectImport.Works
         {
             var project = m_permissionRepository.Load<Project>(m_projectId);
 
-            var newPermissions = m_groupsWithPermission.Select(groupId => new Permission
+            var newPermissions = m_roleIds.Select(groupId => new Permission
             {
                 Project = project,
                 UserGroup = m_projectRepository.Load<UserGroup>(groupId)
