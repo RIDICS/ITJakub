@@ -100,10 +100,9 @@
 
             @if (User.Identity.IsAuthenticated)
             {
-                @*TODO my projects*@
                 <li id="admin-menu" class="last">
-                    <a href='@Url.Action("Upload", "Upload", new {area = ""})'>
-                        <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
+                    <a href='@Url.Action("List", "Project", new {area = "Admin"})'>
+                        <span>@Localizer.Translate("MyProjects", "layout", LocTranslationSource.File)</span>
                     </a>
                 </li>
             }
