@@ -4,8 +4,8 @@ using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Vokabular.Shared;
 using Vokabular.Shared.Const;
+using ITJakub.Web.Hub.Options;
 
 namespace ITJakub.Web.Hub.Areas.Derivation.Controllers
 {

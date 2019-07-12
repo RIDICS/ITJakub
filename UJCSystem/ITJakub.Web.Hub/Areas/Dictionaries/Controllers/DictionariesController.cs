@@ -18,12 +18,12 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
-using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Extensions;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
+using ITJakub.Web.Hub.Options;
 
 namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 {

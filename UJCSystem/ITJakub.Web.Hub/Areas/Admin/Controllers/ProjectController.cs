@@ -20,8 +20,8 @@ using Scalesoft.Localization.AspNetCore;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
-using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Helpers;
+using ITJakub.Web.Hub.Options;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 {

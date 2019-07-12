@@ -1,9 +1,8 @@
 ﻿using System;
+using ITJakub.Web.Hub.Options;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
-using Vokabular.Shared;
-using Vokabular.Shared.Options;
 
 namespace ITJakub.Web.Hub.Authorization
 {

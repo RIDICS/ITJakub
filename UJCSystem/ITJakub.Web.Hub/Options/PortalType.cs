@@ -1,4 +1,4 @@
-﻿namespace Vokabular.Shared
+﻿namespace ITJakub.Web.Hub.Options
 {
     public enum PortalType
     {

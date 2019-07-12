@@ -10,9 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Helpers;
 using Vokabular.Shared.Const;
+using ITJakub.Web.Hub.Options;
 
 namespace ITJakub.Web.Hub.Controllers
 {

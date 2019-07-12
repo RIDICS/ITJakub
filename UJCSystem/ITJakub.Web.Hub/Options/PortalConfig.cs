@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Vokabular.Shared.Options
+﻿namespace ITJakub.Web.Hub.Options
 {
     public class PortalConfig
     {

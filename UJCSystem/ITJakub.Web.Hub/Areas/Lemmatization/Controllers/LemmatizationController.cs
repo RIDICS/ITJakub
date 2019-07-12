@@ -5,8 +5,8 @@ using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models.Requests.Lemmatization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Vokabular.Shared;
 using Vokabular.Shared.Const;
+using ITJakub.Web.Hub.Options;
 
 namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
 {

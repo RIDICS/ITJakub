@@ -1,10 +1,11 @@
-﻿namespace Vokabular.Shared.Options
+﻿namespace ITJakub.Web.Hub.Options
 {
     public class PortalOption
     {
         public PortalType PortalType { get; set; }
 
         public string SecondPortalUrl { get; set; }
+
         public string FaviconPath { get; set; }
 
         public PortalConfig MainPortal { get; set; }
