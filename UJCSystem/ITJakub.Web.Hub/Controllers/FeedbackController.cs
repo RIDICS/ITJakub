@@ -9,7 +9,7 @@ using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Controllers
 {
-    [Authorize(PermissionNames.ManageFeedbacks)]
+    [Authorize(VokabularPermissionNames.ManageFeedbacks)]
     public class FeedbackController : BaseController
     {
         public FeedbackController(CommunicationProvider communicationProvider) : base(communicationProvider)

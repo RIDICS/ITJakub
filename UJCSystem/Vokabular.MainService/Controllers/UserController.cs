@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ridics.Authentication.HttpClient.Exceptions;
+using Ridics.Core.Structures.Shared;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
@@ -10,7 +11,6 @@ using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Headers;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Attributes;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
-using Vokabular.Shared.Const;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -81,6 +81,7 @@ namespace Vokabular.MainService.Controllers
             return m_userDetailManager.GetUserDetailContractForUser(user);
         }
 
+        [Authorize(PermissionNames.EditSelfPersonalData)]
         [HttpPut("current")]
         public IActionResult UpdateCurrentUser([FromBody] UpdateUserContract data)
         {
@@ -99,6 +100,7 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
+        [Authorize(PermissionNames.EditAnyUsersData)]
         [HttpPut("{userId}/edit")]
         public IActionResult UpdateUser(int userId, [FromBody] UpdateUserContract data)
         {
@@ -135,7 +137,7 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [Authorize(PermissionNames.AssignPermissionsToRoles)]
+        [Authorize(PermissionNames.ListUsers)]
         [HttpGet("")]
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
         public List<UserDetailContract> GetUserList([FromQuery] int? start, [FromQuery] int? count, [FromQuery] string filterByName)
@@ -146,7 +148,6 @@ namespace Vokabular.MainService.Controllers
             return result.List;
         }
 
-        [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpGet("{userId}/detail")]
         public UserDetailContract GetUserDetail(int userId)
         {
@@ -161,7 +162,7 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
-        [Authorize(PermissionNames.AssignPermissionsToRoles)]
+        [Authorize(PermissionNames.ListUsers)]
         [HttpGet("autocomplete")]
         public IList<UserDetailContract> GetAutocomplete([FromQuery] string query, [FromQuery] int? count)
         {

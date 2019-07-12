@@ -32,7 +32,7 @@ namespace Vokabular.MainService.Controllers
             return result.List;
         }
 
-        [Authorize(PermissionNames.AddNews)]
+        [Authorize(VokabularPermissionNames.AddNews)]
         [HttpPost("")]
         public long CreateNewsSyndicationItem([FromBody] CreateNewsSyndicationItemContract data)
         {

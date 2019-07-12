@@ -10,16 +10,16 @@ using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Requests.Permission;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Ridics.Core.Structures.Shared;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Results;
-using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Controllers
 {
-    [Authorize(PermissionNames.AssignPermissionsToRoles)]
+    [Authorize]
     public class PermissionController : BaseController
     {
         private const int UserListPageSize = 10;

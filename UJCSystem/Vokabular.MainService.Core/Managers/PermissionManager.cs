@@ -36,7 +36,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var permissions = client.GetAllPermissionsAsync().GetAwaiter().GetResult();
 
-            var result = permissions.Where(x => x.Name.StartsWith(PermissionNames.AutoImport)).Select(p => new PermissionFromAuthContract
+            var result = permissions.Where(x => x.Name.StartsWith(VokabularPermissionNames.AutoImport)).Select(p => new PermissionFromAuthContract
             {
                 Id = p.Id,
                 Name = p.Name,

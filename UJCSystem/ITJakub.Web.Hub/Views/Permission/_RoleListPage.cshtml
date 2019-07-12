@@ -1,4 +1,5 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using Ridics.Core.Structures.Shared
+@using Scalesoft.Localization.AspNetCore
 @using Vokabular.Shared.AspNetCore.Extensions
 @using Vokabular.Shared.Const
 @model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.Permission.RoleContract>
@@ -15,7 +16,7 @@
             @Html.DisplayFor(modelItem => role.Description)
         </td>
         <td class="buttons">
-            <a asp-action="EditRole" asp-route-roleId="@role.Id" class="btn btn-sm btn-default @(User.HasPermission(PermissionNames.AssignPermissionsToRoles) ? "" : "disabled")">
+            <a asp-action="EditRole" asp-route-roleId="@role.Id" class="btn btn-sm btn-default @(User.HasPermission(PermissionNames.ManageUserRoles) ? "" : "disabled")">
                 @Localizer.Translate("Edit", "Permission")
             </a>
         </td>

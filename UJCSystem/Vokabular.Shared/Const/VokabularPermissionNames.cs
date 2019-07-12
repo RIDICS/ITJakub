@@ -1,8 +1,7 @@
 ﻿namespace Vokabular.Shared.Const
 {
-    public class PermissionNames
+    public class VokabularPermissionNames
     {
-        public const string AssignPermissionsToRoles = "auth-assign-permissions-to-roles";
         public const string UploadBook ="upload-book";
         public const string AddNews = "add-news";
         public const string ManageFeedbacks= "manage-feedbacks";
