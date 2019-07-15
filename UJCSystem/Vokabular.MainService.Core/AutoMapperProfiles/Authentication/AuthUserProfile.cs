@@ -18,7 +18,6 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles.Authentication
                 .IncludeBase<Ridics.Authentication.DataContracts.User.UserContract, UserContract>()
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email));
 
-
             CreateMap<Ridics.Authentication.DataContracts.UserWithRolesContract, UserContract>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.UserName, opt => opt.Ignore()) // Username is missing in source data

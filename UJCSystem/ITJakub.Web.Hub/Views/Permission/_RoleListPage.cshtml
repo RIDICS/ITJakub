@@ -1,0 +1,24 @@
+﻿@using Ridics.Core.Structures.Shared
+@using Scalesoft.Localization.AspNetCore
+@using Vokabular.Shared.AspNetCore.Extensions
+@using Vokabular.Shared.Const
+@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.Permission.RoleContract>
+@inject ILocalizationService Localizer
+
+<div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>
+@foreach (var role in Model.List)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => role.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => role.Description)
+        </td>
+        <td class="buttons">
+            <a asp-action="EditRole" asp-route-roleId="@role.Id" class="btn btn-sm btn-default @(User.HasPermission(PermissionNames.ManageUserRoles) ? "" : "disabled")">
+                @Localizer.Translate("Edit", "Permission")
+            </a>
+        </td>
+    </tr>
+}

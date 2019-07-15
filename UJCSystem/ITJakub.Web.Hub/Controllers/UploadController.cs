@@ -14,7 +14,7 @@ using Vokabular.Shared.Const;
 
 namespace ITJakub.Web.Hub.Controllers
 {
-    [Authorize(PermissionNames.UploadBook)]
+    [Authorize(VokabularPermissionNames.UploadBook)]
     public class UploadController : BaseController
     {
         public UploadController(CommunicationProvider communicationProvider) : base(communicationProvider)

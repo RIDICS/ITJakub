@@ -1,15 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using AutoMapper;
 using ITJakub.FileProcessing.DataContracts;
 using log4net;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
-using Vokabular.MainService.Core.Managers.Authentication;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
+using Vokabular.RestClient.Results;
 using Vokabular.Shared.Const;
 using AuthRoleContract = Ridics.Authentication.DataContracts.RoleContract;
+using AuthPermissionContract = Ridics.Authentication.DataContracts.PermissionContract;
+
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -19,22 +23,11 @@ namespace Vokabular.MainService.Core.Managers
 
         private readonly PermissionRepository m_permissionRepository;
         private readonly CommunicationProvider m_communicationProvider;
-        private readonly PermissionConverter m_permissionConverter;
-
-        public PermissionManager(PermissionRepository permissionRepository, CommunicationProvider communicationProvider,
-            PermissionConverter permissionConverter)
+        
+        public PermissionManager(PermissionRepository permissionRepository, CommunicationProvider communicationProvider)
         {
             m_permissionRepository = permissionRepository;
             m_communicationProvider = communicationProvider;
-            m_permissionConverter = permissionConverter;
-        }
-
-        public List<SpecialPermissionContract> GetSpecialPermissions()
-        {
-            var client = m_communicationProvider.GetAuthPermissionApiClient();
-
-            var permissions = client.GetAllPermissionsAsync().GetAwaiter().GetResult();
-            return m_permissionConverter.Convert(permissions);
         }
 
         public List<PermissionFromAuthContract> GetAutoImportSpecialPermissions()
@@ -43,7 +36,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var permissions = client.GetAllPermissionsAsync().GetAwaiter().GetResult();
 
-            var result = permissions.Where(x => x.Name.StartsWith(PermissionNames.AutoImport)).Select(p => new PermissionFromAuthContract
+            var result = permissions.Where(x => x.Name.StartsWith(VokabularPermissionNames.AutoImport)).Select(p => new PermissionFromAuthContract
             {
                 Id = p.Id,
                 Name = p.Name,
@@ -55,14 +48,6 @@ namespace Vokabular.MainService.Core.Managers
             }).ToList();
 
             return result;
-        }
-
-        public List<SpecialPermissionContract> GetSpecialPermissionsForRole(int roleId)
-        {
-            var client = m_communicationProvider.GetAuthRoleApiClient();
-
-            var permissions = client.HttpClient.GetItemAsync<AuthRoleContract>(roleId).GetAwaiter().GetResult().Permissions;
-            return m_permissionConverter.Convert(permissions);
         }
 
         public void AddSpecialPermissionsToRole(int roleId, IList<int> specialPermissionsIds)
@@ -114,6 +99,31 @@ namespace Vokabular.MainService.Core.Managers
         public void RemoveBooksAndCategoriesFromGroup(int roleId, IList<long> bookIds)
         {
             new RemoveProjectsFromUserGroupWork(m_permissionRepository, roleId, bookIds).Execute();
+        }
+
+        public List<PermissionContract> GetAllPermissions()
+        {
+            var client = m_communicationProvider.GetAuthPermissionApiClient();
+
+            var permissions = client.GetAllPermissionsAsync().GetAwaiter().GetResult();
+            return Mapper.Map<List<PermissionContract>>(permissions);
+        }
+
+        public PagedResultList<PermissionContract> GetPermissions(int? start, int? count, string filterByName)
+        {
+            var startValue = PagingHelper.GetStart(start);
+            var countValue = PagingHelper.GetCount(count);
+
+            var client = m_communicationProvider.GetAuthRoleApiClient();
+
+            var result = client.HttpClient.GetListAsync<AuthPermissionContract>(startValue, countValue, filterByName).GetAwaiter().GetResult();
+            var permissionContracts = Mapper.Map<List<PermissionContract>>(result.Items);
+
+            return new PagedResultList<PermissionContract>
+            {
+                List = permissionContracts,
+                TotalCount = result.ItemsCount
+            };
         }
     }
 }

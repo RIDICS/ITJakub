@@ -22,14 +22,14 @@ namespace Vokabular.MainService.Controllers
             m_namedResourceGroupManager = namedResourceGroupManager;
         }
 
-        [Authorize(PermissionNames.UploadBook)]
+        [Authorize(VokabularPermissionNames.UploadBook)]
         [HttpPost("session/{sessionId}/resource")]
         public void UploadResource(string sessionId, [FromQuery] string fileName)
         {
             m_resourceManager.UploadResource(sessionId, Request.Body, fileName);
         }
 
-        [Authorize(PermissionNames.UploadBook)]
+        [Authorize(VokabularPermissionNames.UploadBook)]
         [HttpPost("session/{sessionId}")]
         public void ProcessSessionAsImport(string sessionId, [FromBody] NewBookImportContract info)
         {
