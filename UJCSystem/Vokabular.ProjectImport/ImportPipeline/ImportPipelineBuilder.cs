@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks.Dataflow;
 using Microsoft.Extensions.DependencyInjection;
-using Vokabular.DataEntities.Database.Entities;
+using Ridics.Authentication.HttpClient.Client.Auth;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
@@ -12,6 +12,7 @@ using Vokabular.ProjectImport.Model;
 using Vokabular.ProjectImport.Model.Exceptions;
 using Vokabular.ProjectParsing.Model.Entities;
 using Vokabular.ProjectParsing.Model.Parsers;
+using Vokabular.Shared.Const;
 
 namespace Vokabular.ProjectImport.ImportPipeline
 {
@@ -23,15 +24,17 @@ namespace Vokabular.ProjectImport.ImportPipeline
         private readonly ProjectRepository m_projectRepository;
         private readonly PermissionRepository m_permissionRepository;
         private readonly IServiceProvider m_serviceProvider;
+        private readonly PermissionApiClient m_permissionApiClient;
 
         public ImportPipelineBuilder(IEnumerable<IProjectImportManager> importManagers, IEnumerable<IProjectParser> parsers,
             FilteringExpressionSetManager filteringExpressionSetManager, ProjectRepository projectRepository,
-            PermissionRepository permissionRepository, IServiceProvider serviceProvider)
+            PermissionRepository permissionRepository, IServiceProvider serviceProvider, PermissionApiClient permissionApiClient)
         {
             m_projectImportManagers = new Dictionary<string, IProjectImportManager>();
             m_projectParsers = new Dictionary<string, IProjectParser>();
             m_filteringExpressionSetManager = filteringExpressionSetManager;
             m_serviceProvider = serviceProvider;
+            m_permissionApiClient = permissionApiClient;
             m_projectRepository = projectRepository;
             m_permissionRepository = permissionRepository;
 
@@ -117,19 +120,16 @@ namespace Vokabular.ProjectImport.ImportPipeline
         {
             var bookTypeId = m_projectRepository.InvokeUnitOfWork(x => x.GetBookTypeByEnum(BookTypeEnum.BibliographicalItem)).Id;
 
-            // TODO don't load role from Database directly, but use Auth service instead
-            // TODO Correct permission will be AutoImport for BookTypeEnum.BibliographicalItem 
-            var specialPermissions = m_permissionRepository.InvokeUnitOfWork(x => x.GetSpecialPermissions());
-            var importPermissions = specialPermissions.OfType<ReadExternalProjectPermission>().ToList();
-            var roleIds = new List<int>();
+            var allPermissions = m_permissionApiClient.GetAllPermissionsAsync().GetAwaiter().GetResult();
+            var permission =
+                allPermissions.SingleOrDefault(x => x.Name == $"{PermissionNames.AutoImport}{(int) BookTypeEnum.BibliographicalItem}");
 
-            if (importPermissions.Count != 0)
+            IList<int> roleIds = new List<int>();
+            if (permission != null)
             {
-                roleIds = m_permissionRepository
-                    .InvokeUnitOfWork(x => x.GetGroupsBySpecialPermissionIds(importPermissions.Select(y => y.Id))).Select(x => x.Id)
-                    .ToList();
+                var roleExternalIds = permission.Roles.Select(x => x.Id);
+                roleIds = m_permissionRepository.InvokeUnitOfWork(x => x.GetGroupIdsByExternalIds(roleExternalIds));
             }
-
 
             return new ActionBlock<ImportedRecord>(importedRecord =>
                 {
