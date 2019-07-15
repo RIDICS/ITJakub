@@ -1,5 +1,4 @@
-﻿/// <reference path="../../../../wwwroot/lib/s-pagination/dist/pagination.d.ts" />
-class DictionaryViewer {
+﻿class DictionaryViewer {
     private headwordDescriptionContainer: string;
     private paginationContainer: string;
     private headwordListContainer: string;

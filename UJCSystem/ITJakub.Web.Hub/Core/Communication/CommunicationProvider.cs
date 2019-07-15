@@ -1,8 +1,6 @@
 using System.ServiceModel;
 using ITJakub.Lemmatization.Shared.Contracts;
-using ITJakub.Web.Hub.Core.Managers;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
+using Ridics.Core.HttpClient.Provider;
 using Vokabular.MainService.DataContracts.Clients;
 
 namespace ITJakub.Web.Hub.Core.Communication
@@ -10,28 +8,21 @@ namespace ITJakub.Web.Hub.Core.Communication
     public class CommunicationProvider
     {
         private readonly CommunicationConfigurationProvider m_configurationProvider;
-        private readonly IHttpContextAccessor m_httpContextAccessor;
+        private readonly AuthApiAccessTokenProvider m_authApiAccessTokenProvider;
 
         private const string MainServiceEndpointName = "MainService";
         private const string LemmatizationServiceEndpointName = "LemmatizationService";
 
-        public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider, IHttpContextAccessor httpContextAccessor)
+        public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider, AuthApiAccessTokenProvider authApiAccessTokenProvider)
         {
             m_configurationProvider = communicationConfigurationProvider;
-            m_httpContextAccessor = httpContextAccessor;
-        }
-
-        private string GetCommunicationToken()
-        {
-            var communicationToken = m_httpContextAccessor.HttpContext.GetTokenAsync(AuthenticationManager.AuthenticationTokenName)
-                .GetAwaiter().GetResult();
-            return communicationToken;
+            m_authApiAccessTokenProvider = authApiAccessTokenProvider;
         }
 
         public MainServiceRestClient GetMainServiceClient()
         {
             var uri = m_configurationProvider.GetEndpointUri(MainServiceEndpointName);
-            var authToken = GetCommunicationToken();
+            var authToken = m_authApiAccessTokenProvider.GetAccessTokenAsync().GetAwaiter().GetResult();
             return new MainServiceRestClient(uri, authToken);
         }
         

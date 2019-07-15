@@ -6,25 +6,9 @@
       <generator class="identity" />
     </id>
     
-    <property name="UserName" not-null="true" />
-    
-    <property name="FirstName" not-null="true" />
-    
-    <property name="LastName" not-null="true" />
-    
-    <property name="Email" not-null="true" />
-    
-    <property name="AuthenticationProvider" not-null="true" />
-    
-    <property name="CommunicationToken" not-null="true" />
-    
-    <property name="CommunicationTokenCreateTime" not-null="false" type="UtcDateTime" />
-    
-    <property name="PasswordHash" not-null="false" />
-    
     <property name="CreateTime" not-null="true" type="UtcDateTime" />
     
-    <property name="AvatarUrl" not-null="false" />
+    <property name="ExternalId" not-null="false" unique="true" />
     
     <!--<bag name="FavoriteItems" inverse="true">
       <key column="[User]" />

@@ -1,13 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using AutoMapper;
+using ITJakub.FileProcessing.DataContracts;
 using log4net;
-using Vokabular.DataEntities.Database.Entities.Enums;
+using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.MainService.Core.Communication;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Permission;
-using Vokabular.MainService.DataContracts.Contracts.Permission;
-using Vokabular.Shared.DataContracts.Types;
+using Vokabular.RestClient.Results;
+using Vokabular.Shared.Const;
+using AuthRoleContract = Ridics.Authentication.DataContracts.RoleContract;
+using AuthPermissionContract = Ridics.Authentication.DataContracts.PermissionContract;
+using PermissionContract = Vokabular.MainService.DataContracts.Contracts.Permission.PermissionContract;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -15,77 +21,126 @@ namespace Vokabular.MainService.Core.Managers
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private readonly AuthenticationManager m_authenticationManager;
-        private readonly AuthorizationManager m_authorizationManager;
         private readonly PermissionRepository m_permissionRepository;
-
-        public PermissionManager(AuthenticationManager authenticationManager, AuthorizationManager authorizationManager, PermissionRepository permissionRepository)
-        {
-            m_authenticationManager = authenticationManager;
-            m_authorizationManager = authorizationManager;
-            m_permissionRepository = permissionRepository;
-        }
+        private readonly CommunicationProvider m_communicationProvider;
         
-        public List<SpecialPermissionContract> GetSpecialPermissionsForUser(SpecialPermissionCategorizationEnumContract? filterByType)
+        public PermissionManager(PermissionRepository permissionRepository, CommunicationProvider communicationProvider)
         {
-            var userId = m_authenticationManager.GetCurrentUserId();
-            var categorizationType = Mapper.Map<SpecialPermissionCategorization?>(filterByType);
-
-            var specPermissions = m_permissionRepository.InvokeUnitOfWork(x =>
-                categorizationType == null
-                    ? x.GetSpecialPermissionsByUser(userId)
-                    : x.GetSpecialPermissionsByUserAndType(userId, categorizationType.Value));
-            return Mapper.Map<List<SpecialPermissionContract>>(specPermissions);
+            m_permissionRepository = permissionRepository;
+            m_communicationProvider = communicationProvider;
         }
 
-        public List<SpecialPermissionContract> GetSpecialPermissions()
+        public List<PermissionFromAuthContract> GetAutoImportSpecialPermissions()
         {
-            m_authorizationManager.CheckUserCanManagePermissions();
-            var specPermissions = m_permissionRepository.InvokeUnitOfWork(x => x.GetSpecialPermissions());
-            return Mapper.Map<List<SpecialPermissionContract>>(specPermissions);
+            var client = m_communicationProvider.GetAuthPermissionApiClient();
+
+            var permissions = client.GetAllPermissionsAsync().GetAwaiter().GetResult();
+
+            var result = permissions.Where(x => x.Name.StartsWith(VokabularPermissionNames.AutoImport)).Select(p => new PermissionFromAuthContract
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Roles = p.Roles.Select(r => new RoleFromAuthContract
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                }).ToList()
+            }).ToList();
+
+            return result;
         }
 
-        public List<SpecialPermissionContract> GetSpecialPermissionsForGroup(int groupId)
+        public void AddSpecialPermissionsToRole(int roleId, IList<int> specialPermissionsIds)
         {
-            m_authorizationManager.CheckUserCanManagePermissions();
-            var specPermissions = m_permissionRepository.InvokeUnitOfWork(x => x.GetSpecialPermissionsByGroup(groupId));
-            return Mapper.Map<List<SpecialPermissionContract>>(specPermissions);
-        }
-
-        public void AddSpecialPermissionsToGroup(int groupId, IList<int> specialPermissionsIds)
-        {
-            m_authorizationManager.CheckUserCanManagePermissions();
-
             if (specialPermissionsIds == null || specialPermissionsIds.Count == 0)
             {
                 return;
             }
 
-            new AddSpecialPermissionsToGroupWork(m_permissionRepository, groupId, specialPermissionsIds).Execute();
+            var client = m_communicationProvider.GetAuthRoleApiClient();
+
+            var permissions = client.HttpClient.GetItemAsync<AuthRoleContract>(roleId).GetAwaiter().GetResult().Permissions;
+            var permissionsId = permissions.Select(x => x.Id).ToList();
+            foreach (var permissionToAdd in specialPermissionsIds)
+            {
+                if (!permissionsId.Contains(permissionToAdd))
+                {
+                    permissionsId.Add(permissionToAdd);
+                }
+            }
+
+            client.AssignPermissionsToRoleAsync(roleId, permissionsId).GetAwaiter().GetResult();
         }
 
-        public void RemoveSpecialPermissionsFromGroup(int groupId, IList<int> specialPermissionsIds)
+        public void RemoveSpecialPermissionsFromRole(int roleId, IList<int> specialPermissionsIds)
         {
-            m_authorizationManager.CheckUserCanManagePermissions();
-
             if (specialPermissionsIds == null || specialPermissionsIds.Count == 0)
             {
                 return;
             }
 
-            new RemoveSpecialPermissionsFromGroupWork(m_permissionRepository, groupId, specialPermissionsIds).Execute();
+            var client = m_communicationProvider.GetAuthRoleApiClient();
+
+            var permissions = client.HttpClient.GetItemAsync<AuthRoleContract>(roleId).GetAwaiter().GetResult().Permissions;
+            var permissionsId = permissions.Select(x => x.Id).ToList();
+            foreach (var permissionToRemove in specialPermissionsIds)
+            {
+                permissionsId.Remove(permissionToRemove);
+            }
+
+            client.AssignPermissionsToRoleAsync(roleId, permissionsId).GetAwaiter().GetResult();
         }
 
-        public void AddBooksAndCategoriesToGroup(int groupId, IList<long> bookIds)
+        public void AddBooksAndCategoriesToGroup(int roleId, IList<long> bookIds)
         {
-            m_authorizationManager.CheckUserCanManagePermissions();
-            new AddProjectsToUserGroupWork(m_permissionRepository, groupId, bookIds).Execute();
+            new AddProjectsToUserGroupWork(m_permissionRepository, roleId, bookIds).Execute();
         }
 
-        public void RemoveBooksAndCategoriesFromGroup(int groupId, IList<long> bookIds)
+        public void RemoveBooksAndCategoriesFromGroup(int roleId, IList<long> bookIds)
         {
-            m_authorizationManager.CheckUserCanManagePermissions();
-            new RemoveProjectsFromUserGroupWork(m_permissionRepository, groupId, bookIds).Execute();
+            new RemoveProjectsFromUserGroupWork(m_permissionRepository, roleId, bookIds).Execute();
+        }
+
+        public List<PermissionContract> GetAllPermissions()
+        {
+            var client = m_communicationProvider.GetAuthPermissionApiClient();
+
+            var permissions = client.GetAllPermissionsAsync().GetAwaiter().GetResult();
+            return Mapper.Map<List<PermissionContract>>(permissions);
+        }
+
+        public PagedResultList<PermissionContract> GetPermissions(int? start, int? count, string filterByName)
+        {
+            var startValue = PagingHelper.GetStart(start);
+            var countValue = PagingHelper.GetCount(count);
+
+            var client = m_communicationProvider.GetAuthRoleApiClient();
+
+            var result = client.HttpClient.GetListAsync<AuthPermissionContract>(startValue, countValue, filterByName).GetAwaiter().GetResult();
+            var permissionContracts = Mapper.Map<List<PermissionContract>>(result.Items);
+
+            return new PagedResultList<PermissionContract>
+            {
+                List = permissionContracts,
+                TotalCount = result.ItemsCount
+            };
+        }
+
+        public void EnsureAuthServiceHasRequiredPermissions()
+        {
+            var client = m_communicationProvider.GetAuthPermissionApiClient();
+
+            var request = new EnsurePermissionsContract
+            {
+                NewAssignToRoleName = DefaultValues.RoleForNewPermissions,
+                Permissions = DefaultValues.RequiredPermissionsWithDescription.Select(x => new PermissionContractBase
+                {
+                    Name = x.Item1,
+                    Description = x.Item2,
+                }).ToList()
+            };
+
+            client.EnsurePermissionsExistAsync(request).GetAwaiter().GetResult();
         }
     }
 }

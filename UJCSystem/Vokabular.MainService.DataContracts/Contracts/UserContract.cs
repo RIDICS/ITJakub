@@ -1,4 +1,6 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
+using Vokabular.MainService.DataContracts.Contracts.Permission;
 
 namespace Vokabular.MainService.DataContracts.Contracts
 {
@@ -12,14 +14,15 @@ namespace Vokabular.MainService.DataContracts.Contracts
 
         public string LastName { get; set; }
 
-        public string AvatarUrl { get; set; }
+        [JsonIgnore]
+        public int ExternalId { get; set; }
     }
 
     public class UserDetailContract : UserContract
     {
         public string Email { get; set; }
 
-        public DateTime CreateTime { get; set; }
+        public List<RoleContract> Roles { get; set; }
     }
 
     public class CreateUserContract : UserContract

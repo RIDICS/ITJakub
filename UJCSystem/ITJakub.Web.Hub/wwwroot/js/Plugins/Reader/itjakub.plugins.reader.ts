@@ -1,7 +1,4 @@
-/// <reference path="../../../../node_modules/@types/typeahead/index.d.ts" />
-/// <reference path="../../../../node_modules/@types/jqueryui/index.d.ts" />
-
-class ReaderModule {
+﻿class ReaderModule {
 
     private favoriteManager: FavoriteManager;
     private newFavoriteDialog: NewFavoriteDialog;

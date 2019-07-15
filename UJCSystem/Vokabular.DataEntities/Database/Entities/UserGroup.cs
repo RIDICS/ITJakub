@@ -8,18 +8,14 @@ namespace Vokabular.DataEntities.Database.Entities
         public virtual int Id { get; set; }
 
         public virtual string Name { get; set; }
-
-        public virtual string Description { get; set; }
-
+        
         public virtual DateTime CreateTime { get; set; }
 
-        public virtual User CreatedBy { get; set; }
+        public virtual int ExternalId { get; set; }
 
         public virtual IList<User> Users { get; set; }
 
         public virtual IList<Permission> Permissions { get; set; }
-
-        public virtual IList<SpecialPermission> SpecialPermissions { get; set; }
 
         public virtual bool Equals(UserGroup other)
         {

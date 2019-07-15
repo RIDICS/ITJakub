@@ -1,4 +1,5 @@
-﻿using Vokabular.FulltextService.Core.Communication;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Vokabular.FulltextService.Core.Communication;
 using Vokabular.FulltextService.Core.Helpers;
 using Vokabular.FulltextService.Core.Helpers.Converters;
 using Vokabular.FulltextService.Core.Helpers.Hml;
@@ -11,23 +12,23 @@ namespace Vokabular.FulltextService.Core
 {
     public class FulltextServiceCoreContainerRegistration : IContainerInstaller
     {
-        public void Install(IIocContainer container)
+        public void Install(IServiceCollection services)
         {
-            container.AddPerWebRequest<CommunicationConfigurationProvider>();
-            container.AddPerWebRequest<CommunicationProvider>();
-            container.AddPerWebRequest<TextResourceManager>();
-            container.AddPerWebRequest<SnapshotResourceManager>();
-            container.AddPerWebRequest<SearchManager>();
-            container.AddPerWebRequest<SearchResultProcessor>();
-            container.AddPerWebRequest<QueriesBuilder>();
-            container.AddPerWebRequest<SnapshotResourceBuilder>();
+            services.AddScoped<CommunicationConfigurationProvider>();
+            services.AddScoped<CommunicationProvider>();
+            services.AddScoped<TextResourceManager>();
+            services.AddScoped<SnapshotResourceManager>();
+            services.AddScoped<SearchManager>();
+            services.AddScoped<SearchResultProcessor>();
+            services.AddScoped<QueriesBuilder>();
+            services.AddScoped<SnapshotResourceBuilder>();
 
-            container.AddPerWebRequest<IMarkdownToHtmlConverter, MarkdigMarkdownToHtmlConverter>();
-            container.AddPerWebRequest<IHtmlToPlainTextConverter, HtmlToPlainTextConverter>();
-            container.AddPerWebRequest<IMarkdownToPlainTextConverter, MarkdownToPlainTextConverter>();
-            container.AddPerWebRequest<ITextConverter, TextConverter>();
-            container.AddPerWebRequest<ITextValidator, TextValidator>();
-            container.AddPerWebRequest<IPageWithHtmlTagsCreator, PageWithHtmlTagsCreator>();
+            services.AddScoped<IMarkdownToHtmlConverter, MarkdigMarkdownToHtmlConverter>();
+            services.AddScoped<IHtmlToPlainTextConverter, HtmlToPlainTextConverter>();
+            services.AddScoped<IMarkdownToPlainTextConverter, MarkdownToPlainTextConverter>();
+            services.AddScoped<ITextConverter, TextConverter>();
+            services.AddScoped<ITextValidator, TextValidator>();
+            services.AddScoped<IPageWithHtmlTagsCreator, PageWithHtmlTagsCreator>();
         }
     }
 }

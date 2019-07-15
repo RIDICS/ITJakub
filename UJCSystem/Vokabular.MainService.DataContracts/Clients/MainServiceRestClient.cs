@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using Microsoft.Extensions.Logging;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.CardFile;
 using Vokabular.MainService.DataContracts.Contracts.Favorite;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
+using Vokabular.MainService.DataContracts.Contracts.OaiPmh;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Extensions;
-using Vokabular.RestClient.Headers;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared;
-using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
@@ -30,7 +30,8 @@ namespace Vokabular.MainService.DataContracts.Clients
     {
         private static readonly ILogger m_logger = ApplicationLogging.CreateLogger<MainServiceRestClient>();
         private readonly string m_authenticationToken;
-        
+        private const string AuthenticationScheme = "Bearer";
+
         public MainServiceRestClient(Uri baseAddress, string authenticationToken) : base(baseAddress)
         {
             m_authenticationToken = authenticationToken;
@@ -38,7 +39,7 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         protected override void FillRequestMessage(HttpRequestMessage requestMessage)
         {
-            requestMessage.Headers.TryAddWithoutValidation(CustomHttpHeaders.Authorization, m_authenticationToken);
+            requestMessage.Headers.Authorization = new AuthenticationHeaderValue(AuthenticationScheme, m_authenticationToken);
         }
 
         protected override void ProcessResponse(HttpResponseMessage response)
@@ -113,7 +114,8 @@ namespace Vokabular.MainService.DataContracts.Clients
         }
 
         public ProjectMetadataResultContract GetProjectMetadata(long projectId, bool includeAuthor,
-            bool includeResponsiblePerson, bool includeKind, bool includeGenre, bool includeOriginal, bool includeKeyword, bool includeCategory)
+            bool includeResponsiblePerson, bool includeKind, bool includeGenre, bool includeOriginal, bool includeKeyword,
+            bool includeCategory)
         {
             try
             {
@@ -653,7 +655,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        #endregion       
+        #endregion
 
         #region Responsible person
 
@@ -661,7 +663,8 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = GetPagedList<ProjectDetailContract>($"responsibleperson/{responsiblePersonId}/project?start={start}&count={count}");
+                var result = GetPagedList<ProjectDetailContract>(
+                    $"responsibleperson/{responsiblePersonId}/project?start={start}&count={count}");
                 return result;
             }
             catch (HttpRequestException e)
@@ -968,7 +971,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
-        
+
         public PagedResultList<KeywordContract> GetKeywordList(int? start, int? count)
         {
             try
@@ -1817,7 +1820,8 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = Get<List<FavoriteLabelContract>>(UrlQueryBuilder.Create("favorite/label").AddParameter("count", count).ToQuery());
+                var result = Get<List<FavoriteLabelContract>>(UrlQueryBuilder.Create("favorite/label").AddParameter("count", count)
+                    .ToQuery());
                 return result;
             }
             catch (HttpRequestException e)
@@ -1875,7 +1879,8 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public PagedResultList<FavoriteBaseInfoContract> GetFavoriteItems(int start, int count, long? filterByLabelId, FavoriteTypeEnumContract? filterByType, string filterByTitle, FavoriteSortEnumContract? sort)
+        public PagedResultList<FavoriteBaseInfoContract> GetFavoriteItems(int start, int count, long? filterByLabelId,
+            FavoriteTypeEnumContract? filterByType, string filterByTitle, FavoriteSortEnumContract? sort)
         {
             try
             {
@@ -1887,7 +1892,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                     .AddParameter("filterByTitle", filterByTitle)
                     .AddParameter("sort", sort)
                     .ToQuery();
-                    
+
                 var result = GetPagedList<FavoriteBaseInfoContract>(url);
                 return result;
             }
@@ -1900,7 +1905,8 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public PagedResultList<FavoriteQueryContract> GetFavoriteQueries(int start, int count, long? filterByLabelId, BookTypeEnumContract? bookType, QueryTypeEnumContract? queryType, string filterByTitle)
+        public PagedResultList<FavoriteQueryContract> GetFavoriteQueries(int start, int count, long? filterByLabelId,
+            BookTypeEnumContract? bookType, QueryTypeEnumContract? queryType, string filterByTitle)
         {
             try
             {
@@ -2028,7 +2034,8 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = Get<List<FavoriteLabelWithBooksAndCategories>>($"favorite/label/with-books-and-categories?bookType={bookType.ToString()}");
+                var result = Get<List<FavoriteLabelWithBooksAndCategories>>(
+                    $"favorite/label/with-books-and-categories?bookType={bookType.ToString()}");
                 return result;
             }
             catch (HttpRequestException e)
@@ -2087,7 +2094,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
-        
+
         public long CreateFavoritePage(CreateFavoritePageContract data)
         {
             try
@@ -2269,13 +2276,27 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public UserDetailContract GetCurrentUserInfo()
+        public int CreateUserIfNotExist(int userExternalId)
         {
             try
             {
-                //EnsureSecuredClient();
-                var result = Get<UserDetailContract>("user/current");
+                var result = Post<int>("user/external", userExternalId);
                 return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public UserDetailContract GetCurrentUser()
+        {
+            try
+            {
+                return Get<UserDetailContract>("user/current");
             }
             catch (HttpRequestException e)
             {
@@ -2308,39 +2329,6 @@ namespace Vokabular.MainService.DataContracts.Clients
             {
                 //EnsureSecuredClient();
                 Put<object>("user/current/password", data);
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public SignInResultContract SignIn(SignInContract data)
-        {
-            try
-            {
-                //EnsureSecuredClient();
-                var result = Post<SignInResultContract>("authtoken", data);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void SignOut()
-        {
-            try
-            {
-                //EnsureSecuredClient();
-                Delete("authtoken");
             }
             catch (HttpRequestException e)
             {
@@ -2438,7 +2426,8 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public FileResultData GetCardImage(string cardFileId, string bucketId, string cardId, string imageId, CardImageSizeEnumContract imageSize)
+        public FileResultData GetCardImage(string cardFileId, string bucketId, string cardId, string imageId,
+            CardImageSizeEnumContract imageSize)
         {
             try
             {
@@ -2458,37 +2447,7 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         #region Permissions
 
-        public List<UserDetailContract> GetUserAutocomplete(string query)
-        {
-            try
-            {
-                var result = Get<List<UserDetailContract>>("user/autocomplete".AddQueryString("query", query));
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public List<UserGroupContract> GetUserGroupAutocomplete(string query)
-        {
-            try
-            {
-                var result = Get<List<UserGroupContract>>("usergroup/autocomplete".AddQueryString("query", query));
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
+        #region User
 
         public UserDetailContract GetUserDetail(int userId)
         {
@@ -2506,11 +2465,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public UserGroupDetailContract GetUserGroupDetail(int groupId)
+        public List<UserDetailContract> GetUserAutocomplete(string query)
         {
             try
             {
-                var result = Get<UserGroupDetailContract>($"usergroup/{groupId}/detail");
+                var result = Get<List<UserDetailContract>>("user/autocomplete".AddQueryString("query", query));
                 return result;
             }
             catch (HttpRequestException e)
@@ -2522,11 +2481,14 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public int CreateGroup(UserGroupContract request)
+        public PagedResultList<UserDetailContract> GetUserList(int start, int count, string query)
         {
             try
             {
-                var result = Post<int>("usergroup", request);
+                var url = "user".AddQueryString("start", start.ToString());
+                url = url.AddQueryString("count", count.ToString());
+                url = url.AddQueryString("filterByName", query);
+                var result = GetPagedList<UserDetailContract>(url);
                 return result;
             }
             catch (HttpRequestException e)
@@ -2538,11 +2500,15 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void DeleteGroup(int groupId)
+        public PagedResultList<UserContract> GetUsersByRole(int roleId, int start, int count, string query)
         {
             try
             {
-                Delete($"usergroup/{groupId}");
+                var url = $"role/{roleId}/user".AddQueryString("start", start.ToString());
+                url = url.AddQueryString("count", count.ToString());
+                url = url.AddQueryString("filterByName", query);
+                var result = GetPagedList<UserContract>(url);
+                return result;
             }
             catch (HttpRequestException e)
             {
@@ -2553,11 +2519,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void AddUserToGroup(int userId, int groupId)
+        public void UpdateUser(int userId, UpdateUserContract data)
         {
             try
             {
-                Post<object>($"usergroup/{groupId}/user/{userId}", null);
+                Put<object>($"user/{userId}/edit", data);
             }
             catch (HttpRequestException e)
             {
@@ -2568,11 +2534,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void RemoveUserFromGroup(int userId, int groupId)
+        public void AddUserToRole(int userId, int roleId)
         {
             try
             {
-                Delete($"usergroup/{groupId}/user/{userId}");
+                Post<object>($"role/{roleId}/user/{userId}", null);
             }
             catch (HttpRequestException e)
             {
@@ -2583,11 +2549,125 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<UserGroupContract> GetGroupsByUser(int userId)
+        public void RemoveUserFromRole(int userId, int roleId)
         {
             try
             {
-                var result = Get<List<UserGroupContract>>($"user/{userId}/group");
+                Delete($"role/{roleId}/user/{userId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
+
+        public PagedResultList<RoleContract> GetRoleList(int start, int count, string query)
+        {
+            try
+            {
+                var url = "role".AddQueryString("start", start.ToString());
+                url = url.AddQueryString("count", count.ToString());
+                url = url.AddQueryString("filterByName", query);
+                var result = GetPagedList<RoleContract>(url);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<RoleContract> GetRoleAutocomplete(string query)
+        {
+            try
+            {
+                var result = Get<List<RoleContract>>("role/autocomplete".AddQueryString("query", query));
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public RoleDetailContract GetRoleDetail(int roleId)
+        {
+            try
+            {
+                var result = Get<RoleDetailContract>($"role/{roleId}/detail");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void UpdateRole(int roleId, RoleContract data)
+        {
+            try
+            {
+                Put<object>($"role/{roleId}/edit", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public int CreateRole(RoleContract request)
+        {
+            try
+            {
+                var result = Post<int>("role", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void DeleteRole(int roleId)
+        {
+            try
+            {
+                Delete($"role/{roleId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<RoleContract> GetRolesByUser(int userId)
+        {
+            try
+            {
+                var result = Get<List<RoleContract>>($"user/{userId}/role");
                 return result;
             }
             catch (HttpRequestException e)
@@ -2615,11 +2695,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<BookContract> GetBooksForUserGroup(int groupId, BookTypeEnumContract bookType)
+        public List<BookContract> GetBooksForRole(int roleId, BookTypeEnumContract bookType)
         {
             try
             {
-                var result = Get<List<BookContract>>($"usergroup/{groupId}/book?filterByBookType={bookType}");
+                var result = Get<List<BookContract>>($"role/{roleId}/book?filterByBookType={bookType}");
                 return result;
             }
             catch (HttpRequestException e)
@@ -2631,11 +2711,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void AddBooksToGroup(int groupId, IList<long> bookIds)
+        public void AddBooksToRole(int roleId, IList<long> bookIds)
         {
             try
             {
-                Post<object>($"usergroup/{groupId}/permission/book", new AddBookToUserGroupRequestContract
+                Post<object>($"role/{roleId}/permission/book", new AddBookToRoleRequestContract
                 {
                     BookIdList = bookIds
                 });
@@ -2649,11 +2729,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void RemoveBooksFromGroup(int groupId, IList<long> bookIds)
+        public void RemoveBooksFromRole(int roleId, IList<long> bookIds)
         {
             try
             {
-                Delete($"usergroup/{groupId}/permission/book", new AddBookToUserGroupRequestContract
+                Delete($"role/{roleId}/permission/book", new AddBookToRoleRequestContract
                 {
                     BookIdList = bookIds
                 });
@@ -2667,11 +2747,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<SpecialPermissionContract> GetSpecialPermissions()
+        public List<PermissionContract> GetPermissionsForRole(int roleId)
         {
             try
             {
-                var result = Get<List<SpecialPermissionContract>>("permission/special");
+                var result = Get<List<PermissionContract>>($"role/{roleId}/permission");
                 return result;
             }
             catch (HttpRequestException e)
@@ -2683,11 +2763,14 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<SpecialPermissionContract> GetSpecialPermissionsForGroup(int groupId)
+        public PagedResultList<PermissionContract> GetPermissions(int start, int count, string query)
         {
             try
             {
-                var result = Get<List<SpecialPermissionContract>>($"usergroup/{groupId}/permission/special");
+                var url = "permission".AddQueryString("start", start.ToString());
+                url = url.AddQueryString("count", count.ToString());
+                url = url.AddQueryString("filterByName", query);
+                var result = GetPagedList<PermissionContract>(url);
                 return result;
             }
             catch (HttpRequestException e)
@@ -2699,11 +2782,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void AddSpecialPermissionsToGroup(int groupId, IList<int> specialPermissionsIds)
+        public void AddSpecialPermissionsToRole(int roleId, IList<int> specialPermissionsIds)
         {
             try
             {
-                Post<object>($"usergroup/{groupId}/permission/special", new IntegerIdListContract
+                Post<object>($"role/{roleId}/permission/special", new IntegerIdListContract
                 {
                     IdList = specialPermissionsIds
                 });
@@ -2717,14 +2800,29 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void RemoveSpecialPermissionsFromGroup(int groupId, IList<int> specialPermissionsIds)
+        public void RemoveSpecialPermissionsFromRole(int roleId, IList<int> specialPermissionsIds)
         {
             try
             {
-                Delete($"usergroup/{groupId}/permission/special", new IntegerIdListContract
+                Delete($"role/{roleId}/permission/special", new IntegerIdListContract
                 {
                     IdList = specialPermissionsIds
                 });
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void EnsureAuthServiceHasRequiredPermissions()
+        {
+            try
+            {
+                Put<object>($"permission/ensure", null);
             }
             catch (HttpRequestException e)
             {
@@ -2752,5 +2850,315 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+
+        #region ExternalRepository
+
+        public IList<ExternalRepositoryContract> GetAllExternalRepositories()
+        {
+            try
+            {
+                var result = Get<IList<ExternalRepositoryContract>>($"externalRepository/allExternalRepositories");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public PagedResultList<ExternalRepositoryContract> GetExternalRepositoryList(int start, int count, bool fetchPageCount = false)
+        {
+            try
+            {
+                var result =
+                    GetPagedList<ExternalRepositoryContract>(
+                        $"externalRepository?start={start}&count={count}&fetchPageCount={fetchPageCount}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public ExternalRepositoryDetailContract GetExternalRepositoryDetail(int externalRepositoryId)
+        {
+            try
+            {
+                var result = Get<ExternalRepositoryDetailContract>($"externalRepository/{externalRepositoryId}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public ExternalRepositoryStatisticsContract GetExternalRepositoryStatistics(int externalRepositoryId)
+        {
+            try
+            {
+                var result = Get<ExternalRepositoryStatisticsContract>($"externalRepository/{externalRepositoryId}/statistics");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public int CreateExternalRepository(ExternalRepositoryDetailContract externalRepository)
+        {
+            try
+            {
+                var externalRepositoryId = Post<int>("externalRepository", externalRepository);
+                return externalRepositoryId;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void DeleteExternalRepository(int externalRepositoryId)
+        {
+            try
+            {
+                Delete($"externalRepository/{externalRepositoryId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void UpdateExternalRepository(int externalRepositoryId, ExternalRepositoryDetailContract externalRepository)
+        {
+            try
+            {
+                Put<object>($"externalRepository/{externalRepositoryId}", externalRepository);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void CancelImportTask(int externalRepositoryId)
+        {
+            try
+            {
+                Delete($"externalRepository/{externalRepositoryId}/importStatus");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public IList<ExternalRepositoryTypeContract> GetAllExternalRepositoryTypes()
+        {
+            try
+            {
+                return Get<IList<ExternalRepositoryTypeContract>>($"externalRepository/allExternalRepositoryTypes");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }  
+        
+        public OaiPmhRepositoryInfoContract GetOaiPmhRepositoryInfo(string url)
+        {
+            try
+            {               
+                return Get<OaiPmhRepositoryInfoContract>($"externalRepository/oaiPmhRepositoryInfo?url={url.EncodeQueryString()}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region FilteringExpressionSet
+
+        public PagedResultList<FilteringExpressionSetDetailContract> GetFilteringExpressionSetList(int start, int count, bool fetchPageCount = false)
+        {
+            try
+            {
+                var result =
+                    GetPagedList<FilteringExpressionSetDetailContract>(
+                        $"filteringExpressionSet?start={start}&count={count}&fetchPageCount={fetchPageCount}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+        
+        public IList<FilteringExpressionSetContract> GetAllFilteringExpressionSets()
+        {
+            try
+            {
+                var result = Get<IList<FilteringExpressionSetContract>>($"filteringExpressionSet/allFilteringExpressionSets");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public FilteringExpressionSetDetailContract GetFilteringExpressionSetDetail(int filteringExpressionSetId)
+        {
+            try
+            {
+                var result = Get<FilteringExpressionSetDetailContract>($"filteringExpressionSet/{filteringExpressionSetId}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public int CreateFilteringExpressionSet(FilteringExpressionSetDetailContract filteringExpressionSet)
+        {
+            try
+            {
+                var filteringExpressionSetId = Post<int>("filteringExpressionSet", filteringExpressionSet);
+                return filteringExpressionSetId;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void DeleteFilteringExpressionSet(int filteringExpressionSetId)
+        {
+            try
+            {
+                Delete($"filteringExpressionSet/{filteringExpressionSetId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void UpdateFilteringExpressionSet(int filteringExpressionSetId, FilteringExpressionSetDetailContract filteringExpressionSet)
+        {
+            try
+            {
+                Put<object>($"filteringExpressionSet/{filteringExpressionSetId}", filteringExpressionSet);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public IList<BibliographicFormatContract> GetAllBibliographicFormats()
+        {
+            try
+            {
+                return Get<IList<BibliographicFormatContract>>($"filteringExpressionSet/allBibliographicFormats");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region Import
+
+        public void StartImport(IList<int> externalRepositoryIds)
+        {
+            try
+            {
+                Post<object>($"repositoryImport", externalRepositoryIds);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public IList<RepositoryImportProgressInfoContract> GetImportStatus()
+        {
+            try
+            {
+                return Get<IList<RepositoryImportProgressInfoContract>>($"repositoryImport/importStatus");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
     }
 }

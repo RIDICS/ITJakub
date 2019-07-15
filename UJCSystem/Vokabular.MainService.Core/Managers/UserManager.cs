@@ -3,96 +3,101 @@ using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
-using Vokabular.MainService.Core.Managers.Authentication;
+using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Users;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Results;
+using AuthUserContract = Ridics.Authentication.DataContracts.User.UserContract;
 
 namespace Vokabular.MainService.Core.Managers
 {
     public class UserManager
     {
         private readonly UserRepository m_userRepository;
-        private readonly ICommunicationTokenGenerator m_communicationTokenGenerator;
-        private readonly AuthorizationManager m_authorizationManager;
+        private readonly CommunicationProvider m_communicationProvider;
         private readonly AuthenticationManager m_authenticationManager;
+        private readonly UserDetailManager m_userDetailManager;
 
-        public UserManager(UserRepository userRepository, ICommunicationTokenGenerator communicationTokenGenerator, AuthorizationManager authorizationManager, AuthenticationManager authenticationManager)
+        public UserManager(UserRepository userRepository, CommunicationProvider communicationProvider, AuthenticationManager authenticationManager, UserDetailManager userDetailManager)
         {
             m_userRepository = userRepository;
-            m_communicationTokenGenerator = communicationTokenGenerator;
-            m_authorizationManager = authorizationManager;
+            m_communicationProvider = communicationProvider;
             m_authenticationManager = authenticationManager;
+            m_userDetailManager = userDetailManager;
         }
 
         public int CreateNewUser(CreateUserContract data)
         {
-            var userId = new CreateNewUserWork(m_userRepository, m_communicationTokenGenerator, data).Execute();
+            var userId = new CreateNewUserWork(m_userRepository, m_communicationProvider, data).Execute();
             return userId;
         }
 
-        public UserDetailContract GetCurrentUserByToken()
+        public int CreateUserIfNotExist(int externalId)
         {
-            var dbUser = m_authenticationManager.GetCurrentUser(false);
-            var result = Mapper.Map<UserDetailContract>(dbUser);
-            return result;
+            var authUserApiClient = m_communicationProvider.GetAuthUserApiClient();
+            var userRoles = authUserApiClient.GetRolesByUserAsync(externalId).GetAwaiter().GetResult();
+            var userId = new CreateUserIfNotExistWork(m_userRepository, externalId, userRoles).Execute();
+            return userId;
         }
 
-        public void UpdateUser(UpdateUserContract data)
+        public void UpdateCurrentUser(UpdateUserContract data)
         {
             var userId = m_authenticationManager.GetCurrentUserId();
 
-            // TODO add data validation
+            new UpdateCurrentUserWork(m_userRepository, userId, data, m_communicationProvider).Execute();
+        }
 
-            new UpdateUserWork(m_userRepository, userId, data).Execute();
+        public void UpdateUser(int userId, UpdateUserContract data)
+        {
+            new UpdateUserWork(m_userRepository, userId, data, m_communicationProvider).Execute();
         }
 
         public void UpdateUserPassword(UpdateUserPasswordContract data)
         {
             var userId = m_authenticationManager.GetCurrentUserId();
 
-            // TODO add data validation
-
-            new UpdateUserPasswordWork(m_userRepository, userId, data).Execute();
+            new UpdateUserPasswordWork(m_userRepository, userId, data, m_communicationProvider).Execute();
         }
 
         public PagedResultList<UserDetailContract> GetUserList(int? start, int? count, string filterByName)
-        {
-            m_authorizationManager.CheckUserCanManagePermissions();
-
+        {        
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
 
-            var dbResult = m_userRepository.InvokeUnitOfWork(x => x.GetUserList(startValue, countValue, filterByName));
-            return new PagedResultList<UserDetailContract>
-            {
-                List = Mapper.Map<List<UserDetailContract>>(dbResult.List),
-                TotalCount = dbResult.Count,
-            };
+            var client = m_communicationProvider.GetAuthUserApiClient();
+            
+                var result = client.HttpClient.GetListAsync<AuthUserContract>(startValue, countValue, filterByName).GetAwaiter().GetResult();
+                var userDetailContracts = Mapper.Map<List<UserDetailContract>>(result.Items);
+                m_userDetailManager.AddIdForExternalUsers(userDetailContracts);
+
+                return new PagedResultList<UserDetailContract>
+                {
+                    List = userDetailContracts,
+                    TotalCount = result.ItemsCount,
+                };
         }
 
-        public List<UserDetailContract> GetUserAutocomplete(string query, int? count)
+        public IList<UserDetailContract> GetUserAutocomplete(string query, int? count)
         {
-            m_authorizationManager.CheckUserCanManagePermissions();
-
             if (query == null)
                 query = string.Empty;
 
             var countValue = PagingHelper.GetAutocompleteCount(count);
 
-            var result = m_userRepository.InvokeUnitOfWork(x => x.GetUserAutocomplete(query, countValue));
-            return Mapper.Map<List<UserDetailContract>>(result);
+            var client = m_communicationProvider.GetAuthUserApiClient();
+
+            var result = client.HttpClient.GetListAsync<AuthUserContract>(0, countValue, query).GetAwaiter().GetResult();
+            var userDetailContracts = Mapper.Map<List<UserDetailContract>>(result.Items);
+            m_userDetailManager.AddIdForExternalUsers(userDetailContracts);
+            return userDetailContracts;
         }
 
         public UserDetailContract GetUserDetail(int userId)
         {
-            m_authorizationManager.CheckUserCanManagePermissions();
-
             var dbResult = m_userRepository.InvokeUnitOfWork(x => x.FindById<User>(userId));
-            var result = Mapper.Map<UserDetailContract>(dbResult);
 
-            return result;
+            return m_userDetailManager.GetUserDetailContractForUser(dbResult);
         }
     }
 }

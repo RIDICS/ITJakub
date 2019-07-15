@@ -24,8 +24,8 @@
     "gijgo": "1.8.0",
     "s-pagination": "2.1.0",
     "scalesoft-localization-web": "2.1.1",
-    "jquery-table-fixer": "1.0.0",
     "stickybits": "3.0.4",
+    "urijs": "^1.19.1",
     "golden-layout": "^1.5.9"
   },
   "resolutions": {

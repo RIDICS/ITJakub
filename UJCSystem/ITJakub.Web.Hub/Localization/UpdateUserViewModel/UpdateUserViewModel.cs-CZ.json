@@ -1,0 +1,16 @@
+{
+  "culture": "cs-CZ",
+  "scope": "UpdateUserViewModel",
+  "dictionary": {
+    "UserName": "Uživatelské jméno",
+    "Email": "Email",
+    "HasAtLeastNChars": "{0} musí obsahovat alespoň {2} znaků.",
+    "FirstName": "Křestní jméno",
+    "LastName": "Příjmení",
+    "NotEmpty": "{0} nemůže být prázdné",
+    "NotEmpty2": "{0} nemůže být prázdný",
+    "MustBeFilled": "{0} musí být vyplněn",
+    "The {0} field is not a valid e-mail address": "{0} není validní e-mailová adresa",
+    "The {0} field is not a valid e-mail address.": "{0} není validní e-mailová adresa"
+  }
+}

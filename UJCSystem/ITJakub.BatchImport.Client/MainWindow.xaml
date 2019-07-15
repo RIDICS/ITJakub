@@ -33,8 +33,6 @@
 
 
         <StackPanel Grid.Row="2" HorizontalAlignment="Left" Orientation="Horizontal" Height="26">
-            <TextBox controls:TextBoxHelper.Watermark="Username" Width="150" Text="{Binding UserName}"/>
-            <PasswordBox Name="PasswordBox" controls:TextBoxHelper.Watermark="Password" controls:PasswordBoxHelper.CapsLockWarningToolTip="Capslock is on" Width="150"/>
             <controls:NumericUpDown Value="{Binding ThreadCount}" Minimum="1" Maximum="20" />
         </StackPanel>
 

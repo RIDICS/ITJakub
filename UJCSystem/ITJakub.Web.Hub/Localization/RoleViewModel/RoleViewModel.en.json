@@ -1,0 +1,9 @@
+{
+  "culture": "en",
+  "scope": "RoleViewModel",
+  "dictionary": {
+    "Name": "Name",
+    "Description": "Description",
+    "NotEmpty": "The {0} can not be empty."
+  }
+}

@@ -1,10 +1,13 @@
 ﻿using System.IO;
 using System.Net;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.RestClient.Headers;
 
 namespace Vokabular.MainService.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public abstract class BaseController : Controller
     {
         protected void SetTotalCountHeader(int totalCount)

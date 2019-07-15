@@ -5,13 +5,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Database\Entities\BibliographicFormat.hbm.xml" />
     <None Remove="Database\Entities\BookType.hbm.xml" />
     <None Remove="Database\Entities\Category.hbm.xml" />
+    <None Remove="Database\Entities\ExternalRepository.hbm.xml" />
+    <None Remove="Database\Entities\ExternalRepositoryType.hbm.xml" />
     <None Remove="Database\Entities\FavoriteBase.hbm.xml" />
     <None Remove="Database\Entities\FavoriteLabel.hbm.xml" />
     <None Remove="Database\Entities\Feedback.hbm.xml" />
+    <None Remove="Database\Entities\FilteringExpression.hbm.xml" />
+    <None Remove="Database\Entities\FilteringExpressionSet.hbm.xml" />
     <None Remove="Database\Entities\HeadwordItem.hbm.xml" />
     <None Remove="Database\Entities\HistoryLogBase.hbm.xml" />
+    <None Remove="Database\Entities\ImportedProjectMetadata.hbm.xml" />
+    <None Remove="Database\Entities\ImportedRecordMetadata.hbm.xml" />
+    <None Remove="Database\Entities\ImportHistory.hbm.xml" />
     <None Remove="Database\Entities\Keyword.hbm.xml" />
     <None Remove="Database\Entities\LiteraryGenre.hbm.xml" />
     <None Remove="Database\Entities\LiteraryKind.hbm.xml" />
@@ -26,7 +34,6 @@
     <None Remove="Database\Entities\ResourceVersion.hbm.xml" />
     <None Remove="Database\Entities\ResponsiblePerson.hbm.xml" />
     <None Remove="Database\Entities\ResponsibleType.hbm.xml" />
-    <None Remove="Database\Entities\SpecialPermission.hbm.xml" />
     <None Remove="Database\Entities\Term.hbm.xml" />
     <None Remove="Database\Entities\TermCategory.hbm.xml" />
     <None Remove="Database\Entities\Transformation.hbm.xml" />
@@ -36,9 +43,16 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Database\Entities\BookType.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\BibliographicFormat.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\FilteringExpression.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\FilteringExpressionSet.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\ExternalRepositoryType.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\ImportedProjectMetadata.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\ImportedRecordMetadata.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\ImportHistory.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\ExternalRepository.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\UserGroup.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Permission.hbm.xml" />
-    <EmbeddedResource Include="Database\Entities\SpecialPermission.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\TextComment.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Category.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\FavoriteBase.hbm.xml" />

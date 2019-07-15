@@ -7,11 +7,10 @@
     "target": "es5"
   },
   "include": [
-    "wwwroot"
-  ],
-  "exclude": [
-    "node_modules",
-    "wwwroot/lib"
+    "wwwroot/js",
+    "wwwroot/Areas",
+    "wwwroot/lib/scalesoft-localization-web",
+    "wwwroot/lib/s-pagination"
   ],
   "compileOnSave": false
 }

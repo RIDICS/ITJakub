@@ -32,7 +32,7 @@ namespace Vokabular.RestClient
             {
                 m_client = new HttpClient();
             }
-            
+
             m_client.BaseAddress = baseAddress;
             m_client.DefaultRequestHeaders.ExpectContinue = false;
             m_client.DefaultRequestHeaders.Accept.Clear();
@@ -73,7 +73,7 @@ namespace Vokabular.RestClient
         private void ProcessResponseInternal(HttpResponseMessage response)
         {
             EnsureSuccessStatusCode(response);
-            
+
             ProcessResponse(response);
         }
 
@@ -303,7 +303,7 @@ namespace Vokabular.RestClient
                     var request = CreateRequestMessage(HttpMethod.Post, uriPath, headers);
                     request.Content = content;
                     request.Headers.TransferEncodingChunked = true;
-                    
+
                     var response = await m_client.SendAsync(request);
 
                     ProcessResponseInternal(response);
@@ -392,7 +392,8 @@ namespace Vokabular.RestClient
             var responseStatusCode = response.StatusCode;
             var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
-            if (responseStatusCode == HttpStatusCode.BadRequest && TryDeserializeValidationResult(responseContent, out var validationResult))
+            if (responseStatusCode == HttpStatusCode.BadRequest &&
+                TryDeserializeValidationResult(responseContent, out var validationResult))
             {
                 throw new HttpErrorCodeException(validationResult.Message, responseStatusCode, validationResult.Errors);
             }

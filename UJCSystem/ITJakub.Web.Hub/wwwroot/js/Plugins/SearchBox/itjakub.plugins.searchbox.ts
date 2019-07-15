@@ -1,6 +1,4 @@
-﻿/// <reference path="../../../../node_modules/@types/typeahead/index.d.ts" />
-
-class SearchBox {
+﻿class SearchBox {
      private inputField: string;
      private urlWithController: string;
      private options: Twitter.Typeahead.Options;

@@ -1,7 +1,9 @@
+using System.Security.Claims;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.AspNetCore.Extensions;
 
 namespace ITJakub.Web.Hub.Core.Managers
 {
@@ -16,28 +18,27 @@ namespace ITJakub.Web.Hub.Core.Managers
             m_communicationProvider = communicationProvider;
         }
 
-        public FeedbackViewModel GetBasicViewModel(FeedbackFormIdentification formIdentification, string staticTextName, bool isAuthenticated, string scope)
+        public FeedbackViewModel GetBasicViewModel(FeedbackFormIdentification formIdentification, string staticTextName,
+            bool isAuthenticated, string scope, ClaimsPrincipal user)
         {
             var pageStaticText = m_staticTextManager.GetRenderedHtmlText(staticTextName, scope);
 
-            if (!isAuthenticated)
+            if (isAuthenticated)
             {
                 var viewModel = new FeedbackViewModel
                 {
+                    Name = $"{user.GetFirstName()} {user.GetLastName()}",
+                    Email = user.GetEmail(),
                     PageStaticText = pageStaticText,
                     FormIdentification = formIdentification
                 };
 
                 return viewModel;
             }
-
-            using (var client = m_communicationProvider.GetMainServiceClient())
+            else
             {
-                var user = client.GetCurrentUserInfo();
                 var viewModel = new FeedbackViewModel
                 {
-                    Name = string.Format("{0} {1}", user.FirstName, user.LastName),
-                    Email = user.Email,
                     PageStaticText = pageStaticText,
                     FormIdentification = formIdentification
                 };
@@ -46,7 +47,8 @@ namespace ITJakub.Web.Hub.Core.Managers
             }
         }
 
-        public void FillViewModel(FeedbackViewModel viewModel, string staticTextName, string scope, FeedbackFormIdentification formIdentification)
+        public void FillViewModel(FeedbackViewModel viewModel, string staticTextName, string scope,
+            FeedbackFormIdentification formIdentification)
         {
             viewModel.PageStaticText = m_staticTextManager.GetRenderedHtmlText(staticTextName, scope);
             viewModel.FormIdentification = formIdentification;

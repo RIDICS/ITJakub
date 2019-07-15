@@ -61,7 +61,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 Order = order,
                 Time = ((DateTimeOffset)textComment.CreateTime).ToUnixTimeMilliseconds(),
                 Text = textComment.Text,
-                Picture = textComment.User.AvatarUrl,
+                Picture = null, // Picture is not supported
                 Id = textComment.Id,
                 Nested = nested,
                 TextId = textId,

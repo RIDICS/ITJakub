@@ -1,0 +1,32 @@
+﻿@using ITJakub.Web.Hub.Constants
+@using Scalesoft.Localization.AspNetCore
+@model ITJakub.Web.Hub.Models.AccountDetailViewModel
+
+@inject ILocalizationService Localizer
+@section scripts {
+    <script src="~/js/ridics.account.js"></script>
+}
+@{
+    ViewBag.Title = Localizer.Translate("Settings", "Account");
+}
+
+<div class="content-container top-offset-without-submenu">
+    <h2>@ViewBag.Title</h2>
+    <ul class="nav nav-tabs" role="tablist" id="project-work-tabs">
+        <li role="presentation" @(Model.ActualTab == AccountTab.UpdateAccount ? "class=active" : string.Empty)>
+            <a href="#update-account" data-toggle="tab" role="tab">@Localizer.Translate("DataChange", "Account")</a>
+        </li>
+        <li role="presentation" @(Model.ActualTab == AccountTab.UpdatePassword ? "class=active" : string.Empty)>
+            <a href="#update-password" data-toggle="tab" role="tab">@Localizer.Translate("PasswordChange", "Account")</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane @(Model.ActualTab == AccountTab.UpdateAccount ? "active" : string.Empty)" id="update-account">
+            @await Html.PartialAsync("Settings/_UpdateAccount", Model.UpdateUserViewModel)
+        </div>
+        <div role="tabpanel" class="tab-pane @(Model.ActualTab == AccountTab.UpdatePassword ? "active" : string.Empty)" id="update-password">
+            @await Html.PartialAsync("Settings/_UpdatePassword", Model.UpdatePasswordViewModel)
+        </div>
+    </div>
+</div>
