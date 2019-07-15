@@ -47,7 +47,8 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.RelicAbbreviation, opt => opt.MapFrom(src => src.RelicAbbreviation))
                 .ForMember(dest => dest.SourceAbbreviation, opt => opt.MapFrom(src => src.SourceAbbreviation))
                 .ForMember(dest => dest.SubTitle, opt => opt.MapFrom(src => src.SubTitle))
-                .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title));
+                .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
+                .ForMember(dest => dest.OriginalUrl, opt => opt.MapFrom(src => src.Resource.Project.OriginalUrl));
                 //.ForMember(dest => dest.TermsPageHitsCount, opt => opt.MapFrom(src => src.ExternalId)) // Missing fetch
                 //.ForMember(dest => dest.TotalHitCount, opt => opt.MapFrom(src => src.ExternalId)) // Missing fetch
                 //.ForMember(dest => dest.VersionXmlId, opt => opt.MapFrom(src => src.ExternalId)); // Missing fetch

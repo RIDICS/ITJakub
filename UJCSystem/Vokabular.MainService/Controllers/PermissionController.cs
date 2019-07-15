@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
@@ -26,6 +27,13 @@ namespace Vokabular.MainService.Controllers
 
             SetTotalCountHeader(result.TotalCount);
             return result.List;
+        }
+
+        [Authorize]
+        [HttpPut("ensure")]
+        public void EnsureAuthServiceHasRequiredPermissions()
+        {
+            m_permissionManager.EnsureAuthServiceHasRequiredPermissions();
         }
     }
 }

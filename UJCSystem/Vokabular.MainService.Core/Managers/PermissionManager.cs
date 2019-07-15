@@ -4,16 +4,16 @@ using System.Reflection;
 using AutoMapper;
 using ITJakub.FileProcessing.DataContracts;
 using log4net;
+using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Permission;
-using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.Const;
 using AuthRoleContract = Ridics.Authentication.DataContracts.RoleContract;
 using AuthPermissionContract = Ridics.Authentication.DataContracts.PermissionContract;
-
+using PermissionContract = Vokabular.MainService.DataContracts.Contracts.Permission.PermissionContract;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -124,6 +124,23 @@ namespace Vokabular.MainService.Core.Managers
                 List = permissionContracts,
                 TotalCount = result.ItemsCount
             };
+        }
+
+        public void EnsureAuthServiceHasRequiredPermissions()
+        {
+            var client = m_communicationProvider.GetAuthPermissionApiClient();
+
+            var request = new EnsurePermissionsContract
+            {
+                NewAssignToRoleName = DefaultValues.RoleForNewPermissions,
+                Permissions = DefaultValues.RequiredPermissionsWithDescription.Select(x => new PermissionContractBase
+                {
+                    Name = x.Item1,
+                    Description = x.Item2,
+                }).ToList()
+            };
+
+            client.EnsurePermissionsExistAsync(request).GetAwaiter().GetResult();
         }
     }
 }

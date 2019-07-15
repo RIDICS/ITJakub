@@ -56,12 +56,17 @@ namespace Vokabular.MainService.Core
 
             services.AddSingleton<Profile, AudioProfile>();
             services.AddSingleton<Profile, BookProfile>();
+            services.AddSingleton<Profile, BibliographicFormatProfile>();
             services.AddSingleton<Profile, CategoryProfile>();
             services.AddSingleton<Profile, ChapterProfile>();
             services.AddSingleton<Profile, EditionNoteProfile>();
+            services.AddSingleton<Profile, ExternalRepositoryProfile>();
+            services.AddSingleton<Profile, ExternalRepositoryTypeProfile>();
             services.AddSingleton<Profile, FavoriteLabelProfile>();
             services.AddSingleton<Profile, FavoriteProfile>();
             services.AddSingleton<Profile, FeedbackProfile>();
+            services.AddSingleton<Profile, FilteringExpressionProfile>();
+            services.AddSingleton<Profile, FilteringExpressionSetProfile>();
             services.AddSingleton<Profile, HeadwordProfile>();
             services.AddSingleton<Profile, ImageProfile>();
             services.AddSingleton<Profile, KeywordProfile>();

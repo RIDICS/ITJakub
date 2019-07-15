@@ -23,6 +23,8 @@ using Vokabular.MainService.Core;
 using Vokabular.MainService.Middleware;
 using Vokabular.MainService.Options;
 using Vokabular.MainService.Utils;
+using Vokabular.ProjectImport;
+using Vokabular.ProjectImport.Shared.Options;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
@@ -53,6 +55,7 @@ namespace Vokabular.MainService
             services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
             services.Configure<List<CredentialsOption>>(Configuration.GetSection("Credentials"));
             services.Configure<PathConfiguration>(Configuration.GetSection("PathConfiguration"));
+            services.Configure<OaiPmhClientOption>(Configuration.GetSection("OaiPmhClientOption"));
 
             services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = 1048576000; });
 
@@ -128,6 +131,8 @@ namespace Vokabular.MainService
                 ContactBasePath = "api/v1/contact/",
                 LoginCheckBasePath = "Account/CheckLogin",
             });
+
+            services.AddProjectImportServices();
 
             // IoC
             var container = new DryIocContainer();

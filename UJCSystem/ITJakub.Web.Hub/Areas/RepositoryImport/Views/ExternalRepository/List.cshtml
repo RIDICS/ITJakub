@@ -1,0 +1,85 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@using Scalesoft.Localization.Core.Util
+@model IList<Vokabular.MainService.DataContracts.Contracts.ExternalRepositoryContract>
+
+@inject ILocalizationService Localizer
+
+@{
+    ViewBag.Title = Localizer.Translate("ExternalRepositoriesTitle", "RepositoryImport", LocTranslationSource.File);
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/Areas/RepositoryImport/css/ridics.repositoryImport.css" />
+}
+@section scripts {
+    <script src="~/Areas/RepositoryImport/js/ridics.repositoryImport.js" type="text/javascript"></script>
+}
+
+<div class="content-container">
+    <div class="row project-import-layout">
+        @await Html.PartialAsync("~/Areas/RepositoryImport/Views/_LeftMenu.cshtml")
+        <div class="vertical-splitter"></div>
+
+        <div class="content" id="project-import-layout-content">
+            <div class="col-md-12">
+                <h1>@Localizer.Translate("ExternalRepositoryList", "RepositoryImport", LocTranslationSource.File)</h1>
+            </div>
+            <div class="col-md-offset-11 col-md-1 right-align-btn">
+                <a class="btn btn-default" href="@Url.Action("Create", "ExternalRepository", new {area = "RepositoryImport"})">
+                    @Localizer.Translate("CreateButton", "RepositoryImport", LocTranslationSource.File)
+                </a>
+            </div>
+            <ul class="bib-listing">
+                @foreach (var repository in Model)
+                {
+                    <li class="list-item">
+                        <div class="visible-content">
+                            <div class="visible-wrapper">
+                                <div class="left-panel"></div>
+                                <div class="middle-panel">
+                                    <div class="heading">@repository.Name</div>
+                                    <div class="body">
+                                        @repository.Description
+                                        <div>
+                                            <b>@Localizer.Translate("RepositoryType", "RepositoryImport")</b>
+                                            @repository.ExternalRepositoryType.Name
+                                        </div>
+                                        <div>
+                                            <b>@Localizer.Translate("BibliographicFormat", "RepositoryImport")</b>
+                                            @repository.BibliographicFormat.Name
+                                        </div>
+                                        <div>
+                                            <b>@Localizer.Translate("License", "RepositoryImport")</b>
+                                            @repository.License
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="right-panel">
+                                    <a class="btn btn-sm book-button button" href="@Url.Action("Update", "ExternalRepository", new {area = "RepositoryImport", id = repository.Id})">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </a>
+                                    <a type="button" class="btn btn-sm information-button button" href="@Url.Action("Delete", "ExternalRepository", new {area = "RepositoryImport", id = repository.Id})">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </a>
+                                    <button type="button" class="btn btn-sm content-button" data-toggle="collapse" aria-expanded="false" data-target="#repository-@repository.Id">
+                                        <span class="glyphicon glyphicon-chevron-down repository-detail" data-repository-id="@repository.Id"></span>
+                                        <span class="glyphicon glyphicon-chevron-up"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hidden-content collapse" id="repository-@repository.Id">
+                            <div class="bottom-panel">
+                                <div class="body">
+                                    <div class="bib-table">
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

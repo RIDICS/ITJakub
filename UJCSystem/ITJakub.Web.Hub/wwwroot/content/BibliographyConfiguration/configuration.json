@@ -1014,6 +1014,10 @@
             {
               "label": "EditionLastModification",
               "pattern": "{CreateTimeString}"
+            },
+            {
+              "label": "LinkToOriginal",
+              "pattern": "{$projectOriginalLink}"
             }
           ]
         },
@@ -1064,6 +1068,11 @@
           "scope": "LiteraryGenres",
           "pattern": "{$this}",
           "delimeter": ", "
+        },
+        "$projectOriginalLink": {
+          "type": "basic",
+          "pattern": "<a href='{OriginalUrl}'>{OriginalUrl}</a>",
+          "printIfNullValue": false
         }
       }
     },

@@ -245,6 +245,10 @@ namespace ITJakub.Web.Hub
                     .MapAreaRoute("toolsDefault", "Tools", "{controller=Tools}/{action=Index}");
             });
 
+            // Update missing permissions on Auth service:
+            var communicationProvider = app.ApplicationServices.GetRequiredService<CommunicationProvider>();
+            communicationProvider.GetMainServiceClient().EnsureAuthServiceHasRequiredPermissions();
+
             applicationLifetime.ApplicationStopped.Register(OnShutdown);
         }
 

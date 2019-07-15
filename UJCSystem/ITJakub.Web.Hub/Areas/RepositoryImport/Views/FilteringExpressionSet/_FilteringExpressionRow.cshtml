@@ -1,0 +1,18 @@
+﻿@using HtmlHelpers.BeginCollectionItemCore
+@model Vokabular.MainService.DataContracts.Contracts.FilteringExpressionContract
+
+<tr>
+    @using (Html.BeginCollectionItem("FilteringExpressions"))
+    {
+        <td>
+            @Html.HiddenFor(m => m.Id, new { data_is_deleted = "false" })
+            @Html.TextBoxFor(m => m.Field)
+        </td>
+        <td>
+            @Html.TextBoxFor(m => m.Value)
+        </td>
+        <td>
+            <a class="remove-expression btn btn-default"><i class="glyphicon glyphicon-trash"></i></a>
+        </td>
+    }
+</tr>
