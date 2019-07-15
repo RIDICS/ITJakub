@@ -3,9 +3,11 @@ using System.Linq;
 using System.Reflection;
 using ITJakub.FileProcessing.DataContracts;
 using log4net;
+using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Authentication;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.Shared.Const;
@@ -114,6 +116,23 @@ namespace Vokabular.MainService.Core.Managers
         public void RemoveBooksAndCategoriesFromGroup(int roleId, IList<long> bookIds)
         {
             new RemoveProjectsFromUserGroupWork(m_permissionRepository, roleId, bookIds).Execute();
+        }
+
+        public void EnsureAuthServiceHasRequiredPermissions()
+        {
+            var client = m_communicationProvider.GetAuthPermissionApiClient();
+
+            var request = new EnsurePermissionsContract
+            {
+                NewAssignToRoleName = DefaultValues.RoleForNewPermissions,
+                Permissions = DefaultValues.RequiredPermissionsWithDescription.Select(x => new PermissionContractBase
+                {
+                    Name = x.Item1,
+                    Description = x.Item2,
+                }).ToList()
+            };
+
+            client.EnsurePermissionsExistAsync(request).GetAwaiter().GetResult();
         }
     }
 }

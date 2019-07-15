@@ -24,5 +24,12 @@ namespace Vokabular.MainService.Controllers
             var result = m_permissionManager.GetSpecialPermissions();
             return result;
         }
+
+        [Authorize]
+        [HttpPut("ensure")]
+        public void EnsureAuthServiceHasRequiredPermissions()
+        {
+            m_permissionManager.EnsureAuthServiceHasRequiredPermissions();
+        }
     }
 }

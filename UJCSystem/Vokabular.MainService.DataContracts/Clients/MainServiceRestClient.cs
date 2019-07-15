@@ -2724,6 +2724,21 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public void EnsureAuthServiceHasRequiredPermissions()
+        {
+            try
+            {
+                Put<object>($"permission/ensure", null);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         #endregion
 
         public List<BookTypeContract> GetBookTypeList()
