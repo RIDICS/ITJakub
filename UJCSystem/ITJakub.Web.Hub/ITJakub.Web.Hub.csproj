@@ -41,8 +41,8 @@
     <PackageReference Include="BeginCollectionItemCore" Version="1.0.8" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.10.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="2.2.0" />
-    <PackageReference Include="Ridics.Authentication.HttpClient" Version="0.1.0" />
-    <PackageReference Include="Ridics.Authentication.TicketStore" Version="0.1.0" />
+    <PackageReference Include="Ridics.Authentication.HttpClient" Version="0.1.1" />
+    <PackageReference Include="Ridics.Authentication.TicketStore" Version="0.1.1" />
     <PackageReference Include="Scalesoft.Localization.AspNetCore.Service" Version="2.2.1" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.2.0" />
