@@ -81,7 +81,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                         BookPages = pages,
                         SearchText = searchText,
                         InitPageXmlId = page, // TODO rename to InitPageId
-                        CanPrintEdition = User.HasPermission(PermissionNames.EditionPrintText),
+                        CanPrintEdition = User.HasPermission(VokabularPermissionNames.EditionPrintText),
                         JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
                     });
             }

@@ -9,7 +9,7 @@
 
 <div class="static-text-container">
     <div class="static-text-panel">
-        @if (User.HasPermission(PermissionNames.EditStaticText))
+        @if (User.HasPermission(VokabularPermissionNames.EditStaticText))
         {
             if (Model.IsRecordExists)
             {

@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Ridics.Core.Structures.Shared;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Headers;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
-using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
@@ -26,6 +26,7 @@ namespace Vokabular.MainService.Controllers
             m_bookManager = bookManager;
         }
 
+        [Authorize(PermissionNames.ListUsers)]
         [HttpGet("{roleId}/user")]
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
         public List<UserContract> GetUsersByRole(int roleId, [FromQuery] int? start, [FromQuery] int? count, [FromQuery] string filterByName)
@@ -36,7 +37,7 @@ namespace Vokabular.MainService.Controllers
             return result.List;
         }
 
-        [Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.ManageUserRoles)]
         [HttpPost("")]
         public int CreateRole([FromBody] RoleContract data)
         {
@@ -44,19 +45,40 @@ namespace Vokabular.MainService.Controllers
             return resultId;
         }
 
+        [Authorize(PermissionNames.ManageUserRoles)]
+        [HttpPut("{roleId}/edit")]
+        public IActionResult UpdateRole([FromBody] RoleContract data)
+        {
+            m_roleManager.UpdateRole(data);
+            return Ok();
+        }
+
+        [Authorize]
         [HttpGet("{roleId}/detail")]
-        public RoleContract GetRoleDetail(int roleId)
+        public RoleDetailContract GetRoleDetail(int roleId)
         {
             var result = m_roleManager.GetRoleDetail(roleId);
             return result;
         }
 
-        [Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.ManageUserRoles)]
         [HttpDelete("{roleId}")]
         public void DeleteRole(int roleId)
         {
             m_roleManager.DeleteRole(roleId);
         }
+
+        [Authorize(PermissionNames.ManageUserRoles)]
+        [HttpGet("")]
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
+        public List<RoleContract> GetRoleList([FromQuery] int? start, [FromQuery] int? count, [FromQuery] string filterByName)
+        {
+            var result = m_roleManager.GetRoleList(start, count, filterByName);
+
+            SetTotalCountHeader(result.TotalCount);
+            return result.List;
+        }
+
 
         //public void AddBooksAndCategoriesToGroup(int groupId, IList<long> bookIds, IList<int> categoryIds)
         //{
@@ -68,34 +90,35 @@ namespace Vokabular.MainService.Controllers
         //    //TODO split two methods - for books and categories
         //}
 
-        [Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpPost("{roleId}/permission/book")]
         public void AddBooksToGroup(int roleId, [FromBody] AddBookToRoleRequestContract request)
         {
             m_permissionManager.AddBooksAndCategoriesToGroup(roleId, request.BookIdList);
         }
 
-        [Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpDelete("{roleId}/permission/book")]
         public void RemoveBooksFromGroup(int roleId, [FromBody] AddBookToRoleRequestContract request)
         {
             m_permissionManager.RemoveBooksAndCategoriesFromGroup(roleId, request.BookIdList);
         }
 
-        [Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpDelete("{roleId}/user/{userId}")]
         public void RemoveUserFromRole(int userId, int roleId)
         {
             m_roleManager.RemoveUserFromRole(userId, roleId);
         }
 
-        [Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpPost("{roleId}/user/{userId}")]
         public void AddUserToRole(int userId, int roleId)
         {
             m_roleManager.AddUserToRole(userId, roleId);
         }
 
+        [Authorize]
         [HttpGet("{roleId}/book")] //TODO categoryId -> bookTypeId as filtering query parameter
         [ProducesResponseType(typeof(List<BookContract>), StatusCodes.Status200OK)]
         public IActionResult GetBooksForRole(int roleId, [FromQuery] BookTypeEnumContract? filterByBookType)
@@ -112,29 +135,21 @@ namespace Vokabular.MainService.Controllers
         //{
         //}
 
-        [Authorize(PermissionNames.ManagePermissions)]
-        [HttpGet("{roleId}/permission/special")]
-        public List<SpecialPermissionContract> GetSpecialPermissionsForRole(int roleId)
-        {
-            var result = m_permissionManager.GetSpecialPermissionsForRole(roleId);
-            return result;
-        }
-
-        [Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpPost("{roleId}/permission/special")]
         public void AddSpecialPermissionsToGroup(int roleId, [FromBody] IntegerIdListContract specialPermissionsIds)
         {
             m_permissionManager.AddSpecialPermissionsToRole(roleId, specialPermissionsIds.IdList);
         }
 
-        [Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpDelete("{roleId}/permission/special")]
         public void RemoveSpecialPermissionsFromGroup(int roleId, [FromBody] IntegerIdListContract specialPermissionsIds)
         {
             m_permissionManager.RemoveSpecialPermissionsFromRole(roleId, specialPermissionsIds.IdList);
         }
 
-        [Authorize(PermissionNames.ManagePermissions)]
+        [Authorize(PermissionNames.ManageUserRoles)]
         [HttpGet("autocomplete")]
         public List<RoleContract> GetAutocomplete([FromQuery] string query, [FromQuery] int? count)
         {

@@ -83,7 +83,7 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [Authorize(PermissionNames.ManageFeedbacks)]
+        [Authorize(VokabularPermissionNames.ManageFeedbacks)]
         [HttpGet("")]
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
         public List<FeedbackContract> GetFeedbackList([FromQuery] int? start,
@@ -102,7 +102,7 @@ namespace Vokabular.MainService.Controllers
             return result.List;
         }
 
-        [Authorize(PermissionNames.ManageFeedbacks)]
+        [Authorize(VokabularPermissionNames.ManageFeedbacks)]
         [HttpDelete("{feedbackId}")]
         public void DeleteFeedback(long feedbackId)
         {

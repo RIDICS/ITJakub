@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Vokabular.MainService.DataContracts.Clients;
+using Vokabular.RestClient.Errors;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -50,6 +51,20 @@ namespace ITJakub.Web.Hub.Controllers
         {
             Response.ContentLength = fileSize;
             return base.File(fileStream, contentType, fileDownloadName);
+        }
+
+        protected void AddErrors(HttpErrorCodeException exception)
+        {
+            if (exception.ValidationErrors == null)
+            {
+                ModelState.AddModelError(string.Empty, exception.Message);
+                return;
+            }
+
+            foreach (var error in exception.ValidationErrors)
+            {
+                ModelState.AddModelError(string.Empty, error.Message);
+            }
         }
     }
 }

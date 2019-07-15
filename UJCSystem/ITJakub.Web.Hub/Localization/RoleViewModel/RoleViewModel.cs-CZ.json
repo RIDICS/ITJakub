@@ -1,0 +1,9 @@
+{
+  "culture": "cs-CZ",
+  "scope": "RoleViewModel",
+  "dictionary": {
+    "Name": "Název",
+    "Description": "Popis",
+    "NotEmpty": "{0} nemůže být prázdné"
+  }
+}
