@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
+using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.ProjectImport;
-using Vokabular.ProjectImport.Model;
 using Vokabular.RestClient.Errors;
 using Vokabular.Shared.Const;
 
@@ -38,9 +37,9 @@ namespace Vokabular.MainService.Controllers
         }
        
         [HttpGet("importStatus")]
-        public IList<RepositoryImportProgressInfo> GetActualProgress()
+        public IList<RepositoryImportProgressInfoContract> GetActualProgress()
         {
-            return m_mainImportManager.ActualProgress.Select(x => x.Value).ToList();
+            return m_mainImportManager.GetActualProgressInfo();
         }
     }
 }

@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
+using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
 
@@ -36,6 +39,12 @@ namespace Vokabular.ProjectImport
         public void CancelTask(int externalRepositoryId)
         {
             m_importManager.CancelTask(externalRepositoryId);
+        }
+
+        public IList<RepositoryImportProgressInfoContract> GetActualProgressInfo()
+        {
+            var result = Mapper.Map<IList<RepositoryImportProgressInfoContract>>(ActualProgress.Select(x => x.Value));
+            return result;
         }
     }
 }
