@@ -2332,6 +2332,52 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public void UpdateCurrentUserContact(UpdateUserContactContract data)
+        {
+            try
+            {
+                Put<object>("user/current/contact", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+
+        public void ConfirmUserContact(ConfirmUserContactContract data)
+        {
+            try
+            {
+                Put<object>("user/confirmcontact", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void ResendConfirmCode(UserContactContract data)
+        {
+            try
+            {
+                Put<object>("user/resendcode", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         #endregion
 
         #region Card files
@@ -2516,6 +2562,21 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 Put<object>($"user/{userId}/edit", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void UpdateUserContact(int userId, UpdateUserContactContract data)
+        {
+            try
+            {
+                Put<object>($"user/{userId}/contact", data);
             }
             catch (HttpRequestException e)
             {

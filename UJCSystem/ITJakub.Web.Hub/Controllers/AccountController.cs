@@ -90,6 +90,7 @@ namespace ITJakub.Web.Hub.Controllers
                 {
                     UpdateUserViewModel = Mapper.Map<UpdateUserViewModel>(user),
                     UpdatePasswordViewModel = null,
+                    UpdateContactViewModel = Mapper.Map<UpdateContactViewModel>(user),
                     ActualTab = AccountTab.UpdateAccount
                 };
                 return View(viewmodel);
@@ -161,7 +162,7 @@ namespace ITJakub.Web.Hub.Controllers
                         };
 
                         client.UpdateCurrentPassword(updateUserPasswordContract);
-                        ViewData.Add(AccountConstants.SuccessPasswordChange, true);
+                        ViewData.Add(AccountConstants.SuccessPasswordUpdate, true);
                     }
                 }
                 catch (HttpErrorCodeException e)
@@ -177,12 +178,33 @@ namespace ITJakub.Web.Hub.Controllers
                 {
                     UpdateUserViewModel = Mapper.Map<UpdateUserViewModel>(user),
                     UpdatePasswordViewModel = model,
+                    UpdateContactViewModel = Mapper.Map<UpdateContactViewModel>(user),
                     ActualTab = AccountTab.UpdatePassword
                 };
                 return View("AccountSettings", viewModel);
             }
         }
 
+        //
+        // POST: /Account/UpdateContact
+        [HttpPost]
+        public IActionResult UpdateContact([FromBody] UpdateUserContactContract updateUserContactContract)
+        {
+            try
+            {
+                using (var client = GetRestClient())
+                {
+                    client.UpdateCurrentUserContact(updateUserContactContract);
+                }
+            }
+            catch (HttpErrorCodeException e)
+            {
+                AddErrors(e);
+                return BadRequest(ModelState);
+            }
+
+            return Ok();
+        }
         //
         // POST: /Account/LogOut
         [HttpPost]

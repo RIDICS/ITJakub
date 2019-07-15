@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
+using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
@@ -9,6 +10,7 @@ using Vokabular.MainService.Core.Works.Users;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Results;
 using AuthUserContract = Ridics.Authentication.DataContracts.User.UserContract;
+using UserContactContract = Vokabular.MainService.DataContracts.Contracts.UserContactContract;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -19,7 +21,8 @@ namespace Vokabular.MainService.Core.Managers
         private readonly AuthenticationManager m_authenticationManager;
         private readonly UserDetailManager m_userDetailManager;
 
-        public UserManager(UserRepository userRepository, CommunicationProvider communicationProvider, AuthenticationManager authenticationManager, UserDetailManager userDetailManager)
+        public UserManager(UserRepository userRepository, CommunicationProvider communicationProvider,
+            AuthenticationManager authenticationManager, UserDetailManager userDetailManager)
         {
             m_userRepository = userRepository;
             m_communicationProvider = communicationProvider;
@@ -53,6 +56,11 @@ namespace Vokabular.MainService.Core.Managers
             new UpdateUserWork(m_userRepository, userId, data, m_communicationProvider).Execute();
         }
 
+        public void UpdateUserContact(int userId, UpdateUserContactContract data)
+        {
+            new UpdateUserContactsWork(m_userRepository, userId, data, m_communicationProvider).Execute();
+        }
+
         public void UpdateUserPassword(UpdateUserPasswordContract data)
         {
             var userId = m_authenticationManager.GetCurrentUserId();
@@ -61,21 +69,21 @@ namespace Vokabular.MainService.Core.Managers
         }
 
         public PagedResultList<UserDetailContract> GetUserList(int? start, int? count, string filterByName)
-        {        
+        {
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
 
             var client = m_communicationProvider.GetAuthUserApiClient();
-            
-                var result = client.HttpClient.GetListAsync<AuthUserContract>(startValue, countValue, filterByName).GetAwaiter().GetResult();
-                var userDetailContracts = Mapper.Map<List<UserDetailContract>>(result.Items);
-                m_userDetailManager.AddIdForExternalUsers(userDetailContracts);
 
-                return new PagedResultList<UserDetailContract>
-                {
-                    List = userDetailContracts,
-                    TotalCount = result.ItemsCount,
-                };
+            var result = client.HttpClient.GetListAsync<AuthUserContract>(startValue, countValue, filterByName).GetAwaiter().GetResult();
+            var userDetailContracts = Mapper.Map<List<UserDetailContract>>(result.Items);
+            m_userDetailManager.AddIdForExternalUsers(userDetailContracts);
+
+            return new PagedResultList<UserDetailContract>
+            {
+                List = userDetailContracts,
+                TotalCount = result.ItemsCount,
+            };
         }
 
         public IList<UserDetailContract> GetUserAutocomplete(string query, int? count)
@@ -98,6 +106,33 @@ namespace Vokabular.MainService.Core.Managers
             var dbResult = m_userRepository.InvokeUnitOfWork(x => x.FindById<User>(userId));
 
             return m_userDetailManager.GetUserDetailContractForUser(dbResult);
+        }
+
+        public bool ConfirmContact(int userId, ConfirmUserContactContract data)
+        {
+            var client = m_communicationProvider.GetAuthContactApiClient();
+
+            var contract = new ConfirmContactContract
+            {
+                UserId = userId,
+                ConfirmCode = data.ConfirmCode,
+                ContactType = data.ContactType
+            };
+
+            return client.ConfirmContactAsync(contract).GetAwaiter().GetResult();
+        }
+
+        public void ResendConfirmCode(int userId, UserContactContract data)
+        {
+            var client = m_communicationProvider.GetAuthContactApiClient();
+
+            var contract = new ContactContract
+            {
+                UserId = userId,
+                ContactType = data.ContactType
+            };
+
+            client.ResendCodeAsync(contract).GetAwaiter().GetResult();
         }
     }
 }

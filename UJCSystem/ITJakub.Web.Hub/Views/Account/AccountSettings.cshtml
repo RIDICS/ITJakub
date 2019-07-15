@@ -19,6 +19,9 @@
         <li role="presentation" @(Model.ActualTab == AccountTab.UpdatePassword ? "class=active" : string.Empty)>
             <a href="#update-password" data-toggle="tab" role="tab">@Localizer.Translate("PasswordChange", "Account")</a>
         </li>
+        <li role="presentation" @(Model.ActualTab == AccountTab.UpdateContact ? "class=active" : string.Empty)>
+            <a href="#update-contact" data-toggle="tab" role="tab">@Localizer.Translate("UpdateContact", "Account")</a>@**TODO trans*@
+        </li>
     </ul>
 
     <div class="tab-content">
@@ -27,6 +30,9 @@
         </div>
         <div role="tabpanel" class="tab-pane @(Model.ActualTab == AccountTab.UpdatePassword ? "active" : string.Empty)" id="update-password">
             @await Html.PartialAsync("Settings/_UpdatePassword", Model.UpdatePasswordViewModel)
+        </div>
+        <div role="tabpanel" class="tab-pane @(Model.ActualTab == AccountTab.UpdateContact ? "active" : string.Empty)" id="update-contact">
+            @await Html.PartialAsync("Settings/_UpdateContact", Model.UpdateContactViewModel)
         </div>
     </div>
 </div>

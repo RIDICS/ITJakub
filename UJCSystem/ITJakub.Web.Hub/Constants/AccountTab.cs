@@ -3,6 +3,7 @@
     public enum AccountTab
     {
         UpdatePassword,
-        UpdateAccount
+        UpdateAccount,
+        UpdateContact
     }
 }

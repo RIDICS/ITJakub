@@ -1,0 +1,11 @@
+{
+  "culture": "en",
+  "scope": "UpdateContactViewModel",
+  "dictionary": {
+    "Email": "Email",
+    "ConfirmCode": "Confirm code",
+    "NotEmpty": "The {0} can not be empty.",
+    "The {0} field is not a valid e-mail address": "The {0} field is not a valid e-mail address",
+    "The {0} field is not a valid e-mail address.": "The {0} field is not a valid e-mail address"
+  }
+}

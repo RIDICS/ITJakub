@@ -21,6 +21,8 @@ namespace Vokabular.MainService.DataContracts.Contracts
     public class UserDetailContract : UserContract
     {
         public string Email { get; set; }
+        
+        public bool IsEmailConfirmed { get; set; }
 
         public List<RoleContract> Roles { get; set; }
     }

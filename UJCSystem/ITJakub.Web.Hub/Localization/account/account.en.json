@@ -25,6 +25,8 @@
 
     "PasswordChange": "Update password",
     "UpdatePasswordSubmit": "Change password",
-    "SuccessPasswordChange": "The password was successfully updated."
+    "SuccessPasswordChange": "The password was successfully updated.",
+
+    "UpdateContact": "Edit contacts"
   }
 }

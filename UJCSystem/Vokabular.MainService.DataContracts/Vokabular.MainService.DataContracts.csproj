@@ -20,6 +20,7 @@
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Ridics.Authentication.DataContracts" Version="0.1.1" />
   </ItemGroup>
 
   <ItemGroup>

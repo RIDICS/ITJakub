@@ -1,0 +1,76 @@
+﻿@using ITJakub.Web.Hub.Constants
+@using Scalesoft.Localization.AspNetCore
+@model ITJakub.Web.Hub.Models.UpdateContactViewModel
+@inject ILocalizationService Localizer
+
+<div class="row" style="margin-left: 5px; width: 80%;">
+    <div class="col-md-12">
+        @if (ViewData.TryGetValue(AccountConstants.SuccessContactUpdate, out var success) && (bool)success)
+        {
+            <div class="alert alert-success" role="alert">
+                @Localizer.Translate("SuccessContactUpdate", "Account")
+            </div>
+        }
+        <div class="panel panel-default">
+            <div class="panel-heading">Změna emailové adresy</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email, new { @class = "col-md-3 control-label" })
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @id = "emailInput" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-9">@*Change value Change/Confirm*@
+                        <input id="updateEmail" type="submit" class="btn btn-default" value="@Localizer.Translate("UpdatePasswordSubmit", "Account")" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (Model.IsEmailConfirmed)
+        {
+            <div class="panel panel-warning">
+                <div class="panel-heading">Ověření emailové adresy</div>
+                <div class="panel-body">
+                    @*Confirm code
+                    <div class="form-group">
+                        @Html.LabelFor(m => m., new { @class = "col-md-3 control-label" })
+                        <div class="col-md-8">
+                            @Html.PasswordFor(m => m.OldPassword, new { @class = "form-control" })
+                        </div>
+                    </div>*@
+
+                    <div class="form-group">
+                        <div class="col-md-offset-3 col-md-9">
+                            <input type="submit" class="btn btn-default" value="@Localizer.Translate("UpdatePasswordSubmit", "Account")" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @*<form asp-controller="Account" asp-action="UpdateContact">
+
+            <div asp-validation-summary="All" class="alert alert-danger"></div>
+        </form>
+
+            @using (Html.BeginForm("UpdatePassword", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary("", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(m => m.OldPassword, new { @class = "col-md-3 control-label" })
+                    <div class="col-md-8">
+                        @Html.PasswordFor(m => m.OldPassword, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="submit" class="btn btn-default" value="@Localizer.Translate("UpdatePasswordSubmit", "Account")" />
+                    </div>
+                </div>
+            }*@
+    </div>
+</div>

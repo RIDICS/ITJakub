@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Constants;
-using Vokabular.MainService.DataContracts.Contracts.Permission;
+using RoleContract = Vokabular.MainService.DataContracts.Contracts.Permission.RoleContract;
 
 namespace ITJakub.Web.Hub.Models
 {
@@ -62,6 +62,8 @@ namespace ITJakub.Web.Hub.Models
 
         public UpdatePasswordViewModel UpdatePasswordViewModel;
 
+        public UpdateContactViewModel UpdateContactViewModel;
+
         public AccountTab ActualTab { get; set; }
     }
 
@@ -107,6 +109,20 @@ namespace ITJakub.Web.Hub.Models
         [Display(Name = "ConfirmPassword")]
         [Compare("Password", ErrorMessage = "PasswordsNotEqual")]
         public string ConfirmPassword { get; set; }
+    }
+
+    public class UpdateContactViewModel
+    {
+        [Required(AllowEmptyStrings = false, ErrorMessage = "NotEmpty")]
+        [DataType(DataType.EmailAddress)]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        public bool IsEmailConfirmed { get; set; }
+
+        [Required(AllowEmptyStrings = false, ErrorMessage = "NotEmpty")]
+        [Display(Name = "ConfirmCode")]
+        public string ConfirmCode { get; set; }
     }
 
     public class UserDetailViewModel

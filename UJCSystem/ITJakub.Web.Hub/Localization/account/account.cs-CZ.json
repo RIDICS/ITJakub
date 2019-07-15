@@ -25,6 +25,8 @@
 
     "PasswordChange": "Změna hesla",
     "UpdatePasswordSubmit": "Změnit heslo",
-    "SuccessPasswordChange": "Heslo bylo úspěšně změněno."
+    "SuccessPasswordChange": "Heslo bylo úspěšně změněno.",
+
+    "UpdateContact": "Úprava kontaktů" 
   }
 }
