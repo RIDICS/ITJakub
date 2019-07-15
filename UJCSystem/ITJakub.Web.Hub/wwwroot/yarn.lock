@@ -27,7 +27,6 @@ bootstrap@3.3.7:
 bootstrap@^4.0:
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.3.1.tgz#280ca8f610504d99d7b6b4bfc4b68cec601704ac"
-  integrity sha512-rXqOmH1VilAt2DyPzluTi2blhk17bO7ef+zLLPlWvG494pDxcM234pJ8wTc/6R40UWizAIIMgxjvxZg5kmsbag==
 
 codemirror-spell-checker@*:
   version "1.1.2"
@@ -58,6 +57,10 @@ gijgo@1.8.0:
   resolved "https://registry.yarnpkg.com/gijgo/-/gijgo-1.8.0.tgz#2ce1433be9bc5b542d203e342bbd2b65d7fb6d66"
   dependencies:
     jquery "^3.2.1"
+
+he@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
 
 "jquery-appear@https://github.com/emn178/jquery-appear.git#0.2.6":
   version "0.0.0"
@@ -105,7 +108,6 @@ jquery@^2.1.0:
 jquery@^3.3.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
-  integrity sha512-36+AdBzCL+y6qjw5Tx7HgzeGCzC81MDDgaUP8ld2zhx58HdqXGoBd+tHdrBMiyjGQs0Hxs/MLZTu/eHNJJuWPw==
 
 lazysizes@4.0.1:
   version "4.0.1"
@@ -126,7 +128,6 @@ respond.js@1.4.2:
 s-pagination@2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/s-pagination/-/s-pagination-2.1.0.tgz#42c27b7cfc2e7b12c8b4e1437f90b3fda851ba00"
-  integrity sha512-WkOyj0H7juHzubFs+m1j3c2UYW/AZeJTWx4FxerhpQPN9mCTbsPGrWScgGhBJ+pU7eaWzLuUMaHGsDt/OspdAg==
   dependencies:
     bootstrap "^4.0"
     jquery "^3.3.1"
@@ -134,7 +135,6 @@ s-pagination@2.1.0:
 scalesoft-localization-web@2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/scalesoft-localization-web/-/scalesoft-localization-web-2.1.1.tgz#bd3ae48f86916e27e92833f9bb786d0e0cd40a76"
-  integrity sha512-on14wrOFA9b2YqEtLshROdfN9fHmkpvwW2B09jLZhhcXHMm0kcZaF+gVHcHQKwW0q7/ou6/ZUeeJYtVTD8KVzA==
 
 "simplemde-custom-markdown-mode@https://github.com/RIDICS/simplemde-markdown-editor.git#71b7a583e230b967116c99141291d94276ba1433":
   version "1.11.2"

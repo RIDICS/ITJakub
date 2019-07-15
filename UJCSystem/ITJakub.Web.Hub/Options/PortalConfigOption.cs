@@ -1,4 +1,6 @@
-﻿namespace ITJakub.Web.Hub.Options
+﻿using System.Collections.Generic;
+
+namespace ITJakub.Web.Hub.Options
 {
     public class PortalOption
     {
@@ -11,5 +13,7 @@
         public PortalConfig MainPortal { get; set; }
 
         public PortalConfig SecondPortal { get; set; }
+
+        public Dictionary<string, bool> AllowedSearchOptions { get; set; }
     }
 }

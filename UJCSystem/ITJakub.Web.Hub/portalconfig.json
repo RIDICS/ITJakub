@@ -14,6 +14,23 @@
       "PortalName2": "portál",
       "PortalLogoPath": "~/images/logo/logo.CommunityPortal.png"
     },
-    "SecondPortalUrl": "https://localhost:44368/"
+    "SecondPortalUrl": "https://localhost:44368/",
+    "AllowedSearch": {
+      "Author": true,
+      "Title": true,
+      "Editor": true,
+      "Dating": true,
+      "Fulltext": true,
+      "Heading": true,
+      "Sentence": true,
+      "Result": true,
+      "ResultRestriction": true,
+      "TokenDistance": true,
+      "Headword": true,
+      "HeadwordDescription": true,
+      "HeadwordDescriptionTokenDistance": true,
+      "SelectedCategory": true,
+      "Term": true
+    }
   }
 }

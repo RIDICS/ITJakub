@@ -3,10 +3,8 @@
 @using Microsoft.Extensions.Options;
 @using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
-@using Vokabular.Shared
 @using Vokabular.Shared.AspNetCore.Extensions
 @using Vokabular.Shared.Const
-@using Vokabular.Shared.Options;
 
 @inject ILocalizationService Localizer
 @inject IOptions<PortalOption> PortalConfig
@@ -101,6 +99,7 @@
         <script src="~/lib/s-pagination/dist/pagination.js"></script>
         <script src="~/lib/bootbox/bootbox.js"></script>
         <script src="~/lib/dropzone/downloads/dropzone.js"></script>
+        <script src="~/lib/he/he.js"></script>
 
         <environment names="Staging,Production">
             <script src="~/js/bundles/itjakub.keyboard.bundle.js"></script>
