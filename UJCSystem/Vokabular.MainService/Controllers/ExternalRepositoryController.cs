@@ -1,5 +1,4 @@
-﻿using System.Web;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,7 +17,7 @@ using Vokabular.Shared.Const;
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(PermissionNames.ManageBibliographyImport)]
+    [Authorize(VokabularPermissionNames.ManageBibliographyImport)]
     public class ExternalRepositoryController : BaseController
     {
         private readonly ExternalRepositoryManager m_externalRepositoryManager;

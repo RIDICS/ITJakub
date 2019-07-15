@@ -122,7 +122,7 @@ namespace Vokabular.ProjectImport.ImportPipeline
 
             var allPermissions = m_permissionApiClient.GetAllPermissionsAsync().GetAwaiter().GetResult();
             var permission =
-                allPermissions.SingleOrDefault(x => x.Name == $"{PermissionNames.AutoImport}{(int) BookTypeEnum.BibliographicalItem}");
+                allPermissions.SingleOrDefault(x => x.Name == $"{VokabularPermissionNames.AutoImport}{(int) BookTypeEnum.BibliographicalItem}");
 
             IList<int> roleIds = new List<int>();
             if (permission != null)

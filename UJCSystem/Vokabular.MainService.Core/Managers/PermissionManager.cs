@@ -8,14 +8,12 @@ using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Utils;
-using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Permission;
-using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.Const;
 using AuthRoleContract = Ridics.Authentication.DataContracts.RoleContract;
 using AuthPermissionContract = Ridics.Authentication.DataContracts.PermissionContract;
-
+using PermissionContract = Vokabular.MainService.DataContracts.Contracts.Permission.PermissionContract;
 
 namespace Vokabular.MainService.Core.Managers
 {

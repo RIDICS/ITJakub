@@ -10,7 +10,7 @@ using Vokabular.Shared.Const;
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(PermissionNames.ManageBibliographyImport)]
+    [Authorize(VokabularPermissionNames.ManageBibliographyImport)]
     public class RepositoryImportController : BaseController
     {
         private readonly MainImportManager m_mainImportManager;

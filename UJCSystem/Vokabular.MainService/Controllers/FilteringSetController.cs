@@ -14,7 +14,7 @@ using Vokabular.Shared.Const;
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(PermissionNames.ManageBibliographyImport)]
+    [Authorize(VokabularPermissionNames.ManageBibliographyImport)]
     public class FilteringExpressionSetController : BaseController
     {
         private readonly FilteringExpressionSetManager m_filteringExpressionSetManager;
