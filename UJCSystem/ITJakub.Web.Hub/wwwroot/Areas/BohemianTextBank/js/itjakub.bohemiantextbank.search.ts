@@ -10,7 +10,7 @@ class BohemianTextbankSearch {
     private paginationMaxVisibleElements = 5;
 
     private localization: Localization;
-    private defaultErrorMessage = this.localization.translate("SearchDefaultError", "BohemianTextBank").value;
+    private defaultErrorMessage;
 
     private urlSearchKey = "search";
     private urlPageKey = "page";
@@ -37,6 +37,7 @@ class BohemianTextbankSearch {
 
     constructor() {
         this.localization = localization;
+        this.defaultErrorMessage = this.localization.translate("SearchDefaultError", "BohemianTextBank").value;
     }
 
     initSearch() {
