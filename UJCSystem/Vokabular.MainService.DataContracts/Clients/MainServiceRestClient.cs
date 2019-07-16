@@ -2348,11 +2348,11 @@ namespace Vokabular.MainService.DataContracts.Clients
         }
 
 
-        public void ConfirmUserContact(ConfirmUserContactContract data)
+        public bool ConfirmUserContact(ConfirmUserContactContract data)
         {
             try
             {
-                Put<object>("user/confirmcontact", data);
+                return Post<bool>("user/confirmcontact", data);
             }
             catch (HttpRequestException e)
             {
@@ -2367,7 +2367,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Put<object>("user/resendcode", data);
+                Post<object>("user/resendcode", data);
             }
             catch (HttpRequestException e)
             {

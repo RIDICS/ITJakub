@@ -188,22 +188,70 @@ namespace ITJakub.Web.Hub.Controllers
         //
         // POST: /Account/UpdateContact
         [HttpPost]
-        public IActionResult UpdateContact([FromBody] UpdateUserContactContract updateUserContactContract)
+        public IActionResult UpdateContact([FromBody] UpdateUserContactContract data)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(data.NewContactValue))
+                {
+                    return Json( "empty-email");
+                }
+
+                if (data.NewContactValue == data.OldContactValue)
+                {
+                    return Json("same-email");
+                }
+
+                using (var client = GetRestClient())
+                {
+                    client.UpdateCurrentUserContact(data);
+                }
+            }
+            catch (HttpErrorCodeException e)
+            {
+                return Json(new { e.Message });
+            }
+
+            return Json(new {});
+        }
+
+        //
+        // POST: /Account/ConfirmUserContact
+        [HttpPost]
+        public IActionResult ConfirmUserContact([FromBody] ConfirmUserContactContract data)
         {
             try
             {
                 using (var client = GetRestClient())
                 {
-                    client.UpdateCurrentUserContact(updateUserContactContract);
+                    var result = client.ConfirmUserContact(data);
+                    return Json(result);
                 }
             }
             catch (HttpErrorCodeException e)
             {
-                AddErrors(e);
-                return BadRequest(ModelState);
+                return Json(new { e.Message });
+            }
+        }
+
+        //
+        // POST: /Account/ResendConfirmCode
+        [HttpPost]
+        public IActionResult ResendConfirmCode([FromBody] UserContactContract data)
+        {
+            try
+            {
+                using (var client = GetRestClient())
+                {
+                    client.ResendConfirmCode(data);
+                }
+            }
+            catch (HttpErrorCodeException e)
+            {
+                return Json(new { e.Message });
             }
 
-            return Ok();
+            return Json(new { });
         }
         //
         // POST: /Account/LogOut

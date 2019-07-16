@@ -32,6 +32,8 @@ namespace Vokabular.MainService.DataContracts.Contracts
     public class UpdateUserContactContract : UserContactContract
     {
         public string NewContactValue { get; set; }
+
+        public string OldContactValue { get; set; }
     }
 
     public class ConfirmUserContactContract : UserContactContract

@@ -215,12 +215,7 @@ namespace Vokabular.MainService.Controllers
             try
             {
                 var result = m_userManager.ConfirmContact(data.UserId, data);
-                if (!result)
-                {
-                    //todo return error - confirm code does not match
-                }
-
-                return Ok();
+                return Json(result);
             }
             catch (HttpErrorCodeException exception)
             {

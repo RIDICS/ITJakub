@@ -1,76 +1,88 @@
-﻿@using ITJakub.Web.Hub.Constants
-@using Scalesoft.Localization.AspNetCore
+﻿@using Scalesoft.Localization.AspNetCore
 @model ITJakub.Web.Hub.Models.UpdateContactViewModel
 @inject ILocalizationService Localizer
 
-<div class="row" style="margin-left: 5px; width: 80%;">
-    <div class="col-md-12">
-        @if (ViewData.TryGetValue(AccountConstants.SuccessContactUpdate, out var success) && (bool)success)
-        {
-            <div class="alert alert-success" role="alert">
-                @Localizer.Translate("SuccessContactUpdate", "Account")
-            </div>
-        }
-        <div class="panel panel-default">
-            <div class="panel-heading">Změna emailové adresy</div>
-            <div class="panel-body">
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Email, new { @class = "col-md-3 control-label" })
-                    <div class="col-md-8">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @id = "emailInput" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-md-offset-3 col-md-9">@*Change value Change/Confirm*@
-                        <input id="updateEmail" type="submit" class="btn btn-default" value="@Localizer.Translate("UpdatePasswordSubmit", "Account")" />
-                    </div>
-                </div>
-            </div>
-        </div>
-        @if (Model.IsEmailConfirmed)
-        {
-            <div class="panel panel-warning">
-                <div class="panel-heading">Ověření emailové adresy</div>
+<div class="row">
+    <div class="col-md-offset-1 col-lg-offset-2 col-md-10 col-lg-8">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">@Localizer.Translate("EmailAddressUpdate", "Account")</div>
                 <div class="panel-body">
-                    @*Confirm code
-                    <div class="form-group">
-                        @Html.LabelFor(m => m., new { @class = "col-md-3 control-label" })
-                        <div class="col-md-8">
-                            @Html.PasswordFor(m => m.OldPassword, new { @class = "form-control" })
+                    <form asp-controller="Account" asp-action="UpdateContact" method="post" class="form-horizontal">
+                        <div asp-validation-summary="All" class="alert alert-danger"></div>
+                        <div class="row">
+                            <div class="col-md-offset-2 col-md-8">
+                                <div id="successContactUpdate" class="alert alert-success fade hide" role="alert">
+                                    @Localizer.Translate("SuccessContactUpdate", "Account")
+                                </div>
+                                <div id="errorContactUpdate" class="alert alert-danger fade hide" role="alert">
+                                </div>
+                            </div>
                         </div>
-                    </div>*@
+                        
+                        @Html.Hidden("oldEmailValue", Model.Email)
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", id = "emailInput" })
+                            </div>
+                        </div>
 
-                    <div class="form-group">
-                        <div class="col-md-offset-3 col-md-9">
-                            <input type="submit" class="btn btn-default" value="@Localizer.Translate("UpdatePasswordSubmit", "Account")" />
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-8">
+                                <input id="updateEmailSubmit" type="submit" class="btn btn-default" value="@Localizer.Translate("Change", "Account")" />
+                            </div>
                         </div>
+                    </form>
+                </div>
+            </div>
+            <div id="confirmEmailPanel" class="panel @(Model.IsEmailConfirmed ? "panel-default hide" : "panel-warning")">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <a href="#confirmEmailPanelBody" data-toggle="collapse">@Localizer.Translate("EmailAddressVerification", "Account")</a>
+                        </div>
+                        <div class="col-lg-6 email-warning @(Model.IsEmailConfirmed ? "hide" : string.Empty)">
+                            <i class="fa fa-warning"></i> @Localizer.Translate("EmailAddressIsNotVerified", "Account")</div>
+                    </div>
+                </div>
+                <div id="confirmEmailPanelBody" class="panel-collapse collapse @(Model.IsEmailConfirmed ? string.Empty : "in")">
+                    <div class="panel-body">
+                        <form asp-controller="Account" asp-action="UpdateContact" method="post" class="form-horizontal">
+                            <div asp-validation-summary="All" class="alert alert-danger"></div>
+                            <div class="row">
+                                <div class="col-md-offset-2 col-md-8">
+                                    <div id="confirmCodeSend" class="alert alert-success fade hide" role="alert">
+                                        @Localizer.TranslateFormat("ConfirmCodeSend", "Account", Model.Email)
+                                    </div>
+                                    <div id="successConfirmContact" class="alert alert-success fade hide " role="alert">
+                                        @Localizer.TranslateFormat("SuccessConfirmContact", "Account", Model.Email)
+                                    </div>
+                                    <div id="errorConfirmContact" class="alert alert-danger fade hide " role="alert">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ConfirmCode, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(m => m.ConfirmCode, new { @class = "form-control", id = "emailConfirmInput" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-8">
+                                    <input id="confirmEmailSubmit" type="submit" class="btn btn-default" value="@Localizer.Translate("Confirm", "Account")" />
+                                    <button id="resendConfirmCode" type="button" class="btn btn-default">
+                                        @Localizer.Translate("ResendCode", "Account")
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-        }
 
-        @*<form asp-controller="Account" asp-action="UpdateContact">
-
-            <div asp-validation-summary="All" class="alert alert-danger"></div>
-        </form>
-
-            @using (Html.BeginForm("UpdatePassword", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                @Html.ValidationSummary("", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(m => m.OldPassword, new { @class = "col-md-3 control-label" })
-                    <div class="col-md-8">
-                        @Html.PasswordFor(m => m.OldPassword, new { @class = "form-control" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-md-offset-3 col-md-9">
-                        <input type="submit" class="btn btn-default" value="@Localizer.Translate("UpdatePasswordSubmit", "Account")" />
-                    </div>
-                </div>
-            }*@
+        </div>
     </div>
 </div>

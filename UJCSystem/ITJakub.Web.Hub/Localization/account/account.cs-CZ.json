@@ -1,6 +1,6 @@
 {
-	"culture":"cs-CZ",
-	"scope":"Account",
+  "culture": "cs-CZ",
+  "scope": "Account",
   "dictionary": {
     "UseExternalLoginService": "Použít jinou službu pro přihlášení",
     "UseExternalLoginService-placeholder": "Zde by mělo být možné se zaregistrovat pomocí jiných účtu",
@@ -27,6 +27,19 @@
     "UpdatePasswordSubmit": "Změnit heslo",
     "SuccessPasswordChange": "Heslo bylo úspěšně změněno.",
 
-    "UpdateContact": "Úprava kontaktů" 
+    "UpdateContact": "Úprava kontaktů",
+    "EmailAddressUpdate": "Změna emailové adresy",
+    "EmailAddressVerification": "Ověření emailové adresy",
+    "EmailAddressIsNotVerified": "Emailová adresa není ověřena",
+    "SuccessContactUpdate": "Kontakt byl úspešně změněn. Nyní je potřeba ho ověřit.",
+    "ConfirmCodeSend": "Potvrzovací kód byl odeslán na emailovou adresu {0}.",
+    "Change": "Změnit",
+    "Confirm": "Potvrdit",
+    "ResendCode": "Znovu odeslat kód",
+    "SuccessConfirmContact": "Kontakt byl úspešně ověřen.",
+
+    "EmptyEmail": "Email nemůže být prázdný.",
+    "SameEmail": "Nový email nemůže být stejný jako původní.",
+    "ConfirmCodeNotValid": "Ověřovací kód není správný."
   }
 }

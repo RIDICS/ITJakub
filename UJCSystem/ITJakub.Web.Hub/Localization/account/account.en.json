@@ -1,6 +1,6 @@
 {
-	"culture":"en",
-	"scope":"Account",
+  "culture": "en",
+  "scope": "Account",
   "dictionary": {
     "UseExternalLoginService": "Use another service for login",
     "UseExternalLoginService-placeholder": "You should be able to register using another accounts here",
@@ -27,6 +27,19 @@
     "UpdatePasswordSubmit": "Change password",
     "SuccessPasswordChange": "The password was successfully updated.",
 
-    "UpdateContact": "Edit contacts"
+    "UpdateContact": "Edit contacts",
+    "EmailAddressUpdate": "Edit email address",
+    "EmailAddressVerification": "Email address verification",
+    "EmailAddressIsNotVerified": "Email address is not verified",
+    "SuccessContactUpdate": "The contact was successfully updated. Now you need to verify it.",
+    "ConfirmCodeSend": "The confirm code was sent to email address {0}.",
+    "Change": "Change",
+    "Confirm": "Confirm",
+    "ResendCode": "Resend confirm code",
+    "SuccessConfirmContact": "The contact was successfully confirmed.",
+
+    "EmptyEmail": "Email cannot be empty",
+    "SameEmail": "New email cannot be same as old email.",
+    "ConfirmCodeNotValid": "Confirm code is not valid."
   }
 }
