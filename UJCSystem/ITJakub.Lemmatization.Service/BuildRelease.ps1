@@ -7,12 +7,13 @@ Param(
 )
 
 $env:ASPNETCORE_ENVIRONMENT = "${TargetEnvironment}"
-$MsBuildPath = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\MSBuild.exe"
+$MsBuildPath = & "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -prerelease -products * -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe
 
 $ProjectDir = (Get-Location -PSProvider FileSystem).ProviderPath
 
 Write-Host
 Write-Host "Using project directory: ${ProjectDir}"
+Write-Host "Using MSBuild path: ${MsBuildPath}"
 Write-Host
 Write-Host
 
