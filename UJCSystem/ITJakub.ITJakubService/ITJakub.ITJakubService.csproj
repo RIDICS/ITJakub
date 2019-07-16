@@ -199,7 +199,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <Content Include="..\..\..\itjakub-secrets\ITJakub.Secrets.config">
+    <Content Include="..\..\..\itjakub-secrets\WcfServices\ITJakub.Secrets.config">
       <Link>ITJakub.Secrets.config</Link>
       <SubType>Designer</SubType>
     </Content>
