@@ -4,8 +4,6 @@ namespace Vokabular.MainService.DataContracts.Contracts
 {
     public class UpdateUserContract
     {
-        //public string UserName { get; set; }
-
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
@@ -37,5 +35,14 @@ namespace Vokabular.MainService.DataContracts.Contracts
     public class ConfirmUserContactContract : UserContactContract
     {
         public string ConfirmCode { get; set; }
+    }
+
+    public class UpdateTwoFactorContract
+    {
+        public int UserId { get; set; }
+
+        public bool TwoFactorIsEnabled { get; set; }
+
+        public string TwoFactorProvider { get; set; }
     }
 }

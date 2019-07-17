@@ -2616,6 +2616,21 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public void UpdateUserTwoFactor(int userId, UserContactContract data)
+        {
+            try
+            {
+                Post<object>($"user/{userId}/twoFactor", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         #endregion
 
         public PagedResultList<RoleContract> GetRoleList(int start, int count, string query)

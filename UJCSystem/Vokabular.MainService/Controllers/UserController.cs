@@ -246,5 +246,23 @@ namespace Vokabular.MainService.Controllers
                 return StatusCode(exception.StatusCode, exception.Description);
             }
         }
+
+        [HttpPut("{userId}/twoFactor")]
+        public IActionResult UpdateTwoFactor(int userId, [FromBody] UpdateTwoFactorContract data)
+        {
+            try
+            {
+                m_userManager.UpdateTwoFactor(userId, data);
+                return Ok();
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Message);
+            }
+            catch (AuthServiceApiException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Description);
+            }
+        }
     }
 }

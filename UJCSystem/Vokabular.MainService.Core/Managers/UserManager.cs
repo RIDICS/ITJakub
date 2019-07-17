@@ -134,5 +134,20 @@ namespace Vokabular.MainService.Core.Managers
 
             client.ResendCodeAsync(contract).GetAwaiter().GetResult();
         }
+
+        public void UpdateTwoFactor(int userId, UpdateTwoFactorContract data)
+        {
+            var client = m_communicationProvider.GetAuthUserApiClient();
+
+            var contract = new ChangeTwoFactorContract
+            {
+                
+                TwoFactorIsEnabled = data.TwoFactorIsEnabled,
+                TwoFactorProvider = data.TwoFactorProvider
+            };
+
+            client.SetTwoFactorAsync(userId, contract).GetAwaiter().GetResult();
+            client.SelectTwoFactorProviderAsync(userId, contract).GetAwaiter().GetResult();
+        }
     }
 }
