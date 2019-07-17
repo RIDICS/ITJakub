@@ -83,18 +83,8 @@ namespace ITJakub.Web.Hub.Controllers
         // GET: /Account/AccountSettings
         public IActionResult AccountSettings(AccountTab actualTab = AccountTab.UpdateAccount)
         {
-            using (var client = GetRestClient())
-            {
-                var user = client.GetCurrentUser();
-                var viewmodel = new AccountDetailViewModel
-                {
-                    UpdateUserViewModel = Mapper.Map<UpdateUserViewModel>(user),
-                    UpdatePasswordViewModel = null,
-                    UpdateContactViewModel = Mapper.Map<UpdateContactViewModel>(user),
-                    ActualTab = actualTab
-                };
-                return View(viewmodel);
-            }
+            var viewmodel = CreateAccountDetailViewModel(actualTab);
+            return View(viewmodel);
         }
 
         //
@@ -127,18 +117,9 @@ namespace ITJakub.Web.Hub.Controllers
                 }
             }
 
-
-            using (var client = GetRestClient())
-            {
-                var user = client.GetCurrentUser();
-                var updateUserViewModel = Mapper.Map<UpdateUserViewModel>(user);
-                var viewModel = new AccountDetailViewModel
-                {
-                    UpdateUserViewModel = updateUserViewModel,
-                    UpdatePasswordViewModel = null
-                };
-                return View("AccountSettings", viewModel);
-            }
+            var viewModel = CreateAccountDetailViewModel();
+            viewModel.UpdateUserViewModel = model;
+            return View("AccountSettings", viewModel);
         }
 
         //
@@ -169,19 +150,10 @@ namespace ITJakub.Web.Hub.Controllers
                     AddErrors(e);
                 }
             }
-
-            using (var client = GetRestClient())
-            {
-                var user = client.GetCurrentUser();
-                var viewModel = new AccountDetailViewModel
-                {
-                    UpdateUserViewModel = Mapper.Map<UpdateUserViewModel>(user),
-                    UpdatePasswordViewModel = model,
-                    UpdateContactViewModel = Mapper.Map<UpdateContactViewModel>(user),
-                    ActualTab = AccountTab.UpdatePassword
-                };
-                return View("AccountSettings", viewModel);
-            }
+            
+            var viewModel = CreateAccountDetailViewModel(AccountTab.UpdatePassword);
+            viewModel.UpdatePasswordViewModel = model;
+            return View("AccountSettings", viewModel);
         }
 
         //
@@ -284,6 +256,22 @@ namespace ITJakub.Web.Hub.Controllers
             }
 
             return RedirectToAction("Index", "Home");
+        }
+
+        private AccountDetailViewModel CreateAccountDetailViewModel(AccountTab accountTab = AccountTab.UpdateAccount)
+        {
+            using (var client = GetRestClient())
+            {
+                var user = client.GetCurrentUser();
+                return new AccountDetailViewModel
+                {
+                    UpdateUserViewModel = Mapper.Map<UpdateUserViewModel>(user),
+                    UpdatePasswordViewModel = null,
+                    UpdateContactViewModel = Mapper.Map<UpdateContactViewModel>(user),
+                    UpdateTwoFactorVerificationViewModel = Mapper.Map<UpdateTwoFactorVerificationViewModel>(user),
+                    ActualTab = accountTab
+                };
+            }
         }
     }
 }
