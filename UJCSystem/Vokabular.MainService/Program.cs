@@ -28,7 +28,7 @@ namespace Vokabular.MainService
                         .AddJsonFile("globalsettings.json");
                     var globalConfiguration = globalbuilder.Build();
 
-                    var secretSettingsPath = globalConfiguration["SecretSettingsPath"];
+                    var secretSettingsPath = globalConfiguration["SecretSettingsPath"] ?? string.Empty;
                     var environmentConfiguration = globalConfiguration["EnvironmentConfiguration"];
 
                     builder

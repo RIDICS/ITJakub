@@ -160,7 +160,7 @@ namespace ITJakub.Web.Hub
 
             // Configuration options
             services.AddOptions();
-            services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
+            services.Configure<EndpointOption>(Configuration.GetSection("Endpoints"));
             services.Configure<GoogleCalendarConfiguration>(Configuration.GetSection("GoogleCalendar"));
 
             services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = 1048576000; });

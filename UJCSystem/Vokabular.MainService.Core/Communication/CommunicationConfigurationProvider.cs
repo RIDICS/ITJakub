@@ -9,7 +9,7 @@ namespace Vokabular.MainService.Core.Communication
 {
     public class CommunicationConfigurationProvider : CommunicationConfigurationProviderBase
     {
-        public CommunicationConfigurationProvider(IOptions<List<EndpointOption>> endpointOptions) : base(endpointOptions)
+        public CommunicationConfigurationProvider(IOptions<EndpointOption> endpointOptions) : base(endpointOptions)
         {
         }
 
