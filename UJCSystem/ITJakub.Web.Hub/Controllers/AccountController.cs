@@ -93,7 +93,7 @@ namespace ITJakub.Web.Hub.Controllers
         [HttpPost]
         [RequireHttps]
         [ValidateAntiForgeryToken]
-        public IActionResult UpdateAccount(UpdateUserViewModel model)
+        public IActionResult UpdateAccount(UpdateUserViewModel updateUserViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -104,8 +104,8 @@ namespace ITJakub.Web.Hub.Controllers
                         var updateUserContract = new UpdateUserContract
                         {
                             AvatarUrl = null, //TODO Avatar
-                            FirstName = model.FirstName,
-                            LastName = model.LastName
+                            FirstName = updateUserViewModel.FirstName,
+                            LastName = updateUserViewModel.LastName
                         };
 
                         client.UpdateCurrentUser(updateUserContract);
@@ -119,7 +119,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
 
             var viewModel = CreateAccountDetailViewModel();
-            viewModel.UpdateUserViewModel = model;
+            viewModel.UpdateUserViewModel = updateUserViewModel;
             return View("AccountSettings", viewModel);
         }
 
@@ -160,23 +160,23 @@ namespace ITJakub.Web.Hub.Controllers
         //
         // POST: /Account/UpdateContact
         [HttpPost]
-        public IActionResult UpdateContact([FromBody] UpdateUserContactContract data)
+        public IActionResult UpdateContact([FromBody] UpdateUserContactContract updateUserContactContract)
         {
             try
             {
-                if (string.IsNullOrEmpty(data.NewContactValue))
+                if (string.IsNullOrEmpty(updateUserContactContract.NewContactValue))
                 {
                     return Json( "empty-email");
                 }
 
-                if (data.NewContactValue == data.OldContactValue)
+                if (updateUserContactContract.NewContactValue == updateUserContactContract.OldContactValue)
                 {
                     return Json("same-email");
                 }
 
                 using (var client = GetRestClient())
                 {
-                    client.UpdateCurrentUserContact(data);
+                    client.UpdateCurrentUserContact(updateUserContactContract);
                 }
             }
             catch (HttpErrorCodeException e)
@@ -190,7 +190,7 @@ namespace ITJakub.Web.Hub.Controllers
         //
         // POST: /Account/ConfirmUserContact
         [HttpPost]
-        public IActionResult ConfirmUserContact([FromBody] ConfirmUserContactRequest data)
+        public IActionResult ConfirmUserContact([FromBody] ConfirmUserContactRequest confirmUserContactRequest)
         {
             try
             {
@@ -198,10 +198,10 @@ namespace ITJakub.Web.Hub.Controllers
                 {
                     var contract = new ConfirmUserContactContract
                     {
-                        ConfirmCode = data.ConfirmCode,
-                        ContactType = data.ContactType
+                        ConfirmCode = confirmUserContactRequest.ConfirmCode,
+                        ContactType = confirmUserContactRequest.ContactType
                     };
-                    var result = client.ConfirmUserContact(data.UserId, contract);
+                    var result = client.ConfirmUserContact(confirmUserContactRequest.UserId, contract);
                     return Json(result);
                 }
             }
@@ -214,7 +214,7 @@ namespace ITJakub.Web.Hub.Controllers
         //
         // POST: /Account/ResendConfirmCode
         [HttpPost]
-        public IActionResult ResendConfirmCode([FromBody] ResendConfirmCodeRequest data)
+        public IActionResult ResendConfirmCode([FromBody] ResendConfirmCodeRequest resendConfirmCodeRequest)
         {
             try
             {
@@ -222,9 +222,9 @@ namespace ITJakub.Web.Hub.Controllers
                 {
                     var contract = new UserContactContract
                     {
-                        ContactType = data.ContactType
+                        ContactType = resendConfirmCodeRequest.ContactType
                     };
-                    client.ResendConfirmCode(data.UserId, contract);
+                    client.ResendConfirmCode(resendConfirmCodeRequest.UserId, contract);
                 }
             }
             catch (HttpErrorCodeException e)
@@ -237,7 +237,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SetTwoFactor(UpdateTwoFactorVerificationViewModel data)
+        public ActionResult SetTwoFactor(UpdateTwoFactorVerificationViewModel twoFactorVerificationViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -245,13 +245,13 @@ namespace ITJakub.Web.Hub.Controllers
                 {
                     var contract = new UpdateTwoFactorContract
                     {
-                        TwoFactorIsEnabled = data.TwoFactorEnabled,
-                        TwoFactorProvider = data.SelectedTwoFactorProvider
+                        TwoFactorIsEnabled = twoFactorVerificationViewModel.TwoFactorEnabled,
+                        TwoFactorProvider = twoFactorVerificationViewModel.SelectedTwoFactorProvider
                     };
                     
                     try
                     {
-                        client.UpdateUserTwoFactor(data.UserId, contract);
+                        client.SetTwoFactor(twoFactorVerificationViewModel.UserId, contract);
                     }
                     catch (HttpErrorCodeException e)
                     {
@@ -261,13 +261,12 @@ namespace ITJakub.Web.Hub.Controllers
             }
 
             var viewModel = CreateAccountDetailViewModel(AccountTab.UpdateTwoFactorVerification);
-            viewModel.UpdateTwoFactorVerificationViewModel = data;
             return View("AccountSettings", viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ChangeTwoFactorProvider(UpdateTwoFactorVerificationViewModel data)
+        public ActionResult ChangeTwoFactorProvider(UpdateTwoFactorVerificationViewModel twoFactorVerificationViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -277,10 +276,10 @@ namespace ITJakub.Web.Hub.Controllers
                     {
                         var contract = new UpdateTwoFactorContract
                         {
-                            TwoFactorIsEnabled = data.TwoFactorEnabled,
-                            TwoFactorProvider = data.SelectedTwoFactorProvider
+                            TwoFactorIsEnabled = twoFactorVerificationViewModel.TwoFactorEnabled,
+                            TwoFactorProvider = twoFactorVerificationViewModel.SelectedTwoFactorProvider
                         };
-                        client.UpdateUserTwoFactor(data.UserId, contract);
+                        client.SelectTwoFactorProvider(twoFactorVerificationViewModel.UserId, contract);
                     }
                     catch (HttpErrorCodeException e)
                     {

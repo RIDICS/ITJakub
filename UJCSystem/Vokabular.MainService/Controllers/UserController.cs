@@ -247,12 +247,30 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [HttpPost("{userId}/twoFactor")]
-        public IActionResult UpdateTwoFactor(int userId, [FromBody] UpdateTwoFactorContract data)
+        [HttpPost("{userId}/setTwoFactor")]
+        public IActionResult SetTwoFactor(int userId, [FromBody] UpdateTwoFactorContract data)
         {
             try
             {
-                m_userManager.UpdateTwoFactor(userId, data);
+                m_userManager.SetTwoFactor(userId, data);
+                return Ok();
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Message);
+            }
+            catch (AuthServiceApiException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Description);
+            }
+        }
+
+        [HttpPost("{userId}/selectTwoFactorProvider")]
+        public IActionResult SelectTwoFactorProvider(int userId, [FromBody] UpdateTwoFactorContract data)
+        {
+            try
+            {
+                m_userManager.SelectTwoFactorProvider(userId, data);
                 return Ok();
             }
             catch (HttpErrorCodeException exception)

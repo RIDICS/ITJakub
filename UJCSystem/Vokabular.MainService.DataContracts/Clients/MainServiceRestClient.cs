@@ -2616,11 +2616,26 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void UpdateUserTwoFactor(int userId, UpdateTwoFactorContract data)
+        public void SetTwoFactor(int userId, UpdateTwoFactorContract data)
         {
             try
             {
-                Post<object>($"user/{userId}/twoFactor", data);
+                Post<object>($"user/{userId}/setTwoFactor", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void SelectTwoFactorProvider(int userId, UpdateTwoFactorContract data)
+        {
+            try
+            {
+                Post<object>($"user/{userId}/selectTwoFactorProvider", data);
             }
             catch (HttpRequestException e)
             {

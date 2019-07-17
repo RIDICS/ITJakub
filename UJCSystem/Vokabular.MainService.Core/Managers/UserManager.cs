@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using Ridics.Authentication.DataContracts;
 using Ridics.Authentication.DataContracts.User;
@@ -114,7 +115,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var contract = new ConfirmContactContract
             {
-                UserId = userId,
+                UserId = GetUserExternalId(userId),
                 ConfirmCode = data.ConfirmCode,
                 ContactType = data.ContactType
             };
@@ -128,26 +129,47 @@ namespace Vokabular.MainService.Core.Managers
 
             var contract = new ContactContract
             {
-                UserId = userId,
+                UserId = GetUserExternalId(userId),
                 ContactType = data.ContactType
             };
 
             client.ResendCodeAsync(contract).GetAwaiter().GetResult();
         }
 
-        public void UpdateTwoFactor(int userId, UpdateTwoFactorContract data)
+        public void SetTwoFactor(int userId, UpdateTwoFactorContract data)
         {
             var client = m_communicationProvider.GetAuthUserApiClient();
 
             var contract = new ChangeTwoFactorContract
             {
-                
+                TwoFactorIsEnabled = data.TwoFactorIsEnabled,
+            };
+
+            client.SetTwoFactorAsync(GetUserExternalId(userId), contract).GetAwaiter().GetResult();
+        }
+
+        public void SelectTwoFactorProvider(int userId, UpdateTwoFactorContract data)
+        {
+            var client = m_communicationProvider.GetAuthUserApiClient();
+
+            var contract = new ChangeTwoFactorContract
+            {
                 TwoFactorIsEnabled = data.TwoFactorIsEnabled,
                 TwoFactorProvider = data.TwoFactorProvider
             };
 
-            client.SetTwoFactorAsync(userId, contract).GetAwaiter().GetResult();
-            client.SelectTwoFactorProviderAsync(userId, contract).GetAwaiter().GetResult();
+            client.SelectTwoFactorProviderAsync(GetUserExternalId(userId), contract).GetAwaiter().GetResult();
+        }
+
+        private int GetUserExternalId(int userId)
+        {
+            var user = m_userRepository.InvokeUnitOfWork(x => x.FindById<User>(userId));
+            if (user.ExternalId == null)
+            {
+                throw new ArgumentException($"User with ID {user.Id} has missing ExternalID");
+            }
+
+            return user.ExternalId.Value;
         }
     }
 }
