@@ -17,20 +17,16 @@ Write-Host "Using .NET Core SDK ${DotnetVersion}"
 Write-Host
 Write-Host
 
-$CsprojFile = Join-Path $ProjectDir "ITJakub.Web.Hub.csproj"
+$CsprojFile = Join-Path $ProjectDir "Vokabular.FulltextService.csproj"
 $PackageLocation = Join-Path $ProjectDir "bin\Publish-${TargetEnvironment}"
 $OutDir = Join-Path $ProjectDir "bin\Publish-build"
 $BuildPackageLocation = Join-Path $ProjectDir "bin\temp-package.zip"
 
-$IisPath = "Default Web Site"
+$IisPath = "LocalhostServices/Vokabular.FulltextService"
 
 $GlobalSettingsFile = Join-Path $ProjectDir "globalsettings.json"
 $GlobalSettingsFileBackup = Join-Path $ProjectDir "globalsettings.json.original"
 
-
-yarn install
-yarn gulp yarn-runtime
-yarn gulp default
 
 if (Test-Path $GlobalSettingsFile)
 {
