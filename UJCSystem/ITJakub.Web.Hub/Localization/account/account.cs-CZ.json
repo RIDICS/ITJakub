@@ -40,6 +40,9 @@
 
     "EmptyEmail": "Email nemůže být prázdný.",
     "SameEmail": "Nový email nemůže být stejný jako původní.",
-    "ConfirmCodeNotValid": "Ověřovací kód není správný."
+    "ConfirmCodeNotValid": "Ověřovací kód není správný.",
+
+    "UpdateTwoFactorVerification": "Dvoufaktorové ověření",
+    "Save": "Uložit"
   }
 }

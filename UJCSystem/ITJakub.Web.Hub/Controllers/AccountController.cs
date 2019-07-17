@@ -234,6 +234,65 @@ namespace ITJakub.Web.Hub.Controllers
 
             return Json(new { });
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SetTwoFactor(UpdateTwoFactorVerificationViewModel data)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var client = GetRestClient())
+                {
+                    var contract = new UpdateTwoFactorContract
+                    {
+                        TwoFactorIsEnabled = data.TwoFactorEnabled,
+                        TwoFactorProvider = data.SelectedTwoFactorProvider
+                    };
+                    
+                    try
+                    {
+                        client.UpdateUserTwoFactor(data.UserId, contract);
+                    }
+                    catch (HttpErrorCodeException e)
+                    {
+                        AddErrors(e);
+                    }
+                }
+            }
+
+            var viewModel = CreateAccountDetailViewModel(AccountTab.UpdateTwoFactorVerification);
+            viewModel.UpdateTwoFactorVerificationViewModel = data;
+            return View("AccountSettings", viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeTwoFactorProvider(UpdateTwoFactorVerificationViewModel data)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var client = GetRestClient())
+                {
+                    try
+                    {
+                        var contract = new UpdateTwoFactorContract
+                        {
+                            TwoFactorIsEnabled = data.TwoFactorEnabled,
+                            TwoFactorProvider = data.SelectedTwoFactorProvider
+                        };
+                        client.UpdateUserTwoFactor(data.UserId, contract);
+                    }
+                    catch (HttpErrorCodeException e)
+                    {
+                        AddErrors(e);
+                    }
+                }
+            }
+
+            var viewModel = CreateAccountDetailViewModel(AccountTab.UpdateTwoFactorVerification);
+            return View("AccountSettings", viewModel);
+        }
+
         //
         // POST: /Account/LogOut
         [HttpPost]

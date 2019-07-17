@@ -247,7 +247,7 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [HttpPut("{userId}/twoFactor")]
+        [HttpPost("{userId}/twoFactor")]
         public IActionResult UpdateTwoFactor(int userId, [FromBody] UpdateTwoFactorContract data)
         {
             try

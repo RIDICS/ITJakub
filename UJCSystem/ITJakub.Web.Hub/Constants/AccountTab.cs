@@ -4,6 +4,7 @@
     {
         UpdatePassword,
         UpdateAccount,
-        UpdateContact
+        UpdateContact,
+        UpdateTwoFactorVerification,
     }
 }

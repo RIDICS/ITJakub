@@ -1,6 +1,6 @@
 ﻿@using ITJakub.Web.Hub.Constants
 @using Scalesoft.Localization.AspNetCore
-@model ITJakub.Web.Hub.Models.AccountDetailViewModel
+@model ITJakub.Web.Hub.Models.User.AccountDetailViewModel
 
 @inject ILocalizationService Localizer
 @section styles {
@@ -23,7 +23,10 @@
             <a href="#update-password" data-toggle="tab" role="tab">@Localizer.Translate("PasswordChange", "Account")</a>
         </li>
         <li role="presentation" @(Model.ActualTab == AccountTab.UpdateContact ? "class=active" : string.Empty)>
-            <a href="#update-contact" data-toggle="tab" role="tab">@Localizer.Translate("UpdateContact", "Account")</a>@**TODO trans*@
+            <a href="#update-contact" data-toggle="tab" role="tab">@Localizer.Translate("UpdateContact", "Account")</a>
+        </li>
+        <li role="presentation" @(Model.ActualTab == AccountTab.UpdateTwoFactorVerification ? "class=active" : string.Empty)>
+            <a href="#update-two-factor-verification" data-toggle="tab" role="tab">@Localizer.Translate("UpdateTwoFactorVerification", "Account")</a>
         </li>
     </ul>
 
@@ -36,6 +39,9 @@
         </div>
         <div role="tabpanel" class="tab-pane @(Model.ActualTab == AccountTab.UpdateContact ? "active" : string.Empty)" id="update-contact">
             @await Html.PartialAsync("Settings/_UpdateContact", Model.UpdateContactViewModel)
+        </div>
+        <div role="tabpanel" class="tab-pane @(Model.ActualTab == AccountTab.UpdateTwoFactorVerification ? "active" : string.Empty)" id="update-two-factor-verification">
+            @await Html.PartialAsync("Settings/_UpdateTwoFactorVerification", Model.UpdateTwoFactorVerificationViewModel)
         </div>
     </div>
 </div>

@@ -2616,7 +2616,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void UpdateUserTwoFactor(int userId, UserContactContract data)
+        public void UpdateUserTwoFactor(int userId, UpdateTwoFactorContract data)
         {
             try
             {

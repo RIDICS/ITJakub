@@ -40,6 +40,9 @@
 
     "EmptyEmail": "Email cannot be empty",
     "SameEmail": "New email cannot be same as old email.",
-    "ConfirmCodeNotValid": "Confirm code is not valid."
+    "ConfirmCodeNotValid": "Confirm code is not valid.",
+
+    "UpdateTwoFactorVerification": "Two-factor verification",
+    "Save": "Save"
   }
 }
