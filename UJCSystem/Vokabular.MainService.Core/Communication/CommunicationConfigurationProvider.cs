@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.ServiceModel;
 using System.Xml;
 using Microsoft.Extensions.Options;
