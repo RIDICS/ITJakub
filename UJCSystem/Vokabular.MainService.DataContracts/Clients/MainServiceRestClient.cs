@@ -2346,38 +2346,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
-
-
-        public bool ConfirmUserContact(ConfirmUserContactContract data)
-        {
-            try
-            {
-                return Post<bool>("user/confirmcontact", data);
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void ResendConfirmCode(UserContactContract data)
-        {
-            try
-            {
-                Post<object>("user/resendcode", data);
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
+        
         #endregion
 
         #region Card files
@@ -2607,6 +2576,36 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 Delete($"role/{roleId}/user/{userId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public bool ConfirmUserContact(int userId, ConfirmUserContactContract data)
+        {
+            try
+            {
+                return Post<bool>($"user/{userId}/confirmContact", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void ResendConfirmCode(int userId, UserContactContract data)
+        {
+            try
+            {
+                Post<object>($"user/{userId}/resendCode", data);
             }
             catch (HttpRequestException e)
             {

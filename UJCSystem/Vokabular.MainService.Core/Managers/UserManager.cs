@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 using Ridics.Authentication.DataContracts;
+using Ridics.Authentication.DataContracts.User;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
@@ -10,6 +11,7 @@ using Vokabular.MainService.Core.Works.Users;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Results;
 using AuthUserContract = Ridics.Authentication.DataContracts.User.UserContract;
+using CreateUserContract = Vokabular.MainService.DataContracts.Contracts.CreateUserContract;
 using UserContactContract = Vokabular.MainService.DataContracts.Contracts.UserContactContract;
 
 namespace Vokabular.MainService.Core.Managers
@@ -61,10 +63,8 @@ namespace Vokabular.MainService.Core.Managers
             new UpdateUserContactsWork(m_userRepository, userId, data, m_communicationProvider).Execute();
         }
 
-        public void UpdateUserPassword(UpdateUserPasswordContract data)
+        public void UpdateUserPassword(int userId, UpdateUserPasswordContract data)
         {
-            var userId = m_authenticationManager.GetCurrentUserId();
-
             new UpdateUserPasswordWork(m_userRepository, userId, data, m_communicationProvider).Execute();
         }
 

@@ -39,7 +39,6 @@ namespace Vokabular.MainService.Core.Works.Users
             authUser.LastName = m_data.LastName;
 
             client.EditSelfAsync(user.ExternalId.Value, authUser).GetAwaiter().GetResult();
-
         }
     }
 }

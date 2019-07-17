@@ -125,7 +125,8 @@ namespace Vokabular.MainService.Controllers
         {
             try
             {
-                m_userManager.UpdateUserPassword(data);
+                var userId = m_authenticationManager.GetCurrentUserId();
+                m_userManager.UpdateUserPassword(userId, data);
                 return Ok();
             }
             catch (HttpErrorCodeException exception)
@@ -148,6 +149,15 @@ namespace Vokabular.MainService.Controllers
             SetTotalCountHeader(result.TotalCount);
             return result.List;
         }
+
+        [Authorize(PermissionNames.ListUsers)]
+        [HttpGet("autocomplete")]
+        public IList<UserDetailContract> GetAutocomplete([FromQuery] string query, [FromQuery] int? count)
+        {
+            var result = m_userManager.GetUserAutocomplete(query, count);
+            return result;
+        }
+
 
         [HttpGet("{userId}/detail")]
         public UserDetailContract GetUserDetail(int userId)
@@ -201,20 +211,12 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [Authorize(PermissionNames.ListUsers)]
-        [HttpGet("autocomplete")]
-        public IList<UserDetailContract> GetAutocomplete([FromQuery] string query, [FromQuery] int? count)
-        {
-            var result = m_userManager.GetUserAutocomplete(query, count);
-            return result;
-        }
-
-        [HttpPost("confirmcontact")]
-        public IActionResult ConfirmContact([FromBody] ConfirmUserContactContract data)
+        [HttpPost("{userId}/confirmContact")]
+        public IActionResult ConfirmContact(int userId, [FromBody] ConfirmUserContactContract data)
         {
             try
             {
-                var result = m_userManager.ConfirmContact(data.UserId, data);
+                var result = m_userManager.ConfirmContact(userId, data);
                 return Json(result);
             }
             catch (HttpErrorCodeException exception)
@@ -227,12 +229,12 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [HttpPost("resendcode")]
-        public IActionResult ResendConfirmCode([FromBody] UserContactContract data)
+        [HttpPost("{userId}/resendCode")]
+        public IActionResult ResendConfirmCode(int userId, [FromBody] UserContactContract data)
         {
             try
             {
-                m_userManager.ResendConfirmCode(data.UserId, data);
+                m_userManager.ResendConfirmCode(userId, data);
                 return Ok();
             }
             catch (HttpErrorCodeException exception)

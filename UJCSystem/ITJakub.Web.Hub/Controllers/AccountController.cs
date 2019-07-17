@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using ITJakub.Web.Hub.Constants;
 using ITJakub.Web.Hub.Core.Communication;
-using ITJakub.Web.Hub.Models;
+using ITJakub.Web.Hub.Models.User;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
@@ -195,7 +195,7 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 using (var client = GetRestClient())
                 {
-                    var result = client.ConfirmUserContact(data);
+                    var result = client.ConfirmUserContact(data.UserId, data);
                     return Json(result);
                 }
             }
@@ -214,7 +214,7 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 using (var client = GetRestClient())
                 {
-                    client.ResendConfirmCode(data);
+                    client.ResendConfirmCode(data.UserId, data);
                 }
             }
             catch (HttpErrorCodeException e)
