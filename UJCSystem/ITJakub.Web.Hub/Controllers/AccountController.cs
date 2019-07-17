@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ITJakub.Web.Hub.Constants;
 using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Models.Requests.Permission;
 using ITJakub.Web.Hub.Models.User;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -189,13 +190,18 @@ namespace ITJakub.Web.Hub.Controllers
         //
         // POST: /Account/ConfirmUserContact
         [HttpPost]
-        public IActionResult ConfirmUserContact([FromBody] ConfirmUserContactContract data)
+        public IActionResult ConfirmUserContact([FromBody] ConfirmUserContactRequest data)
         {
             try
             {
                 using (var client = GetRestClient())
                 {
-                    var result = client.ConfirmUserContact(data.UserId, data);
+                    var contract = new ConfirmUserContactContract
+                    {
+                        ConfirmCode = data.ConfirmCode,
+                        ContactType = data.ContactType
+                    };
+                    var result = client.ConfirmUserContact(data.UserId, contract);
                     return Json(result);
                 }
             }
@@ -208,13 +214,17 @@ namespace ITJakub.Web.Hub.Controllers
         //
         // POST: /Account/ResendConfirmCode
         [HttpPost]
-        public IActionResult ResendConfirmCode([FromBody] UserContactContract data)
+        public IActionResult ResendConfirmCode([FromBody] ResendConfirmCodeRequest data)
         {
             try
             {
                 using (var client = GetRestClient())
                 {
-                    client.ResendConfirmCode(data.UserId, data);
+                    var contract = new UserContactContract
+                    {
+                        ContactType = data.ContactType
+                    };
+                    client.ResendConfirmCode(data.UserId, contract);
                 }
             }
             catch (HttpErrorCodeException e)

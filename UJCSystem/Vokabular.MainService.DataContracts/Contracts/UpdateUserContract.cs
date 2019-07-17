@@ -20,8 +20,6 @@ namespace Vokabular.MainService.DataContracts.Contracts
 
     public class UserContactContract
     {
-        public int UserId { get; set; }
-
         public ContactTypeEnum ContactType { get; set; }
     }
 
@@ -39,8 +37,6 @@ namespace Vokabular.MainService.DataContracts.Contracts
 
     public class UpdateTwoFactorContract
     {
-        public int UserId { get; set; }
-
         public bool TwoFactorIsEnabled { get; set; }
 
         public string TwoFactorProvider { get; set; }
