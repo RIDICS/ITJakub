@@ -10,11 +10,16 @@ class AccountManager {
     private readonly successContactUpdateAlert: JQuery;
     private readonly confirmCodeSendAlert: JQuery;
     private readonly successConfirmContactAlert: JQuery;
+    private readonly confirmContactDescriptionAlert: JQuery;
     private readonly errorContactUpdateAlert: JQuery;
     private readonly errorConfirmContactAlert: JQuery;
     private readonly emailIsNotVerifiedTitle: JQuery;
     private readonly confirmEmailPanel: JQuery;
     private readonly confirmEmailPanelBody: JQuery;
+
+    private readonly resendConfirmCodeBtn: JQuery;
+    private readonly confirmEmailCodeInput: JQuery;
+    private readonly confirmEmailSubmit: JQuery;
 
     constructor() {
         this.userId = $("#userId").data("id");
@@ -23,6 +28,7 @@ class AccountManager {
         this.successContactUpdateAlert = $("#successContactUpdate");
         this.confirmCodeSendAlert = $("#confirmCodeSend");
         this.successConfirmContactAlert = $("#successConfirmContact");
+        this.confirmContactDescriptionAlert = $("#confirmContactDescription");
 
         this.errorContactUpdateAlert = $("#errorContactUpdate");
         this.errorConfirmContactAlert = $("#errorConfirmContact");
@@ -31,6 +37,10 @@ class AccountManager {
 
         this.confirmEmailPanel = $("#confirmEmailPanel");
         this.confirmEmailPanelBody = $("#confirmEmailPanelBody");
+
+        this.resendConfirmCodeBtn = $("#resendConfirmCode");
+        this.confirmEmailCodeInput = $("#confirmEmailCodeInput");
+        this.confirmEmailSubmit = $("#confirmEmailSubmit");
     }
 
     init() {
@@ -53,12 +63,12 @@ class AccountManager {
             this.sendUpdateContactRequest();
         });
 
-        $("#confirmEmailSubmit").click((event) => {
+        this.confirmEmailSubmit.click((event) => {
             event.preventDefault();
             this.sendConfirmContactRequest();
         });
 
-        $("#resendConfirmCode").click((event) => {
+        this.resendConfirmCodeBtn.click((event) => {
             event.preventDefault();
             this.hideAlert(this.confirmCodeSendAlert);
             this.hideAlert(this.errorConfirmContactAlert);
@@ -96,7 +106,7 @@ class AccountManager {
     }
 
     sendConfirmContactRequest() {
-        var confirmCode = $("#emailConfirmInput").val() as string;
+        var confirmCode = this.confirmEmailCodeInput.val() as string;
         this.confirmContact(this.emailContactType, confirmCode).then((response) => {
             this.hideAlert(this.errorConfirmContactAlert);
             this.hideAlert(this.confirmCodeSendAlert);
@@ -105,16 +115,21 @@ class AccountManager {
             if (response.hasOwnProperty("message")) {
                 this.showAlert(this.errorConfirmContactAlert.text(response.message));
             } else if (response === false) {
-                this.showAlert(this.errorConfirmContactAlert.text(localization.translate("ConfirmCodeNotValid", "Account").value));
+                this.showAlert(
+                    this.errorConfirmContactAlert.text(localization.translate("ConfirmCodeNotValid", "Account").value));
             } else {
-                
-                    this.showAlert(this.successConfirmContactAlert);
-                    this.emailIsNotVerifiedTitle.addClass("hide");
-                    this.confirmEmailPanel.switchClass("panel-warning", "panel-default");
-                    this.hideAlert(this.confirmCodeSendAlert);
-                    this.showAlert(this.successConfirmContactAlert);
-                }
-            });
+                this.hideAlert(this.confirmContactDescriptionAlert);
+                this.showAlert(this.successConfirmContactAlert);
+                this.emailIsNotVerifiedTitle.addClass("hide");
+                this.confirmEmailPanel.switchClass("panel-warning", "panel-default");
+                this.hideAlert(this.confirmCodeSendAlert);
+                this.showAlert(this.successConfirmContactAlert);
+
+                this.resendConfirmCodeBtn.addClass("disabled");
+                this.confirmEmailCodeInput.addClass("disabled");
+                this.confirmEmailSubmit.addClass("disabled");
+            }
+        });
     }
 
     updateContact(contactType: string, newContactValue: string): JQueryPromise<any> {

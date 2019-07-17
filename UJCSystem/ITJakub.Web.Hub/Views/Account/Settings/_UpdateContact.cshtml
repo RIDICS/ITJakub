@@ -52,6 +52,9 @@
                             <div asp-validation-summary="All" class="alert alert-danger"></div>
                             <div class="row">
                                 <div class="col-md-offset-2 col-md-8">
+                                    <div id="confirmContactDescription" class="alert alert-warning fade in" role="alert">
+                                        @Localizer.Translate("EmailIsNotConfirmedAlertDescription")
+                                    </div>
                                     <div id="confirmCodeSend" class="alert alert-success fade hide" role="alert">
                                         @Localizer.TranslateFormat("ConfirmCodeSend", "Account", Model.Email)
                                     </div>
@@ -66,7 +69,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(m => m.ConfirmCode, new { @class = "col-md-2 control-label" })
                                 <div class="col-md-8">
-                                    @Html.TextBoxFor(m => m.ConfirmCode, new { @class = "form-control", id = "emailConfirmInput" })
+                                    @Html.TextBoxFor(m => m.ConfirmCode, new { @class = "form-control", id = "confirmEmailCodeInput" })
                                 </div>
                             </div>
 
