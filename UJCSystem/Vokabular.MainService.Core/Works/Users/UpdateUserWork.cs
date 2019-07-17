@@ -35,7 +35,6 @@ namespace Vokabular.MainService.Core.Works.Users
 
             var authUser = client.HttpClient.GetItemAsync<AuthUserContract>(user.ExternalId.Value).GetAwaiter().GetResult();
 
-            authUser.Email = m_data.Email;
             authUser.FirstName = m_data.FirstName;
             authUser.LastName = m_data.LastName;
 

@@ -76,11 +76,6 @@ namespace ITJakub.Web.Hub.Models
         [ReadOnly(true)]
         public string UserName { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "MustBeFilled")]
-        [EmailAddress]
-        [Display(Name = "Email")]
-        public string Email { get; set; }
-
         [Required(AllowEmptyStrings = false, ErrorMessage = "NotEmpty")]
         [DataType(DataType.Text)]
         [Display(Name = "FirstName")]

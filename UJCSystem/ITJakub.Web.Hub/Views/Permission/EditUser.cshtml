@@ -22,18 +22,12 @@
         @using (Html.BeginForm("EditUser", "Permission", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
             @Html.AntiForgeryToken()
-            @Html.ValidationSummary("", new { @class = "text-danger" })
+            @Html.ValidationSummary("", new { @class = "alert alert-danger" })
             @Html.HiddenFor(m => m.Id)
             <div class="form-group">
                 @Html.LabelFor(m => m.UserName, new { @class = "col-md-3 control-label" })
                 <div class="col-md-8">
                     @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @readonly = true })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Email, new { @class = "col-md-3 control-label" })
-                <div class="col-md-8">
-                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
                 </div>
             </div>
             <div class="form-group">
