@@ -8,6 +8,7 @@ using ITJakub.Web.Hub.DataContracts;
 using ITJakub.Web.Hub.Helpers;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Requests.Permission;
+using ITJakub.Web.Hub.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
