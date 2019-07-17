@@ -9,7 +9,8 @@ Param(
 $env:ASPNETCORE_ENVIRONMENT = "${TargetEnvironment}"
 $DotnetVersion = & dotnet --version
 
-$ProjectDir = (Get-Location -PSProvider FileSystem).ProviderPath
+$ProjectDir = $PSScriptRoot
+$CurrentPath = (Get-Location -PSProvider FileSystem).ProviderPath
 
 Write-Host
 Write-Host "Using project directory: ${ProjectDir}"
@@ -27,10 +28,30 @@ $IisPath = "Default Web Site"
 $GlobalSettingsFile = Join-Path $ProjectDir "globalsettings.json"
 $GlobalSettingsFileBackup = Join-Path $ProjectDir "globalsettings.json.original"
 
+Set-Location $ProjectDir
 
 yarn install
+if ($LASTEXITCODE -ne 0)
+{
+  Set-Location $CurrentPath
+  exit 1
+}
+
 yarn gulp yarn-runtime
+if ($LASTEXITCODE -ne 0)
+{
+  Set-Location $CurrentPath
+  exit 1
+}
+
 yarn gulp default
+if ($LASTEXITCODE -ne 0)
+{
+  Set-Location $CurrentPath
+  exit 1
+}
+
+Set-Location $CurrentPath
 
 if (Test-Path $GlobalSettingsFile)
 {

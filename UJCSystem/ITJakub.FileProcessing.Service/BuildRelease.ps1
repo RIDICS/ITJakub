@@ -9,7 +9,7 @@ Param(
 $env:ASPNETCORE_ENVIRONMENT = "${TargetEnvironment}"
 $MsBuildPath = & "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -prerelease -products * -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe
 
-$ProjectDir = (Get-Location -PSProvider FileSystem).ProviderPath
+$ProjectDir = $PSScriptRoot
 
 Write-Host
 Write-Host "Using project directory: ${ProjectDir}"

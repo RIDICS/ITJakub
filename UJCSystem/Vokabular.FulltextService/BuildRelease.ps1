@@ -9,7 +9,7 @@ Param(
 $env:ASPNETCORE_ENVIRONMENT = "${TargetEnvironment}"
 $DotnetVersion = & dotnet --version
 
-$ProjectDir = (Get-Location -PSProvider FileSystem).ProviderPath
+$ProjectDir = $PSScriptRoot
 
 Write-Host
 Write-Host "Using project directory: ${ProjectDir}"
