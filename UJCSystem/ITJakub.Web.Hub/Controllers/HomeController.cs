@@ -28,7 +28,16 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            if (IsUserLoggedIn())
+            {
+                using (var client = GetRestClient())
+                {
+                    var user = client.GetCurrentUser();
+                    return View(user);
+                }
+            }
+
+            return View(null);
         }
 
         public ActionResult About()

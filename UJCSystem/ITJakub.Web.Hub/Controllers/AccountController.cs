@@ -81,7 +81,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         //
         // GET: /Account/AccountSettings
-        public IActionResult AccountSettings()
+        public IActionResult AccountSettings(AccountTab actualTab = AccountTab.UpdateAccount)
         {
             using (var client = GetRestClient())
             {
@@ -91,7 +91,7 @@ namespace ITJakub.Web.Hub.Controllers
                     UpdateUserViewModel = Mapper.Map<UpdateUserViewModel>(user),
                     UpdatePasswordViewModel = null,
                     UpdateContactViewModel = Mapper.Map<UpdateContactViewModel>(user),
-                    ActualTab = AccountTab.UpdateAccount
+                    ActualTab = actualTab
                 };
                 return View(viewmodel);
             }
