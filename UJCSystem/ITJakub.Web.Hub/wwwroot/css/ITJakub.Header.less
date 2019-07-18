@@ -1,7 +1,8 @@
 ﻿@import "ITJakub.Colors.less";
 @import "ITJakub.Fonts.less";
 
-.main_logo {
+.main_logo,
+.second_logo {
     margin: 10px;
     margin-left: 0;
     margin-right: 5px;
@@ -9,6 +10,8 @@
     display: inline-block;
 }
 
+
+a.second_logo_href,
 a.main_logo_href {
     color: white;
     text-decoration: none;
@@ -16,91 +19,107 @@ a.main_logo_href {
     padding-right: 1rem;
     padding-top: 2px;
     padding-bottom: 0;
-    float: left;
 
-    @media screen and (min-width: 1100px) {
+    img {
+        height: 3.5rem;
+        width: auto;
+        margin: .8rem 1rem;
+        margin-right: 0;
+        float: left;
+
+        @media screen and (max-width: 1500px) {
+            height: 3rem;
+            margin: 0.5rem;
+            margin-right: 0;
+            margin-left: 1rem;
+        }
+    }
+
+    @media screen and (min-width: 1200px) {
         padding-top: 0;
         padding-bottom: 2px;
     }
 
     @media screen and (min-width: 1501px) {
-		padding: 0.1rem 0;
+        padding: 0.1rem 0;
         padding-right: 0.5rem;
-	}
-}
-
-a.main_logo_href:hover {
-	background-color: @menu-hover-color;
-}
-
-a.main_logo_href img {
-    height: 3.5rem;
-    width: auto;
-    margin: .8rem 1rem;
-    margin-right: 0;
-    float: left;
-
-    @media screen and (max-width: 1500px) {
-        height: 3rem;
-        margin: 0.5rem;
-        margin-right: 0;
-        margin-left: 1rem;
     }
 }
 
-.main_logo_text {
+a.main_logo_href {
+    float: left;
+
+    &:hover {
+        background-color: @menu-hover-color;
+    }
+}
+
+a.second_logo_href {
+    float: right;
+    background-color: @button-background-color;
+
+    &:hover {
+        background-color: @button-hover-background-color
+    }
+}
+
+.main_logo_text,
+.second_logo_text {
     color: white;
     line-height: normal;
     display: inline-block;
     margin: .85rem 0 0;
     margin-left: .75rem;
     font-weight: bold;
+
+    h1 {
+        display: inline;
+        display: block;
+        font-size: 22px;
+        font-weight: bold;
+        margin: 0;
+        font-family: @sanserif-font-family-1;
+        font-family: @sanserif-font-family-2;
+    }
+
+    h2 {
+        display: inline;
+        display: block;
+        font-size: 22px;
+        font-weight: bold;
+        margin: 0px 0 0;
+        font-family: @sanserif-font-family-3;
+        font-family: @sanserif-font-family-2;
+    }
 }
 
-.main_logo_text h1 {
-    display: inline;
-    display: block;
-    font-size: 22px;
-    font-weight: bold;
-    margin: 0;
-    font-family: @sanserif-font-family-1;
-    font-family: @sanserif-font-family-2;
-}
-
-.main_logo_text h2 {
-    display: inline;
-    display: block;
-    font-size: 22px;
-    font-weight: bold;
-    margin: 0px 0 0;
-    font-family: @sanserif-font-family-3;
-    font-family: @sanserif-font-family-2;
-}
 
 @media screen and (max-width: 1500px) {
-    .main_logo_text {
+    .main_logo_text,
+    .second_logo_text {
         margin: .65rem 0 0 .75rem;
-    }
 
-    .main_logo_text h1 {
-        font-size: 18px;
-    }
+        h1 {
+            font-size: 18px;
+        }
 
-    .main_logo_text h2 {
-        font-size: 18px;
+        h2 {
+            font-size: 18px;
+        }
     }
 }
 
-.main_logo_text {
-    @media screen and (max-width: 1199px) {
+.main_logo_text,
+.second_logo_text {
+    @media screen and (max-width: 1410px) {
         display: none;
     }
 
-    @media screen and (max-width: 1099px) {
+    @media screen and (max-width: 1199px) {
         display: inline-block;
     }
 
-    @media screen and (max-width: 399px) {
+    @media screen and (max-width: 500px) {
         display: none;
     }
 }
@@ -119,17 +138,17 @@ a.main_logo_href img {
 
 ul.navbar-login,
 ul.navbar-language {
-    margin: 2.1rem 1rem 0 0;
-    float: right;
-    font-size: 16px;
-    font-weight: bold;
-    padding-left: 2rem;
+margin: 2.1rem 1rem 0 0;
+float: right;
+font-size: 16px;
+font-weight: bold;
+padding-left: 2rem;
 }
 
 .navbar-login li,
 .navbar-language li {
-    display: inline-block;
-    list-style: none;
+display: inline-block;
+list-style: none;
 
     @media screen and (max-width: 1500px) {
         display: block;
@@ -166,12 +185,12 @@ ul.navbar-language li:hover a {
     background-color: transparent;
     background-image: none;
     border: none;
-    margin: 0.55rem 1rem;
+    margin: 0.55rem 0.95rem;
     padding: 4px 0px 0px 0px;
     font-size: 200%;
     color: white;
     cursor: pointer;
-    
+
     ul.navbar-login,
     ul.navbar-language {
         display: none;
@@ -249,6 +268,7 @@ ul.navbar-language li:hover a {
         margin: 10px 0;
         margin-right: 20px;
     }
+
     .secondary-navbar-toggle ul.navbar-language li {
         display: block;
     }
@@ -260,15 +280,15 @@ ul.navbar-language li:hover a {
     padding: 4px 0px 0px 0px;
     font-size: 200%;
     color: white;
-}
 
-.navbar-toggle .icon-bar {
-    height: 3px;
-    width: 2rem;
-}
+    .icon-bar {
+        height: 3px;
+        width: 2rem;
+    }
 
-.navbar-toggle .icon-bar + .icon-bar {
-    margin-top: .5rem;
+    .icon-bar + .icon-bar {
+        margin-top: .5rem;
+    }
 }
 
 .navbar-inverse .navbar-toggle {

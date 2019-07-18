@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core;
@@ -10,6 +11,7 @@ using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.DataContracts;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
+using ITJakub.Web.Hub.Options;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -45,21 +47,25 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             return View("List");
         }
 
+        [LimitedAccess(PortalType.ResearchPortal)]
         public ActionResult Search()
         {
             return View();
         }
 
+        [LimitedAccess(PortalType.CommunityPortal)]
         public ActionResult SearchCombined()
         {
             return View();
         }
 
+        [LimitedAccess(PortalType.CommunityPortal)]
         public ActionResult SearchSingleLazyload()
         {
             return View();
         }
 
+        [LimitedAccess(PortalType.CommunityPortal)]
         public ActionResult SearchSinglePaged()
         {
             return View();
@@ -142,6 +148,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 
         #region Search corpus
 
+        [LimitedAccess(PortalType.ResearchPortal)]
         public ActionResult TextSearchFulltextCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             if (string.IsNullOrEmpty(text))
@@ -162,7 +169,8 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 return Json(new {count});
             }
         }
-        
+
+        [LimitedAccess(PortalType.ResearchPortal)]
         public ActionResult TextSearchFulltextPaged(string text, int start, int count, int contextLength, short sortingEnum, bool sortAsc,
             IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
@@ -188,7 +196,8 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 return Json(new {results = resultList});
             }
         }
-        
+
+        [LimitedAccess(PortalType.ResearchPortal)]
         public ActionResult AdvancedSearchCorpusResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
@@ -211,6 +220,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             }
         }
 
+        [LimitedAccess(PortalType.ResearchPortal)]
         public ActionResult AdvancedSearchCorpusPaged(string json, int start, int count, int contextLength, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
@@ -237,6 +247,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             }
         }
 
+        [LimitedAccess(PortalType.CommunityPortal)]
         public ActionResult BasicSearchGetResultSnapshotListPageOfIdsWithoutResultNumbers(CorpusListGetPageContractBasic searchQuery)
         {
             var text = searchQuery.Text;
@@ -267,6 +278,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 
         }
 
+        [LimitedAccess(PortalType.CommunityPortal)]
         public CorpusSearchSnapshotsResultContract BasicSearchGetResultSnapshotListPageOfIdsWithResultNumbers(CorpusListGetPageContractBasic searchQuery)
         {
             var text = searchQuery.Text;
@@ -297,6 +309,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             });
         }
 
+        [LimitedAccess(PortalType.CommunityPortal)]
         [HttpGet]
         public ActionResult BasicCorpusSearchGetResultsPage([FromQuery] CorpusLookupContractBasicSearch request)
         {
@@ -322,7 +335,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 });
         }
 
-
+        [LimitedAccess(PortalType.CommunityPortal)]
         public ActionResult AdvancedSearchGetResultSnapshotListPageOfIdsWithoutResultNumbers(CorpusListGetPageContractAdvanced searchQuery)
         {
             var json = searchQuery.Json;
@@ -352,6 +365,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             }));
         }
 
+        [LimitedAccess(PortalType.CommunityPortal)]
         public CorpusSearchSnapshotsResultContract AdvancedSearchGetResultSnapshotListPageOfIdsWithResultNumbers(CorpusListGetPageContractAdvanced searchQuery)
         {
             var json = searchQuery.Json;
@@ -375,6 +389,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             });
         }
 
+        [LimitedAccess(PortalType.CommunityPortal)]
         public ActionResult AdvancedCorpusSearchGetResultsPage(CorpusLookupContractAdvancedSearch request)
         {
             var json = request.Json;
@@ -402,6 +417,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             });
         }
 
+        [LimitedAccess(PortalType.CommunityPortal)]
         public ActionResult BasicSearchGetTotalResultNumber(CorpusSearchTotalResultCountBasic request)
         {
             var text = request.Text;
@@ -422,6 +438,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             });
         }
 
+        [LimitedAccess(PortalType.CommunityPortal)]
         public ActionResult AdvancedSearchGetTotalResultNumber(CorpusSearchTotalResultCountAdvanced request)
         {
             List<SearchCriteriaContract> listSearchCriteriaContracts;
@@ -485,6 +502,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             }
         }
 
+        [LimitedAccess(PortalType.CommunityPortal)]
         public ActionResult BasicSearchGetPagePositionInAllResultPages(int hitResultTotalStart, int compositionsPerPage, CorpusListLookupBasicSearchParams searchParams)
         {
             var bookId=0L;
@@ -529,6 +547,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             });
         }
 
+        [LimitedAccess(PortalType.CommunityPortal)]
         public ActionResult AdvancedSearchGetPagePositionInAllResultPages(int hitResultTotalStart, int compositionsPerPage, CorpusListLookupAdvancedSearchParams searchParams)
         {
             var bookId = 0L;
