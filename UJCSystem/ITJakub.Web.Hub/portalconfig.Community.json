@@ -1,6 +1,7 @@
 ﻿{
   "PortalConfig": {
     "PortalType": "CommunityPortal",
+    "SecondPortalType": "ResearchPortal",
     "FaviconPath": "~/images/favicon.CommunityPortal.png",
     "MainPortal": {
       "PortalNameFull": "Komunitní portál",
@@ -14,7 +15,6 @@
       "PortalName2": "webový",
       "PortalLogoPath": "~/images/logo/logo.ResearchPortal.png"
     },
-    "SecondPortalUrl": "https://localhost:44368/",
     "AllowedSearchOptions": {
       "Author": true,
       "Title": true,

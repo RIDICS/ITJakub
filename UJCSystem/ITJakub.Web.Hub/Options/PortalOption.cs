@@ -6,7 +6,9 @@ namespace ITJakub.Web.Hub.Options
     {
         public PortalType PortalType { get; set; }
 
-        public string SecondPortalUrl { get; set; }
+        public PortalType SecondPortalType { get; set; }
+
+        public IDictionary<PortalType, string> PortalUrls { get; set; }
 
         public string FaviconPath { get; set; }
 

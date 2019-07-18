@@ -36,9 +36,9 @@ namespace ITJakub.Web.Hub
                         //.SetBasePath(env.ContentRootPath)
                         .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                         .AddJsonFile($"appsettings.{environmentConfiguration}.json", optional: true)
+                        .AddJsonFile($"portalconfig.{portalType}.json", optional: false, reloadOnChange: true)
                         .AddJsonFile(Path.Combine(secretSettingsPath, "ITJakub.Secrets.json"), optional: true)
                         .AddJsonFile(Path.Combine(secretSettingsPath, $"ITJakub.Secrets.{environmentConfiguration}.json"), optional: true)
-                        .AddJsonFile($"portalconfig.{portalType}.json", optional: false, reloadOnChange: true)
                         .AddEnvironmentVariables();
                 })
                 .ConfigureLogging((builderContext, builder) =>

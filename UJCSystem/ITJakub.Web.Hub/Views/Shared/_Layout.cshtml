@@ -38,7 +38,7 @@
         <div class="">
             <div class="main-navbar-container">
                 <div class="navbar-header-not">
-                    <a href='@PortalConfig.Value.SecondPortalUrl' class="second_logo_href">
+                    <a href="@PortalConfig.Value.GetSecondPortalUrl()" class="second_logo_href">
                         <img src="@Url.Content(PortalConfig.Value.SecondPortal.PortalLogoPath)" alt="second_logo" class="second_logo" />
                         <div class="second_logo_text">
                             <h1>@Localizer.Translate(PortalConfig.Value.SecondPortal.PortalName1, "global", LocTranslationSource.File)</h1>
@@ -52,7 +52,7 @@
 
                     @await Html.PartialAsync("_LoginPartial")
 
-                    <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
+                    <a href="@Url.Action("Index", "Home", new {area = ""})" class="main_logo_href">
                         <img src="@Url.Content(PortalConfig.Value.MainPortal.PortalLogoPath)" alt="main_logo" class="main_logo" />
                         <div class="main_logo_text">
                             <h1>@Localizer.Translate(PortalConfig.Value.MainPortal.PortalName1, "global", LocTranslationSource.File)</h1>
@@ -170,35 +170,35 @@
     </div>
 
     <footer class="footer">
-        <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
+        <a href="@Url.Action("Index", "Home", new {area = ""})" class="main_logo_href">
             <img src="@Url.Content(PortalConfig.Value.MainPortal.PortalLogoPath)" alt="main_logo" /> @*TODO make logo small as this size*@
         </a>
 
         <div class="footer-text-area">
             <ul>
                 <li class="footer-first">
-                    <a href='@Url.Action("About", "Home", new {area = ""})'>@Localizer.Translate("AboutVW", "layout", LocTranslationSource.File)</a>
+                    <a href="@Url.Action("About", "Home", new {area = ""})">@Localizer.Translate("AboutVW", "layout", LocTranslationSource.File)</a>
                 </li>
                 <li>
-                    <a href='@Url.Action("Copyright", "Home", new {area = ""})'>@Localizer.Translate("Copyright", "layout", LocTranslationSource.File)</a>
+                    <a href="@Url.Action("Copyright", "Home", new {area = ""})">@Localizer.Translate("Copyright", "layout", LocTranslationSource.File)</a>
                 </li>
                 <li>
-                    <a href='@Url.Action("Contacts", "Home", new {area = ""})'>@Localizer.Translate("Contacts", "layout", LocTranslationSource.File)</a>
+                    <a href="@Url.Action("Contacts", "Home", new {area = ""})">@Localizer.Translate("Contacts", "layout", LocTranslationSource.File)</a>
                 </li>
                 <li>
-                    <a href='@Url.Action("Links", "Home", new {area = ""})'>@Localizer.Translate("Links", "layout", LocTranslationSource.File)</a>
+                    <a href="@Url.Action("Links", "Home", new {area = ""})">@Localizer.Translate("Links", "layout", LocTranslationSource.File)</a>
                 </li>
                 <li>
-                    <a href='@Url.Action("Support", "Home", new {area = ""})'>@Localizer.Translate("Support", "layout", LocTranslationSource.File)</a>
+                    <a href="@Url.Action("Support", "Home", new {area = ""})">@Localizer.Translate("Support", "layout", LocTranslationSource.File)</a>
                 </li>
                 <li>
-                    <a href='@Url.Action("HowToCite", "Home", new {area = ""})'>@Localizer.Translate("HowToCite", "layout", LocTranslationSource.File)</a>
+                    <a href="@Url.Action("HowToCite", "Home", new {area = ""})">@Localizer.Translate("HowToCite", "layout", LocTranslationSource.File)</a>
                 </li>
                 <li>
-                    <a href='@Url.Action("Feedback", "Home", new {area = ""})'>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</a>
+                    <a href="@Url.Action("Feedback", "Home", new {area = ""})">@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</a>
                 </li>
                 <li class="footer-last">
-                    <a href='@Url.Action("Calendar", "News", new {area = ""})'>@Localizer.Translate("Events", "News", LocTranslationSource.File)</a>
+                    <a href="@Url.Action("Calendar", "News", new {area = ""})">@Localizer.Translate("Events", "News", LocTranslationSource.File)</a>
                 </li>
             </ul>
             <div class="footer-text">
