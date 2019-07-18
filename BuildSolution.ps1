@@ -44,7 +44,6 @@ $ServiceProjectsToBuild = @()
 $ServiceProjectsToBuild += "ITJakub.FileProcessing.Service"
 $ServiceProjectsToBuild += "ITJakub.Lemmatization.Service"
 $ServiceProjectsToBuild += "ITJakub.SearchService"
-$ServiceProjectsToBuild += "ITJakub.Web.Hub"
 $ServiceProjectsToBuild += "Vokabular.FulltextService"
 $ServiceProjectsToBuild += "Vokabular.MainService"
 
@@ -53,6 +52,8 @@ foreach ($ProjectToBuild in $ServiceProjectsToBuild)
 {
   Write-Host $ProjectToBuild
 }
+Write-Host "ITJakub.Web.Hub (Research)"
+Write-Host "ITJakub.Web.Hub (Community)"
 
 Write-Host
 Write-Host
@@ -73,6 +74,38 @@ function BuildServiceProject {
         $ProjectPublish = Join-Path $SolutionDir "${ProjectName}\bin\Publish-${TargetEnvironment}\*"
 
         Copy-Item $ProjectPublish -Destination $OutputDir -Recurse
+
+        if ($LASTEXITCODE -ne 0)
+        {
+            Write-Error "Copy ${ProjectName} failed"
+            exit 1
+        }
+    }
+    else
+    {
+        Write-Error "Build ${ProjectName} failed"
+        exit 1
+    }
+}
+
+function BuildWebHubProject {
+    Param ([String]$ProjectName, [String]$ProjectType)
+
+    Write-Host
+    Write-Host
+
+	$BuildScriptPath = Join-Path $SolutionDir "${ProjectName}\BuildRelease.ps1"
+
+    & $BuildScriptPath ${TargetEnvironment} ${ProjectType}
+
+    if ($LASTEXITCODE -eq 0)
+    {
+        $ProjectPublish = Join-Path $SolutionDir "${ProjectName}\bin\Publish-${TargetEnvironment}\*"
+		$WebHubOutputDir = Join-Path $OutputDir "ITJakub.Web.Hub-${ProjectType}"
+		
+		New-Item $WebHubOutputDir -Type Directory > $null
+		
+        Copy-Item $ProjectPublish -Destination $WebHubOutputDir -Recurse
 
         if ($LASTEXITCODE -ne 0)
         {
@@ -127,10 +160,19 @@ function BuildMigrator {
     }
 }
 
+dotnet restore UJCSystem\UJCSystem.sln
+
 foreach ($ProjectToBuild in $ServiceProjectsToBuild)
 {
   BuildServiceProject($ProjectToBuild)
 }
 
+BuildWebHubProject "ITJakub.Web.Hub" -ProjectType "ResearchPortal"
+BuildWebHubProject "ITJakub.Web.Hub" -ProjectType "CommunityPortal"
+
 # BuildMigrator
 
+Write-Host
+Write-Host
+Write-Host "BUILD FINISHED"
+Write-Host
