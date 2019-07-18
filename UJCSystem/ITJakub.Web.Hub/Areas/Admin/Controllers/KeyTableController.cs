@@ -7,7 +7,6 @@ using ITJakub.Web.Hub.Options;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 {
-    [LimitedAccess(PortalType.CommunityPortal)]
     [Area("Admin")]
     public class KeyTableController : BaseController
     {
