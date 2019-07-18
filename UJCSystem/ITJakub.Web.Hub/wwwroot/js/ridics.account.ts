@@ -33,7 +33,7 @@ class AccountManager {
     constructor() {
         this.client = new AccountApiClient();
 
-        this.accountDataForm = $("#updatePasswordForm");
+        this.accountDataForm = $("#updateAccountForm");
         this.passwordForm = $("#updatePasswordForm");
 
         this.userId = $("#userId").data("id");
@@ -96,6 +96,7 @@ class AccountManager {
         });
 
         this.initPasswordForm();
+        this.initAccountDataForm();
     }
 
     initPasswordForm() {
@@ -111,6 +112,24 @@ class AccountManager {
                         .catch((error) => {
                             $("#update-password").html((error.responseText) as any);
                             this.initPasswordForm();
+                        });
+                }
+            });
+    }
+
+    initAccountDataForm() {
+        this.accountDataForm.on("submit",
+            (event) => {
+                event.preventDefault();
+                if (this.accountDataForm.valid()) {
+                    this.client.updateAccount(this.accountDataForm.serialize())
+                        .then((response) => {
+                            $("#update-account").html((response.responseText) as any);
+                            this.initAccountDataForm();
+                        })
+                        .catch((error) => {
+                            $("#update-account").html((error.responseText) as any);
+                            this.initAccountDataForm();
                         });
                 }
             });

@@ -26,6 +26,13 @@
         );
     }
 
+    public updateAccount(accountDataForm: string): Promise<JQuery.jqXHR> {
+        return this.post(this.getAccountControllerUrl() + "/UpdateAccount",
+            accountDataForm,
+            "application/x-www-form-urlencoded"
+        );
+    }
+
     private getAccountControllerUrl(): string {
         return getBaseUrl() + "Account/";
     }
