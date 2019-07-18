@@ -2,7 +2,7 @@
 {
     public enum PortalType
     {
+        ResearchPortal,
         CommunityPortal,
-        ResearchPortal
     }
 }
