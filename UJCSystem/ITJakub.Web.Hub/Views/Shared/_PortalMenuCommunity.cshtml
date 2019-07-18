@@ -1,0 +1,106 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@using Scalesoft.Localization.Core.Util
+
+@inject ILocalizationService Localizer
+
+<div class="navbar-collapse collapse">
+    <div id="main-plugins-menu" class="main-plugins-menu">
+        <ul>
+            <li id="editions-menu" class="has-sub">
+                <a href='@Url.Action("List", "Editions", new {area = "Editions"})'>
+                    <span>@Localizer.Translate("Editions", "layout", LocTranslationSource.File)</span>
+                </a>
+                <ul>
+                    <li>
+                        <a href='@Url.Action("Information", "Editions", new {area = "Editions"})'>
+                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("List", "Editions", new {area = "Editions"})'>
+                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Search", "Editions", new {area = "Editions"})'>
+                            <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("EditionPrinciples", "Editions", new {area = "Editions"})'>
+                            <span>@Localizer.Translate("EditionPrinciples", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Help", "Editions", new {area = "Editions"})'>
+                            <span>@Localizer.Translate("Help", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Feedback", "Editions", new {area = "Editions"})'>
+                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        <li id="corpus-menu" class="has-sub">
+            <a href='@Url.Action("List", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                <span>@Localizer.Translate("Corpora", "layout", LocTranslationSource.File)</span>
+            </a>
+            <ul>
+                <li>
+                    <a href='@Url.Action("Information", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                        <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
+                    </a>
+                </li>
+                <li>
+                    <a href='@Url.Action("List", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                        <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
+                    </a>
+                </li>
+                <li>
+                    <a href='@Url.Action("SearchCombined", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                        <span>Vyhledávání kombinované</span>
+                    </a>
+                </li>
+                <li>
+                    <a href='@Url.Action("SearchSingleLazyload", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                        <span>Vyhledávání podle díla na jedné stránce</span>
+                    </a>
+                </li>
+                <li>
+                    <a href='@Url.Action("SearchSinglePaged", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                        <span>Vyhledávání podle díla strankované</span>
+                    </a>
+                </li>
+                <li>
+                    <a href='@Url.Action("Help", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                        <span>@Localizer.Translate("Help", "layout", LocTranslationSource.File)</span>
+                    </a>
+                </li>
+                <li>
+                    <a href='@Url.Action("Feedback", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                        <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        @*TODO forum*@
+       
+        <li>
+            <a href='@Url.Action("Calendar", "News", new {area = ""})'>
+                <span>@Localizer.Translate("Events", "News", LocTranslationSource.File)</span>
+            </a>
+        </li>
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <li id="admin-menu" class="last">
+                    <a href='@Url.Action("List", "Project", new {area = "Admin"})'>
+                        <span>@Localizer.Translate("MyProjects", "layout", LocTranslationSource.File)</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

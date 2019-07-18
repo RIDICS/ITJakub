@@ -89,6 +89,11 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
   </ItemGroup>
   
+
+  <Target Name="Gulp" BeforeTargets="BeforeBuild">
+    <Exec Command="yarn gulp default" />
+  </Target>
+  
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
     <!--Yarn is handled by build script-->
     <!--Exec Command="yarn install" />-->

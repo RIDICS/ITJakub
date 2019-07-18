@@ -39,6 +39,11 @@
   version "0.6.6"
   resolved "https://registry.yarnpkg.com/@types/gijgo/-/gijgo-0.6.6.tgz#301a7310764a06ef2b10e558d524e1fdb9ea2e08"
 
+"@types/he@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@types/he/-/he-1.1.0.tgz#0ddc2ae80f0814f729f0f7e5aa77b191ab4a9598"
+  integrity sha512-HyiLOiJhclRBPzcbYrNThdi0JOdq7bT4hq9jFBPQk4HGjzkwYVQnMj9IDi7qvYkg9QTly2oZ9kjm4j7d8Ic9eA==
+
 "@types/jquery-validation-unobtrusive@3.2.32":
   version "3.2.32"
   resolved "https://registry.yarnpkg.com/@types/jquery-validation-unobtrusive/-/jquery-validation-unobtrusive-3.2.32.tgz#21e8de36da77d9ec323d5d4fe582c4e6cf9c02c7"

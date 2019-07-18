@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Requests;
@@ -11,9 +12,11 @@ using Microsoft.Net.Http.Headers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.AspNetCore.Helpers;
 using Vokabular.Shared.Const;
+using ITJakub.Web.Hub.Options;
 
 namespace ITJakub.Web.Hub.Controllers
 {
+    [LimitedAccess(PortalType.ResearchPortal)]
     [Authorize(VokabularPermissionNames.UploadBook)]
     public class UploadController : BaseController
     {
