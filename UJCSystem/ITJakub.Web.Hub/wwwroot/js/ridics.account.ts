@@ -15,7 +15,6 @@ class AccountManager {
     private passwordSection: JQuery;
     private twoFactorSection: JQuery;
     //Email confirm
-    private readonly userId: number;
     private readonly oldEmailValue: string;
 
     private readonly emailContactType = "Email";
@@ -43,7 +42,6 @@ class AccountManager {
         this.passwordSection = $("#update-password");
         this.twoFactorSection = $("#update-two-factor-verification");
 
-        this.userId = $("#userId").data("id");
         this.oldEmailValue = String($("#oldEmailValue").val());
 
         this.successContactUpdateAlert = $("#successContactUpdate");
@@ -93,7 +91,7 @@ class AccountManager {
             this.hideAlert(this.confirmCodeSendAlert);
             this.hideAlert(this.errorConfirmContactAlert);
 
-            this.client.resendConfirmCode(this.emailContactType, this.userId).then((response) => {
+            this.client.resendConfirmCode(this.emailContactType).then((response) => {
                 if (response.hasOwnProperty("message")) {
                     this.showAlert(this.errorConfirmContactAlert.text(((response) as any).message));
                 } else {
@@ -209,7 +207,7 @@ class AccountManager {
 
     sendConfirmContactRequest() {
         var confirmCode = this.confirmEmailCodeInput.val() as string;
-        this.client.confirmContact(this.emailContactType, confirmCode, this.userId).then((response) => {
+        this.client.confirmContact(this.emailContactType, confirmCode).then((response) => {
             this.hideAlert(this.errorConfirmContactAlert);
             this.hideAlert(this.confirmCodeSendAlert);
             this.hideAlert(this.successConfirmContactAlert);

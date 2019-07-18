@@ -9,14 +9,14 @@
             }));
     }
 
-    public confirmContact(contactType: string, confirmCode: string, userId: number): Promise<JQuery.jqXHR> {
+    public confirmContact(contactType: string, confirmCode: string): Promise<JQuery.jqXHR> {
         return this.post(this.getAccountControllerUrl() + "ConfirmUserContact",
-            JSON.stringify({ confirmCode: confirmCode, ContactType: contactType, userId: userId }));
+            JSON.stringify({ confirmCode: confirmCode, ContactType: contactType}));
     }
 
-    public resendConfirmCode(contactType: string, userId: number): Promise<JQuery.jqXHR> {
+    public resendConfirmCode(contactType: string): Promise<JQuery.jqXHR> {
         return this.post(this.getAccountControllerUrl() + "ResendConfirmCode",
-            JSON.stringify({ ContactType: contactType, userId: userId }));
+            JSON.stringify({ ContactType: contactType}));
     }
 
     public updatePassword(passwordForm: string): Promise<JQuery.jqXHR> {

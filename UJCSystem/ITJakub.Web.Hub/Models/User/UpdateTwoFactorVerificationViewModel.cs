@@ -5,8 +5,6 @@ namespace ITJakub.Web.Hub.Models.User
 {
     public class UpdateTwoFactorVerificationViewModel
     {
-        public int UserId { get; set; }
-
         [Display(Name = "TwoFactorEnabled")]
         public bool TwoFactorEnabled { get; set; }
 

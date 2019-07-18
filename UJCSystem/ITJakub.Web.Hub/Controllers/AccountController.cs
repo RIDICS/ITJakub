@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Errors;
+using Vokabular.Shared.AspNetCore.Extensions;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -199,7 +200,7 @@ namespace ITJakub.Web.Hub.Controllers
                         ConfirmCode = confirmUserContactRequest.ConfirmCode,
                         ContactType = confirmUserContactRequest.ContactType
                     };
-                    var result = client.ConfirmUserContact(confirmUserContactRequest.UserId, contract);
+                    var result = client.ConfirmUserContact(User.GetId().Value, contract);
                     return Json(result);
                 }
             }
@@ -248,7 +249,7 @@ namespace ITJakub.Web.Hub.Controllers
                             TwoFactorIsEnabled = twoFactorVerificationViewModel.TwoFactorEnabled,
                             TwoFactorProvider = twoFactorVerificationViewModel.SelectedTwoFactorProvider
                         };
-                        client.SetTwoFactor(twoFactorVerificationViewModel.UserId, contract);
+                        client.SetTwoFactor(User.GetId().Value, contract);
                         ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, true);
                     }
                     catch (HttpErrorCodeException e)
@@ -282,7 +283,7 @@ namespace ITJakub.Web.Hub.Controllers
                             TwoFactorIsEnabled = twoFactorVerificationViewModel.TwoFactorEnabled,
                             TwoFactorProvider = twoFactorVerificationViewModel.SelectedTwoFactorProvider
                         };
-                        client.SelectTwoFactorProvider(twoFactorVerificationViewModel.UserId, contract);
+                        client.SelectTwoFactorProvider(User.GetId().Value, contract);
                         ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, true);
                     }
                     catch (HttpErrorCodeException e)
