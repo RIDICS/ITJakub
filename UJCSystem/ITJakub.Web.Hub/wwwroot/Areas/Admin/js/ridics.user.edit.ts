@@ -9,7 +9,7 @@ class UserPermissionEditor {
     private roleSearchBox: SingleSetTypeaheadSearchBox<IGroup>;
     private roleSearchCurrentSelectedItem: IGroup;
     private roleList: ListWithPagination;
-    private client: WebHubApiClient;
+    private client: PermissionApiClient;
     private userId: number;
 
     constructor(mainContainer: string) {
@@ -22,7 +22,7 @@ class UserPermissionEditor {
         this.roleList = new ListWithPagination(`Permission/GetRolesByUser?userId=${this.userId}`, 10, "role", ViewType.Partial, false, this.initRemoveUserFromRoleButton, this);
         this.roleList.init();
         this.initRemoveUserFromRoleButton();
-        this.client = new WebHubApiClient();
+        this.client = new PermissionApiClient();
     }
 
     public make() {
