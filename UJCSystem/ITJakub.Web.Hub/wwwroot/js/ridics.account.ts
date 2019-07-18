@@ -4,15 +4,24 @@
 });
 
 class AccountManager {
+    private readonly client: AccountApiClient;
+
+    private readonly accountDataForm: JQuery;
+    private readonly passwordForm: JQuery;
+    //Email confirm
     private readonly userId: number;
     private readonly oldEmailValue: string;
+
     private readonly emailContactType = "Email";
+
     private readonly successContactUpdateAlert: JQuery;
     private readonly confirmCodeSendAlert: JQuery;
     private readonly successConfirmContactAlert: JQuery;
     private readonly confirmContactDescriptionAlert: JQuery;
+
     private readonly errorContactUpdateAlert: JQuery;
     private readonly errorConfirmContactAlert: JQuery;
+
     private readonly emailIsNotVerifiedTitle: JQuery;
     private readonly confirmEmailPanel: JQuery;
     private readonly confirmEmailPanelBody: JQuery;
@@ -22,6 +31,11 @@ class AccountManager {
     private readonly confirmEmailSubmit: JQuery;
 
     constructor() {
+        this.client = new AccountApiClient();
+
+        this.accountDataForm = $("#updatePasswordForm");
+        this.passwordForm = $("#updatePasswordForm");
+
         this.userId = $("#userId").data("id");
         this.oldEmailValue = String($("#oldEmailValue").val());
 
@@ -34,7 +48,6 @@ class AccountManager {
         this.errorConfirmContactAlert = $("#errorConfirmContact");
 
         this.emailIsNotVerifiedTitle = $(".email-warning");
-
         this.confirmEmailPanel = $("#confirmEmailPanel");
         this.confirmEmailPanelBody = $("#confirmEmailPanelBody");
 
@@ -73,25 +86,45 @@ class AccountManager {
             this.hideAlert(this.confirmCodeSendAlert);
             this.hideAlert(this.errorConfirmContactAlert);
 
-            this.resendConfirmCode(this.emailContactType).then((response) => {
+            this.client.resendConfirmCode(this.emailContactType, this.userId).then((response) => {
                 if (response.hasOwnProperty("message")) {
-                    this.showAlert(this.errorConfirmContactAlert.text(response.message));
+                    this.showAlert(this.errorConfirmContactAlert.text(((response) as any).message));
                 } else {
                     this.showAlert(this.confirmCodeSendAlert);
                 }
             });
         });
+
+        this.initPasswordForm();
+    }
+
+    initPasswordForm() {
+        this.passwordForm.on("submit",
+            (event) => {
+                event.preventDefault();
+                if (this.passwordForm.valid()) {
+                    this.client.updatePassword(this.passwordForm.serialize())
+                        .then((response) => {
+                            $("#update-password").html((response.responseText) as any);
+                            this.initPasswordForm();
+                        })
+                        .catch((error) => {
+                            $("#update-password").html((error.responseText) as any);
+                            this.initPasswordForm();
+                        });
+                }
+            });
     }
 
     sendUpdateContactRequest() {
         var email = $("#emailInput").val() as string;
-        this.updateContact(this.emailContactType, email).then((response) => {
+        this.client.updateContact(this.emailContactType, email, this.oldEmailValue).then((response) => {
             this.hideAlert(this.errorContactUpdateAlert);
             if (response.hasOwnProperty("message")) {
-                this.showAlert(this.errorContactUpdateAlert.text(response.message));
-            } else if (response === "same-email") {
+                this.showAlert(this.errorContactUpdateAlert.text(((response) as any).message));
+            } else if (String(response) === "same-email") {
                 this.showAlert(this.errorContactUpdateAlert.text(localization.translate("SameEmail", "Account").value));
-            } else if (response === "empty-email") {
+            } else if (String(response) === "empty-email") {
                 this.showAlert(
                     this.errorContactUpdateAlert.text(localization.translate("EmptyEmail", "Account").value));
             } else {
@@ -107,14 +140,14 @@ class AccountManager {
 
     sendConfirmContactRequest() {
         var confirmCode = this.confirmEmailCodeInput.val() as string;
-        this.confirmContact(this.emailContactType, confirmCode).then((response) => {
+        this.client.confirmContact(this.emailContactType, confirmCode, this.userId).then((response) => {
             this.hideAlert(this.errorConfirmContactAlert);
             this.hideAlert(this.confirmCodeSendAlert);
             this.hideAlert(this.successConfirmContactAlert);
 
             if (response.hasOwnProperty("message")) {
-                this.showAlert(this.errorConfirmContactAlert.text(response.message));
-            } else if (response === false) {
+                this.showAlert(this.errorConfirmContactAlert.text(response.responseText));
+            } else if (String(response) === "false") {
                 this.showAlert(
                     this.errorConfirmContactAlert.text(localization.translate("ConfirmCodeNotValid", "Account").value));
             } else {
@@ -132,41 +165,11 @@ class AccountManager {
         });
     }
 
-    updateContact(contactType: string, newContactValue: string): JQueryPromise<any> {
-        return this.post(getBaseUrl() + "Account/UpdateContact",
-            JSON.stringify({
-                NewContactValue: newContactValue,
-                ContactType: contactType,
-                oldContactValue: this.oldEmailValue
-            }));
-    }
-
-    confirmContact(contactType: string, confirmCode: string): JQueryPromise<any> {
-        return this.post(getBaseUrl() + "Account/ConfirmUserContact",
-            JSON.stringify({ confirmCode: confirmCode, ContactType: contactType, userId: this.userId }));
-    }
-
-    resendConfirmCode(contactType: string): JQueryPromise<any> {
-        return this.post(getBaseUrl() + "Account/ResendConfirmCode",
-            JSON.stringify({ ContactType: contactType, userId: this.userId }));
-    }
-
     private showAlert(alert: JQuery) {
         alert.removeClass("hide").addClass("in");
     }
 
     private hideAlert(alert: JQuery) {
         alert.removeClass("in").addClass("hide");
-    }
-
-    private post(url: string, data: string) {
-        return $.ajax({
-            type: "POST",
-            traditional: true,
-            url: url,
-            data: data,
-            dataType: "json",
-            contentType: "application/json"
-        });
     }
 }

@@ -144,6 +144,7 @@ namespace ITJakub.Web.Hub.Controllers
 
                         client.UpdateCurrentPassword(updateUserPasswordContract);
                         ViewData.Add(AccountConstants.SuccessPasswordUpdate, true);
+                        return PartialView("Settings/_UpdatePassword", null);
                     }
                 }
                 catch (HttpErrorCodeException e)
@@ -151,10 +152,8 @@ namespace ITJakub.Web.Hub.Controllers
                     AddErrors(e);
                 }
             }
-            
-            var viewModel = CreateAccountDetailViewModel(AccountTab.UpdatePassword);
-            viewModel.UpdatePasswordViewModel = model;
-            return View("AccountSettings", viewModel);
+
+            return PartialView("Settings/_UpdatePassword", model);
         }
 
         //
