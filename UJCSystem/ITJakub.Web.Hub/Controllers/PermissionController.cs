@@ -10,7 +10,6 @@ using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Requests.Permission;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Ridics.Core.Structures.Shared;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Errors;
@@ -400,8 +399,15 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetRestClient())
             {
-                client.AddSpecialPermissionsToRole(request.RoleId, new List<int> {request.SpecialPermissionId});
-                return Json(new { });
+                try
+                {
+                    client.AddSpecialPermissionsToRole(request.RoleId, new List<int> {request.SpecialPermissionId});
+                    return Json(new { });
+                }
+                catch (HttpErrorCodeException e)
+                {
+                    return Json(new {e.Message});
+                }
             }
         }
 
@@ -410,8 +416,15 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetRestClient())
             {
-                client.RemoveSpecialPermissionsFromRole(request.RoleId, new List<int> {request.SpecialPermissionId});
-                return Json(new { });
+                try
+                {
+                    client.RemoveSpecialPermissionsFromRole(request.RoleId, new List<int> {request.SpecialPermissionId});
+                    return Json(new { });
+                }
+                catch (HttpErrorCodeException e)
+                {
+                    return Json(new { e.Message });
+                }
             }
         }
 

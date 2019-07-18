@@ -7,7 +7,8 @@
 {
 <tr>
     <td class="permission-checkbox" data-permission-id="@permission.Id">
-        @Html.CheckBoxFor(modelItem => permission.IsSelected)
+        <i class="fa fa-circle-o-notch fa-spin spinner-font loading-spinner"></i>
+        <input type="checkbox" asp-for="@permission.IsSelected" class="permission-checkbox-input"/>
     </td>
     <td>
         @Html.DisplayFor(modelItem => permission.Name)

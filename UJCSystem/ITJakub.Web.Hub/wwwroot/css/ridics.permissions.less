@@ -122,3 +122,28 @@
         margin-top: 1em;
     }
 }
+
+.permission-checkbox {
+    .spinner-font {
+        display: inline-block;
+        font-size: 14px;
+        vertical-align: -2px;
+        margin-right: 0;
+        margin-left: -1px;
+        margin-top: 3px;
+        margin-bottom: 5px;
+    }
+
+    .loading-spinner {
+        float: left;
+        display: none;
+    }
+
+    &.pending .loading-spinner {
+        display: block;
+    }
+
+    &.pending .permission-checkbox-input {
+        display: none;
+    }
+}

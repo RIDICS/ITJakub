@@ -81,13 +81,33 @@ class RoleManager {
 
     private initPermissionManaging() {
         $(".permission-checkbox input[type=checkbox]").change((event) => {
+            event.preventDefault();
             var roleId = $(".role-row.active").data("role-id");
-            var specialPermissionId = $((event.currentTarget) as any).parent("td").data("permission-id");
+            var permissionCheckboxInput = $(event.currentTarget);
+            var permissionCheckbox = permissionCheckboxInput.parent(".permission-checkbox");
+            permissionCheckbox.addClass("pending");
+            var specialPermissionId = permissionCheckbox.data("permission-id");
 
-            if ($((event.currentTarget) as any).is(":checked")) {
-                this.client.addSpecialPermissionToRole(roleId, specialPermissionId);
+            if ($(event.currentTarget).is(":checked")) {
+                this.client.addSpecialPermissionToRole(roleId, specialPermissionId).then((response) => {
+                    if (response.hasOwnProperty("message")) {
+                        permissionCheckboxInput.prop("checked", false);
+                        //TODO show error
+                    } else {
+                        permissionCheckboxInput.prop("checked", true);
+                    }
+                    permissionCheckbox.removeClass("pending");
+                });
             } else {
-                this.client.removeSpecialPermissionToRole(roleId, specialPermissionId);
+                this.client.removeSpecialPermissionToRole(roleId, specialPermissionId).then((response) => {
+                    if (response.hasOwnProperty("message")) {
+                        permissionCheckboxInput.prop("checked", false);
+                        //TODO show error
+                    } else {
+                        permissionCheckboxInput.prop("checked", true);
+                    }
+                    permissionCheckbox.removeClass("pending");
+                });
             }
         });
     }
