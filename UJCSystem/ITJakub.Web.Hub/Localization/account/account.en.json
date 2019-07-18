@@ -43,6 +43,7 @@
     "ConfirmCodeNotValid": "Confirm code is not valid.",
 
     "UpdateTwoFactorVerification": "Two-factor verification",
+    "SuccessTwoFactorUpdate": "Two-factor verification was successfully updated.",
     "Save": "Save"
   }
 }

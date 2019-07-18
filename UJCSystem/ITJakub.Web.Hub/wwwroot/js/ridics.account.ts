@@ -6,8 +6,14 @@
 class AccountManager {
     private readonly client: AccountApiClient;
 
-    private readonly accountDataForm: JQuery;
-    private readonly passwordForm: JQuery;
+    private accountDataForm: JQuery;
+    private passwordForm: JQuery;
+    private setTwoFactorForm: JQuery;
+    private changeTwoFactorProviderForm: JQuery;
+
+    private accountSection: JQuery;
+    private passwordSection: JQuery;
+    private twoFactorSection: JQuery;
     //Email confirm
     private readonly userId: number;
     private readonly oldEmailValue: string;
@@ -33,8 +39,9 @@ class AccountManager {
     constructor() {
         this.client = new AccountApiClient();
 
-        this.accountDataForm = $("#updateAccountForm");
-        this.passwordForm = $("#updatePasswordForm");
+        this.accountSection = $("#update-account");
+        this.passwordSection = $("#update-password");
+        this.twoFactorSection = $("#update-two-factor-verification");
 
         this.userId = $("#userId").data("id");
         this.oldEmailValue = String($("#oldEmailValue").val());
@@ -95,45 +102,88 @@ class AccountManager {
             });
         });
 
-        this.initPasswordForm();
         this.initAccountDataForm();
-    }
-
-    initPasswordForm() {
-        this.passwordForm.on("submit",
-            (event) => {
-                event.preventDefault();
-                if (this.passwordForm.valid()) {
-                    this.client.updatePassword(this.passwordForm.serialize())
-                        .then((response) => {
-                            $("#update-password").html((response.responseText) as any);
-                            this.initPasswordForm();
-                        })
-                        .catch((error) => {
-                            $("#update-password").html((error.responseText) as any);
-                            this.initPasswordForm();
-                        });
-                }
-            });
+        this.initPasswordForm();
+        this.initTwoFactorSettingsForm();
     }
 
     initAccountDataForm() {
+        this.accountDataForm = $("#updateAccountForm");
+       
         this.accountDataForm.on("submit",
             (event) => {
                 event.preventDefault();
                 if (this.accountDataForm.valid()) {
                     this.client.updateAccount(this.accountDataForm.serialize())
                         .then((response) => {
-                            $("#update-account").html((response.responseText) as any);
+                            this.accountSection.html(response.responseText);
                             this.initAccountDataForm();
                         })
-                        .catch((error) => {
-                            $("#update-account").html((error.responseText) as any);
+                        .catch((response) => {
+                            this.accountSection.html(response.responseText);
                             this.initAccountDataForm();
                         });
                 }
             });
     }
+
+    initPasswordForm() {
+        this.passwordForm = $("#updatePasswordForm");
+        
+        this.passwordForm.on("submit",
+            (event) => {
+                event.preventDefault();
+                if (this.passwordForm.valid()) {
+                    this.client.updatePassword(this.passwordForm.serialize())
+                        .then((response) => {
+                            this.passwordSection.html(response.responseText);
+                            this.initPasswordForm();
+                        })
+                        .catch((response) => {
+                            this.passwordSection.html(response.responseText);
+                            this.initPasswordForm();
+                        });
+                }
+            });
+    }
+
+    initTwoFactorSettingsForm() {
+        this.setTwoFactorForm = $("#setTwoFactorForm");
+        this.changeTwoFactorProviderForm = $("#changeTwoFactorProviderForm");
+
+        this.setTwoFactorForm.on("submit",
+            (event) => {
+                event.preventDefault();
+                if (this.setTwoFactorForm.valid()) {
+                    this.client.setTwoFactor(this.setTwoFactorForm.serialize())
+                        .then((response) => {
+                            this.twoFactorSection.html((response.responseText) as any);
+                            this.initTwoFactorSettingsForm();
+                        })
+                        .catch((error) => {
+                            this.twoFactorSection.html((error.responseText) as any);
+                            this.initTwoFactorSettingsForm();
+                        });
+                }
+            });
+
+        this.changeTwoFactorProviderForm.on("submit",
+            (event) => {
+                event.preventDefault();
+                if (this.changeTwoFactorProviderForm.valid()) {
+                    this.client.changeTwoFactorProvider(this.changeTwoFactorProviderForm.serialize())
+                        .then((response) => {
+                            this.twoFactorSection.html((response.responseText) as any);
+                            this.initTwoFactorSettingsForm();
+                        })
+                        .catch((error) => {
+                            this.twoFactorSection.html((error.responseText) as any);
+                            this.initTwoFactorSettingsForm();
+                        });
+                }
+            });
+    }
+
 
     sendUpdateContactRequest() {
         var email = $("#emailInput").val() as string;

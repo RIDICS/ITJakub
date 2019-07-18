@@ -43,6 +43,7 @@
     "ConfirmCodeNotValid": "Ověřovací kód není správný.",
 
     "UpdateTwoFactorVerification": "Dvoufaktorové ověření",
+    "SuccessTwoFactorUpdate": "Nastavení dvoufaktorového ověření bylo úspšeně aktualizováno.",
     "Save": "Uložit"
   }
 }

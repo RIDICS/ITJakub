@@ -33,6 +33,20 @@
         );
     }
 
+    public setTwoFactor(twoFactorDataForm: string): Promise<JQuery.jqXHR> {
+        return this.post(this.getAccountControllerUrl() + "/SetTwoFactor",
+            twoFactorDataForm,
+            "application/x-www-form-urlencoded"
+        );
+    }
+
+    public changeTwoFactorProvider(twoFactorDataForm: string): Promise<JQuery.jqXHR> {
+        return this.post(this.getAccountControllerUrl() + "/ChangeTwoFactorProvider",
+            twoFactorDataForm,
+            "application/x-www-form-urlencoded"
+        );
+    }
+
     private getAccountControllerUrl(): string {
         return getBaseUrl() + "Account/";
     }

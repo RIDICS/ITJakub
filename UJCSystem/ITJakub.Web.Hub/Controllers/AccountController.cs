@@ -109,11 +109,11 @@ namespace ITJakub.Web.Hub.Controllers
 
                         client.UpdateCurrentUser(updateUserContract);
                         ViewData.Add(AccountConstants.SuccessUserUpdate, true);
-                        return PartialView("Settings/_UpdateAccount", updateUserViewModel);
                     }
                 }
                 catch (HttpErrorCodeException e)
                 {
+                    ViewData.Add(AccountConstants.SuccessUserUpdate, false);
                     AddErrors(e);
                 }
             }
@@ -147,6 +147,7 @@ namespace ITJakub.Web.Hub.Controllers
                 }
                 catch (HttpErrorCodeException e)
                 {
+                    ViewData.Add(AccountConstants.SuccessPasswordUpdate, false);
                     AddErrors(e);
                 }
             }
@@ -240,25 +241,30 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 using (var client = GetRestClient())
                 {
-                    var contract = new UpdateTwoFactorContract
-                    {
-                        TwoFactorIsEnabled = twoFactorVerificationViewModel.TwoFactorEnabled,
-                        TwoFactorProvider = twoFactorVerificationViewModel.SelectedTwoFactorProvider
-                    };
-                    
                     try
                     {
+                        var contract = new UpdateTwoFactorContract
+                        {
+                            TwoFactorIsEnabled = twoFactorVerificationViewModel.TwoFactorEnabled,
+                            TwoFactorProvider = twoFactorVerificationViewModel.SelectedTwoFactorProvider
+                        };
                         client.SetTwoFactor(twoFactorVerificationViewModel.UserId, contract);
+                        ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, true);
                     }
                     catch (HttpErrorCodeException e)
                     {
+                        ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, false);
                         AddErrors(e);
                     }
                 }
             }
 
-            var viewModel = CreateAccountDetailViewModel(AccountTab.UpdateTwoFactorVerification);
-            return View("AccountSettings", viewModel);
+            using (var client = GetRestClient())
+            {
+                var user = client.GetCurrentUser();
+                twoFactorVerificationViewModel = Mapper.Map<UpdateTwoFactorVerificationViewModel>(user);
+                return PartialView("Settings/_UpdateTwoFactorVerification", twoFactorVerificationViewModel);
+            }
         }
 
         [HttpPost]
@@ -277,16 +283,22 @@ namespace ITJakub.Web.Hub.Controllers
                             TwoFactorProvider = twoFactorVerificationViewModel.SelectedTwoFactorProvider
                         };
                         client.SelectTwoFactorProvider(twoFactorVerificationViewModel.UserId, contract);
+                        ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, true);
                     }
                     catch (HttpErrorCodeException e)
                     {
+                        ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, false);
                         AddErrors(e);
                     }
                 }
             }
 
-            var viewModel = CreateAccountDetailViewModel(AccountTab.UpdateTwoFactorVerification);
-            return View("AccountSettings", viewModel);
+            using (var client = GetRestClient())
+            {
+                var user = client.GetCurrentUser();
+                twoFactorVerificationViewModel = Mapper.Map<UpdateTwoFactorVerificationViewModel>(user);
+                return PartialView("Settings/_UpdateTwoFactorVerification", twoFactorVerificationViewModel);
+            }
         }
 
         //
