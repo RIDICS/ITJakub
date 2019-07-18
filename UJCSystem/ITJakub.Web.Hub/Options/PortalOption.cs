@@ -10,9 +10,9 @@ namespace ITJakub.Web.Hub.Options
 
         public string FaviconPath { get; set; }
 
-        public PortalConfig MainPortal { get; set; }
+        public PortalHeadingOption MainPortal { get; set; }
 
-        public PortalConfig SecondPortal { get; set; }
+        public PortalHeadingOption SecondPortal { get; set; }
 
         public Dictionary<string, bool> AllowedSearchOptions { get; set; }
     }

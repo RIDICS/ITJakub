@@ -1,7 +1,7 @@
 ﻿{
   "PortalConfig": {
     "PortalType": "CommunityPortal",
-    "FaviconPath": "~/images/logo/favicon.CommunityPortal.png",
+    "FaviconPath": "~/images/favicon.CommunityPortal.png",
     "MainPortal": {
       "PortalNameFull": "Komunitní portál",
       "PortalName1": "Komunitní",

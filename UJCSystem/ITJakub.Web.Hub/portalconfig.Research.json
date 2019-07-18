@@ -1,7 +1,7 @@
 ﻿{
   "PortalConfig": {
     "PortalType": "ResearchPortal",
-    "FaviconPath": "~/images/logo/favicon.ResearchPortal.png",
+    "FaviconPath": "~/images/favicon.ResearchPortal.png",
     "MainPortal": {
       "PortalNameFull": "Vokabulář webový",
       "PortalName1": "Vokabulář",
