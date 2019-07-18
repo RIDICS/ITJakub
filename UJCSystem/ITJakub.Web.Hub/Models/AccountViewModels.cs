@@ -1,4 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using ITJakub.Web.Hub.Areas.Admin.Models;
+using ITJakub.Web.Hub.Constants;
+using Vokabular.MainService.DataContracts.Contracts.Permission;
 
 namespace ITJakub.Web.Hub.Models
 {
@@ -54,25 +58,22 @@ namespace ITJakub.Web.Hub.Models
 
     public class AccountDetailViewModel
     {
-        [Display(Name = "UserName")]
-        public string UserName { get; set; }
-
-        [Display(Name = "Email")]
-        public string Email { get; set; }
-
-        [Display(Name = "FirstName")]
-        public string FirstName { get; set; }
-
-        [Display(Name = "LastName")]
-        public string LastName { get; set; }
-
-        public UpdateAccountViewModel UpdateAccountViewModel;
+        public UpdateUserViewModel UpdateUserViewModel;
 
         public UpdatePasswordViewModel UpdatePasswordViewModel;
+
+        public AccountTab ActualTab { get; set; }
     }
 
-    public class UpdateAccountViewModel
+    public class UpdateUserViewModel
     {
+        [ReadOnly(true)]
+        public int Id { get; set; }
+
+        [Display(Name = "UserName")]
+        [ReadOnly(true)]
+        public string UserName { get; set; }
+
         [Required(AllowEmptyStrings = false, ErrorMessage = "MustBeFilled")]
         [EmailAddress]
         [Display(Name = "Email")]
@@ -106,5 +107,25 @@ namespace ITJakub.Web.Hub.Models
         [Display(Name = "ConfirmPassword")]
         [Compare("Password", ErrorMessage = "PasswordsNotEqual")]
         public string ConfirmPassword { get; set; }
+    }
+
+    public class UserDetailViewModel
+    {
+        public int Id { get; set; }
+
+        [Display(Name = "UserName")]
+        public string UserName { get; set; }
+
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Display(Name = "FirstName")]
+        public string FirstName { get; set; }
+
+        [Display(Name = "LastName")]
+        public string LastName { get; set; }
+
+        [Display(Name = "Roles")]
+        public ListViewModel<RoleContract> Roles { get; set; }
     }
 }

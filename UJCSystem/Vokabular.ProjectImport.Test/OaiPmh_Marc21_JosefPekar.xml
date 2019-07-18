@@ -1,0 +1,136 @@
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:m="http://www.loc.gov/MARC21/slim" xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <responseDate>2019-04-26T16:40:37.136Z</responseDate>
+    <request verb="GetRecord" identifier="oai:biblio.hiu.cas.cz:1" metadataPrefix="marc21" from="1970-01-01" until="2019-04-26">https://biblio.hiu.cas.cz/api/oai</request>
+    <GetRecord>
+        <record>
+            <header>
+                <identifier>oai:biblio.hiu.cas.cz:1</identifier>
+            </header>
+            <metadata>
+                <m:record>
+                    <m:leader>-----nam-a22------i-4500</m:leader>
+                    <m:controlfield tag="001">kpm011</m:controlfield>
+                    <m:controlfield tag="003">CZ-PrHAC</m:controlfield>
+                    <m:controlfield tag="005">20190413192954.5</m:controlfield>
+                    <m:controlfield tag="007">ta</m:controlfield>
+                    <m:controlfield tag="008">120730s1990----xr ||||f||||||||||||cze||</m:controlfield>
+                    <m:datafield tag="020" ind1=" " ind2=" ">
+                        <m:subfield code="a">0-946352-70-4</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="040" ind1=" " ind2=" ">
+                        <m:subfield code="a">ABB115</m:subfield>
+                        <m:subfield code="b">cze</m:subfield>
+                        <m:subfield code="e">rda</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="041" ind1="0" ind2=" ">
+                        <m:subfield code="a">cze</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="044" ind1=" " ind2=" ">
+                        <m:subfield code="a">xr</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="072" ind1=" " ind2="7">
+                        <m:subfield code="a">94(437)</m:subfield>
+                        <m:subfield code="x">Dějiny Česka a Slovenska</m:subfield>
+                        <m:subfield code="2">Konspekt</m:subfield>
+                        <m:subfield code="9">8</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="100" ind1="1" ind2=" ">
+                        <m:subfield code="a">Pekař, Josef,</m:subfield>
+                        <m:subfield code="d">1870-1937</m:subfield>
+                        <m:subfield code="7">jk01092389</m:subfield>
+                        <m:subfield code="4">aut</m:subfield>
+                        <m:subfield code="e">Autor</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="245" ind1="1" ind2="0">
+                        <m:subfield code="a">O smyslu českých dějin /</m:subfield>
+                        <m:subfield code="c">Josef Pekař</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="264" ind1=" " ind2="1">
+                        <m:subfield code="a">Praha :</m:subfield>
+                        <m:subfield code="b">Rozmluvy,</m:subfield>
+                        <m:subfield code="c">1990</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="300" ind1=" " ind2=" ">
+                        <m:subfield code="a">418 s.</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="336" ind1=" " ind2=" ">
+                        <m:subfield code="a">text</m:subfield>
+                        <m:subfield code="b">txt</m:subfield>
+                        <m:subfield code="2">rdacontent</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="337" ind1=" " ind2=" ">
+                        <m:subfield code="a">bez média</m:subfield>
+                        <m:subfield code="b">n</m:subfield>
+                        <m:subfield code="2">rdamedia</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="338" ind1=" " ind2=" ">
+                        <m:subfield code="a">svazek</m:subfield>
+                        <m:subfield code="b">nc</m:subfield>
+                        <m:subfield code="2">rdacarrier</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="600" ind1="0" ind2="4">
+                        <m:subfield code="a">Kristián,</m:subfield>
+                        <m:subfield code="c">mnich,</m:subfield>
+                        <m:subfield code="d">asi 929-asi 996</m:subfield>
+                        <m:subfield code="7">jk01063351</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="600" ind1="0" ind2="4">
+                        <m:subfield code="a">Václav,</m:subfield>
+                        <m:subfield code="c">český kníže,</m:subfield>
+                        <m:subfield code="d">asi 907-asi 935</m:subfield>
+                        <m:subfield code="7">jn20000728789</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="600" ind1="1" ind2="4">
+                        <m:subfield code="a">Vavák, František Jan,</m:subfield>
+                        <m:subfield code="d">1741-1816</m:subfield>
+                        <m:subfield code="7">jk01141705</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="600" ind1="1" ind2="4">
+                        <m:subfield code="a">Dlask, Josef,</m:subfield>
+                        <m:subfield code="d">1782-1853</m:subfield>
+                        <m:subfield code="7">jk01022365</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="653" ind1="0" ind2=" ">
+                        <m:subfield code="a">historiografie česká</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="653" ind1="0" ind2=" ">
+                        <m:subfield code="a">filozofie dějin</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="655" ind1=" " ind2="7">
+                        <m:subfield code="a">studie</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="655" ind1=" " ind2="7">
+                        <m:subfield code="a">soubory studií</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="659" ind1=" " ind2=" ">
+                        <m:subfield code="a">xab</m:subfield>
+                        <m:subfield code="x">filozofie dějin</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="659" ind1=" " ind2=" ">
+                        <m:subfield code="a">yba</m:subfield>
+                        <m:subfield code="x">přehledná zpracování dějin českých zemí (chronologicky)</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="659" ind1=" " ind2=" ">
+                        <m:subfield code="a">zza</m:subfield>
+                        <m:subfield code="x">dějepisectví, historické vědy, historici</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="910" ind1=" " ind2=" ">
+                        <m:subfield code="a">ABB115</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="990" ind1=" " ind2=" ">
+                        <m:subfield code="a">6</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="998" ind1=" " ind2=" ">
+                        <m:subfield code="a">c</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="998" ind1=" " ind2=" ">
+                        <m:subfield code="b">a</m:subfield>
+                    </m:datafield>
+                    <m:datafield tag="998" ind1=" " ind2=" ">
+                        <m:subfield code="c">m</m:subfield>
+                    </m:datafield>
+                </m:record>
+            </metadata>
+        </record>
+    </GetRecord>
+</OAI-PMH>

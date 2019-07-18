@@ -1,5 +1,5 @@
 ﻿using System;
-using Vokabular.Authentication.DataContracts.User;
+using Ridics.Authentication.DataContracts.User;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;

@@ -8,8 +8,8 @@
     <property name="Type" not-null="true" />
 
     <bag name="Snapshots" table="Snapshot_BookType" inverse="true" lazy="true">
-      <key column="Snapshot" />
-      <many-to-many class="BookType" column="BookType" />
+      <key column="BookType" />
+      <many-to-many class="Snapshot" column="Snapshot" />
     </bag>
 
   </class>

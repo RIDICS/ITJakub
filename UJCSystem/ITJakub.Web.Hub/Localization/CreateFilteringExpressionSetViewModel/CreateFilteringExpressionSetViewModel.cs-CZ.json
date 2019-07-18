@@ -1,0 +1,9 @@
+{
+  "culture": "cs-CZ",
+  "scope": "CreateFilteringExpressionSetViewModel",
+  "dictionary": {
+    "Name": "Název: ",
+    "Required": "Pole musí být vyplněno.",
+    "BibliographicFormat": "Bibliografický formát: "
+  }
+}

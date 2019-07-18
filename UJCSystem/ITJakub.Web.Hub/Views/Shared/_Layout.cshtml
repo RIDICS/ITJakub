@@ -1,6 +1,7 @@
 ﻿@using ITJakub.Web.Hub.Helpers
 @using ITJakub.Web.Hub.Options
 @using Microsoft.Extensions.Options;
+@using Ridics.Core.Structures.Shared
 @using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
 @using Vokabular.Shared.AspNetCore.Extensions
@@ -75,7 +76,7 @@
     </div>
 
     <div id="baseUrl" data-path="@Url.Content("~/")" style="display: none"></div>
-    <div id="permissions-div" class="hidden" data-is-authenticated="@User.Identity.IsAuthenticated" data-roles="@if (User.HasPermission(PermissionNames.EditLemmatization))
+    <div id="permissions-div" class="hidden" data-is-authenticated="@User.Identity.IsAuthenticated" data-roles="@if (User.HasPermission(VokabularPermissionNames.EditLemmatization))
                                                                                                     {@Html.Raw("EditLemmatization")
                                                                                                     } "></div>
     <div class="page-body-content">
@@ -100,6 +101,7 @@
         <script src="~/lib/bootbox/bootbox.js"></script>
         <script src="~/lib/dropzone/downloads/dropzone.js"></script>
         <script src="~/lib/he/he.js"></script>
+    <script src="~/lib/urijs/src/URI.min.js"></script>
 
         <environment names="Staging,Production">
             <script src="~/js/bundles/itjakub.keyboard.bundle.js"></script>
@@ -204,8 +206,8 @@
                 @{
                     string vokabularStartedNew = FooterHelper.VokabularStartedLocalized(Localizer, new DateTime(2015, 1, 1));
                 }
-
-                @Localizer.TranslateFormat("FooterText", new object[] { vokabularStartedNew }, "layout", LocTranslationSource.File)
+                
+                @Localizer.TranslateFormat("FooterText", "layout", LocTranslationSource.File, vokabularStartedNew)
             </div>
             <div class="footer-logos">
                 <a href="http://www.ujc.cas.cz/" class="ujc" title="@Localizer.Translate("UjcLong", "layout")">

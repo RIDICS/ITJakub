@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ITJakub.Web.Hub.Constants;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -59,7 +60,8 @@ namespace ITJakub.Web.Hub.Controllers
                     {
                         client.CreateNewUser(user);
                     }
-                    ViewData.Add("SuccessRegistration", true);
+
+                    return RedirectToAction(nameof(SuccessfulRegistration));
                 }
                 catch (HttpErrorCodeException e)
                 {
@@ -67,8 +69,14 @@ namespace ITJakub.Web.Hub.Controllers
                 }
             }
 
-            // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult SuccessfulRegistration()
+        {
+            return View();
         }
 
         //
@@ -78,9 +86,12 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetRestClient())
             {
                 var user = client.GetCurrentUser();
-                var viewmodel = Mapper.Map<AccountDetailViewModel>(user);
-                viewmodel.UpdateAccountViewModel = Mapper.Map<UpdateAccountViewModel>(user);
-                viewmodel.UpdatePasswordViewModel = null;
+                var viewmodel = new AccountDetailViewModel
+                {
+                    UpdateUserViewModel = Mapper.Map<UpdateUserViewModel>(user),
+                    UpdatePasswordViewModel = null,
+                    ActualTab = AccountTab.UpdateAccount
+                };
                 return View(viewmodel);
             }
         }
@@ -90,26 +101,24 @@ namespace ITJakub.Web.Hub.Controllers
         [HttpPost]
         [RequireHttps]
         [ValidateAntiForgeryToken]
-        public IActionResult UpdateAccount(UpdateAccountViewModel model)
+        public IActionResult UpdateAccount(UpdateUserViewModel model)
         {
-            ViewData.Add("ActualTab", "UpdateAccount");
-
             if (ModelState.IsValid)
             {
                 try
                 {
                     using (var client = GetRestClient())
                     {
-                        UpdateUserContract updateUserContract = new UpdateUserContract
+                        var updateUserContract = new UpdateUserContract
                         {
-                            AvatarUrl = null, //TODO
+                            AvatarUrl = null, //TODO Avatar
                             Email = model.Email,
                             FirstName = model.FirstName,
                             LastName = model.LastName
                         };
 
                         client.UpdateCurrentUser(updateUserContract);
-                        ViewData.Add("SuccessUpdateAccount", true);
+                        ViewData.Add(AccountConstants.SuccessUserUpdate, true);
                     }
                 }
                 catch (HttpErrorCodeException e)
@@ -118,8 +127,18 @@ namespace ITJakub.Web.Hub.Controllers
                 }
             }
 
-            var viewModel = new AccountDetailViewModel {UpdateAccountViewModel = model};
-            return View("AccountSettings", viewModel);
+
+            using (var client = GetRestClient())
+            {
+                var user = client.GetCurrentUser();
+                var updateUserViewModel = Mapper.Map<UpdateUserViewModel>(user);
+                var viewModel = new AccountDetailViewModel
+                {
+                    UpdateUserViewModel = updateUserViewModel,
+                    UpdatePasswordViewModel = null
+                };
+                return View("AccountSettings", viewModel);
+            }
         }
 
         //
@@ -129,22 +148,20 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult UpdatePassword(UpdatePasswordViewModel model)
         {
-            ViewData.Add("ActualTab", "UpdatePassword");
-
             if (ModelState.IsValid)
             {
                 try
                 {
                     using (var client = GetRestClient())
                     {
-                        UpdateUserPasswordContract updateUserPasswordContract = new UpdateUserPasswordContract
+                        var updateUserPasswordContract = new UpdateUserPasswordContract
                         {
                             NewPassword = model.Password,
                             OldPassword = model.OldPassword
                         };
 
                         client.UpdateCurrentPassword(updateUserPasswordContract);
-                        ViewData.Add("SuccessPasswordChange", true);
+                        ViewData.Add(AccountConstants.SuccessPasswordChange, true);
                     }
                 }
                 catch (HttpErrorCodeException e)
@@ -153,8 +170,17 @@ namespace ITJakub.Web.Hub.Controllers
                 }
             }
 
-            var viewModel = new AccountDetailViewModel { UpdatePasswordViewModel = model };
-            return View("AccountSettings", viewModel);
+            using (var client = GetRestClient())
+            {
+                var user = client.GetCurrentUser();
+                var viewModel = new AccountDetailViewModel
+                {
+                    UpdateUserViewModel = Mapper.Map<UpdateUserViewModel>(user),
+                    UpdatePasswordViewModel = model,
+                    ActualTab = AccountTab.UpdatePassword
+                };
+                return View("AccountSettings", viewModel);
+            }
         }
 
         //
@@ -179,20 +205,6 @@ namespace ITJakub.Web.Hub.Controllers
         public IActionResult AccessDenied()
         {
             return View();
-        }
-
-        private void AddErrors(HttpErrorCodeException exception)
-        {
-            if (exception.ValidationErrors == null)
-            {
-                ModelState.AddModelError(string.Empty, exception.Message);
-                return;
-            }
-
-            foreach (var error in exception.ValidationErrors)
-            {
-                ModelState.AddModelError(string.Empty, error.Message);
-            }
         }
 
         private ActionResult RedirectToLocal(string returnUrl)

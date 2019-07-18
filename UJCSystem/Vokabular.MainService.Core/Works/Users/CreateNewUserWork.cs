@@ -1,5 +1,5 @@
 ﻿using System;
-using Vokabular.Authentication.DataContracts.User;
+using Ridics.Authentication.DataContracts.User;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
@@ -25,7 +25,7 @@ namespace Vokabular.MainService.Core.Works.Users
         {
             var client = m_communicationProvider.GetAuthRegistrationApiClient();
 
-            var authUser = new Authentication.DataContracts.User.CreateUserContract
+            var authUser = new Ridics.Authentication.DataContracts.User.CreateUserContract
             {
                 Password = m_data.NewPassword,
                 UserName = m_data.UserName,

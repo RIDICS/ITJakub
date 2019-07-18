@@ -25,6 +25,7 @@
     "s-pagination": "2.1.0",
     "scalesoft-localization-web": "2.1.1",
     "stickybits": "3.0.4",
+    "urijs": "1.19.1",
     "he": "1.2.0"
   },
   "resolutions": {

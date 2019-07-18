@@ -4,7 +4,7 @@ using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.DataContracts.Contracts;
-using AuthUserContract = Vokabular.Authentication.DataContracts.User.UserContract;
+using AuthUserContract = Ridics.Authentication.DataContracts.User.UserContract;
 
 namespace Vokabular.MainService.Core.Works.Users
 {
