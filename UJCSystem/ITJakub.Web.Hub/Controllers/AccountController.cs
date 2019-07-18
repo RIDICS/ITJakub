@@ -103,7 +103,6 @@ namespace ITJakub.Web.Hub.Controllers
                     {
                         var updateUserContract = new UpdateUserContract
                         {
-                            AvatarUrl = null, //TODO Avatar
                             FirstName = updateUserViewModel.FirstName,
                             LastName = updateUserViewModel.LastName
                         };
