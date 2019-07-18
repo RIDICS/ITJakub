@@ -351,20 +351,22 @@ class RegExAdvancedSearchEditor {
         this.enabledOptionsArray = enabledOptions;
 
         //Set options which are allowed for the actual portal.
-        var allowed = JSON.parse(he.decode($("#allowedSearchOptions").data("options")));
-        for (var i = 0; i < this.enabledOptionsArray.length; i++) {
-            var optionName = SearchTypeEnum[this.enabledOptionsArray[i]];
+        var allowedOptions = JSON.parse(he.decode($("#allowedSearchOptions").data("options")));
+        var enabledOptions = new Array<SearchTypeEnum>();
+        for (var optionId of this.enabledOptionsArray) {
+            var optionName = SearchTypeEnum[optionId];
 
-            for (var j = 0; j < allowed.length; j++) {
-                if (allowed[j].key == optionName) {
-                    if (allowed[j].value == false) {
-                        this.enabledOptionsArray.splice(i, 1);
-                        i--;
+            for (var allowedOption of allowedOptions) {
+                if (allowedOption.key == optionName) {
+                    if (allowedOption.value == true) {
+                        enabledOptions.push(optionId);
                     }
                     break;
                 }
             }
         }
+
+        this.enabledOptionsArray = enabledOptions;
     }
 
     limitFullTextOptions() {
