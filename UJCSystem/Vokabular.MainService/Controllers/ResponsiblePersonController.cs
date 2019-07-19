@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
@@ -6,6 +7,7 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Headers;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
+using Vokabular.Shared.Const;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -23,12 +25,14 @@ namespace Vokabular.MainService.Controllers
             m_projectManager = projectManager;
         }
 
+        [Authorize]
         [HttpPost("")]
         public int CreateResponsiblePerson([FromBody] ResponsiblePersonContract responsiblePerson)
         {
             return m_personManager.CreateResponsiblePerson(responsiblePerson);
         }
 
+        [Authorize(VokabularPermissionNames.ManageCodeList)]
         [HttpPut("{responsiblePersonId}")]
         public IActionResult UpdateResponsiblePerson(int responsiblePersonId, [FromBody] ResponsiblePersonContract data)
         {
@@ -43,6 +47,7 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
+        [Authorize(VokabularPermissionNames.ManageCodeList)]
         [HttpDelete("{responsiblePersonId}")]
         public IActionResult DeleteResponsiblePerson(int responsiblePersonId)
         {
@@ -83,12 +88,14 @@ namespace Vokabular.MainService.Controllers
             return m_personManager.GetResponsiblePersonAutocomplete(query, count);
         }
 
+        [Authorize(VokabularPermissionNames.ManageCodeList)]
         [HttpPost("type")]
         public int CreateResponsibleType([FromBody] ResponsibleTypeContract responsibleType)
         {
             return m_catalogValueManager.CreateResponsibleType(responsibleType);
         }
 
+        [Authorize(VokabularPermissionNames.ManageCodeList)]
         [HttpPut("type/{responsibleTypeId}")]
         public IActionResult UpdateResponsibleType(int responsibleTypeId, [FromBody] ResponsibleTypeContract data)
         {
@@ -103,6 +110,7 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
+        [Authorize(VokabularPermissionNames.ManageCodeList)]
         [HttpDelete("type/{responsibleTypeId}")]
         public IActionResult DeleteResponsibleType(int responsibleTypeId)
         {

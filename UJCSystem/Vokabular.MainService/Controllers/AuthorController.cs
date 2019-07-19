@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
@@ -6,6 +7,7 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Headers;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
+using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
@@ -22,6 +24,7 @@ namespace Vokabular.MainService.Controllers
             m_projectManager = projectManager;
         }
 
+        [Authorize]
         [HttpPost("")]
         public int CreateOriginalAuthor([FromBody] OriginalAuthorContract author)
         {
@@ -45,6 +48,7 @@ namespace Vokabular.MainService.Controllers
             return Ok(result);
         }
 
+        [Authorize(VokabularPermissionNames.ManageCodeList)]
         [HttpPut("{authorId}")]
         public IActionResult UpdateOriginalAuthor(int authorId, [FromBody] OriginalAuthorContract author)
         {
@@ -59,6 +63,7 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
+        [Authorize(VokabularPermissionNames.ManageCodeList)]
         [HttpDelete("{authorId}")]
         public IActionResult DeleteOriginalAuthor(int authorId)
         {
