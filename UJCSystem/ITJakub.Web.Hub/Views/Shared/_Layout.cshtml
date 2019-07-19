@@ -14,19 +14,19 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="@Url.Content(PortalConfig.Value.FaviconPath)">
+    <link asp-append-version="true" rel="icon" type="image/png" href="@Url.Content(PortalConfig.Value.FaviconPath)">
     <title>@PortalConfig.Value.MainPortal.PortalNameFull - @ViewBag.Title</title>
-    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
-    <link href="~/lib/dropzone/downloads/css/dropzone.css" rel="stylesheet" />
-    <link href="~/lib/jquery-ui-dist/jquery-ui.min.css" rel="stylesheet" />
-    <link href="~/lib/jquery-eu-cookie-law-popup/css/jquery-eu-cookie-law-popup.css" rel="stylesheet" />
-    <link href="~/lib/simplemde-custom-markdown-mode/dist/simplemde.min.css" rel="stylesheet" />
-    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <link href="~/lib/bootstrap-colorpicker-plus/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap-colorpicker-plus/dist/css/bootstrap-colorpicker-plus.min.css" rel="stylesheet" />
-    <link href="~/lib/s-pagination/dist/pagination.css" rel="stylesheet" />
-    <link href="~/css/ITJakubStyle.css" rel="stylesheet" />
-    <script src="~/lib/modernizr/modernizr.js"></script>
+    <link asp-append-version="true" href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link asp-append-version="true" href="~/lib/dropzone/downloads/css/dropzone.css" rel="stylesheet" />
+    <link asp-append-version="true" href="~/lib/jquery-ui-dist/jquery-ui.min.css" rel="stylesheet" />
+    <link asp-append-version="true" href="~/lib/jquery-eu-cookie-law-popup/css/jquery-eu-cookie-law-popup.css" rel="stylesheet" />
+    <link asp-append-version="true" href="~/lib/simplemde-custom-markdown-mode/dist/simplemde.min.css" rel="stylesheet" />
+    <link asp-append-version="true" href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link asp-append-version="true" href="~/lib/bootstrap-colorpicker-plus/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet" />
+    <link asp-append-version="true" href="~/lib/bootstrap-colorpicker-plus/dist/css/bootstrap-colorpicker-plus.min.css" rel="stylesheet" />
+    <link asp-append-version="true" href="~/lib/s-pagination/dist/pagination.css" rel="stylesheet" />
+    <link asp-append-version="true" href="~/css/ITJakubStyle.css" rel="stylesheet" />
+    <script asp-append-version="true" src="~/lib/modernizr/modernizr.js"></script>
     @RenderSection("styles", false)
 </head>
 <body class="eupopup eupopup-fixedtop eupopup-color-inverse" data-has-book-text-url="@Url.Action("HasBookText", "Reader",  new {area = ""})">
@@ -80,80 +80,80 @@
                                                                                                     } "></div>
     <div class="page-body-content">
 
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/lib/jquery-ui-dist/jquery-ui.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-        <script src="~/lib/respond.js/dest/respond.min.js"></script>
-        <script src="~/lib-custom/typeahead.bundle.js"></script>
-        <script src="~/lib/scalesoft-localization-web/dist/localization.js"></script>
-        <script src="~/lib/jquery-appear/src/jquery.appear.js"></script>
-        <script src="~/lib/jquery-zoom/jquery.zoom.js"></script>
-        <script src="~/lib/wheelzoom/wheelzoom.js"></script>
-        <script src="~/lib/jquery-eu-cookie-law-popup/js/jquery-eu-cookie-law-popup.js"></script>
-        <script src="~/lib/simplemde-custom-markdown-mode/dist/simplemde.min.js"></script>
-        <script src="~/lib-custom/jq-simple-connect/source/jqSimpleConnect.js"></script>
-        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
-        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-        <script src="~/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker.js"></script>
-        <script src="~/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker-plus.js"></script>
-        <script src="~/lib/s-pagination/dist/pagination.js"></script>
-        <script src="~/lib/bootbox/bootbox.js"></script>
-        <script src="~/lib/dropzone/downloads/dropzone.js"></script>
-        <script src="~/lib/he/he.js"></script>
-    <script src="~/lib/urijs/src/URI.min.js"></script>
+        <script asp-append-version="true" src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script asp-append-version="true" src="~/lib/jquery-ui-dist/jquery-ui.min.js"></script>
+        <script asp-append-version="true" src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script asp-append-version="true" src="~/lib/respond.js/dest/respond.min.js"></script>
+        <script asp-append-version="true" src="~/lib-custom/typeahead.bundle.js"></script>
+        <script asp-append-version="true" src="~/lib/scalesoft-localization-web/dist/localization.js"></script>
+        <script asp-append-version="true" src="~/lib/jquery-appear/src/jquery.appear.js"></script>
+        <script asp-append-version="true" src="~/lib/jquery-zoom/jquery.zoom.js"></script>
+        <script asp-append-version="true" src="~/lib/wheelzoom/wheelzoom.js"></script>
+        <script asp-append-version="true" src="~/lib/jquery-eu-cookie-law-popup/js/jquery-eu-cookie-law-popup.js"></script>
+        <script asp-append-version="true" src="~/lib/simplemde-custom-markdown-mode/dist/simplemde.min.js"></script>
+        <script asp-append-version="true" src="~/lib-custom/jq-simple-connect/source/jqSimpleConnect.js"></script>
+        <script asp-append-version="true" src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+        <script asp-append-version="true" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+        <script asp-append-version="true" src="~/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker.js"></script>
+        <script asp-append-version="true" src="~/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker-plus.js"></script>
+        <script asp-append-version="true" src="~/lib/s-pagination/dist/pagination.js"></script>
+        <script asp-append-version="true" src="~/lib/bootbox/bootbox.js"></script>
+        <script asp-append-version="true" src="~/lib/dropzone/downloads/dropzone.js"></script>
+        <script asp-append-version="true" src="~/lib/he/he.js"></script>
+    <script asp-append-version="true" src="~/lib/urijs/src/URI.min.js"></script>
 
         <environment names="Staging,Production">
-            <script src="~/js/bundles/itjakub.keyboard.bundle.js"></script>
-            <script src="~/js/bundles/itjakub.storage.bundle.js"></script>
-            <script src="~/js/bundles/itjakub.bundle.js"></script>
-            <script src="~/js/bundles/itjakub.plugins.bundle.js"></script>
-            <script src="~/js/bundles/itjakub.favorite.bundle.js"></script>
+            <script asp-append-version="true" src="~/js/bundles/itjakub.keyboard.bundle.js"></script>
+            <script asp-append-version="true" src="~/js/bundles/itjakub.storage.bundle.js"></script>
+            <script asp-append-version="true" src="~/js/bundles/itjakub.bundle.js"></script>
+            <script asp-append-version="true" src="~/js/bundles/itjakub.plugins.bundle.js"></script>
+            <script asp-append-version="true" src="~/js/bundles/itjakub.favorite.bundle.js"></script>
         </environment>
         <environment names="Development">
             @*Bundle keyboard*@
-            <script src="~/js/Plugins/Keyboard/itjakub.plugins.keyboard.js"></script>
-            <script src="~/js/Plugins/Keyboard/itjakub.plugins.keyboardComponent.js"></script>
-            <script src="~/js/Plugins/Keyboard/itjakub.plugins.keyboardManager.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/Keyboard/itjakub.plugins.keyboard.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/Keyboard/itjakub.plugins.keyboardComponent.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/Keyboard/itjakub.plugins.keyboardManager.js"></script>
 
             @*Bundle storage*@
-            <script src="~/js/Plugins/Storage/itjakub.plugins.storage.manager.js"></script>
-            <script src="~/js/Plugins/Storage/itjakub.plugins.storage.cookiestorage.js"></script>
-            <script src="~/js/Plugins/Storage/itjakub.plugins.storage.localstorage.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/Storage/itjakub.plugins.storage.manager.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/Storage/itjakub.plugins.storage.cookiestorage.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/Storage/itjakub.plugins.storage.localstorage.js"></script>
 
             @*Bundle itjakub*@
-            <script src="~/js/itjakub.js"></script>
-            <script src="~/js/itjakub.dataContracts.js"></script>
-            <script src="~/js/Plugins/itjakub.tools.js"></script>
-            <script src="~/js/Plugins/itjakub.components.js"></script>
-            <script src="~/js/Plugins/itjakub.eucookiepopup.js"></script>
-            <script src="~/js/Plugins/itjakub.helper.js"></script>
+            <script asp-append-version="true" src="~/js/itjakub.js"></script>
+            <script asp-append-version="true" src="~/js/itjakub.dataContracts.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/itjakub.tools.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/itjakub.components.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/itjakub.eucookiepopup.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/itjakub.helper.js"></script>
 
-            <script src="~/js/ridics.form-validation.js"></script>
+            <script asp-append-version="true" src="~/js/ridics.form-validation.js"></script>
 
             @*Bundle plugins*@
-            <script src="~/js/Plugins/Progress/itjakub.plugins.progress.js"></script>
-            <script src="~/js/Plugins/itjakub.modul.inicializator.js"></script>
-            <script src="~/js/Plugins/itjakub.list.modul.inicializator.js"></script>
-            <script src="~/js/Plugins/itjakub.search.modul.inicializator.js"></script>
-            <script src="~/js/Plugins/Reader/itjakub.plugins.reader.js"></script>
-            <script src="~/js/Plugins/Bibliography/itjakub.plugins.bibliography.variableInterpreter.js"></script>
-            <script src="~/js/Plugins/Bibliography/itjakub.plugins.bibliography.factories.js"></script>
-            <script src="~/js/Plugins/Bibliography/itjakub.plugins.bibliography.configuration.js"></script>
-            <script src="~/js/Plugins/Bibliography/itjakub.plugins.bibliography.js"></script>
-            <script src="~/js/Plugins/Sort/itjakub.plugins.sort.js"></script>
-            <script src="~/js/Plugins/DropdownSelect/itjakub.plugins.dropdownselect.js"></script>
-            <script src="~/js/Plugins/DropdownSelect/itjakub.plugins.dropdownselect2.js"></script>
-            <script src="~/js/Plugins/RegExSearch/itjakub.plugins.regexsearch.js"></script>
-            <script src="~/js/Plugins/SearchBox/itjakub.plugins.searchbox.js"></script>
-            <script src="~/js/Plugins/SearchBox/itjakub.plugins.singlesearchbox.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/Progress/itjakub.plugins.progress.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/itjakub.modul.inicializator.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/itjakub.list.modul.inicializator.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/itjakub.search.modul.inicializator.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/Reader/itjakub.plugins.reader.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/Bibliography/itjakub.plugins.bibliography.variableInterpreter.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/Bibliography/itjakub.plugins.bibliography.factories.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/Bibliography/itjakub.plugins.bibliography.configuration.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/Bibliography/itjakub.plugins.bibliography.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/Sort/itjakub.plugins.sort.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/DropdownSelect/itjakub.plugins.dropdownselect.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/DropdownSelect/itjakub.plugins.dropdownselect2.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/RegExSearch/itjakub.plugins.regexsearch.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/SearchBox/itjakub.plugins.searchbox.js"></script>
+            <script asp-append-version="true" src="~/js/Plugins/SearchBox/itjakub.plugins.singlesearchbox.js"></script>
 
             @*Bundle favorite*@
-            <script src="~/js/Favorite/itjakub.favoriteBook.js"></script>
-            <script src="~/js/Favorite/itjakub.favoriteManager.js"></script>
-            <script src="~/js/Favorite/itjakub.favoriteQuery.js"></script>
-            <script src="~/js/Favorite/itjakub.favoriteStar.js"></script>
-            <script src="~/js/Favorite/itjakub.newFavoriteDialog.js"></script>
-            <script src="~/js/Favorite/itjakub.newFavoriteNotification.js"></script>
+            <script asp-append-version="true" src="~/js/Favorite/itjakub.favoriteBook.js"></script>
+            <script asp-append-version="true" src="~/js/Favorite/itjakub.favoriteManager.js"></script>
+            <script asp-append-version="true" src="~/js/Favorite/itjakub.favoriteQuery.js"></script>
+            <script asp-append-version="true" src="~/js/Favorite/itjakub.favoriteStar.js"></script>
+            <script asp-append-version="true" src="~/js/Favorite/itjakub.newFavoriteDialog.js"></script>
+            <script asp-append-version="true" src="~/js/Favorite/itjakub.newFavoriteNotification.js"></script>
         </environment>
 
         @RenderSection("scripts", false)

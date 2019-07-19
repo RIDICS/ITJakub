@@ -3,7 +3,7 @@
 @using Scalesoft.Localization.AspNetCore
 @model ITJakub.Web.Hub.Models.StaticTextViewModel
 @section styles{
-    <link href="~/Areas/Dictionaries/css/itjakub.dictionaries.css" rel="stylesheet" />
+    <link asp-append-version="true" href="~/Areas/Dictionaries/css/itjakub.dictionaries.css" rel="stylesheet" />
 }
 @{
     ViewBag.Title = @Localizer.Translate("DictionariesInformation", "Dictionaries");

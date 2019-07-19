@@ -6,11 +6,11 @@
 }
 
 @section styles{
-    <link href="~/Areas/ProfessionalLiterature/css/itjakub.professionalliterature.css" rel="stylesheet" />
+    <link asp-append-version="true" href="~/Areas/ProfessionalLiterature/css/itjakub.professionalliterature.css" rel="stylesheet" />
 }
 @section scripts{
-    <script src="~/Areas/ProfessionalLiterature/js/itjakub.professionalliterature.js"></script>
-    <script src="~/Areas/ProfessionalLiterature/js/itjakub.professionalliterature.list.bundle.js"></script>
+    <script asp-append-version="true" src="~/Areas/ProfessionalLiterature/js/itjakub.professionalliterature.js"></script>
+    <script asp-append-version="true" src="~/Areas/ProfessionalLiterature/js/itjakub.professionalliterature.list.bundle.js"></script>
 }
 
 @await Html.PartialAsync("_BibliographySearch")
