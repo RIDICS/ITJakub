@@ -80,33 +80,35 @@ class RoleManager {
     }
 
     private initPermissionManaging() {
-        $(".permission-checkbox input[type=checkbox]").change((event) => {
+        $(".permission-row input[type=checkbox]").change((event) => {
             event.preventDefault();
-            var roleId = $(".role-row.active").data("role-id");
-            var permissionCheckboxInput = $(event.currentTarget);
-            var permissionCheckbox = permissionCheckboxInput.parent(".permission-checkbox");
-            permissionCheckbox.addClass("pending");
-            var specialPermissionId = permissionCheckbox.data("permission-id");
+            const permissionCheckboxInput = $(event.currentTarget);
+            const permissionRow = permissionCheckboxInput.parents(".permission-row");
+            permissionRow.addClass("pending");
+            const alert = permissionRow.find(".alert");
+            alert.hide();
+            const specialPermissionId = permissionRow.data("permission-id");
+            const roleId = $(".role-row.active").data("role-id");
 
             if ($(event.currentTarget).is(":checked")) {
                 this.client.addSpecialPermissionToRole(roleId, specialPermissionId).then((response) => {
                     if (response.hasOwnProperty("message")) {
-                        permissionCheckboxInput.prop("checked", false);
-                        //TODO show error
+                        alert.text(response.message);
+                        alert.show();
                     } else {
-                        permissionCheckboxInput.prop("checked", true);
+                        permissionCheckboxInput.prop("checked", !permissionCheckboxInput.prop("checked"));
                     }
-                    permissionCheckbox.removeClass("pending");
+                    permissionRow.removeClass("pending");
                 });
             } else {
                 this.client.removeSpecialPermissionToRole(roleId, specialPermissionId).then((response) => {
                     if (response.hasOwnProperty("message")) {
-                        permissionCheckboxInput.prop("checked", false);
-                        //TODO show error
+                        alert.text(response.message);
+                        alert.show();
                     } else {
-                        permissionCheckboxInput.prop("checked", true);
+                        permissionCheckboxInput.prop("checked", !permissionCheckboxInput.prop("checked"));
                     }
-                    permissionCheckbox.removeClass("pending");
+                    permissionRow.removeClass("pending");
                 });
             }
         });
