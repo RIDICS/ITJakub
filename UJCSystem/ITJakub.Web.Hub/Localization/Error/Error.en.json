@@ -1,0 +1,27 @@
+{
+  "culture": "en",
+  "scope": "Error",
+  "dictionary": {
+    "error": "Error",
+    "details": "Details",
+    "status-code": "Status code",
+    "request-id": "Request ID",
+    "back-to-main-page": "Back to the main page",
+    "unknown-error-msg": "Unknown Error",
+    "bad-request-msg": "Bad Request",
+    "unauthorized-msg": "Unauthorized",
+    "forbidden-msg": "Forbidden",
+    "not-found-msg": "Page Not Found",
+    "internal-server-error-msg": "Internal Server Error",
+    "bad-gateway-msg": "Bad Gateway",
+    "gateway-timeout-msg": "Gateway Timeout",
+    "bad-request-detail": "The request could not be understood by the server due to malformed syntax.",
+    "unauthorized-detail": "The request requires user authentication. ",
+    "forbidden-detail": "The server refused to fulfill the request. Insufficient access permissions.",
+    "not-found-detail": "The URL may be misspelled or the page you are looking for is no longer available.",
+    "internal-server-error-detail": "An unexpected internal server error occurred.",
+    "bad-gateway-detail": "There was an unknown problem communicating with a third party service.",
+    "gateway-timeout-detail": "Third party service is not responding (timeout expired).",
+    "page-load-error": "Error loading page"
+  }
+}

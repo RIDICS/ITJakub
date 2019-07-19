@@ -69,7 +69,7 @@ namespace ITJakub.Web.Hub
                 {
                     options.ExpireTimeSpan = m_cookieExpireTimeSpan;
                     options.Cookie.Name = "identity";
-                    options.AccessDeniedPath = "/Account/AccessDenied/";
+                    options.AccessDeniedPath = "/Error/403/";
                     options.LoginPath = "/Account/Login";
                 })
                 .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
@@ -206,7 +206,7 @@ namespace ITJakub.Web.Hub
             {
                 configuration.DisableTelemetry = true; // Workaround for disabling telemetry
             }
-            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -214,10 +214,10 @@ namespace ITJakub.Web.Hub
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Error/500");
             }
 
-            app.UseStatusCodePages();
+            app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
             app.UseAuthentication();
 
