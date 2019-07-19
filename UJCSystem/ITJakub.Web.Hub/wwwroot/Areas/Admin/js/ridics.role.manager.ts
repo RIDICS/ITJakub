@@ -78,6 +78,15 @@ class RoleManager {
                 container.html(response);
                 this.initPermissionManaging();
             }
+           
+        }).catch((response) => {
+            if (response.hasOwnProperty("message")) {
+                container.html(`<div class="alert alert-danger">${response.message}</div>`);
+            } else {
+                container.html(response.responseText);
+            }
+            
+        }).always(() => {
             const permissionList = new ListWithPagination(`Permission/RolePermissionList?roleId=${roleId}`,
                 10,
                 "permission",
@@ -198,11 +207,16 @@ class RoleManager {
         });
 
         $("#create-role").click(() => {
+            $(".add-to-role-error").html("");
             var roleName = $("#new-role-name").val() as string;
             var roleDescription = $("#new-role-description").val() as string;
-            this.client.createRole(roleName, roleDescription).then(() => {
-                $("#createRoleModal").modal("hide");
-                this.roleList.reloadPage();
+            this.client.createRole(roleName, roleDescription).then((response) => {
+                if (response.hasOwnProperty("message")) {
+                    $(".add-to-role-error").html(`<div class="alert alert-danger">${response.message}</div>`);
+                } else {
+                    $("#createRoleModal").modal("hide");
+                    this.roleList.reloadPage();
+                }
             });
         });
     }

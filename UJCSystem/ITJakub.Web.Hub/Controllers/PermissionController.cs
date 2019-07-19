@@ -259,10 +259,17 @@ namespace ITJakub.Web.Hub.Controllers
         [HttpPost]
         public ActionResult AddUserToRole([FromBody] AddUserToRoleRequest request)
         {
-            using (var client = GetRestClient())
+            try
             {
-                client.AddUserToRole(request.UserId, request.RoleId);
-                return Json(new { });
+                using (var client = GetRestClient())
+                {
+                    client.AddUserToRole(request.UserId, request.RoleId);
+                    return Json(new { });
+                }
+            }
+            catch (HttpErrorCodeException e)
+            {
+                return Json(new { e.Message});
             }
         }
 
