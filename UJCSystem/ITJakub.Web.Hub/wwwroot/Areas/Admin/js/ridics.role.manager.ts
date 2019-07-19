@@ -29,9 +29,9 @@ class RoleManager {
         this.roleList.init();
 
         $(".role-row").click((event) => {
-            $((event.currentTarget) as any).addClass("active").siblings().removeClass("active");
+            $(event.currentTarget).addClass("active").siblings().removeClass("active");
 
-            var selectedRoleId = $((event.currentTarget) as any).data("role-id");
+            var selectedRoleId = $(event.currentTarget).data("role-id");
             this.loadUsers(selectedRoleId);
             this.loadPermissions(selectedRoleId);
         });
@@ -42,11 +42,18 @@ class RoleManager {
     }
 
     private loadUsers(roleId: number) {
-        var container = $("#user-list-container");
+        const userSection = $("#user-section .section");
+        const container = userSection.find("#user-list-container");
         container.html("<div class=\"loader\"></div>");
+        userSection.removeClass("hide");
 
         this.client.getUsersByRole(roleId).then(response => {
-            container.html((response) as any);
+            if (response.hasOwnProperty("message")) {
+                container.html(`<div class="alert alert-danger">${response.message}</div>`);
+            } else {
+                container.html(response);
+                this.initRemoveUserFromRoleButton();
+            }
             this.userList = new ListWithPagination(`Permission/UsersByRole?roleId=${roleId}`,
                 10,
                 "user",
@@ -55,18 +62,23 @@ class RoleManager {
                 this.initRemoveUserFromRoleButton,
                 this);
             this.userList.init();
-            this.initRemoveUserFromRoleButton();
-            $("#user-section .section").removeClass("hide");
         });
     }
 
     private loadPermissions(roleId: number) {
-        var container = $("#permission-list-container");
+        const permissionSection = $("#permission-section .section");
+        const container = permissionSection.find("#permission-list-container");
         container.html("<div class=\"loader\"></div>");
+        permissionSection.removeClass("hide");
 
         this.client.getPermissionsByRole(roleId).then(response => {
-            container.html(response);
-            var permissionList = new ListWithPagination(`Permission/RolePermissionList?roleId=${roleId}`,
+            if (response.hasOwnProperty("message")) {
+                container.html(`<div class="alert alert-danger">${response.message}</div>`);
+            } else {
+                container.html(response);
+                this.initPermissionManaging();
+            }
+            const permissionList = new ListWithPagination(`Permission/RolePermissionList?roleId=${roleId}`,
                 10,
                 "permission",
                 ViewType.Widget,
@@ -74,8 +86,6 @@ class RoleManager {
                 this.initPermissionManaging,
                 this);
             permissionList.init();
-            this.initPermissionManaging();
-            $("#permission-section .section").removeClass("hide");
         });
     }
 
@@ -116,7 +126,7 @@ class RoleManager {
 
     private initRemoveUserFromRoleButton() {
         $(".remove-user-from-role").click((event) => {
-            var userId = $((event.currentTarget) as any).data("user-id");
+            var userId = $(event.currentTarget).data("user-id");
             var roleId = $(".role-row.active").data("role-id");
             this.client.removeUserFromRole(userId, roleId).then(() => {
                 this.userList.reloadPage();
@@ -127,7 +137,7 @@ class RoleManager {
     private initRemoveRoleButtons() {
         $(".remove-role").click((event) => {
             event.stopPropagation();
-            var roleId = $((event.currentTarget) as any).parents("tr.role-row").data("role-id");
+            var roleId = $(event.currentTarget).parents("tr.role-row").data("role-id");
             this.client.deleteRole(roleId).then(() => {
                 this.roleList.reloadPage();
             });

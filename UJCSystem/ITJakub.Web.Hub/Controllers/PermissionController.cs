@@ -84,37 +84,51 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetRestClient())
             {
-                search = search ?? string.Empty;
-                var roleContract = client.GetRoleDetail(roleId);
-                var pagedPermissionsResult = client.GetPermissions(start, count, search);
-                var permissionList = Mapper.Map<List<PermissionViewModel>>(pagedPermissionsResult.List);
-
-                foreach (var permission in permissionList)
+                try
                 {
-                    permission.IsSelected = roleContract.Permissions.Any(x => x.Id == permission.Id);
+                    search = search ?? string.Empty;
+                    var roleContract = client.GetRoleDetail(roleId);
+                    var pagedPermissionsResult = client.GetPermissions(start, count, search);
+                    var permissionList = Mapper.Map<List<PermissionViewModel>>(pagedPermissionsResult.List);
+
+                    foreach (var permission in permissionList)
+                    {
+                        permission.IsSelected = roleContract.Permissions.Any(x => x.Id == permission.Id);
+                    }
+
+                    var model = new ListViewModel<PermissionViewModel>
+                    {
+                        TotalCount = pagedPermissionsResult.TotalCount,
+                        List = permissionList,
+                        PageSize = count,
+                        Start = start,
+                        SearchQuery = search
+                    };
+
+                    return PartialView("Widget/_PermissionListWidget", model);
                 }
-
-                var model = new ListViewModel<PermissionViewModel>
+                catch (HttpErrorCodeException e)
                 {
-                    TotalCount = pagedPermissionsResult.TotalCount,
-                    List = permissionList,
-                    PageSize = count,
-                    Start = start,
-                    SearchQuery = search
-                };
-
-                return PartialView("Widget/_PermissionListWidget", model);
+                    return Json(new {e.Message});
+                }
             }
         }
 
         public ActionResult UsersByRole(int roleId, string search, int start, int count = UserListPageSize)
         {
-            using (var client = GetRestClient())
+            try
             {
-                search = search ?? string.Empty;
-                var result = client.GetUsersByRole(roleId, start, count, search);
-                var model = CreateListViewModel<UserDetailViewModel, UserContract>(result, start, count, search);
-                return PartialView("Widget/_UserListWidget", model);
+                using (var client = GetRestClient())
+                {
+                    search = search ?? string.Empty;
+                    var result = client.GetUsersByRole(roleId, start, count, search);
+                    var model = CreateListViewModel<UserDetailViewModel, UserContract>(result, start, count, search);
+                    return PartialView("Widget/_UserListWidget", model);
+                }
+            }
+            catch (HttpErrorCodeException e)
+            {
+                return Json(new {e.Message});
             }
         }
 
@@ -149,7 +163,7 @@ namespace ITJakub.Web.Hub.Controllers
                 {
                     AddErrors(e);
                 }
-                
+
                 var user = client.GetUserDetail(userViewModel.Id);
                 var model = Mapper.Map<UpdateUserViewModel>(user);
                 ViewData.Add(AccountConstants.SuccessUserUpdate, true);
@@ -423,12 +437,13 @@ namespace ITJakub.Web.Hub.Controllers
                 }
                 catch (HttpErrorCodeException e)
                 {
-                    return Json(new { e.Message });
+                    return Json(new {e.Message});
                 }
             }
         }
 
-        private ListViewModel<TTarget> CreateListViewModel<TTarget, TSource>(PagedResultList<TSource> data, int start, int pageSize, string search)
+        private ListViewModel<TTarget> CreateListViewModel<TTarget, TSource>(PagedResultList<TSource> data, int start, int pageSize,
+            string search)
         {
             return new ListViewModel<TTarget>
             {

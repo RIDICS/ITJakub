@@ -18,6 +18,8 @@
 		"AddNews" : "Přidávat novinky",
 		"UploadBook" : "Nahrávat díla",
 		"ManagePermissions" : "Spravovat práva",
-		"ReadFeedback" : "Číst připomínky"
+    "ReadFeedback": "Číst připomínky",
+    
+    "ListError": "Chyba při načítání stránky seznamu." 
 		}
 }
