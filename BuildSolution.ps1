@@ -172,6 +172,8 @@ BuildWebHubProject "ITJakub.Web.Hub" -ProjectType "CommunityPortal"
 
 # BuildMigrator
 
+Copy-Item "DeploySolution.ps1" -Destination $OutputDir
+
 Write-Host
 Write-Host
 Write-Host "BUILD FINISHED"
