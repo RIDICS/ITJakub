@@ -3,7 +3,7 @@
   "scope": "UserDetailViewModel",
   "dictionary": {
     "UserName": "Uživatelské jméno",
-    "Email": "Email",
+    "Email": "E-mail",
     "Password": "Heslo",
     "FirstName": "Křestní jméno",
     "LastName": "Příjmení"

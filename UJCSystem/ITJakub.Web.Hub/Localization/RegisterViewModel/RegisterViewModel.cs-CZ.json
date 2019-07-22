@@ -3,7 +3,7 @@
 	"scope":"RegisterViewModel",
   "dictionary": {
     "UserName": "Uživatelské jméno",
-    "Email": "Email",
+    "Email": "E-mail",
     "Password": "Heslo",
     "HasAtLeastNChars": "{0} musí obsahovat alespoň {2} znaků.",
     "FirstName": "Křestní jméno",

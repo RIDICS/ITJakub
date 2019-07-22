@@ -1,13 +1,13 @@
 {
-	"culture":"en",
-	"scope":"FeedbackViewModel",
-    "dictionary": {
-       "Name:": "Name: ",
-	   "NameNotFilled": "{0} was not filled.",
-	   "NameNotFilled1": "{0} was not filled.",
-	   "Email:": "Email: ",
-	   "EmailWrongFormatError": "Incorrect format of the specified email.",
-	   "Text": "Text",
-	   "FeedbackNotFilled": "Feedback {0} was not filled."
+  "culture": "en",
+  "scope": "FeedbackViewModel",
+  "dictionary": {
+    "Name:": "Name: ",
+    "NameNotFilled": "{0} was not filled.",
+    "NameNotFilled1": "{0} was not filled.",
+    "Email:": "E-mail: ",
+    "EmailWrongFormatError": "Incorrect format of the specified e-mail.",
+    "Text": "Text",
+    "FeedbackNotFilled": "Feedback {0} was not filled."
   }
 }

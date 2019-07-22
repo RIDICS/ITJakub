@@ -4,8 +4,8 @@
   "dictionary": {
     "Default": "Default",
     "Default-SmsTokenProvider": "Default channel (SMS)",
-    "Default-EmailTokenProvider": "Default channel (Email)",
+    "Default-EmailTokenProvider": "Default channel (E-mail)",
     "SmsTokenProvider": "SMS",
-    "EmailTokenProvider": "Email"
+    "EmailTokenProvider": "E-mail"
   }
 }

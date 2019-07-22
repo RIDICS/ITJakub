@@ -3,7 +3,7 @@
   "scope": "UpdateUserViewModel",
   "dictionary": {
     "UserName": "Username",
-    "Email": "Email",
+    "Email": "E-mail",
     "HasAtLeastNChars": "The {0} must have at least {2} characters.",
     "FirstName": "First name",
     "LastName": "Last name",

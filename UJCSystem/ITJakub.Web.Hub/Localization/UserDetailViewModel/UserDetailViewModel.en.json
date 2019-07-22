@@ -3,7 +3,7 @@
   "scope": "UserDetailViewModel",
   "dictionary": {
     "UserName": "Username",
-    "Email": "Email",
+    "Email": "E-mail",
     "Password": "Password",
     "FirstName": "First name",
     "LastName": "Last name"

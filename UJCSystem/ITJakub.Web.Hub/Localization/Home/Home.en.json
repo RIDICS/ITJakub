@@ -23,7 +23,7 @@
     "LinksTitle": "Links",
 
     "SupportTitle": "Support",
-    "EmailIsNotConfirmedAlert1": "Your email address is not confirmed. Please confirm your email address in {0}.",
+    "EmailIsNotConfirmedAlert1": "Your e-mail address is not confirmed. Please confirm your email address in {0}.",
     "EmailIsNotConfirmedAlert2": "profile"
   }
 }

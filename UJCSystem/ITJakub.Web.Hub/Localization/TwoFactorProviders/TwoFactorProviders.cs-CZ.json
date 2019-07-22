@@ -4,8 +4,8 @@
   "dictionary": {
     "Default": "Výchozí",
     "Default-SmsTokenProvider": "Výchozí kanál (SMS)",
-    "Default-EmailTokenProvider": "Výchozí kanál (Email)",
+    "Default-EmailTokenProvider": "Výchozí kanál (E-mail)",
     "SmsTokenProvider": "SMS",
-    "EmailTokenProvider": "Email"
+    "EmailTokenProvider": "E-mail"
   }
 }
