@@ -109,7 +109,7 @@ namespace ITJakub.Web.Hub.Controllers
                 }
                 catch (HttpErrorCodeException e)
                 {
-                    return Json(new {e.Message});
+                    return BadRequest(new {e.Message});
                 }
             }
         }
@@ -128,7 +128,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
             catch (HttpErrorCodeException e)
             {
-                return Json(new {e.Message});
+                return BadRequest(new {e.Message});
             }
         }
 
@@ -269,23 +269,30 @@ namespace ITJakub.Web.Hub.Controllers
             }
             catch (HttpErrorCodeException e)
             {
-                return Json(new { e.Message});
+                return BadRequest(new {e.Message});
             }
         }
 
         [HttpPost]
         public ActionResult CreateRole([FromBody] CreateRoleRequest request)
         {
-            using (var client = GetRestClient())
+            try
             {
-                var newRoleContract = new RoleContract
+                using (var client = GetRestClient())
                 {
-                    Name = request.RoleName,
-                    Description = request.RoleDescription,
-                };
-                var roleId = client.CreateRole(newRoleContract);
-                var role = client.GetRoleDetail(roleId);
-                return Json(role);
+                    var newRoleContract = new RoleContract
+                    {
+                        Name = request.RoleName,
+                        Description = request.RoleDescription,
+                    };
+                    var roleId = client.CreateRole(newRoleContract);
+                    var role = client.GetRoleDetail(roleId);
+                    return Json(role);
+                }
+            }
+            catch (HttpErrorCodeException e)
+            {
+                return BadRequest(new {e.Message});
             }
         }
 
@@ -307,10 +314,17 @@ namespace ITJakub.Web.Hub.Controllers
         [HttpPost]
         public ActionResult RemoveUserFromRole([FromBody] RemoveUserFromRoleRequest request)
         {
-            using (var client = GetRestClient())
+            try
             {
-                client.RemoveUserFromRole(request.UserId, request.RoleId);
-                return Json(new { });
+                using (var client = GetRestClient())
+                {
+                    client.RemoveUserFromRole(request.UserId, request.RoleId);
+                    return Json(new { });
+                }
+            }
+            catch (HttpErrorCodeException e)
+            {
+                return BadRequest(new {e.Message});
             }
         }
 
@@ -386,10 +400,17 @@ namespace ITJakub.Web.Hub.Controllers
         [HttpPost]
         public ActionResult DeleteRole([FromBody] DeleteRoleRequest request)
         {
-            using (var client = GetRestClient())
+            try
             {
-                client.DeleteRole(request.RoleId);
-                return Json(new { });
+                using (var client = GetRestClient())
+                {
+                    client.DeleteRole(request.RoleId);
+                    return Json(new { });
+                }
+            }
+            catch (HttpErrorCodeException e)
+            {
+                return BadRequest(new {e.Message});
             }
         }
 
@@ -427,7 +448,7 @@ namespace ITJakub.Web.Hub.Controllers
                 }
                 catch (HttpErrorCodeException e)
                 {
-                    return Json(new {e.Message});
+                    return BadRequest(new {e.Message});
                 }
             }
         }
@@ -444,7 +465,7 @@ namespace ITJakub.Web.Hub.Controllers
                 }
                 catch (HttpErrorCodeException e)
                 {
-                    return Json(new {e.Message});
+                    return BadRequest(new {e.Message});
                 }
             }
         }

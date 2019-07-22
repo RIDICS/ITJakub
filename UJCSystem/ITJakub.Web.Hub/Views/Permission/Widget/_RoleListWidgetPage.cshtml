@@ -9,8 +9,9 @@
 {
     <tr data-role-id="@role.Id" class="role-row">
         <td>
-            <div class="name">@Html.DisplayFor(modelItem => role.Name)</div>
-            <div class="description">@Html.DisplayFor(modelItem => role.Description)</div>
+            <div class="name">@role.Name</div>
+            <div class="description">@role.Description</div>
+            <div class="alert alert-danger"></div>
         </td>
          @if (User.HasPermission(PermissionNames.ManageUserRoles))
          {
