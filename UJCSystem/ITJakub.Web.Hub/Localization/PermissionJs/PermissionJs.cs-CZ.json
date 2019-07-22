@@ -22,10 +22,10 @@
 
     "ListError": "Nastala neočekávaná chyba při načítání stránky seznamu.",
     "PermissionError": "Nastala neočekávaná chyba při nastavování práv.",
-    "DeleteRoleError": "Nastala neočekávaná chyba při odstraňování role.",
-    "CreateRoleError": "Nastala neočekávaná chyba při vytváření role.",
-    "RemoveUserFromRoleError": "Nastala neočekávaná chyba při odstraňování uživatele z role.",
-    "AddUserToRoleError": "Nastala neočekávaná chyba při přidávání uživatele do role.",
+    "DeleteRoleError": "Nastala neočekávaná chyba při odstraňování skupiny.",
+    "CreateRoleError": "Nastala neočekávaná chyba při vytváření skupiny.",
+    "RemoveUserFromRoleError": "Nastala neočekávaná chyba při odstraňování uživatele ze skupiny.",
+    "AddUserToRoleError": "Nastala neočekávaná chyba při přidávání uživatele do skupiny.",
     "CreateRoleWithUserError": "Nastala neočekávaná chyba při vytváření skupiny s uživatelem."
   }
 }
