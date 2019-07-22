@@ -25,6 +25,7 @@
     "DeleteRoleError": "An unexpected error occurred when deleting the role.",
     "CreateRoleError": "An unexpected error occurred when creating the role.",
     "RemoveUserFromRoleError": "An unexpected error occurred when removing the user from the role.",
-    "AddUserToRoleError": "An unexpected error occurred when adding the user to the role."
+    "AddUserToRoleError": "An unexpected error occurred when adding the user to the role.",
+    "CreateRoleWithUserError": "An unexpected error occurred when creating the group with the user."
   }
 }

@@ -1,16 +1,15 @@
 ﻿$(document.documentElement).ready(() => {
-    var permissionEditor = new UserPermissionEditor("#mainContainer");
+    var permissionEditor = new UserRolesEditor("#mainContainer");
     permissionEditor.make();
 });
 
-//TODO rename to role
-class UserPermissionEditor {
-    private mainContainer: string;
-    private roleSearchBox: SingleSetTypeaheadSearchBox<IGroup>;
+class UserRolesEditor {
+    private readonly  mainContainer: string;
+    private readonly roleSearchBox: SingleSetTypeaheadSearchBox<IGroup>;
+    private readonly roleList: ListWithPagination;
+    private readonly client: WebHubApiClient;
+    private readonly userId: number;
     private roleSearchCurrentSelectedItem: IGroup;
-    private roleList: ListWithPagination;
-    private client: WebHubApiClient;
-    private userId: number;
 
     constructor(mainContainer: string) {
         this.mainContainer = mainContainer;
@@ -25,13 +24,13 @@ class UserPermissionEditor {
         this.client = new WebHubApiClient();
     }
 
-    public make() {
+    make() {
         $(this.mainContainer).empty();
 
         this.roleSearchBox.setDataSet("Role");
         this.roleSearchBox.create((selectedExists: boolean, selectionConfirmed: boolean) => {
             if (selectionConfirmed) {
-                var selectedItem = this.roleSearchBox.getValue();
+                const selectedItem = this.roleSearchBox.getValue();
                 this.roleSearchCurrentSelectedItem = selectedItem;
                 $("#specificGroupName").text(selectedItem.name);
                 $("#specificGroupName").data("role-id", this.roleSearchCurrentSelectedItem.id);
@@ -45,7 +44,9 @@ class UserPermissionEditor {
 
         $("#add-user-to-group").click(() => {
             if ($("#tab2-select-existing").hasClass("active")) {
-                var roleId: number;
+                let roleId: number;
+                const alertHolder = $("add-user-to-role-error");
+                alertHolder.html("");
                 if (typeof this.roleSearchCurrentSelectedItem == "undefined")
                     roleId = $("#selectedUser").data("role-id");
                 else {
@@ -55,13 +56,19 @@ class UserPermissionEditor {
                     $("#addToGroupDialog").modal("hide");
                     this.roleList.reloadPage();
                     this.initRemoveUserFromRoleButton();
+                }).catch(() => {
+                    alertHolder.html(`<div class="alert alert-danger">${localization.translate("AddUserToRoleError", "PermissionJs").value}</div>`);
                 });
             } else {
-                var roleName = $("#new-group-name").val() as string;
-                var roleDescription = $("#new-group-description").val() as string;
+                const alertHolder = $("create-role-with-user-error");
+                alertHolder.html("");
+                const roleName = $("#new-group-name").val() as string;
+                const roleDescription = $("#new-group-description").val() as string;
                 this.client.createRoleWithUser(this.userId, roleName, roleDescription).then(() => {
                     $("#addToGroupDialog").modal("hide");
                     this.roleList.reloadPage();
+                }).catch(() => {
+                    alertHolder.html(`<div class="alert alert-danger">${localization.translate("CreateRoleWithUserError", "PermissionJs").value}</div>`);
                 });
             }
         });
@@ -69,10 +76,16 @@ class UserPermissionEditor {
 
     private initRemoveUserFromRoleButton() {
         $(".remove-role").click((event) => {
-            var userId = Number(getQueryStringParameterByName("userId"));
-            var roleId = $((event.currentTarget) as any).parents("tr.role-row").data("role-id");
-            this.client.removeUserFromRole(userId, roleId).then(() => {
+            const roleRow = $(event.currentTarget).parents(".role-row");
+            const roleId = roleRow.data("role-id");
+            const alert = roleRow.find(".alert");
+            alert.hide();
+
+            this.client.removeUserFromRole(this.userId, roleId).then(() => {
                 this.roleList.reloadPage();
+            }).catch(() => {
+                alert.text(localization.translate("RemoveUserFromRoleError", "PermissionJs").value);
+                alert.show();
             });
         });
     }

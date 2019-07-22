@@ -1,6 +1,6 @@
 {
-	"culture":"cs-CZ",
-	"scope":"PermissionJs",
+  "culture": "cs-CZ",
+  "scope": "PermissionJs",
   "dictionary": {
     "News": "Novinky",
     "BookUploading": "Nahrávání děl",
@@ -25,6 +25,7 @@
     "DeleteRoleError": "Nastala neočekávaná chyba při odstraňování role.",
     "CreateRoleError": "Nastala neočekávaná chyba při vytváření role.",
     "RemoveUserFromRoleError": "Nastala neočekávaná chyba při odstraňování uživatele z role.",
-    "AddUserToRoleError": "Nastala neočekávaná chyba při přidávání uživatele do role."
+    "AddUserToRoleError": "Nastala neočekávaná chyba při přidávání uživatele do role.",
+    "CreateRoleWithUserError": "Nastala neočekávaná chyba při vytváření skupiny s uživatelem."
   }
 }

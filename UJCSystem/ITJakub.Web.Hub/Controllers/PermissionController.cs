@@ -299,15 +299,22 @@ namespace ITJakub.Web.Hub.Controllers
         [HttpPost]
         public ActionResult CreateRoleWithUser([FromBody] CreateRoleWithUserRequest request)
         {
-            using (var client = GetRestClient())
+            try
             {
-                var roleId = client.CreateRole(new RoleContract
+                using (var client = GetRestClient())
                 {
-                    Name = request.RoleName,
-                    Description = request.RoleDescription,
-                });
-                client.AddUserToRole(request.UserId, roleId);
-                return Json(roleId);
+                    var roleId = client.CreateRole(new RoleContract
+                    {
+                        Name = request.RoleName,
+                        Description = request.RoleDescription,
+                    });
+                    client.AddUserToRole(request.UserId, roleId);
+                    return Json(roleId);
+                }
+            }
+            catch (HttpErrorCodeException e)
+            {
+                return BadRequest(new { e.Message });
             }
         }
 
