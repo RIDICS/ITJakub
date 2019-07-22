@@ -266,8 +266,8 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var uriPath = $"session/{sessionId}/resource".AddQueryString("fileName", fileName);
-                PostStream<object>(uriPath, data);
+                var uriPath = $"session/{sessionId}/resource";
+                PostStreamAsForm<object>(uriPath, data, fileName);
             }
             catch (HttpRequestException e)
             {

@@ -75,6 +75,7 @@ namespace Vokabular.MainService
                 options.DescribeAllEnumsAsStrings();
                 options.IncludeXmlComments(GetXmlCommentsPath());
                 options.OperationFilter<AddResponseHeadersFilter>();
+                options.OperationFilter<FileOperationFilter>();
 
                 options.DocumentFilter<PolymorphismDocumentFilter<SearchCriteriaContract>>();
                 options.SchemaFilter<PolymorphismSchemaFilter<SearchCriteriaContract>>();
