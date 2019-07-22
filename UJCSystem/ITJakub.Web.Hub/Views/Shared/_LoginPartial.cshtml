@@ -29,8 +29,8 @@
         {
 
             <ul class="navbar-login">
-                <li><a href="@Url.Action("AccountSettings", "Account", new {area = ""})">@Html.Raw(User.Identity.Name)</a></li>
-                <li><a href="javascript:document.getElementById('logoutForm').submit()">@Localizer.Translate("LogOut", "global", LocTranslationSource.File)</a></li>
+                <li><a href="@Url.Action("AccountSettings", "Account", new {area = ""})"><span>@Html.Raw(User.Identity.Name)</span></a></li>
+                <li><a href="javascript:document.getElementById('logoutForm').submit()"><span>@Localizer.Translate("LogOut", "global", LocTranslationSource.File)</span></a></li>
             </ul>
         }
     }
