@@ -2605,7 +2605,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Post<object>($"user/{userId}/resendCode", data);
+                Post<object>($"user/{userId}/confirmCode", data);
             }
             catch (HttpRequestException e)
             {
@@ -2620,7 +2620,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Post<object>($"user/{userId}/setTwoFactor", data);
+                Put<object>($"user/{userId}/twoFactor", data);
             }
             catch (HttpRequestException e)
             {
@@ -2635,7 +2635,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Post<object>($"user/{userId}/selectTwoFactorProvider", data);
+                Put<object>($"user/{userId}/twoFactorProvider", data);
             }
             catch (HttpRequestException e)
             {

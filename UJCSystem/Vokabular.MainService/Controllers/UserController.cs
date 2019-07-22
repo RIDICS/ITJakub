@@ -229,8 +229,8 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [HttpPost("{userId}/resendCode")]
-        public IActionResult ResendConfirmCode(int userId, [FromBody] UserContactContract data)
+        [HttpPost("{userId}/confirmCode")]
+        public IActionResult ConfirmCode(int userId, [FromBody] UserContactContract data)
         {
             try
             {
@@ -247,8 +247,8 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [HttpPost("{userId}/setTwoFactor")]
-        public IActionResult SetTwoFactor(int userId, [FromBody] UpdateTwoFactorContract data)
+        [HttpPut("{userId}/twoFactor")]
+        public IActionResult TwoFactor(int userId, [FromBody] UpdateTwoFactorContract data)
         {
             try
             {
@@ -265,8 +265,8 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [HttpPost("{userId}/selectTwoFactorProvider")]
-        public IActionResult SelectTwoFactorProvider(int userId, [FromBody] UpdateTwoFactorContract data)
+        [HttpPut("{userId}/twoFactorProvider")]
+        public IActionResult TwoFactorProvider(int userId, [FromBody] UpdateTwoFactorContract data)
         {
             try
             {
