@@ -1,5 +1,5 @@
 ﻿class WebHubApiClient {
-    public post(url: string, data: string, contentType = "application/json"): Promise<JQuery.jqXHR> {
+    public post(url: string, data: string, contentType = "application/json"): JQuery.jqXHR {
         return $.ajax({
             type: "POST",
             traditional: true,
@@ -10,7 +10,7 @@
         });
     }
 
-    public get(url: string): Promise<JQuery.jqXHR> {
+    public get(url: string): JQuery.jqXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
