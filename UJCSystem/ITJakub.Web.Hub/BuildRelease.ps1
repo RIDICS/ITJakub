@@ -84,7 +84,11 @@ Set-Content -Path $GlobalSettingsFile -Value "{""EnvironmentConfiguration"": ""$
 # Run build
 dotnet build $CsprojFile --configuration Release /p:PublishProfile=Release /p:PackageLocation="${PackageLocation}" /p:OutDir="${OutDir}" /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /maxcpucount:1 /p:platform="Any CPU" /p:configuration="Release" /p:DesktopBuildPackageLocation="${BuildPackageLocation}" /p:DeployIisAppPath="${IisPath}"
 
+# Restore global configuration
 if (Test-Path $GlobalSettingsFileBackup)
 {
   Move-Item -Path $GlobalSettingsFileBackup -Destination $GlobalSettingsFile -Force
 }
+
+# Restore theme to default
+& $SelectThemeFile
