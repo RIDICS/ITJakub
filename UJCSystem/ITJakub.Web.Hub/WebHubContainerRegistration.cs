@@ -21,14 +21,15 @@ namespace ITJakub.Web.Hub
             services.AddScoped<IMarkdownToHtmlConverter, MarkdigMarkdownToHtmlConverter>();
 
             // AutoMapper profiles
-            services.AddSingleton<Profile, UserDetailProfile>();
             services.AddSingleton<Profile, ConditionCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, DatingCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, DatingListCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, FavoriteProfile>();
             services.AddSingleton<Profile, PermissionProfile>();
+            services.AddSingleton<Profile, RoleProfile>();
             services.AddSingleton<Profile, TokenDistanceCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, TokenDistanceListCriteriaDescriptionProfile>();
+            services.AddSingleton<Profile, UserDetailProfile>();
             services.AddSingleton<Profile, WordCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, WordListCriteriaDescriptionProfile>();
 
