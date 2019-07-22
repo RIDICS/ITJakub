@@ -1,4 +1,4 @@
-﻿using Ridics.Authentication.DataContracts;
+﻿using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.DataContracts.Contracts
 {
@@ -18,7 +18,7 @@ namespace Vokabular.MainService.DataContracts.Contracts
 
     public class UserContactContract
     {
-        public ContactTypeEnum ContactType { get; set; }
+        public ContactType ContactType { get; set; }
     }
 
     public class UpdateUserContactContract : UserContactContract

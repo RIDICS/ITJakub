@@ -1,11 +1,9 @@
-﻿using Ridics.Authentication.DataContracts;
+﻿using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Models.Requests.Permission
 {
     public class ResendConfirmCodeRequest
     {
-        public int UserId { get; set; }
-
-        public ContactTypeEnum ContactType { get; set; }
+        public ContactType ContactType { get; set; }
     }
 }

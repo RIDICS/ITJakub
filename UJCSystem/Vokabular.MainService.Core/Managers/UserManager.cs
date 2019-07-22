@@ -117,7 +117,7 @@ namespace Vokabular.MainService.Core.Managers
             {
                 UserId = GetUserExternalId(userId),
                 ConfirmCode = data.ConfirmCode,
-                ContactType = data.ContactType
+                ContactType = (ContactTypeEnum)Enum.Parse(typeof(ContactTypeEnum), data.ContactType.ToString())
             };
 
             return client.ConfirmContactAsync(contract).GetAwaiter().GetResult();
@@ -130,7 +130,7 @@ namespace Vokabular.MainService.Core.Managers
             var contract = new ContactContract
             {
                 UserId = GetUserExternalId(userId),
-                ContactType = data.ContactType
+                ContactType = (ContactTypeEnum)Enum.Parse(typeof(ContactTypeEnum), data.ContactType.ToString())
             };
 
             client.ResendCodeAsync(contract).GetAwaiter().GetResult();

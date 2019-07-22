@@ -33,7 +33,7 @@ namespace Vokabular.MainService.Core.Works.Users
 
             var contract = new ChangeContactContract
             {
-                ContactType = m_data.ContactType,
+                ContactType = (ContactTypeEnum)Enum.Parse(typeof(ContactTypeEnum), m_data.ContactType.ToString()),
                 UserId = user.ExternalId.Value,
                 NewContactValue = m_data.NewContactValue
             };
