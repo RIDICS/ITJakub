@@ -41,6 +41,8 @@
     "EmptyEmail": "Email nemůže být prázdný.",
     "SameEmail": "Nový email nemůže být stejný jako původní.",
     "ConfirmCodeNotValid": "Ověřovací kód není správný.",
+    "ResendCodeError": "Při odesílání ověřovacího kódu došlu k neočekávané chybě.",
+
 
     "UpdateTwoFactorVerification": "Dvoufaktorové ověření",
     "SuccessTwoFactorUpdate": "Nastavení dvoufaktorového ověření bylo úspšeně aktualizováno.",

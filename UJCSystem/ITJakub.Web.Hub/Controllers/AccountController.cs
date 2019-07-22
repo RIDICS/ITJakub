@@ -165,12 +165,12 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 if (string.IsNullOrEmpty(updateUserContactContract.NewContactValue))
                 {
-                    return Json( "empty-email");
+                    return BadRequest("empty-email");
                 }
 
                 if (updateUserContactContract.NewContactValue == updateUserContactContract.OldContactValue)
                 {
-                    return Json("same-email");
+                    return BadRequest("same-email");
                 }
 
                 using (var client = GetRestClient())
@@ -180,7 +180,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
             catch (HttpErrorCodeException e)
             {
-                return Json(new { e.Message });
+                return BadRequest(new { e.Message });
             }
 
             return Json(new {});
@@ -206,7 +206,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
             catch (HttpErrorCodeException e)
             {
-                return Json(new { e.Message });
+                return BadRequest(new { e.Message });
             }
         }
 
@@ -223,12 +223,12 @@ namespace ITJakub.Web.Hub.Controllers
                     {
                         ContactType = resendConfirmCodeRequest.ContactType
                     };
-                    client.ResendConfirmCode(resendConfirmCodeRequest.UserId, contract);
+                    client.ResendConfirmCode(User.GetId().Value, contract);
                 }
             }
             catch (HttpErrorCodeException e)
             {
-                return Json(new { e.Message });
+                return BadRequest(new { e.Message });
             }
 
             return Json(new { });

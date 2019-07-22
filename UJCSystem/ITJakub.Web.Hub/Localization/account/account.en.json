@@ -41,6 +41,7 @@
     "EmptyEmail": "Email cannot be empty",
     "SameEmail": "New email cannot be same as old email.",
     "ConfirmCodeNotValid": "Confirm code is not valid.",
+    "ResendCodeError": "An unexpected problem occurred when sending confirm the code.",
 
     "UpdateTwoFactorVerification": "Two-factor verification",
     "SuccessTwoFactorUpdate": "Two-factor verification was successfully updated.",

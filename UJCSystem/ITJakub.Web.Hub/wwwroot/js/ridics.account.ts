@@ -11,9 +11,9 @@ class AccountManager {
     private setTwoFactorForm: JQuery;
     private changeTwoFactorProviderForm: JQuery;
 
-    private accountSection: JQuery;
-    private passwordSection: JQuery;
-    private twoFactorSection: JQuery;
+    private readonly  accountSection: JQuery;
+    private readonly passwordSection: JQuery;
+    private readonly twoFactorSection: JQuery;
     //Email confirm
     private readonly oldEmailValue: string;
 
@@ -91,12 +91,10 @@ class AccountManager {
             this.hideAlert(this.confirmCodeSendAlert);
             this.hideAlert(this.errorConfirmContactAlert);
 
-            this.client.resendConfirmCode(this.emailContactType).then((response) => {
-                if (response.hasOwnProperty("message")) {
-                    this.showAlert(this.errorConfirmContactAlert.text(((response) as any).message));
-                } else {
-                    this.showAlert(this.confirmCodeSendAlert);
-                }
+            this.client.resendConfirmCode(this.emailContactType).then(() => {
+                this.showAlert(this.confirmCodeSendAlert);
+            }).catch(() => {
+                this.showAlert(this.errorConfirmContactAlert.text(localization.translate("ResendCodeError", "Account").value));
             });
         });
 
@@ -155,11 +153,11 @@ class AccountManager {
                 if (this.setTwoFactorForm.valid()) {
                     this.client.setTwoFactor(this.setTwoFactorForm.serialize())
                         .then((response) => {
-                            this.twoFactorSection.html((response.responseText) as any);
+                            this.twoFactorSection.html(response.responseText);
                             this.initTwoFactorSettingsForm();
                         })
                         .catch((error) => {
-                            this.twoFactorSection.html((error.responseText) as any);
+                            this.twoFactorSection.html(error.responseText);
                             this.initTwoFactorSettingsForm();
                         });
                 }
@@ -171,11 +169,11 @@ class AccountManager {
                 if (this.changeTwoFactorProviderForm.valid()) {
                     this.client.changeTwoFactorProvider(this.changeTwoFactorProviderForm.serialize())
                         .then((response) => {
-                            this.twoFactorSection.html((response.responseText) as any);
+                            this.twoFactorSection.html(response.responseText);
                             this.initTwoFactorSettingsForm();
                         })
                         .catch((error) => {
-                            this.twoFactorSection.html((error.responseText) as any);
+                            this.twoFactorSection.html(error.responseText);
                             this.initTwoFactorSettingsForm();
                         });
                 }
@@ -184,37 +182,37 @@ class AccountManager {
 
 
     sendUpdateContactRequest() {
-        var email = $("#emailInput").val() as string;
-        this.client.updateContact(this.emailContactType, email, this.oldEmailValue).then((response) => {
+        const email = $("#emailInput").val() as string;
+        this.client.updateContact(this.emailContactType, email, this.oldEmailValue).then(() => {
             this.hideAlert(this.errorContactUpdateAlert);
-            if (response.hasOwnProperty("message")) {
-                this.showAlert(this.errorContactUpdateAlert.text(((response) as any).message));
-            } else if (String(response) === "same-email") {
+            this.showAlert(this.successContactUpdateAlert);
+            this.emailIsNotVerifiedTitle.removeClass("hide");
+            this.confirmEmailPanel.switchClass("panel-default", "panel-warning");
+            this.confirmEmailPanel.removeClass("hide");
+            this.showAlert(this.confirmCodeSendAlert);
+            this.confirmEmailPanelBody.collapse("show");
+        }).catch((response) => {
+            if (response.responseText.hasOwnProperty("message")) {
+                this.showAlert(this.errorContactUpdateAlert.text(response.responseText.message));
+            } else if (response.responseText === "same-email") {
                 this.showAlert(this.errorContactUpdateAlert.text(localization.translate("SameEmail", "Account").value));
-            } else if (String(response) === "empty-email") {
+            } else if (response.responseText === "empty-email") {
                 this.showAlert(
                     this.errorContactUpdateAlert.text(localization.translate("EmptyEmail", "Account").value));
             } else {
-                this.showAlert(this.successContactUpdateAlert);
-                this.emailIsNotVerifiedTitle.removeClass("hide");
-                this.confirmEmailPanel.switchClass("panel-default", "panel-warning");
-                this.confirmEmailPanel.removeClass("hide");
-                this.showAlert(this.confirmCodeSendAlert);
-                this.confirmEmailPanelBody.collapse("show");
+                this.showAlert(this.errorContactUpdateAlert.text(response));
             }
         });
     }
 
     sendConfirmContactRequest() {
-        var confirmCode = this.confirmEmailCodeInput.val() as string;
+        const confirmCode = this.confirmEmailCodeInput.val() as string;
         this.client.confirmContact(this.emailContactType, confirmCode).then((response) => {
             this.hideAlert(this.errorConfirmContactAlert);
             this.hideAlert(this.confirmCodeSendAlert);
             this.hideAlert(this.successConfirmContactAlert);
 
-            if (response.hasOwnProperty("message")) {
-                this.showAlert(this.errorConfirmContactAlert.text(response.responseText));
-            } else if (String(response) === "false") {
+            if (Boolean(response) === false) {
                 this.showAlert(
                     this.errorConfirmContactAlert.text(localization.translate("ConfirmCodeNotValid", "Account").value));
             } else {
@@ -228,6 +226,12 @@ class AccountManager {
                 this.resendConfirmCodeBtn.addClass("disabled");
                 this.confirmEmailCodeInput.addClass("disabled");
                 this.confirmEmailSubmit.addClass("disabled");
+            }
+        }).catch((response) => {
+            if (response.responseText.hasOwnProperty("message")) {
+                this.showAlert(this.errorConfirmContactAlert.text(response.responseText.message));
+            } else {
+                this.showAlert(this.errorConfirmContactAlert.text(response.responseText));
             }
         });
     }
