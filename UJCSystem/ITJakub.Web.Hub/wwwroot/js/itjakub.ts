@@ -22,6 +22,7 @@ $(document as Node as Element).ready(() => {
         event.preventDefault();
         var $liElement = $(event.currentTarget as Node as Element).closest(".has-sub");
         $liElement.siblings().removeClass("hover");
+        $(".secondary-navbar-toggle").removeClass("hover");
         $liElement.toggleClass("hover");
     });
     $(".secondary-navbar-toggle").on("touchstart", (event) => {
@@ -30,6 +31,7 @@ $(document as Node as Element).ready(() => {
         }
         var $buttonElement = $(event.currentTarget as Node as Element);
         $buttonElement.siblings(".secondary-navbar-toggle").removeClass("hover");
+        $("#main-plugins-menu > ul > li").removeClass("hover");
         $buttonElement.toggleClass("hover");
     });
 });
