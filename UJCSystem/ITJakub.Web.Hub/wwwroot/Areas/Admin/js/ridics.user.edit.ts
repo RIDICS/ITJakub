@@ -45,7 +45,7 @@ class UserRolesEditor {
         $("#add-user-to-group").click(() => {
             if ($("#tab2-select-existing").hasClass("active")) {
                 let roleId: number;
-                const alertHolder = $("add-user-to-role-error");
+                const alertHolder = $("#add-user-to-role-error");
                 alertHolder.html("");
                 if (typeof this.roleSearchCurrentSelectedItem == "undefined")
                     roleId = $("#selectedUser").data("role-id");
@@ -60,7 +60,7 @@ class UserRolesEditor {
                     alertHolder.html(`<div class="alert alert-danger">${localization.translate("AddUserToRoleError", "PermissionJs").value}</div>`);
                 });
             } else {
-                const alertHolder = $("create-role-with-user-error");
+                const alertHolder = $("#create-role-with-user-error");
                 alertHolder.html("");
                 const roleName = $("#new-group-name").val() as string;
                 const roleDescription = $("#new-group-description").val() as string;

@@ -184,7 +184,7 @@ class RoleManager {
             });
 
             addUserToRoleBtn.click(() => {
-                var roleError = $(".add-user-to-role-error");
+                var roleError = $("#add-user-to-role-error");
                 roleError.html("");
                 var roleId = $(".role-row.active").data("role-id");
                 var userId: number;
