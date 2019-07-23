@@ -223,12 +223,10 @@ ul.navbar-language li:hover a {
 
         a {
             vertical-align: middle;
-            padding: 1.2rem 0.5rem !important;
 
             span {
                 text-align: center;
                 vertical-align: middle;
-                height: 40px;
                 display: table-cell;
             }
         }
@@ -238,8 +236,10 @@ ul.navbar-language li:hover a {
         a {
             color: white;
 
-            &:hover {
-                opacity: 0.5;
+            @media screen and (max-width: 1570px) {
+                &:hover {
+                    opacity: 0.5;
+                }
             }
         }
     }
