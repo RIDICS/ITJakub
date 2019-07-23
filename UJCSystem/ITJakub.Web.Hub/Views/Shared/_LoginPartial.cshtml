@@ -33,7 +33,7 @@
             <ul class="navbar-login">
                 <li>
                     <a href="@Url.Action("AccountSettings", "Account", new {area = ""})">
-                    <span>@Html.Raw(User.Identity.Name)</span>
+                        <span>@User.Identity.Name</span>
                     </a>
                 </li>
                 <li>
