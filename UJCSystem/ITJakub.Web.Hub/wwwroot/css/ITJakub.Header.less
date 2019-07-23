@@ -74,6 +74,37 @@ a.main_logo_href + .tooltip {
     }
 }
 
+.main-navbar-container {
+    .tooltip {
+        .tooltip-arrow,
+        .tooltip-inner {
+            color: white;
+            border-radius: 0px;
+        }
+
+        .tooltip-inner {
+            background-color: @menu-background-color;
+            border: 1px solid white;
+        }
+
+        &.in {
+            opacity: 1;
+        }
+
+        &.right {
+            .tooltip-arrow {
+                border-right-color: white;
+            }
+        }
+
+        &.left {
+            .tooltip-arrow {
+                border-left-color: white;
+            }
+        }
+    }
+}
+
 .main_logo_text,
 .second_logo_text {
     color: white;
