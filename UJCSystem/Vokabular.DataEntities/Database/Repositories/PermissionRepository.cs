@@ -42,6 +42,15 @@ namespace Vokabular.DataEntities.Database.Repositories
             return newGroup;
         }
 
+        public virtual IList<int> GetGroupIdsByExternalIds(IEnumerable<int> externalIds)
+        {
+            var result = GetSession().QueryOver<UserGroup>()
+                .WhereRestrictionOn(x => x.ExternalId).IsInG(externalIds)
+                .Select(x => x.Id)
+                .List<int>();
+            return result;
+        }
+
         public virtual int CreateGroup(UserGroup group)
         {
             return (int) GetSession().Save(group);

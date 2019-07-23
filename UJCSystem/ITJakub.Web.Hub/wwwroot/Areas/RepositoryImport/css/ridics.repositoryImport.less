@@ -1,0 +1,345 @@
+﻿@import "../../../css/ITJakub.Colors.less";
+
+@box-border: 1px solid #ddd;
+@even-table-row-colour: #eee;
+@odd-table-row-colour: #white;
+
+.row.display-flex {
+    display: flex;
+    flex-wrap: wrap;
+
+    & > [class*='col-'] {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.content-button[aria-expanded=true] .glyphicon-chevron-down {
+    display: none;
+}
+
+.content-button[aria-expanded=false] .glyphicon-chevron-up {
+    display: none;
+}
+
+ul.bib-listing li.list-item {
+    .visible-content {
+        border-top: 1px solid #E5E5E5;
+    }
+
+    .hidden-content {
+        border-top: none;
+        border-bottom: 1px solid #E5E5E5;
+        display: inherit;
+        overflow-y: hidden;
+    }
+
+    .collapse .bottom-panel {
+        border-right: 1px solid #E5E5E5;
+
+        .body {
+            padding: 0;
+        }
+    }
+
+    .collapse.in .bottom-panel .body {
+        padding: 1rem;
+    }
+
+    .right-panel .checkbox {
+        label {
+            padding-left: 8px;  
+            
+            &:after {
+            content: '';
+            display: table;
+            clear: both;
+            }
+        }
+
+        .cr {
+            position: relative;
+            display: inline-block;
+            border: 1px solid white;
+            width: 1.5em;
+            height: 1.5em;
+            float: left;
+            margin-right: .5em;
+
+            .cr-icon {
+                position: absolute;
+                color: white;
+                font-size: 1.1em;
+                line-height: 0;
+                top: 50%;
+                left: 14%;
+            }
+        }
+
+        input[type="checkbox"] {
+            display: none;
+        }
+
+        input[type="checkbox"] + .cr > .cr-icon {
+            opacity: 0;
+        }
+
+        input[type="checkbox"]:checked + .cr > .cr-icon {
+            opacity: 1;
+        }
+
+        input[type="checkbox"]:disabled + .cr {
+            opacity: .5;
+        }
+    }
+}
+
+
+.import-alert {
+    word-break: break-all;
+}
+
+.keytable-container {
+    .keytable-row {
+        min-height: 16em;
+    }
+
+    .vertical-splitter-control {
+        display: flex;
+        position: relative;
+        padding: 0;
+        border-left: solid gray 2px;
+
+        button {
+            padding: 10px 2px;
+            margin-right: 3px;
+            position: absolute;
+            top: 50%;
+            height: 6em;
+            margin-top: -3em;
+        }
+    }
+}
+
+.project-import-layout {
+    display: table-row;
+
+    .left-menu, .vertical-splitter, .vertical-splitter-control, .content {
+        display: table-cell;
+    }
+
+    .left-menu {
+        vertical-align: top;
+        width: 200px;
+        padding-right: 10px;
+    }
+
+    .vertical-splitter-control {
+        vertical-align: middle;
+
+        button {
+            padding: 10px 2px;
+            margin-right: 3px;
+            transform: scaleY(2);
+        }
+    }
+
+    .vertical-splitter {
+        border: 1px solid #ccc;
+    }
+
+    .content {
+        width: 100%;
+    }
+
+    .right-align-btn {
+        text-align: right;
+        float: right;
+        padding-bottom: 10px;
+        padding-right: 0px;
+    }
+
+    .tab-content {
+        border: @box-border;
+        border-top-width: 0;
+        padding: 1rem 0.5rem 1rem 0.5rem;
+    }
+
+    .modal .tab-content {
+        height: auto;
+        overflow: initial;
+        border-width: 0;
+        padding: 1rem 0;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    td, th {
+        border: @box-border;
+        text-align: center;
+    }
+
+    th {
+        background-color: #eee;
+    }
+}
+
+    .project-import-title {
+        font-weight: bold;
+        font-size: 120%;
+        width: 200px;
+        margin-bottom: 20px;
+    }
+
+    .resource-panel {
+        button, select {
+            width: 100%;
+            margin-bottom: 3px;
+        }
+    }
+
+    .project-bottom-buttons {
+        margin-top: 1rem;
+        text-align: right;
+    }
+
+    .project-form-bottom-buttons {
+        margin-right: 1rem;
+    }
+
+    .project-layout-box {
+        padding: 0.2rem 1rem 0.5rem 1rem;
+        margin-left: 0.5rem;
+        float: left;
+        width: 500px;
+
+        .control-label {
+            text-align: left;
+        }
+    }
+
+    .project-layout-box-500 {
+        max-width: 500px;
+    }
+
+    .project-layout-box-200 {
+        max-width: 200px;
+    }
+
+    .resource-version-button-icon {
+        margin-top: -6px;
+        margin-bottom: -8px;
+    }
+
+    .resource-version-panel {
+        height: 220px;
+        padding-top: 7px;
+
+        > div {
+            border: @box-border;
+            padding: 0.5rem;
+            height: 100%;
+        }
+    }
+
+    .resource-tab-row-fix {
+        margin-right: 0;
+    }
+
+    .resource-version-table {
+        height: 80%;
+        overflow-y: auto;
+        padding-right: 2px;
+        padding-bottom: 5px;
+    }
+
+    .resource-version-control {
+        height: 20%;
+        padding-top: 5px;
+    }
+
+    .input-as-text {
+        border: none;
+        background: transparent !important;
+        box-shadow: none;
+        cursor: default !important;
+    }
+
+    .project-history-records {
+        .panel {
+            margin-top: 7px;
+            margin-bottom: 7px;
+        }
+
+        .snapshot-panel {
+            background-color: @breadcrumb-background-color;
+        }
+    }
+
+    .project-page-list {
+        .image-preview {
+            text-align: right;
+
+            img {
+                max-width: 100%;
+                max-height: 100%;
+            }
+        }
+
+        .project-bottom-buttons {
+            padding-right: 15px;
+        }
+
+        .resource-tab-row-fix {
+            margin-left: 0;
+        }
+
+        > .row > div {
+            height: 540px;
+
+            select {
+                height: 100%;
+            }
+        }
+
+        .main-buttons button {
+            margin-bottom: 3px;
+        }
+
+        .bottom-buttons {
+            position: absolute;
+            bottom: 0;
+            width: 50px;
+        }
+    }
+
+    @page-list-panel-height: 470px;
+
+    table {
+        select {
+            width: 100%;
+        }
+
+        .checkbox {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+    }
+
+    .preloading-pages-spinner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        display: none;
+        z-index: 9999;
+    }
+
+    .invisible {
+        visibility: hidden;
+    }
+
+    .textarea-no-resize {
+        resize: none;
+    }

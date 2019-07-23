@@ -208,10 +208,13 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\itjakub-secrets\WcfServices\*.config">
+      <Link>%(RecursiveDir)\%(FileName).config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="packages.config" />
-    <Content Include="..\..\..\itjakub-secrets\ITJakub.Secrets.config">
-      <Link>ITJakub.Secrets.config</Link>
-    </Content>
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2_Development.pubxml" />
@@ -223,7 +226,7 @@
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-    <None Include="Web.Development.config">
+    <None Include="Web.Production.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.Release.config">

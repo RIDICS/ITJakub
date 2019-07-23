@@ -1,0 +1,58 @@
+﻿@using ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
+@using Scalesoft.Localization.AspNetCore
+@using Scalesoft.Localization.Core.Util
+@model ITJakub.Web.Hub.Areas.RepositoryImport.Models.CreateFilteringExpressionSetViewModel
+
+@inject ILocalizationService Localizer
+
+@Html.AntiForgeryToken()
+@Html.ValidationSummary(true, "", new {@class = "text-danger"})
+@Html.HiddenFor(model => model.Id)
+<div class="form-group">
+    @Html.LabelFor(model => model.Name, htmlAttributes: new {@class = "control-label col-md-2"})
+    <div class="col-md-9">
+        @Html.TextBoxFor(model => model.Name,  new {@class = "form-control"})
+        @Html.ValidationMessageFor(model => model.Name, "", new {@class = "text-danger"})
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.BibliographicFormatId, htmlAttributes: new {@class = "control-label col-md-2"})
+    <div class="col-md-9">
+        @Html.DropDownListFor(model => model.BibliographicFormatId, (SelectList) ViewData[RepositoryImportConstants.AvailableBibliographicFormats], new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.BibliographicFormatId, "", new {@class = "text-danger"})
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-9">
+        <div class="table-responsive">
+            <table id="filteringExpressions" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>@Localizer.Translate("Field", "RepositoryImport", LocTranslationSource.File)</th>
+                        <th>@Localizer.Translate("Value", "RepositoryImport", LocTranslationSource.File)</th>
+                        <th>@Localizer.Translate("Delete", "RepositoryImport", LocTranslationSource.File)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.FilteringExpressions != null)
+                    {
+                         foreach (var expr in Model.FilteringExpressions)
+                         {
+                            @await Html.PartialAsync("_FilteringExpressionRow", expr)
+                         }
+                    }
+                </tbody>
+
+            </table>
+        </div>
+        <button type="button" id="addFilteringExpressionRow" class="btn btn-default">@Localizer.Translate("AddFilteringExpression", "RepositoryImport", LocTranslationSource.File)</button>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-md-offset-10 col-md-1">
+        <input type="submit" value="@Localizer.Translate("Submit", "RepositoryImport", LocTranslationSource.File)" class="btn btn-default" />
+    </div>
+</div>

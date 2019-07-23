@@ -11,11 +11,11 @@
     ViewBag.Title = Localizer.Translate("IndexTitle", "Home", LocTranslationSource.File);
 }
 @section scripts{
-    <script src="~/js/itjakub.home.js"></script>
-    <script src="~/js/itjakub.news.js"></script>
+    <script asp-append-version="true" src="~/js/itjakub.home.js"></script>
+    <script asp-append-version="true" src="~/js/itjakub.news.js"></script>
 }
 @section styles{
-    <link rel="stylesheet" href="~/css/ITJakub.Home.css" />
+    <link asp-append-version="true" rel="stylesheet" href="~/css/ITJakub.Home.css" />
 }
 
 <script type="text/javascript">

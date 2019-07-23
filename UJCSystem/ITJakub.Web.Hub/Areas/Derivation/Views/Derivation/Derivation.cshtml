@@ -5,10 +5,10 @@
     ViewBag.Title = @Localizer.Translate("Derivation", "Derivation");
 }
 @section styles{
-    <link href="~/Areas/Derivation/css/itjakub.derivation.css" rel="stylesheet" />
+    <link asp-append-version="true" href="~/Areas/Derivation/css/itjakub.derivation.css" rel="stylesheet" />
 }
 @section scripts{
-    <script src="~/Areas/Derivation/js/itjakub.derivation.bundle.js"></script>
+    <script asp-append-version="true" src="~/Areas/Derivation/js/itjakub.derivation.bundle.js"></script>
 }
 
 <script type="text/javascript">

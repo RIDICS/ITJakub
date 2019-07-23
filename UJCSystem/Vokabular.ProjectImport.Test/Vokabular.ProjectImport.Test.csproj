@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="OaiPmh_Marc21_JanHus.xml" />
+    <None Remove="OaiPmh_Marc21_JosefPekar.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="OaiPmh_Marc21_JanHus.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="OaiPmh_Marc21_JosefPekar.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+    <PackageReference Include="Moq" Version="4.10.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
+    <PackageReference Include="NHibernate" Version="5.2.5" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.110" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj" />
+    <ProjectReference Include="..\Vokabular.ProjectImport.Model\Vokabular.ProjectImport.Model.csproj" />
+    <ProjectReference Include="..\Vokabular.ProjectImport.Shared\Vokabular.ProjectImport.Shared.csproj" />
+    <ProjectReference Include="..\Vokabular.ProjectImport\Vokabular.ProjectImport.csproj" />
+  </ItemGroup>
+
+</Project>

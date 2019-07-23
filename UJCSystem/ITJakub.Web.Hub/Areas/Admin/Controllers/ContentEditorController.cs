@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using ITJakub.Web.Hub.Areas.Admin.Models.Request;
 using ITJakub.Web.Hub.Areas.Admin.Models.Response;
+using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataContracts.Types;
+using ITJakub.Web.Hub.Options;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 {
+    [LimitedAccess(PortalType.CommunityPortal)]
     [Area("Admin")]
     public class ContentEditorController : BaseController
     {

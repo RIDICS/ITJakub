@@ -162,5 +162,6 @@ namespace ITJakub.FileProcessing.Service
             //return System.Reflection.Assembly.GetExecutingAssembly();
             return typeof(Container).Assembly;
         }
+
     }
 }

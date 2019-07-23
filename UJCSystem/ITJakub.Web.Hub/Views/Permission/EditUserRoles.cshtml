@@ -7,14 +7,14 @@
     ViewBag.Title = Localizer.Translate("EditUserTitle", "Permission", LocTranslationSource.File);
 }
 @section styles{
-    <link href="~/css/ITJakub.Permission.css" rel="stylesheet" />
-    <link href="~/css/ridics.permissions.css" rel="stylesheet" />
+    <link asp-append-version="true" href="~/css/ITJakub.Permission.css" rel="stylesheet" />
+    <link asp-append-version="true" href="~/css/ridics.permissions.css" rel="stylesheet" />
 }
 @section scripts{
-    <script src="~/js/ridics.web-hub-api-client.js"></script>
-    <script src="~/Areas/Admin/js/ridics.permission-api-client.js"></script>
-    <script src="~/Areas/Admin/js/ridics.list.js"></script>
-    <script src="~/Areas/Admin/js/ridics.user.edit.js"></script>
+    <script asp-append-version="true" src="~/js/ridics.web-hub-api-client.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.permission-api-client.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.list.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.user.edit.js"></script>
 }
 
 <div class="col-sm-6 col-md-4">

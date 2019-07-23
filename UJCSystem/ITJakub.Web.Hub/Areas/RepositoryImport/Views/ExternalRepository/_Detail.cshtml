@@ -1,0 +1,38 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@model Vokabular.MainService.DataContracts.Contracts.ExternalRepositoryStatisticsContract
+
+@inject ILocalizationService Localizer
+
+<div class="bib-table-row">
+    <div class="bib-table-cell bib-label">@Localizer.Translate("TotalImportedItems", "RepositoryImport")</div>
+    <div class="bib-table-cell">@Model.TotalImportedItems</div>
+</div>
+
+<div class="bib-table-row">
+    <div class="bib-table-cell bib-label">@Localizer.Translate("LastImport", "RepositoryImport")</div>
+    <div class="bib-table-cell">@Model.LastUpdateDate</div>
+</div>
+<div class="bib-table-row">
+    <div class="bib-table-cell bib-label">@Localizer.Translate("LastUpdateBy", "RepositoryImport")</div>
+    <div class="bib-table-cell">@Model.UpdatedBy.FirstName @Model.UpdatedBy.LastName</div>
+</div>
+<div class="bib-table-row">
+    <div class="bib-table-cell bib-label">@(Model.IsSuccessful ? Localizer.Translate("SuccessfulLastImport", "RepositoryImport")
+                                                : Localizer.Translate("UnsuccessfulLastImport", "RepositoryImport"))</div>
+</div>
+<div class="bib-table-row">
+    <div class="bib-table-cell bib-label">@Localizer.Translate("TotalItemsInLastUpdate", "RepositoryImport")</div>
+    <div class="bib-table-cell">@Model.TotalItemsInLastUpdate</div>
+</div>
+<div class="bib-table-row">
+    <div class="bib-table-cell bib-label">@Localizer.Translate("NewItemsInLastUpdate", "RepositoryImport")</div>
+    <div class="bib-table-cell">@Model.NewItemsInLastUpdate</div>
+</div>
+<div class="bib-table-row">
+    <div class="bib-table-cell bib-label">@Localizer.Translate("UpdatedItemsInLastUpdate", "RepositoryImport")</div>
+    <div class="bib-table-cell">@Model.UpdatedItemsInLastUpdate</div>
+</div>
+<div class="bib-table-row">
+    <div class="bib-table-cell bib-label">@Localizer.Translate("FailedItemsInLastUpdate", "RepositoryImport")</div>
+    <div class="bib-table-cell">@(Model.TotalItemsInLastUpdate - Model.UpdatedItemsInLastUpdate - Model.NewItemsInLastUpdate)</div>
+</div>

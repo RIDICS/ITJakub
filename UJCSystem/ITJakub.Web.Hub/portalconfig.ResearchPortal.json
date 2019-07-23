@@ -1,0 +1,36 @@
+﻿{
+  "PortalConfig": {
+    "PortalType": "ResearchPortal",
+    "SecondPortalType": "CommunityPortal",
+    "FaviconPath": "~/images/favicon.ResearchPortal.png",
+    "MainPortal": {
+      "PortalNameFull": "Vokabulář webový",
+      "PortalName1": "Vokabulář",
+      "PortalName2": "webový",
+      "PortalLogoPath": "~/images/logo/logo.ResearchPortal.png"
+    },
+    "SecondPortal": {
+      "PortalNameFull": "Komunitní portál",
+      "PortalName1": "Komunitní",
+      "PortalName2": "portál",
+      "PortalLogoPath": "~/images/logo/logo.CommunityPortal.png"
+    },
+    "AllowedSearchOptions": {
+      "Author": true,
+      "Title": true,
+      "Editor": true,
+      "Dating": true,
+      "Fulltext": true,
+      "Heading": true,
+      "Sentence": true,
+      "Result": true,
+      "ResultRestriction": true,
+      "TokenDistance": true,
+      "Headword": true,
+      "HeadwordDescription": true,
+      "HeadwordDescriptionTokenDistance": true,
+      "SelectedCategory": true,
+      "Term": true
+    }
+  }
+}

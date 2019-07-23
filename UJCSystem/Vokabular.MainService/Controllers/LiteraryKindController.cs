@@ -1,22 +1,25 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Errors;
+using Vokabular.Shared.Const;
 
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
     public class LiteraryKindController : Controller
     {
-        private CatalogValueManager m_catalogValueManager;
+        private readonly CatalogValueManager m_catalogValueManager;
 
         public LiteraryKindController(CatalogValueManager catalogValueManager)
         {
             m_catalogValueManager = catalogValueManager;
         }
 
+        [Authorize(VokabularPermissionNames.ManageCodeList)]
         [HttpPost("")]
         public int CreateLiteraryKind([FromBody] LiteraryKindContract literaryKind)
         {
@@ -24,6 +27,7 @@ namespace Vokabular.MainService.Controllers
             return resultId;
         }
 
+        [Authorize(VokabularPermissionNames.ManageCodeList)]
         [HttpPut("{literaryKindId}")]
         public IActionResult UpdateLiteraryKind(int literaryKindId, [FromBody] LiteraryKindContract data)
         {
@@ -38,6 +42,7 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
+        [Authorize(VokabularPermissionNames.ManageCodeList)]
         [HttpDelete("{literaryKindId}")]
         public IActionResult DeleteLiteraryKind(int literaryKindId)
         {

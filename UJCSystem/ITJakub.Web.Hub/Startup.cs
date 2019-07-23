@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Helpers;
+using ITJakub.Web.Hub.Options;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -160,10 +161,12 @@ namespace ITJakub.Web.Hub
 
             // Configuration options
             services.AddOptions();
-            services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
+            services.Configure<EndpointOption>(Configuration.GetSection("Endpoints"));
             services.Configure<GoogleCalendarConfiguration>(Configuration.GetSection("GoogleCalendar"));
 
             services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = 1048576000; });
+
+            services.Configure<PortalOption>(Configuration.GetSection("PortalConfig"));
 
             // Localization
             var localizationConfiguration = Configuration.GetSection("Localization").Get<LocalizationConfiguration>();
@@ -244,6 +247,10 @@ namespace ITJakub.Web.Hub
                     .MapAreaRoute("audioBooksDefault", "AudioBooks", "{controller=AudioBooks}/{action=Index}")
                     .MapAreaRoute("toolsDefault", "Tools", "{controller=Tools}/{action=Index}");
             });
+
+            // Update missing permissions on Auth service:
+            var communicationProvider = app.ApplicationServices.GetRequiredService<CommunicationProvider>();
+            communicationProvider.GetMainServiceClient().EnsureAuthServiceHasRequiredPermissions();
 
             applicationLifetime.ApplicationStopped.Register(OnShutdown);
         }

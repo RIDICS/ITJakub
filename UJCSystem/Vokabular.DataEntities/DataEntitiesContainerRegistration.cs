@@ -2,12 +2,11 @@
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.SearchCriteria;
 using Vokabular.DataEntities.Database.UnitOfWork;
-using Vokabular.Shared.Container;
 using Vokabular.Shared.DataContracts.Search.QueryBuilder;
 
 namespace Vokabular.DataEntities
 {
-    public class DataEntitiesContainerRegistration : IContainerInstaller
+    public class DataEntitiesContainerRegistration
     {
         public void Install(IServiceCollection services)
         {
@@ -17,7 +16,12 @@ namespace Vokabular.DataEntities
             services.AddScoped<CatalogValueRepository>();
             services.AddScoped<CategoryRepository>();
             services.AddScoped<FavoritesRepository>();
+            services.AddScoped<ExternalRepositoryRepository>();
             services.AddScoped<MetadataRepository>();
+            services.AddScoped<FilteringExpressionSetRepository>();
+            services.AddScoped<ImportHistoryRepository>();
+            services.AddScoped<ImportedProjectMetadataRepository>();
+            services.AddScoped<ImportedRecordMetadataRepository>();
             services.AddScoped<PermissionRepository>();
             services.AddScoped<PersonRepository>();
             services.AddScoped<PortalRepository>();
