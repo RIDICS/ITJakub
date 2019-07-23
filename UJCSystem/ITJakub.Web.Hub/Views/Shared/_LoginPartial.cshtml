@@ -10,47 +10,48 @@
 }
 
 
-<div class="secondary-navbar-toggle language" title="@Localizer.Translate("Language", "global", LocTranslationSource.File)">
+<div class="secondary-navbar-toggle language" data-toggle="tooltip" data-placement="left" title="@Localizer.Translate("Language", "global", LocTranslationSource.File)">
     <span class="glyphicon glyphicon-text-background"></span>
     <ul class="navbar-language">
         @foreach (var x in Localizer.GetSupportedCultures())
         {
             <li>
-                @Html.ActionLink(x.NativeName, "SetLanguage", "Localization", new {area = "", culture = x.Name, returnUrl = pathAndQuery})
+                @Html.ActionLink(x.NativeName, "SetLanguage", "Localization", new { area = "", culture = x.Name, returnUrl = pathAndQuery })
             </li>
         }
     </ul>
 </div>
-<div class="secondary-navbar-toggle login" title="@Localizer.Translate("UserAccount", "global", LocTranslationSource.File)">
-    @if (User.Identity.IsAuthenticated)
-    {
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="secondary-navbar-toggle login" data-toggle="tooltip" data-placement="left" title="@Localizer.Translate("UserAccount", "global", LocTranslationSource.File)">
         <a href="@Url.Action("AccountSettings", "Account", new {area = ""})">
             <span class="glyphicon glyphicon-user"> </span>
         </a>
 
-        using (Html.BeginForm("LogOut", "Account", new {area = ""}, FormMethod.Post, true, new {id = "logoutForm", @class = "navbar-right"}))
+        @using (Html.BeginForm("LogOut", "Account", new {area = ""}, FormMethod.Post, true, new {id = "logoutForm", @class = "navbar-right"}))
         {
-            <ul class="navbar-login">
-                <li>
-                    <a href="@Url.Action("AccountSettings", "Account", new {area = ""})">
-                        <span>@Html.Raw(User.Identity.Name)</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:document.getElementById('logoutForm').submit()">
-                        <span>@Localizer.Translate("LogOut", "global", LocTranslationSource.File)</span>
-                    </a>
-                </li>
-            </ul>
+        <ul class="navbar-login">
+            <li>
+                <a href="@Url.Action("AccountSettings", "Account", new {area = ""})">
+                    <span>@Html.Raw(User.Identity.Name)</span>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:document.getElementById('logoutForm').submit()">
+                    <span>@Localizer.Translate("LogOut", "global", LocTranslationSource.File)</span>
+                </a>
+            </li>
+        </ul>
         }
-    }
-    else
+    </div>
+}
+else
+{
+    if (!string.IsNullOrEmpty(pathAndQuery) && pathAndQuery != "/" && !pathAndQuery.StartsWith("/Account/"))
     {
-        if (!string.IsNullOrEmpty(pathAndQuery) && pathAndQuery != "/" && !pathAndQuery.StartsWith("/Account/"))
-        {
-            ViewBag.ReturnUrl = pathAndQuery;
-        }
-
+        ViewBag.ReturnUrl = pathAndQuery;
+    }
+    <div class="secondary-navbar-toggle login" data-toggle="tooltip" data-placement="left" title="@Localizer.Translate("SignIn", "global", LocTranslationSource.File)">
         <a id="loginLink" href="@Url.Action("Login", "Account", new {area = "", returnUrl = ViewBag.ReturnUrl})">
             <span class="glyphicon glyphicon-user"></span>
         </a>
@@ -66,5 +67,5 @@
                 </a>
             </li>
         </ul>
-    }
-</div>
+    </div>
+}

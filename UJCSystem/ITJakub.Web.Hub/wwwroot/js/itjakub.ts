@@ -11,6 +11,8 @@ $(document as Node as Element).ready(() => {
     localization = new Localization();
     localization.configureSiteUrl(getBaseUrl());
 
+    $(".main-navbar-container [data-toggle=\"tooltip\"]").tooltip();
+
     $('#main-plugins-menu').find('li').removeClass('active');
     var href = window.location.pathname;
     var liTargetingActualPage = $('#main-plugins-menu').find("a[href='" + href.toString() + "']").parent('li');

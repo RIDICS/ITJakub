@@ -63,6 +63,17 @@ a.second_logo_href {
     }
 }
 
+a.second_logo_href + .tooltip,
+a.main_logo_href + .tooltip {
+    @media screen and (min-width: 1411px) {
+        display: none !important;
+    }
+
+    @media screen and (min-width: 501px) and (max-width: 1219px) {
+        display: none !important;
+    }
+}
+
 .main_logo_text,
 .second_logo_text {
     color: white;
@@ -256,6 +267,12 @@ ul.navbar-language li:hover a {
     &:hover ul,
     &.hover ul {
         display: block;
+    }
+
+    @media screen and (min-width: 1571px) {
+        & + .tooltip {
+            display: none !important;
+        }
     }
 }
 
