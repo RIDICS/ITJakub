@@ -28,6 +28,7 @@ $(document as Node as Element).ready(() => {
         $liElement.toggleClass("hover");
     });
     $(".secondary-navbar-toggle").on("touchstart", (event) => {
+        event.preventDefault();
         if ($(event.target as Node as Element).is("a")) {
             return;
         }

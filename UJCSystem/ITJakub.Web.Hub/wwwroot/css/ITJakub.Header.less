@@ -260,7 +260,6 @@ ul.navbar-language li:hover a {
     .navbar-login li {
         margin: 0;
         padding: 0;
-        max-width: 100px;
         display: inline-block;
 
         a {
@@ -277,11 +276,24 @@ ul.navbar-language li:hover a {
     &.login {
         a {
             color: white;
+        }
 
-            @media screen and (max-width: 1570px) {
-                &:hover {
+        @media screen and (max-width: 1570px) {
+            &:hover,
+            &.hover {
+                & > a span {
                     opacity: 0.5;
                 }
+            }
+
+            .navbar-login li {
+                width: 100%;
+            }
+        }
+
+        @media screen and (min-width: 1571px) {
+            .navbar-login li {
+                max-width: 100px;
             }
         }
     }
