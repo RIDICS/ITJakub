@@ -1,13 +1,14 @@
-﻿using ITJakub.Web.Hub.Authorization;
-using ITJakub.Web.Hub.Controllers;
+﻿using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
-using ITJakub.Web.Hub.Options;
+using Vokabular.Shared.Const;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(VokabularPermissionNames.ManageCodeList)]
     public class KeyTableController : BaseController
     {
         public KeyTableController(CommunicationProvider communicationProvider) : base(communicationProvider)

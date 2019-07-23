@@ -419,12 +419,21 @@
                                 </a>
                             </li>
                         }
-						
+
                         @if (User.HasPermission(VokabularPermissionNames.ManageBibliographyImport))
                         {
                             <li>
                                 <a href='@Url.Action("List", "ExternalRepository", new {area = "RepositoryImport"})'>
                                     <span>@Localizer.Translate("RepositoryImport", "layout", LocTranslationSource.File)</span>
+                                </a>
+                            </li>
+                        }
+
+                        @if (User.HasPermission(VokabularPermissionNames.ManageCodeList))
+                        {
+                            <li>
+                                <a href='@Url.Action("KeyTable", "KeyTable", new {area = "Admin"})'>
+                                    <span>@Localizer.Translate("CodeLists", "layout", LocTranslationSource.File)</span>
                                 </a>
                             </li>
                         }

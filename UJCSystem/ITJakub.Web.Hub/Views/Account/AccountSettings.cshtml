@@ -4,7 +4,7 @@
 
 @inject ILocalizationService Localizer
 @section scripts {
-    <script src="~/js/ridics.account.js"></script>
+    <script asp-append-version="true" src="~/js/ridics.account.js"></script>
 }
 @{
     ViewBag.Title = Localizer.Translate("Settings", "Account");

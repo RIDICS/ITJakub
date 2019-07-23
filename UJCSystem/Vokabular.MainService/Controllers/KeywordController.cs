@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
@@ -6,6 +7,7 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Headers;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
+using Vokabular.Shared.Const;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -19,6 +21,7 @@ namespace Vokabular.MainService.Controllers
             m_catalogValueManager = catalogValueManager;
         }
 
+        [Authorize]
         [HttpPost("")]
         public int CreateKeyword([FromBody] KeywordContract data)
         {
@@ -26,6 +29,7 @@ namespace Vokabular.MainService.Controllers
             return resultId;
         }
 
+        [Authorize(VokabularPermissionNames.ManageCodeList)]
         [HttpPut("{keywordId}")]
         public IActionResult UpdateKeyword(int keywordId, [FromBody] KeywordContract data)
         {
@@ -40,6 +44,7 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
+        [Authorize(VokabularPermissionNames.ManageCodeList)]
         [HttpDelete("{keywordId}")]
         public IActionResult DeleteKeyword(int keywordId)
         {

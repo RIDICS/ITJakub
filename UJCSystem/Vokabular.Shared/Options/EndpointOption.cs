@@ -1,15 +1,9 @@
-﻿namespace Vokabular.Shared.Options
+﻿using System.Collections.Generic;
+
+namespace Vokabular.Shared.Options
 {
     public class EndpointOption
     {
-        public string Name { get; set; }
-
-        public string Address { get; set; }
-
-        //public System.Type Contract { get; set; }
-
-        //public string Binding { get; set; }
-
-        //public string BindingConfiguration { get; set; }
+        public IDictionary<string, string> Addresses { get; set; }
     }
 }

@@ -8,13 +8,13 @@
 }
 
 @section styles{
-    <link href="~/css/ridics.permissions.css" rel="stylesheet"/>
+    <link asp-append-version="true" href="~/css/ridics.permissions.css" rel="stylesheet"/>
 }
 
 @section scripts{
-    <script src="~/Areas/Admin/js/ridics.list.js"></script>
-    <script src="~/Areas/Admin/js/ridics.role.manager.js"></script>
-    <script src="~/Areas/Admin/js/ridics.web-hub-api-client.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.list.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.role.manager.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.web-hub-api-client.js"></script>
 }
 
 <h2>@Localizer.Translate("GroupPermissionManagementHeadline", "Permission", LocTranslationSource.File)</h2>

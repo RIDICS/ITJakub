@@ -1,3 +1,3 @@
 #!/usr/bin/env pwsh
 
-.\SelectPortalTheme.ps1 CommunityPortal
+.\UJCSystem\ITJakub.Web.Hub\SelectPortalTheme.ps1 CommunityPortal
