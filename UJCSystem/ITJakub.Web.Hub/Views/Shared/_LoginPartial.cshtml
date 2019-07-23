@@ -30,18 +30,18 @@
 
         @using (Html.BeginForm("LogOut", "Account", new {area = ""}, FormMethod.Post, true, new {id = "logoutForm", @class = "navbar-right"}))
         {
-        <ul class="navbar-login">
-            <li>
-                <a href="@Url.Action("AccountSettings", "Account", new {area = ""})">
+            <ul class="navbar-login">
+                <li>
+                    <a href="@Url.Action("AccountSettings", "Account", new {area = ""})">
                     <span>@Html.Raw(User.Identity.Name)</span>
-                </a>
-            </li>
-            <li>
-                <a href="javascript:document.getElementById('logoutForm').submit()">
-                    <span>@Localizer.Translate("LogOut", "global", LocTranslationSource.File)</span>
-                </a>
-            </li>
-        </ul>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:document.getElementById('logoutForm').submit()">
+                        <span>@Localizer.Translate("LogOut", "global", LocTranslationSource.File)</span>
+                    </a>
+                </li>
+            </ul>
         }
     </div>
 }
