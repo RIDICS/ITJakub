@@ -60,7 +60,7 @@ Environment configuration
   4. Click on each certificate in personal store and select "Manage private keys" and add "Everyone" for full control to all certificates
 * Allow SSL in IIS
   1. In IIS manager select website and add HTTPS binding with "localhost" certificate issued by ITJakubCA
-  2. For selected website open SSL Settings and select "Accept client certificate"
+  2. Ensure that selected website ignores client certificates. This setting can be found in SSL Settings. If client certificate is enabled, the large file upload probably won't work.
 * Configure Application Pools in IIS
   1. ITJakub.SearchService should be deployed in different Application Pool than ITJakub.ITJakubService
 
@@ -159,3 +159,6 @@ Check if ".NET Core Windows Server Hosting" is installed.
 
 **Logging doesn't work on IIS.**  
 System user IIS_IUSRS must has permission to write to "logs" folder.
+
+**The large file upload fails with 413.0 - Request Entity Too Large on IIS server
+The problem may be caused by enabled client certificate. Try to set "Ignore client certificate" in SSL Settings in IIS Manager.

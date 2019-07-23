@@ -36,7 +36,7 @@ namespace Vokabular.FulltextService
         {
             // Configuration options
             services.AddOptions();
-            services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
+            services.Configure<EndpointOption>(Configuration.GetSection("Endpoints"));
             services.Configure<IndicesOption>(Configuration.GetSection("ElasticsearchIndices"));
             services.Configure<SpecialCharsOption>(Configuration.GetSection("SpecialChars"));
 

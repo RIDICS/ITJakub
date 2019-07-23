@@ -26,6 +26,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\..\..\itjakub-secrets\*.json">
+      <Link>%(RecursiveDir)\%(FileName).json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ITJakub.Lemmatization.Shared.Contracts\ITJakub.Lemmatization.Shared.Contracts.csproj" />
     <ProjectReference Include="..\ITJakub.SearchService.DataContracts\ITJakub.SearchService.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.Jewelry\Vokabular.Jewelry.csproj" />
@@ -82,28 +89,14 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
   </ItemGroup>
   
-  <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.DotNet.Xdt.Tools" Version="2.0.0" />
-  </ItemGroup>
-
-  <Target Name="ApplyXdtConfigTransform" BeforeTargets="MSDeployPublish">
-    <PropertyGroup>
-      <_SourceWebConfig>$(MSBuildThisFileDirectory)Web.config</_SourceWebConfig>
-      <_XdtTransform>$(MSBuildThisFileDirectory)Web.$(Configuration).config</_XdtTransform>
-      <_TargetWebConfig>$(PublishDir)Web.config</_TargetWebConfig>
-    </PropertyGroup>
-    <Exec Command="dotnet transform-xdt --xml &quot;$(_SourceWebConfig)&quot; --transform &quot;$(_XdtTransform)&quot; --output &quot;$(_TargetWebConfig)&quot;" Condition="Exists('$(_XdtTransform)')" />
-  </Target>
 
   <Target Name="Gulp" BeforeTargets="BeforeBuild">
     <Exec Command="yarn gulp default" />
   </Target>
   
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
-    <Exec Command="npm install" />
-    <Exec Command="yarn gulp yarn-runtime" />
-    <Exec Command="yarn gulp clean" />
-    <Exec Command="yarn gulp default" />
+    <!--Yarn is handled by build script-->
+    <!--Exec Command="yarn install" />-->
   </Target>
 
 </Project>

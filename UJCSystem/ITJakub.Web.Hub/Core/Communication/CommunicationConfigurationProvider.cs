@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.ServiceModel;
 using System.Xml;
 using Microsoft.Extensions.Options;
@@ -9,7 +8,7 @@ namespace ITJakub.Web.Hub.Core.Communication
 {
     public class CommunicationConfigurationProvider : CommunicationConfigurationProviderBase
     {
-        public CommunicationConfigurationProvider(IOptions<List<EndpointOption>> endpointOptions) : base(endpointOptions)
+        public CommunicationConfigurationProvider(IOptions<EndpointOption> endpointOptions) : base(endpointOptions)
         {
         }
 
