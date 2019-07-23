@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
-using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
@@ -82,14 +81,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public void UpdateUserContact(int userId, UpdateUserContactContract data)
         {
-            var userExternalId = GetUserExternalId(userId);
-
-            var contract = new AuthChangeContactContract
-            {
-                ContactType = (ContactTypeEnum)Enum.Parse(typeof(ContactTypeEnum), data.ContactType.ToString()),
-                UserId = userExternalId,
-                NewContactValue = data.NewContactValue
-            };
+            var contract = Mapper.Map<AuthChangeContactContract>(data);
+            contract.UserId = GetUserExternalId(userId);
 
             var client = m_communicationProvider.GetAuthContactApiClient();
             client.ChangeContactAsync(contract).GetAwaiter().GetResult();
@@ -151,53 +144,35 @@ namespace Vokabular.MainService.Core.Managers
 
         public bool ConfirmContact(int userId, ConfirmUserContactContract data)
         {
+            var contract = Mapper.Map<AuthConfirmContactContract>(data);
+            contract.UserId = GetUserExternalId(userId);
+
             var client = m_communicationProvider.GetAuthContactApiClient();
-
-            var contract = new AuthConfirmContactContract
-            {
-                UserId = GetUserExternalId(userId),
-                ConfirmCode = data.ConfirmCode,
-                ContactType = (ContactTypeEnum)Enum.Parse(typeof(ContactTypeEnum), data.ContactType.ToString())
-            };
-
             return client.ConfirmContactAsync(contract).GetAwaiter().GetResult();
         }
 
         public void ResendConfirmCode(int userId, UserContactContract data)
         {
+            var contract = Mapper.Map<AuthContactContract>(data);
+            contract.UserId = GetUserExternalId(userId);
+
             var client = m_communicationProvider.GetAuthContactApiClient();
-
-            var contract = new AuthContactContract
-            {
-                UserId = GetUserExternalId(userId),
-                ContactType = (ContactTypeEnum)Enum.Parse(typeof(ContactTypeEnum), data.ContactType.ToString())
-            };
-
             client.ResendCodeAsync(contract).GetAwaiter().GetResult();
         }
 
         public void SetTwoFactor(int userId, UpdateTwoFactorContract data)
         {
+            var contract = Mapper.Map<AuthChangeTwoFactorContract>(data);
+
             var client = m_communicationProvider.GetAuthUserApiClient();
-
-            var contract = new AuthChangeTwoFactorContract
-            {
-                TwoFactorIsEnabled = data.TwoFactorIsEnabled,
-            };
-
             client.SetTwoFactorAsync(GetUserExternalId(userId), contract).GetAwaiter().GetResult();
         }
 
         public void SelectTwoFactorProvider(int userId, UpdateTwoFactorContract data)
         {
+            var contract = Mapper.Map<AuthChangeTwoFactorContract>(data);
+
             var client = m_communicationProvider.GetAuthUserApiClient();
-
-            var contract = new AuthChangeTwoFactorContract
-            {
-                TwoFactorIsEnabled = data.TwoFactorIsEnabled,
-                TwoFactorProvider = data.TwoFactorProvider
-            };
-
             client.SelectTwoFactorProviderAsync(GetUserExternalId(userId), contract).GetAwaiter().GetResult();
         }
 

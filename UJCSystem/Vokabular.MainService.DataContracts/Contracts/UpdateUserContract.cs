@@ -1,4 +1,4 @@
-﻿using Vokabular.Shared.DataContracts.Types;
+﻿using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace Vokabular.MainService.DataContracts.Contracts
 {
@@ -18,7 +18,7 @@ namespace Vokabular.MainService.DataContracts.Contracts
 
     public class UserContactContract
     {
-        public ContactType ContactType { get; set; }
+        public ContactTypeContract ContactType { get; set; }
     }
 
     public class UpdateUserContactContract : UserContactContract
