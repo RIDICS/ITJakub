@@ -38,7 +38,7 @@
         <div class="">
             <div class="main-navbar-container">
                 <div class="navbar-header-not">
-                    <a href="@PortalConfig.Value.GetSecondPortalUrl()" class="second_logo_href" data-toggle="tooltip" data-placement="left" title="@PortalConfig.Value.SecondPortal.PortalNameFull">
+                    <a href="@PortalConfig.Value.GetSecondPortalUrl()" class="second_logo_href" data-toggle="tooltip" data-placement="bottom" title="@PortalConfig.Value.SecondPortal.PortalNameFull">
                         <img src="@Url.Content(PortalConfig.Value.SecondPortal.PortalLogoPath)" alt="second_logo" class="second_logo" />
                         <div class="second_logo_text">
                             <h1>@Localizer.Translate(PortalConfig.Value.SecondPortal.PortalName1, "global", LocTranslationSource.File)</h1>
@@ -52,7 +52,7 @@
 
                     @await Html.PartialAsync("_LoginPartial")
 
-                    <a href="@Url.Action("Index", "Home", new {area = ""})" class="main_logo_href" data-toggle="tooltip" data-placement="right" title="@PortalConfig.Value.MainPortal.PortalNameFull">
+                    <a href="@Url.Action("Index", "Home", new {area = ""})" class="main_logo_href" data-toggle="tooltip" data-placement="bottom" title="@PortalConfig.Value.MainPortal.PortalNameFull">
                         <img src="@Url.Content(PortalConfig.Value.MainPortal.PortalLogoPath)" alt="main_logo" class="main_logo" />
                         <div class="main_logo_text">
                             <h1>@Localizer.Translate(PortalConfig.Value.MainPortal.PortalName1, "global", LocTranslationSource.File)</h1>
