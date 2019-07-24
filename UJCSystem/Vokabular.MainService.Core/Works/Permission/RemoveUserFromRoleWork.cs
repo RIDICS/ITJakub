@@ -28,7 +28,7 @@ namespace Vokabular.MainService.Core.Works.Permission
 
         protected override void ExecuteWorkImplementation()
         {
-            var group = m_permissionRepository.FindGroupByExternalId(m_roleId);
+            var group = m_permissionRepository.FindGroupByExternalIdOrCreate(m_roleId);
             var user = m_permissionRepository.FindById<User>(m_userId);
             if (user.ExternalId == null)
             {
