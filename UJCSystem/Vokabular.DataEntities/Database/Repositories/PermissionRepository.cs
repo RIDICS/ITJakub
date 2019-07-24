@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NHibernate;
 using NHibernate.Criterion;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
@@ -12,11 +13,19 @@ namespace Vokabular.DataEntities.Database.Repositories
         public PermissionRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
-        
+
+        public virtual User GetUserWithGroups(int userId)
+        {
+            var result = GetSession().QueryOver<User>()
+                .Where(x => x.Id == userId)
+                .Fetch(SelectMode.Fetch, x => x.Groups)
+                .SingleOrDefault();
+            return result;
+        }
+
         public virtual UserGroup FindGroupByExternalId(int externalId)
         {
             var group = GetSession().QueryOver<UserGroup>()
-                //.Fetch(SelectMode.Fetch, g => g.Users) // TODO remove this Fetch
                 .Where(g => g.ExternalId == externalId)
                 .SingleOrDefault();
 
