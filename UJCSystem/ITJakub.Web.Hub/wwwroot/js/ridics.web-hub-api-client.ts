@@ -2,7 +2,7 @@
     formContentType = "application/x-www-form-urlencoded";
     jsonContentType = "application/json";
 
-    post(url: string, data: string, contentType = this.jsonContentType): JQuery.jqXHR {
+    post(url: string, data: string, contentType = this.jsonContentType): JQuery.Promise<any> {
         return $.ajax({
             type: "POST",
             traditional: true,
@@ -13,7 +13,7 @@
         });
     }
 
-    get(url: string): JQuery.jqXHR {
+    get(url: string): JQuery.Promise<any> {
         return $.ajax({
             type: "GET",
             traditional: true,

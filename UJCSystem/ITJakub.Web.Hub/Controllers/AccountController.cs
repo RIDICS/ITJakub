@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Net;
+using AutoMapper;
 using ITJakub.Web.Hub.Constants;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models.Requests.Permission;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Scalesoft.Localization.AspNetCore;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Errors;
 using Vokabular.Shared.AspNetCore.Extensions;
@@ -16,8 +18,11 @@ namespace ITJakub.Web.Hub.Controllers
     [Authorize]
     public class AccountController : BaseController
     {
-        public AccountController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        private readonly ILocalizationService m_localizationService;
+
+        public AccountController(CommunicationProvider communicationProvider, ILocalizationService localizationService) : base(communicationProvider)
         {
+            m_localizationService = localizationService;
         }
 
         //
@@ -165,12 +170,12 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 if (string.IsNullOrEmpty(updateUserContactContract.NewContactValue))
                 {
-                    return BadRequest("empty-email");
+                    return AjaxErrorResponse(m_localizationService.Translate("EmptyEmail", "Account"), HttpStatusCode.BadRequest);
                 }
 
                 if (updateUserContactContract.NewContactValue == updateUserContactContract.OldContactValue)
                 {
-                    return BadRequest("same-email");
+                    return AjaxErrorResponse(m_localizationService.Translate("SameEmail", "Account"), HttpStatusCode.BadRequest);
                 }
 
                 using (var client = GetRestClient())
@@ -180,10 +185,10 @@ namespace ITJakub.Web.Hub.Controllers
             }
             catch (HttpErrorCodeException e)
             {
-                return BadRequest(new { e.Message });
+                return AjaxErrorResponse(e.Message, e.StatusCode);
             }
 
-            return Json(new {});
+            return AjaxOkResponse();
         }
 
         //
@@ -206,7 +211,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
             catch (HttpErrorCodeException e)
             {
-                return BadRequest(new { e.Message });
+                return AjaxErrorResponse(e.Message, e.StatusCode);
             }
         }
 
@@ -228,10 +233,10 @@ namespace ITJakub.Web.Hub.Controllers
             }
             catch (HttpErrorCodeException e)
             {
-                return BadRequest(new { e.Message });
+                return AjaxErrorResponse(m_localizationService.Translate("ResendCodeError", "Account"), e.StatusCode);
             }
 
-            return Json(new { });
+            return AjaxOkResponse();
         }
 
         [HttpPost]

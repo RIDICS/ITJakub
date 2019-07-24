@@ -5,6 +5,7 @@
 
 class AccountManager {
     private readonly client: AccountApiClient;
+    private readonly errorHandler: ErrorHandler;
 
     private accountDataForm: JQuery;
     private passwordForm: JQuery;
@@ -37,6 +38,7 @@ class AccountManager {
 
     constructor() {
         this.client = new AccountApiClient();
+        this.errorHandler = new ErrorHandler();
 
         this.accountSection = $("#update-account");
         this.passwordSection = $("#update-password");
@@ -91,10 +93,10 @@ class AccountManager {
             this.hideAlert(this.confirmCodeSendAlert);
             this.hideAlert(this.errorConfirmContactAlert);
 
-            this.client.resendConfirmCode(this.emailContactType).then(() => {
+            this.client.resendConfirmCode(this.emailContactType).done(() => {
                 this.showAlert(this.confirmCodeSendAlert);
-            }).catch(() => {
-                this.showAlert(this.errorConfirmContactAlert.text(localization.translate("ResendCodeError", "Account").value));
+            }).fail((response) => {
+                this.showAlert(this.errorConfirmContactAlert.text(this.errorHandler.getErrorMessage(response)));
             });
         });
 
@@ -111,11 +113,11 @@ class AccountManager {
                 event.preventDefault();
                 if (this.accountDataForm.valid()) {
                     this.client.updateAccount(this.accountDataForm.serialize())
-                        .then((response) => {
+                        .done((response) => {
                             this.accountSection.html(response.responseText);
                             this.initAccountDataForm();
                         })
-                        .catch((response) => {
+                        .fail((response) => {
                             this.accountSection.html(response.responseText);
                             this.initAccountDataForm();
                         });
@@ -131,12 +133,12 @@ class AccountManager {
                 event.preventDefault();
                 if (this.passwordForm.valid()) {
                     this.client.updatePassword(this.passwordForm.serialize())
-                        .then((response) => {
+                        .done((response) => {
                             this.passwordSection.html(response.responseText);
-                            this.initPasswordForm();
                         })
-                        .catch((response) => {
+                        .fail((response) => {
                             this.passwordSection.html(response.responseText);
+                        }).always(() => {
                             this.initPasswordForm();
                         });
                 }
@@ -152,12 +154,12 @@ class AccountManager {
                 event.preventDefault();
                 if (this.setTwoFactorForm.valid()) {
                     this.client.setTwoFactor(this.setTwoFactorForm.serialize())
-                        .then((response) => {
+                        .done((response) => {
                             this.twoFactorSection.html(response.responseText);
-                            this.initTwoFactorSettingsForm();
                         })
-                        .catch((error) => {
+                        .fail((error) => {
                             this.twoFactorSection.html(error.responseText);
+                        }).always(() => {
                             this.initTwoFactorSettingsForm();
                         });
                 }
@@ -168,12 +170,13 @@ class AccountManager {
                 event.preventDefault();
                 if (this.changeTwoFactorProviderForm.valid()) {
                     this.client.changeTwoFactorProvider(this.changeTwoFactorProviderForm.serialize())
-                        .then((response) => {
+                        .done((response) => {
                             this.twoFactorSection.html(response.responseText);
-                            this.initTwoFactorSettingsForm();
                         })
-                        .catch((error) => {
-                            this.twoFactorSection.html(error.responseText);
+                        .fail((response) => {
+                            this.twoFactorSection.html(response.responseText);
+                            
+                        }).always(() => {
                             this.initTwoFactorSettingsForm();
                         });
                 }
@@ -183,7 +186,7 @@ class AccountManager {
 
     sendUpdateContactRequest() {
         const email = $("#emailInput").val() as string;
-        this.client.updateContact(this.emailContactType, email, this.oldEmailValue).then(() => {
+        this.client.updateContact(this.emailContactType, email, this.oldEmailValue).done(() => {
             this.hideAlert(this.errorContactUpdateAlert);
             this.showAlert(this.successContactUpdateAlert);
             this.emailIsNotVerifiedTitle.removeClass("hide");
@@ -191,28 +194,19 @@ class AccountManager {
             this.confirmEmailPanel.removeClass("hide");
             this.showAlert(this.confirmCodeSendAlert);
             this.confirmEmailPanelBody.collapse("show");
-        }).catch((response) => {
-            if (response.responseText.hasOwnProperty("message")) {
-                this.showAlert(this.errorContactUpdateAlert.text(response.responseText.message));
-            } else if (response.responseText === "same-email") {
-                this.showAlert(this.errorContactUpdateAlert.text(localization.translate("SameEmail", "Account").value));
-            } else if (response.responseText === "empty-email") {
-                this.showAlert(
-                    this.errorContactUpdateAlert.text(localization.translate("EmptyEmail", "Account").value));
-            } else {
-                this.showAlert(this.errorContactUpdateAlert.text(response));
-            }
+        }).fail((response) => {
+            this.showAlert(this.errorContactUpdateAlert.text(this.errorHandler.getErrorMessage(response)));
         });
     }
 
     sendConfirmContactRequest() {
         const confirmCode = this.confirmEmailCodeInput.val() as string;
-        this.client.confirmContact(this.emailContactType, confirmCode).then((response) => {
+        this.client.confirmContact(this.emailContactType, confirmCode).done((response) => {
             this.hideAlert(this.errorConfirmContactAlert);
             this.hideAlert(this.confirmCodeSendAlert);
             this.hideAlert(this.successConfirmContactAlert);
 
-            if (Boolean(response) === false) {
+            if (response === false) {
                 this.showAlert(
                     this.errorConfirmContactAlert.text(localization.translate("ConfirmCodeNotValid", "Account").value));
             } else {
@@ -227,12 +221,8 @@ class AccountManager {
                 this.confirmEmailCodeInput.addClass("disabled");
                 this.confirmEmailSubmit.addClass("disabled");
             }
-        }).catch((response) => {
-            if (response.responseText.hasOwnProperty("message")) {
-                this.showAlert(this.errorConfirmContactAlert.text(response.responseText.message));
-            } else {
-                this.showAlert(this.errorConfirmContactAlert.text(response.responseText));
-            }
+        }).fail((response) => {
+            this.showAlert(this.errorConfirmContactAlert.text(this.errorHandler.getErrorMessage(response)));
         });
     }
 
