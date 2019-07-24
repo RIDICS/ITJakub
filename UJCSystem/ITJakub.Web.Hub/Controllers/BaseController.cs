@@ -76,7 +76,15 @@ namespace ITJakub.Web.Hub.Controllers
 
         protected IActionResult AjaxErrorResponse(string message, HttpStatusCode httpStatusCode = HttpStatusCode.InternalServerError)
         {
-            return new ObjectResult(new ErrorContract { ErrorMessage = message }) { StatusCode = (int)httpStatusCode };
+            var result = new ErrorContract
+            {
+                ErrorMessage = message
+            };
+
+            return new ObjectResult(result)
+            {
+                StatusCode = (int)httpStatusCode
+            };
         }
     }
 }
