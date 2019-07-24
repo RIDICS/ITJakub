@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using log4net;
-using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
@@ -29,26 +28,27 @@ namespace Vokabular.MainService.Core.Works.Permission
         protected override void ExecuteWorkImplementation()
         {
             var group = m_permissionRepository.FindGroupByExternalIdOrCreate(m_roleId);
-            var user = m_permissionRepository.FindById<User>(m_userId);
+            var user = m_permissionRepository.GetUserWithGroups(m_userId);
             if (user.ExternalId == null)
             {
                 throw new ArgumentException($"User with ID {user.Id} has missing ExternalID");
             }
 
-            //TODO switch logic: remove group from user (fetch lower amount of data)
-            if (group.Users == null)
+            if (user.Groups == null)
             {
                 if (m_log.IsWarnEnabled)
                 {
-                    string message = string.Format("Cannot remove user with id '{0}' from group with id '{1}'. Group is empty.", user.Id, group.Id);
+                    string message = $"Cannot remove Group with ID '{group.Id}' from User with ID '{user.Id}'. User is empty.";
                     m_log.Warn(message);
                 }
 
                 return;
             }
 
-            group.Users.Remove(user);
-            m_permissionRepository.Save(group);
+            // Remove group from user (fetch lower amount of data)
+
+            user.Groups.Remove(group);
+            m_permissionRepository.Save(user);
             m_permissionRepository.Flush();
 
 
