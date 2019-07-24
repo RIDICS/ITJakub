@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using Vokabular.Shared.Const;
 
@@ -53,6 +54,16 @@ namespace Vokabular.Shared.AspNetCore.Extensions
             if (claimsPrincipal.Identity.IsAuthenticated)
             {
                 return claimsPrincipal.FindFirst(ClaimTypes.Email)?.Value;
+            }
+
+            return null;
+        }
+
+        public static bool? IsEmailConfirmed(this ClaimsPrincipal claimsPrincipal)
+        {
+            if (claimsPrincipal.Identity.IsAuthenticated)
+            {
+                return Convert.ToBoolean(claimsPrincipal.FindFirst(CustomClaimTypes.EmailConfirmed)?.Value);
             }
 
             return null;

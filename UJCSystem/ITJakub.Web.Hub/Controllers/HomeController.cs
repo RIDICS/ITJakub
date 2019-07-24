@@ -6,6 +6,7 @@ using ITJakub.Web.Hub.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.AspNetCore.Extensions;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -28,16 +29,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult Index()
         {
-            if (IsUserLoggedIn())
-            {
-                using (var client = GetRestClient())
-                {
-                    var user = client.GetCurrentUser();
-                    return View(user);
-                }
-            }
-
-            return View(null);
+            return View();
         }
 
         public ActionResult About()

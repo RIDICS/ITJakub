@@ -1,14 +1,16 @@
-﻿@model Vokabular.MainService.DataContracts.Contracts.UserDetailContract
-@using ITJakub.Web.Hub.Constants
+﻿@using ITJakub.Web.Hub.Constants
 @using ITJakub.Web.Hub.Controllers
 @using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
+@using Vokabular.Shared.AspNetCore.Extensions
 
 @inject ILocalizationService Localizer
 @inject IRazorLocalizationService RazorLocalizer
 
 @{
     ViewBag.Title = Localizer.Translate("IndexTitle", "Home", LocTranslationSource.File);
+    var emailConfirmed = User.IsEmailConfirmed();
+
 }
 @section scripts{
     <script asp-append-version="true" src="~/js/itjakub.home.js"></script>
@@ -25,10 +27,11 @@
 </script>
 
 <div class="top-offset-main-site">
-    @if (Model != null && !Model.IsEmailConfirmed)
+  
+    @if (emailConfirmed.HasValue && !emailConfirmed.Value)
     {
         <div class="alert alert-warning">
-            <i class="fa fa-warning"></i> 
+            <i class="fa fa-warning"></i>
             @RazorLocalizer.TranslateFormat(
                 "EmailIsNotConfirmedAlert1",
                 "Home",
@@ -53,7 +56,7 @@
                 </button>
             </div>
             <div class="searchbar-inputs">
-                <input type="text" class="form-control searchbar-input" id="searchbox" placeholder=" @Localizer.Translate("Find...", "Home", LocTranslationSource.File)" style="max-width: 100%;"/>
+                <input type="text" class="form-control searchbar-input" id="searchbox" placeholder=" @Localizer.Translate("Find...", "Home", LocTranslationSource.File)" style="max-width: 100%;" />
             </div>
 
         </div>
@@ -61,7 +64,7 @@
 
     <div style="height: 73vh;">
         <div class="content-container left-panel">
-            <img src='@Url.Content("~/images/mlceni_pink.jpg")' alt="@Localizer.Translate("Silence", "Home", LocTranslationSource.File)" class="centered" style="max-height: 100%; max-width: 100%;"/>
+            <img src='@Url.Content("~/images/mlceni_pink.jpg")' alt="@Localizer.Translate("Silence", "Home", LocTranslationSource.File)" class="centered" style="max-height: 100%; max-width: 100%;" />
         </div>
         <div class="content-container right-panel">
             <div id="news" class="news">
