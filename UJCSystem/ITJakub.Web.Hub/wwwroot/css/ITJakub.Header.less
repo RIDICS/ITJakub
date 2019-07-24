@@ -335,6 +335,83 @@ ul.navbar-language li:hover a {
     }
 }
 
+
+a.main_logo_href {
+    .main_logo_text {
+        @media screen and (min-width: @extra-small-screen) {
+            display: inline-block;
+        }
+
+        @media screen and (min-width: @medium-screen) {
+            display: none;
+        }
+
+        @media screen and (min-width: @medium2-screen) {
+            display: inline-block;
+        }
+    }
+
+    & + .tooltip {
+        display: none !important;
+
+        @media screen and (min-width: @extra-small-screen) {
+            display: block !important;
+        }
+
+        @media screen and (min-width: @medium-screen) {
+            display: none !important;
+        }
+
+        @media screen and (min-width: @medium2-screen) {
+            display: block !important;
+        }
+    }
+}
+
+a.second_logo_href {
+    .second_logo_text {
+        @media screen and (min-width: @small-screen) {
+            display: inline-block;
+        }
+
+        @media screen and (min-width: @medium-screen) {
+            display: none;
+        }
+
+        @media screen and (min-width: @large-screen) {
+            display: inline-block;
+        }
+    }
+
+    & + .tooltip {
+        display: none;
+
+        @media screen and (min-width: @small-screen) {
+            display: block !important;
+        }
+
+        @media screen and (min-width: @medium-screen) {
+            display: none !important;
+        }
+
+        @media screen and (min-width: @large-screen) {
+            display: block !important;
+        }
+    }
+}
+
+.main-navbar-container {
+    .navbar-toggle {
+        & + .tooltip {
+            display: block !important;
+
+            @media screen and (min-width: @medium-screen) {
+                display: none !important;
+            }
+        }
+    }
+}
+
 .secondary-navbar-toggle.login span {
     margin-right: 10px;
 }
