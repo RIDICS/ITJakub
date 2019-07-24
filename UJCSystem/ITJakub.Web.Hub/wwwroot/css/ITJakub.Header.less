@@ -1,4 +1,5 @@
 ﻿@import "ITJakub.Colors.less";
+@import "ITJakub.Constants.less";
 @import "ITJakub.Fonts.less";
 
 .main_logo,
@@ -27,7 +28,7 @@ a.main_logo_href {
         margin-right: 0;
         float: left;
 
-        @media screen and (max-width: 1570px) {
+        @media screen and (max-width: @extra-large-screen) {
             height: 3rem;
             margin: 0.5rem;
             margin-right: 0;
@@ -35,12 +36,12 @@ a.main_logo_href {
         }
     }
 
-    @media screen and (min-width: 1220px) {
+    @media screen and (min-width: @medium-screen) {
         padding-top: 0;
         padding-bottom: 2px;
     }
 
-    @media screen and (min-width: 1571px) {
+    @media screen and (min-width: @extra-large-screen + 1px) {
         padding: 0.1rem 0;
         padding-right: 0.5rem;
     }
@@ -65,11 +66,11 @@ a.second_logo_href {
 
 a.second_logo_href + .tooltip,
 a.main_logo_href + .tooltip {
-    @media screen and (min-width: 1411px) {
+    @media screen and (min-width: @large-screen + 1px) {
         display: none !important;
     }
 
-    @media screen and (min-width: 521px) and (max-width: 1219px) {
+    @media screen and (min-width: @small-screen + 1px) and (max-width: @medium-screen - 1px) {
         display: none !important;
     }
 }
@@ -136,7 +137,7 @@ a.main_logo_href + .tooltip {
 }
 
 
-@media screen and (max-width: 1570px) {
+@media screen and (max-width: @extra-large-screen) {
     .main_logo_text,
     .second_logo_text {
         margin: .65rem 0 0 .75rem;
@@ -153,15 +154,15 @@ a.main_logo_href + .tooltip {
 
 .main_logo_text,
 .second_logo_text {
-    @media screen and (max-width: 1410px) {
+    @media screen and (max-width: @large-screen) {
         display: none;
     }
 
-    @media screen and (max-width: 1219px) {
+    @media screen and (max-width: @medium-screen - 1px) {
         display: inline-block;
     }
 
-    @media screen and (max-width: 520px) {
+    @media screen and (max-width: @small-screen) {
         display: none;
     }
 }
@@ -192,7 +193,7 @@ padding-left: 2rem;
 display: inline-block;
 list-style: none;
 
-    @media screen and (max-width: 1570px) {
+    @media screen and (max-width: @extra-large-screen) {
         display: block;
         position: relative;
     }
@@ -278,7 +279,7 @@ ul.navbar-language li:hover a {
             color: white;
         }
 
-        @media screen and (max-width: 1570px) {
+        @media screen and (max-width: @extra-large-screen) {
             &:hover,
             &.hover {
                 & > a span {
@@ -291,7 +292,7 @@ ul.navbar-language li:hover a {
             }
         }
 
-        @media screen and (min-width: 1571px) {
+        @media screen and (min-width: @extra-large-screen + 1px) {
             .navbar-login li {
                 max-width: 100px;
             }
@@ -312,7 +313,7 @@ ul.navbar-language li:hover a {
         display: block;
     }
 
-    @media screen and (min-width: 1571px) {
+    @media screen and (min-width: @extra-large-screen + 1px) {
         & + .tooltip {
             display: none !important;
         }
@@ -323,7 +324,7 @@ ul.navbar-language li:hover a {
     margin-right: 10px;
 }
 
-@media screen and (min-width: 1571px) {
+@media screen and (min-width: @extra-large-screen + 1px) {
     .secondary-navbar-toggle.login span {
         display: none;
         margin-right: 0;
