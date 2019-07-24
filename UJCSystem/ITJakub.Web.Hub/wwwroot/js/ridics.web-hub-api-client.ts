@@ -1,6 +1,6 @@
 ﻿class WebHubApiClient {
-    formContentType = "application/x-www-form-urlencoded";
-    jsonContentType = "application/json";
+    protected readonly formContentType = "application/x-www-form-urlencoded";
+    protected readonly jsonContentType = "application/json";
 
     post(url: string, data: string, contentType = this.jsonContentType): JQuery.Promise<any> {
         return $.ajax({
