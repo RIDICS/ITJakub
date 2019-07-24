@@ -9,7 +9,6 @@ class UserRolesEditor {
     private readonly userId: number;
     private readonly roleList: ListWithPagination;
     private readonly client: WebHubApiClient;
-    private readonly alertGenerator: AlertGenerator;
     private roleSearchCurrentSelectedItem: IGroup;
 
     constructor(mainContainer: string) {
@@ -30,7 +29,6 @@ class UserRolesEditor {
         this.roleList.init();
         this.initRemoveUserFromRoleButton();
         this.client = new WebHubApiClient();
-        this.alertGenerator = new AlertGenerator();
     }
 
     make() {
@@ -55,7 +53,7 @@ class UserRolesEditor {
             if ($("#tab2-select-existing").hasClass("active")) {
                 let roleId: number;
                 const alertHolder = $("#add-user-to-role-error");
-                this.alertGenerator.dismissAlert(alertHolder);
+                alertHolder.empty();
                 if (typeof this.roleSearchCurrentSelectedItem == "undefined")
                     roleId = $("#selectedUser").data("role-id");
                 else {
@@ -66,20 +64,20 @@ class UserRolesEditor {
                     this.roleList.reloadPage();
                     this.initRemoveUserFromRoleButton();
                 }).fail(() => {
-                    this.alertGenerator.addAlert(alertHolder,
-                        localization.translate("AddUserToRoleError", "PermissionJs").value);
+                    const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("AddUserToRoleError", "PermissionJs").value);
+                    alertHolder.empty().append(error.buildElement());
                 });
             } else {
                 const alertHolder = $("#create-role-with-user-error");
-                this.alertGenerator.dismissAlert(alertHolder);
+                alertHolder.empty();
                 const roleName = $("#new-group-name").val() as string;
                 const roleDescription = $("#new-group-description").val() as string;
                 this.client.createRoleWithUser(this.userId, roleName, roleDescription).done(() => {
                     $("#addToGroupDialog").modal("hide");
                     this.roleList.reloadPage();
                 }).fail(() => {
-                    this.alertGenerator.addAlert(alertHolder,
-                        localization.translate("CreateRoleWithUserError", "PermissionJs").value);
+                    const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("CreateRoleWithUserError", "PermissionJs").value);
+                    alertHolder.empty().append(error.buildElement());
                 });
             }
         });

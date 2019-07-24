@@ -96,41 +96,33 @@
         $listContainer.html("<div class=\"loader\"></div>");
 
         $.get(url).done((response) => {
-            if (response.hasOwnProperty("message")) {
-                this.totalCount = 0;
-                var alert = new AlertComponentBuilder(AlertType.Error).addContent(response.message);
-                $listContainer
-                    .empty()
-                    .append(alert.buildElement());
-            } else {
-                $listContainer.html(response);
-                this.initPagination();
+            $listContainer.html(response);
+            this.initPagination();
 
-                this.setUri(start, this.pageSize, this.search);
-                this.renderPaginationContainer(pageNumber);
+            this.setUri(start, this.pageSize, this.search);
+            this.renderPaginationContainer(pageNumber);
 
-                if (this.search) {
-                    this.resetSearchForm = $listContainer.find(".reset-search-form");
-                    this.resetSearchForm.submit((event) => {
-                        this.searchForm.find(".search-value").val("");
-                        event.preventDefault();
-                        this.removeSearchFromUri();
-                        this.search = null;
-                        this.loadPage(this.firstPageNumber);
-                    });
-                }
+            if (this.search) {
+                this.resetSearchForm = $listContainer.find(".reset-search-form");
+                this.resetSearchForm.submit((event) => {
+                    this.searchForm.find(".search-value").val("");
+                    event.preventDefault();
+                    this.removeSearchFromUri();
+                    this.search = null;
+                    this.loadPage(this.firstPageNumber);
+                });
+            }
 
-                if (typeof this.pageLoadCallback !== "undefined") {
-                    this.pageLoadCallback.call(this.contextForCallback, this);
-                }
+            if (typeof this.pageLoadCallback !== "undefined") {
+                this.pageLoadCallback.call(this.contextForCallback, this);
+            }
 
-                if (this.selector === "role" && typeof RoleManager !== "undefined") {
-                    if (typeof this.contextForCallback !== "undefined" && this.contextForCallback instanceof RoleManager) {
-                        this.contextForCallback.init(this);
-                    } else {
-                        var roleManager = new RoleManager();
-                        roleManager.init(this);
-                    }
+            if (this.selector === "role" && typeof RoleManager !== "undefined") {
+                if (typeof this.contextForCallback !== "undefined" && this.contextForCallback instanceof RoleManager) {
+                    this.contextForCallback.init(this);
+                } else {
+                    var roleManager = new RoleManager();
+                    roleManager.init(this);
                 }
             }
         }).fail(() => {

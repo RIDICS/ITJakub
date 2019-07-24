@@ -6,7 +6,6 @@
 class RoleManager {
     private readonly searchBox: SingleSetTypeaheadSearchBox<IUserDetail>;
     private readonly client: WebHubApiClient;
-    private readonly alertGenerator: AlertGenerator;
     private currentUserSelectedItem: IUserDetail;
     private userList: ListWithPagination;
     private roleList: ListWithPagination;
@@ -18,7 +17,6 @@ class RoleManager {
             (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(this.getFullNameString(item),
                 item.email));
         this.client = new WebHubApiClient();
-        this.alertGenerator = new AlertGenerator();
     }
 
     public init(list?: ListWithPagination) {
@@ -53,7 +51,8 @@ class RoleManager {
             container.html(response);
             this.initRemoveUserFromRoleButton();
         }).fail(() => {
-            this.alertGenerator.addAlert(container, localization.translate("ListError", "PermissionJs").value);
+            const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("ListError", "PermissionJs").value);
+            container.empty().append(error.buildElement());
         }).always(() => {
             this.userList = new ListWithPagination(`Permission/UsersByRole?roleId=${roleId}`,
                 10,
@@ -76,7 +75,8 @@ class RoleManager {
             container.html(response);
             this.initPermissionManaging();
         }).fail(() => {
-            this.alertGenerator.addAlert(container, localization.translate("ListError", "PermissionJs").value);
+            const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("ListError", "PermissionJs").value);
+            container.empty().append(error.buildElement());
         }).always(() => {
             const permissionList = new ListWithPagination(`Permission/RolePermissionList?roleId=${roleId}`,
                 10,
@@ -181,7 +181,7 @@ class RoleManager {
 
             addUserToRoleBtn.click(() => {
                 var roleError = $("#add-user-to-role-error");
-                this.alertGenerator.dismissAlert(roleError);
+                roleError.empty();
                 var roleId = $(".role-row.active").data("role-id");
                 var userId: number;
                 if (typeof this.currentUserSelectedItem == "undefined")
@@ -194,7 +194,8 @@ class RoleManager {
                     this.userList.reloadPage();
                     $("#addToRoleDialog").modal("hide");
                 }).fail(() => {
-                    this.alertGenerator.addAlert(roleError, localization.translate("AddUserToRoleError", "PermissionJs").value);
+                    const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("AddUserToRoleError", "PermissionJs").value);
+                    roleError.empty().append(error.buildElement());
                 });
             });
         }
@@ -213,12 +214,13 @@ class RoleManager {
             var roleName = $("#new-role-name").val() as string;
             var roleDescription = $("#new-role-description").val() as string;
             var roleError = $(".add-user-to-role-error");
-            this.alertGenerator.dismissAlert(roleError);
+            roleError.empty();
             this.client.createRole(roleName, roleDescription).done(() => {
                 $("#createRoleModal").modal("hide");
                 this.roleList.reloadPage();
             }).fail(() => {
-                this.alertGenerator.addAlert(roleError, localization.translate("CreateRoleError", "PermissionJs").value);
+                const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("CreateRoleError", "PermissionJs").value);
+                roleError.empty().append(error.buildElement());
             });
         });
     }
