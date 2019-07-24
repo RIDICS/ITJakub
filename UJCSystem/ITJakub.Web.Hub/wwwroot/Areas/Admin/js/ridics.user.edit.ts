@@ -4,24 +4,33 @@
 });
 
 class UserRolesEditor {
-    private readonly  mainContainer: string;
+    private readonly mainContainer: string;
     private readonly roleSearchBox: SingleSetTypeaheadSearchBox<IGroup>;
+    private readonly userId: number;
     private readonly roleList: ListWithPagination;
     private readonly client: WebHubApiClient;
-    private readonly userId: number;
+    private readonly alertGenerator: AlertGenerator;
     private roleSearchCurrentSelectedItem: IGroup;
 
     constructor(mainContainer: string) {
         this.mainContainer = mainContainer;
-        this.roleSearchBox = new SingleSetTypeaheadSearchBox<IGroup>("#groupSearchInput", "Permission",
+        this.roleSearchBox = new SingleSetTypeaheadSearchBox<IGroup>("#groupSearchInput",
+            "Permission",
             (item) => item.name,
             (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(item.name, item.description));
 
         this.userId = Number(getQueryStringParameterByName("userId"));
-        this.roleList = new ListWithPagination(`Permission/GetRolesByUser?userId=${this.userId}`, 10, "role", ViewType.Partial, false, this.initRemoveUserFromRoleButton, this);
+        this.roleList = new ListWithPagination(`Permission/GetRolesByUser?userId=${this.userId}`,
+            10,
+            "role",
+            ViewType.Partial,
+            false,
+            this.initRemoveUserFromRoleButton,
+            this);
         this.roleList.init();
         this.initRemoveUserFromRoleButton();
         this.client = new WebHubApiClient();
+        this.alertGenerator = new AlertGenerator();
     }
 
     make() {
@@ -46,7 +55,7 @@ class UserRolesEditor {
             if ($("#tab2-select-existing").hasClass("active")) {
                 let roleId: number;
                 const alertHolder = $("#add-user-to-role-error");
-                alertHolder.html("");
+                this.alertGenerator.dismissAlert(alertHolder);
                 if (typeof this.roleSearchCurrentSelectedItem == "undefined")
                     roleId = $("#selectedUser").data("role-id");
                 else {
@@ -57,18 +66,20 @@ class UserRolesEditor {
                     this.roleList.reloadPage();
                     this.initRemoveUserFromRoleButton();
                 }).fail(() => {
-                    alertHolder.html(`<div class="alert alert-danger">${localization.translate("AddUserToRoleError", "PermissionJs").value}</div>`);
+                    this.alertGenerator.addAlert(alertHolder,
+                        localization.translate("AddUserToRoleError", "PermissionJs").value);
                 });
             } else {
                 const alertHolder = $("#create-role-with-user-error");
-                alertHolder.html("");
+                this.alertGenerator.dismissAlert(alertHolder);
                 const roleName = $("#new-group-name").val() as string;
                 const roleDescription = $("#new-group-description").val() as string;
                 this.client.createRoleWithUser(this.userId, roleName, roleDescription).done(() => {
                     $("#addToGroupDialog").modal("hide");
                     this.roleList.reloadPage();
                 }).fail(() => {
-                    alertHolder.html(`<div class="alert alert-danger">${localization.translate("CreateRoleWithUserError", "PermissionJs").value}</div>`);
+                    this.alertGenerator.addAlert(alertHolder,
+                        localization.translate("CreateRoleWithUserError", "PermissionJs").value);
                 });
             }
         });
