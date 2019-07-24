@@ -46,8 +46,8 @@
                         </div>
                     </a>
 
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" title="Menu">
-                        <span class="glyphicon glyphicon-menu-hamburger"></span>
+                    <button type="button" class="navbar-toggle" data-toggle="tooltip" data-placement="left" title="@Localizer.Translate("Menu", "global")">
+                        <span class="glyphicon glyphicon-menu-hamburger" data-toggle="collapse" data-target=".navbar-collapse"></span>
                     </button>
 
                     @await Html.PartialAsync("_LoginPartial")
