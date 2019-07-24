@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
+using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
@@ -81,8 +82,14 @@ namespace Vokabular.MainService.Core.Managers
 
         public void UpdateUserContact(int userId, UpdateUserContactContract data)
         {
-            var contract = Mapper.Map<AuthChangeContactContract>(data);
-            contract.UserId = GetUserExternalId(userId);
+            var userExternalId = GetUserExternalId(userId);
+
+            var contract = new AuthChangeContactContract
+            {
+                ContactType = Mapper.Map<ContactTypeEnum>(data.ContactType),
+                UserId = userExternalId,
+                NewContactValue = data.NewContactValue
+            };
 
             var client = m_communicationProvider.GetAuthContactApiClient();
             client.ChangeContactAsync(contract).GetAwaiter().GetResult();
@@ -144,8 +151,12 @@ namespace Vokabular.MainService.Core.Managers
 
         public bool ConfirmContact(int userId, ConfirmUserContactContract data)
         {
-            var contract = Mapper.Map<AuthConfirmContactContract>(data);
-            contract.UserId = GetUserExternalId(userId);
+            var contract = new AuthConfirmContactContract
+            {
+                UserId = GetUserExternalId(userId),
+                ConfirmCode = data.ConfirmCode,
+                ContactType = Mapper.Map<ContactTypeEnum>(data.ContactType),
+            };
 
             var client = m_communicationProvider.GetAuthContactApiClient();
             return client.ConfirmContactAsync(contract).GetAwaiter().GetResult();
@@ -153,8 +164,11 @@ namespace Vokabular.MainService.Core.Managers
 
         public void ResendConfirmCode(int userId, UserContactContract data)
         {
-            var contract = Mapper.Map<AuthContactContract>(data);
-            contract.UserId = GetUserExternalId(userId);
+            var contract = new AuthContactContract
+            {
+                UserId = GetUserExternalId(userId),
+                ContactType = Mapper.Map<ContactTypeEnum>(data.ContactType),
+            };
 
             var client = m_communicationProvider.GetAuthContactApiClient();
             client.ResendCodeAsync(contract).GetAwaiter().GetResult();
@@ -162,7 +176,10 @@ namespace Vokabular.MainService.Core.Managers
 
         public void SetTwoFactor(int userId, UpdateTwoFactorContract data)
         {
-            var contract = Mapper.Map<AuthChangeTwoFactorContract>(data);
+            var contract = new AuthChangeTwoFactorContract
+            {
+                TwoFactorIsEnabled = data.TwoFactorIsEnabled,
+            };
 
             var client = m_communicationProvider.GetAuthUserApiClient();
             client.SetTwoFactorAsync(GetUserExternalId(userId), contract).GetAwaiter().GetResult();
@@ -170,7 +187,10 @@ namespace Vokabular.MainService.Core.Managers
 
         public void SelectTwoFactorProvider(int userId, UpdateTwoFactorProviderContract data)
         {
-            var contract = Mapper.Map<AuthChangeTwoFactorContract>(data);
+            var contract = new AuthChangeTwoFactorContract
+            {
+                TwoFactorProvider = data.TwoFactorProvider,
+            };
 
             var client = m_communicationProvider.GetAuthUserApiClient();
             client.SelectTwoFactorProviderAsync(GetUserExternalId(userId), contract).GetAwaiter().GetResult();
