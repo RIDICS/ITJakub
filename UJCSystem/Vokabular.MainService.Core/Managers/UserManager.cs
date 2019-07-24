@@ -168,7 +168,7 @@ namespace Vokabular.MainService.Core.Managers
             client.SetTwoFactorAsync(GetUserExternalId(userId), contract).GetAwaiter().GetResult();
         }
 
-        public void SelectTwoFactorProvider(int userId, UpdateTwoFactorContract data)
+        public void SelectTwoFactorProvider(int userId, UpdateTwoFactorProviderContract data)
         {
             var contract = Mapper.Map<AuthChangeTwoFactorContract>(data);
 

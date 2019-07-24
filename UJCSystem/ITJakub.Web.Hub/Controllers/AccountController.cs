@@ -251,8 +251,7 @@ namespace ITJakub.Web.Hub.Controllers
                     {
                         var contract = new UpdateTwoFactorContract
                         {
-                            TwoFactorIsEnabled = twoFactorVerificationViewModel.TwoFactorEnabled,
-                            TwoFactorProvider = twoFactorVerificationViewModel.SelectedTwoFactorProvider
+                            TwoFactorIsEnabled = twoFactorVerificationViewModel.TwoFactorEnabled
                         };
                         client.SetTwoFactor(User.GetId().Value, contract);
                         ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, true);
@@ -283,9 +282,8 @@ namespace ITJakub.Web.Hub.Controllers
                 {
                     try
                     {
-                        var contract = new UpdateTwoFactorContract
+                        var contract = new UpdateTwoFactorProviderContract
                         {
-                            TwoFactorIsEnabled = twoFactorVerificationViewModel.TwoFactorEnabled,
                             TwoFactorProvider = twoFactorVerificationViewModel.SelectedTwoFactorProvider
                         };
                         client.SelectTwoFactorProvider(User.GetId().Value, contract);

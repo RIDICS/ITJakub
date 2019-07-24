@@ -25,6 +25,10 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
 
             CreateMap<UpdateTwoFactorContract, ChangeTwoFactorContract>()
                 .ForMember(dest => dest.TwoFactorIsEnabled, opt => opt.MapFrom(src => src.TwoFactorIsEnabled))
+                .ForMember(dest => dest.TwoFactorProvider, opt => opt.Ignore());
+
+            CreateMap<UpdateTwoFactorProviderContract, ChangeTwoFactorContract>()
+                .ForMember(dest => dest.TwoFactorIsEnabled, opt => opt.Ignore())
                 .ForMember(dest => dest.TwoFactorProvider, opt => opt.MapFrom(src => src.TwoFactorProvider));
         }
     }

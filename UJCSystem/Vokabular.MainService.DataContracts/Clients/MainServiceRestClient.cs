@@ -2538,7 +2538,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Put<object>($"user/{userId}/edit", data);
+                Put<object>($"user/{userId}", data);
             }
             catch (HttpRequestException e)
             {
@@ -2598,7 +2598,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                return Post<bool>($"user/{userId}/confirmContact", data);
+                return Post<bool>($"user/{userId}/contact/confirmation", data);
             }
             catch (HttpRequestException e)
             {
@@ -2613,7 +2613,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Post<object>($"user/{userId}/confirmCode", data);
+                Post<object>($"user/{userId}/contact/confirmation/resend", data);
             }
             catch (HttpRequestException e)
             {
@@ -2639,11 +2639,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void SelectTwoFactorProvider(int userId, UpdateTwoFactorContract data)
+        public void SelectTwoFactorProvider(int userId, UpdateTwoFactorProviderContract data)
         {
             try
             {
-                Put<object>($"user/{userId}/twoFactorProvider", data);
+                Put<object>($"user/{userId}/twoFactor/provider", data);
             }
             catch (HttpRequestException e)
             {

@@ -174,7 +174,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [Authorize(PermissionNames.EditAnyUsersData)]
-        [HttpPut("{userId}/edit")]
+        [HttpPut("{userId}")]
         public IActionResult UpdateUser(int userId, [FromBody] UpdateUserContract data)
         {
             try
@@ -211,7 +211,7 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [HttpPost("{userId}/confirmContact")]
+        [HttpPost("{userId}/contact/confirmation")]
         public IActionResult ConfirmContact(int userId, [FromBody] ConfirmUserContactContract data)
         {
             try
@@ -229,7 +229,7 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [HttpPost("{userId}/confirmCode")]
+        [HttpPost("{userId}/contact/confirmation/resend")]
         public IActionResult ConfirmCode(int userId, [FromBody] UserContactContract data)
         {
             try
@@ -265,8 +265,8 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [HttpPut("{userId}/twoFactorProvider")]
-        public IActionResult TwoFactorProvider(int userId, [FromBody] UpdateTwoFactorContract data)
+        [HttpPut("{userId}/twoFactor/provider")]
+        public IActionResult TwoFactorProvider(int userId, [FromBody] UpdateTwoFactorProviderContract data)
         {
             try
             {

@@ -36,7 +36,10 @@ namespace Vokabular.MainService.DataContracts.Contracts
     public class UpdateTwoFactorContract
     {
         public bool TwoFactorIsEnabled { get; set; }
+    }
 
+    public class UpdateTwoFactorProviderContract
+    {
         public string TwoFactorProvider { get; set; }
     }
 }
