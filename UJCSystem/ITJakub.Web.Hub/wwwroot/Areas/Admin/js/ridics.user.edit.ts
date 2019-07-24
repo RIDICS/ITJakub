@@ -52,11 +52,11 @@ class UserRolesEditor {
                 else {
                     roleId = this.roleSearchCurrentSelectedItem.id;
                 }
-                this.client.addUserToRole(this.userId, roleId).then(() => {
+                this.client.addUserToRole(this.userId, roleId).done(() => {
                     $("#addToGroupDialog").modal("hide");
                     this.roleList.reloadPage();
                     this.initRemoveUserFromRoleButton();
-                }).catch(() => {
+                }).fail(() => {
                     alertHolder.html(`<div class="alert alert-danger">${localization.translate("AddUserToRoleError", "PermissionJs").value}</div>`);
                 });
             } else {
@@ -64,10 +64,10 @@ class UserRolesEditor {
                 alertHolder.html("");
                 const roleName = $("#new-group-name").val() as string;
                 const roleDescription = $("#new-group-description").val() as string;
-                this.client.createRoleWithUser(this.userId, roleName, roleDescription).then(() => {
+                this.client.createRoleWithUser(this.userId, roleName, roleDescription).done(() => {
                     $("#addToGroupDialog").modal("hide");
                     this.roleList.reloadPage();
-                }).catch(() => {
+                }).fail(() => {
                     alertHolder.html(`<div class="alert alert-danger">${localization.translate("CreateRoleWithUserError", "PermissionJs").value}</div>`);
                 });
             }
@@ -81,9 +81,9 @@ class UserRolesEditor {
             const alert = roleRow.find(".alert");
             alert.hide();
 
-            this.client.removeUserFromRole(this.userId, roleId).then(() => {
+            this.client.removeUserFromRole(this.userId, roleId).done(() => {
                 this.roleList.reloadPage();
-            }).catch(() => {
+            }).fail(() => {
                 alert.text(localization.translate("RemoveUserFromRoleError", "PermissionJs").value);
                 alert.show();
             });

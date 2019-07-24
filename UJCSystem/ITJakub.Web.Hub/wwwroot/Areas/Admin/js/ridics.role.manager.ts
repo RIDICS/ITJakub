@@ -4,11 +4,11 @@
 });
 
 class RoleManager {
-    private searchBox: SingleSetTypeaheadSearchBox<IUserDetail>;
+    private readonly searchBox: SingleSetTypeaheadSearchBox<IUserDetail>;
     private currentUserSelectedItem: IUserDetail;
-    public client: WebHubApiClient;
-    public userList;
-    public roleList: ListWithPagination;
+    private readonly client: WebHubApiClient;
+    private userList: ListWithPagination;
+    private roleList: ListWithPagination;
 
     constructor() {
         this.searchBox = new SingleSetTypeaheadSearchBox<IUserDetail>("#mainSearchInput",
@@ -47,10 +47,10 @@ class RoleManager {
         container.html("<div class=\"loader\"></div>");
         userSection.removeClass("hide");
 
-        this.client.getUsersByRole(roleId).then(response => {
+        this.client.getUsersByRole(roleId).done(response => {
             container.html(response);
             this.initRemoveUserFromRoleButton();
-        }).catch(() => {
+        }).fail(() => {
             container.html(`<div class="alert alert-danger">${localization.translate("ListError", "PermissionJs").value}</div>`);
         }).always(() => {
             this.userList = new ListWithPagination(`Permission/UsersByRole?roleId=${roleId}`,
@@ -70,10 +70,10 @@ class RoleManager {
         container.html("<div class=\"loader\"></div>");
         permissionSection.removeClass("hide");
 
-        this.client.getPermissionsByRole(roleId).then(response => {
+        this.client.getPermissionsByRole(roleId).done(response => {
             container.html(response);
             this.initPermissionManaging();
-        }).catch(() => {
+        }).fail(() => {
             container.html(`<div class="alert alert-danger">${localization.translate("ListError", "PermissionJs").value}</div>`);
         }).always(() => {
             const permissionList = new ListWithPagination(`Permission/RolePermissionList?roleId=${roleId}`,
@@ -88,38 +88,32 @@ class RoleManager {
     }
 
     private initPermissionManaging() {
-        $(".permission-row input[type=checkbox]").change((event) => {
-            event.preventDefault();
+
+        $(".permission-row input[type=checkbox]").on("click", (event) => {
             const permissionCheckboxInput = $(event.currentTarget);
+            const addPermission = $(event.currentTarget).is(":checked");
             const permissionRow = permissionCheckboxInput.parents(".permission-row");
             permissionRow.addClass("pending");
             const alert = permissionRow.find(".alert");
             alert.hide();
             const specialPermissionId = permissionRow.data("permission-id");
             const roleId = $(".role-row.active").data("role-id");
-            var test = permissionCheckboxInput.prop("checked");
-            console.log(test);
-            if ($(event.currentTarget).is(":checked")) {
-                this.client.addSpecialPermissionToRole(roleId, specialPermissionId).then(() => {
-                    permissionCheckboxInput.prop("checked", true);
-                }).catch(() => {
-                    permissionCheckboxInput.prop("checked", false);
-                    alert.text(localization.translate("PermissionError", "PermissionJs").value);
-                    alert.show();
-                }).always(() => {
-                    permissionRow.removeClass("pending");
-                });
+
+            let result: JQuery.jqXHR<any>;
+            if (addPermission) {
+                result = this.client.addSpecialPermissionToRole(roleId, specialPermissionId);
             } else {
-                this.client.removeSpecialPermissionToRole(roleId, specialPermissionId).then(() => {
-                    permissionCheckboxInput.prop("checked", false);
-                }).catch(() => {
-                    permissionCheckboxInput.prop("checked", true);
-                    alert.text(localization.translate("PermissionError", "PermissionJs").value);
-                    alert.show();
-                }).always(() => {
-                    permissionRow.removeClass("pending");
-                });
+                result = this.client.removeSpecialPermissionToRole(roleId, specialPermissionId);
             }
+
+            result.done(() => {
+            }).fail(() => {
+                permissionCheckboxInput.prop("checked", !addPermission);
+                alert.text(localization.translate("PermissionError", "PermissionJs").value);
+                alert.show();
+            }).always(() => {
+                permissionRow.removeClass("pending");
+            });
         });
     }
 
@@ -131,9 +125,9 @@ class RoleManager {
             alert.hide();
 
             var roleId = $(".role-row.active").data("role-id");
-            this.client.removeUserFromRole(userId, roleId).then(() => {
+            this.client.removeUserFromRole(userId, roleId).done(() => {
                 this.userList.reloadPage();
-            }).catch(() => {
+            }).fail(() => {
                 alert.text(localization.translate("RemoveUserFromRoleError", "PermissionJs").value);
                 alert.show();
             });
@@ -147,9 +141,9 @@ class RoleManager {
             var roleId = roleRow.data("role-id");
             var alert = roleRow.find(".alert");
             alert.hide();
-            this.client.deleteRole(roleId).then(() => {
+            this.client.deleteRole(roleId).done(() => {
                 this.roleList.reloadPage();
-            }).catch(() => {
+            }).fail(() => {
                 alert.text(localization.translate("RemoveRoleError", "PermissionJs").value);
                 alert.show();
             });
@@ -194,10 +188,10 @@ class RoleManager {
                     userId = this.currentUserSelectedItem.id;
                 }
 
-                this.client.addUserToRole(userId, roleId).then(() => {
+                this.client.addUserToRole(userId, roleId).done(() => {
                     this.userList.reloadPage();
                     $("#addToRoleDialog").modal("hide");
-                }).catch(() => {
+                }).fail(() => {
                     roleError.html(`<div class="alert alert-danger">${localization.translate("AddUserToRoleError", "PermissionJs").value}</div>`);
                 });
             });
@@ -218,10 +212,10 @@ class RoleManager {
             var roleDescription = $("#new-role-description").val() as string;
             var roleError = $(".add-user-to-role-error");
             roleError.html("");
-            this.client.createRole(roleName, roleDescription).then(() => {
+            this.client.createRole(roleName, roleDescription).done(() => {
                 $("#createRoleModal").modal("hide");
                 this.roleList.reloadPage();
-            }).catch(() => {
+            }).fail(() => {
                 roleError.html(`<div class="alert alert-danger">${localization.translate("CreateRoleError", "PermissionJs").value}</div>`);
             });
         });

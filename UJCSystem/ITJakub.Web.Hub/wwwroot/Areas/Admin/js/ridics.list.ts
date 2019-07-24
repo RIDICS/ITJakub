@@ -95,7 +95,7 @@
         const $listContainer = $(this.listContainerSelector);
         $listContainer.html("<div class=\"loader\"></div>");
 
-        $.get(url).then((response) => {
+        $.get(url).done((response) => {
             if (response.hasOwnProperty("message")) {
                 this.totalCount = 0;
                 var alert = new AlertComponentBuilder(AlertType.Error).addContent(response.message);
@@ -133,7 +133,7 @@
                     }
                 }
             }
-        }).catch(() => {
+        }).fail(() => {
             var alert = new AlertComponentBuilder(AlertType.Error).addContent(localization
                 .translate("ListError", "PermissionJs").value);
             $listContainer
