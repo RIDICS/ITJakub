@@ -2628,7 +2628,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Put<object>($"user/{userId}/twoFactor", data);
+                Put<object>($"user/{userId}/two-factor", data);
             }
             catch (HttpRequestException e)
             {
@@ -2643,7 +2643,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Put<object>($"user/{userId}/twoFactor/provider", data);
+                Put<object>($"user/{userId}/two-factor/provider", data);
             }
             catch (HttpRequestException e)
             {
@@ -2711,7 +2711,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Put<object>($"role/{roleId}/edit", data);
+                Put<object>($"role/{roleId}", data);
             }
             catch (HttpRequestException e)
             {

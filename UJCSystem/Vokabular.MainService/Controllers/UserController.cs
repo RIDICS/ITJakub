@@ -247,7 +247,7 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [HttpPut("{userId}/twoFactor")]
+        [HttpPut("{userId}/two-factor")]
         public IActionResult TwoFactor(int userId, [FromBody] UpdateTwoFactorContract data)
         {
             try
@@ -265,7 +265,7 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [HttpPut("{userId}/twoFactor/provider")]
+        [HttpPut("{userId}/two-factor/provider")]
         public IActionResult TwoFactorProvider(int userId, [FromBody] UpdateTwoFactorProviderContract data)
         {
             try
