@@ -1,4 +1,5 @@
 ﻿@import "ITJakub.Colors.less";
+@import "ITJakub.Constants.less";
 @import "ITJakub.Fonts.less";
 
 .main_logo,
@@ -27,7 +28,7 @@ a.main_logo_href {
         margin-right: 0;
         float: left;
 
-        @media screen and (max-width: 1570px) {
+        @media screen and (max-width: @extra-large-screen) {
             height: 3rem;
             margin: 0.5rem;
             margin-right: 0;
@@ -35,12 +36,12 @@ a.main_logo_href {
         }
     }
 
-    @media screen and (min-width: 1220px) {
+    @media screen and (min-width: @medium-screen) {
         padding-top: 0;
         padding-bottom: 2px;
     }
 
-    @media screen and (min-width: 1571px) {
+    @media screen and (min-width: @extra-large-screen + 1px) {
         padding: 0.1rem 0;
         padding-right: 0.5rem;
     }
@@ -60,6 +61,54 @@ a.second_logo_href {
 
     &:hover {
         background-color: @button-hover-background-color
+    }
+}
+
+a.second_logo_href + .tooltip,
+a.main_logo_href + .tooltip {
+    @media screen and (min-width: @large-screen + 1px) {
+        display: none !important;
+    }
+
+    @media screen and (min-width: @small-screen + 1px) and (max-width: @medium-screen - 1px) {
+        display: none !important;
+    }
+}
+
+.main-navbar-container {
+    .tooltip {
+        .tooltip-arrow,
+        .tooltip-inner {
+            color: white;
+            border-radius: 0px;
+        }
+
+        .tooltip-inner {
+            background-color: @menu-background-color;
+            border: 1px solid white;
+        }
+
+        &.in {
+            opacity: 1;
+        }
+
+        &.right {
+            .tooltip-arrow {
+                border-right-color: white;
+            }
+        }
+
+        &.left {
+            .tooltip-arrow {
+                border-left-color: white;
+            }
+        }
+
+        &.bottom {
+            .tooltip-arrow {
+                border-bottom-color: #A9A9A9;
+            }
+        }
     }
 }
 
@@ -94,7 +143,7 @@ a.second_logo_href {
 }
 
 
-@media screen and (max-width: 1570px) {
+@media screen and (max-width: @extra-large-screen) {
     .main_logo_text,
     .second_logo_text {
         margin: .65rem 0 0 .75rem;
@@ -111,15 +160,15 @@ a.second_logo_href {
 
 .main_logo_text,
 .second_logo_text {
-    @media screen and (max-width: 1410px) {
+    @media screen and (max-width: @large-screen) {
         display: none;
     }
 
-    @media screen and (max-width: 1219px) {
+    @media screen and (max-width: @medium-screen - 1px) {
         display: inline-block;
     }
 
-    @media screen and (max-width: 500px) {
+    @media screen and (max-width: @small-screen) {
         display: none;
     }
 }
@@ -150,7 +199,7 @@ padding-left: 2rem;
 display: inline-block;
 list-style: none;
 
-    @media screen and (max-width: 1570px) {
+    @media screen and (max-width: @extra-large-screen) {
         display: block;
         position: relative;
     }
@@ -218,7 +267,6 @@ ul.navbar-language li:hover a {
     .navbar-login li {
         margin: 0;
         padding: 0;
-        max-width: 100px;
         display: inline-block;
 
         a {
@@ -235,11 +283,24 @@ ul.navbar-language li:hover a {
     &.login {
         a {
             color: white;
+        }
 
-            @media screen and (max-width: 1570px) {
-                &:hover {
+        @media screen and (max-width: @extra-large-screen) {
+            &:hover,
+            &.hover {
+                & > a span {
                     opacity: 0.5;
                 }
+            }
+
+            .navbar-login li {
+                width: 100%;
+            }
+        }
+
+        @media screen and (min-width: @extra-large-screen + 1px) {
+            .navbar-login li {
+                max-width: 100px;
             }
         }
     }
@@ -257,13 +318,19 @@ ul.navbar-language li:hover a {
     &.hover ul {
         display: block;
     }
+
+    @media screen and (min-width: @extra-large-screen + 1px) {
+        & + .tooltip {
+            display: none !important;
+        }
+    }
 }
 
 .secondary-navbar-toggle.login span {
     margin-right: 10px;
 }
 
-@media screen and (min-width: 1571px) {
+@media screen and (min-width: @extra-large-screen + 1px) {
     .secondary-navbar-toggle.login span {
         display: none;
         margin-right: 0;

@@ -9,6 +9,7 @@
 
     "Komunitní": "Komunitní",
     "portál": "portál",
+    "Menu": "Menu",
 
     "FeedbackFormPlaceholder": "Type your feedback here...",
     "NameFormPlaceholder": "Type your name here...",
@@ -16,7 +17,7 @@
     "Send": "Send",
 
     "FeedbackSentTitle": "Feedback sent",
-    "FeedbackSentAlert": "Feedback successfuly sent.",
+    "FeedbackSentAlert": "Feedback successfully sent.",
 
     "Max": "Max.",
     "Remaining": "Remaining",
