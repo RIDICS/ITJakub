@@ -21,6 +21,10 @@ $(document as Node as Element).ready(() => {
     $(liTargetingActualPage).addClass('active');
     $(liTargetingActualPage).parents('li').addClass('active');
 
+    $(".navbar-toggle .glyphicon.glyphicon-menu-hamburger").on("touchstart", (event) => {
+        $(event.currentTarget.parentElement).toggleClass("toggled");
+    });
+
     // Fix navigation menu behavior for touch devices
     $("#main-plugins-menu > ul > li > a").on("touchstart", (event) => {
         event.preventDefault();
@@ -41,10 +45,9 @@ $(document as Node as Element).ready(() => {
         $buttonElement.toggleClass("hover");
     });
 
-    collapsibleMenu.on("show.bs.collapse",
-        (event) => {
-            $(".secondary-navbar-toggle").removeClass("hover");
-        });
+    collapsibleMenu.on("show.bs.collapse", () => {
+        $(".secondary-navbar-toggle").removeClass("hover");
+    });
 });
 
 function getQueryStringParameterByName(name) {
