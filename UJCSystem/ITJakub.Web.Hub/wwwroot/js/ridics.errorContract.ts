@@ -1,0 +1,3 @@
+﻿interface IErrorContract {
+    errorMessage: string
+}
