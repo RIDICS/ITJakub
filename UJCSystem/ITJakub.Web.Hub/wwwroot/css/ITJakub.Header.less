@@ -352,18 +352,18 @@ a.main_logo_href {
     }
 
     & + .tooltip {
-        display: none !important;
+        display: block !important;
 
         @media screen and (min-width: @extra-small-screen) {
-            display: block !important;
-        }
-
-        @media screen and (min-width: @medium-screen) {
             display: none !important;
         }
 
-        @media screen and (min-width: @medium2-screen) {
+        @media screen and (min-width: @medium-screen) {
             display: block !important;
+        }
+
+        @media screen and (min-width: @medium2-screen) {
+            display: none !important;
         }
     }
 }
@@ -384,18 +384,18 @@ a.second_logo_href {
     }
 
     & + .tooltip {
-        display: none;
+        display: block !important;
 
         @media screen and (min-width: @small-screen) {
-            display: block !important;
-        }
-
-        @media screen and (min-width: @medium-screen) {
             display: none !important;
         }
 
-        @media screen and (min-width: @large-screen) {
+        @media screen and (min-width: @medium-screen) {
             display: block !important;
+        }
+
+        @media screen and (min-width: @large-screen) {
+            display: none !important;
         }
     }
 }
