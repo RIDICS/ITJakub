@@ -152,16 +152,34 @@ class RoleManager {
     private initRemoveRoleButtons() {
         $(".remove-role").click((event) => {
             event.stopPropagation();
-            var roleRow = $(event.currentTarget).parents(".role-row");
-            var roleId = roleRow.data("role-id");
-            var alert = roleRow.find(".alert");
-            alert.hide();
-            this.clearSections();
-            this.client.deleteRole(roleId).done(() => {
-                this.roleList.reloadPage();
-            }).fail(() => {
-                alert.text(localization.translate("RemoveRoleError", "PermissionJs").value);
-                alert.show();
+            var roleName = $(event.currentTarget).parents(".role-row").find(".name").text();
+            bootbox.dialog({
+                title: localization.translate("Warning", "PermissionJs").value,
+                message: localization.translateFormat("DeleteRoleConfirm", [roleName],"PermissionJs").value,
+                buttons: {
+                    confirm: {
+                        label: localization.translate("Delete", "PermissionJs").value,
+                        className: "btn-default",
+                        callback: () => {
+                            var roleRow = $(event.currentTarget).parents(".role-row");
+                            var roleId = roleRow.data("role-id");
+                            var alert = roleRow.find(".alert");
+                            alert.hide();
+                            this.clearSections();
+                            this.client.deleteRole(roleId).done(() => {
+                                this.roleList.reloadPage();
+                            }).fail(() => {
+                                alert.text(localization.translate("RemoveRoleError", "PermissionJs").value);
+                                alert.show();
+                            });
+                        }
+                    },
+                    cancel: {
+                        label: localization.translate("Cancel", "PermissionJs").value,
+                        className: "btn-default",
+                        callback: () => {}
+                    }
+                }
             });
         });
     }

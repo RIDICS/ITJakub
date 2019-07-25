@@ -27,6 +27,11 @@
     "RemoveUserFromRoleError": "Nastala neočekávaná chyba při odstraňování uživatele ze skupiny.",
     "AddUserToRoleError": "Nastala neočekávaná chyba při přidávání uživatele do skupiny.",
     "CreateRoleWithUserError": "Nastala neočekávaná chyba při vytváření skupiny s uživatelem.",
-    "RoleIsNotSelected" : "Není vybrána skupina."
+    "RoleIsNotSelected": "Není vybrána skupina.",
+
+    "Cancel": "Zrušit",
+    "Delete": "Smazat",
+    "Warning": "Upozornění",
+    "DeleteRoleConfirm": "Opravdu chcete smazat skupinu {0}?"
   }
 }
