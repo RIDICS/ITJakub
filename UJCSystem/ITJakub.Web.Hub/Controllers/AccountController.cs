@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 using Scalesoft.Localization.AspNetCore;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Errors;
-using Vokabular.Shared.AspNetCore.Extensions;
 
 namespace ITJakub.Web.Hub.Controllers
 {
