@@ -33,11 +33,12 @@
             container: document.getElementById(selector + "-pagination") as HTMLDivElement,
             pageClickCallback: this.loadPage.bind(this)
         });
+        this.searchForm = $(`.${this.selector}-search-form`);
     }
 
     public init() {
-        this.searchForm = $(`.${this.selector}-search-form`);
-        this.searchForm.submit((event) => {
+        this.searchForm.off("submit");
+        this.searchForm.on("submit", (event) => {
             const searchValue = this.searchForm.find(".search-value").val() as string;
             event.preventDefault();
             this.search = searchValue;
