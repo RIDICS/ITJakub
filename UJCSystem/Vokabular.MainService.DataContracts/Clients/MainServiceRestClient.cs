@@ -2594,11 +2594,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public bool ConfirmUserContact(int userId, ConfirmUserContactContract data)
+        public bool ConfirmUserContact(ConfirmUserContactContract data)
         {
             try
             {
-                return Post<bool>($"user/{userId}/contact/confirmation", data);
+                return Post<bool>($"user/current/contact/confirmation", data);
             }
             catch (HttpRequestException e)
             {
@@ -2609,11 +2609,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void ResendConfirmCode(int userId, UserContactContract data)
+        public void ResendConfirmCode(UserContactContract data)
         {
             try
             {
-                Post<object>($"user/{userId}/contact/confirmation/resend", data);
+                Post<object>($"user/current/contact/confirmation/resend", data);
             }
             catch (HttpRequestException e)
             {
@@ -2624,11 +2624,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void SetTwoFactor(int userId, UpdateTwoFactorContract data)
+        public void SetTwoFactor(UpdateTwoFactorContract data)
         {
             try
             {
-                Put<object>($"user/{userId}/two-factor", data);
+                Put<object>($"user/current/two-factor", data);
             }
             catch (HttpRequestException e)
             {
@@ -2639,11 +2639,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void SelectTwoFactorProvider(int userId, UpdateTwoFactorProviderContract data)
+        public void SelectTwoFactorProvider(UpdateTwoFactorProviderContract data)
         {
             try
             {
-                Put<object>($"user/{userId}/two-factor/provider", data);
+                Put<object>($"user/current/two-factor/provider", data);
             }
             catch (HttpRequestException e)
             {

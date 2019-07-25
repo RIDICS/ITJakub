@@ -71,7 +71,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         protected IActionResult AjaxOkResponse()
         {
-            return new OkResult();
+            return new JsonResult(new {});
         }
 
         protected IActionResult AjaxErrorResponse(string message, HttpStatusCode httpStatusCode = HttpStatusCode.InternalServerError)

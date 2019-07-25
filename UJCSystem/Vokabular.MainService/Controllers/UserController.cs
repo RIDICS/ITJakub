@@ -211,11 +211,12 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [HttpPost("{userId}/contact/confirmation")]
-        public IActionResult ConfirmContact(int userId, [FromBody] ConfirmUserContactContract data)
+        [HttpPost("current/contact/confirmation")]
+        public IActionResult ConfirmContact([FromBody] ConfirmUserContactContract data)
         {
             try
             {
+                var userId = m_authenticationManager.GetCurrentUserId();
                 var result = m_userManager.ConfirmContact(userId, data);
                 return Json(result);
             }
@@ -229,11 +230,12 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [HttpPost("{userId}/contact/confirmation/resend")]
-        public IActionResult ConfirmCode(int userId, [FromBody] UserContactContract data)
+        [HttpPost("current/contact/confirmation/resend")]
+        public IActionResult ResendConfirmCode([FromBody] UserContactContract data)
         {
             try
             {
+                var userId = m_authenticationManager.GetCurrentUserId();
                 m_userManager.ResendConfirmCode(userId, data);
                 return Ok();
             }
@@ -247,11 +249,13 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [HttpPut("{userId}/two-factor")]
-        public IActionResult TwoFactor(int userId, [FromBody] UpdateTwoFactorContract data)
+        [Authorize(PermissionNames.SetTwoFactor)]
+        [HttpPut("current/two-factor")]
+        public IActionResult TwoFactor([FromBody] UpdateTwoFactorContract data)
         {
             try
             {
+                var userId = m_authenticationManager.GetCurrentUserId();
                 m_userManager.SetTwoFactor(userId, data);
                 return Ok();
             }
@@ -265,11 +269,13 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [HttpPut("{userId}/two-factor/provider")]
-        public IActionResult TwoFactorProvider(int userId, [FromBody] UpdateTwoFactorProviderContract data)
+        [Authorize(PermissionNames.SelectTwoFactorProvider)]
+        [HttpPut("current/two-factor/provider")]
+        public IActionResult TwoFactorProvider([FromBody] UpdateTwoFactorProviderContract data)
         {
             try
-            {
+            { 
+                var userId = m_authenticationManager.GetCurrentUserId();
                 m_userManager.SelectTwoFactorProvider(userId, data);
                 return Ok();
             }
