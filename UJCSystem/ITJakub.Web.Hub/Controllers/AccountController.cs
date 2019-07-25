@@ -205,7 +205,7 @@ namespace ITJakub.Web.Hub.Controllers
                         ConfirmCode = confirmUserContactRequest.ConfirmCode,
                         ContactType = confirmUserContactRequest.ContactType
                     };
-                    var result = client.ConfirmUserContact(User.GetId().Value, contract);
+                    var result = client.ConfirmUserContact(User.GetId(), contract);
                     return Json(result);
                 }
             }
@@ -228,7 +228,7 @@ namespace ITJakub.Web.Hub.Controllers
                     {
                         ContactType = resendConfirmCodeRequest.ContactType
                     };
-                    client.ResendConfirmCode(User.GetId().Value, contract);
+                    client.ResendConfirmCode(User.GetId(), contract);
                 }
             }
             catch (HttpErrorCodeException e)
@@ -253,7 +253,7 @@ namespace ITJakub.Web.Hub.Controllers
                         {
                             TwoFactorIsEnabled = twoFactorVerificationViewModel.TwoFactorEnabled
                         };
-                        client.SetTwoFactor(User.GetId().Value, contract);
+                        client.SetTwoFactor(User.GetId(), contract);
                         ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, true);
                     }
                     catch (HttpErrorCodeException e)
@@ -286,7 +286,7 @@ namespace ITJakub.Web.Hub.Controllers
                         {
                             TwoFactorProvider = twoFactorVerificationViewModel.SelectedTwoFactorProvider
                         };
-                        client.SelectTwoFactorProvider(User.GetId().Value, contract);
+                        client.SelectTwoFactorProvider(User.GetId(), contract);
                         ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, true);
                     }
                     catch (HttpErrorCodeException e)

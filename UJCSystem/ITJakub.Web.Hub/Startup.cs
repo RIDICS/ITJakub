@@ -130,7 +130,7 @@ namespace ITJakub.Web.Hub
                             var communicationProvider = context.HttpContext.RequestServices.GetRequiredService<CommunicationProvider>();
                             var client = communicationProvider.GetMainServiceClient();
 
-                            client.CreateUserIfNotExist(context.Principal.GetId().GetValueOrDefault());
+                            client.CreateUserIfNotExist(context.Principal.GetIdOrDefault().GetValueOrDefault());
 
                             return Task.CompletedTask;
                         },

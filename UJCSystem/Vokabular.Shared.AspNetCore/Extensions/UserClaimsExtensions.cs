@@ -7,7 +7,7 @@ namespace Vokabular.Shared.AspNetCore.Extensions
 {
     public static class UserClaimsExtensions
     {
-        public static int? GetId(this ClaimsPrincipal claimsPrincipal)
+        public static int? GetIdOrDefault(this ClaimsPrincipal claimsPrincipal)
         {
             var idClaim = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier);
 
@@ -17,6 +17,17 @@ namespace Vokabular.Shared.AspNetCore.Extensions
             }
 
             return null;
+        }
+
+        public static int GetId(this ClaimsPrincipal claimsPrincipal)
+        { 
+            var idClaim = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier);
+            if (claimsPrincipal.Identity.IsAuthenticated && idClaim != null)
+            {
+                return int.Parse(idClaim.Value);
+            }
+
+            throw new ArgumentException("User is not sign in.");
         }
 
         public static string GetUserName(this ClaimsPrincipal claimsPrincipal)
