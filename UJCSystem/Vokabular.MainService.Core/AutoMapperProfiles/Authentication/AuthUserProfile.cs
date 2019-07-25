@@ -16,7 +16,11 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles.Authentication
 
             CreateMap<Ridics.Authentication.DataContracts.User.UserContract, UserDetailContract>()
                 .IncludeBase<Ridics.Authentication.DataContracts.User.UserContract, UserContract>()
-                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email));
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.IsEmailConfirmed, opt => opt.MapFrom(src => src.EmailConfirmed))
+                .ForMember(dest => dest.TwoFactorEnabled, opt => opt.MapFrom(src => src.TwoFactorEnabled))
+                .ForMember(dest => dest.TwoFactorProvider, opt => opt.MapFrom(src => src.TwoFactorProvider))
+                .ForMember(dest => dest.ValidTwoFactorProviders, opt => opt.MapFrom(src => src.ValidTwoFactorProviders));
 
             CreateMap<Ridics.Authentication.DataContracts.UserWithRolesContract, UserContract>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())

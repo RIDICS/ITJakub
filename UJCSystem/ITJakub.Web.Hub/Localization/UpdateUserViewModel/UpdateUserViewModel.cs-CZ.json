@@ -3,7 +3,7 @@
   "scope": "UpdateUserViewModel",
   "dictionary": {
     "UserName": "Uživatelské jméno",
-    "Email": "Email",
+    "Email": "E-mail",
     "HasAtLeastNChars": "{0} musí obsahovat alespoň {2} znaků.",
     "FirstName": "Křestní jméno",
     "LastName": "Příjmení",

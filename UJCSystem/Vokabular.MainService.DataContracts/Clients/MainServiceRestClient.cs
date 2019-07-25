@@ -2339,6 +2339,21 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public void UpdateCurrentUserContact(UpdateUserContactContract data)
+        {
+            try
+            {
+                Put<object>("user/current/contact", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+        
         #endregion
 
         #region Card files
@@ -2523,7 +2538,22 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Put<object>($"user/{userId}/edit", data);
+                Put<object>($"user/{userId}", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void UpdateUserContact(int userId, UpdateUserContactContract data)
+        {
+            try
+            {
+                Put<object>($"user/{userId}/contact", data);
             }
             catch (HttpRequestException e)
             {
@@ -2554,6 +2584,66 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 Delete($"role/{roleId}/user/{userId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public bool ConfirmUserContact(ConfirmUserContactContract data)
+        {
+            try
+            {
+                return Post<bool>($"user/current/contact/confirmation", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void ResendConfirmCode(UserContactContract data)
+        {
+            try
+            {
+                Post<object>($"user/current/contact/confirmation/resend", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void SetTwoFactor(UpdateTwoFactorContract data)
+        {
+            try
+            {
+                Put<object>($"user/current/two-factor", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void SelectTwoFactorProvider(UpdateTwoFactorProviderContract data)
+        {
+            try
+            {
+                Put<object>($"user/current/two-factor/provider", data);
             }
             catch (HttpRequestException e)
             {
@@ -2621,7 +2711,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Put<object>($"role/{roleId}/edit", data);
+                Put<object>($"role/{roleId}", data);
             }
             catch (HttpRequestException e)
             {

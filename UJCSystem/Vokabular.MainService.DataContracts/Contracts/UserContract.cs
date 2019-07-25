@@ -21,8 +21,16 @@ namespace Vokabular.MainService.DataContracts.Contracts
     public class UserDetailContract : UserContract
     {
         public string Email { get; set; }
+        
+        public bool IsEmailConfirmed { get; set; }
 
         public List<RoleContract> Roles { get; set; }
+
+        public bool TwoFactorEnabled { get; set; }
+
+        public string TwoFactorProvider { get; set; }
+
+        public IList<string> ValidTwoFactorProviders { get; set; }
     }
 
     public class CreateUserContract : UserContract

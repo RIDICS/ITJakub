@@ -38,7 +38,8 @@
     "SignIn": "Sign in",
     "SignUp": "Sign up",
     "EditText": "Edit text",
-    "CreateText": "Create text"
+    "CreateText": "Create text",
+    "EmailIsNotConfirmedAlertDescription": "If e-mail is not confirmed, it is not possible to change the password, neither secure account with two-phase authentication. "
   },
   "plural": {
     "Characters": {

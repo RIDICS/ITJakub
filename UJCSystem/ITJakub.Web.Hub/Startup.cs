@@ -91,6 +91,7 @@ namespace ITJakub.Web.Hub
                     options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
                     options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
                     options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
+                    options.ClaimActions.MapJsonKey(CustomClaimTypes.EmailConfirmed, "email_confirmed");
                     options.ClaimActions.MapJsonKey(CustomClaimTypes.Permission, CustomClaimTypes.Permission);
                     options.ClaimActions.MapJsonKey(CustomClaimTypes.ResourcePermission, CustomClaimTypes.ResourcePermission);
                     options.ClaimActions.MapJsonKey(CustomClaimTypes.ResourcePermissionType, CustomClaimTypes.ResourcePermissionType);
@@ -129,7 +130,7 @@ namespace ITJakub.Web.Hub
                             var communicationProvider = context.HttpContext.RequestServices.GetRequiredService<CommunicationProvider>();
                             var client = communicationProvider.GetMainServiceClient();
 
-                            client.CreateUserIfNotExist(context.Principal.GetId().GetValueOrDefault());
+                            client.CreateUserIfNotExist(context.Principal.GetIdOrDefault().GetValueOrDefault());
 
                             return Task.CompletedTask;
                         },

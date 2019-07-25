@@ -1,27 +1,29 @@
 {
 	"culture":"cs-CZ",
 	"scope":"Home",
-	"dictionary": {
-		"AboutTitle": "O Vokabuláři webovém",
-		"VokabularVersion":"Verze Vokabuláře webového: {0}",
-		
-		"ContactsTitle":"Kontakty",
-		
-		"CopyrightTitle":"Copyright",
-		
-		"FeedbackTitle":"Připomínky",
-		
-		"HowToCiteTitle":"Jak citovat",
-		
-		"IndexTitle":"Úvodní stránka",
-		"Search":"Vyhledat",
-		"Specify":"Upřesnit",
-		"Find...":"Hledat...",
-		"Silence":"mlceni",
-		"News":"Aktuality",
-			
-		"LinksTitle":"Odkazy",
-		
-		"SupportTitle":"Podpora"
-	}
+  "dictionary": {
+    "AboutTitle": "O Vokabuláři webovém",
+    "VokabularVersion": "Verze Vokabuláře webového: {0}",
+
+    "ContactsTitle": "Kontakty",
+
+    "CopyrightTitle": "Copyright",
+
+    "FeedbackTitle": "Připomínky",
+
+    "HowToCiteTitle": "Jak citovat",
+
+    "IndexTitle": "Úvodní stránka",
+    "Search": "Vyhledat",
+    "Specify": "Upřesnit",
+    "Find...": "Hledat...",
+    "Silence": "mlceni",
+    "News": "Aktuality",
+
+    "LinksTitle": "Odkazy",
+
+    "SupportTitle": "Podpora",
+    "EmailIsNotConfirmedAlert1": "Vaše e-mailová adresa není ověřena. Prosím ověřte svou adresu v {0}.",
+    "EmailIsNotConfirmedAlert2": "profilu"
+  }
 }

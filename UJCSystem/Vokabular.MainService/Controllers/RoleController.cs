@@ -46,7 +46,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [Authorize(PermissionNames.ManageUserRoles)]
-        [HttpPut("{roleId}/edit")]
+        [HttpPut("{roleId}")]
         public IActionResult UpdateRole([FromBody] RoleContract data)
         {
             m_roleManager.UpdateRole(data);

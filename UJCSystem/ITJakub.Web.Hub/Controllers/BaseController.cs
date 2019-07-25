@@ -1,6 +1,8 @@
 using System.IO;
+using System.Net;
 using ITJakub.Lemmatization.Shared.Contracts;
 using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.DataContracts;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -65,6 +67,24 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 ModelState.AddModelError(string.Empty, error.Message);
             }
+        }
+
+        protected IActionResult AjaxOkResponse()
+        {
+            return new JsonResult(new {});
+        }
+
+        protected IActionResult AjaxErrorResponse(string message, HttpStatusCode httpStatusCode = HttpStatusCode.InternalServerError)
+        {
+            var result = new ErrorContract
+            {
+                ErrorMessage = message
+            };
+
+            return new ObjectResult(result)
+            {
+                StatusCode = (int)httpStatusCode
+            };
         }
     }
 }

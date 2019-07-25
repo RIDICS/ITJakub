@@ -28,7 +28,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public User GetCurrentUser(bool returnDefaultUserIfNull)
         {
-            var id = m_httpContextAccessor.HttpContext.User.GetId();
+            var id = m_httpContextAccessor.HttpContext.User.GetIdOrDefault();
 
             if (id.HasValue)
             {

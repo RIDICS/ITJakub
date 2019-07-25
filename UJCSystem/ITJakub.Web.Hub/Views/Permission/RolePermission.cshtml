@@ -12,58 +12,26 @@
 }
 
 @section scripts{
+    <script asp-append-version="true" src="~/js/ridics.web-hub-api-client.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.permission-api-client.js"></script>
     <script asp-append-version="true" src="~/Areas/Admin/js/ridics.list.js"></script>
     <script asp-append-version="true" src="~/Areas/Admin/js/ridics.role.manager.js"></script>
-    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.web-hub-api-client.js"></script>
 }
 
 <h2>@Localizer.Translate("GroupPermissionManagementHeadline", "Permission", LocTranslationSource.File)</h2>
 
 <div class="row">
-<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 role-section" id="role-section">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <div class="row page-control">
-                <div class="panel-title col col-xs-12 col-sm-2">
-                    @Localizer.Translate("Group", "Permission")
-                </div>
-                <div class="col col-xs-12 col col-sm-10">
-                    <form asp-action="RolePermission" asp-controller="Permission" method="get" class="role-search-form form-inline">
-                        <div class="form-group">
-                            <button id="createRoleButton" class="btn btn-default">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                            <div class="search-button">
-                                <button class="btn btn-default" type="submit">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </div>
-                            <input class="form-control search-value" name="search" value="@Model.SearchQuery"/>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="panel-body">
-            <div id="role-list-container" class="list-container">
-                @await Html.PartialAsync("Widget/_RoleListWidget", Model)
-            </div>
-            <div id="role-pagination" class="text-center"></div>
-        </div>
-    </div>
-</div>
-<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 user-section" id="user-section">
-    <div class="section hide">
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 role-section" id="role-section">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <div class="row page-control">
+                <div class="row">
                     <div class="panel-title col col-xs-12 col-sm-2">
-                        @Localizer.Translate("User", "Permission")
+                        @Localizer.Translate("Group", "Permission")
                     </div>
                     <div class="col col-xs-12 col col-sm-10">
-                        <form asp-action="UsersByRole" asp-controller="Permission" method="get" class="user-search-form form-inline">
+                        <form asp-action="RolePermission" asp-controller="Permission" method="get" class="role-search-form form-inline">
                             <div class="form-group">
-                                <button id="addRoleButton" class="btn btn-default">
+                                <button id="createRoleButton" class="btn btn-default">
                                     <i class="fa fa-plus"></i>
                                 </button>
                                 <div class="search-button">
@@ -71,30 +39,63 @@
                                         <i class="fa fa-search"></i>
                                     </button>
                                 </div>
-                                <input class="form-control search-value" name="search" value="@Model.SearchQuery"/>
+                                <input class="form-control search-value" name="search" value="@Model.SearchQuery" />
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
             <div class="panel-body">
-                <div id="user-list-container" class="list-container"></div>
-                <div id="user-pagination" class="text-center"></div>
+                <div id="role-list-container" class="list-container">
+                    @await Html.PartialAsync("Widget/_RoleListWidget", Model)
+                </div>
+                <div id="role-pagination" class="text-center"></div>
             </div>
         </div>
     </div>
-</div>
-
-<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 permission-section" id="permission-section">
-    <div class="section hide">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div class="row page-control">
-                    <div class="panel-title col col-xs-12 col-sm-2">
-                        @Localizer.Translate("Permissions", "Permission")
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 user-section" id="user-section">
+        <div class="section hide">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="panel-title col col-xs-12 col-sm-2">
+                            @Localizer.Translate("User", "Permission")
+                        </div>
+                        <div class="col col-xs-12 col col-sm-10">
+                            <form asp-action="UsersByRole" asp-controller="Permission" method="get" class="user-search-form form-inline">
+                                <div class="form-group">
+                                    <button id="addRoleButton" class="btn btn-default">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                    <div class="search-button">
+                                        <button class="btn btn-default" type="submit">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </div>
+                                    <input class="form-control search-value" name="search" value="@Model.SearchQuery" />
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <div class="col col-xs-12 col col-sm-10">
-                        <form asp-action="RolePermissionList" asp-controller="Permission" method="get" class="permission-search-form form-inline">
+                </div>
+                <div class="panel-body">
+                    <div id="user-list-container" class="list-container"></div>
+                    <div id="user-pagination" class="text-center"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 permission-section" id="permission-section">
+        <div class="section hide">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="panel-title col col-xs-12 col-sm-2">
+                            @Localizer.Translate("Permissions", "Permission")
+                        </div>
+                        <div class="col col-xs-12 col col-sm-10">
+                            <form asp-action="RolePermissionList" asp-controller="Permission" method="get" class="permission-search-form form-inline">
                                 <div class="form-group">
                                     <div class="search-button">
                                         <button class="btn btn-default" type="submit">
@@ -107,13 +108,13 @@
                         </div>
                     </div>
                 </div>
-            <div class="panel-body">
-                <div id="permission-list-container" class="list-container"></div>
-                <div id="permission-pagination" class="text-center"></div>
+                <div class="panel-body">
+                    <div id="permission-list-container" class="list-container"></div>
+                    <div id="permission-pagination" class="text-center"></div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 
 <div id="createRoleModal" class="modal fade" role="dialog">
@@ -157,7 +158,7 @@
             <div class="modal-body">
 
                 <div class="permission-search">
-                    <input type="text" class="form-control permission-search-input" id="mainSearchInput" placeholder="@Localizer.Translate("SearchUser", "Permission", LocTranslationSource.File)"/>
+                    <input type="text" class="form-control permission-search-input" id="mainSearchInput" placeholder="@Localizer.Translate("SearchUser", "Permission", LocTranslationSource.File)" />
                 </div>
 
                 <div class="content">
