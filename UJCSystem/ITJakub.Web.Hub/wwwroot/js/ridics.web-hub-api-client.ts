@@ -2,7 +2,7 @@
     protected readonly formContentType = "application/x-www-form-urlencoded";
     protected readonly jsonContentType = "application/json";
 
-    post(url: string, data: string, contentType = this.jsonContentType): JQuery.Promise<any> {
+    post(url: string, data: string, contentType = this.jsonContentType): JQuery.jqXHR {
         return $.ajax({
             type: "POST",
             traditional: true,
@@ -13,7 +13,7 @@
         });
     }
 
-    get(url: string): JQuery.Promise<any> {
+    get(url: string): JQuery.jqXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
