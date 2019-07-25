@@ -114,7 +114,7 @@ class AccountManager {
                 if (this.accountDataForm.valid()) {
                     this.client.updateAccount(this.accountDataForm.serialize())
                         .done((response) => {
-                            this.accountSection.html(response.responseText);
+                            this.accountSection.html(response);
                             this.initAccountDataForm();
                         })
                         .fail((response) => {
@@ -134,7 +134,7 @@ class AccountManager {
                 if (this.passwordForm.valid()) {
                     this.client.updatePassword(this.passwordForm.serialize())
                         .done((response) => {
-                            this.passwordSection.html(response.responseText);
+                            this.passwordSection.html(response);
                         })
                         .fail((response) => {
                             this.passwordSection.html(response.responseText);
@@ -155,7 +155,8 @@ class AccountManager {
                 if (this.setTwoFactorForm.valid()) {
                     this.client.setTwoFactor(this.setTwoFactorForm.serialize())
                         .done((response) => {
-                            this.twoFactorSection.html(response.responseText);
+                            console.log(response);
+                            this.twoFactorSection.html(response);
                         })
                         .fail((error) => {
                             this.twoFactorSection.html(error.responseText);
@@ -171,7 +172,7 @@ class AccountManager {
                 if (this.changeTwoFactorProviderForm.valid()) {
                     this.client.changeTwoFactorProvider(this.changeTwoFactorProviderForm.serialize())
                         .done((response) => {
-                            this.twoFactorSection.html(response.responseText);
+                            this.twoFactorSection.html(response);
                         })
                         .fail((response) => {
                             this.twoFactorSection.html(response.responseText);

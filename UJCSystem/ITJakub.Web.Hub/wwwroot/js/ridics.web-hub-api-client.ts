@@ -2,13 +2,16 @@
     protected readonly formContentType = "application/x-www-form-urlencoded";
     protected readonly jsonContentType = "application/json";
 
-    post(url: string, data: string, contentType = this.jsonContentType): JQuery.jqXHR {
+    protected readonly jsonDataType = "json";
+    protected readonly htmlDataType = "html";
+
+    post(url: string, data: string, contentType = this.jsonContentType, dataType = this.jsonDataType): JQuery.jqXHR {
         return $.ajax({
             type: "POST",
             traditional: true,
             url: url,
             data: data,
-            dataType: "json",
+            dataType: dataType,
             contentType: contentType
         });
     }

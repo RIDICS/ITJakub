@@ -22,28 +22,32 @@
     public updatePassword(passwordForm: string): JQuery.jqXHR {
         return this.post(this.getAccountControllerUrl() + "UpdatePassword",
             passwordForm,
-            this.formContentType
+            this.formContentType,
+            this.htmlDataType
         );
     }
 
     public updateAccount(accountDataForm: string): JQuery.jqXHR {
         return this.post(this.getAccountControllerUrl() + "UpdateAccount",
             accountDataForm,
-            this.formContentType
+            this.formContentType,
+            this.htmlDataType
         );
     }
 
     public setTwoFactor(twoFactorDataForm: string): JQuery.jqXHR {
         return this.post(this.getAccountControllerUrl() + "SetTwoFactor",
             twoFactorDataForm,
-            this.formContentType
+            this.formContentType,
+            this.htmlDataType
         );
     }
 
     public changeTwoFactorProvider(twoFactorDataForm: string): JQuery.jqXHR {
         return this.post(this.getAccountControllerUrl() + "ChangeTwoFactorProvider",
             twoFactorDataForm,
-            this.formContentType
+            this.formContentType,
+            this.htmlDataType
         );
     }
 
