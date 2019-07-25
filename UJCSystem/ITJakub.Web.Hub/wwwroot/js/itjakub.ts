@@ -11,6 +11,8 @@ $(document as Node as Element).ready(() => {
     localization = new Localization();
     localization.configureSiteUrl(getBaseUrl());
 
+    var collapsibleMenu = $(".main-navbar-container .navbar-collapse.collapse");
+    var navbarItems = $(".secondary-navbar-toggle");
     $(".main-navbar-container [data-toggle=\"tooltip\"]").tooltip();
 
     $('#main-plugins-menu').find('li').removeClass('active');
@@ -19,23 +21,32 @@ $(document as Node as Element).ready(() => {
     $(liTargetingActualPage).addClass('active');
     $(liTargetingActualPage).parents('li').addClass('active');
 
+    $(".navbar-toggle .glyphicon.glyphicon-menu-hamburger").on("touchstart", (event) => {
+        $(event.currentTarget.parentElement).toggleClass("toggled");
+    });
+
     // Fix navigation menu behavior for touch devices
     $("#main-plugins-menu > ul > li > a").on("touchstart", (event) => {
         event.preventDefault();
         var $liElement = $(event.currentTarget as Node as Element).closest(".has-sub");
         $liElement.siblings().removeClass("hover");
-        $(".secondary-navbar-toggle").removeClass("hover");
+        navbarItems.removeClass("hover");
         $liElement.toggleClass("hover");
     });
-    $(".secondary-navbar-toggle").on("touchstart", (event) => {
-        event.preventDefault();
+    navbarItems.on("touchstart", (event) => {
         if ($(event.target as Node as Element).is("a")) {
             return;
         }
+        event.preventDefault();
+        collapsibleMenu.collapse("hide");
         var $buttonElement = $(event.currentTarget as Node as Element);
         $buttonElement.siblings(".secondary-navbar-toggle").removeClass("hover");
         $("#main-plugins-menu > ul > li").removeClass("hover");
         $buttonElement.toggleClass("hover");
+    });
+
+    collapsibleMenu.on("show.bs.collapse", () => {
+        $(".secondary-navbar-toggle").removeClass("hover");
     });
 });
 

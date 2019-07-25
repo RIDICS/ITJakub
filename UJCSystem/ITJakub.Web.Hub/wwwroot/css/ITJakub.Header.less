@@ -116,7 +116,7 @@ a.main_logo_href + .tooltip {
 .second_logo_text {
     color: white;
     line-height: normal;
-    display: inline-block;
+    display: none;
     margin: .85rem 0 0;
     margin-left: .75rem;
     font-weight: bold;
@@ -140,12 +140,8 @@ a.main_logo_href + .tooltip {
         font-family: @sanserif-font-family-3;
         font-family: @sanserif-font-family-2;
     }
-}
 
-
-@media screen and (max-width: @extra-large-screen) {
-    .main_logo_text,
-    .second_logo_text {
+    @media screen and (max-width: @extra-large-screen) {
         margin: .65rem 0 0 .75rem;
 
         h1 {
@@ -155,21 +151,34 @@ a.main_logo_href + .tooltip {
         h2 {
             font-size: 18px;
         }
-    }
+    }    
 }
 
-.main_logo_text,
-.second_logo_text {
-    @media screen and (max-width: @large-screen) {
-        display: none;
-    }
-
-    @media screen and (max-width: @medium-screen - 1px) {
+.main_logo_text {
+    @media screen and (min-width: @extra-small-screen) {
         display: inline-block;
     }
 
-    @media screen and (max-width: @small-screen) {
+    @media screen and (min-width: @medium-screen) {
         display: none;
+    }
+
+    @media screen and (min-width: @medium2-screen) {
+        display: inline-block;
+    }
+}
+
+.second_logo_text {
+    @media screen and (min-width: @small-screen) {
+        display: inline-block;
+    }
+
+    @media screen and (min-width: @medium-screen) {
+        display: none;
+    }
+
+    @media screen and (min-width: @large-screen) {
+        display: inline-block;
     }
 }
 
@@ -321,6 +330,87 @@ ul.navbar-language li:hover a {
 
     @media screen and (min-width: @extra-large-screen + 1px) {
         & + .tooltip {
+            display: none !important;
+        }
+    }
+}
+
+
+a.main_logo_href {
+    .main_logo_text {
+        @media screen and (min-width: @extra-small-screen) {
+            display: inline-block;
+        }
+
+        @media screen and (min-width: @medium-screen) {
+            display: none;
+        }
+
+        @media screen and (min-width: @medium2-screen) {
+            display: inline-block;
+        }
+    }
+
+    & + .tooltip {
+        display: block !important;
+
+        @media screen and (min-width: @extra-small-screen) {
+            display: none !important;
+        }
+
+        @media screen and (min-width: @medium-screen) {
+            display: block !important;
+        }
+
+        @media screen and (min-width: @medium2-screen) {
+            display: none !important;
+        }
+    }
+}
+
+a.second_logo_href {
+    .second_logo_text {
+        @media screen and (min-width: @small-screen) {
+            display: inline-block;
+        }
+
+        @media screen and (min-width: @medium-screen) {
+            display: none;
+        }
+
+        @media screen and (min-width: @large-screen) {
+            display: inline-block;
+        }
+    }
+
+    & + .tooltip {
+        display: block !important;
+
+        @media screen and (min-width: @small-screen) {
+            display: none !important;
+        }
+
+        @media screen and (min-width: @medium-screen) {
+            display: block !important;
+        }
+
+        @media screen and (min-width: @large-screen) {
+            display: none !important;
+        }
+    }
+}
+
+.main-navbar-container {
+    .navbar-toggle {
+        & + .tooltip {
+            display: block !important;
+
+            @media screen and (min-width: @medium-screen) {
+                display: none !important;
+            }
+        }
+
+        &.toggled + .tooltip {
             display: none !important;
         }
     }
