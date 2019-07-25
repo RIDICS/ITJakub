@@ -213,7 +213,7 @@ class RoleManager {
         $("#create-role").click(() => {
             var roleName = $("#new-role-name").val() as string;
             var roleDescription = $("#new-role-description").val() as string;
-            var roleError = $(".add-user-to-role-error");
+            var roleError = $("#create-role-error");
             roleError.empty();
             this.client.createRole(roleName, roleDescription).done(() => {
                 $("#createRoleModal").modal("hide");

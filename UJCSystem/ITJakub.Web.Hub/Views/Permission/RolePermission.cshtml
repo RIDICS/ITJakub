@@ -138,8 +138,8 @@
                             <input class="form-control" id="new-role-description" name="new-text" type="text">
                         </div>
                     </div>
+                    <div id="create-role-error"></div>
                 </div>
-                <div class="create-role-error"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "Permission", LocTranslationSource.File)</button>
@@ -157,7 +157,6 @@
                 <h4 class="modal-title">@Localizer.Translate("AddToGroup", "Permission", LocTranslationSource.File)</h4>
             </div>
             <div class="modal-body">
-
                 <div class="permission-search">
                     <input type="text" class="form-control permission-search-input" id="mainSearchInput" placeholder="@Localizer.Translate("SearchUser", "Permission", LocTranslationSource.File)"/>
                 </div>
@@ -177,8 +176,8 @@
                             <span id="selectedUser"></span>
                         </div>
                     </div>
+                    <div id="add-user-to-role-error"></div>
                 </div>
-                <div id="add-user-to-role-error"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "Permission", LocTranslationSource.File)</button>

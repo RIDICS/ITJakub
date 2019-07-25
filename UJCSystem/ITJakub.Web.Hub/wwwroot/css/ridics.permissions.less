@@ -25,8 +25,8 @@
 
 .list-container {
     .alert-info {
-        margin-top: 20px;
-        margin-bottom: 15px;
+        margin-top: 8px;
+        margin-bottom: 8px;
     }
 
     .selectable-table {
@@ -45,6 +45,13 @@
                 border: none
             }
         }
+
+        tr {
+            .alert {
+                padding: 3px 7px;
+                margin: 1px 0 0 0;
+            }
+        }
     }
 
     .buttons {
@@ -58,6 +65,48 @@
             &:first-of-type {
                 margin-left: 0;
             }
+        }
+    }
+
+    .role-row {
+        .description {
+            font-size: 11px;
+            white-space: normal;
+        }
+
+        .buttons {
+            min-width: 90px;
+        }
+    }
+
+    .permission-row {
+        .spinner-font {
+            display: inline-block;
+            font-size: 14px;
+            vertical-align: -2px;
+            margin-right: 0;
+            margin-left: -1px;
+            margin-top: 3px;
+            margin-bottom: 5px;
+        }
+
+        .loading-spinner {
+            float: left;
+            display: none;
+        }
+
+        &.pending .loading-spinner {
+            display: block;
+        }
+
+        &.pending .permission-checkbox-input {
+            display: none;
+        }
+
+        .alert {
+            display: none;
+            margin-top: 3px;
+            margin-bottom: 3px;
         }
     }
 }
@@ -104,52 +153,13 @@
     }
 }
 
-.role-row {
-    .description {
-        font-size: 11px;
-        white-space: normal;
-    }
-
-    .buttons {
-        min-width: 90px;
-    }
-}
-
-
-
 .modal {
-    .content {
+    .content,
+    .form-horizontal {
         margin-top: 1em;
-    }
-}
 
-.permission-row {
-    .spinner-font {
-        display: inline-block;
-        font-size: 14px;
-        vertical-align: -2px;
-        margin-right: 0;
-        margin-left: -1px;
-        margin-top: 3px;
-        margin-bottom: 5px;
-    }
-
-    .loading-spinner {
-        float: left;
-        display: none;
-    }
-
-    &.pending .loading-spinner {
-        display: block;
-    }
-
-    &.pending .permission-checkbox-input {
-        display: none;
-    }
-
-    .alert {
-        display: none;
-        margin-top: 3px;
-        margin-bottom: 3px;
+        .alert {
+            margin: 10px 0 0 0;
+        }
     }
 }
