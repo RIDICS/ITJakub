@@ -26,6 +26,7 @@
     "CreateRoleError": "Nastala neočekávaná chyba při vytváření skupiny.",
     "RemoveUserFromRoleError": "Nastala neočekávaná chyba při odstraňování uživatele ze skupiny.",
     "AddUserToRoleError": "Nastala neočekávaná chyba při přidávání uživatele do skupiny.",
-    "CreateRoleWithUserError": "Nastala neočekávaná chyba při vytváření skupiny s uživatelem."
+    "CreateRoleWithUserError": "Nastala neočekávaná chyba při vytváření skupiny s uživatelem.",
+    "RoleIsNotSelected" : "Není vybrána skupina."
   }
 }

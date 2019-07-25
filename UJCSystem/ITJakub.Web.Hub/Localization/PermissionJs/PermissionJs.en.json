@@ -26,6 +26,7 @@
     "CreateRoleError": "An unexpected error occurred when creating the group.",
     "RemoveUserFromRoleError": "An unexpected error occurred when removing the user from the group.",
     "AddUserToRoleError": "An unexpected error occurred when adding the user to the group.",
-    "CreateRoleWithUserError": "An unexpected error occurred when creating the group with the user."
+    "CreateRoleWithUserError": "An unexpected error occurred when creating the group with the user.",
+    "RoleIsNotSelected": "The group is not selected."
   }
 }
