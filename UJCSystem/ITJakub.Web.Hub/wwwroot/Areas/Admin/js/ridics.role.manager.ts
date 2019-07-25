@@ -189,14 +189,10 @@ class RoleManager {
     private initSearchBox() {
         this.searchBox.setDataSet("User");
         this.searchBox.create((selectedExists: boolean, selectionConfirmed: boolean) => {
-            if (!selectedExists || this.searchBox.getInputValue() === "") {
-
-            }
-
             if (selectionConfirmed) {
                 this.currentUserSelectedItem = this.searchBox.getValue();
-                var userBox = $("#selectedUser");
-                var name = this.getFullNameString(this.currentUserSelectedItem);
+                const userBox = $("#selectedUser");
+                const name = this.getFullNameString(this.currentUserSelectedItem);
                 userBox.text(name);
                 userBox.data("user-id", this.currentUserSelectedItem.id);
             }
@@ -207,13 +203,20 @@ class RoleManager {
             addUserToRoleBtn.data("init", true);
 
             const initModalBtn = $("#addRoleButton");
+            const addToRoleDialog = $("#addToRoleDialog");
             initModalBtn.click(() => {
                 if (!initModalBtn.hasClass("disabled")) {
-                    var role = $(".role-row.active");
+                    const role = $(".role-row.active");
                     $("#specificRoleName").text(role.find(".name").text());
                     $("#specificRoleDescription").text(role.find(".description").text());
-                    $("#addToRoleDialog").modal();
+                    addToRoleDialog.modal();
                 }
+            });
+
+            addToRoleDialog.on("hidden.bs.modal", () => {
+                this.currentUserSelectedItem = null; 
+                addToRoleDialog.find("#mainSearchInput").val("");
+                addToRoleDialog.find("#selectedUser").text(localization.translate("UserIsNotSelected", "Permission").value);
             });
 
             addUserToRoleBtn.click(() => {
@@ -221,7 +224,8 @@ class RoleManager {
                 roleError.empty();
                 var roleId = $(".role-row.active").data("role-id");
                 var userId: number;
-                if (typeof this.currentUserSelectedItem == "undefined")
+
+               if (typeof this.currentUserSelectedItem == "undefined" || this.currentUserSelectedItem == null)
                     userId = $("#selectedUser").data("user-id");
                 else {
                     userId = this.currentUserSelectedItem.id;
@@ -229,7 +233,7 @@ class RoleManager {
 
                 this.client.addUserToRole(userId, roleId).done(() => {
                     this.userList.reloadPage();
-                    $("#addToRoleDialog").modal("hide");
+                    addToRoleDialog.modal("hide");
                 }).fail(() => {
                     const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("AddUserToRoleError", "PermissionJs").value);
                     roleError.empty().append(error.buildElement());
