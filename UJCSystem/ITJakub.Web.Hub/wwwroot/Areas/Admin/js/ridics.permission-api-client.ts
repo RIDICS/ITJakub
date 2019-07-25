@@ -1,4 +1,4 @@
-﻿class WebHubApiClient {
+﻿class PermissionApiClient extends WebHubApiClient {
     public getUsersByRole(roleId: number): JQuery.jqXHR {
         return this.get(URI(this.getPermissionControllerUrl() + "UsersByRole").search(query => {
             query.roleId = roleId;
@@ -58,25 +58,6 @@
             this.getPermissionControllerUrl() + "DeleteRole",
             JSON.stringify({ roleId: roleId })
         );
-    }
-
-    private post(url: string, data: string): JQuery.jqXHR {
-        return $.ajax({
-            type: "POST",
-            traditional: true,
-            url: url,
-            data: data,
-            dataType: "json",
-            contentType: "application/json"
-        });
-    }
-
-    private get(url: string): JQuery.jqXHR {
-        return $.ajax({
-            type: "GET",
-            traditional: true,
-            url: url
-        });
     }
 
     private getPermissionControllerUrl(): string {

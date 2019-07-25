@@ -8,6 +8,7 @@ using ITJakub.Web.Hub.DataContracts;
 using ITJakub.Web.Hub.Helpers;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Requests.Permission;
+using ITJakub.Web.Hub.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -132,10 +133,14 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult EditUser(int userId)
+        public ActionResult EditUser(int userId, bool successUpdate = false)
         {
             using (var client = GetRestClient())
             {
+                if (successUpdate)
+                {
+                    ViewData.Add(AccountConstants.SuccessUserUpdate, true);
+                }
                 var result = client.GetUserDetail(userId);
                 var model = Mapper.Map<UpdateUserViewModel>(result);
                 return View(model);
@@ -146,29 +151,29 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditUser(UpdateUserViewModel userViewModel)
         {
-            using (var client = GetRestClient())
+            if (ModelState.IsValid)
             {
-                var data = new UpdateUserContract
+                using (var client = GetRestClient())
                 {
-                    Email = userViewModel.Email,
-                    FirstName = userViewModel.FirstName,
-                    LastName = userViewModel.LastName
-                };
+                    var data = new UpdateUserContract
+                    {
+                        FirstName = userViewModel.FirstName,
+                        LastName = userViewModel.LastName
+                    };
 
-                try
-                {
-                    client.UpdateUser(userViewModel.Id, data);
+                    try
+                    {
+                        client.UpdateUser(userViewModel.Id, data);
+                        return RedirectToAction("EditUser", new {userId = userViewModel.Id, successUpdate = true});
+                    }
+                    catch (HttpErrorCodeException e)
+                    {
+                        AddErrors(e);
+                    }
                 }
-                catch (HttpErrorCodeException e)
-                {
-                    AddErrors(e);
-                }
-
-                var user = client.GetUserDetail(userViewModel.Id);
-                var model = Mapper.Map<UpdateUserViewModel>(user);
-                ViewData.Add(AccountConstants.SuccessUserUpdate, true);
-                return View(model);
             }
+
+            return View(userViewModel);
         }
 
         public ActionResult EditRole(int roleId)

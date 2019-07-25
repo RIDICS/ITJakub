@@ -2,7 +2,8 @@
 {
     public class AccountConstants
     {
-        public const string SuccessPasswordChange = "SuccessPasswordChange";
-        public const string SuccessUserUpdate = "SuccessUpdateAccount";
+        public const string SuccessPasswordUpdate = "SuccessPasswordUpdate";
+        public const string SuccessUserUpdate = "SuccessUserUpdate";
+        public const string SuccessTwoFactorUpdate = "SuccessTwoFactorUpdate";
     }
 }

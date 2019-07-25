@@ -1,4 +1,4 @@
-﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<ITJakub.Web.Hub.Models.UserDetailViewModel>
+﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<ITJakub.Web.Hub.Models.User.UserDetailViewModel>
 @using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
 
@@ -21,7 +21,7 @@
 <div class="user-section">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <div class="row page-control">
+            <div class="row">
                 <div class="col-sm-offset-6 col-sm-6 col-lg-offset-8 col-lg-4">
                     <form asp-action="UserPermission" asp-controller="Permission" method="get" class="user-search-form form-inline">
                         <div class="form-group">

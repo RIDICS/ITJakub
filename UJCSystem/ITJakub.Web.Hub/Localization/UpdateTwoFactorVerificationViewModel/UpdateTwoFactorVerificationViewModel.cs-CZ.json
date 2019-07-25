@@ -1,0 +1,8 @@
+{
+  "culture": "cs-CZ",
+  "scope": "UpdateTwoFactorVerificationViewModel",
+  "dictionary": {
+    "TwoFactorEnabled": "Zapnout dvoufaktorové ověření",
+    "SelectedTwoFactorProvider": "Způsob dvoufaktorového ověření"
+  }
+}

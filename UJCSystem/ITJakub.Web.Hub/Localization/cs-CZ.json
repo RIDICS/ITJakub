@@ -9,6 +9,7 @@
 
     "Komunitní": "Komunitní",
     "portál": "portál",
+    "Menu": "Menu" ,
 
     "FeedbackFormPlaceholder": "Zde napište vaši připomínku...",
     "NameFormPlaceholder": "Zde zadejte Vaše jméno...",
@@ -37,7 +38,8 @@
     "LogOut": "Odhlásit",
     "SignUp": "Registace",
     "EditText": "Upravit text",
-    "CreateText": "Vytvořit text"
+    "CreateText": "Vytvořit text",
+    "EmailIsNotConfirmedAlertDescription": "Pokud není e-mail ověřen, není možné obnovit heslo ani zabezpečit účet pomocí druhého faktoru."
   },
   "plural": {
     "Characters": {

@@ -1,11 +1,14 @@
-﻿using AutoMapper;
+﻿using System.Net;
+using AutoMapper;
 using ITJakub.Web.Hub.Constants;
 using ITJakub.Web.Hub.Core.Communication;
-using ITJakub.Web.Hub.Models;
+using ITJakub.Web.Hub.Models.Requests.Permission;
+using ITJakub.Web.Hub.Models.User;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Scalesoft.Localization.AspNetCore;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Errors;
 
@@ -14,8 +17,11 @@ namespace ITJakub.Web.Hub.Controllers
     [Authorize]
     public class AccountController : BaseController
     {
-        public AccountController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        private readonly ILocalizationService m_localizationService;
+
+        public AccountController(CommunicationProvider communicationProvider, ILocalizationService localizationService) : base(communicationProvider)
         {
+            m_localizationService = localizationService;
         }
 
         //
@@ -81,19 +87,10 @@ namespace ITJakub.Web.Hub.Controllers
 
         //
         // GET: /Account/AccountSettings
-        public IActionResult AccountSettings()
+        public IActionResult AccountSettings(AccountTab actualTab = AccountTab.UpdateAccount)
         {
-            using (var client = GetRestClient())
-            {
-                var user = client.GetCurrentUser();
-                var viewmodel = new AccountDetailViewModel
-                {
-                    UpdateUserViewModel = Mapper.Map<UpdateUserViewModel>(user),
-                    UpdatePasswordViewModel = null,
-                    ActualTab = AccountTab.UpdateAccount
-                };
-                return View(viewmodel);
-            }
+            var viewmodel = CreateAccountDetailViewModel(actualTab);
+            return View(viewmodel);
         }
 
         //
@@ -101,7 +98,7 @@ namespace ITJakub.Web.Hub.Controllers
         [HttpPost]
         [RequireHttps]
         [ValidateAntiForgeryToken]
-        public IActionResult UpdateAccount(UpdateUserViewModel model)
+        public IActionResult UpdateAccount(UpdateUserViewModel updateUserViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -111,10 +108,8 @@ namespace ITJakub.Web.Hub.Controllers
                     {
                         var updateUserContract = new UpdateUserContract
                         {
-                            AvatarUrl = null, //TODO Avatar
-                            Email = model.Email,
-                            FirstName = model.FirstName,
-                            LastName = model.LastName
+                            FirstName = updateUserViewModel.FirstName,
+                            LastName = updateUserViewModel.LastName
                         };
 
                         client.UpdateCurrentUser(updateUserContract);
@@ -123,24 +118,14 @@ namespace ITJakub.Web.Hub.Controllers
                 }
                 catch (HttpErrorCodeException e)
                 {
+                    ViewData.Add(AccountConstants.SuccessUserUpdate, false);
                     AddErrors(e);
                 }
             }
 
-
-            using (var client = GetRestClient())
-            {
-                var user = client.GetCurrentUser();
-                var updateUserViewModel = Mapper.Map<UpdateUserViewModel>(user);
-                var viewModel = new AccountDetailViewModel
-                {
-                    UpdateUserViewModel = updateUserViewModel,
-                    UpdatePasswordViewModel = null
-                };
-                return View("AccountSettings", viewModel);
-            }
+            return PartialView("Settings/_UpdateAccount", updateUserViewModel);
         }
-
+        
         //
         // POST: /Account/UpdatePassword
         [HttpPost]
@@ -161,25 +146,161 @@ namespace ITJakub.Web.Hub.Controllers
                         };
 
                         client.UpdateCurrentPassword(updateUserPasswordContract);
-                        ViewData.Add(AccountConstants.SuccessPasswordChange, true);
+                        ViewData.Add(AccountConstants.SuccessPasswordUpdate, true);
+                        return PartialView("Settings/_UpdatePassword", null);
                     }
                 }
                 catch (HttpErrorCodeException e)
                 {
+                    ViewData.Add(AccountConstants.SuccessPasswordUpdate, false);
                     AddErrors(e);
+                }
+            }
+
+            return PartialView("Settings/_UpdatePassword", model);
+        }
+
+        //
+        // POST: /Account/UpdateContact
+        [HttpPost]
+        public IActionResult UpdateContact([FromBody] UpdateUserContactContract updateUserContactContract)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(updateUserContactContract.NewContactValue))
+                {
+                    return AjaxErrorResponse(m_localizationService.Translate("EmptyEmail", "Account"), HttpStatusCode.BadRequest);
+                }
+
+                if (updateUserContactContract.NewContactValue == updateUserContactContract.OldContactValue)
+                {
+                    return AjaxErrorResponse(m_localizationService.Translate("SameEmail", "Account"), HttpStatusCode.BadRequest);
+                }
+
+                using (var client = GetRestClient())
+                {
+                    client.UpdateCurrentUserContact(updateUserContactContract);
+                }
+            }
+            catch (HttpErrorCodeException e)
+            {
+                return AjaxErrorResponse(e.Message, e.StatusCode);
+            }
+
+            return AjaxOkResponse();
+        }
+
+        //
+        // POST: /Account/ConfirmUserContact
+        [HttpPost]
+        public IActionResult ConfirmUserContact([FromBody] ConfirmUserContactRequest confirmUserContactRequest)
+        {
+            try
+            {
+                using (var client = GetRestClient())
+                {
+                    var contract = new ConfirmUserContactContract
+                    {
+                        ConfirmCode = confirmUserContactRequest.ConfirmCode,
+                        ContactType = confirmUserContactRequest.ContactType
+                    };
+                    var result = client.ConfirmUserContact(contract);
+                    return Json(result);
+                }
+            }
+            catch (HttpErrorCodeException e)
+            {
+                return AjaxErrorResponse(e.Message, e.StatusCode);
+            }
+        }
+
+        //
+        // POST: /Account/ResendConfirmCode
+        [HttpPost]
+        public IActionResult ResendConfirmCode([FromBody] ResendConfirmCodeRequest resendConfirmCodeRequest)
+        {
+            try
+            {
+                using (var client = GetRestClient())
+                {
+                    var contract = new UserContactContract
+                    {
+                        ContactType = resendConfirmCodeRequest.ContactType
+                    };
+                    client.ResendConfirmCode(contract);
+                }
+            }
+            catch (HttpErrorCodeException e)
+            {
+                return AjaxErrorResponse(m_localizationService.Translate("ResendCodeError", "Account"), e.StatusCode);
+            }
+
+            return AjaxOkResponse();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SetTwoFactor(UpdateTwoFactorVerificationViewModel twoFactorVerificationViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var client = GetRestClient())
+                {
+                    try
+                    {
+                        var contract = new UpdateTwoFactorContract
+                        {
+                            TwoFactorIsEnabled = twoFactorVerificationViewModel.TwoFactorEnabled
+                        };
+                        client.SetTwoFactor(contract);
+                        ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, true);
+                    }
+                    catch (HttpErrorCodeException e)
+                    {
+                        ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, false);
+                        AddErrors(e);
+                    }
                 }
             }
 
             using (var client = GetRestClient())
             {
                 var user = client.GetCurrentUser();
-                var viewModel = new AccountDetailViewModel
+                twoFactorVerificationViewModel = Mapper.Map<UpdateTwoFactorVerificationViewModel>(user);
+                return PartialView("Settings/_UpdateTwoFactorVerification", twoFactorVerificationViewModel);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeTwoFactorProvider(UpdateTwoFactorVerificationViewModel twoFactorVerificationViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var client = GetRestClient())
                 {
-                    UpdateUserViewModel = Mapper.Map<UpdateUserViewModel>(user),
-                    UpdatePasswordViewModel = model,
-                    ActualTab = AccountTab.UpdatePassword
-                };
-                return View("AccountSettings", viewModel);
+                    try
+                    {
+                        var contract = new UpdateTwoFactorProviderContract
+                        {
+                            TwoFactorProvider = twoFactorVerificationViewModel.SelectedTwoFactorProvider
+                        };
+                        client.SelectTwoFactorProvider(contract);
+                        ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, true);
+                    }
+                    catch (HttpErrorCodeException e)
+                    {
+                        ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, false);
+                        AddErrors(e);
+                    }
+                }
+            }
+
+            using (var client = GetRestClient())
+            {
+                var user = client.GetCurrentUser();
+                twoFactorVerificationViewModel = Mapper.Map<UpdateTwoFactorVerificationViewModel>(user);
+                return PartialView("Settings/_UpdateTwoFactorVerification", twoFactorVerificationViewModel);
             }
         }
 
@@ -209,6 +330,22 @@ namespace ITJakub.Web.Hub.Controllers
             }
 
             return RedirectToAction("Index", "Home");
+        }
+
+        private AccountDetailViewModel CreateAccountDetailViewModel(AccountTab accountTab = AccountTab.UpdateAccount)
+        {
+            using (var client = GetRestClient())
+            {
+                var user = client.GetCurrentUser();
+                return new AccountDetailViewModel
+                {
+                    UpdateUserViewModel = Mapper.Map<UpdateUserViewModel>(user),
+                    UpdatePasswordViewModel = null,
+                    UpdateContactViewModel = Mapper.Map<UpdateContactViewModel>(user),
+                    UpdateTwoFactorVerificationViewModel = Mapper.Map<UpdateTwoFactorVerificationViewModel>(user),
+                    ActualTab = accountTab
+                };
+            }
         }
     }
 }

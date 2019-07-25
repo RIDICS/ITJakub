@@ -5,7 +5,7 @@
 
 class RoleManager {
     private readonly searchBox: SingleSetTypeaheadSearchBox<IUserDetail>;
-    private readonly client: WebHubApiClient;
+    private readonly client: PermissionApiClient;
     private currentUserSelectedItem: IUserDetail;
     private userList: ListWithPagination;
     private roleList: ListWithPagination;
@@ -16,7 +16,7 @@ class RoleManager {
             this.getFullNameString,
             (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(this.getFullNameString(item),
                 item.email));
-        this.client = new WebHubApiClient();
+        this.client = new PermissionApiClient();
     }
 
     public init(list?: ListWithPagination) {

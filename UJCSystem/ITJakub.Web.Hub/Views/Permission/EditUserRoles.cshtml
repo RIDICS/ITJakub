@@ -1,6 +1,6 @@
 ﻿@using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
-@model ITJakub.Web.Hub.Models.UserDetailViewModel
+@model ITJakub.Web.Hub.Models.User.UserDetailViewModel
 @inject ILocalizationService Localizer
 
 @{
@@ -11,10 +11,11 @@
     <link asp-append-version="true" href="~/css/ridics.permissions.css" rel="stylesheet" />
 }
 @section scripts{
+    <script asp-append-version="true" src="~/js/ridics.web-hub-api-client.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.web-hub-api-client.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.permission-api-client.js"></script>
     <script asp-append-version="true" src="~/Areas/Admin/js/ridics.list.js"></script>
     <script asp-append-version="true" src="~/Areas/Admin/js/ridics.user.edit.js"></script>
-    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.web-hub-api-client.js"></script>
-    <script asp-append-version="true" src="~/js/ridics.alert-generator.js"></script>
 }
 
 <h2>@Localizer.Translate("EditUsersGroupsTitle", "Permission", LocTranslationSource.File)</h2>

@@ -1,6 +1,6 @@
 {
-	"culture":"cs-CZ",
-	"scope":"Account",
+  "culture": "cs-CZ",
+  "scope": "Account",
   "dictionary": {
     "UseExternalLoginService": "Použít jinou službu pro přihlášení",
     "UseExternalLoginService-placeholder": "Zde by mělo být možné se zaregistrovat pomocí jiných účtu",
@@ -25,6 +25,26 @@
 
     "PasswordChange": "Změna hesla",
     "UpdatePasswordSubmit": "Změnit heslo",
-    "SuccessPasswordChange": "Heslo bylo úspěšně změněno."
+    "SuccessPasswordChange": "Heslo bylo úspěšně změněno.",
+
+    "UpdateContact": "Úprava kontaktů",
+    "EmailAddressUpdate": "Změna e-mailové adresy",
+    "EmailAddressVerification": "Ověření e-mailové adresy",
+    "EmailAddressIsNotVerified": "E-mailová adresa není ověřena",
+    "SuccessContactUpdate": "Kontakt byl úspešně změněn. Nyní je potřeba ho ověřit.",
+    "ConfirmCodeSend": "Potvrzovací kód byl odeslán na e-mailovou adresu {0}.",
+    "Change": "Změnit",
+    "Confirm": "Potvrdit",
+    "ResendCode": "Znovu odeslat kód",
+    "SuccessConfirmContact": "Kontakt byl úspešně ověřen.",
+
+    "EmptyEmail": "E-mail nemůže být prázdný.",
+    "SameEmail": "Nový e-mail nemůže být stejný jako původní.",
+    "ConfirmCodeNotValid": "Ověřovací kód není správný.",
+    "ResendCodeError": "Při odesílání ověřovacího kódu došlo k neočekávané chybě.",
+
+    "UpdateTwoFactorVerification": "Dvoufaktorové ověření",
+    "SuccessTwoFactorUpdate": "Nastavení dvoufaktorového ověření bylo úspšeně aktualizováno.",
+    "Save": "Uložit"
   }
 }

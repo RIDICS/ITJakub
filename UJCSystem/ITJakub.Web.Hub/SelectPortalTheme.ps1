@@ -39,8 +39,14 @@ function copyLessFile {
     [string]$SourceFilePath
   )
   
-  Set-Content -Path (Join-Path $cssPath $OutputFileName) -Value "//-----Generated content-----`r`n"
-  Add-Content -Path (Join-Path $cssPath $OutputFileName) -Value (Get-Content -Path $SourceFilePath)
+  $OutputFilePath = Join-Path $cssPath $OutputFileName
+  Write-Output "Generating: ${OutputFilePath}"
+  
+  # Set-Content sometimes fails with “Stream was not readable”, so it is replaced by [System.IO.File]
+  # Set-Content -Path $OutputFilePath -Value "//-----Generated content-----`r`n" -Force -ErrorAction Stop
+  [System.IO.File]::WriteAllText($OutputFilePath, "//-----Generated content-----`r`n")
+  
+  Add-Content -Path $OutputFilePath -Value (Get-Content -Path $SourceFilePath) -Force -ErrorAction Stop
 }
 
 if ($Args.Count -gt 0) {

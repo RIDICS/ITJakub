@@ -8,7 +8,7 @@ class UserRolesEditor {
     private readonly roleSearchBox: SingleSetTypeaheadSearchBox<IGroup>;
     private readonly userId: number;
     private readonly roleList: ListWithPagination;
-    private readonly client: WebHubApiClient;
+    private readonly client: PermissionApiClient;
     private roleSearchCurrentSelectedItem: IGroup;
 
     constructor(mainContainer: string) {
@@ -28,7 +28,7 @@ class UserRolesEditor {
             this);
         this.roleList.init();
         this.initRemoveUserFromRoleButton();
-        this.client = new WebHubApiClient();
+        this.client = new PermissionApiClient();
     }
 
     make() {
