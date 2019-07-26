@@ -48,6 +48,7 @@ class RoleManager {
 
         this.initCreateRoleModal();
         this.initRemoveRoleButtons();
+        this.initEditRoleButtons();
         this.initSearchBox();
     }
 
@@ -164,10 +165,64 @@ class RoleManager {
         });
     }
 
+    private initEditRoleButtons() {
+        const editRoleDialog = $("#editRoleDialog");
+        $(".edit-role").click((event) => {
+            event.stopPropagation();
+            const roleRow = $(event.currentTarget).parents(".role-row");
+            const roleId = roleRow.data("role-id");
+            const roleName = roleRow.find(".name").text();
+            const roleDescription = roleRow.find(".description").text();
+
+            editRoleDialog.find("input[name=\"Id\"]").val(roleId);
+            editRoleDialog.find("input[name=\"Name\"]").val(roleName);
+            editRoleDialog.find("input[name=\"Description\"]").val(roleDescription);
+            editRoleDialog.find(".form-group").removeClass("has-error");
+
+            editRoleDialog.find(".alert-success").remove();
+            const errorSummary = editRoleDialog.find(".validation-summary-errors");
+            errorSummary.switchClass("validation-summary-errors", "validation-summary-valid").empty();
+            if (errorSummary.length) {
+                errorSummary.switchClass("validation-summary-errors", "validation-summary-valid").empty();
+            }
+
+            editRoleDialog.modal("show");
+        });
+
+        this.initEditRoleForm();
+    }
+
+    private initEditRoleForm() {
+        const editRoleForm = $("#editRoleForm");
+
+        editRoleForm.on("submit", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+    
+            if (editRoleForm.valid()) {
+                const editRoleSection = $("#editRoleSection");
+                this.client.editRole(editRoleForm.serialize())
+                    .done((response) => {
+                        editRoleSection.html(response);
+                        if (editRoleForm.find(".alert-success").length) {
+                            this.roleList.reloadPage();
+                        }
+                    })
+                    .fail((error) => {
+                        editRoleSection.html(error.responseText);
+                    }).always(() => {
+                        this.initEditRoleForm();
+                    });
+            }
+        });
+    }
+
+
     private initRemoveRoleButtons() {
         $(".remove-role").click((event) => {
             event.stopPropagation();
-            var roleName = $(event.currentTarget).parents(".role-row").find(".name").text();
+            const roleRow = $(event.currentTarget).parents(".role-row");
+            const roleName = roleRow.find(".name").text();
             bootbox.dialog({
                 title: localization.translate("Warning", "PermissionJs").value,
                 message: localization.translateFormat("DeleteRoleConfirm", [roleName],"PermissionJs").value,
@@ -176,9 +231,8 @@ class RoleManager {
                         label: localization.translate("Delete", "PermissionJs").value,
                         className: "btn-default",
                         callback: () => {
-                            var roleRow = $(event.currentTarget).parents(".role-row");
-                            var roleId = roleRow.data("role-id");
-                            var alert = roleRow.find(".alert");
+                            const roleId = roleRow.data("role-id");
+                            const alert = roleRow.find(".alert");
                             alert.hide();
                             this.clearSections();
                             this.client.deleteRole(roleId).done(() => {

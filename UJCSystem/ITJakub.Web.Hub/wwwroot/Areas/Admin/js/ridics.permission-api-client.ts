@@ -60,6 +60,15 @@
         );
     }
 
+    public editRole(editRoleDataForm: string): JQuery.jqXHR {
+        return this.post(
+            this.getPermissionControllerUrl() + "EditRole",
+            editRoleDataForm,
+            this.formContentType,
+            this.htmlDataType
+        );
+    }
+
     private getPermissionControllerUrl(): string {
         return getBaseUrl() + "Permission/";
     }

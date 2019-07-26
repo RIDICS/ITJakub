@@ -181,10 +181,13 @@
 .modal {
     .content,
     .form-horizontal {
-        margin-top: 1em;
-
         .alert {
             margin: 10px 0 0 0;
+
+            &.validation-summary-errors,
+            &.alert-success {
+                margin: 10px 0;
+            }
         }
     }
 }

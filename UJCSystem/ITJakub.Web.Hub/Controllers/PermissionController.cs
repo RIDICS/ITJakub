@@ -176,35 +176,32 @@ namespace ITJakub.Web.Hub.Controllers
             return View(userViewModel);
         }
 
-        public ActionResult EditRole(int roleId)
-        {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetRoleDetail(roleId);
-                var model = Mapper.Map<RoleViewModel>(result);
-                return View(model);
-            }
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditRole(RoleViewModel roleViewModel)
         {
             using (var client = GetRestClient())
             {
-                var roleContract = new RoleContract
+                try
                 {
-                    Id = roleViewModel.Id,
-                    Name = roleViewModel.Name,
-                    Description = roleViewModel.Description
-                };
-                client.UpdateRole(roleContract.Id, roleContract);
-
-                var role = client.GetRoleDetail(roleContract.Id);
-                var model = Mapper.Map<RoleViewModel>(role);
-                model.SuccessfulUpdate = true;
-                return View(model);
+                    var roleContract = new RoleContract
+                    {
+                        Id = roleViewModel.Id,
+                        Name = roleViewModel.Name,
+                        Description = roleViewModel.Description
+                    };
+                    client.UpdateRole(roleContract.Id, roleContract);
+                    roleViewModel.SuccessfulUpdate = true;
+                    
+                }
+                catch (HttpErrorCodeException e)
+                {
+                    roleViewModel.SuccessfulUpdate = false;
+                    AddErrors(e);
+                }
             }
+
+            return PartialView("_EditRole", roleViewModel);
         }
 
         public ActionResult EditUserRoles(int userId)

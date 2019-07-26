@@ -16,7 +16,7 @@
          @if (User.HasPermission(PermissionNames.ManageUserRoles))
          {
              <td class="buttons">
-                 <a asp-action="EditRole" asp-route-roleId="@role.Id" class="btn btn-sm btn-default">
+                 <a class="edit-role btn btn-sm btn-default">
                      <i class="fa fa-pencil"></i>
                  </a>
                  <a class="remove-role btn btn-sm btn-default">
