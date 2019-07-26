@@ -9,6 +9,7 @@ class UserRolesEditor {
     private readonly userId: number;
     private readonly roleList: ListWithPagination;
     private readonly client: PermissionApiClient;
+    private readonly errorHandler: ErrorHandler;
     private roleSearchCurrentSelectedItem: IGroup;
 
     constructor(mainContainer: string) {
@@ -29,6 +30,7 @@ class UserRolesEditor {
         this.roleList.init();
         this.initRemoveUserFromRoleButton();
         this.client = new PermissionApiClient();
+        this.errorHandler = new ErrorHandler();
     }
 
     make() {
@@ -63,9 +65,10 @@ class UserRolesEditor {
                     $("#addToGroupDialog").modal("hide");
                     this.roleList.reloadPage();
                     this.initRemoveUserFromRoleButton();
-                }).fail(() => {
-                    const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("AddUserToRoleError", "PermissionJs").value);
-                    alertHolder.empty().append(error.buildElement());
+                }).fail((error) => {
+                    const errorAlert = new AlertComponentBuilder(AlertType.Error)
+                        .addContent(this.errorHandler.getErrorMessage(error, localization.translate("AddUserToRoleError", "PermissionJs").value));
+                    alertHolder.empty().append(errorAlert.buildElement());
                 });
             } else {
                 const alertHolder = $("#create-role-with-user-error");
@@ -75,9 +78,10 @@ class UserRolesEditor {
                 this.client.createRoleWithUser(this.userId, roleName, roleDescription).done(() => {
                     $("#addToGroupDialog").modal("hide");
                     this.roleList.reloadPage();
-                }).fail(() => {
-                    const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("CreateRoleWithUserError", "PermissionJs").value);
-                    alertHolder.empty().append(error.buildElement());
+                }).fail((error) => {
+                    const errorAlert = new AlertComponentBuilder(AlertType.Error)
+                        .addContent(this.errorHandler.getErrorMessage(error, localization.translate("CreateRoleWithUserError", "PermissionJs").value));
+                    alertHolder.empty().append(errorAlert.buildElement());
                 });
             }
         });
@@ -92,8 +96,8 @@ class UserRolesEditor {
 
             this.client.removeUserFromRole(this.userId, roleId).done(() => {
                 this.roleList.reloadPage();
-            }).fail(() => {
-                alert.text(localization.translate("RemoveUserFromRoleError", "PermissionJs").value);
+            }).fail((error) => {
+                alert.text(this.errorHandler.getErrorMessage(error, localization.translate("RemoveUserFromRoleError", "PermissionJs").value));
                 alert.show();
             });
         });

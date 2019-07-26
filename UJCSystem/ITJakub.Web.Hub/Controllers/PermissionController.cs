@@ -30,7 +30,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
         }
 
-        public ActionResult UserPermission(string search, int start, int count = UserListPageSize, ViewType viewType = ViewType.Full)
+        public IActionResult UserPermission(string search, int start, int count = UserListPageSize, ViewType viewType = ViewType.Full)
         {
             using (var client = GetRestClient())
             {
@@ -52,7 +52,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult RolePermission(string search, int start, int count = RoleListPageSize, ViewType viewType = ViewType.Full)
+        public IActionResult RolePermission(string search, int start, int count = RoleListPageSize, ViewType viewType = ViewType.Full)
         {
             using (var client = GetRestClient())
             {
@@ -81,7 +81,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult RolePermissionList(int roleId, string search, int start, int count = PermissionListPageSize)
+        public IActionResult RolePermissionList(int roleId, string search, int start, int count = PermissionListPageSize)
         {
             using (var client = GetRestClient())
             {
@@ -110,12 +110,12 @@ namespace ITJakub.Web.Hub.Controllers
                 }
                 catch (HttpErrorCodeException e)
                 {
-                    return BadRequest(new {e.Message});
+                    return AjaxErrorResponse(e.Message, e.StatusCode);
                 }
             }
         }
 
-        public ActionResult UsersByRole(int roleId, string search, int start, int count = UserListPageSize)
+        public IActionResult UsersByRole(int roleId, string search, int start, int count = UserListPageSize)
         {
             try
             {
@@ -129,11 +129,11 @@ namespace ITJakub.Web.Hub.Controllers
             }
             catch (HttpErrorCodeException e)
             {
-                return BadRequest(new {e.Message});
+                return AjaxErrorResponse(e.Message, e.StatusCode);
             }
         }
 
-        public ActionResult EditUser(int userId, bool successUpdate = false)
+        public IActionResult EditUser(int userId, bool successUpdate = false)
         {
             using (var client = GetRestClient())
             {
@@ -149,7 +149,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditUser(UpdateUserViewModel userViewModel)
+        public IActionResult EditUser(UpdateUserViewModel userViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -178,7 +178,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditRole(RoleViewModel roleViewModel)
+        public IActionResult EditRole(RoleViewModel roleViewModel)
         {
             using (var client = GetRestClient())
             {
@@ -204,7 +204,7 @@ namespace ITJakub.Web.Hub.Controllers
             return PartialView("_EditRole", roleViewModel);
         }
 
-        public ActionResult EditUserRoles(int userId)
+        public IActionResult EditUserRoles(int userId)
         {
             using (var client = GetRestClient())
             {
@@ -222,7 +222,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult GetTypeaheadUser(string query)
+        public IActionResult GetTypeaheadUser(string query)
         {
             using (var client = GetRestClient())
             {
@@ -231,7 +231,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult GetTypeaheadRole(string query)
+        public IActionResult GetTypeaheadRole(string query)
         {
             using (var client = GetRestClient())
             {
@@ -240,7 +240,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult GetUser(int userId)
+        public IActionResult GetUser(int userId)
         {
             using (var client = GetRestClient())
             {
@@ -249,7 +249,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult GetRole(int roleId)
+        public IActionResult GetRole(int roleId)
         {
             using (var client = GetRestClient())
             {
@@ -259,7 +259,7 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddUserToRole([FromBody] AddUserToRoleRequest request)
+        public IActionResult AddUserToRole([FromBody] AddUserToRoleRequest request)
         {
             try
             {
@@ -271,12 +271,12 @@ namespace ITJakub.Web.Hub.Controllers
             }
             catch (HttpErrorCodeException e)
             {
-                return BadRequest(new {e.Message});
+                return AjaxErrorResponse(e.Message, e.StatusCode);
             }
         }
 
         [HttpPost]
-        public ActionResult CreateRole([FromBody] CreateRoleRequest request)
+        public IActionResult CreateRole([FromBody] CreateRoleRequest request)
         {
             try
             {
@@ -294,12 +294,12 @@ namespace ITJakub.Web.Hub.Controllers
             }
             catch (HttpErrorCodeException e)
             {
-                return BadRequest(new {e.Message});
+                return AjaxErrorResponse(e.Message, e.StatusCode);
             }
         }
 
         [HttpPost]
-        public ActionResult CreateRoleWithUser([FromBody] CreateRoleWithUserRequest request)
+        public IActionResult CreateRoleWithUser([FromBody] CreateRoleWithUserRequest request)
         {
             try
             {
@@ -316,12 +316,12 @@ namespace ITJakub.Web.Hub.Controllers
             }
             catch (HttpErrorCodeException e)
             {
-                return BadRequest(new { e.Message });
+                return AjaxErrorResponse(e.Message, e.StatusCode);
             }
         }
 
         [HttpPost]
-        public ActionResult RemoveUserFromRole([FromBody] RemoveUserFromRoleRequest request)
+        public IActionResult RemoveUserFromRole([FromBody] RemoveUserFromRoleRequest request)
         {
             try
             {
@@ -333,11 +333,11 @@ namespace ITJakub.Web.Hub.Controllers
             }
             catch (HttpErrorCodeException e)
             {
-                return BadRequest(new {e.Message});
+                return AjaxErrorResponse(e.Message, e.StatusCode);
             }
         }
 
-        public ActionResult GetRolesByUser(int userId)
+        public IActionResult GetRolesByUser(int userId)
         {
             using (var client = GetRestClient())
             {
@@ -354,7 +354,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult GetRootCategories()
+        public IActionResult GetRootCategories()
         {
             using (var client = GetRestClient())
             {
@@ -368,7 +368,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult GetCategoryContent(int groupId, BookTypeEnumContract? bookType)
+        public IActionResult GetCategoryContent(int groupId, BookTypeEnumContract? bookType)
         {
             if (bookType == null)
             {
@@ -387,7 +387,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult GetAllCategoryContent(BookTypeEnumContract? bookType)
+        public IActionResult GetAllCategoryContent(BookTypeEnumContract? bookType)
         {
             if (bookType == null)
             {
@@ -407,7 +407,7 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult DeleteRole([FromBody] DeleteRoleRequest request)
+        public IActionResult DeleteRole([FromBody] DeleteRoleRequest request)
         {
             try
             {
@@ -419,12 +419,12 @@ namespace ITJakub.Web.Hub.Controllers
             }
             catch (HttpErrorCodeException e)
             {
-                return BadRequest(new {e.Message});
+                return AjaxErrorResponse(e.Message, e.StatusCode);
             }
         }
 
         [HttpPost]
-        public ActionResult AddBooksAndCategoriesToGroup([FromBody] AddBooksAndCategoriesToRoleRequest request)
+        public IActionResult AddBooksAndCategoriesToGroup([FromBody] AddBooksAndCategoriesToRoleRequest request)
         {
             using (var client = GetRestClient())
             {
@@ -435,7 +435,7 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult RemoveBooksAndCategoriesFromGroup([FromBody] RemoveBooksAndCategoriesFromRoleRequest request)
+        public IActionResult RemoveBooksAndCategoriesFromGroup([FromBody] RemoveBooksAndCategoriesFromRoleRequest request)
         {
             using (var client = GetRestClient())
             {
@@ -446,7 +446,7 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddSpecialPermissionsToRole([FromBody] AddSpecialPermissionsToRoleRequest request)
+        public IActionResult AddSpecialPermissionsToRole([FromBody] AddSpecialPermissionsToRoleRequest request)
         {
             using (var client = GetRestClient())
             {
@@ -457,13 +457,13 @@ namespace ITJakub.Web.Hub.Controllers
                 }
                 catch (HttpErrorCodeException e)
                 {
-                    return BadRequest(new {e.Message});
+                    return AjaxErrorResponse(e.Message, e.StatusCode);
                 }
             }
         }
 
         [HttpPost]
-        public ActionResult RemoveSpecialPermissionsFromRole([FromBody] RemoveSpecialPermissionsFromRoleRequest request)
+        public IActionResult RemoveSpecialPermissionsFromRole([FromBody] RemoveSpecialPermissionsFromRoleRequest request)
         {
             using (var client = GetRestClient())
             {
@@ -474,7 +474,7 @@ namespace ITJakub.Web.Hub.Controllers
                 }
                 catch (HttpErrorCodeException e)
                 {
-                    return BadRequest(new {e.Message});
+                    return AjaxErrorResponse(e.Message, e.StatusCode);
                 }
             }
         }

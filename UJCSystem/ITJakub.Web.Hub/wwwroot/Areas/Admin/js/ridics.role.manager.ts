@@ -7,6 +7,7 @@ class RoleManager {
     private readonly searchBox: SingleSetTypeaheadSearchBox<IUserDetail>;
     private readonly client: PermissionApiClient;
     private readonly delayForShowResponse = 1000;
+    private readonly errorHandler: ErrorHandler;
     private currentUserSelectedItem: IUserDetail;
     private userList: ListWithPagination;
     private roleList: ListWithPagination;
@@ -18,6 +19,7 @@ class RoleManager {
             (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(this.getFullNameString(item),
                 item.email));
         this.client = new PermissionApiClient();
+        this.errorHandler = new ErrorHandler();
     }
 
     public init(list?: ListWithPagination) {
@@ -64,9 +66,10 @@ class RoleManager {
         this.client.getUsersByRole(roleId).done(response => {
             container.html(response);
             this.initRemoveUserFromRoleButton();
-        }).fail(() => {
-            const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("ListError", "PermissionJs").value);
-            container.empty().append(error.buildElement());
+        }).fail((error) => {
+            const errorAlert = new AlertComponentBuilder(AlertType.Error)
+                .addContent(this.errorHandler.getErrorMessage(error, localization.translate("ListError", "PermissionJs").value));
+            container.empty().append(errorAlert.buildElement());
         }).always(() => {
             this.userList = new ListWithPagination(`Permission/UsersByRole?roleId=${roleId}`,
                 10,
@@ -91,9 +94,10 @@ class RoleManager {
         this.client.getPermissionsByRole(roleId).done(response => {
             container.html(response);
             this.initPermissionManaging();
-        }).fail(() => {
-            const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("ListError", "PermissionJs").value);
-            container.empty().append(error.buildElement());
+        }).fail((error) => {
+            const errorAlert = new AlertComponentBuilder(AlertType.Error)
+                .addContent(this.errorHandler.getErrorMessage(error, localization.translate("ListError", "PermissionJs").value));
+            container.empty().append(errorAlert.buildElement());
         }).always(() => {
             const permissionList = new ListWithPagination(`Permission/RolePermissionList?roleId=${roleId}`,
                 10,
@@ -135,9 +139,9 @@ class RoleManager {
                     successLabel.show();
                     permissionCheckboxInput.prop("checked", addPermission);
                 }, this.delayForShowResponse);
-            }).fail(() => {
+            }).fail((error) => {
                 setTimeout(() => {
-                    alert.text(localization.translate("PermissionError", "PermissionJs").value);
+                    alert.text(this.errorHandler.getErrorMessage(error, localization.translate("PermissionError", "PermissionJs").value));
                     alert.show();
                 }, this.delayForShowResponse);
             }).always(() => {
@@ -158,8 +162,8 @@ class RoleManager {
             var roleId = $(".role-row.active").data("role-id");
             this.client.removeUserFromRole(userId, roleId).done(() => {
                 this.userList.reloadPage();
-            }).fail(() => {
-                alert.text(localization.translate("RemoveUserFromRoleError", "PermissionJs").value);
+            }).fail((error) => {
+                alert.text(this.errorHandler.getErrorMessage(error, localization.translate("RemoveUserFromRoleError", "PermissionJs").value));
                 alert.show();
             });
         });
@@ -237,8 +241,8 @@ class RoleManager {
                             this.clearSections();
                             this.client.deleteRole(roleId).done(() => {
                                 this.roleList.reloadPage();
-                            }).fail(() => {
-                                alert.text(localization.translate("RemoveRoleError", "PermissionJs").value);
+                            }).fail((error) => {
+                                alert.text(this.errorHandler.getErrorMessage(error, localization.translate("RemoveRoleError", "PermissionJs").value));
                                 alert.show();
                             });
                         }
@@ -301,9 +305,10 @@ class RoleManager {
                 this.client.addUserToRole(userId, roleId).done(() => {
                     this.userList.reloadPage();
                     addToRoleDialog.modal("hide");
-                }).fail(() => {
-                    const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("AddUserToRoleError", "PermissionJs").value);
-                    roleError.empty().append(error.buildElement());
+                }).fail((error) => {
+                    const errorAlert = new AlertComponentBuilder(AlertType.Error)
+                        .addContent(this.errorHandler.getErrorMessage(error, localization.translate("AddUserToRoleError", "PermissionJs").value));
+                    roleError.empty().append(errorAlert.buildElement());
                 });
             });
         }
@@ -327,9 +332,10 @@ class RoleManager {
                 $("#createRoleModal").modal("hide");
                 this.roleList.reloadPage();
                 this.clearSections();
-            }).fail(() => {
-                const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("CreateRoleError", "PermissionJs").value);
-                roleError.empty().append(error.buildElement());
+            }).fail((error) => {
+                const errorAlert = new AlertComponentBuilder(AlertType.Error)
+                    .addContent(this.errorHandler.getErrorMessage(error, localization.translate("CreateRoleError", "PermissionJs").value));
+                roleError.empty().append(errorAlert.buildElement());
             });
         });
     }
@@ -347,8 +353,8 @@ class RoleManager {
         $(`#${listType}-pagination`).empty();
 
         const container = userSection.find(`.list-container`);
-        const error = new AlertComponentBuilder(AlertType.Info).addContent(localization.translate("RoleIsNotSelected", "PermissionJs").value);
-        container.empty().append(error.buildElement());
+        const infoAlert = new AlertComponentBuilder(AlertType.Info).addContent(localization.translate("RoleIsNotSelected", "PermissionJs").value);
+        container.empty().append(infoAlert.buildElement());
     }
 
     private setSearchFormDisabled(searchForm: JQuery, disabled = true) {
