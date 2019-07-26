@@ -27,6 +27,7 @@ Recommended software:
 Environment configuration
 * Checkout repository to C:\Pool\itjakub\
 * Checkout itjakub-secrets repository to C:\Pool\itjakub-secrets\
+* Checkout Authentication repository to disk and setup it according to it's Readme file (ITJakub.Web.Hub won't start without running Authentication service)
 * Configure connection strings and passwords in itjakub-secrets folder
 * Create database schema (use numbered SQL create scripts in correct order, stored in Database folder):
   * ITJakubDB - old database for ITJakub.ITJakubService (will be removed)
@@ -71,7 +72,7 @@ Notes
 > *It is highly recommended to disable automatic NPM and Bower restore in Visual Studio and use Yarn instead of that.* The whole project is configured to Yarn.
 
 Services to deploy:
-* ITJakub.Web.Hub - web portal (ASP.NET Core)
+* ITJakub.Web.Hub - web portal (ASP.NET Core) with two modes available (Research and Community)
 * Vokabular.MainService - main service for direct client communication (ASP.NET Core)
 * Vokabular.FulltextService - service for searching in fulltext database of Community portal (in Elasticsearch) (ASP.NET Core)
 * ~~ITJakub.ITJakubService~~ - original main service (will be completetly replaced by Vokabular.MainService) (WCF service)
@@ -104,25 +105,70 @@ Environment configuration
 
 ## Environment configuration
 
+Solution is configured to load sensitive information from external location which is C:\Pool\itjakub-secrets
+The reason of separating this info from the remaining code is avoiding accidental commit of private/secret information to public git.
+The template of this configuration can be checked out from https://github.com/RIDICS/itjakub-secrets
+
 **ASP.NET Core projects** are configured to use specific configuration files for different environments.
 Selected environment is configured in globalsettings.json file. Default configuration is stored in appsettings.json file.
-Environment specific configuration is stored in appsettings.{environment_name}.json file.
-Currently exists three preconfigured environments:
+Environment specific configuration is stored in appsettings.{ENVIRONMENT_NAME}.json file.
+Currently there exists three preconfigured environments:
 * default (without name) - shared values for all configurations and default endpoint URLs
 * LocalDebug - endpoint URLs configured to use services deployed to IIS Express
 * Development - configuration for deploying testing instance to server (on URL http://{server}/Development)
 
-**WCF Service projects** use specific Web.config files (Web.{build_configuration}.config) according to selected build configuration during publish process.
+Summary - the complete configuration is consist of all following settings files (new file overwrites only values which are specified in this new file):
+* globalsettings.json selects ENVIRONMENT_NAME
+* appsettings.json is always loaded
+* configuration is changed to values specified in appsettings.{ENVIRONMENT_NAME}.json if the file exists
+* configuration is changed to values specified in C:\Pool\itjakub-secrets\ITJakub.Secrets.json
+* configuration is changed to values specified in C:\Pool\itjakub-secrets\ITJakub.Secrets.{ENVIRONMENT_NAME}.json if the file exists
 
-Path to itjakub-secrets folder can be configured in globalsettings.json or Web.config file.
+**WCF Service projects** use specific Web.config files transformed by Web.{ENVIRONMENT_NAME}.config during the build process according to selected build configuration.
+* Web.{ENVIRONMENT_NAME}.config is loaded automatically either from the project folder (e.g. C:\Pool\itjakub\UJCSystem\ITJakub.Lemmatization.Service) or from C:\Pool\itjakub-secrets\WcfServices
+* Web.{ENVIRONMENT_NAME}.config usually assumes loading secrets from C:\Pool\itjakub-secrets\WcfServices (ITJakub.Secrets.config or ITJakub.Secrets.{ENVIRONMENT_NAME}.config)
 
-> This section will be extended with some example
-> TODO
+The setting from itjakub-secrets are included in deployment package, so the server doesn't need any more steps for setup the configuration.
+
+**Authentication Service project**
+* Authentication Service includes configuration from C:\Pool\itjakub-secrets\Auth (it requires appsettings.{ENVIRONMENT_NAME}.json5 and modules.{ENVIRONMENT_NAME}.json5)
+* Database Migrator includes configuration from C:\Pool\itjakub-secrets\DatabaseMigratorAuth (it requires appsettings.{ENVIRONMENT_NAME}.json)
+
+**Forum (YAFNET) project**
+The configuration must be created directly in the project folder (according to Readme file) and MUST NOT be commited to Git.
 
 ## The project build and deployment
 
-TODO
+* Ensure that the latest version of Authentication service and Forum is deployed
+* Choose environment which you want to build (which settings will be used)
+* Run script `BuildSolution.ps1 {ENVIRONMENT_NAME}`
+* All build artifacts are created in `build\Publish-{ENVIRONMENT_NAME}` folder
+* Copy this folder to target server
+* Optionally update `{SERVICE_NAME}.SetParameters.xml` files with desired target path (site) in IIS
+* Run script `DeploySolution.ps1`
+  * -disableInteractive this parameter disable waiting for user input after each service deployment
+  * -test run deployment simulation, it doesn't deploy anything but it creates a report
 
+### Intended deploy model
+
+Inteded deployment model is following:
+* ITJakub.Web.Hub (research mode) deployed as example.com
+* ITJakub.Web.Hub (community mode) deployed as example.com/Community or community.example.com
+* Vokabular.MainService deployed as example.com/MainService
+* Ridics.Authentication.Service deployed as example.com/Auth
+* Ridics YAFNET Forum deployed as example.com/Forum
+* ITJakub.FileProcessing.Service deployed as localhost:85/ITJakub.FileProcessing.Service
+* ITJakub.Lemmatization.Service deployed as localhost:85/ITJakub.Lemmatization.Service
+* ITJakub.SearchService deployed as localhost:85/ITJakub.SearchService
+* Vokabular.FulltextService deployed as localhost:85/Vokabular.FulltextService
+
+**example.com is "Default Web Site" in IIS**
+* Publicly available over some host name e.g. example.com
+* HTTPS secured by valid SSL certificate
+
+**localhost:85 is "LocalhostServices" site in IIS**
+* HTTP running on port 85
+* Available only for localhost by specified host name "localhost"
 
 ## Default credentials
 
@@ -171,3 +217,5 @@ System user IIS_IUSRS must has permission to write to "logs" folder.
 
 **The large file upload fails with 413.0 - Request Entity Too Large on IIS server**
 The problem may be caused by enabled client certificate. Try to set "Ignore client certificate" in SSL Settings in IIS Manager.
+
+> You can also check Troubleshooting section in Readme file of Authentication Service
