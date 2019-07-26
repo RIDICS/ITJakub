@@ -181,6 +181,11 @@ These values should be replaced with secret ones and the folder should not be ac
 
 Login to portal: Admin
 Default password: administrator
+Description: This user has Admin role which is a special role used for Authentication service configuration. This user and this role are hidden in the Web.Hub and doesn't have full functionality available.
+
+Login to portal: PortalAdmin
+Default password: administrator
+Description: This user has PortalAdmin role which is used for managing portal Web.Hub and for managing created roles/groups and theirs permissions.
 
 ## Securing services
 
