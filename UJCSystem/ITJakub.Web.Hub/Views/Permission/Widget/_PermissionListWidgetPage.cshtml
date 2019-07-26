@@ -7,7 +7,7 @@
 {
 <tr class="permission-row" data-permission-id="@permission.Id">
     <td>
-        <input type="checkbox" asp-for="@permission.IsSelected" class="permission-checkbox-input" />
+        <input type="checkbox" asp-for="@permission.IsSelected" />
     </td>
     <td>
         <div class="name">
@@ -15,7 +15,7 @@
         </div>
         <div class="status visible-xs">
             <span class="loading-spinner spin"></span>
-            <span class="success">Ym2eneno</span>
+            <span class="success">@Localizer.Translate("Changed", "Permission")</span>
         </div>
         <div class="alert alert-danger"></div>
     </td>
