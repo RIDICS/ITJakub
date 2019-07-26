@@ -55,6 +55,7 @@
     "Permissions": "Permissions",
     "SuccessGroupUpdate": "Group update was successful.",
     "SuccessUserUpdate": "User update was successful.",
-    "GroupEditTitle": "Edit group"
+    "GroupEditTitle": "Edit group",
+    "Changed": "Changed"
   }
 }

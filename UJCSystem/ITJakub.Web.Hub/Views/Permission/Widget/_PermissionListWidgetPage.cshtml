@@ -7,12 +7,21 @@
 {
 <tr class="permission-row" data-permission-id="@permission.Id">
     <td>
-        <i class="fa fa-circle-o-notch fa-spin spinner-font loading-spinner"></i>
-        <input type="checkbox" asp-for="@permission.IsSelected" class="permission-checkbox-input"/>
+        <input type="checkbox" asp-for="@permission.IsSelected" class="permission-checkbox-input" />
     </td>
     <td>
-        @Html.DisplayFor(modelItem => permission.Name)
+        <div class="name">
+            @Html.DisplayFor(modelItem => permission.Name)
+        </div>
+        <div class="status visible-xs">
+            <span class="loading-spinner spin"></span>
+            <span class="success">Ym2eneno</span>
+        </div>
         <div class="alert alert-danger"></div>
+    </td>
+    <td class="status hidden-xs">
+        <span class="loading-spinner spin"></span>
+        <span class="success">@Localizer.Translate("Changed", "Permission")</span>
     </td>
 </tr>
 }

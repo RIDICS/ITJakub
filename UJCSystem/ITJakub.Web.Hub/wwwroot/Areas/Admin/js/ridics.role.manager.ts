@@ -6,6 +6,7 @@
 class RoleManager {
     private readonly searchBox: SingleSetTypeaheadSearchBox<IUserDetail>;
     private readonly client: PermissionApiClient;
+    private readonly delayForShowResponse = 1000;
     private currentUserSelectedItem: IUserDetail;
     private userList: ListWithPagination;
     private roleList: ListWithPagination;
@@ -106,16 +107,21 @@ class RoleManager {
 
     private initPermissionManaging() {
 
-        $(".permission-row input[type=checkbox]").on("click", (event) => {
-            const permissionCheckboxInput = $(event.currentTarget);
+        $(".permission-row input[type=checkbox]").on("input", (event) => {
             const addPermission = $(event.currentTarget).is(":checked");
+            const permissionCheckboxInput = $(event.currentTarget);
+            permissionCheckboxInput.prop("checked", !addPermission);
             const permissionRow = permissionCheckboxInput.parents(".permission-row");
-            permissionRow.addClass("pending");
             const alert = permissionRow.find(".alert");
             alert.hide();
             const specialPermissionId = permissionRow.data("permission-id");
             const roleId = $(".role-row.active").data("role-id");
 
+            const spinner = permissionRow.find(".loading-spinner");
+            spinner.show();
+            const successLabel = permissionRow.find(".success");
+            successLabel.hide();
+            
             let result: JQuery.jqXHR<any>;
             if (addPermission) {
                 result = this.client.addSpecialPermissionToRole(roleId, specialPermissionId);
@@ -124,12 +130,19 @@ class RoleManager {
             }
 
             result.done(() => {
+                setTimeout(() => {
+                    successLabel.show();
+                    permissionCheckboxInput.prop("checked", addPermission);
+                }, this.delayForShowResponse);
             }).fail(() => {
-                permissionCheckboxInput.prop("checked", !addPermission);
-                alert.text(localization.translate("PermissionError", "PermissionJs").value);
-                alert.show();
+                setTimeout(() => {
+                    alert.text(localization.translate("PermissionError", "PermissionJs").value);
+                    alert.show();
+                }, this.delayForShowResponse);
             }).always(() => {
-                permissionRow.removeClass("pending");
+                setTimeout(() => {
+                    spinner.hide();
+                }, this.delayForShowResponse);
             });
         });
     }

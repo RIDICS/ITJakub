@@ -55,6 +55,7 @@
     "Permissions": "Oprávnění",
     "SuccessGroupUpdate": "Úprava skupiny proběhla úspěšně.",
     "SuccessUserUpdate": "Úprava uživatele proběhla úspěšně.",
-    "GroupEditTitle": "Úprava skupiny"
+    "GroupEditTitle": "Úprava skupiny",
+    "Changed": "Změněno"
   }
 }
