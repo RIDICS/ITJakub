@@ -15,7 +15,7 @@ namespace ITJakub.Web.Hub.Models.User
         public string Email { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "NotEmpty")]
-        [StringLength(100, ErrorMessage = "HasAtLeastNChars", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "HasAtLeastNChars", MinimumLength = PasswordRequirements.MinLength)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
