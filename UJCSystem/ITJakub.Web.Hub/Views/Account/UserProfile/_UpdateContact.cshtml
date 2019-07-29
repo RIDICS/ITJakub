@@ -4,7 +4,7 @@
 
 <div class="row">
     <div class="col-md-offset-1 col-lg-offset-2 col-md-10 col-lg-8">
-        <div class="panel panel-default">
+        <div id="updateEmailPanel" class="panel panel-default">
                 <div class="panel-heading">@Localizer.Translate("EmailAddressUpdate", "Account")</div>
                 <div class="panel-body">
                     <form asp-controller="Account" asp-action="UpdateContact" method="post" class="form-horizontal">
@@ -14,8 +14,7 @@
                                 <div id="successContactUpdate" class="alert alert-success fade hide" role="alert">
                                     @Localizer.Translate("SuccessContactUpdate", "Account")
                                 </div>
-                                <div id="errorContactUpdate" class="alert alert-danger fade hide" role="alert">
-                                </div>
+                                <div class="alert-holder"></div>
                             </div>
                         </div>
                         
@@ -38,10 +37,10 @@
             <div id="confirmEmailPanel" class="panel @(Model.IsEmailConfirmed ? "panel-default hide" : "panel-warning")">
                 <div class="panel-heading">
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-sm-6">
                             <a href="#confirmEmailPanelBody" data-toggle="collapse">@Localizer.Translate("EmailAddressVerification", "Account")</a>
                         </div>
-                        <div class="col-lg-6 email-warning @(Model.IsEmailConfirmed ? "hide" : string.Empty)">
+                        <div class="col-sm-6 email-warning @(Model.IsEmailConfirmed ? "hide" : string.Empty)">
                             <i class="fa fa-warning"></i> @Localizer.Translate("EmailAddressIsNotVerified", "Account")</div>
                     </div>
                 </div>
@@ -54,14 +53,7 @@
                                     <div id="confirmContactDescription" class="alert alert-warning fade in" role="alert">
                                         @Localizer.Translate("EmailIsNotConfirmedAlertDescription")
                                     </div>
-                                    <div id="confirmCodeSend" class="alert alert-success fade hide" role="alert">
-                                        @Localizer.TranslateFormat("ConfirmCodeSend", "Account", Model.Email)
-                                    </div>
-                                    <div id="successConfirmContact" class="alert alert-success fade hide " role="alert">
-                                        @Localizer.TranslateFormat("SuccessConfirmContact", "Account", Model.Email)
-                                    </div>
-                                    <div id="errorConfirmContact" class="alert alert-danger fade hide " role="alert">
-                                    </div>
+                                    <div class="alert-holder"></div>
                                 </div>
                             </div>
 

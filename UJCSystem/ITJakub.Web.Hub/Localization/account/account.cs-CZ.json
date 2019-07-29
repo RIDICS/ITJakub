@@ -31,7 +31,7 @@
     "EmailAddressUpdate": "Změna e-mailové adresy",
     "EmailAddressVerification": "Ověření e-mailové adresy",
     "EmailAddressIsNotVerified": "E-mailová adresa není ověřena",
-    "SuccessContactUpdate": "Kontakt byl úspešně změněn. Nyní je potřeba ho ověřit.",
+    "SuccessContactUpdate": "Kontakt byl úspešně změněn. Nyní je potřeba ho ověřit kódem, který byl odeslán na e-mailovou adresu {0}.",
     "ConfirmCodeSend": "Potvrzovací kód byl odeslán na e-mailovou adresu {0}.",
     "Change": "Změnit",
     "Confirm": "Potvrdit",
