@@ -217,7 +217,7 @@ class AccountManager {
                 this.confirmEmailPanel.switchClass("panel-warning", "panel-default");
 
                 this.resendConfirmCodeBtn.addClass("disabled");
-                this.confirmEmailCodeInput.addClass("disabled");
+                this.confirmEmailCodeInput.prop("readonly", true);
                 this.confirmEmailSubmit.addClass("disabled");
             }
         }).fail((response) => {
