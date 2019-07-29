@@ -31,7 +31,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
 
             foreach (var bookType in m_bookTypes)
             {
-                foreach (var permission in m_autoImportPermissions.Where(x => x.Name == PermissionNames.AutoImport + (int) bookType).ToList())
+                foreach (var permission in m_autoImportPermissions.Where(x => x.Name == VokabularPermissionNames.AutoImport + (int) bookType).ToList())
                 {
                     roles.AddRange(permission.Roles);
                 }

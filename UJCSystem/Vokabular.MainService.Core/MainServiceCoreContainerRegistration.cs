@@ -47,22 +47,27 @@ namespace Vokabular.MainService.Core
             services.AddScoped<CommunicationConfigurationProvider>();
             services.AddScoped<CommunicationProvider>();
             services.AddScoped<DefaultUserProvider>();
-            services.AddScoped<PermissionConverter>();
             services.AddScoped<FulltextStorageProvider>();
             services.AddScoped<IFulltextStorage, ExistDbStorage>();
             services.AddScoped<IFulltextStorage, ElasticSearchStorage>();
 
             services.AddSingleton<Profile, AuthUserProfile>();
             services.AddSingleton<Profile, RoleProfile>();
+            services.AddSingleton<Profile, PermissionProfile>();
 
             services.AddSingleton<Profile, AudioProfile>();
             services.AddSingleton<Profile, BookProfile>();
+            services.AddSingleton<Profile, BibliographicFormatProfile>();
             services.AddSingleton<Profile, CategoryProfile>();
             services.AddSingleton<Profile, ChapterProfile>();
             services.AddSingleton<Profile, EditionNoteProfile>();
+            services.AddSingleton<Profile, ExternalRepositoryProfile>();
+            services.AddSingleton<Profile, ExternalRepositoryTypeProfile>();
             services.AddSingleton<Profile, FavoriteLabelProfile>();
             services.AddSingleton<Profile, FavoriteProfile>();
             services.AddSingleton<Profile, FeedbackProfile>();
+            services.AddSingleton<Profile, FilteringExpressionProfile>();
+            services.AddSingleton<Profile, FilteringExpressionSetProfile>();
             services.AddSingleton<Profile, ForumProfile>();
             services.AddSingleton<Profile, HeadwordProfile>();
             services.AddSingleton<Profile, ImageProfile>();
@@ -83,6 +88,7 @@ namespace Vokabular.MainService.Core
             services.AddSingleton<Profile, TextProfile>();
             services.AddSingleton<Profile, TrackProfile>();
             services.AddSingleton<Profile, TransformationProfile>();
+            services.AddSingleton<Profile, UserContactProfile>();
             services.AddSingleton<Profile, UserProfile>();
 
             services.AddSingleton<Profile, BucketContractProfile>();

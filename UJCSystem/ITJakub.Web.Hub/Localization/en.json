@@ -1,37 +1,82 @@
 {
-	"culture":"en",
-	"scope":"global",
-	"dictionary": {
-		"Vokabulář" : "Vokabulář",
-		"webový": "webový",
-		"VokabulářWebový" : "Vokabulář webový",
-		"and":"and",
-		
-		"FeedbackFormPlaceholder":"Type your feedback here...",
-		"NameFormPlaceholder":"Type your name here...",
-		"EmailFormPlaceholder":"Type your e-mail here...",
-		"Send":"Send",
-		
-		"FeedbackSentTitle":"Feedback sent",
-		"FeedbackSentAlert":"Feedback successfuly sent.",
-		
-		"Max":"Max.",
-		"Remaining":"Remaining",
-		"YouCanUseDiacritics":"You can use diacritics",
-		"Characters":"characters",
-		
-		"Close":"Close",
-		"Save":"Save",
-		"Error":"Error",
-		"DefaultTitle":"Default title",
-		
-		"SortBy":"Sort by",
-		"UserAccount":"User account",
-		"Language":"Language",
-		"LogOut": "Log out",
-		"SignIn":"Sign in",
-		"SignUp":"Sign up",
-		"EditText":"Edit text",
-		"CreateText":"Create text"
-		}
+  "culture": "en",
+  "scope": "global",
+  "dictionary": {
+    "Vokabulář": "Vokabulář",
+    "webový": "webový",
+    "VokabulářWebový": "Vokabulář webový",
+    "and": "and",
+
+    "Komunitní": "Komunitní",
+    "portál": "portál",
+    "Menu": "Menu",
+
+    "FeedbackFormPlaceholder": "Type your feedback here...",
+    "NameFormPlaceholder": "Type your name here...",
+    "EmailFormPlaceholder": "Type your e-mail here...",
+    "Send": "Send",
+
+    "FeedbackSentTitle": "Feedback sent",
+    "FeedbackSentAlert": "Feedback successfully sent.",
+
+    "Max": "Max.",
+    "Remaining": "Remaining",
+    "YouCanUseDiacritics": "You can use diacritics",
+    "Characters": "characters",
+
+    "Close": "Close",
+    "Save": "Save",
+    "Edit": "Edit",
+    "Cancel": "Cancel",
+    "Error": "Error",
+    "DefaultTitle": "Default title",
+
+    "SortBy": "Sort by",
+    "UserAccount": "User account",
+    "Language": "Language",
+    "LogOut": "Log out",
+    "SignIn": "Sign in",
+    "SignUp": "Sign up",
+    "EditText": "Edit text",
+    "CreateText": "Create text",
+    "EmailIsNotConfirmedAlertDescription": "If e-mail is not confirmed, it is not possible to change the password, neither secure account with two-phase authentication. "
+  },
+  "plural": {
+    "Characters": {
+      "characters": [
+        [ null, -2, "characters" ],
+        [ -1, -1, "character" ],
+        [ 0, 0, "characters" ],
+        [ 1, 1, "character" ],
+        [ 2, null, "characters" ]
+      ]
+    },
+    "Years": {
+      "years": [
+        [ null, -2, "years" ],
+        [ -1, -1, "year" ],
+        [ 0, 0, "years" ],
+        [ 1, 1, "year" ],
+        [ 2, null, "years" ]
+      ]
+    },
+    "Months": {
+      "months": [
+        [ null, -2, "months" ],
+        [ -1, -1, "month" ],
+        [ 0, 0, "months" ],
+        [ 1, 1, "month" ],
+        [ 2, null, "months" ]
+      ]
+    },
+    "Days": {
+      "days": [
+        [ null, -2, "days" ],
+        [ -1, -1, "day" ],
+        [ 0, 0, "days" ],
+        [ 1, 1, "day" ],
+        [ 2, null, "days" ]
+      ]
+    }
+  }
 }

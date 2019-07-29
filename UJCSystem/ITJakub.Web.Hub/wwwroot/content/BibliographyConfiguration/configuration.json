@@ -1052,6 +1052,10 @@
               "pattern": "{CreateTimeString}"
             },
             {
+              "label": "LinkToOriginal",
+              "pattern": "{$projectOriginalLink}"
+            },
+            {
               "label": "LinkToForum",
               "pattern": "{$forumLink}"
             }
@@ -1104,6 +1108,11 @@
           "scope": "LiteraryGenres",
           "pattern": "{$this}",
           "delimeter": ", "
+        },
+        "$projectOriginalLink": {
+          "type": "basic",
+          "pattern": "<a href='{OriginalUrl}'>{OriginalUrl}</a>",
+          "printIfNullValue": false
         },
         "$forumLink": {
           "type": "basic",

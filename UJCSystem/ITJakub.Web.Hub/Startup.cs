@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Helpers;
+using ITJakub.Web.Hub.Options;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -19,16 +20,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Ridics.Authentication.HttpClient;
+using Ridics.Authentication.HttpClient.Configuration;
+using Ridics.Authentication.TicketStore;
+using Ridics.Authentication.TicketStore.Store;
+using Ridics.Core.HttpClient.Config;
 using Scalesoft.Localization.AspNetCore;
 using Scalesoft.Localization.AspNetCore.IoC;
 using Scalesoft.Localization.Core.Configuration;
 using Scalesoft.Localization.Core.Util;
 using Scalesoft.Localization.Database.NHibernate;
-using Vokabular.Authentication.Client;
-using Vokabular.Authentication.Client.Configuration;
-using Vokabular.Authentication.Client.SharedClient.Config;
-using Vokabular.Authentication.TicketStore;
-using Vokabular.Authentication.TicketStore.Store;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
@@ -90,6 +91,7 @@ namespace ITJakub.Web.Hub
                     options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
                     options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
                     options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
+                    options.ClaimActions.MapJsonKey(CustomClaimTypes.EmailConfirmed, "email_confirmed");
                     options.ClaimActions.MapJsonKey(CustomClaimTypes.Permission, CustomClaimTypes.Permission);
                     options.ClaimActions.MapJsonKey(CustomClaimTypes.ResourcePermission, CustomClaimTypes.ResourcePermission);
                     options.ClaimActions.MapJsonKey(CustomClaimTypes.ResourcePermissionType, CustomClaimTypes.ResourcePermissionType);
@@ -128,7 +130,7 @@ namespace ITJakub.Web.Hub
                             var communicationProvider = context.HttpContext.RequestServices.GetRequiredService<CommunicationProvider>();
                             var client = communicationProvider.GetMainServiceClient();
 
-                            client.CreateUserIfNotExist(context.Principal.GetId().GetValueOrDefault());
+                            client.CreateUserIfNotExist(context.Principal.GetIdOrDefault().GetValueOrDefault());
 
                             return Task.CompletedTask;
                         },
@@ -160,10 +162,12 @@ namespace ITJakub.Web.Hub
 
             // Configuration options
             services.AddOptions();
-            services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
+            services.Configure<EndpointOption>(Configuration.GetSection("Endpoints"));
             services.Configure<GoogleCalendarConfiguration>(Configuration.GetSection("GoogleCalendar"));
 
             services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = 1048576000; });
+
+            services.Configure<PortalOption>(Configuration.GetSection("PortalConfig"));
 
             // Localization
             var localizationConfiguration = Configuration.GetSection("Localization").Get<LocalizationConfiguration>();
@@ -244,6 +248,10 @@ namespace ITJakub.Web.Hub
                     .MapAreaRoute("audioBooksDefault", "AudioBooks", "{controller=AudioBooks}/{action=Index}")
                     .MapAreaRoute("toolsDefault", "Tools", "{controller=Tools}/{action=Index}");
             });
+
+            // Update missing permissions on Auth service:
+            var communicationProvider = app.ApplicationServices.GetRequiredService<CommunicationProvider>();
+            communicationProvider.GetMainServiceClient().EnsureAuthServiceHasRequiredPermissions();
 
             applicationLifetime.ApplicationStopped.Register(OnShutdown);
         }

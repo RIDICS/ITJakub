@@ -13,6 +13,8 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual string ExternalId { get; set; }
 
+        public virtual string OriginalUrl { get; set; }
+
         public virtual User CreatedByUser { get; set; }
 
         public virtual Snapshot LatestPublishedSnapshot { get; set; }

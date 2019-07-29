@@ -1,13 +1,16 @@
 ﻿using ITJakub.Lemmatization.Shared.Contracts;
+using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models.Requests.Lemmatization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.Shared.Const;
+using ITJakub.Web.Hub.Options;
 
 namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
 {
+    [LimitedAccess(PortalType.ResearchPortal)]
     [Area("Lemmatization")]
     public class LemmatizationController : BaseController
     {
@@ -15,25 +18,25 @@ namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
         {
         }
 
-        [Authorize(PermissionNames.ReadLemmatization + "," + PermissionNames.EditLemmatization)]
+        [Authorize(VokabularPermissionNames.ReadLemmatization + "," + VokabularPermissionNames.EditLemmatization)]
         public ActionResult Index()
         {
             return View("Lemmatization");
         }
 
-        [Authorize(PermissionNames.ReadLemmatization + "," + PermissionNames.EditLemmatization)]
+        [Authorize(VokabularPermissionNames.ReadLemmatization + "," + VokabularPermissionNames.EditLemmatization)]
         public ActionResult Lemmatization()
         {
             return View("Lemmatization");
         }
 
-        [Authorize(PermissionNames.ReadLemmatization + "," + PermissionNames.EditLemmatization)]
+        [Authorize(VokabularPermissionNames.ReadLemmatization + "," + VokabularPermissionNames.EditLemmatization)]
         public ActionResult List()
         {
             return View("List");
         }
 
-        [Authorize(PermissionNames.ReadLemmatization + "," + PermissionNames.EditLemmatization)]
+        [Authorize(VokabularPermissionNames.ReadLemmatization + "," + VokabularPermissionNames.EditLemmatization)]
         public ActionResult GetTypeaheadToken(string query)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -43,7 +46,7 @@ namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
             }
         }
 
-        [Authorize(PermissionNames.EditLemmatization)]
+        [Authorize(VokabularPermissionNames.EditLemmatization)]
         public ActionResult CreateToken([FromBody] CreateTokenRequest request)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -53,7 +56,7 @@ namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
             }
         }
 
-        [Authorize(PermissionNames.ReadLemmatization + "," + PermissionNames.EditLemmatization)]
+        [Authorize(VokabularPermissionNames.ReadLemmatization + "," + VokabularPermissionNames.EditLemmatization)]
         public ActionResult GetTokenCharacteristic(long tokenId)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -63,7 +66,7 @@ namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
             }
         }
 
-        [Authorize(PermissionNames.EditLemmatization)]
+        [Authorize(VokabularPermissionNames.EditLemmatization)]
         public ActionResult AddTokenCharacteristic([FromBody] AddTokenCharacteristicRequest request)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -73,7 +76,7 @@ namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
             }
         }
 
-        [Authorize(PermissionNames.ReadLemmatization + "," + PermissionNames.EditLemmatization)]
+        [Authorize(VokabularPermissionNames.ReadLemmatization + "," + VokabularPermissionNames.EditLemmatization)]
         public ActionResult GetTypeaheadCanonicalForm(CanonicalFormTypeContract type, string query)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -83,7 +86,7 @@ namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
             }
         }
 
-        [Authorize(PermissionNames.ReadLemmatization + "," + PermissionNames.EditLemmatization)]
+        [Authorize(VokabularPermissionNames.ReadLemmatization + "," + VokabularPermissionNames.EditLemmatization)]
         public ActionResult GetTypeaheadHyperCanonicalForm(HyperCanonicalFormTypeContract type, string query)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -93,7 +96,7 @@ namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
             }
         }
 
-        [Authorize(PermissionNames.EditLemmatization)]
+        [Authorize(VokabularPermissionNames.EditLemmatization)]
         public ActionResult CreateCanonicalForm([FromBody] CreateCanonicalFormRequest request)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -103,7 +106,7 @@ namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
             }
         }
 
-        [Authorize(PermissionNames.EditLemmatization)]
+        [Authorize(VokabularPermissionNames.EditLemmatization)]
         public ActionResult AddCanonicalForm([FromBody] AddCanonicalFormRequest request)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -113,7 +116,7 @@ namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
             }
         }
 
-        [Authorize(PermissionNames.EditLemmatization)]
+        [Authorize(VokabularPermissionNames.EditLemmatization)]
         public ActionResult CreateHyperCanonicalForm([FromBody] CreateHyperCanonicalFormRequest request)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -123,7 +126,7 @@ namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
             }
         }
 
-        [Authorize(PermissionNames.EditLemmatization)]
+        [Authorize(VokabularPermissionNames.EditLemmatization)]
         public ActionResult SetHyperCanonicalForm([FromBody] SetHyperCanonicalFormRequest request)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -133,7 +136,7 @@ namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
             }
         }
 
-        [Authorize(PermissionNames.EditLemmatization)]
+        [Authorize(VokabularPermissionNames.EditLemmatization)]
         public ActionResult EditToken([FromBody] EditTokenRequest request)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -143,7 +146,7 @@ namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
             }
         }
 
-        [Authorize(PermissionNames.EditLemmatization)]
+        [Authorize(VokabularPermissionNames.EditLemmatization)]
         public ActionResult EditTokenCharacteristic([FromBody] EditTokenCharacteristicRequest request)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -153,7 +156,7 @@ namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
             }
         }
 
-        [Authorize(PermissionNames.EditLemmatization)]
+        [Authorize(VokabularPermissionNames.EditLemmatization)]
         public ActionResult EditCanonicalForm([FromBody] EditCanonicalFormRequest request)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -163,7 +166,7 @@ namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
             }
         }
 
-        [Authorize(PermissionNames.EditLemmatization)]
+        [Authorize(VokabularPermissionNames.EditLemmatization)]
         public ActionResult EditHyperCanonicalForm([FromBody] EditHyperCanonicalFormRequest request)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -173,7 +176,7 @@ namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
             }
         }
 
-        [Authorize(PermissionNames.ReadLemmatization + "," + PermissionNames.EditLemmatization)]
+        [Authorize(VokabularPermissionNames.ReadLemmatization + "," + VokabularPermissionNames.EditLemmatization)]
         public ActionResult GetTokenCount()
         {
             using (var client = GetLemmationzationServiceClient())
@@ -183,7 +186,7 @@ namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
             }
         }
 
-        [Authorize(PermissionNames.ReadLemmatization + "," + PermissionNames.EditLemmatization)]
+        [Authorize(VokabularPermissionNames.ReadLemmatization + "," + VokabularPermissionNames.EditLemmatization)]
         public ActionResult GetTokenList(int start, int count)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -193,7 +196,7 @@ namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
             }
         }
 
-        [Authorize(PermissionNames.ReadLemmatization + "," + PermissionNames.EditLemmatization)]
+        [Authorize(VokabularPermissionNames.ReadLemmatization + "," + VokabularPermissionNames.EditLemmatization)]
         public ActionResult GetToken(long tokenId)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -203,7 +206,7 @@ namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
             }
         }
 
-        [Authorize(PermissionNames.EditLemmatization)]
+        [Authorize(VokabularPermissionNames.EditLemmatization)]
         public ActionResult DeleteTokenCharacteristic([FromBody] DeleteTokenCharacteristicRequest request)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -213,7 +216,7 @@ namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
             }
         }
 
-        [Authorize(PermissionNames.EditLemmatization)]
+        [Authorize(VokabularPermissionNames.EditLemmatization)]
         public ActionResult RemoveCanonicalForm([FromBody] RemoveCanonicalFormRequest request)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -223,7 +226,7 @@ namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
             }
         }
 
-        [Authorize(PermissionNames.EditLemmatization)]
+        [Authorize(VokabularPermissionNames.EditLemmatization)]
         public ActionResult RemoveHyperCanonicalForm([FromBody] RemoveHyperCanonicalFormRequest request)
         {
             using (var client = GetLemmationzationServiceClient())

@@ -51,7 +51,7 @@ namespace Vokabular.MainService.Core.Managers
         public void CheckUserCanViewCardFile(string cardFileId)
         {
             var currentUserPermissions = m_authenticationManager.GetCurrentUserPermissions(true);
-            if (currentUserPermissions.All(x => x.Value != PermissionNames.CardFile + cardFileId))
+            if (currentUserPermissions.All(x => x.Value != VokabularPermissionNames.CardFile + cardFileId))
             {
                 var user = m_authenticationManager.GetCurrentUser();
                 if (user == null)
@@ -73,7 +73,7 @@ namespace Vokabular.MainService.Core.Managers
             }
 
             var currentUserPermissions = m_authenticationManager.GetCurrentUserPermissions(true);
-            cardFilesContracts = cardFilesContracts.Where(x => currentUserPermissions.Any(y => y.Value == PermissionNames.CardFile + x.Id))
+            cardFilesContracts = cardFilesContracts.Where(x => currentUserPermissions.Any(y => y.Value == VokabularPermissionNames.CardFile + x.Id))
                 .ToList();
         }
 

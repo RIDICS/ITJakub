@@ -9,12 +9,12 @@
     <PackageReference Include="FluentValidation" Version="8.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="MimeMapping" Version="1.0.1.12" />
+    <PackageReference Include="Ridics.Authentication.HttpClient" Version="0.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ITJakub.FileProcessing.DataContracts\ITJakub.FileProcessing.DataContracts.csproj" />
     <ProjectReference Include="..\ITJakub.SearchService.DataContracts\ITJakub.SearchService.DataContracts.csproj" />
-    <ProjectReference Include="..\Vokabular.Authentication.Client\Vokabular.Authentication.Client.csproj" />
     <ProjectReference Include="..\Vokabular.CardFile.Core\Vokabular.CardFile.Core.csproj" />
     <ProjectReference Include="..\Vokabular.Core\Vokabular.Core.csproj" />
     <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj" />

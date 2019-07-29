@@ -7,16 +7,14 @@ namespace ITJakub.Web.Hub.Helpers
 {
     public static class BreadcrumbsHelper
     {
-        public static HtmlString Create(ILocalizationService localizer, params string[] path)
+        public static HtmlString Create(ILocalizationService localizer, string portalName, params string[] path)
         {
-            var appNameLocalized = localizer.Translate("VokabulářWebový", "global");
-            
             var sb = new StringBuilder();
             sb.Append("<ul class=\"breadcrumb\">");
 
             //sb.Append("<li><a href=\"/\">Vokabulář webový</a></li> ");
             sb.Append("<li><a href=\"/\">");
-            sb.Append(appNameLocalized);
+            sb.Append(portalName);
             sb.Append("</a></li> ");
 
             for (int i = 0; i < path.Length - 1; i++)

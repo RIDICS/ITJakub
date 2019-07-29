@@ -115,5 +115,10 @@ namespace Vokabular.MainService.Test.Containers
         {
             m_container.Register<TService, TImplementation>(Reuse.Singleton, ifAlreadyRegistered: IfAlreadyRegistered.Replace);
         }
+
+        public void Populate(IServiceCollection services)
+        {
+            m_container.Populate(services);
+        }
     }
 }

@@ -1,0 +1,11 @@
+{
+  "culture": "en",
+  "scope": "UserDetailViewModel",
+  "dictionary": {
+    "UserName": "Username",
+    "Email": "E-mail",
+    "Password": "Password",
+    "FirstName": "First name",
+    "LastName": "Last name"
+  }
+}

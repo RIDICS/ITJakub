@@ -1,5 +1,5 @@
-﻿using Vokabular.Authentication.Client.Client;
-using Vokabular.Authentication.Client.Exceptions;
+﻿using Ridics.Authentication.HttpClient.Client;
+using Ridics.Authentication.HttpClient.Exceptions;
 
 namespace Vokabular.MainService.Utils
 {

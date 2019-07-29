@@ -15,7 +15,7 @@ using Vokabular.Shared.Const;
 
 namespace ITJakub.Web.Hub.Controllers
 {
-    [Authorize(PermissionNames.AddNews)]
+    [Authorize(VokabularPermissionNames.AddNews)]
     public class NewsController : BaseController
     {
         private readonly GoogleCalendarConfiguration m_googleCalendarConfiguration;

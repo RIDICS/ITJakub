@@ -1,0 +1,58 @@
+﻿@using ITJakub.Web.Hub.Constants
+@using Scalesoft.Localization.AspNetCore
+@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.Permission.RoleContract>
+
+@inject ILocalizationService Localizer
+
+
+@if (!string.IsNullOrEmpty(Model.SearchQuery))
+{
+    <div class="row reset-search">
+        <div class="query">
+            <span class="text-nowrap">@Localizer.Translate("SearchQuery", "Permission"): <span class="searched-query">Model.SearchQuery</span></span>
+        </div>
+        <div class="reset-search-form">
+            <form asp-action="RolePermission" asp-controller="Permission" method="get" class="">
+                <input type="hidden" class="reset-search-count" name="count"/>
+                <button type="submit" class="btn btn-sm btn-default">@Localizer.Translate("ResetSearch", "Permission")</button>
+            </form>
+        </div>
+    </div>
+}
+
+@if (Model != null && Model.List.Count != 0)
+{
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>
+                    @Localizer.Translate("Name", "Permission")
+                </th>
+                <th>
+                    @Localizer.Translate("Description", "Permission")
+                </th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @await Html.PartialAsync("_RoleListPage", Model)
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        <i class="fa fa-info-circle fa-lg"></i>
+        @if (!string.IsNullOrEmpty(Model.SearchQuery))
+        {
+            @(Localizer.Translate("NoUsersSearch", "Permission") + "\"")<span class="searched-query">@Model.SearchQuery</span>
+            @("\"")
+        }
+        else
+        {
+            @Localizer.Translate("NoUsersFound", "Permission")
+        }
+    </div>
+}

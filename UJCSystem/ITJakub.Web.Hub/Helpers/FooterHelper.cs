@@ -18,9 +18,9 @@ namespace ITJakub.Web.Hub.Helpers
             int months = age.Month - 1;
             int days = age.Day - 1;
 
-            string yearsLabel = localizer.TranslatePluralization("Years", years, "global");
-            string monthsLabel = localizer.TranslatePluralization("Months", years, "global");
-            string daysLabel = localizer.TranslatePluralization("Days", years, "global");
+            string yearsLabel = localizer.TranslatePluralization("Years", "global", years);
+            string monthsLabel = localizer.TranslatePluralization("Months", "global", months);
+            string daysLabel = localizer.TranslatePluralization("Days", "global", days);
             string andConjunction = localizer.Translate("and", "global");
 
             var resultString = $"{years} {yearsLabel}, {months} {monthsLabel} {andConjunction} {days} {daysLabel}";

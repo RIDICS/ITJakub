@@ -1,0 +1,37 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@using Scalesoft.Localization.Core.Util
+@model ITJakub.Web.Hub.Areas.RepositoryImport.Models.CreateExternalRepositoryViewModel
+
+@inject ILocalizationService Localizer
+
+@{
+    ViewBag.Title = Localizer.Translate("ExternalRepositoriesTitle", "RepositoryImport", LocTranslationSource.File);
+}
+
+@section styles {
+    <link asp-append-version="true" rel="stylesheet" href="~/Areas/RepositoryImport/css/ridics.repositoryImport.css" />
+}
+
+@section scripts {
+    <script asp-append-version="true" src="~/Areas/RepositoryImport/js/ridics.repositoryImport.js" type="text/javascript"></script>
+}
+
+<div class="content-container">
+    <div class="row project-import-layout">
+        @await Html.PartialAsync("~/Areas/RepositoryImport/Views/_LeftMenu.cshtml")
+        <div class="vertical-splitter"></div>
+
+        <div class="content" id="project-import-layout-content">
+            <div class="col-md-offset-2 col-md-11">
+                <h1>@Localizer.Translate("CreateExternalRepository", "RepositoryImport", LocTranslationSource.File)</h1>
+            </div>
+
+            <p>
+                @using (Html.BeginForm("Create", "ExternalRepository", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+                {
+                    @await Html.PartialAsync("_ExternalRepositoryForm")
+                }
+            </p>
+        </div>
+    </div>
+</div>

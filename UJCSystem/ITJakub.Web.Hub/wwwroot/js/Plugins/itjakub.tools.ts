@@ -7,6 +7,11 @@
     InternalServerError = 500,
 }
 
+interface IKeyValue<TKey, TValue> {
+    key: TKey;
+    value: TValue;
+}
+
 interface IDictionary<T> {
     [key: number]: T;
     [key: string]: T;

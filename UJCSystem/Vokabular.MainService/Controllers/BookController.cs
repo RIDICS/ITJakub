@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
-using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.RestClient.Errors;
-using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
@@ -39,7 +36,6 @@ namespace Vokabular.MainService.Controllers
             return Ok(result);
         }
 
-        [Authorize(PermissionNames.ManagePermissions)]
         [HttpGet("type/{bookType}/all")]
         [ProducesResponseType(typeof(List<BookContract>), StatusCodes.Status200OK)]
         public IActionResult GetAllBooksByType(BookTypeEnumContract? bookType)

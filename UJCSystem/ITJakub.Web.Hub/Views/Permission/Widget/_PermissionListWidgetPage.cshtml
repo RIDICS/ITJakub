@@ -1,0 +1,16 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<ITJakub.Web.Hub.Models.PermissionViewModel>
+@inject ILocalizationService Localizer
+
+<div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>
+@foreach (var permission in Model.List)
+{
+<tr>
+    <td class="permission-checkbox" data-permission-id="@permission.Id">
+        @Html.CheckBoxFor(modelItem => permission.IsSelected)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => permission.Name)
+    </td>
+</tr>
+}

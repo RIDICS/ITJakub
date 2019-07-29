@@ -1,19 +1,20 @@
 {
-	"culture":"en",
-	"scope":"Account",
+  "culture": "en",
+  "scope": "Account",
   "dictionary": {
     "UseExternalLoginService": "Use another service for login",
     "UseExternalLoginService-placeholder": "You should be able to register using another accounts here",
-    "Login": "Login",
-    "Login-text": "Log in using your account",
-    "Login-submit": "Log in",
+    "Login": "Sign in",
+    "Login-text": "Sign in using your account",
+    "Login-submit": "Sign in",
 
     "RegisterAccount": "Register as new user",
     "Registration": "Registration",
-    "SuccessRegistration": "The registration was successful. You can log in.",
+    "SuccessRegistration1": "The registration was successful. You can {0}",
+    "SuccessRegistration2": "sign in.",
 
     "MakeNewAccount": "New account creation",
-    "Registration-submit": "Register",
+    "Registration-submit": "Sign up",
 
     "Detail": "Account detail",
     "Settings": "Account settings",
@@ -24,6 +25,26 @@
 
     "PasswordChange": "Update password",
     "UpdatePasswordSubmit": "Change password",
-    "SuccessPasswordChange": "The password was successfully updated."
+    "SuccessPasswordChange": "The password was successfully updated.",
+
+    "UpdateContact": "Edit contacts",
+    "EmailAddressUpdate": "Edit e-mail address",
+    "EmailAddressVerification": "E-mail address verification",
+    "EmailAddressIsNotVerified": "E-mail address is not verified",
+    "SuccessContactUpdate": "The contact was successfully updated. Now you need to verify it.",
+    "ConfirmCodeSend": "The confirm code was sent to e-mail address {0}.",
+    "Change": "Change",
+    "Confirm": "Confirm",
+    "ResendCode": "Resend confirm code",
+    "SuccessConfirmContact": "The contact was successfully confirmed.",
+
+    "EmptyEmail": "E-mail cannot be empty",
+    "SameEmail": "New e-mail cannot be same as old e-mail.",
+    "ConfirmCodeNotValid": "Confirm code is not valid.",
+    "ResendCodeError": "An unexpected problem occurred when sending the confirmation code.",
+
+    "UpdateTwoFactorVerification": "Two-factor verification",
+    "SuccessTwoFactorUpdate": "Two-factor verification was successfully updated.",
+    "Save": "Save"
   }
 }

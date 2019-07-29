@@ -46,9 +46,9 @@ namespace Vokabular.RestClient
             return PostAsync<T>(uriPath, data).GetAwaiter().GetResult();
         }
 
-        protected T PostStreamAsForm<T>(string uriPath, Stream data, IEnumerable<Tuple<string, string>> headers = null)
+        protected T PostStreamAsForm<T>(string uriPath, Stream data, string fileName, IEnumerable<Tuple<string, string>> headers = null)
         {
-            return PostStreamAsFormAsync<T>(uriPath, data, headers).GetAwaiter().GetResult();
+            return PostStreamAsFormAsync<T>(uriPath, data, fileName, headers).GetAwaiter().GetResult();
         }
 
         protected T PostStream<T>(string uriPath, Stream data, IEnumerable<Tuple<string, string>> headers = null)

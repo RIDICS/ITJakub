@@ -3,7 +3,7 @@
 	"scope":"RegisterViewModel",
 	  "dictionary": {
 		"UserName": "Username",
-		"Email":"Email",
+		"Email":"E-mail",
 		"Password":"Password",
 		"HasAtLeastNChars":"The {0} must have at least {2} characters.",
 		"FirstName":"First name",

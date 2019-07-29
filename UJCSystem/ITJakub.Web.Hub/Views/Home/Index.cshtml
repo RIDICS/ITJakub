@@ -1,27 +1,50 @@
-﻿@using ITJakub.Web.Hub.Controllers
+﻿@using ITJakub.Web.Hub.Constants
+@using ITJakub.Web.Hub.Controllers
 @using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
+@using Vokabular.Shared.AspNetCore.Extensions
 
 @inject ILocalizationService Localizer
+@inject IRazorLocalizationService RazorLocalizer
 
 @{
     ViewBag.Title = Localizer.Translate("IndexTitle", "Home", LocTranslationSource.File);
+    var emailConfirmed = User.IsEmailConfirmed();
+
 }
 @section scripts{
-    <script src="~/js/itjakub.home.js"></script>
-    <script src="~/js/itjakub.news.js"></script>
+    <script asp-append-version="true" src="~/js/itjakub.home.js"></script>
+    <script asp-append-version="true" src="~/js/itjakub.news.js"></script>
 }
 @section styles{
-    <link rel="stylesheet" href="~/css/ITJakub.Home.css" />
+    <link asp-append-version="true" rel="stylesheet" href="~/css/ITJakub.Home.css" />
 }
 
 <script type="text/javascript">
-    $(document).ready(function() {
+    $(document).ready(function () {
         new News().initNews();
     });
 </script>
 
 <div class="top-offset-main-site">
+  
+    @if (emailConfirmed.HasValue && !emailConfirmed.Value)
+    {
+        <div class="alert alert-warning">
+            <i class="fa fa-warning"></i>
+            @RazorLocalizer.TranslateFormat(
+                "EmailIsNotConfirmedAlert1",
+                "Home",
+                Html.ActionLink(
+                    Localizer.TranslateFormat("EmailIsNotConfirmedAlert2", "Home").ToString(),
+                    "AccountSettings",
+                    "Account",
+                    new {actualTab = AccountTab.UpdateContact})
+                )
+            @Localizer.Translate("EmailIsNotConfirmedAlertDescription")
+        </div>
+    }
+
     <form role="form" class="form-horizontal">
         <div class="form-group searchbar">
             <div class="searchbar-buttons">
@@ -33,7 +56,7 @@
                 </button>
             </div>
             <div class="searchbar-inputs">
-                <input type="text" class="form-control searchbar-input" id="searchbox" placeholder=" @Localizer.Translate("Find...", "Home", LocTranslationSource.File)" style="max-width: 100%;"/>
+                <input type="text" class="form-control searchbar-input" id="searchbox" placeholder=" @Localizer.Translate("Find...", "Home", LocTranslationSource.File)" style="max-width: 100%;" />
             </div>
 
         </div>
@@ -41,13 +64,13 @@
 
     <div style="height: 73vh;">
         <div class="content-container left-panel">
-            <img src='@Url.Content("~/images/mlceni_pink.jpg")' alt="@Localizer.Translate("Silence","Home", LocTranslationSource.File)" class="centered" style="max-height: 100%; max-width: 100%;"/>
+            <img src='@Url.Content("~/images/mlceni_pink.jpg")' alt="@Localizer.Translate("Silence", "Home", LocTranslationSource.File)" class="centered" style="max-height: 100%; max-width: 100%;" />
         </div>
         <div class="content-container right-panel">
             <div id="news" class="news">
-                <h1>@Localizer.Translate("News","Home", LocTranslationSource.File)</h1>
+                <h1>@Localizer.Translate("News", "Home", LocTranslationSource.File)</h1>
 
-                <div class="news-feeds">                    
+                <div class="news-feeds">
                     <a href="@Url.Action("Feed", "News", new {feedType = FeedType.Atom.ToString()})" class="news-feed-atom"></a>
                     <a href="@Url.Action("Feed", "News", new {feedType = FeedType.Rss.ToString()})" class="news-feed-rss"></a>
                 </div>

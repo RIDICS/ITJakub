@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.MainService.Models;
 using Vokabular.Shared.Const;
 
 namespace Vokabular.MainService.Controllers
@@ -22,14 +23,17 @@ namespace Vokabular.MainService.Controllers
             m_namedResourceGroupManager = namedResourceGroupManager;
         }
 
-        [Authorize(PermissionNames.UploadBook)]
+        [Authorize(VokabularPermissionNames.UploadBook)]
         [HttpPost("session/{sessionId}/resource")]
-        public void UploadResource(string sessionId, [FromQuery] string fileName)
+        public void UploadResource(string sessionId, [FromForm] FormFileContract formData)
         {
-            m_resourceManager.UploadResource(sessionId, Request.Body, fileName);
+            using (var fileStream = formData.File.OpenReadStream())
+            {
+                m_resourceManager.UploadResource(sessionId, fileStream, formData.File.FileName);
+            }
         }
 
-        [Authorize(PermissionNames.UploadBook)]
+        [Authorize(VokabularPermissionNames.UploadBook)]
         [HttpPost("session/{sessionId}")]
         public void ProcessSessionAsImport(string sessionId, [FromBody] NewBookImportContract info)
         {

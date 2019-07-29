@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Core.Communication;
@@ -12,9 +13,11 @@ using Vokabular.MainService.DataContracts.Contracts.CardFile;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Old;
 using Vokabular.Shared.DataContracts.Types;
+using ITJakub.Web.Hub.Options;
 
 namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 {
+    [LimitedAccess(PortalType.ResearchPortal)]
     [Area("CardFiles")]
     public class CardFilesController : AreaController
     {

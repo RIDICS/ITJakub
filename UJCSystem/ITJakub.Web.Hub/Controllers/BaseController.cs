@@ -1,10 +1,13 @@
 using System.IO;
+using System.Net;
 using ITJakub.Lemmatization.Shared.Contracts;
 using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.DataContracts;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Vokabular.MainService.DataContracts.Clients;
+using Vokabular.RestClient.Errors;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -50,6 +53,38 @@ namespace ITJakub.Web.Hub.Controllers
         {
             Response.ContentLength = fileSize;
             return base.File(fileStream, contentType, fileDownloadName);
+        }
+
+        protected void AddErrors(HttpErrorCodeException exception)
+        {
+            if (exception.ValidationErrors == null)
+            {
+                ModelState.AddModelError(string.Empty, exception.Message);
+                return;
+            }
+
+            foreach (var error in exception.ValidationErrors)
+            {
+                ModelState.AddModelError(string.Empty, error.Message);
+            }
+        }
+
+        protected IActionResult AjaxOkResponse()
+        {
+            return new JsonResult(new {});
+        }
+
+        protected IActionResult AjaxErrorResponse(string message, HttpStatusCode httpStatusCode = HttpStatusCode.InternalServerError)
+        {
+            var result = new ErrorContract
+            {
+                ErrorMessage = message
+            };
+
+            return new ObjectResult(result)
+            {
+                StatusCode = (int)httpStatusCode
+            };
         }
     }
 }

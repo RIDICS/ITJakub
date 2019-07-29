@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Errors;
+using Vokabular.Shared.Const;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -17,12 +19,14 @@ namespace Vokabular.MainService.Controllers
             m_categoryManager = categoryManager;
         }
 
+        [Authorize(VokabularPermissionNames.ManageCodeList)]
         [HttpPost("")]
         public int CreateCategory([FromBody] CategoryContract category)
         {
             return m_categoryManager.CreateCategory(category);
         }
 
+        [Authorize(VokabularPermissionNames.ManageCodeList)]
         [HttpPut("{categoryId}")]
         public IActionResult UpdateCategory(int categoryId, [FromBody] CategoryContract category)
         {
@@ -37,6 +41,7 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
+        [Authorize(VokabularPermissionNames.ManageCodeList)]
         [HttpDelete("{categoryId}")]
         public IActionResult DeleteCategory(int categoryId)
         {

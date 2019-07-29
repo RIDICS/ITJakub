@@ -9,10 +9,10 @@
 }
 
 @section styles{
-    <link href="~/css/ITJakub.TextEditor.css" rel="stylesheet" />
+    <link asp-append-version="true" href="~/css/ITJakub.TextEditor.css" rel="stylesheet" />
 }
 @section Scripts {
-    <script src="~/js/itjakub.text.editor.js"></script>
+    <script asp-append-version="true" src="~/js/itjakub.text.editor.js"></script>
 }
 
 <div class="content-container top-offset-without-submenu">
@@ -55,7 +55,7 @@
                             <span id="modification-author">
                                 @if (string.IsNullOrEmpty(Model.LastModificationAuthor))
                                 {
-                                    @Html.Raw(Localizer.TranslateFormat("AnonymousVar2", new object[]{"(",")"}, "Text", LocTranslationSource.File))
+                                    @Html.Raw(Localizer.TranslateFormat("AnonymousVar2", "Text", LocTranslationSource.File, "(", ")"))
                                 }
                                 else
                                 {

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="Vokabular.DataEntities" namespace="Vokabular.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="ExternalRepository" table="[ExternalRepository]" >
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+    
+    <property name="Name" not-null="true" />
+
+    <property name="Description" />
+
+    <property name="Url" not-null="true" />
+
+    <property name="UrlTemplate" not-null="false" />
+
+    <property name="License" />
+
+    <property name="Configuration" />
+
+    <many-to-one name="CreatedByUser" class="User" lazy="proxy" not-null="true" />
+
+    <many-to-one name="ExternalRepositoryType" class="ExternalRepositoryType" lazy="proxy" not-null="true" />
+
+    <many-to-one name="BibliographicFormat" class="BibliographicFormat" lazy="proxy" not-null="true" />
+    
+    <bag name="ImportHistories" lazy="true">
+      <key column="ExternalRepository" />
+      <one-to-many class="ImportHistory" />
+    </bag>
+
+    <bag name="FilteringExpressionSets" table="ExternalRepository_FilteringExpressionSet" lazy="true">
+      <key column="ExternalRepository" />
+      <many-to-many class="FilteringExpressionSet" column="FilteringExpressionSet" />
+    </bag>
+
+    <bag name="ImportedProjectMetadata" lazy="true">
+      <key column="ExternalRepository" />
+      <one-to-many class="ImportedProjectMetadata" />
+    </bag>
+  </class>
+</hibernate-mapping>

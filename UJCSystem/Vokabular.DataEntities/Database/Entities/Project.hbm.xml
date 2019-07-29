@@ -11,6 +11,8 @@
     
     <property name="ExternalId" not-null="false" />
 
+    <property name="OriginalUrl" not-null="false" />
+
     <property name="ForumId" not-null="false" />
 
     <many-to-one name="LatestPublishedSnapshot" class="Snapshot" lazy="proxy" />

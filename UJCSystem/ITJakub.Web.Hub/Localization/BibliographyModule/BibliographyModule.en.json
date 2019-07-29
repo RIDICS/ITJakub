@@ -21,6 +21,7 @@
     "BrowserDoesNotSupportHtmlAudio": "translate[Váš prohlížeč nepodporuje html audio]",
     "Length": "translate[Délka]",
     "DownloadChapter": "translate[Stáhnout kapitolu]",
+    "LinkToOriginal": "translate[Odkaz na originál]",
 
     "NotFilled": "&lt;translate[Nezadáno]&gt;"
   }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NHibernate;
 using NHibernate.Criterion;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.Shared.DataEntities.UnitOfWork;
@@ -11,11 +12,19 @@ namespace Vokabular.DataEntities.Database.Repositories
         public PermissionRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
         }
-        
+
+        public virtual User GetUserWithGroups(int userId)
+        {
+            var result = GetSession().QueryOver<User>()
+                .Where(x => x.Id == userId)
+                .Fetch(SelectMode.Fetch, x => x.Groups)
+                .SingleOrDefault();
+            return result;
+        }
+
         public virtual UserGroup FindGroupByExternalId(int externalId)
         {
             var group = GetSession().QueryOver<UserGroup>()
-                //.Fetch(SelectMode.Fetch, g => g.Users) // TODO remove this Fetch
                 .Where(g => g.ExternalId == externalId)
                 .SingleOrDefault();
 
@@ -39,6 +48,15 @@ namespace Vokabular.DataEntities.Database.Repositories
             CreateGroup(newGroup);
 
             return newGroup;
+        }
+
+        public virtual IList<int> GetGroupIdsByExternalIds(IEnumerable<int> externalIds)
+        {
+            var result = GetSession().QueryOver<UserGroup>()
+                .WhereRestrictionOn(x => x.ExternalId).IsInG(externalIds)
+                .Select(x => x.Id)
+                .List<int>();
+            return result;
         }
 
         public virtual int CreateGroup(UserGroup group)

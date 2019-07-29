@@ -348,7 +348,23 @@ class RegExAdvancedSearchEditor {
     }
 
     setEnabledOptions(enabledOptions: Array<SearchTypeEnum>) {
-        this.enabledOptionsArray = enabledOptions;
+        //Set options which are allowed for the actual portal.
+        const allowedOptions = JSON.parse(he.decode($("#allowedSearchOptions").data("options"))) as Array<IKeyValue<string, boolean>>;
+        const filteredEnabledOptions = new Array<SearchTypeEnum>();
+        for (let optionId of enabledOptions) {
+            const optionName = SearchTypeEnum[optionId];
+
+            for (let allowedOption of allowedOptions) {
+                if (allowedOption.key === optionName) {
+                    if (allowedOption.value) {
+                        filteredEnabledOptions.push(optionId);
+                    }
+                    break;
+                }
+            }
+        }
+
+        this.enabledOptionsArray = filteredEnabledOptions;
     }
 
     limitFullTextOptions() {

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using Vokabular.Shared.Const;
 
@@ -6,7 +7,7 @@ namespace Vokabular.Shared.AspNetCore.Extensions
 {
     public static class UserClaimsExtensions
     {
-        public static int? GetId(this ClaimsPrincipal claimsPrincipal)
+        public static int? GetIdOrDefault(this ClaimsPrincipal claimsPrincipal)
         {
             var idClaim = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier);
 
@@ -16,6 +17,11 @@ namespace Vokabular.Shared.AspNetCore.Extensions
             }
 
             return null;
+        }
+
+        public static int GetId(this ClaimsPrincipal claimsPrincipal)
+        {
+            return claimsPrincipal.GetIdOrDefault() ?? throw new InvalidOperationException("User is not sign in.");
         }
 
         public static string GetUserName(this ClaimsPrincipal claimsPrincipal)
@@ -53,6 +59,16 @@ namespace Vokabular.Shared.AspNetCore.Extensions
             if (claimsPrincipal.Identity.IsAuthenticated)
             {
                 return claimsPrincipal.FindFirst(ClaimTypes.Email)?.Value;
+            }
+
+            return null;
+        }
+
+        public static bool? IsEmailConfirmed(this ClaimsPrincipal claimsPrincipal)
+        {
+            if (claimsPrincipal.Identity.IsAuthenticated)
+            {
+                return Convert.ToBoolean(claimsPrincipal.FindFirst(CustomClaimTypes.EmailConfirmed)?.Value);
             }
 
             return null;

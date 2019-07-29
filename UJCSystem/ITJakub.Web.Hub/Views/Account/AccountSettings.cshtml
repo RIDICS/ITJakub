@@ -1,36 +1,49 @@
-﻿@using Scalesoft.Localization.AspNetCore
-@model ITJakub.Web.Hub.Models.AccountDetailViewModel
+﻿@using ITJakub.Web.Hub.Constants
+@using Scalesoft.Localization.AspNetCore
+@model ITJakub.Web.Hub.Models.User.AccountDetailViewModel
 
 @inject ILocalizationService Localizer
+@section styles {
+    <link asp-append-version="true" href="~/css/ridics.account.css" rel="stylesheet" />
+}
+@section scripts {
+    <script asp-append-version="true" src="~/js/ridics.web-hub-api-client.js"></script>
+    <script asp-append-version="true" src="~/js/ridics.account-api-client.js"></script>
+    <script asp-append-version="true" src="~/js/ridics.account.js"></script>
+}
 @{
     ViewBag.Title = Localizer.Translate("Settings", "Account");
-    ViewData.TryGetValue("ActualTab", out var value);
-    var actualTab = (string) value;
 }
-
+<div id="userId" class="hide" data-id="@Model.UpdateUserViewModel.Id"></div>
 <div class="content-container top-offset-without-submenu">
     <h2>@ViewBag.Title</h2>
     <ul class="nav nav-tabs" role="tablist" id="project-work-tabs">
-        <li role="presentation" @(!ViewData.ContainsKey("ActualTab") ? "class=active" : string.Empty)>
-            <a href="#account-settings" data-toggle="tab" role="tab">@Localizer.Translate("Detail", "Account")</a>
-        </li>
-        <li role="presentation" @(actualTab == "UpdateAccount" ? "class=active" : string.Empty)>
+        <li role="presentation" @(Model.ActualTab == AccountTab.UpdateAccount ? "class=active" : string.Empty)>
             <a href="#update-account" data-toggle="tab" role="tab">@Localizer.Translate("DataChange", "Account")</a>
         </li>
-        <li role="presentation" @(actualTab == "UpdatePassword" ? "class=active" : string.Empty)>
+        <li role="presentation" @(Model.ActualTab == AccountTab.UpdatePassword ? "class=active" : string.Empty)>
             <a href="#update-password" data-toggle="tab" role="tab">@Localizer.Translate("PasswordChange", "Account")</a>
+        </li>
+        <li role="presentation" @(Model.ActualTab == AccountTab.UpdateContact ? "class=active" : string.Empty)>
+            <a href="#update-contact" data-toggle="tab" role="tab">@Localizer.Translate("UpdateContact", "Account")</a>
+        </li>
+        <li role="presentation" @(Model.ActualTab == AccountTab.UpdateTwoFactorVerification ? "class=active" : string.Empty)>
+            <a href="#update-two-factor-verification" data-toggle="tab" role="tab">@Localizer.Translate("UpdateTwoFactorVerification", "Account")</a>
         </li>
     </ul>
 
     <div class="tab-content">
-        <div role="tabpanel" class="tab-pane @(!ViewData.ContainsKey("ActualTab") ? "active" : string.Empty)" id="account-settings">
-            @await Html.PartialAsync("Settings/_Detail", Model)
+        <div role="tabpanel" class="tab-pane @(Model.ActualTab == AccountTab.UpdateAccount ? "active" : string.Empty)" id="update-account">
+            @await Html.PartialAsync("Settings/_UpdateAccount", Model.UpdateUserViewModel)
         </div>
-        <div role="tabpanel" class="tab-pane @(actualTab == "UpdateAccount" ? "active" : string.Empty)" id="update-account">
-            @await Html.PartialAsync("Settings/_UpdateAccount", Model.UpdateAccountViewModel)
-        </div>
-        <div role="tabpanel" class="tab-pane @(actualTab == "UpdatePassword" ? "active" : string.Empty)" id="update-password">
+        <div role="tabpanel" class="tab-pane @(Model.ActualTab == AccountTab.UpdatePassword ? "active" : string.Empty)" id="update-password">
             @await Html.PartialAsync("Settings/_UpdatePassword", Model.UpdatePasswordViewModel)
+        </div>
+        <div role="tabpanel" class="tab-pane @(Model.ActualTab == AccountTab.UpdateContact ? "active" : string.Empty)" id="update-contact">
+            @await Html.PartialAsync("Settings/_UpdateContact", Model.UpdateContactViewModel)
+        </div>
+        <div role="tabpanel" class="tab-pane @(Model.ActualTab == AccountTab.UpdateTwoFactorVerification ? "active" : string.Empty)" id="update-two-factor-verification">
+            @await Html.PartialAsync("Settings/_UpdateTwoFactorVerification", Model.UpdateTwoFactorVerificationViewModel)
         </div>
     </div>
 </div>

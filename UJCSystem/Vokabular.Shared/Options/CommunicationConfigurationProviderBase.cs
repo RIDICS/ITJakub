@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
 using Microsoft.Extensions.Options;
 
@@ -8,23 +7,23 @@ namespace Vokabular.Shared.Options
 {
     public abstract class CommunicationConfigurationProviderBase
     {
-        private readonly Dictionary<string, EndpointOption> m_endpointsOptions;
+        private readonly IDictionary<string, string> m_endpointAddresses;
 
-        public CommunicationConfigurationProviderBase(IOptions<List<EndpointOption>> endpointOptions)
+        public CommunicationConfigurationProviderBase(IOptions<EndpointOption> endpointOptions)
         {
-            m_endpointsOptions = endpointOptions.Value.ToDictionary(x => x.Name);
+            m_endpointAddresses = endpointOptions.Value.Addresses;
         }
 
         public Uri GetEndpointUri(string name)
         {
-            var options = m_endpointsOptions[name];
-            return new Uri(options.Address);
+            var url = m_endpointAddresses[name];
+            return new Uri(url);
         }
 
         public EndpointAddress GetEndpointAddress(string name)
         {
-            var options = m_endpointsOptions[name];
-            return new EndpointAddress(options.Address);
+            var url = m_endpointAddresses[name];
+            return new EndpointAddress(url);
         }
     }
 }
