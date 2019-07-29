@@ -1,5 +1,7 @@
 ﻿using System.Net;
+using System.Threading.Tasks;
 using AutoMapper;
+using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Constants;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models.Requests.Permission;
@@ -18,10 +20,12 @@ namespace ITJakub.Web.Hub.Controllers
     public class AccountController : BaseController
     {
         private readonly ILocalizationService m_localizationService;
+        private readonly RefreshUserManager m_refreshUserManager;
 
-        public AccountController(CommunicationProvider communicationProvider, ILocalizationService localizationService) : base(communicationProvider)
+        public AccountController(CommunicationProvider communicationProvider, ILocalizationService localizationService, RefreshUserManager refreshUserManager) : base(communicationProvider)
         {
             m_localizationService = localizationService;
+            m_refreshUserManager = refreshUserManager;
         }
 
         //
@@ -163,7 +167,7 @@ namespace ITJakub.Web.Hub.Controllers
         //
         // POST: /Account/UpdateContact
         [HttpPost]
-        public IActionResult UpdateContact([FromBody] UpdateUserContactContract updateUserContactContract)
+        public async Task<IActionResult> UpdateContact([FromBody] UpdateUserContactContract updateUserContactContract)
         {
             try
             {
@@ -180,6 +184,7 @@ namespace ITJakub.Web.Hub.Controllers
                 using (var client = GetRestClient())
                 {
                     client.UpdateCurrentUserContact(updateUserContactContract);
+                    await m_refreshUserManager.RefreshUserClaimsAsync(HttpContext);
                 }
             }
             catch (HttpErrorCodeException e)
@@ -193,7 +198,7 @@ namespace ITJakub.Web.Hub.Controllers
         //
         // POST: /Account/ConfirmUserContact
         [HttpPost]
-        public IActionResult ConfirmUserContact([FromBody] ConfirmUserContactRequest confirmUserContactRequest)
+        public async Task<IActionResult> ConfirmUserContact([FromBody] ConfirmUserContactRequest confirmUserContactRequest)
         {
             try
             {
@@ -205,6 +210,11 @@ namespace ITJakub.Web.Hub.Controllers
                         ContactType = confirmUserContactRequest.ContactType
                     };
                     var result = client.ConfirmUserContact(contract);
+                    if (result)
+                    {
+                        await m_refreshUserManager.RefreshUserClaimsAsync(HttpContext);
+                    }
+
                     return Json(result);
                 }
             }
