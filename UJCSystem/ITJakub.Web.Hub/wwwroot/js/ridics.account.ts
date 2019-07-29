@@ -72,7 +72,6 @@ class AccountManager {
         });
 
         $("#account-cancel-button").click((event) => {
-            event.preventDefault();
             $(".editable").prop("readonly", true);
             $("#account-editor-button-panel").addClass("hide");
             $("#account-view-button-panel").removeClass("hide");
