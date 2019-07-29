@@ -1,9 +1,7 @@
-﻿@using ITJakub.Web.Hub.Constants
-@using Scalesoft.Localization.AspNetCore
+﻿@using Scalesoft.Localization.AspNetCore
 @model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.Permission.RoleContract>
 
 @inject ILocalizationService Localizer
-
 
 @if (!string.IsNullOrEmpty(Model.SearchQuery))
 {
