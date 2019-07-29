@@ -86,19 +86,19 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         //
-        // GET: /Account/AccountSettings
-        public IActionResult AccountSettings(AccountTab actualTab = AccountTab.UpdateAccount)
+        // GET: /Account/UserProfile
+        public IActionResult UserProfile(AccountTab actualTab = AccountTab.UpdateAccount)
         {
             var viewmodel = CreateAccountDetailViewModel(actualTab);
             return View(viewmodel);
         }
 
         //
-        // POST: /Account/UpdateAccount
+        // POST: /Account/UpdateBasicData
         [HttpPost]
         [RequireHttps]
         [ValidateAntiForgeryToken]
-        public IActionResult UpdateAccount(UpdateUserViewModel updateUserViewModel)
+        public IActionResult UpdateBasicData(UpdateUserViewModel updateUserViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -123,7 +123,7 @@ namespace ITJakub.Web.Hub.Controllers
                 }
             }
 
-            return PartialView("Settings/_UpdateAccount", updateUserViewModel);
+            return PartialView("UserProfile/_UpdateBasicData", updateUserViewModel);
         }
         
         //
@@ -147,7 +147,7 @@ namespace ITJakub.Web.Hub.Controllers
 
                         client.UpdateCurrentPassword(updateUserPasswordContract);
                         ViewData.Add(AccountConstants.SuccessPasswordUpdate, true);
-                        return PartialView("Settings/_UpdatePassword", null);
+                        return PartialView("UserProfile/_UpdatePassword", null);
                     }
                 }
                 catch (HttpErrorCodeException e)
@@ -157,7 +157,7 @@ namespace ITJakub.Web.Hub.Controllers
                 }
             }
 
-            return PartialView("Settings/_UpdatePassword", model);
+            return PartialView("UserProfile/_UpdatePassword", model);
         }
 
         //
@@ -267,7 +267,7 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 var user = client.GetCurrentUser();
                 twoFactorVerificationViewModel = Mapper.Map<UpdateTwoFactorVerificationViewModel>(user);
-                return PartialView("Settings/_UpdateTwoFactorVerification", twoFactorVerificationViewModel);
+                return PartialView("UserProfile/_UpdateTwoFactorVerification", twoFactorVerificationViewModel);
             }
         }
 
@@ -300,7 +300,7 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 var user = client.GetCurrentUser();
                 twoFactorVerificationViewModel = Mapper.Map<UpdateTwoFactorVerificationViewModel>(user);
-                return PartialView("Settings/_UpdateTwoFactorVerification", twoFactorVerificationViewModel);
+                return PartialView("UserProfile/_UpdateTwoFactorVerification", twoFactorVerificationViewModel);
             }
         }
 

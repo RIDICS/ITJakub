@@ -34,16 +34,16 @@
 
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane @(Model.ActualTab == AccountTab.UpdateAccount ? "active" : string.Empty)" id="update-account">
-            @await Html.PartialAsync("Settings/_UpdateAccount", Model.UpdateUserViewModel)
+            @await Html.PartialAsync("UserProfile/_UpdateBasicData", Model.UpdateUserViewModel)
         </div>
         <div role="tabpanel" class="tab-pane @(Model.ActualTab == AccountTab.UpdatePassword ? "active" : string.Empty)" id="update-password">
-            @await Html.PartialAsync("Settings/_UpdatePassword", Model.UpdatePasswordViewModel)
+            @await Html.PartialAsync("UserProfile/_UpdatePassword", Model.UpdatePasswordViewModel)
         </div>
         <div role="tabpanel" class="tab-pane @(Model.ActualTab == AccountTab.UpdateContact ? "active" : string.Empty)" id="update-contact">
-            @await Html.PartialAsync("Settings/_UpdateContact", Model.UpdateContactViewModel)
+            @await Html.PartialAsync("UserProfile/_UpdateContact", Model.UpdateContactViewModel)
         </div>
         <div role="tabpanel" class="tab-pane @(Model.ActualTab == AccountTab.UpdateTwoFactorVerification ? "active" : string.Empty)" id="update-two-factor-verification">
-            @await Html.PartialAsync("Settings/_UpdateTwoFactorVerification", Model.UpdateTwoFactorVerificationViewModel)
+            @await Html.PartialAsync("UserProfile/_UpdateTwoFactorVerification", Model.UpdateTwoFactorVerificationViewModel)
         </div>
     </div>
 </div>
