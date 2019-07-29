@@ -49,15 +49,15 @@ namespace Vokabular.MainService.Core.Managers
                     throw new InvalidOperationException("Import failed");
                 }
             }
-   
+
             try
             {
-                 m_forumSiteManager.CreateForums(importResult.ProjectId);
-             }
-             catch (ForumException e)
-             {
-                 throw new InvalidOperationException("Import succeeded. " + e.Message);
-             }
+                m_forumSiteManager.CreateForums(importResult.ProjectId);
+            }
+            catch (ForumException e)
+            {
+                throw new InvalidOperationException("Import succeeded. Forum creation failed." + e.Message, e);
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.ForumSite.Core.Works
 {
-    public class CreateVirtualForumsForCategories : UnitOfWorkBase
+    public class CreateVirtualForumsForCategoriesWork : UnitOfWorkBase
     {
         private readonly ForumRepository m_forumRepository;
         private readonly ForumAccessSubwork m_forumAccessSubwork;
@@ -18,7 +18,7 @@ namespace Vokabular.ForumSite.Core.Works
         private readonly IList<int> m_oldCategoryIds;
         private readonly long m_projectId;
 
-        public CreateVirtualForumsForCategories(ForumRepository forumRepository, ForumAccessSubwork forumAccessSubwork,
+        public CreateVirtualForumsForCategoriesWork(ForumRepository forumRepository, ForumAccessSubwork forumAccessSubwork,
             ForumSiteUrlHelper forumSiteUrlHelper, IList<int> categoryIds, IList<int> oldCategoryIds, long projectId) : base(
             forumRepository)
         {

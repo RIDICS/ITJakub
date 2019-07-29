@@ -40,7 +40,7 @@ namespace Vokabular.ForumSite.Core.Managers
 
         public void CreateVirtualForums(long projectId, IList<int> categoryIds, IList<int> oldCategoryIds)
         {
-            new CreateVirtualForumsForCategories(m_forumRepository, m_forumAccessSubwork, m_forumSiteUrlHelper, categoryIds, oldCategoryIds, projectId).Execute();
+            new CreateVirtualForumsForCategoriesWork(m_forumRepository, m_forumAccessSubwork, m_forumSiteUrlHelper, categoryIds, oldCategoryIds, projectId).Execute();
         }
     }
 }
