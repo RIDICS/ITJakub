@@ -15,6 +15,12 @@
                             @Localizer.Translate("SuccessTwoFactorUpdate", "Account")
                         </div>
                     }
+                    @if (!Model.IsEmailConfirmed && Model.TwoFactorEnabled)
+                    {
+                        <div id="confirmContactDescription" class="alert alert-warning fade in" role="alert">
+                            @Localizer.Translate("TwoFactorVerificationIsNotActive", "Account")
+                        </div>
+                    }
                 </div>
             </div>
             <div class="panel panel-default">

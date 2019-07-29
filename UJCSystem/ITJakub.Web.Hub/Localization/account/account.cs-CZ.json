@@ -46,6 +46,7 @@
     "UpdateTwoFactorVerification": "Dvoufaktorové ověření",
     "TwoFactorProvider": "Způsob dvoufaktorového ověření",
     "SuccessTwoFactorUpdate": "Nastavení dvoufaktorového ověření bylo úspšeně aktualizováno.",
+    "TwoFactorVerificationIsNotActive": "Emailová adresa není ověřena - dvoufaktorové ověření není aktivní.",
     "Save": "Uložit"
   }
 }

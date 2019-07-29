@@ -38,9 +38,9 @@ class AccountManager {
         this.client = new AccountApiClient();
         this.errorHandler = new ErrorHandler();
 
-        this.accountSection = $("#update-account");
-        this.passwordSection = $("#update-password");
-        this.twoFactorSection = $("#update-two-factor-verification");
+        this.accountSection = $("#updateAccount");
+        this.passwordSection = $("#updatePassword");
+        this.twoFactorSection = $("#updateTwoFactorVerification");
 
         this.oldEmailValue = String($("#oldEmailValue").val());
 
@@ -90,7 +90,8 @@ class AccountManager {
                     .translateFormat("ConfirmCodeSend", [this.newEmailValue], "Account").value).buildElement();
                 alertHolder.empty().append(alert);
             }).fail((response) => {
-                const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(response)).buildElement();
+                const alert = new AlertComponentBuilder(AlertType.Error)
+                    .addContent(this.errorHandler.getErrorMessage(response)).buildElement();
                 alertHolder.empty().append(alert);
             });
         });
@@ -98,11 +99,23 @@ class AccountManager {
         this.initAccountDataForm();
         this.initPasswordForm();
         this.initTwoFactorSettingsForm();
+
+        $("#updateTwoFactorVerificationButton").on("click",
+            () => {
+                this.twoFactorSection.html("<div class=\"loader\"></div>");
+                this.client.getTwoFactor().done((response) => {
+                    this.twoFactorSection.html(response);
+                    this.initTwoFactorSettingsForm();
+                }).fail((response) => {
+                    this.twoFactorSection.html(response.responseText);
+                    this.initTwoFactorSettingsForm();
+                });
+            });
     }
 
     initAccountDataForm() {
         this.accountDataForm = $("#updateAccountForm");
-       
+
         this.accountDataForm.on("submit",
             (event) => {
                 event.preventDefault();
@@ -122,7 +135,7 @@ class AccountManager {
 
     initPasswordForm() {
         this.passwordForm = $("#updatePasswordForm");
-        
+
         this.passwordForm.on("submit",
             (event) => {
                 event.preventDefault();
@@ -171,14 +184,13 @@ class AccountManager {
                         })
                         .fail((response) => {
                             this.twoFactorSection.html(response.responseText);
-                            
+
                         }).always(() => {
                             this.initTwoFactorSettingsForm();
                         });
                 }
             });
     }
-
 
     sendUpdateContactRequest() {
         this.newEmailValue = $(this.newEmailInputSelector).val() as string;
@@ -194,7 +206,8 @@ class AccountManager {
                 .translateFormat("SuccessContactUpdate", [this.newEmailValue], "Account").value).buildElement();
             alertHolder.append(alert);
         }).fail((response) => {
-            const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(response)).buildElement();
+            const alert = new AlertComponentBuilder(AlertType.Error)
+                .addContent(this.errorHandler.getErrorMessage(response)).buildElement();
             alertHolder.append(alert);
         });
     }
@@ -205,12 +218,14 @@ class AccountManager {
         alertHolder.empty();
         this.client.confirmContact(this.emailContactType, confirmCode).done((response) => {
             if (response === false) {
-                const alert = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("ConfirmCodeNotValid", "Account").value).buildElement();
+                const alert = new AlertComponentBuilder(AlertType.Error)
+                    .addContent(localization.translate("ConfirmCodeNotValid", "Account").value).buildElement();
                 alertHolder.empty().append(alert);
             } else {
                 this.hideAlert(this.confirmContactDescriptionAlert);
-                
-                const alert = new AlertComponentBuilder(AlertType.Success).addContent(localization.translate("SuccessConfirmContact", "Account").value).buildElement();
+
+                const alert = new AlertComponentBuilder(AlertType.Success)
+                    .addContent(localization.translate("SuccessConfirmContact", "Account").value).buildElement();
                 alertHolder.empty().append(alert);
 
                 this.emailIsNotVerifiedTitle.addClass("hide");
@@ -221,7 +236,8 @@ class AccountManager {
                 this.confirmEmailSubmit.addClass("disabled");
             }
         }).fail((response) => {
-            const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(response)).buildElement();
+            const alert = new AlertComponentBuilder(AlertType.Error)
+                .addContent(this.errorHandler.getErrorMessage(response)).buildElement();
             alertHolder.empty().append(alert);
         });
     }

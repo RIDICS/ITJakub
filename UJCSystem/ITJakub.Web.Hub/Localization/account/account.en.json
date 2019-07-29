@@ -45,6 +45,7 @@
 
     "UpdateTwoFactorVerification": "Two-factor verification",
     "SuccessTwoFactorUpdate": "Two-factor verification was successfully updated.",
+    "TwoFactorVerificationIsNotActive": "Email address is not confirmed - two-factor verification is not active.",
     "Save": "Save"
   }
 }

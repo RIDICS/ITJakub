@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Scalesoft.Localization.AspNetCore;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Errors;
+using Vokabular.Shared.AspNetCore.Extensions;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -248,6 +249,14 @@ namespace ITJakub.Web.Hub.Controllers
             return AjaxOkResponse();
         }
 
+
+        [HttpGet]
+        public ActionResult TwoFactor()
+        {
+            var twoFactorVerificationViewModel = CreateUpdateTwoFactorVerificationViewModel();
+            return PartialView("UserProfile/_UpdateTwoFactorVerification", twoFactorVerificationViewModel);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult SetTwoFactor(UpdateTwoFactorVerificationViewModel twoFactorVerificationViewModel)
@@ -273,12 +282,8 @@ namespace ITJakub.Web.Hub.Controllers
                 }
             }
 
-            using (var client = GetRestClient())
-            {
-                var user = client.GetCurrentUser();
-                twoFactorVerificationViewModel = Mapper.Map<UpdateTwoFactorVerificationViewModel>(user);
-                return PartialView("UserProfile/_UpdateTwoFactorVerification", twoFactorVerificationViewModel);
-            }
+            twoFactorVerificationViewModel = CreateUpdateTwoFactorVerificationViewModel();
+            return PartialView("UserProfile/_UpdateTwoFactorVerification", twoFactorVerificationViewModel);
         }
 
         [HttpPost]
@@ -306,12 +311,8 @@ namespace ITJakub.Web.Hub.Controllers
                 }
             }
 
-            using (var client = GetRestClient())
-            {
-                var user = client.GetCurrentUser();
-                twoFactorVerificationViewModel = Mapper.Map<UpdateTwoFactorVerificationViewModel>(user);
-                return PartialView("UserProfile/_UpdateTwoFactorVerification", twoFactorVerificationViewModel);
-            }
+            twoFactorVerificationViewModel = CreateUpdateTwoFactorVerificationViewModel();
+            return PartialView("UserProfile/_UpdateTwoFactorVerification", twoFactorVerificationViewModel);
         }
 
         //
@@ -358,10 +359,26 @@ namespace ITJakub.Web.Hub.Controllers
                     UpdateUserViewModel = Mapper.Map<UpdateUserViewModel>(user),
                     UpdatePasswordViewModel = null,
                     UpdateContactViewModel = Mapper.Map<UpdateContactViewModel>(user),
-                    UpdateTwoFactorVerificationViewModel = Mapper.Map<UpdateTwoFactorVerificationViewModel>(user),
+                    UpdateTwoFactorVerificationViewModel = CreateUpdateTwoFactorVerificationViewModel(user),
                     ActualTab = accountTab
                 };
             }
+        }
+
+        private UpdateTwoFactorVerificationViewModel CreateUpdateTwoFactorVerificationViewModel(UserDetailContract user = null)
+        {
+            if (user == null)
+            {
+                using (var client = GetRestClient())
+                {
+                    user = client.GetCurrentUser();
+                }
+            }
+
+            var updateTwoFactorVerificationViewModel = Mapper.Map<UpdateTwoFactorVerificationViewModel>(user);
+            var isEmailConfirmed = User.IsEmailConfirmed();
+            updateTwoFactorVerificationViewModel.IsEmailConfirmed = isEmailConfirmed ?? false;
+            return updateTwoFactorVerificationViewModel;
         }
     }
 }
