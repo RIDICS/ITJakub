@@ -398,7 +398,7 @@ namespace Vokabular.RestClient
                 throw new HttpErrorCodeException(validationResult.Message, responseStatusCode, validationResult.Errors);
             }
 
-            var exceptionMessage = GetExceptionMessage(responseContent, responseStatusCode);
+            var exceptionMessage = responseContent.Trim('\"');
             throw new HttpErrorCodeException(exceptionMessage, response.StatusCode);
         }
 
@@ -424,11 +424,6 @@ namespace Vokabular.RestClient
             {
                 return false;
             }
-        }
-
-        private string GetExceptionMessage(string message, HttpStatusCode statusCode)
-        {
-            return $"({(int) statusCode}) {message}";
         }
 
         protected string GetCurrentMethod([CallerMemberName] string methodName = null)
