@@ -44,6 +44,7 @@
     "ResendCodeError": "Při odesílání ověřovacího kódu došlo k neočekávané chybě.",
 
     "UpdateTwoFactorVerification": "Dvoufaktorové ověření",
+    "TwoFactorProvider": "Způsob dvoufaktorového ověření",
     "SuccessTwoFactorUpdate": "Nastavení dvoufaktorového ověření bylo úspšeně aktualizováno.",
     "Save": "Uložit"
   }

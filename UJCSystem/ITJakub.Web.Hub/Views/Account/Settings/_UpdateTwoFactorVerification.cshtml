@@ -4,42 +4,58 @@
 @inject ILocalizationService Localizer
 
 <div class="row">
-    <div class="col-md-offset-2 col-lg-offset-3 col-md-10 col-lg-8">
-        <div class="col-xs-12">
-            @if (ViewData.TryGetValue(AccountConstants.SuccessTwoFactorUpdate, out var success) && (bool) success)
-            {
-                <div class="alert alert-success" role="alert">
-                    @Localizer.Translate("SuccessTwoFactorUpdate", "Account")
+    <div class="col-md-offset-1 col-lg-offset-2 col-md-10 col-lg-8">
+        <form id="setTwoFactorForm" method="post" asp-controller="Account" asp-action="SetTwoFactor">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div asp-validation-summary="All" class="alert alert-danger"></div>
+                    @if (ViewData.TryGetValue(AccountConstants.SuccessTwoFactorUpdate, out var success) && (bool) success)
+                    {
+                        <div class="alert alert-success" role="alert">
+                            @Localizer.Translate("SuccessTwoFactorUpdate", "Account")
+                        </div>
+                    }
                 </div>
-            }
-            <form id="setTwoFactorForm" method="post" asp-controller="Account" asp-action="SetTwoFactor">
-                <div asp-validation-summary="All" class="alert alert-danger"></div>
-                <div class="form-group">
-                    <input asp-for="TwoFactorEnabled" type="checkbox" value="true" class="" id="twoFactorEnabled" />
-                    <label asp-for="TwoFactorEnabled" class="control-label" for="twoFactorEnabled"></label>
-                    <span asp-validation-for="TwoFactorEnabled" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" class="btn btn-default" value="@Localizer.Translate("Save", "Account")"/>
-                </div>
-            </form>
-
-            <form id="changeTwoFactorProviderForm" method="post" asp-controller="Account" asp-action="ChangeTwoFactorProvider" class="form-horizontal">
-                <div class="form-group" id="twoFactorProvidersSelect">
-                    <div class="col-md-7">
-                        <label asp-for="SelectedTwoFactorProvider" class="control-label"></label>
-                        <select asp-for="SelectedTwoFactorProvider"
-                                asp-items="@Model.TwoFactorProviders?.Select(x => new SelectListItem(Localizer.Translate(x, "TwoFactorProviders"), x) {Selected = x == Model.SelectedTwoFactorProvider})"
-                                class="form-control"></select>
-                        <span asp-validation-for="SelectedTwoFactorProvider" class="text-danger"></span>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">@Localizer.Translate("UpdateTwoFactorVerification", "Account")</div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="col-md-offset-3 col-md-6">
+                            <input asp-for="TwoFactorEnabled" type="checkbox" value="true" class="" id="twoFactorEnabled"/>
+                            <label asp-for="TwoFactorEnabled" class="control-label" for="twoFactorEnabled"></label>
+                            <span asp-validation-for="TwoFactorEnabled" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-3 col-md-6">
+                            <input type="submit" class="btn btn-default" value="@Localizer.Translate("Save", "Account")"/>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <div class="col-md-12">
-                        <input type="submit" class="btn btn-default" value="@Localizer.Translate("Save", "Account")"/>
+            </div>
+        </form>
+        <div class="panel panel-default">
+            <div class="panel-heading">@Localizer.Translate("TwoFactorProvider", "Account")</div>
+            <div class="panel-body">
+                <form id="changeTwoFactorProviderForm" method="post" asp-controller="Account" asp-action="ChangeTwoFactorProvider" class="form-horizontal">
+                    <div class="form-group" id="twoFactorProvidersSelect">
+                        <label asp-for="SelectedTwoFactorProvider" class="control-label col-md-3"></label>
+                        <div class="col-md-6">
+                            <select asp-for="SelectedTwoFactorProvider"
+                                    asp-items="@Model.TwoFactorProviders?.Select(x => new SelectListItem(Localizer.Translate(x, "TwoFactorProviders"), x) {Selected = x == Model.SelectedTwoFactorProvider})"
+                                    class="form-control">
+                            </select>
+                            <span asp-validation-for="SelectedTwoFactorProvider" class="text-danger"></span>
+                        </div>
                     </div>
-                </div>
-            </form>
+                    <div class="form-group">
+                        <div class="col-md-offset-3 col-md-6">
+                            <input type="submit" class="btn btn-default" value="@Localizer.Translate("Save", "Account")"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

@@ -4,14 +4,13 @@
 
 <div class="row">
     <div class="col-md-offset-1 col-lg-offset-2 col-md-10 col-lg-8">
-        <div class="col-xs-12">
-            <div class="panel panel-default">
+        <div class="panel panel-default">
                 <div class="panel-heading">@Localizer.Translate("EmailAddressUpdate", "Account")</div>
                 <div class="panel-body">
                     <form asp-controller="Account" asp-action="UpdateContact" method="post" class="form-horizontal">
-                        <div asp-validation-summary="All" class="alert alert-danger"></div>
                         <div class="row">
-                            <div class="col-md-offset-2 col-md-8">
+                            <div class="col-md-offset-3 col-md-6">
+                                <div asp-validation-summary="All" class="alert alert-danger"></div>
                                 <div id="successContactUpdate" class="alert alert-success fade hide" role="alert">
                                     @Localizer.Translate("SuccessContactUpdate", "Account")
                                 </div>
@@ -22,14 +21,14 @@
                         
                         @Html.Hidden("oldEmailValue", Model.Email)
                         <div class="form-group">
-                            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-                            <div class="col-md-8">
+                            @Html.LabelFor(m => m.Email, new { @class = "col-md-3 control-label" })
+                            <div class="col-md-6">
                                 @Html.TextBoxFor(m => m.Email, new { @class = "form-control", id = "emailInput" })
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <div class="col-md-offset-2 col-md-8">
+                            <div class="col-md-offset-3 col-md-6">
                                 <input id="updateEmailSubmit" type="submit" class="btn btn-default" value="@Localizer.Translate("Change", "Account")" />
                             </div>
                         </div>
@@ -49,9 +48,9 @@
                 <div id="confirmEmailPanelBody" class="panel-collapse collapse @(Model.IsEmailConfirmed ? string.Empty : "in")">
                     <div class="panel-body">
                         <form asp-controller="Account" asp-action="UpdateContact" method="post" class="form-horizontal">
-                            <div asp-validation-summary="All" class="alert alert-danger"></div>
                             <div class="row">
-                                <div class="col-md-offset-2 col-md-8">
+                                <div class="col-md-offset-3 col-md-6">
+                                    <div asp-validation-summary="All" class="alert alert-danger"></div>
                                     <div id="confirmContactDescription" class="alert alert-warning fade in" role="alert">
                                         @Localizer.Translate("EmailIsNotConfirmedAlertDescription")
                                     </div>
@@ -67,14 +66,14 @@
                             </div>
 
                             <div class="form-group">
-                                @Html.LabelFor(m => m.ConfirmCode, new { @class = "col-md-2 control-label" })
-                                <div class="col-md-8">
+                                @Html.LabelFor(m => m.ConfirmCode, new { @class = "col-md-3 control-label" })
+                                <div class="col-md-6">
                                     @Html.TextBoxFor(m => m.ConfirmCode, new { @class = "form-control", id = "confirmEmailCodeInput" })
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <div class="col-md-offset-2 col-md-8">
+                                <div class="col-md-offset-3 col-md-6">
                                     <input id="confirmEmailSubmit" type="submit" class="btn btn-default" value="@Localizer.Translate("Confirm", "Account")" />
                                     <button id="resendConfirmCode" type="button" class="btn btn-default">
                                         @Localizer.Translate("ResendCode", "Account")
@@ -85,7 +84,5 @@
                     </div>
                 </div>
             </div>
-
-        </div>
     </div>
 </div>

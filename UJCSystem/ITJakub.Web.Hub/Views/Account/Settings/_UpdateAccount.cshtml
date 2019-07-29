@@ -4,46 +4,53 @@
 @inject ILocalizationService Localizer
 
 <div class="row">
-    <form id="updateAccountForm" asp-controller="Account" asp-action="UpdateAccount" method="post" class="form-horizontal col-xs-12">
-        <div class="row">
-            <div class="col-md-offset-3 col-md-5">
-                <div asp-validation-summary="All" class="alert alert-danger"></div>
-                @if (ViewData.TryGetValue(AccountConstants.SuccessUserUpdate, out var success) && (bool)success)
-                {
-                    <div class="alert alert-success" role="alert">
-                        @Localizer.Translate("SuccessUpdateAccount", "Account")
+    <div class="col-md-offset-1 col-lg-offset-2 col-md-10 col-lg-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">@Localizer.Translate("BasicData", "Account")</div>
+            <div class="panel-body">
+                <form id="updateAccountForm" asp-controller="Account" asp-action="UpdateAccount" method="post" class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-offset-3 col-md-6">
+                            <div asp-validation-summary="All" class="alert alert-danger"></div>
+                            @if (ViewData.TryGetValue(AccountConstants.SuccessUserUpdate, out var success) && (bool)success)
+                            {
+                                <div class="alert alert-success" role="alert">
+                                    @Localizer.Translate("SuccessUpdateAccount", "Account")
+                                </div>
+                            }
+                        </div>
                     </div>
-                }
+                    <div class="form-group">
+                        <label asp-for="UserName" class="col-md-3 control-label"></label>
+                        <div class="col-md-6">
+                            <input type="text" asp-for="UserName" class="form-control" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="FirstName" class="col-md-3 control-label"></label>
+                        <div class="col-md-6">
+                            <input type="text" asp-for="FirstName" class="form-control editable" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="LastName" class="col-md-3 control-label"></label>
+                        <div class="col-md-6">
+                            <input type="text" asp-for="LastName" class="form-control editable" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-3 col-md-6">
+                            <div id="account-view-button-panel">
+                                <button class="btn btn-default" id="account-edit-button">@Localizer.Translate("Edit")</button>
+                            </div>
+                            <div id="account-editor-button-panel" class="hide">
+                                <input type="reset" class="btn btn-default" id="account-cancel-button" value="@Localizer.Translate("Cancel")" />
+                                <input type="submit" class="btn btn-default" value="@Localizer.Translate("UpdateAccountSubmit", "Account")" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-        <div class="form-group">
-            <label asp-for="UserName" class="col-md-3 control-label"></label>
-            <div class="col-md-5">
-                <input type="text" asp-for="UserName" class="form-control" readonly="readonly" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="FirstName" class="col-md-3 control-label"></label>
-            <div class="col-md-5">
-                <input type="text" asp-for="FirstName" class="form-control editable" readonly="readonly" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="LastName" class="col-md-3 control-label"></label>
-            <div class="col-md-5">
-                <input type="text" asp-for="LastName" class="form-control editable" readonly="readonly" />
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-3 col-md-5">
-                <div id="account-view-button-panel">
-                    <button class="btn btn-default" id="account-edit-button">@Localizer.Translate("Edit")</button>
-                </div>
-                <div id="account-editor-button-panel" class="hide">
-                    <input type="reset" class="btn btn-default" id="account-cancel-button" value="@Localizer.Translate("Cancel")"/>
-                    <input type="submit" class="btn btn-default" value="@Localizer.Translate("UpdateAccountSubmit", "Account")" />
-                </div>
-            </div>
-        </div>
-    </form>
+    </div>
 </div>
