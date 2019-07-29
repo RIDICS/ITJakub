@@ -5,7 +5,6 @@ using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Parameter;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Headers;
-using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
 
 namespace Vokabular.MainService.Controllers
@@ -196,9 +195,11 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPost("{projectId}/forum")]
-        public int CreateForum(long projectId)
+        public ActionResult<int> CreateForum(long projectId)
         {
-            return m_forumSiteManager.CreateForums(projectId);
+            var forumId = m_forumSiteManager.CreateForums(projectId);
+
+            return forumId != null ? (ActionResult<int>) Ok(forumId.Value) : BadRequest("Forum is disabled");
         }
     }
 }

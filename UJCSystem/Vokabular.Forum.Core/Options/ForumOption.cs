@@ -6,5 +6,6 @@
         public string WebHubUrl { get; set; }
         public string DefaultAuthorUsername { get; set; }
         public string FirstTopicName { get; set; }
+        public bool IsEnabled { get; set; }
     }
 }

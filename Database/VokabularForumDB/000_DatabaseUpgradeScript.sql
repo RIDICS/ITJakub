@@ -30,7 +30,7 @@ BEGIN TRAN
 -- Add column for mapping Forum (Forum) - Project (Vokabular)
 	ALTER TABLE [dbo].[yaf_Forum] ADD ExternalProjectID BIGINT NULL
 
-	ALTER TABLE [dbo].[yaf_prov_Profile] ADD VokabularID NVARCHAR(255) NULL
+	--ALTER TABLE [dbo].[yaf_prov_Profile] ADD VokabularID NVARCHAR(255) NULL --Manual adding VokabularID is not required because it is added automatically
 
 -- Insert version number to DatabaseVersion table
 
