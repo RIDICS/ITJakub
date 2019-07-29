@@ -7,7 +7,7 @@ BEGIN TRAN
     INSERT INTO [dbo].[DatabaseVersion]
 		(DatabaseVersion)
     VALUES
-		('004')
+		('006')
 		-- DatabaseVersion - varchar
 
 --ROLLBACK
