@@ -17,17 +17,17 @@
     "Registration-submit": "Sign up",
 
     "Detail": "Account detail",
-    "Settings": "Account settings",
+    "BasicData": "User profile",
 
-    "DataChange": "Update data",
+    "DataChange": "Basic data",
     "UpdateAccountSubmit": "Save changes",
     "SuccessUpdateAccount": "Data was successfully updated.",
 
-    "PasswordChange": "Update password",
+    "PasswordChange": "Change password",
     "UpdatePasswordSubmit": "Change password",
     "SuccessPasswordChange": "The password was successfully updated.",
 
-    "UpdateContact": "Edit contacts",
+    "UpdateContact": "Contacts",
     "EmailAddressUpdate": "Edit e-mail address",
     "EmailAddressVerification": "E-mail address verification",
     "EmailAddressIsNotVerified": "E-mail address is not verified",

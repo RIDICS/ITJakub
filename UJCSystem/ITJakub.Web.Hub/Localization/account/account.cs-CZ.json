@@ -17,9 +17,9 @@
     "Registration-submit": "Registrovat",
 
     "Detail": "Detail účtu",
-    "Settings": "Nastavení účtu",
+    "UserProfile": "Uživatelský profil",
 
-    "DataChange": "Změna údajů",
+    "BasicData": "Základní údaje",
     "UpdateAccountSubmit": "Uložit změny",
     "SuccessUpdateAccount": "Údaje byly úspěšně změněny.",
 
@@ -27,7 +27,7 @@
     "UpdatePasswordSubmit": "Změnit heslo",
     "SuccessPasswordChange": "Heslo bylo úspěšně změněno.",
 
-    "UpdateContact": "Úprava kontaktů",
+    "UpdateContact": "Kontakty",
     "EmailAddressUpdate": "Změna e-mailové adresy",
     "EmailAddressVerification": "Ověření e-mailové adresy",
     "EmailAddressIsNotVerified": "E-mailová adresa není ověřena",
