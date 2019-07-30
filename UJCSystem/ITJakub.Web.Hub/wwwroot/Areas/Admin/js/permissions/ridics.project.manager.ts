@@ -48,6 +48,7 @@ class ProjectManager {
     private loadRoles(projectId: number) {
         var container = $("#role-list-container");
         container.html("<div class=\"loader\"></div>");
+        $("#addPermissionButton").removeClass("disabled");
 
         this.client.getRolesByProject(projectId).done(response => {
             container.html(response as string);
@@ -114,5 +115,10 @@ class ProjectManager {
                 });
             });
         }
+    }
+
+    private clearSections() {
+        this.roleList.clear(localization.translate("ProjectIsNotSelected", "PermissionJs").value);
+        $("#addPermissionButton").addClass("disabled");
     }
 }

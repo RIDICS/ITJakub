@@ -28,6 +28,7 @@
     "AddUserToRoleError": "Nastala neočekávaná chyba při přidávání uživatele do skupiny.",
     "CreateRoleWithUserError": "Nastala neočekávaná chyba při vytváření skupiny s uživatelem.",
     "RoleIsNotSelected": "Není vybrána skupina.",
+    "ProjectIsNotSelected": "Není vybrán projekt.",
 
     "Cancel": "Zrušit",
     "Delete": "Smazat",
