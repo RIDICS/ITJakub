@@ -191,5 +191,35 @@ namespace Vokabular.DataEntities.Database.Repositories
                             permission.UserGroup.Id == groupId)
                     .SingleOrDefault<Permission>();
         }
+
+        public virtual IList<UserGroup> FindGroupsByBook(long bookId)
+        {
+            Project projectAlias = null;
+            Permission permissionAlias = null;
+            UserGroup groupAlias = null;
+
+            var groups = GetSession().QueryOver(() => groupAlias)
+                .JoinQueryOver(x => groupAlias.Permissions, () => permissionAlias)
+                .JoinQueryOver(x => permissionAlias.Project, () => projectAlias)
+                .Where(() => projectAlias.Id == bookId)
+                .List<UserGroup>();
+
+            return groups;
+        }
+
+        public virtual int FindGroupsByBookCount(long bookId)
+        {
+            Project projectAlias = null;
+            Permission permissionAlias = null;
+            UserGroup groupAlias = null;
+
+            var count = GetSession().QueryOver(() => groupAlias)
+                .JoinQueryOver(x => groupAlias.Permissions, () => permissionAlias)
+                .JoinQueryOver(x => permissionAlias.Project, () => projectAlias)
+                .Where(() => projectAlias.Id == bookId)
+                .RowCount();
+
+            return count;
+        }
     }
 }

@@ -6,10 +6,14 @@ using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works;
+using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Results;
+using AuthRoleContract = Ridics.Authentication.DataContracts.RoleContract;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -17,16 +21,21 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly ProjectRepository m_projectRepository;
         private readonly MetadataRepository m_metadataRepository;
+        private readonly PermissionRepository m_permissionRepository;
         private readonly AuthenticationManager m_authenticationManager;
         private readonly UserDetailManager m_userDetailManager;
+        private readonly CommunicationProvider m_communicationProvider;
 
         public ProjectManager(ProjectRepository projectRepository, MetadataRepository metadataRepository,
-            AuthenticationManager authenticationManager, UserDetailManager userDetailManager)
+            PermissionRepository permissionRepository, AuthenticationManager authenticationManager,
+            UserDetailManager userDetailManager, CommunicationProvider communicationProvider)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
+            m_permissionRepository = permissionRepository;
             m_authenticationManager = authenticationManager;
             m_userDetailManager = userDetailManager;
+            m_communicationProvider = communicationProvider;
         }
 
         public long CreateProject(ProjectContract projectData)
@@ -162,6 +171,42 @@ namespace Vokabular.MainService.Core.Managers
             var result = MapPagedProjectsToContractList(dbMetadataList);
 
             return result;
+        }
+
+        public PagedResultList<RoleContract> GetRolesByProject(long projectId, int? start, int? count, string query)
+        {
+            var startValue = PagingHelper.GetStart(start);
+            var countValue = PagingHelper.GetCount(count);
+
+            //TODO count, start, search
+            var groups = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupsByBook(projectId));
+            var groupsCount = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupsByBookCount(projectId));
+            
+            if (groups == null)
+            {
+                return null;
+            }
+
+            var client = m_communicationProvider.GetAuthRoleApiClient();
+            var authRoles = new List<AuthRoleContract>();
+
+            foreach (var group in groups)
+            {
+                var authRole = client.HttpClient.GetItemAsync<AuthRoleContract>(group.ExternalId).GetAwaiter().GetResult();
+                authRoles.Add(authRole);
+                if (authRole.Name != group.Name)
+                {
+                    new SynchronizeRoleWork(m_permissionRepository, authRole).Execute();
+                }
+            }
+
+            var result = Mapper.Map<List<RoleContract>>(authRoles);
+
+            return new PagedResultList<RoleContract>
+            {
+                List = result,
+                TotalCount = groupsCount,
+            };
         }
     }
 }

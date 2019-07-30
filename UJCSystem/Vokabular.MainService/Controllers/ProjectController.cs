@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Parameter;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Headers;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
 
@@ -182,6 +183,17 @@ namespace Vokabular.MainService.Controllers
         public List<ProjectResponsiblePersonContract> GetProjectResponsiblePersons(long projectId)
         {
             return m_projectInfoManager.GetProjectResponsiblePersons(projectId);
+        }
+
+        [HttpGet("{projectId}/role")]
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total records count")]
+        public List<RoleContract> GetRolesByProject(long projectId, [FromQuery] int? start, [FromQuery] int? count, [FromQuery] string filterByName)
+        {
+            var result = m_projectManager.GetRolesByProject(projectId, start, count, filterByName);
+
+            SetTotalCountHeader(result.TotalCount);
+
+            return result.List;
         }
     }
 }
