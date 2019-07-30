@@ -59,6 +59,7 @@ namespace ITJakub.Web.Hub
             //IdentityModelEventSource.ShowPII = true; // Enable to debug authentication problems
 
             var openIdConnectConfig = Configuration.GetSection("OpenIdConnect").Get<OpenIdConnectConfiguration>();
+            var portalConfig = Configuration.GetSection("PortalConfig").Get<PortalOption>();
 
             services.AddAuthentication(options =>
                 {
@@ -68,7 +69,7 @@ namespace ITJakub.Web.Hub
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
                 {
                     options.ExpireTimeSpan = m_cookieExpireTimeSpan;
-                    options.Cookie.Name = "identity";
+                    options.Cookie.Name = $"identity{portalConfig.PortalType}";
                     options.AccessDeniedPath = "/Error/403/";
                     options.LoginPath = "/Account/Login";
                 })

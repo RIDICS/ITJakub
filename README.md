@@ -30,9 +30,10 @@ Environment configuration
 * Checkout Authentication repository to disk and setup it according to it's Readme file (ITJakub.Web.Hub won't start without running Authentication service)
 * Configure connection strings and passwords in itjakub-secrets folder
 * Create database schema (use numbered SQL create scripts in correct order, stored in Database folder):
-  * ITJakubDB - old database for ITJakub.ITJakubService (will be removed)
+  * ~~ITJakubDB - database for ITJakub.ITJakubService~~ (will be removed)
   * ITJakubWebDB - database for ITJakub.Web.Hub for storing texts
   * VokabularDB - new database for Vokabular.MainService
+  * VokabularForumDB - database for Forum (create empty database, install Forum, run update script)
 * Prepare eXist-db collection (it's possible either to use script `ExistDB-Recreate.cmd` or copy ExistDB folder content manually).
   * Automatic script use predefined default values or values specified as parameters in following order:
     1. eXist URL (default is xmldb:exist://localhost:8080/exist/xmlrpc)
