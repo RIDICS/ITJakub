@@ -51,6 +51,26 @@ namespace Vokabular.DataEntities.Database.Repositories
             return newGroup;
         }
 
+        public virtual UserGroup FindGroupByExternalIdOrCreate(int externalId, string roleName)
+        {
+            var group = FindGroupByExternalId(externalId);
+            if (group != null)
+            {
+                return group;
+            }
+
+            var newGroup = new UserGroup
+            {
+                ExternalId = externalId,
+                CreateTime = DateTime.UtcNow,
+                Name = roleName
+            };
+
+            CreateGroup(newGroup);
+
+            return newGroup;
+        }
+
         public virtual IList<int> GetGroupIdsByExternalIds(IEnumerable<int> externalIds)
         {
             var result = GetSession().QueryOver<UserGroup>()

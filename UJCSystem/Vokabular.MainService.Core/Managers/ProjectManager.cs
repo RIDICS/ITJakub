@@ -187,17 +187,12 @@ namespace Vokabular.MainService.Core.Managers
                 return null;
             }
 
-            var client = m_communicationProvider.GetAuthRoleApiClient();
             var authRoles = new List<AuthRoleContract>();
-
             foreach (var group in groups)
             {
-                var authRole = client.HttpClient.GetItemAsync<AuthRoleContract>(group.ExternalId).GetAwaiter().GetResult();
-                authRoles.Add(authRole);
-                if (authRole.Name != group.Name)
-                {
-                    new SynchronizeRoleWork(m_permissionRepository, authRole).Execute();
-                }
+                var work = new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, group.ExternalId);
+                work.Execute();
+                authRoles.Add(work.GetRoleContract());
             }
 
             var result = Mapper.Map<List<RoleContract>>(authRoles);

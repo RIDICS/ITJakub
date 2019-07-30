@@ -40,7 +40,7 @@ namespace Vokabular.MainService.Core.Managers
 
             if (user == null)
             {
-                string message = $"Cannot locate user with id '{userId}'";
+                var message = $"Cannot locate user with id '{userId}'";
                 if (m_log.IsErrorEnabled)
                     m_log.Error(message);
                 throw new ArgumentException(message);
@@ -100,11 +100,13 @@ namespace Vokabular.MainService.Core.Managers
 
         public void RemoveUserFromRole(int userId, int roleId)
         {
+            new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
             new RemoveUserFromRoleWork(m_permissionRepository, m_communicationProvider, userId, roleId).Execute();
         }
 
         public void AddUserToRole(int userId, int roleId)
         {
+            new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
             new AddUserToRoleWork(m_permissionRepository, m_communicationProvider, userId, roleId).Execute();
         }
 
@@ -129,6 +131,12 @@ namespace Vokabular.MainService.Core.Managers
             var client = m_communicationProvider.GetAuthRoleApiClient();
 
             var result = client.HttpClient.GetListAsync<AuthRoleContract>(startValue, countValue, filterByName).GetAwaiter().GetResult();
+
+            foreach (var roleContract in result.Items)
+            {
+                new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleContract).Execute();
+            }
+
             var roleContracts = Mapper.Map<List<RoleContract>>(result.Items);
 
             return new PagedResultList<RoleContract>
