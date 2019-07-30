@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
-using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
 {
-    public class FilteringExpressionSetRepository : NHibernateDao
+    public class FilteringExpressionSetRepository : MainDbRepositoryBase
     {
-        public FilteringExpressionSetRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public FilteringExpressionSetRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
         }
 

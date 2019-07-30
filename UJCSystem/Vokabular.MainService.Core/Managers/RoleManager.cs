@@ -4,13 +4,13 @@ using System.Reflection;
 using AutoMapper;
 using log4net;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Results;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 using AuthRoleContract = Ridics.Authentication.DataContracts.RoleContract;
 
 namespace Vokabular.MainService.Core.Managers

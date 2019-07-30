@@ -10,11 +10,12 @@ namespace ITJakub.FileProcessing.Core.Sessions
     public class ResourceSessionManager
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        
+
         private readonly ResourceProcessorManager m_resourceProcessorManager;
         private readonly ActiveSessionManager m_activeSessionManager;
 
-        public ResourceSessionManager(ResourceProcessorManager resourceProcessorManager, string rootFolder, ActiveSessionManager activeSessionManager)
+        public ResourceSessionManager(ResourceProcessorManager resourceProcessorManager, string rootFolder,
+            ActiveSessionManager activeSessionManager)
         {
             m_resourceProcessorManager = resourceProcessorManager;
             m_activeSessionManager = activeSessionManager;
@@ -65,14 +66,14 @@ namespace ITJakub.FileProcessing.Core.Sessions
 
             director.AddResourceAndFillResourceTypeByExtension(fileName, data);
         }
-        
-        public bool ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage, IList<PermissionFromAuthContract> autoImportPermissions)
+
+        public ImportResultContract ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage, IList<PermissionFromAuthContract> autoImportPermissions)
         {
             if (!m_activeSessionManager.ContainsSessionId(sessionId))
             {
-                return false;
+                return new ImportResultContract { Success = false};
             }
-            
+
             ResourceSessionDirector director = m_activeSessionManager.GetDirectorBySessionId(sessionId);
             director.SetSessionInfoValue(SessionInfo.Message, uploadMessage);
             director.SetSessionInfoValue(SessionInfo.CreateTime, DateTime.UtcNow);
@@ -80,8 +81,12 @@ namespace ITJakub.FileProcessing.Core.Sessions
             director.SetSessionInfoValue(SessionInfo.UserId, userId);
             director.SetSessionInfoValue(SessionInfo.AutoImportPermissions, autoImportPermissions);
             bool result = m_resourceProcessorManager.ProcessSessionResources(director);
+            ImportResultContract importResult = new ImportResultContract(
+                director.GetSessionInfoValue<long>(SessionInfo.ProjectId),
+                result
+            );
             m_activeSessionManager.FinalizeSession(sessionId);
-            return result;
+            return importResult;
         }
     }
 }

@@ -5,8 +5,9 @@ using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
-using Vokabular.DataEntities.Database.Daos;
+using Vokabular.DataEntities;
 using Vokabular.Shared.Container;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 using Vokabular.Shared.Options;
 using Configuration = NHibernate.Cfg.Configuration;
 
@@ -30,13 +31,15 @@ namespace ITJakub.FileProcessing.Service
                     //db.LogFormattedSql = true;
                     //db.LogSqlInConsole = true;
                 })
-                .AddAssembly(typeof(NHibernateDao).Assembly);
+                .AddAssembly(typeof(DataEntitiesContainerRegistration).Assembly);
 
             var sessionFactory = cfg.BuildSessionFactory();
 
             services.AddSingleton(cfg);
 
             services.AddSingleton(sessionFactory);
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
     }
 }

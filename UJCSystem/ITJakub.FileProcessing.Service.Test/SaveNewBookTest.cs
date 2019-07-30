@@ -9,16 +9,22 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Vokabular.Core.Storage.Resources;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace ITJakub.FileProcessing.Service.Test
 {
     [TestClass]
     public class SaveNewBookTest
     {
+        private UnitOfWorkProvider CreateMockUnitOfWorkProvider()
+        {
+            return MockUnitOfWorkProvider.Create();
+        }
+
         [TestMethod]
         public void TestUpdateProject()
         {
-            var unitOfWork = new MockUnitOfWork();
+            var unitOfWorkProvider = CreateMockUnitOfWorkProvider();
             var bookData = new BookData
             {
                 BookXmlId = "external-id",
@@ -26,7 +32,7 @@ namespace ITJakub.FileProcessing.Service.Test
             };
 
 
-            var projectRepository = new MockProjectRepository(unitOfWork);
+            var projectRepository = new MockProjectRepository(unitOfWorkProvider);
             var subtask = new UpdateProjectSubtask(projectRepository);
 
             long? projectId = 12;
@@ -40,7 +46,7 @@ namespace ITJakub.FileProcessing.Service.Test
 
 
 
-            projectRepository = new MockProjectRepository(unitOfWork) {CanFindProjectByExternalId = true};
+            projectRepository = new MockProjectRepository(unitOfWorkProvider) {CanFindProjectByExternalId = true};
             subtask = new UpdateProjectSubtask(projectRepository);
 
             var dbProjectId = subtask.UpdateProject(null, 1, bookData);
@@ -51,7 +57,7 @@ namespace ITJakub.FileProcessing.Service.Test
 
 
 
-            projectRepository = new MockProjectRepository(unitOfWork) {CanFindProjectByExternalId = false};
+            projectRepository = new MockProjectRepository(unitOfWorkProvider) {CanFindProjectByExternalId = false};
             subtask = new UpdateProjectSubtask(projectRepository);
 
             subtask.UpdateProject(null, 1, bookData);
@@ -85,7 +91,7 @@ namespace ITJakub.FileProcessing.Service.Test
         [TestMethod]
         public void TestUpdateAuthors()
         {
-            var unitOfWork = new MockUnitOfWork();
+            var unitOfWorkProvider = CreateMockUnitOfWorkProvider();
             var bookData = new BookData
             {
                 Authors = new List<AuthorData>
@@ -96,11 +102,11 @@ namespace ITJakub.FileProcessing.Service.Test
             };
 
 
-            var personRepository = new MockPersonRepository(unitOfWork)
+            var personRepository = new MockPersonRepository(unitOfWorkProvider)
             {
                 CanFindAuthorByName = true
             };
-            var projectRepository = new MockProjectRepository(unitOfWork)
+            var projectRepository = new MockProjectRepository(unitOfWorkProvider)
             {
                 ProjectOriginalAuthors = new List<ProjectOriginalAuthor>
                 {
@@ -133,7 +139,7 @@ namespace ITJakub.FileProcessing.Service.Test
         [TestMethod]
         public void TestUpdateMetadata()
         {
-            var unitOfWork = new MockUnitOfWork();
+            var unitOfWorkProvider = CreateMockUnitOfWorkProvider();
             var bookData = new BookData
             {
                 BookXmlId = "external-id",
@@ -145,7 +151,7 @@ namespace ITJakub.FileProcessing.Service.Test
             };
 
 
-            var metadataRepository = new MockMetadataRepository(unitOfWork)
+            var metadataRepository = new MockMetadataRepository(unitOfWorkProvider)
             {
                 CanGetLatestMetadata = true,
                 LatestMetadataVersion = 29
@@ -165,7 +171,7 @@ namespace ITJakub.FileProcessing.Service.Test
             Assert.AreEqual(bookData.PublishPlace, createdMetadata.PublishPlace);
 
 
-            metadataRepository = new MockMetadataRepository(unitOfWork)
+            metadataRepository = new MockMetadataRepository(unitOfWorkProvider)
             {
                 CanGetLatestMetadata = false
             };
@@ -204,8 +210,8 @@ namespace ITJakub.FileProcessing.Service.Test
         [TestMethod]
         public void TestUpdatePages()
         {
-            var unitOfWork = new MockUnitOfWork();
-            var resourceRepository = new MockResourceRepository(unitOfWork);
+            var unitOfWorkProvider = CreateMockUnitOfWorkProvider();
+            var resourceRepository = new MockResourceRepository(unitOfWorkProvider);
             var bookData = new BookData
             {
                 Pages = new List<BookPageData>
@@ -250,8 +256,8 @@ namespace ITJakub.FileProcessing.Service.Test
         [TestMethod]
         public void TestUpdatePageTexts()
         {
-            var unitOfWork = new MockUnitOfWork();
-            var resourceRepository = new MockResourceRepository(unitOfWork);
+            var unitOfWorkProvider = CreateMockUnitOfWorkProvider();
+            var resourceRepository = new MockResourceRepository(unitOfWorkProvider);
             var bookData = new BookData
             {
                 Pages = new List<BookPageData>
@@ -289,8 +295,8 @@ namespace ITJakub.FileProcessing.Service.Test
         [TestMethod]
         public void TestUpdatePageImages()
         {
-            var unitOfWork = new MockUnitOfWork();
-            var resourceRepository = new MockResourceRepository(unitOfWork);
+            var unitOfWorkProvider = CreateMockUnitOfWorkProvider();
+            var resourceRepository = new MockResourceRepository(unitOfWorkProvider);
             var bookData = new BookData
             {
                 Pages = new List<BookPageData>
@@ -336,8 +342,8 @@ namespace ITJakub.FileProcessing.Service.Test
         [TestMethod]
         public void TestUpdateChapters()
         {
-            var unitOfWork = new MockUnitOfWork();
-            var resourceRepository = new MockResourceRepository(unitOfWork);
+            var unitOfWorkProvider = CreateMockUnitOfWorkProvider();
+            var resourceRepository = new MockResourceRepository(unitOfWorkProvider);
 
             var contentItem1 = new BookContentItemData
             {
@@ -401,8 +407,8 @@ namespace ITJakub.FileProcessing.Service.Test
         [TestMethod]
         public void TestUpdateHeadwords()
         {
-            var unitOfWork = new MockUnitOfWork();
-            var resourceRepository = new MockResourceRepository(unitOfWork);
+            var unitOfWorkProvider = CreateMockUnitOfWorkProvider();
+            var resourceRepository = new MockResourceRepository(unitOfWorkProvider);
 
             var headwordDataList = new List<BookHeadwordData>
             {
@@ -473,8 +479,8 @@ namespace ITJakub.FileProcessing.Service.Test
         [TestMethod]
         public void TestUpdateHeadwordsWithImages()
         {
-            var unitOfWork = new MockUnitOfWork();
-            var resourceRepository = new MockResourceRepository(unitOfWork);
+            var unitOfWorkProvider = CreateMockUnitOfWorkProvider();
+            var resourceRepository = new MockResourceRepository(unitOfWorkProvider);
 
             var headwordDataList = new List<BookHeadwordData>
             {
@@ -557,8 +563,8 @@ namespace ITJakub.FileProcessing.Service.Test
         [TestMethod]
         public void TestUpdateTerms()
         {
-            var unitOfWork = new MockUnitOfWork();
-            var resourceRepository = new MockResourceRepository(unitOfWork);
+            var unitOfWorkProvider = CreateMockUnitOfWorkProvider();
+            var resourceRepository = new MockResourceRepository(unitOfWorkProvider);
 
             var termList = new List<TermData>
             {
@@ -611,8 +617,8 @@ namespace ITJakub.FileProcessing.Service.Test
         [TestMethod]
         public void TestUpdateTracks()
         {
-            var unitOfWork = new MockUnitOfWork();
-            var resourceRepository = new MockResourceRepository(unitOfWork);
+            var unitOfWorkProvider = CreateMockUnitOfWorkProvider();
+            var resourceRepository = new MockResourceRepository(unitOfWorkProvider);
             var bookData = new BookData
             {
                 Tracks = new List<TrackData>
@@ -686,8 +692,8 @@ namespace ITJakub.FileProcessing.Service.Test
         [TestMethod]
         public void TestUpdateFullBookAudio()
         {
-            var unitOfWork = new MockUnitOfWork();
-            var resourceRepository = new MockResourceRepository(unitOfWork);
+            var unitOfWorkProvider = CreateMockUnitOfWorkProvider();
+            var resourceRepository = new MockResourceRepository(unitOfWorkProvider);
             var bookData = new BookData
             {
                 FullBookRecordings = new List<FullBookRecordingData>
@@ -734,8 +740,8 @@ namespace ITJakub.FileProcessing.Service.Test
         [TestMethod]
         public void TestUpdateBookVersion()
         {
-            var unitOfWork = new MockUnitOfWork();
-            var resourceRepository = new MockResourceRepository(unitOfWork);
+            var unitOfWorkProvider = CreateMockUnitOfWorkProvider();
+            var resourceRepository = new MockResourceRepository(unitOfWorkProvider);
             var bookData = new BookData
             {
                 VersionXmlId = ""
@@ -761,8 +767,8 @@ namespace ITJakub.FileProcessing.Service.Test
         [TestMethod]
         public void TestUpdateEditionNote()
         {
-            var unitOfWork = new MockUnitOfWork();
-            var resourceRepository = new MockResourceRepository(unitOfWork);
+            var unitOfWorkProvider = CreateMockUnitOfWorkProvider();
+            var resourceRepository = new MockResourceRepository(unitOfWorkProvider);
             var bookData = new BookData
             {
                 ContainsEditionNote = true

@@ -106,6 +106,10 @@
             {
               "label": "EditionLastModification",
               "pattern": "{CreateTimeString}"
+            },
+            {
+              "label": "LinkToForum",
+              "pattern": "{$forumLink}"
             }
           ]
         },
@@ -156,6 +160,11 @@
           "scope": "LiteraryGenres",
           "pattern": "{$this}",
           "delimeter": ", "
+        },
+        "$forumLink": {
+          "type": "basic",
+          "pattern": "<a href='{ForumUrl}'>Link</a>",
+          "printIfNullValue": false
         }
       }
     },
@@ -329,6 +338,10 @@
             {
               "label": "EditionLastModification",
               "pattern": "{CreateTimeString}"
+            },
+            {
+              "label": "LinkToForum",
+              "pattern": "{$forumLink}"
             }
           ]
         },
@@ -379,6 +392,11 @@
           "scope": "LiteraryGenres",
           "pattern": "{$this}",
           "delimeter": ", "
+        },
+        "$forumLink": {
+          "type": "basic",
+          "pattern": "<a href='{ForumUrl}'>Link</a>",
+          "printIfNullValue": false
         }
       }
     },
@@ -656,6 +674,10 @@
             {
               "label": "EditionLastModification",
               "pattern": "{CreateTimeString}"
+            },
+            {
+              "label": "LinkToForum",
+              "pattern": "{$forumLink}"
             }
           ]
         },
@@ -706,6 +728,11 @@
           "scope": "LiteraryGenres",
           "pattern": "{$this}",
           "delimeter": ", "
+        },
+        "$forumLink": {
+          "type": "basic",
+          "pattern": "<a href='{ForumUrl}'>Link</a>",
+          "printIfNullValue": false
         }
       }
     },
@@ -835,6 +862,10 @@
             {
               "label": "EditionLastModification",
               "pattern": "{CreateTimeString}"
+            },
+            {
+              "label": "LinkToForum",
+              "pattern": "{$forumLink}"
             }
           ]
         },
@@ -885,6 +916,11 @@
           "scope": "LiteraryGenres",
           "pattern": "{$this}",
           "delimeter": ", "
+        },
+        "$forumLink": {
+          "type": "basic",
+          "pattern": "<a href='{ForumUrl}'>Link</a>",
+          "printIfNullValue": false
         }
       }
     },
@@ -1018,6 +1054,10 @@
             {
               "label": "LinkToOriginal",
               "pattern": "{$projectOriginalLink}"
+            },
+            {
+              "label": "LinkToForum",
+              "pattern": "{$forumLink}"
             }
           ]
         },
@@ -1072,6 +1112,11 @@
         "$projectOriginalLink": {
           "type": "basic",
           "pattern": "<a href='{OriginalUrl}'>{OriginalUrl}</a>",
+          "printIfNullValue": false
+        },
+        "$forumLink": {
+          "type": "basic",
+          "pattern": "<a href='{ForumUrl}'>Link</a>",
           "printIfNullValue": false
         }
       }

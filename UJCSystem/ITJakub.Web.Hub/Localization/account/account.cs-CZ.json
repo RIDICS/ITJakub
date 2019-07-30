@@ -17,9 +17,9 @@
     "Registration-submit": "Registrovat",
 
     "Detail": "Detail účtu",
-    "Settings": "Nastavení účtu",
+    "UserProfile": "Uživatelský profil",
 
-    "DataChange": "Změna údajů",
+    "BasicData": "Základní údaje",
     "UpdateAccountSubmit": "Uložit změny",
     "SuccessUpdateAccount": "Údaje byly úspěšně změněny.",
 
@@ -27,11 +27,11 @@
     "UpdatePasswordSubmit": "Změnit heslo",
     "SuccessPasswordChange": "Heslo bylo úspěšně změněno.",
 
-    "UpdateContact": "Úprava kontaktů",
+    "UpdateContact": "Kontakty",
     "EmailAddressUpdate": "Změna e-mailové adresy",
     "EmailAddressVerification": "Ověření e-mailové adresy",
     "EmailAddressIsNotVerified": "E-mailová adresa není ověřena",
-    "SuccessContactUpdate": "Kontakt byl úspešně změněn. Nyní je potřeba ho ověřit.",
+    "SuccessContactUpdate": "Kontakt byl úspešně změněn. Nyní je potřeba ho ověřit kódem, který byl odeslán na e-mailovou adresu {0}.",
     "ConfirmCodeSend": "Potvrzovací kód byl odeslán na e-mailovou adresu {0}.",
     "Change": "Změnit",
     "Confirm": "Potvrdit",
@@ -44,7 +44,9 @@
     "ResendCodeError": "Při odesílání ověřovacího kódu došlo k neočekávané chybě.",
 
     "UpdateTwoFactorVerification": "Dvoufaktorové ověření",
+    "TwoFactorProvider": "Způsob dvoufaktorového ověření",
     "SuccessTwoFactorUpdate": "Nastavení dvoufaktorového ověření bylo úspšeně aktualizováno.",
+    "TwoFactorVerificationIsNotActive": "Emailová adresa není ověřena - dvoufaktorové ověření není aktivní.",
     "Save": "Uložit"
   }
 }

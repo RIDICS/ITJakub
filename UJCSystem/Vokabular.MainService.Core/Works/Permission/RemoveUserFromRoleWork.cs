@@ -2,7 +2,7 @@
 using System.Reflection;
 using log4net;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
 
 namespace Vokabular.MainService.Core.Works.Permission

@@ -13,7 +13,7 @@ namespace ITJakub.FileProcessing.Service
             m_sessionManager.AddResource(resourceInfoSkeleton.SessionId, resourceInfoSkeleton.FileName, resourceInfoSkeleton.Data);
         }
 
-        public bool ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage, IList<PermissionFromAuthContract> autoImportPermissions)
+        public ImportResultContract ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage, IList<PermissionFromAuthContract> autoImportPermissions)
         {
             return m_sessionManager.ProcessSession(sessionId, projectId, userId, uploadMessage, autoImportPermissions);
         }

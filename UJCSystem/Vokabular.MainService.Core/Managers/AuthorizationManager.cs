@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using log4net;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Errors;
 using Vokabular.MainService.Core.Works.Permission;
@@ -12,6 +11,7 @@ using Vokabular.MainService.DataContracts.Contracts.CardFile;
 using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Types;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Managers
 {

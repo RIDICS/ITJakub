@@ -10,6 +10,6 @@ namespace ITJakub.FileProcessing.DataContracts
         void AddResource(UploadResourceContract resourceInfoSkeleton);
 
         [OperationContract]
-        bool ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage, IList<PermissionFromAuthContract> autoImportPermissions);
+        ImportResultContract ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage, IList<PermissionFromAuthContract> autoImportPermissions);
     }
 }

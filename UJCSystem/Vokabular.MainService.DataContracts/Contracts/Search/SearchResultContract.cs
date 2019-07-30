@@ -73,6 +73,8 @@ namespace Vokabular.MainService.DataContracts.Contracts.Search
         public SearchTermResultContract TermPageHits { get; set; }
 
         public string OriginalUrl { get; set; }
+
+        public string ForumUrl { get; set; }
     }
 
     public class SearchResultDetailContract : SearchResultContract

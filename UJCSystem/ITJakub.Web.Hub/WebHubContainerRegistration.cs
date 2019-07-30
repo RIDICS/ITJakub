@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ITJakub.Web.Hub.Areas.Admin.AutomapperProfiles;
+using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.AutoMapperProfiles;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
@@ -17,6 +18,7 @@ namespace ITJakub.Web.Hub
             services.AddScoped<CommunicationConfigurationProvider>();
             services.AddScoped<StaticTextManager>();
             services.AddScoped<FeedbacksManager>();
+            services.AddScoped<RefreshUserManager>();
 
             services.AddScoped<IMarkdownToHtmlConverter, MarkdigMarkdownToHtmlConverter>();
 

@@ -161,6 +161,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
         VersionXmlId = 4,
         BookData = 5,
         UserId = 6,
-        AutoImportPermissions = 7,
+        SnapshotId = 7,
+        AutoImportPermissions = 8,
     }
 }

@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Text;
-using Vokabular.DataEntities.Database.Daos;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
+using Vokabular.Shared.DataEntities.Daos;
 
 namespace Vokabular.DataEntities.Database.Search
 {

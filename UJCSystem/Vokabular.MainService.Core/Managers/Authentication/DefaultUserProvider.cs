@@ -4,7 +4,7 @@ using System.Security.Claims;
 using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.Shared.Const;
 

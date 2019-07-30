@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using DryIoc;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -18,6 +19,8 @@ using Ridics.Core.HttpClient.Config;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Vokabular.Core;
+using Vokabular.ForumSite.Core;
+using Vokabular.ForumSite.Core.Options;
 using Vokabular.MainService.Authorization;
 using Vokabular.MainService.Core;
 using Vokabular.MainService.Middleware;
@@ -30,6 +33,7 @@ using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
 using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 using Vokabular.Shared.Options;
 
 namespace Vokabular.MainService
@@ -43,7 +47,7 @@ namespace Vokabular.MainService
         }
 
         private IConfiguration Configuration { get; }
-        private DryIocContainer Container { get; set; }
+        private DryIocContainerWrapper Container { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -56,6 +60,7 @@ namespace Vokabular.MainService
             services.Configure<List<CredentialsOption>>(Configuration.GetSection("Credentials"));
             services.Configure<PathConfiguration>(Configuration.GetSection("PathConfiguration"));
             services.Configure<OaiPmhClientOption>(Configuration.GetSection("OaiPmhClientOption"));
+            services.Configure<ForumOption>(Configuration.GetSection("ForumOptions"));
 
             services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = 1048576000; });
 
@@ -136,11 +141,15 @@ namespace Vokabular.MainService
             services.AddProjectImportServices();
 
             // IoC
-            var container = new DryIocContainer();
+            var container = new DryIocContainerWrapper();
             container.RegisterLogger();
-            container.Install<MainServiceContainerRegistration>();
-            container.Install<NHibernateInstaller>();
             Container = container;
+
+            container.InnerContainer.AddNHibernateDefaultDatabase();
+            container.InnerContainer.AddNHibernateForumDatabase();
+            
+            container.Install<MainServiceContainerRegistration>();
+            container.Install<ForumCoreContainerRegistration>();
 
             return container.CreateServiceProvider(services);
         }

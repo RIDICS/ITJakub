@@ -5,8 +5,8 @@ using System.Linq;
 using Ujc.Ovj.Ooxml.Conversion;
 using Vokabular.Core.Storage.Resources;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.Shared.DataContracts.Types;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
