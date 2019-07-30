@@ -395,6 +395,15 @@
                                 </a>
                             </li>
                         }
+                        
+                        @if (User.HasPermission(PermissionNames.ManageUserRoles))
+                        {
+                            <li>
+                                <a href='@Url.Action("ProjectPermission", "Permission", new {area = ""})'>
+                                    <span>@Localizer.Translate("BookPermissionManagement", "layout", LocTranslationSource.File)</span>
+                                </a>
+                            </li>
+                        }
 
                         @if (User.HasPermission(VokabularPermissionNames.ManageFeedbacks))
                         {
