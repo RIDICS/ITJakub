@@ -27,7 +27,7 @@ $(document as Node as Element).ready(() => {
             $(event.currentTarget.parentElement).toggleClass("toggled");
         });
 
-    $("#defaultLoginLink").on("touchstart touchend",
+    $("#defaultUserMenuItemLink").on("touchstart touchend",
         (event) => {
             event.preventDefault();
         });
