@@ -32,7 +32,8 @@ namespace ITJakub.Web.Hub.AutoMapperProfiles
             CreateMap<UserDetailContract, UpdateTwoFactorVerificationViewModel>()
                 .ForMember(dest => dest.TwoFactorEnabled, opt => opt.MapFrom(src => src.TwoFactorEnabled))
                 .ForMember(dest => dest.SelectedTwoFactorProvider, opt => opt.MapFrom(src => src.TwoFactorProvider))
-                .ForMember(dest => dest.TwoFactorProviders, opt => opt.MapFrom(src => src.ValidTwoFactorProviders));
+                .ForMember(dest => dest.TwoFactorProviders, opt => opt.MapFrom(src => src.ValidTwoFactorProviders))
+                .ForMember(dest => dest.IsEmailConfirmed, opt => opt.Ignore());
         }
     }
 }

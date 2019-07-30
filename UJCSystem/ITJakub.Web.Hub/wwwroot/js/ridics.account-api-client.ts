@@ -9,6 +9,10 @@
             }));
     }
 
+    public getTwoFactor(): JQuery.jqXHR<string> {
+        return this.get(this.getAccountControllerUrl() + "TwoFactor");
+    }
+
     public confirmContact(contactType: string, confirmCode: string): JQuery.jqXHR<boolean> {
         return this.post(this.getAccountControllerUrl() + "ConfirmUserContact",
             JSON.stringify({ confirmCode: confirmCode, ContactType: contactType}));
