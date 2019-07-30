@@ -14,8 +14,7 @@ class UserRolesEditor {
 
     constructor(mainContainer: string) {
         this.mainContainer = mainContainer;
-        this.roleSearchBox = new SingleSetTypeaheadSearchBox<IRole>("#groupSearchInput",
-            "Permission",
+        this.roleSearchBox = new SingleSetTypeaheadSearchBox<IRole>("#roleSearchInput", "Permission",
             (item) => item.name,
             (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(item.name, item.description));
 

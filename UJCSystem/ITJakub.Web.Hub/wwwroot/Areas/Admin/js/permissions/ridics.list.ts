@@ -71,6 +71,24 @@
         this.loadPage(this.pagination.getCurrentPage());
     }
 
+    public clear(emptyListMessage: string) {
+        const section = $(`#${this.selector}-section .section`);
+        this.setSearchFormDisabled();
+        $(`#${this.selector}-pagination`).empty();
+
+        const container = section.find(`.list-container`);
+        const infoAlert = new AlertComponentBuilder(AlertType.Info).addContent(emptyListMessage);
+        container.empty().append(infoAlert.buildElement());
+    }
+
+    public setSearchFormDisabled(disabled = true) {
+        const section = $(`#${this.selector}-section .section`);
+        const searchForm = section.find(`.${this.selector}-search-form`);
+        searchForm.find("input").prop("disabled", disabled);
+        searchForm.find("submit").prop("disabled", disabled);
+        searchForm.find("button").prop("disabled", disabled);
+    }
+
     private initPagination() {
         const pagingInfo = $(this.listContainerSelector + " " + this.pagingInfoSelector);
         if (pagingInfo.length !== 0) {

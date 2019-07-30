@@ -9,8 +9,9 @@ class RoleManager {
     private readonly delayForShowResponse = 1000;
     private readonly errorHandler: ErrorHandler;
     private currentUserSelectedItem: IUserDetail;
+    private roleList: ListWithPagination; 
     private userList: ListWithPagination;
-    private roleList: ListWithPagination;
+    private permissionList: ListWithPagination; 
 
     constructor() {
         this.searchBox = new SingleSetTypeaheadSearchBox<IUserDetail>("#mainSearchInput",
@@ -32,10 +33,10 @@ class RoleManager {
         this.roleList.init();
 
         $(".role-row").click((event) => {
-            $(event.currentTarget).addClass("active").siblings().removeClass("active");
+            $(event.currentTarget as Node as Element).addClass("active").siblings().removeClass("active");
             $("#addRoleButton").removeClass("disabled");
 
-            var selectedRoleId = $(event.currentTarget).data("role-id");
+            var selectedRoleId = $(event.currentTarget as Node as Element).data("role-id");
             this.loadUsers(selectedRoleId);
             this.loadPermissions(selectedRoleId);
         });
@@ -59,7 +60,7 @@ class RoleManager {
         const container = userSection.find(".list-container");
         const searchForm = userSection.find(".user-search-form");
         searchForm.find("input.search-value").val("");
-        this.setSearchFormDisabled(searchForm, false);
+        this.userList.setSearchFormDisabled(false);
         container.html("<div class=\"loader\"></div>");
         userSection.removeClass("hide");
 
@@ -87,7 +88,7 @@ class RoleManager {
         const container = permissionSection.find(".list-container");
         container.html("<div class=\"loader\"></div>");
         const searchForm = permissionSection.find(".permission-search-form");
-        this.setSearchFormDisabled(searchForm, false);
+        this.permissionList.setSearchFormDisabled(false);
         searchForm.find("input.search").val("");
         permissionSection.removeClass("hide");
 
@@ -99,22 +100,22 @@ class RoleManager {
                 .addContent(this.errorHandler.getErrorMessage(error, localization.translate("ListError", "PermissionJs").value));
             container.empty().append(errorAlert.buildElement());
         }).always(() => {
-            const permissionList = new ListWithPagination(`Permission/RolePermissionList?roleId=${roleId}`,
+            this.permissionList = new ListWithPagination(`Permission/RolePermissionList?roleId=${roleId}`,
                 10,
                 "permission",
                 ViewType.Widget,
                 false,
                 this.initPermissionManaging,
                 this);
-            permissionList.init();
+            this.permissionList.init();
         });
     }
 
     private initPermissionManaging() {
 
         $(".permission-row input[type=checkbox]").on("input", (event) => {
-            const addPermission = $(event.currentTarget).is(":checked");
-            const permissionCheckboxInput = $(event.currentTarget);
+            const addPermission = $(event.currentTarget as Node as Element).is(":checked");
+            const permissionCheckboxInput = $(event.currentTarget as Node as Element);
             permissionCheckboxInput.prop("checked", !addPermission);
             const permissionRow = permissionCheckboxInput.parents(".permission-row");
             const alert = permissionRow.find(".alert");
@@ -154,7 +155,7 @@ class RoleManager {
 
     private initRemoveUserFromRoleButton() {
         $(".remove-user-from-role").click((event) => {
-            var userRow = $(event.currentTarget).parents(".user-row");
+            var userRow = $(event.currentTarget as Node as Element).parents(".user-row");
             var userId = userRow.data("user-id");
             const alert = userRow.find(".alert");
             alert.hide();
@@ -173,7 +174,7 @@ class RoleManager {
         const editRoleDialog = $("#editRoleDialog");
         $(".edit-role").click((event) => {
             event.stopPropagation();
-            const roleRow = $(event.currentTarget).parents(".role-row");
+            const roleRow = $(event.currentTarget as Node as Element).parents(".role-row");
             const roleId = roleRow.data("role-id");
             const roleName = roleRow.find(".name").text();
             const roleDescription = roleRow.find(".description").text();
@@ -225,7 +226,7 @@ class RoleManager {
     private initRemoveRoleButtons() {
         $(".remove-role").click((event) => {
             event.stopPropagation();
-            const roleRow = $(event.currentTarget).parents(".role-row");
+            const roleRow = $(event.currentTarget as Node as Element).parents(".role-row");
             const roleName = roleRow.find(".name").text();
             bootbox.dialog({
                 title: localization.translate("Warning", "PermissionJs").value,
@@ -341,25 +342,8 @@ class RoleManager {
     }
 
     private clearSections() {
-        this.clearList("user");
-        this.clearList("permission");
+        this.userList.clear(localization.translate("RoleIsNotSelected", "PermissionJs").value);
+        this.permissionList.clear(localization.translate("RoleIsNotSelected", "PermissionJs").value);
         $("#addRoleButton").addClass("disabled");
-    }
-
-    private clearList(listType: string) {
-        const userSection = $(`#${listType}-section .section`);
-        const searchForm = userSection.find(`.${listType}-search-form`);
-        this.setSearchFormDisabled(searchForm);
-        $(`#${listType}-pagination`).empty();
-
-        const container = userSection.find(`.list-container`);
-        const infoAlert = new AlertComponentBuilder(AlertType.Info).addContent(localization.translate("RoleIsNotSelected", "PermissionJs").value);
-        container.empty().append(infoAlert.buildElement());
-    }
-
-    private setSearchFormDisabled(searchForm: JQuery, disabled = true) {
-        searchForm.find("input").prop("disabled", disabled);
-        searchForm.find("submit").prop("disabled", disabled);
-        searchForm.find("button").prop("disabled", disabled);
     }
 }
