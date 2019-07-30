@@ -28,6 +28,7 @@
     "UserPermissionManagementHeadline": "Správa uživatelů",
     "SearchUser": "Hledat uživatele...",
     "SelectedUser": "Vybraný uživatel",
+    "UserIsNotSelected": "Uživatel není vybrán",
     "FirstName": "Křestní jméno",
     "LastName": "Příjmení",
     "UserName": "Uživatelské jméno",
@@ -39,6 +40,7 @@
     "AddUserToGroup": "Přiřadit",
     "Edit": "Upravit",
     "EditUserTitle": "Úprava uživatele",
+    "EditUsersGroupsTitle": "Úprava skupin uživatele",
     "Search": "Hledat",
     "NoUsersSearch": "Je nám líto, ale nepodařilo se najít žádné uživatele odpovídající dotazu ",
     "NoUsersFound": "Je nám líto, ale nebyly nalezeni žádní uživatelé",
@@ -46,11 +48,14 @@
     "ResetSearch": "Zrušit hledání",
     "Groups": "Skupiny",
     "Group": "Skupina",
+    "AssignedGroups": "Přiřazené skupiny",
+    "AssignToGroup": "Přiřadit do skupiny",
     "User": "Uživatel",
     "ManagePermissions": "Spravovat práva",
     "Permissions": "Oprávnění",
     "SuccessGroupUpdate": "Úprava skupiny proběhla úspěšně.",
     "SuccessUserUpdate": "Úprava uživatele proběhla úspěšně.",
-    "GroupEditTitle": "Úprava skupiny"
+    "GroupEditTitle": "Úprava skupiny",
+    "Changed": "Změněno"
   }
 }

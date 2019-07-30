@@ -322,12 +322,6 @@ namespace ITJakub.Web.Hub.Controllers
             return new SignOutResult(new[] {CookieAuthenticationDefaults.AuthenticationScheme});
         }
 
-        [AllowAnonymous]
-        public IActionResult AccessDenied()
-        {
-            return View();
-        }
-
         private ActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))
