@@ -4,14 +4,14 @@ using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
-using Vokabular.DataEntities.Database.Daos;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.Shared.DataEntities.Daos;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace ITJakub.Lemmatization.DataEntities.Repositories
 {
     public class LemmatizationRepository : NHibernateDao
     {
-        public LemmatizationRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public LemmatizationRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider, null)
         {
         }
 

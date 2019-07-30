@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using NHibernate;
-using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
 {
-    public class ImportedRecordMetadataRepository : NHibernateDao
+    public class ImportedRecordMetadataRepository : MainDbRepositoryBase
     {
-        public ImportedRecordMetadataRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public ImportedRecordMetadataRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
         }
 

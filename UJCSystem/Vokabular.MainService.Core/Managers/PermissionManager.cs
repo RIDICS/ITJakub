@@ -11,6 +11,7 @@ using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.Const;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 using AuthRoleContract = Ridics.Authentication.DataContracts.RoleContract;
 using AuthPermissionContract = Ridics.Authentication.DataContracts.PermissionContract;
 using PermissionContract = Vokabular.MainService.DataContracts.Contracts.Permission.PermissionContract;

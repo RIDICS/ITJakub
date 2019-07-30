@@ -27,6 +27,7 @@ namespace Vokabular.MainService.Core
             services.AddScoped<CorpusSearchManager>();
             services.AddScoped<FavoriteManager>();
             services.AddScoped<FeedbackManager>();
+            services.AddScoped<ForumSiteManager>();
             services.AddScoped<HeadwordSearchManager>();
             services.AddScoped<NamedResourceGroupManager>();
             services.AddScoped<NewsManager>();
@@ -67,6 +68,7 @@ namespace Vokabular.MainService.Core
             services.AddSingleton<Profile, FeedbackProfile>();
             services.AddSingleton<Profile, FilteringExpressionProfile>();
             services.AddSingleton<Profile, FilteringExpressionSetProfile>();
+            services.AddSingleton<Profile, ForumProfile>();
             services.AddSingleton<Profile, HeadwordProfile>();
             services.AddSingleton<Profile, ImageProfile>();
             services.AddSingleton<Profile, KeywordProfile>();

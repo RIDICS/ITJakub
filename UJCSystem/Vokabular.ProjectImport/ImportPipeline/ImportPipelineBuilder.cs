@@ -5,7 +5,6 @@ using System.Threading.Tasks.Dataflow;
 using Microsoft.Extensions.DependencyInjection;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
 using Vokabular.ProjectImport.Model.Exceptions;
@@ -13,6 +12,7 @@ using Vokabular.ProjectImport.Permissions;
 using Vokabular.ProjectParsing.Model.Entities;
 using Vokabular.ProjectParsing.Model.Parsers;
 using Vokabular.Shared.Const;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.ProjectImport.ImportPipeline
 {

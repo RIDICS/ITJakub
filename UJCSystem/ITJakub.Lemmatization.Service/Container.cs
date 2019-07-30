@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using Castle.Core.Resource;
+using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
@@ -10,6 +13,7 @@ using ITJakub.Lemmatization.DataEntities;
 using log4net;
 using log4net.Config;
 using Microsoft.Extensions.DependencyInjection;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 using Vokabular.Shared.WcfService;
 
 namespace ITJakub.Lemmatization.Service
@@ -59,6 +63,13 @@ namespace ITJakub.Lemmatization.Service
             new LemmatizationDataEntitiesContainerRegistration().Install(services);
 
             this.AddServicesCollection(services);
+
+            // Re-register UnitOfWorkProvider to satisfy dependency
+            Register(Component.For<UnitOfWorkProvider>()
+                .IsDefault()
+                .UsingFactoryMethod(c => new UnitOfWorkProvider(c.ResolveAll<IUnitOfWork>().Select(x => new KeyValuePair<object, IUnitOfWork>(null, x)).ToList()))
+                .LifestylePerWebRequest()
+            );
         }
 
         private void ConfigureAutoMapper()

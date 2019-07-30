@@ -13,6 +13,8 @@
 
     <property name="OriginalUrl" not-null="false" />
 
+    <property name="ForumId" not-null="false" />
+
     <many-to-one name="LatestPublishedSnapshot" class="Snapshot" lazy="proxy" />
 
     <many-to-one name="CreatedByUser" class="User" lazy="proxy" not-null="true" />

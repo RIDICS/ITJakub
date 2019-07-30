@@ -16,7 +16,7 @@
         return MyStorageManager.instance;
     }
 
-    public getStorage(type: StorageTypeEnum = StorageTypeEnum.Any):IStorage {
+    public getStorage(type: StorageTypeEnum = StorageTypeEnum.Any): IStorage {
         if (this.storage[type] === undefined) {
             switch (type) {
                 case StorageTypeEnum.Any:
@@ -43,7 +43,7 @@
         return this.storage[type];
     }
 
-    private createLocalStorage():IStorage {
+    private createLocalStorage(): IStorage {
         if (typeof (Storage) !== "undefined") {
             return new LocalStorage;
         } else {

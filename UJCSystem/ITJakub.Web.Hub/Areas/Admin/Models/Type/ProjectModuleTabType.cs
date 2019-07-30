@@ -10,5 +10,6 @@
         WorkNote = 5,
         ResourceDiscussion = 102,
         ResourceMetadata = 103,
+        Forum = 200,
     }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace ITJakub.FileProcessing.Service.Test.Mock
 {
@@ -12,7 +12,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
     {
         public const long HeadwordBookVersionId = 3;
 
-        public MockResourceRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public MockResourceRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
             CreatedObjects = new List<object>();
             UpdatedObjects = new List<object>();

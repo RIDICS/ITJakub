@@ -2,9 +2,9 @@ using System.Linq;
 using System.Net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Errors;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.ProjectImport.Works.FilteringExpressionSetManagement
 {

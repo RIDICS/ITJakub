@@ -5,18 +5,17 @@ using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
 using Vokabular.DataEntities.Database.ConditionCriteria;
-using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Search;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
 {
-    public class MetadataRepository : NHibernateDao
+    public class MetadataRepository : MainDbRepositoryBase
     {
-        public MetadataRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public MetadataRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
         }
 
@@ -444,7 +443,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List<string>();
         }
 
-        public virtual IList<MetadataResource> GetMetadataByProjectIds(IList<long> projectIds, bool fetchAuthors, bool fetchResponsiblePersons)
+        public virtual IList<MetadataResource> GetMetadataByProjectIds(IList<long> projectIds, bool fetchAuthors, bool fetchResponsiblePersons, bool fetchBookTypes)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;
@@ -477,6 +476,15 @@ namespace Vokabular.DataEntities.Database.Repositories
                     .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons)
                     .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons[0].ResponsiblePerson)
                     .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons[0].ResponsibleType)
+                    .Future();
+            }
+
+            if (fetchBookTypes)
+            {
+                GetSession().QueryOver<Project>()
+                    .WhereRestrictionOn(x => x.Id).IsInG(projectIds)
+                    .Fetch(SelectMode.Fetch, x => x.LatestPublishedSnapshot)
+                    .Fetch(SelectMode.Fetch, x => x.LatestPublishedSnapshot.BookTypes)
                     .Future();
             }
 

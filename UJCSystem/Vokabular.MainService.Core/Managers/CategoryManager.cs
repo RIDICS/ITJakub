@@ -2,24 +2,27 @@
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Works.CategoryManagement;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Managers
 {
     public class CategoryManager
     {
         private readonly CategoryRepository m_categoryRepository;
+        private readonly ForumSiteManager m_forumSiteManager;
 
-        public CategoryManager(CategoryRepository categoryRepository)
+        public CategoryManager(CategoryRepository categoryRepository, ForumSiteManager forumSiteManager)
         {
             m_categoryRepository = categoryRepository;
+            m_forumSiteManager = forumSiteManager;
         }
 
         public int CreateCategory(CategoryContract category)
         {
             var resultId = new CreateCategoryWork(m_categoryRepository, category).Execute();
+            m_forumSiteManager.CreateCategory(category, resultId);
             return resultId;
         }
 
@@ -32,12 +35,15 @@ namespace Vokabular.MainService.Core.Managers
         public void DeleteCategory(int categoryId)
         {
             var deleteCategoryWork = new DeleteCategoryWork(m_categoryRepository, categoryId);
+            m_forumSiteManager.DeleteCategory(categoryId); 
             deleteCategoryWork.Execute();
         }
 
         public void UpdateCategory(int categoryId, CategoryContract category)
         {
+            var oldCategory = GetCategory(categoryId);
             var updateCategoryWork = new UpdateCategoryWork(m_categoryRepository, categoryId, category);
+            m_forumSiteManager.UpdateCategory(category, oldCategory);
             updateCategoryWork.Execute();
         }
 

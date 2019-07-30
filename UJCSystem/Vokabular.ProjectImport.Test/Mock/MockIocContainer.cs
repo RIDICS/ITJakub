@@ -11,9 +11,9 @@ using NHibernate.Connection;
 using NHibernate.Driver;
 using NHibernate.Tool.hbm2ddl;
 using Vokabular.DataEntities;
-using Vokabular.DataEntities.Database.Daos;
-using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.ProjectImport.Shared.Options;
+using Vokabular.Shared.DataEntities.Daos;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
 

@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.OaiPmh;
 using Vokabular.ProjectImport.Works.ExternalRepositoryManagement;
 using Vokabular.RestClient.Results;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.ProjectImport.Managers
 {

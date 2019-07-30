@@ -6,7 +6,6 @@ using AutoMapper;
 using Vokabular.DataEntities.Database.ConditionCriteria;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
 using Vokabular.MainService.Core.Utils;
@@ -16,6 +15,7 @@ using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Managers
 {

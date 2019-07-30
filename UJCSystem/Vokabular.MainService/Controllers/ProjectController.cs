@@ -5,7 +5,6 @@ using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Parameter;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Headers;
-using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
 
 namespace Vokabular.MainService.Controllers
@@ -16,13 +15,15 @@ namespace Vokabular.MainService.Controllers
         private readonly ProjectManager m_projectManager;
         private readonly ProjectMetadataManager m_projectMetadataManager;
         private readonly ProjectInfoManager m_projectInfoManager;
+        private readonly ForumSiteManager m_forumSiteManager;
 
         public ProjectController(ProjectManager projectManager, ProjectMetadataManager projectMetadataManager,
-            ProjectInfoManager projectInfoManager)
+            ProjectInfoManager projectInfoManager, ForumSiteManager forumSiteManager)
         {
             m_projectManager = projectManager;
             m_projectMetadataManager = projectMetadataManager;
             m_projectInfoManager = projectInfoManager;
+            m_forumSiteManager = forumSiteManager;
         }
         
         [HttpGet]
@@ -183,6 +184,22 @@ namespace Vokabular.MainService.Controllers
         public List<ProjectResponsiblePersonContract> GetProjectResponsiblePersons(long projectId)
         {
             return m_projectInfoManager.GetProjectResponsiblePersons(projectId);
+        }
+
+        [HttpGet("{projectId}/forum")]
+        [ProducesResponseType(typeof(ForumContract), StatusCodes.Status200OK)]
+        public IActionResult GetForum(long projectId)
+        {
+            var forum = m_forumSiteManager.GetForum(projectId);
+            return Ok(forum);
+        }
+
+        [HttpPost("{projectId}/forum")]
+        public ActionResult<int> CreateForum(long projectId)
+        {
+            var forumId = m_forumSiteManager.CreateForums(projectId);
+
+            return forumId != null ? (ActionResult<int>) Ok(forumId.Value) : BadRequest("Forum is disabled");
         }
     }
 }

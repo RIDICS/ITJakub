@@ -4,16 +4,15 @@ using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
-using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
 {
-    public class ExternalRepositoryRepository : NHibernateDao
+    public class ExternalRepositoryRepository : MainDbRepositoryBase
     {
-        public ExternalRepositoryRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public ExternalRepositoryRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
         }
 

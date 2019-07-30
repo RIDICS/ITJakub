@@ -8,7 +8,7 @@ using ITJakub.FileProcessing.DataContracts;
 using log4net;
 using Vokabular.Core.Storage.Resources;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
@@ -101,6 +101,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             //{
             //     m_permissionRepository.CreatePermissionIfNotExist(newPermission);
             //}
+            resourceDirector.SetSessionInfoValue(SessionInfo.ProjectId, projectId);
         }
 
         private void PublishSnapshotToExternalDatabase(long snapshotId, long projectId, List<BookPageData> bookDataPages)

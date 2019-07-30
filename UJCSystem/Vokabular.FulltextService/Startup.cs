@@ -29,7 +29,7 @@ namespace Vokabular.FulltextService
 
         private IConfiguration Configuration { get; }
 
-        private DryIocContainer Container { get; set; }
+        private DryIocContainerWrapper Container { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -59,7 +59,7 @@ namespace Vokabular.FulltextService
             });
 
             // IoC
-            var container = new DryIocContainer();
+            var container = new DryIocContainerWrapper();
             container.Install<FulltextServiceContainerRegistration>();
             Container = container;
 
