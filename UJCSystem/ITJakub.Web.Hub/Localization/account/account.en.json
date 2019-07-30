@@ -17,9 +17,9 @@
     "Registration-submit": "Sign up",
 
     "Detail": "Account detail",
-    "BasicData": "User profile",
+    "UserProfile": "User profile",
 
-    "DataChange": "Basic data",
+    "BasicData": "Basic data",
     "UpdateAccountSubmit": "Save changes",
     "SuccessUpdateAccount": "Data was successfully updated.",
 
