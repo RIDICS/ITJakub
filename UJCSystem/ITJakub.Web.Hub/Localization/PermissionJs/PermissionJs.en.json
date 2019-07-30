@@ -1,23 +1,37 @@
 {
 	"culture":"en",
 	"scope":"PermissionJs",
-	"dictionary": {
-		"News" : "News",
-		"BookUploading" : "Book uploading",
-		"PermissionManagement" : "Permission management",
-		"FeedbackManagement" : "Feedback management",
-		"ReadCardFile" : "Reading cardfiles",
-		"AutoImport" : "Translate[Automatické právo na kategorii]",
-		"ReadLemmatization" : "Lemmatization reading",
-		"EditLemmatization" : "Lemmatization editing",
-		"DerivateLemmatization" : "Translate[Derivace hláskových podob]",
-		"PrintEdition" : "Edition printing",
-		"EditStaticText" : "Translate[Úprava statických textů]",
-		"UnknownPermission" : "Unknown permission",
-		
-		"AddNews" : "Translate[Přidávat novinky]",
-		"UploadBook" : "Translate[Nahrávat díla]",
-		"ManagePermissions" : "Translate[Spravovat práva]",
-		"ReadFeedback" : "Translate[Číst připomínky]"
-		}
+  "dictionary": {
+    "News": "News",
+    "BookUploading": "Book uploading",
+    "PermissionManagement": "Permission management",
+    "FeedbackManagement": "Feedback management",
+    "ReadCardFile": "Reading cardfiles",
+    "AutoImport": "Translate[Automatické právo na kategorii]",
+    "ReadLemmatization": "Lemmatization reading",
+    "EditLemmatization": "Lemmatization editing",
+    "DerivateLemmatization": "Translate[Derivace hláskových podob]",
+    "PrintEdition": "Edition printing",
+    "EditStaticText": "Translate[Úprava statických textů]",
+    "UnknownPermission": "Unknown permission",
+
+    "AddNews": "Translate[Přidávat novinky]",
+    "UploadBook": "Translate[Nahrávat díla]",
+    "ManagePermissions": "Translate[Spravovat práva]",
+    "ReadFeedback": "Translate[Číst připomínky]",
+
+    "ListError": "An unexpected error occurred, when loading a page of the list.",
+    "PermissionError": "An unexpected error occurred when setting permission.",
+    "DeleteRoleError": "An unexpected error occurred when deleting the group.",
+    "CreateRoleError": "An unexpected error occurred when creating the group.",
+    "RemoveUserFromRoleError": "An unexpected error occurred when removing the user from the group.",
+    "AddUserToRoleError": "An unexpected error occurred when adding the user to the group.",
+    "CreateRoleWithUserError": "An unexpected error occurred when creating the group with the user.",
+    "RoleIsNotSelected": "The group is not selected.",
+
+    "Cancel": "Cancel",
+    "Delete": "Delete",
+    "Warning": "Warning",
+    "DeleteRoleConfirm": "Are you sure you want to delete group {0}?"
+  }
 }

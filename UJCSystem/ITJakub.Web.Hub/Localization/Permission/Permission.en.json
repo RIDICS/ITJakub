@@ -28,6 +28,7 @@
     "UserPermissionManagementHeadline": "User management",
     "SearchUser": "Search user...",
     "SelectedUser": "Selected user",
+    "UserIsNotSelected": "User is not selected",
     "FirstName": "First name",
     "LastName": "Last name",
     "UserName": "Username",
@@ -39,6 +40,7 @@
     "AddUserToGroup": "Add user to group",
     "Edit": "Edit",
     "EditUserTitle": "Edit user",
+    "EditUsersGroupsTitle": "Edit user's groups",
     "Search": "Search",
     "NoUsersSearch": "Sorry, but we could not find any user matching ",
     "NoUsersFound": "Sorry, but no users were found",
@@ -46,11 +48,14 @@
     "ResetSearch": "Reset search",
     "Groups": "Groups",
     "Group": "Group",
+    "AssignedGroups": "Assigned groups",
+    "AssignToGroup": "Assign to group",
     "User": "User",
     "ManagePermissions": "Manage permissions",
     "Permissions": "Permissions",
     "SuccessGroupUpdate": "Group update was successful.",
     "SuccessUserUpdate": "User update was successful.",
-    "GroupEditTitle": "Edit group"
+    "GroupEditTitle": "Edit group",
+    "Changed": "Changed"
   }
 }

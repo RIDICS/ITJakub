@@ -163,7 +163,6 @@ class AccountManager {
                 if (this.setTwoFactorForm.valid()) {
                     this.client.setTwoFactor(this.setTwoFactorForm.serialize())
                         .done((response) => {
-                            console.log(response);
                             this.twoFactorSection.html(response);
                         })
                         .fail((error) => {
