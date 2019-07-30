@@ -6,15 +6,15 @@
 //TODO rename to role
 class UserPermissionEditor {
     private mainContainer: string;
-    private roleSearchBox: SingleSetTypeaheadSearchBox<IGroup>;
-    private roleSearchCurrentSelectedItem: IGroup;
+    private roleSearchBox: SingleSetTypeaheadSearchBox<IRole>;
+    private roleSearchCurrentSelectedItem: IRole;
     private roleList: ListWithPagination;
     private client: PermissionApiClient;
     private userId: number;
 
     constructor(mainContainer: string) {
         this.mainContainer = mainContainer;
-        this.roleSearchBox = new SingleSetTypeaheadSearchBox<IGroup>("#groupSearchInput", "Permission",
+        this.roleSearchBox = new SingleSetTypeaheadSearchBox<IRole>("#groupSearchInput", "Permission",
             (item) => item.name,
             (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(item.name, item.description));
 
