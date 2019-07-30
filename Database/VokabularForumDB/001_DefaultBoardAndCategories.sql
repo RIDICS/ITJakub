@@ -4,17 +4,16 @@ BEGIN TRAN
 
 	  CREATE UNIQUE INDEX IX_ExternalID ON [dbo].[yaf_Category](ExternalID) WHERE ExternalID IS NOT NULL
 
--- Insert default board 
-	  INSERT INTO [dbo].[yaf_Board]
-	  (    
-	      [Name],	-- Type - smallint
-		  [AllowThreaded]
-	  )
-	  VALUES
-	  ('Vokabulář webový', 1)
 
 	  DECLARE @BoardId INT
-	   SELECT @BoardId = [BoardId] FROM [dbo].[yaf_Board] WHERE [dbo].[yaf_Board].[Name] = 'Vokabulář webový'
+	   SELECT TOP (1) @BoardId = [BoardId] FROM [dbo].[yaf_Board] ORDER BY [dbo].[yaf_Board].[BoardID]
+
+-- Update default board
+	  UPDATE [dbo].[yaf_Board]
+	   SET [Name] = 'Vokabulář webový',
+	       [AllowThreaded] = 1
+       WHERE [BoardID] = @BoardId
+
 
    --****** Book types ********
    --     Edition = 0,                   //Edice
