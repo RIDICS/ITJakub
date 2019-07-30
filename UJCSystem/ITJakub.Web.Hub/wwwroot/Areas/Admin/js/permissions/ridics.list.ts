@@ -1,21 +1,21 @@
 ﻿class ListWithPagination {
     private readonly firstPageNumber = 1;
     private readonly pagingInfoSelector = ".paging-info";
-    private readonly listContainerSelector;
-    private readonly defaultPageSize;
-    private readonly urlPath;
-    private readonly selector;
 
-    private searchForm: JQuery;
+    private readonly urlPath;
+    private readonly defaultPageSize;
+    private readonly selector;
+    private readonly viewType: ViewType;
+    private readonly saveStateToUrl: boolean;
+    private readonly pageLoadCallback;
+    private readonly contextForCallback;
+    private readonly listContainerSelector;
+    private readonly pagination: Pagination;
+    private readonly searchForm: JQuery;
+
     private resetSearchForm: JQuery;
-    private pagination: Pagination;
     private pageSize: number;
     private totalCount: number;
-    private viewType: ViewType;
-    private saveStateToUrl: boolean;
-    private pageLoadCallback;
-    private contextForCallback;
-
     private search: string;
 
     constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, saveStateToUrl: boolean);
@@ -115,7 +115,7 @@
         $listContainer.html("<div class=\"loader\"></div>");
 
         $.get(url).done((response) => {
-            $listContainer.html(response);
+            $listContainer.html(String(response));
             this.initPagination();
 
             this.setUri(start, this.pageSize, this.search);
@@ -140,7 +140,7 @@
                 if (typeof this.contextForCallback !== "undefined" && this.contextForCallback instanceof RoleManager) {
                     this.contextForCallback.init(this);
                 } else {
-                    var roleManager = new RoleManager();
+                    const roleManager = new RoleManager();
                     roleManager.init(this);
                 }
             }
