@@ -13,5 +13,7 @@ namespace ITJakub.Web.Hub.Models.User
 
         [Display(Name = "TwoFactorProviders")]
         public IList<string> TwoFactorProviders { get; set; }
+
+        public bool IsEmailConfirmed { get; set; }
     }
 }

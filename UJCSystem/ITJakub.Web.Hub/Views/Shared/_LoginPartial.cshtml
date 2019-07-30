@@ -24,7 +24,7 @@
 @if (User.Identity.IsAuthenticated)
 {
     <div class="secondary-navbar-toggle login" data-toggle="tooltip" data-placement="left" title="@Localizer.Translate("UserAccount", "global", LocTranslationSource.File)">
-        <a href="@Url.Action("AccountSettings", "Account", new {area = ""})">
+        <a id="defaultUserMenuItemLink" href="@Url.Action("UserProfile", "Account", new {area = ""})">
             <span class="glyphicon glyphicon-user"> </span>
         </a>
 
@@ -32,7 +32,7 @@
         {
             <ul class="navbar-login">
                 <li>
-                    <a href="@Url.Action("AccountSettings", "Account", new {area = ""})">
+                    <a href="@Url.Action("UserProfile", "Account", new {area = ""})">
                         <span>@User.Identity.Name</span>
                     </a>
                 </li>
@@ -52,7 +52,7 @@ else
         ViewBag.ReturnUrl = pathAndQuery;
     }
     <div class="secondary-navbar-toggle login" data-toggle="tooltip" data-placement="left" title="@Localizer.Translate("SignIn", "global", LocTranslationSource.File)">
-        <a id="loginLink" href="@Url.Action("Login", "Account", new {area = "", returnUrl = ViewBag.ReturnUrl})">
+        <a id="defaultUserMenuItemLink" href="@Url.Action("Login", "Account", new {area = "", returnUrl = ViewBag.ReturnUrl})">
             <span class="glyphicon glyphicon-user"></span>
         </a>
         <ul class="navbar-login">

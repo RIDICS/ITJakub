@@ -12,23 +12,21 @@ class AccountManager {
     private setTwoFactorForm: JQuery;
     private changeTwoFactorProviderForm: JQuery;
 
-    private readonly  accountSection: JQuery;
+    private readonly accountSection: JQuery;
     private readonly passwordSection: JQuery;
     private readonly twoFactorSection: JQuery;
     //Email confirm
     private readonly oldEmailValue: string;
+    private newEmailValue: string;
 
     private readonly emailContactType = "Email";
+    private readonly newEmailInputSelector = "#emailInput";
+    private readonly alertHolderSelector = ".alert-holder";
 
-    private readonly successContactUpdateAlert: JQuery;
-    private readonly confirmCodeSendAlert: JQuery;
-    private readonly successConfirmContactAlert: JQuery;
     private readonly confirmContactDescriptionAlert: JQuery;
 
-    private readonly errorContactUpdateAlert: JQuery;
-    private readonly errorConfirmContactAlert: JQuery;
-
     private readonly emailIsNotVerifiedTitle: JQuery;
+    private readonly updateEmailPanel: JQuery;
     private readonly confirmEmailPanel: JQuery;
     private readonly confirmEmailPanelBody: JQuery;
 
@@ -40,21 +38,16 @@ class AccountManager {
         this.client = new AccountApiClient();
         this.errorHandler = new ErrorHandler();
 
-        this.accountSection = $("#update-account");
-        this.passwordSection = $("#update-password");
-        this.twoFactorSection = $("#update-two-factor-verification");
+        this.accountSection = $("#updateAccount");
+        this.passwordSection = $("#updatePassword");
+        this.twoFactorSection = $("#updateTwoFactorVerification");
 
         this.oldEmailValue = String($("#oldEmailValue").val());
 
-        this.successContactUpdateAlert = $("#successContactUpdate");
-        this.confirmCodeSendAlert = $("#confirmCodeSend");
-        this.successConfirmContactAlert = $("#successConfirmContact");
         this.confirmContactDescriptionAlert = $("#confirmContactDescription");
 
-        this.errorContactUpdateAlert = $("#errorContactUpdate");
-        this.errorConfirmContactAlert = $("#errorConfirmContact");
-
         this.emailIsNotVerifiedTitle = $(".email-warning");
+        this.updateEmailPanel = $("#updateEmailPanel");
         this.confirmEmailPanel = $("#confirmEmailPanel");
         this.confirmEmailPanelBody = $("#confirmEmailPanelBody");
 
@@ -71,8 +64,7 @@ class AccountManager {
             $("#account-editor-button-panel").removeClass("hide");
         });
 
-        $("#account-cancel-button").click((event) => {
-            event.preventDefault();
+        $("#account-cancel-button").click(() => {
             $(".editable").prop("readonly", true);
             $("#account-editor-button-panel").addClass("hide");
             $("#account-view-button-panel").removeClass("hide");
@@ -90,24 +82,40 @@ class AccountManager {
 
         this.resendConfirmCodeBtn.click((event) => {
             event.preventDefault();
-            this.hideAlert(this.confirmCodeSendAlert);
-            this.hideAlert(this.errorConfirmContactAlert);
+            const alertHolder = this.confirmEmailPanel.find(this.alertHolderSelector);
+            alertHolder.empty();
 
             this.client.resendConfirmCode(this.emailContactType).done(() => {
-                this.showAlert(this.confirmCodeSendAlert);
+                const alert = new AlertComponentBuilder(AlertType.Success).addContent(localization
+                    .translateFormat("ConfirmCodeSend", [this.newEmailValue], "Account").value).buildElement();
+                alertHolder.empty().append(alert);
             }).fail((response) => {
-                this.showAlert(this.errorConfirmContactAlert.text(this.errorHandler.getErrorMessage(response)));
+                const alert = new AlertComponentBuilder(AlertType.Error)
+                    .addContent(this.errorHandler.getErrorMessage(response)).buildElement();
+                alertHolder.empty().append(alert);
             });
         });
 
         this.initAccountDataForm();
         this.initPasswordForm();
         this.initTwoFactorSettingsForm();
+
+        $("#updateTwoFactorVerificationButton").on("click",
+            () => {
+                this.twoFactorSection.html("<div class=\"loader\"></div>");
+                this.client.getTwoFactor().done((response) => {
+                    this.twoFactorSection.html(response);
+                    this.initTwoFactorSettingsForm();
+                }).fail((response) => {
+                    this.twoFactorSection.html(response.responseText);
+                    this.initTwoFactorSettingsForm();
+                });
+            });
     }
 
     initAccountDataForm() {
         this.accountDataForm = $("#updateAccountForm");
-       
+
         this.accountDataForm.on("submit",
             (event) => {
                 event.preventDefault();
@@ -127,7 +135,7 @@ class AccountManager {
 
     initPasswordForm() {
         this.passwordForm = $("#updatePasswordForm");
-        
+
         this.passwordForm.on("submit",
             (event) => {
                 event.preventDefault();
@@ -155,7 +163,6 @@ class AccountManager {
                 if (this.setTwoFactorForm.valid()) {
                     this.client.setTwoFactor(this.setTwoFactorForm.serialize())
                         .done((response) => {
-                            console.log(response);
                             this.twoFactorSection.html(response);
                         })
                         .fail((error) => {
@@ -176,7 +183,7 @@ class AccountManager {
                         })
                         .fail((response) => {
                             this.twoFactorSection.html(response.responseText);
-                            
+
                         }).always(() => {
                             this.initTwoFactorSettingsForm();
                         });
@@ -184,51 +191,54 @@ class AccountManager {
             });
     }
 
-
     sendUpdateContactRequest() {
-        const email = $("#emailInput").val() as string;
-        this.client.updateContact(this.emailContactType, email, this.oldEmailValue).done(() => {
-            this.hideAlert(this.errorContactUpdateAlert);
-            this.showAlert(this.successContactUpdateAlert);
+        this.newEmailValue = $(this.newEmailInputSelector).val() as string;
+        const alertHolder = this.updateEmailPanel.find(this.alertHolderSelector);
+        alertHolder.empty();
+        this.client.updateContact(this.emailContactType, this.newEmailValue, this.oldEmailValue).done(() => {
             this.emailIsNotVerifiedTitle.removeClass("hide");
             this.confirmEmailPanel.switchClass("panel-default", "panel-warning");
             this.confirmEmailPanel.removeClass("hide");
-            this.showAlert(this.confirmCodeSendAlert);
             this.confirmEmailPanelBody.collapse("show");
+
+            const alert = new AlertComponentBuilder(AlertType.Success).addContent(localization
+                .translateFormat("SuccessContactUpdate", [this.newEmailValue], "Account").value).buildElement();
+            alertHolder.append(alert);
         }).fail((response) => {
-            this.showAlert(this.errorContactUpdateAlert.text(this.errorHandler.getErrorMessage(response)));
+            const alert = new AlertComponentBuilder(AlertType.Error)
+                .addContent(this.errorHandler.getErrorMessage(response)).buildElement();
+            alertHolder.append(alert);
         });
     }
 
     sendConfirmContactRequest() {
         const confirmCode = this.confirmEmailCodeInput.val() as string;
+        const alertHolder = this.confirmEmailPanel.find(this.alertHolderSelector);
+        alertHolder.empty();
         this.client.confirmContact(this.emailContactType, confirmCode).done((response) => {
-            this.hideAlert(this.errorConfirmContactAlert);
-            this.hideAlert(this.confirmCodeSendAlert);
-            this.hideAlert(this.successConfirmContactAlert);
-
             if (response === false) {
-                this.showAlert(
-                    this.errorConfirmContactAlert.text(localization.translate("ConfirmCodeNotValid", "Account").value));
+                const alert = new AlertComponentBuilder(AlertType.Error)
+                    .addContent(localization.translate("ConfirmCodeNotValid", "Account").value).buildElement();
+                alertHolder.empty().append(alert);
             } else {
                 this.hideAlert(this.confirmContactDescriptionAlert);
-                this.showAlert(this.successConfirmContactAlert);
+
+                const alert = new AlertComponentBuilder(AlertType.Success)
+                    .addContent(localization.translate("SuccessConfirmContact", "Account").value).buildElement();
+                alertHolder.empty().append(alert);
+
                 this.emailIsNotVerifiedTitle.addClass("hide");
                 this.confirmEmailPanel.switchClass("panel-warning", "panel-default");
-                this.hideAlert(this.confirmCodeSendAlert);
-                this.showAlert(this.successConfirmContactAlert);
 
                 this.resendConfirmCodeBtn.addClass("disabled");
-                this.confirmEmailCodeInput.addClass("disabled");
+                this.confirmEmailCodeInput.prop("readonly", true);
                 this.confirmEmailSubmit.addClass("disabled");
             }
         }).fail((response) => {
-            this.showAlert(this.errorConfirmContactAlert.text(this.errorHandler.getErrorMessage(response)));
+            const alert = new AlertComponentBuilder(AlertType.Error)
+                .addContent(this.errorHandler.getErrorMessage(response)).buildElement();
+            alertHolder.empty().append(alert);
         });
-    }
-
-    private showAlert(alert: JQuery) {
-        alert.removeClass("hide").addClass("in");
     }
 
     private hideAlert(alert: JQuery) {

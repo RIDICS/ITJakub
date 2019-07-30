@@ -1,4 +1,5 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using ITJakub.Web.Hub.Models
+@using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
 @model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.Permission.RoleContract>
 @inject ILocalizationService Localizer
@@ -22,34 +23,36 @@
 
 <div class="row">
     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 role-section" id="role-section">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="panel-title col col-xs-12 col-sm-2">
-                        @Localizer.Translate("Group", "Permission")
-                    </div>
-                    <div class="col col-xs-12 col col-sm-10">
-                        <form asp-action="RolePermission" asp-controller="Permission" method="get" class="role-search-form form-inline">
-                            <div class="form-group">
-                                <button id="createRoleButton" class="btn btn-default">
-                                    <i class="fa fa-plus"></i>
-                                </button>
-                                <div class="search-button">
-                                    <button class="btn btn-default" type="submit">
-                                        <i class="fa fa-search"></i>
-                                    </button>
+        <div class="section">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="panel-title col col-xs-12 col-sm-2">
+                            @Localizer.Translate("Group", "Permission")
+                        </div>
+                        <div class="col col-xs-12 col col-sm-10">
+                            <form asp-action="RolePermission" asp-controller="Permission" method="get" class="role-search-form form-inline">
+                                <div class="form-group">
+                                    <div id="createRoleButton" class="btn btn-default">
+                                        <i class="fa fa-plus"></i>
+                                    </div>
+                                    <div class="search-button">
+                                        <button class="btn btn-default" type="submit">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </div>
+                                    <input class="form-control search-value" name="search" value="@Model.SearchQuery"/>
                                 </div>
-                                <input class="form-control search-value" name="search" value="@Model.SearchQuery" />
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="panel-body">
-                <div id="role-list-container" class="list-container">
-                    @await Html.PartialAsync("Widget/_RoleListWidget", Model)
+                <div class="panel-body">
+                    <div id="role-list-container" class="list-container">
+                        @await Html.PartialAsync("Widget/_RoleListWidget", Model)
+                    </div>
+                    <div id="role-pagination" class="text-center"></div>
                 </div>
-                <div id="role-pagination" class="text-center"></div>
             </div>
         </div>
     </div>
@@ -64,15 +67,15 @@
                         <div class="col col-xs-12 col col-sm-10">
                             <form asp-action="UsersByRole" asp-controller="Permission" method="get" class="user-search-form form-inline">
                                 <div class="form-group">
-                                    <button id="addRoleButton" class="btn btn-default">
+                                    <div id="addRoleButton" class="btn btn-default">
                                         <i class="fa fa-plus"></i>
-                                    </button>
+                                    </div>
                                     <div class="search-button">
                                         <button class="btn btn-default" type="submit">
                                             <i class="fa fa-search"></i>
                                         </button>
                                     </div>
-                                    <input class="form-control search-value" name="search" value="@Model.SearchQuery" />
+                                    <input class="form-control search-value" name="search" value="@Model.SearchQuery"/>
                                 </div>
                             </form>
                         </div>
@@ -102,7 +105,7 @@
                                             <i class="fa fa-search"></i>
                                         </button>
                                     </div>
-                                    <input class="form-control search-value" name="search" value="@Model.SearchQuery" />
+                                    <input class="form-control search-value" name="search" value="@Model.SearchQuery"/>
                                 </div>
                             </form>
                         </div>
@@ -138,6 +141,7 @@
                             <input class="form-control" id="new-role-description" name="new-text" type="text">
                         </div>
                     </div>
+                    <div id="create-role-error"></div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -156,9 +160,8 @@
                 <h4 class="modal-title">@Localizer.Translate("AddToGroup", "Permission", LocTranslationSource.File)</h4>
             </div>
             <div class="modal-body">
-
                 <div class="permission-search">
-                    <input type="text" class="form-control permission-search-input" id="mainSearchInput" placeholder="@Localizer.Translate("SearchUser", "Permission", LocTranslationSource.File)" />
+                    <input type="text" class="form-control permission-search-input" id="mainSearchInput" placeholder="@Localizer.Translate("SearchUser", "Permission", LocTranslationSource.File)"/>
                 </div>
 
                 <div class="content">
@@ -173,15 +176,25 @@
                         </div>
                         <div class="detail-item">
                             <span class="detail-item-title">@Localizer.Translate("SelectedUser", "Permission", LocTranslationSource.File): </span>
-                            <span id="selectedUser"></span>
+                            <span id="selectedUser">@Localizer.Translate("UserIsNotSelected", "Permission", LocTranslationSource.File)</span>
                         </div>
                     </div>
+                    <div id="add-user-to-role-error"></div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "Permission", LocTranslationSource.File)</button>
                 <button type="button" class="btn btn-default" id="add-user-to-role" data-init="false">@Localizer.Translate("AddUserToGroup", "Permission", LocTranslationSource.File)</button>
             </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="editRoleDialog" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content" id="editRoleSection">
+            @await Html.PartialAsync("_EditRole", new RoleViewModel(), null)
         </div>
     </div>
 </div>

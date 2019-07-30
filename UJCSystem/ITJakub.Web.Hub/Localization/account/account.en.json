@@ -17,22 +17,22 @@
     "Registration-submit": "Sign up",
 
     "Detail": "Account detail",
-    "Settings": "Account settings",
+    "UserProfile": "User profile",
 
-    "DataChange": "Update data",
+    "BasicData": "Basic data",
     "UpdateAccountSubmit": "Save changes",
     "SuccessUpdateAccount": "Data was successfully updated.",
 
-    "PasswordChange": "Update password",
+    "PasswordChange": "Change password",
     "UpdatePasswordSubmit": "Change password",
     "SuccessPasswordChange": "The password was successfully updated.",
 
-    "UpdateContact": "Edit contacts",
+    "UpdateContact": "Contacts",
     "EmailAddressUpdate": "Edit e-mail address",
     "EmailAddressVerification": "E-mail address verification",
     "EmailAddressIsNotVerified": "E-mail address is not verified",
-    "SuccessContactUpdate": "The contact was successfully updated. Now you need to verify it.",
-    "ConfirmCodeSend": "The confirm code was sent to e-mail address {0}.",
+    "SuccessContactUpdate": "The contact was successfully updated. Now you need to verify it by code, which was sent to the e-mail address {0}.",
+    "ConfirmCodeSend": "The confirm code was sent to the e-mail address {0}.",
     "Change": "Change",
     "Confirm": "Confirm",
     "ResendCode": "Resend confirm code",
@@ -44,7 +44,9 @@
     "ResendCodeError": "An unexpected problem occurred when sending the confirmation code.",
 
     "UpdateTwoFactorVerification": "Two-factor verification",
+    "TwoFactorProvider": "Two-factor provider",
     "SuccessTwoFactorUpdate": "Two-factor verification was successfully updated.",
+    "TwoFactorVerificationIsNotActive": "Email address is not confirmed - two-factor verification is not active.",
     "Save": "Save"
   }
 }
