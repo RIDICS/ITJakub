@@ -44,6 +44,7 @@
     "ResendCodeError": "An unexpected problem occurred when sending the confirmation code.",
 
     "UpdateTwoFactorVerification": "Two-factor verification",
+    "TwoFactorProvider": "Two-factor provider",
     "SuccessTwoFactorUpdate": "Two-factor verification was successfully updated.",
     "TwoFactorVerificationIsNotActive": "Email address is not confirmed - two-factor verification is not active.",
     "Save": "Save"
