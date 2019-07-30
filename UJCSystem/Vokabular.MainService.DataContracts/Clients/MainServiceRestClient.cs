@@ -48,13 +48,13 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         #region Project
 
-        public PagedResultList<ProjectDetailContract> GetProjectList(int start, int count, bool fetchPageCount = false)
+        public PagedResultList<ProjectDetailContract> GetProjectList(int start, int count, string filterByName = null, bool fetchPageCount = false)
         {
             try
             {
                 var result =
                     GetPagedList<ProjectDetailContract>(
-                        $"project?start={start}&count={count}&fetchPageCount={fetchPageCount}");
+                        $"project?start={start}&count={count}&filterByName={filterByName}&fetchPageCount={fetchPageCount}");
                 return result;
             }
             catch (HttpRequestException e)

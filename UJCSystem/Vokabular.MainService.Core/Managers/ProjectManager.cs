@@ -60,12 +60,12 @@ namespace Vokabular.MainService.Core.Managers
             throw new NotImplementedException();
         }
 
-        public PagedResultList<ProjectDetailContract> GetProjectList(int? start, int? count, bool fetchPageCount, bool fetchAuthors, bool fetchResponsiblePersons)
+        public PagedResultList<ProjectDetailContract> GetProjectList(int? start, int? count, string filterByName, bool fetchPageCount, bool fetchAuthors, bool fetchResponsiblePersons)
         {
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCountForProject(count);
 
-            var work = new GetProjectListWork(m_projectRepository, m_metadataRepository, startValue, countValue, fetchPageCount, fetchAuthors, fetchResponsiblePersons);
+            var work = new GetProjectListWork(m_projectRepository, m_metadataRepository, startValue, countValue, filterByName, fetchPageCount, fetchAuthors, fetchResponsiblePersons);
             var resultEntities = work.Execute();
 
             var metadataList = work.GetMetadataResources();

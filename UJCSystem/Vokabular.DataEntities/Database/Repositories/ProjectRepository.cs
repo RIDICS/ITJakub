@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
+using NHibernate.Criterion;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
@@ -13,12 +14,18 @@ namespace Vokabular.DataEntities.Database.Repositories
         public ProjectRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
         }
-        
-        public virtual ListWithTotalCountResult<Project> GetProjectList(int start, int count)
+
+        public virtual ListWithTotalCountResult<Project> GetProjectList(int start, int count, string filterByName = null)
         {
             var query = GetSession().QueryOver<Project>()
-                .Fetch(SelectMode.Fetch, x => x.CreatedByUser)
-                .OrderBy(x => x.Name).Asc
+                .Fetch(SelectMode.Fetch, x => x.CreatedByUser);
+
+            if (!string.IsNullOrEmpty(filterByName))
+            {
+                query.WhereRestrictionOn(x => x.Name).IsInsensitiveLike(filterByName, MatchMode.Anywhere);
+            }
+
+            query.OrderBy(x => x.Name).Asc
                 .Skip(start)
                 .Take(count);
 
@@ -56,7 +63,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => x.ExternalId == externalId)
                 .SingleOrDefault();
         }
-        
+
         public virtual BookType GetBookTypeByEnum(BookTypeEnum bookTypeEnum)
         {
             return GetSession().QueryOver<BookType>()
@@ -95,7 +102,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             return query.List();
         }
-        
+
         public virtual IList<ProjectResponsiblePerson> GetProjectResponsibleList(long projectId)
         {
             return GetSession().QueryOver<ProjectResponsiblePerson>()
@@ -134,7 +141,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(() => projectAlias.Id == projectId)
                 .List();
         }
-        
+
         public virtual IList<Category> GetProjectCategories(long projectId)
         {
             Project projectAlias = null;

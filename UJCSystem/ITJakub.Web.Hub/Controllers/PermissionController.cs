@@ -87,8 +87,7 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetRestClient())
             {
                 search = search ?? string.Empty;
-                //TODO add search
-                var result = client.GetProjectList(start, count);
+                var result = client.GetProjectList(start, count, search);
                 var model = new ListViewModel<ProjectDetailContract>
                 {
                     TotalCount = result.TotalCount,

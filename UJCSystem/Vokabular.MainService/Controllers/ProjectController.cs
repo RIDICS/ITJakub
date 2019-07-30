@@ -29,12 +29,12 @@ namespace Vokabular.MainService.Controllers
         
         [HttpGet]
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total records count")]
-        public List<ProjectDetailContract> GetProjectList([FromQuery] int? start, [FromQuery] int? count, [FromQuery] bool? fetchPageCount, [FromQuery] bool? fetchAuthors, [FromQuery] bool? fetchResponsiblePersons)
+        public List<ProjectDetailContract> GetProjectList([FromQuery] int? start, [FromQuery] int? count, [FromQuery] string filterByName, [FromQuery] bool? fetchPageCount, [FromQuery] bool? fetchAuthors, [FromQuery] bool? fetchResponsiblePersons)
         {
             var isFetchPageCount = fetchPageCount ?? false;
             var isFetchAuthors = fetchAuthors ?? false;
             var isFetchResponsiblePersons = fetchResponsiblePersons ?? false;
-            var result = m_projectManager.GetProjectList(start, count, isFetchPageCount, isFetchAuthors, isFetchResponsiblePersons);
+            var result = m_projectManager.GetProjectList(start, count, filterByName, isFetchPageCount, isFetchAuthors, isFetchResponsiblePersons);
 
             SetTotalCountHeader(result.TotalCount);
 
