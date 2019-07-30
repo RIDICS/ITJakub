@@ -91,14 +91,14 @@ namespace Vokabular.MainService.Core.Managers
             client.AssignPermissionsToRoleAsync(roleId, permissionsId).GetAwaiter().GetResult();
         }
 
-        public void AddBooksAndCategoriesToGroup(int roleId, IList<long> bookIds)
+        public void AddBooksToRole(int roleId, IList<long> bookIds)
         {
-            new AddProjectsToUserGroupWork(m_permissionRepository, roleId, bookIds).Execute();
+            new AddProjectsToRoleWork(m_permissionRepository, roleId, bookIds).Execute();
         }
 
-        public void RemoveBooksAndCategoriesFromGroup(int roleId, IList<long> bookIds)
+        public void RemoveBooksFromRole(int roleId, IList<long> bookIds)
         {
-            new RemoveProjectsFromUserGroupWork(m_permissionRepository, roleId, bookIds).Execute();
+            new RemoveProjectsFromRoleWork(m_permissionRepository, roleId, bookIds).Execute();
         }
 
         public List<PermissionContract> GetAllPermissions()

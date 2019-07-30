@@ -8,7 +8,7 @@ using Vokabular.DataEntities.Database.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Permission
 {
-    public class AddProjectsToUserGroupWork : UnitOfWorkBase
+    public class AddProjectsToRoleWork : UnitOfWorkBase
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -16,7 +16,7 @@ namespace Vokabular.MainService.Core.Works.Permission
         private readonly int m_roleId;
         private readonly IList<long> m_bookIds;
 
-        public AddProjectsToUserGroupWork(PermissionRepository permissionRepository, int roleId, IList<long> bookIds) : base(permissionRepository)
+        public AddProjectsToRoleWork(PermissionRepository permissionRepository, int roleId, IList<long> bookIds) : base(permissionRepository)
         {
             m_permissionRepository = permissionRepository;
             m_roleId = roleId;
@@ -28,12 +28,6 @@ namespace Vokabular.MainService.Core.Works.Permission
             var group = m_permissionRepository.FindGroupByExternalIdOrCreate(m_roleId);
 
             var allBookIds = new List<long>();
-
-            //if (categoryIds != null && categoryIds.Count > 0)
-            //{
-            //    var bookIdsFromCategories = m_categoryRepository.GetBookIdsFromCategory(categoryIds);
-            //    allBookIds.AddRange(bookIdsFromCategories);
-            //}
 
             if (m_bookIds != null)
             {

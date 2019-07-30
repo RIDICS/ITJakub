@@ -378,23 +378,21 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddBooksAndCategoriesToGroup([FromBody] AddBooksAndCategoriesToRoleRequest request)
+        public ActionResult AddProjectsToRole([FromBody] AddProjectsToRoleRequest request)
         {
             using (var client = GetRestClient())
             {
                 client.AddBooksToRole(request.RoleId, request.BookIds);
-                //client.AddBooksAndCategoriesToGroup(request.GroupId, request.BookIds, request.CategoryIds);
                 return Json(new { });
             }
         }
 
         [HttpPost]
-        public ActionResult RemoveBooksAndCategoriesFromGroup([FromBody] RemoveBooksAndCategoriesFromRoleRequest request)
+        public ActionResult RemoveProjectsFromRole([FromBody] RemoveProjectsFromRoleRequest request)
         {
             using (var client = GetRestClient())
             {
                 client.RemoveBooksFromRole(request.RoleId, request.BookIds);
-                //client.RemoveBooksAndCategoriesFromGroup(request.GroupId, request.BookIds, request.CategoryIds);
                 return Json(new { });
             }
         }
