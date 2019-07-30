@@ -5,12 +5,23 @@
 <div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>
 @foreach (var permission in Model.List)
 {
-<tr>
-    <td class="permission-checkbox" data-permission-id="@permission.Id">
-        @Html.CheckBoxFor(modelItem => permission.IsSelected)
+<tr class="permission-row" data-permission-id="@permission.Id">
+    <td>
+        <input type="checkbox" asp-for="@permission.IsSelected" />
     </td>
     <td>
-        @Html.DisplayFor(modelItem => permission.Name)
+        <div class="name">
+            @Html.DisplayFor(modelItem => permission.Name)
+        </div>
+        <div class="status visible-xs">
+            <span class="loading-spinner spin"></span>
+            <span class="success">@Localizer.Translate("Changed", "Permission")</span>
+        </div>
+        <div class="alert alert-danger"></div>
+    </td>
+    <td class="status hidden-xs">
+        <span class="loading-spinner spin"></span>
+        <span class="success">@Localizer.Translate("Changed", "Permission")</span>
     </td>
 </tr>
 }

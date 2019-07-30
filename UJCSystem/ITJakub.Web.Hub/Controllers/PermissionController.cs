@@ -30,7 +30,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
         }
 
-        public ActionResult UserPermission(string search, int start, int count = UserListPageSize, ViewType viewType = ViewType.Full)
+        public IActionResult UserPermission(string search, int start, int count = UserListPageSize, ViewType viewType = ViewType.Full)
         {
             using (var client = GetRestClient())
             {
@@ -52,7 +52,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult RolePermission(string search, int start, int count = RoleListPageSize, ViewType viewType = ViewType.Full)
+        public IActionResult RolePermission(string search, int start, int count = RoleListPageSize, ViewType viewType = ViewType.Full)
         {
             using (var client = GetRestClient())
             {
@@ -81,45 +81,59 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult RolePermissionList(int roleId, string search, int start, int count = PermissionListPageSize)
+        public IActionResult RolePermissionList(int roleId, string search, int start, int count = PermissionListPageSize)
         {
             using (var client = GetRestClient())
             {
-                search = search ?? string.Empty;
-                var roleContract = client.GetRoleDetail(roleId);
-                var pagedPermissionsResult = client.GetPermissions(start, count, search);
-                var permissionList = Mapper.Map<List<PermissionViewModel>>(pagedPermissionsResult.List);
-
-                foreach (var permission in permissionList)
+                try
                 {
-                    permission.IsSelected = roleContract.Permissions.Any(x => x.Id == permission.Id);
+                    search = search ?? string.Empty;
+                    var roleContract = client.GetRoleDetail(roleId);
+                    var pagedPermissionsResult = client.GetPermissions(start, count, search);
+                    var permissionList = Mapper.Map<List<PermissionViewModel>>(pagedPermissionsResult.List);
+
+                    foreach (var permission in permissionList)
+                    {
+                        permission.IsSelected = roleContract.Permissions.Any(x => x.Id == permission.Id);
+                    }
+
+                    var model = new ListViewModel<PermissionViewModel>
+                    {
+                        TotalCount = pagedPermissionsResult.TotalCount,
+                        List = permissionList,
+                        PageSize = count,
+                        Start = start,
+                        SearchQuery = search
+                    };
+
+                    return PartialView("Widget/_PermissionListWidget", model);
                 }
-
-                var model = new ListViewModel<PermissionViewModel>
+                catch (HttpErrorCodeException e)
                 {
-                    TotalCount = pagedPermissionsResult.TotalCount,
-                    List = permissionList,
-                    PageSize = count,
-                    Start = start,
-                    SearchQuery = search
-                };
-
-                return PartialView("Widget/_PermissionListWidget", model);
+                    return AjaxErrorResponse(e.Message, e.StatusCode);
+                }
             }
         }
 
-        public ActionResult UsersByRole(int roleId, string search, int start, int count = UserListPageSize)
+        public IActionResult UsersByRole(int roleId, string search, int start, int count = UserListPageSize)
         {
-            using (var client = GetRestClient())
+            try
             {
-                search = search ?? string.Empty;
-                var result = client.GetUsersByRole(roleId, start, count, search);
-                var model = CreateListViewModel<UserDetailViewModel, UserContract>(result, start, count, search);
-                return PartialView("Widget/_UserListWidget", model);
+                using (var client = GetRestClient())
+                {
+                    search = search ?? string.Empty;
+                    var result = client.GetUsersByRole(roleId, start, count, search);
+                    var model = CreateListViewModel<UserDetailViewModel, UserContract>(result, start, count, search);
+                    return PartialView("Widget/_UserListWidget", model);
+                }
+            }
+            catch (HttpErrorCodeException e)
+            {
+                return AjaxErrorResponse(e.Message, e.StatusCode);
             }
         }
 
-        public ActionResult EditUser(int userId, bool successUpdate = false)
+        public IActionResult EditUser(int userId, bool successUpdate = false)
         {
             using (var client = GetRestClient())
             {
@@ -135,7 +149,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditUser(UpdateUserViewModel userViewModel)
+        public IActionResult EditUser(UpdateUserViewModel userViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -162,38 +176,35 @@ namespace ITJakub.Web.Hub.Controllers
             return View(userViewModel);
         }
 
-        public ActionResult EditRole(int roleId)
-        {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetRoleDetail(roleId);
-                var model = Mapper.Map<RoleViewModel>(result);
-                return View(model);
-            }
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditRole(RoleViewModel roleViewModel)
+        public IActionResult EditRole(RoleViewModel roleViewModel)
         {
             using (var client = GetRestClient())
             {
-                var roleContract = new RoleContract
+                try
                 {
-                    Id = roleViewModel.Id,
-                    Name = roleViewModel.Name,
-                    Description = roleViewModel.Description
-                };
-                client.UpdateRole(roleContract.Id, roleContract);
-
-                var role = client.GetRoleDetail(roleContract.Id);
-                var model = Mapper.Map<RoleViewModel>(role);
-                model.SuccessfulUpdate = true;
-                return View(model);
+                    var roleContract = new RoleContract
+                    {
+                        Id = roleViewModel.Id,
+                        Name = roleViewModel.Name,
+                        Description = roleViewModel.Description
+                    };
+                    client.UpdateRole(roleContract.Id, roleContract);
+                    roleViewModel.SuccessfulUpdate = true;
+                    
+                }
+                catch (HttpErrorCodeException e)
+                {
+                    roleViewModel.SuccessfulUpdate = false;
+                    AddErrors(e);
+                }
             }
+
+            return PartialView("_EditRole", roleViewModel);
         }
 
-        public ActionResult EditUserRoles(int userId)
+        public IActionResult EditUserRoles(int userId)
         {
             using (var client = GetRestClient())
             {
@@ -211,7 +222,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult GetTypeaheadUser(string query)
+        public IActionResult GetTypeaheadUser(string query)
         {
             using (var client = GetRestClient())
             {
@@ -220,7 +231,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult GetTypeaheadRole(string query)
+        public IActionResult GetTypeaheadRole(string query)
         {
             using (var client = GetRestClient())
             {
@@ -229,7 +240,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult GetUser(int userId)
+        public IActionResult GetUser(int userId)
         {
             using (var client = GetRestClient())
             {
@@ -238,7 +249,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult GetRole(int roleId)
+        public IActionResult GetRole(int roleId)
         {
             using (var client = GetRestClient())
             {
@@ -248,57 +259,85 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddUserToRole([FromBody] AddUserToRoleRequest request)
+        public IActionResult AddUserToRole([FromBody] AddUserToRoleRequest request)
         {
-            using (var client = GetRestClient())
+            try
             {
-                client.AddUserToRole(request.UserId, request.RoleId);
-                return Json(new { });
-            }
-        }
-
-        [HttpPost]
-        public ActionResult CreateRole([FromBody] CreateRoleRequest request)
-        {
-            using (var client = GetRestClient())
-            {
-                var newRoleContract = new RoleContract
+                using (var client = GetRestClient())
                 {
-                    Name = request.RoleName,
-                    Description = request.RoleDescription,
-                };
-                var roleId = client.CreateRole(newRoleContract);
-                var role = client.GetRoleDetail(roleId);
-                return Json(role);
+                    client.AddUserToRole(request.UserId, request.RoleId);
+                    return Json(new { });
+                }
+            }
+            catch (HttpErrorCodeException e)
+            {
+                return AjaxErrorResponse(e.Message, e.StatusCode);
             }
         }
 
         [HttpPost]
-        public ActionResult CreateRoleWithUser([FromBody] CreateRoleWithUserRequest request)
+        public IActionResult CreateRole([FromBody] CreateRoleRequest request)
         {
-            using (var client = GetRestClient())
+            try
             {
-                var roleId = client.CreateRole(new RoleContract
+                using (var client = GetRestClient())
                 {
-                    Name = request.RoleName,
-                    Description = request.RoleDescription,
-                });
-                client.AddUserToRole(request.UserId, roleId);
-                return Json(roleId);
+                    var newRoleContract = new RoleContract
+                    {
+                        Name = request.RoleName,
+                        Description = request.RoleDescription,
+                    };
+                    var roleId = client.CreateRole(newRoleContract);
+                    var role = client.GetRoleDetail(roleId);
+                    return Json(role);
+                }
+            }
+            catch (HttpErrorCodeException e)
+            {
+                return AjaxErrorResponse(e.Message, e.StatusCode);
             }
         }
 
         [HttpPost]
-        public ActionResult RemoveUserFromRole([FromBody] RemoveUserFromRoleRequest request)
+        public IActionResult CreateRoleWithUser([FromBody] CreateRoleWithUserRequest request)
         {
-            using (var client = GetRestClient())
+            try
             {
-                client.RemoveUserFromRole(request.UserId, request.RoleId);
-                return Json(new { });
+                using (var client = GetRestClient())
+                {
+                    var roleId = client.CreateRole(new RoleContract
+                    {
+                        Name = request.RoleName,
+                        Description = request.RoleDescription,
+                    });
+                    client.AddUserToRole(request.UserId, roleId);
+                    return Json(roleId);
+                }
+            }
+            catch (HttpErrorCodeException e)
+            {
+                return AjaxErrorResponse(e.Message, e.StatusCode);
             }
         }
 
-        public ActionResult GetRolesByUser(int userId)
+        [HttpPost]
+        public IActionResult RemoveUserFromRole([FromBody] RemoveUserFromRoleRequest request)
+        {
+            try
+            {
+                using (var client = GetRestClient())
+                {
+                    client.RemoveUserFromRole(request.UserId, request.RoleId);
+                    return Json(new { });
+                }
+            }
+            catch (HttpErrorCodeException e)
+            {
+                return AjaxErrorResponse(e.Message, e.StatusCode);
+            }
+        }
+
+        public IActionResult GetRolesByUser(int userId)
         {
             using (var client = GetRestClient())
             {
@@ -315,7 +354,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult GetRootCategories()
+        public IActionResult GetRootCategories()
         {
             using (var client = GetRestClient())
             {
@@ -329,7 +368,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult GetCategoryContent(int groupId, BookTypeEnumContract? bookType)
+        public IActionResult GetCategoryContent(int groupId, BookTypeEnumContract? bookType)
         {
             if (bookType == null)
             {
@@ -348,7 +387,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult GetAllCategoryContent(BookTypeEnumContract? bookType)
+        public IActionResult GetAllCategoryContent(BookTypeEnumContract? bookType)
         {
             if (bookType == null)
             {
@@ -368,12 +407,19 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult DeleteRole([FromBody] DeleteRoleRequest request)
+        public IActionResult DeleteRole([FromBody] DeleteRoleRequest request)
         {
-            using (var client = GetRestClient())
+            try
             {
-                client.DeleteRole(request.RoleId);
-                return Json(new { });
+                using (var client = GetRestClient())
+                {
+                    client.DeleteRole(request.RoleId);
+                    return Json(new { });
+                }
+            }
+            catch (HttpErrorCodeException e)
+            {
+                return AjaxErrorResponse(e.Message, e.StatusCode);
             }
         }
 
@@ -398,26 +444,41 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddSpecialPermissionsToRole([FromBody] AddSpecialPermissionsToRoleRequest request)
+        public IActionResult AddSpecialPermissionsToRole([FromBody] AddSpecialPermissionsToRoleRequest request)
         {
             using (var client = GetRestClient())
             {
-                client.AddSpecialPermissionsToRole(request.RoleId, new List<int> {request.SpecialPermissionId});
-                return Json(new { });
+                try
+                {
+                    client.AddSpecialPermissionsToRole(request.RoleId, new List<int> {request.SpecialPermissionId});
+                    return Json(new { });
+                }
+                catch (HttpErrorCodeException e)
+                {
+                    return AjaxErrorResponse(e.Message, e.StatusCode);
+                }
             }
         }
 
         [HttpPost]
-        public ActionResult RemoveSpecialPermissionsFromRole([FromBody] RemoveSpecialPermissionsFromRoleRequest request)
+        public IActionResult RemoveSpecialPermissionsFromRole([FromBody] RemoveSpecialPermissionsFromRoleRequest request)
         {
             using (var client = GetRestClient())
             {
-                client.RemoveSpecialPermissionsFromRole(request.RoleId, new List<int> {request.SpecialPermissionId});
-                return Json(new { });
+                try
+                {
+                    client.RemoveSpecialPermissionsFromRole(request.RoleId, new List<int> {request.SpecialPermissionId});
+                    return Json(new { });
+                }
+                catch (HttpErrorCodeException e)
+                {
+                    return AjaxErrorResponse(e.Message, e.StatusCode);
+                }
             }
         }
 
-        private ListViewModel<TTarget> CreateListViewModel<TTarget, TSource>(PagedResultList<TSource> data, int start, int pageSize, string search)
+        private ListViewModel<TTarget> CreateListViewModel<TTarget, TSource>(PagedResultList<TSource> data, int start, int pageSize,
+            string search)
         {
             return new ListViewModel<TTarget>
             {

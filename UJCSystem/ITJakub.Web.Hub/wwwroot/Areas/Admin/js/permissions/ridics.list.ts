@@ -33,11 +33,12 @@
             container: document.getElementById(selector + "-pagination") as HTMLDivElement,
             pageClickCallback: this.loadPage.bind(this)
         });
+        this.searchForm = $(`.${this.selector}-search-form`);
     }
 
     public init() {
-        this.searchForm = $(`.${this.selector}-search-form`);
-        this.searchForm.submit((event) => {
+        this.searchForm.off("submit");
+        this.searchForm.on("submit", (event) => {
             const searchValue = this.searchForm.find(".search-value").val() as string;
             event.preventDefault();
             this.search = searchValue;
@@ -93,50 +94,45 @@
         }).toString();
 
         const $listContainer = $(this.listContainerSelector);
+        $listContainer.html("<div class=\"loader\"></div>");
 
-        $listContainer
-            .html("<div class=\"loader\"></div>")
-            .load(url,
-                null,
-                (responseText, textStatus, xmlHttpRequest) => {
-                    if (xmlHttpRequest.status !== HttpStatusCode.Success) {
-                        this.totalCount = 0;
-                        var alert = new AlertComponentBuilder(AlertType.Error).addContent(localization
-                            .translate("ListError", "Admin").value);
-                        $listContainer
-                            .empty()
-                            .append(alert.buildElement());
-                    }
+        $.get(url).done((response) => {
+            $listContainer.html(response);
+            this.initPagination();
 
-                    this.initPagination();
+            this.setUri(start, this.pageSize, this.search);
+            this.renderPaginationContainer(pageNumber);
 
-                    this.setUri(start, this.pageSize, this.search);
-                    this.renderPaginationContainer(pageNumber);
-
-                    if (this.search) {
-                        this.resetSearchForm = $listContainer.find(".reset-search-form");
-                        this.resetSearchForm.submit((event) => {
-                            this.searchForm.find(".search-value").val("");
-                            event.preventDefault();
-                            this.removeSearchFromUri();
-                            this.search = null;
-                            this.loadPage(this.firstPageNumber);
-                        });
-                    }
-
-                    if (typeof this.pageLoadCallback !== "undefined") {
-                        this.pageLoadCallback.call(this.contextForCallback, this);
-                    }
-
-                    if (this.selector === "role" && typeof RoleManager !== "undefined") {
-                        if (typeof this.contextForCallback !== "undefined" && this.contextForCallback instanceof RoleManager) {
-                            this.contextForCallback.init(this);
-                        } else {
-                            var roleManager = new RoleManager();
-                            roleManager.init(this);
-                        }
-                    }
+            if (this.search) {
+                this.resetSearchForm = $listContainer.find(".reset-search-form");
+                this.resetSearchForm.submit((event) => {
+                    this.searchForm.find(".search-value").val("");
+                    event.preventDefault();
+                    this.removeSearchFromUri();
+                    this.search = null;
+                    this.loadPage(this.firstPageNumber);
                 });
+            }
+
+            if (typeof this.pageLoadCallback !== "undefined") {
+                this.pageLoadCallback.call(this.contextForCallback, this);
+            }
+
+            if (this.selector === "role" && typeof RoleManager !== "undefined") {
+                if (typeof this.contextForCallback !== "undefined" && this.contextForCallback instanceof RoleManager) {
+                    this.contextForCallback.init(this);
+                } else {
+                    var roleManager = new RoleManager();
+                    roleManager.init(this);
+                }
+            }
+        }).fail(() => {
+            var alert = new AlertComponentBuilder(AlertType.Error).addContent(localization
+                .translate("ListError", "PermissionJs").value);
+            $listContainer
+                .empty()
+                .append(alert.buildElement());
+        });
     }
 
     private computeInitPage(itemsPerPage: number, startItem: number): number {

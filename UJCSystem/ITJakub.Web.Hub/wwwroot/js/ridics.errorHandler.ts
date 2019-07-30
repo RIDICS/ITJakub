@@ -35,28 +35,28 @@
         let errorMessage;
         switch (statusCode) {
             case StatusCodes.Status400BadRequest:
-                errorMessage = localization.translate("bad-request-detail", "error").value;
+                errorMessage = localization.translate("bad-request-detail", "Error").value;
                 break;
             case StatusCodes.Status401Unauthorized:
-                errorMessage = localization.translate("unauthorized-detail", "error").value;
+                errorMessage = localization.translate("unauthorized-detail", "Error").value;
                 break;
             case StatusCodes.Status403Forbidden:
-                errorMessage = localization.translate("forbidden-detail", "error").value;
+                errorMessage = localization.translate("forbidden-detail", "Error").value;
                 break;
             case StatusCodes.Status404NotFound:
-                errorMessage = localization.translate("not-found-detail", "error").value;
+                errorMessage = localization.translate("not-found-detail", "Error").value;
                 break;
             case StatusCodes.Status500InternalServerError:
-                errorMessage = localization.translate("internal-server-error-detail", "error").value;
+                errorMessage = localization.translate("internal-server-error-detail", "Error").value;
                 break;
             case StatusCodes.Status502BadGateway:
-                errorMessage = localization.translate("bad-gateway-detail", "error").value;
+                errorMessage = localization.translate("bad-gateway-detail", "Error").value;
                 break;
             case StatusCodes.Status504GatewayTimeout:
-                errorMessage = localization.translate("gateway-timeout-detail", "error").value;
+                errorMessage = localization.translate("gateway-timeout-detail", "Error").value;
                 break;
             default:
-                errorMessage = localization.translate("generic-error", "remote-error").value;
+                errorMessage = localization.translate("generic-error", "Error").value;
         }
 
         return errorMessage;

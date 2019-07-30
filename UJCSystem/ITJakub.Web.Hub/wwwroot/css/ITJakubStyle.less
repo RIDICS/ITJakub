@@ -6,6 +6,7 @@
 @import "ITJakub.Footer.less";
 @import "ITJakub.BibliographySearch.less";
 @import "ITJakub.Favorites.less";
+@import "ITJakub.Constants.less";
 @import "Plugins/ITJakub.EuCookiePopup.less";
 @import "Plugins/ITJakub.Bibliography.less";
 @import "Plugins/ITJakub.Reader.less";
@@ -41,16 +42,16 @@ body {
 }
 
 .container-header {
-    margin-top: 1.7rem;
     margin-bottom: 20px;
     background-color: @breadcrumb-background-color;
+    margin-top: 0.3rem;
 
-    @media screen and (max-width: 1570px) {
+    @media screen and (min-width: @medium-screen) {
         margin-top: 0.6rem;
     }
 
-    @media screen and (max-width: 1200px) {
-        margin-top: 0.3rem;
+    @media screen and (min-width: @extra-large-screen + 1px) {
+        margin-top: 1.7rem;
     }
 
     .breadcrumb {
@@ -145,4 +146,10 @@ div.container {
 
 .validation-summary-valid {
     display: none;
+}
+
+.alert {
+    &:empty {
+        display: none;
+    }
 }
