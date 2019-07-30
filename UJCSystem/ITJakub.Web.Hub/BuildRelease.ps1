@@ -32,7 +32,7 @@ $BuildPackageLocation = Join-Path $ProjectDir "bin\temp-package.zip"
 $IisPath = "Default Web Site"
 if ($PortalType -eq "ResearchPortal")
 {
-    $IisPath = "Default Web Site/Research"
+    $IisPath = "Default Web Site"
 }
 else
 {
