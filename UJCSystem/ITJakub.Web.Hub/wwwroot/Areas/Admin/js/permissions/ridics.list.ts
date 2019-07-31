@@ -135,15 +135,6 @@
             if (typeof this.pageLoadCallback !== "undefined") {
                 this.pageLoadCallback.call(this.contextForCallback, this);
             }
-
-            if (this.selector === "role" && typeof RoleManager !== "undefined") {
-                if (typeof this.contextForCallback !== "undefined" && this.contextForCallback instanceof RoleManager) {
-                    this.contextForCallback.init(this);
-                } else {
-                    const roleManager = new RoleManager();
-                    roleManager.init(this);
-                }
-            }
         }).fail(() => {
             var alert = new AlertComponentBuilder(AlertType.Error).addContent(localization
                 .translate("ListError", "PermissionJs").value);

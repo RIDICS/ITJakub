@@ -25,33 +25,38 @@ class RoleManager {
 
     public init(list?: ListWithPagination) {
         if (list == null) {
-            this.roleList = new ListWithPagination("Permission/RolePermission", 10, "role", ViewType.Widget, true, undefined, this);
+            this.roleList = new ListWithPagination("Permission/RolePermission", 10, "role", ViewType.Widget, true, this.reinitRoleList, this);
             
         } else {
             this.roleList = list;
         }
         this.roleList.init();
 
-        $(".role-row").click((event) => {
+        this.initCreateRoleModal();
+        this.initSearchBox();
+        this.reinitRoleList();
+        this.initEditRoleForm();
+    }
+
+    public reinitRoleList() {
+        $(".role-row").on("click", (event) => {
             $(event.currentTarget as Node as Element).addClass("active").siblings().removeClass("active");
 
-            var selectedRoleId = $(event.currentTarget as Node as Element).data("role-id");
+            const selectedRoleId = $(event.currentTarget as Node as Element).data("role-id");
             this.loadUsers(selectedRoleId);
             this.loadPermissions(selectedRoleId);
         });
 
-        $("form.role-search-form").submit(() => {
+        $("form.role-search-form").on("submit", () => {
             this.clearSections();
         });
 
-        $("#rolePagination a").click(() => {
-           this.clearSections();
+        $("#rolePagination a").on("click", () => {
+            this.clearSections();
         });
 
-        this.initCreateRoleModal();
         this.initRemoveRoleButtons();
         this.initEditRoleButtons();
-        this.initSearchBox();
     }
 
     private loadUsers(roleId: number) {
@@ -155,12 +160,12 @@ class RoleManager {
 
     private initRemoveUserFromRoleButton() {
         $(".remove-user-from-role").click((event) => {
-            var userRow = $(event.currentTarget as Node as Element).parents(".user-row");
-            var userId = userRow.data("user-id");
+            const userRow = $(event.currentTarget as Node as Element).parents(".user-row");
+            const userId = userRow.data("user-id");
             const alert = userRow.find(".alert");
             alert.hide();
 
-            var roleId = $(".role-row.active").data("role-id");
+            const roleId = $(".role-row.active").data("role-id");
             this.client.removeUserFromRole(userId, roleId).done(() => {
                 this.userList.reloadPage();
             }).fail((error) => {
@@ -193,12 +198,10 @@ class RoleManager {
 
             editRoleDialog.modal("show");
         });
-
-        this.initEditRoleForm();
     }
 
     private initEditRoleForm() {
-        const editRoleForm = $("#editRoleForm");
+        let editRoleForm = $("#editRoleForm");
 
         editRoleForm.on("submit", (event) => {
             event.preventDefault();
@@ -209,8 +212,10 @@ class RoleManager {
                 this.client.editRole(editRoleForm.serialize())
                     .done((response) => {
                         editRoleSection.html(response);
+                        editRoleForm = $("#editRoleForm");
                         if (editRoleForm.find(".alert-success").length) {
                             this.roleList.reloadPage();
+                            this.clearSections();
                         }
                     })
                     .fail((error) => {
@@ -292,10 +297,10 @@ class RoleManager {
             });
 
             addUserToRoleBtn.click(() => {
-                var roleError = $("#add-user-to-role-error");
+                const roleError = $("#add-user-to-role-error");
                 roleError.empty();
-                var roleId = $(".role-row.active").data("role-id");
-                var userId: number;
+                const roleId = $(".role-row.active").data("role-id");
+                let userId: number;
 
                if (typeof this.currentUserSelectedItem == "undefined" || this.currentUserSelectedItem == null)
                     userId = $("#selectedUser").data("user-id");
