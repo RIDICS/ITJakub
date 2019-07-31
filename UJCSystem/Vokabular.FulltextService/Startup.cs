@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -8,7 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using Vokabular.FulltextService.Core.Options;
+using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.Shared;
+using Vokabular.Shared.AspNetCore;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
@@ -50,7 +50,8 @@ namespace Vokabular.FulltextService
                     Version = "v1",
                 });
                 options.DescribeAllEnumsAsStrings();
-                options.IncludeXmlComments(GetXmlCommentsPath());
+                options.IncludeXmlComments(ServiceUtils.GetAppXmlDocumentationPath());
+                options.IncludeXmlComments(ServiceUtils.GetAppXmlDocumentationPath(typeof(FulltextSearchCorpusResultContract)));
 
                 options.DocumentFilter<PolymorphismDocumentFilter<SearchCriteriaContract>>();
                 options.SchemaFilter<PolymorphismSchemaFilter<SearchCriteriaContract>>();
@@ -93,13 +94,6 @@ namespace Vokabular.FulltextService
         private void OnShutdown()
         {
             Container.Dispose();
-        }
-
-        private string GetXmlCommentsPath()
-        {
-            var appBasePath = AppContext.BaseDirectory;
-            var appName = Assembly.GetEntryAssembly().GetName().Name;
-            return Path.Combine(appBasePath, $"{appName}.xml");
         }
     }
 }

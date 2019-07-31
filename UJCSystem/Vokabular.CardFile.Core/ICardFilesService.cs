@@ -1,9 +1,11 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.ServiceModel;
 using Vokabular.CardFile.Core.DataContractEntities;
 
 namespace Vokabular.CardFile.Core
 {
+    [Obsolete("Replaced by " + nameof(CardFilesClient))]
     [ServiceContract]
     [XmlSerializerFormat]
     public interface ICardFilesService
@@ -35,6 +37,7 @@ namespace Vokabular.CardFile.Core
         Stream GetImageForCard(string fileId, string bucketId, string cardId, string imageId, string imageSize);
     }
 
+    [Obsolete("Replaced by " + nameof(CardFilesClient))]
     public sealed class CardFilesServiceClient : ClientBase<ICardFilesService>, ICardFilesService
     {
         public files GetFiles()

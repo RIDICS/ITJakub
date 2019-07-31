@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using DryIoc;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -23,24 +20,25 @@ using Vokabular.ForumSite.Core;
 using Vokabular.ForumSite.Core.Options;
 using Vokabular.MainService.Authorization;
 using Vokabular.MainService.Core;
+using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.Middleware;
 using Vokabular.MainService.Options;
 using Vokabular.MainService.Utils;
 using Vokabular.ProjectImport;
 using Vokabular.ProjectImport.Shared.Options;
 using Vokabular.Shared;
+using Vokabular.Shared.AspNetCore;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
 using Vokabular.Shared.DataContracts.Search.Criteria;
-using Vokabular.Shared.DataEntities.UnitOfWork;
 using Vokabular.Shared.Options;
 
 namespace Vokabular.MainService
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
             ApplicationConfig.Configuration = Configuration;
@@ -78,7 +76,8 @@ namespace Vokabular.MainService
                     Version = "v1",
                 });
                 options.DescribeAllEnumsAsStrings();
-                options.IncludeXmlComments(GetXmlCommentsPath());
+                options.IncludeXmlComments(ServiceUtils.GetAppXmlDocumentationPath());
+                options.IncludeXmlComments(ServiceUtils.GetAppXmlDocumentationPath(typeof(BookContract)));
                 options.OperationFilter<AddResponseHeadersFilter>();
                 options.OperationFilter<FileOperationFilter>();
 
@@ -187,13 +186,6 @@ namespace Vokabular.MainService
         private void OnShutdown()
         {
             Container.Dispose();
-        }
-
-        private string GetXmlCommentsPath()
-        {
-            var appBasePath = AppContext.BaseDirectory;
-            var appName = Assembly.GetEntryAssembly().GetName().Name;
-            return Path.Combine(appBasePath, $"{appName}.xml");
         }
     }
 }
