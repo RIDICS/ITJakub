@@ -231,6 +231,11 @@ class RoleManager {
                 title: localization.translate("Warning", "PermissionJs").value,
                 message: localization.translateFormat("DeleteRoleConfirm", [roleName],"PermissionJs").value,
                 buttons: {
+                    cancel: {
+                        label: localization.translate("Cancel", "PermissionJs").value,
+                        className: "btn-default",
+                        callback: () => { }
+                    },
                     confirm: {
                         label: localization.translate("Delete", "PermissionJs").value,
                         className: "btn-default",
@@ -246,11 +251,6 @@ class RoleManager {
                                 alert.show();
                             });
                         }
-                    },
-                    cancel: {
-                        label: localization.translate("Cancel", "PermissionJs").value,
-                        className: "btn-default",
-                        callback: () => {}
                     }
                 }
             });
