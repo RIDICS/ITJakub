@@ -33,12 +33,12 @@ else
         <i class="fa fa-info-circle fa-lg"></i>
         @if (!string.IsNullOrEmpty(Model.SearchQuery))
         {
-            @(Localizer.Translate("NoUsersSearch", "Permission") + "\"")<span class="searched-query">@Model.SearchQuery</span>
+            @(Localizer.Translate("NoPermissionsSearch", "Permission") + "\"")<span class="searched-query">@Model.SearchQuery</span>
             @("\"")
         }
         else
         {
-            @Localizer.Translate("NoUsersFound", "Permission")
+            @Localizer.Translate("NoPermissionsFound", "Permission")
         }
     </div>
 }
