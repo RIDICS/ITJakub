@@ -53,23 +53,26 @@ class UserRolesEditor {
 
         $("#add-user-to-group").click(() => {
             if ($("#tab2-select-existing").hasClass("active")) {
-                let roleId: number;
                 const alertHolder = $("#add-user-to-role-error");
                 alertHolder.empty();
-                if (typeof this.roleSearchCurrentSelectedItem == "undefined")
-                    roleId = $("#selectedUser").data("role-id");
-                else {
-                    roleId = this.roleSearchCurrentSelectedItem.id;
-                }
-                this.client.addUserToRole(this.userId, roleId).done(() => {
-                    $("#addToGroupDialog").modal("hide");
-                    this.roleList.reloadPage();
-                    this.initRemoveUserFromRoleButton();
-                }).fail((error) => {
+                if (typeof this.roleSearchCurrentSelectedItem == "undefined" ||
+                    this.roleSearchCurrentSelectedItem == null) {
                     const errorAlert = new AlertComponentBuilder(AlertType.Error)
-                        .addContent(this.errorHandler.getErrorMessage(error, localization.translate("AddUserToRoleError", "PermissionJs").value));
+                        .addContent(localization.translate("RoleIsNotSelected", "PermissionJs").value);
                     alertHolder.empty().append(errorAlert.buildElement());
-                });
+                }
+                else {
+                    const roleId = this.roleSearchCurrentSelectedItem.id;
+                    this.client.addUserToRole(this.userId, roleId).done(() => {
+                        $("#addToGroupDialog").modal("hide");
+                        this.roleList.reloadPage();
+                        this.initRemoveUserFromRoleButton();
+                    }).fail((error) => {
+                        const errorAlert = new AlertComponentBuilder(AlertType.Error)
+                            .addContent(this.errorHandler.getErrorMessage(error, localization.translate("AddUserToRoleError", "PermissionJs").value));
+                        alertHolder.empty().append(errorAlert.buildElement());
+                    });
+                }
             } else {
                 const alertHolder = $("#create-role-with-user-error");
                 alertHolder.empty();

@@ -262,10 +262,9 @@ class RoleManager {
         this.searchBox.create((selectedExists: boolean, selectionConfirmed: boolean) => {
             if (selectionConfirmed) {
                 this.currentUserSelectedItem = this.searchBox.getValue();
-                const userBox = $("#selectedUser");
+                const selectedUser = $("#selectedUser");
                 const name = this.getFullNameString(this.currentUserSelectedItem);
-                userBox.text(name);
-                userBox.data("user-id", this.currentUserSelectedItem.id);
+                selectedUser.text(name);
             }
         });
 
@@ -291,31 +290,32 @@ class RoleManager {
             });
 
             addUserToRoleBtn.click(() => {
-                var roleError = $("#add-user-to-role-error");
+                const roleError = $("#add-user-to-role-error");
                 roleError.empty();
-                var roleId = $(".role-row.active").data("role-id");
-                var userId: number;
-
-               if (typeof this.currentUserSelectedItem == "undefined" || this.currentUserSelectedItem == null)
-                    userId = $("#selectedUser").data("user-id");
-                else {
-                    userId = this.currentUserSelectedItem.id;
-                }
-
-                this.client.addUserToRole(userId, roleId).done(() => {
-                    this.userList.reloadPage();
-                    addToRoleDialog.modal("hide");
-                }).fail((error) => {
+                const roleId = $(".role-row.active").data("role-id");
+                if (typeof this.currentUserSelectedItem == "undefined" || this.currentUserSelectedItem == null) {
                     const errorAlert = new AlertComponentBuilder(AlertType.Error)
-                        .addContent(this.errorHandler.getErrorMessage(error, localization.translate("AddUserToRoleError", "PermissionJs").value));
+                        .addContent(localization.translate("UserIsNotSelected", "PermissionJs").value);
                     roleError.empty().append(errorAlert.buildElement());
-                });
+                    return;
+                }
+                else {
+                    const userId = this.currentUserSelectedItem.id;
+                    this.client.addUserToRole(userId, roleId).done(() => {
+                        this.userList.reloadPage();
+                        addToRoleDialog.modal("hide");
+                    }).fail((error) => {
+                        const errorAlert = new AlertComponentBuilder(AlertType.Error)
+                            .addContent(this.errorHandler.getErrorMessage(error, localization.translate("AddUserToRoleError", "PermissionJs").value));
+                        roleError.empty().append(errorAlert.buildElement());
+                    });
+                }
             });
         }
     }
 
     private getFullNameString(user: IUser): string {
-        return `${user.userName} - ${user.firstName} - ${user.lastName}`;
+        return `${user.userName} - ${user.firstName} ${user.lastName}`;
     }
 
     private initCreateRoleModal() {
