@@ -21,28 +21,30 @@ class ProjectManager {
 
     public init(list?: ListWithPagination) {
         if (list == null) {
-            this.projectList = new ListWithPagination("Permission/ProjectPermission", 10, "project", ViewType.Widget, true, undefined, this);
+            this.projectList = new ListWithPagination("Permission/ProjectPermission", 10, "project", ViewType.Widget, true, this.reInit, this);
             
         } else {
             this.projectList = list;
         }
         this.projectList.init();
+        this.initSearchBox();
+        this.reInit();
+    }
 
+    public reInit() {
         $(".project-row").on("click", (event) => {
             $(event.currentTarget as Node as Element).addClass("active").siblings().removeClass("active");
             var selectedProjectId = $(event.currentTarget as Node as Element).data("project-id");
             this.loadRoles(selectedProjectId);
         });
 
-        $("form.project-search-form").submit(() => {
+        $("form.project-search-form").on("submit", () => {
             this.clearSections();
         });
 
         $("#projectPagination a").on("click", () => {
             this.clearSections();
         });
-
-        this.initSearchBox();
     }
 
     private loadRoles(projectId: number) {
@@ -65,7 +67,7 @@ class ProjectManager {
                 this.initRemoveRoleFromProjectButton,
                 this);
             this.roleList.init();
-            this.roleList.setSearchFormDisabled(true);
+            this.roleList.setSearchFormDisabled(false);
             $("#addPermissionButton").removeClass("disabled");
         });
     }
