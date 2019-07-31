@@ -34,7 +34,6 @@ class RoleManager {
 
         $(".role-row").click((event) => {
             $(event.currentTarget as Node as Element).addClass("active").siblings().removeClass("active");
-            $("#addRoleButton").removeClass("disabled");
 
             var selectedRoleId = $(event.currentTarget as Node as Element).data("role-id");
             this.loadUsers(selectedRoleId);
@@ -60,7 +59,6 @@ class RoleManager {
         const container = userSection.find(".list-container");
         const searchForm = userSection.find(".user-search-form");
         searchForm.find("input.search-value").val("");
-        this.userList.setSearchFormDisabled(false);
         container.html("<div class=\"loader\"></div>");
         userSection.removeClass("hide");
 
@@ -80,6 +78,8 @@ class RoleManager {
                 this.initRemoveUserFromRoleButton,
                 this);
             this.userList.init();
+            this.userList.setSearchFormDisabled(false);
+            $("#addRoleButton").removeClass("disabled");
         });
     }
 
@@ -88,7 +88,6 @@ class RoleManager {
         const container = permissionSection.find(".list-container");
         container.html("<div class=\"loader\"></div>");
         const searchForm = permissionSection.find(".permission-search-form");
-        this.permissionList.setSearchFormDisabled(false);
         searchForm.find("input.search").val("");
         permissionSection.removeClass("hide");
 
@@ -108,6 +107,7 @@ class RoleManager {
                 this.initPermissionManaging,
                 this);
             this.permissionList.init();
+            this.permissionList.setSearchFormDisabled(false);
         });
     }
 
