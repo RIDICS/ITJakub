@@ -64,6 +64,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             {
                 ExternalId = externalId,
                 CreateTime = DateTime.UtcNow,
+                LastChange = DateTime.UtcNow,
                 Name = roleName
             };
 

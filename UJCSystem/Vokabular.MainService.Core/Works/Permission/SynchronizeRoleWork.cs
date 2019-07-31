@@ -1,4 +1,5 @@
-﻿using Vokabular.DataEntities.Database.Repositories;
+﻿using System;
+using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 using AuthRoleContract = Ridics.Authentication.DataContracts.RoleContract;
@@ -43,6 +44,7 @@ namespace Vokabular.MainService.Core.Works.Permission
             if (group.Name != m_roleContract.Name)
             {
                 group.Name = m_roleContract.Name;
+                group.LastChange = DateTime.UtcNow;
                 m_permissionRepository.Save(group);
                 m_permissionRepository.Flush();
             }

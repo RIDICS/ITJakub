@@ -1,4 +1,5 @@
-﻿using Vokabular.DataEntities.Database.Repositories;
+﻿using System;
+using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 using AuthRoleContract = Ridics.Authentication.DataContracts.RoleContract;
@@ -23,6 +24,7 @@ namespace Vokabular.MainService.Core.Works.Permission
         {
             var group = m_permissionRepository.FindGroupByExternalIdOrCreate(m_data.Id);
             group.Name = m_data.Name;
+            group.LastChange = DateTime.UtcNow;
             m_permissionRepository.Save(group);
             m_permissionRepository.Flush();
 
