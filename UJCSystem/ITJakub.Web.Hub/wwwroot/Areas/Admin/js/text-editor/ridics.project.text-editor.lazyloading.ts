@@ -8,7 +8,7 @@
     init() {
         $(".pages-start").on("lazybeforeunveil",
             (event) => {
-                var targetEl = $(event.target);
+                var targetEl = $(event.target as Node as HTMLElement);
                 if (targetEl.hasClass("page-row")) {
                     this.pageStructure.loadPage(targetEl);
                 } else {

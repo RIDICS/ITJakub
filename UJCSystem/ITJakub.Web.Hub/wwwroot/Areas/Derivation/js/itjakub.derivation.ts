@@ -109,8 +109,8 @@
             $(tr).addClass("lazy-loading")
                 .append(td)
                 .attr("data-id", this.idList[i])
-                .bind("appearing", event => {
-                    this.onTableRowAppear(event.target);
+                .bind("appearing", (event) => {
+                    this.onTableRowAppear(event.target as Node as HTMLElement);
                 });
             
             $(this.tbody).append(tr);

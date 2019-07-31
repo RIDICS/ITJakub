@@ -174,7 +174,7 @@ $(document.documentElement).ready(() => {
                     feedbackDeleteButton.appendChild(removeGlyph);
 
                     $(feedbackDeleteButton).click((event) => {
-                        var elementId = $(event.target).parents(".feedback").attr("id");
+                        var elementId = $(event.target as Node as HTMLElement).parents(".feedback").attr("id");
                         deleteFeedback(elementId);
                     });
 

@@ -1564,7 +1564,7 @@ class SettingsPanel extends LeftSidePanel {
 
         $(showPageNameCheckbox).change((eventData) => {
             var readerText:JQuery = $("#" + this.parentReader.textPanelIdentificator).find(".reader-text");
-            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
+            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget as Node as HTMLElement);
             if (currentTarget.checked) {
                 readerText.addClass("reader-text-show-page-names");
             } else {
@@ -1585,7 +1585,7 @@ class SettingsPanel extends LeftSidePanel {
 
         $(showPageOnNewLineCheckbox).change((eventData) => {
             var readerText = $("#" + this.parentReader.textPanelIdentificator).find(".reader-text");
-            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
+            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget as Node as HTMLElement);
             if (currentTarget.checked) {
                 $(readerText).addClass("reader-text-page-new-line");
             } else {
@@ -1606,7 +1606,7 @@ class SettingsPanel extends LeftSidePanel {
 
         $(showCommentCheckbox).change((eventData) => {
             var readerText = $("#" + this.parentReader.textPanelIdentificator).find(".reader-text");
-            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
+            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget as Node as HTMLElement);
             if (currentTarget.checked) {
                 $(readerText).addClass("show-notes");
             } else {
@@ -2189,11 +2189,11 @@ class TextPanel extends RightSidePanel {
         $(textContainerDiv).scroll((event) => {
             this.parentReader.clickedMoveToPage = false;
 
-            var pages = $(event.target).find(".page");
+            var pages = $(event.target as Node as HTMLElement).find(".page");
             var minOffset = Number.MAX_VALUE;
             var pageWithMinOffset;
             $.each(pages, (index, page) => {
-                var pageOfsset = Math.abs($(page as Node as Element).offset().top - $(event.target).offset().top);
+                var pageOfsset = Math.abs($(page as Node as Element).offset().top - $(event.target as Node as Element).offset().top);
                 if (minOffset > pageOfsset) {
                     minOffset = pageOfsset;
                     pageWithMinOffset = page;

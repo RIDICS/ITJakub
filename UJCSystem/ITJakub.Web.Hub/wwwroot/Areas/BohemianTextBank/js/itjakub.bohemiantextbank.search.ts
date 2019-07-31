@@ -101,7 +101,7 @@ class BohemianTextbankSearch {
         });
 
         $("#resultsTableBody").click((event) => {
-            var clickedRow = $(event.target).parents("tr");
+            var clickedRow = $(event.target as Node as HTMLElement).parents("tr");
 
             if (clickedRow.hasClass("notes")) {
                 return;

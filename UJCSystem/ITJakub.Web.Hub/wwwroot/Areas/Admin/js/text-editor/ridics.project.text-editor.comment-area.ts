@@ -342,7 +342,7 @@
 
     private processDeleteCommentClick() {
         $(".delete-comment").on("click", (event) => {
-            const target = $(event.target);
+            const target = $(event.target as Node as HTMLElement);
             const commentActionsRowEl = target.parents(".comment-actions-row");
             const commentId = parseInt(commentActionsRowEl.siblings(".media-body").attr("data-comment-id"));
             bootbox.confirm({

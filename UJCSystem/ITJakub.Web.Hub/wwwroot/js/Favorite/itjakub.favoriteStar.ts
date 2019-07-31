@@ -95,7 +95,7 @@
         });
 
         $(".favorite-book-remove").click((event) => {
-            var elementJQuery = $(event.currentTarget);
+            var elementJQuery = $(event.currentTarget as Node as HTMLElement);
             var id = <number>elementJQuery.data("id");
 
             this.deleteFavoriteItem(id, elementJQuery);

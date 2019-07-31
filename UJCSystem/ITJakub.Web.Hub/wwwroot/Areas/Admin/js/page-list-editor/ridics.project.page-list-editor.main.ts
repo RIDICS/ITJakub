@@ -47,7 +47,7 @@
                     const selectedPageEl = $(".page-list").children(".ui-selected");
                     if (selectedPageEl.length) {
                         selectedPageEl.each((index, element) => {
-                            const selectedItemJEl = $(element);
+                            const selectedItemJEl = $(element as Node as HTMLElement);
                             listStructure.movePageUp(selectedItemJEl);
                         });
                     }
@@ -59,7 +59,7 @@
                     const selectedPageEl = $(".page-list").children(".ui-selected");
                     if (selectedPageEl.length) {
                         $(selectedPageEl.get().reverse()).each((index, element) => {
-                            const selectedItemJEl = $(element);
+                            const selectedItemJEl = $(element as Node as HTMLElement);
                             listStructure.movePageDown(selectedItemJEl);
                         });
                     }

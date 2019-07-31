@@ -348,8 +348,8 @@
             lazyloadedCompositionEl.addClass("lazyload");
         }
         if (this.editingMode) { // changing div to textarea here
-            pageRow.each((index: number, child: HTMLElement) => {
-                const pageEl = $(child);
+            pageRow.each((index, child) => {
+                const pageEl = $(child as Node as HTMLElement);
                 const compositionAreaEl = pageEl.children(".composition-area");
                 this.commentArea.updateCommentAreaHeight(pageEl);
                 const placeholderSpinner = pageEl.find(".loading");
@@ -357,8 +357,8 @@
                 this.createEditorAreaBody(compositionAreaEl);
             });
         } else { // changing textarea to div here
-            pageRow.each((index: number, child: HTMLElement) => {
-                const pageEl = $(child);
+            pageRow.each((index, child) => {
+                const pageEl = $(child as Node as HTMLElement);
                 const compositionAreaEl = pageEl.children(".composition-area");
                 this.commentArea.updateCommentAreaHeight(pageEl);
                 const placeholderSpinner = pageEl.find(".loading");

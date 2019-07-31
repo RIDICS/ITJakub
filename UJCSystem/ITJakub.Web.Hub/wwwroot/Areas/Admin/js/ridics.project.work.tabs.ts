@@ -191,7 +191,7 @@
         const existingCategoriesEl = $(".all-category-list");
         const existingCategoriesElList = existingCategoriesEl.children(".existing-category-list-item");
         existingCategoriesElList.each((index, elem) => {
-            const catEl = $(elem);
+            const catEl = $(elem as Node as HTMLElement);
             var categoryTreeEl = this.convertCateroryElToCategoryTreeEl(catEl);
             categoryTreeObject.push(categoryTreeEl);
         });
@@ -529,7 +529,7 @@
 
         $("#add-author-search").on("input",
             (event) => {
-                const textAreaEl = $(event.target as HTMLElement);
+                const textAreaEl = $(event.target as Node as HTMLElement);
                 const enteredText = textAreaEl.val() as string;
                 if (enteredText === "") {
                     $(".author-list-item").remove();
@@ -561,7 +561,7 @@
         const $editorId = $("#add-editor-id-preview");
         $("#add-editor-search").on("input",
             (event) => {
-                const textAreaEl = $(event.target as HTMLElement);
+                const textAreaEl = $(event.target as Node as HTMLElement);
                 const enteredText = textAreaEl.val() as string;
                 if (enteredText === "") {
                     $(".responsible-person-list-item").remove();
@@ -1075,7 +1075,7 @@ class ProjectWorkPublicationsResource {
         });
 
         $("td input[type=checkbox]", this.$container).change((event) => {
-            var $parentTd = $(event.currentTarget).closest("td");
+            var $parentTd = $(event.currentTarget as Node as HTMLElement).closest("td");
             var $parentTr = $parentTd.closest("tr");
             var position = $parentTr.children().index($parentTd) + 1;
 

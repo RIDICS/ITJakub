@@ -55,7 +55,7 @@
 * @param {Number} textId - Number of page for which to load plain text
 * @returns {JQueryXHR} Ajax containing page plain text
 */
-    loadPlainText(textId: number): JQueryXHR {
+    loadPlainText(textId: number): JQuery.jqXHR<ITextWithContent> {
         const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetTextResource`,
             { textId: textId, format: TextFormatEnumContract.Raw } as JQuery.PlainObject);
         return ajax;
@@ -66,7 +66,7 @@
 * @param {Number} textId  - Id of page for which to load rendered text
 * @returns {JQueryXHR} Ajax query of rendered text
 */
-    loadRenderedText(textId: number): JQueryXHR {
+    loadRenderedText(textId: number): JQuery.jqXHR<ITextWithContent> {
         const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetTextResource`,
             { textId: textId, format: TextFormatEnumContract.Html } as JQuery.PlainObject);
         return ajax;
