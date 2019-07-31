@@ -1,7 +1,7 @@
 ﻿class EditorsUtil {
     private serverPath = getBaseUrl();
 
-    getPagesList(projectId: number): JQueryXHR {
+    getPagesList(projectId: number): JQuery.jqXHR<IPage[]> {
         const pageListAjax = $.get(`${this.serverPath}Admin/ContentEditor/GetPageList`,
             {
                 projectId: projectId
@@ -115,7 +115,7 @@
         return result;
     }
 
-    loadEditionNote(projectId: number): JQueryXHR {//TODO
+    loadEditionNote(projectId: number): JQuery.jqXHR<string> {//TODO
         const format: TextFormatEnumContract = TextFormatEnumContract.Raw;
         const ajax = $.get(`${this.serverPath}Admin/ContentEditor/GetEditionNote`,
             {
@@ -125,7 +125,7 @@
         return ajax;
     }
 
-    saveEditionNote(noteRequest: IEditionNote) {
+    saveEditionNote(noteRequest: IEditionNote): JQuery.jqXHR {
         const ajax = $.post(`${this.serverPath}Admin/ContentEditor/SetEditionNote`,
             noteRequest as JQuery.PlainObject);
         return ajax;

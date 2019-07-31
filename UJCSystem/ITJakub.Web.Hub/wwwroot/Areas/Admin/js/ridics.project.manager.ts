@@ -96,7 +96,7 @@
         this.postAjax("Admin/Project/CreateLiteraryGenre", data, callback);
     }
 
-    createAuthor(firstName: string, lastName: string):JQueryXHR {
+    createAuthor(firstName: string, lastName: string): JQuery.jqXHR<number> {
         const data: IOriginalAuthor = {
             id:0,
             firstName: firstName,
@@ -105,7 +105,7 @@
         return $.post(`${getBaseUrl()}Admin/KeyTable/CreateAuthor`, { request: data } as JQuery.PlainObject);
     }
 
-    createResponsiblePerson(firstName: string, lastName: string):JQueryXHR {
+    createResponsiblePerson(firstName: string, lastName: string): JQuery.jqXHR<number> {
         const data: IResponsiblePerson = {
             id:0,
             firstName: firstName,
