@@ -27,28 +27,26 @@
 }
 
 .list-container {
+    &.selectable {
+        tbody {
+            cursor: pointer;
+
+            .active {
+                td {
+                    background-color: #DCDCDC !important;
+                }
+            }
+        }
+    }
+
     .alert-info {
         margin-top: 8px;
         margin-bottom: 8px;
     }
 
-    .selectable-table {
-        cursor: pointer;
-
-        .active {
-            td {
-                background-color: #DCDCDC !important;
-            }
-        }
-    }
-
     table {
         tr {
-            border-top: 1px solid @separation-line-color;
-
-            &:first-of-type {
-                border: none
-            }
+            border-bottom: 1px solid @separation-line-color;
 
             td {
                 border: none;
