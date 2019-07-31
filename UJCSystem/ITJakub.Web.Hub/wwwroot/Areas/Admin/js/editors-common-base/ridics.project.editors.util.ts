@@ -34,7 +34,7 @@
         return guid;
     }
 
-    getProjectContent(projectId: number): JQueryXHR {
+    getProjectContent(projectId: number): JQuery.jqXHR<ITextWithPage[]> {
         const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetProjectContent`,
             {
                 projectId: projectId

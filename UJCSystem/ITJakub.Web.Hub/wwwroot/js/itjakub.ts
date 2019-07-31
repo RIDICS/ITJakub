@@ -103,7 +103,7 @@ function updateQueryStringParameter(key, value) {
 }
 
 function getBaseUrl() {
-    var baseUrl = $("#baseUrl").data("path");
+    var baseUrl = $("#baseUrl").data("path") as string;
     return baseUrl;
 }
 

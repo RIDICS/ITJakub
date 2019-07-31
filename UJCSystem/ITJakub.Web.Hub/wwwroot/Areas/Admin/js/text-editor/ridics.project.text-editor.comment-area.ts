@@ -1,5 +1,6 @@
 ﻿class CommentArea {
     private readonly util: EditorsUtil;
+    private readonly adminApiClient = new AdminApiClient();
 
     constructor(util: EditorsUtil) {
         this.util = util;
@@ -270,8 +271,7 @@
         const pageRowEl = commentAreaEl.parent(".page-row");
         const pageName = pageRowEl.data("page-name") as string;
         const textId = pageRowEl.data("page") as number;
-        const ajax = $.post(`${this.util.getServerAddress()}Admin/ContentEditor/LoadCommentFile`,
-            { textId: textId } as JQuery.PlainObject);
+        const ajax = this.adminApiClient.loadCommentFile(textId);
         ajax.done(
             (fileContent: ICommentSctucture[]) => {
                 if (fileContent.length) {

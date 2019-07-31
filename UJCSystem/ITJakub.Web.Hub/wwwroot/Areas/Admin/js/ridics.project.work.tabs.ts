@@ -12,6 +12,8 @@
     private existingGenres: JQuery = null;
     private existingLitKinds: JQuery = null;
     private workModule: ProjectWorkModule;
+    private adminApiClient = new AdminApiClient();
+
     constructor(projectId: number, workModule: ProjectWorkModule) {
         super();
         this.projectId = projectId;
@@ -46,20 +48,6 @@
             $viewButtonPanel: $("#work-metadata-view-button-panel"),
             $editorButtonPanel: $("#work-metadata-editor-button-panel")
         };
-    }
-
-    private createNewKeywordsByArray(names: string[]): JQueryXHR {
-        const url = `${getBaseUrl()}Admin/Project/CreateKeywordsWithArray`;
-        const id = 0; //keyword doesn't have an id yet
-        const payload: IKeywordContract[] = [];
-        for (let i = 0; i < names.length; i++) {
-            payload.push(
-                {
-                    name: names[i],
-                    id: id
-                });
-        };
-        return $.post(url, { request: payload } as JQuery.PlainObject);
     }
 
     private initKeywords() {
@@ -549,7 +537,7 @@
                     this.selectedAuthorId = null;
                     return;
                 }
-                $.get(`${getBaseUrl()}Admin/Project/GetTypeaheadOriginalAuthor?query=${enteredText}`).done(
+                this.adminApiClient.getOriginalAuthorTypeahead(enteredText).done(
                     (data: IOriginalAuthor[]) => {
                         if (data.length) {
                             $authorId.val("");
@@ -584,7 +572,7 @@
                     this.selectedResponsiblePersonId = null;
                     return;
                 }
-                $.get(`${getBaseUrl()}Admin/Project/GetTypeaheadResponsiblePerson?query=${enteredText}`).done(
+                this.adminApiClient.getResponsiblePersonTypeahead(enteredText).done(
                     (data: IResponsiblePerson[]) => {
                         if (data.length) {
                             $editorId.val("");
@@ -924,7 +912,7 @@
                 keywordNonIdList.push(uniqueKeywordArray[i]);
             }
         }
-        const createNewKeywordAjax = this.createNewKeywordsByArray(keywordNonIdList);
+        const createNewKeywordAjax = this.adminApiClient.createNewKeywordsByArray(keywordNonIdList);
         var publisherText = "";
         if (this.publisherName == null) {
             publisherText = $("#work-metadata-publisher").val() as string;
@@ -991,10 +979,10 @@
         $buttons.prop("disabled", true);
         $successAlert.finish().hide();
         $errorAlert.hide();
-        this.projectClient.saveMetadata(this.projectId, data).done((data) => {
+        this.projectClient.saveMetadata(this.projectId, data).done((responseData) => {
             $successAlert.show().delay(3000).fadeOut(2000);
-            $("#work-metadata-last-modification").text(data.lastModificationText);
-            $("#work-metadata-literary-original").text(data.literaryOriginalText);
+            $("#work-metadata-last-modification").text(responseData.lastModificationText);
+            $("#work-metadata-literary-original").text(responseData.literaryOriginalText);
         }).fail(() => {
             $errorAlert.show();
         }).always(() => {

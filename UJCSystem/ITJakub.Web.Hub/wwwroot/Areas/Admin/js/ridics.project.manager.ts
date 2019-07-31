@@ -114,7 +114,7 @@
         return $.post(`${getBaseUrl()}Admin/KeyTable/CreateResponsiblePerson`, { request: data } as JQuery.PlainObject);
     }
 
-    createResponsibleType(type: ResponsibleTypeEnum, text: string):JQueryXHR {
+    createResponsibleType(type: ResponsibleTypeEnum, text: string): JQuery.jqXHR<number> {
         const data:IResponsibleType = {
             id: 0,
             type: type,
@@ -123,7 +123,7 @@
         return $.post(`${getBaseUrl()}Admin/KeyTable/CreateResponsibleType`, { request: data } as JQuery.PlainObject);
     }
 
-    saveMetadata(projectId: number, data: ISaveMetadataResource): JQueryXHR {
+    saveMetadata(projectId: number, data: ISaveMetadataResource): JQuery.jqXHR<IMetadataSaveResult> {
         return $.ajax({
             url: `${getBaseUrl()}Admin/Project/SaveMetadata?projectId=${projectId}`,
             type: "POST",
@@ -135,15 +135,15 @@
         });
     }
 
-    getProjectsByAuthor(authorId: number, start?: number, count?: number): JQueryXHR {
+    getProjectsByAuthor(authorId: number, start?: number, count?: number): JQuery.jqXHR<IPagedResult<IProjectDetailContract>> {
         return $.get(`${getBaseUrl()}Admin/Project/GetProjectsByAuthor?authorId=${authorId}&start=${start}&count=${count}`);
     }
 
-    getProjectsByResponsiblePerson(responsiblePersonId: number, start?: number, count?: number): JQueryXHR {
+    getProjectsByResponsiblePerson(responsiblePersonId: number, start?: number, count?: number): JQuery.jqXHR<IPagedResult<IProjectDetailContract>> {
         return $.get(`${getBaseUrl()}Admin/Project/GetProjectsByResponsiblePerson?responsiblePersonId=${responsiblePersonId}&start=${start}&count=${count}`);
     }
 
-    createForum(projectId: number): JQueryXHR {
+    createForum(projectId: number): JQuery.jqXHR<IForumViewModel> {
         return $.post(`${getBaseUrl()}Admin/Project/CreateForum?projectId=${projectId}`, {});
     }
 }
