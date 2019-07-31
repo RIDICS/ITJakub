@@ -5,6 +5,7 @@ using ITJakub.Web.Hub.Areas.Admin.Models.Response;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataContracts.Types;
@@ -16,7 +17,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
     [Area("Admin")]
     public class ContentEditorController : BaseController
     {
-        public ContentEditorController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        public ContentEditorController(CommunicationProvider communicationProvider, HttpErrorCodeTranslator httpErrorCodeTranslator) : base(
+            communicationProvider, httpErrorCodeTranslator)
         {
         }
 
@@ -38,6 +40,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 {
                     return Json(parts);
                 }
+
                 foreach (var pageComments in result)
                 {
                     var order = 0;
@@ -54,6 +57,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     }
                 }
             }
+
             return Json(parts);
         }
 
@@ -62,7 +66,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var comment = new CommentStructureResponse
             {
                 Order = order,
-                Time = ((DateTimeOffset)textComment.CreateTime).ToUnixTimeMilliseconds(),
+                Time = ((DateTimeOffset) textComment.CreateTime).ToUnixTimeMilliseconds(),
                 Text = textComment.Text,
                 Picture = null, // Picture is not supported
                 Id = textComment.Id,
@@ -179,7 +183,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             using (var client = GetRestClient())
             {
                 //var result = client.
-                var result = "TODO";//TODO add logic
+                var result = "TODO"; //TODO add logic
                 return Json(result);
             }
         }

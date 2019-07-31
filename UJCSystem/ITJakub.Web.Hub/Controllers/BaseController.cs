@@ -3,6 +3,7 @@ using System.Net;
 using ITJakub.Lemmatization.Shared.Contracts;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.DataContracts;
+using ITJakub.Web.Hub.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -14,10 +15,12 @@ namespace ITJakub.Web.Hub.Controllers
     public abstract class BaseController : Controller
     {
         private readonly CommunicationProvider m_communication;
+        private readonly HttpErrorCodeTranslator m_httpErrorCodeTranslator;
 
-        protected BaseController(CommunicationProvider communicationProvider)
+        protected BaseController(CommunicationProvider communicationProvider, HttpErrorCodeTranslator httpErrorCodeTranslator)
         {
             m_communication = communicationProvider;
+            m_httpErrorCodeTranslator = httpErrorCodeTranslator;
         }
 
         public MainServiceRestClient GetRestClient()
@@ -59,7 +62,12 @@ namespace ITJakub.Web.Hub.Controllers
         {
             if (exception.ValidationErrors == null)
             {
-                ModelState.AddModelError(string.Empty, exception.Message);
+                var message = exception.Message;
+                if (string.IsNullOrEmpty(message))
+                {
+                    message = m_httpErrorCodeTranslator.GetMessageFromErrorCode(exception.StatusCode).ErrorMessage;
+                }
+                ModelState.AddModelError(string.Empty, message);
                 return;
             }
 
@@ -76,12 +84,21 @@ namespace ITJakub.Web.Hub.Controllers
 
         protected IActionResult AjaxErrorResponse(string message, HttpStatusCode httpStatusCode = HttpStatusCode.InternalServerError)
         {
-            var result = new ErrorContract
-            {
-                ErrorMessage = message
-            };
+            ErrorContract errorContract;
 
-            return new ObjectResult(result)
+            if (string.IsNullOrEmpty(message))
+            {
+                errorContract = m_httpErrorCodeTranslator.GetMessageFromErrorCode(httpStatusCode);
+            }
+            else
+            {
+                errorContract = new ErrorContract
+                {
+                    ErrorMessage = message
+                };
+            }
+
+            return new ObjectResult(errorContract)
             {
                 StatusCode = (int)httpStatusCode
             };

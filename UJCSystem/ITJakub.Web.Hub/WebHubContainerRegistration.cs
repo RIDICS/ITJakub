@@ -5,6 +5,7 @@ using ITJakub.Web.Hub.AutoMapperProfiles;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Core.Markdown;
+using ITJakub.Web.Hub.Helpers;
 using Microsoft.Extensions.DependencyInjection;
 using Vokabular.Shared.Container;
 
@@ -19,6 +20,7 @@ namespace ITJakub.Web.Hub
             services.AddScoped<StaticTextManager>();
             services.AddScoped<FeedbacksManager>();
             services.AddScoped<RefreshUserManager>();
+            services.AddScoped<HttpErrorCodeTranslator>();
 
             services.AddScoped<IMarkdownToHtmlConverter, MarkdigMarkdownToHtmlConverter>();
 

@@ -26,7 +26,8 @@ namespace ITJakub.Web.Hub.Controllers
         private const int RoleListPageSize = 10;
         private const int PermissionListPageSize = 10;
 
-        public PermissionController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        public PermissionController(CommunicationProvider communicationProvider, HttpErrorCodeTranslator httpErrorCodeTranslator) : base(
+            communicationProvider, httpErrorCodeTranslator)
         {
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Helpers;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Config;
 using ITJakub.Web.Hub.Models.FeedResults;
@@ -20,7 +21,8 @@ namespace ITJakub.Web.Hub.Controllers
     {
         private readonly GoogleCalendarConfiguration m_googleCalendarConfiguration;
 
-        public NewsController(CommunicationProvider communicationProvider, IOptions<GoogleCalendarConfiguration> options) : base(communicationProvider)
+        public NewsController(CommunicationProvider communicationProvider, IOptions<GoogleCalendarConfiguration> options, HttpErrorCodeTranslator httpErrorCodeTranslator) : base(
+            communicationProvider, httpErrorCodeTranslator)
         {
             m_googleCalendarConfiguration = options.Value;
         }

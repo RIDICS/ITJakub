@@ -6,6 +6,7 @@ using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
+using ITJakub.Web.Hub.Helpers;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Authorization;
@@ -26,7 +27,8 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
         private readonly StaticTextManager m_staticTextManager;
         private readonly FeedbacksManager m_feedbacksManager;
 
-        public ProfessionalLiteratureController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager, CommunicationProvider communicationProvider) : base(communicationProvider)
+        public ProfessionalLiteratureController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager, CommunicationProvider communicationProvider, 
+            HttpErrorCodeTranslator httpErrorCodeTranslator) : base(communicationProvider, httpErrorCodeTranslator)
         {
             m_staticTextManager = staticTextManager;
             m_feedbacksManager = feedbacksManager;

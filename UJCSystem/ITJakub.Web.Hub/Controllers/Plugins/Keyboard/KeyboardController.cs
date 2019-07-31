@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Helpers;
 using ITJakub.Web.Hub.Models.Plugins.Keyboard;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,8 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Keyboard
         private readonly Lazy<Dictionary<string, LayoutListItem>> m_layoutKeys;
         private readonly Lazy<Dictionary<string, string>> m_layouts;
 
-        public KeyboardController(CommunicationProvider communicationProvider, IHostingEnvironment environment) : base(communicationProvider)
+        public KeyboardController(CommunicationProvider communicationProvider, IHostingEnvironment environment,
+            HttpErrorCodeTranslator httpErrorCodeTranslator) : base(communicationProvider, httpErrorCodeTranslator)
         {
             m_layoutKeys = new Lazy<Dictionary<string, LayoutListItem>>(LoadLayoutKeys);
             m_layouts = new Lazy<Dictionary<string, string>>(LoadLayouts);

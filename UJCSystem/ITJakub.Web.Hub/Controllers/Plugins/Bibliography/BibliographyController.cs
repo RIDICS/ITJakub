@@ -1,11 +1,13 @@
 ﻿using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITJakub.Web.Hub.Controllers.Plugins.Bibliography
 {
     public class BibliographyController : BaseController
     {
-        public BibliographyController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        public BibliographyController(CommunicationProvider communicationProvider, HttpErrorCodeTranslator httpErrorCodeTranslator) : base(
+            communicationProvider, httpErrorCodeTranslator)
         {
         }
 

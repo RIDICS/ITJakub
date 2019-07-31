@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Helpers;
 using ITJakub.Web.Hub.Models.Favorite;
 using ITJakub.Web.Hub.Models.Requests.Favorite;
 using Microsoft.AspNetCore.Http;
@@ -17,7 +18,8 @@ namespace ITJakub.Web.Hub.Controllers
         private const int LatestFavoriteCount = 5;
         private readonly ILocalizationService m_localizer;
 
-        public FavoriteController(CommunicationProvider communicationProvider, ILocalizationService localizer) : base(communicationProvider)
+        public FavoriteController(CommunicationProvider communicationProvider, ILocalizationService localizer, HttpErrorCodeTranslator httpErrorCodeTranslator) : base(
+            communicationProvider, httpErrorCodeTranslator)
         {
             m_localizer = localizer;
         }
