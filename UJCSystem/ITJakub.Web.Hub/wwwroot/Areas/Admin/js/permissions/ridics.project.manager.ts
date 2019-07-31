@@ -34,11 +34,11 @@ class ProjectManager {
             this.loadRoles(selectedProjectId);
         });
 
-        $("form.role-search-form").submit(() => {
+        $("form.project-search-form").submit(() => {
             this.clearSections();
         });
 
-        $("#role-pagination a").on("click", () => {
+        $("#project-pagination a").on("click", () => {
             this.clearSections();
         });
 
@@ -46,12 +46,17 @@ class ProjectManager {
     }
 
     private loadRoles(projectId: number) {
-        var container = $("#role-list-container");
+        const roleSection = $("#role-section .section");
+        const container = roleSection.find(".list-container");
+        const searchForm = roleSection.find(".role-search-form");
+        searchForm.find("input.search-value").val("");
         container.html("<div class=\"loader\"></div>");
-        $("#addPermissionButton").removeClass("disabled");
+        roleSection.removeClass("hide");
 
         this.client.getRolesByProject(projectId).done(response => {
             container.html(response as string);
+            this.initRemoveRoleFromProjectButton();
+        }).always(() => {
             this.roleList = new ListWithPagination(`Permission/RolesByProject?projectId=${projectId}`,
                 10,
                 "role",
@@ -60,8 +65,8 @@ class ProjectManager {
                 this.initRemoveRoleFromProjectButton,
                 this);
             this.roleList.init();
-            this.initRemoveRoleFromProjectButton();
-            $("#role-section .section").removeClass("hide");
+            this.roleList.setSearchFormDisabled(true);
+            $("#addPermissionButton").removeClass("disabled");
         });
     }
     
