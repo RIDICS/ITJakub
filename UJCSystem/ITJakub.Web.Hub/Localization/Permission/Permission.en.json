@@ -16,7 +16,6 @@
     "AllowedBookList": "Allowed books for selected group",
     "AllowedSpecialPermissionList": "Special permissions for selected group",
     "NewGroup": "New group",
-    "SpecialPermissisons": "Special permissisons",
     "GroupName": "Group name",
     "Close": "Close",
     "Create": "Create",
@@ -62,6 +61,12 @@
     "SuccessGroupUpdate": "Group update was successful.",
     "SuccessUserUpdate": "User update was successful.",
     "GroupEditTitle": "Edit group",
-    "Changed": "Changed"
+    "Changed": "Changed",
+
+    "ProjectPermissionManagementHeadline": "Project's permission management",
+    "Projects": "Projects",
+    "AddProjectPermissionToGroup": "Add project permission to a group",
+    "SelectedProject": "Selected project",
+    "AddPermissionToGroup": "Add permission to group"
   }
 }

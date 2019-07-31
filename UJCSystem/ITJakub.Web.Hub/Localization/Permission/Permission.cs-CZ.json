@@ -62,6 +62,12 @@
     "SuccessGroupUpdate": "Úprava skupiny proběhla úspěšně.",
     "SuccessUserUpdate": "Úprava uživatele proběhla úspěšně.",
     "GroupEditTitle": "Úprava skupiny",
-    "Changed": "Změněno"
+    "Changed": "Změněno",
+
+    "ProjectPermissionManagementHeadline": "Správa práv projektů",
+    "Projects": "Projekty",
+    "AddProjectPermissionToGroup": "Přidat právo na projekt skupině",
+    "SelectedProject": "Vybraný projekt",
+    "AddPermissionToGroup": "Přidat oprávnění skupině"
   }
 }
