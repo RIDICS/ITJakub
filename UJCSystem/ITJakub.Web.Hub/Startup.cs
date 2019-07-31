@@ -7,7 +7,6 @@ using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Helpers;
 using ITJakub.Web.Hub.Options;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -202,12 +201,6 @@ namespace ITJakub.Web.Hub
             IApplicationLifetime applicationLifetime)
         {
             ApplicationLogging.LoggerFactory = loggerFactory;
-
-            var configuration = app.ApplicationServices.GetService<TelemetryConfiguration>();
-            if (configuration != null)
-            {
-                configuration.DisableTelemetry = true; // Workaround for disabling telemetry
-            }
 
             if (env.IsDevelopment())
             {
