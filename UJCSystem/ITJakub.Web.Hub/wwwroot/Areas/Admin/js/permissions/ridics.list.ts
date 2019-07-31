@@ -28,9 +28,9 @@
         this.saveStateToUrl = saveStateToUrl;
         this.pageLoadCallback = pageLoadCallback;
         this.contextForCallback = contextForCallback;
-        this.listContainerSelector = `#${this.selector}-list-container`;
+        this.listContainerSelector = `#${this.selector}ListContainer`;
         this.pagination = new Pagination({
-            container: document.getElementById(selector + "-pagination") as HTMLDivElement,
+            container: document.getElementById(selector + "Pagination") as HTMLDivElement,
             pageClickCallback: this.loadPage.bind(this)
         });
         this.searchForm = $(`.${this.selector}-search-form`);
@@ -74,7 +74,7 @@
     public clear(emptyListMessage: string) {
         const section = $(`#${this.selector}-section .section`);
         this.setSearchFormDisabled();
-        $(`#${this.selector}-pagination`).empty();
+        $(`#${this.selector}Pagination`).empty();
 
         const container = section.find(`.list-container`);
         const infoAlert = new AlertComponentBuilder(AlertType.Info).addContent(emptyListMessage);

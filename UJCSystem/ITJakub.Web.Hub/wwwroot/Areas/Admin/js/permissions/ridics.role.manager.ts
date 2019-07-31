@@ -44,7 +44,7 @@ class RoleManager {
             this.clearSections();
         });
 
-        $("#role-pagination a").click(() => {
+        $("#rolePagination a").click(() => {
            this.clearSections();
         });
 

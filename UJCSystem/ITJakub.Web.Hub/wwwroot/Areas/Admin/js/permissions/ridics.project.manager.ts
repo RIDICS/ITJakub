@@ -38,7 +38,7 @@ class ProjectManager {
             this.clearSections();
         });
 
-        $("#project-pagination a").on("click", () => {
+        $("#projectPagination a").on("click", () => {
             this.clearSections();
         });
 
