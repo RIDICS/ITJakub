@@ -243,11 +243,11 @@ class RoleManager {
                             const roleId = roleRow.data("role-id");
                             const alert = roleRow.find(".alert");
                             alert.hide();
-                            this.clearSections();
                             this.client.deleteRole(roleId).done(() => {
+                                this.clearSections();
                                 this.roleList.reloadPage();
                             }).fail((error) => {
-                                alert.text(this.errorHandler.getErrorMessage(error, localization.translate("RemoveRoleError", "PermissionJs").value));
+                                alert.text(this.errorHandler.getErrorMessage(error, localization.translate("DeleteRoleError", "PermissionJs").value));
                                 alert.show();
                             });
                         }

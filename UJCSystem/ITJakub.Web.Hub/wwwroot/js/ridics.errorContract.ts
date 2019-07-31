@@ -1,3 +1,4 @@
 ﻿interface IErrorContract {
-    errorMessage: string
+    errorMessage: string;
+    errorMessageDetail: string;
 }
