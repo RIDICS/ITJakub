@@ -58,6 +58,10 @@ class ProjectManager {
         this.client.getRolesByProject(projectId).done(response => {
             container.html(response as string);
             this.initRemoveRoleFromProjectButton();
+        }).fail((error) => {
+            const errorAlert = new AlertComponentBuilder(AlertType.Error)
+                .addContent(this.errorHandler.getErrorMessage(error, localization.translate("ListError", "PermissionJs").value));
+            container.empty().append(errorAlert.buildElement());
         }).always(() => {
             this.roleList = new ListWithPagination(`Permission/RolesByProject?projectId=${projectId}`,
                 10,
@@ -76,10 +80,16 @@ class ProjectManager {
         $(".remove-role").on("click", (event) => {
             event.stopPropagation();
             const roleRow = $(event.currentTarget as Node as Element).parents(".role-row");
+            const alert = roleRow.find(".alert");
+            alert.hide();
+
             const roleId = roleRow.data("role-id");
             const projectId = $(".project-row.active").data("project-id");
             this.client.removeProjectFromRole(projectId, roleId).done(() => {
                 this.roleList.reloadPage();
+            }).fail((error) => {
+                alert.text(this.errorHandler.getErrorMessage(error, localization.translate("RemoveProjectFromRoleError", "PermissionJs").value));
+                alert.show();
             });
         });
     }
@@ -96,9 +106,9 @@ class ProjectManager {
             }
         });
 
-        const addPermissionToRoleBtn = $("#addPermission");
-        if (addPermissionToRoleBtn.data("init") === false) {
-            addPermissionToRoleBtn.data("init", true);
+        const addProjectPermissionToRoleBtn = $("#addPermission");
+        if (addProjectPermissionToRoleBtn.data("init") === false) {
+            addProjectPermissionToRoleBtn.data("init", true);
 
             $("#addPermissionButton").on("click", (event) => {
                 event.preventDefault();
@@ -107,7 +117,10 @@ class ProjectManager {
                 $("#addProjectPermissionToRoleDialog").modal();
             });
 
-            addPermissionToRoleBtn.on("click", () => {
+            addProjectPermissionToRoleBtn.on("click", () => {
+                const roleError = $("#addProjectToRoleError");
+                roleError.empty();
+
                 const projectId = $(".project-row.active").data("project-id");
                 let roleId: number;
                 if (typeof this.currentRoleSelectedItem == "undefined")
@@ -119,6 +132,10 @@ class ProjectManager {
                 this.client.addProjectToRole(projectId, roleId).done(() => {
                     this.roleList.reloadPage();
                     $("#addProjectPermissionToRoleDialog").modal("hide");
+                }).fail((error) => {
+                    const errorAlert = new AlertComponentBuilder(AlertType.Error)
+                        .addContent(this.errorHandler.getErrorMessage(error, localization.translate("AddProjectToRoleError", "PermissionJs").value));
+                    roleError.empty().append(errorAlert.buildElement());
                 });
             });
         }
