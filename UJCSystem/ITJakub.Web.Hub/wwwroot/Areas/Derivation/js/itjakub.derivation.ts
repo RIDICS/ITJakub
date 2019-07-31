@@ -110,7 +110,7 @@
                 .append(td)
                 .attr("data-id", this.idList[i])
                 .bind("appearing", event => {
-                    this.onTableRowAppear(event);
+                    this.onTableRowAppear(event.target);
                 });
             
             $(this.tbody).append(tr);
@@ -119,8 +119,8 @@
         $(this.container).append(table);
     }
 
-    private onTableRowAppear(event: JQuery.Event) {
-        var tr = event.target as HTMLElement;
+    private onTableRowAppear(targetElement: HTMLElement) {
+        var tr = targetElement;
         var id = $(tr).data("id");
         $(tr).unbind("appearing")
             .removeClass("lazy-loading");

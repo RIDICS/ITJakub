@@ -1562,7 +1562,7 @@ class SettingsPanel extends LeftSidePanel {
         var showPageNameCheckbox: HTMLInputElement = window.document.createElement("input");
         showPageNameCheckbox.type = "checkbox";
 
-        $(showPageNameCheckbox).change((eventData: JQuery.Event) => {
+        $(showPageNameCheckbox).change((eventData) => {
             var readerText:JQuery = $("#" + this.parentReader.textPanelIdentificator).find(".reader-text");
             var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
             if (currentTarget.checked) {
@@ -1583,7 +1583,7 @@ class SettingsPanel extends LeftSidePanel {
         var showPageOnNewLineCheckbox: HTMLInputElement = window.document.createElement("input");
         showPageOnNewLineCheckbox.type = "checkbox";
 
-        $(showPageOnNewLineCheckbox).change((eventData: JQuery.Event) => {
+        $(showPageOnNewLineCheckbox).change((eventData) => {
             var readerText = $("#" + this.parentReader.textPanelIdentificator).find(".reader-text");
             var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
             if (currentTarget.checked) {
@@ -1604,7 +1604,7 @@ class SettingsPanel extends LeftSidePanel {
         var showCommentCheckbox: HTMLInputElement = window.document.createElement("input");
         showCommentCheckbox.type = "checkbox";
 
-        $(showCommentCheckbox).change((eventData: JQuery.Event) => {
+        $(showCommentCheckbox).change((eventData) => {
             var readerText = $("#" + this.parentReader.textPanelIdentificator).find(".reader-text");
             var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
             if (currentTarget.checked) {
@@ -2186,14 +2186,14 @@ class TextPanel extends RightSidePanel {
         var textContainerDiv: HTMLDivElement = window.document.createElement("div");
         $(textContainerDiv).addClass("reader-text-container");
 
-        $(textContainerDiv).scroll((event: JQuery.Event) => {
+        $(textContainerDiv).scroll((event) => {
             this.parentReader.clickedMoveToPage = false;
 
-            var pages = $(event.target as Node as Element).find(".page");
+            var pages = $(event.target).find(".page");
             var minOffset = Number.MAX_VALUE;
             var pageWithMinOffset;
             $.each(pages, (index, page) => {
-                var pageOfsset = Math.abs($(page as Node as Element).offset().top - $(event.target as Node as Element).offset().top);
+                var pageOfsset = Math.abs($(page as Node as Element).offset().top - $(event.target).offset().top);
                 if (minOffset > pageOfsset) {
                     minOffset = pageOfsset;
                     pageWithMinOffset = page;

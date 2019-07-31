@@ -56,7 +56,7 @@ class BootstrapDialogWrapper {
         if (options.element instanceof jQuery) {
             this.$element = <JQuery>(options.element);
         } else {
-            this.$element = $(options.element);
+            this.$element = $(options.element as HTMLDivElement);
         }
         
         this.bindEvents();

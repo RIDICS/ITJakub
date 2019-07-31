@@ -203,7 +203,7 @@
         const existingCategoriesEl = $(".all-category-list");
         const existingCategoriesElList = existingCategoriesEl.children(".existing-category-list-item");
         existingCategoriesElList.each((index, elem) => {
-            const catEl = $(elem as Node as Element);
+            const catEl = $(elem);
             var categoryTreeEl = this.convertCateroryElToCategoryTreeEl(catEl);
             categoryTreeObject.push(categoryTreeEl);
         });
@@ -520,7 +520,7 @@
 
         $(".author-list-items").on("click",
             ".author-list-item",
-            (event: JQuery.Event) => {
+            (event) => {
                 var targetEl = $(event.target as HTMLElement);
                 if (!targetEl.hasClass("author-list-item")) {
                     targetEl = targetEl.parents(".author-list-item");
@@ -540,7 +540,7 @@
             });
 
         $("#add-author-search").on("input",
-            (event: JQuery.Event) => {
+            (event) => {
                 const textAreaEl = $(event.target as HTMLElement);
                 const enteredText = textAreaEl.val() as string;
                 if (enteredText === "") {
@@ -572,7 +572,7 @@
 
         const $editorId = $("#add-editor-id-preview");
         $("#add-editor-search").on("input",
-            (event: JQuery.Event) => {
+            (event) => {
                 const textAreaEl = $(event.target as HTMLElement);
                 const enteredText = textAreaEl.val() as string;
                 if (enteredText === "") {
@@ -601,8 +601,8 @@
 
         $(".responsible-person-list-items").on("click",
             ".responsible-person-list-item",
-            (event: JQuery.Event) => {
-                var targetEl = $(event.target as Node as Element);
+            (event) => {
+                var targetEl = $(event.target);
                 if (!targetEl.hasClass("responsible-person-list-item")) {
                     targetEl = targetEl.parents(".responsible-person-list-item");
                 }
@@ -685,8 +685,8 @@
         projects.forEach((project) => {
             elm += `<div class="col-xs-12 works-list-item">${project.latestMetadata.title}</div>`;
         });
-        const html = $.parseHTML(elm);
-        this.populateAuthorWorkListItemsTable($(html as Element[]));
+        const jqElement = $(elm);
+        this.populateAuthorWorkListItemsTable(jqElement);
     }
 
     private generateWorkResponsiblePersonItem(projects: IProjectDetailContract[], responsiblePersonId: number) {
@@ -698,8 +698,8 @@
             elm += `<div class="col-xs-12 works-list-item">${project.latestMetadata.title} - ${responsibilityType
                 }</div>`;
         });
-        const html = $.parseHTML(elm);
-        this.populateResponsiblePersonWorkListItemsTable($(html as Element[]));
+        const jqElement = $(elm);
+        this.populateResponsiblePersonWorkListItemsTable(jqElement);
     }
 
     private populateAuthorWorkListItemsTable(tableItems: JQuery) {
@@ -1087,7 +1087,7 @@ class ProjectWorkPublicationsResource {
         });
 
         $("td input[type=checkbox]", this.$container).change((event) => {
-            var $parentTd = $(event.currentTarget as Node as Element).closest("td");
+            var $parentTd = $(event.currentTarget).closest("td");
             var $parentTr = $parentTd.closest("tr");
             var position = $parentTr.children().index($parentTd) + 1;
 

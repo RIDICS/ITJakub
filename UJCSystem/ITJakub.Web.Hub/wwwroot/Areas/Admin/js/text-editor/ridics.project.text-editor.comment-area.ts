@@ -341,8 +341,8 @@
     }
 
     private processDeleteCommentClick() {
-        $(".delete-comment").on("click", (event: JQuery.Event) => {
-            const target = $(event.target as Node as Element);
+        $(".delete-comment").on("click", (event) => {
+            const target = $(event.target);
             const commentActionsRowEl = target.parents(".comment-actions-row");
             const commentId = parseInt(commentActionsRowEl.siblings(".media-body").attr("data-comment-id"));
             bootbox.confirm({
@@ -392,10 +392,10 @@
     private processToggleNestedCommentClick() {
         $("#project-resource-preview").on("click",
             ".toggle-nested-comments",
-            (event: JQuery.Event) => {
+            (event) => {
                 event.stopImmediatePropagation();
                 const editorPageContainer = ".pages-start";
-                var target = $(event.target as HTMLElement);
+                var target = $(event.target);
                 var parentComment = target.parents(".media-list");
                 var commentArea = parentComment.parent(".threads-container").parent(".comment-area");
                 var nestedComments = target.parent(".toggle-nested-comments-icon-container").siblings(".media")
@@ -442,9 +442,9 @@
     private processToggleCommentAresSizeClick() {
         $("#project-resource-preview").on("click",
             ".toggleCommentViewAreaSize",
-            (event: JQuery.Event) => {
+            (event) => {
                 event.stopImmediatePropagation();
-                const target = $(event.target as HTMLElement);
+                const target = $(event.target);
                 const commentArea = target.parents(".comment-area");
                 const commentAreaHeight = commentArea.height();
                 const threadsContainer = commentArea.children(".threads-container");

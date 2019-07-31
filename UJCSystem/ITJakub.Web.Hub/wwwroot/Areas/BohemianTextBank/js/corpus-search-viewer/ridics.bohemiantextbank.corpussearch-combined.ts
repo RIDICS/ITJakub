@@ -151,8 +151,8 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
 
         $(".text-results-table-body").on("click",
             ".result-row",
-            (event: JQuery.Event) => {
-                var clickedRow = $(event.target as Node as Element).closest(".result-row");
+            (event) => {
+                var clickedRow = $(event.target).closest(".result-row");
 
                 $(".result-row").not(clickedRow).removeClass("clicked");
                 clickedRow.addClass("clicked");
