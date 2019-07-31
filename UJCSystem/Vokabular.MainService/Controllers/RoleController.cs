@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -116,8 +115,6 @@ namespace Vokabular.MainService.Controllers
         [HttpPost("{roleId}/user/{userId}")]
         public void AddUserToRole(int userId, int roleId)
         {
-            //TODO
-            throw new Exception("test");
             m_roleManager.AddUserToRole(userId, roleId);
         }
 
