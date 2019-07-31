@@ -70,8 +70,6 @@ namespace ITJakub.Web.Hub.Controllers
 
                 switch (viewType)
                 {
-                    case ViewType.Partial:
-                        return PartialView("_RoleList", model);
                     case ViewType.Widget:
                         return PartialView("Widget/_RoleListWidget", model);
                     case ViewType.Full:
