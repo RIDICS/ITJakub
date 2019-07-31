@@ -68,6 +68,8 @@ namespace ITJakub.Web.Hub.Controllers
                     SearchQuery = search
                 };
 
+                ViewData.Add(PermissionConstants.IsRoleEditAllowed, true);
+
                 switch (viewType)
                 {
                     case ViewType.Widget:

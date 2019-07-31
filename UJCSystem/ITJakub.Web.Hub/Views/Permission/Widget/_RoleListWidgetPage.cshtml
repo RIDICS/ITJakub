@@ -1,4 +1,5 @@
-﻿@using Ridics.Core.Structures.Shared
+﻿@using ITJakub.Web.Hub.Constants
+@using Ridics.Core.Structures.Shared
 @using Scalesoft.Localization.AspNetCore
 @using Vokabular.Shared.AspNetCore.Extensions
 @model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.Permission.RoleContract>
@@ -16,9 +17,12 @@
          @if (User.HasPermission(PermissionNames.ManageUserRoles))
          {
              <td class="buttons">
-                 <a class="edit-role btn btn-sm btn-default">
-                     <i class="fa fa-pencil"></i>
-                 </a>
+                 @if (ViewData.TryGetValue(PermissionConstants.IsRoleEditAllowed, out var isEditAllowed) && (bool)isEditAllowed)
+                 {
+                     <a class="edit-role btn btn-sm btn-default">
+                         <i class="fa fa-pencil"></i>
+                     </a>
+                 }
                  <a class="remove-role btn btn-sm btn-default">
                      <i class="fa fa-trash"></i>
                  </a>
