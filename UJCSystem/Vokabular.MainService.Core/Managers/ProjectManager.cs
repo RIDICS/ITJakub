@@ -172,34 +172,32 @@ namespace Vokabular.MainService.Core.Managers
             return result;
         }
 
-        public PagedResultList<RoleContract> GetRolesByProject(long projectId, int? start, int? count, string query)
+        public PagedResultList<RoleContract> GetRolesByProject(long projectId, int? start, int? count, string filterByName)
         {
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
 
-            //TODO count, start, search
-            var groups = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupsByBook(projectId));
-            var groupsCount = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupsByBookCount(projectId));
-            
-            if (groups == null)
+            var result = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupsByBook(projectId, startValue, countValue, filterByName));
+
+            if (result == null)
             {
                 return null;
             }
 
             var authRoles = new List<AuthRoleContract>();
-            foreach (var group in groups)
+            foreach (var group in result.List)
             {
                 var work = new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, group.ExternalId);
                 work.Execute();
                 authRoles.Add(work.GetRoleContract());
             }
 
-            var result = Mapper.Map<List<RoleContract>>(authRoles);
+            var roles = Mapper.Map<List<RoleContract>>(authRoles);
 
             return new PagedResultList<RoleContract>
             {
-                List = result,
-                TotalCount = groupsCount,
+                List = roles,
+                TotalCount = result.Count,
             };
         }
     }

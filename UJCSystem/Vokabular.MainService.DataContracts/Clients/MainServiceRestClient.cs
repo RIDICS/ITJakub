@@ -2773,10 +2773,10 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var url = $"project/{projectId}/user".AddQueryString("start", start.ToString());
+                var url = $"project/{projectId}/role".AddQueryString("start", start.ToString());
                 url = url.AddQueryString("count", count.ToString());
                 url = url.AddQueryString("filterByName", query);
-                var result = GetPagedList<RoleContract>($"project/{projectId}/role");
+                var result = GetPagedList<RoleContract>(url);
                 return result;
             }
             catch (HttpRequestException e)
