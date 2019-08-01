@@ -2,12 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <ApplicationIcon />
-    <OutputType>Library</OutputType>
-    <StartupObject></StartupObject>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <VersionPrefix>1.0.0</VersionPrefix>
-    <VersionSuffix></VersionSuffix>
   </PropertyGroup>
 
   <ItemGroup>

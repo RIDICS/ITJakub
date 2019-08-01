@@ -2,16 +2,17 @@
     private readonly firstPageNumber = 1;
     private readonly pagingInfoSelector = ".paging-info";
 
-    private readonly urlPath;
-    private readonly defaultPageSize;
-    private readonly selector;
+    private readonly urlPath: string;
+    private readonly defaultPageSize: number;
+    private readonly selector: string;
     private readonly viewType: ViewType;
     private readonly saveStateToUrl: boolean;
-    private readonly pageLoadCallback;
+    private readonly pageLoadCallback: (list: ListWithPagination) => void;
     private readonly contextForCallback;
     private readonly listContainerSelector;
     private readonly pagination: Pagination;
     private readonly searchForm: JQuery;
+    private readonly adminApiClient = new AdminApiClient();
 
     private resetSearchForm: JQuery;
     private pageSize: number;
@@ -114,7 +115,7 @@
         const $listContainer = $(this.listContainerSelector);
         $listContainer.html("<div class=\"loader\"></div>");
 
-        $.get(url).done((response) => {
+        this.adminApiClient.getHtmlPageByUrl(url).done((response) => {
             $listContainer.html(String(response));
             this.initPagination();
 

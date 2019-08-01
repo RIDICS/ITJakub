@@ -7,7 +7,6 @@ using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Helpers;
 using ITJakub.Web.Hub.Options;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -59,6 +58,7 @@ namespace ITJakub.Web.Hub
             //IdentityModelEventSource.ShowPII = true; // Enable to debug authentication problems
 
             var openIdConnectConfig = Configuration.GetSection("OpenIdConnect").Get<OpenIdConnectConfiguration>();
+            var portalConfig = Configuration.GetSection("PortalConfig").Get<PortalOption>();
 
             services.AddAuthentication(options =>
                 {
@@ -68,7 +68,7 @@ namespace ITJakub.Web.Hub
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
                 {
                     options.ExpireTimeSpan = m_cookieExpireTimeSpan;
-                    options.Cookie.Name = "identity";
+                    options.Cookie.Name = $"identity{portalConfig.PortalType}";
                     options.AccessDeniedPath = "/Error/403/";
                     options.LoginPath = "/Account/Login";
                 })
@@ -201,12 +201,6 @@ namespace ITJakub.Web.Hub
             IApplicationLifetime applicationLifetime)
         {
             ApplicationLogging.LoggerFactory = loggerFactory;
-
-            var configuration = app.ApplicationServices.GetService<TelemetryConfiguration>();
-            if (configuration != null)
-            {
-                configuration.DisableTelemetry = true; // Workaround for disabling telemetry
-            }
 
             if (env.IsDevelopment())
             {

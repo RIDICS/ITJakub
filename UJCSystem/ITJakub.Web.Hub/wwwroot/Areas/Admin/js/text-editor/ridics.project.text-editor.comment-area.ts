@@ -1,5 +1,6 @@
 ﻿class CommentArea {
     private readonly util: EditorsUtil;
+    private readonly adminApiClient = new AdminApiClient();
 
     constructor(util: EditorsUtil) {
         this.util = util;
@@ -266,12 +267,11 @@
  * Loads contents of files with comments in a page from the server.
  * @param {JQuery} commentAreaEl Comment area element for which to construct structure
  */
-    asyncConstructCommentArea(commentAreaEl: JQuery): JQueryXHR {
+    asyncConstructCommentArea(commentAreaEl: JQuery): JQuery.jqXHR<ICommentSctucture[]> {
         const pageRowEl = commentAreaEl.parent(".page-row");
         const pageName = pageRowEl.data("page-name") as string;
         const textId = pageRowEl.data("page") as number;
-        const ajax = $.post(`${this.util.getServerAddress()}Admin/ContentEditor/LoadCommentFile`,
-            { textId: textId } as JQuery.PlainObject);
+        const ajax = this.adminApiClient.loadCommentFile(textId);
         ajax.done(
             (fileContent: ICommentSctucture[]) => {
                 if (fileContent.length) {
@@ -341,8 +341,8 @@
     }
 
     private processDeleteCommentClick() {
-        $(".delete-comment").on("click", (event: JQuery.Event) => {
-            const target = $(event.target as Node as Element);
+        $(".delete-comment").on("click", (event) => {
+            const target = $(event.target as Node as HTMLElement);
             const commentActionsRowEl = target.parents(".comment-actions-row");
             const commentId = parseInt(commentActionsRowEl.siblings(".media-body").attr("data-comment-id"));
             bootbox.confirm({
@@ -392,10 +392,10 @@
     private processToggleNestedCommentClick() {
         $("#project-resource-preview").on("click",
             ".toggle-nested-comments",
-            (event: JQuery.Event) => {
+            (event) => {
                 event.stopImmediatePropagation();
                 const editorPageContainer = ".pages-start";
-                var target = $(event.target as HTMLElement);
+                var target = $(event.target as Node as HTMLElement);
                 var parentComment = target.parents(".media-list");
                 var commentArea = parentComment.parent(".threads-container").parent(".comment-area");
                 var nestedComments = target.parent(".toggle-nested-comments-icon-container").siblings(".media")
@@ -442,9 +442,9 @@
     private processToggleCommentAresSizeClick() {
         $("#project-resource-preview").on("click",
             ".toggleCommentViewAreaSize",
-            (event: JQuery.Event) => {
+            (event) => {
                 event.stopImmediatePropagation();
-                const target = $(event.target as HTMLElement);
+                const target = $(event.target as Node as HTMLElement);
                 const commentArea = target.parents(".comment-area");
                 const commentAreaHeight = commentArea.height();
                 const threadsContainer = commentArea.children(".threads-container");

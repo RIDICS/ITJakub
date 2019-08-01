@@ -88,7 +88,7 @@ class UserRolesEditor {
 
     private initRemoveUserFromRoleButton() {
         $(".remove-role").click((event) => {
-            const roleRow = $(event.currentTarget as Node as Element).parents(".role-row");
+            const roleRow = $(event.currentTarget as Node as HTMLElement).parents(".role-row");
             const roleId = roleRow.data("role-id");
             const alert = roleRow.find(".alert");
             alert.hide();

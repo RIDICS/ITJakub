@@ -2,9 +2,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <VersionPrefix>1.0.0</VersionPrefix>
-    <VersionSuffix></VersionSuffix>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="ITJakub.Lemmatization.Core.Container.Config" />

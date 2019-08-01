@@ -151,8 +151,8 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
 
         $(".text-results-table-body").on("click",
             ".result-row",
-            (event: JQuery.Event) => {
-                var clickedRow = $(event.target as Node as Element).closest(".result-row");
+            (event) => {
+                var clickedRow = $(event.target).closest(".result-row");
 
                 $(".result-row").not(clickedRow).removeClass("clicked");
                 clickedRow.addClass("clicked");
@@ -655,7 +655,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
         updateQueryStringParameter(this.urlSortCriteriaKey, sortingEnum);
         updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
 
-        $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/BasicSearchGetResultSnapshotListPageOfIdsWithoutResultNumbers`, payload as JQuery.PlainObject)
+        this.basicApiClient.basicSearchGetResultSnapshotListPageOfIdsWithoutResultNumbers(payload)
             .done((bookIds: ICoprusSearchSnapshotResult) => {
                 const totalCount = bookIds.totalCount;
                 const page = (start / count) + 1;
@@ -721,7 +721,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
             start: start,
             count: count
         };
-        $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchGetResultSnapshotListPageOfIdsWithoutResultNumbers`, payload as JQuery.PlainObject)
+        this.basicApiClient.advancedSearchGetResultSnapshotListPageOfIdsWithoutResultNumbers(payload)
             .done((bookIds: ICoprusSearchSnapshotResult) => {
                 const totalCount = bookIds.totalCount;
                 const page = (start / count) + 1;
