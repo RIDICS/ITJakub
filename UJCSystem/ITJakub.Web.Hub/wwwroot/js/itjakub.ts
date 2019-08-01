@@ -103,7 +103,7 @@ function updateQueryStringParameter(key, value) {
 }
 
 function getBaseUrl() {
-    var baseUrl = $("#baseUrl").data("path");
+    var baseUrl = $("#baseUrl").data("path") as string;
     return baseUrl;
 }
 
@@ -137,10 +137,6 @@ function onClickHref(event:JQuery.Event, targetUrl) {
     }
 }
 
-interface JQueryStatic {
-    expr: any;
-}
-
 // An implementation of a case-insensitive contains pseudo
 // made for all versions of jQuery
 ($ => {//TODO requires testing
@@ -156,7 +152,7 @@ interface JQueryStatic {
 
     $.expr.pseudos.containsCI = $.expr.createPseudo ?
         $.expr.createPseudo(text => elem => icontains(elem, text)) :
-        (elem, i, match) => icontains(elem, match[3]);
+        <any>((elem, i, match) => icontains(elem, match[3])); //ELSE branch for backward compatibility - probably not required
 
 })(jQuery);
 

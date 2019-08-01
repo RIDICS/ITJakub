@@ -1,4 +1,4 @@
-﻿$(document as Node as Element).ready(() => {
+﻿$(document.documentElement).ready(() => {
     var staticTextEditor = new StaticTextEditor();
     staticTextEditor.init();
 });
@@ -88,34 +88,34 @@ class TextEditorWrapper {
             promptURLs: false,
             spellChecker: false,
             toolbar: [
-                TextEditorWrapper.toolUndo,
-                TextEditorWrapper.toolRedo,
-                TextEditorWrapper.toolSeparator,
-                TextEditorWrapper.toolBold,
-                TextEditorWrapper.toolItalic,
-                //TextEditorWrapper.toolStrikethrough, // not supported by the most markdown parsers
-                TextEditorWrapper.toolSeparator,
-                TextEditorWrapper.toolHeading1,
-                TextEditorWrapper.toolHeading2,
-                TextEditorWrapper.toolHeading3,
-                TextEditorWrapper.toolHeadingSmaller,
-                TextEditorWrapper.toolHeadingBigger,
-                TextEditorWrapper.toolSeparator,
-                TextEditorWrapper.toolUnorderedList,
-                TextEditorWrapper.toolOrderedList,
-                TextEditorWrapper.toolCodeBlock,
-                TextEditorWrapper.toolQuote,
-                TextEditorWrapper.toolSeparator,
-                TextEditorWrapper.toolLink,
-                TextEditorWrapper.toolImage,
-                TextEditorWrapper.toolTable,
-                TextEditorWrapper.toolHorizontalRule,
-                TextEditorWrapper.toolSeparator,
-                TextEditorWrapper.toolPreview,
-                TextEditorWrapper.toolSideBySide,
-                TextEditorWrapper.toolFullScreen,
-                TextEditorWrapper.toolSeparator,
-                TextEditorWrapper.toolGuide
+                this.toolUndo,
+                this.toolRedo,
+                this.toolSeparator,
+                this.toolBold,
+                this.toolItalic,
+                //this.toolStrikethrough, // not supported by the most markdown parsers
+                this.toolSeparator,
+                this.toolHeading1,
+                this.toolHeading2,
+                this.toolHeading3,
+                this.toolHeadingSmaller,
+                this.toolHeadingBigger,
+                this.toolSeparator,
+                this.toolUnorderedList,
+                this.toolOrderedList,
+                this.toolCodeBlock,
+                this.toolQuote,
+                this.toolSeparator,
+                this.toolLink,
+                this.toolImage,
+                this.toolTable,
+                this.toolHorizontalRule,
+                this.toolSeparator,
+                this.toolPreview,
+                this.toolSideBySide,
+                this.toolFullScreen,
+                this.toolSeparator,
+                this.toolGuide
             ]
         };
     }
@@ -163,13 +163,13 @@ class TextEditorWrapper {
 
     private setCustomPreviewRender() {
         // for SideBySide mode use faster inner markdown parser
-        TextEditorWrapper.toolSideBySide.action = (editor: SimpleMDE) => {
+        this.toolSideBySide.action = (editor: SimpleMDE) => {
             this.options.previewRender = this.originalPreviewRender;
             SimpleMDE.toggleSideBySide(editor);
         };
 
         // for Preview mode use server-side markdown parser
-        TextEditorWrapper.toolPreview.action = (editor: SimpleMDE) => {
+        this.toolPreview.action = (editor: SimpleMDE) => {
             this.options.previewRender = (plainText: string, preview: HTMLElement) => {
                 this.previewRemoteRender(plainText, preview);
                 return "<div class=\"loading\"></div>";
@@ -184,7 +184,7 @@ class TextEditorWrapper {
             autoClearInputs: true
         });
 
-        TextEditorWrapper.toolImage.action = (editor: SimpleMDE) => {
+        this.toolImage.action = (editor: SimpleMDE) => {
             var selectedText = editor.codemirror.getSelection();
             $("#editor-insert-image-alt").val(selectedText);
             this.dialogInsertImage.show();
@@ -202,7 +202,7 @@ class TextEditorWrapper {
             autoClearInputs: true
         });
 
-        TextEditorWrapper.toolLink.action = (editor: SimpleMDE) => {
+        this.toolLink.action = (editor: SimpleMDE) => {
             var selectedText = editor.codemirror.getSelection();
             $("#editor-insert-link-label").val(selectedText);
 
@@ -262,156 +262,156 @@ class TextEditorWrapper {
         codeMirror.focus();
     }
 
-    static toolSeparator = "|";
+    public toolSeparator = "|";
 
-    static toolBold: SimpleMDE.ToolbarIcon = {
+    public toolBold: SimpleMDE.ToolbarIcon = {
         name: "bold",
         action: SimpleMDE.toggleBold,
         className: "fa fa-bold",
         title: localization.translate("Bold", "ItJakubJs").value
     }
 
-    static toolItalic: SimpleMDE.ToolbarIcon = {
+    public toolItalic: SimpleMDE.ToolbarIcon = {
         name: "italic",
         action: SimpleMDE.toggleItalic,
         className: "fa fa-italic",
         title: localization.translate("Italic", "ItJakubJs").value
     }
 
-    static toolStrikethrough: SimpleMDE.ToolbarIcon = {
+    public toolStrikethrough: SimpleMDE.ToolbarIcon = {
         name: "strikethrough",
         action: SimpleMDE.toggleStrikethrough,
         className: "fa fa-strikethrough",
         title: localization.translate("StrikeThrough", "ItJakubJs").value
     }
 
-    static toolHeadingSmaller: SimpleMDE.ToolbarIcon = {
+    public toolHeadingSmaller: SimpleMDE.ToolbarIcon = {
         name: "heading-smaller",
         action: SimpleMDE.toggleHeadingSmaller,
         className: "fa fa-header fa-header-x fa-header-smaller",
         title: localization.translate("HeaderSmaller", "ItJakubJs").value
     }
 
-    static toolHeadingBigger: SimpleMDE.ToolbarIcon = {
+    public toolHeadingBigger: SimpleMDE.ToolbarIcon = {
         name: "heading-bigger",
         action: SimpleMDE.toggleHeadingBigger,
         className: "fa fa-header fa-header-x fa-header-bigger",
         title: localization.translate("HeaderBigger", "ItJakubJs").value
     }
 
-    static toolHeading1: SimpleMDE.ToolbarIcon = {
+    public toolHeading1: SimpleMDE.ToolbarIcon = {
         name: "heading-1",
         action: SimpleMDE.toggleHeading1,
         className: "fa fa-header fa-header-x fa-header-1",
         title: localization.translate("H1", "ItJakubJs").value
     }
 
-    static toolHeading2: SimpleMDE.ToolbarIcon = {
+    public toolHeading2: SimpleMDE.ToolbarIcon = {
         name: "heading-2",
         action: SimpleMDE.toggleHeading2,
         className: "fa fa-header fa-header-x fa-header-2",
         title: localization.translate("H2", "ItJakubJs").value
     }
 
-    static toolHeading3: SimpleMDE.ToolbarIcon = {
+    public toolHeading3: SimpleMDE.ToolbarIcon = {
         name: "heading-3",
         action: SimpleMDE.toggleHeading3,
         className: "fa fa-header fa-header-x fa-header-3",
         title: localization.translate("H3", "ItJakubJs").value
     }
 
-    static toolCodeBlock: SimpleMDE.ToolbarIcon = {
+    public toolCodeBlock: SimpleMDE.ToolbarIcon = {
         name: "code",
         action: SimpleMDE.toggleCodeBlock,
         className: "fa fa-code",
         title: localization.translate("Code", "ItJakubJs").value
     }
 
-    static toolQuote: SimpleMDE.ToolbarIcon = {
+    public toolQuote: SimpleMDE.ToolbarIcon = {
         name: "quote",
         action: SimpleMDE.toggleBlockquote,
         className: "fa fa-quote-left",
         title: localization.translate("Quote", "ItJakubJs").value
     }
 
-    static toolUnorderedList: SimpleMDE.ToolbarIcon = {
+    public toolUnorderedList: SimpleMDE.ToolbarIcon = {
         name: "unordered-list",
         action: SimpleMDE.toggleUnorderedList,
         className: "fa fa-list-ul",
         title: localization.translate("UnorderedList", "ItJakubJs").value
     }
 
-    static toolOrderedList: SimpleMDE.ToolbarIcon = {
+    public toolOrderedList: SimpleMDE.ToolbarIcon = {
         name: "ordered-list",
         action: SimpleMDE.toggleOrderedList,
         className: "fa fa-list-ol",
         title: localization.translate("OrderedList", "ItJakubJs").value
     }
 
-    static toolLink: SimpleMDE.ToolbarIcon = {
+    public toolLink: SimpleMDE.ToolbarIcon = {
         name: "link",
         action: SimpleMDE.drawLink,
         className: "fa fa-link",
         title: localization.translate("CreateLink", "ItJakubJs").value
     }
 
-    static toolImage: SimpleMDE.ToolbarIcon = {
+    public toolImage: SimpleMDE.ToolbarIcon = {
         name: "image",
         action: SimpleMDE.drawImage,
         className: "fa fa-picture-o",
         title: localization.translate("InsertImage", "ItJakubJs").value
     }
 
-    static toolTable: SimpleMDE.ToolbarIcon = {
+    public toolTable: SimpleMDE.ToolbarIcon = {
         name: "table",
         action: SimpleMDE.drawTable,
         className: "fa fa-table",
         title: localization.translate("InsertTable", "ItJakubJs").value
     }
 
-    static toolHorizontalRule: SimpleMDE.ToolbarIcon = {
+    public toolHorizontalRule: SimpleMDE.ToolbarIcon = {
         name: "horizontal-rule",
         action: SimpleMDE.drawHorizontalRule,
         className: "fa fa-minus",
         title: localization.translate("InsertHorizontalRule", "ItJakubJs").value
     }
 
-    static toolPreview: SimpleMDE.ToolbarIcon = {
+    public toolPreview: SimpleMDE.ToolbarIcon = {
         name: "preview",
         action: SimpleMDE.togglePreview,
         className: "fa fa-eye no-disable",
         title: localization.translate("TogglePreview", "ItJakubJs").value
     }
 
-    static toolSideBySide: SimpleMDE.ToolbarIcon = {
+    public toolSideBySide: SimpleMDE.ToolbarIcon = {
         name: "side-by-side",
         action: SimpleMDE.toggleSideBySide,
         className: "fa fa-columns no-disable no-mobile",
         title: localization.translate("ToggleSideBySide", "ItJakubJs").value
     }
 
-    static toolFullScreen: SimpleMDE.ToolbarIcon = {
+    public toolFullScreen: SimpleMDE.ToolbarIcon = {
         name: "fullscreen",
         action: SimpleMDE.toggleFullScreen,
         className: "fa fa-arrows-alt no-disable no-mobile",
         title: localization.translate("ToggleFullscreen", "ItJakubJs").value
     }
 
-    static toolGuide: SimpleMDE.ToolbarIcon = {
+    public toolGuide: SimpleMDE.ToolbarIcon = {
         name: "guide",
         action: "https://simplemde.com/markdown-guide",
         className: "fa fa-question-circle",
         title: localization.translate("MarkdownGuide", "ItJakubJs").value
     }
 
-    static toolUndo: SimpleMDE.ToolbarIcon = {
+    public toolUndo: SimpleMDE.ToolbarIcon = {
         name: "undo",
         action: SimpleMDE.undo,
         className: "fa fa-undo no-disable",
         title: localization.translate("Undo", "ItJakubJs").value
     }
 
-    static toolRedo: SimpleMDE.ToolbarIcon = {
+    public toolRedo: SimpleMDE.ToolbarIcon = {
         name: "redo",
         action: SimpleMDE.redo,
         className: "fa fa-repeat no-disable",

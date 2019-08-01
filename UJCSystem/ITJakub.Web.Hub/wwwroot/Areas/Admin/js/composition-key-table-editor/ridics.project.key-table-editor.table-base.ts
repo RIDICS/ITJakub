@@ -54,8 +54,7 @@
             elm += listItemEnd;
         }
         elm += listEnd;
-        const html = $.parseHTML(elm);
-        return $(html as Element[]);
+        return $(elm);
     }
 
     protected unbindEventsDialog() {

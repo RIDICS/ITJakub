@@ -12,6 +12,8 @@
     private existingGenres: JQuery = null;
     private existingLitKinds: JQuery = null;
     private workModule: ProjectWorkModule;
+    private adminApiClient = new AdminApiClient();
+
     constructor(projectId: number, workModule: ProjectWorkModule) {
         super();
         this.projectId = projectId;
@@ -46,20 +48,6 @@
             $viewButtonPanel: $("#work-metadata-view-button-panel"),
             $editorButtonPanel: $("#work-metadata-editor-button-panel")
         };
-    }
-
-    private createNewKeywordsByArray(names: string[]): JQueryXHR {
-        const url = `${getBaseUrl()}Admin/Project/CreateKeywordsWithArray`;
-        const id = 0; //keyword doesn't have an id yet
-        const payload: IKeywordContract[] = [];
-        for (let i = 0; i < names.length; i++) {
-            payload.push(
-                {
-                    name: names[i],
-                    id: id
-                });
-        };
-        return $.post(url, { request: payload } as JQuery.PlainObject);
     }
 
     private initKeywords() {
@@ -203,7 +191,7 @@
         const existingCategoriesEl = $(".all-category-list");
         const existingCategoriesElList = existingCategoriesEl.children(".existing-category-list-item");
         existingCategoriesElList.each((index, elem) => {
-            const catEl = $(elem as Node as Element);
+            const catEl = $(elem as Node as HTMLElement);
             var categoryTreeEl = this.convertCateroryElToCategoryTreeEl(catEl);
             categoryTreeObject.push(categoryTreeEl);
         });
@@ -520,7 +508,7 @@
 
         $(".author-list-items").on("click",
             ".author-list-item",
-            (event: JQuery.Event) => {
+            (event) => {
                 var targetEl = $(event.target as HTMLElement);
                 if (!targetEl.hasClass("author-list-item")) {
                     targetEl = targetEl.parents(".author-list-item");
@@ -540,8 +528,8 @@
             });
 
         $("#add-author-search").on("input",
-            (event: JQuery.Event) => {
-                const textAreaEl = $(event.target as HTMLElement);
+            (event) => {
+                const textAreaEl = $(event.target as Node as HTMLElement);
                 const enteredText = textAreaEl.val() as string;
                 if (enteredText === "") {
                     $(".author-list-item").remove();
@@ -549,7 +537,7 @@
                     this.selectedAuthorId = null;
                     return;
                 }
-                $.get(`${getBaseUrl()}Admin/Project/GetTypeaheadOriginalAuthor?query=${enteredText}`).done(
+                this.adminApiClient.getOriginalAuthorTypeahead(enteredText).done(
                     (data: IOriginalAuthor[]) => {
                         if (data.length) {
                             $authorId.val("");
@@ -572,8 +560,8 @@
 
         const $editorId = $("#add-editor-id-preview");
         $("#add-editor-search").on("input",
-            (event: JQuery.Event) => {
-                const textAreaEl = $(event.target as HTMLElement);
+            (event) => {
+                const textAreaEl = $(event.target as Node as HTMLElement);
                 const enteredText = textAreaEl.val() as string;
                 if (enteredText === "") {
                     $(".responsible-person-list-item").remove();
@@ -584,7 +572,7 @@
                     this.selectedResponsiblePersonId = null;
                     return;
                 }
-                $.get(`${getBaseUrl()}Admin/Project/GetTypeaheadResponsiblePerson?query=${enteredText}`).done(
+                this.adminApiClient.getResponsiblePersonTypeahead(enteredText).done(
                     (data: IResponsiblePerson[]) => {
                         if (data.length) {
                             $editorId.val("");
@@ -601,8 +589,8 @@
 
         $(".responsible-person-list-items").on("click",
             ".responsible-person-list-item",
-            (event: JQuery.Event) => {
-                var targetEl = $(event.target as Node as Element);
+            (event) => {
+                var targetEl = $(event.target);
                 if (!targetEl.hasClass("responsible-person-list-item")) {
                     targetEl = targetEl.parents(".responsible-person-list-item");
                 }
@@ -685,8 +673,8 @@
         projects.forEach((project) => {
             elm += `<div class="col-xs-12 works-list-item">${project.latestMetadata.title}</div>`;
         });
-        const html = $.parseHTML(elm);
-        this.populateAuthorWorkListItemsTable($(html as Element[]));
+        const jqElement = $(elm);
+        this.populateAuthorWorkListItemsTable(jqElement);
     }
 
     private generateWorkResponsiblePersonItem(projects: IProjectDetailContract[], responsiblePersonId: number) {
@@ -698,8 +686,8 @@
             elm += `<div class="col-xs-12 works-list-item">${project.latestMetadata.title} - ${responsibilityType
                 }</div>`;
         });
-        const html = $.parseHTML(elm);
-        this.populateResponsiblePersonWorkListItemsTable($(html as Element[]));
+        const jqElement = $(elm);
+        this.populateResponsiblePersonWorkListItemsTable(jqElement);
     }
 
     private populateAuthorWorkListItemsTable(tableItems: JQuery) {
@@ -924,7 +912,7 @@
                 keywordNonIdList.push(uniqueKeywordArray[i]);
             }
         }
-        const createNewKeywordAjax = this.createNewKeywordsByArray(keywordNonIdList);
+        const createNewKeywordAjax = this.adminApiClient.createNewKeywordsByArray(keywordNonIdList);
         var publisherText = "";
         if (this.publisherName == null) {
             publisherText = $("#work-metadata-publisher").val() as string;
@@ -991,10 +979,10 @@
         $buttons.prop("disabled", true);
         $successAlert.finish().hide();
         $errorAlert.hide();
-        this.projectClient.saveMetadata(this.projectId, data).done((data) => {
+        this.projectClient.saveMetadata(this.projectId, data).done((responseData) => {
             $successAlert.show().delay(3000).fadeOut(2000);
-            $("#work-metadata-last-modification").text(data.lastModificationText);
-            $("#work-metadata-literary-original").text(data.literaryOriginalText);
+            $("#work-metadata-last-modification").text(responseData.lastModificationText);
+            $("#work-metadata-literary-original").text(responseData.literaryOriginalText);
         }).fail(() => {
             $errorAlert.show();
         }).always(() => {
@@ -1087,7 +1075,7 @@ class ProjectWorkPublicationsResource {
         });
 
         $("td input[type=checkbox]", this.$container).change((event) => {
-            var $parentTd = $(event.currentTarget as Node as Element).closest("td");
+            var $parentTd = $(event.currentTarget as Node as HTMLElement).closest("td");
             var $parentTr = $parentTd.closest("tr");
             var position = $parentTr.children().index($parentTd) + 1;
 
