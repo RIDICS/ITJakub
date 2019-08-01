@@ -37,7 +37,7 @@
     private connectionsOnEnter(): void {
         $(document.documentElement).on("mouseenter",
             ".media-list",
-            (event: JQuery.Event) => {
+            (event) => {
                 event.stopImmediatePropagation();
                 const target = event.target as HTMLElement;
                 var thread = $(target).parents(".media-list");

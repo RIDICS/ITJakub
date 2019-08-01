@@ -43,8 +43,8 @@ class FavoriteManagement {
         this.labelColorInput.setColorChangedCallback(this.renderNewLabelPreview.bind(this));
         $("#favorite-label-name").change(this.renderNewLabelPreview.bind(this));
 
-        $(".favorite-label-management").each((index, element : Node) => {
-            this.renderLabelColor($(element as Element));
+        $(".favorite-label-management").each((index, element) => {
+            this.renderLabelColor($(element as Node as HTMLElement));
         });
         
         $("#add-new-label").click(() => {
@@ -253,8 +253,8 @@ class FavoriteManagement {
 
         $(".favorite-label-management")
             .removeClass("active")
-            .each((index, element : Node) => {
-                var elementJQuery = $(element as Element);
+            .each((index, element) => {
+                var elementJQuery = $(element as Node as HTMLElement);
                 let fontColor = FavoriteHelper.getInactiveFontColor();
                 let backgroundColor = elementJQuery.data("inactive-background");
                 let borderColor = elementJQuery.data("inactive-border");

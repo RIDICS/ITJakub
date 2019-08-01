@@ -46,6 +46,8 @@
 
     protected search: Search;
 
+    protected basicApiClient = new BasicApiClient();
+
     protected showLoading(tableEl: JQuery) {
         const loaderEl = tableEl.siblings(".corpus-search-results-table-div-loader");
         tableEl.hide();

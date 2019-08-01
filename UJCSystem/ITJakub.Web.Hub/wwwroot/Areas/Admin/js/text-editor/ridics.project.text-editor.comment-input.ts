@@ -81,7 +81,7 @@
     }
 
     private processEditCommentClick() {
-        $("#project-resource-preview").on("click", ".edit-comment", (event: JQuery.Event) => {
+        $("#project-resource-preview").on("click", ".edit-comment", (event) => {
             const target = $(event.target as HTMLElement);
             const commentActionsRowEl = target.parents(".comment-actions-row");
             const commentBody = commentActionsRowEl.siblings(".media-body");
@@ -105,7 +105,7 @@
     private processRespondToCommentClick() {
         $("#project-resource-preview").on("click",
             "button.respond-to-comment",
-            (event: JQuery.Event) => { // Process click on "Respond" button
+            (event) => { // Process click on "Respond" button
                 const target = $(event.target as HTMLElement);
                 const pageRow =
                     target.parents(".comment-area").parent(".page-row");

@@ -12,7 +12,7 @@
     private loadAllPagesButtonContent: JQuery;
     constructor(options: IndefinitePagination.Options) {
         this.options = options;
-        this.paginationContainer = $(options.container);
+        this.paginationContainer = options.container;
         if (options.buttonClass) {
             this.buttonClass = options.buttonClass;
         }
