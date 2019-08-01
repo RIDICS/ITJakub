@@ -81,8 +81,7 @@
             elm += listItemEnd;
         }
         elm += listEnd;
-        const html = $.parseHTML(elm);
-        const jListEl = $(html as Element[]);
+        const jListEl = $(elm);
         const hierarchicallySortedList = this.hierarchicallySortCategories(jListEl);
         return hierarchicallySortedList;
     }
@@ -94,8 +93,7 @@
                 `<option value="${categoryItemList[i].id}" data-parent-category-id="${categoryItemList[i].parentCategoryId}">${categoryItemList[i].description}</option>`;
             elm += listItemStart;
         }
-        const html = $.parseHTML(elm);
-        const jListEl = $(html as Element[]);
+        const jListEl = $(elm);
         return jListEl;
     }
 
@@ -127,7 +125,7 @@
         });
     }
 
-    private trackCollapseCategoryButton(childrenCategories:JQuery) {
+    private trackCollapseCategoryButton(childrenCategories:JQuery<Element>) {
         $(".collapse-category-button").on("click", () => {
             childrenCategories.toggle();
         });

@@ -323,7 +323,7 @@ class DropDownSelect {
         }
 
         $(".concrete-item", dropdownItemsDiv).each((index, element) => {
-            const jqEl = $(element as Node as Element);
+            const jqEl = $(element as Node as HTMLElement);
             var id = jqEl.data("id");
             var type = jqEl.data("type");
             var itemName = jqEl.data("name");

@@ -77,7 +77,7 @@
 
         var image = this.createImage();
 
-        inputs.each((input: number, element: Element) => {
+        inputs.each((input: number, element: HTMLElement) => {
             this.registerInput(element, image);
         });
     }
@@ -91,7 +91,7 @@
         return image;
     }
 
-    public registerInput(element: Element, image: HTMLImageElement = null) {
+    public registerInput(element: HTMLElement, image: HTMLImageElement = null) {
         if (image === null || image === undefined) {
             image = this.createImage();
         }

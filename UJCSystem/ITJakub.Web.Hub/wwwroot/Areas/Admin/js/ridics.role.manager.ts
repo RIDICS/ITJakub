@@ -32,10 +32,10 @@ class RoleManager {
         this.roleList.init();
 
         $(".role-row").click((event) => {
-            $(event.currentTarget).addClass("active").siblings().removeClass("active");
+            $(event.currentTarget as Node as HTMLElement).addClass("active").siblings().removeClass("active");
             $("#addRoleButton").removeClass("disabled");
 
-            var selectedRoleId = $(event.currentTarget).data("role-id");
+            var selectedRoleId = $(event.currentTarget as Node as HTMLElement).data("role-id");
             this.loadUsers(selectedRoleId);
             this.loadPermissions(selectedRoleId);
         });
@@ -113,8 +113,8 @@ class RoleManager {
     private initPermissionManaging() {
 
         $(".permission-row input[type=checkbox]").on("input", (event) => {
-            const addPermission = $(event.currentTarget).is(":checked");
-            const permissionCheckboxInput = $(event.currentTarget);
+            const addPermission = $(event.currentTarget as Node as HTMLElement).is(":checked");
+            const permissionCheckboxInput = $(event.currentTarget as Node as HTMLElement);
             permissionCheckboxInput.prop("checked", !addPermission);
             const permissionRow = permissionCheckboxInput.parents(".permission-row");
             const alert = permissionRow.find(".alert");
@@ -154,7 +154,7 @@ class RoleManager {
 
     private initRemoveUserFromRoleButton() {
         $(".remove-user-from-role").click((event) => {
-            var userRow = $(event.currentTarget).parents(".user-row");
+            var userRow = $(event.currentTarget as Node as HTMLElement).parents(".user-row");
             var userId = userRow.data("user-id");
             const alert = userRow.find(".alert");
             alert.hide();
@@ -173,7 +173,7 @@ class RoleManager {
         const editRoleDialog = $("#editRoleDialog");
         $(".edit-role").click((event) => {
             event.stopPropagation();
-            const roleRow = $(event.currentTarget).parents(".role-row");
+            const roleRow = $(event.currentTarget as Node as HTMLElement).parents(".role-row");
             const roleId = roleRow.data("role-id");
             const roleName = roleRow.find(".name").text();
             const roleDescription = roleRow.find(".description").text();
@@ -225,7 +225,7 @@ class RoleManager {
     private initRemoveRoleButtons() {
         $(".remove-role").click((event) => {
             event.stopPropagation();
-            const roleRow = $(event.currentTarget).parents(".role-row");
+            const roleRow = $(event.currentTarget as Node as HTMLElement).parents(".role-row");
             const roleName = roleRow.find(".name").text();
             bootbox.dialog({
                 title: localization.translate("Warning", "PermissionJs").value,

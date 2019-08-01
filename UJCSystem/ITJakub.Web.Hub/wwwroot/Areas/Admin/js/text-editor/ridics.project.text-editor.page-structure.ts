@@ -46,7 +46,7 @@
         }
     }
 
-    private appendRenderedText(pageEl: JQuery): JQueryXHR {
+    private appendRenderedText(pageEl: JQuery): JQuery.jqXHR<ITextWithContent> {
         const textId = pageEl.data("page") as number;
         const renderedText = this.util.loadRenderedText(textId);
         const compositionAreaDiv = pageEl.find(".rendered-text");
@@ -81,7 +81,7 @@
         return renderedText;
     }
 
-    private appendPlainText(pageEl: JQuery): JQueryXHR {
+    private appendPlainText(pageEl: JQuery): JQuery.jqXHR<ITextWithContent> {
         const textId = pageEl.data("page") as number;
         const plainText = this.util.loadPlainText(textId);
         const textAreaEl = $(pageEl.find(".plain-text"));
