@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ITJakub.Web.Hub.Models
+﻿namespace ITJakub.Web.Hub.Models
 {
     public class ModificationUpdateViewModel
     {

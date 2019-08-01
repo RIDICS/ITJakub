@@ -32,7 +32,7 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [Authorize(VokabularPermissionNames.EditStaticText)]
-        public ActionResult SaveText([FromBody] StaticTextViewModel viewModel)
+        public ActionResult SaveText([FromBody] EditStaticTextViewModel viewModel)
         {
             var username = GetUserName();
             var culture = m_localizationService.GetRequestCulture();
