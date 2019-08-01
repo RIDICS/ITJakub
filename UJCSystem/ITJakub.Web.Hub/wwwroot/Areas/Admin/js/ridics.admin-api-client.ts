@@ -11,7 +11,7 @@
         return this.get(`${getBaseUrl()}Admin/Project/GetTypeaheadResponsiblePerson?query=${query}`);
     }
 
-    public loadCommentFile(textId: number) {
+    public loadCommentFile(textId: number): JQuery.jqXHR<ICommentSctucture[]> {
         return this.post(`${getBaseUrl()}Admin/ContentEditor/LoadCommentFile`,
             JSON.stringify({
                  textId: textId

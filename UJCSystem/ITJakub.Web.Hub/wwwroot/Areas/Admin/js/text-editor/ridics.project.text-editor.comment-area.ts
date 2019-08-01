@@ -267,7 +267,7 @@
  * Loads contents of files with comments in a page from the server.
  * @param {JQuery} commentAreaEl Comment area element for which to construct structure
  */
-    asyncConstructCommentArea(commentAreaEl: JQuery): JQueryXHR {
+    asyncConstructCommentArea(commentAreaEl: JQuery): JQuery.jqXHR<ICommentSctucture[]> {
         const pageRowEl = commentAreaEl.parent(".page-row");
         const pageName = pageRowEl.data("page-name") as string;
         const textId = pageRowEl.data("page") as number;
@@ -395,7 +395,7 @@
             (event) => {
                 event.stopImmediatePropagation();
                 const editorPageContainer = ".pages-start";
-                var target = $(event.target);
+                var target = $(event.target as Node as HTMLElement);
                 var parentComment = target.parents(".media-list");
                 var commentArea = parentComment.parent(".threads-container").parent(".comment-area");
                 var nestedComments = target.parent(".toggle-nested-comments-icon-container").siblings(".media")
@@ -444,7 +444,7 @@
             ".toggleCommentViewAreaSize",
             (event) => {
                 event.stopImmediatePropagation();
-                const target = $(event.target);
+                const target = $(event.target as Node as HTMLElement);
                 const commentArea = target.parents(".comment-area");
                 const commentAreaHeight = commentArea.height();
                 const threadsContainer = commentArea.children(".threads-container");
