@@ -35,21 +35,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public virtual UserGroup FindGroupByExternalIdOrCreate(int externalId)
         {
-            var group = FindGroupByExternalId(externalId);
-            if (group != null)
-            {
-                return group;
-            }
-
-            var newGroup = new UserGroup
-            {
-                ExternalId = externalId,
-                CreateTime = DateTime.UtcNow,
-            };
-
-            CreateGroup(newGroup);
-
-            return newGroup;
+            return FindGroupByExternalIdOrCreate(externalId, null);
         }
 
         public virtual UserGroup FindGroupByExternalIdOrCreate(int externalId, string roleName)
@@ -60,11 +46,12 @@ namespace Vokabular.DataEntities.Database.Repositories
                 return group;
             }
 
+            var now = DateTime.UtcNow;
             var newGroup = new UserGroup
             {
                 ExternalId = externalId,
-                CreateTime = DateTime.UtcNow,
-                LastChange = DateTime.UtcNow,
+                CreateTime = now,
+                LastChange = now,
                 Name = roleName
             };
 

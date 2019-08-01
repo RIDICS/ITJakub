@@ -13,7 +13,7 @@ namespace Vokabular.MainService.Core.Works.Permission
         private readonly int m_roleId;
         private AuthRoleContract m_roleContract;
 
-        public SynchronizeRoleWork(PermissionRepository permissionRepository, CommunicationProvider communicationProvider) : base(
+        private SynchronizeRoleWork(PermissionRepository permissionRepository, CommunicationProvider communicationProvider) : base(
             permissionRepository)
         {
             m_permissionRepository = permissionRepository;

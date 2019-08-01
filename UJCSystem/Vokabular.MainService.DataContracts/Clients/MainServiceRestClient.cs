@@ -52,9 +52,13 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result =
-                    GetPagedList<ProjectDetailContract>(
-                        $"project?start={start}&count={count}&filterByName={filterByName}&fetchPageCount={fetchPageCount}");
+                var url = UrlQueryBuilder.Create("project")
+                    .AddParameter("start", start)
+                    .AddParameter("count", count)
+                    .AddParameter("filterByName", filterByName)
+                    .AddParameter("fetchPageCount", fetchPageCount)
+                    .ToQuery();
+                var result = GetPagedList<ProjectDetailContract>(url);
                 return result;
             }
             catch (HttpRequestException e)
@@ -2773,9 +2777,12 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var url = $"project/{projectId}/role".AddQueryString("start", start.ToString());
-                url = url.AddQueryString("count", count.ToString());
-                url = url.AddQueryString("filterByName", query);
+                var url = UrlQueryBuilder.Create($"project/{projectId}/role")
+                    .AddParameter("start", start)
+                    .AddParameter("count", count)
+                    .AddParameter("filterByName", query)
+                    .ToQuery();
+
                 var result = GetPagedList<RoleContract>(url);
                 return result;
             }

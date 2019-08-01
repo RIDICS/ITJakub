@@ -101,7 +101,7 @@ namespace Vokabular.MainService.Core.Managers
             {
                 var role = m_authenticationManager.GetUnregisteredRole();
                 new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, role.Id).Execute();
-                var group = m_permissionRepository.FindGroupByExternalIdOrCreate(role.Id);
+                var group = m_permissionRepository.FindGroupByExternalIdOrCreate(role.Id, role.Name);
                 filtered = m_permissionRepository.GetFilteredBookIdListByGroupPermissions(group.Id, projectIds);
             }
 
