@@ -38,6 +38,11 @@
                 <div class="col-md-3">
                     <div class="alert alert-info inline-alert">@Localizer.Translate("UsesMarkdown", "Text", LocTranslationSource.File)</div>
                 </div>
+
+                <label for="text" class="col-md-2 control-label">@Localizer.Translate("LanguageOfText", "Text", LocTranslationSource.File)</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="scope" disabled="disabled" value="@Model.CultureNameLabel">
+                </div>
             </div>
 
             <div class="form-group">

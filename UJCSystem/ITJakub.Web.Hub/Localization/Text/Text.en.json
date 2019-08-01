@@ -1,29 +1,30 @@
 {
-	"culture":"en",
-	"scope":"Text",
-	"dictionary": {
-		"InsertImage":"Insert image",
-		"UrlAddress":"URL Address",
-		"Label":"Label",
-		"Insert":"Insert",
-		
-		"InsertLink":"Insert link",
-		"Close" : "Close",
-		
-		"TextManagementTitle":"Administration - Edit static text",
-		"TextEditor":"Text editor",
-		"PageName":"Page name",
-		"PageText":"Page text",
-		"UsesMarkdown":"Editor uses Markdown syntax",
-		"LastModificationAuthor":"Author of the last modification",
-		"Anonymous":"anonymous",
-		"AnonymousVar2":"{0}anonymous{1}",
-		"LastModificationTime":"Last modification time",
-		"TextSavingError":"Error while saving text occured",
-		"TextSaved":"Text saved",
-		"Save":"Save",
-		"CloseEditor":"Close editor",
-		"NoTextSelected":"No text selected for editing.",
-		"Category" : "translate[Kategorie]"
-	}
+  "culture": "en",
+  "scope": "Text",
+  "dictionary": {
+    "InsertImage": "Insert image",
+    "UrlAddress": "URL Address",
+    "Label": "Label",
+    "Insert": "Insert",
+
+    "InsertLink": "Insert link",
+    "Close": "Close",
+
+    "TextManagementTitle": "Administration - Edit static text",
+    "TextEditor": "Text editor",
+    "PageName": "Page name",
+    "PageText": "Page text",
+    "UsesMarkdown": "Editor uses Markdown syntax",
+    "LastModificationAuthor": "Author of the last modification",
+    "Anonymous": "anonymous",
+    "AnonymousVar2": "{0}anonymous{1}",
+    "LastModificationTime": "Last modification time",
+    "TextSavingError": "Error while saving text occured",
+    "TextSaved": "Text saved",
+    "Save": "Save",
+    "CloseEditor": "Close editor",
+    "NoTextSelected": "No text selected for editing.",
+    "Category": "translate[Kategorie]",
+    "LanguageOfText": "Language of the text"
+  }
 }

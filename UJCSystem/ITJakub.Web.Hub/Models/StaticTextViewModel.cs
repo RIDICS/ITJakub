@@ -14,6 +14,8 @@ namespace ITJakub.Web.Hub.Models
 
     public class EditStaticTextViewModel : StaticTextViewModel
     {
+        public string CultureNameLabel { get; set; }
+
         public bool IsRecordExists { get; set; }
 
         public StaticTextFormatType Format { get; set; }

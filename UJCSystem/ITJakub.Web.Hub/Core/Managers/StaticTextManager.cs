@@ -23,15 +23,17 @@ namespace ITJakub.Web.Hub.Core.Managers
         
         public EditStaticTextViewModel GetText(string name, string scope)
         {
-            var staticText = m_dynamicTextService.GetDynamicText(name, scope);           
-           
+            var staticText = m_dynamicTextService.GetDynamicText(name, scope);
+            var currentCultureLabel = m_localizationService.GetRequestCulture().NativeName;
+
             if (staticText == null)
             {
                 return new EditStaticTextViewModel
                 {
                     Name = name,
                     Scope = scope,
-                    IsRecordExists = false
+                    IsRecordExists = false,
+                    CultureNameLabel = currentCultureLabel,
                 };
             }
 
@@ -44,6 +46,7 @@ namespace ITJakub.Web.Hub.Core.Managers
                 LastModificationAuthor = staticText.ModificationUser,
                 LastModificationTime = staticText.ModificationTime,
                 Text = staticText.Text,
+                CultureNameLabel = currentCultureLabel,
             };
             
             return staticTextViewModel;
