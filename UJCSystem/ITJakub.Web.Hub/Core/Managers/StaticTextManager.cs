@@ -1,10 +1,10 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using ITJakub.Web.Hub.Core.Markdown;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Type;
 using Scalesoft.Localization.AspNetCore;
 using Scalesoft.Localization.Core.Model;
+using Scalesoft.Localization.Core.Util;
 
 namespace ITJakub.Web.Hub.Core.Managers
 {
@@ -39,38 +39,24 @@ namespace ITJakub.Web.Hub.Core.Managers
             {
                 Format = (StaticTextFormatType) staticText.Format,
                 Name = staticText.Name,
-                Scope = staticText.DictionaryScope
+                Scope = staticText.DictionaryScope,
+                IsRecordExists = true,
+                LastModificationAuthor = staticText.ModificationUser,
+                LastModificationTime = staticText.ModificationTime,
+                Text = staticText.Text,
             };
-
-            if (staticText.FallBack)
-            {
-                staticTextViewModel.IsRecordExists = false;
-                staticTextViewModel.LastModificationTime = new DateTime();
-                staticTextViewModel.Text = string.Empty;
-                staticTextViewModel.LastModificationAuthor = string.Empty;
-            }
-            else
-            {
-                staticTextViewModel.IsRecordExists = true;
-                staticTextViewModel.LastModificationAuthor = staticText.ModificationUser;
-                staticTextViewModel.LastModificationTime = staticText.ModificationTime;
-                staticTextViewModel.Text = staticText.Text;
-            }
-
+            
             return staticTextViewModel;
         }
 
         public StaticTextViewModel GetRenderedHtmlText(string name, string scope)
         {
-            var staticText = m_dynamicTextService.GetDynamicText(name, scope);
-            var isRecordExist = staticText != null;
-            var text = isRecordExist ? staticText.Text : m_localizationService.Translate(name, scope);
+            var text = m_localizationService.Translate(name, scope, LocTranslationSource.Database);
 
             var htmlText = m_markdownToHtmlConverter.ConvertToHtml(text);
             
             var viewModel = new StaticTextViewModel
             {
-                IsRecordExists = isRecordExist,
                 Name = name,
                 Text = htmlText,
                 Scope = scope

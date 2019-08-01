@@ -5,8 +5,6 @@ namespace ITJakub.Web.Hub.Models
 {
     public class StaticTextViewModel
     {
-        public bool IsRecordExists { get; set; }
-
         public string Name { get; set; }
 
         public string Scope { get; set; }
@@ -16,6 +14,8 @@ namespace ITJakub.Web.Hub.Models
 
     public class EditStaticTextViewModel : StaticTextViewModel
     {
+        public bool IsRecordExists { get; set; }
+
         public StaticTextFormatType Format { get; set; }
 
         public DateTime LastModificationTime { get; set; }
