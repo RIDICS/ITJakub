@@ -34,7 +34,7 @@ namespace Vokabular.ProjectImport.Test.UnitTests
 
             m_importPipelineBuilderMock =
                 mockFactory.Create<ImportPipelineBuilder>(new List<IProjectImportManager>(), new List<IProjectParser>(), null, null, null,
-                    null);
+                    null, null);
 
             m_importPipelineBuilderMock
                 .Setup(x => x.BuildResponseParserBlock(It.IsAny<string>(), It.IsAny<ExecutionDataflowBlockOptions>()))

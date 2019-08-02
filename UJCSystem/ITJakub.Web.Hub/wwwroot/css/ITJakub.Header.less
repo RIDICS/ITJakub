@@ -1,7 +1,9 @@
 ﻿@import "ITJakub.Colors.less";
+@import "ITJakub.Constants.less";
 @import "ITJakub.Fonts.less";
 
-.main_logo {
+.main_logo,
+.second_logo {
     margin: 10px;
     margin-left: 0;
     margin-right: 5px;
@@ -9,6 +11,8 @@
     display: inline-block;
 }
 
+
+a.second_logo_href,
 a.main_logo_href {
     color: white;
     text-decoration: none;
@@ -16,92 +20,165 @@ a.main_logo_href {
     padding-right: 1rem;
     padding-top: 2px;
     padding-bottom: 0;
-    float: left;
 
-    @media screen and (min-width: 1100px) {
+    img {
+        height: 3.5rem;
+        width: auto;
+        margin: .8rem 1rem;
+        margin-right: 0;
+        float: left;
+
+        @media screen and (max-width: @extra-large-screen) {
+            height: 3rem;
+            margin: 0.5rem;
+            margin-right: 0;
+            margin-left: 1rem;
+        }
+    }
+
+    @media screen and (min-width: @medium-screen) {
         padding-top: 0;
         padding-bottom: 2px;
     }
 
-    @media screen and (min-width: 1501px) {
-		padding: 0.1rem 0;
+    @media screen and (min-width: @extra-large-screen + 1px) {
+        padding: 0.1rem 0;
         padding-right: 0.5rem;
-	}
-}
-
-a.main_logo_href:hover {
-	background-color: @menu-hover-color;
-}
-
-a.main_logo_href img {
-    height: 3.5rem;
-    width: auto;
-    margin: .8rem 1rem;
-    margin-right: 0;
-    float: left;
-
-    @media screen and (max-width: 1500px) {
-        height: 3rem;
-        margin: 0.5rem;
-        margin-right: 0;
-        margin-left: 1rem;
     }
 }
 
-.main_logo_text {
+a.main_logo_href {
+    float: left;
+
+    &:hover {
+        background-color: @menu-hover-color;
+    }
+}
+
+a.second_logo_href {
+    float: right;
+    background-color: @button-background-color;
+
+    &:hover {
+        background-color: @button-hover-background-color
+    }
+}
+
+a.second_logo_href + .tooltip,
+a.main_logo_href + .tooltip {
+    @media screen and (min-width: @large-screen + 1px) {
+        display: none !important;
+    }
+
+    @media screen and (min-width: @small-screen + 1px) and (max-width: @medium-screen - 1px) {
+        display: none !important;
+    }
+}
+
+.main-navbar-container {
+    .tooltip {
+        .tooltip-arrow,
+        .tooltip-inner {
+            color: white;
+            border-radius: 0px;
+        }
+
+        .tooltip-inner {
+            background-color: @menu-background-color;
+            border: 1px solid white;
+        }
+
+        &.in {
+            opacity: 1;
+        }
+
+        &.right {
+            .tooltip-arrow {
+                border-right-color: white;
+            }
+        }
+
+        &.left {
+            .tooltip-arrow {
+                border-left-color: white;
+            }
+        }
+
+        &.bottom {
+            .tooltip-arrow {
+                border-bottom-color: #A9A9A9;
+            }
+        }
+    }
+}
+
+.main_logo_text,
+.second_logo_text {
     color: white;
     line-height: normal;
-    display: inline-block;
+    display: none;
     margin: .85rem 0 0;
     margin-left: .75rem;
     font-weight: bold;
-}
 
-.main_logo_text h1 {
-    display: inline;
-    display: block;
-    font-size: 22px;
-    font-weight: bold;
-    margin: 0;
-    font-family: @sanserif-font-family-1;
-    font-family: @sanserif-font-family-2;
-}
+    h1 {
+        display: inline;
+        display: block;
+        font-size: 22px;
+        font-weight: bold;
+        margin: 0;
+        font-family: @sanserif-font-family-1;
+        font-family: @sanserif-font-family-2;
+    }
 
-.main_logo_text h2 {
-    display: inline;
-    display: block;
-    font-size: 22px;
-    font-weight: bold;
-    margin: 0px 0 0;
-    font-family: @sanserif-font-family-3;
-    font-family: @sanserif-font-family-2;
-}
+    h2 {
+        display: inline;
+        display: block;
+        font-size: 22px;
+        font-weight: bold;
+        margin: 0px 0 0;
+        font-family: @sanserif-font-family-3;
+        font-family: @sanserif-font-family-2;
+    }
 
-@media screen and (max-width: 1500px) {
-    .main_logo_text {
+    @media screen and (max-width: @extra-large-screen) {
         margin: .65rem 0 0 .75rem;
-    }
 
-    .main_logo_text h1 {
-        font-size: 18px;
-    }
+        h1 {
+            font-size: 18px;
+        }
 
-    .main_logo_text h2 {
-        font-size: 18px;
-    }
+        h2 {
+            font-size: 18px;
+        }
+    }    
 }
 
 .main_logo_text {
-    @media screen and (max-width: 1199px) {
-        display: none;
-    }
-
-    @media screen and (max-width: 1099px) {
+    @media screen and (min-width: @extra-small-screen) {
         display: inline-block;
     }
 
-    @media screen and (max-width: 399px) {
+    @media screen and (min-width: @medium-screen) {
         display: none;
+    }
+
+    @media screen and (min-width: @medium2-screen) {
+        display: inline-block;
+    }
+}
+
+.second_logo_text {
+    @media screen and (min-width: @small-screen) {
+        display: inline-block;
+    }
+
+    @media screen and (min-width: @medium-screen) {
+        display: none;
+    }
+
+    @media screen and (min-width: @large-screen) {
+        display: inline-block;
     }
 }
 
@@ -119,19 +196,19 @@ a.main_logo_href img {
 
 ul.navbar-login,
 ul.navbar-language {
-    margin: 2.1rem 1rem 0 0;
-    float: right;
-    font-size: 16px;
-    font-weight: bold;
-    padding-left: 2rem;
+margin: 2.1rem 1rem 0 0;
+float: right;
+font-size: 16px;
+font-weight: bold;
+padding-left: 2rem;
 }
 
 .navbar-login li,
 .navbar-language li {
-    display: inline-block;
-    list-style: none;
+display: inline-block;
+list-style: none;
 
-    @media screen and (max-width: 1500px) {
+    @media screen and (max-width: @extra-large-screen) {
         display: block;
         position: relative;
     }
@@ -166,12 +243,12 @@ ul.navbar-language li:hover a {
     background-color: transparent;
     background-image: none;
     border: none;
-    margin: 0.55rem 1rem;
+    margin: 0.55rem 0.95rem;
     padding: 4px 0px 0px 0px;
     font-size: 200%;
     color: white;
     cursor: pointer;
-    
+
     ul.navbar-login,
     ul.navbar-language {
         display: none;
@@ -186,7 +263,7 @@ ul.navbar-language li:hover a {
         top: 100%;
         padding: 0;
         right: -14px;
-        width: 155px;
+        min-width: 135px;
         border: solid 1px @menu-hover-color;
     }
 
@@ -194,6 +271,47 @@ ul.navbar-language li:hover a {
     .navbar-language li a {
         padding: 8px 10px 8px 10px;
         display: block;
+    }
+
+    .navbar-login li {
+        margin: 0;
+        padding: 0;
+        display: inline-block;
+
+        a {
+            vertical-align: middle;
+
+            span {
+                text-align: center;
+                vertical-align: middle;
+                display: table-cell;
+            }
+        }
+    }
+
+    &.login {
+        a {
+            color: white;
+        }
+
+        @media screen and (max-width: @extra-large-screen) {
+            &:hover,
+            &.hover {
+                & > a span {
+                    opacity: 0.5;
+                }
+            }
+
+            .navbar-login li {
+                width: 100%;
+            }
+        }
+
+        @media screen and (min-width: @extra-large-screen + 1px) {
+            .navbar-login li {
+                max-width: 100px;
+            }
+        }
     }
 
     &:focus {
@@ -209,13 +327,100 @@ ul.navbar-language li:hover a {
     &.hover ul {
         display: block;
     }
+
+    @media screen and (min-width: @extra-large-screen + 1px) {
+        & + .tooltip {
+            display: none !important;
+        }
+    }
+}
+
+
+a.main_logo_href {
+    .main_logo_text {
+        @media screen and (min-width: @extra-small-screen) {
+            display: inline-block;
+        }
+
+        @media screen and (min-width: @medium-screen) {
+            display: none;
+        }
+
+        @media screen and (min-width: @medium2-screen) {
+            display: inline-block;
+        }
+    }
+
+    & + .tooltip {
+        display: block !important;
+
+        @media screen and (min-width: @extra-small-screen) {
+            display: none !important;
+        }
+
+        @media screen and (min-width: @medium-screen) {
+            display: block !important;
+        }
+
+        @media screen and (min-width: @medium2-screen) {
+            display: none !important;
+        }
+    }
+}
+
+a.second_logo_href {
+    .second_logo_text {
+        @media screen and (min-width: @small-screen) {
+            display: inline-block;
+        }
+
+        @media screen and (min-width: @medium-screen) {
+            display: none;
+        }
+
+        @media screen and (min-width: @large-screen) {
+            display: inline-block;
+        }
+    }
+
+    & + .tooltip {
+        display: block !important;
+
+        @media screen and (min-width: @small-screen) {
+            display: none !important;
+        }
+
+        @media screen and (min-width: @medium-screen) {
+            display: block !important;
+        }
+
+        @media screen and (min-width: @large-screen) {
+            display: none !important;
+        }
+    }
+}
+
+.main-navbar-container {
+    .navbar-toggle {
+        & + .tooltip {
+            display: block !important;
+
+            @media screen and (min-width: @medium-screen) {
+                display: none !important;
+            }
+        }
+
+        &.toggled + .tooltip {
+            display: none !important;
+        }
+    }
 }
 
 .secondary-navbar-toggle.login span {
     margin-right: 10px;
 }
 
-@media screen and (min-width: 1501px) {
+@media screen and (min-width: @extra-large-screen + 1px) {
     .secondary-navbar-toggle.login span {
         display: none;
         margin-right: 0;
@@ -233,7 +438,7 @@ ul.navbar-language li:hover a {
         -webkit-box-shadow: none;
         -moz-box-shadow: none;
         border: none;
-        width: 370px;
+        width: 180px;
         z-index: 1;
         text-align: right;
         margin-right: 20px;
@@ -249,6 +454,7 @@ ul.navbar-language li:hover a {
         margin: 10px 0;
         margin-right: 20px;
     }
+
     .secondary-navbar-toggle ul.navbar-language li {
         display: block;
     }
@@ -260,15 +466,15 @@ ul.navbar-language li:hover a {
     padding: 4px 0px 0px 0px;
     font-size: 200%;
     color: white;
-}
 
-.navbar-toggle .icon-bar {
-    height: 3px;
-    width: 2rem;
-}
+    .icon-bar {
+        height: 3px;
+        width: 2rem;
+    }
 
-.navbar-toggle .icon-bar + .icon-bar {
-    margin-top: .5rem;
+    .icon-bar + .icon-bar {
+        margin-top: .5rem;
+    }
 }
 
 .navbar-inverse .navbar-toggle {

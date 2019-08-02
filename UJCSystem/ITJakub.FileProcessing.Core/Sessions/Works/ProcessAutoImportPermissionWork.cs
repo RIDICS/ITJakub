@@ -4,7 +4,7 @@ using ITJakub.FileProcessing.DataContracts;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 using Vokabular.Shared.Const;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Works
@@ -42,7 +42,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
             var groups = new List<UserGroup>();
             foreach (var role in roles)
             {
-                var permission = m_permissionRepository.FindGroupByExternalIdOrCreate(role.Id);
+                var permission = m_permissionRepository.FindGroupByExternalIdOrCreate(role.Id, role.Name);
                 if (permission != null)
                 {
                     groups.Add(permission);

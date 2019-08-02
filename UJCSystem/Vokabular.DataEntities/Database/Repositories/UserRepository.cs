@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
 {
-    public class UserRepository : NHibernateDao
+    public class UserRepository : MainDbRepositoryBase
     {
-        public UserRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public UserRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
         }
 
@@ -69,6 +68,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             {
                 Name = defaultRegisteredGroupName,
                 CreateTime = now,
+                LastChange = now,
                 ExternalId = getExternalId.Invoke(),
             };
 

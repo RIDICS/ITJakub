@@ -11,26 +11,51 @@ $(document as Node as Element).ready(() => {
     localization = new Localization();
     localization.configureSiteUrl(getBaseUrl());
 
+    // Fix navigation menu behavior for touch devices
+    var collapsibleMenu = $(".main-navbar-container .navbar-collapse.collapse");
+    var navbarItems = $(".secondary-navbar-toggle");
+    $(".main-navbar-container [data-toggle=\"tooltip\"]").tooltip();
+
     $('#main-plugins-menu').find('li').removeClass('active');
     var href = window.location.pathname;
     var liTargetingActualPage = $('#main-plugins-menu').find("a[href='" + href.toString() + "']").parent('li');
     $(liTargetingActualPage).addClass('active');
     $(liTargetingActualPage).parents('li').addClass('active');
 
-    // Fix navigation menu behavior for touch devices
-    $("#main-plugins-menu > ul > li > a").on("touchstart", (event) => {
-        event.preventDefault();
-        var $liElement = $(event.currentTarget as Node as Element).closest(".has-sub");
-        $liElement.siblings().removeClass("hover");
-        $liElement.toggleClass("hover");
-    });
-    $(".secondary-navbar-toggle").on("touchstart", (event) => {
-        if ($(event.target as Node as Element).is("a")) {
-            return;
-        }
-        var $buttonElement = $(event.currentTarget as Node as Element);
-        $buttonElement.siblings(".secondary-navbar-toggle").removeClass("hover");
-        $buttonElement.toggleClass("hover");
+    $(".navbar-toggle .glyphicon.glyphicon-menu-hamburger").on("touchstart",
+        (event) => {
+            $(event.currentTarget.parentElement).toggleClass("toggled");
+        });
+
+    $("#defaultUserMenuItemLink").on("touchstart touchend",
+        (event) => {
+            event.preventDefault();
+        });
+
+    $("#main-plugins-menu > ul > li > a").on("touchstart",
+        (event) => {
+            event.preventDefault();
+            var $liElement = $(event.currentTarget as Node as Element).closest(".has-sub");
+            $liElement.siblings().removeClass("hover");
+            navbarItems.removeClass("hover");
+            $liElement.toggleClass("hover");
+        });
+    navbarItems.on("touchstart",
+        (event) => {
+            var target = $(event.target as Node as Element);
+            if (target.is("a")) {
+                return;
+            }
+            event.preventDefault();
+            collapsibleMenu.collapse("hide");
+            var $buttonElement = $(event.currentTarget as Node as Element);
+            $buttonElement.siblings(".secondary-navbar-toggle").removeClass("hover");
+            $("#main-plugins-menu > ul > li").removeClass("hover");
+            $buttonElement.toggleClass("hover");
+        });
+
+    collapsibleMenu.on("show.bs.collapse", () => {
+        $(".secondary-navbar-toggle").removeClass("hover");
     });
 });
 
@@ -78,7 +103,7 @@ function updateQueryStringParameter(key, value) {
 }
 
 function getBaseUrl() {
-    var baseUrl = $("#baseUrl").data("path");
+    var baseUrl = $("#baseUrl").data("path") as string;
     if (typeof baseUrl === "undefined") {
         baseUrl = "/";
     }
@@ -115,10 +140,6 @@ function onClickHref(event:JQuery.Event, targetUrl) {
     }
 }
 
-interface JQueryStatic {
-    expr: any;
-}
-
 // An implementation of a case-insensitive contains pseudo
 // made for all versions of jQuery
 ($ => {//TODO requires testing
@@ -134,7 +155,7 @@ interface JQueryStatic {
 
     $.expr.pseudos.containsCI = $.expr.createPseudo ?
         $.expr.createPseudo(text => elem => icontains(elem, text)) :
-        (elem, i, match) => icontains(elem, match[3]);
+        <any>((elem, i, match) => icontains(elem, match[3])); //ELSE branch for backward compatibility - probably not required
 
 })(jQuery);
 

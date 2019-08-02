@@ -5,10 +5,10 @@
     ViewBag.Title = @Localizer.Translate("LemmatizationList", "Lemmatization");
 }
 @section styles{
-    <link href="~/Areas/Lemmatization/css/itjakub.lemmatization.css" rel="stylesheet" />
+    <link asp-append-version="true" href="~/Areas/Lemmatization/css/itjakub.lemmatization.css" rel="stylesheet" />
 }
 @section scripts{
-    <script src="~/Areas/Lemmatization/js/itjakub.lemmatization.bundle.js"></script>
+    <script asp-append-version="true" src="~/Areas/Lemmatization/js/itjakub.lemmatization.bundle.js"></script>
 }
 
 <script type="text/javascript">

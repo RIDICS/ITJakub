@@ -100,13 +100,14 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [Authorize(PermissionNames.EditAnyUsersData)]
-        [HttpPut("{userId}/edit")]
-        public IActionResult UpdateUser(int userId, [FromBody] UpdateUserContract data)
+        [Authorize(PermissionNames.EditSelfContacts)]
+        [HttpPut("current/contact")]
+        public IActionResult UpdateCurrentUserContacts([FromBody] UpdateUserContactContract data)
         {
             try
             {
-                m_userManager.UpdateUser(userId, data);
+                var user = m_authenticationManager.GetCurrentUser();
+                m_userManager.UpdateUserContact(user.Id, data);
                 return Ok();
             }
             catch (HttpErrorCodeException exception)
@@ -124,7 +125,8 @@ namespace Vokabular.MainService.Controllers
         {
             try
             {
-                m_userManager.UpdateUserPassword(data);
+                var userId = m_authenticationManager.GetCurrentUserId();
+                m_userManager.UpdateUserPassword(userId, data);
                 return Ok();
             }
             catch (HttpErrorCodeException exception)
@@ -148,6 +150,15 @@ namespace Vokabular.MainService.Controllers
             return result.List;
         }
 
+        [Authorize(PermissionNames.ListUsers)]
+        [HttpGet("autocomplete")]
+        public IList<UserDetailContract> GetAutocomplete([FromQuery] string query, [FromQuery] int? count)
+        {
+            var result = m_userManager.GetUserAutocomplete(query, count);
+            return result;
+        }
+
+
         [HttpGet("{userId}/detail")]
         public UserDetailContract GetUserDetail(int userId)
         {
@@ -162,12 +173,120 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
-        [Authorize(PermissionNames.ListUsers)]
-        [HttpGet("autocomplete")]
-        public IList<UserDetailContract> GetAutocomplete([FromQuery] string query, [FromQuery] int? count)
+        [Authorize(PermissionNames.EditAnyUsersData)]
+        [HttpPut("{userId}")]
+        public IActionResult UpdateUser(int userId, [FromBody] UpdateUserContract data)
         {
-            var result = m_userManager.GetUserAutocomplete(query, count);
-            return result;
+            try
+            {
+                m_userManager.UpdateUser(userId, data);
+                return Ok();
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Message);
+            }
+            catch (AuthServiceApiException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Description);
+            }
+        }
+
+        [Authorize(PermissionNames.EditAnyUsersData)]
+        [HttpPut("{userId}/contact")]
+        public IActionResult UpdateUserContact(int userId, [FromBody] UpdateUserContactContract data)
+        {
+            try
+            {
+                m_userManager.UpdateUserContact(userId, data);
+                return Ok();
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Message);
+            }
+            catch (AuthServiceApiException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Description);
+            }
+        }
+
+        [HttpPost("current/contact/confirmation")]
+        public IActionResult ConfirmContact([FromBody] ConfirmUserContactContract data)
+        {
+            try
+            {
+                var userId = m_authenticationManager.GetCurrentUserId();
+                var result = m_userManager.ConfirmContact(userId, data);
+                return Json(result);
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Message);
+            }
+            catch (AuthServiceApiException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Description);
+            }
+        }
+
+        [HttpPost("current/contact/confirmation/resend")]
+        public IActionResult ResendConfirmCode([FromBody] UserContactContract data)
+        {
+            try
+            {
+                var userId = m_authenticationManager.GetCurrentUserId();
+                m_userManager.ResendConfirmCode(userId, data);
+                return Ok();
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Message);
+            }
+            catch (AuthServiceApiException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Description);
+            }
+        }
+
+        [Authorize(PermissionNames.SetTwoFactor)]
+        [HttpPut("current/two-factor")]
+        public IActionResult TwoFactor([FromBody] UpdateTwoFactorContract data)
+        {
+            try
+            {
+                var userId = m_authenticationManager.GetCurrentUserId();
+                m_userManager.SetTwoFactor(userId, data);
+                return Ok();
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Message);
+            }
+            catch (AuthServiceApiException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Description);
+            }
+        }
+
+        [Authorize(PermissionNames.SelectTwoFactorProvider)]
+        [HttpPut("current/two-factor/provider")]
+        public IActionResult TwoFactorProvider([FromBody] UpdateTwoFactorProviderContract data)
+        {
+            try
+            { 
+                var userId = m_authenticationManager.GetCurrentUserId();
+                m_userManager.SelectTwoFactorProvider(userId, data);
+                return Ok();
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Message);
+            }
+            catch (AuthServiceApiException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Description);
+            }
         }
     }
 }

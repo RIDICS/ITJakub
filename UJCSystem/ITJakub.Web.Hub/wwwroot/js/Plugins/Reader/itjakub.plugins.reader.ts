@@ -1558,9 +1558,9 @@ class SettingsPanel extends LeftSidePanel {
         var showPageNameCheckbox: HTMLInputElement = window.document.createElement("input");
         showPageNameCheckbox.type = "checkbox";
 
-        $(showPageNameCheckbox).change((eventData: JQuery.Event) => {
+        $(showPageNameCheckbox).change((eventData) => {
             var readerText:JQuery = $("#" + this.parentReader.textPanelIdentificator).find(".reader-text");
-            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
+            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget as Node as HTMLElement);
             if (currentTarget.checked) {
                 readerText.addClass("reader-text-show-page-names");
             } else {
@@ -1579,9 +1579,9 @@ class SettingsPanel extends LeftSidePanel {
         var showPageOnNewLineCheckbox: HTMLInputElement = window.document.createElement("input");
         showPageOnNewLineCheckbox.type = "checkbox";
 
-        $(showPageOnNewLineCheckbox).change((eventData: JQuery.Event) => {
+        $(showPageOnNewLineCheckbox).change((eventData) => {
             var readerText = $("#" + this.parentReader.textPanelIdentificator).find(".reader-text");
-            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
+            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget as Node as HTMLElement);
             if (currentTarget.checked) {
                 $(readerText).addClass("reader-text-page-new-line");
             } else {
@@ -1600,9 +1600,9 @@ class SettingsPanel extends LeftSidePanel {
         var showCommentCheckbox: HTMLInputElement = window.document.createElement("input");
         showCommentCheckbox.type = "checkbox";
 
-        $(showCommentCheckbox).change((eventData: JQuery.Event) => {
+        $(showCommentCheckbox).change((eventData) => {
             var readerText = $("#" + this.parentReader.textPanelIdentificator).find(".reader-text");
-            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
+            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget as Node as HTMLElement);
             if (currentTarget.checked) {
                 $(readerText).addClass("show-notes");
             } else {
@@ -2182,10 +2182,10 @@ class TextPanelOld extends RightSidePanel {
         var textContainerDiv: HTMLDivElement = window.document.createElement("div");
         $(textContainerDiv).addClass("reader-text-container");
 
-        $(textContainerDiv).scroll((event: JQuery.Event) => {
+        $(textContainerDiv).scroll((event) => {
             this.parentReader.clickedMoveToPage = false;
 
-            var pages = $(event.target as Node as Element).find(".page");
+            var pages = $(event.target as Node as HTMLElement).find(".page");
             var minOffset = Number.MAX_VALUE;
             var pageWithMinOffset;
             $.each(pages, (index, page) => {

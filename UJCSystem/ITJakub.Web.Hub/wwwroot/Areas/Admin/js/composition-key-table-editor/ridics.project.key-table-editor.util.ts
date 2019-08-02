@@ -1,6 +1,6 @@
 ﻿class KeyTableUtilManager {
     //category section start
-    getCategoryList(): JQueryXHR {
+    getCategoryList(): JQuery.jqXHR<ICategoryContract[]> {
         const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetCategoryList`);
         return ajax;
     }
@@ -51,7 +51,7 @@
         return $.post(url, { request: payload } as JQuery.PlainObject);
     }
 
-    getLiteraryGenreList() {
+    getLiteraryGenreList(): JQuery.jqXHR<IGenreResponseContract[]> {
         const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetLiteraryGenreList`);
         return ajax;
     }
@@ -80,7 +80,7 @@
     //genre section end
 
     //kind section start
-    getLitararyKindList() {
+    getLitararyKindList(): JQuery.jqXHR<ILiteraryKindContract[]> {
         const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetLiteraryKindList`);
         return ajax;
     }
@@ -115,7 +115,7 @@
     //kind section end
 
     //responsible person type section start
-    getResponsiblePersonTypeList(): JQueryXHR {
+    getResponsiblePersonTypeList(): JQuery.jqXHR<IResponsibleType[]> {
         const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetResponsibleTypeList`);
         return ajax;
     }
@@ -152,7 +152,7 @@
     }
     //responsible person type section end
     //responsible person section start
-    getResponsiblePersonList(start: number, count: number): JQueryXHR {
+    getResponsiblePersonList(start: number, count: number): JQuery.jqXHR<IPagedResult<IResponsiblePerson>> {
         const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetResponsiblePersonList`,
             {
                 start: start,
@@ -191,7 +191,7 @@
     //responsible person section end
 
     //literary original section start
-    getLiteraryOriginalList(): JQueryXHR {
+    getLiteraryOriginalList(): JQuery.jqXHR<ILiteraryOriginalContract[]> {
         const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetLiteraryOriginalList`);
         return ajax;
     }
@@ -227,7 +227,7 @@
 
     //literary original section end
     //original author section start
-    getOriginalAuthorList(start?: number, count?: number): JQueryXHR {
+    getOriginalAuthorList(start?: number, count?: number): JQuery.jqXHR<IPagedResult<IOriginalAuthor>> {
         const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetOriginalAuthorList`,
             {
                 start: start,
@@ -266,7 +266,7 @@
     //original author section end
 
     //keyword section start
-    getKeywordList(start?: number, count?: number): JQueryXHR {
+    getKeywordList(start?: number, count?: number): JQuery.jqXHR<IPagedResult<IKeywordContract>> {
         const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetKeywordList`, {
             start: start,
             count: count

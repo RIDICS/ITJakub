@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Permission
 {
@@ -25,20 +25,22 @@ namespace Vokabular.MainService.Core.Works.Permission
 
         protected override void ExecuteWorkImplementation()
         {
-            var group = m_permissionRepository.FindGroupByExternalId(m_roleId);
-            var user = m_permissionRepository.FindById<User>(m_userId);
+            var group = m_permissionRepository.FindGroupByExternalIdOrCreate(m_roleId);
+            var user = m_permissionRepository.GetUserWithGroups(m_userId);
             if (user.ExternalId == null)
             {
                 throw new ArgumentException($"User with ID {user.Id} has missing ExternalID");
             }
 
-            if (group.Users == null)
+            if (user.Groups == null)
             {
-                group.Users = new List<User>();
+                user.Groups = new List<UserGroup>();
             }
 
-            group.Users.Add(user);
-            m_permissionRepository.Save(group);
+            // Assign group to user (fetch lower amount of data)
+
+            user.Groups.Add(group);
+            m_permissionRepository.Save(user);
             m_permissionRepository.Flush();
 
 

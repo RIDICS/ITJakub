@@ -2,10 +2,10 @@
 using System.Linq;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.ProjectImport.Works.FilteringExpressionSetManagement;
 using Vokabular.RestClient.Results;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.ProjectImport.Managers
 {

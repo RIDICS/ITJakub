@@ -16,7 +16,7 @@ namespace Vokabular.ProjectImport.Test.Mock
         protected override void RegisterFunctions()
         {
             base.RegisterFunctions();
-            RegisterFunction("current_timestamp", new NoArgSQLFunction("TEXT", NHibernateUtil.DateTime2, true));
+            RegisterFunction("current_timestamp", new NoArgSQLFunction("TEXT", NHibernateUtil.DateTime, true));
 
         }
 

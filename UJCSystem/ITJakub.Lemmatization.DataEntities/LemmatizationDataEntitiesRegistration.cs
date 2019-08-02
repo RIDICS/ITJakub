@@ -1,7 +1,8 @@
 ﻿using ITJakub.Lemmatization.DataEntities.Repositories;
 using Microsoft.Extensions.DependencyInjection;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Vokabular.Shared.Container;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace ITJakub.Lemmatization.DataEntities
 {
@@ -9,7 +10,7 @@ namespace ITJakub.Lemmatization.DataEntities
     {
         public void Install(IServiceCollection services)
         {
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.TryAddScoped<UnitOfWorkProvider>();
 
             services.AddScoped<LemmatizationRepository>();
         }

@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -18,6 +19,7 @@ using Vokabular.OaiPmhImportManager.Model;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
 using Vokabular.ProjectImport.Model.Exceptions;
+using Vokabular.ProjectImport.Permissions;
 using Vokabular.ProjectImport.Test.Mock;
 using Vokabular.ProjectParsing.Model.Parsers;
 
@@ -68,9 +70,13 @@ namespace Vokabular.ProjectImport.Test.IntegrationTests
                     })
                 .Returns(Task.CompletedTask);
 
+            var permissionProviderMock = mockFactory.Create<IPermissionsProvider>();
+            permissionProviderMock.Setup(x => x.GetPermissionByName(It.IsAny<string>())).Returns((PermissionContract) null);
+
             var mockIoc = new MockIocContainer(true);
             mockIoc.ServiceCollection.Replace(new ServiceDescriptor(typeof(IProjectImportManager),
                 oaiPmhProjectImportManagerMock.Object));
+            mockIoc.ServiceCollection.Replace(new ServiceDescriptor(typeof(IPermissionsProvider), permissionProviderMock.Object));
 
             var serviceProvider = mockIoc.CreateServiceProvider();
 

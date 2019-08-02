@@ -1,8 +1,7 @@
 ﻿@using Scalesoft.Localization.AspNetCore
-@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<ITJakub.Web.Hub.Models.UserDetailViewModel>
+@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<ITJakub.Web.Hub.Models.User.UserDetailViewModel>
 
 @inject ILocalizationService Localizer
-
 
 @if (!string.IsNullOrEmpty(Model.SearchQuery))
 {

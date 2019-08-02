@@ -1,0 +1,11 @@
+{
+  "culture": "en",
+  "scope": "TwoFactorProviders",
+  "dictionary": {
+    "Default": "Default",
+    "Default-SmsTokenProvider": "Default channel (SMS)",
+    "Default-EmailTokenProvider": "Default channel (E-mail)",
+    "SmsTokenProvider": "SMS",
+    "EmailTokenProvider": "E-mail"
+  }
+}

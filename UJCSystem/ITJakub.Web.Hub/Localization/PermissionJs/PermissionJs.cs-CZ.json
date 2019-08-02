@@ -1,23 +1,40 @@
 {
-	"culture":"cs-CZ",
-	"scope":"PermissionJs",
-	"dictionary": {
-		"News" : "Novinky",
-		"BookUploading" : "Nahrávání děl",
-		"PermissionManagement" : "Správa práv",
-		"FeedbackManagement" : "Správa připomínek",
-		"ReadCardFile" : "Prohlížení kartoték",
-		"AutoImport" : "Automatické právo na kategorii",
-		"ReadLemmatization" : "Prohlížení lematizace",
-		"EditLemmatization" : "Úprava lematizace",
-		"DerivateLemmatization" : "Derivace hláskových podob",
-		"PrintEdition" : "Tisk edic",
-		"EditStaticText" : "Úprava statických textů",
-		"UnknownPermission" : "Neznámé právo",
-		
-		"AddNews" : "Přidávat novinky",
-		"UploadBook" : "Nahrávat díla",
-		"ManagePermissions" : "Spravovat práva",
-		"ReadFeedback" : "Číst připomínky"
-		}
+  "culture": "cs-CZ",
+  "scope": "PermissionJs",
+  "dictionary": {
+    "News": "Novinky",
+    "BookUploading": "Nahrávání děl",
+    "PermissionManagement": "Správa práv",
+    "FeedbackManagement": "Správa připomínek",
+    "ReadCardFile": "Prohlížení kartoték",
+    "AutoImport": "Automatické právo na kategorii",
+    "ReadLemmatization": "Prohlížení lematizace",
+    "EditLemmatization": "Úprava lematizace",
+    "DerivateLemmatization": "Derivace hláskových podob",
+    "PrintEdition": "Tisk edic",
+    "EditStaticText": "Úprava statických textů",
+    "UnknownPermission": "Neznámé právo",
+
+    "AddNews": "Přidávat novinky",
+    "UploadBook": "Nahrávat díla",
+    "ManagePermissions": "Spravovat práva",
+    "ReadFeedback": "Číst připomínky",
+
+    "ListError": "Nastala neočekávaná chyba při načítání stránky seznamu.",
+    "PermissionError": "Nastala neočekávaná chyba při nastavování práv.",
+    "DeleteRoleError": "Nastala neočekávaná chyba při odstraňování skupiny.",
+    "CreateRoleError": "Nastala neočekávaná chyba při vytváření skupiny.",
+    "RemoveUserFromRoleError": "Nastala neočekávaná chyba při odstraňování uživatele ze skupiny.",
+    "AddUserToRoleError": "Nastala neočekávaná chyba při přidávání uživatele do skupiny.",
+    "CreateRoleWithUserError": "Nastala neočekávaná chyba při vytváření skupiny s uživatelem.",
+    "RoleIsNotSelected": "Není vybrána skupina.",
+    "ProjectIsNotSelected": "Není vybrán projekt.",
+    "RemoveProjectFromRoleError": "Nastala neočekávaná chyba při odstraňování práva na projekt ze skupiny.",
+    "AddProjectToRoleError": "Nastala neočekávaná chyba při přidávání práva na projekt skupině.",
+
+    "Cancel": "Zrušit",
+    "Delete": "Smazat",
+    "Warning": "Upozornění",
+    "DeleteRoleConfirm": "Opravdu chcete smazat skupinu {0}?"
+  }
 }

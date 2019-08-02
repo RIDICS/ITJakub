@@ -4,7 +4,7 @@ using System.Linq;
 using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Users
 {
@@ -75,6 +75,7 @@ namespace Vokabular.MainService.Core.Works.Users
                         ExternalId = roleContract.Id,
                         Name = roleContract.Name,
                         CreateTime = now,
+                        LastChange = now,
                     };
 
                     m_userRepository.Create(newDbRole);

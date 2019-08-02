@@ -1,6 +1,6 @@
 ﻿using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.ProjectParsing.Model.Entities;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 using Project = Vokabular.DataEntities.Database.Entities.Project;
 
 namespace Vokabular.ProjectImport.Works

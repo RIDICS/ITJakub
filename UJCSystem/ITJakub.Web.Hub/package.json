@@ -5,9 +5,10 @@
   "devDependencies": {
     "@types/bootstrap": "3.3.42",
     "@types/codemirror": "0.0.46",
-    "@types/dropzone": "4.3.36",
+    "@types/dropzone": "5.0.6",
     "@types/gijgo": "0.6.6",
-    "@types/jquery": "3.2.17",
+    "@types/he": "1.1.0",
+    "@types/jquery": "3.3.30",
     "@types/jquery-validation-unobtrusive": "3.2.32",
     "@types/jquery.validation": "1.16.4",
     "@types/jqueryui": "1.12.7",
@@ -25,7 +26,7 @@
     "gulp-watch": "5.0.1",
     "gulp-yarn": "2.0.0",
     "rimraf": "2.6.3",
-    "typescript": "2.9.2"
+    "typescript": "3.5.3"
   },
   "resolutions": {
     "@types/jquery": "3.2.17"

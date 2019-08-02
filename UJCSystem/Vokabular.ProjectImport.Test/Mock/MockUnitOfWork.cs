@@ -1,5 +1,5 @@
 ﻿using NHibernate;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.ProjectImport.Test.Mock
 {

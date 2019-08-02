@@ -27,6 +27,7 @@
     "Derivation": "Derivation of spell forms",
     "UserManagement": "User management",
     "GroupManagement": "Group management",
+    "BookPermissionManagement": "Project's permission management",
     "FeedbackManagement": "Feedback management",
     "FavoriteItems": "Favorite items",
     "AddNews": "Add news",
@@ -37,6 +38,8 @@
     "Support": "Support",
     "HowToCite": "How to cite",
     "RepositoryImport": "Import from repositories",
+    "MyProjects": "My projects",
+    "CodeLists": "Code lists",
 
     "FooterText": "VOKABULÁŘ WEBOVÝ was launched {0} ago",
     "UjcLong": "Institute of the Czech Language",

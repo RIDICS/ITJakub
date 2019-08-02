@@ -173,8 +173,8 @@ $(document.documentElement).ready(() => {
                     $(removeGlyph).addClass("glyphicon glyphicon-trash");
                     feedbackDeleteButton.appendChild(removeGlyph);
 
-                    $(feedbackDeleteButton).click((event: JQuery.Event) => {
-                        var elementId = $(event.target as Element).parents(".feedback").attr("id");
+                    $(feedbackDeleteButton).click((event) => {
+                        var elementId = $(event.target as Node as HTMLElement).parents(".feedback").attr("id");
                         deleteFeedback(elementId);
                     });
 

@@ -1,13 +1,12 @@
 ﻿using NHibernate;
-using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
 {
-    public class ImportedProjectMetadataRepository : NHibernateDao
+    public class ImportedProjectMetadataRepository : MainDbRepositoryBase
     {
-        public ImportedProjectMetadataRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public ImportedProjectMetadataRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
         }
 

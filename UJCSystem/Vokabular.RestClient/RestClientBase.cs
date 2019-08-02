@@ -263,7 +263,7 @@ namespace Vokabular.RestClient
             });
         }
 
-        protected Task<T> PostStreamAsFormAsync<T>(string uriPath, Stream data, IEnumerable<Tuple<string, string>> headers = null)
+        protected Task<T> PostStreamAsFormAsync<T>(string uriPath, Stream data, string fileName, IEnumerable<Tuple<string, string>> headers = null)
         {
             return Task.Run(async () =>
             {
@@ -273,7 +273,7 @@ namespace Vokabular.RestClient
                     fileStreamContent.Headers.ContentType = new MediaTypeHeaderValue(ContentTypes.ApplicationOctetStream);
 
                     var content = new MultipartFormDataContent();
-                    content.Add(fileStreamContent, "file");
+                    content.Add(fileStreamContent, "File", fileName);
 
                     var request = CreateRequestMessage(HttpMethod.Post, uriPath, headers);
                     request.Content = content;
@@ -398,7 +398,7 @@ namespace Vokabular.RestClient
                 throw new HttpErrorCodeException(validationResult.Message, responseStatusCode, validationResult.Errors);
             }
 
-            var exceptionMessage = GetExceptionMessage(responseContent, responseStatusCode);
+            var exceptionMessage = responseContent.Trim('\"');
             throw new HttpErrorCodeException(exceptionMessage, response.StatusCode);
         }
 
@@ -424,11 +424,6 @@ namespace Vokabular.RestClient
             {
                 return false;
             }
-        }
-
-        private string GetExceptionMessage(string message, HttpStatusCode statusCode)
-        {
-            return $"({(int) statusCode}) {message}";
         }
 
         protected string GetCurrentMethod([CallerMemberName] string methodName = null)

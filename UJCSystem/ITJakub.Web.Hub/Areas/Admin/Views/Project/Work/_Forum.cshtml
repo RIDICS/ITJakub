@@ -1,0 +1,51 @@
+﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ForumViewModel
+@using Scalesoft.Localization.AspNetCore
+@inject ILocalizationService Localizer
+
+<div class="container-fluid">
+    <div class="row"></div>
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-3 control-label">
+                @Localizer.Translate("Name", "Admin")
+            </label>
+            <div class="col-md-9">
+                <span id="forum-name" class="text-as-form-control">
+                    @(Model != null ? Model.Name : "-")
+                </span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-3 control-label">
+                @Localizer.Translate("URL", "Admin")
+            </label>
+            <div class="col-md-9">
+                <span id="forum-url" class="text-as-form-control">
+                    @if (Model != null)
+                    {
+                        <a href="@Model.Url">@Model.Url</a>
+                    }
+                    else
+                    {
+                        <span>-</span>
+                    }
+                </span>
+            </div>
+        </div>
+    </div>
+    @if (Model == null)
+    {
+        <div class="row" id="forum-repair-block">
+            <div class="col-xs-12">
+                <b>@Localizer.Translate("ForumRepairText", "Admin")</b>
+                <div id="forum-button-panel">
+                    <div class="alert alert-success" id="forum-repair-success">@Localizer.Translate("ForumRepairSuccess", "Admin")</div>
+                    <div class="alert alert-danger" id="forum-repair-error">@Localizer.Translate("ForumRepairError", "Admin")</div>
+                    <button type="submit" id="forum-repair-button" class="btn btn-default save-button">
+                        <span class="saving-icon loading-small-button"></span>@Localizer.Translate("Repair", "Admin")
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>

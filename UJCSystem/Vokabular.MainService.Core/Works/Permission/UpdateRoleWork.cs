@@ -1,6 +1,7 @@
-﻿using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
+﻿using System;
+using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 using AuthRoleContract = Ridics.Authentication.DataContracts.RoleContract;
 using RoleContract = Vokabular.MainService.DataContracts.Contracts.Permission.RoleContract;
 
@@ -21,8 +22,9 @@ namespace Vokabular.MainService.Core.Works.Permission
 
         protected override void ExecuteWorkImplementation()
         {
-            var group = m_permissionRepository.FindGroupByExternalId(m_data.Id);
+            var group = m_permissionRepository.FindGroupByExternalIdOrCreate(m_data.Id);
             group.Name = m_data.Name;
+            group.LastChange = DateTime.UtcNow;
             m_permissionRepository.Save(group);
             m_permissionRepository.Flush();
 

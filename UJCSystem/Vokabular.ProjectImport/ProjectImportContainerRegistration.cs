@@ -5,6 +5,7 @@ using Vokabular.OaiPmhImportManager;
 using Vokabular.ProjectImport.AutoMapperProfiles;
 using Vokabular.ProjectImport.ImportPipeline;
 using Vokabular.ProjectImport.Managers;
+using Vokabular.ProjectImport.Permissions;
 
 namespace Vokabular.ProjectImport
 {
@@ -23,6 +24,8 @@ namespace Vokabular.ProjectImport
             container.AddScoped<ImportedProjectManager>();
 
             container.AddScoped<CommunicationFactory>();
+
+            container.AddScoped<IPermissionsProvider, PermissionProvider>();
             
             container.AddHostedService<ProjectImportBackgroundService>();
             container.AddSingleton<MainImportManager>();

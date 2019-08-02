@@ -75,6 +75,7 @@
     <Compile Include="Mock\MockProjectRepository.cs" />
     <Compile Include="Mock\MockResourceRepository.cs" />
     <Compile Include="Mock\MockUnitOfWork.cs" />
+    <Compile Include="Mock\MockUnitOfWorkProvider.cs" />
     <Compile Include="SaveNewBookTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -90,6 +91,10 @@
     <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj">
       <Project>{7ff7fb5d-4eff-46dd-9682-21dd476abcb0}</Project>
       <Name>Vokabular.DataEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vokabular.Shared.DataEntities\Vokabular.Shared.DataEntities.csproj">
+      <Project>{1d302489-8778-4dec-9bcf-ee35f90af87b}</Project>
+      <Name>Vokabular.Shared.DataEntities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

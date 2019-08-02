@@ -215,9 +215,9 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
         $(".text-results-table-body").off("click", ".result-row");
         $(".text-results-table-body").on("click",
             ".result-row",
-            (event: JQuery.Event) => {
+            (event) => {
                 console.log(event.target);
-                var clickedRow = $(event.target as Node as Element).closest(".result-row");
+                var clickedRow = $(event.target).closest(".result-row");
 
                 clickedRow.siblings(".result-row").removeClass("clicked");
                 clickedRow.addClass("clicked");
@@ -641,7 +641,7 @@ class BohemianTextBankSingleLazyload extends BohemianTextBankSingle {
         updateQueryStringParameter(this.urlSortCriteriaKey, sortingEnum);
         updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
 
-        $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchGetResultSnapshotListPageOfIdsWithResultNumbers`, payload as JQuery.PlainObject)
+        this.basicApiClient.advancedSearchGetResultSnapshotListPageOfIdsWithResultNumbers(payload)
             .done((bookIds: ICoprusSearchSnapshotResult) => {
                 const totalCount = bookIds.totalCount;
                 const snapshotStructureArray = bookIds.snapshotList;
@@ -706,7 +706,7 @@ class BohemianTextBankSingleLazyload extends BohemianTextBankSingle {
         updateQueryStringParameter(this.urlSortCriteriaKey, sortingEnum);
         updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
 
-        $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/BasicSearchGetResultSnapshotListPageOfIdsWithResultNumbers`, payload as JQuery.PlainObject)
+        this.basicApiClient.basicSearchGetResultSnapshotListPageOfIdsWithResultNumbers(payload)
             .done((bookIds: ICoprusSearchSnapshotResult) => {
                 const totalCount = bookIds.totalCount;
                 const snapshotStructureArray = bookIds.snapshotList;
@@ -920,7 +920,7 @@ class BohemianTextBankSinglePaged extends BohemianTextBankSingle {
         updateQueryStringParameter(this.urlSortCriteriaKey, sortingEnum);
         updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
 
-        $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/AdvancedSearchGetResultSnapshotListPageOfIdsWithResultNumbers`, payload as JQuery.PlainObject)
+        this.basicApiClient.advancedSearchGetResultSnapshotListPageOfIdsWithResultNumbers(payload)
             .done((bookIds: ICoprusSearchSnapshotResult) => {
                 const totalCount = bookIds.totalCount;
                 const snapshotStructureArray = bookIds.snapshotList;
@@ -988,7 +988,7 @@ class BohemianTextBankSinglePaged extends BohemianTextBankSingle {
         updateQueryStringParameter(this.urlSortCriteriaKey, sortingEnum);
         updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
 
-        $.post(`${getBaseUrl()}BohemianTextBank/BohemianTextBank/BasicSearchGetResultSnapshotListPageOfIdsWithResultNumbers`, payload as JQuery.PlainObject)
+        this.basicApiClient.basicSearchGetResultSnapshotListPageOfIdsWithResultNumbers(payload)
             .done((bookIds: ICoprusSearchSnapshotResult) => {
                 const totalCount = bookIds.totalCount;
                 const snapshotStructureArray = bookIds.snapshotList;

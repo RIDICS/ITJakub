@@ -1,6 +1,6 @@
 ﻿@using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
-@model ITJakub.Web.Hub.Models.StaticTextViewModel
+@model ITJakub.Web.Hub.Models.EditStaticTextViewModel
     
 @inject ILocalizationService Localizer
 
@@ -9,10 +9,10 @@
 }
 
 @section styles{
-    <link href="~/css/ITJakub.TextEditor.css" rel="stylesheet" />
+    <link asp-append-version="true" href="~/css/ITJakub.TextEditor.css" rel="stylesheet" />
 }
 @section Scripts {
-    <script src="~/js/itjakub.text.editor.js"></script>
+    <script asp-append-version="true" src="~/js/itjakub.text.editor.js"></script>
 }
 
 <div class="content-container top-offset-without-submenu">
@@ -37,6 +37,11 @@
                 <label for="text" class="col-md-2 control-label">@Localizer.Translate("PageText", "Text", LocTranslationSource.File):</label>
                 <div class="col-md-3">
                     <div class="alert alert-info inline-alert">@Localizer.Translate("UsesMarkdown", "Text", LocTranslationSource.File)</div>
+                </div>
+
+                <label for="text" class="col-md-2 control-label">@Localizer.Translate("LanguageOfText", "Text", LocTranslationSource.File)</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="scope" disabled="disabled" value="@Model.CultureNameLabel">
                 </div>
             </div>
 

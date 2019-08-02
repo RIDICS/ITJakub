@@ -6,15 +6,18 @@ using Vokabular.Core.Storage;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.MainService.Core.Communication;
+using Vokabular.ForumSite.Core.Helpers;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Utils;
+using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.MainService.Core.Works.Search;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -28,13 +31,15 @@ namespace Vokabular.MainService.Core.Managers
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
         private readonly AuthorizationManager m_authorizationManager;
         private readonly AuthenticationManager m_authenticationManager;
+        private readonly CommunicationProvider m_communicationProvider;
         private readonly CategoryRepository m_categoryRepository;
+        private readonly ForumSiteUrlHelper m_forumSiteUrlHelper;
         private readonly BookTypeEnum[] m_filterBookType;
 
         public BookManager(MetadataRepository metadataRepository, CategoryRepository categoryRepository,
             BookRepository bookRepository, ResourceRepository resourceRepository, PermissionRepository permissionRepository,
             FileSystemManager fileSystemManager, FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager,
-            AuthenticationManager authenticationManager)
+            AuthenticationManager authenticationManager, CommunicationProvider communicationProvider, ForumSiteUrlHelper forumSiteUrlHelper)
         {
             m_metadataRepository = metadataRepository;
             m_bookRepository = bookRepository;
@@ -44,6 +49,8 @@ namespace Vokabular.MainService.Core.Managers
             m_fulltextStorageProvider = fulltextStorageProvider;
             m_authorizationManager = authorizationManager;
             m_authenticationManager = authenticationManager;
+            m_communicationProvider = communicationProvider;
+            m_forumSiteUrlHelper = forumSiteUrlHelper;
             m_categoryRepository = categoryRepository;
             m_filterBookType = new[] {BookTypeEnum.CardFile};
         }
@@ -75,6 +82,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<BookContract> GetBooksForRole(int roleId, BookTypeEnumContract bookType)
         {
+            new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
             var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalIdOrCreate(roleId));
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
             var dbResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataForUserGroup(bookTypeEnum, group.Id));
@@ -111,6 +119,12 @@ namespace Vokabular.MainService.Core.Managers
 
             var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataWithDetail(projectId));
             var result = Mapper.Map<SearchResultDetailContract>(metadataResult);
+            
+            if (metadataResult.Resource.Project.ForumId != null)
+            {
+                result.ForumUrl = m_forumSiteUrlHelper.GetTopicsUrl((int)metadataResult.Resource.Project.ForumId);
+            }
+
             return result;
         }
 

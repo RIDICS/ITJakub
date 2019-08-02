@@ -4,7 +4,7 @@ using ITJakub.Lemmatization.Core.Works;
 using ITJakub.Lemmatization.DataEntities.Entities;
 using ITJakub.Lemmatization.DataEntities.Repositories;
 using ITJakub.Lemmatization.Shared.Contracts;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace ITJakub.Lemmatization.Core
 {

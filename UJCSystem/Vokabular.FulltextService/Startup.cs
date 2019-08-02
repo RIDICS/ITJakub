@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -10,7 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using Vokabular.FulltextService.Core.Options;
+using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.Shared;
+using Vokabular.Shared.AspNetCore;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
@@ -29,14 +27,14 @@ namespace Vokabular.FulltextService
 
         private IConfiguration Configuration { get; }
 
-        private DryIocContainer Container { get; set; }
+        private DryIocContainerWrapper Container { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             // Configuration options
             services.AddOptions();
-            services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
+            services.Configure<EndpointOption>(Configuration.GetSection("Endpoints"));
             services.Configure<IndicesOption>(Configuration.GetSection("ElasticsearchIndices"));
             services.Configure<SpecialCharsOption>(Configuration.GetSection("SpecialChars"));
 
@@ -52,14 +50,15 @@ namespace Vokabular.FulltextService
                     Version = "v1",
                 });
                 options.DescribeAllEnumsAsStrings();
-                options.IncludeXmlComments(GetXmlCommentsPath());
+                options.IncludeXmlComments(ServiceUtils.GetAppXmlDocumentationPath());
+                options.IncludeXmlComments(ServiceUtils.GetAppXmlDocumentationPath(typeof(FulltextSearchCorpusResultContract)));
 
                 options.DocumentFilter<PolymorphismDocumentFilter<SearchCriteriaContract>>();
                 options.SchemaFilter<PolymorphismSchemaFilter<SearchCriteriaContract>>();
             });
 
             // IoC
-            var container = new DryIocContainer();
+            var container = new DryIocContainerWrapper();
             container.Install<FulltextServiceContainerRegistration>();
             Container = container;
 
@@ -70,12 +69,6 @@ namespace Vokabular.FulltextService
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime applicationLifetime)
         {
             ApplicationLogging.LoggerFactory = loggerFactory;
-
-            var configuration = app.ApplicationServices.GetService<TelemetryConfiguration>();
-            if (configuration != null)
-            {
-                configuration.DisableTelemetry = true; // Workaround for disabling telemetry
-            }
 
             if (env.IsDevelopment())
             {
@@ -101,13 +94,6 @@ namespace Vokabular.FulltextService
         private void OnShutdown()
         {
             Container.Dispose();
-        }
-
-        private string GetXmlCommentsPath()
-        {
-            var appBasePath = AppContext.BaseDirectory;
-            var appName = Assembly.GetEntryAssembly().GetName().Name;
-            return Path.Combine(appBasePath, $"{appName}.xml");
         }
     }
 }

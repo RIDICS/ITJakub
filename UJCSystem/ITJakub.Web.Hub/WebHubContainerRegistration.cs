@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ITJakub.Web.Hub.Areas.Admin.AutomapperProfiles;
+using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.AutoMapperProfiles;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
@@ -17,18 +18,20 @@ namespace ITJakub.Web.Hub
             services.AddScoped<CommunicationConfigurationProvider>();
             services.AddScoped<StaticTextManager>();
             services.AddScoped<FeedbacksManager>();
+            services.AddScoped<RefreshUserManager>();
 
             services.AddScoped<IMarkdownToHtmlConverter, MarkdigMarkdownToHtmlConverter>();
 
             // AutoMapper profiles
-            services.AddSingleton<Profile, UserDetailProfile>();
             services.AddSingleton<Profile, ConditionCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, DatingCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, DatingListCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, FavoriteProfile>();
             services.AddSingleton<Profile, PermissionProfile>();
+            services.AddSingleton<Profile, RoleProfile>();
             services.AddSingleton<Profile, TokenDistanceCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, TokenDistanceListCriteriaDescriptionProfile>();
+            services.AddSingleton<Profile, UserDetailProfile>();
             services.AddSingleton<Profile, WordCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, WordListCriteriaDescriptionProfile>();
 

@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Errors;
+using Vokabular.Shared.Const;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -17,6 +19,7 @@ namespace Vokabular.MainService.Controllers
             m_catalogValueManager = catalogValueManager;
         }
 
+        [Authorize(VokabularPermissionNames.ManageCodeList)]
         [HttpPost("")]
         public int CreateLiteraryGenre([FromBody] LiteraryGenreContract data)
         {
@@ -24,6 +27,7 @@ namespace Vokabular.MainService.Controllers
             return resultId;
         }
 
+        [Authorize(VokabularPermissionNames.ManageCodeList)]
         [HttpPut("{literaryGenreId}")]
         public IActionResult UpdateLiteraryGenre(int literaryGenreId, [FromBody] LiteraryGenreContract data)
         {
@@ -38,6 +42,7 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
+        [Authorize(VokabularPermissionNames.ManageCodeList)]
         [HttpDelete("{literaryGenreId}")]
         public IActionResult DeleteLiteraryGenre(int literaryGenreId)
         {

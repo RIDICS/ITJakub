@@ -1,5 +1,6 @@
 ﻿@import "ITJakub.Fonts.less";
 @import "ITJakub.Colors.less";
+@import "ITJakub.Constants.less";
 
 html {
     font-size: 14px;
@@ -120,7 +121,7 @@ fieldset[disabled] .btn-default.active {
         float: initial;
     }
 }
-@media (min-width: 1200px) {
+@media (min-width: @medium-screen) {
     .navbar-header {
         float: left;
     }
@@ -164,7 +165,7 @@ fieldset[disabled] .btn-default.active {
     }
 }
 
-@media (min-width: 1100px) {
+@media (min-width: @medium-screen) {
     .navbar-collapse {
         width: auto;
         border-top: 0;
@@ -199,7 +200,7 @@ fieldset[disabled] .btn-default.active {
         display: initial;
     }
 }
-@media (min-width: 1100px) {
+@media (min-width: @medium-screen) {
     .navbar-toggle {
         display: none;
     }

@@ -8,10 +8,10 @@
     ViewBag.Title = Localizer.Translate("UploadManagementTitle", "Upload", LocTranslationSource.File);
 }
 @section scripts{
-    <script src="~/js/itjakub.upload.js"></script>
+    <script asp-append-version="true" src="~/js/itjakub.upload.js"></script>
 }
 @section styles{
-    <link rel="stylesheet" href="~/css/ITJakub.UploadBook.css" />
+    <link asp-append-version="true" rel="stylesheet" href="~/css/ITJakub.UploadBook.css" />
 }
 
 <div class="content-container">

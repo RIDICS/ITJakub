@@ -12,6 +12,7 @@
         <li role="presentation"><a href="#project-work-metadata" aria-controls="project-work-metadata" role="tab">@Localizer.Translate("Metadata", "Admin")</a></li>
         <li role="presentation"><a href="#project-work-history" aria-controls="project-work-history" role="tab">@Localizer.Translate("History", "Admin")</a></li>
         <li role="presentation"><a href="#project-work-note" aria-controls="project-work-history" role="tab">Ediční poznámka</a></li>
+        <li role="presentation"><a href="#project-forum" aria-controls="project-work-forum" role="tab">@Localizer.Translate("Forum", "Admin")</a></li>
     </ul>
     
     <div class="tab-content">
@@ -21,5 +22,6 @@
         <div role="tabpanel" class="tab-pane" id="project-work-metadata" data-panel-type="@Html.Raw((int)ProjectModuleTabType.WorkMetadata)"></div>
         <div role="tabpanel" class="tab-pane" id="project-work-history" data-panel-type="@Html.Raw((int)ProjectModuleTabType.WorkHistory)"></div>
         <div role="tabpanel" class="tab-pane" id="project-work-note" data-panel-type="@Html.Raw((int)ProjectModuleTabType.WorkNote)"></div>
+        <div role="tabpanel" class="tab-pane" id="project-forum" data-panel-type="@Html.Raw((int)ProjectModuleTabType.Forum)"></div>
     </div>
 </div>

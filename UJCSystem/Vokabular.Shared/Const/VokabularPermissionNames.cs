@@ -13,5 +13,6 @@
         public const string CardFile = "card-file:";
         public const string AutoImport = "autoimport:";
         public const string ManageBibliographyImport = "manage-bibliography-import";
+        public const string ManageCodeList = "manage-code-list";
     }
 }

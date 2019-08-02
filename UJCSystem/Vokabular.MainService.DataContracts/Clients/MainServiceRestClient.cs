@@ -48,13 +48,17 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         #region Project
 
-        public PagedResultList<ProjectDetailContract> GetProjectList(int start, int count, bool fetchPageCount = false)
+        public PagedResultList<ProjectDetailContract> GetProjectList(int start, int count, string filterByName = null, bool fetchPageCount = false)
         {
             try
             {
-                var result =
-                    GetPagedList<ProjectDetailContract>(
-                        $"project?start={start}&count={count}&fetchPageCount={fetchPageCount}");
+                var url = UrlQueryBuilder.Create("project")
+                    .AddParameter("start", start)
+                    .AddParameter("count", count)
+                    .AddParameter("filterByName", filterByName)
+                    .AddParameter("fetchPageCount", fetchPageCount)
+                    .ToQuery();
+                var result = GetPagedList<ProjectDetailContract>(url);
                 return result;
             }
             catch (HttpRequestException e)
@@ -266,8 +270,8 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var uriPath = $"session/{sessionId}/resource".AddQueryString("fileName", fileName);
-                PostStream<object>(uriPath, data);
+                var uriPath = $"session/{sessionId}/resource";
+                PostStreamAsForm<object>(uriPath, data, fileName);
             }
             catch (HttpRequestException e)
             {
@@ -283,7 +287,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 HttpClient.Timeout = new TimeSpan(0, 10, 0); // Import is long running operation
-                Post<object>($"session/{sessionId}", request);
+                Post<object>($"session/{sessionId}",request);
             }
             catch (HttpRequestException e)
             {
@@ -2339,6 +2343,21 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public void UpdateCurrentUserContact(UpdateUserContactContract data)
+        {
+            try
+            {
+                Put<object>("user/current/contact", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+        
         #endregion
 
         #region Card files
@@ -2523,7 +2542,22 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Put<object>($"user/{userId}/edit", data);
+                Put<object>($"user/{userId}", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void UpdateUserContact(int userId, UpdateUserContactContract data)
+        {
+            try
+            {
+                Put<object>($"user/{userId}/contact", data);
             }
             catch (HttpRequestException e)
             {
@@ -2554,6 +2588,66 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 Delete($"role/{roleId}/user/{userId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public bool ConfirmUserContact(ConfirmUserContactContract data)
+        {
+            try
+            {
+                return Post<bool>($"user/current/contact/confirmation", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void ResendConfirmCode(UserContactContract data)
+        {
+            try
+            {
+                Post<object>($"user/current/contact/confirmation/resend", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void SetTwoFactor(UpdateTwoFactorContract data)
+        {
+            try
+            {
+                Put<object>($"user/current/two-factor", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void SelectTwoFactorProvider(UpdateTwoFactorProviderContract data)
+        {
+            try
+            {
+                Put<object>($"user/current/two-factor/provider", data);
             }
             catch (HttpRequestException e)
             {
@@ -2621,7 +2715,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Put<object>($"role/{roleId}/edit", data);
+                Put<object>($"role/{roleId}", data);
             }
             catch (HttpRequestException e)
             {
@@ -2668,6 +2762,28 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 var result = Get<List<RoleContract>>($"user/{userId}/role");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+        
+        public PagedResultList<RoleContract> GetRolesByProject(int projectId, int start, int count, string query)
+        {
+            try
+            {
+                var url = UrlQueryBuilder.Create($"project/{projectId}/role")
+                    .AddParameter("start", start)
+                    .AddParameter("count", count)
+                    .AddParameter("filterByName", query)
+                    .ToQuery();
+
+                var result = GetPagedList<RoleContract>(url);
                 return result;
             }
             catch (HttpRequestException e)
@@ -3149,6 +3265,42 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 return Get<IList<RepositoryImportProgressInfoContract>>($"repositoryImport/importStatus");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region Forum
+
+        public int CreateForum(long projectId)
+        {
+            try
+            {
+                var forumId = Post<int>($"project/{projectId}/forum", null);
+                return forumId;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public ForumContract GetForum(long projectId)
+        {
+            try
+            {
+                var result = Get<ForumContract>($"project/{projectId}/forum");
+                return result;
             }
             catch (HttpRequestException e)
             {

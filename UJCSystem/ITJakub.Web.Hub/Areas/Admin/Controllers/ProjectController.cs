@@ -8,6 +8,7 @@ using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Areas.Admin.Models.Request;
 using ITJakub.Web.Hub.Areas.Admin.Models.Response;
 using ITJakub.Web.Hub.Areas.Admin.Models.Type;
+using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Helpers;
@@ -20,9 +21,11 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.AspNetCore.Helpers;
+using ITJakub.Web.Hub.Options;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 {
+    [LimitedAccess(PortalType.CommunityPortal)]
     [Area("Admin")]
     public class ProjectController : BaseController
     {
@@ -51,7 +54,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             using (var client = GetRestClient())
             {
                 const int start = 0;
-                var result = client.GetProjectList(start, ProjectListPageSize, true);
+                var result = client.GetProjectList(start, ProjectListPageSize, null, true);
                 var viewModel = CreateProjectListViewModel(result, start);
                 return View(viewModel);
             }
@@ -71,7 +74,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             using (var client = GetRestClient())
             {
-                var result = client.GetProjectList(start, count, true);
+                var result = client.GetProjectList(start, count, null, true);
                 var viewModel = CreateProjectListViewModel(result, start);
                 return PartialView("_ProjectListContent", viewModel);
             }
@@ -128,6 +131,14 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                         return PartialView("Work/_History");
                     case ProjectModuleTabType.WorkNote:
                         return PartialView("Work/_Note");
+                    case ProjectModuleTabType.Forum:
+                        var forum = client.GetForum(projectId.Value);
+                        ForumViewModel forumViewModel = null;
+                        if (forum != null)
+                        {
+                            forumViewModel = Mapper.Map<ForumViewModel>(forum);
+                        }
+                        return PartialView("Work/_Forum", forumViewModel);
                     default:
                         return NotFound();
                 }
@@ -186,6 +197,18 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
             var viewModel = ProjectMock.GetNewPulication(m_localizer);
             return PartialView("Work/_PublicationsNew", viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult CreateForum(long projectId)
+        {
+            using (var client = GetRestClient())
+            {
+                client.CreateForum(projectId);
+                var forum = client.GetForum(projectId);
+                ForumViewModel forumViewModel = Mapper.Map<ForumViewModel>(forum); 
+                return Json(forumViewModel);
+            }
         }
 
         [HttpPost]

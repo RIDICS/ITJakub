@@ -3,7 +3,7 @@ using System.Linq;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works
 {
@@ -13,6 +13,7 @@ namespace Vokabular.MainService.Core.Works
         private readonly MetadataRepository m_metadataRepository;
         private readonly int m_start;
         private readonly int m_count;
+        private readonly string m_filterByName;
         private readonly bool m_fetchPageCount;
         private readonly bool m_fetchAuthors;
         private readonly bool m_fetchResponsiblePersons;
@@ -20,12 +21,13 @@ namespace Vokabular.MainService.Core.Works
         private IList<MetadataResource> m_metadataList;
         private IList<PageCountResult> m_pageCount;
 
-        public GetProjectListWork(ProjectRepository projectRepository, MetadataRepository metadataRepository, int start, int count, bool fetchPageCount, bool fetchAuthors, bool fetchResponsiblePersons) : base(projectRepository)
+        public GetProjectListWork(ProjectRepository projectRepository, MetadataRepository metadataRepository, int start, int count, string filterByName, bool fetchPageCount, bool fetchAuthors, bool fetchResponsiblePersons) : base(projectRepository)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
             m_start = start;
             m_count = count;
+            m_filterByName = filterByName;
             m_fetchPageCount = fetchPageCount;
             m_fetchAuthors = fetchAuthors;
             m_fetchResponsiblePersons = fetchResponsiblePersons;
@@ -33,10 +35,10 @@ namespace Vokabular.MainService.Core.Works
 
         protected override IList<Project> ExecuteWorkImplementation()
         {
-            var dbResult = m_projectRepository.GetProjectList(m_start, m_count);
+            var dbResult = m_projectRepository.GetProjectList(m_start, m_count, m_filterByName);
             var projectIdList = dbResult.List.Select(x => x.Id).ToList();
 
-            m_metadataList = m_metadataRepository.GetMetadataByProjectIds(projectIdList, m_fetchAuthors, m_fetchResponsiblePersons);
+            m_metadataList = m_metadataRepository.GetMetadataByProjectIds(projectIdList, m_fetchAuthors, m_fetchResponsiblePersons, false);
             m_resultCount = dbResult.Count;
 
             m_pageCount = m_fetchPageCount

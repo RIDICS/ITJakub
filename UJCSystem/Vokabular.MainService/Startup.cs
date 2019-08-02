@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -18,14 +16,18 @@ using Ridics.Core.HttpClient.Config;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Vokabular.Core;
+using Vokabular.ForumSite.Core;
+using Vokabular.ForumSite.Core.Options;
 using Vokabular.MainService.Authorization;
 using Vokabular.MainService.Core;
+using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.Middleware;
 using Vokabular.MainService.Options;
 using Vokabular.MainService.Utils;
 using Vokabular.ProjectImport;
 using Vokabular.ProjectImport.Shared.Options;
 using Vokabular.Shared;
+using Vokabular.Shared.AspNetCore;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
@@ -36,14 +38,14 @@ namespace Vokabular.MainService
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
             ApplicationConfig.Configuration = Configuration;
         }
 
         private IConfiguration Configuration { get; }
-        private DryIocContainer Container { get; set; }
+        private DryIocContainerWrapper Container { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -52,10 +54,11 @@ namespace Vokabular.MainService
 
             // Configuration options
             services.AddOptions();
-            services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
+            services.Configure<EndpointOption>(Configuration.GetSection("Endpoints"));
             services.Configure<List<CredentialsOption>>(Configuration.GetSection("Credentials"));
             services.Configure<PathConfiguration>(Configuration.GetSection("PathConfiguration"));
             services.Configure<OaiPmhClientOption>(Configuration.GetSection("OaiPmhClientOption"));
+            services.Configure<ForumOption>(Configuration.GetSection("ForumOptions"));
 
             services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = 1048576000; });
 
@@ -73,8 +76,10 @@ namespace Vokabular.MainService
                     Version = "v1",
                 });
                 options.DescribeAllEnumsAsStrings();
-                options.IncludeXmlComments(GetXmlCommentsPath());
+                options.IncludeXmlComments(ServiceUtils.GetAppXmlDocumentationPath());
+                options.IncludeXmlComments(ServiceUtils.GetAppXmlDocumentationPath(typeof(BookContract)));
                 options.OperationFilter<AddResponseHeadersFilter>();
+                options.OperationFilter<FileOperationFilter>();
 
                 options.DocumentFilter<PolymorphismDocumentFilter<SearchCriteriaContract>>();
                 options.SchemaFilter<PolymorphismSchemaFilter<SearchCriteriaContract>>();
@@ -135,11 +140,15 @@ namespace Vokabular.MainService
             services.AddProjectImportServices();
 
             // IoC
-            var container = new DryIocContainer();
+            var container = new DryIocContainerWrapper();
             container.RegisterLogger();
-            container.Install<MainServiceContainerRegistration>();
-            container.Install<NHibernateInstaller>();
             Container = container;
+
+            container.InnerContainer.AddNHibernateDefaultDatabase();
+            container.InnerContainer.AddNHibernateForumDatabase();
+            
+            container.Install<MainServiceContainerRegistration>();
+            container.Install<ForumCoreContainerRegistration>();
 
             return container.CreateServiceProvider(services);
         }
@@ -177,13 +186,6 @@ namespace Vokabular.MainService
         private void OnShutdown()
         {
             Container.Dispose();
-        }
-
-        private string GetXmlCommentsPath()
-        {
-            var appBasePath = AppContext.BaseDirectory;
-            var appName = Assembly.GetEntryAssembly().GetName().Name;
-            return Path.Combine(appBasePath, $"{appName}.xml");
         }
     }
 }

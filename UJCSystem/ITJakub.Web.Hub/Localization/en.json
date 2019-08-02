@@ -7,13 +7,17 @@
     "VokabulářWebový": "Vokabulář webový",
     "and": "and",
 
+    "Komunitní": "Komunitní",
+    "portál": "portál",
+    "Menu": "Menu",
+
     "FeedbackFormPlaceholder": "Type your feedback here...",
     "NameFormPlaceholder": "Type your name here...",
     "EmailFormPlaceholder": "Type your e-mail here...",
     "Send": "Send",
 
     "FeedbackSentTitle": "Feedback sent",
-    "FeedbackSentAlert": "Feedback successfuly sent.",
+    "FeedbackSentAlert": "Feedback successfully sent.",
 
     "Max": "Max.",
     "Remaining": "Remaining",
@@ -34,7 +38,8 @@
     "SignIn": "Sign in",
     "SignUp": "Sign up",
     "EditText": "Edit text",
-    "CreateText": "Create text"
+    "CreateText": "Create text",
+    "EmailIsNotConfirmedAlertDescription": "If e-mail is not confirmed, it is not possible to change the password, neither secure account with two-phase authentication. "
   },
   "plural": {
     "Characters": {

@@ -8,7 +8,7 @@ namespace Vokabular.MainService.Test.Mock
 {
     public class MockResourceRepository : ResourceRepository
     {
-        public MockResourceRepository() : base(new MockUnitOfWork())
+        public MockResourceRepository() : base(MockUnitOfWorkProvider.Create())
         {
             CreatedObjects = new List<object>();
             UpdatedObjects = new List<object>();

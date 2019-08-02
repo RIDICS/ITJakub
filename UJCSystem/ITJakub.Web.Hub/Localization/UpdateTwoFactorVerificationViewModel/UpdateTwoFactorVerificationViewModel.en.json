@@ -1,0 +1,8 @@
+{
+  "culture": "en",
+  "scope": "UpdateTwoFactorVerificationViewModel",
+  "dictionary": {
+    "TwoFactorEnabled": "Enable two-factor verification",
+    "SelectedTwoFactorProvider": "Method of two-factor verification"
+  }
+}

@@ -29,15 +29,21 @@
   version "0.0.46"
   resolved "https://registry.yarnpkg.com/@types/codemirror/-/codemirror-0.0.46.tgz#64e732e5b24d2fbacf29230e7db0089c15ef4b3e"
 
-"@types/dropzone@4.3.36":
-  version "4.3.36"
-  resolved "https://registry.yarnpkg.com/@types/dropzone/-/dropzone-4.3.36.tgz#a9f97a1c1c9c54cad129710f77d4b78dbbdce2d3"
+"@types/dropzone@5.0.6":
+  version "5.0.6"
+  resolved "https://registry.yarnpkg.com/@types/dropzone/-/dropzone-5.0.6.tgz#766fc512c2816403c7a97dd6d41bd9187355ff6c"
+  integrity sha512-/bR/dUj1bhlGCpIUEzXUy5E9YQyPPcfbQTNOX+xpGZ7aoBdZ2VdwuBNromSACgtsfzXSatqvurHvxJ3QrEV93g==
   dependencies:
     "@types/jquery" "*"
 
 "@types/gijgo@0.6.6":
   version "0.6.6"
   resolved "https://registry.yarnpkg.com/@types/gijgo/-/gijgo-0.6.6.tgz#301a7310764a06ef2b10e558d524e1fdb9ea2e08"
+
+"@types/he@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@types/he/-/he-1.1.0.tgz#0ddc2ae80f0814f729f0f7e5aa77b191ab4a9598"
+  integrity sha512-HyiLOiJhclRBPzcbYrNThdi0JOdq7bT4hq9jFBPQk4HGjzkwYVQnMj9IDi7qvYkg9QTly2oZ9kjm4j7d8Ic9eA==
 
 "@types/jquery-validation-unobtrusive@3.2.32":
   version "3.2.32"
@@ -61,6 +67,13 @@
   version "3.2.17"
   resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.2.17.tgz#01df9805dd5cf83a14cf5bfd81adced7d4fbd970"
 
+"@types/jquery@3.3.30":
+  version "3.3.30"
+  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.3.30.tgz#af4ad612d86d954d74664b2b0ec337a251fddb5b"
+  integrity sha512-chB+QbLulamShZAFcTJtl8opZwHFBpDOP6nRLrPGkhC6N1aKWrDXg2Nc71tEg6ny6E8SQpRwbWSi9GdstH5VJA==
+  dependencies:
+    "@types/sizzle" "*"
+
 "@types/jqueryui@1.12.7":
   version "1.12.7"
   resolved "https://registry.yarnpkg.com/@types/jqueryui/-/jqueryui-1.12.7.tgz#81546a73d5460a27d972008a8bd1d73b0e275a48"
@@ -74,6 +87,11 @@
 "@types/simplemde@1.11.5":
   version "1.11.5"
   resolved "https://registry.yarnpkg.com/@types/simplemde/-/simplemde-1.11.5.tgz#0bfc256278a36f08751efa71eb4d62ccdfae649c"
+
+"@types/sizzle@*":
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/@types/sizzle/-/sizzle-2.3.2.tgz#a811b8c18e2babab7d542b3365887ae2e4d9de47"
+  integrity sha512-7EJYyKTL7tFR8+gDbB6Wwz/arpGa0Mywk1TJbNzKzHtzbwVmY4HR9WqS5VV7dsBUKQmPNr192jHr/VpBluj/hg==
 
 "@types/typeahead@0.11.32":
   version "0.11.32"
@@ -3271,9 +3289,10 @@ type@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/type/-/type-1.0.1.tgz#084c9a17fcc9151a2cdb1459905c2e45e4bb7d61"
 
-typescript@2.9.2:
-  version "2.9.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.9.2.tgz#1cbf61d05d6b96269244eb6a3bce4bd914e0f00c"
+typescript@3.5.3:
+  version "3.5.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.5.3.tgz#c830f657f93f1ea846819e929092f5fe5983e977"
+  integrity sha512-ACzBtm/PhXBDId6a6sDJfroT2pOWt/oOnk4/dElG5G33ZL776N3Y6/6bKZJBFpd+b05F3Ct9qDjMeJmRWtE2/g==
 
 uglify-js@^2.8.22:
   version "2.8.29"

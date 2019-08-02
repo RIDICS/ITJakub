@@ -3,12 +3,12 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
 using System.Security.Claims;
 using Ridics.Authentication.DataContracts;
 using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.Shared.AspNetCore.Extensions;
 using Vokabular.Shared.Const;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -28,7 +28,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public User GetCurrentUser(bool returnDefaultUserIfNull)
         {
-            var id = m_httpContextAccessor.HttpContext.User.GetId();
+            var id = m_httpContextAccessor.HttpContext.User.GetIdOrDefault();
 
             if (id.HasValue)
             {

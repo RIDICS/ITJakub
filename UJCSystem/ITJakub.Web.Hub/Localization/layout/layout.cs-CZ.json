@@ -27,6 +27,7 @@
     "Derivation": "Derivace hláskových podob",
     "UserManagement": "Správa uživatelů",
     "GroupManagement": "Správa skupin",
+    "BookPermissionManagement": "Správa práv projektů",
     "FeedbackManagement": "Správa připomínek",
     "FavoriteItems": "Oblíbené položky",
     "AddNews": "Přidat novinku",
@@ -37,6 +38,8 @@
     "Support": "Podpora",
     "HowToCite": "Jak citovat",
     "RepositoryImport": "Import repozitářů",
+    "MyProjects": "Moje díla",
+    "CodeLists": "Číselníky",
 
     "FooterText": "VOKABULÁŘ WEBOVÝ byl spuštěn před {0}",
     "UjcLong": "Ústav pro jazyk český",

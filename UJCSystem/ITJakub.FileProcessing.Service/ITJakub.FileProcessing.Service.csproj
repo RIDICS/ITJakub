@@ -208,10 +208,13 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\itjakub-secrets\WcfServices\*.config">
+      <Link>%(RecursiveDir)\%(FileName).config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="packages.config" />
-    <Content Include="..\..\..\itjakub-secrets\ITJakub.Secrets.config">
-      <Link>ITJakub.Secrets.config</Link>
-    </Content>
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2_Development.pubxml" />
@@ -223,7 +226,7 @@
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-    <None Include="Web.Development.config">
+    <None Include="Web.Production.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.Release.config">
@@ -262,6 +265,10 @@
     <ProjectReference Include="..\Vokabular.Log4Net\Vokabular.Log4Net.csproj">
       <Project>{105904c3-ab87-4bdd-ada3-c16ca61d7147}</Project>
       <Name>Vokabular.Log4Net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vokabular.Shared.DataEntities\Vokabular.Shared.DataEntities.csproj">
+      <Project>{1d302489-8778-4dec-9bcf-ee35f90af87b}</Project>
+      <Name>Vokabular.Shared.DataEntities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vokabular.Shared.WcfService\Vokabular.Shared.WcfService.csproj">
       <Project>{7deba8c4-efd2-472b-9c16-35f8319ff0f5}</Project>

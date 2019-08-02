@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Helpers;
-using Microsoft.ApplicationInsights.Extensibility;
+using ITJakub.Web.Hub.Options;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -49,7 +49,7 @@ namespace ITJakub.Web.Hub
         }
 
         private IConfiguration Configuration { get; }
-        private DryIocContainer Container { get; set; }
+        private DryIocContainerWrapper Container { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
@@ -58,6 +58,7 @@ namespace ITJakub.Web.Hub
             //IdentityModelEventSource.ShowPII = true; // Enable to debug authentication problems
 
             var openIdConnectConfig = Configuration.GetSection("OpenIdConnect").Get<OpenIdConnectConfiguration>();
+            var portalConfig = Configuration.GetSection("PortalConfig").Get<PortalOption>();
 
             services.AddAuthentication(options =>
                 {
@@ -67,8 +68,8 @@ namespace ITJakub.Web.Hub
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
                 {
                     options.ExpireTimeSpan = m_cookieExpireTimeSpan;
-                    options.Cookie.Name = "identity";
-                    options.AccessDeniedPath = "/Account/AccessDenied/";
+                    options.Cookie.Name = $"identity{portalConfig.PortalType}";
+                    options.AccessDeniedPath = "/Error/403/";
                     options.LoginPath = "/Account/Login";
                 })
                 .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
@@ -90,6 +91,7 @@ namespace ITJakub.Web.Hub
                     options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
                     options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
                     options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
+                    options.ClaimActions.MapJsonKey(CustomClaimTypes.EmailConfirmed, "email_confirmed");
                     options.ClaimActions.MapJsonKey(CustomClaimTypes.Permission, CustomClaimTypes.Permission);
                     options.ClaimActions.MapJsonKey(CustomClaimTypes.ResourcePermission, CustomClaimTypes.ResourcePermission);
                     options.ClaimActions.MapJsonKey(CustomClaimTypes.ResourcePermissionType, CustomClaimTypes.ResourcePermissionType);
@@ -128,7 +130,7 @@ namespace ITJakub.Web.Hub
                             var communicationProvider = context.HttpContext.RequestServices.GetRequiredService<CommunicationProvider>();
                             var client = communicationProvider.GetMainServiceClient();
 
-                            client.CreateUserIfNotExist(context.Principal.GetId().GetValueOrDefault());
+                            client.CreateUserIfNotExist(context.Principal.GetIdOrDefault().GetValueOrDefault());
 
                             return Task.CompletedTask;
                         },
@@ -160,10 +162,12 @@ namespace ITJakub.Web.Hub
 
             // Configuration options
             services.AddOptions();
-            services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
+            services.Configure<EndpointOption>(Configuration.GetSection("Endpoints"));
             services.Configure<GoogleCalendarConfiguration>(Configuration.GetSection("GoogleCalendar"));
 
             services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = 1048576000; });
+
+            services.Configure<PortalOption>(Configuration.GetSection("PortalConfig"));
 
             // Localization
             var localizationConfiguration = Configuration.GetSection("Localization").Get<LocalizationConfiguration>();
@@ -182,7 +186,7 @@ namespace ITJakub.Web.Hub
                 });
 
             // IoC
-            var container = new DryIocContainer();
+            var container = new DryIocContainerWrapper();
             container.RegisterLogger();
             container.Install<WebHubContainerRegistration>();
             container.Install<NHibernateInstaller>();
@@ -198,12 +202,6 @@ namespace ITJakub.Web.Hub
         {
             ApplicationLogging.LoggerFactory = loggerFactory;
 
-            var configuration = app.ApplicationServices.GetService<TelemetryConfiguration>();
-            if (configuration != null)
-            {
-                configuration.DisableTelemetry = true; // Workaround for disabling telemetry
-            }
-            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -211,10 +209,10 @@ namespace ITJakub.Web.Hub
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Error/500");
             }
 
-            app.UseStatusCodePages();
+            app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
             app.UseAuthentication();
 

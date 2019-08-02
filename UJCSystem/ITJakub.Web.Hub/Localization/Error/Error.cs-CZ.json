@@ -1,0 +1,28 @@
+{
+  "culture": "cs-CZ",
+  "scope": "Error",
+  "dictionary": {
+    "error": "Chyba",
+    "details": "Detaily",
+    "status-code": "Stavový kód",
+    "request-id": "ID požadavku",
+    "back-to-main-page": "Zpět na hlavní stránku",
+    "unknown-error-msg": "Neznámá chyba",
+    "bad-request-msg": "Chybný požadavek",
+    "unauthorized-msg": "Uživatel nepřihlášen",
+    "forbidden-msg": "Nedostatečná práva",
+    "not-found-msg": "Stránka nenalezena",
+    "internal-server-error-msg": "Neočekávaná chyba serveru",
+    "bad-gateway-msg": "Chyba při komunikaci s externí službou",
+    "gateway-timeout-msg": "Chyba při komunikaci s externí službou",
+    "bad-request-detail": "Požadavek odeslaný na server byl nesprávně specifikován.",
+    "unauthorized-detail": "Pro tuto akci potřebujete být přihlášen/a.",
+    "forbidden-detail": "Pro tuto akci nemáte dostatečná práva.",
+    "not-found-detail": "Adresa URL může být chybně napsaná nebo stránka, kterou hledáte, již není k dispozici.",
+    "internal-server-error-detail": "Nastala neočekávaná interní chyba serveru.",
+    "bad-gateway-detail": "Při komunikaci se službou třetí strany došlo k neznámému problému.",
+    "gateway-timeout-detail": "Služba třetí strany neodpovídá (vypršel časový limit).",
+    "page-load-error": "Chyba při načítání stránky",
+    "generic-error": "Operace se nezdařila"
+  }
+}

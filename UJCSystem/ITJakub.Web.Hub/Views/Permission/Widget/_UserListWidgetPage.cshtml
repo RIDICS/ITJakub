@@ -1,17 +1,18 @@
 ﻿@using Scalesoft.Localization.AspNetCore
-@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<ITJakub.Web.Hub.Models.UserDetailViewModel>
+@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<ITJakub.Web.Hub.Models.User.UserDetailViewModel>
 @inject ILocalizationService Localizer
 
 <div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>
 @foreach (var user in Model.List)
 {
-    <tr>
+    <tr data-user-id="@user.Id" class="user-row">
         <td>
-            @Html.DisplayFor(modelItem => user.FirstName)
-            @Html.DisplayFor(modelItem => user.LastName)
+            @user.FirstName
+            @user.LastName
+            <div class="alert alert-danger"></div>
         </td>
         <td class="buttons">
-            <a data-user-id="@user.Id" class="btn btn-sm btn-default remove-user-from-role">
+            <a class="btn btn-sm btn-default remove-user-from-role">
                 <i class="fa fa-trash"></i>
             </a>
         </td>

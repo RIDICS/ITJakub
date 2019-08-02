@@ -11,20 +11,10 @@
     <div class="static-text-panel">
         @if (User.HasPermission(VokabularPermissionNames.EditStaticText))
         {
-            if (Model.IsRecordExists)
-            {
-                <a href="@Url.RouteUrl("Default", new {controller = "Text", action = "Editor", textName = Model.Name, scope = Model.Scope, pageUrl = Context.Request.GetDisplayUrl()})" class="btn btn-default">
-                    <span class="glyphicon glyphicon-pencil"></span>
-                    @Localizer.Translate("EditText", "global", LocTranslationSource.File)
-                </a>
-            }
-            else
-            {
-                <a href="@Url.RouteUrl("Default", new {controller = "Text", action = "Editor", textName = Model.Name, scope = Model.Scope, pageUrl = Context.Request.GetDisplayUrl()})" class="btn btn-default">
-                    <span class="glyphicon glyphicon-pencil"></span>
-                    @Localizer.Translate("CreateText", "global", LocTranslationSource.File)
-                </a>
-            }
+            <a href="@Url.RouteUrl("Default", new {controller = "Text", action = "Editor", textName = Model.Name, scope = Model.Scope, pageUrl = Context.Request.GetDisplayUrl()})" class="btn btn-default">
+                <span class="glyphicon glyphicon-pencil"></span>
+                @Localizer.Translate("EditText", "global", LocTranslationSource.File)
+            </a>
         }
     </div>
 

@@ -1,14 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
+using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Users;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Results;
+using Vokabular.Shared.DataEntities.UnitOfWork;
+using AuthChangeContactContract = Ridics.Authentication.DataContracts.ChangeContactContract;
+using AuthChangePasswordContract = Ridics.Authentication.DataContracts.User.ChangePasswordContract;
+using AuthChangeTwoFactorContract = Ridics.Authentication.DataContracts.User.ChangeTwoFactorContract;
+using AuthConfirmContactContract = Ridics.Authentication.DataContracts.ConfirmContactContract;
+using AuthContactContract = Ridics.Authentication.DataContracts.ContactContract;
 using AuthUserContract = Ridics.Authentication.DataContracts.User.UserContract;
+using UserContactContract = Vokabular.MainService.DataContracts.Contracts.UserContactContract;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -19,7 +27,8 @@ namespace Vokabular.MainService.Core.Managers
         private readonly AuthenticationManager m_authenticationManager;
         private readonly UserDetailManager m_userDetailManager;
 
-        public UserManager(UserRepository userRepository, CommunicationProvider communicationProvider, AuthenticationManager authenticationManager, UserDetailManager userDetailManager)
+        public UserManager(UserRepository userRepository, CommunicationProvider communicationProvider,
+            AuthenticationManager authenticationManager, UserDetailManager userDetailManager)
         {
             m_userRepository = userRepository;
             m_communicationProvider = communicationProvider;
@@ -43,39 +52,79 @@ namespace Vokabular.MainService.Core.Managers
 
         public void UpdateCurrentUser(UpdateUserContract data)
         {
-            var userId = m_authenticationManager.GetCurrentUserId();
+            var user = m_authenticationManager.GetCurrentUser();
+            if (user.ExternalId == null)
+            {
+                throw new ArgumentException($"User with ID {user.Id} has missing ExternalID");
+            }
 
-            new UpdateCurrentUserWork(m_userRepository, userId, data, m_communicationProvider).Execute();
+            var client = m_communicationProvider.GetAuthUserApiClient();
+
+            var authUser = client.HttpClient.GetItemAsync<AuthUserContract>(user.ExternalId.Value).GetAwaiter().GetResult();
+
+            authUser.FirstName = data.FirstName;
+            authUser.LastName = data.LastName;
+
+            client.EditSelfAsync(user.ExternalId.Value, authUser).GetAwaiter().GetResult();
         }
 
         public void UpdateUser(int userId, UpdateUserContract data)
         {
-            new UpdateUserWork(m_userRepository, userId, data, m_communicationProvider).Execute();
+            var userExternalId = GetUserExternalId(userId);
+            var client = m_communicationProvider.GetAuthUserApiClient();
+            var authUser = client.HttpClient.GetItemAsync<AuthUserContract>(userExternalId).GetAwaiter().GetResult();
+
+            authUser.FirstName = data.FirstName;
+            authUser.LastName = data.LastName;
+
+            client.HttpClient.EditItemAsync(userExternalId, authUser).GetAwaiter().GetResult();
         }
 
-        public void UpdateUserPassword(UpdateUserPasswordContract data)
+        public void UpdateUserContact(int userId, UpdateUserContactContract data)
         {
-            var userId = m_authenticationManager.GetCurrentUserId();
+            var userExternalId = GetUserExternalId(userId);
 
-            new UpdateUserPasswordWork(m_userRepository, userId, data, m_communicationProvider).Execute();
+            var contract = new AuthChangeContactContract
+            {
+                ContactType = Mapper.Map<ContactTypeEnum>(data.ContactType),
+                UserId = userExternalId,
+                NewContactValue = data.NewContactValue
+            };
+
+            var client = m_communicationProvider.GetAuthContactApiClient();
+            client.ChangeContactAsync(contract).GetAwaiter().GetResult();
+        }
+
+        public void UpdateUserPassword(int userId, UpdateUserPasswordContract data)
+        {
+            var userExternalId = GetUserExternalId(userId);
+
+            var contract = new AuthChangePasswordContract
+            {
+                OriginalPassword = data.OldPassword,
+                Password = data.NewPassword
+            };
+
+            var client = m_communicationProvider.GetAuthUserApiClient();
+            client.PasswordChangeAsync(userExternalId, contract).GetAwaiter().GetResult();
         }
 
         public PagedResultList<UserDetailContract> GetUserList(int? start, int? count, string filterByName)
-        {        
+        {
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
 
             var client = m_communicationProvider.GetAuthUserApiClient();
-            
-                var result = client.HttpClient.GetListAsync<AuthUserContract>(startValue, countValue, filterByName).GetAwaiter().GetResult();
-                var userDetailContracts = Mapper.Map<List<UserDetailContract>>(result.Items);
-                m_userDetailManager.AddIdForExternalUsers(userDetailContracts);
 
-                return new PagedResultList<UserDetailContract>
-                {
-                    List = userDetailContracts,
-                    TotalCount = result.ItemsCount,
-                };
+            var result = client.HttpClient.GetListAsync<AuthUserContract>(startValue, countValue, filterByName).GetAwaiter().GetResult();
+            var userDetailContracts = Mapper.Map<List<UserDetailContract>>(result.Items);
+            m_userDetailManager.AddIdForExternalUsers(userDetailContracts);
+
+            return new PagedResultList<UserDetailContract>
+            {
+                List = userDetailContracts,
+                TotalCount = result.ItemsCount,
+            };
         }
 
         public IList<UserDetailContract> GetUserAutocomplete(string query, int? count)
@@ -98,6 +147,64 @@ namespace Vokabular.MainService.Core.Managers
             var dbResult = m_userRepository.InvokeUnitOfWork(x => x.FindById<User>(userId));
 
             return m_userDetailManager.GetUserDetailContractForUser(dbResult);
+        }
+
+        public bool ConfirmContact(int userId, ConfirmUserContactContract data)
+        {
+            var contract = new AuthConfirmContactContract
+            {
+                UserId = GetUserExternalId(userId),
+                ConfirmCode = data.ConfirmCode,
+                ContactType = Mapper.Map<ContactTypeEnum>(data.ContactType),
+            };
+
+            var client = m_communicationProvider.GetAuthContactApiClient();
+            return client.ConfirmContactAsync(contract).GetAwaiter().GetResult();
+        }
+
+        public void ResendConfirmCode(int userId, UserContactContract data)
+        {
+            var contract = new AuthContactContract
+            {
+                UserId = GetUserExternalId(userId),
+                ContactType = Mapper.Map<ContactTypeEnum>(data.ContactType),
+            };
+
+            var client = m_communicationProvider.GetAuthContactApiClient();
+            client.ResendCodeAsync(contract).GetAwaiter().GetResult();
+        }
+
+        public void SetTwoFactor(int userId, UpdateTwoFactorContract data)
+        {
+            var contract = new AuthChangeTwoFactorContract
+            {
+                TwoFactorIsEnabled = data.TwoFactorIsEnabled,
+            };
+
+            var client = m_communicationProvider.GetAuthUserApiClient();
+            client.SetTwoFactorAsync(GetUserExternalId(userId), contract).GetAwaiter().GetResult();
+        }
+
+        public void SelectTwoFactorProvider(int userId, UpdateTwoFactorProviderContract data)
+        {
+            var contract = new AuthChangeTwoFactorContract
+            {
+                TwoFactorProvider = data.TwoFactorProvider,
+            };
+
+            var client = m_communicationProvider.GetAuthUserApiClient();
+            client.SelectTwoFactorProviderAsync(GetUserExternalId(userId), contract).GetAwaiter().GetResult();
+        }
+
+        private int GetUserExternalId(int userId)
+        {
+            var user = m_userRepository.InvokeUnitOfWork(x => x.FindById<User>(userId));
+            if (user.ExternalId == null)
+            {
+                throw new ArgumentException($"User with ID {user.Id} has missing ExternalID");
+            }
+
+            return user.ExternalId.Value;
         }
     }
 }

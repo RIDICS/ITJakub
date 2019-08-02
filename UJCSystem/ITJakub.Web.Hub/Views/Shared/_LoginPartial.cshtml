@@ -10,7 +10,7 @@
 }
 
 
-<div class="secondary-navbar-toggle language" title="@Localizer.Translate("Language", "global", LocTranslationSource.File)">
+<div class="secondary-navbar-toggle language" data-toggle="tooltip" data-placement="left" title="@Localizer.Translate("Language", "global", LocTranslationSource.File)">
     <span class="glyphicon glyphicon-text-background"></span>
     <ul class="navbar-language">
         @foreach (var x in Localizer.GetSupportedCultures())
@@ -21,29 +21,51 @@
         }
     </ul>
 </div>
-<div class="secondary-navbar-toggle login" title="@Localizer.Translate("UserAccount", "global", LocTranslationSource.File)">
-    <span class="glyphicon glyphicon-user"></span>
-    @if (User.Identity.IsAuthenticated)
-    {
-        using (Html.BeginForm("LogOut", "Account", new { area = "" }, FormMethod.Post, true, new { id = "logoutForm", @class = "navbar-right" }))
-        {
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="secondary-navbar-toggle login" data-toggle="tooltip" data-placement="left" title="@Localizer.Translate("UserAccount", "global", LocTranslationSource.File)">
+        <a id="defaultUserMenuItemLink" href="@Url.Action("UserProfile", "Account", new {area = ""})">
+            <span class="glyphicon glyphicon-user"> </span>
+        </a>
 
+        @using (Html.BeginForm("LogOut", "Account", new {area = ""}, FormMethod.Post, true, new {id = "logoutForm", @class = "navbar-right"}))
+        {
             <ul class="navbar-login">
-                <li><a href="@Url.Action("AccountSettings", "Account", new {area = ""})">@Html.Raw(User.Identity.Name)</a></li>
-                <li><a href="javascript:document.getElementById('logoutForm').submit()">@Localizer.Translate("LogOut", "global", LocTranslationSource.File)</a></li>
+                <li>
+                    <a href="@Url.Action("UserProfile", "Account", new {area = ""})">
+                        <span>@User.Identity.Name</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:document.getElementById('logoutForm').submit()">
+                        <span>@Localizer.Translate("LogOut", "global", LocTranslationSource.File)</span>
+                    </a>
+                </li>
             </ul>
         }
-    }
-    else
+    </div>
+}
+else
+{
+    if (!string.IsNullOrEmpty(pathAndQuery) && pathAndQuery != "/" && !pathAndQuery.StartsWith("/Account/"))
     {
-        if (!string.IsNullOrEmpty(pathAndQuery) && pathAndQuery != "/" && !pathAndQuery.StartsWith("/Account/"))
-        {
-            ViewBag.ReturnUrl = pathAndQuery;
-        }
-        <ul class="navbar-login">
-            <li>@Html.ActionLink(Localizer.Translate("SignIn", "global", LocTranslationSource.File), "Login", "Account", new { area = "", returnUrl = ViewBag.ReturnUrl }, new { id = "loginLink" })</li>
-            <li>@Html.ActionLink(Localizer.Translate("SignUp", "global", LocTranslationSource.File), "Register", "Account", new { area = "" }, new { id = "registerLink" })</li>
-        </ul>
+        ViewBag.ReturnUrl = pathAndQuery;
     }
-</div>
-
+    <div class="secondary-navbar-toggle login" data-toggle="tooltip" data-placement="left" title="@Localizer.Translate("SignIn", "global", LocTranslationSource.File)">
+        <a id="defaultUserMenuItemLink" href="@Url.Action("Login", "Account", new {area = "", returnUrl = ViewBag.ReturnUrl})">
+            <span class="glyphicon glyphicon-user"></span>
+        </a>
+        <ul class="navbar-login">
+            <li>
+                <a id="loginLink" href="@Url.Action("Login", "Account", new {area = "", returnUrl = ViewBag.ReturnUrl})">
+                    <span>@Localizer.Translate("SignIn", "global", LocTranslationSource.File)</span>
+                </a>
+            </li>
+            <li>
+                <a id="registerLink" href="@Url.Action("Register", "Account", new {area = ""})">
+                    <span>@Localizer.Translate("SignUp", "global", LocTranslationSource.File)</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+}

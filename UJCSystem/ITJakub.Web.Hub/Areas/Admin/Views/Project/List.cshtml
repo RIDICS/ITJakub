@@ -7,11 +7,11 @@
     ViewBag.Title = Localizer.Translate("ProjectList", "Admin");
 }
 @section styles {
-    <link rel="stylesheet" href="~/Areas/Admin/css/ridics.project.css" />
+    <link asp-append-version="true" rel="stylesheet" href="~/Areas/Admin/css/ridics.project.css" />
 }
 @section scripts {
-    <script src="~/Areas/Admin/js/ridics.project.list.js"></script>
-    <script src="~/Areas/Admin/js/ridics.project.manager.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.project.list.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.project.client.js"></script>
 }
 
 <div class="content-container project-list">

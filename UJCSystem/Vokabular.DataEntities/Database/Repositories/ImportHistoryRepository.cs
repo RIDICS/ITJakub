@@ -1,14 +1,13 @@
 ﻿using NHibernate;
-using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
-using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
 {
-    public class ImportHistoryRepository : NHibernateDao
+    public class ImportHistoryRepository : MainDbRepositoryBase
     {
-        public ImportHistoryRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public ImportHistoryRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
         }
 

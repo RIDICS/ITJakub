@@ -19,6 +19,7 @@ namespace Vokabular.MainService.Core.Communication
         private readonly RoleApiClient m_roleApiClient;
         private readonly PermissionApiClient m_permissionApiClient;
         private readonly RegistrationApiClient m_registrationApiClient;
+        private readonly ContactApiClient m_contactApiClient;
 
         private const string FileProcessingServiceEndpointName = "FileProcessingService";
         private const string FulltextServiceEndpointName = "FulltextService";
@@ -27,7 +28,7 @@ namespace Vokabular.MainService.Core.Communication
         private const string CardFilesCredentials = "CardFiles";
         
         public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider, IOptions<List<CredentialsOption>> credentialsOptions,
-            UserApiClient userApiClient, RoleApiClient roleApiClient, PermissionApiClient permissionApiClient, RegistrationApiClient registrationApiClient)
+            UserApiClient userApiClient, RoleApiClient roleApiClient, PermissionApiClient permissionApiClient, RegistrationApiClient registrationApiClient, ContactApiClient contactApiClient)
         {
             m_configurationProvider = communicationConfigurationProvider;
             m_credentialsOptions = credentialsOptions;
@@ -35,6 +36,7 @@ namespace Vokabular.MainService.Core.Communication
             m_roleApiClient = roleApiClient;
             m_permissionApiClient = permissionApiClient;
             m_registrationApiClient = registrationApiClient;
+            m_contactApiClient = contactApiClient;
         }
 
         public FileProcessingServiceClient GetFileProcessingClient()
@@ -90,6 +92,11 @@ namespace Vokabular.MainService.Core.Communication
         public RegistrationApiClient GetAuthRegistrationApiClient()
         {
             return m_registrationApiClient;
+        }
+
+        public ContactApiClient GetAuthContactApiClient()
+        {
+            return m_contactApiClient;
         }
     }
 }

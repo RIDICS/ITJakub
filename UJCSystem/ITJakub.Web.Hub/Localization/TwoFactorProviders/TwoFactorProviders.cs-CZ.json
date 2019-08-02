@@ -1,0 +1,11 @@
+{
+  "culture": "cs-CZ",
+  "scope": "TwoFactorProviders",
+  "dictionary": {
+    "Default": "Výchozí",
+    "Default-SmsTokenProvider": "Výchozí kanál (SMS)",
+    "Default-EmailTokenProvider": "Výchozí kanál (E-mail)",
+    "SmsTokenProvider": "SMS",
+    "EmailTokenProvider": "E-mail"
+  }
+}

@@ -1,7 +1,10 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using ITJakub.Web.Hub.Options
+@using Microsoft.Extensions.Options
+@using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
 
 @inject ILocalizationService Localizer
+@inject IOptions<PortalOption> PortalOption
 
 <div id="listHeader">
     <div id="listSearchDiv" class="list-search-div">
@@ -13,6 +16,7 @@
     </div>
 </div>
 
+<div id="allowedSearchOptions" class="hide" data-options="@Html.Encode(Json.Serialize(PortalOption.Value.AllowedSearchOptions.ToArray()))"></div>
 
 <div id="dropdownSelectDiv" class="dropdown-select-div">
 </div>
