@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Web.Hosting;
 using Ujc.Ovj.Ooxml.Conversion;
 using Vokabular.Core.Storage.Resources;
 using Vokabular.DataEntities.Database.Repositories;
@@ -66,7 +67,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 UploadedFilesPath = resourceSessionDirector.Resources.GroupBy(resource => resource.ResourceType).
                     ToDictionary(resourceGroup => resourceGroup.Key,
                         resourceGroup => resourceGroup.Select(resource => resource.FullPath).ToArray()),
-                MetadataFilePath = m_conversionMetadataPath,
+                //MetadataFilePath = null,
                 OutputDirectoryPath = resourceSessionDirector.SessionPath,
                 OutputMetadataFilePath = metaDataResource.FullPath,
                 TempDirectoryPath = tmpDirPath,
@@ -75,9 +76,27 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 DataDirectoryPath = m_dataDirectoryPath
             };
 
-            var converter = new DocxToTeiConverter();
-            var conversionResult = converter.Convert(settings);
+            var evidenceFolderPath = Path.Combine(HostingEnvironment.ApplicationPhysicalPath,
+                m_conversionMetadataPath);
+            var evidenceXmlFiles = Directory.GetFiles(evidenceFolderPath);
+            ConversionResult conversionResult = null;
 
+            foreach (var evidenceXmlFile in evidenceXmlFiles)
+            {
+                settings.MetadataFilePath = evidenceXmlFile;
+
+                var converter = new DocxToTeiConverter();
+                conversionResult = converter.Convert(settings);
+
+                var documentNotInEvidenceException = conversionResult.Errors.OfType<DocumentNotInEvidenceException>()
+                    .FirstOrDefault();
+
+                if (documentNotInEvidenceException == null)
+                {
+                    break;
+                }
+            }
+            
             if (conversionResult.IsConverted)
             {
                 resourceSessionDirector.Resources.Add(metaDataResource);                
