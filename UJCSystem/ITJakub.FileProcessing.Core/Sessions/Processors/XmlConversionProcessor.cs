@@ -87,11 +87,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
                 var converter = new DocxToTeiConverter();
                 conversionResult = converter.Convert(settings);
-
-                var documentNotInEvidenceException = conversionResult.Errors.OfType<DocumentNotInEvidenceException>()
-                    .FirstOrDefault();
-
-                if (documentNotInEvidenceException == null)
+                
+                if (conversionResult.Errors.Count == 0)
                 {
                     break;
                 }
