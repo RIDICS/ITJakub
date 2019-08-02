@@ -79,29 +79,18 @@ namespace Vokabular.MainService.Controllers
             return result.List;
         }
 
-
-        //public void AddBooksAndCategoriesToGroup(int groupId, IList<long> bookIds, IList<int> categoryIds)
-        //{
-        //    //TODO split two methods - for books and categories
-        //}
-
-        //public void RemoveBooksAndCategoriesFromGroup(int groupId, IList<long> bookIds, IList<int> categoryIds)
-        //{
-        //    //TODO split two methods - for books and categories
-        //}
-
         [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpPost("{roleId}/permission/book")]
-        public void AddBooksToGroup(int roleId, [FromBody] AddBookToRoleRequestContract request)
+        public void AddBooksToRole(int roleId, [FromBody] AddBookToRoleRequestContract request)
         {
-            m_permissionManager.AddBooksAndCategoriesToGroup(roleId, request.BookIdList);
+            m_permissionManager.AddBooksToRole(roleId, request.BookIdList);
         }
 
         [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpDelete("{roleId}/permission/book")]
-        public void RemoveBooksFromGroup(int roleId, [FromBody] AddBookToRoleRequestContract request)
+        public void RemoveBooksFromRole(int roleId, [FromBody] AddBookToRoleRequestContract request)
         {
-            m_permissionManager.RemoveBooksAndCategoriesFromGroup(roleId, request.BookIdList);
+            m_permissionManager.RemoveBooksFromRole(roleId, request.BookIdList);
         }
 
         [Authorize(PermissionNames.AssignPermissionsToRoles)]

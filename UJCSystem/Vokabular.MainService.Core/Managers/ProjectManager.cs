@@ -5,10 +5,14 @@ using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works;
+using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Results;
+using AuthRoleContract = Ridics.Authentication.DataContracts.RoleContract;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Managers
@@ -17,16 +21,21 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly ProjectRepository m_projectRepository;
         private readonly MetadataRepository m_metadataRepository;
+        private readonly PermissionRepository m_permissionRepository;
         private readonly AuthenticationManager m_authenticationManager;
         private readonly UserDetailManager m_userDetailManager;
+        private readonly CommunicationProvider m_communicationProvider;
 
         public ProjectManager(ProjectRepository projectRepository, MetadataRepository metadataRepository,
-            AuthenticationManager authenticationManager, UserDetailManager userDetailManager)
+            PermissionRepository permissionRepository, AuthenticationManager authenticationManager,
+            UserDetailManager userDetailManager, CommunicationProvider communicationProvider)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
+            m_permissionRepository = permissionRepository;
             m_authenticationManager = authenticationManager;
             m_userDetailManager = userDetailManager;
+            m_communicationProvider = communicationProvider;
         }
 
         public long CreateProject(ProjectContract projectData)
@@ -51,12 +60,12 @@ namespace Vokabular.MainService.Core.Managers
             throw new NotImplementedException();
         }
 
-        public PagedResultList<ProjectDetailContract> GetProjectList(int? start, int? count, bool fetchPageCount, bool fetchAuthors, bool fetchResponsiblePersons)
+        public PagedResultList<ProjectDetailContract> GetProjectList(int? start, int? count, string filterByName, bool fetchPageCount, bool fetchAuthors, bool fetchResponsiblePersons)
         {
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCountForProject(count);
 
-            var work = new GetProjectListWork(m_projectRepository, m_metadataRepository, startValue, countValue, fetchPageCount, fetchAuthors, fetchResponsiblePersons);
+            var work = new GetProjectListWork(m_projectRepository, m_metadataRepository, startValue, countValue, filterByName, fetchPageCount, fetchAuthors, fetchResponsiblePersons);
             var resultEntities = work.Execute();
 
             var metadataList = work.GetMetadataResources();
@@ -161,6 +170,35 @@ namespace Vokabular.MainService.Core.Managers
             var result = MapPagedProjectsToContractList(dbMetadataList);
 
             return result;
+        }
+
+        public PagedResultList<RoleContract> GetRolesByProject(long projectId, int? start, int? count, string filterByName)
+        {
+            var startValue = PagingHelper.GetStart(start);
+            var countValue = PagingHelper.GetCount(count);
+
+            var result = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupsByBook(projectId, startValue, countValue, filterByName));
+
+            if (result == null)
+            {
+                return null;
+            }
+
+            var authRoles = new List<AuthRoleContract>();
+            foreach (var group in result.List)
+            {
+                var work = new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, group.ExternalId);
+                work.Execute();
+                authRoles.Add(work.GetRoleContract());
+            }
+
+            var roles = Mapper.Map<List<RoleContract>>(authRoles);
+
+            return new PagedResultList<RoleContract>
+            {
+                List = roles,
+                TotalCount = result.Count,
+            };
         }
     }
 }

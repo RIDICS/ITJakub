@@ -9,15 +9,14 @@
     "SelectedGroup": "Selected group",
     "Name": "Name",
     "GroupDescription": "Description",
-    "Description": "Description",
     "DeleteGroup": "Delete group",
     "BookPermissions": "Book permissions",
     "SpecialPermissions": "Special permissions",
     "AllowedBookList": "Allowed books for selected group",
     "AllowedSpecialPermissionList": "Special permissions for selected group",
     "NewGroup": "New group",
-    "SpecialPermissisons": "Special permissisons",
     "GroupName": "Group name",
+    "Description": "Description",
     "Close": "Close",
     "Create": "Create",
     "AddAllowedBooksToGroup": "Add allowed books",
@@ -44,6 +43,12 @@
     "Search": "Search",
     "NoUsersSearch": "Sorry, but we could not find any user matching ",
     "NoUsersFound": "Sorry, but no users were found",
+    "NoRolesSearch": "Sorry, but we could not find any role matching ",
+    "NoRolesFound": "Sorry, but no roles were found",
+    "NoPermissionsSearch": "Sorry, but we could not find any permission matching ",
+    "NoPermissionsFound": "Sorry, but no permissions were found",
+    "NoProjectsSearch": "Sorry, but we could not find any project matching ",
+    "NoProjectsFound": "Sorry, but no projects were found",
     "SearchQuery": "Showing results for",
     "ResetSearch": "Reset search",
     "Groups": "Groups",
@@ -56,6 +61,12 @@
     "SuccessGroupUpdate": "Group update was successful.",
     "SuccessUserUpdate": "User update was successful.",
     "GroupEditTitle": "Edit group",
-    "Changed": "Changed"
+    "Changed": "Changed",
+
+    "ProjectPermissionManagementHeadline": "Project's permission management",
+    "Projects": "Projects",
+    "AddProjectPermissionToGroup": "Add project permission to a group",
+    "SelectedProject": "Selected project",
+    "AddPermissionToGroup": "Add permission to group"
   }
 }

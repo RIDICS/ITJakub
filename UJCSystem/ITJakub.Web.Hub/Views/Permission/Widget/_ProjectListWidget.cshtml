@@ -1,5 +1,5 @@
 ﻿@using Scalesoft.Localization.AspNetCore
-@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<ITJakub.Web.Hub.Models.PermissionViewModel>
+@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.ProjectDetailContract>
 
 @inject ILocalizationService Localizer
 
@@ -10,7 +10,7 @@
             <span class="text-nowrap">@Localizer.Translate("SearchQuery", "Permission"): <span class="searched-query">@Model.SearchQuery</span></span>
         </div>
         <div class="reset-search-form">
-            <form asp-action="RolePermissionList" asp-controller="Permission" method="get" class="">
+            <form asp-action="ProjectPermission" asp-controller="Permission" method="get" class="">
                 <button type="submit" class="btn btn-sm btn-default">@Localizer.Translate("ResetSearch", "Permission")</button>
             </form>
         </div>
@@ -22,7 +22,7 @@
     <div class="table-responsive">
         <table class="table table-hover">
             <tbody>
-                @await Html.PartialAsync("Widget/_PermissionListWidgetPage", Model)
+                @await Html.PartialAsync("Widget/_ProjectListWidgetPage", Model)
             </tbody>
         </table>
     </div>
@@ -33,12 +33,12 @@ else
         <i class="fa fa-info-circle fa-lg"></i>
         @if (!string.IsNullOrEmpty(Model.SearchQuery))
         {
-            @(Localizer.Translate("NoPermissionsSearch", "Permission") + "\"")<span class="searched-query">@Model.SearchQuery</span>
+            @(Localizer.Translate("NoProjectsSearch", "Permission") + "\"")<span class="searched-query">@Model.SearchQuery</span>
             @("\"")
         }
         else
         {
-            @Localizer.Translate("NoPermissionsFound", "Permission")
+            @Localizer.Translate("NoProjectsFound", "Permission")
         }
     </div>
 }

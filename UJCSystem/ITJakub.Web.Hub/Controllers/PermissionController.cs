@@ -25,6 +25,7 @@ namespace ITJakub.Web.Hub.Controllers
         private const int UserListPageSize = 10;
         private const int RoleListPageSize = 10;
         private const int PermissionListPageSize = 10;
+        private const int BookListPageSize = 10;
 
         public PermissionController(CommunicationProvider communicationProvider) : base(communicationProvider)
         {
@@ -67,12 +68,39 @@ namespace ITJakub.Web.Hub.Controllers
                     SearchQuery = search
                 };
 
+                ViewData.Add(PermissionConstants.IsRoleEditAllowed, true);
+
                 switch (viewType)
                 {
-                    case ViewType.Partial:
-                        return PartialView("_RoleList", model);
                     case ViewType.Widget:
                         return PartialView("Widget/_RoleListWidget", model);
+                    case ViewType.Full:
+                        return View(model);
+                    default:
+                        return View(model);
+                }
+            }
+        }
+
+        public ActionResult ProjectPermission(string search, int start, int count = BookListPageSize, ViewType viewType = ViewType.Full)
+        {
+            using (var client = GetRestClient())
+            {
+                search = search ?? string.Empty;
+                var result = client.GetProjectList(start, count, search);
+                var model = new ListViewModel<ProjectDetailContract>
+                {
+                    TotalCount = result.TotalCount,
+                    List = result.List,
+                    PageSize = count,
+                    Start = start,
+                    SearchQuery = search
+                };
+
+                switch (viewType)
+                {
+                    case ViewType.Widget:
+                        return PartialView("Widget/_ProjectListWidget", model);
                     case ViewType.Full:
                         return View(model);
                     default:
@@ -133,7 +161,26 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public IActionResult EditUser(int userId, bool successUpdate = false)
+        public ActionResult RolesByProject(int projectId, string search, int start, int count = RoleListPageSize)
+        {
+            using (var client = GetRestClient())
+            {
+                search = search ?? string.Empty;
+                var result = client.GetRolesByProject(projectId, start, count, search);
+                var model = new ListViewModel<RoleContract>
+                {
+                    TotalCount = result.TotalCount,
+                    List = result.List,
+                    PageSize = count,
+                    Start = start,
+                    SearchQuery = search
+                };
+                
+                return PartialView("Widget/_RoleListWidget", model);
+            }
+        }
+
+        public ActionResult EditUser(int userId, bool successUpdate = false)
         {
             using (var client = GetRestClient())
             {
@@ -424,23 +471,21 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddBooksAndCategoriesToGroup([FromBody] AddBooksAndCategoriesToRoleRequest request)
+        public ActionResult AddProjectsToRole([FromBody] AddProjectsToRoleRequest request)
         {
             using (var client = GetRestClient())
             {
                 client.AddBooksToRole(request.RoleId, request.BookIds);
-                //client.AddBooksAndCategoriesToGroup(request.GroupId, request.BookIds, request.CategoryIds);
                 return Json(new { });
             }
         }
 
         [HttpPost]
-        public IActionResult RemoveBooksAndCategoriesFromGroup([FromBody] RemoveBooksAndCategoriesFromRoleRequest request)
+        public ActionResult RemoveProjectsFromRole([FromBody] RemoveProjectsFromRoleRequest request)
         {
             using (var client = GetRestClient())
             {
                 client.RemoveBooksFromRole(request.RoleId, request.BookIds);
-                //client.RemoveBooksAndCategoriesFromGroup(request.GroupId, request.BookIds, request.CategoryIds);
                 return Json(new { });
             }
         }

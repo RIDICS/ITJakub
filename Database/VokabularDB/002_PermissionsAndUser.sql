@@ -6,6 +6,7 @@ BEGIN TRAN;
 		[Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_UserGroup(Id)] PRIMARY KEY,
 		[Name] varchar(255) NULL,
 		[CreateTime] datetime NOT NULL,
+		[LastChange] datetime NOT NULL,
 		[ExternalId] int NOT NULL CONSTRAINT [UQ_UserGroup(ExternalId)] UNIQUE,
 	);
 

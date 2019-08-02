@@ -11,9 +11,9 @@
     <link asp-append-version="true" href="~/css/ridics.permissions.css" rel="stylesheet" />
 }
 @section scripts{
-    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.permission-api-client.js"></script>
-    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.list.js"></script>
-    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.user.edit.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/permissions/ridics.permission-api-client.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/permissions/ridics.list.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/permissions/ridics.user.edit.js"></script>
 }
 
 <h2>@Localizer.Translate("EditUsersGroupsTitle", "Permission", LocTranslationSource.File)</h2>
@@ -62,10 +62,10 @@
                 </div>
             </div>
             <div class="panel-body">
-                <div id="role-list-container" class="list-container">
+                <div id="roleListContainer" class="list-container">
                     @await Html.PartialAsync("Widget/_RoleListWidget", Model.Roles)
                 </div>
-                <div id="role-pagination" class="text-center"></div>
+                <div id="rolePagination" class="text-center"></div>
             </div>
         </div>
     </div>
@@ -90,7 +90,7 @@
                     <div class="tab-content">
                         <div id="tab2-select-existing" class="tab-pane active">
                             <div class="permission-search">
-                                <input type="text" class="form-control permission-search-input" id="groupSearchInput" placeholder="@Localizer.Translate("SearchGroup", "Permission", LocTranslationSource.File)" />
+                                <input type="text" class="form-control permission-search-input" id="roleSearchInput" placeholder="@Localizer.Translate("SearchGroup", "Permission", LocTranslationSource.File)" />
                             </div>
                             <div class="content">
                                 <div class="item-details-title">@Localizer.Translate("SelectedGroup", "Permission", LocTranslationSource.File)</div>

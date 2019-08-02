@@ -42,7 +42,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
             var groups = new List<UserGroup>();
             foreach (var role in roles)
             {
-                var permission = m_permissionRepository.FindGroupByExternalIdOrCreate(role.Id);
+                var permission = m_permissionRepository.FindGroupByExternalIdOrCreate(role.Id, role.Name);
                 if (permission != null)
                 {
                     groups.Add(permission);

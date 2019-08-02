@@ -13,9 +13,9 @@
 }
 
 @section scripts{
-    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.permission-api-client.js"></script>
-    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.list.js"></script>
-    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.role.manager.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/permissions/ridics.permission-api-client.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/permissions/ridics.list.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/permissions/ridics.role.manager.js"></script>
 }
 
 <h2>@Localizer.Translate("GroupPermissionManagementHeadline", "Permission", LocTranslationSource.File)</h2>
@@ -47,10 +47,10 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <div id="role-list-container" class="list-container">
+                    <div id="roleListContainer" class="list-container selectable">
                         @await Html.PartialAsync("Widget/_RoleListWidget", Model)
                     </div>
-                    <div id="role-pagination" class="text-center"></div>
+                    <div id="rolePagination" class="text-center"></div>
                 </div>
             </div>
         </div>
@@ -81,8 +81,8 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <div id="user-list-container" class="list-container"></div>
-                    <div id="user-pagination" class="text-center"></div>
+                    <div id="userListContainer" class="list-container"></div>
+                    <div id="userPagination" class="text-center"></div>
                 </div>
             </div>
         </div>
@@ -111,8 +111,8 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <div id="permission-list-container" class="list-container"></div>
-                    <div id="permission-pagination" class="text-center"></div>
+                    <div id="permissionListContainer" class="list-container"></div>
+                    <div id="permissionPagination" class="text-center"></div>
                 </div>
             </div>
         </div>

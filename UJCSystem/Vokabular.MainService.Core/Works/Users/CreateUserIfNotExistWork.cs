@@ -75,6 +75,7 @@ namespace Vokabular.MainService.Core.Works.Users
                         ExternalId = roleContract.Id,
                         Name = roleContract.Name,
                         CreateTime = now,
+                        LastChange = now,
                     };
 
                     m_userRepository.Create(newDbRole);

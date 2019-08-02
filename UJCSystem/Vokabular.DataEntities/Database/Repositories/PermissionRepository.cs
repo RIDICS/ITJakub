@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
@@ -33,16 +35,24 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public virtual UserGroup FindGroupByExternalIdOrCreate(int externalId)
         {
+            return FindGroupByExternalIdOrCreate(externalId, null);
+        }
+
+        public virtual UserGroup FindGroupByExternalIdOrCreate(int externalId, string roleName)
+        {
             var group = FindGroupByExternalId(externalId);
             if (group != null)
             {
                 return group;
             }
 
+            var now = DateTime.UtcNow;
             var newGroup = new UserGroup
             {
                 ExternalId = externalId,
-                CreateTime = DateTime.UtcNow,
+                CreateTime = now,
+                LastChange = now,
+                Name = roleName
             };
 
             CreateGroup(newGroup);
@@ -189,6 +199,36 @@ namespace Vokabular.DataEntities.Database.Repositories
                             permission.Project.Id == projectId &&
                             permission.UserGroup.Id == groupId)
                     .SingleOrDefault<Permission>();
+        }
+
+        public virtual ListWithTotalCountResult<UserGroup> FindGroupsByBook(long bookId, int start, int count, string filterByName)
+        {
+            Project projectAlias = null;
+            Permission permissionAlias = null;
+            UserGroup groupAlias = null;
+
+            var query = GetSession().QueryOver(() => groupAlias)
+                .JoinQueryOver(x => groupAlias.Permissions, () => permissionAlias)
+                .JoinQueryOver(x => permissionAlias.Project, () => projectAlias)
+                .Where(() => projectAlias.Id == bookId);
+
+            if (!string.IsNullOrEmpty(filterByName))
+            {
+                query.WhereRestrictionOn( () => groupAlias.Name).IsInsensitiveLike(filterByName, MatchMode.Anywhere);
+            }
+
+            query.OrderBy(x => x.Name).Asc
+                .Skip(start)
+                .Take(count);
+
+            var list = query.Future();
+            var totalCount = query.ToRowCountQuery().FutureValue<int>();
+
+            return new ListWithTotalCountResult<UserGroup>
+            {
+                List = list.ToList(),
+                Count = totalCount.Value
+            };
         }
     }
 }

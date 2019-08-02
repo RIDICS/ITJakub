@@ -9,8 +9,9 @@ class RoleManager {
     private readonly delayForShowResponse = 1000;
     private readonly errorHandler: ErrorHandler;
     private currentUserSelectedItem: IUserDetail;
+    private roleList: ListWithPagination; 
     private userList: ListWithPagination;
-    private roleList: ListWithPagination;
+    private permissionList: ListWithPagination; 
 
     constructor() {
         this.searchBox = new SingleSetTypeaheadSearchBox<IUserDetail>("#mainSearchInput",
@@ -24,34 +25,38 @@ class RoleManager {
 
     public init(list?: ListWithPagination) {
         if (list == null) {
-            this.roleList = new ListWithPagination("Permission/RolePermission", 10, "role", ViewType.Widget, true, undefined, this);
+            this.roleList = new ListWithPagination("Permission/RolePermission", 10, "role", ViewType.Widget, true, this.reinitRoleList, this);
             
         } else {
             this.roleList = list;
         }
         this.roleList.init();
 
-        $(".role-row").click((event) => {
-            $(event.currentTarget as Node as HTMLElement).addClass("active").siblings().removeClass("active");
-            $("#addRoleButton").removeClass("disabled");
+        this.initCreateRoleModal();
+        this.initSearchBox();
+        this.reinitRoleList();
+        this.initEditRoleForm();
+    }
 
-            var selectedRoleId = $(event.currentTarget as Node as HTMLElement).data("role-id");
+    public reinitRoleList() {
+        $(".role-row").on("click", (event) => {
+            $(event.currentTarget as Node as Element).addClass("active").siblings().removeClass("active");
+
+            const selectedRoleId = $(event.currentTarget as Node as Element).data("role-id");
             this.loadUsers(selectedRoleId);
             this.loadPermissions(selectedRoleId);
         });
 
-        $("form.role-search-form").submit(() => {
+        $("form.role-search-form").on("submit", () => {
             this.clearSections();
         });
 
-        $("#role-pagination a").click(() => {
-           this.clearSections();
+        $("#rolePagination a").on("click", () => {
+            this.clearSections();
         });
 
-        this.initCreateRoleModal();
         this.initRemoveRoleButtons();
         this.initEditRoleButtons();
-        this.initSearchBox();
     }
 
     private loadUsers(roleId: number) {
@@ -59,7 +64,6 @@ class RoleManager {
         const container = userSection.find(".list-container");
         const searchForm = userSection.find(".user-search-form");
         searchForm.find("input.search-value").val("");
-        this.setSearchFormDisabled(searchForm, false);
         container.html("<div class=\"loader\"></div>");
         userSection.removeClass("hide");
 
@@ -79,6 +83,8 @@ class RoleManager {
                 this.initRemoveUserFromRoleButton,
                 this);
             this.userList.init();
+            this.userList.setSearchFormDisabled(false);
+            $("#addRoleButton").removeClass("disabled");
         });
     }
 
@@ -87,7 +93,6 @@ class RoleManager {
         const container = permissionSection.find(".list-container");
         container.html("<div class=\"loader\"></div>");
         const searchForm = permissionSection.find(".permission-search-form");
-        this.setSearchFormDisabled(searchForm, false);
         searchForm.find("input.search").val("");
         permissionSection.removeClass("hide");
 
@@ -99,14 +104,15 @@ class RoleManager {
                 .addContent(this.errorHandler.getErrorMessage(error, localization.translate("ListError", "PermissionJs").value));
             container.empty().append(errorAlert.buildElement());
         }).always(() => {
-            const permissionList = new ListWithPagination(`Permission/RolePermissionList?roleId=${roleId}`,
+            this.permissionList = new ListWithPagination(`Permission/RolePermissionList?roleId=${roleId}`,
                 10,
                 "permission",
                 ViewType.Widget,
                 false,
                 this.initPermissionManaging,
                 this);
-            permissionList.init();
+            this.permissionList.init();
+            this.permissionList.setSearchFormDisabled(false);
         });
     }
 
@@ -154,12 +160,12 @@ class RoleManager {
 
     private initRemoveUserFromRoleButton() {
         $(".remove-user-from-role").click((event) => {
-            var userRow = $(event.currentTarget as Node as HTMLElement).parents(".user-row");
-            var userId = userRow.data("user-id");
+            const userRow = $(event.currentTarget as Node as HTMLElement).parents(".user-row");
+            const userId = userRow.data("user-id");
             const alert = userRow.find(".alert");
             alert.hide();
 
-            var roleId = $(".role-row.active").data("role-id");
+            const roleId = $(".role-row.active").data("role-id");
             this.client.removeUserFromRole(userId, roleId).done(() => {
                 this.userList.reloadPage();
             }).fail((error) => {
@@ -192,12 +198,10 @@ class RoleManager {
 
             editRoleDialog.modal("show");
         });
-
-        this.initEditRoleForm();
     }
 
     private initEditRoleForm() {
-        const editRoleForm = $("#editRoleForm");
+        let editRoleForm = $("#editRoleForm");
 
         editRoleForm.on("submit", (event) => {
             event.preventDefault();
@@ -208,8 +212,10 @@ class RoleManager {
                 this.client.editRole(editRoleForm.serialize())
                     .done((response) => {
                         editRoleSection.html(response);
+                        editRoleForm = $("#editRoleForm");
                         if (editRoleForm.find(".alert-success").length) {
                             this.roleList.reloadPage();
+                            this.clearSections();
                         }
                     })
                     .fail((error) => {
@@ -291,10 +297,10 @@ class RoleManager {
             });
 
             addUserToRoleBtn.click(() => {
-                var roleError = $("#add-user-to-role-error");
+                const roleError = $("#add-user-to-role-error");
                 roleError.empty();
-                var roleId = $(".role-row.active").data("role-id");
-                var userId: number;
+                const roleId = $(".role-row.active").data("role-id");
+                let userId: number;
 
                if (typeof this.currentUserSelectedItem == "undefined" || this.currentUserSelectedItem == null)
                     userId = $("#selectedUser").data("user-id");
@@ -341,25 +347,8 @@ class RoleManager {
     }
 
     private clearSections() {
-        this.clearList("user");
-        this.clearList("permission");
+        this.userList.clear(localization.translate("RoleIsNotSelected", "PermissionJs").value);
+        this.permissionList.clear(localization.translate("RoleIsNotSelected", "PermissionJs").value);
         $("#addRoleButton").addClass("disabled");
-    }
-
-    private clearList(listType: string) {
-        const userSection = $(`#${listType}-section .section`);
-        const searchForm = userSection.find(`.${listType}-search-form`);
-        this.setSearchFormDisabled(searchForm);
-        $(`#${listType}-pagination`).empty();
-
-        const container = userSection.find(`.list-container`);
-        const infoAlert = new AlertComponentBuilder(AlertType.Info).addContent(localization.translate("RoleIsNotSelected", "PermissionJs").value);
-        container.empty().append(infoAlert.buildElement());
-    }
-
-    private setSearchFormDisabled(searchForm: JQuery, disabled = true) {
-        searchForm.find("input").prop("disabled", disabled);
-        searchForm.find("submit").prop("disabled", disabled);
-        searchForm.find("button").prop("disabled", disabled);
     }
 }

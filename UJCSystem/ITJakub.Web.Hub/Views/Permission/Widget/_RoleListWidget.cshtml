@@ -21,7 +21,7 @@
 {
     <div class="table-responsive">
         <table class="table table-hover">
-            <tbody class="selectable-table ">
+            <tbody>
                 @await Html.PartialAsync("Widget/_RoleListWidgetPage", Model)
             </tbody>
         </table>
@@ -33,12 +33,12 @@ else
         <i class="fa fa-info-circle fa-lg"></i>
         @if (!string.IsNullOrEmpty(Model.SearchQuery))
         {
-            @(Localizer.Translate("NoUsersSearch", "Permission") + "\"")<span class="searched-query">@Model.SearchQuery</span>
+            @(Localizer.Translate("NoRolesSearch", "Permission") + "\"")<span class="searched-query">@Model.SearchQuery</span>
             @("\"")
         }
         else
         {
-            @Localizer.Translate("NoUsersFound", "Permission")
+            @Localizer.Translate("NoRolesFound", "Permission")
         }
     </div>
 }
