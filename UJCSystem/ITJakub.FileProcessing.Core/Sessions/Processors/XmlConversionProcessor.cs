@@ -73,7 +73,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 TempDirectoryPath = tmpDirPath,
                 GetVersionList = versionProviderHelper.GetVersionsByBookXmlId,
                 SplitDocumentByPageBreaks = true,
-                DataDirectoryPath = m_dataDirectoryPath
+                DataDirectoryPath = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, m_dataDirectoryPath)
             };
 
             var evidenceFolderPath = Path.Combine(HostingEnvironment.ApplicationPhysicalPath,

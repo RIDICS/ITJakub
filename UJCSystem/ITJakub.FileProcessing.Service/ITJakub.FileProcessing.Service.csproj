@@ -212,10 +212,17 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ConversionData\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\itjakub-secrets\WcfServices\*.config">
       <Link>%(RecursiveDir)\%(FileName).config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\ITJakub.Xml.Conversion\Ujc.Ovj.Ooxml.Conversion\Data\**">
+      <Link>ConversionData\%(RecursiveDir)\%(FileName).%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
