@@ -42,6 +42,7 @@ namespace Vokabular.MainService.Core.Works.Permission
             {
                 Name = m_roleName,
                 CreateTime = now,
+                LastChange = now,
                 ExternalId = externalRoleId,
             };
 
