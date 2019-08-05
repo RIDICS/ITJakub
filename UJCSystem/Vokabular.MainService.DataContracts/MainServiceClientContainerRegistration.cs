@@ -9,6 +9,7 @@ namespace Vokabular.MainService.DataContracts
         public void Install(IServiceCollection services)
         {
             services.AddScoped<MainServiceBookClient>();
+            services.AddScoped<MainServiceCategoryClient>();
             services.AddScoped<MainServiceMetadataClient>();
             services.AddScoped<MainServiceProjectClient>();
             services.AddScoped<MainServiceResourceClient>();
