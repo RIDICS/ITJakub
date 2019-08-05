@@ -34,6 +34,11 @@ namespace ITJakub.Web.Hub.Controllers
         {
             return m_communication.GetMainServiceCategoryClient();
         }
+
+        public MainServiceExternalRepositoryClient GetExternalRepositoryClient()
+        {
+            return m_communication.GetMainServiceExternalRepositoryClient();
+        }
         
         public MainServiceFavoriteClient GetFavoriteClient()
         {

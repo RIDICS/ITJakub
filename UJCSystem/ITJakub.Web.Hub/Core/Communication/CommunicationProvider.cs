@@ -10,6 +10,7 @@ namespace ITJakub.Web.Hub.Core.Communication
         private readonly MainServiceRestClient m_mainServiceRestClient;
         private readonly MainServiceBookClient m_bookClient;
         private readonly MainServiceCategoryClient m_categoryClient;
+        private readonly MainServiceExternalRepositoryClient m_externalRepositoryClient;
         private readonly MainServiceFavoriteClient m_favoriteClient;
         private readonly MainServiceFilteringExpressionSetClient m_filteringExpressionSetClient;
         private readonly MainServiceMetadataClient m_metadataClient;
@@ -21,7 +22,7 @@ namespace ITJakub.Web.Hub.Core.Communication
         private const string LemmatizationServiceEndpointName = "LemmatizationService";
 
         public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider,
-            MainServiceRestClient mainServiceRestClient, MainServiceBookClient bookClient, MainServiceCategoryClient categoryClient,
+            MainServiceRestClient mainServiceRestClient, MainServiceBookClient bookClient, MainServiceCategoryClient categoryClient, MainServiceExternalRepositoryClient externalRepositoryClient,
             MainServiceFavoriteClient favoriteClient, MainServiceFilteringExpressionSetClient filteringExpressionSetClient, MainServiceMetadataClient metadataClient,
             MainServiceProjectClient projectClient, MainServiceResourceClient resourceClient, MainServiceRoleClient roleClient,
             MainServiceUserClient userClient)
@@ -30,6 +31,7 @@ namespace ITJakub.Web.Hub.Core.Communication
             m_mainServiceRestClient = mainServiceRestClient;
             m_bookClient = bookClient;
             m_categoryClient = categoryClient;
+            m_externalRepositoryClient = externalRepositoryClient;
             m_favoriteClient = favoriteClient;
             m_filteringExpressionSetClient = filteringExpressionSetClient;
             m_metadataClient = metadataClient;
@@ -52,6 +54,11 @@ namespace ITJakub.Web.Hub.Core.Communication
         public MainServiceCategoryClient GetMainServiceCategoryClient()
         {
             return m_categoryClient;
+        }
+
+        public MainServiceExternalRepositoryClient GetMainServiceExternalRepositoryClient()
+        {
+            return m_externalRepositoryClient;
         }
 
         public MainServiceFavoriteClient GetMainServiceFavoriteClient()
