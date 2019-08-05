@@ -51,33 +51,27 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult List()
         {
-            using (var client = GetRestClient())
-            {
-                const int start = 0;
-                var result = client.GetProjectList(start, ProjectListPageSize, null, true);
-                var viewModel = CreateProjectListViewModel(result, start);
-                return View(viewModel);
-            }
+            var client = GetProjectClient();
+            const int start = 0;
+            var result = client.GetProjectList(start, ProjectListPageSize, null, true);
+            var viewModel = CreateProjectListViewModel(result, start);
+            return View(viewModel);
         }
 
         public IActionResult Project(long id)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetProject(id);
-                var viewModel = Mapper.Map<ProjectItemViewModel>(result);
-                return View(viewModel);
-            }
+            var client = GetProjectClient();
+            var result = client.GetProject(id);
+            var viewModel = Mapper.Map<ProjectItemViewModel>(result);
+            return View(viewModel);
         }
 
         public IActionResult ProjectListContent(int start, int count)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetProjectList(start, count, null, true);
-                var viewModel = CreateProjectListViewModel(result, start);
-                return PartialView("_ProjectListContent", viewModel);
-            }
+            var client = GetProjectClient();
+            var result = client.GetProjectList(start, count, null, true);
+            var viewModel = CreateProjectListViewModel(result, start);
+            return PartialView("_ProjectListContent", viewModel);
         }
 
         public IActionResult ProjectModule(ProjectModuleType moduleType)
@@ -100,48 +94,48 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 return BadRequest();
             }
 
-            using (var client = GetRestClient())
+            var client = GetRestClient();
+            var projectClient = GetProjectClient();
+
+            switch (tabType)
             {
-                switch (tabType)
-                {
-                    case ProjectModuleTabType.WorkPublications:
-                        var snapshotList = client.GetSnapshotList(projectId.Value);
-                        var publicationsViewModel = Mapper.Map<List<SnapshotViewModel>>(snapshotList);
-                        return PartialView("Work/_Publications", publicationsViewModel);
-                    case ProjectModuleTabType.WorkPageList:
-                        return PartialView("Work/_PageList");
-                    case ProjectModuleTabType.WorkCooperation:
-                        return PartialView("Work/_Cooperation");
-                    case ProjectModuleTabType.WorkMetadata:
-                        var literaryKinds = client.GetLiteraryKindList();
-                        var literaryGenres = client.GetLiteraryGenreList();
-                        var literaryOriginals = client.GetLiteraryOriginalList();
-                        var responsibleTypes = client.GetResponsibleTypeList();
-                        var categories = client.GetCategoryList();
-                        var projectMetadata = client.GetProjectMetadata(projectId.Value, true, true, true, true, true, true, true);
-                        var workMetadaViewModel = Mapper.Map<ProjectWorkMetadataViewModel>(projectMetadata);
-                        workMetadaViewModel.AllLiteraryKindList = literaryKinds;
-                        workMetadaViewModel.AllLiteraryGenreList = literaryGenres;
-                        workMetadaViewModel.AllLiteraryOriginalList = literaryOriginals;
-                        workMetadaViewModel.AllCategoryList = categories;
-                        workMetadaViewModel.AllResponsibleTypeList =
-                            Mapper.Map<List<ResponsibleTypeViewModel>>(responsibleTypes);
-                        return PartialView("Work/_Metadata", workMetadaViewModel);
-                    case ProjectModuleTabType.WorkHistory:
-                        return PartialView("Work/_History");
-                    case ProjectModuleTabType.WorkNote:
-                        return PartialView("Work/_Note");
-                    case ProjectModuleTabType.Forum:
-                        var forum = client.GetForum(projectId.Value);
-                        ForumViewModel forumViewModel = null;
-                        if (forum != null)
-                        {
-                            forumViewModel = Mapper.Map<ForumViewModel>(forum);
-                        }
-                        return PartialView("Work/_Forum", forumViewModel);
-                    default:
-                        return NotFound();
-                }
+                case ProjectModuleTabType.WorkPublications:
+                    var snapshotList = client.GetSnapshotList(projectId.Value);
+                    var publicationsViewModel = Mapper.Map<List<SnapshotViewModel>>(snapshotList);
+                    return PartialView("Work/_Publications", publicationsViewModel);
+                case ProjectModuleTabType.WorkPageList:
+                    return PartialView("Work/_PageList");
+                case ProjectModuleTabType.WorkCooperation:
+                    return PartialView("Work/_Cooperation");
+                case ProjectModuleTabType.WorkMetadata:
+                    var literaryKinds = client.GetLiteraryKindList();
+                    var literaryGenres = client.GetLiteraryGenreList();
+                    var literaryOriginals = client.GetLiteraryOriginalList();
+                    var responsibleTypes = client.GetResponsibleTypeList();
+                    var categories = client.GetCategoryList();
+                    var projectMetadata = projectClient.GetProjectMetadata(projectId.Value, true, true, true, true, true, true, true);
+                    var workMetadaViewModel = Mapper.Map<ProjectWorkMetadataViewModel>(projectMetadata);
+                    workMetadaViewModel.AllLiteraryKindList = literaryKinds;
+                    workMetadaViewModel.AllLiteraryGenreList = literaryGenres;
+                    workMetadaViewModel.AllLiteraryOriginalList = literaryOriginals;
+                    workMetadaViewModel.AllCategoryList = categories;
+                    workMetadaViewModel.AllResponsibleTypeList =
+                        Mapper.Map<List<ResponsibleTypeViewModel>>(responsibleTypes);
+                    return PartialView("Work/_Metadata", workMetadaViewModel);
+                case ProjectModuleTabType.WorkHistory:
+                    return PartialView("Work/_History");
+                case ProjectModuleTabType.WorkNote:
+                    return PartialView("Work/_Note");
+                case ProjectModuleTabType.Forum:
+                    var forum = client.GetForum(projectId.Value);
+                    ForumViewModel forumViewModel = null;
+                    if (forum != null)
+                    {
+                        forumViewModel = Mapper.Map<ForumViewModel>(forum);
+                    }
+                    return PartialView("Work/_Forum", forumViewModel);
+                default:
+                    return NotFound();
             }
         }
 
@@ -214,25 +208,23 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult CreateProject([FromBody] CreateProjectRequest request)
         {
-            using (var client = GetRestClient())
+            var client = GetProjectClient();
+            
+            var newProject = new ProjectContract
             {
-                var newProject = new ProjectContract
-                {
-                    Name = request.Name
-                };
-                var newProjectId = client.CreateProject(newProject);
-                return Json(newProjectId);
-            }
+                Name = request.Name
+            };
+            var newProjectId = client.CreateProject(newProject);
+            return Json(newProjectId);
         }
 
         [HttpPost]
         public IActionResult DeleteProject([FromBody] DeleteProjectRequest request)
         {
-            using (var client = GetRestClient())
-            {
-                client.DeleteProject(request.Id);
-                return Json(new { });
-            }
+            var client = GetProjectClient();
+            
+            client.DeleteProject(request.Id);
+            return Json(new { });
         }
 
         [HttpPost]
@@ -431,12 +423,10 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         public IActionResult GetProjectMetadata([FromQuery] long projectId, [FromQuery] bool includeAuthor, [FromQuery] bool includeResponsiblePerson,
             [FromQuery] bool includeKind, [FromQuery] bool includeGenre, [FromQuery] bool includeOriginal, [FromQuery] bool includeKeyword, [FromQuery] bool includeCategory)
         {
-            using (var client = GetRestClient())
-            {
-                var response = client.GetProjectMetadata(projectId, includeAuthor,
-                includeResponsiblePerson, includeKind, includeGenre, includeOriginal, includeKeyword, includeCategory);
-                return Json(response);
-            }
+            var client = GetProjectClient();
+            var response = client.GetProjectMetadata(projectId, includeAuthor,
+            includeResponsiblePerson, includeKind, includeGenre, includeOriginal, includeKeyword, includeCategory);
+            return Json(response);
         }
 
         [HttpPost]
@@ -447,117 +437,116 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 return BadRequest();
             }
 
-            using (var client = GetRestClient())
+            var client = GetProjectClient();
+           
+            var contract = new ProjectMetadataContract
             {
-                var contract = new ProjectMetadataContract
-                {
-                    Authors = request.Authors,
-                    BiblText = request.BiblText,
-                    Copyright = request.Copyright,
-                    ManuscriptCountry = request.ManuscriptCountry,
-                    ManuscriptExtent = request.ManuscriptExtent,
-                    ManuscriptIdno = request.ManuscriptIdno,
-                    ManuscriptRepository = request.ManuscriptRepository,
-                    ManuscriptSettlement = request.ManuscriptSettlement,
-                    NotAfter = request.NotAfter != null ? (DateTime?) new DateTime(request.NotAfter.Value, 1, 1) : null,
-                    NotBefore = request.NotBefore != null
-                        ? (DateTime?) new DateTime(request.NotBefore.Value, 1, 1)
-                        : null,
-                    OriginDate = request.OriginDate,
-                    PublishDate = request.PublishDate,
-                    PublishPlace = request.PublishPlace,
-                    PublisherText = request.PublisherText,
-                    PublisherEmail = request.PublisherEmail,
-                    RelicAbbreviation = request.RelicAbbreviation,
-                    SourceAbbreviation = request.SourceAbbreviation,
-                    SubTitle = request.SubTitle,
-                    Title = request.Title,
-                };
-                long newResourceVersionId = -1;
-                int unsuccessRequestCount = 0;
+                Authors = request.Authors,
+                BiblText = request.BiblText,
+                Copyright = request.Copyright,
+                ManuscriptCountry = request.ManuscriptCountry,
+                ManuscriptExtent = request.ManuscriptExtent,
+                ManuscriptIdno = request.ManuscriptIdno,
+                ManuscriptRepository = request.ManuscriptRepository,
+                ManuscriptSettlement = request.ManuscriptSettlement,
+                NotAfter = request.NotAfter != null ? (DateTime?) new DateTime(request.NotAfter.Value, 1, 1) : null,
+                NotBefore = request.NotBefore != null
+                    ? (DateTime?) new DateTime(request.NotBefore.Value, 1, 1)
+                    : null,
+                OriginDate = request.OriginDate,
+                PublishDate = request.PublishDate,
+                PublishPlace = request.PublishPlace,
+                PublisherText = request.PublisherText,
+                PublisherEmail = request.PublisherEmail,
+                RelicAbbreviation = request.RelicAbbreviation,
+                SourceAbbreviation = request.SourceAbbreviation,
+                SubTitle = request.SubTitle,
+                Title = request.Title,
+            };
+            long newResourceVersionId = -1;
+            int unsuccessRequestCount = 0;
 
-                try
-                {
-                    newResourceVersionId = client.CreateNewProjectMetadataVersion(projectId, contract);
-                }
-                catch (HttpRequestException)
-                {
-                    unsuccessRequestCount++;
-                }
-
-                try
-                {
-                    client.SetProjectAuthors(projectId, new IntegerIdListContract {IdList = request.AuthorIdList});
-                }
-                catch (HttpRequestException)
-                {
-                    unsuccessRequestCount++;
-                }
-
-                try
-                {
-                    client.SetProjectResponsiblePersons(projectId, request.ProjectResponsiblePersonIdList);
-                }
-                catch (HttpRequestException)
-                {
-                    unsuccessRequestCount++;
-                }
-
-                try
-                {
-                    client.SetProjectLiteraryKinds(projectId,
-                        new IntegerIdListContract {IdList = request.LiteraryKindIdList});
-                }
-                catch (HttpRequestException)
-                {
-                    unsuccessRequestCount++;
-                }
-
-                try
-                {
-                    client.SetProjectCategories(projectId,
-                        new IntegerIdListContract { IdList = request.CategoryIdList });
-                }
-                catch (HttpRequestException)
-                {
-                    unsuccessRequestCount++;
-                }
-
-                try
-                {
-                    client.SetProjectLiteraryGenres(projectId,
-                        new IntegerIdListContract {IdList = request.LiteraryGenreIdList});
-                }
-                catch (HttpRequestException)
-                {
-                    unsuccessRequestCount++;
-                }
-
-                try
-                {
-                    client.SetProjectKeywords(projectId, new IntegerIdListContract {IdList = request.KeywordIdList});
-                }
-                catch (HttpRequestException)
-                {
-                    unsuccessRequestCount++;
-                }
-
-                if (unsuccessRequestCount > 0)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError);
-                }
-
-                var response = new SaveMetadataResponse
-                {
-                    NewResourceVersionId = newResourceVersionId,
-                    LastModificationText = DateTime.Now.ToString(CultureInfo.CurrentCulture),
-                    LiteraryOriginalText =
-                        LiteraryOriginalTextConverter.GetLiteraryOriginalText(request.ManuscriptCountry,
-                            request.ManuscriptSettlement,
-                            request.ManuscriptRepository, request.ManuscriptIdno, request.ManuscriptExtent),
-                };
-                return Json(response);
+            try
+            {
+                newResourceVersionId = client.CreateNewProjectMetadataVersion(projectId, contract);
             }
+            catch (HttpRequestException)
+            {
+                unsuccessRequestCount++;
+            }
+
+            try
+            {
+                client.SetProjectAuthors(projectId, new IntegerIdListContract {IdList = request.AuthorIdList});
+            }
+            catch (HttpRequestException)
+            {
+                unsuccessRequestCount++;
+            }
+
+            try
+            {
+                client.SetProjectResponsiblePersons(projectId, request.ProjectResponsiblePersonIdList);
+            }
+            catch (HttpRequestException)
+            {
+                unsuccessRequestCount++;
+            }
+
+            try
+            {
+                client.SetProjectLiteraryKinds(projectId,
+                    new IntegerIdListContract {IdList = request.LiteraryKindIdList});
+            }
+            catch (HttpRequestException)
+            {
+                unsuccessRequestCount++;
+            }
+
+            try
+            {
+                client.SetProjectCategories(projectId,
+                    new IntegerIdListContract { IdList = request.CategoryIdList });
+            }
+            catch (HttpRequestException)
+            {
+                unsuccessRequestCount++;
+            }
+
+            try
+            {
+                client.SetProjectLiteraryGenres(projectId,
+                    new IntegerIdListContract {IdList = request.LiteraryGenreIdList});
+            }
+            catch (HttpRequestException)
+            {
+                unsuccessRequestCount++;
+            }
+
+            try
+            {
+                client.SetProjectKeywords(projectId, new IntegerIdListContract {IdList = request.KeywordIdList});
+            }
+            catch (HttpRequestException)
+            {
+                unsuccessRequestCount++;
+            }
+
+            if (unsuccessRequestCount > 0)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            var response = new SaveMetadataResponse
+            {
+                NewResourceVersionId = newResourceVersionId,
+                LastModificationText = DateTime.Now.ToString(CultureInfo.CurrentCulture),
+                LiteraryOriginalText =
+                    LiteraryOriginalTextConverter.GetLiteraryOriginalText(request.ManuscriptCountry,
+                        request.ManuscriptSettlement,
+                        request.ManuscriptRepository, request.ManuscriptIdno, request.ManuscriptExtent),
+            };
+            return Json(response);
         }
 
 

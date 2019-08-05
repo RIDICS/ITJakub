@@ -24,7 +24,12 @@ namespace ITJakub.Web.Hub.Controllers
         {
             return m_communication.GetMainServiceClient();
         }
-        
+
+        public MainServiceProjectClient GetProjectClient()
+        {
+            return m_communication.GetMainServiceProjectClient();
+        }
+
         public LemmatizationServiceClient GetLemmationzationServiceClient()
         {
             return m_communication.GetLemmatizationClient();

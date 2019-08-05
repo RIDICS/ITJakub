@@ -46,222 +46,25 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
         }
 
-        #region Project
-
-        public PagedResultList<ProjectDetailContract> GetProjectList(int start, int count, string filterByName = null, bool fetchPageCount = false)
-        {
-            try
-            {
-                var url = UrlQueryBuilder.Create("project")
-                    .AddParameter("start", start)
-                    .AddParameter("count", count)
-                    .AddParameter("filterByName", filterByName)
-                    .AddParameter("fetchPageCount", fetchPageCount)
-                    .ToQuery();
-                var result = GetPagedList<ProjectDetailContract>(url);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public ProjectDetailContract GetProject(long projectId, bool fetchPageCount = false)
-        {
-            try
-            {
-                var project = Get<ProjectDetailContract>($"project/{projectId}?fetchPageCount={fetchPageCount}");
-                return project;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public long CreateProject(ProjectContract project)
-        {
-            try
-            {
-                var projectId = Post<long>("project", project);
-                return projectId;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void DeleteProject(long projectId)
-        {
-            try
-            {
-                Delete($"project/{projectId}");
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public ProjectMetadataResultContract GetProjectMetadata(long projectId, bool includeAuthor,
-            bool includeResponsiblePerson, bool includeKind, bool includeGenre, bool includeOriginal, bool includeKeyword,
-            bool includeCategory)
-        {
-            try
-            {
-                var metadata =
-                    Get<ProjectMetadataResultContract>(
-                        $"project/{projectId}/metadata?includeAuthor={includeAuthor}&includeResponsiblePerson={includeResponsiblePerson}&includeKind={includeKind}&includeGenre={includeGenre}&includeOriginal={includeOriginal}&includeKeyword={includeKeyword}&includeCategory={includeCategory}");
-                return metadata;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
         public List<string> GetPublisherAutoComplete(string query)
         {
             try
             {
-                var publishers = Get<List<string>>($"metadata/publisher/autocomplete?query={query}");
+                var publishers =  Get<List<string>>($"metadata/publisher/autocomplete?query={query}");
                 return publishers;
             }
             catch (HttpRequestException e)
             {
                 if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+                    m_logger.LogError("{0} failed with {1}",  GetCurrentMethod(), e);
 
                 throw;
             }
         }
-
-        public long CreateNewProjectMetadataVersion(long projectId, ProjectMetadataContract metadata)
-        {
-            try
-            {
-                var newResourceVersion = Post<long>($"project/{projectId}/metadata", metadata);
-                return newResourceVersion;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        #endregion
 
         #region Configure project relationships
 
-        public void SetProjectLiteraryKinds(long projectId, IntegerIdListContract request)
-        {
-            try
-            {
-                Put<object>($"project/{projectId}/literary-kind", request);
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void SetProjectCategories(long projectId, IntegerIdListContract request)
-        {
-            try
-            {
-                Put<object>($"project/{projectId}/category", request);
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void SetProjectKeywords(long projectId, IntegerIdListContract request)
-        {
-            try
-            {
-                Put<object>($"project/{projectId}/keyword", request);
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void SetProjectLiteraryGenres(long projectId, IntegerIdListContract request)
-        {
-            try
-            {
-                Put<object>($"project/{projectId}/literary-genre", request);
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void SetProjectAuthors(long projectId, IntegerIdListContract request)
-        {
-            try
-            {
-                Put<object>($"project/{projectId}/author", request);
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void SetProjectResponsiblePersons(long projectId, List<ProjectResponsiblePersonIdContract> request)
-        {
-            try
-            {
-                Put<object>($"project/{projectId}/responsible-person", request);
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
+      
 
         #endregion
 

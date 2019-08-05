@@ -48,6 +48,8 @@ namespace ITJakub.Web.Hub
             services.AddSingleton<Profile, ResponsibleTypeProfile>();
             services.AddSingleton<Profile, SnapshotProfile>();
             services.AddSingleton<Profile, UserProfile>();
+
+            new MainServiceClientContainerRegistration().Install(services);
         }
     }
 }

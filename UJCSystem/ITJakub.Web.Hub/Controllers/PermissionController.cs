@@ -84,28 +84,27 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult ProjectPermission(string search, int start, int count = BookListPageSize, ViewType viewType = ViewType.Full)
         {
-            using (var client = GetRestClient())
-            {
-                search = search ?? string.Empty;
-                var result = client.GetProjectList(start, count, search);
-                var model = new ListViewModel<ProjectDetailContract>
-                {
-                    TotalCount = result.TotalCount,
-                    List = result.List,
-                    PageSize = count,
-                    Start = start,
-                    SearchQuery = search
-                };
+            search = search ?? string.Empty;
 
-                switch (viewType)
-                {
-                    case ViewType.Widget:
-                        return PartialView("Widget/_ProjectListWidget", model);
-                    case ViewType.Full:
-                        return View(model);
-                    default:
-                        return View(model);
-                }
+            var client = GetProjectClient();
+            var result = client.GetProjectList(start, count, search);
+            var model = new ListViewModel<ProjectDetailContract>
+            {
+                TotalCount = result.TotalCount,
+                List = result.List,
+                PageSize = count,
+                Start = start,
+                SearchQuery = search
+            };
+
+            switch (viewType)
+            {
+                case ViewType.Widget:
+                    return PartialView("Widget/_ProjectListWidget", model);
+                case ViewType.Full:
+                    return View(model);
+                default:
+                    return View(model);
             }
         }
 
