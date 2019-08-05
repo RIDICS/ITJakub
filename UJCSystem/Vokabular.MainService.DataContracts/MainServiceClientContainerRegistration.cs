@@ -8,6 +8,7 @@ namespace Vokabular.MainService.DataContracts
     {
         public void Install(IServiceCollection services)
         {
+            services.AddScoped<MainServiceBookClient>();
             services.AddScoped<MainServiceMetadataClient>();
             services.AddScoped<MainServiceProjectClient>();
             services.AddScoped<MainServiceRoleClient>();

@@ -25,6 +25,11 @@ namespace ITJakub.Web.Hub.Controllers
             return m_communication.GetMainServiceClient();
         }
 
+        public MainServiceBookClient GetBookClient()
+        {
+            return m_communication.GetMainServiceBookClient();
+        }
+
         public MainServiceMetadataClient GetMetadataClient()
         {
             return m_communication.GetMainServiceMetadataClient();
