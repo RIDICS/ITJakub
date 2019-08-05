@@ -10,6 +10,7 @@ namespace ITJakub.Web.Hub.Core.Communication
         private readonly MainServiceRestClient m_mainServiceRestClient;
         private readonly MainServiceBookClient m_bookClient;
         private readonly MainServiceCategoryClient m_categoryClient;
+        private readonly MainServiceFavoriteClient m_favoriteClient;
         private readonly MainServiceFilteringExpressionSetClient m_filteringExpressionSetClient;
         private readonly MainServiceMetadataClient m_metadataClient;
         private readonly MainServiceProjectClient m_projectClient;
@@ -21,7 +22,7 @@ namespace ITJakub.Web.Hub.Core.Communication
 
         public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider,
             MainServiceRestClient mainServiceRestClient, MainServiceBookClient bookClient, MainServiceCategoryClient categoryClient,
-            MainServiceFilteringExpressionSetClient filteringExpressionSetClient, MainServiceMetadataClient metadataClient,
+            MainServiceFavoriteClient favoriteClient, MainServiceFilteringExpressionSetClient filteringExpressionSetClient, MainServiceMetadataClient metadataClient,
             MainServiceProjectClient projectClient, MainServiceResourceClient resourceClient, MainServiceRoleClient roleClient,
             MainServiceUserClient userClient)
         {
@@ -29,6 +30,7 @@ namespace ITJakub.Web.Hub.Core.Communication
             m_mainServiceRestClient = mainServiceRestClient;
             m_bookClient = bookClient;
             m_categoryClient = categoryClient;
+            m_favoriteClient = favoriteClient;
             m_filteringExpressionSetClient = filteringExpressionSetClient;
             m_metadataClient = metadataClient;
             m_projectClient = projectClient;
@@ -50,6 +52,11 @@ namespace ITJakub.Web.Hub.Core.Communication
         public MainServiceCategoryClient GetMainServiceCategoryClient()
         {
             return m_categoryClient;
+        }
+
+        public MainServiceFavoriteClient GetMainServiceFavoriteClient()
+        {
+            return m_favoriteClient;
         }
 
         public MainServiceFilteringExpressionSetClient GetMainServiceFilteringExpressionSetClient()
