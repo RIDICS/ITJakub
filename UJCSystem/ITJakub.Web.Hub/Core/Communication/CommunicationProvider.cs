@@ -8,18 +8,21 @@ namespace ITJakub.Web.Hub.Core.Communication
     {
         private readonly CommunicationConfigurationProvider m_configurationProvider;
         private readonly MainServiceRestClient m_mainServiceRestClient;
-        private readonly MainServiceProjectClient m_projectClient;
         private readonly MainServiceMetadataClient m_metadataClient;
+        private readonly MainServiceProjectClient m_projectClient;
+        private readonly MainServiceRoleClient m_roleClient;
+        
 
         private const string LemmatizationServiceEndpointName = "LemmatizationService";
 
         public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider,
-            MainServiceRestClient mainServiceRestClient, MainServiceProjectClient projectClient, MainServiceMetadataClient metadataClient)
+            MainServiceRestClient mainServiceRestClient, MainServiceMetadataClient metadataClient, MainServiceProjectClient projectClient, MainServiceRoleClient roleClient)
         {
             m_configurationProvider = communicationConfigurationProvider;
             m_mainServiceRestClient = mainServiceRestClient;
-            m_projectClient = projectClient;
             m_metadataClient = metadataClient;
+            m_projectClient = projectClient;
+            m_roleClient = roleClient;
         }
 
         public MainServiceRestClient GetMainServiceClient()
@@ -27,14 +30,19 @@ namespace ITJakub.Web.Hub.Core.Communication
             return m_mainServiceRestClient;
         }
 
+        public MainServiceMetadataClient GetMainServiceMetadataClient()
+        {
+            return m_metadataClient;
+        }
+
         public MainServiceProjectClient GetMainServiceProjectClient()
         {
             return m_projectClient;
         }
 
-        public MainServiceMetadataClient GetMainServiceMetadataClient()
+        public MainServiceRoleClient GetMainServiceRoleClient()
         {
-            return m_metadataClient;
+            return m_roleClient;
         }
 
         public LemmatizationServiceClient GetLemmatizationClient()
