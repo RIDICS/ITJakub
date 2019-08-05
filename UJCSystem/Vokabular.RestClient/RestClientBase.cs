@@ -426,7 +426,7 @@ namespace Vokabular.RestClient
             }
         }
 
-        protected string GetCurrentMethod([CallerMemberName] string methodName = null)
+        public string GetCurrentMethod([CallerMemberName] string methodName = null)
         {
             return methodName;
         }
