@@ -273,24 +273,26 @@ class RoleManager {
             addUserToRoleBtn.data("init", true);
 
             const initModalBtn = $("#addRoleButton");
-            const addToRoleDialog = $("#addToRoleDialog");
+            const addToRoleModal = $("#addToRoleDialog");
+            const roleError = $("#add-user-to-role-error");
+
             initModalBtn.click(() => {
                 if (!initModalBtn.hasClass("disabled")) {
                     const role = $(".role-row.active");
                     $("#specificRoleName").text(role.find(".name").text());
                     $("#specificRoleDescription").text(role.find(".description").text());
-                    addToRoleDialog.modal();
+                    addToRoleModal.modal();
                 }
             });
 
-            addToRoleDialog.on("hidden.bs.modal", () => {
+            addToRoleModal.on("hidden.bs.modal", () => {
+                roleError.empty();
                 this.currentUserSelectedItem = null; 
-                addToRoleDialog.find("#mainSearchInput").val("");
-                addToRoleDialog.find("#selectedUser").text(localization.translate("UserIsNotSelected", "Permission").value);
+                addToRoleModal.find("#mainSearchInput").val("");
+                addToRoleModal.find("#selectedUser").text(localization.translate("UserIsNotSelected", "Permission").value);
             });
 
             addUserToRoleBtn.click(() => {
-                const roleError = $("#add-user-to-role-error");
                 roleError.empty();
                 const roleId = $(".role-row.active").data("role-id");
                 if (typeof this.currentUserSelectedItem == "undefined" || this.currentUserSelectedItem == null) {
@@ -303,10 +305,10 @@ class RoleManager {
                     const userId = this.currentUserSelectedItem.id;
                     this.client.addUserToRole(userId, roleId).done(() => {
                         this.userList.reloadPage();
-                        addToRoleDialog.modal("hide");
+                        addToRoleModal.modal("hide");
                     }).fail((error) => {
                         const errorAlert = new AlertComponentBuilder(AlertType.Error)
-                            .addContent(this.errorHandler.getErrorMessage(error, localization.translate("AddUserToRoleError", "PermissionJs").value));
+                            .addContent(this.errorHandler.getErrorMessage(error));
                         roleError.empty().append(errorAlert.buildElement());
                     });
                 }
@@ -319,14 +321,20 @@ class RoleManager {
     }
 
     private initCreateRoleModal() {
+        const createRoleModal = $("#createRoleModal");
+        const roleError = $("#create-role-error");
+
         $("#createRoleButton").click(() => {
-            $("#createRoleModal").modal();
+            createRoleModal.modal();
+        });
+
+        createRoleModal.on("hidden.bs.modal", () => {
+            roleError.empty();
         });
 
         $("#create-role").click(() => {
             var roleName = $("#new-role-name").val() as string;
             var roleDescription = $("#new-role-description").val() as string;
-            var roleError = $("#create-role-error");
             roleError.empty();
             this.client.createRole(roleName, roleDescription).done(() => {
                 $("#createRoleModal").modal("hide");
