@@ -14,7 +14,6 @@ namespace ITJakub.BatchImport.Client
         {            
             container.Register(Component.For<FileUploadManager>());
             container.Register(Component.For<CommunicationProvider>());
-            container.Register(Component.For<AuthenticationManager>());
             container.Register(Component.For<IMainServiceAuthTokenProvider, AuthenticationManager>());
             container.Register(Component.For<IMainServiceUriProvider, MainServiceUriProvider>());
             container.Register(Component.For<MainServiceRestClient>());
