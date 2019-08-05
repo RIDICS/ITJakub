@@ -10,6 +10,7 @@ namespace ITJakub.Web.Hub.Core.Communication
         private readonly MainServiceRestClient m_mainServiceRestClient;
         private readonly MainServiceBookClient m_bookClient;
         private readonly MainServiceCategoryClient m_categoryClient;
+        private readonly MainServiceFilteringExpressionSetClient m_filteringExpressionSetClient;
         private readonly MainServiceMetadataClient m_metadataClient;
         private readonly MainServiceProjectClient m_projectClient;
         private readonly MainServiceResourceClient m_resourceClient;
@@ -20,13 +21,15 @@ namespace ITJakub.Web.Hub.Core.Communication
 
         public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider,
             MainServiceRestClient mainServiceRestClient, MainServiceBookClient bookClient, MainServiceCategoryClient categoryClient,
-            MainServiceMetadataClient metadataClient, MainServiceProjectClient projectClient, MainServiceResourceClient resourceClient,
-            MainServiceRoleClient roleClient, MainServiceUserClient userClient)
+            MainServiceFilteringExpressionSetClient filteringExpressionSetClient, MainServiceMetadataClient metadataClient,
+            MainServiceProjectClient projectClient, MainServiceResourceClient resourceClient, MainServiceRoleClient roleClient,
+            MainServiceUserClient userClient)
         {
             m_configurationProvider = communicationConfigurationProvider;
             m_mainServiceRestClient = mainServiceRestClient;
             m_bookClient = bookClient;
             m_categoryClient = categoryClient;
+            m_filteringExpressionSetClient = filteringExpressionSetClient;
             m_metadataClient = metadataClient;
             m_projectClient = projectClient;
             m_resourceClient = resourceClient;
@@ -47,6 +50,11 @@ namespace ITJakub.Web.Hub.Core.Communication
         public MainServiceCategoryClient GetMainServiceCategoryClient()
         {
             return m_categoryClient;
+        }
+
+        public MainServiceFilteringExpressionSetClient GetMainServiceFilteringExpressionSetClient()
+        {
+            return m_filteringExpressionSetClient;
         }
 
         public MainServiceMetadataClient GetMainServiceMetadataClient()

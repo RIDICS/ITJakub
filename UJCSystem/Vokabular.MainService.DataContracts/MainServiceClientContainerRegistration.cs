@@ -10,6 +10,7 @@ namespace Vokabular.MainService.DataContracts
         {
             services.AddScoped<MainServiceBookClient>();
             services.AddScoped<MainServiceCategoryClient>();
+            services.AddScoped<MainServiceFilteringExpressionSetClient>();
             services.AddScoped<MainServiceMetadataClient>();
             services.AddScoped<MainServiceProjectClient>();
             services.AddScoped<MainServiceResourceClient>();

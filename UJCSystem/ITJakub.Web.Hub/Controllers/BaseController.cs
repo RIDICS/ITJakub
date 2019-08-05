@@ -34,6 +34,11 @@ namespace ITJakub.Web.Hub.Controllers
         {
             return m_communication.GetMainServiceCategoryClient();
         }
+        
+        public MainServiceFilteringExpressionSetClient GetFilteringExpressionSetClient()
+        {
+            return m_communication.GetMainServiceFilteringExpressionSetClient();
+        }
 
         public MainServiceMetadataClient GetMetadataClient()
         {
