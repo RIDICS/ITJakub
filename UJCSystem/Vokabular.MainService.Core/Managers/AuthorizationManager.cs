@@ -4,9 +4,7 @@ using System.Linq;
 using System.Reflection;
 using log4net;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Errors;
-using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.MainService.DataContracts.Contracts.CardFile;
 using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Search.Criteria;
@@ -21,14 +19,11 @@ namespace Vokabular.MainService.Core.Managers
 
         private readonly AuthenticationManager m_authenticationManager;
         private readonly PermissionRepository m_permissionRepository;
-        private readonly CommunicationProvider m_communicationProvider;
 
-        public AuthorizationManager(AuthenticationManager authenticationManager, PermissionRepository permissionRepository,
-            CommunicationProvider communicationProvider)
+        public AuthorizationManager(AuthenticationManager authenticationManager, PermissionRepository permissionRepository)
         {
             m_authenticationManager = authenticationManager;
             m_permissionRepository = permissionRepository;
-            m_communicationProvider = communicationProvider;
         }
 
         public int GetCurrentUserId()
@@ -100,7 +95,6 @@ namespace Vokabular.MainService.Core.Managers
             else
             {
                 var role = m_authenticationManager.GetUnregisteredRole();
-                new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, role.Id).Execute();
                 var group = m_permissionRepository.FindGroupByExternalIdOrCreate(role.Id, role.Name);
                 filtered = m_permissionRepository.GetFilteredBookIdListByGroupPermissions(group.Id, projectIds);
             }
@@ -124,7 +118,6 @@ namespace Vokabular.MainService.Core.Managers
             else
             {
                 var role = m_authenticationManager.GetUnregisteredRole();
-                new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, role.Id).Execute();
                 var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalIdOrCreate(role.Id, role.Name));
                 var filtered = m_permissionRepository.InvokeUnitOfWork(x =>
                     x.GetFilteredBookIdListByGroupPermissions(group.Id, new List<long> {projectId}));
@@ -152,7 +145,6 @@ namespace Vokabular.MainService.Core.Managers
             else
             {
                 var role = m_authenticationManager.GetUnregisteredRole();
-                new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, role.Id).Execute();
                 var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalIdOrCreate(role.Id, role.Name));
                 var filtered = m_permissionRepository.InvokeUnitOfWork(x => x.GetResourceByUserGroupPermissions(group.Id, resourceId));
 
