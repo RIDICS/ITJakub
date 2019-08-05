@@ -133,6 +133,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     {
                         forumViewModel = Mapper.Map<ForumViewModel>(forum);
                     }
+
                     return PartialView("Work/_Forum", forumViewModel);
                 default:
                     return NotFound();
@@ -156,38 +157,35 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 return BadRequest();
             }
 
-            using (var client = GetRestClient())
+            var client = GetResourceClient();
+
+            switch (tabType)
             {
-                switch (tabType)
-                {
-                    case ProjectModuleTabType.ResourceDiscussion:
-                        return PartialView("Resource/_Discussion");
-                    case ProjectModuleTabType.ResourceMetadata:
-                        var resourceMetadata = client.GetResourceMetadata(resourceId.Value);
-                        var resourceMetadataViewModel = Mapper.Map<ProjectResourceMetadataViewModel>(resourceMetadata);
-                        return PartialView("Resource/_Metadata", resourceMetadataViewModel);
-                    default:
-                        return NotFound();
-                }
+                case ProjectModuleTabType.ResourceDiscussion:
+                    return PartialView("Resource/_Discussion");
+                case ProjectModuleTabType.ResourceMetadata:
+                    var resourceMetadata = client.GetResourceMetadata(resourceId.Value);
+                    var resourceMetadataViewModel = Mapper.Map<ProjectResourceMetadataViewModel>(resourceMetadata);
+                    return PartialView("Resource/_Metadata", resourceMetadataViewModel);
+                default:
+                    return NotFound();
             }
         }
 
         public IActionResult ProjectResourceVersion(long resourceId)
         {
-            using (var client = GetRestClient())
-            {
-                var resourceVersionList = client.GetResourceVersionHistory(resourceId);
-                var viewModel = Mapper.Map<List<ResourceVersionViewModel>>(resourceVersionList);
-                return PartialView("_ResourceVersion", viewModel);
-            }
+            var client = GetResourceClient();
+            var resourceVersionList = client.GetResourceVersionHistory(resourceId);
+            var viewModel = Mapper.Map<List<ResourceVersionViewModel>>(resourceVersionList);
+            return PartialView("_ResourceVersion", viewModel);
         }
 
         public IActionResult NewSnapshot(long projectId)
         {
             var client = GetProjectClient();
             var resources = client.GetResourceList(projectId);
-                // TODO
-            
+            // TODO
+
             var viewModel = ProjectMock.GetNewPulication(m_localizer);
             return PartialView("Work/_PublicationsNew", viewModel);
         }
@@ -198,7 +196,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var client = GetProjectClient();
             client.CreateForum(projectId);
             var forum = client.GetForum(projectId);
-            ForumViewModel forumViewModel = Mapper.Map<ForumViewModel>(forum); 
+            var forumViewModel = Mapper.Map<ForumViewModel>(forum);
             return Json(forumViewModel);
         }
 
@@ -206,7 +204,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         public IActionResult CreateProject([FromBody] CreateProjectRequest request)
         {
             var client = GetProjectClient();
-            
+
             var newProject = new ProjectContract
             {
                 Name = request.Name
@@ -219,7 +217,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         public IActionResult DeleteProject([FromBody] DeleteProjectRequest request)
         {
             var client = GetProjectClient();
-            
+
             client.DeleteProject(request.Id);
             return Json(new { });
         }
@@ -322,16 +320,14 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult ProcessUploadResourceVersion([FromBody] ProcessResourceVersionRequest request)
         {
-            using (var client = GetRestClient())
-            {
-                var resourceVersionId = client.ProcessUploadedResourceVersion(request.ResourceId,
-                    new NewResourceContract
-                    {
-                        SessionId = request.SessionId,
-                        Comment = request.Comment
-                    });
-                return Json(resourceVersionId);
-            }
+            var client = GetResourceClient();
+            var resourceVersionId = client.ProcessUploadedResourceVersion(request.ResourceId,
+                new NewResourceContract
+                {
+                    SessionId = request.SessionId,
+                    Comment = request.Comment
+                });
+            return Json(resourceVersionId);
         }
 
         [HttpPost]
@@ -345,6 +341,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     var newId = client.CreateKeyword(t);
                     ids.Add(newId);
                 }
+
                 return Json(ids);
             }
         }
@@ -382,43 +379,39 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult DeleteResource([FromBody] DeleteResourceRequest request)
         {
-            using (var client = GetRestClient())
-            {
-                client.DeleteResource(request.ResourceId);
-                return Json(new { });
-            }
+            var client = GetResourceClient();
+            client.DeleteResource(request.ResourceId);
+            return Json(new { });
         }
 
         [HttpPost]
         public IActionResult RenameResource([FromBody] RenameResourceRequest request)
         {
-            using (var client = GetRestClient())
+            var client = GetResourceClient();
+            client.RenameResource(request.ResourceId, new ResourceContract
             {
-                client.RenameResource(request.ResourceId, new ResourceContract
-                {
-                    Name = request.NewName
-                });
-                return Json(new { });
-            }
+                Name = request.NewName
+            });
+            return Json(new { });
         }
 
         [HttpPost]
         public IActionResult DuplicateResource([FromBody] DuplicateResourceRequest request)
         {
-            using (var client = GetRestClient())
-            {
-                var newResourceId = client.DuplicateResource(request.ResourceId);
-                return Json(newResourceId);
-            }
+            var client = GetResourceClient();
+            var newResourceId = client.DuplicateResource(request.ResourceId);
+            return Json(newResourceId);
         }
 
         [HttpGet]
-        public IActionResult GetProjectMetadata([FromQuery] long projectId, [FromQuery] bool includeAuthor, [FromQuery] bool includeResponsiblePerson,
-            [FromQuery] bool includeKind, [FromQuery] bool includeGenre, [FromQuery] bool includeOriginal, [FromQuery] bool includeKeyword, [FromQuery] bool includeCategory)
+        public IActionResult GetProjectMetadata([FromQuery] long projectId, [FromQuery] bool includeAuthor,
+            [FromQuery] bool includeResponsiblePerson,
+            [FromQuery] bool includeKind, [FromQuery] bool includeGenre, [FromQuery] bool includeOriginal, [FromQuery] bool includeKeyword,
+            [FromQuery] bool includeCategory)
         {
             var client = GetProjectClient();
             var response = client.GetProjectMetadata(projectId, includeAuthor,
-            includeResponsiblePerson, includeKind, includeGenre, includeOriginal, includeKeyword, includeCategory);
+                includeResponsiblePerson, includeKind, includeGenre, includeOriginal, includeKeyword, includeCategory);
             return Json(response);
         }
 
@@ -431,7 +424,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
 
             var client = GetProjectClient();
-           
+
             var contract = new ProjectMetadataContract
             {
                 Authors = request.Authors,
@@ -499,7 +492,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             try
             {
                 client.SetProjectCategories(projectId,
-                    new IntegerIdListContract { IdList = request.CategoryIdList });
+                    new IntegerIdListContract {IdList = request.CategoryIdList});
             }
             catch (HttpRequestException)
             {
@@ -602,7 +595,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             {
                 GroupId = id,
                 //Name = string.Format("Skupina {0}", id)
-                Name = localizer.TranslateFormat("Group", new object[]{id}, "Admin")
+                Name = localizer.TranslateFormat("Group", new object[] {id}, "Admin")
             };
         }
 
@@ -612,7 +605,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             {
                 Id = id,
                 //Name = string.Format("Strana {0}", id),
-                Name = localizer.TranslateFormat("Page", new object[]{id}, "Admin"),
+                Name = localizer.TranslateFormat("Page", new object[] {id}, "Admin"),
                 VersionList = new List<VersionNumberViewModel>
                 {
                     GetVersionNumber(1),

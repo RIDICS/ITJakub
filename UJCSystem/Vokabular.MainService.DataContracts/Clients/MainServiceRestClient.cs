@@ -14,12 +14,9 @@ using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient;
-using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Extensions;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared;
-using Vokabular.Shared.DataContracts.Search.Corpus;
-using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataContracts.Types.Favorite;
 using Vokabular.Shared.Extensions;
@@ -68,100 +65,6 @@ namespace Vokabular.MainService.DataContracts.Clients
             {
                 HttpClient.Timeout = new TimeSpan(0, 10, 0); // Import is long running operation
                 Post<object>($"session/{sessionId}",request);
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void DeleteResource(long resourceId)
-        {
-            try
-            {
-                Delete($"resource/{resourceId}");
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public long DuplicateResource(long resourceId)
-        {
-            try
-            {
-                var newResourceId = Post<long>($"resource/{resourceId}/duplicate", null);
-                return newResourceId;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public List<ResourceVersionContract> GetResourceVersionHistory(long resourceId)
-        {
-            try
-            {
-                var result = Get<List<ResourceVersionContract>>($"resource/{resourceId}/version");
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public ResourceMetadataContract GetResourceMetadata(long resourceId)
-        {
-            try
-            {
-                var result = Get<ResourceMetadataContract>($"resource/{resourceId}/metadata");
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public long ProcessUploadedResourceVersion(long resourceId, NewResourceContract resourceInfo)
-        {
-            try
-            {
-                var resourceVersionId = Post<long>($"resource/{resourceId}/version", resourceInfo);
-                return resourceVersionId;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void RenameResource(long resourceId, ResourceContract resource)
-        {
-            try
-            {
-                Put<object>($"resource/{resourceId}", resource);
             }
             catch (HttpRequestException e)
             {
