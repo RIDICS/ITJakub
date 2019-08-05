@@ -11,18 +11,21 @@ namespace ITJakub.Web.Hub.Core.Communication
         private readonly MainServiceMetadataClient m_metadataClient;
         private readonly MainServiceProjectClient m_projectClient;
         private readonly MainServiceRoleClient m_roleClient;
-        
+        private readonly MainServiceUserClient m_userClient;
+
 
         private const string LemmatizationServiceEndpointName = "LemmatizationService";
 
         public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider,
-            MainServiceRestClient mainServiceRestClient, MainServiceMetadataClient metadataClient, MainServiceProjectClient projectClient, MainServiceRoleClient roleClient)
+            MainServiceRestClient mainServiceRestClient, MainServiceMetadataClient metadataClient, MainServiceProjectClient projectClient,
+            MainServiceRoleClient roleClient, MainServiceUserClient userClient)
         {
             m_configurationProvider = communicationConfigurationProvider;
             m_mainServiceRestClient = mainServiceRestClient;
             m_metadataClient = metadataClient;
             m_projectClient = projectClient;
             m_roleClient = roleClient;
+            m_userClient = userClient;
         }
 
         public MainServiceRestClient GetMainServiceClient()
@@ -43,6 +46,11 @@ namespace ITJakub.Web.Hub.Core.Communication
         public MainServiceRoleClient GetMainServiceRoleClient()
         {
             return m_roleClient;
+        }
+
+        public MainServiceUserClient GetMainServiceUserClient()
+        {
+            return m_userClient;
         }
 
         public LemmatizationServiceClient GetLemmatizationClient()

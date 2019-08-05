@@ -40,6 +40,11 @@ namespace ITJakub.Web.Hub.Controllers
             return m_communication.GetMainServiceRoleClient();
         }
 
+        public MainServiceUserClient GetUserClient()
+        {
+            return m_communication.GetMainServiceUserClient();
+        }
+
         public LemmatizationServiceClient GetLemmationzationServiceClient()
         {
             return m_communication.GetLemmatizationClient();
