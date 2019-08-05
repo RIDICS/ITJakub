@@ -44,10 +44,10 @@ namespace ITJakub.Web.Hub.Controllers
 
         protected BooksAndCategoriesContract GetBooksAndCategories()
         {
-            var client = GetBookClient();
-            var restClient = GetRestClient();
-            var categories = restClient.GetCategoryList();
-            var books = client.GetBooksByType(AreaBookType);
+            var bookClient = GetBookClient();
+            var categoryClient = GetCategoryClient();
+            var categories = categoryClient.GetCategoryList();
+            var books = bookClient.GetBooksByType(AreaBookType);
 
             // Modify data for DropDownSelect usage
 

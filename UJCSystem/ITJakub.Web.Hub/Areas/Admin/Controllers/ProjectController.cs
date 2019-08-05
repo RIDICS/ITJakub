@@ -96,6 +96,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
             var client = GetRestClient();
             var projectClient = GetProjectClient();
+            var categoryClient = GetCategoryClient();
 
             switch (tabType)
             {
@@ -112,7 +113,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     var literaryGenres = client.GetLiteraryGenreList();
                     var literaryOriginals = client.GetLiteraryOriginalList();
                     var responsibleTypes = client.GetResponsibleTypeList();
-                    var categories = client.GetCategoryList();
+                    var categories = categoryClient.GetCategoryList();
                     var projectMetadata = projectClient.GetProjectMetadata(projectId.Value, true, true, true, true, true, true, true);
                     var workMetadaViewModel = Mapper.Map<ProjectWorkMetadataViewModel>(projectMetadata);
                     workMetadaViewModel.AllLiteraryKindList = literaryKinds;
