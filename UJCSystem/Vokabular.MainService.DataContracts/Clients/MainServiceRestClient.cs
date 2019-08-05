@@ -6,9 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.Extensions.Logging;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.MainService.DataContracts.Contracts.CardFile;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
-using Vokabular.MainService.DataContracts.Contracts.OaiPmh;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
@@ -851,116 +849,6 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 Delete($"feedback/{feedbackId}");
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        #endregion
-
-        #region Authentication and users
-
-       
-        
-        #endregion
-
-        #region Card files
-
-        public List<CardFileContract> GetCardFiles()
-        {
-            try
-            {
-                var result = Get<List<CardFileContract>>("cardfile");
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public List<BucketShortContract> GetBuckets(string cardFileId, string headword = null)
-        {
-            try
-            {
-                var url = UrlQueryBuilder.Create($"cardfile/{cardFileId}/bucket")
-                    .AddParameter("headword", headword)
-                    .ToQuery();
-                var result = Get<List<BucketShortContract>>(url);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public List<CardContract> GetCards(string cardFileId, string bucketId)
-        {
-            try
-            {
-                var result = Get<List<CardContract>>($"cardfile/{cardFileId}/bucket/{bucketId}/card");
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public List<CardShortContract> GetCardsShort(string cardFileId, string bucketId)
-        {
-            try
-            {
-                var result = Get<List<CardShortContract>>($"cardfile/{cardFileId}/bucket/{bucketId}/card/short");
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public CardContract GetCard(string cardFileId, string bucketId, string cardId)
-        {
-            try
-            {
-                var result = Get<CardContract>($"cardfile/{cardFileId}/bucket/{bucketId}/card/{cardId}");
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public FileResultData GetCardImage(string cardFileId, string bucketId, string cardId, string imageId,
-            CardImageSizeEnumContract imageSize)
-        {
-            try
-            {
-                var result = GetStream($"cardfile/{cardFileId}/bucket/{bucketId}/card/{cardId}/image/{imageId}?imageSize={imageSize}");
-                return result;
             }
             catch (HttpRequestException e)
             {

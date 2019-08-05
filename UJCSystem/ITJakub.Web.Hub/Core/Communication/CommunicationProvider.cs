@@ -9,6 +9,7 @@ namespace ITJakub.Web.Hub.Core.Communication
         private readonly CommunicationConfigurationProvider m_configurationProvider;
         private readonly MainServiceRestClient m_mainServiceRestClient;
         private readonly MainServiceBookClient m_bookClient;
+        private readonly MainServiceCardFileClient m_cardFileClient;
         private readonly MainServiceCategoryClient m_categoryClient;
         private readonly MainServiceExternalRepositoryClient m_externalRepositoryClient;
         private readonly MainServiceFavoriteClient m_favoriteClient;
@@ -22,7 +23,7 @@ namespace ITJakub.Web.Hub.Core.Communication
         private const string LemmatizationServiceEndpointName = "LemmatizationService";
 
         public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider,
-            MainServiceRestClient mainServiceRestClient, MainServiceBookClient bookClient, MainServiceCategoryClient categoryClient, MainServiceExternalRepositoryClient externalRepositoryClient,
+            MainServiceRestClient mainServiceRestClient, MainServiceBookClient bookClient, MainServiceCardFileClient cardFileClient, MainServiceCategoryClient categoryClient, MainServiceExternalRepositoryClient externalRepositoryClient,
             MainServiceFavoriteClient favoriteClient, MainServiceFilteringExpressionSetClient filteringExpressionSetClient, MainServiceMetadataClient metadataClient,
             MainServiceProjectClient projectClient, MainServiceResourceClient resourceClient, MainServiceRoleClient roleClient,
             MainServiceUserClient userClient)
@@ -30,6 +31,7 @@ namespace ITJakub.Web.Hub.Core.Communication
             m_configurationProvider = communicationConfigurationProvider;
             m_mainServiceRestClient = mainServiceRestClient;
             m_bookClient = bookClient;
+            m_cardFileClient = cardFileClient;
             m_categoryClient = categoryClient;
             m_externalRepositoryClient = externalRepositoryClient;
             m_favoriteClient = favoriteClient;
@@ -49,6 +51,11 @@ namespace ITJakub.Web.Hub.Core.Communication
         public MainServiceBookClient GetMainServiceBookClient()
         {
             return m_bookClient;
+        }
+
+        public MainServiceCardFileClient GetMainServiceCardFileClient()
+        {
+            return m_cardFileClient;
         }
 
         public MainServiceCategoryClient GetMainServiceCategoryClient()
