@@ -20,7 +20,6 @@ class UserRolesEditor {
 
         this.userId = Number(getQueryStringParameterByName("userId"));
         this.roleList = new ListWithPagination(`Permission/GetRolesByUser?userId=${this.userId}`,
-            10,
             "role",
             ViewType.Partial,
             false,

@@ -21,7 +21,7 @@ class ProjectManager {
 
     public init(list?: ListWithPagination) {
         if (list == null) {
-            this.projectList = new ListWithPagination("Permission/ProjectPermission", 10, "project", ViewType.Widget, true, this.reInit, this);
+            this.projectList = new ListWithPagination("Permission/ProjectPermission", "project", ViewType.Widget, true, this.reInit, this);
             
         } else {
             this.projectList = list;
@@ -64,7 +64,6 @@ class ProjectManager {
             container.empty().append(errorAlert.buildElement());
         }).always(() => {
             this.roleList = new ListWithPagination(`Permission/RolesByProject?projectId=${projectId}`,
-                10,
                 "role",
                 ViewType.Widget,
                 false,
