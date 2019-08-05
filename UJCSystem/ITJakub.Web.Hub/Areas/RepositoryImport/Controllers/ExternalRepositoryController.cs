@@ -43,24 +43,24 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
 
         public IActionResult Create()
         {
-            using (var client = GetRestClient())
-            {
-                var bibliographicFormats = client.GetAllBibliographicFormats();
-                var availableBibliographicFormats = new SelectList(bibliographicFormats,
-                    nameof(BibliographicFormatContract.Id),
-                    nameof(BibliographicFormatContract.Name));
-                ViewData[RepositoryImportConstants.AvailableBibliographicFormats] = availableBibliographicFormats;
+            var client = GetFilteringExpressionSetClient();
 
-                var externalRepositoryTypes = client.GetAllExternalRepositoryTypes();
-                var availableExternalRepositoryTypes = new SelectList(externalRepositoryTypes,
-                    nameof(BibliographicFormatContract.Id),
-                    nameof(BibliographicFormatContract.Name));
-                ViewData[RepositoryImportConstants.AvailableExternalRepositoryTypes] = availableExternalRepositoryTypes;
+            var bibliographicFormats = client.GetAllBibliographicFormats();
+            var availableBibliographicFormats = new SelectList(bibliographicFormats,
+                nameof(BibliographicFormatContract.Id),
+                nameof(BibliographicFormatContract.Name));
+            ViewData[RepositoryImportConstants.AvailableBibliographicFormats] = availableBibliographicFormats;
 
-                var filteringExpressionSets = client.GetAllFilteringExpressionSets();
-                return View(new CreateExternalRepositoryViewModel()
-                    {FilteringExpressionSets = filteringExpressionSets.Select(x => new CheckBoxEntity(x.Id, x.Name)).ToList()});
-            }
+            var restClient = GetRestClient();
+            var externalRepositoryTypes = restClient.GetAllExternalRepositoryTypes();
+            var availableExternalRepositoryTypes = new SelectList(externalRepositoryTypes,
+                nameof(BibliographicFormatContract.Id),
+                nameof(BibliographicFormatContract.Name));
+            ViewData[RepositoryImportConstants.AvailableExternalRepositoryTypes] = availableExternalRepositoryTypes;
+
+            var filteringExpressionSets = client.GetAllFilteringExpressionSets();
+            return View(new CreateExternalRepositoryViewModel()
+                {FilteringExpressionSets = filteringExpressionSets.Select(x => new CheckBoxEntity(x.Id, x.Name)).ToList()});
         }
 
         [HttpPost]
@@ -93,44 +93,44 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
 
         public IActionResult Update(int id)
         {
-            using (var client = GetRestClient())
+            var client = GetFilteringExpressionSetClient();
+            var restClient = GetRestClient();
+
+            var externalRepositoryDetail = restClient.GetExternalRepositoryDetail(id);
+
+            var bibliographicFormats = client.GetAllBibliographicFormats();
+            var availableBibliographicFormats = new SelectList(bibliographicFormats,
+                nameof(BibliographicFormatContract.Id),
+                nameof(BibliographicFormatContract.Name),
+                externalRepositoryDetail.BibliographicFormat.Id);
+            ViewData[RepositoryImportConstants.AvailableBibliographicFormats] = availableBibliographicFormats;
+
+            var externalRepositoryTypes = restClient.GetAllExternalRepositoryTypes();
+            var availableExternalRepositoryTypes = new SelectList(externalRepositoryTypes,
+                nameof(BibliographicFormatContract.Id),
+                nameof(BibliographicFormatContract.Name),
+                externalRepositoryDetail.ExternalRepositoryType.Id);
+            ViewData[RepositoryImportConstants.AvailableExternalRepositoryTypes] = availableExternalRepositoryTypes;
+
+            var filteringExpressionSets = client.GetAllFilteringExpressionSets();
+            var availableFilteringExpressionSets = filteringExpressionSets.Select(x =>
+                new CheckBoxEntity(x.Id, x.Name, externalRepositoryDetail.FilteringExpressionSets.Any(y => y.Id == x.Id))).ToList();
+
+            var model = new CreateExternalRepositoryViewModel
             {
-                var externalRepositoryDetail = client.GetExternalRepositoryDetail(id);
+                Name = externalRepositoryDetail.Name,
+                Id = externalRepositoryDetail.Id,
+                Description = externalRepositoryDetail.Description,
+                License = externalRepositoryDetail.License,
+                Url = externalRepositoryDetail.Url,
+                UrlTemplate = externalRepositoryDetail.UrlTemplate,
+                BibliographicFormatId = externalRepositoryDetail.BibliographicFormat.Id,
+                ExternalRepositoryTypeId = externalRepositoryDetail.ExternalRepositoryType.Id,
+                Configuration = externalRepositoryDetail.Configuration,
+                FilteringExpressionSets = availableFilteringExpressionSets
+            };
 
-                var bibliographicFormats = client.GetAllBibliographicFormats();
-                var availableBibliographicFormats = new SelectList(bibliographicFormats,
-                    nameof(BibliographicFormatContract.Id),
-                    nameof(BibliographicFormatContract.Name),
-                    externalRepositoryDetail.BibliographicFormat.Id);
-                ViewData[RepositoryImportConstants.AvailableBibliographicFormats] = availableBibliographicFormats;
-
-                var externalRepositoryTypes = client.GetAllExternalRepositoryTypes();
-                var availableExternalRepositoryTypes = new SelectList(externalRepositoryTypes,
-                    nameof(BibliographicFormatContract.Id),
-                    nameof(BibliographicFormatContract.Name),
-                    externalRepositoryDetail.ExternalRepositoryType.Id);
-                ViewData[RepositoryImportConstants.AvailableExternalRepositoryTypes] = availableExternalRepositoryTypes;
-
-                var filteringExpressionSets = client.GetAllFilteringExpressionSets();
-                var availableFilteringExpressionSets = filteringExpressionSets.Select(x =>
-                    new CheckBoxEntity(x.Id, x.Name, externalRepositoryDetail.FilteringExpressionSets.Any(y => y.Id == x.Id))).ToList();
-
-                var model = new CreateExternalRepositoryViewModel
-                {
-                    Name = externalRepositoryDetail.Name,
-                    Id = externalRepositoryDetail.Id,
-                    Description = externalRepositoryDetail.Description,
-                    License = externalRepositoryDetail.License,
-                    Url = externalRepositoryDetail.Url,
-                    UrlTemplate = externalRepositoryDetail.UrlTemplate,
-                    BibliographicFormatId = externalRepositoryDetail.BibliographicFormat.Id,
-                    ExternalRepositoryTypeId = externalRepositoryDetail.ExternalRepositoryType.Id,
-                    Configuration = externalRepositoryDetail.Configuration,
-                    FilteringExpressionSets = availableFilteringExpressionSets
-                };
-
-                return View(model);
-            }
+            return View(model);
         }
 
         [HttpPost]
@@ -243,6 +243,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                     ViewData["selectedMetadataFormat"] = config.DataFormat;
                     break;
                 }
+
                 default:
                     throw new ArgumentException($"API type {apiType} cannot be found.");
             }

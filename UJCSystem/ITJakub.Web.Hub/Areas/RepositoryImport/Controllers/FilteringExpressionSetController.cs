@@ -15,51 +15,45 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
     {
         public FilteringExpressionSetController(CommunicationProvider communicationProvider) : base(communicationProvider)
         {
-
         }
 
         public IActionResult List()
         {
-            using (var client = GetRestClient())
-            {
-                var filteringExpressionSetList = client.GetAllFilteringExpressionSets();
-                return View(filteringExpressionSetList);
-            }
+            var client = GetFilteringExpressionSetClient();
+            var filteringExpressionSetList = client.GetAllFilteringExpressionSets();
+            return View(filteringExpressionSetList);
         }
 
         public IActionResult Detail(int id)
         {
-            using (var client = GetRestClient())
+            var client = GetFilteringExpressionSetClient();
+            var filteringExpressionSet = client.GetFilteringExpressionSetDetail(id);
+
+            var bibliographicFormats = client.GetAllBibliographicFormats();
+            var availableBibliographicFormats = new SelectList(bibliographicFormats,
+                nameof(BibliographicFormatContract.Id),
+                nameof(BibliographicFormatContract.Name),
+                filteringExpressionSet.BibliographicFormat.Id);
+            ViewData[RepositoryImportConstants.AvailableBibliographicFormats] = availableBibliographicFormats;
+
+            var model = new CreateFilteringExpressionSetViewModel
             {
-                var filteringExpressionSet = client.GetFilteringExpressionSetDetail(id);
-
-                var bibliographicFormats = client.GetAllBibliographicFormats();
-                var availableBibliographicFormats = new SelectList(bibliographicFormats, 
-                    nameof(BibliographicFormatContract.Id),
-                    nameof(BibliographicFormatContract.Name),
-                    filteringExpressionSet.BibliographicFormat.Id);
-                ViewData[RepositoryImportConstants.AvailableBibliographicFormats] = availableBibliographicFormats;
-
-                var model = new CreateFilteringExpressionSetViewModel
-                {
-                    Name = filteringExpressionSet.Name,
-                    FilteringExpressions = filteringExpressionSet.FilteringExpressions,
-                    Id = filteringExpressionSet.Id,
-                };
-                return View(model);
-            }
+                Name = filteringExpressionSet.Name,
+                FilteringExpressions = filteringExpressionSet.FilteringExpressions,
+                Id = filteringExpressionSet.Id,
+            };
+            return View(model);
         }
 
         public IActionResult Create()
         {
-            using (var client = GetRestClient())
-            {
-                var bibliographicFormats = client.GetAllBibliographicFormats();
-                var availableBibliographicFormats = new SelectList(bibliographicFormats, 
-                    nameof(BibliographicFormatContract.Id),
-                    nameof(BibliographicFormatContract.Name));
-                ViewData[RepositoryImportConstants.AvailableBibliographicFormats] = availableBibliographicFormats;
-            }
+            var client = GetFilteringExpressionSetClient();
+            var bibliographicFormats = client.GetAllBibliographicFormats();
+            var availableBibliographicFormats = new SelectList(bibliographicFormats,
+                nameof(BibliographicFormatContract.Id),
+                nameof(BibliographicFormatContract.Name));
+            ViewData[RepositoryImportConstants.AvailableBibliographicFormats] = availableBibliographicFormats;
+
             return View(new CreateFilteringExpressionSetViewModel());
         }
 
@@ -72,16 +66,14 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                 return View("Create", model);
             }
 
-            using (var client = GetRestClient())
+            var client = GetFilteringExpressionSetClient();
+            client.CreateFilteringExpressionSet(new FilteringExpressionSetDetailContract
             {
-                client.CreateFilteringExpressionSet(new FilteringExpressionSetDetailContract
-                {
-                    Name = model.Name,
-                    BibliographicFormat = new BibliographicFormatContract{Id = model.BibliographicFormatId}, 
-                    FilteringExpressions = model.FilteringExpressions
-                });
-                return RedirectToAction("List");
-            }
+                Name = model.Name,
+                BibliographicFormat = new BibliographicFormatContract {Id = model.BibliographicFormatId},
+                FilteringExpressions = model.FilteringExpressions
+            });
+            return RedirectToAction("List");
         }
 
         [HttpPost]
@@ -93,31 +85,27 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                 return View("Detail", model);
             }
 
-            using (var client = GetRestClient())
+            var client = GetFilteringExpressionSetClient();
+            client.UpdateFilteringExpressionSet(model.Id, new FilteringExpressionSetDetailContract
             {
-                client.UpdateFilteringExpressionSet(model.Id, new FilteringExpressionSetDetailContract
-                {
-                    Name = model.Name,
-                    BibliographicFormat = new BibliographicFormatContract { Id = model.BibliographicFormatId },
-                    FilteringExpressions = model.FilteringExpressions
-                });
-                return RedirectToAction("List");
-            }
+                Name = model.Name,
+                BibliographicFormat = new BibliographicFormatContract {Id = model.BibliographicFormatId},
+                FilteringExpressions = model.FilteringExpressions
+            });
+            return RedirectToAction("List");
         }
 
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            using (var client = GetRestClient())
-            {
-                client.DeleteFilteringExpressionSet(id);
-                return RedirectToAction("List");
-            }
+            var client = GetFilteringExpressionSetClient();
+            client.DeleteFilteringExpressionSet(id);
+            return RedirectToAction("List");
         }
 
         public IActionResult AddFilteringExpressionRow()
         {
             return PartialView("_FilteringExpressionRow", new FilteringExpressionContract());
-        }       
+        }
     }
 }
