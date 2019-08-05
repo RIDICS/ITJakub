@@ -128,7 +128,7 @@ namespace ITJakub.Web.Hub
                         OnUserInformationReceived = context =>
                         {
                             var communicationProvider = context.HttpContext.RequestServices.GetRequiredService<CommunicationProvider>();
-                            var client = communicationProvider.GetMainServiceClient();
+                            var client = communicationProvider.GetMainServiceUserClient();
 
                             client.CreateUserIfNotExist(context.Principal.GetIdOrDefault().GetValueOrDefault());
 

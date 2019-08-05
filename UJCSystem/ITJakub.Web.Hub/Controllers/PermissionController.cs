@@ -33,23 +33,22 @@ namespace ITJakub.Web.Hub.Controllers
 
         public IActionResult UserPermission(string search, int start, int count = UserListPageSize, ViewType viewType = ViewType.Full)
         {
-            using (var client = GetRestClient())
-            {
-                search = search ?? string.Empty;
-                var result = client.GetUserList(start, count, search);
-                var model = CreateListViewModel<UserDetailViewModel, UserDetailContract>(result, start, count, search);
+            var client = GetUserClient();
+        
+            search = search ?? string.Empty;
+            var result = client.GetUserList(start, count, search);
+            var model = CreateListViewModel<UserDetailViewModel, UserDetailContract>(result, start, count, search);
 
-                switch (viewType)
-                {
-                    case ViewType.Partial:
-                        return PartialView("_UserList", model);
-                    case ViewType.Widget:
-                        return PartialView("Widget/_UserListWidget", model);
-                    case ViewType.Full:
-                        return View(model);
-                    default:
-                        return View(model);
-                }
+            switch (viewType)
+            {
+                case ViewType.Partial:
+                    return PartialView("_UserList", model);
+                case ViewType.Widget:
+                    return PartialView("Widget/_UserListWidget", model);
+                case ViewType.Full:
+                    return View(model);
+                default:
+                    return View(model);
             }
         }
 
@@ -177,16 +176,14 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult EditUser(int userId, bool successUpdate = false)
         {
-            using (var client = GetRestClient())
+            if (successUpdate)
             {
-                if (successUpdate)
-                {
-                    ViewData.Add(AccountConstants.SuccessUserUpdate, true);
-                }
-                var result = client.GetUserDetail(userId);
-                var model = Mapper.Map<UpdateUserViewModel>(result);
-                return View(model);
+                ViewData.Add(AccountConstants.SuccessUserUpdate, true);
             }
+            var client = GetUserClient();
+            var result = client.GetUserDetail(userId);
+            var model = Mapper.Map<UpdateUserViewModel>(result);
+            return View(model);
         }
 
         [HttpPost]
@@ -195,23 +192,21 @@ namespace ITJakub.Web.Hub.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (var client = GetRestClient())
+                var data = new UpdateUserContract
                 {
-                    var data = new UpdateUserContract
-                    {
-                        FirstName = userViewModel.FirstName,
-                        LastName = userViewModel.LastName
-                    };
+                    FirstName = userViewModel.FirstName,
+                    LastName = userViewModel.LastName
+                };
 
-                    try
-                    {
-                        client.UpdateUser(userViewModel.Id, data);
-                        return RedirectToAction("EditUser", new {userId = userViewModel.Id, successUpdate = true});
-                    }
-                    catch (HttpErrorCodeException e)
-                    {
-                        AddErrors(e);
-                    }
+                try
+                {
+                    var client = GetUserClient();
+                    client.UpdateUser(userViewModel.Id, data);
+                    return RedirectToAction("EditUser", new {userId = userViewModel.Id, successUpdate = true});
+                }
+                catch (HttpErrorCodeException e)
+                {
+                    AddErrors(e);
                 }
             }
 
@@ -247,29 +242,25 @@ namespace ITJakub.Web.Hub.Controllers
 
         public IActionResult EditUserRoles(int userId)
         {
-            using (var client = GetRestClient())
+            var client = GetUserClient();
+            var result = client.GetUserDetail(userId);
+            var model = Mapper.Map<UserDetailViewModel>(result);
+            model.Roles = new ListViewModel<RoleContract>
             {
-                var result = client.GetUserDetail(userId);
-                var model = Mapper.Map<UserDetailViewModel>(result);
-                model.Roles = new ListViewModel<RoleContract>
-                {
-                    TotalCount = result.Roles.Count,
-                    List = result.Roles,
-                    PageSize = RoleListPageSize,
-                    Start = 0
-                };
+                TotalCount = result.Roles.Count,
+                List = result.Roles,
+                PageSize = RoleListPageSize,
+                Start = 0
+            };
 
-                return View(model);
-            }
+            return View(model);
         }
 
         public IActionResult GetTypeaheadUser(string query)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetUserAutocomplete(query);
-                return Json(result);
-            }
+            var client = GetUserClient();
+            var result = client.GetUserAutocomplete(query);
+            return Json(result);
         }
 
         public IActionResult GetTypeaheadRole(string query)
@@ -281,11 +272,9 @@ namespace ITJakub.Web.Hub.Controllers
 
         public IActionResult GetUser(int userId)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetUserDetail(userId);
-                return Json(result);
-            }
+            var client = GetUserClient();
+            var result = client.GetUserDetail(userId);
+            return Json(result);
         }
 
         public IActionResult GetRole(int roleId)
@@ -368,19 +357,17 @@ namespace ITJakub.Web.Hub.Controllers
 
         public IActionResult GetRolesByUser(int userId)
         {
-            using (var client = GetRestClient())
+            var client = GetUserClient();
+            var result = client.GetRolesByUser(userId);
+            var model = new ListViewModel<RoleContract>
             {
-                var result = client.GetRolesByUser(userId);
-                var model = new ListViewModel<RoleContract>
-                {
-                    TotalCount = result.Count,
-                    List = result,
-                    PageSize = result.Count,
-                    Start = 0
-                };
+                TotalCount = result.Count,
+                List = result,
+                PageSize = result.Count,
+                Start = 0
+            };
 
-                return PartialView("Widget/_RoleListWidget", model);
-            }
+            return PartialView("Widget/_RoleListWidget", model);
         }
 
         public IActionResult GetRootCategories()

@@ -23,7 +23,8 @@ namespace ITJakub.Web.Hub.Controllers
         private readonly ILocalizationService m_localizationService;
         private readonly RefreshUserManager m_refreshUserManager;
 
-        public AccountController(CommunicationProvider communicationProvider, ILocalizationService localizationService, RefreshUserManager refreshUserManager) : base(communicationProvider)
+        public AccountController(CommunicationProvider communicationProvider, ILocalizationService localizationService,
+            RefreshUserManager refreshUserManager) : base(communicationProvider)
         {
             m_localizationService = localizationService;
             m_refreshUserManager = refreshUserManager;
@@ -67,10 +68,8 @@ namespace ITJakub.Web.Hub.Controllers
 
                 try
                 {
-                    using (var client = GetRestClient())
-                    {
-                        client.CreateNewUser(user);
-                    }
+                    var client = GetUserClient();
+                    client.CreateNewUser(user);
 
                     return RedirectToAction(nameof(SuccessfulRegistration));
                 }
@@ -109,17 +108,15 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 try
                 {
-                    using (var client = GetRestClient())
+                    var client = GetUserClient();
+                    var updateUserContract = new UpdateUserContract
                     {
-                        var updateUserContract = new UpdateUserContract
-                        {
-                            FirstName = updateUserViewModel.FirstName,
-                            LastName = updateUserViewModel.LastName
-                        };
+                        FirstName = updateUserViewModel.FirstName,
+                        LastName = updateUserViewModel.LastName
+                    };
 
-                        client.UpdateCurrentUser(updateUserContract);
-                        ViewData.Add(AccountConstants.SuccessUserUpdate, true);
-                    }
+                    client.UpdateCurrentUser(updateUserContract);
+                    ViewData.Add(AccountConstants.SuccessUserUpdate, true);
                 }
                 catch (HttpErrorCodeException e)
                 {
@@ -130,7 +127,7 @@ namespace ITJakub.Web.Hub.Controllers
 
             return PartialView("UserProfile/_UpdateBasicData", updateUserViewModel);
         }
-        
+
         //
         // POST: /Account/UpdatePassword
         [HttpPost]
@@ -142,18 +139,16 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 try
                 {
-                    using (var client = GetRestClient())
+                    var updateUserPasswordContract = new UpdateUserPasswordContract
                     {
-                        var updateUserPasswordContract = new UpdateUserPasswordContract
-                        {
-                            NewPassword = model.Password,
-                            OldPassword = model.OldPassword
-                        };
+                        NewPassword = model.Password,
+                        OldPassword = model.OldPassword
+                    };
 
-                        client.UpdateCurrentPassword(updateUserPasswordContract);
-                        ViewData.Add(AccountConstants.SuccessPasswordUpdate, true);
-                        return PartialView("UserProfile/_UpdatePassword", null);
-                    }
+                    var client = GetUserClient();
+                    client.UpdateCurrentPassword(updateUserPasswordContract);
+                    ViewData.Add(AccountConstants.SuccessPasswordUpdate, true);
+                    return PartialView("UserProfile/_UpdatePassword", null);
                 }
                 catch (HttpErrorCodeException e)
                 {
@@ -182,11 +177,9 @@ namespace ITJakub.Web.Hub.Controllers
                     return AjaxErrorResponse(m_localizationService.Translate("SameEmail", "Account"), HttpStatusCode.BadRequest);
                 }
 
-                using (var client = GetRestClient())
-                {
-                    client.UpdateCurrentUserContact(updateUserContactContract);
-                    await m_refreshUserManager.RefreshUserClaimsAsync(HttpContext);
-                }
+                var client = GetUserClient();
+                client.UpdateCurrentUserContact(updateUserContactContract);
+                await m_refreshUserManager.RefreshUserClaimsAsync(HttpContext);
             }
             catch (HttpErrorCodeException e)
             {
@@ -203,21 +196,20 @@ namespace ITJakub.Web.Hub.Controllers
         {
             try
             {
-                using (var client = GetRestClient())
+                var contract = new ConfirmUserContactContract
                 {
-                    var contract = new ConfirmUserContactContract
-                    {
-                        ConfirmCode = confirmUserContactRequest.ConfirmCode,
-                        ContactType = confirmUserContactRequest.ContactType
-                    };
-                    var result = client.ConfirmUserContact(contract);
-                    if (result)
-                    {
-                        await m_refreshUserManager.RefreshUserClaimsAsync(HttpContext);
-                    }
+                    ConfirmCode = confirmUserContactRequest.ConfirmCode,
+                    ContactType = confirmUserContactRequest.ContactType
+                };
 
-                    return Json(result);
+                var client = GetUserClient();
+                var result = client.ConfirmUserContact(contract);
+                if (result)
+                {
+                    await m_refreshUserManager.RefreshUserClaimsAsync(HttpContext);
                 }
+
+                return Json(result);
             }
             catch (HttpErrorCodeException e)
             {
@@ -232,14 +224,13 @@ namespace ITJakub.Web.Hub.Controllers
         {
             try
             {
-                using (var client = GetRestClient())
+                var contract = new UserContactContract
                 {
-                    var contract = new UserContactContract
-                    {
-                        ContactType = resendConfirmCodeRequest.ContactType
-                    };
-                    client.ResendConfirmCode(contract);
-                }
+                    ContactType = resendConfirmCodeRequest.ContactType
+                };
+
+                var client = GetUserClient();
+                client.ResendConfirmCode(contract);
             }
             catch (HttpErrorCodeException e)
             {
@@ -263,22 +254,20 @@ namespace ITJakub.Web.Hub.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (var client = GetRestClient())
+                try
                 {
-                    try
+                    var contract = new UpdateTwoFactorContract
                     {
-                        var contract = new UpdateTwoFactorContract
-                        {
-                            TwoFactorIsEnabled = twoFactorVerificationViewModel.TwoFactorEnabled
-                        };
-                        client.SetTwoFactor(contract);
-                        ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, true);
-                    }
-                    catch (HttpErrorCodeException e)
-                    {
-                        ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, false);
-                        AddErrors(e);
-                    }
+                        TwoFactorIsEnabled = twoFactorVerificationViewModel.TwoFactorEnabled
+                    };
+                    var client = GetUserClient();
+                    client.SetTwoFactor(contract);
+                    ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, true);
+                }
+                catch (HttpErrorCodeException e)
+                {
+                    ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, false);
+                    AddErrors(e);
                 }
             }
 
@@ -292,22 +281,21 @@ namespace ITJakub.Web.Hub.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (var client = GetRestClient())
+                try
                 {
-                    try
+                    var contract = new UpdateTwoFactorProviderContract
                     {
-                        var contract = new UpdateTwoFactorProviderContract
-                        {
-                            TwoFactorProvider = twoFactorVerificationViewModel.SelectedTwoFactorProvider
-                        };
-                        client.SelectTwoFactorProvider(contract);
-                        ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, true);
-                    }
-                    catch (HttpErrorCodeException e)
-                    {
-                        ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, false);
-                        AddErrors(e);
-                    }
+                        TwoFactorProvider = twoFactorVerificationViewModel.SelectedTwoFactorProvider
+                    };
+
+                    var client = GetUserClient();
+                    client.SelectTwoFactorProvider(contract);
+                    ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, true);
+                }
+                catch (HttpErrorCodeException e)
+                {
+                    ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, false);
+                    AddErrors(e);
                 }
             }
 
@@ -345,28 +333,24 @@ namespace ITJakub.Web.Hub.Controllers
 
         private AccountDetailViewModel CreateAccountDetailViewModel(AccountTab accountTab = AccountTab.UpdateAccount)
         {
-            using (var client = GetRestClient())
+            var client = GetUserClient();
+            var user = client.GetCurrentUser();
+            return new AccountDetailViewModel
             {
-                var user = client.GetCurrentUser();
-                return new AccountDetailViewModel
-                {
-                    UpdateUserViewModel = Mapper.Map<UpdateUserViewModel>(user),
-                    UpdatePasswordViewModel = null,
-                    UpdateContactViewModel = Mapper.Map<UpdateContactViewModel>(user),
-                    UpdateTwoFactorVerificationViewModel = CreateUpdateTwoFactorVerificationViewModel(user),
-                    ActualTab = accountTab
-                };
-            }
+                UpdateUserViewModel = Mapper.Map<UpdateUserViewModel>(user),
+                UpdatePasswordViewModel = null,
+                UpdateContactViewModel = Mapper.Map<UpdateContactViewModel>(user),
+                UpdateTwoFactorVerificationViewModel = CreateUpdateTwoFactorVerificationViewModel(user),
+                ActualTab = accountTab
+            };
         }
 
         private UpdateTwoFactorVerificationViewModel CreateUpdateTwoFactorVerificationViewModel(UserDetailContract user = null)
         {
             if (user == null)
             {
-                using (var client = GetRestClient())
-                {
-                    user = client.GetCurrentUser();
-                }
+                var client = GetUserClient();
+                user = client.GetCurrentUser();
             }
 
             var updateTwoFactorVerificationViewModel = Mapper.Map<UpdateTwoFactorVerificationViewModel>(user);
