@@ -1,6 +1,5 @@
 ﻿using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
-using ITJakub.Web.Hub.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -12,8 +11,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
     [Authorize(VokabularPermissionNames.ManageCodeList)]
     public class KeyTableController : BaseController
     {
-        public KeyTableController(CommunicationProvider communicationProvider, HttpErrorCodeTranslator httpErrorCodeTranslator) : base(
-            communicationProvider, httpErrorCodeTranslator)
+        public KeyTableController(CommunicationProvider communicationProvider) : base(communicationProvider)
         {
         }
 

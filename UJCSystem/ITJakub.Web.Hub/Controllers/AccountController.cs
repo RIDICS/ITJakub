@@ -4,7 +4,6 @@ using AutoMapper;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Constants;
 using ITJakub.Web.Hub.Core.Communication;
-using ITJakub.Web.Hub.Helpers;
 using ITJakub.Web.Hub.Models.Requests.Permission;
 using ITJakub.Web.Hub.Models.User;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -24,9 +23,7 @@ namespace ITJakub.Web.Hub.Controllers
         private readonly ILocalizationService m_localizationService;
         private readonly RefreshUserManager m_refreshUserManager;
 
-        public AccountController(CommunicationProvider communicationProvider, ILocalizationService localizationService,
-            RefreshUserManager refreshUserManager, HttpErrorCodeTranslator httpErrorCodeTranslator) : base(
-            communicationProvider, httpErrorCodeTranslator)
+        public AccountController(CommunicationProvider communicationProvider, ILocalizationService localizationService, RefreshUserManager refreshUserManager) : base(communicationProvider)
         {
             m_localizationService = localizationService;
             m_refreshUserManager = refreshUserManager;

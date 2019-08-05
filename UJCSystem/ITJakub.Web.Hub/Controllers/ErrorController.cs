@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using ITJakub.Web.Hub.Helpers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ridics.Core.Structures.Shared;
 using Scalesoft.Localization.AspNetCore;
@@ -11,26 +11,52 @@ namespace ITJakub.Web.Hub.Controllers
     public class ErrorController : Controller
     {
         private readonly ILocalizationService m_localization;
-        private readonly HttpErrorCodeTranslator m_httpErrorCodeTranslator;
 
-        public ErrorController(ILocalizationService localization, HttpErrorCodeTranslator httpErrorCodeTranslator)
+        public ErrorController(ILocalizationService localization)
         {
             m_localization = localization;
-            m_httpErrorCodeTranslator = httpErrorCodeTranslator;
         }
 
         [Route("Error")]
         [Route("Error/{errorCode}")]
         public IActionResult Index(string errorCode)
         {
-            var errorMessage = m_localization.Translate("unknown-error-msg", "Error").Value;
+            var errorMessage = m_localization.Translate("unknown-error-msg", "Error");
             var errorMessageDetail = string.Empty;
 
             if (int.TryParse(errorCode, out var errorCodeNumber))
             {
-                var errorContract = m_httpErrorCodeTranslator.GetMessageFromErrorCode(errorCodeNumber);
-                errorMessage = errorContract.ErrorMessage;
-                errorMessageDetail = errorContract.ErrorMessageDetail;
+                switch (errorCodeNumber)
+                {
+                    case StatusCodes.Status400BadRequest:
+                        errorMessage = m_localization.Translate("bad-request-msg", "Error");
+                        errorMessageDetail = m_localization.Translate("bad-request-detail", "Error");
+                        break;
+                    case StatusCodes.Status401Unauthorized:
+                        errorMessage = m_localization.Translate("unauthorized-msg", "Error");
+                        errorMessageDetail = m_localization.Translate("unauthorized-detail", "Error");
+                        break;
+                    case StatusCodes.Status403Forbidden:
+                        errorMessage = m_localization.Translate("forbidden-msg", "Error");
+                        errorMessageDetail = m_localization.Translate("forbidden-detail", "Error");
+                        break;
+                    case StatusCodes.Status404NotFound:
+                        errorMessage = m_localization.Translate("not-found-msg", "Error");
+                        errorMessageDetail = m_localization.Translate("not-found-detail", "Error");
+                        break;
+                    case StatusCodes.Status500InternalServerError:
+                        errorMessage = m_localization.Translate("internal-server-error-msg", "Error");
+                        errorMessageDetail = m_localization.Translate("internal-server-error-detail", "Error");
+                        break;
+                    case StatusCodes.Status502BadGateway:
+                        errorMessage = m_localization.Translate("bad-gateway-msg", "Error");
+                        errorMessageDetail = m_localization.Translate("bad-gateway-detail", "Error");
+                        break;
+                    case StatusCodes.Status504GatewayTimeout:
+                        errorMessage = m_localization.Translate("gateway-timeout-msg", "Error");
+                        errorMessageDetail = m_localization.Translate("gateway-timeout-detail", "Error");
+                        break;
+                }
             }
 
             return View("Error", new ErrorViewModel

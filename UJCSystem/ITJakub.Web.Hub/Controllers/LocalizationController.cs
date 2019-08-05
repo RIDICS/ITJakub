@@ -1,5 +1,4 @@
 ﻿using ITJakub.Web.Hub.Core.Communication;
-using ITJakub.Web.Hub.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Scalesoft.Localization.AspNetCore;
 
@@ -11,8 +10,7 @@ namespace ITJakub.Web.Hub.Controllers
         private readonly IDictionaryService m_dictionaryService;
 
 
-        public LocalizationController(CommunicationProvider communicationProvider, ILocalizationService localizationService, IDictionaryService dictionaryService, HttpErrorCodeTranslator httpErrorCodeTranslator) : base(
-            communicationProvider, httpErrorCodeTranslator)
+        public LocalizationController(CommunicationProvider communicationProvider, ILocalizationService localizationService, IDictionaryService dictionaryService) : base(communicationProvider)
         {
             m_localizationService = localizationService;
             m_dictionaryService = dictionaryService;

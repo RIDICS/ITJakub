@@ -32,9 +32,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         private const int ProjectListPageSize = 5;
         private readonly ILocalizationService m_localizer;
 
-        public ProjectController(CommunicationProvider communicationProvider, ILocalizationService localizer, HttpErrorCodeTranslator httpErrorCodeTranslator) : base(
-            communicationProvider, httpErrorCodeTranslator)
-        { 
+        public ProjectController(CommunicationProvider communicationProvider, ILocalizationService localizer) : base(communicationProvider)
+        {
             m_localizer = localizer;
         }
 

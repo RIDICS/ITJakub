@@ -2,7 +2,6 @@
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
-using ITJakub.Web.Hub.Helpers;
 using ITJakub.Web.Hub.Models.Requests.Lemmatization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,8 +14,7 @@ namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
     [Area("Lemmatization")]
     public class LemmatizationController : BaseController
     {
-        public LemmatizationController(CommunicationProvider communicationProvider, HttpErrorCodeTranslator httpErrorCodeTranslator) : base(
-            communicationProvider, httpErrorCodeTranslator)
+        public LemmatizationController(CommunicationProvider communicationProvider) : base(communicationProvider)
         {
         }
 

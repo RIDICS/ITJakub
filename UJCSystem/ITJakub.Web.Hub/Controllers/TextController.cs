@@ -1,7 +1,6 @@
 ﻿using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Core.Markdown;
-using ITJakub.Web.Hub.Helpers;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Requests;
 using ITJakub.Web.Hub.Models.Type;
@@ -18,8 +17,7 @@ namespace ITJakub.Web.Hub.Controllers
         private readonly StaticTextManager m_staticTextManager;
         private readonly IMarkdownToHtmlConverter m_markdownToHtmlConverter;
 
-        public TextController(ILocalizationService localizationService, StaticTextManager staticTextManager, CommunicationProvider communicationProvider,
-            IMarkdownToHtmlConverter markdownToHtmlConverter, HttpErrorCodeTranslator httpErrorCodeTranslator) : base( communicationProvider, httpErrorCodeTranslator)
+        public TextController(ILocalizationService localizationService, StaticTextManager staticTextManager, CommunicationProvider communicationProvider, IMarkdownToHtmlConverter markdownToHtmlConverter) : base(communicationProvider)
         {
             m_localizationService = localizationService;
             m_staticTextManager = staticTextManager;
