@@ -277,6 +277,7 @@
     </ApplicationDefinition>
     <Compile Include="Behaviors\FolderDialogBehavior.cs" />
     <Compile Include="BusinessLogic\AuthenticationManager.cs" />
+    <Compile Include="BusinessLogic\Communication\MainServiceUriProvider.cs" />
     <Compile Include="BusinessLogic\Communication\CommunicationProvider.cs" />
     <Compile Include="ComponentInstaller.cs" />
     <Compile Include="Container.cs" />

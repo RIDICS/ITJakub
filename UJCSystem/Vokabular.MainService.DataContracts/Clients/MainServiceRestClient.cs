@@ -28,18 +28,18 @@ namespace Vokabular.MainService.DataContracts.Clients
 {
     public class MainServiceRestClient : FullRestClientBase
     {
+        private readonly IMainServiceAuthTokenProvider m_tokenProvider;
         private static readonly ILogger m_logger = ApplicationLogging.CreateLogger<MainServiceRestClient>();
-        private readonly string m_authenticationToken;
         private const string AuthenticationScheme = "Bearer";
 
-        public MainServiceRestClient(Uri baseAddress, string authenticationToken) : base(baseAddress)
+        public MainServiceRestClient(IMainServiceUriProvider uriProvider, IMainServiceAuthTokenProvider tokenProvider) : base(uriProvider.MainServiceUri)
         {
-            m_authenticationToken = authenticationToken;
+            m_tokenProvider = tokenProvider;
         }
 
         protected override void FillRequestMessage(HttpRequestMessage requestMessage)
         {
-            requestMessage.Headers.Authorization = new AuthenticationHeaderValue(AuthenticationScheme, m_authenticationToken);
+            requestMessage.Headers.Authorization = new AuthenticationHeaderValue(AuthenticationScheme, m_tokenProvider.AuthToken);
         }
 
         protected override void ProcessResponse(HttpResponseMessage response)

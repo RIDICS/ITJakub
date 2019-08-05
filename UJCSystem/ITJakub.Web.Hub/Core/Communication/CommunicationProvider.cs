@@ -9,23 +9,24 @@ namespace ITJakub.Web.Hub.Core.Communication
     {
         private readonly CommunicationConfigurationProvider m_configurationProvider;
         private readonly AuthApiAccessTokenProvider m_authApiAccessTokenProvider;
+        private readonly MainServiceRestClient m_mainServiceRestClient;
 
-        private const string MainServiceEndpointName = "MainService";
         private const string LemmatizationServiceEndpointName = "LemmatizationService";
 
-        public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider, AuthApiAccessTokenProvider authApiAccessTokenProvider)
+        public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider,
+            AuthApiAccessTokenProvider authApiAccessTokenProvider, MainServiceRestClient mainServiceRestClient)
         {
             m_configurationProvider = communicationConfigurationProvider;
             m_authApiAccessTokenProvider = authApiAccessTokenProvider;
+            m_mainServiceRestClient = mainServiceRestClient;
         }
 
         public MainServiceRestClient GetMainServiceClient()
         {
-            var uri = m_configurationProvider.GetEndpointUri(MainServiceEndpointName);
             var authToken = m_authApiAccessTokenProvider.GetAccessTokenAsync().GetAwaiter().GetResult();
-            return new MainServiceRestClient(uri, authToken);
+            return m_mainServiceRestClient;
         }
-        
+
         public LemmatizationServiceClient GetLemmatizationClient()
         {
             var endpoint = m_configurationProvider.GetEndpointAddress(LemmatizationServiceEndpointName);

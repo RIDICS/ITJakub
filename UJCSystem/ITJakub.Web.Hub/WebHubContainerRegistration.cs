@@ -6,6 +6,7 @@ using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Core.Markdown;
 using Microsoft.Extensions.DependencyInjection;
+using Vokabular.MainService.DataContracts;
 using Vokabular.Shared.Container;
 
 namespace ITJakub.Web.Hub
@@ -21,6 +22,8 @@ namespace ITJakub.Web.Hub
             services.AddScoped<RefreshUserManager>();
 
             services.AddScoped<IMarkdownToHtmlConverter, MarkdigMarkdownToHtmlConverter>();
+
+            services.RegisterMainServiceClient<UriProvider, AuthTokenProvider>();
 
             // AutoMapper profiles
             services.AddSingleton<Profile, ConditionCriteriaDescriptionProfile>();
