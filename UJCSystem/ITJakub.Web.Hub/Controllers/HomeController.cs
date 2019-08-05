@@ -102,11 +102,9 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult GetTypeaheadTitle(string query)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetTitleAutocomplete(query);
-                return Json(result);
-            }
+            var client = GetMetadataClient();
+            var result = client.GetTitleAutocomplete(query);
+            return Json(result);
         }
 
         public ActionResult GetTypeaheadDictionaryHeadword(string query)

@@ -83,11 +83,9 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
 
         public override ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetTitleAutocomplete(query, null, selectedCategoryIds, selectedBookIds);
-                return Json(result);
-            }
+            var client = GetMetadataClient();
+            var result = client.GetTitleAutocomplete(query, null, selectedCategoryIds, selectedBookIds);
+            return Json(result);
         }
 
         public ActionResult AdvancedSearchResultsCount(string json)

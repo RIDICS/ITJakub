@@ -45,30 +45,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         protected override void ProcessResponse(HttpResponseMessage response)
         {
         }
-
-        public List<string> GetPublisherAutoComplete(string query)
-        {
-            try
-            {
-                var publishers =  Get<List<string>>($"metadata/publisher/autocomplete?query={query}");
-                return publishers;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}",  GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        #region Configure project relationships
-
-      
-
-        #endregion
-
-
+        
         public void UploadResource(string sessionId, Stream data, string fileName)
         {
             try
@@ -784,30 +761,6 @@ namespace Vokabular.MainService.DataContracts.Clients
                     .ToQuery();
 
                 var result = Get<List<OriginalAuthorContract>>(url);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public List<string> GetTitleAutocomplete(string query, BookTypeEnumContract? bookType = null,
-            IList<int> selectedCategoryIds = null, IList<long> selectedProjectIds = null)
-        {
-            try
-            {
-                var url = UrlQueryBuilder.Create("metadata/title/autocomplete")
-                    .AddParameter("query", query)
-                    .AddParameter("bookType", bookType)
-                    .AddParameterList("selectedCategoryIds", selectedCategoryIds)
-                    .AddParameterList("selectedProjectIds", selectedProjectIds)
-                    .ToQuery();
-
-                var result = Get<List<string>>(url);
                 return result;
             }
             catch (HttpRequestException e)
