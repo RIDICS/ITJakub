@@ -40,6 +40,11 @@ namespace ITJakub.Web.Hub.Controllers
             return m_communication.GetMainServiceProjectClient();
         }
 
+        public MainServiceResourceClient GetResourceClient()
+        {
+            return m_communication.GetMainServiceResourceClient();
+        }
+
         public MainServiceRoleClient GetRoleClient()
         {
             return m_communication.GetMainServiceRoleClient();

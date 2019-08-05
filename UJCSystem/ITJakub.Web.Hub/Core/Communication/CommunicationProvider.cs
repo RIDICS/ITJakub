@@ -11,6 +11,7 @@ namespace ITJakub.Web.Hub.Core.Communication
         private readonly MainServiceBookClient m_bookClient;
         private readonly MainServiceMetadataClient m_metadataClient;
         private readonly MainServiceProjectClient m_projectClient;
+        private readonly MainServiceResourceClient m_resourceClient;
         private readonly MainServiceRoleClient m_roleClient;
         private readonly MainServiceUserClient m_userClient;
 
@@ -18,13 +19,15 @@ namespace ITJakub.Web.Hub.Core.Communication
 
         public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider,
             MainServiceRestClient mainServiceRestClient, MainServiceBookClient bookClient, MainServiceMetadataClient metadataClient,
-            MainServiceProjectClient projectClient, MainServiceRoleClient roleClient, MainServiceUserClient userClient)
+            MainServiceProjectClient projectClient, MainServiceResourceClient resourceClient, MainServiceRoleClient roleClient,
+            MainServiceUserClient userClient)
         {
             m_configurationProvider = communicationConfigurationProvider;
             m_mainServiceRestClient = mainServiceRestClient;
             m_bookClient = bookClient;
             m_metadataClient = metadataClient;
             m_projectClient = projectClient;
+            m_resourceClient = resourceClient;
             m_roleClient = roleClient;
             m_userClient = userClient;
         }
@@ -47,6 +50,11 @@ namespace ITJakub.Web.Hub.Core.Communication
         public MainServiceProjectClient GetMainServiceProjectClient()
         {
             return m_projectClient;
+        }
+
+        public MainServiceResourceClient GetMainServiceResourceClient()
+        {
+            return m_resourceClient;
         }
 
         public MainServiceRoleClient GetMainServiceRoleClient()
