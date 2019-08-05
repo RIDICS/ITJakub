@@ -132,28 +132,6 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<ResourceContract> GetResourceList(long projectId, ResourceTypeEnumContract? resourceType = null)
-        {
-            try
-            {
-                var url = $"project/{projectId}/resource";
-                if (resourceType != null)
-                {
-                    url.AddQueryString("resourceType", resourceType.ToString());
-                }
-
-                var result = Get<List<ResourceContract>>(url);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
         public List<ResourceVersionContract> GetResourceVersionHistory(long resourceId)
         {
             try
@@ -186,22 +164,6 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public long ProcessUploadedResources(long projectId, NewResourceContract resourceInfo)
-        {
-            try
-            {
-                var resourceId = Post<long>($"project/{projectId}/resource", resourceInfo);
-                return resourceId;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
         public long ProcessUploadedResourceVersion(long resourceId, NewResourceContract resourceInfo)
         {
             try
@@ -223,38 +185,6 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 Put<object>($"resource/{resourceId}", resource);
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public long CreateSnapshot(long projectId)
-        {
-            try
-            {
-                var snapshotId = Post<long>($"project/{projectId}/snapshot", null);
-                return snapshotId;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public List<SnapshotContract> GetSnapshotList(long projectId)
-        {
-            try
-            {
-                var result = Get<List<SnapshotContract>>($"project/{projectId}/snapshot");
-                return result;
             }
             catch (HttpRequestException e)
             {
@@ -1239,139 +1169,12 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<PageContract> GetAllPageList(long projectId)
-        {
-            try
-            {
-                var result = Get<List<PageContract>>($"project/{projectId}/page");
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
         public long SetAllPageList(string[] pageList)
         {
             try
             {
                 //TODO add logic for saving page list after editing
                 throw new NotImplementedException();
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public List<TextWithPageContract> GetAllTextResourceList(long projectId, long? resourceGroupId)
-        {
-            try
-            {
-                var result =
-                    Get<List<TextWithPageContract>>($"project/{projectId}/text?resourceGroupId={resourceGroupId}");
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public FullTextContract GetTextResource(long textId, TextFormatEnumContract? format)
-        {
-            try
-            {
-                var result = Get<FullTextContract>($"project/text/{textId}?format={format.ToString()}");
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public List<GetTextCommentContract> GetCommentsForText(long textId)
-        {
-            try
-            {
-                var result = Get<List<GetTextCommentContract>>($"project/text/{textId}/comment");
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public long CreateComment(long textId, CreateTextCommentContract request)
-        {
-            try
-            {
-                var result = Post<long>($"project/text/{textId}/comment", request);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void UpdateComment(long commentId, CreateTextCommentContract request)
-        {
-            try
-            {
-                Put<HttpStatusCode>($"project/text/comment/{commentId}", request);
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void DeleteComment(long commentId)
-        {
-            try
-            {
-                Delete($"project/text/comment/{commentId}");
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public long CreateTextResourceVersion(long textId, CreateTextRequestContract request)
-        {
-            try
-            {
-                var result = Post<long>($"project/text/{textId}", request);
-                return result;
             }
             catch (HttpRequestException e)
             {
@@ -2575,28 +2378,6 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
-        
-        public PagedResultList<RoleContract> GetRolesByProject(int projectId, int start, int count, string query)
-        {
-            try
-            {
-                var url = UrlQueryBuilder.Create($"project/{projectId}/role")
-                    .AddParameter("start", start)
-                    .AddParameter("count", count)
-                    .AddParameter("filterByName", query)
-                    .ToQuery();
-
-                var result = GetPagedList<RoleContract>(url);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
 
         public List<BookContract> GetAllBooksByType(BookTypeEnumContract bookType)
         {
@@ -3068,42 +2849,6 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 return Get<IList<RepositoryImportProgressInfoContract>>($"repositoryImport/importStatus");
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        #endregion
-
-        #region Forum
-
-        public int CreateForum(long projectId)
-        {
-            try
-            {
-                var forumId = Post<int>($"project/{projectId}/forum", null);
-                return forumId;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public ForumContract GetForum(long projectId)
-        {
-            try
-            {
-                var result = Get<ForumContract>($"project/{projectId}/forum");
-                return result;
             }
             catch (HttpRequestException e)
             {

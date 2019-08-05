@@ -100,7 +100,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             switch (tabType)
             {
                 case ProjectModuleTabType.WorkPublications:
-                    var snapshotList = client.GetSnapshotList(projectId.Value);
+                    var snapshotList = projectClient.GetSnapshotList(projectId.Value);
                     var publicationsViewModel = Mapper.Map<List<SnapshotViewModel>>(snapshotList);
                     return PartialView("Work/_Publications", publicationsViewModel);
                 case ProjectModuleTabType.WorkPageList:
@@ -127,7 +127,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 case ProjectModuleTabType.WorkNote:
                     return PartialView("Work/_Note");
                 case ProjectModuleTabType.Forum:
-                    var forum = client.GetForum(projectId.Value);
+                    var forum = projectClient.GetForum(projectId.Value);
                     ForumViewModel forumViewModel = null;
                     if (forum != null)
                     {
@@ -184,11 +184,10 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult NewSnapshot(long projectId)
         {
-            using (var client = GetRestClient())
-            {
-                var resources = client.GetResourceList(projectId);
+            var client = GetProjectClient();
+            var resources = client.GetResourceList(projectId);
                 // TODO
-            }
+            
             var viewModel = ProjectMock.GetNewPulication(m_localizer);
             return PartialView("Work/_PublicationsNew", viewModel);
         }
@@ -196,13 +195,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult CreateForum(long projectId)
         {
-            using (var client = GetRestClient())
-            {
-                client.CreateForum(projectId);
-                var forum = client.GetForum(projectId);
-                ForumViewModel forumViewModel = Mapper.Map<ForumViewModel>(forum); 
-                return Json(forumViewModel);
-            }
+            var client = GetProjectClient();
+            client.CreateForum(projectId);
+            var forum = client.GetForum(projectId);
+            ForumViewModel forumViewModel = Mapper.Map<ForumViewModel>(forum); 
+            return Json(forumViewModel);
         }
 
         [HttpPost]
@@ -305,25 +302,21 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult GetResourceList(long projectId, ResourceTypeEnumContract resourceType)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetResourceList(projectId, resourceType);
-                return Json(result);
-            }
+            var client = GetProjectClient();
+            var result = client.GetResourceList(projectId, resourceType);
+            return Json(result);
         }
 
         [HttpPost]
         public IActionResult ProcessUploadedResources([FromBody] ProcessResourcesRequest request)
         {
-            using (var client = GetRestClient())
+            var client = GetProjectClient();
+            var resourceId = client.ProcessUploadedResources(request.ProjectId, new NewResourceContract
             {
-                var resourceId = client.ProcessUploadedResources(request.ProjectId, new NewResourceContract
-                {
-                    SessionId = request.SessionId,
-                    Comment = request.Comment
-                });
-                return Json(resourceId);
-            }
+                SessionId = request.SessionId,
+                Comment = request.Comment
+            });
+            return Json(resourceId);
         }
 
         [HttpPost]

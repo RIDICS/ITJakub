@@ -162,21 +162,19 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult RolesByProject(int projectId, string search, int start, int count = RoleListPageSize)
         {
-            using (var client = GetRestClient())
+            var client = GetProjectClient();
+            search = search ?? string.Empty;
+            var result = client.GetRolesByProject(projectId, start, count, search);
+            var model = new ListViewModel<RoleContract>
             {
-                search = search ?? string.Empty;
-                var result = client.GetRolesByProject(projectId, start, count, search);
-                var model = new ListViewModel<RoleContract>
-                {
-                    TotalCount = result.TotalCount,
-                    List = result.List,
-                    PageSize = count,
-                    Start = start,
-                    SearchQuery = search
-                };
-                
-                return PartialView("Widget/_RoleListWidget", model);
-            }
+                TotalCount = result.TotalCount,
+                List = result.List,
+                PageSize = count,
+                Start = start,
+                SearchQuery = search
+            };
+            
+            return PartialView("Widget/_RoleListWidget", model);
         }
 
         public ActionResult EditUser(int userId, bool successUpdate = false)

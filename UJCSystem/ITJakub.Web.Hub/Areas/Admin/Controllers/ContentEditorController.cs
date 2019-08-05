@@ -31,29 +31,29 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         public IActionResult LoadCommentFile(long textId)
         {
             var parts = new List<CommentStructureResponse>();
-            using (var client = GetRestClient())
+            var client = GetProjectClient();
+            
+            var result = client.GetCommentsForText(textId);
+            if (result.Count <= 0)
             {
-                var result = client.GetCommentsForText(textId);
-                if (result.Count <= 0)
+                return Json(parts);
+            }
+            foreach (var pageComments in result)
+            {
+                var order = 0;
+                var mainComment = CreateComment(order, pageComments, false, textId);
+                parts.Add(mainComment);
+                if (pageComments.TextComments.Count > 0)
                 {
-                    return Json(parts);
-                }
-                foreach (var pageComments in result)
-                {
-                    var order = 0;
-                    var mainComment = CreateComment(order, pageComments, false, textId);
-                    parts.Add(mainComment);
-                    if (pageComments.TextComments.Count > 0)
+                    foreach (var textComment in pageComments.TextComments)
                     {
-                        foreach (var textComment in pageComments.TextComments)
-                        {
-                            order++;
-                            var nestedComment = CreateComment(order, textComment, true, textId);
-                            parts.Add(nestedComment);
-                        }
+                        order++;
+                        var nestedComment = CreateComment(order, textComment, true, textId);
+                        parts.Add(nestedComment);
                     }
                 }
             }
+
             return Json(parts);
         }
 
@@ -78,29 +78,23 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult SaveComment(CreateTextCommentContract comment, long textId)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.CreateComment(textId, comment);
-                return Json(result);
-            }
+            var client = GetProjectClient();
+            var result = client.CreateComment(textId, comment);
+            return Json(result);
         }
 
         [HttpPost]
         public void UpdateComment(CreateTextCommentContract comment, long commentId)
         {
-            using (var client = GetRestClient())
-            {
-                client.UpdateComment(commentId, comment);
-            }
+            var client = GetProjectClient();
+            client.UpdateComment(commentId, comment);
         }
 
         [HttpPost]
         public void DeleteComment(long commentId)
         {
-            using (var client = GetRestClient())
-            {
-                client.DeleteComment(commentId);
-            }
+            var client = GetProjectClient();
+            client.DeleteComment(commentId);
         }
 
         [HttpGet]
@@ -116,21 +110,17 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult GetProjectContent(long projectId, long? resourceGroupId)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetAllTextResourceList(projectId, resourceGroupId);
-                return Json(result);
-            }
+            var client = GetProjectClient();
+            var result = client.GetAllTextResourceList(projectId, resourceGroupId);
+            return Json(result);
         }
 
         [HttpGet]
         public IActionResult GetPageList(long projectId)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetAllPageList(projectId);
-                return Json(result);
-            }
+            var client = GetProjectClient();
+            var result = client.GetAllPageList(projectId);
+            return Json(result);
         }
 
         [HttpPost]
@@ -146,21 +136,17 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult GetTextResource(long textId, TextFormatEnumContract? format)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetTextResource(textId, format);
-                return Json(result);
-            }
+            var client = GetProjectClient();
+            var result = client.GetTextResource(textId, format);
+            return Json(result);
         }
 
         [HttpPost]
         public IActionResult SetTextResource(long textId, CreateTextRequestContract request)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.CreateTextResourceVersion(textId, request);
-                return Json(result);
-            }
+            var client = GetProjectClient();
+            var result = client.CreateTextResourceVersion(textId, request);
+            return Json(result);
         }
 
         [HttpGet]
