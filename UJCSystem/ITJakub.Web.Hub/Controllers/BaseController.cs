@@ -30,6 +30,11 @@ namespace ITJakub.Web.Hub.Controllers
             return m_communication.GetMainServiceProjectClient();
         }
 
+        public MainServiceMetadataClient GetMetadataClient()
+        {
+            return m_communication.GetMainServiceMetadataClient();
+        }
+
         public LemmatizationServiceClient GetLemmationzationServiceClient()
         {
             return m_communication.GetLemmatizationClient();
