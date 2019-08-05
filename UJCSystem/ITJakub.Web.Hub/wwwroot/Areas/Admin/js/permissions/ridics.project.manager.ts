@@ -109,15 +109,21 @@ class ProjectManager {
         if (addProjectPermissionToRoleBtn.data("init") === false) {
             addProjectPermissionToRoleBtn.data("init", true);
 
+            const addProjectPermissionModal = $("#addProjectPermissionToRoleDialog");
+            const roleError = $("#addProjectToRoleError");
+
             $("#addPermissionButton").on("click", (event) => {
                 event.preventDefault();
                 const role = $(".project-row.active");
                 $("#specificProjectName").text(role.find(".name").text());
-                $("#addProjectPermissionToRoleDialog").modal();
+                addProjectPermissionModal.modal();
+            });
+
+            addProjectPermissionModal.on("hidden.bs.modal", () => {
+                roleError.empty();
             });
 
             addProjectPermissionToRoleBtn.on("click", () => {
-                const roleError = $("#addProjectToRoleError");
                 roleError.empty();
 
                 const projectId = $(".project-row.active").data("project-id");
