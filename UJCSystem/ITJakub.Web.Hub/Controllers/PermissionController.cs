@@ -34,7 +34,7 @@ namespace ITJakub.Web.Hub.Controllers
         public IActionResult UserPermission(string search, int start, int count = UserListPageSize, ViewType viewType = ViewType.Full)
         {
             var client = GetUserClient();
-        
+
             search = search ?? string.Empty;
             var result = client.GetUserList(start, count, search);
             var model = CreateListViewModel<UserDetailViewModel, UserDetailContract>(result, start, count, search);
@@ -55,7 +55,7 @@ namespace ITJakub.Web.Hub.Controllers
         public IActionResult RolePermission(string search, int start, int count = RoleListPageSize, ViewType viewType = ViewType.Full)
         {
             var client = GetRoleClient();
-            
+
             search = search ?? string.Empty;
             var result = client.GetRoleList(start, count, search);
             var model = new ListViewModel<RoleContract>
@@ -170,7 +170,7 @@ namespace ITJakub.Web.Hub.Controllers
                 Start = start,
                 SearchQuery = search
             };
-            
+
             return PartialView("Widget/_RoleListWidget", model);
         }
 
@@ -180,6 +180,7 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 ViewData.Add(AccountConstants.SuccessUserUpdate, true);
             }
+
             var client = GetUserClient();
             var result = client.GetUserDetail(userId);
             var model = Mapper.Map<UpdateUserViewModel>(result);
@@ -217,7 +218,6 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult EditRole(RoleViewModel roleViewModel)
         {
-            
             try
             {
                 var roleContract = new RoleContract
@@ -229,7 +229,6 @@ namespace ITJakub.Web.Hub.Controllers
                 var client = GetRoleClient();
                 client.UpdateRole(roleContract.Id, roleContract);
                 roleViewModel.SuccessfulUpdate = true;
-                
             }
             catch (HttpErrorCodeException e)
             {
@@ -372,16 +371,15 @@ namespace ITJakub.Web.Hub.Controllers
 
         public IActionResult GetRootCategories()
         {
-            using (var client = GetRestClient())
+            var client = GetBookClient();
+
+            var result = client.GetBookTypeList();
+            var convertedResult = result.Select(x => new CategoryOrBookTypeContract
             {
-                var result = client.GetBookTypeList();
-                var convertedResult = result.Select(x => new CategoryOrBookTypeContract
-                {
-                    BookType = x.Type,
-                    Description = BookTypeHelper.GetCategoryName(x.Type),
-                });
-                return Json(convertedResult);
-            }
+                BookType = x.Type,
+                Description = BookTypeHelper.GetCategoryName(x.Type),
+            });
+            return Json(convertedResult);
         }
 
         public IActionResult GetCategoryContent(int groupId, BookTypeEnumContract? bookType)
@@ -408,16 +406,14 @@ namespace ITJakub.Web.Hub.Controllers
                 return BadRequest("BookType parameter is required");
             }
 
-            using (var client = GetRestClient())
+            var client = GetBookClient();
+            var books = client.GetAllBooksByType(bookType.Value);
+            var result = new CategoryContentContract
             {
-                var books = client.GetAllBooksByType(bookType.Value);
-                var result = new CategoryContentContract
-                {
-                    Categories = new List<CategoryContract>(), // Categories are currently not used after migration to new MainService
-                    Books = books,
-                };
-                return Json(result);
-            }
+                Categories = new List<CategoryContract>(), // Categories are currently not used after migration to new MainService
+                Books = books,
+            };
+            return Json(result);
         }
 
         [HttpPost]

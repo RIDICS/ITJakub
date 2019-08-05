@@ -18,11 +18,9 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Bibliography
 
         public ActionResult GetBookDetailInfo(long bookId)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetBookDetail(bookId);
-                return Json(result, GetJsonSerializerSettingsForBiblModule());
-            }
+            var client = GetBookClient();
+            var result = client.GetBookDetail(bookId);
+            return Json(result, GetJsonSerializerSettingsForBiblModule());
         }
 
         public ActionResult GetAudioBookDetailInfo(long bookId)

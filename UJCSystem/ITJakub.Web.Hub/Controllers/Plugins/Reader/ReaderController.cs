@@ -30,54 +30,44 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
 
         public ActionResult HasBookImage(long bookId, long? snapshotId)
         {
-            using (var client = GetRestClient())
-            {
-                return Json(new { HasBookImage = client.HasBookAnyImage(bookId) });
-            }
+            var client = GetBookClient();
+            return Json(new {HasBookImage = client.HasBookAnyImage(bookId)});
         }
 
         public ActionResult HasBookText(long bookId, long? snapshotId)
         {
-            using (var client = GetRestClient())
-            {
-                return Json(new {HasBookPage = client.HasBookAnyText(bookId)}, GetJsonSerializerSettings());
-            }
+            var client = GetBookClient();
+            return Json(new {HasBookPage = client.HasBookAnyText(bookId)}, GetJsonSerializerSettings());
         }
 
         public ActionResult GetBookPage(long? snapshotId, long pageId)
         {
-            using (var client = GetRestClient())
-            {
-                var text = client.GetPageText(pageId, TextFormatEnumContract.Html);
-                return Json(new { pageText = text }, GetJsonSerializerSettings());
-            }
+            var client = GetBookClient();
+            var text = client.GetPageText(pageId, TextFormatEnumContract.Html);
+            return Json(new {pageText = text}, GetJsonSerializerSettings());
         }
 
         public ActionResult GetBookImage(long? snapshotId, long pageId)
         {
-            using (var client = GetRestClient())
+            try
             {
-                try
-                {
-                    var imageData = client.GetPageImage(pageId);
-                    return new FileStreamResult(imageData.Stream, imageData.MimeType);
-                }
-                catch (HttpErrorCodeException e)
-                {
-                    return StatusCode((int) e.StatusCode);
-                }
+                var client = GetBookClient();
+                var imageData = client.GetPageImage(pageId);
+                return new FileStreamResult(imageData.Stream, imageData.MimeType);
+            }
+            catch (HttpErrorCodeException e)
+            {
+                return StatusCode((int) e.StatusCode);
             }
         }
 
         public ActionResult GetTermsOnPage(string snapshotId, long pageId)
         {
-            using (var client = GetRestClient())
-            {
-                var terms = client.GetPageTermList(pageId);
-                return Json(new { terms });
-            }
+            var client = GetBookClient();
+            var terms = client.GetPageTermList(pageId);
+            return Json(new {terms});
         }
-        
+
         private List<SearchCriteriaContract> CreateQueryCriteriaContract(CriteriaKey criteriaKey, string query)
         {
             return new List<SearchCriteriaContract>
@@ -110,24 +100,20 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
                 listSearchCriteriaContracts = CreateQueryCriteriaContract(CriteriaKey.Fulltext, query);
             }
 
-            using (var client = GetRestClient())
+            var request = new SearchPageRequestContract
             {
-                var request = new SearchPageRequestContract
-                {
-                    ConditionConjunction = listSearchCriteriaContracts
-                };
-                var text = client.GetPageTextFromSearch(pageId, TextFormatEnumContract.Html, request);
-                return Json(new {pageText = text}, GetJsonSerializerSettings());
-            }
+                ConditionConjunction = listSearchCriteriaContracts
+            };
+            var client = GetBookClient();
+            var text = client.GetPageTextFromSearch(pageId, TextFormatEnumContract.Html, request);
+            return Json(new {pageText = text}, GetJsonSerializerSettings());
         }
 
         public ActionResult GetBookContent(long bookId)
         {
-            using (var client = GetRestClient())
-            {
-                var contentItems = client.GetBookChapterList(bookId);
-                return Json(new { content = contentItems });
-            }
+            var client = GetBookClient();
+            var contentItems = client.GetBookChapterList(bookId);
+            return Json(new {content = contentItems});
         }
     }
 }

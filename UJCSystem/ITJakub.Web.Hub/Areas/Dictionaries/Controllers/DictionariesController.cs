@@ -65,13 +65,11 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
             if (!string.IsNullOrEmpty(externalId)) // request to one specific book using externalId
             {
-                using (var client = GetRestClient())
-                {
-                    var book = client.GetBookInfoByExternalId(externalId);
-                    var bookArrId = $"[{book.Id}]";
+                var client = GetBookClient();
+                var book = client.GetBookInfoByExternalId(externalId);
+                var bookArrId = $"[{book.Id}]";
 
-                    return RedirectToAction("Listing", "Dictionaries", new {books = bookArrId});
-                }
+                return RedirectToAction("Listing", "Dictionaries", new {books = bookArrId});
             }
 
             return View();
@@ -166,15 +164,14 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
             AddCategoryCriteria(searchContractBasic, selectedBookIds, selectedCategoryIds);
 
-            using (var client = GetRestClient())
+
+            var newRequest = new HeadwordSearchRequestContract
             {
-                var newRequest = new HeadwordSearchRequestContract
-                {
-                    ConditionConjunction = searchContractBasic,
-                };
-                var resultCount = client.SearchHeadwordCount(newRequest);
-                return Json(resultCount);
-            }
+                ConditionConjunction = searchContractBasic,
+            };
+            var client = GetBookClient();
+            var resultCount = client.SearchHeadwordCount(newRequest);
+            return Json(resultCount);
         }
 
         public ActionResult SearchBasicFulltextResultsCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
@@ -183,15 +180,13 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
             AddCategoryCriteria(searchContractFulltext, selectedBookIds, selectedCategoryIds);
 
-            using (var client = GetRestClient())
+            var newRequest = new HeadwordSearchRequestContract
             {
-                var newRequest = new HeadwordSearchRequestContract
-                {
-                    ConditionConjunction = searchContractFulltext,
-                };
-                var resultCount = client.SearchHeadwordCount(newRequest);
-                return Json(resultCount);
-            }
+                ConditionConjunction = searchContractFulltext,
+            };
+            var client = GetBookClient();
+            var resultCount = client.SearchHeadwordCount(newRequest);
+            return Json(resultCount);
         }
 
         public ActionResult SearchBasicHeadword(string text, int start, int count, IList<long> selectedBookIds,
@@ -223,15 +218,13 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
             AddCategoryCriteria(listSearchCriteriaContracts, request.SelectedBookIds, request.SelectedCategoryIds);
 
-            using (var client = GetRestClient())
+            var newRequest = new HeadwordSearchRequestContract
             {
-                var newRequest = new HeadwordSearchRequestContract
-                {
-                    ConditionConjunction = listSearchCriteriaContracts,
-                };
-                var resultCount = client.SearchHeadwordCount(newRequest);
-                return Json(resultCount);
-            }
+                ConditionConjunction = listSearchCriteriaContracts,
+            };
+            var client = GetBookClient();
+            var resultCount = client.SearchHeadwordCount(newRequest);
+            return Json(resultCount);
         }
 
         [HttpPost]
@@ -248,34 +241,32 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         private ResultHeadwordListContract SearchHeadwordByCriteria(List<SearchCriteriaContract> listSearchCriteriaContracts,
             int start, int count)
         {
-            using (var client = GetRestClient())
+            var client = GetBookClient();
+            // Search headwords
+            var newRequest = new HeadwordSearchRequestContract
             {
-                // Search headwords
-                var newRequest = new HeadwordSearchRequestContract
-                {
-                    ConditionConjunction = listSearchCriteriaContracts,
-                    Start = start,
-                    Count = count,
-                };
-                var resultHeadwords = client.SearchHeadword(newRequest);
+                ConditionConjunction = listSearchCriteriaContracts,
+                Start = start,
+                Count = count,
+            };
+            var resultHeadwords = client.SearchHeadword(newRequest);
 
-                // Load info about dictionaries/books
-                var bookListDictionary = new Dictionary<long, BookContract>();
-                foreach (var projectId in resultHeadwords.Select(x => x.ProjectId).Distinct())
-                {
-                    var bookInfo = client.GetBookInfo(projectId);
-                    bookListDictionary.Add(projectId, bookInfo);
-                }
-
-                // Create response
-                var result = new ResultHeadwordListContract
-                {
-                    HeadwordList = MapHeadwordsToGroupedList(resultHeadwords),
-                    BookList = bookListDictionary
-                };
-
-                return result;
+            // Load info about dictionaries/books
+            var bookListDictionary = new Dictionary<long, BookContract>();
+            foreach (var projectId in resultHeadwords.Select(x => x.ProjectId).Distinct())
+            {
+                var bookInfo = client.GetBookInfo(projectId);
+                bookListDictionary.Add(projectId, bookInfo);
             }
+
+            // Create response
+            var result = new ResultHeadwordListContract
+            {
+                HeadwordList = MapHeadwordsToGroupedList(resultHeadwords),
+                BookList = bookListDictionary
+            };
+
+            return result;
         }
 
         private List<HeadwordWithDictionariesContract> MapHeadwordsToGroupedList(List<HeadwordContract> headwords)
@@ -312,11 +303,9 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetHeadwordDescription(long headwordId)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetHeadwordText(headwordId, TextFormatEnumContract.Html);
-                return Json(result);
-            }
+            var client = GetBookClient();
+            var result = client.GetHeadwordText(headwordId, TextFormatEnumContract.Html);
+            return Json(result);
         }
 
         public ActionResult GetHeadwordDescriptionFromSearch(string criteria, bool isCriteriaJson, long headwordId)
@@ -334,15 +323,13 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                 };
             }
 
-            using (var client = GetRestClient())
+            var client = GetBookClient();
+            var request = new SearchPageRequestContract
             {
-                var request = new SearchPageRequestContract
-                {
-                    ConditionConjunction = listSearchCriteriaContracts
-                };
-                var result = client.GetHeadwordTextFromSearch(headwordId, TextFormatEnumContract.Html, request);
-                return Json(result);
-            }
+                ConditionConjunction = listSearchCriteriaContracts
+            };
+            var result = client.GetHeadwordTextFromSearch(headwordId, TextFormatEnumContract.Html, request);
+            return Json(result);
         }
 
         public ActionResult GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
@@ -350,15 +337,14 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             var listSearchCriteriaContracts = new List<SearchCriteriaContract>();
             AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
 
-            using (var client = GetRestClient())
+            var newRequest = new HeadwordSearchRequestContract
             {
-                var newRequest = new HeadwordSearchRequestContract
-                {
-                    ConditionConjunction = listSearchCriteriaContracts,
-                };
-                var resultCount = client.SearchHeadwordCount(newRequest);
-                return Json(resultCount);
-            }
+                ConditionConjunction = listSearchCriteriaContracts,
+            };
+
+            var client = GetBookClient();
+            var resultCount = client.SearchHeadwordCount(newRequest);
+            return Json(resultCount);
         }
 
         public ActionResult GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int page, int pageSize)
@@ -373,24 +359,22 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetHeadwordPageNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, int pageSize)
         {
-            using (var client = GetRestClient())
+            var request = new HeadwordRowNumberSearchRequestContract
             {
-                var request = new HeadwordRowNumberSearchRequestContract
+                Query = query,
+                Category = new SelectedCategoryCriteriaContract
                 {
-                    Query = query,
-                    Category = new SelectedCategoryCriteriaContract
-                    {
-                        BookType = AreaBookType,
-                        SelectedBookIds = selectedBookIds,
-                        SelectedCategoryIds = selectedCategoryIds,
-                    }
-                };
-                var rowNumber = client.SearchHeadwordRowNumber(request);
+                    BookType = AreaBookType,
+                    SelectedBookIds = selectedBookIds,
+                    SelectedCategoryIds = selectedCategoryIds,
+                }
+            };
+            var client = GetBookClient();
+            var rowNumber = client.SearchHeadwordRowNumber(request);
 
-                var resultPageNumber = (rowNumber - 1) / pageSize + 1;
+            var resultPageNumber = (rowNumber - 1) / pageSize + 1;
 
-                return Json(resultPageNumber);
-            }
+            return Json(resultPageNumber);
         }
 
         // Favorite headwords are not currently supported

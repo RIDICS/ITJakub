@@ -32,12 +32,13 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             var parts = new List<CommentStructureResponse>();
             var client = GetProjectClient();
-            
+
             var result = client.GetCommentsForText(textId);
             if (result.Count <= 0)
             {
                 return Json(parts);
             }
+
             foreach (var pageComments in result)
             {
                 var order = 0;
@@ -62,7 +63,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var comment = new CommentStructureResponse
             {
                 Order = order,
-                Time = ((DateTimeOffset)textComment.CreateTime).ToUnixTimeMilliseconds(),
+                Time = ((DateTimeOffset) textComment.CreateTime).ToUnixTimeMilliseconds(),
                 Text = textComment.Text,
                 Picture = null, // Picture is not supported
                 Id = textComment.Id,
@@ -100,11 +101,9 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult GetPageImage(long pageId)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetPageImage(pageId);
-                return new FileStreamResult(result.Stream, result.MimeType);
-            }
+            var client = GetBookClient();
+            var result = client.GetPageImage(pageId);
+            return new FileStreamResult(result.Stream, result.MimeType);
         }
 
         [HttpPost]
@@ -152,11 +151,9 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult GetEditionNote(long projectId, TextFormatEnumContract format)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetEditionNote(projectId, format);
-                return Json(result);
-            }
+            var client = GetBookClient();
+            var result = client.GetEditionNote(projectId, format);
+            return Json(result);
         }
 
         [HttpPost]
@@ -165,7 +162,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             using (var client = GetRestClient())
             {
                 //var result = client.
-                var result = "TODO";//TODO add logic
+                var result = "TODO"; //TODO add logic
                 return Json(result);
             }
         }
