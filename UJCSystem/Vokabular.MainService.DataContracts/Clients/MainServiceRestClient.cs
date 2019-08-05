@@ -2078,25 +2078,6 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public PagedResultList<UserContract> GetUsersByRole(int roleId, int start, int count, string query)
-        {
-            try
-            {
-                var url = $"role/{roleId}/user".AddQueryString("start", start.ToString());
-                url = url.AddQueryString("count", count.ToString());
-                url = url.AddQueryString("filterByName", query);
-                var result = GetPagedList<UserContract>(url);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
         public void UpdateUser(int userId, UpdateUserContract data)
         {
             try
@@ -2117,36 +2098,6 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 Put<object>($"user/{userId}/contact", data);
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void AddUserToRole(int userId, int roleId)
-        {
-            try
-            {
-                Post<object>($"role/{roleId}/user/{userId}", null);
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void RemoveUserFromRole(int userId, int roleId)
-        {
-            try
-            {
-                Delete($"role/{roleId}/user/{userId}");
             }
             catch (HttpRequestException e)
             {
@@ -2219,103 +2170,6 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         #endregion
 
-        public PagedResultList<RoleContract> GetRoleList(int start, int count, string query)
-        {
-            try
-            {
-                var url = "role".AddQueryString("start", start.ToString());
-                url = url.AddQueryString("count", count.ToString());
-                url = url.AddQueryString("filterByName", query);
-                var result = GetPagedList<RoleContract>(url);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public List<RoleContract> GetRoleAutocomplete(string query)
-        {
-            try
-            {
-                var result = Get<List<RoleContract>>("role/autocomplete".AddQueryString("query", query));
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public RoleDetailContract GetRoleDetail(int roleId)
-        {
-            try
-            {
-                var result = Get<RoleDetailContract>($"role/{roleId}/detail");
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void UpdateRole(int roleId, RoleContract data)
-        {
-            try
-            {
-                Put<object>($"role/{roleId}", data);
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public int CreateRole(RoleContract request)
-        {
-            try
-            {
-                var result = Post<int>("role", request);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void DeleteRole(int roleId)
-        {
-            try
-            {
-                Delete($"role/{roleId}");
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
         public List<RoleContract> GetRolesByUser(int userId)
         {
             try
@@ -2348,73 +2202,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<BookContract> GetBooksForRole(int roleId, BookTypeEnumContract bookType)
-        {
-            try
-            {
-                var result = Get<List<BookContract>>($"role/{roleId}/book?filterByBookType={bookType}");
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void AddBooksToRole(int roleId, IList<long> bookIds)
-        {
-            try
-            {
-                Post<object>($"role/{roleId}/permission/book", new AddBookToRoleRequestContract
-                {
-                    BookIdList = bookIds
-                });
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void RemoveBooksFromRole(int roleId, IList<long> bookIds)
-        {
-            try
-            {
-                Delete($"role/{roleId}/permission/book", new AddBookToRoleRequestContract
-                {
-                    BookIdList = bookIds
-                });
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public List<PermissionContract> GetPermissionsForRole(int roleId)
-        {
-            try
-            {
-                var result = Get<List<PermissionContract>>($"role/{roleId}/permission");
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
+       
 
         public PagedResultList<PermissionContract> GetPermissions(int start, int count, string query)
         {
@@ -2425,42 +2213,6 @@ namespace Vokabular.MainService.DataContracts.Clients
                 url = url.AddQueryString("filterByName", query);
                 var result = GetPagedList<PermissionContract>(url);
                 return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void AddSpecialPermissionsToRole(int roleId, IList<int> specialPermissionsIds)
-        {
-            try
-            {
-                Post<object>($"role/{roleId}/permission/special", new IntegerIdListContract
-                {
-                    IdList = specialPermissionsIds
-                });
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void RemoveSpecialPermissionsFromRole(int roleId, IList<int> specialPermissionsIds)
-        {
-            try
-            {
-                Delete($"role/{roleId}/permission/special", new IntegerIdListContract
-                {
-                    IdList = specialPermissionsIds
-                });
             }
             catch (HttpRequestException e)
             {

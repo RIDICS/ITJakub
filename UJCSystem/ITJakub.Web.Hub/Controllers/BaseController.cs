@@ -25,14 +25,19 @@ namespace ITJakub.Web.Hub.Controllers
             return m_communication.GetMainServiceClient();
         }
 
+        public MainServiceMetadataClient GetMetadataClient()
+        {
+            return m_communication.GetMainServiceMetadataClient();
+        }
+
         public MainServiceProjectClient GetProjectClient()
         {
             return m_communication.GetMainServiceProjectClient();
         }
 
-        public MainServiceMetadataClient GetMetadataClient()
+        public MainServiceRoleClient GetRoleClient()
         {
-            return m_communication.GetMainServiceMetadataClient();
+            return m_communication.GetMainServiceRoleClient();
         }
 
         public LemmatizationServiceClient GetLemmationzationServiceClient()
