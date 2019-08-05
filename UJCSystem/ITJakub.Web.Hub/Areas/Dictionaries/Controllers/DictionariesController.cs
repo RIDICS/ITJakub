@@ -439,26 +439,25 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         private void AddHeadwordFeedback(string content, long headwordVersionId, string name, string email)
         {
-            using (var client = GetRestClient())
+            var client = GetFeedbackClient();
+
+            if (IsUserLoggedIn())
             {
-                if (IsUserLoggedIn())
+                client.CreateHeadwordFeedback(headwordVersionId, new CreateFeedbackContract
                 {
-                    client.CreateHeadwordFeedback(headwordVersionId, new CreateFeedbackContract
-                    {
-                        FeedbackCategory = FeedbackCategoryEnumContract.Dictionaries,
-                        Text = content,
-                    });
-                }
-                else
+                    FeedbackCategory = FeedbackCategoryEnumContract.Dictionaries,
+                    Text = content,
+                });
+            }
+            else
+            {
+                client.CreateAnonymousHeadwordFeedback(headwordVersionId, new CreateAnonymousFeedbackContract
                 {
-                    client.CreateAnonymousHeadwordFeedback(headwordVersionId, new CreateAnonymousFeedbackContract
-                    {
-                        FeedbackCategory = FeedbackCategoryEnumContract.Dictionaries,
-                        Text = content,
-                        AuthorEmail = email,
-                        AuthorName = name,
-                    });
-                }
+                    FeedbackCategory = FeedbackCategoryEnumContract.Dictionaries,
+                    Text = content,
+                    AuthorEmail = email,
+                    AuthorName = name,
+                });
             }
         }
 

@@ -13,6 +13,7 @@ namespace ITJakub.Web.Hub.Core.Communication
         private readonly MainServiceCategoryClient m_categoryClient;
         private readonly MainServiceExternalRepositoryClient m_externalRepositoryClient;
         private readonly MainServiceFavoriteClient m_favoriteClient;
+        private readonly MainServiceFeedbackClient m_feedbackClient;
         private readonly MainServiceFilteringExpressionSetClient m_filteringExpressionSetClient;
         private readonly MainServiceMetadataClient m_metadataClient;
         private readonly MainServiceProjectClient m_projectClient;
@@ -23,8 +24,10 @@ namespace ITJakub.Web.Hub.Core.Communication
         private const string LemmatizationServiceEndpointName = "LemmatizationService";
 
         public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider,
-            MainServiceRestClient mainServiceRestClient, MainServiceBookClient bookClient, MainServiceCardFileClient cardFileClient, MainServiceCategoryClient categoryClient, MainServiceExternalRepositoryClient externalRepositoryClient,
-            MainServiceFavoriteClient favoriteClient, MainServiceFilteringExpressionSetClient filteringExpressionSetClient, MainServiceMetadataClient metadataClient,
+            MainServiceRestClient mainServiceRestClient, MainServiceBookClient bookClient, MainServiceCardFileClient cardFileClient,
+            MainServiceCategoryClient categoryClient, MainServiceExternalRepositoryClient externalRepositoryClient,
+            MainServiceFavoriteClient favoriteClient, MainServiceFeedbackClient feedbackClient,
+            MainServiceFilteringExpressionSetClient filteringExpressionSetClient, MainServiceMetadataClient metadataClient,
             MainServiceProjectClient projectClient, MainServiceResourceClient resourceClient, MainServiceRoleClient roleClient,
             MainServiceUserClient userClient)
         {
@@ -35,6 +38,7 @@ namespace ITJakub.Web.Hub.Core.Communication
             m_categoryClient = categoryClient;
             m_externalRepositoryClient = externalRepositoryClient;
             m_favoriteClient = favoriteClient;
+            m_feedbackClient = feedbackClient;
             m_filteringExpressionSetClient = filteringExpressionSetClient;
             m_metadataClient = metadataClient;
             m_projectClient = projectClient;
@@ -71,6 +75,11 @@ namespace ITJakub.Web.Hub.Core.Communication
         public MainServiceFavoriteClient GetMainServiceFavoriteClient()
         {
             return m_favoriteClient;
+        }
+
+        public MainServiceFeedbackClient GetMainServiceFeedbackClient()
+        {
+            return m_feedbackClient;
         }
 
         public MainServiceFilteringExpressionSetClient GetMainServiceFilteringExpressionSetClient()

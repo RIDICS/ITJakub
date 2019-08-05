@@ -50,6 +50,11 @@ namespace ITJakub.Web.Hub.Controllers
             return m_communication.GetMainServiceFavoriteClient();
         }
 
+        public MainServiceFeedbackClient GetFeedbackClient()
+        {
+            return m_communication.GetMainServiceFeedbackClient();
+        }
+
         public MainServiceFilteringExpressionSetClient GetFilteringExpressionSetClient()
         {
             return m_communication.GetMainServiceFilteringExpressionSetClient();
