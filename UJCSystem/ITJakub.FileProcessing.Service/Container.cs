@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -16,10 +17,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Vokabular.Core;
 using Vokabular.DataEntities;
+using Vokabular.FulltextService.DataContracts;
 using Vokabular.Log4Net;
+using Vokabular.RestClient;
 using Vokabular.Shared;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 using Vokabular.Shared.WcfService;
+using Configuration = Castle.Windsor.Installer.Configuration;
 
 namespace ITJakub.FileProcessing.Service
 {
@@ -71,6 +75,11 @@ namespace ITJakub.FileProcessing.Service
             new DataEntitiesContainerRegistration().Install(services);
 
             services.AddSingleton<IOptions<PathConfiguration>, PathConfigImplementation>(); // TODO after switch to ASP.NET Core use framework options handler
+
+            services.RegisterFulltextServiceClientComponents(new ServiceCommunicationConfiguration
+            {
+                Url = new Uri(ConfigurationManager.AppSettings["FulltextServiceEndpoint"])
+            });
 
             this.AddServicesCollection(services);
 

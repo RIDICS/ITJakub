@@ -18,6 +18,7 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 using Vokabular.Core;
 using Vokabular.ForumSite.Core;
 using Vokabular.ForumSite.Core.Options;
+using Vokabular.FulltextService.DataContracts;
 using Vokabular.MainService.Authorization;
 using Vokabular.MainService.Core;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -26,6 +27,7 @@ using Vokabular.MainService.Options;
 using Vokabular.MainService.Utils;
 using Vokabular.ProjectImport;
 using Vokabular.ProjectImport.Shared.Options;
+using Vokabular.RestClient;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore;
 using Vokabular.Shared.AspNetCore.Container;
@@ -51,6 +53,7 @@ namespace Vokabular.MainService
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             var openIdConnectConfig = Configuration.GetSection("OpenIdConnect").Get<OpenIdConnectConfiguration>();
+            var endpointsConfiguration = Configuration.GetSection("Endpoints").Get<EndpointOption>();
 
             // Configuration options
             services.AddOptions();
@@ -135,6 +138,11 @@ namespace Vokabular.MainService
                 NonceBasePath = "api/v1/nonce/",
                 ContactBasePath = "api/v1/contact/",
                 LoginCheckBasePath = "Account/CheckLogin",
+            });
+
+            services.RegisterFulltextServiceClientComponents(new ServiceCommunicationConfiguration
+            {
+                Url = new Uri(endpointsConfiguration.Addresses["FulltextService"])
             });
 
             services.AddProjectImportServices();

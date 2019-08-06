@@ -20,15 +20,17 @@ namespace Vokabular.MainService.Core.Communication
         private readonly PermissionApiClient m_permissionApiClient;
         private readonly RegistrationApiClient m_registrationApiClient;
         private readonly ContactApiClient m_contactApiClient;
+        private readonly FulltextServiceClient m_fulltextServiceClient;
 
         private const string FileProcessingServiceEndpointName = "FileProcessingService";
-        private const string FulltextServiceEndpointName = "FulltextService";
         private const string SearchServiceEndpointName = "SearchService";
         private const string CardFilesEndpointName = "CardFilesService";
         private const string CardFilesCredentials = "CardFiles";
-        
-        public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider, IOptions<List<CredentialsOption>> credentialsOptions,
-            UserApiClient userApiClient, RoleApiClient roleApiClient, PermissionApiClient permissionApiClient, RegistrationApiClient registrationApiClient, ContactApiClient contactApiClient)
+
+        public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider,
+            IOptions<List<CredentialsOption>> credentialsOptions, UserApiClient userApiClient, RoleApiClient roleApiClient,
+            PermissionApiClient permissionApiClient, RegistrationApiClient registrationApiClient, ContactApiClient contactApiClient,
+            FulltextServiceClient fulltextServiceClient)
         {
             m_configurationProvider = communicationConfigurationProvider;
             m_credentialsOptions = credentialsOptions;
@@ -37,6 +39,7 @@ namespace Vokabular.MainService.Core.Communication
             m_permissionApiClient = permissionApiClient;
             m_registrationApiClient = registrationApiClient;
             m_contactApiClient = contactApiClient;
+            m_fulltextServiceClient = fulltextServiceClient;
         }
 
         public FileProcessingServiceClient GetFileProcessingClient()
@@ -49,8 +52,7 @@ namespace Vokabular.MainService.Core.Communication
 
         public FulltextServiceClient GetFulltextServiceClient()
         {
-            var uri = m_configurationProvider.GetEndpointUri(FulltextServiceEndpointName);
-            return new FulltextServiceClient(uri);
+            return m_fulltextServiceClient;
         }
 
         public SearchServiceClient GetSearchServiceClient()
@@ -73,7 +75,7 @@ namespace Vokabular.MainService.Core.Communication
             var client = new CardFilesClient(uri, credentials.Username, credentials.Password);
             return client;
         }
-        
+
         public UserApiClient GetAuthUserApiClient()
         {
             return m_userApiClient;
