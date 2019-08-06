@@ -9,7 +9,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         private readonly IMainServiceAuthTokenProvider m_tokenProvider;
         private const string AuthenticationScheme = "Bearer";
 
-        public MainServiceRestClient(IMainServiceUriProvider uriProvider, IMainServiceAuthTokenProvider tokenProvider) : base(uriProvider.MainServiceUri)
+        public MainServiceRestClient(MainServiceCommunicationConfiguration configuration, IMainServiceAuthTokenProvider tokenProvider) : base(configuration.Url)
         {
             m_tokenProvider = tokenProvider;
         }

@@ -1,4 +1,6 @@
-﻿using Castle.MicroKernel.Registration;
+﻿using System;
+using System.Configuration;
+using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using ITJakub.BatchImport.Client.BusinessLogic;
@@ -14,9 +16,16 @@ namespace ITJakub.BatchImport.Client
         {            
             container.Register(Component.For<FileUploadManager>());
             container.Register(Component.For<CommunicationProvider>());
+
+            var mainServiceConfiguration = new MainServiceCommunicationConfiguration
+            {
+                Url = new Uri(ConfigurationManager.AppSettings["MainService"])
+            };
+
+            container.Register(Component.For<MainServiceCommunicationConfiguration>().Instance(mainServiceConfiguration));
             container.Register(Component.For<IMainServiceAuthTokenProvider, AuthenticationManager>());
-            container.Register(Component.For<IMainServiceUriProvider, MainServiceUriProvider>());
             container.Register(Component.For<MainServiceRestClient>());
+            container.Register(Component.For<MainServiceSessionClient>());
         }
     }
 }

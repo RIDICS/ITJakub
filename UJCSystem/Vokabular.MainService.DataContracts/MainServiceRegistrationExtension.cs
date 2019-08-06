@@ -5,10 +5,13 @@ namespace Vokabular.MainService.DataContracts
 {
     public static class MainServiceRegistrationExtension
     {
-        public static void RegisterMainServiceClient<TUriProvider, TTokenProvider>(this IServiceCollection services)
-            where TUriProvider : class, IMainServiceUriProvider where TTokenProvider : class, IMainServiceAuthTokenProvider
+        public static void RegisterMainServiceClient<TTokenProvider>(this IServiceCollection services,
+            MainServiceCommunicationConfiguration configuration = null)
+            where TTokenProvider : class, IMainServiceAuthTokenProvider
         {
-            services.AddScoped<IMainServiceUriProvider, TUriProvider>();
+            if (configuration != null)
+                services.AddSingleton(configuration);
+
             services.AddScoped<IMainServiceAuthTokenProvider, TTokenProvider>();
             services.AddScoped<MainServiceRestClient>();
         }

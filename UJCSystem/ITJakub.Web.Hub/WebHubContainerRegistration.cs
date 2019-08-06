@@ -23,8 +23,6 @@ namespace ITJakub.Web.Hub
 
             services.AddScoped<IMarkdownToHtmlConverter, MarkdigMarkdownToHtmlConverter>();
 
-            services.RegisterMainServiceClient<UriProvider, AuthTokenProvider>();
-
             // AutoMapper profiles
             services.AddSingleton<Profile, ConditionCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, DatingCriteriaDescriptionProfile>();

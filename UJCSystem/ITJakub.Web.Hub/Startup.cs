@@ -29,6 +29,7 @@ using Scalesoft.Localization.AspNetCore.IoC;
 using Scalesoft.Localization.Core.Configuration;
 using Scalesoft.Localization.Core.Util;
 using Scalesoft.Localization.Database.NHibernate;
+using Vokabular.MainService.DataContracts;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
@@ -59,6 +60,7 @@ namespace ITJakub.Web.Hub
 
             var openIdConnectConfig = Configuration.GetSection("OpenIdConnect").Get<OpenIdConnectConfiguration>();
             var portalConfig = Configuration.GetSection("PortalConfig").Get<PortalOption>();
+            var endpointsConfiguration = Configuration.GetSection("Endpoints").Get<EndpointOption>();
 
             services.AddAuthentication(options =>
                 {
@@ -159,6 +161,11 @@ namespace ITJakub.Web.Hub
                 ClientId = openIdConnectConfig.ClientId,
                 ClientSecret = openIdConnectConfig.ClientSecret,
             }, new AuthServiceControllerBasePathsConfiguration(/*Not required to fill because client is not used*/));
+
+            services.RegisterMainServiceClient<AuthTokenProvider>(new MainServiceCommunicationConfiguration
+            {
+                Url = new Uri(endpointsConfiguration.Addresses["MainService"])
+            });
 
             // Configuration options
             services.AddOptions();
