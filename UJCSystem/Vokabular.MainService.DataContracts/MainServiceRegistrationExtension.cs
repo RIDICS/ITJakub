@@ -1,12 +1,13 @@
 using Microsoft.Extensions.DependencyInjection;
 using Vokabular.MainService.DataContracts.Clients;
+using Vokabular.RestClient;
 
 namespace Vokabular.MainService.DataContracts
 {
     public static class MainServiceRegistrationExtension
     {
         public static void RegisterMainServiceClient<TTokenProvider>(this IServiceCollection services,
-            MainServiceCommunicationConfiguration configuration = null)
+            ServiceCommunicationConfiguration configuration = null)
             where TTokenProvider : class, IMainServiceAuthTokenProvider
         {
             if (configuration != null)

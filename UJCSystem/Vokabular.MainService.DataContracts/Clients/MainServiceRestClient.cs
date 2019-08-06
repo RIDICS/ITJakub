@@ -4,12 +4,12 @@ using Vokabular.RestClient;
 
 namespace Vokabular.MainService.DataContracts.Clients
 {
-    public class MainServiceRestClient : FullRestClientBase
+    public class MainServiceRestClient : FullRestClient
     {
         private readonly IMainServiceAuthTokenProvider m_tokenProvider;
         private const string AuthenticationScheme = "Bearer";
 
-        public MainServiceRestClient(MainServiceCommunicationConfiguration configuration, IMainServiceAuthTokenProvider tokenProvider) : base(configuration.Url)
+        public MainServiceRestClient(ServiceCommunicationConfiguration configuration, IMainServiceAuthTokenProvider tokenProvider) : base(configuration)
         {
             m_tokenProvider = tokenProvider;
         }

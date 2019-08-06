@@ -11,11 +11,11 @@ using Vokabular.Shared.Extensions;
 
 namespace Vokabular.CardFile.Core
 {
-    public class CardFilesClient : FullRestClientBase
+    public class CardFilesClient : FullRestClient
     {
         private static readonly ILogger m_logger = ApplicationLogging.CreateLogger<CardFilesClient>();
 
-        public CardFilesClient(Uri baseAddress, string username, string password) : base(baseAddress, true)
+        public CardFilesClient(Uri baseAddress, string username, string password) : base(new ServiceCommunicationConfiguration{ Url = baseAddress}, true)
         {
             var networkCredentials = new NetworkCredential(username, password);
             var credCache = new CredentialCache();

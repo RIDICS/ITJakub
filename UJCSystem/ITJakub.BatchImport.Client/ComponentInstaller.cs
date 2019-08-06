@@ -7,6 +7,7 @@ using ITJakub.BatchImport.Client.BusinessLogic;
 using ITJakub.BatchImport.Client.BusinessLogic.Communication;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Clients;
+using Vokabular.RestClient;
 
 namespace ITJakub.BatchImport.Client
 {
@@ -17,12 +18,12 @@ namespace ITJakub.BatchImport.Client
             container.Register(Component.For<FileUploadManager>());
             container.Register(Component.For<CommunicationProvider>());
 
-            var mainServiceConfiguration = new MainServiceCommunicationConfiguration
+            var mainServiceConfiguration = new ServiceCommunicationConfiguration
             {
                 Url = new Uri(ConfigurationManager.AppSettings["MainService"])
             };
 
-            container.Register(Component.For<MainServiceCommunicationConfiguration>().Instance(mainServiceConfiguration));
+            container.Register(Component.For<ServiceCommunicationConfiguration>().Instance(mainServiceConfiguration));
             container.Register(Component.For<IMainServiceAuthTokenProvider, AuthenticationManager>());
             container.Register(Component.For<MainServiceRestClient>());
             container.Register(Component.For<MainServiceSessionClient>());

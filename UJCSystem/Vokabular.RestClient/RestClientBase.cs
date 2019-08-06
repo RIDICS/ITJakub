@@ -21,7 +21,7 @@ namespace Vokabular.RestClient
         private readonly HttpClient m_client;
         private readonly HttpClientHandler m_httpClientHandler;
 
-        public RestClientBase(Uri baseAddress, bool createCustomHandler = false)
+        public RestClientBase(ServiceCommunicationConfiguration communicationConfiguration, bool createCustomHandler = false)
         {
             if (createCustomHandler)
             {
@@ -33,7 +33,7 @@ namespace Vokabular.RestClient
                 m_client = new HttpClient();
             }
 
-            m_client.BaseAddress = baseAddress;
+            m_client.BaseAddress = communicationConfiguration.Url;
             m_client.DefaultRequestHeaders.ExpectContinue = false;
             m_client.DefaultRequestHeaders.Accept.Clear();
             m_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

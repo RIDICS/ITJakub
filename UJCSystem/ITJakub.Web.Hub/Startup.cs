@@ -30,6 +30,7 @@ using Scalesoft.Localization.Core.Configuration;
 using Scalesoft.Localization.Core.Util;
 using Scalesoft.Localization.Database.NHibernate;
 using Vokabular.MainService.DataContracts;
+using Vokabular.RestClient;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
@@ -162,7 +163,7 @@ namespace ITJakub.Web.Hub
                 ClientSecret = openIdConnectConfig.ClientSecret,
             }, new AuthServiceControllerBasePathsConfiguration(/*Not required to fill because client is not used*/));
 
-            services.RegisterMainServiceClient<AuthTokenProvider>(new MainServiceCommunicationConfiguration
+            services.RegisterMainServiceClient<AuthTokenProvider>(new ServiceCommunicationConfiguration
             {
                 Url = new Uri(endpointsConfiguration.Addresses["MainService"])
             });

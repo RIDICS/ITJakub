@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Http;
 using Vokabular.RestClient.Results;
 
 namespace Vokabular.RestClient
 {
-    public abstract class FullRestClientBase : RestClientBase
+    public class FullRestClient : RestClientBase
     {
-        protected FullRestClientBase(Uri baseAddress, bool createCustomHandler = false) : base(baseAddress, createCustomHandler)
+        protected FullRestClient(ServiceCommunicationConfiguration communicationConfiguration, bool createCustomHandler = false) : base(communicationConfiguration, createCustomHandler)
         {
         }
 
@@ -69,6 +70,16 @@ namespace Vokabular.RestClient
         public void Delete(string uriPath, object data = null)
         {
             DeleteAsync(uriPath, data).GetAwaiter().GetResult();
+        }
+
+        protected override void FillRequestMessage(HttpRequestMessage requestMessage)
+        {
+            
+        }
+
+        protected override void ProcessResponse(HttpResponseMessage response)
+        {
+
         }
     }
 }
