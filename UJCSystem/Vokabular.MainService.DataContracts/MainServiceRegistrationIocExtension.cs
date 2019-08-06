@@ -4,9 +4,9 @@ using Vokabular.RestClient;
 
 namespace Vokabular.MainService.DataContracts
 {
-    public static class MainServiceRegistrationExtension
+    public static class MainServiceIocRegistrationExtension
     {
-        public static void RegisterMainServiceClient<TTokenProvider>(this IServiceCollection services,
+        public static void RegisterMainServiceClientComponents<TTokenProvider>(this IServiceCollection services,
             ServiceCommunicationConfiguration configuration = null)
             where TTokenProvider : class, IMainServiceAuthTokenProvider
         {
