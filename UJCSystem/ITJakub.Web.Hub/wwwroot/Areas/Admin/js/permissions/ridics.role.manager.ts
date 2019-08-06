@@ -11,6 +11,7 @@ class RoleManager {
     private currentUserSelectedItem: IUserDetail;
     private userList: ListWithPagination;
     private roleList: ListWithPagination;
+    private permissionList: ListWithPagination; 
 
     constructor() {
         this.searchBox = new SingleSetTypeaheadSearchBox<IUserDetail>("#mainSearchInput",
@@ -21,37 +22,41 @@ class RoleManager {
         this.client = new PermissionApiClient();
         this.errorHandler = new ErrorHandler();
     }
-
+    
     public init(list?: ListWithPagination) {
         if (list == null) {
-            this.roleList = new ListWithPagination("Permission/RolePermission", 10, "role", ViewType.Widget, true, undefined, this);
-            
+            this.roleList = new ListWithPagination("Permission/RolePermission", 10, "role", ViewType.Widget, true, this.reinitRoleList, this);
+
         } else {
             this.roleList = list;
         }
         this.roleList.init();
 
-        $(".role-row").click((event) => {
-            $(event.currentTarget as Node as HTMLElement).addClass("active").siblings().removeClass("active");
-            $("#addRoleButton").removeClass("disabled");
+        this.initCreateRoleModal();
+        this.initSearchBox();
+        this.reinitRoleList();
+        this.initEditRoleForm();
+    }
 
-            var selectedRoleId = $(event.currentTarget as Node as HTMLElement).data("role-id");
+    public reinitRoleList() {
+        $(".role-row").on("click", (event) => {
+            $(event.currentTarget as Node as Element).addClass("active").siblings().removeClass("active");
+
+            const selectedRoleId = $(event.currentTarget as Node as Element).data("role-id");
             this.loadUsers(selectedRoleId);
             this.loadPermissions(selectedRoleId);
         });
 
-        $("form.role-search-form").submit(() => {
+        $("form.role-search-form").on("submit", () => {
             this.clearSections();
         });
 
-        $("#role-pagination a").click(() => {
-           this.clearSections();
+        $("#rolePagination a").on("click", () => {
+            this.clearSections();
         });
 
-        this.initCreateRoleModal();
         this.initRemoveRoleButtons();
         this.initEditRoleButtons();
-        this.initSearchBox();
     }
 
     private loadUsers(roleId: number) {
@@ -59,7 +64,6 @@ class RoleManager {
         const container = userSection.find(".list-container");
         const searchForm = userSection.find(".user-search-form");
         searchForm.find("input.search-value").val("");
-        this.setSearchFormDisabled(searchForm, false);
         container.html("<div class=\"loader\"></div>");
         userSection.removeClass("hide");
 
@@ -79,6 +83,8 @@ class RoleManager {
                 this.initRemoveUserFromRoleButton,
                 this);
             this.userList.init();
+            this.userList.setSearchFormDisabled(false);
+            $("#addRoleButton").removeClass("disabled");
         });
     }
 
@@ -87,7 +93,6 @@ class RoleManager {
         const container = permissionSection.find(".list-container");
         container.html("<div class=\"loader\"></div>");
         const searchForm = permissionSection.find(".permission-search-form");
-        this.setSearchFormDisabled(searchForm, false);
         searchForm.find("input.search").val("");
         permissionSection.removeClass("hide");
 
@@ -99,19 +104,19 @@ class RoleManager {
                 .addContent(this.errorHandler.getErrorMessage(error, localization.translate("ListError", "PermissionJs").value));
             container.empty().append(errorAlert.buildElement());
         }).always(() => {
-            const permissionList = new ListWithPagination(`Permission/RolePermissionList?roleId=${roleId}`,
+            this.permissionList = new ListWithPagination(`Permission/RolePermissionList?roleId=${roleId}`,
                 10,
                 "permission",
                 ViewType.Widget,
                 false,
                 this.initPermissionManaging,
                 this);
-            permissionList.init();
+            this.permissionList.init();
+            this.permissionList.setSearchFormDisabled(false);
         });
     }
 
     private initPermissionManaging() {
-
         $(".permission-row input[type=checkbox]").on("input", (event) => {
             const addPermission = $(event.currentTarget as Node as HTMLElement).is(":checked");
             const permissionCheckboxInput = $(event.currentTarget as Node as HTMLElement);
@@ -154,8 +159,8 @@ class RoleManager {
 
     private initRemoveUserFromRoleButton() {
         $(".remove-user-from-role").click((event) => {
-            var userRow = $(event.currentTarget as Node as HTMLElement).parents(".user-row");
-            var userId = userRow.data("user-id");
+            const userRow = $(event.currentTarget as Node as HTMLElement).parents(".user-row");
+            const userId = userRow.data("user-id");
             const alert = userRow.find(".alert");
             alert.hide();
 
@@ -231,11 +236,6 @@ class RoleManager {
                 title: localization.translate("Warning", "PermissionJs").value,
                 message: localization.translateFormat("DeleteRoleConfirm", [roleName],"PermissionJs").value,
                 buttons: {
-                    cancel: {
-                        label: localization.translate("Cancel", "PermissionJs").value,
-                        className: "btn-default",
-                        callback: () => { }
-                    },
                     confirm: {
                         label: localization.translate("Delete", "PermissionJs").value,
                         className: "btn-default",
@@ -243,14 +243,20 @@ class RoleManager {
                             const roleId = roleRow.data("role-id");
                             const alert = roleRow.find(".alert");
                             alert.hide();
+                            this.clearSections();
                             this.client.deleteRole(roleId).done(() => {
-                                this.clearSections();
                                 this.roleList.reloadPage();
                             }).fail((error) => {
-                                alert.text(this.errorHandler.getErrorMessage(error, localization.translate("DeleteRoleError", "PermissionJs").value));
+                                alert.text(this.errorHandler.getErrorMessage(error,
+                                    localization.translate("DeleteRoleError", "PermissionJs").value));
                                 alert.show();
                             });
                         }
+                    },
+                    cancel: {
+                        label: localization.translate("Cancel", "PermissionJs").value,
+                        className: "btn-default",
+                        callback: () => { }
                     }
                 }
             });
@@ -349,25 +355,8 @@ class RoleManager {
     }
 
     private clearSections() {
-        this.clearList("user");
-        this.clearList("permission");
+        this.userList.clear(localization.translate("RoleIsNotSelected", "PermissionJs").value);
+        this.permissionList.clear(localization.translate("RoleIsNotSelected", "PermissionJs").value);
         $("#addRoleButton").addClass("disabled");
-    }
-
-    private clearList(listType: string) {
-        const userSection = $(`#${listType}-section .section`);
-        const searchForm = userSection.find(`.${listType}-search-form`);
-        this.setSearchFormDisabled(searchForm);
-        $(`#${listType}-pagination`).empty();
-
-        const container = userSection.find(`.list-container`);
-        const infoAlert = new AlertComponentBuilder(AlertType.Info).addContent(localization.translate("RoleIsNotSelected", "PermissionJs").value);
-        container.empty().append(infoAlert.buildElement());
-    }
-
-    private setSearchFormDisabled(searchForm: JQuery, disabled = true) {
-        searchForm.find("input").prop("disabled", disabled);
-        searchForm.find("submit").prop("disabled", disabled);
-        searchForm.find("button").prop("disabled", disabled);
     }
 }
