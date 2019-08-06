@@ -1,52 +1,33 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
+﻿using System.Net.Http;
 using Microsoft.Extensions.Logging;
 using Vokabular.CardFile.Core.DataContractEntities;
-using Vokabular.RestClient;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared;
 using Vokabular.Shared.Extensions;
 
 namespace Vokabular.CardFile.Core
 {
-    public class CardFilesClient : FullRestClient
+    public class CardFilesClient
     {
+        private readonly CardFilesRestClient m_client;
         private static readonly ILogger m_logger = ApplicationLogging.CreateLogger<CardFilesClient>();
 
-        public CardFilesClient(Uri baseAddress, string username, string password) : base(new ServiceCommunicationConfiguration{ Url = baseAddress, CreateCustomHandler = true})
+        public CardFilesClient(CardFilesRestClient client)
         {
-            var networkCredentials = new NetworkCredential(username, password);
-            var credCache = new CredentialCache();
-            credCache.Add(baseAddress, "Digest", networkCredentials);
-
-            HttpClientHandler.Credentials = credCache;
-
-            HttpClient.DefaultRequestHeaders.Accept.Clear();
-            HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
-            DeserializationType = DeserializationType.Xml;
-        }
-
-        protected override void FillRequestMessage(HttpRequestMessage requestMessage)
-        {
-        }
-
-        protected override void ProcessResponse(HttpResponseMessage response)
-        {
+            m_client = client;
         }
 
         public files GetFiles()
         {
             try
             {
-                var result = Get<files>("files");
+                var result = m_client.Get<files>("files");
                 return result;
             }
             catch (HttpRequestException e)
             {
                 if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
 
                 throw;
             }
@@ -56,13 +37,13 @@ namespace Vokabular.CardFile.Core
         {
             try
             {
-                var result = Get<buckets>($"files/{fileId}/buckets?heslo={headword}");
+                var result = m_client.Get<buckets>($"files/{fileId}/buckets?heslo={headword}");
                 return result;
             }
             catch (HttpRequestException e)
             {
                 if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
 
                 throw;
             }
@@ -72,13 +53,13 @@ namespace Vokabular.CardFile.Core
         {
             try
             {
-                var result = Get<buckets>($"files/{fileId}/buckets");
+                var result = m_client.Get<buckets>($"files/{fileId}/buckets");
                 return result;
             }
             catch (HttpRequestException e)
             {
                 if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
 
                 throw;
             }
@@ -88,13 +69,13 @@ namespace Vokabular.CardFile.Core
         {
             try
             {
-                var result = Get<buckets>($"files/{fileId}/buckets/{bucketId}");
+                var result = m_client.Get<buckets>($"files/{fileId}/buckets/{bucketId}");
                 return result;
             }
             catch (HttpRequestException e)
             {
                 if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
 
                 throw;
             }
@@ -104,13 +85,13 @@ namespace Vokabular.CardFile.Core
         {
             try
             {
-                var result = Get<card>($"files/{fileId}/buckets/{bucketId}/cards/{cardId}");
+                var result = m_client.Get<card>($"files/{fileId}/buckets/{bucketId}/cards/{cardId}");
                 return result;
             }
             catch (HttpRequestException e)
             {
                 if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
 
                 throw;
             }
@@ -120,13 +101,13 @@ namespace Vokabular.CardFile.Core
         {
             try
             {
-                var result = GetStream($"files/{fileId}/buckets/{bucketId}/cards/{cardId}/images/{imageId}?size={imageSize}");
+                var result = m_client.GetStream($"files/{fileId}/buckets/{bucketId}/cards/{cardId}/images/{imageId}?size={imageSize}");
                 return result;
             }
             catch (HttpRequestException e)
             {
                 if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
 
                 throw;
             }

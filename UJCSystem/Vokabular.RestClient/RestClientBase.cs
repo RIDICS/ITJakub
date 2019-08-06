@@ -18,25 +18,23 @@ namespace Vokabular.RestClient
     public abstract class RestClientBase : IDisposable
     {
         private const int StreamBufferSize = 64 * 1024;
-        private readonly HttpClient m_client;
-        private readonly HttpClientHandler m_httpClientHandler;
 
         public RestClientBase(ServiceCommunicationConfiguration communicationConfiguration)
         {
             if (communicationConfiguration.CreateCustomHandler)
             {
-                m_httpClientHandler = new HttpClientHandler();
-                m_client = new HttpClient(m_httpClientHandler);
+                HttpClientHandler = new HttpClientHandler();
+                HttpClient = new HttpClient(HttpClientHandler);
             }
             else
             {
-                m_client = new HttpClient();
+                HttpClient = new HttpClient();
             }
 
-            m_client.BaseAddress = communicationConfiguration.Url;
-            m_client.DefaultRequestHeaders.ExpectContinue = false;
-            m_client.DefaultRequestHeaders.Accept.Clear();
-            m_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            HttpClient.BaseAddress = communicationConfiguration.Url;
+            HttpClient.DefaultRequestHeaders.ExpectContinue = false;
+            HttpClient.DefaultRequestHeaders.Accept.Clear();
+            HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             DeserializationType = DeserializationType.Json;
         }
 
@@ -46,12 +44,12 @@ namespace Vokabular.RestClient
 
         public void Dispose()
         {
-            m_client.Dispose();
+            HttpClient.Dispose();
         }
 
-        public HttpClient HttpClient => m_client;
+        public HttpClient HttpClient { get; }
 
-        protected HttpClientHandler HttpClientHandler => m_httpClientHandler;
+        protected HttpClientHandler HttpClientHandler { get; }
 
         public DeserializationType DeserializationType { get; set; }
 
@@ -117,7 +115,7 @@ namespace Vokabular.RestClient
                 try
                 {
                     var request = CreateRequestMessage(HttpMethod.Get, uriPath);
-                    var response = await m_client.SendAsync(request);
+                    var response = await HttpClient.SendAsync(request);
 
                     ProcessResponseInternal(response);
                     var result = GetResponseBody<T>(response);
@@ -138,7 +136,7 @@ namespace Vokabular.RestClient
                 try
                 {
                     var request = CreateRequestMessage(HttpMethod.Get, uriPath);
-                    var response = await m_client.SendAsync(request);
+                    var response = await HttpClient.SendAsync(request);
 
                     ProcessResponseInternal(response);
                     var result = GetResponseBody<List<T>>(response);
@@ -163,7 +161,7 @@ namespace Vokabular.RestClient
                 try
                 {
                     var request = CreateRequestMessage(HttpMethod.Get, uriPath);
-                    var response = await m_client.SendAsync(request);
+                    var response = await HttpClient.SendAsync(request);
 
                     ProcessResponseInternal(response);
                     return GetResponseBody<T>(response);
@@ -182,7 +180,7 @@ namespace Vokabular.RestClient
                 try
                 {
                     var request = CreateRequestMessage(HttpMethod.Get, uriPath);
-                    var response = await m_client.SendAsync(request);
+                    var response = await HttpClient.SendAsync(request);
 
                     ProcessResponseInternal(response);
                     return await response.Content.ReadAsStringAsync();
@@ -201,7 +199,7 @@ namespace Vokabular.RestClient
                 try
                 {
                     var request = CreateRequestMessage(HttpMethod.Get, uriPath);
-                    var response = await m_client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+                    var response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
                     ProcessResponseInternal(response);
                     var contentHeaders = response.Content.Headers;
@@ -232,7 +230,7 @@ namespace Vokabular.RestClient
                 try
                 {
                     var request = CreateRequestMessage(HttpMethod.Head, uriPath);
-                    var response = await m_client.SendAsync(request);
+                    var response = await HttpClient.SendAsync(request);
 
                     ProcessResponseInternal(response);
                 }
@@ -250,7 +248,7 @@ namespace Vokabular.RestClient
                 try
                 {
                     var request = CreateRequestMessage(HttpMethod.Post, uriPath);
-                    var response = await m_client.SendAsJsonAsync(request, data);
+                    var response = await HttpClient.SendAsJsonAsync(request, data);
 
                     ProcessResponseInternal(response);
 
@@ -279,7 +277,7 @@ namespace Vokabular.RestClient
                     request.Content = content;
                     request.Headers.TransferEncodingChunked = true;
 
-                    var response = await m_client.SendAsync(request);
+                    var response = await HttpClient.SendAsync(request);
 
                     ProcessResponseInternal(response);
                     return GetResponseBody<T>(response);
@@ -304,7 +302,7 @@ namespace Vokabular.RestClient
                     request.Content = content;
                     request.Headers.TransferEncodingChunked = true;
 
-                    var response = await m_client.SendAsync(request);
+                    var response = await HttpClient.SendAsync(request);
 
                     ProcessResponseInternal(response);
                     return GetResponseBody<T>(response);
@@ -323,7 +321,7 @@ namespace Vokabular.RestClient
                 try
                 {
                     var request = CreateRequestMessage(HttpMethod.Post, uriPath);
-                    var response = await m_client.SendAsJsonAsync(request, data);
+                    var response = await HttpClient.SendAsJsonAsync(request, data);
 
                     ProcessResponseInternal(response);
                     return await response.Content.ReadAsStringAsync();
@@ -342,7 +340,7 @@ namespace Vokabular.RestClient
                 try
                 {
                     var request = CreateRequestMessage(HttpMethod.Put, uriPath);
-                    var response = await m_client.SendAsJsonAsync(request, data);
+                    var response = await HttpClient.SendAsJsonAsync(request, data);
 
                     ProcessResponseInternal(response);
                     return GetResponseBody<T>(response);
@@ -362,8 +360,8 @@ namespace Vokabular.RestClient
                 {
                     var request = CreateRequestMessage(HttpMethod.Delete, uriPath);
                     var response = data == null
-                        ? await m_client.SendAsync(request)
-                        : await m_client.SendAsJsonAsync(request, data);
+                        ? await HttpClient.SendAsync(request)
+                        : await HttpClient.SendAsJsonAsync(request, data);
 
                     ProcessResponseInternal(response);
                 }
@@ -376,9 +374,9 @@ namespace Vokabular.RestClient
 
         protected void EnsureSecuredClient()
         {
-            if (m_client.BaseAddress.Scheme != "https")
+            if (HttpClient.BaseAddress.Scheme != "https")
             {
-                throw new InvalidOperationException($"The client is not configured to use secured channel (HTTPS), current scheme is {m_client.BaseAddress.Scheme}");
+                throw new InvalidOperationException($"The client is not configured to use secured channel (HTTPS), current scheme is {HttpClient.BaseAddress.Scheme}");
             }
         }
 
