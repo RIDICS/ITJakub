@@ -78,7 +78,8 @@ namespace ITJakub.FileProcessing.Service
 
             services.RegisterFulltextServiceClientComponents(new ServiceCommunicationConfiguration
             {
-                Url = new Uri(ConfigurationManager.AppSettings["FulltextServiceEndpoint"])
+                Url = new Uri(ConfigurationManager.AppSettings["FulltextServiceEndpoint"]),
+                CreateCustomHandler = false
             });
 
             this.AddServicesCollection(services);

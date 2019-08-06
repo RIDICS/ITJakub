@@ -142,7 +142,8 @@ namespace Vokabular.MainService
 
             services.RegisterFulltextServiceClientComponents(new ServiceCommunicationConfiguration
             {
-                Url = new Uri(endpointsConfiguration.Addresses["FulltextService"])
+                Url = new Uri(endpointsConfiguration.Addresses["FulltextService"]),
+                CreateCustomHandler = false
             });
 
             services.AddProjectImportServices();

@@ -165,7 +165,8 @@ namespace ITJakub.Web.Hub
 
             services.RegisterMainServiceClient<AuthTokenProvider>(new ServiceCommunicationConfiguration
             {
-                Url = new Uri(endpointsConfiguration.Addresses["MainService"])
+                Url = new Uri(endpointsConfiguration.Addresses["MainService"]),
+                CreateCustomHandler = false
             });
 
             // Configuration options

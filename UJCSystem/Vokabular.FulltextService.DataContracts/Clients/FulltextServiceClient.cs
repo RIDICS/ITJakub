@@ -16,9 +16,9 @@ namespace Vokabular.FulltextService.DataContracts.Clients
     public class FulltextServiceClient
     {
         private static readonly ILogger m_logger = ApplicationLogging.CreateLogger<FulltextServiceClient>();
-        private readonly FullRestClient m_client;
+        private readonly FulltextServiceRestClient m_client;
 
-        public FulltextServiceClient(FullRestClient client)
+        public FulltextServiceClient(FulltextServiceRestClient client)
         {
             m_client = client;
         }

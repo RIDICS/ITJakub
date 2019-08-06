@@ -8,7 +8,7 @@ namespace Vokabular.RestClient
 {
     public class FullRestClient : RestClientBase
     {
-        protected FullRestClient(ServiceCommunicationConfiguration communicationConfiguration, bool createCustomHandler = false) : base(communicationConfiguration, createCustomHandler)
+        protected FullRestClient(ServiceCommunicationConfiguration communicationConfiguration) : base(communicationConfiguration)
         {
         }
 

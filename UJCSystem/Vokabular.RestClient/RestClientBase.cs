@@ -21,9 +21,9 @@ namespace Vokabular.RestClient
         private readonly HttpClient m_client;
         private readonly HttpClientHandler m_httpClientHandler;
 
-        public RestClientBase(ServiceCommunicationConfiguration communicationConfiguration, bool createCustomHandler = false)
+        public RestClientBase(ServiceCommunicationConfiguration communicationConfiguration)
         {
-            if (createCustomHandler)
+            if (communicationConfiguration.CreateCustomHandler)
             {
                 m_httpClientHandler = new HttpClientHandler();
                 m_client = new HttpClient(m_httpClientHandler);

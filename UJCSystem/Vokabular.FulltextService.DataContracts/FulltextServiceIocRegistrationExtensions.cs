@@ -12,8 +12,8 @@ namespace Vokabular.FulltextService.DataContracts
             if (configuration != null)
                 services.AddSingleton(configuration);
 
+            services.AddScoped<FulltextServiceRestClient>();
             services.AddScoped<FulltextServiceClient>();
-            services.AddScoped<FullRestClient>();
         }
     }
 }

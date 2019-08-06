@@ -15,7 +15,7 @@ namespace Vokabular.CardFile.Core
     {
         private static readonly ILogger m_logger = ApplicationLogging.CreateLogger<CardFilesClient>();
 
-        public CardFilesClient(Uri baseAddress, string username, string password) : base(new ServiceCommunicationConfiguration{ Url = baseAddress}, true)
+        public CardFilesClient(Uri baseAddress, string username, string password) : base(new ServiceCommunicationConfiguration{ Url = baseAddress, CreateCustomHandler = true})
         {
             var networkCredentials = new NetworkCredential(username, password);
             var credCache = new CredentialCache();
