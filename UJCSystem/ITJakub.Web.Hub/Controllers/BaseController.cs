@@ -35,9 +35,9 @@ namespace ITJakub.Web.Hub.Controllers
             return m_communication.GetMainServiceCardFileClient();
         }
 
-        public MainServiceCategoryClient GetCategoryClient()
+        public MainServiceCodeListClient GetCodeListClient()
         {
-            return m_communication.GetMainServiceCategoryClient();
+            return m_communication.GetMainServiceCodeListClient();
         }
 
         public MainServiceExternalRepositoryClient GetExternalRepositoryClient()

@@ -10,7 +10,7 @@ namespace Vokabular.MainService.DataContracts
         {
             services.AddScoped<MainServiceBookClient>();
             services.AddScoped<MainServiceCardFileClient>();
-            services.AddScoped<MainServiceCategoryClient>();
+            services.AddScoped<MainServiceCodeListClient>();
             services.AddScoped<MainServiceExternalRepositoryClient>();
             services.AddScoped<MainServiceFavoriteClient>();
             services.AddScoped<MainServiceFeedbackClient>();

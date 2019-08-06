@@ -10,7 +10,7 @@ namespace ITJakub.Web.Hub.Core.Communication
         private readonly MainServiceRestClient m_mainServiceRestClient;
         private readonly MainServiceBookClient m_bookClient;
         private readonly MainServiceCardFileClient m_cardFileClient;
-        private readonly MainServiceCategoryClient m_categoryClient;
+        private readonly MainServiceCodeListClient m_codeListClient;
         private readonly MainServiceExternalRepositoryClient m_externalRepositoryClient;
         private readonly MainServiceFavoriteClient m_favoriteClient;
         private readonly MainServiceFeedbackClient m_feedbackClient;
@@ -25,7 +25,7 @@ namespace ITJakub.Web.Hub.Core.Communication
 
         public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider,
             MainServiceRestClient mainServiceRestClient, MainServiceBookClient bookClient, MainServiceCardFileClient cardFileClient,
-            MainServiceCategoryClient categoryClient, MainServiceExternalRepositoryClient externalRepositoryClient,
+            MainServiceCodeListClient codeListClient, MainServiceExternalRepositoryClient externalRepositoryClient,
             MainServiceFavoriteClient favoriteClient, MainServiceFeedbackClient feedbackClient,
             MainServiceFilteringExpressionSetClient filteringExpressionSetClient, MainServiceMetadataClient metadataClient,
             MainServiceProjectClient projectClient, MainServiceResourceClient resourceClient, MainServiceRoleClient roleClient,
@@ -35,7 +35,7 @@ namespace ITJakub.Web.Hub.Core.Communication
             m_mainServiceRestClient = mainServiceRestClient;
             m_bookClient = bookClient;
             m_cardFileClient = cardFileClient;
-            m_categoryClient = categoryClient;
+            m_codeListClient = codeListClient;
             m_externalRepositoryClient = externalRepositoryClient;
             m_favoriteClient = favoriteClient;
             m_feedbackClient = feedbackClient;
@@ -62,9 +62,9 @@ namespace ITJakub.Web.Hub.Core.Communication
             return m_cardFileClient;
         }
 
-        public MainServiceCategoryClient GetMainServiceCategoryClient()
+        public MainServiceCodeListClient GetMainServiceCodeListClient()
         {
-            return m_categoryClient;
+            return m_codeListClient;
         }
 
         public MainServiceExternalRepositoryClient GetMainServiceExternalRepositoryClient()

@@ -94,9 +94,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 return BadRequest();
             }
 
-            var client = GetRestClient();
             var projectClient = GetProjectClient();
-            var categoryClient = GetCategoryClient();
+            var codeListClient = GetCodeListClient();
 
             switch (tabType)
             {
@@ -109,11 +108,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 case ProjectModuleTabType.WorkCooperation:
                     return PartialView("Work/_Cooperation");
                 case ProjectModuleTabType.WorkMetadata:
-                    var literaryKinds = client.GetLiteraryKindList();
-                    var literaryGenres = client.GetLiteraryGenreList();
-                    var literaryOriginals = client.GetLiteraryOriginalList();
-                    var responsibleTypes = client.GetResponsibleTypeList();
-                    var categories = categoryClient.GetCategoryList();
+                    var literaryKinds = codeListClient.GetLiteraryKindList();
+                    var literaryGenres = codeListClient.GetLiteraryGenreList();
+                    var literaryOriginals = codeListClient.GetLiteraryOriginalList();
+                    var responsibleTypes = codeListClient.GetResponsibleTypeList();
+                    var categories = codeListClient.GetCategoryList();
                     var projectMetadata = projectClient.GetProjectMetadata(projectId.Value, true, true, true, true, true, true, true);
                     var workMetadaViewModel = Mapper.Map<ProjectWorkMetadataViewModel>(projectMetadata);
                     workMetadaViewModel.AllLiteraryKindList = literaryKinds;
@@ -334,47 +333,39 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult CreateKeywordsWithArray(List<KeywordContract> request)
         {
-            using (var client = GetRestClient())
+            var client = GetCodeListClient();
+            var ids = new List<int>();
+            foreach (KeywordContract t in request)
             {
-                var ids = new List<int>();
-                foreach (KeywordContract t in request)
-                {
-                    var newId = client.CreateKeyword(t);
-                    ids.Add(newId);
-                }
-
-                return Json(ids);
+                var newId = client.CreateKeyword(t);
+                ids.Add(newId);
             }
+
+            return Json(ids);
         }
 
         [HttpGet]
         public IActionResult GetProjectsByAuthor(int authorId, int? start, int? count)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetProjectsByAuthor(authorId, start, count);
-                return Json(result);
-            }
+            var client = GetCodeListClient();
+            var result = client.GetProjectsByAuthor(authorId, start, count);
+            return Json(result);
         }
 
         [HttpGet]
         public IActionResult GetProjectsByResponsiblePerson(int responsiblePersonId, int? start, int? count)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetProjectsByResponsiblePerson(responsiblePersonId, start, count);
-                return Json(result);
-            }
+            var client = GetCodeListClient();
+            var result = client.GetProjectsByResponsiblePerson(responsiblePersonId, start, count);
+            return Json(result);
         }
 
         [HttpGet]
         public IActionResult KeywordTypeahead([FromQuery] string keyword, [FromQuery] int? count)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetKeywordAutocomplete(keyword, count);
-                return Json(result);
-            }
+            var client = GetCodeListClient();
+            var result = client.GetKeywordAutocomplete(keyword, count);
+            return Json(result);
         }
 
         [HttpPost]

@@ -45,7 +45,7 @@ namespace ITJakub.Web.Hub.Controllers
         protected BooksAndCategoriesContract GetBooksAndCategories()
         {
             var bookClient = GetBookClient();
-            var categoryClient = GetCategoryClient();
+            var categoryClient = GetCodeListClient();
             var categories = categoryClient.GetCategoryList();
             var books = bookClient.GetBooksByType(AreaBookType);
 
