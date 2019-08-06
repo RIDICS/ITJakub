@@ -13,8 +13,8 @@
 }
 
 @section scripts{
-    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.list.js"></script>
-    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.user.list.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/permissions/ridics.list.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/permissions/ridics.user.list.js"></script>
 }
 
 <h2>@Localizer.Translate("UserPermissionManagementHeadline", "Permission", LocTranslationSource.File)</h2>
@@ -35,11 +35,11 @@
             </div>
         </div>
         <div class="panel-body">
-            <div id="user-list-container" class="list-container">
+            <div id="userListContainer" class="list-container">
                 @await Html.PartialAsync("_UserList", Model)
             </div>
 
-            <div id="user-pagination" class="text-center"></div>
+            <div id="userPagination" class="text-center"></div>
         </div>
     </div>
 </div>

@@ -17,7 +17,6 @@
     "NewGroup": "Nová skupina",
     "GroupName": "Název skupiny",
     "Description": "Popis",
-    "SpecialPermissisons": "Speciální práva",
     "Close": "Zavřít",
     "Create": "Vytvořit",
     "AddAllowedBooksToGroup": "Přidání povolených děl",
@@ -43,7 +42,13 @@
     "EditUsersGroupsTitle": "Úprava skupin uživatele",
     "Search": "Hledat",
     "NoUsersSearch": "Je nám líto, ale nepodařilo se najít žádné uživatele odpovídající dotazu ",
-    "NoUsersFound": "Je nám líto, ale nebyly nalezeni žádní uživatelé",
+    "NoUsersFound": "Je nám líto, ale nebyli nalezeni žádní uživatelé",
+    "NoRolesSearch": "Je nám líto, ale nepodařilo se najít žádné role odpovídající dotazu ",
+    "NoRolesFound": "Je nám líto, ale nebyly nalezeny žádné role",
+    "NoPermissionsSearch": "Je nám líto, ale nepodařilo se najít žádné oprávnění odpovídající dotazu ",
+    "NoPermissionsFound": "Je nám líto, ale nebyla nalezena žádná oprávnění",
+    "NoProjectsSearch": "Je nám líto, ale nepodařilo se najít žádné projekty odpovídající dotazu  ",
+    "NoProjectsFound": "Je nám líto, ale nebyly nalezeny žádné projekty",
     "SearchQuery": "Zobrazují se výsledky pro",
     "ResetSearch": "Zrušit hledání",
     "Groups": "Skupiny",
@@ -56,6 +61,12 @@
     "SuccessGroupUpdate": "Úprava skupiny proběhla úspěšně.",
     "SuccessUserUpdate": "Úprava uživatele proběhla úspěšně.",
     "GroupEditTitle": "Úprava skupiny",
-    "Changed": "Změněno"
+    "Changed": "Změněno",
+
+    "ProjectPermissionManagementHeadline": "Správa práv projektů",
+    "Projects": "Projekty",
+    "AddProjectPermissionToGroup": "Přidat právo na projekt skupině",
+    "SelectedProject": "Vybraný projekt",
+    "AddPermissionToGroup": "Přidat oprávnění skupině"
   }
 }

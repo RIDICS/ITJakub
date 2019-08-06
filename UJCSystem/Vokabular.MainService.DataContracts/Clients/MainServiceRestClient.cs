@@ -48,13 +48,17 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         #region Project
 
-        public PagedResultList<ProjectDetailContract> GetProjectList(int start, int count, bool fetchPageCount = false)
+        public PagedResultList<ProjectDetailContract> GetProjectList(int start, int count, string filterByName = null, bool fetchPageCount = false)
         {
             try
             {
-                var result =
-                    GetPagedList<ProjectDetailContract>(
-                        $"project?start={start}&count={count}&fetchPageCount={fetchPageCount}");
+                var url = UrlQueryBuilder.Create("project")
+                    .AddParameter("start", start)
+                    .AddParameter("count", count)
+                    .AddParameter("filterByName", filterByName)
+                    .AddParameter("fetchPageCount", fetchPageCount)
+                    .ToQuery();
+                var result = GetPagedList<ProjectDetailContract>(url);
                 return result;
             }
             catch (HttpRequestException e)
@@ -2758,6 +2762,28 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 var result = Get<List<RoleContract>>($"user/{userId}/role");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+        
+        public PagedResultList<RoleContract> GetRolesByProject(int projectId, int start, int count, string query)
+        {
+            try
+            {
+                var url = UrlQueryBuilder.Create($"project/{projectId}/role")
+                    .AddParameter("start", start)
+                    .AddParameter("count", count)
+                    .AddParameter("filterByName", query)
+                    .ToQuery();
+
+                var result = GetPagedList<RoleContract>(url);
                 return result;
             }
             catch (HttpRequestException e)

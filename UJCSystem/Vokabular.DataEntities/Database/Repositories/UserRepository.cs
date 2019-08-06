@@ -68,6 +68,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             {
                 Name = defaultRegisteredGroupName,
                 CreateTime = now,
+                LastChange = now,
                 ExternalId = getExternalId.Invoke(),
             };
 

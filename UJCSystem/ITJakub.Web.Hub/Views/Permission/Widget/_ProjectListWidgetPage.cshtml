@@ -1,0 +1,13 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.ProjectDetailContract>
+@inject ILocalizationService Localizer
+
+<div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>
+@foreach (var project in Model.List)
+{
+    <tr data-project-id="@project.Id" class="project-row">
+        <td>
+            <div class="name">@project.Name</div>
+        </td>
+    </tr>
+}

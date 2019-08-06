@@ -69,6 +69,22 @@
         );
     }
 
+    public getRolesByProject(projectId: number): JQuery.jqXHR<string> {
+        return this.get(URI(this.getPermissionControllerUrl() + "RolesByProject").search(query => {
+            query.projectId = projectId;
+        }).toString());
+    }
+
+    public removeProjectFromRole(projectId: number, roleId: number): JQuery.jqXHR<string> {
+        return this.post(this.getPermissionControllerUrl() + "RemoveProjectsFromRole",
+            JSON.stringify({ roleId: roleId, bookIds: [projectId] }));
+    }
+
+    public addProjectToRole(projectId: number, roleId: number): JQuery.jqXHR<string> {
+        return this.post(this.getPermissionControllerUrl() + "AddProjectsToRole",
+            JSON.stringify({ roleId: roleId, bookIds: [projectId] }));
+    }
+
     private getPermissionControllerUrl(): string {
         return getBaseUrl() + "Permission/";
     }

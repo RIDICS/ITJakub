@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using AutoMapper;
 using ITJakub.FileProcessing.DataContracts;
-using log4net;
 using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
@@ -20,8 +18,6 @@ namespace Vokabular.MainService.Core.Managers
 {
     public class PermissionManager
     {
-        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
         private readonly PermissionRepository m_permissionRepository;
         private readonly CommunicationProvider m_communicationProvider;
         
@@ -92,14 +88,16 @@ namespace Vokabular.MainService.Core.Managers
             client.AssignPermissionsToRoleAsync(roleId, permissionsId).GetAwaiter().GetResult();
         }
 
-        public void AddBooksAndCategoriesToGroup(int roleId, IList<long> bookIds)
+        public void AddBooksToRole(int roleId, IList<long> bookIds)
         {
-            new AddProjectsToUserGroupWork(m_permissionRepository, roleId, bookIds).Execute();
+            new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
+            new AddProjectsToRoleWork(m_permissionRepository, roleId, bookIds).Execute();
         }
 
-        public void RemoveBooksAndCategoriesFromGroup(int roleId, IList<long> bookIds)
+        public void RemoveBooksFromRole(int roleId, IList<long> bookIds)
         {
-            new RemoveProjectsFromUserGroupWork(m_permissionRepository, roleId, bookIds).Execute();
+            new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
+            new RemoveProjectsFromRoleWork(m_permissionRepository, roleId, bookIds).Execute();
         }
 
         public List<PermissionContract> GetAllPermissions()

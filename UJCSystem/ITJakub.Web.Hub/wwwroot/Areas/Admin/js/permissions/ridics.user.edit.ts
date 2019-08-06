@@ -5,17 +5,16 @@
 
 class UserRolesEditor {
     private readonly mainContainer: string;
-    private readonly roleSearchBox: SingleSetTypeaheadSearchBox<IGroup>;
+    private readonly roleSearchBox: SingleSetTypeaheadSearchBox<IRole>;
     private readonly userId: number;
     private readonly roleList: ListWithPagination;
     private readonly client: PermissionApiClient;
     private readonly errorHandler: ErrorHandler;
-    private roleSearchCurrentSelectedItem: IGroup;
+    private roleSearchCurrentSelectedItem: IRole;
 
     constructor(mainContainer: string) {
         this.mainContainer = mainContainer;
-        this.roleSearchBox = new SingleSetTypeaheadSearchBox<IGroup>("#groupSearchInput",
-            "Permission",
+        this.roleSearchBox = new SingleSetTypeaheadSearchBox<IRole>("#roleSearchInput", "Permission",
             (item) => item.name,
             (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(item.name, item.description));
 

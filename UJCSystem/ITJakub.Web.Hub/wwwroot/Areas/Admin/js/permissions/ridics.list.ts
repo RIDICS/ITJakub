@@ -1,22 +1,22 @@
 ﻿class ListWithPagination {
     private readonly firstPageNumber = 1;
     private readonly pagingInfoSelector = ".paging-info";
-    private readonly listContainerSelector: string;
-    private readonly defaultPageSize: number;
+
     private readonly urlPath: string;
+    private readonly defaultPageSize: number;
     private readonly selector: string;
+    private readonly viewType: ViewType;
+    private readonly saveStateToUrl: boolean;
+    private readonly pageLoadCallback: (list: ListWithPagination) => void;
+    private readonly contextForCallback;
+    private readonly listContainerSelector;
+    private readonly pagination: Pagination;
+    private readonly searchForm: JQuery;
     private readonly adminApiClient = new AdminApiClient();
 
-    private searchForm: JQuery;
     private resetSearchForm: JQuery;
-    private pagination: Pagination;
     private pageSize: number;
     private totalCount: number;
-    private viewType: ViewType;
-    private saveStateToUrl: boolean;
-    private pageLoadCallback: (list: ListWithPagination) => void;
-    private contextForCallback;
-
     private search: string;
 
     constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, saveStateToUrl: boolean);
@@ -29,9 +29,9 @@
         this.saveStateToUrl = saveStateToUrl;
         this.pageLoadCallback = pageLoadCallback;
         this.contextForCallback = contextForCallback;
-        this.listContainerSelector = `#${this.selector}-list-container`;
+        this.listContainerSelector = `#${this.selector}ListContainer`;
         this.pagination = new Pagination({
-            container: document.getElementById(selector + "-pagination") as HTMLDivElement,
+            container: document.getElementById(selector + "Pagination") as HTMLDivElement,
             pageClickCallback: this.loadPage.bind(this)
         });
         this.searchForm = $(`.${this.selector}-search-form`);
@@ -72,6 +72,24 @@
         this.loadPage(this.pagination.getCurrentPage());
     }
 
+    public clear(emptyListMessage: string) {
+        const section = $(`#${this.selector}-section .section`);
+        this.setSearchFormDisabled();
+        $(`#${this.selector}Pagination`).empty();
+
+        const container = section.find(`.list-container`);
+        const infoAlert = new AlertComponentBuilder(AlertType.Info).addContent(emptyListMessage);
+        container.empty().append(infoAlert.buildElement());
+    }
+
+    public setSearchFormDisabled(disabled = true) {
+        const section = $(`#${this.selector}-section .section`);
+        const searchForm = section.find(`.${this.selector}-search-form`);
+        searchForm.find("input").prop("disabled", disabled);
+        searchForm.find("submit").prop("disabled", disabled);
+        searchForm.find("button").prop("disabled", disabled);
+    }
+
     private initPagination() {
         const pagingInfo = $(this.listContainerSelector + " " + this.pagingInfoSelector);
         if (pagingInfo.length !== 0) {
@@ -98,7 +116,7 @@
         $listContainer.html("<div class=\"loader\"></div>");
 
         this.adminApiClient.getHtmlPageByUrl(url).done((response) => {
-            $listContainer.html(response);
+            $listContainer.html(String(response));
             this.initPagination();
 
             this.setUri(start, this.pageSize, this.search);
@@ -117,15 +135,6 @@
 
             if (typeof this.pageLoadCallback !== "undefined") {
                 this.pageLoadCallback.call(this.contextForCallback, this);
-            }
-
-            if (this.selector === "role" && typeof RoleManager !== "undefined") {
-                if (typeof this.contextForCallback !== "undefined" && this.contextForCallback instanceof RoleManager) {
-                    this.contextForCallback.init(this);
-                } else {
-                    var roleManager = new RoleManager();
-                    roleManager.init(this);
-                }
             }
         }).fail(() => {
             var alert = new AlertComponentBuilder(AlertType.Error).addContent(localization
