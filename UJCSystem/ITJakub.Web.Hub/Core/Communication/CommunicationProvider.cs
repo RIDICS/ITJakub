@@ -7,7 +7,6 @@ namespace ITJakub.Web.Hub.Core.Communication
     public class CommunicationProvider
     {
         private readonly CommunicationConfigurationProvider m_configurationProvider;
-        private readonly MainServiceRestClient m_mainServiceRestClient;
         private readonly MainServiceBookClient m_bookClient;
         private readonly MainServiceCardFileClient m_cardFileClient;
         private readonly MainServiceCodeListClient m_codeListClient;
@@ -28,16 +27,14 @@ namespace ITJakub.Web.Hub.Core.Communication
         private const string LemmatizationServiceEndpointName = "LemmatizationService";
 
         public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider,
-            MainServiceRestClient mainServiceRestClient, MainServiceBookClient bookClient, MainServiceCardFileClient cardFileClient,
-            MainServiceCodeListClient codeListClient, MainServiceExternalRepositoryClient externalRepositoryClient,
-            MainServiceFavoriteClient favoriteClient, MainServiceFeedbackClient feedbackClient,
-            MainServiceFilteringExpressionSetClient filteringExpressionSetClient, MainServiceMetadataClient metadataClient,
-            MainServiceNewsClient newsClient, MainServicePermissionClient permissionClient, MainServiceProjectClient projectClient,
-            MainServiceResourceClient resourceClient, MainServiceRoleClient roleClient, MainServiceSessionClient sessionClient, 
-            MainServiceTermClient termClient, MainServiceUserClient userClient)
+            MainServiceBookClient bookClient, MainServiceCardFileClient cardFileClient, MainServiceCodeListClient codeListClient,
+            MainServiceExternalRepositoryClient externalRepositoryClient, MainServiceFavoriteClient favoriteClient,
+            MainServiceFeedbackClient feedbackClient, MainServiceFilteringExpressionSetClient filteringExpressionSetClient,
+            MainServiceMetadataClient metadataClient, MainServiceNewsClient newsClient, MainServicePermissionClient permissionClient,
+            MainServiceProjectClient projectClient, MainServiceResourceClient resourceClient, MainServiceRoleClient roleClient,
+            MainServiceSessionClient sessionClient, MainServiceTermClient termClient, MainServiceUserClient userClient)
         {
             m_configurationProvider = communicationConfigurationProvider;
-            m_mainServiceRestClient = mainServiceRestClient;
             m_bookClient = bookClient;
             m_cardFileClient = cardFileClient;
             m_codeListClient = codeListClient;
@@ -54,11 +51,6 @@ namespace ITJakub.Web.Hub.Core.Communication
             m_sessionClient = sessionClient;
             m_termClient = termClient;
             m_userClient = userClient;
-        }
-
-        public MainServiceRestClient GetMainServiceClient()
-        {
-            return m_mainServiceRestClient;
         }
 
         public MainServiceBookClient GetMainServiceBookClient()

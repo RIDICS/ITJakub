@@ -15,7 +15,7 @@ using Vokabular.RestClient.Results;
 
 namespace Vokabular.RestClient
 {
-    public abstract class RestClientBase : IDisposable
+    public abstract class RestClientBase
     {
         private const int StreamBufferSize = 64 * 1024;
 
@@ -41,11 +41,6 @@ namespace Vokabular.RestClient
         protected abstract void FillRequestMessage(HttpRequestMessage requestMessage);
 
         protected abstract void ProcessResponse(HttpResponseMessage response);
-
-        public void Dispose()
-        {
-            HttpClient.Dispose();
-        }
 
         public HttpClient HttpClient { get; }
 

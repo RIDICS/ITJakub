@@ -157,12 +157,9 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult SetEditionNote([FromBody] CreateEditionNoteRequest request)
         {
-            using (var client = GetRestClient())
-            {
-                //var result = client.
-                var result = "TODO"; //TODO add logic
-                return Json(result);
-            }
+            //var result = client.
+            var result = "TODO"; //TODO add logic
+            return Json(result);
         }
     }
 }
