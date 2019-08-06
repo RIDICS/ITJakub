@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
-using Scalesoft.Localization.AspNetCore;
 using Vokabular.RestClient.Errors;
 
 namespace ITJakub.Web.Hub.Middleware
@@ -9,12 +9,10 @@ namespace ITJakub.Web.Hub.Middleware
     public class ErrorHandlingMiddleware
     {
         private readonly RequestDelegate m_next;
-        private readonly ILocalizationService m_localization;
 
-        public ErrorHandlingMiddleware(RequestDelegate next, ILocalizationService localization)
+        public ErrorHandlingMiddleware(RequestDelegate next)
         {
             m_next = next;
-            m_localization = localization;
         }
 
         public async Task Invoke(HttpContext context)
@@ -25,25 +23,52 @@ namespace ITJakub.Web.Hub.Middleware
             }
             catch (HttpErrorCodeException exception)
             {
+                int statusCode;
                 switch (exception.StatusCode)
                 {
                     case HttpStatusCode.Unauthorized:
-                        await FillResponse(context, StatusCodes.Status401Unauthorized, m_localization.Translate("unauthorized-detail", "Error"));
+                        statusCode = StatusCodes.Status401Unauthorized;
+                        
                         break;
                     case HttpStatusCode.Forbidden:
-                        await FillResponse(context, StatusCodes.Status403Forbidden, m_localization.Translate("forbidden-detail", "Error"));
+                        statusCode = StatusCodes.Status403Forbidden;
                         break;
                     default:
-                        await FillResponse(context, StatusCodes.Status502BadGateway, m_localization.Translate("bad-gateway-detail", "Error"));
+                        statusCode = StatusCodes.Status502BadGateway;
                         break;
                 }
+
+                await ReExecute(context, statusCode);
             }
         }
 
-        private async Task FillResponse(HttpContext context, int statusCode, string message)
+        private async Task ReExecute(HttpContext context, int statusCode)
         {
-            context.Response.StatusCode = statusCode;
-            await context.Response.WriteAsync(message);
+            var pathString = new PathString($"/Error/{statusCode}");
+            var originalPath = context.Request.Path;
+            var originalQueryString = context.Request.QueryString;
+
+            context.Features.Set<IStatusCodeReExecuteFeature>(new StatusCodeReExecuteFeature
+            {
+                OriginalPathBase = context.Request.PathBase.Value,
+                OriginalPath = originalPath.Value,
+                OriginalQueryString = originalQueryString.HasValue ? originalQueryString.Value : null
+            });
+            context.Request.Path = pathString;
+            context.Request.QueryString = QueryString.Empty;
+
+
+            try
+            {
+                await m_next(context);
+            }
+            finally
+            {
+                context.Request.QueryString = originalQueryString;
+                context.Request.Path = originalPath;
+                context.Response.StatusCode = statusCode;
+                context.Features.Set<IStatusCodeReExecuteFeature>(null);
+            }
         }
     }
 }
