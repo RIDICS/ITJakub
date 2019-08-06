@@ -17,10 +17,12 @@ namespace Vokabular.MainService.DataContracts
             services.AddScoped<MainServiceFilteringExpressionSetClient>();
             services.AddScoped<MainServiceMetadataClient>();
             services.AddScoped<MainServiceNewsClient>();
+            services.AddScoped<MainServicePermissionClient>();
             services.AddScoped<MainServiceProjectClient>();
             services.AddScoped<MainServiceResourceClient>();
             services.AddScoped<MainServiceRoleClient>();
             services.AddScoped<MainServiceSessionClient>();
+            services.AddScoped<MainServiceTermClient>();
             services.AddScoped<MainServiceUserClient>();
         }
     }

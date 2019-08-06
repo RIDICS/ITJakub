@@ -419,11 +419,9 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetTypeaheadDictionaryHeadword(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetHeadwordAutocomplete(query, AreaBookType, selectedCategoryIds, selectedBookIds);
-                return Json(result);
-            }
+            var client = GetBookClient();
+            var result = client.GetHeadwordAutocomplete(query, AreaBookType, selectedCategoryIds, selectedBookIds);
+            return Json(result);
         }
 
         //public FileResult GetHeadwordImage(string bookXmlId, string bookVersionXmlId, string fileName) // Original signature

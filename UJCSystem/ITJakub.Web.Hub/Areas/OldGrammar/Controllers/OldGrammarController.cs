@@ -58,14 +58,12 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 
         public ActionResult ListTerms()
         {
-            using (var client = GetRestClient())
+            var client = GetTermClient();
+            var termCategories = client.GetTermCategoriesWithTerms();
+            return View(new TermCategoriesWithTermsModel
             {
-                var termCategories = client.GetTermCategoriesWithTerms();
-                return View(new TermCategoriesWithTermsModel
-                {
-                    TermCategories = termCategories
-                });
-            }
+                TermCategories = termCategories
+            });
         }
 
         public ActionResult Information()

@@ -21,7 +21,8 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
         private readonly StaticTextManager m_staticTextManager;
         private readonly FeedbacksManager m_feedbacksManager;
 
-        public BibliographiesController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager, CommunicationProvider communicationProvider) : base(communicationProvider)
+        public BibliographiesController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager,
+            CommunicationProvider communicationProvider) : base(communicationProvider)
         {
             m_staticTextManager = staticTextManager;
             m_feedbacksManager = feedbacksManager;
@@ -31,7 +32,7 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
 
         private FeedbackFormIdentification GetFeedbackFormIdentification()
         {
-            return new FeedbackFormIdentification { Area = "Bibliographies", Controller = "Bibliographies" };
+            return new FeedbackFormIdentification {Area = "Bibliographies", Controller = "Bibliographies"};
         }
 
         public ActionResult Index()
@@ -52,7 +53,8 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
 
         public ActionResult Feedback()
         {
-            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, IsUserLoggedIn(), "home", User);
+            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback,
+                IsUserLoggedIn(), "home", User);
             return View(viewModel);
         }
 
@@ -73,12 +75,10 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
 
         public override ActionResult GetTypeaheadAuthor(string query)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetOriginalAuthorAutocomplete(query);
-                var resultStringList = result.Select(x => $"{x.LastName} {x.FirstName}");
-                return Json(resultStringList);
-            }
+            var client = GetCodeListClient();
+            var result = client.GetOriginalAuthorAutocomplete(query);
+            var resultStringList = result.Select(x => $"{x.LastName} {x.FirstName}");
+            return Json(resultStringList);
         }
 
         public override ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
@@ -91,25 +91,25 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
         public ActionResult AdvancedSearchResultsCount(string json)
         {
             var count = SearchByCriteriaJsonCount(json, null, null);
-            return Json(new { count });
+            return Json(new {count});
         }
 
         public ActionResult AdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc)
         {
             var result = SearchByCriteriaJson(json, start, count, sortingEnum, sortAsc, null, null);
-            return Json(new { results = result }, GetJsonSerializerSettingsForBiblModule());
+            return Json(new {results = result}, GetJsonSerializerSettingsForBiblModule());
         }
 
         public ActionResult TextSearchCount(string text)
         {
             var count = SearchByCriteriaTextCount(CriteriaKey.Title, text, null, null);
-            return Json(new { count });
+            return Json(new {count});
         }
-        
+
         public ActionResult TextSearchPaged(string text, int start, int count, short sortingEnum, bool sortAsc)
         {
             var result = SearchByCriteriaText(CriteriaKey.Title, text, start, count, sortingEnum, sortAsc, null, null);
-            return Json(new { results = result }, GetJsonSerializerSettingsForBiblModule());
+            return Json(new {results = result}, GetJsonSerializerSettingsForBiblModule());
         }
     }
 }

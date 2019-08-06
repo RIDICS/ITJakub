@@ -528,20 +528,16 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult GetTypeaheadOriginalAuthor(string query)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetOriginalAuthorAutocomplete(query);
-                return Json(result);
-            }
+            var client = GetCodeListClient();
+            var result = client.GetOriginalAuthorAutocomplete(query);
+            return Json(result);
         }
 
         public IActionResult GetTypeaheadResponsiblePerson(string query)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetResponsiblePersonAutocomplete(query);
-                return Json(result);
-            }
+            var client = GetCodeListClient();
+            var result = client.GetResponsiblePersonAutocomplete(query);
+            return Json(result);
         }
 
         public IActionResult GetTypeaheadPublisher(string query)

@@ -245,7 +245,7 @@ namespace ITJakub.Web.Hub
 
             // Update missing permissions on Auth service:
             var communicationProvider = app.ApplicationServices.GetRequiredService<CommunicationProvider>();
-            communicationProvider.GetMainServiceClient().EnsureAuthServiceHasRequiredPermissions();
+            communicationProvider.GetMainServicePermissionClient().EnsureAuthServiceHasRequiredPermissions();
 
             applicationLifetime.ApplicationStopped.Register(OnShutdown);
         }

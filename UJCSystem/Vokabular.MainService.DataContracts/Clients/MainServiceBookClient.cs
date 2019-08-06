@@ -4,6 +4,7 @@ using System.Net.Http;
 using Microsoft.Extensions.Logging;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.RestClient;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Extensions;
 using Vokabular.RestClient.Results;
@@ -25,203 +26,13 @@ namespace Vokabular.MainService.DataContracts.Clients
             m_client = client;
         }
 
-        public List<BookWithCategoriesContract> GetBooksByType(BookTypeEnumContract bookTypeEnum)
-        {
-            try
-            {
-                var result = m_client.Get<List<BookWithCategoriesContract>>($"book/type/{bookTypeEnum}");
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public List<SearchResultContract> SearchBook(SearchRequestContract request)
-        {
-            try
-            {
-                var result = m_client.Post<List<SearchResultContract>>("book/search", request);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public List<HeadwordContract> SearchHeadword(HeadwordSearchRequestContract request)
-        {
-            try
-            {
-                var result = m_client.Post<List<HeadwordContract>>("headword/search", request);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public List<AudioBookSearchResultContract> SearchAudioBook(SearchRequestContract request)
-        {
-            try
-            {
-                var result = m_client.Post<List<AudioBookSearchResultContract>>("audiobook/search", request);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public long SearchBookCount(SearchRequestContract request)
-        {
-            try
-            {
-                var result = m_client.Post<long>("book/search-count", request);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public long SearchHeadwordCount(HeadwordSearchRequestContract request)
-        {
-            try
-            {
-                var result = m_client.Post<long>("headword/search-count", request);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public long SearchHeadwordRowNumber(HeadwordRowNumberSearchRequestContract request)
-        {
-            try
-            {
-                var result = m_client.Post<long>("headword/search-row-number", request);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
+        #region Book
 
         public List<PageContract> SearchPage(long projectId, SearchPageRequestContract request)
         {
             try
             {
                 var result = m_client.Post<List<PageContract>>($"book/{projectId}/page/search", request);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public List<CorpusSearchResultContract> SearchCorpus(CorpusSearchRequestContract request)
-        {
-            try
-            {
-                var result = m_client.Post<List<CorpusSearchResultContract>>("corpus/search", request);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public long SearchCorpusCount(CorpusSearchRequestContract request)
-        {
-            try
-            {
-                var result = m_client.Post<long>("corpus/search-count", request);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotList(CorpusSearchRequestContract request)
-        {
-            try
-            {
-                var result = m_client.Post<CorpusSearchSnapshotsResultContract>("bookpagedcorpus/search", request);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public List<CorpusSearchResultContract> SearchCorpusInSnapshot(long snapshotId, CorpusSearchRequestContract request)
-        {
-            try
-            {
-                var result = m_client.Post<List<CorpusSearchResultContract>>($"bookpagedcorpus/snapshot/{snapshotId}/search", request);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public long SearchCorpusTotalResultCount(SearchRequestContractBase request)
-        {
-            try
-            {
-                var result = m_client.Post<long>("bookpagedcorpus/search-count", request);
                 return result;
             }
             catch (HttpRequestException e)
@@ -550,5 +361,256 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+
+        public List<BookWithCategoriesContract> GetBooksByType(BookTypeEnumContract bookTypeEnum)
+        {
+            try
+            {
+                var result = m_client.Get<List<BookWithCategoriesContract>>($"book/type/{bookTypeEnum}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<SearchResultContract> SearchBook(SearchRequestContract request)
+        {
+            try
+            {
+                var result = m_client.Post<List<SearchResultContract>>("book/search", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public long SearchBookCount(SearchRequestContract request)
+        {
+            try
+            {
+                var result = m_client.Post<long>("book/search-count", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region Headword
+
+        public long SearchHeadwordCount(HeadwordSearchRequestContract request)
+        {
+            try
+            {
+                var result = m_client.Post<long>("headword/search-count", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public long SearchHeadwordRowNumber(HeadwordRowNumberSearchRequestContract request)
+        {
+            try
+            {
+                var result = m_client.Post<long>("headword/search-row-number", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+
+        public List<HeadwordContract> SearchHeadword(HeadwordSearchRequestContract request)
+        {
+            try
+            {
+                var result = m_client.Post<List<HeadwordContract>>("headword/search", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<string> GetHeadwordAutocomplete(string query, BookTypeEnumContract? bookType = null,
+            IList<int> selectedCategoryIds = null, IList<long> selectedProjectIds = null)
+        {
+            try
+            {
+                var url = UrlQueryBuilder.Create("headword/autocomplete")
+                    .AddParameter("query", query)
+                    .AddParameter("bookType", bookType)
+                    .AddParameterList("selectedCategoryIds", selectedCategoryIds)
+                    .AddParameterList("selectedProjectIds", selectedProjectIds)
+                    .ToQuery();
+
+                var result = m_client.Get<List<string>>(url);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region Corpus
+
+        public List<CorpusSearchResultContract> SearchCorpus(CorpusSearchRequestContract request)
+        {
+            try
+            {
+                var result = m_client.Post<List<CorpusSearchResultContract>>("corpus/search", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public long SearchCorpusCount(CorpusSearchRequestContract request)
+        {
+            try
+            {
+                var result = m_client.Post<long>("corpus/search-count", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region BookPagedCorpus
+
+        public CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotList(CorpusSearchRequestContract request)
+        {
+            try
+            {
+                var result = m_client.Post<CorpusSearchSnapshotsResultContract>("bookpagedcorpus/search", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<CorpusSearchResultContract> SearchCorpusInSnapshot(long snapshotId, CorpusSearchRequestContract request)
+        {
+            try
+            {
+                var result = m_client.Post<List<CorpusSearchResultContract>>($"bookpagedcorpus/snapshot/{snapshotId}/search", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public long SearchCorpusTotalResultCount(SearchRequestContractBase request)
+        {
+            try
+            {
+                var result = m_client.Post<long>("bookpagedcorpus/search-count", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region AudioBook
+
+        public AudioBookSearchResultContract GetAudioBookDetail(long projectId)
+        {
+            try
+            {
+                var result = m_client.Get<AudioBookSearchResultContract>($"audiobook/{projectId}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<AudioBookSearchResultContract> SearchAudioBook(SearchRequestContract request)
+        {
+            try
+            {
+                var result = m_client.Post<List<AudioBookSearchResultContract>>("audiobook/search", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
     }
 }

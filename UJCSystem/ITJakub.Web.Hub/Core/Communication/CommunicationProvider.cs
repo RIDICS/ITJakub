@@ -17,10 +17,12 @@ namespace ITJakub.Web.Hub.Core.Communication
         private readonly MainServiceFilteringExpressionSetClient m_filteringExpressionSetClient;
         private readonly MainServiceMetadataClient m_metadataClient;
         private readonly MainServiceNewsClient m_newsClient;
+        private readonly MainServicePermissionClient m_permissionClient;
         private readonly MainServiceProjectClient m_projectClient;
         private readonly MainServiceResourceClient m_resourceClient;
         private readonly MainServiceRoleClient m_roleClient;
         private readonly MainServiceSessionClient m_sessionClient;
+        private readonly MainServiceTermClient m_termClient;
         private readonly MainServiceUserClient m_userClient;
 
         private const string LemmatizationServiceEndpointName = "LemmatizationService";
@@ -29,9 +31,10 @@ namespace ITJakub.Web.Hub.Core.Communication
             MainServiceRestClient mainServiceRestClient, MainServiceBookClient bookClient, MainServiceCardFileClient cardFileClient,
             MainServiceCodeListClient codeListClient, MainServiceExternalRepositoryClient externalRepositoryClient,
             MainServiceFavoriteClient favoriteClient, MainServiceFeedbackClient feedbackClient,
-            MainServiceFilteringExpressionSetClient filteringExpressionSetClient, MainServiceMetadataClient metadataClient, MainServiceNewsClient newsClient,
-            MainServiceProjectClient projectClient, MainServiceResourceClient resourceClient, MainServiceRoleClient roleClient,
-            MainServiceSessionClient sessionClient, MainServiceUserClient userClient)
+            MainServiceFilteringExpressionSetClient filteringExpressionSetClient, MainServiceMetadataClient metadataClient,
+            MainServiceNewsClient newsClient, MainServicePermissionClient permissionClient, MainServiceProjectClient projectClient,
+            MainServiceResourceClient resourceClient, MainServiceRoleClient roleClient, MainServiceSessionClient sessionClient, 
+            MainServiceTermClient termClient, MainServiceUserClient userClient)
         {
             m_configurationProvider = communicationConfigurationProvider;
             m_mainServiceRestClient = mainServiceRestClient;
@@ -44,10 +47,12 @@ namespace ITJakub.Web.Hub.Core.Communication
             m_filteringExpressionSetClient = filteringExpressionSetClient;
             m_metadataClient = metadataClient;
             m_newsClient = newsClient;
+            m_permissionClient = permissionClient;
             m_projectClient = projectClient;
             m_resourceClient = resourceClient;
             m_roleClient = roleClient;
             m_sessionClient = sessionClient;
+            m_termClient = termClient;
             m_userClient = userClient;
         }
 
@@ -101,6 +106,11 @@ namespace ITJakub.Web.Hub.Core.Communication
             return m_newsClient;
         }
 
+        public MainServicePermissionClient GetMainServicePermissionClient()
+        {
+            return m_permissionClient;
+        }
+
         public MainServiceProjectClient GetMainServiceProjectClient()
         {
             return m_projectClient;
@@ -119,6 +129,11 @@ namespace ITJakub.Web.Hub.Core.Communication
         public MainServiceSessionClient GetMainServiceSessionClient()
         {
             return m_sessionClient;
+        }
+
+        public MainServiceTermClient GetMainServiceTermClient()
+        {
+            return m_termClient;
         }
 
         public MainServiceUserClient GetMainServiceUserClient()

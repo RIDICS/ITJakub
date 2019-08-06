@@ -108,36 +108,35 @@ namespace ITJakub.Web.Hub.Controllers
 
         public IActionResult RolePermissionList(int roleId, string search, int start, int count = PermissionListPageSize)
         {
-            using (var client = GetRestClient())
+            try
             {
-                try
+                search = search ?? string.Empty;
+                var roleClient = GetRoleClient();
+                var roleContract = roleClient.GetRoleDetail(roleId);
+                var permissionClient = GetPermissionClient();
+
+                var pagedPermissionsResult = permissionClient.GetPermissions(start, count, search);
+                var permissionList = Mapper.Map<List<PermissionViewModel>>(pagedPermissionsResult.List);
+
+                foreach (var permission in permissionList)
                 {
-                    search = search ?? string.Empty;
-                    var roleClient = GetRoleClient();
-                    var roleContract = roleClient.GetRoleDetail(roleId);
-                    var pagedPermissionsResult = client.GetPermissions(start, count, search);
-                    var permissionList = Mapper.Map<List<PermissionViewModel>>(pagedPermissionsResult.List);
-
-                    foreach (var permission in permissionList)
-                    {
-                        permission.IsSelected = roleContract.Permissions.Any(x => x.Id == permission.Id);
-                    }
-
-                    var model = new ListViewModel<PermissionViewModel>
-                    {
-                        TotalCount = pagedPermissionsResult.TotalCount,
-                        List = permissionList,
-                        PageSize = count,
-                        Start = start,
-                        SearchQuery = search
-                    };
-
-                    return PartialView("Widget/_PermissionListWidget", model);
+                    permission.IsSelected = roleContract.Permissions.Any(x => x.Id == permission.Id);
                 }
-                catch (HttpErrorCodeException e)
+
+                var model = new ListViewModel<PermissionViewModel>
                 {
-                    return AjaxErrorResponse(e.Message, e.StatusCode);
-                }
+                    TotalCount = pagedPermissionsResult.TotalCount,
+                    List = permissionList,
+                    PageSize = count,
+                    Start = start,
+                    SearchQuery = search
+                };
+
+                return PartialView("Widget/_PermissionListWidget", model);
+            }
+            catch (HttpErrorCodeException e)
+            {
+                return AjaxErrorResponse(e.Message, e.StatusCode);
             }
         }
 

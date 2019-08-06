@@ -27,12 +27,10 @@ namespace ITJakub.Web.Hub.Controllers
 
         public virtual ActionResult GetTypeaheadAuthor(string query)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetOriginalAuthorAutocomplete(query, AreaBookType);
-                var resultStringList = result.Select(x => $"{x.LastName} {x.FirstName}");
-                return Json(resultStringList);
-            }
+            var client = GetCodeListClient();
+            var result = client.GetOriginalAuthorAutocomplete(query, AreaBookType);
+            var resultStringList = result.Select(x => $"{x.LastName} {x.FirstName}");
+            return Json(resultStringList);
         }
 
         public virtual ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)

@@ -70,6 +70,11 @@ namespace ITJakub.Web.Hub.Controllers
             return m_communication.GetMainServiceNewsClient();
         }
 
+        public MainServicePermissionClient GetPermissionClient()
+        {   
+            return m_communication.GetMainServicePermissionClient();
+        }
+
         public MainServiceProjectClient GetProjectClient()
         {
             return m_communication.GetMainServiceProjectClient();
@@ -88,6 +93,11 @@ namespace ITJakub.Web.Hub.Controllers
         public MainServiceSessionClient GetSessionClient()
         {
             return m_communication.GetMainServiceSessionClient();
+        }
+
+        public MainServiceTermClient GetTermClient()
+        {
+            return m_communication.GetMainServiceTermClient();
         }
 
         public MainServiceUserClient GetUserClient()

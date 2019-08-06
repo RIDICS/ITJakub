@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
@@ -484,5 +485,41 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+
+        public long SetAllPageList(string[] pageList)
+        {
+            try
+            {
+                //TODO add logic for saving page list after editing
+                throw new NotImplementedException();
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #region Text
+
+        public long CreateNewTextResourceVersion(long textId, TextContract request)
+        {
+            try
+            {
+                var result = m_client.Post<long>($"text/{textId}", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
     }
 }

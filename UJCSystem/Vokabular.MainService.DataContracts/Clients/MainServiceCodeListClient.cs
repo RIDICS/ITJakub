@@ -3,8 +3,11 @@ using System.Net;
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.RestClient;
+using Vokabular.RestClient.Extensions;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared;
+using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.Extensions;
 
 namespace Vokabular.MainService.DataContracts.Clients
@@ -446,6 +449,28 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public List<OriginalAuthorContract> GetOriginalAuthorAutocomplete(string query,
+            BookTypeEnumContract? bookType = null)
+        {
+            try
+            {
+                var url = UrlQueryBuilder.Create("author/autocomplete")
+                    .AddParameter("query", query)
+                    .AddParameter("bookType", bookType)
+                    .ToQuery();
+
+                var result = m_client.Get<List<OriginalAuthorContract>>(url);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         #endregion
 
         #region Responsible person
@@ -519,6 +544,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 m_client.Delete($"responsibleperson/{responsiblePersonId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<ResponsiblePersonContract> GetResponsiblePersonAutocomplete(string query)
+        {
+            try
+            {
+                var result = m_client.Get<List<ResponsiblePersonContract>>("responsibleperson/autocomplete".AddQueryString("query", query));
+                return result;
             }
             catch (HttpRequestException e)
             {
