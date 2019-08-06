@@ -16,6 +16,7 @@ namespace ITJakub.Web.Hub.Core.Communication
         private readonly MainServiceFeedbackClient m_feedbackClient;
         private readonly MainServiceFilteringExpressionSetClient m_filteringExpressionSetClient;
         private readonly MainServiceMetadataClient m_metadataClient;
+        private readonly MainServiceNewsClient m_newsClient;
         private readonly MainServiceProjectClient m_projectClient;
         private readonly MainServiceResourceClient m_resourceClient;
         private readonly MainServiceRoleClient m_roleClient;
@@ -28,7 +29,7 @@ namespace ITJakub.Web.Hub.Core.Communication
             MainServiceRestClient mainServiceRestClient, MainServiceBookClient bookClient, MainServiceCardFileClient cardFileClient,
             MainServiceCodeListClient codeListClient, MainServiceExternalRepositoryClient externalRepositoryClient,
             MainServiceFavoriteClient favoriteClient, MainServiceFeedbackClient feedbackClient,
-            MainServiceFilteringExpressionSetClient filteringExpressionSetClient, MainServiceMetadataClient metadataClient,
+            MainServiceFilteringExpressionSetClient filteringExpressionSetClient, MainServiceMetadataClient metadataClient, MainServiceNewsClient newsClient,
             MainServiceProjectClient projectClient, MainServiceResourceClient resourceClient, MainServiceRoleClient roleClient,
             MainServiceSessionClient sessionClient, MainServiceUserClient userClient)
         {
@@ -42,6 +43,7 @@ namespace ITJakub.Web.Hub.Core.Communication
             m_feedbackClient = feedbackClient;
             m_filteringExpressionSetClient = filteringExpressionSetClient;
             m_metadataClient = metadataClient;
+            m_newsClient = newsClient;
             m_projectClient = projectClient;
             m_resourceClient = resourceClient;
             m_roleClient = roleClient;
@@ -92,6 +94,11 @@ namespace ITJakub.Web.Hub.Core.Communication
         public MainServiceMetadataClient GetMainServiceMetadataClient()
         {
             return m_metadataClient;
+        }
+
+        public MainServiceNewsClient GetMainServiceNewsClient()
+        {
+            return m_newsClient;
         }
 
         public MainServiceProjectClient GetMainServiceProjectClient()

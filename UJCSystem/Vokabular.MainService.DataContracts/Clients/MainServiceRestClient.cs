@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.Extensions.Logging;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.MainService.DataContracts.Contracts.Feedback;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.MainService.DataContracts.Contracts.Search;
-using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient;
 using Vokabular.RestClient.Extensions;
 using Vokabular.RestClient.Results;
@@ -166,47 +162,6 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
-
-        #region News
-
-        public PagedResultList<NewsSyndicationItemContract> GetNewsSyndicationItems(int start, int count, NewsTypeEnumContract? itemType)
-        {
-            try
-            {
-                var url = UrlQueryBuilder.Create("news")
-                    .AddParameter("start", start)
-                    .AddParameter("count", count)
-                    .AddParameter("itemType", itemType)
-                    .ToQuery();
-                var result = GetPagedList<NewsSyndicationItemContract>(url);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public long CreateNewsSyndicationItem(CreateNewsSyndicationItemContract data)
-        {
-            try
-            {
-                var result = Post<long>("news", data);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        #endregion
 
         public PagedResultList<PermissionContract> GetPermissions(int start, int count, string query)
         {

@@ -65,6 +65,11 @@ namespace ITJakub.Web.Hub.Controllers
             return m_communication.GetMainServiceMetadataClient();
         }
 
+        public MainServiceNewsClient GetNewsClient()
+        {
+            return m_communication.GetMainServiceNewsClient();
+        }
+
         public MainServiceProjectClient GetProjectClient()
         {
             return m_communication.GetMainServiceProjectClient();
