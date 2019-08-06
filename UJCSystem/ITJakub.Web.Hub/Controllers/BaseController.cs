@@ -80,6 +80,11 @@ namespace ITJakub.Web.Hub.Controllers
             return m_communication.GetMainServiceRoleClient();
         }
 
+        public MainServiceSessionClient GetSessionClient()
+        {
+            return m_communication.GetMainServiceSessionClient();
+        }
+
         public MainServiceUserClient GetUserClient()
         {
             return m_communication.GetMainServiceUserClient();

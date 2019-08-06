@@ -38,40 +38,6 @@ namespace Vokabular.MainService.DataContracts.Clients
         protected override void ProcessResponse(HttpResponseMessage response)
         {
         }
-        
-        public void UploadResource(string sessionId, Stream data, string fileName)
-        {
-            try
-            {
-                var uriPath = $"session/{sessionId}/resource";
-                PostStreamAsForm<object>(uriPath, data, fileName);
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void ProcessSessionAsImport(string sessionId, NewBookImportContract request)
-        {
-            try
-            {
-                HttpClient.Timeout = new TimeSpan(0, 10, 0); // Import is long running operation
-                Post<object>($"session/{sessionId}",request);
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-
 
         public List<OriginalAuthorContract> GetOriginalAuthorAutocomplete(string query,
             BookTypeEnumContract? bookType = null)

@@ -19,6 +19,7 @@ namespace Vokabular.MainService.DataContracts
             services.AddScoped<MainServiceProjectClient>();
             services.AddScoped<MainServiceResourceClient>();
             services.AddScoped<MainServiceRoleClient>();
+            services.AddScoped<MainServiceSessionClient>();
             services.AddScoped<MainServiceUserClient>();
         }
     }

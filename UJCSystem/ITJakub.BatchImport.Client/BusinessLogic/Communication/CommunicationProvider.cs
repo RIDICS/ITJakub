@@ -7,7 +7,7 @@ namespace ITJakub.BatchImport.Client.BusinessLogic.Communication
 {
     public class CommunicationProvider
     {
-        private readonly MainServiceRestClient m_mainServiceRestClient;
+        private readonly MainServiceSessionClient m_mainServiceSessionClient;
         private const string EncryptedEndpointName = "ItJakubServiceEncrypted";
         private const string MainServiceEndpointName = "ItJakubService";
         private const string MainServiceEndpointNameAuthenticated = "ItJakubService.Authenticated";
@@ -15,16 +15,16 @@ namespace ITJakub.BatchImport.Client.BusinessLogic.Communication
         //private const string StreamedServiceEndpointNameAuthenticated = "ItJakubServiceStreamed.Authenticated";
         private const string StreamedServiceEndpointNameAuthenticated = "ItJakubServiceStreamed";
 
-        public CommunicationProvider(MainServiceRestClient mainServiceRestClient)
+        public CommunicationProvider(MainServiceSessionClient mainServiceSessionClient)
         {
-            m_mainServiceRestClient = mainServiceRestClient;
+            m_mainServiceSessionClient = mainServiceSessionClient;
         }
 
-        public MainServiceRestClient GetMainServiceClient()
+        public MainServiceSessionClient GetMainServiceSessionClient()
         {
-            return m_mainServiceRestClient;
+            return m_mainServiceSessionClient;
         }
-        
+
         /// <summary>
         /// 
         /// </summary>

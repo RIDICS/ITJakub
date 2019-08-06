@@ -19,6 +19,7 @@ namespace ITJakub.Web.Hub.Core.Communication
         private readonly MainServiceProjectClient m_projectClient;
         private readonly MainServiceResourceClient m_resourceClient;
         private readonly MainServiceRoleClient m_roleClient;
+        private readonly MainServiceSessionClient m_sessionClient;
         private readonly MainServiceUserClient m_userClient;
 
         private const string LemmatizationServiceEndpointName = "LemmatizationService";
@@ -29,7 +30,7 @@ namespace ITJakub.Web.Hub.Core.Communication
             MainServiceFavoriteClient favoriteClient, MainServiceFeedbackClient feedbackClient,
             MainServiceFilteringExpressionSetClient filteringExpressionSetClient, MainServiceMetadataClient metadataClient,
             MainServiceProjectClient projectClient, MainServiceResourceClient resourceClient, MainServiceRoleClient roleClient,
-            MainServiceUserClient userClient)
+            MainServiceSessionClient sessionClient, MainServiceUserClient userClient)
         {
             m_configurationProvider = communicationConfigurationProvider;
             m_mainServiceRestClient = mainServiceRestClient;
@@ -44,6 +45,7 @@ namespace ITJakub.Web.Hub.Core.Communication
             m_projectClient = projectClient;
             m_resourceClient = resourceClient;
             m_roleClient = roleClient;
+            m_sessionClient = sessionClient;
             m_userClient = userClient;
         }
 
@@ -105,6 +107,11 @@ namespace ITJakub.Web.Hub.Core.Communication
         public MainServiceRoleClient GetMainServiceRoleClient()
         {
             return m_roleClient;
+        }
+
+        public MainServiceSessionClient GetMainServiceSessionClient()
+        {
+            return m_sessionClient;
         }
 
         public MainServiceUserClient GetMainServiceUserClient()

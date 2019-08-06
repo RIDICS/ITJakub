@@ -49,7 +49,7 @@ namespace Vokabular.RestClient
             m_client.Dispose();
         }
 
-        protected HttpClient HttpClient => m_client;
+        public HttpClient HttpClient => m_client;
 
         protected HttpClientHandler HttpClientHandler => m_httpClientHandler;
 

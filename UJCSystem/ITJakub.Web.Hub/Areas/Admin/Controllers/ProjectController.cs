@@ -244,10 +244,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
                     var fileSection = section.AsFileSection();
 
-                    using (var client = GetRestClient())
-                    {
-                        client.UploadResource(sessionId, fileSection.FileStream, fileSection.FileName);
-                    }
+                    var client = GetSessionClient();
+                    client.UploadResource(sessionId, fileSection.FileStream, fileSection.FileName);
                 }
                 else if (contentDispo.IsFormDisposition())
                 {
@@ -282,10 +280,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
                     var fileSection = section.AsFileSection();
 
-                    using (var client = GetRestClient())
-                    {
-                        client.UploadResource(sessionId, fileSection.FileStream, fileSection.FileName);
-                    }
+                    var client = GetSessionClient();
+                    client.UploadResource(sessionId, fileSection.FileStream, fileSection.FileName);
                 }
                 else if (contentDispo.IsFormDisposition())
                 {
