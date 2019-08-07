@@ -2,6 +2,9 @@
   "culture": "cs-CZ",
   "scope": "BohemianTextBank",
   "dictionary": {
+    "SearchCombined": "Korpusy - Vyhledávání kombinované",
+    "SearchSingleLazyload": "Korpusy - Vyhledávání podle díla na jedné stránce",
+    "SearchSinglePaged": "Korpusy - Vyhledávání podle díla strankované",
     "SearchDefaultError": "Vyhledávání se nezdařilo. Ujistěte se, zda máte zadáno alespoň jedno kritérium na vyhledávání v textu.",
     "BohemianTextBankFeedback": "Korpusy - Připomínky",
     "BohemianTextBankHelp": "Korpusy - Nápověda",

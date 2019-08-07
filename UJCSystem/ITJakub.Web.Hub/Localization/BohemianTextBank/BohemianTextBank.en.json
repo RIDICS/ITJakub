@@ -2,6 +2,9 @@
 	"culture":"en",
 	"scope":"BohemianTextBank",
   "dictionary": {
+    "SearchCombined": "Corpora - Combined search",
+    "SearchSingleLazyload": "Corpora - Search by work on one page",
+    "SearchSinglePaged": "Corpora - Search by work - paged",
     "SearchDefaultError": "Searching was unsuccessful. Make sure that you fill at least one criteria for searching in text.",
     "BohemianTextBankFeedback": "Corpora - Feedback",
     "BohemianTextBankHelp": "Corpora - Help",
