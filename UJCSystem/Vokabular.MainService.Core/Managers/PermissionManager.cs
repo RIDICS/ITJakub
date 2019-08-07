@@ -1,15 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using ITJakub.FileProcessing.DataContracts;
 using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
+using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.Const;
-using Vokabular.Shared.DataEntities.UnitOfWork;
 using AuthRoleContract = Ridics.Authentication.DataContracts.RoleContract;
 using AuthPermissionContract = Ridics.Authentication.DataContracts.PermissionContract;
 using PermissionContract = Vokabular.MainService.DataContracts.Contracts.Permission.PermissionContract;
@@ -20,11 +21,14 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly PermissionRepository m_permissionRepository;
         private readonly CommunicationProvider m_communicationProvider;
-        
-        public PermissionManager(PermissionRepository permissionRepository, CommunicationProvider communicationProvider)
+        private readonly DefaultUserProvider m_defaultUserProvider;
+
+        public PermissionManager(PermissionRepository permissionRepository, CommunicationProvider communicationProvider,
+            DefaultUserProvider defaultUserProvider)
         {
             m_permissionRepository = permissionRepository;
             m_communicationProvider = communicationProvider;
+            m_defaultUserProvider = defaultUserProvider;
         }
 
         public List<PermissionFromAuthContract> GetAutoImportSpecialPermissions()
@@ -33,16 +37,17 @@ namespace Vokabular.MainService.Core.Managers
 
             var permissions = client.GetAllPermissionsAsync().GetAwaiter().GetResult();
 
-            var result = permissions.Where(x => x.Name.StartsWith(VokabularPermissionNames.AutoImport)).Select(p => new PermissionFromAuthContract
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Roles = p.Roles.Select(r => new RoleFromAuthContract
+            var result = permissions.Where(x => x.Name.StartsWith(VokabularPermissionNames.AutoImport)).Select(p =>
+                new PermissionFromAuthContract
                 {
-                    Id = r.Id,
-                    Name = r.Name,
-                }).ToList()
-            }).ToList();
+                    Id = p.Id,
+                    Name = p.Name,
+                    Roles = p.Roles.Select(r => new RoleFromAuthContract
+                    {
+                        Id = r.Id,
+                        Name = r.Name,
+                    }).ToList()
+                }).ToList();
 
             return result;
         }
@@ -55,13 +60,19 @@ namespace Vokabular.MainService.Core.Managers
             }
 
             var client = m_communicationProvider.GetAuthRoleApiClient();
-
+            var defaultUnregisteredRole = m_defaultUserProvider.GetDefaultUnregisteredRole();
             var permissions = client.HttpClient.GetItemAsync<AuthRoleContract>(roleId).GetAwaiter().GetResult().Permissions;
             var permissionsId = permissions.Select(x => x.Id).ToList();
             foreach (var permissionToAdd in specialPermissionsIds)
             {
                 if (!permissionsId.Contains(permissionToAdd))
                 {
+                    var permission = client.HttpClient.GetItemAsync<AuthPermissionContract>(permissionToAdd).GetAwaiter().GetResult();
+                    if (defaultUnregisteredRole.Id == roleId && !permission.Name.Contains(VokabularPermissionNames.AutoImport) &&
+                        !permission.Name.Contains(VokabularPermissionNames.CardFile))
+                    {
+                        throw new ArgumentException($"Special permissions cannot be added to the default role {defaultUnregisteredRole.Name}.");
+                    }
                     permissionsId.Add(permissionToAdd);
                 }
             }
@@ -115,7 +126,8 @@ namespace Vokabular.MainService.Core.Managers
 
             var client = m_communicationProvider.GetAuthRoleApiClient();
 
-            var result = client.HttpClient.GetListAsync<AuthPermissionContract>(startValue, countValue, filterByName).GetAwaiter().GetResult();
+            var result = client.HttpClient.GetListAsync<AuthPermissionContract>(startValue, countValue, filterByName).GetAwaiter()
+                .GetResult();
             var permissionContracts = Mapper.Map<List<PermissionContract>>(result.Items);
 
             return new PagedResultList<PermissionContract>
