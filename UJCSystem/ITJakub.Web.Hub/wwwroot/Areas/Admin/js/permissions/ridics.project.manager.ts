@@ -111,7 +111,7 @@ class ProjectManager {
 
             const addProjectPermissionModal = $("#addProjectPermissionToRoleDialog");
             const roleError = $("#addProjectToRoleError");
-
+            
             $("#addPermissionButton").on("click", (event) => {
                 event.preventDefault();
                 const role = $(".project-row.active");
@@ -121,27 +121,33 @@ class ProjectManager {
 
             addProjectPermissionModal.on("hidden.bs.modal", () => {
                 roleError.empty();
+                this.currentRoleSelectedItem = null;
+                addProjectPermissionModal.find("#roleSearchInput").val("");
+                addProjectPermissionModal.find("#selectedRole").text(localization.translate("RoleIsNotSelected", "PermissionJs").value);
             });
 
             addProjectPermissionToRoleBtn.on("click", () => {
                 roleError.empty();
-
                 const projectId = $(".project-row.active").data("project-id");
-                let roleId: number;
-                if (typeof this.currentRoleSelectedItem == "undefined")
-                    roleId = $("#selectedRole").data("role-id");
-                else {
-                    roleId = this.currentRoleSelectedItem.id;
-                }
-
-                this.client.addProjectToRole(projectId, roleId).done(() => {
-                    this.roleList.reloadPage();
-                    $("#addProjectPermissionToRoleDialog").modal("hide");
-                }).fail((error) => {
+     
+                if (typeof this.currentRoleSelectedItem == "undefined" || this.currentRoleSelectedItem == null) {
                     const errorAlert = new AlertComponentBuilder(AlertType.Error)
-                        .addContent(this.errorHandler.getErrorMessage(error, localization.translate("AddProjectToRoleError", "PermissionJs").value));
+                        .addContent(localization.translate("RoleIsNotSelected", "PermissionJs").value);
                     roleError.empty().append(errorAlert.buildElement());
-                });
+                    return;
+                }
+                else {
+                    const roleId = this.currentRoleSelectedItem.id;
+                    this.client.addProjectToRole(projectId, roleId).done(() => {
+                        this.roleList.reloadPage();
+                        addProjectPermissionModal.modal("hide");
+                    }).fail((error) => {
+                        const errorAlert = new AlertComponentBuilder(AlertType.Error)
+                            .addContent(this.errorHandler.getErrorMessage(error,
+                                localization.translate("AddProjectToRoleError", "PermissionJs").value));
+                        roleError.empty().append(errorAlert.buildElement());
+                    });
+                }
             });
         }
     }

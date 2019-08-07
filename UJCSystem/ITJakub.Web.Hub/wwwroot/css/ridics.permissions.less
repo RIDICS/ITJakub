@@ -193,16 +193,21 @@
     .content {
         .item-details {
             margin-top: 1em;
-        }
 
-        .top-separation-line {
-            margin-top: 0.3em;
-            border-top: 1px solid @separation-line-color;
-            padding-top: 0.3em;
-        }
+            .detail-item {
+                padding-left: 5px;
+            }
 
-        #selectedUser {
-            font-weight: bold;
+            .top-separation-line {
+                margin-top: 0.3em;
+                border-top: 1px solid @separation-line-color;
+                padding-top: 0.3em;
+            }
+
+            #selectedUser,
+            #selectedRole {
+                font-weight: bold;
+            }
         }
     }
 }
