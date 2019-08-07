@@ -66,7 +66,6 @@ namespace ITJakub.Web.Hub.Middleware
             {
                 context.Request.QueryString = originalQueryString;
                 context.Request.Path = originalPath;
-                context.Response.StatusCode = statusCode;
                 context.Features.Set<IStatusCodeReExecuteFeature>(null);
             }
         }
