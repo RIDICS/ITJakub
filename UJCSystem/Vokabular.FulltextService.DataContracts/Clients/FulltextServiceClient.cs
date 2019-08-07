@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
 using Vokabular.FulltextService.DataContracts.Contracts;
@@ -14,33 +13,27 @@ using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.FulltextService.DataContracts.Clients
 {
-    public class FulltextServiceClient : FullRestClientBase
+    public class FulltextServiceClient
     {
-        private static readonly ILogger Logger = ApplicationLogging.CreateLogger<FulltextServiceClient>();
+        private static readonly ILogger m_logger = ApplicationLogging.CreateLogger<FulltextServiceClient>();
+        private readonly FulltextServiceRestClient m_client;
 
-        public FulltextServiceClient(Uri baseAddress) : base(baseAddress)
+        public FulltextServiceClient(FulltextServiceRestClient client)
         {
-        }
-
-        protected override void FillRequestMessage(HttpRequestMessage requestMessage)
-        {
-        }
-
-        protected override void ProcessResponse(HttpResponseMessage response)
-        {
+            m_client = client;
         }
 
         public TextResourceContract GetTextResource(string resourceId, TextFormatEnumContract formatValue)
         {
             try
             {
-                var textResource = Get<TextResourceContract>($"text/{resourceId}?formatValue={formatValue}");
+                var textResource = m_client.Get<TextResourceContract>($"text/{resourceId}?formatValue={formatValue}");
                 return textResource;
             }
             catch (HttpRequestException e)
             {
-                if (Logger.IsErrorEnabled())
-                    Logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
 
                 throw;
             }
@@ -53,13 +46,13 @@ namespace Vokabular.FulltextService.DataContracts.Clients
 
             try
             {
-                var result = Post<ResultContract>("text", textResource);
+                var result = m_client.Post<ResultContract>("text", textResource);
                 return result.Id;
             }
             catch (HttpRequestException e)
             {
-                if (Logger.IsErrorEnabled())
-                    Logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
 
                 throw;
             }
@@ -69,12 +62,12 @@ namespace Vokabular.FulltextService.DataContracts.Clients
         {
             try
             {
-                var result = Post<ResultContract>("snapshot", snapshotResource);
+                m_client.Post<ResultContract>("snapshot", snapshotResource);
             }
             catch (HttpRequestException e)
             {
-                if (Logger.IsErrorEnabled())
-                    Logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
 
                 throw;
             }
@@ -84,13 +77,13 @@ namespace Vokabular.FulltextService.DataContracts.Clients
         {
             try
             {
-                var result = Post<FulltextSearchResultContract>("snapshot/search", searchRequestContract);
+                var result = m_client.Post<FulltextSearchResultContract>("snapshot/search", searchRequestContract);
                 return result;
             }
             catch (HttpRequestException e)
             {
-                if (Logger.IsErrorEnabled())
-                    Logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
 
                 throw;
             }
@@ -101,13 +94,13 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             var searchRequest = new SearchRequestContractBase {ConditionConjunction = searchCriterias};
             try
             {
-                var result = Post<FulltextSearchResultContract>("snapshot/search-count", searchRequest);
+                var result = m_client.Post<FulltextSearchResultContract>("snapshot/search-count", searchRequest);
                 return result;
             }
             catch (HttpRequestException e)
             {
-                if (Logger.IsErrorEnabled())
-                    Logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
 
                 throw;
             }
@@ -117,13 +110,13 @@ namespace Vokabular.FulltextService.DataContracts.Clients
         {
             try
             {
-                var result = Post<PageSearchResultContract>($"text/snapshot/{snapshotId}/search", new SearchRequestContractBase{ConditionConjunction = searchCriterias});
+                var result = m_client.Post<PageSearchResultContract>($"text/snapshot/{snapshotId}/search", new SearchRequestContractBase{ConditionConjunction = searchCriterias});
                 return result;
             }
             catch (HttpRequestException e)
             {
-                if (Logger.IsErrorEnabled())
-                    Logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
 
                 throw;
             }
@@ -133,13 +126,13 @@ namespace Vokabular.FulltextService.DataContracts.Clients
         {
             try
             {
-                var result = Post<long>($"text/snapshot/{snapshotId}/search-count", new SearchRequestContractBase { ConditionConjunction = searchCriterias });
+                var result = m_client.Post<long>($"text/snapshot/{snapshotId}/search-count", new SearchRequestContractBase { ConditionConjunction = searchCriterias });
                 return result;
             }
             catch (HttpRequestException e)
             {
-                if (Logger.IsErrorEnabled())
-                    Logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
 
                 throw;
             }
@@ -149,13 +142,13 @@ namespace Vokabular.FulltextService.DataContracts.Clients
         {
             try
             {
-                var result = Post<TextResourceContract>($"text/{resourceId}/search?formatValue={format}", searchRequest);
+                var result = m_client.Post<TextResourceContract>($"text/{resourceId}/search?formatValue={format}", searchRequest);
                 return result;
             }
             catch (HttpRequestException e)
             {
-                if (Logger.IsErrorEnabled())
-                    Logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
 
                 throw;
             }
@@ -166,13 +159,13 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             var searchRequest = new SearchRequestContractBase { ConditionConjunction = searchCriterias };
             try
             {
-                var result = Post<long>("corpus/search-count", searchRequest);
+                var result = m_client.Post<long>("corpus/search-count", searchRequest);
                 return result;
             }
             catch (HttpRequestException e)
             {
-                if (Logger.IsErrorEnabled())
-                    Logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
 
                 throw;
             }
@@ -183,13 +176,13 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             var searchRequest = new CorpusSearchRequestContract { Start = start, Count = count, ContextLength = contextLength, ConditionConjunction = searchCriterias };
             try
             {
-                var result = Post<List<CorpusSearchResultContract>>("corpus/search", searchRequest);
+                var result = m_client.Post<List<CorpusSearchResultContract>>("corpus/search", searchRequest);
                 return result;
             }
             catch (HttpRequestException e)
             {
-                if (Logger.IsErrorEnabled())
-                    Logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
 
                 throw;
             }
@@ -200,13 +193,13 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             var searchRequest = new CorpusSearchRequestContract { Start = start, Count = count, ConditionConjunction = searchCriterias, FetchNumberOfResults = fetchNumberOfResults, Sort = sort, SortDirection = sortDirection };
             try
             {
-                var result = Post<CorpusSearchSnapshotsResultContract>("bookpagedcorpus/search", searchRequest);
+                var result = m_client.Post<CorpusSearchSnapshotsResultContract>("bookpagedcorpus/search", searchRequest);
                 return result;
             }
             catch (HttpRequestException e)
             {
-                if (Logger.IsErrorEnabled())
-                    Logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
 
                 throw;
             }
@@ -217,13 +210,13 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             var searchRequest = new CorpusSearchRequestContract { Start = start, Count = count, ContextLength = contextLength, ConditionConjunction = searchCriterias };
             try
             {
-                var result = Post<List<CorpusSearchResultContract>>($"bookpagedcorpus/snapshot/{snapshotId}/search", searchRequest);
+                var result = m_client.Post<List<CorpusSearchResultContract>>($"bookpagedcorpus/snapshot/{snapshotId}/search", searchRequest);
                 return result;
             }
             catch (HttpRequestException e)
             {
-                if (Logger.IsErrorEnabled())
-                    Logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
 
                 throw;
             }
@@ -234,13 +227,13 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             var searchRequest = new SearchRequestContractBase { ConditionConjunction = searchCriterias };
             try
             {
-                var result = Post<long>("bookpagedcorpus/search-count", searchRequest);
+                var result = m_client.Post<long>("bookpagedcorpus/search-count", searchRequest);
                 return result;
             }
             catch (HttpRequestException e)
             {
-                if (Logger.IsErrorEnabled())
-                    Logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
 
                 throw;
             }
@@ -259,13 +252,13 @@ namespace Vokabular.FulltextService.DataContracts.Clients
 
             try
             {
-                var result = Post<HitsWithPageContextResultContract>($"text/snapshot/{snapshotId}/search-context", searchRequest);
+                var result = m_client.Post<HitsWithPageContextResultContract>($"text/snapshot/{snapshotId}/search-context", searchRequest);
                 return result;
             }
             catch (HttpRequestException e)
             {
-                if (Logger.IsErrorEnabled())
-                    Logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
 
                 throw;
             }

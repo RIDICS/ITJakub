@@ -1,13 +1,17 @@
-﻿using System;
-using System.Configuration;
-using ITJakub.SearchService.DataContracts;
+﻿using ITJakub.SearchService.DataContracts;
 using Vokabular.FulltextService.DataContracts.Clients;
 
 namespace ITJakub.FileProcessing.Core.Communication
 {
     public class FileProcessingCommunicationProvider
     {
-        private const string FulltextServiceEndpointName = "FulltextServiceEndpoint";
+        private readonly FulltextServiceClient m_fulltextServiceClient;
+
+        public FileProcessingCommunicationProvider(FulltextServiceClient fulltextServiceClient)
+        {
+            m_fulltextServiceClient = fulltextServiceClient;
+        }
+
 
         public SearchServiceClient GetSearchServiceClient()
         {
@@ -16,9 +20,7 @@ namespace ITJakub.FileProcessing.Core.Communication
 
         public FulltextServiceClient GetFulltextServiceClient()
         {
-            var url = ConfigurationManager.AppSettings[FulltextServiceEndpointName] ?? throw new ArgumentException("Fulltext service endpoint URL not found");
-            var uri = new Uri(url);
-            return new FulltextServiceClient(uri);
+            return m_fulltextServiceClient;
         }
     }
 }

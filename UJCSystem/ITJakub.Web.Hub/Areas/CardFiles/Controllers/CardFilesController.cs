@@ -24,7 +24,8 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
         private readonly StaticTextManager m_staticTextManager;
         private readonly FeedbacksManager m_feedbacksManager;
 
-        public CardFilesController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager, CommunicationProvider communicationProvider) : base(communicationProvider)
+        public CardFilesController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager,
+            CommunicationProvider communicationProvider) : base(communicationProvider)
         {
             m_staticTextManager = staticTextManager;
             m_feedbacksManager = feedbacksManager;
@@ -34,7 +35,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 
         private FeedbackFormIdentification GetFeedbackFormIdentification()
         {
-            return new FeedbackFormIdentification { Area = "CardFiles", Controller = "CardFiles" };
+            return new FeedbackFormIdentification {Area = "CardFiles", Controller = "CardFiles"};
         }
 
         public ActionResult Index()
@@ -61,25 +62,25 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
         {
             term = term == null ? string.Empty : term.ToLower();
 
-            using (var client = GetRestClient())
+            var client = GetCardFileClient();
+            var cardFiles = client.GetCardFiles();
+            var result = new List<SearchResultContract>();
+            foreach (var cardFile in cardFiles)
             {
-                var cardFiles = client.GetCardFiles();
-                var result = new List<SearchResultContract>();
-                foreach (var cardFile in cardFiles)
+                if (cardFile.Name.ToLower().Contains(term) || cardFile.Description.ToLower().Contains(term) ||
+                    string.IsNullOrWhiteSpace(term))
                 {
-                    if (cardFile.Name.ToLower().Contains(term) || cardFile.Description.ToLower().Contains(term) || string.IsNullOrWhiteSpace(term))
+                    result.Add(new SearchResultContract
                     {
-                        result.Add(new SearchResultContract
-                        {
-                            Title = cardFile.Name,
-                            BookXmlId = cardFile.Id,
-                            SubTitle = cardFile.Description,
-                            BookType = AreaBookType
-                        });
-                    }
+                        Title = cardFile.Name,
+                        BookXmlId = cardFile.Id,
+                        SubTitle = cardFile.Description,
+                        BookType = AreaBookType
+                    });
                 }
-                return Json(new {books = result}, GetJsonSerializerSettingsForBiblModule());
             }
+
+            return Json(new {books = result}, GetJsonSerializerSettingsForBiblModule());
         }
 
         public ActionResult Information()
@@ -90,7 +91,8 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 
         public ActionResult Feedback()
         {
-            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, IsUserLoggedIn(), "home", User);
+            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback,
+                IsUserLoggedIn(), "home", User);
             return View(viewModel);
         }
 
@@ -111,47 +113,37 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 
         public ActionResult CardFiles()
         {
-            using (var client = GetRestClient())
-            {
-                var cardFiles = client.GetCardFiles();
-                return Json(new {cardFiles}, GetJsonSerializerSettingsForBiblModule());
-            }
+            var client = GetCardFileClient();
+            var cardFiles = client.GetCardFiles();
+            return Json(new {cardFiles}, GetJsonSerializerSettingsForBiblModule());
         }
 
         public ActionResult Buckets(string cardFileId, string headword)
         {
-            using (var client = GetRestClient())
-            {
-                var buckets = client.GetBuckets(cardFileId, headword);
-                return Json(new {buckets}, GetJsonSerializerSettingsForBiblModule());
-            }
+            var client = GetCardFileClient();
+            var buckets = client.GetBuckets(cardFileId, headword);
+            return Json(new {buckets}, GetJsonSerializerSettingsForBiblModule());
         }
 
         public ActionResult Cards(string cardFileId, string bucketId)
         {
-            using (var client = GetRestClient())
-            {
-                var cards = client.GetCards(cardFileId, bucketId);
-                return Json(new {cards}, GetJsonSerializerSettingsForBiblModule());
-            }
+            var client = GetCardFileClient();
+            var cards = client.GetCards(cardFileId, bucketId);
+            return Json(new {cards}, GetJsonSerializerSettingsForBiblModule());
         }
 
         public ActionResult CardsShort(string cardFileId, string bucketId)
         {
-            using (var client = GetRestClient())
-            {
-                var cards = client.GetCardsShort(cardFileId, bucketId);
-                return Json(new {cards}, GetJsonSerializerSettingsForBiblModule());
-            }
+            var client = GetCardFileClient();
+            var cards = client.GetCardsShort(cardFileId, bucketId);
+            return Json(new {cards}, GetJsonSerializerSettingsForBiblModule());
         }
 
         public ActionResult Card(string cardFileId, string bucketId, string cardId)
         {
-            using (var client = GetRestClient())
-            {
-                var card = client.GetCard(cardFileId, bucketId, cardId);
-                return Json(new {card}, GetJsonSerializerSettingsForBiblModule());
-            }
+            var client = GetCardFileClient();
+            var card = client.GetCard(cardFileId, bucketId, cardId);
+            return Json(new {card}, GetJsonSerializerSettingsForBiblModule());
         }
 
         public ActionResult Image(string cardFileId, string bucketId, string cardId, string imageId, string imageSize)
@@ -163,11 +155,10 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
             {
                 return StatusCode((int) HttpStatusCode.BadRequest); // invalid image size
             }
-            using (var client = GetRestClient())
-            {
-                var imageData = client.GetCardImage(cardFileId, bucketId, cardId, imageId, imageSizeEnum);
-                return File(imageData.Stream, imageData.MimeType, imageData.FileName, imageData.FileSize);
-            }
+
+            var client = GetCardFileClient();
+            var imageData = client.GetCardImage(cardFileId, bucketId, cardId, imageId, imageSizeEnum);
+            return File(imageData.Stream, imageData.MimeType, imageData.FileName, imageData.FileSize);
         }
     }
 }

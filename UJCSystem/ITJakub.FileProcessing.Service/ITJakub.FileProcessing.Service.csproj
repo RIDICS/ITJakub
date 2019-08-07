@@ -266,6 +266,10 @@
       <Project>{105904c3-ab87-4bdd-ada3-c16ca61d7147}</Project>
       <Name>Vokabular.Log4Net</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vokabular.RestClient\Vokabular.RestClient.csproj">
+      <Project>{2e80933f-418a-4181-aad3-84d4059fbbea}</Project>
+      <Name>Vokabular.RestClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vokabular.Shared.DataEntities\Vokabular.Shared.DataEntities.csproj">
       <Project>{1d302489-8778-4dec-9bcf-ee35f90af87b}</Project>
       <Name>Vokabular.Shared.DataEntities</Name>
