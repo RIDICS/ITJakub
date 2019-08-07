@@ -40,6 +40,9 @@
     "RepositoryImport": "Import repozitářů",
     "MyProjects": "Moje díla",
     "CodeLists": "Číselníky",
+    "SearchCombined": "Vyhledávání kombinované",
+    "SearchSingleLazyload": "Vyhledávání podle díla na jedné stránce",
+    "SearchSinglePaged": "Vyhledávání podle díla strankované",
 
     "FooterText": "VOKABULÁŘ WEBOVÝ byl spuštěn před {0}",
     "UjcLong": "Ústav pro jazyk český",
