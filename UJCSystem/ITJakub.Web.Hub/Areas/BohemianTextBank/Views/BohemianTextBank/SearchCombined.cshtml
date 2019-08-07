@@ -1,5 +1,5 @@
-﻿@using Scalesoft.Localization.AspNetCore.Service
-@inject LocalizationService Localization
+﻿@using Scalesoft.Localization.AspNetCore
+@inject ILocalizationService Localization
 
 @section styles{
     <link asp-append-version="true" href="~/Areas/BohemianTextBank/css/itjakub.bohemiantextbank.css" rel="stylesheet" />
@@ -19,136 +19,138 @@
 
 @await Html.PartialAsync("_BibliographySearch")
 
-    <div class="search-result-section container-fluid" id="corpus-search-div">
-        <div class="row corpus-result-and-settings-row no-gutters">
-            <div class="corpus-search-result-controls-container col-md-2 col-md-push-10 col-sm-push-9 col-sm-3 col-xs-12">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="corpus-search-settings-label">@Localization.Translate("ViewOptions", "BohemianTextBank")</div>
-                    </div>
+<div class="search-result-section container-fluid" id="corpus-search-div">
+    <div class="row corpus-result-and-settings-row no-gutters">
+        <div class="corpus-search-result-controls-container col-md-2 col-md-push-10 col-sm-push-9 col-sm-3 col-xs-12">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="corpus-search-settings-label">@Localization.Translate("ViewOptions", "BohemianTextBank")</div>
                 </div>
-                <div class="corpus-search-result-view-properties-advanced">
-                    <div class="corpus-search-setting-div-context">
-                        <label for="contextPositionsSelect">@Localization.Translate("PositionsInContext", "BohemianTextBank"):</label>
-                        <input id="contextPositionsSelect" type="number">
-                        <div class="context-size-warning"></div>
-                    </div>
-                    <div class="number-of-results-per-viewing-page">
-                        <label for="number-of-results-per-viewing-page">@Localization.Translate("NumberOfResultsOnPage", "BohemianTextBank")</label>
-                        <input id="number-of-results-per-viewing-page" type="number">
-                        <div class="number-of-positions-size-warning"></div>
-                    </div>
-                    <div class="search-settings-changed-refresh text-center">
-                        <button class="btn btn-default results-refresh-button"><i class="fa fa-refresh"></i></button>
-                    </div>
+            </div>
+            <div class="corpus-search-result-view-properties-advanced">
+                <div class="corpus-search-setting-div-context">
+                    <label for="contextPositionsSelect">@Localization.Translate("PositionsInContext", "BohemianTextBank"):</label>
+                    <input id="contextPositionsSelect" type="number">
+                    <div class="context-size-warning"></div>
                 </div>
-                <div class="corpus-search-settings-checkboxes">
-                    <div class="checkbox" style="display: none;">
-                        <label><input id="wordCheckbox" type="checkbox" value="">@Localization.Translate("Word", "BohemianTextBank")</label>
-                    </div>
-                    <div class="checkbox">
-                        <label><input id="commentCheckbox" type="checkbox" value="">@Localization.Translate("Comment", "BohemianTextBank")</label>
-                    </div>
-                    @*<div class="checkbox">TODO backend implementation required
+                <div class="number-of-results-per-viewing-page">
+                    <label for="number-of-results-per-viewing-page">@Localization.Translate("NumberOfResultsOnPage", "BohemianTextBank")</label>
+                    <input id="number-of-results-per-viewing-page" type="number">
+                    <div class="number-of-positions-size-warning"></div>
+                </div>
+                <div class="search-settings-changed-refresh text-center">
+                    <button class="btn btn-default results-refresh-button"><i class="fa fa-refresh"></i></button>
+                </div>
+            </div>
+            <div class="corpus-search-settings-checkboxes">
+                <div class="checkbox" style="display: none;">
+                    <label><input id="wordCheckbox" type="checkbox" value="">@Localization.Translate("Word", "BohemianTextBank")</label>
+                </div>
+                <div class="checkbox">
+                    <label><input id="commentCheckbox" type="checkbox" value="">@Localization.Translate("Comment", "BohemianTextBank")</label>
+                </div>
+                @*<div class="checkbox">TODO backend implementation required
                         <label><input id="languageCheckbox" type="checkbox" value="">@Localization.Translate("Language", "BohemianTextBank")</label>
                     </div>
                     <div class="checkbox">
                         <label><input id="structureCheckbox" type="checkbox" value="">@Localization.Translate("TextStructure", "BohemianTextBank")</label>
                     </div>*@
-                    <div class="checkbox">
-                        <label><input id="paragraphCheckbox" type="checkbox" value="">@Localization.Translate("Paragraph", "BohemianTextBank")</label>
-                    </div>
-                </div>
-                <div class="corpus-search-setting-div-results-count">
-                    <div>@Localization.Translate("NumberOfProjects", "BohemianTextBank"):</div>
-                    <div id="totalCompositionsCountDiv"></div>
-                    <div class="total-results-count" style="display: none">
-                        <div>@Localization.Translate("NumberOfResults", "BohemianTextBank"):</div>
-                        <div id="totalResultCountDiv"></div>
-                    </div>
-                </div>
-                <div class="corpus-search-setting-div-pagination pagination-extra-small" id="paginationContainer">
+                <div class="checkbox">
+                    <label><input id="paragraphCheckbox" type="checkbox" value="">@Localization.Translate("Paragraph", "BohemianTextBank")</label>
                 </div>
             </div>
-            <div class="corpus-search-results-div col-md-10 col-md-pull-2 col-sm-pull-3 col-sm-9 col-xs-12">
-                <div class="row search-results-row no-gutters">
-                    <div class="col-xs-12 result-text-col text-center">
-                        <div class="alert alert-info corpus-search-results-table-div-loader">
-                            @Localization.Translate("UseSearchForResults", "BohemianTextBank")
-                        </div><table class="text-results-table"><tbody class="text-results-table-body"></tbody></table>
-                    </div>
+            <div class="corpus-search-setting-div-results-count">
+                <div>@Localization.Translate("NumberOfProjects", "BohemianTextBank"):</div>
+                <div id="totalCompositionsCountDiv"></div>
+                <div class="total-results-count" style="display: none">
+                    <div>@Localization.Translate("NumberOfResults", "BohemianTextBank"):</div>
+                    <div id="totalResultCountDiv"></div>
                 </div>
             </div>
-            </div>
-        <div class="row corpus-search-result-detail-row">
-            <div class="corpus-search-result-detail-container col-xs-12">
-                <div class="corpus-search-detail">
-                    <div class="row result-info-section">
-                        <div class="col-sm-2 col-xs-12 label">@Localization.Translate("Doc", "BohemianTextBank")</div>
-                        <div class="col-sm-10 col-xs-12">
-                            <div class="corpus-search-detail">
-                                <div class="table-row row">
-                                    <div class="col-sm-2 col-xs-12 label">@Localization.Translate("Author", "BohemianTextBank")</div>
-                                    <div class="detail-author col-sm-10 col-xs-12 break-word">&lt;@Localization.Translate("NotFilled", "BohemianTextBank")&gt;</div>
-                                </div>
-                                <div class="table-row row">
-                                    <div class="col-sm-2 col-xs-12 label">@Localization.Translate("Title", "BohemianTextBank")</div>
-                                    <div class="detail-title col-sm-10 col-xs-12 break-word">&lt;@Localization.Translate("NotFilled", "BohemianTextBank")&gt;</div>
-                                </div>
-                                <div class="table-row row">
-                                    <div class="col-sm-2 col-xs-12 label">@Localization.Translate("DatingDetail", "BohemianTextBank")</div>
-                                    <div class="detail-dating col-sm-10 col-xs-12 break-word">&lt;@Localization.Translate("NotFilled", "BohemianTextBank")&gt;</div>
-                                </div>
-                                <div class="table-row row">
-                                    <div class="col-sm-2 col-xs-12 label">@Localization.Translate("DatingCentury", "BohemianTextBank")</div>
-                                    <div class="detail-dating-century col-sm-10 col-xs-12 break-word">&lt;@Localization.Translate("NotFilled", "BohemianTextBank")&gt;</div>
-                                </div>
-                                <div class="table-row row">
-                                    <div class="col-sm-2 col-xs-12 label">@Localization.Translate("DetailAbbr", "BohemianTextBank")</div>
-                                    <div class="detail-abbrev col-sm-10 col-xs-12 break-word">&lt;@Localization.Translate("NotFilled", "BohemianTextBank")&gt;</div>
-                                </div>
-                                <div class="table-row row">
-                                    <div class="col-xs-12 col-no-padding">
-                                        <a class="detail-edition-note-href" href="#">@Localization.Translate("EditionNote", "BohemianTextBank")</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div></div>
-                    <div class="row result-info-section">
-                        <div class="col-sm-2 col-xs-12 label">@Localization.Translate("Folio", "BohemianTextBank")</div>
-                        <div class="col-sm-10 col-xs-12 col-no-padding">
-                            <div class="detail-folio">&lt;@Localization.Translate("NotFilled", "BohemianTextBank")&gt;</div>
-                            </div>
-                        </div>
-                    <div class="row result-info-section">
-                        <div class="col-sm-2 col-xs-12 label">@Localization.Translate("Verse", "BohemianTextBank")</div>
-                        <div class="col-sm-10 col-xs-12 col-no-padding">
-                            <div class="detail-vers">&lt;@Localization.Translate("NotFilled", "BohemianTextBank")&gt;</div>
-                            </div>
-                        </div>
-                    <div class="row result-info-section">
-                        <div class="col-sm-2 col-xs-12 label">@Localization.Translate("BibleVerse", "BohemianTextBank")</div>
-                        <div class="col-sm-10 col-xs-12">
-                                <div class="corpus-search-detail">
-                                    <div class="table-row row">
-                                        <div class="col-sm-2 col-xs-12 label">@Localization.Translate("Book", "BohemianTextBank")</div>
-                                        <div class="detail-bible-vers-book col-sm-10 col-xs-12 break-word">&lt;@Localization.Translate("NotFilled", "BohemianTextBank")&gt;</div>
-                                    </div>
-                                    <div class="table-row row">
-                                        <div class="col-sm-2 col-xs-12 label">@Localization.Translate("Chapter", "BohemianTextBank")</div>
-                                        <div class="detail-bible-vers-chapter col-sm-10 col-xs-12 break-word">&lt;@Localization.Translate("NotFilled", "BohemianTextBank")&gt;</div>
-                                    </div>
-                                    <div class="table-row row">
-                                        <div class="col-sm-2 col-xs-12 label">@Localization.Translate("Verse", "BohemianTextBank")</div>
-                                        <div class="detail-bible-vers-vers col-sm-10 col-xs-12 break-word">&lt;@Localization.Translate("NotFilled", "BohemianTextBank")&gt;</div>
-                                    </div>
-                                </div>
-                        </div>
-                    </div></div>
+            <div class="corpus-search-setting-div-pagination pagination-extra-small" id="paginationContainer">
             </div>
         </div>
-        <ul class="page-history-constainer hidden"></ul>
+        <div class="corpus-search-results-div col-md-10 col-md-pull-2 col-sm-pull-3 col-sm-9 col-xs-12">
+            <div class="row search-results-row no-gutters">
+                <div class="col-xs-12 result-text-col text-center">
+                    <div class="alert alert-info corpus-search-results-table-div-loader">
+                        @Localization.Translate("UseSearchForResults", "BohemianTextBank")
+                    </div><table class="text-results-table"><tbody class="text-results-table-body"></tbody></table>
+                </div>
+            </div>
+        </div>
     </div>
+    <div class="row corpus-search-result-detail-row">
+        <div class="corpus-search-result-detail-container col-xs-12">
+            <div class="corpus-search-detail">
+                <div class="row result-info-section">
+                    <div class="col-sm-2 col-xs-12 label">@Localization.Translate("Doc", "BohemianTextBank")</div>
+                    <div class="col-sm-10 col-xs-12">
+                        <div class="corpus-search-detail">
+                            <div class="table-row row">
+                                <div class="col-sm-2 col-xs-12 label">@Localization.Translate("Author", "BohemianTextBank")</div>
+                                <div class="detail-author col-sm-10 col-xs-12 break-word">&lt;@Localization.Translate("NotFilled", "BohemianTextBank")&gt;</div>
+                            </div>
+                            <div class="table-row row">
+                                <div class="col-sm-2 col-xs-12 label">@Localization.Translate("Title", "BohemianTextBank")</div>
+                                <div class="detail-title col-sm-10 col-xs-12 break-word">&lt;@Localization.Translate("NotFilled", "BohemianTextBank")&gt;</div>
+                            </div>
+                            <div class="table-row row">
+                                <div class="col-sm-2 col-xs-12 label">@Localization.Translate("DatingDetail", "BohemianTextBank")</div>
+                                <div class="detail-dating col-sm-10 col-xs-12 break-word">&lt;@Localization.Translate("NotFilled", "BohemianTextBank")&gt;</div>
+                            </div>
+                            <div class="table-row row">
+                                <div class="col-sm-2 col-xs-12 label">@Localization.Translate("DatingCentury", "BohemianTextBank")</div>
+                                <div class="detail-dating-century col-sm-10 col-xs-12 break-word">&lt;@Localization.Translate("NotFilled", "BohemianTextBank")&gt;</div>
+                            </div>
+                            <div class="table-row row">
+                                <div class="col-sm-2 col-xs-12 label">@Localization.Translate("DetailAbbr", "BohemianTextBank")</div>
+                                <div class="detail-abbrev col-sm-10 col-xs-12 break-word">&lt;@Localization.Translate("NotFilled", "BohemianTextBank")&gt;</div>
+                            </div>
+                            <div class="table-row row">
+                                <div class="col-xs-12 col-no-padding">
+                                    <a class="detail-edition-note-href" href="#">@Localization.Translate("EditionNote", "BohemianTextBank")</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row result-info-section">
+                    <div class="col-sm-2 col-xs-12 label">@Localization.Translate("Folio", "BohemianTextBank")</div>
+                    <div class="col-sm-10 col-xs-12 col-no-padding">
+                        <div class="detail-folio">&lt;@Localization.Translate("NotFilled", "BohemianTextBank")&gt;</div>
+                    </div>
+                </div>
+                <div class="row result-info-section">
+                    <div class="col-sm-2 col-xs-12 label">@Localization.Translate("Verse", "BohemianTextBank")</div>
+                    <div class="col-sm-10 col-xs-12 col-no-padding">
+                        <div class="detail-vers">&lt;@Localization.Translate("NotFilled", "BohemianTextBank")&gt;</div>
+                    </div>
+                </div>
+                <div class="row result-info-section">
+                    <div class="col-sm-2 col-xs-12 label">@Localization.Translate("BibleVerse", "BohemianTextBank")</div>
+                    <div class="col-sm-10 col-xs-12">
+                        <div class="corpus-search-detail">
+                            <div class="table-row row">
+                                <div class="col-sm-2 col-xs-12 label">@Localization.Translate("Book", "BohemianTextBank")</div>
+                                <div class="detail-bible-vers-book col-sm-10 col-xs-12 break-word">&lt;@Localization.Translate("NotFilled", "BohemianTextBank")&gt;</div>
+                            </div>
+                            <div class="table-row row">
+                                <div class="col-sm-2 col-xs-12 label">@Localization.Translate("Chapter", "BohemianTextBank")</div>
+                                <div class="detail-bible-vers-chapter col-sm-10 col-xs-12 break-word">&lt;@Localization.Translate("NotFilled", "BohemianTextBank")&gt;</div>
+                            </div>
+                            <div class="table-row row">
+                                <div class="col-sm-2 col-xs-12 label">@Localization.Translate("Verse", "BohemianTextBank")</div>
+                                <div class="detail-bible-vers-vers col-sm-10 col-xs-12 break-word">&lt;@Localization.Translate("NotFilled", "BohemianTextBank")&gt;</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ul class="page-history-constainer hidden"></ul>
+</div>
 
 <script>
     $(document).ready(function () {

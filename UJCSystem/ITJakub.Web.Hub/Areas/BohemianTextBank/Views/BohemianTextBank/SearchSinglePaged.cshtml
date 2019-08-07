@@ -1,5 +1,5 @@
-﻿@using Scalesoft.Localization.AspNetCore.Service
-@inject LocalizationService Localization
+﻿@using Scalesoft.Localization.AspNetCore
+@inject ILocalizationService Localization
 
 @section styles{
     <link asp-append-version="true" href="~/Areas/BohemianTextBank/css/itjakub.bohemiantextbank.css" rel="stylesheet" />
@@ -47,7 +47,7 @@
             <label><input id="wordCheckbox" type="checkbox" value=""> @Localization.Translate("Word", "BohemianTextBank")</label>
         </div>*@
                 <div class="checkbox">
-                    <label><input id="commentCheckbox" type="checkbox" value="">@Localization.Translate("Comment")</label>
+                    <label><input id="commentCheckbox" type="checkbox" value="">@Localization.Translate("Comment", "BohemianTextBank")</label>
                 </div>
                 @*<div class="checkbox">
             <label><input id="languageCheckbox" type="checkbox" value=""> @Localization.Translate("Language", "BohemianTextBank")</label>
