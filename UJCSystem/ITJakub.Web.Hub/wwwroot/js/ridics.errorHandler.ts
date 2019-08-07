@@ -9,10 +9,10 @@
             if (this.isErrorContract(parsedResponse)) {
                 return  parsedResponse.errorMessage;
             } else { // valid json, but unexpected object
-                return this.getErrorByCodeOrDefault(statusCode, defaultMessage);
+                return this.getDefaultOrErrorByCode(statusCode, defaultMessage);
             }
         } catch (e) { // response is not a valid json, show generic error
-            return this.getErrorByCodeOrDefault(statusCode, defaultMessage);
+            return this.getDefaultOrErrorByCode(statusCode, defaultMessage);
         }
     }
 
@@ -23,7 +23,7 @@
         return typeof (error as IErrorContract).errorMessage !== "undefined";
     }
 
-    private getErrorByCodeOrDefault(statusCode: number, defaultMessage?: string): string {
+    private getDefaultOrErrorByCode(statusCode: number, defaultMessage?: string): string {
         if (defaultMessage) {
             return defaultMessage;
         } else {

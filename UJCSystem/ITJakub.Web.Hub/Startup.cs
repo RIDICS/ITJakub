@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Helpers;
+using ITJakub.Web.Hub.Middleware;
 using ITJakub.Web.Hub.Options;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -226,6 +227,8 @@ namespace ITJakub.Web.Hub
             app.UseAuthentication();
 
             app.ConfigureAutoMapper();
+
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseStaticFiles();
 
