@@ -12,20 +12,20 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
     protected bootstrapXsScreenWidth = 768;
 
     //string for localisation
-    protected errorDisplayingResultsMessage = "Chyba při zobrazení výsledků";
-    protected noResultsMessage = "Žadné výsledky";
-    protected docString = "Doc";
-    protected authorString = "Autor";
-    protected titleString = "Titul";
-    protected sourceDateString = "Datace pramene";
-    protected sourceDateCenturyString = "Datace století";
-    protected sourceAbbreviationString = "Zkratka památky";
-    protected editionNoteString = "Ediční poznámka";
-    protected pholioString = "Folio";
-    protected verseString = "Verš";
-    protected bibleVerseString = "Bible verš";
-    protected bookString = "Book";
-    protected chapterString = "Kapitola";
+    protected errorDisplayingResultsMessage = localization.translate("ErrorDisplayingResults", "BohemianTextBank").value;
+    protected noResultsMessage = localization.translate("NoResults", "BohemianTextBank").value;
+    protected docString = localization.translate("Doc", "BohemianTextBank").value;
+    protected authorString = localization.translate("Author", "BohemianTextBank").value;
+    protected titleString = localization.translate("Title", "BohemianTextBank").value;
+    protected sourceDateString = localization.translate("DatingDetail", "BohemianTextBank").value;
+    protected sourceDateCenturyString = localization.translate("DatingDetail", "DatingCentury").value;
+    protected sourceAbbreviationString = localization.translate("DatingDetail", "DetailAbbr").value;
+    protected editionNoteString = localization.translate("DatingDetail", "EditionNote").value;
+    protected pholioString = localization.translate("Folio", "BohemianTextBank").value;
+    protected verseString = localization.translate("Verse", "BohemianTextBank").value;
+    protected bibleVerseString = localization.translate("BibleVerse", "BohemianTextBank").value;
+    protected bookString = localization.translate("Book", "BohemianTextBank").value;
+    protected chapterString = localization.translate("Chapter", "BohemianTextBank").value;
     /**
      * Initialises event listeners, sets initial parameters, creates gui elements
      */
