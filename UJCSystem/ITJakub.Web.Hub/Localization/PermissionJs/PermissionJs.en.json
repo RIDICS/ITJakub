@@ -28,6 +28,7 @@
     "AddUserToRoleError": "An unexpected error occurred when adding the user to the group.",
     "CreateRoleWithUserError": "An unexpected error occurred when creating the group with the user.",
     "RoleIsNotSelected": "The group is not selected.",
+    "UserIsNotSelected": "The user is not selected.",
     "ProjectIsNotSelected": "The project is not selected.",
     "RemoveProjectFromRoleError": "An unexpected error occurred when removing the project's permission from the group.",
     "AddProjectToRoleError": "An unexpected error occurred when adding the project's permission to the group.",

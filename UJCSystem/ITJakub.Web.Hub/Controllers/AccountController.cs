@@ -170,27 +170,20 @@ namespace ITJakub.Web.Hub.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateContact([FromBody] UpdateUserContactContract updateUserContactContract)
         {
-            try
+            if (string.IsNullOrEmpty(updateUserContactContract.NewContactValue))
             {
-                if (string.IsNullOrEmpty(updateUserContactContract.NewContactValue))
-                {
-                    return AjaxErrorResponse(m_localizationService.Translate("EmptyEmail", "Account"), HttpStatusCode.BadRequest);
-                }
-
-                if (updateUserContactContract.NewContactValue == updateUserContactContract.OldContactValue)
-                {
-                    return AjaxErrorResponse(m_localizationService.Translate("SameEmail", "Account"), HttpStatusCode.BadRequest);
-                }
-
-                using (var client = GetRestClient())
-                {
-                    client.UpdateCurrentUserContact(updateUserContactContract);
-                    await m_refreshUserManager.RefreshUserClaimsAsync(HttpContext);
-                }
+                return AjaxErrorResponse(m_localizationService.Translate("EmptyEmail", "Account"), HttpStatusCode.BadRequest);
             }
-            catch (HttpErrorCodeException e)
+
+            if (updateUserContactContract.NewContactValue == updateUserContactContract.OldContactValue)
             {
-                return AjaxErrorResponse(e.Message, e.StatusCode);
+                return AjaxErrorResponse(m_localizationService.Translate("SameEmail", "Account"), HttpStatusCode.BadRequest);
+            }
+
+            using (var client = GetRestClient())
+            {
+                client.UpdateCurrentUserContact(updateUserContactContract);
+                await m_refreshUserManager.RefreshUserClaimsAsync(HttpContext);
             }
 
             return AjaxOkResponse();
@@ -201,27 +194,20 @@ namespace ITJakub.Web.Hub.Controllers
         [HttpPost]
         public async Task<IActionResult> ConfirmUserContact([FromBody] ConfirmUserContactRequest confirmUserContactRequest)
         {
-            try
+            using (var client = GetRestClient())
             {
-                using (var client = GetRestClient())
+                var contract = new ConfirmUserContactContract
                 {
-                    var contract = new ConfirmUserContactContract
-                    {
-                        ConfirmCode = confirmUserContactRequest.ConfirmCode,
-                        ContactType = confirmUserContactRequest.ContactType
-                    };
-                    var result = client.ConfirmUserContact(contract);
-                    if (result)
-                    {
-                        await m_refreshUserManager.RefreshUserClaimsAsync(HttpContext);
-                    }
-
-                    return Json(result);
+                    ConfirmCode = confirmUserContactRequest.ConfirmCode,
+                    ContactType = confirmUserContactRequest.ContactType
+                };
+                var result = client.ConfirmUserContact(contract);
+                if (result)
+                {
+                    await m_refreshUserManager.RefreshUserClaimsAsync(HttpContext);
                 }
-            }
-            catch (HttpErrorCodeException e)
-            {
-                return AjaxErrorResponse(e.Message, e.StatusCode);
+
+                return Json(result);
             }
         }
 
@@ -239,14 +225,13 @@ namespace ITJakub.Web.Hub.Controllers
                         ContactType = resendConfirmCodeRequest.ContactType
                     };
                     client.ResendConfirmCode(contract);
+                    return AjaxOkResponse();
                 }
             }
             catch (HttpErrorCodeException e)
             {
                 return AjaxErrorResponse(m_localizationService.Translate("ResendCodeError", "Account"), e.StatusCode);
             }
-
-            return AjaxOkResponse();
         }
 
 
