@@ -20,16 +20,21 @@ namespace Vokabular.MainService.Core.Works.Permission
         {
             m_permissionRepository = permissionRepository;
             m_defaultUserProvider = defaultUserProvider;
-            m_data = data;
             m_communicationProvider = communicationProvider;
+            m_data = data;
         }
 
         protected override void ExecuteWorkImplementation()
         {
-            var role = m_defaultUserProvider.GetDefaultUnregisteredRole();
-            if (role.Id == m_data.Id && role.Name != m_data.Name)
+            var unregisteredRole = m_defaultUserProvider.GetDefaultUnregisteredRole();
+            var registeredRole = m_defaultUserProvider.GetDefaultRegisteredRole();
+            if (unregisteredRole.Id == m_data.Id && unregisteredRole.Name != m_data.Name)
             {
-                throw new ArgumentException($"The name of the default role {role.Name} cannot be changed.");
+                throw new ArgumentException($"The name of the default role {unregisteredRole.Name} cannot be changed.");
+            }
+            if (registeredRole.Id == m_data.Id && registeredRole.Name != m_data.Name)
+            {
+                throw new ArgumentException($"The name of the default role {registeredRole.Name} cannot be changed.");
             }
 
             var group = m_permissionRepository.FindGroupByExternalIdOrCreate(m_data.Id);

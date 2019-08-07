@@ -12,7 +12,9 @@ namespace Vokabular.MainService.Core.Managers.Authentication
 {
     public class DefaultUserProvider
     {
+        //TODO get from AuthService (RoleNames)
         private const string Unregistered = "Unregistered";
+        private const string RegisteredUser = "RegisteredUser";
 
         private readonly UserRepository m_userRepository;
         private readonly CommunicationProvider m_communicationProvider;
@@ -61,6 +63,14 @@ namespace Vokabular.MainService.Core.Managers.Authentication
             var client = m_communicationProvider.GetAuthRoleApiClient();
 
             return client.GetAllRolesAsync().GetAwaiter().GetResult().First(role => role.Name == Unregistered);
+        }
+
+        public RoleContract GetDefaultRegisteredRole()
+        {
+            //TODO get role by name
+            var client = m_communicationProvider.GetAuthRoleApiClient();
+
+            return client.GetAllRolesAsync().GetAwaiter().GetResult().First(role => role.Name == RegisteredUser);
         }
     }
 }
