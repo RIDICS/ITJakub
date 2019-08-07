@@ -67,6 +67,7 @@
     "Projects": "Projekty",
     "AddProjectPermissionToGroup": "Přidat právo na projekt skupině",
     "SelectedProject": "Vybraný projekt",
-    "AddPermissionToGroup": "Přidat oprávnění skupině"
+    "AddPermissionToGroup": "Přidat oprávnění skupině",
+    "ResetPassword":  "Resetovat heslo"
   }
 }

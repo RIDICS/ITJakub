@@ -206,5 +206,10 @@ namespace Vokabular.MainService.Core.Managers
 
             return user.ExternalId.Value;
         }
+
+        public void ResetUserPassword(int userId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
