@@ -1,0 +1,19 @@
+﻿@using ITJakub.Web.Hub.Options
+@using Microsoft.AspNetCore.Http
+@using Microsoft.Extensions.Options
+@using Ridics.Authentication.HttpClient.Configuration
+@inject AuthServiceCommunicationConfiguration Configuration
+@inject AuthServiceControllerBasePathsConfiguration BasePathsConfiguration
+@inject IOptions<AutoLoginCookieConfiguration> CookieConfig
+
+
+@if (User == null || !User.Identity.IsAuthenticated && !Context.Request.Cookies.ContainsKey(AutoLoginCookieConfiguration.Name))
+{
+    //If user is already logged in at identityserver returned script will contain redirect to login url, otherwise script will be empty
+
+    var src = $"{Configuration.AuthenticationServiceAddress}{BasePathsConfiguration.LoginCheckBasePath}";
+    <script type="text/javascript" asp-append-version="true" src="@src" id="sso-script" data-login-url="@Url.Action("Login", "Account", new {area = ""})"></script>
+
+    //Set cookie and dont try auto login in next 5 minutes
+    Context.Response.Cookies.Append(AutoLoginCookieConfiguration.Name, AutoLoginCookieConfiguration.Value, new CookieOptions{Expires = DateTimeOffset.Now.AddSeconds(CookieConfig.Value.ExpirationTimeInSeconds), IsEssential = true});
+}

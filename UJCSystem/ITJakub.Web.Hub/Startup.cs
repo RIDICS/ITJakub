@@ -117,14 +117,16 @@ namespace ITJakub.Web.Hub
                             var returnUrl = context.Request.GetAppBaseUrl();
                             context.ProtocolMessage.SetParameter("returnUrlOnCancel", returnUrl.ToString());
 
-                            var culture = context.HttpContext.RequestServices.GetRequiredService<ILocalizationService>().GetRequestCulture();
+                            var culture = context.HttpContext.RequestServices.GetRequiredService<ILocalizationService>()
+                                .GetRequestCulture();
                             context.ProtocolMessage.SetParameter("culture", culture.Name);
 
                             return Task.CompletedTask;
                         },
                         OnRedirectToIdentityProviderForSignOut = context =>
                         {
-                            var culture = context.HttpContext.RequestServices.GetRequiredService<ILocalizationService>().GetRequestCulture();
+                            var culture = context.HttpContext.RequestServices.GetRequiredService<ILocalizationService>()
+                                .GetRequestCulture();
                             context.ProtocolMessage.SetParameter("culture", culture.Name);
 
                             return Task.CompletedTask;
@@ -151,18 +153,23 @@ namespace ITJakub.Web.Hub
             services.RegisterAutomaticTokenManagement();
 
             // Register Auth service client, because contains components for obtaining access token (for user and also for app)
-            services.RegisterAuthorizationHttpClientComponents<AuthServiceClientLocalization>(new AuthServiceCommunicationConfiguration
+            var authServiceCommunicationConfiguration = new AuthServiceCommunicationConfiguration
             {
                 TokenName = null, // not required
                 ApiAccessToken = null, // not required
                 AuthenticationServiceAddress = openIdConnectConfig.Url,
-            }, new OpenIdConnectConfig
-            {
-                Url = openIdConnectConfig.Url,
-                Scopes = new List<string> { openIdConnectConfig.AuthServiceScopeName },
-                ClientId = openIdConnectConfig.ClientId,
-                ClientSecret = openIdConnectConfig.ClientSecret,
-            }, new AuthServiceControllerBasePathsConfiguration(/*Not required to fill because client is not used*/));
+            };
+            var authServiceControllerBasePathsConfiguration = Configuration.GetSection("AuthServiceControllerBasePathsConfiguration")
+                .Get<AuthServiceControllerBasePathsConfiguration>();
+
+            services.RegisterAuthorizationHttpClientComponents<AuthServiceClientLocalization>(authServiceCommunicationConfiguration,
+                new OpenIdConnectConfig
+                {
+                    Url = openIdConnectConfig.Url,
+                    Scopes = new List<string> {openIdConnectConfig.AuthServiceScopeName},
+                    ClientId = openIdConnectConfig.ClientId,
+                    ClientSecret = openIdConnectConfig.ClientSecret,
+                }, authServiceControllerBasePathsConfiguration);
 
             services.RegisterMainServiceClientComponents<AuthTokenProvider>(new ServiceCommunicationConfiguration
             {
@@ -174,11 +181,10 @@ namespace ITJakub.Web.Hub
             services.AddOptions();
             services.Configure<EndpointOption>(Configuration.GetSection("Endpoints"));
             services.Configure<GoogleCalendarConfiguration>(Configuration.GetSection("GoogleCalendar"));
-
             services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = 1048576000; });
-
             services.Configure<PortalOption>(Configuration.GetSection("PortalConfig"));
-
+            services.Configure<AutoLoginCookieConfiguration>(Configuration.GetSection("AutoLoginCookieConfiguration"));
+           
             // Localization
             var localizationConfiguration = Configuration.GetSection("Localization").Get<LocalizationConfiguration>();
 
