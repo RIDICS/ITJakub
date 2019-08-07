@@ -56,26 +56,25 @@ namespace ITJakub.Web.Hub.Core.Managers
 
         public void CreateFeedback(FeedbackViewModel model, FeedbackCategoryEnumContract category, bool isAuthenticated)
         {
-            using (var client = m_communicationProvider.GetMainServiceClient())
+            var client = m_communicationProvider.GetMainServiceFeedbackClient();
+
+            if (isAuthenticated)
             {
-                if (isAuthenticated)
+                client.CreateFeedback(new CreateFeedbackContract
                 {
-                    client.CreateFeedback(new CreateFeedbackContract
-                    {
-                        FeedbackCategory = category,
-                        Text = model.Text
-                    });
-                }
-                else
+                    FeedbackCategory = category,
+                    Text = model.Text
+                });
+            }
+            else
+            {
+                client.CreateAnonymousFeedback(new CreateAnonymousFeedbackContract
                 {
-                    client.CreateAnonymousFeedback(new CreateAnonymousFeedbackContract
-                    {
-                        FeedbackCategory = category,
-                        Text = model.Text,
-                        AuthorEmail = model.Email,
-                        AuthorName = model.Name,
-                    });
-                }
+                    FeedbackCategory = category,
+                    Text = model.Text,
+                    AuthorEmail = model.Email,
+                    AuthorName = model.Name,
+                });
             }
         }
     }

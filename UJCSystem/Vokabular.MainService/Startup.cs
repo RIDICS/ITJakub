@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -15,9 +16,11 @@ using Ridics.Authentication.HttpClient.Configuration;
 using Ridics.Core.HttpClient.Config;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using Vokabular.CardFile.Core;
 using Vokabular.Core;
 using Vokabular.ForumSite.Core;
 using Vokabular.ForumSite.Core.Options;
+using Vokabular.FulltextService.DataContracts;
 using Vokabular.MainService.Authorization;
 using Vokabular.MainService.Core;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -26,6 +29,7 @@ using Vokabular.MainService.Options;
 using Vokabular.MainService.Utils;
 using Vokabular.ProjectImport;
 using Vokabular.ProjectImport.Shared.Options;
+using Vokabular.RestClient;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore;
 using Vokabular.Shared.AspNetCore.Container;
@@ -51,7 +55,9 @@ namespace Vokabular.MainService
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             var openIdConnectConfig = Configuration.GetSection("OpenIdConnect").Get<OpenIdConnectConfiguration>();
-
+            var endpointsConfiguration = Configuration.GetSection("Endpoints").Get<EndpointOption>();
+            var credentialsConfiguration = Configuration.GetSection("Credentials").Get<List<CredentialsOption>>();
+            
             // Configuration options
             services.AddOptions();
             services.Configure<EndpointOption>(Configuration.GetSection("Endpoints"));
@@ -135,6 +141,26 @@ namespace Vokabular.MainService
                 NonceBasePath = "api/v1/nonce/",
                 ContactBasePath = "api/v1/contact/",
                 LoginCheckBasePath = "Account/CheckLogin",
+            });
+
+            services.RegisterFulltextServiceClientComponents(new ServiceCommunicationConfiguration
+            {
+                Url = new Uri(endpointsConfiguration.Addresses["FulltextService"]),
+                CreateCustomHandler = false
+            });
+
+            var credentials = credentialsConfiguration.FirstOrDefault(x => x.Type == "CardFiles");
+            if (credentials == null)
+            {
+                throw new ArgumentException("Credentials for Card files not found");
+            }
+
+            services.RegisterCardFileClientComponents(new CardFilesCommunicationConfiguration
+            {
+                Url = new Uri(endpointsConfiguration.Addresses["CardFilesService"]),
+                CreateCustomHandler = true,
+                Username = credentials.Username,
+                Password = credentials.Password
             });
 
             services.AddProjectImportServices();

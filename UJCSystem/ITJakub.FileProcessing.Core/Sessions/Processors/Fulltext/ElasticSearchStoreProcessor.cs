@@ -27,10 +27,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
 
         public string UploadPageToBookVersion(VersionResourceUploadContract resourceUploadContract)
         {
-            using (var client = m_communicationProvider.GetFulltextServiceClient())
-            {
-                return client.CreateTextResource(m_converter.Convert(resourceUploadContract.DataStream), 1);
-            }
+            var client = m_communicationProvider.GetFulltextServiceClient();
+            return client.CreateTextResource(m_converter.Convert(resourceUploadContract.DataStream), 1);
         }
 
         public void UploadTransformationResource(VersionResourceUploadContract resourceUploadContract)
@@ -76,10 +74,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
                 }
             };
 
-            using (var client = m_communicationProvider.GetFulltextServiceClient())
-            {
-                client.CreateSnapshot(snapshotResource);
-            }
+            var client = m_communicationProvider.GetFulltextServiceClient();
+            client.CreateSnapshot(snapshotResource);
         }
     }
 }

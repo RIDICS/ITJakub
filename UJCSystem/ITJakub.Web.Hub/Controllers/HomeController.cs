@@ -6,7 +6,6 @@ using ITJakub.Web.Hub.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts.Type;
-using Vokabular.Shared.AspNetCore.Extensions;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -15,12 +14,13 @@ namespace ITJakub.Web.Hub.Controllers
         private readonly StaticTextManager m_staticTextManager;
         private readonly FeedbacksManager m_feedbacksManager;
 
-        public HomeController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager, CommunicationProvider communicationProvider) : base(communicationProvider)
+        public HomeController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager,
+            CommunicationProvider communicationProvider) : base(communicationProvider)
         {
             m_staticTextManager = staticTextManager;
             m_feedbacksManager = feedbacksManager;
         }
-        
+
         private FeedbackFormIdentification GetFeedbackFormIdentification()
         {
             return new FeedbackFormIdentification {Area = string.Empty, Controller = "Home"};
@@ -52,7 +52,8 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult Feedback()
         {
-            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, IsUserLoggedIn(), "home", User);
+            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback,
+                IsUserLoggedIn(), "home", User);
             return View(viewModel);
         }
 
@@ -91,31 +92,24 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult GetTypeaheadAuthor(string query)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetOriginalAuthorAutocomplete(query);
-                var response = result.Select(x => x.FirstName != null ? $"{x.FirstName} {x.LastName}" : x.LastName)
-                    .ToList();
-                return Json(response);
-            }
+            var client = GetCodeListClient();
+            var result = client.GetOriginalAuthorAutocomplete(query);
+            var response = result.Select(x => x.FirstName != null ? $"{x.FirstName} {x.LastName}" : x.LastName).ToList();
+            return Json(response);
         }
 
         public ActionResult GetTypeaheadTitle(string query)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetTitleAutocomplete(query);
-                return Json(result);
-            }
+            var client = GetMetadataClient();
+            var result = client.GetTitleAutocomplete(query);
+            return Json(result);
         }
 
         public ActionResult GetTypeaheadDictionaryHeadword(string query)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetHeadwordAutocomplete(query);
-                return Json(result);
-            }
+            var client = GetBookClient();
+            var result = client.GetHeadwordAutocomplete(query);
+            return Json(result);
         }
     }
 }
