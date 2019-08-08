@@ -184,7 +184,8 @@ namespace ITJakub.Web.Hub
             services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = 1048576000; });
             services.Configure<PortalOption>(Configuration.GetSection("PortalConfig"));
             services.Configure<AutoLoginCookieConfiguration>(Configuration.GetSection("AutoLoginCookieConfiguration"));
-           
+            services.Configure<ForumOption>(Configuration.GetSection("Forum"));
+
             // Localization
             var localizationConfiguration = Configuration.GetSection("Localization").Get<LocalizationConfiguration>();
 
