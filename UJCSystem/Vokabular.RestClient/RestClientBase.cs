@@ -375,7 +375,7 @@ namespace Vokabular.RestClient
             }
         }
 
-        private void EnsureSuccessStatusCode(HttpResponseMessage response)
+        protected virtual void EnsureSuccessStatusCode(HttpResponseMessage response)
         {
             if (response.IsSuccessStatusCode)
             {

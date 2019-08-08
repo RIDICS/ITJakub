@@ -1,6 +1,12 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net;
+using System.Net.Http;
 using System.Net.Http.Headers;
+using Newtonsoft.Json;
 using Vokabular.RestClient;
+using Vokabular.RestClient.Contracts;
+using Vokabular.RestClient.Errors;
+using Vokabular.RestClient.Extensions;
 
 namespace Vokabular.MainService.DataContracts.Clients
 {
@@ -19,8 +25,53 @@ namespace Vokabular.MainService.DataContracts.Clients
             requestMessage.Headers.Authorization = new AuthenticationHeaderValue(AuthenticationScheme, m_tokenProvider.AuthToken);
         }
 
-        protected override void ProcessResponse(HttpResponseMessage response)
+        protected override void EnsureSuccessStatusCode(HttpResponseMessage response)
         {
+            if (response.IsSuccessStatusCode)
+            {
+                return;
+            }
+
+            var responseStatusCode = response.StatusCode;
+            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            if (responseStatusCode == HttpStatusCode.BadRequest &&
+                TryDeserializeErrorResult(responseContent, out var errorContract))
+            {
+                var exception = new MainServiceException
+                {
+                    Code = errorContract.Code,
+                    Description = errorContract.Description,
+                    StatusCode = responseStatusCode
+                };
+
+                throw exception;
+            }
+    
+            base.EnsureSuccessStatusCode(response);
+        }
+
+        private bool TryDeserializeErrorResult(string responseContent, out ErrorContract errorContract)
+        {
+            errorContract = null;
+            if (!(responseContent.StartsWith("{") && responseContent.EndsWith("}")))
+            {
+                return false;
+            }
+
+            try
+            {
+                errorContract = responseContent.Deserialize<ErrorContract>();
+                return true;
+            }
+            catch (JsonSerializationException)
+            {
+                return false;
+            }
+            catch (JsonReaderException)
+            {
+                return false;
+            }
         }
     }
 }
