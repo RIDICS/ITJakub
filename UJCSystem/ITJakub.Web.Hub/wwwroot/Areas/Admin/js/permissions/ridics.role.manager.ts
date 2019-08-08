@@ -201,11 +201,12 @@ class RoleManager {
 
     private initEditRoleForm() {
         const editRoleForm = $("#editRoleForm");
-
+        const alertHolder = editRoleForm.find(".alert-holder");
         editRoleForm.on("submit", (event) => {
             event.preventDefault();
             event.stopPropagation();
-    
+            alertHolder.empty();
+
             if (editRoleForm.valid()) {
                 const editRoleSection = $("#editRoleSection");
                 this.client.editRole(editRoleForm.serialize())
@@ -214,11 +215,12 @@ class RoleManager {
                         if (editRoleForm.find(".alert-success").length) {
                             this.roleList.reloadPage();
                         }
+                        this.initEditRoleForm();
                     })
                     .fail((error) => {
-                        editRoleSection.html(error.responseText);
-                    }).always(() => {
-                        this.initEditRoleForm();
+                        const alert = new AlertComponentBuilder(AlertType.Error)
+                            .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                        alertHolder.empty().append(alert);
                     });
             }
         });

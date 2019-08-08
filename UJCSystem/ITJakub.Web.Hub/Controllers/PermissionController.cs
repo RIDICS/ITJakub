@@ -11,6 +11,7 @@ using ITJakub.Web.Hub.Models.Requests.Permission;
 using ITJakub.Web.Hub.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Errors;
@@ -162,11 +163,8 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult EditUser(int userId, bool successUpdate = false)
         {
-            if (successUpdate)
-            {
-                ViewData.Add(AccountConstants.SuccessUserUpdate, true);
-            }
-
+            ViewData.Add(AccountConstants.SuccessUserUpdate, successUpdate);
+            
             var client = GetUserClient();
             var result = client.GetUserDetail(userId);
             var model = Mapper.Map<UpdateUserViewModel>(result);
@@ -195,6 +193,10 @@ namespace ITJakub.Web.Hub.Controllers
                 {
                     AddErrors(e);
                 }
+                catch (MainServiceException e)
+                {
+                    AddErrors(e);
+                }
             }
 
             return View(userViewModel);
@@ -204,22 +206,25 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult EditRole(RoleViewModel roleViewModel)
         {
-            try
+            roleViewModel.SuccessfulUpdate = false;
+            if (ModelState.IsValid)
             {
-                var roleContract = new RoleContract
+                try
                 {
-                    Id = roleViewModel.Id,
-                    Name = roleViewModel.Name,
-                    Description = roleViewModel.Description
-                };
-                var client = GetRoleClient();
-                client.UpdateRole(roleContract.Id, roleContract);
-                roleViewModel.SuccessfulUpdate = true;
-            }
-            catch (HttpErrorCodeException e)
-            {
-                roleViewModel.SuccessfulUpdate = false;
-                AddErrors(e);
+                    var roleContract = new RoleContract
+                    {
+                        Id = roleViewModel.Id,
+                        Name = roleViewModel.Name,
+                        Description = roleViewModel.Description
+                    };
+                    var client = GetRoleClient();
+                    client.UpdateRole(roleContract.Id, roleContract);
+                    roleViewModel.SuccessfulUpdate = true;
+                }
+                catch (HttpErrorCodeException e)
+                {
+                    AddErrors(e);
+                }
             }
 
             return PartialView("_EditRole", roleViewModel);
