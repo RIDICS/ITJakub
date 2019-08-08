@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Ridics.Authentication.HttpClient.Exceptions;
 using Vokabular.MainService.Core.Errors;
+using Vokabular.RestClient.Contracts;
 
 namespace Vokabular.MainService.Middleware
 {
@@ -19,6 +24,14 @@ namespace Vokabular.MainService.Middleware
             try
             {
                 await m_next(context);
+            }
+            catch (AuthServiceApiException exception)
+            {
+                await FillResponse(context, exception.StatusCode,JsonConvert.SerializeObject(new ErrorContract{Code = exception.Code, Description = exception.Message}));
+            }
+            catch (AuthServiceException exception)
+            {
+                await FillResponse(context, exception.StatusCode, JsonConvert.SerializeObject(new ErrorContract { Description = exception.Message }));
             }
             catch (ArgumentException exception)
             {
