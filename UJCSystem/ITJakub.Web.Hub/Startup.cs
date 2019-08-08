@@ -164,7 +164,7 @@ namespace ITJakub.Web.Hub
                 ClientSecret = openIdConnectConfig.ClientSecret,
             }, new AuthServiceControllerBasePathsConfiguration(/*Not required to fill because client is not used*/));
 
-            services.RegisterMainServiceClientComponents<AuthTokenProvider>(new ServiceCommunicationConfiguration
+            services.RegisterMainServiceClientComponents<AuthTokenProvider, MainServiceClientLocalization>(new ServiceCommunicationConfiguration
             {
                 Url = new Uri(endpointsConfiguration.Addresses["MainService"]),
                 CreateCustomHandler = false

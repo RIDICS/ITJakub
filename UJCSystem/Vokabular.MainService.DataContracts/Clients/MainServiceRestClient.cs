@@ -13,11 +13,14 @@ namespace Vokabular.MainService.DataContracts.Clients
     public class MainServiceRestClient : FullRestClient
     {
         private readonly IMainServiceAuthTokenProvider m_tokenProvider;
+        private readonly IMainServiceClientLocalization m_localization;
         private const string AuthenticationScheme = "Bearer";
 
-        public MainServiceRestClient(ServiceCommunicationConfiguration configuration, IMainServiceAuthTokenProvider tokenProvider) : base(configuration)
+        public MainServiceRestClient(ServiceCommunicationConfiguration configuration, IMainServiceAuthTokenProvider tokenProvider,
+            IMainServiceClientLocalization localization) : base(configuration)
         {
             m_tokenProvider = tokenProvider;
+            m_localization = localization;
         }
 
         protected override void FillRequestMessage(HttpRequestMessage requestMessage)
@@ -44,6 +47,8 @@ namespace Vokabular.MainService.DataContracts.Clients
                     Description = errorContract.Description,
                     StatusCode = responseStatusCode
                 };
+
+                m_localization.LocalizeApiException(exception);
 
                 throw exception;
             }
