@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Scalesoft.Localization.AspNetCore;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Errors;
 using Vokabular.Shared.AspNetCore.Extensions;
@@ -77,6 +78,10 @@ namespace ITJakub.Web.Hub.Controllers
                 {
                     AddErrors(e);
                 }
+                catch (MainServiceException e)
+                {
+                    AddErrors(e);
+                }
             }
 
             return View(model);
@@ -120,6 +125,10 @@ namespace ITJakub.Web.Hub.Controllers
                 }
                 catch (HttpErrorCodeException e)
                 {
+                    AddErrors(e);
+                }
+                catch (MainServiceException e)
+                {
                     ViewData.Add(AccountConstants.SuccessUserUpdate, false);
                     AddErrors(e);
                 }
@@ -151,6 +160,11 @@ namespace ITJakub.Web.Hub.Controllers
                     return PartialView("UserProfile/_UpdatePassword", null);
                 }
                 catch (HttpErrorCodeException e)
+                {
+                    ViewData.Add(AccountConstants.SuccessPasswordUpdate, false);
+                    AddErrors(e);
+                }
+                catch (MainServiceException e)
                 {
                     ViewData.Add(AccountConstants.SuccessPasswordUpdate, false);
                     AddErrors(e);
@@ -254,6 +268,11 @@ namespace ITJakub.Web.Hub.Controllers
                     ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, false);
                     AddErrors(e);
                 }
+                catch (MainServiceException e)
+                {
+                    ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, false);
+                    AddErrors(e);
+                }
             }
 
             twoFactorVerificationViewModel = CreateUpdateTwoFactorVerificationViewModel();
@@ -278,6 +297,11 @@ namespace ITJakub.Web.Hub.Controllers
                     ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, true);
                 }
                 catch (HttpErrorCodeException e)
+                {
+                    ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, false);
+                    AddErrors(e);
+                }
+                catch (MainServiceException e)
                 {
                     ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, false);
                     AddErrors(e);
