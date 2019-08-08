@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div asp-validation-summary="All" class="alert alert-danger"></div>
-                    @if (ViewData.TryGetValue(AccountConstants.SuccessTwoFactorUpdate, out var success) && (bool) success)
+                    @if (ViewData.TryGetValue(AccountConstants.SuccessTwoFactorUpdate, out var success) && (bool)success)
                     {
                         <div class="alert alert-success" role="alert">
                             @Localizer.Translate("SuccessTwoFactorUpdate", "Account")
@@ -21,6 +21,7 @@
                             @Localizer.Translate("TwoFactorVerificationIsNotActive", "Account")
                         </div>
                     }
+                    <div class="alert-holder"></div>
                 </div>
             </div>
             <div class="panel panel-default">

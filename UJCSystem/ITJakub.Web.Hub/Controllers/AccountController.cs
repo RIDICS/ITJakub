@@ -109,6 +109,7 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult UpdateBasicData(UpdateUserViewModel updateUserViewModel)
         {
+            ViewData.Add(AccountConstants.SuccessUserUpdate, false);
             if (ModelState.IsValid)
             {
                 try
@@ -127,11 +128,6 @@ namespace ITJakub.Web.Hub.Controllers
                 {
                     AddErrors(e);
                 }
-                catch (MainServiceException e)
-                {
-                    ViewData.Add(AccountConstants.SuccessUserUpdate, false);
-                    AddErrors(e);
-                }
             }
 
             return PartialView("UserProfile/_UpdateBasicData", updateUserViewModel);
@@ -144,6 +140,7 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult UpdatePassword(UpdatePasswordViewModel model)
         {
+            ViewData.Add(AccountConstants.SuccessPasswordUpdate, false);
             if (ModelState.IsValid)
             {
                 try
@@ -161,12 +158,6 @@ namespace ITJakub.Web.Hub.Controllers
                 }
                 catch (HttpErrorCodeException e)
                 {
-                    ViewData.Add(AccountConstants.SuccessPasswordUpdate, false);
-                    AddErrors(e);
-                }
-                catch (MainServiceException e)
-                {
-                    ViewData.Add(AccountConstants.SuccessPasswordUpdate, false);
                     AddErrors(e);
                 }
             }
@@ -251,6 +242,7 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SetTwoFactor(UpdateTwoFactorVerificationViewModel twoFactorVerificationViewModel)
         {
+            ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, false);
             if (ModelState.IsValid)
             {
                 try
@@ -265,12 +257,6 @@ namespace ITJakub.Web.Hub.Controllers
                 }
                 catch (HttpErrorCodeException e)
                 {
-                    ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, false);
-                    AddErrors(e);
-                }
-                catch (MainServiceException e)
-                {
-                    ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, false);
                     AddErrors(e);
                 }
             }
@@ -283,6 +269,7 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangeTwoFactorProvider(UpdateTwoFactorVerificationViewModel twoFactorVerificationViewModel)
         {
+            ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, false);
             if (ModelState.IsValid)
             {
                 try
@@ -298,12 +285,6 @@ namespace ITJakub.Web.Hub.Controllers
                 }
                 catch (HttpErrorCodeException e)
                 {
-                    ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, false);
-                    AddErrors(e);
-                }
-                catch (MainServiceException e)
-                {
-                    ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, false);
                     AddErrors(e);
                 }
             }
