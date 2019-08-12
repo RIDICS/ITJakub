@@ -113,12 +113,12 @@ namespace Vokabular.Database.Migrations.Migrations.VokabularDB
                 .ForeignKey("FK_Resource(LatestVersion)_ResourceVersion(Id)", "ResourceVersion", "Id");
 
             Create.Table("BookVersionResource")
-                .WithColumn("ResourceVersionId").AsInt64().NotNullable().PrimaryKey("PK_BookVersionResource(ResourceVersionId)").Identity()
+                .WithColumn("ResourceVersionId").AsInt64().NotNullable().PrimaryKey("PK_BookVersionResource(ResourceVersionId)")
                 .ForeignKey("ResourceVersion", "Id")
                 .WithColumn("ExternalId").AsString(255).Nullable();
 
             Create.Table("MetadataResource")
-                .WithColumn("ResourceVersionId").AsInt64().NotNullable().PrimaryKey("PK_MetadataResource(ResourceVersionId)").Identity()
+                .WithColumn("ResourceVersionId").AsInt64().NotNullable().PrimaryKey("PK_MetadataResource(ResourceVersionId)")
                 .ForeignKey("ResourceVersion", "Id").Nullable()
                 .WithColumn("AuthorsLabel").AsString(2000).Nullable()
                 .WithColumn("Title").AsString(2000).Nullable()
@@ -142,12 +142,12 @@ namespace Vokabular.Database.Migrations.Migrations.VokabularDB
                 .WithColumn("ManuscriptTitle").AsString(2000).Nullable();
 
             Create.Table("PageResource")
-                .WithColumn("ResourceVersionId").AsInt64().NotNullable().PrimaryKey("PK_PageResource(ResourceVersionId)").Identity().ForeignKey("ResourceVersion", "Id")
+                .WithColumn("ResourceVersionId").AsInt64().NotNullable().PrimaryKey("PK_PageResource(ResourceVersionId)").ForeignKey("ResourceVersion", "Id")
                 .WithColumn("Name").AsString(50).NotNullable()
                 .WithColumn("Position").AsInt32().NotNullable();
 
             Create.Table("TextResource")
-                .WithColumn("ResourceVersionId").AsInt64().NotNullable().PrimaryKey("PK_TextResource(ResourceVersionId)").Identity().ForeignKey("ResourceVersion", "Id")
+                .WithColumn("ResourceVersionId").AsInt64().NotNullable().PrimaryKey("PK_TextResource(ResourceVersionId)").ForeignKey("ResourceVersion", "Id")
                 .WithColumn("ExternalId").AsString(100).Nullable()
                 .WithColumn("ResourcePage").AsInt64().Nullable().ForeignKey("FK_TextResource(ResourcePage)_Resource(Id)", "Resource", "Id")
                 .WithColumn("BookVersion").AsInt64().Nullable().ForeignKey("FK_TextResource(BookVersion)_BookVersionResource(ResourceVersionId)", "BookVersionResource", "ResourceVersionId");
@@ -161,7 +161,7 @@ namespace Vokabular.Database.Migrations.Migrations.VokabularDB
                 .WithColumn("ResourcePage").AsInt64().Nullable().ForeignKey("FK_ImageResource(ResourcePage)_Resource(Id)", "Resource", "Id");
 
             Create.Table("AudioResource")
-                .WithColumn("ResourceVersionId").AsInt64().NotNullable().PrimaryKey("PK_AudioResource(ResourceVersionId)").Identity().ForeignKey("ResourceVersion", "Id")
+                .WithColumn("ResourceVersionId").AsInt64().NotNullable().PrimaryKey("PK_AudioResource(ResourceVersionId)").ForeignKey("ResourceVersion", "Id")
                 .WithColumn("Duration").AsInt64().Nullable()
                 .WithColumn("FileName").AsString(255).NotNullable()
                 .WithColumn("FileId").AsString(100).Nullable()
@@ -170,7 +170,7 @@ namespace Vokabular.Database.Migrations.Migrations.VokabularDB
                 .WithColumn("ResourceTrack").AsInt64().Nullable().ForeignKey("FK_AudioResource(ResourceTrack)_Resource(Id)", "Resource", "Id");
 
             Create.Table("TrackResource")
-                .WithColumn("ResourceVersionId").AsInt64().NotNullable().PrimaryKey("PK_TrackResource(ResourceVersionId)").Identity().ForeignKey("ResourceVersion", "Id")
+                .WithColumn("ResourceVersionId").AsInt64().NotNullable().PrimaryKey("PK_TrackResource(ResourceVersionId)").ForeignKey("ResourceVersion", "Id")
                 .WithColumn("Name").AsString(50).NotNullable()
                 .WithColumn("Text").AsMaxString().Nullable()
                 .WithColumn("Position").AsInt16().NotNullable()
@@ -178,7 +178,7 @@ namespace Vokabular.Database.Migrations.Migrations.VokabularDB
                 .WithColumn("ResourceBeginningPage").AsInt64().Nullable().ForeignKey("FK_TrackResource(ResourceBeginningPage)_Resource(Id)", "Resource", "Id");
 
             Create.Table("ChapterResource")
-                .WithColumn("ResourceVersionId").AsInt64().NotNullable().PrimaryKey("PK_ChapterResource(ResourceVersionId)").Identity()
+                .WithColumn("ResourceVersionId").AsInt64().NotNullable().PrimaryKey("PK_ChapterResource(ResourceVersionId)")
                 .ForeignKey("ResourceVersion", "Id")
                 .WithColumn("Name").AsString(1000).NotNullable()
                 .WithColumn("Position").AsInt16().NotNullable()
@@ -186,27 +186,27 @@ namespace Vokabular.Database.Migrations.Migrations.VokabularDB
                 .WithColumn("ResourceBeginningPage").AsInt64().Nullable().ForeignKey("FK_ChapterResource(ResourceBeginningPage)_Resource(Id)", "Resource", "Id");
 
             Create.Table("HeadwordResource")
-                .WithColumn("ResourceVersionId").AsInt64().NotNullable().PrimaryKey("PK_HeadwordResource(ResourceVersionId)").Identity().ForeignKey("ResourceVersion", "Id")
+                .WithColumn("ResourceVersionId").AsInt64().NotNullable().PrimaryKey("PK_HeadwordResource(ResourceVersionId)").ForeignKey("ResourceVersion", "Id")
                 .WithColumn("ExternalId").AsString(100).NotNullable()
                 .WithColumn("DefaultHeadword").AsString(255).NotNullable()
                 .WithColumn("Sorting").AsString(255).NotNullable()
                 .WithColumn("BookVersion").AsInt64().Nullable().ForeignKey("FK_HeadwordResource(BookVersion)_BookVersionResource(ResourceVersionId)", "BookVersionResource", "ResourceVersionId");
 
             Create.Table("HeadwordItem")
-                .WithColumn("Id").AsInt64().NotNullable().PrimaryKey("PK_HeadwordItem(Id)").Identity()
+                .WithColumn("Id").AsInt64().NotNullable().PrimaryKey("PK_HeadwordItem(Id)")
                 .WithColumn("HeadwordResource").AsInt64().NotNullable().ForeignKey("FK_HeadwordItem(HeadwordResource)_HeadwordResource(ResourceVersionId)", "HeadwordResource", "ResourceVersionId")
                 .WithColumn("Headword").AsString(255).NotNullable()
                 .WithColumn("HeadwordOriginal").AsString(255).Nullable()
                 .WithColumn("ResourcePage").AsInt64().Nullable().ForeignKey("FK_HeadwordItem(ResourcePage)_Resource(Id)", "Resource", "Id");
 
             Create.Table("BinaryResource")
-                .WithColumn("ResourceVersionId").AsInt64().NotNullable().PrimaryKey("PK_BinaryResource(ResourceVersionId)").Identity().ForeignKey("ResourceVersion", "Id")
+                .WithColumn("ResourceVersionId").AsInt64().NotNullable().PrimaryKey("PK_BinaryResource(ResourceVersionId)").ForeignKey("ResourceVersion", "Id")
                 .WithColumn("Name").AsString(255).NotNullable()
                 .WithColumn("FileName").AsString(255).NotNullable()
                 .WithColumn("FileId").AsString(100).Nullable();
 
             Create.Table("EditionNoteResource")
-                .WithColumn("ResourceVersionId").AsInt64().NotNullable().PrimaryKey("PK_EditionNoteResource(ResourceVersionId)").Identity().ForeignKey("ResourceVersion", "Id")
+                .WithColumn("ResourceVersionId").AsInt64().NotNullable().PrimaryKey("PK_EditionNoteResource(ResourceVersionId)").ForeignKey("ResourceVersion", "Id")
                 .WithColumn("ExternalId").AsString(100).Nullable()
                 .WithColumn("BookVersion").AsInt64().Nullable().ForeignKey("FK_EditionNoteResource(BookVersion)_BookVersionResource(ResourceVersionId)", "BookVersionResource", "ResourceVersionId");
 
@@ -335,6 +335,13 @@ namespace Vokabular.Database.Migrations.Migrations.VokabularDB
                 .ForeignKey("FK_Project_LiteraryKind(LiteraryKind)_LiteraryKind(Id)", "LiteraryKind", "Id");
             Create.PrimaryKey("PK_Project_LiteraryKind(Project)_Project_LiteraryKind(LiteraryKind)").OnTable("Project_LiteraryKind")
                 .Columns("Project", "LiteraryKind");
+
+            Create.Table("Project_LiteraryGenre")
+                .WithColumn("Project").AsInt64().NotNullable().ForeignKey("FK_Project_LiteraryGenre(Project)_Project(Id)", "Project", "Id")
+                .WithColumn("LiteraryGenre").AsInt32().NotNullable()
+                .ForeignKey("FK_Project_LiteraryGenre(LiteraryGenre)_LiteraryGenre(Id)", "LiteraryGenre", "Id");
+            Create.PrimaryKey("PK_Project_LiteraryGenre(Project)_Project_LiteraryGenre(LiteraryGenre)").OnTable("Project_LiteraryGenre")
+                .Columns("Project", "LiteraryGenre");
 
             Create.Table("Project_LiteraryOriginal")
                 .WithColumn("Project").AsInt64().NotNullable()
