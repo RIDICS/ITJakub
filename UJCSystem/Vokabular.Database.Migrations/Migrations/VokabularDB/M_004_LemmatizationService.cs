@@ -13,7 +13,7 @@ namespace Vokabular.Database.Migrations.Migrations.VokabularDB
             Create.Table("HyperCanonicalForm")
                 .WithColumn("Id").AsInt64().NotNullable().PrimaryKey("PK_HyperCanonicalForm(Id)").Identity()
                 .WithColumn("Text").AsString(255).NotNullable()
-                .WithColumn("Type").AsByte().NotNullable()
+                .WithColumn("Type").AsInt16().NotNullable()
                 .WithColumn("Description").AsString(255).Nullable();
 
             Create.Table("Token")
@@ -30,7 +30,7 @@ namespace Vokabular.Database.Migrations.Migrations.VokabularDB
             Create.Table("CanonicalForm")
                 .WithColumn("Id").AsInt64().NotNullable().PrimaryKey("PK_CanonicalForm(Id)").Identity()
                 .WithColumn("Text").AsString(255).NotNullable()
-                .WithColumn("Type").AsByte().NotNullable()
+                .WithColumn("Type").AsInt16().NotNullable()
                 .WithColumn("Description").AsString(255).NotNullable()
                 .WithColumn("HyperCanonicalForm").AsInt64().Nullable().ForeignKey("FK_CanonicalForm(HyperCanonicalForm)_HyperCanonicalForm(Id)", "HyperCanonicalForm", "Id");
 
