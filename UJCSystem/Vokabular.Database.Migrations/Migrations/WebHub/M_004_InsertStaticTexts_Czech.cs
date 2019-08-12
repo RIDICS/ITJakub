@@ -98,7 +98,7 @@ Valentinská 1
 +420 225 391 452
 
 *mapa:*  
-<script type=""text/javascript"" src=""http://maps.google.com/maps/api/js?sensor=false""></script>
+<script type=""text/javascript"" src=""https://maps.google.com/maps/api/js?sensor=false""></script>
 <div style=""overflow: hidden; height: 500px; width: 600px;"">
     <div id=""gmap_canvas"" style=""height: 500px; width: 600px;""></div>
     <style>
@@ -106,7 +106,7 @@ Valentinská 1
             max-width: none !important;
             background: none !important;
         }
-    </style><a class=""google-map-code"" href=""http://www.map-embed.com"" id=""get-map-data"">http://www.map-embed.com</a>
+    </style><a class=""google-map-code"" href=""https://www.map-embed.com"" id=""get-map-data"">https://www.map-embed.com</a>
 </div>
 <script type=""text/javascript"">
     function init_map()
@@ -128,7 +128,7 @@ Valentinská 1
         google.maps.event.addListener(marker, ""click"", function() { infowindow.open(map, marker); });
         infowindow.open(map, marker);
     }
-    google.maps.event.addDomListener(window, ''load'', init_map);
+    google.maps.event.addDomListener(window, ""load"", init_map);
 </script>",
                 ModificationUser = "Admin"
             });
