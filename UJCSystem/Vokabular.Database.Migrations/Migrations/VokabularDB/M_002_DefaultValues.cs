@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using FluentMigrator;
+using FluentMigrator.SqlServer;
 using Ridics.DatabaseMigrator.QueryBuilder;
 using Ridics.DatabaseMigrator.Shared.TagsAttributes;
 
@@ -12,14 +13,14 @@ namespace Vokabular.Database.Migrations.Migrations.VokabularDB
     {
         public override void Up()
         {
-            Insert.IntoTable("BookType").Row(new {Type = 0});
-            Insert.IntoTable("BookType").Row(new {Type = 1});
-            Insert.IntoTable("BookType").Row(new {Type = 2});
-            Insert.IntoTable("BookType").Row(new {Type = 3});
-            Insert.IntoTable("BookType").Row(new {Type = 4});
-            Insert.IntoTable("BookType").Row(new {Type = 5});
-            Insert.IntoTable("BookType").Row(new {Type = 6});
-            Insert.IntoTable("BookType").Row(new {Type = 7});
+            Insert.IntoTable("BookType").WithIdentityInsert().Row(new { Id = 0, Type = 0});
+            Insert.IntoTable("BookType").WithIdentityInsert().Row(new { Id = 1, Type = 1});
+            Insert.IntoTable("BookType").WithIdentityInsert().Row(new { Id = 2, Type = 2});
+            Insert.IntoTable("BookType").WithIdentityInsert().Row(new { Id = 3, Type = 3});
+            Insert.IntoTable("BookType").WithIdentityInsert().Row(new { Id = 4, Type = 4});
+            Insert.IntoTable("BookType").WithIdentityInsert().Row(new { Id = 5, Type = 5});
+            Insert.IntoTable("BookType").WithIdentityInsert().Row(new { Id = 6, Type = 6});
+            Insert.IntoTable("BookType").WithIdentityInsert().Row(new { Id = 7, Type = 7});
 
             Execute.WithConnection((connection, transaction) =>
             {
