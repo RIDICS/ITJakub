@@ -15,6 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="..\..\..\itjakub-secrets\DatabaseMigrator\appsettings.Production.json" Link="appsettings.Production.json" />
+    <Content Include="..\..\..\itjakub-secrets\DatabaseMigrator\appsettings.Sample.json" Link="appsettings.Sample.json" />
+    <Content Include="..\..\..\itjakub-secrets\DatabaseMigrator\appsettings.StagingCenseo2.json" Link="appsettings.StagingCenseo2.json" />
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
