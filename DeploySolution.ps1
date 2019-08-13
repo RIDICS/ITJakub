@@ -70,12 +70,12 @@ else {
 Write-Host
 Write-Host
 
-$folderName = (Get-Item $CurrentPath).Name
-$TargetEnvironment = $folderName.Split('-')[1]
+$CurrentFolderName = (Get-Item $CurrentPath).Name
+$TargetEnvironment = $CurrentFolderName.Split('-')[1]
 
-$migratorPath = Join-Path $CurrentPath "${MigrationToRun}"
+$MigratorPath = Join-Path $CurrentPath "${MigrationToRun}"
 
-Set-Location $migratorPath
+Set-Location $MigratorPath
 & $MigrationScriptPath ${TargetEnvironment}
 
 Set-Location $CurrentPath
