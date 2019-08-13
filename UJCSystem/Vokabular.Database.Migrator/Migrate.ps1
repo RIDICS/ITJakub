@@ -14,7 +14,7 @@ $env:ASPNETCORE_ENVIRONMENT = "${Environment}"
 
 Write-Host "Start migration"
 
-dotnet (Join-Path $CurrentPath Ridics.Authentication.Database.Migrator.dll) --no-interactive
+dotnet (Join-Path $CurrentPath Vokabular.Database.Migrator.dll) --no-interactive
 
 Write-Host "Migration finished"
 
