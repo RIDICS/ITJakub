@@ -81,6 +81,61 @@ foreach ($DeploymentScript in $DeploymentScripts)
   }
 }
 
+Write-Host "Creating logs folders"
+Write-Host
+
+$DefaultWebSitePath = Get-WebFilePath 'IIS:\Sites\Default Web Site'
+$MainServiceLogsPath = Join-Path $DefaultWebSitePath "MainService\logs"
+ 
+if (Test-Path $MainServiceLogsPath)
+{
+    New-Item -Path $MainServiceLogsPath -ItemType "directory" > $null
+}
+else {
+    Write-Host "${MainServiceLogsPath} FOUND" -foregroundcolor green  
+}
+
+function SetFullAccessToFolder {
+    Param ([String]$FolderPath)
+
+    $Acl = Get-Acl $FolderPath 
+
+    $AccessRule = New-Object System.Security.AccessControl.FileSystemAccessRule("IIS_IUSRS", "FullControl", "ContainerInherit,ObjectInherit", "None", "Allow")
+
+    $Acl.SetAccessRule($AccessRule)
+    Set-Acl $FolderPath $Acl
+}
+
+SetFullAccessToFolder($MainServiceLogsPath)
+
+
+$LocalhostServicesPath = Get-WebFilePath 'IIS:\Sites\LocalhostServices'
+Write-Host $LocalhostServicesPath
+
+$Services = @()
+$Services += "ITJakub.FileProcessing.Service"
+$Services += "ITJakub.Lemmatization.Service"
+$Services += "ITJakub.SearchService"
+$Services += "Vokabular.FulltextService"
+
+foreach ($Service in $Services)
+{
+  $ServiceLogsPath = Join-Path $LocalhostServicesPath "${Service}\logs"
+  
+  if (Test-Path $ServiceLogsPath)
+  {
+    Write-Host "${Service} FOUND" -foregroundcolor green
+  }
+  else
+  {
+    New-Item -Path $ServiceLogsPath -ItemType "directory" > $null
+  }
+  SetFullAccessToFolder($ServiceLogsPath)
+}
+
+Write-Host "Logs folders created"
+Write-Host
+
 Write-Host
 Write-Host
 Write-Host "DEPLOYMENT FINISHED"
