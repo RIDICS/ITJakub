@@ -225,6 +225,10 @@ namespace ITJakub.Web.Hub.Controllers
                 {
                     AddErrors(e);
                 }
+                catch (MainServiceException e)
+                {
+                    AddErrors(e);
+                }
             }
 
             return PartialView("_EditRole", roleViewModel);
@@ -283,18 +287,35 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateRole([FromBody] CreateRoleRequest request)
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateRole(RoleViewModel roleViewModel)
         {
-            var client = GetRoleClient();
-
-            var newRoleContract = new RoleContract
+            roleViewModel.SuccessfulUpdate = false;
+            if (ModelState.IsValid)
             {
-                Name = request.RoleName,
-                Description = request.RoleDescription,
-            };
-            var roleId = client.CreateRole(newRoleContract);
-            var role = client.GetRoleDetail(roleId);
-            return Json(role);
+                try
+                {
+                    var roleContract = new RoleContract
+                    {
+                        Id = roleViewModel.Id,
+                        Name = roleViewModel.Name,
+                        Description = roleViewModel.Description
+                    };
+                    var client = GetRoleClient();
+                    client.UpdateRole(roleContract.Id, roleContract);
+                    roleViewModel.SuccessfulUpdate = true;
+                }
+                catch (HttpErrorCodeException e)
+                {
+                    AddErrors(e);
+                }
+                catch (MainServiceException e)
+                {
+                    AddErrors(e);
+                }
+            }
+
+            return PartialView("_CreateRole", roleViewModel);
         }
 
         [HttpPost]

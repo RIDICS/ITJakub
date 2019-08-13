@@ -25,13 +25,15 @@
         );
     }
 
-    public createRole(roleName: string, roleDescription: string): JQuery.jqXHR {
+    public createRole(createRoleDataForm: string): JQuery.jqXHR {
         return this.post(
             this.getPermissionControllerUrl() + "CreateRole",
-            JSON.stringify({ roleName: roleName, roleDescription: roleDescription })
+            createRoleDataForm,
+            this.formContentType,
+            this.htmlDataType
         );
     }
-
+    
     public createRoleWithUser(userId: number, roleName: string, roleDescription: string): JQuery.jqXHR {
         return this.post(
             this.getPermissionControllerUrl() + "CreateRoleWithUser",
