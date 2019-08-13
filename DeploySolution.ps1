@@ -87,12 +87,9 @@ Write-Host
 $DefaultWebSitePath = Get-WebFilePath 'IIS:\Sites\Default Web Site'
 $MainServiceLogsPath = Join-Path $DefaultWebSitePath "MainService\logs"
  
-if (Test-Path $MainServiceLogsPath)
+if (-Not(Test-Path $MainServiceLogsPath))
 {
     New-Item -Path $MainServiceLogsPath -ItemType "directory" > $null
-}
-else {
-    Write-Host "${MainServiceLogsPath} FOUND" -foregroundcolor green  
 }
 
 function SetFullAccessToFolder {
@@ -122,14 +119,11 @@ foreach ($Service in $Services)
 {
   $ServiceLogsPath = Join-Path $LocalhostServicesPath "${Service}\logs"
   
-  if (Test-Path $ServiceLogsPath)
-  {
-    Write-Host "${Service} FOUND" -foregroundcolor green
-  }
-  else
+  if (-Not (Test-Path $ServiceLogsPath))
   {
     New-Item -Path $ServiceLogsPath -ItemType "directory" > $null
   }
+  
   SetFullAccessToFolder($ServiceLogsPath)
 }
 
