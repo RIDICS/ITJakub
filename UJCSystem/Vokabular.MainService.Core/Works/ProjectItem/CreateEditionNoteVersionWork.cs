@@ -4,8 +4,8 @@ using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Managers.Fulltext;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.ProjectItem
@@ -35,7 +35,9 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
 
             if (latestEditionNote != null && latestEditionNote.Id != m_data.OriginalVersionId)
             {
-                throw new HttpErrorCodeException($"Conflict. Current latest versionId is {latestEditionNote.Id}, but originalVersionId was specified {m_data.OriginalVersionId}", HttpStatusCode.Conflict);
+                throw new MainServiceException(MainServiceErrorCode.EditionNoteConflict, 
+                    $"Conflict. Current latest versionId is {latestEditionNote.Id}, but originalVersionId was specified {m_data.OriginalVersionId}",
+                    HttpStatusCode.Conflict, new object[]{ latestEditionNote.Id , m_data.OriginalVersionId });
             }
 
             if (latestEditionNote == null)

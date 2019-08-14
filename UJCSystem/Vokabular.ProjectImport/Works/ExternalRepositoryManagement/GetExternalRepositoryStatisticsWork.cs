@@ -2,7 +2,7 @@ using System.Net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.RestClient.Errors;
+using Vokabular.MainService.DataContracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.ProjectImport.Works.ExternalRepositoryManagement
@@ -31,7 +31,9 @@ namespace Vokabular.ProjectImport.Works.ExternalRepositoryManagement
         {
             var externalRepository = m_externalRepositoryRepository.FindById<ExternalRepository>(m_externalRepositoryId);
             if (externalRepository == null)
-                throw new HttpErrorCodeException(ErrorMessages.NotFound, HttpStatusCode.NotFound);
+            {
+                throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
+            }
 
             TotalImportStatistics = m_externalRepositoryRepository.GetExternalRepositoryStatistics(m_externalRepositoryId);
             LastImportStatisticsResult = m_externalRepositoryRepository.GetLastUpdateExternalRepositoryStatistics(m_externalRepositoryId);

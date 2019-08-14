@@ -2,6 +2,15 @@
   "culture": "en",
   "scope": "MainServiceErrorCode",
   "dictionary": {
+    //Main service codes
+    "entity-not-found": "The entity was not found",
+    "headword-not-found": "The headword was not found",
+    "category-has-sub-categories": "Category has some sub-categories",
+    "repository-contains-history": "The external repository cannot be deleted, because it contains history",
+    "comments-to-second-level": "Only comments to second level are allowed",
+    "edition-note-conflict": "Conflict. Current latest versionId is {0}, but originalVersionId was specified {1}",
+    "resource-version-id-null": "resourceVersionId can't be null for HeadwordFeedback",
+
     //Auth service codes
     "generic-error": "Operation failed",
     "user-not-exist-id": "User with given identifier does not exist",
@@ -17,7 +26,7 @@
     "create-user-error-user-contact-email": "Failed to create user since entered email address is already in use",
     "create-user-error-user-contact-phone": "Failed to create user since entered phone number is already in use",
     "create-user-error-user-contact-email-not-valid": "Failed to create user due to invalid email address",
-    "create-user-error-user-contact-phone-not-valid": "Failed to create user due to intvalid phone number (phone number has to contain country code and start with a plus sign)",
+    "create-user-error-user-contact-phone-not-valid": "Failed to create user due to invalid phone number (phone number has to contain country code and start with a plus sign)",
     "create-user-error-external-identity": "Failed to create user due to an external account",
     "generate-verification-code": "Failed to generate verification code",
     "generate-username": "Failed to generate username",

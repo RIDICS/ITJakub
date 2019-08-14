@@ -1,6 +1,7 @@
 using System.Net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataEntities.UnitOfWork;
@@ -24,7 +25,9 @@ namespace Vokabular.ProjectImport.Works.ExternalRepositoryManagement
         {
             var externalRepository = m_externalRepositoryRepository.FindById<ExternalRepository>(m_externalRepositoryId);
             if (externalRepository == null)
-                throw new HttpErrorCodeException(ErrorMessages.NotFound, HttpStatusCode.NotFound);
+            {
+                throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
+            }
 
             var bibliographicFormat = m_externalRepositoryRepository.Load<BibliographicFormat>(m_data.BibliographicFormat.Id);
             var externalRepositoryType = m_externalRepositoryRepository.Load<ExternalRepositoryType>(m_data.ExternalRepositoryType.Id);

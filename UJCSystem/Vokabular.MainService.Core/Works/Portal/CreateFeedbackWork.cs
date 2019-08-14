@@ -4,6 +4,7 @@ using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
 using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataEntities.UnitOfWork;
@@ -87,13 +88,13 @@ namespace Vokabular.MainService.Core.Works.Portal
         {
             if (m_resourceVersionId == null)
             {
-                throw new ArgumentException("resourceVerionId can't be null for HeadwordFeedback");
+                throw new MainServiceException(MainServiceErrorCode.ResourceVersionIdNull, "resourceVersionId can't be null for HeadwordFeedback");
             }
 
             var headwordResourceVersion = m_portalRepository.FindById<HeadwordResource>(m_resourceVersionId.Value);
             if (headwordResourceVersion == null)
             {
-                throw new HttpErrorCodeException("Headword not found", HttpStatusCode.BadRequest);
+                throw new MainServiceException(MainServiceErrorCode.HeadwordNotFound, "The headword was not found");
             }
 
             return new HeadwordFeedback
