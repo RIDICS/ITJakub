@@ -1,11 +1,9 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using Vokabular.RestClient;
 using Vokabular.RestClient.Contracts;
-using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Extensions;
 
 namespace Vokabular.MainService.DataContracts.Clients
@@ -41,12 +39,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             if (responseStatusCode == HttpStatusCode.BadRequest &&
                 TryDeserializeErrorResult(responseContent, out var errorContract))
             {
-                var exception = new MainServiceException
-                {
-                    Code = errorContract.Code,
-                    Description = errorContract.Description,
-                    StatusCode = responseStatusCode
-                };
+                var exception = new MainServiceException(errorContract.Code, errorContract.Description, responseStatusCode);
 
                 m_localization.LocalizeApiException(exception);
 
