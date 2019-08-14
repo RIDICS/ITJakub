@@ -9,5 +9,6 @@
         public const string CommentsToSecondLevel = "comments-to-second-level";
         public const string EditionNoteConflict = "edition-note-conflict";
         public const string ResourceVersionIdNull = "resource-version-id-null";
+        public const string CannotMoveCategoryToSubcategory = "cannot-move-category-to-subcategory";
     }
 }

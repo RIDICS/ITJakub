@@ -36,15 +36,15 @@ namespace Vokabular.MainService.Middleware
             {
                 await FillResponse(context, (int)exception.StatusCode, JsonConvert.SerializeObject(new ErrorContract { Code = exception.Code, Description = exception.Message, DescriptionParams = exception.DescriptionParams}));
             }
-            catch (ArgumentException exception)
+            catch (ArgumentException exception) //TODO remove
             {
                 await FillResponse(context, StatusCodes.Status400BadRequest, exception.Message);
             }
-            catch (AuthenticationException exception)
+            catch (AuthenticationException exception) //TODO remove?
             {
                 await FillResponse(context, StatusCodes.Status401Unauthorized, exception.Message);
             }
-            catch (UnauthorizedException exception)
+            catch (UnauthorizedException exception) //TODO remove?
             {
                 await FillResponse(context, StatusCodes.Status403Forbidden, exception.Message);
             }

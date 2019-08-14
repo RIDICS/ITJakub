@@ -1,7 +1,5 @@
-using System.Net;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts;
-using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.CategoryManagement
@@ -25,7 +23,7 @@ namespace Vokabular.MainService.Core.Works.CategoryManagement
                 throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
 
             if (category.Categories.Count > 0)
-                throw new HttpErrorCodeException("Category has some sub-categories", HttpStatusCode.BadRequest);
+                throw new MainServiceException(MainServiceErrorCode.CategoryHasSubCategories, "Category has some sub-categories");
 
             m_categoryRepository.Delete(category);
         }

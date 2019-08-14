@@ -1,11 +1,9 @@
-using System;
 using System.Linq;
 using System.Net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.CategoryManagement
@@ -42,7 +40,7 @@ namespace Vokabular.MainService.Core.Works.CategoryManagement
                 {
                     var pathIds = parentCategory.Path.Split('/').Where(x => !string.IsNullOrEmpty(x)).Select(int.Parse);
                     if (pathIds.Contains(category.Id))
-                        throw new ArgumentException("Can't move category into it's own subcategories");
+                        throw new MainServiceException(MainServiceErrorCode.CannotMoveCategoryToSubcategory, "Can't move category into it's own subcategories", HttpStatusCode.Conflict);
                 }
 
                 // Update Path property

@@ -8,8 +8,9 @@
     "category-has-sub-categories": "Kategorie má podkategorie.",
     "repository-contains-history": "Externí repozitář nemůže být odstraněn, jelikož obsahuje historii.",
     "comments-to-second-level": "Komentáře jsou povoleny pouze do druhé úrovně.",
-    "edition-note-conflict": "Konflikt. Aktuální poslední versionId je, ale originalVersionId je {1}",
+    "edition-note-conflict": "Konflikt - aktuální poslední versionId je, ale originalVersionId je {1}",
     "resource-version-id-null": "ResourceVersionId nemůže být prázdné pro připomínky k heslu.",
+    "cannot-move-category-to-subcategory": "Nelze přesunout kategorii do její vlastní podkategorie",
 
     //Auth service codes
     "generic-error": "Operace se nezdařila",
