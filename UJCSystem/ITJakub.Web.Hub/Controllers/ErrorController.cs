@@ -19,13 +19,19 @@ namespace ITJakub.Web.Hub.Controllers
 
         [Route("Error")]
         [Route("Error/{errorCode}")]
-        public IActionResult Index(string errorCode)
+        public IActionResult Index(string errorCode, [FromQuery] string message = null)
         {
-            var errorMessage = m_localization.Translate("unknown-error-msg", "Error");
+            var errorMessage = m_localization.Translate("unknown-error-msg", "Error").Value;
             var errorMessageDetail = string.Empty;
+            Response.StatusCode = StatusCodes.Status500InternalServerError;
 
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                errorMessage = message;
+            }
             if (int.TryParse(errorCode, out var errorCodeNumber))
             {
+                Response.StatusCode = errorCodeNumber;
                 switch (errorCodeNumber)
                 {
                     case StatusCodes.Status400BadRequest:
@@ -58,8 +64,7 @@ namespace ITJakub.Web.Hub.Controllers
                         break;
                 }
             }
-
-            Response.StatusCode = errorCodeNumber;
+            
             return View("Error", new ErrorViewModel
             {
                 RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,

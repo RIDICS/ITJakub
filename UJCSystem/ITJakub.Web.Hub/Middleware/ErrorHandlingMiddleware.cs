@@ -62,14 +62,16 @@ namespace ITJakub.Web.Hub.Middleware
                 }
                 else
                 {
-                    await ReExecute(context, (int) exception.StatusCode);
+                    await ReExecute(context, (int) exception.StatusCode, exception.Description);
                 }
             }
         }
 
-        private async Task ReExecute(HttpContext context, int statusCode)
+        private async Task ReExecute(HttpContext context, int statusCode, string errorMessage = null)
         {
             var pathString = new PathString($"/Error/{statusCode}");
+            var queryString = errorMessage == null ? QueryString.Empty : new QueryString($"?message={errorMessage}");
+
             var originalPath = context.Request.Path;
             var originalQueryString = context.Request.QueryString;
 
@@ -80,7 +82,7 @@ namespace ITJakub.Web.Hub.Middleware
                 OriginalQueryString = originalQueryString.HasValue ? originalQueryString.Value : null
             });
             context.Request.Path = pathString;
-            context.Request.QueryString = QueryString.Empty;
+            context.Request.QueryString = queryString;
 
 
             try
