@@ -39,7 +39,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             if (responseStatusCode == HttpStatusCode.BadRequest &&
                 TryDeserializeErrorResult(responseContent, out var errorContract))
             {
-                var exception = new MainServiceException(errorContract.Code, errorContract.Description, responseStatusCode);
+                var exception = new MainServiceException(errorContract.Code, errorContract.Description, responseStatusCode, errorContract.DescriptionParams);
 
                 m_localization.LocalizeApiException(exception);
 

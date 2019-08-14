@@ -24,7 +24,14 @@ namespace ITJakub.Web.Hub.Helpers
             {
                 if (!string.IsNullOrEmpty(ex.Code))
                 {
-                    ex.Description = m_localization.Translate(ex.Code, "MainServiceErrorCode");
+                    if (ex.DescriptionParams == null)
+                    {
+                        ex.Description = m_localization.Translate(ex.Code, "MainServiceErrorCode");
+                    }
+                    else
+                    {
+                        ex.Description = m_localization.TranslateFormat(ex.Code, "MainServiceErrorCode", ex.DescriptionParams);
+                    }
                 }
             }
             catch (Exception e) when (e is LocalizationLibraryException || e is TranslateException)
