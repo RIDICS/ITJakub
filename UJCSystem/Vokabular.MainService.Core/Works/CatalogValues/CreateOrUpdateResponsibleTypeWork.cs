@@ -1,10 +1,9 @@
-using System.Net;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.CatalogValues
@@ -29,7 +28,7 @@ namespace Vokabular.MainService.Core.Works.CatalogValues
                 : new ResponsibleType();
 
             if (responsibleType == null)
-                throw new HttpErrorCodeException(ErrorMessages.NotFound, HttpStatusCode.NotFound);
+                throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
 
             var typeEnum = Mapper.Map<ResponsibleTypeEnum>(m_data.Type);
             responsibleType.Text = m_data.Text;

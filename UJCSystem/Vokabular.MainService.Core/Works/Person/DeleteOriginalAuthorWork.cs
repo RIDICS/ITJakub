@@ -2,6 +2,7 @@ using System.Net;
 using NHibernate.Exceptions;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.DataContracts;
 using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
@@ -23,7 +24,7 @@ namespace Vokabular.MainService.Core.Works.Person
             var dbAuthor = m_personRepository.FindById<OriginalAuthor>(m_authorId);
             if (dbAuthor == null)
             {
-                throw new HttpErrorCodeException(ErrorMessages.NotFound, HttpStatusCode.NotFound);
+                throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
             }
 
             try

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataEntities.UnitOfWork;
@@ -26,8 +27,8 @@ namespace Vokabular.MainService.Core.Works.CategoryManagement
         {
             var category = m_categoryRepository.FindById<Category>(m_categoryId);
             if (category == null)
-                throw new HttpErrorCodeException(ErrorMessages.NotFound, HttpStatusCode.NotFound);
-            
+                throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
+
             category.Description = m_data.Description;
             category.ExternalId = m_data.ExternalId;
 
