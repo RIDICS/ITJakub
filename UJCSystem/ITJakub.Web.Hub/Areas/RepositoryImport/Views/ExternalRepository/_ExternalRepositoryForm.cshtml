@@ -6,7 +6,7 @@
 @inject ILocalizationService Localizer
 
 @Html.AntiForgeryToken()
-@Html.ValidationSummary(true, "", new {@class = "text-danger"})
+@Html.ValidationSummary("", new {@class = "text-danger"})
 @Html.HiddenFor(model => model.Id)
 @Html.HiddenFor(model => model.Configuration, new { @class = "repository-configuration"})
 <div class="form-group">
