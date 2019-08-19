@@ -1,10 +1,11 @@
 ﻿@using Scalesoft.Localization.AspNetCore
-@using Scalesoft.Localization.Core.Util
 @model ITJakub.Web.Hub.Areas.RepositoryImport.Models.ImportViewModel
+
 @inject ILocalizationService Localizer
+@inject IRazorLocalizationService RazorLocalizer
 
 @{
-    ViewBag.Title = Localizer.Translate("ExternalRepositoriesTitle", "RepositoryImport", LocTranslationSource.File);
+    ViewBag.Title = Localizer.Translate("ExternalRepositoriesTitle", "RepositoryImport");
 }
 
 @section styles {
@@ -21,55 +22,72 @@
 
         <div class="content" id="project-import-layout-content">
             <div class="col-md-12">
-                <h1>@Localizer.Translate("ImportExternalRepositoryList", "RepositoryImport", LocTranslationSource.File)</h1>
-            </div>
-            
-            <div class="col-md-offset-10 col-md-2 right-align-btn">
-                <input type="button" id="select-all-repositories" value="@Localizer.Translate("SelectAll", "RepositoryImport", LocTranslationSource.File)" class="btn btn-default" />
+                <h1>@Localizer.Translate("ImportExternalRepositoryList", "RepositoryImport")</h1>
             </div>
 
-            <div class="col-md-12">
-                @using (Html.BeginForm("StartImport", "RepositoryImport", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                {
-                    @Html.AntiForgeryToken()
-                    <div class="form-group repositories">
-                        <ul class="bib-listing">
-                            @for (var idx = 0; idx < Model.ExternalRepositoryCheckBoxes.Count; idx++)
-                            {
-                                <li class="list-item">
-                                    <div class="visible-content">
-                                        <div class="visible-wrapper">
-                                            <div class="left-panel"></div>
-                                            <div class="middle-panel">
-                                                <div class="heading">
-                                                    @Html.HiddenFor(x => Model.ExternalRepositoryCheckBoxes[idx].Id)
-                                                    @Html.DisplayFor(x => Model.ExternalRepositoryCheckBoxes[idx].Name)
-                                                    @Html.HiddenFor(x => Model.ExternalRepositoryCheckBoxes[idx].Name)
+            @if (Model.ExternalRepositoryCheckBoxes.Count == 0)
+            {
+                <div class="col-xs-12">
+                    <div class="alert alert-info">
+                        <i class="fa fa-info-circle"></i>
+                        @RazorLocalizer.TranslateFormat(
+                            "EmptyExternalRepositoryList",
+                            "RepositoryImport",
+                            Html.ActionLink(
+                                Localizer.TranslateFormat("Here", "RepositoryImport").ToString(),
+                                "Create",
+                                "ExternalRepository")
+                            )
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-offset-10 col-md-2 right-align-btn">
+                    <input type="button" id="select-all-repositories" value="@Localizer.Translate("SelectAll", "RepositoryImport")" class="btn btn-default" />
+                </div>
+
+                <div class="col-md-12">
+                    @using (Html.BeginForm("StartImport", "RepositoryImport", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-group repositories">
+                            <ul class="bib-listing">
+                                @for (var idx = 0; idx < Model.ExternalRepositoryCheckBoxes.Count; idx++)
+                                {
+                                    <li class="list-item">
+                                        <div class="visible-content">
+                                            <div class="visible-wrapper">
+                                                <div class="left-panel"></div>
+                                                <div class="middle-panel">
+                                                    <div class="heading">
+                                                        @Html.HiddenFor(x => Model.ExternalRepositoryCheckBoxes[idx].Id)
+                                                        @Html.DisplayFor(x => Model.ExternalRepositoryCheckBoxes[idx].Name)
+                                                        @Html.HiddenFor(x => Model.ExternalRepositoryCheckBoxes[idx].Name)
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="right-panel">
-                                                <div class="checkbox">
-                                                    <label>
-                                                        @Html.CheckBoxFor(x => Model.ExternalRepositoryCheckBoxes[idx].IsChecked)
-                                                        <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
-                                                    </label>
+                                                <div class="right-panel">
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            @Html.CheckBoxFor(x => Model.ExternalRepositoryCheckBoxes[idx].IsChecked)
+                                                            <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="hidden-content"></div>
-                                </li>
-                            }
-                        </ul>
-                    </div>
+                                        <div class="hidden-content"></div>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
 
-                    <div class="col-md-offset-10 col-md-2 right-align-btn">
-                        <input type="submit" id="start-import-btn" value="@Localizer.Translate("Import", "RepositoryImport", LocTranslationSource.File)" class="btn btn-default disabled" />
-                    </div>
-
-
-                }
-            </div>
+                        <div class="col-md-offset-10 col-md-2 right-align-btn">
+                            <input type="submit" id="start-import-btn" value="@Localizer.Translate("Import", "RepositoryImport")" class="btn btn-default disabled" />
+                        </div>
+                    }
                 </div>
+            }
+        </div>
     </div>
 </div>
