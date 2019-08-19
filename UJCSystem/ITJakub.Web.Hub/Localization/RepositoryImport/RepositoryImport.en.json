@@ -45,6 +45,7 @@
     "CancelImportTask": "translate[Zrušit import]",
     "Import": "translate[Importovat]",
     "EmptyExternalRepositoryList": "translate[Zatím nebyla přidáná žádná externí databáze. Klikněte {0} pro přidání.]",
-    "Here": "here"
+    "Here": "here",
+    "EmptyFilteringExpressionList": "translate[Zatím nebyl vytvořen žádný filtrační set.]"
   }
 }

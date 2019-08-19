@@ -45,6 +45,7 @@
     "CancelImportTask": "Zrušit import",
     "Import": "Importovat",
     "EmptyExternalRepositoryList": "Zatím nebyla přidáná žádná externí databáze. Klikněte {0} pro přidání.",
-    "Here": "zde"
+    "Here": "zde",
+    "EmptyFilteringExpressionList": "Zatím nebyl vytvořen žádný filtrační set."
   }
 }

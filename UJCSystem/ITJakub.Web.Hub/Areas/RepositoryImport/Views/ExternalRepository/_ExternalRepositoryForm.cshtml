@@ -75,13 +75,22 @@
 <div class="form-group">
     @Html.LabelFor(model => model.FilteringExpressionSets, htmlAttributes: new {@class = "control-label col-md-2"})
     <div class="col-md-9">
-        @for (var idx = 0; idx < Model.FilteringExpressionSets.Count; idx++)
+        @if (Model.FilteringExpressionSets.Count == 0)
         {
-            <div>
-                @Html.CheckBoxFor(x => Model.FilteringExpressionSets[idx].IsChecked)
-                @Html.HiddenFor(x => Model.FilteringExpressionSets[idx].Id)
-                @Html.DisplayFor(x => Model.FilteringExpressionSets[idx].Name)
+            <div class="form-text">
+                @Localizer.Translate("EmptyFilteringExpressionList", "RepositoryImport")
             </div>
+        }
+        else
+        {
+            @for (var idx = 0; idx < Model.FilteringExpressionSets.Count; idx++)
+             {
+                 <div>
+                     @Html.CheckBoxFor(x => Model.FilteringExpressionSets[idx].IsChecked)
+                     @Html.HiddenFor(x => Model.FilteringExpressionSets[idx].Id)
+                     @Html.DisplayFor(x => Model.FilteringExpressionSets[idx].Name)
+                 </div>
+             }
         }
     </div>
 </div>
