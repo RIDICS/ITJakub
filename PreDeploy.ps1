@@ -41,22 +41,32 @@ function TestConnection {
     }
 }
 
-$httpPrefix = "http://"
+$httpScheme = "http"
 
-function AddPrefix {
+function AddScheme {
     param (
         [string] $url,
-        [string] $prefix = $httpPrefix       
+        [string] $scheme = $httpScheme       
     )
 
-    if(-Not($url.Contains($prefix)))
+    $seperator = "://"
+
+    if(-Not($url.Contains($seperator)))
     {
-       return $prefix + $url 
+        return $scheme + $seperator + $url 
     }
+
+    if($url.Contains($scheme))
+    {
+       return $url
+    }
+
+    $url = $url.Remove(0, $url.IndexOf($seperator))
+    return $scheme + $url 
 }
 
-$elasticSearchUrl = AddPrefix $elasticSearchUrl
-$existDbTempUrl = AddPrefix $existDbUrl
+$elasticSearchUrl = AddScheme $elasticSearchUrl
+$existDbTempUrl = AddScheme $existDbUrl
 
 Write-Host "Testing connections"
 TestConnection "ElasticSearch" -url $elasticSearchUrl
@@ -89,8 +99,8 @@ else {
 
 $ExistDbScriptPath = Join-Path $DatabaseFolderPath $ExistDbScript
 Write-Host "Running script  ${ExistDbScript}"
-$existPrefix = "xmldb:exist://" 
-$existDbTempUrl = AddPrefix $existDbUrl -prefix $existPrefix
+$existScheme = "xmldb:exist" 
+$existDbTempUrl = AddScheme $existDbUrl -scheme $existScheme
 $existDbTempUrl = $existDbTempUrl + "/xmlrpc"
 & $ExistDbScriptPath $existDbTempUrl
 
