@@ -11,7 +11,8 @@ namespace Vokabular.Database.Migrations.Migrations.VokabularDB
         public override void Up()
         {
             Insert.IntoTable("ExternalRepositoryType").Row(new {Name = "OaiPmh"});
-            Insert.IntoTable("ExternalRepositoryType").Row(new {Name = "Marc21"});
+
+            Insert.IntoTable("BibliographicFormat").Row(new {Name = "Marc21"});
         }
     }
 }
