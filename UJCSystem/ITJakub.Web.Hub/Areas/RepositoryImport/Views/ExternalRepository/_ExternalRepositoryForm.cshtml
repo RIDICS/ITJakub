@@ -81,14 +81,13 @@
                 @Html.CheckBoxFor(x => Model.FilteringExpressionSets[idx].IsChecked)
                 @Html.HiddenFor(x => Model.FilteringExpressionSets[idx].Id)
                 @Html.DisplayFor(x => Model.FilteringExpressionSets[idx].Name)
-
             </div>
         }
     </div>
 </div>
 
 <div class="form-group">
-    <div class="col-md-offset-10 col-md-1">
+    <div class="col-md-offset-10 col-md-1 right-align">
         <input type="submit" value="@Localizer.Translate("Submit", "RepositoryImport", LocTranslationSource.File)" class="btn btn-default"/>
     </div>
 </div>

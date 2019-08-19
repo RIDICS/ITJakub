@@ -34,6 +34,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Models
         [Display(Name = "BibliographicFormat")]
         public int BibliographicFormatId { get; set; }
 
+        [Display(Name = "FilteringExpressionSets")]
         public IList<CheckBoxEntity> FilteringExpressionSets { get; set; }
 
         public string Configuration { get; set; }
