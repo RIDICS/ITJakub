@@ -13,6 +13,14 @@ Write-Host "Using root directory: ${CurrentPath}"
 Write-Host
 Write-Host
 
+try {
+    $javaVersion = (Get-Command java | Select-Object -ExpandProperty Version).toString()    
+    Write-Host "Java is installed. Vesrion: ${javaVersion}"
+}
+catch {
+    Write-Error "Java is not installed"
+}
+
 function TestConnection {
     Param (
         [String]$serviceName,
