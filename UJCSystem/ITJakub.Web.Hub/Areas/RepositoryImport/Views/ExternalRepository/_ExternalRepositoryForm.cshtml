@@ -40,6 +40,9 @@
         @Html.TextBoxFor(model => model.UrlTemplate, new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.UrlTemplate, "", new { @class = "text-danger" })
     </div>
+    <div class="col-md-1 help">
+        <i class="fa fa-question-circle-o" data-toggle="tooltip" data-placement="top" title="@Localizer.Translate("UrlTemplateHelp", "RepositoryImport")"></i>
+    </div>
 </div>
 
 <div class="form-group">
