@@ -1,7 +1,10 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using ITJakub.Web.Hub.Options
+@using Microsoft.Extensions.Options
+@using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
 
 @inject ILocalizationService Localizer
+@inject IOptions<ForumOption> ForumOption
 
 <div class="navbar-collapse collapse">
     <div id="main-plugins-menu" class="main-plugins-menu">
@@ -85,8 +88,11 @@
                 </li>
             </ul>
         </li>
-        @*TODO forum*@
-       
+        <li>
+            <a href='@ForumOption.Value.Url'>
+                <span>@Localizer.Translate("Forum", "layout", LocTranslationSource.File)</span>
+            </a>
+        </li>
         <li>
             <a href='@Url.Action("Calendar", "News", new {area = ""})'>
                 <span>@Localizer.Translate("Events", "News", LocTranslationSource.File)</span>
