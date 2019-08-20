@@ -40,6 +40,9 @@
     "RepositoryImport": "Import from repositories",
     "MyProjects": "My projects",
     "CodeLists": "Code lists",
+    "SearchCombined": "Combined search",
+    "SearchSingleLazyload": "Search by work on one page",
+    "SearchSinglePaged": "Search by work (paged)",
 
     "FooterText": "VOKABULÁŘ WEBOVÝ was launched {0} ago",
     "UjcLong": "Institute of the Czech Language",
