@@ -153,23 +153,18 @@ namespace ITJakub.Web.Hub
             services.RegisterAutomaticTokenManagement();
 
             // Register Auth service client, because contains components for obtaining access token (for user and also for app)
-            var authServiceCommunicationConfiguration = new AuthServiceCommunicationConfiguration
+            services.RegisterAuthorizationHttpClientComponents<AuthServiceClientLocalization>(new AuthServiceCommunicationConfiguration
             {
                 TokenName = null, // not required
                 ApiAccessToken = null, // not required
                 AuthenticationServiceAddress = openIdConnectConfig.Url,
-            };
-            var authServiceControllerBasePathsConfiguration = Configuration.GetSection("AuthServiceControllerBasePathsConfiguration")
-                .Get<AuthServiceControllerBasePathsConfiguration>();
-
-            services.RegisterAuthorizationHttpClientComponents<AuthServiceClientLocalization>(authServiceCommunicationConfiguration,
-                new OpenIdConnectConfig
-                {
-                    Url = openIdConnectConfig.Url,
-                    Scopes = new List<string> {openIdConnectConfig.AuthServiceScopeName},
-                    ClientId = openIdConnectConfig.ClientId,
-                    ClientSecret = openIdConnectConfig.ClientSecret,
-                }, authServiceControllerBasePathsConfiguration);
+            }, new OpenIdConnectConfig
+            {
+                Url = openIdConnectConfig.Url,
+                Scopes = new List<string> {openIdConnectConfig.AuthServiceScopeName},
+                ClientId = openIdConnectConfig.ClientId,
+                ClientSecret = openIdConnectConfig.ClientSecret,
+            }, new AuthServiceControllerBasePathsConfiguration( /*Not required to fill because client is not used*/));
 
             services.RegisterMainServiceClientComponents<AuthTokenProvider>(new ServiceCommunicationConfiguration
             {
@@ -179,11 +174,12 @@ namespace ITJakub.Web.Hub
 
             // Configuration options
             services.AddOptions();
+            services.AddSingleton(openIdConnectConfig);
             services.Configure<EndpointOption>(Configuration.GetSection("Endpoints"));
             services.Configure<GoogleCalendarConfiguration>(Configuration.GetSection("GoogleCalendar"));
             services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = 1048576000; });
             services.Configure<PortalOption>(Configuration.GetSection("PortalConfig"));
-            services.Configure<AutoLoginCookieConfiguration>(Configuration.GetSection("AutoLoginCookieConfiguration"));
+            services.Configure<AutoLoginCookieConfiguration>(Configuration.GetSection("AutoLoginCookie"));
             services.Configure<ForumOption>(Configuration.GetSection("Forum"));
 
             // Localization

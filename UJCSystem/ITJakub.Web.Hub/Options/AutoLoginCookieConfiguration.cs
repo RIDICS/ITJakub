@@ -7,5 +7,7 @@
         public const string Value = "true";
 
         public int ExpirationTimeInSeconds { get; set; }
+
+        public string LoginCheckPath { get; set; }
     }
 }

@@ -1,9 +1,8 @@
-﻿@using ITJakub.Web.Hub.Options
+﻿@using ITJakub.Web.Hub.Models.Config
+@using ITJakub.Web.Hub.Options
 @using Microsoft.AspNetCore.Http
 @using Microsoft.Extensions.Options
-@using Ridics.Authentication.HttpClient.Configuration
-@inject AuthServiceCommunicationConfiguration Configuration
-@inject AuthServiceControllerBasePathsConfiguration BasePathsConfiguration
+@inject OpenIdConnectConfiguration AuthConfiguration
 @inject IOptions<AutoLoginCookieConfiguration> CookieConfig
 
 
@@ -11,7 +10,7 @@
 {
     //If user is already logged in at identityserver returned script will contain redirect to login url, otherwise script will be empty
 
-    var src = $"{Configuration.AuthenticationServiceAddress}{BasePathsConfiguration.LoginCheckBasePath}";
+    var src = $"{AuthConfiguration.Url}{CookieConfig.Value.LoginCheckPath}";
     <script type="text/javascript" asp-append-version="true" src="@src" id="sso-script" data-login-url="@Url.Action("Login", "Account", new {area = ""})"></script>
 
     //Set cookie and dont try auto login in next 5 minutes
