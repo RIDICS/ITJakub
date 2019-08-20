@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Net;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
-using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Portal
@@ -70,7 +68,7 @@ namespace Vokabular.MainService.Core.Works.Portal
                 var createAnonymousData = m_data as CreateAnonymousFeedbackContract;
                 if (createAnonymousData == null)
                 {
-                    throw new ArgumentException("If no userId is specified then CreateAnonymousFeedbackContract is required as data argument");
+                    throw new MainServiceException(MainServiceErrorCode.CreateAnonymousFeedback, "If no userId is specified then CreateAnonymousFeedbackContract is required as data argument");
                 }
                 feedback.AuthorEmail = createAnonymousData.AuthorEmail;
                 feedback.AuthorName = createAnonymousData.AuthorName;

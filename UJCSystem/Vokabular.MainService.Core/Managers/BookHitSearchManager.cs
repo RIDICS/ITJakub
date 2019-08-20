@@ -9,6 +9,7 @@ using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
 using Vokabular.MainService.Core.Utils;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.RestClient.Errors;
@@ -105,7 +106,9 @@ namespace Vokabular.MainService.Core.Managers
             }
             else
             {
-                throw new ArgumentException("No supported search criteria was specified");
+                throw new MainServiceException(MainServiceErrorCode.NoSupportedSearch,
+                    "No supported search criteria was specified"
+                );
             }
 
             var result = Mapper.Map<List<PageContract>>(resultPages);
@@ -136,7 +139,9 @@ namespace Vokabular.MainService.Core.Managers
             var fulltextConditions = ExtractFulltextConditions(request.ConditionConjunction);
             if (fulltextConditions.Count == 0)
             {
-                throw new ArgumentException("No supported search criteria was specified");
+                throw new MainServiceException(MainServiceErrorCode.NoSupportedSearch,
+                    "No supported search criteria was specified"
+                );
             }
 
             var projectIdentification = m_bookRepository.InvokeUnitOfWork(x => x.GetProjectIdentification(projectId));
@@ -164,7 +169,9 @@ namespace Vokabular.MainService.Core.Managers
             var fulltextConditions = ExtractFulltextConditions(request.ConditionConjunction);
             if (fulltextConditions.Count == 0)
             {
-                throw new ArgumentException("No supported search criteria was specified");
+                throw new MainServiceException(MainServiceErrorCode.NoSupportedSearch,
+                    "No supported search criteria was specified"
+                );
             }
 
             var projectIdentification = m_bookRepository.InvokeUnitOfWork(x => x.GetProjectIdentification(projectId));

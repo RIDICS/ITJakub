@@ -18,6 +18,12 @@
     "user-cardfile-access-forbidden": "Uživatel s id '{0}' (externí id '{1}') nemá přístup ke čtení kartotéky s id '{2}'",
     "user-book-access-forbidden": "Uživatel s id '{0}' (externí id '{1}') nemá přístup ke knize s id '{2}'",
     "user-resource-access-forbidden": "Uživatel s id '{0}' (externí id '{1}') nemá přístup ke knize se zdrojem s id '{2}'",
+    "project-id-or-resource-id": "Musí být specifikován právě jeden parametr (ProjectId or ResourceId)",
+    "create-anonymous-feedback": "Pokud userId není specifikováno, je vyžadován CreateAnonymousFeedbackContract jako data argument",
+    "user-has-missing-external-id": "Uživateli s ID {0} schází externí ID",
+    "cannot-locate-user": "Nelze nalézt uživatele s id {0}",
+    "no-supported-search": "Nebylo specifikováno žádné podporované vyhledávací kritérium",
+    "null-book-type-not-supported": "Hodnota Null není pro typ díla podporována",
 
     //Auth service codes
     "generic-error": "Operace se nezdařila",

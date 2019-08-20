@@ -32,7 +32,7 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
             
             if ((m_projectId == null && m_resourceId == null) || (m_projectId != null && m_resourceId != null))
             {
-                throw new ArgumentException("Exactly one parameter (ProjectId or ResourceId) has to be specified");
+                throw new MainServiceException(MainServiceErrorCode.ProjectIdOrResourceId, "Exactly one parameter (ProjectId or ResourceId) has to be specified");
             }
 
             var pageResource = m_resourceId != null

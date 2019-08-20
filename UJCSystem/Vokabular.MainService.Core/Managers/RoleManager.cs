@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Reflection;
 using AutoMapper;
 using log4net;
@@ -7,6 +7,7 @@ using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Permission;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Results;
@@ -43,12 +44,21 @@ namespace Vokabular.MainService.Core.Managers
                 var message = $"Cannot locate user with id '{userId}'";
                 if (m_log.IsErrorEnabled)
                     m_log.Error(message);
-                throw new ArgumentException(message);
+
+                throw new MainServiceException(MainServiceErrorCode.CannotLocateUser,
+                    message,
+                    HttpStatusCode.BadRequest,
+                    new object[] {userId}
+                );
             }
 
             if (user.ExternalId == null)
             {
-                throw new ArgumentException($"User with ID {userId} has missing ExternalID");
+                throw new MainServiceException(MainServiceErrorCode.UserHasMissingExternalId,
+                    $"User with ID {user.Id} has missing ExternalID",
+                    HttpStatusCode.BadRequest,
+                    new object[] {user.Id}
+                );
             }
 
             var client = m_communicationProvider.GetAuthUserApiClient();

@@ -18,6 +18,12 @@
     "user-cardfile-access-forbidden": "User with id '{0}' (external id '{1}') does not have permission to read cardfile with id '{2}'",
     "user-book-access-forbidden": "User with id '{0}' (external id '{1}') does not have permission on book with id '{2}'",
     "user-resource-access-forbidden": "User with id '{0}' (external id '{1}') does not have permission on book with resource with id '{2}'",
+    "project-id-or-resource-id": "Exactly one parameter (ProjectId or ResourceId) has to be specified",
+    "create-anonymous-feedback": "If no userId is specified then CreateAnonymousFeedbackContract is required as data argument",
+    "user-has-missing-external-id": "User with ID {0} has missing ExternalID",
+    "cannot-locate-user": "Cannot locate user with id '{0}'",
+    "no-supported-search": "No supported search criteria was specified",
+    "null-book-type-not-supported": "Null value of BookType is not supported",
 
     //Auth service codes
     "generic-error": "Operation failed",

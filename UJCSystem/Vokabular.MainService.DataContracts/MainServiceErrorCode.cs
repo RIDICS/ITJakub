@@ -17,5 +17,11 @@
         public const string UserCardFileAccessForbidden = "user-cardfile-access-forbidden";
         public const string UserBookAccessForbidden = "user-book-access-forbidden";
         public const string UserResourceAccessForbidden = "user-resource-access-forbidden";
+        public const string ProjectIdOrResourceId = "project-id-or-resource-id";
+        public const string CreateAnonymousFeedback = "create-anonymous-feedback";
+        public const string UserHasMissingExternalId = "user-has-missing-external-id";
+        public const string CannotLocateUser = "cannot-locate-user";
+        public const string NoSupportedSearch = "no-supported-search";
+        public const string NullBookTypeNotSupported = "null-book-type-not-supported";
     }
 }
