@@ -13,7 +13,7 @@ namespace Vokabular.MainService.DataContracts
                 services.AddSingleton(configuration);
 
             services.AddScoped<IMainServiceAuthTokenProvider, TTokenProvider>();
-            services.AddScoped<MainServiceRestClient>();
+            services.AddSingleton<MainServiceRestClient>();
 
             services.AddScoped<MainServiceBookClient>();
             services.AddScoped<MainServiceCardFileClient>();

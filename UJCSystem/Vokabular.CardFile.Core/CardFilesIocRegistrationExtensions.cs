@@ -10,7 +10,7 @@ namespace Vokabular.CardFile.Core
             if (configuration != null)
                 services.AddSingleton(configuration);
 
-            services.AddScoped<CardFilesRestClient>();
+            services.AddSingleton<CardFilesRestClient>();
             services.AddScoped<CardFilesClient>();
         }
     }
