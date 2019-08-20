@@ -16,11 +16,11 @@
     <div class="row project-import-layout">
         @await Html.PartialAsync("~/Areas/RepositoryImport/Views/_LeftMenu.cshtml")
         
-        <div class="content" id="project-import-layout-content">
-            <div class="col-xs-12">
-                <h1> @Localizer.Translate("FilteringSetList", "RepositoryImport", LocTranslationSource.File)</h1>
+        <div class="content content-list" id="project-import-layout-content">
+            <div class="col-xs-12 float-none">
+                <h2> @Localizer.Translate("FilteringSetList", "RepositoryImport", LocTranslationSource.File)</h2>
             </div>
-            <div class="col-xs-offset-5 col-xs-7 right-align-btn">
+            <div class="col-xs-12 right-align-btn">
                 <a class="btn btn-default" href="@Url.Action("Create", "FilteringExpressionSet", new {area = "RepositoryImport"})">
                     @Localizer.Translate("CreateButton", "RepositoryImport", LocTranslationSource.File)
                 </a>
