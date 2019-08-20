@@ -47,6 +47,7 @@
     "EmptyExternalRepositoryList": "Zatím nebyla přidáná žádná externí databáze bibliografických údajů. Klikněte {0} pro přidání.",
     "Here": "zde",
     "EmptyFilteringExpressionList": "Zatím nebyl vytvořen žádný filtrační set.",
-    "UrlTemplateHelp": "Doplňte adresu ve tvaru např. \"www.example.com/path/{0}\", kde se za \"{0}\" automaticky doplní ID importovaného záznamu."
+    "UrlTemplateHelp": "Doplňte adresu ve tvaru např. \"www.example.com/path/{0}\", kde se za \"{0}\" automaticky doplní ID importovaného záznamu.",
+    "NoImport" : "Zatím nebyl proveden žádný import"
   }
 }

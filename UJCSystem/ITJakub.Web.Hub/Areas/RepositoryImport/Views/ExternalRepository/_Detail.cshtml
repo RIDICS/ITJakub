@@ -8,18 +8,36 @@
     <div class="bib-table-cell">@Model.TotalImportedItems</div>
 </div>
 
-<div class="bib-table-row">
-    <div class="bib-table-cell bib-label">@Localizer.Translate("LastImport", "RepositoryImport")</div>
-    <div class="bib-table-cell">@Model.LastUpdateDate</div>
-</div>
-<div class="bib-table-row">
-    <div class="bib-table-cell bib-label">@Localizer.Translate("LastUpdateBy", "RepositoryImport")</div>
-    <div class="bib-table-cell">@Model.UpdatedBy.FirstName @Model.UpdatedBy.LastName</div>
-</div>
-<div class="bib-table-row">
-    <div class="bib-table-cell bib-label">@(Model.IsSuccessful ? Localizer.Translate("SuccessfulLastImport", "RepositoryImport")
-                                                : Localizer.Translate("UnsuccessfulLastImport", "RepositoryImport"))</div>
-</div>
+@if (Model.LastUpdateDate.HasValue)
+{
+    <div class="bib-table-row">
+        <div class="bib-table-cell bib-label">@Localizer.Translate("LastImport", "RepositoryImport")</div>
+        <div class="bib-table-cell">@Model.LastUpdateDate.Value</div>
+    </div>
+}
+else
+{
+    <div class="bib-table-row">
+        <div class="bib-table-cell bib-label">@Localizer.Translate("LastImport", "RepositoryImport")</div>
+        <div class="bib-table-cell">@Localizer.Translate("NoImport", "RepositoryImport")</div>
+    </div>
+}
+@if (Model.UpdatedBy != null)
+{
+    <div class="bib-table-row">
+        <div class="bib-table-cell bib-label">@Localizer.Translate("LastUpdateBy", "RepositoryImport")</div>
+        <div class="bib-table-cell">@Model.UpdatedBy.FirstName @Model.UpdatedBy.LastName</div>
+    </div>
+}
+@if (Model.IsSuccessful.HasValue)
+{
+    <div class="bib-table-row">
+        <div class="bib-table-cell bib-label">
+            @(Model.IsSuccessful.Value ? Localizer.Translate("SuccessfulLastImport", "RepositoryImport")
+                                          : Localizer.Translate("UnsuccessfulLastImport", "RepositoryImport"))
+        </div>
+    </div>
+}
 <div class="bib-table-row">
     <div class="bib-table-cell bib-label">@Localizer.Translate("TotalItemsInLastUpdate", "RepositoryImport")</div>
     <div class="bib-table-cell">@Model.TotalItemsInLastUpdate</div>

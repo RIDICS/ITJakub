@@ -31,6 +31,8 @@ namespace Vokabular.MainService.DataContracts.Contracts
 
     public class ExternalRepositoryStatisticsContract
     {
+        public bool EmptyStatistics { get; set; }
+
         public int TotalImportedItems { get; set; }
 
         public int TotalItemsInLastUpdate { get; set; }
@@ -39,10 +41,10 @@ namespace Vokabular.MainService.DataContracts.Contracts
 
         public int UpdatedItemsInLastUpdate { get; set; }
 
-        public DateTime LastUpdateDate { get; set; }
+        public DateTime? LastUpdateDate { get; set; }
 
         public UserContract UpdatedBy { get; set; }
         
-        public bool IsSuccessful { get; set; }
+        public bool? IsSuccessful { get; set; }
     }
 }
