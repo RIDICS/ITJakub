@@ -31,8 +31,6 @@ namespace Vokabular.MainService.DataContracts.Contracts
 
     public class ExternalRepositoryStatisticsContract
     {
-        public bool EmptyStatistics { get; set; }
-
         public int TotalImportedItems { get; set; }
 
         public int TotalItemsInLastUpdate { get; set; }
