@@ -182,9 +182,20 @@ ul.bib-listing li.list-item {
             padding-top: 7px;
         }
 
-        .help {
-            padding-left: 0;
-            font-size: 1.5em;
+        .input-help {
+            position: relative;
+
+            input {
+                padding-right: 2em
+            }
+
+            .help {
+                font-size: 1.2em;
+                position: absolute;
+                right: 1.5em;
+                top: 50%;
+                transform: translatey(-50%);
+            }
         }
     }
 
