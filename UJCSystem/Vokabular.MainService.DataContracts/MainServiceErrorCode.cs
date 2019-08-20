@@ -10,5 +10,12 @@
         public const string EditionNoteConflict = "edition-note-conflict";
         public const string ResourceVersionIdNull = "resource-version-id-null";
         public const string CannotMoveCategoryToSubcategory = "cannot-move-category-to-subcategory";
+        public const string UnallowedAuthorizationCriteria = "unallowed-authorization-criteria";
+        public const string UnregisteredCardFileAccessForbidden = "unregistered-user-cardfile-access-forbidden";
+        public const string UnregisteredUserBookAccessForbidden = "unregistered-user-book-access-forbidden";
+        public const string UnregisteredUserResourceAccessForbidden = "unregistered-user-resource-access-forbidden";
+        public const string UserCardFileAccessForbidden = "user-cardfile-access-forbidden";
+        public const string UserBookAccessForbidden = "user-book-access-forbidden";
+        public const string UserResourceAccessForbidden = "user-resource-access-forbidden";
     }
 }

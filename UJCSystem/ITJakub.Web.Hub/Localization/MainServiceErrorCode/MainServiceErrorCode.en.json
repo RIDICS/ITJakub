@@ -11,6 +11,13 @@
     "edition-note-conflict": "Conflict - current latest versionId is {0}, but originalVersionId was specified {1}",
     "resource-version-id-null": "resourceVersionId can't be null for HeadwordFeedback",
     "cannot-move-category-to-subcategory": "Can't move category into it's own subcategories",
+    "unallowed-authorization-criteria": "Search criteria contains unallowed Authorization criteria. Authorization criteria is generated automatically.",
+    "unregistered-user-cardfile-access-forbidden": "Unregistered user does not have permission to read cardfile with id '{0}'",
+    "unregistered-user-book-access-forbidden": "Unregistered user does not have permission on book with id '{0}'",
+    "unregistered-user-resource-access-forbidden": "Unregistered user does not have permission on book with resource with id '{0}'",
+    "user-cardfile-access-forbidden": "User with id '{0}' (external id '{1}') does not have permission to read cardfile with id '{2}'",
+    "user-book-access-forbidden": "User with id '{0}' (external id '{1}') does not have permission on book with id '{2}'",
+    "user-resource-access-forbidden": "User with id '{0}' (external id '{1}') does not have permission on book with resource with id '{2}'",
 
     //Auth service codes
     "generic-error": "Operation failed",

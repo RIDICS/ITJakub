@@ -11,6 +11,13 @@
     "edition-note-conflict": "Konflikt - aktuální poslední versionId je, ale originalVersionId je {1}",
     "resource-version-id-null": "ResourceVersionId nemůže být prázdné pro připomínky k heslu.",
     "cannot-move-category-to-subcategory": "Nelze přesunout kategorii do její vlastní podkategorie",
+    "unallowed-authorization-criteria": "Vyhledácí kritérium obsahuje nepovolené autorizační kritérium. Autorizační kritérium je generováno automaticky.",
+    "unregistered-user-cardfile-access": "Neregistrovaní uživatelé nemají přístup ke čtení kartotéky s id '{0}'",
+    "unregistered-user-book-access-forbidden": "Neregistrovaní uživatelé nemají přístup ke knize s id '{0}",
+    "unregistered-user-resource-access-forbidden": "Neregistrovaní uživatelé nemají přístup ke knize se zdrojem s id '{0}",
+    "user-cardfile-access-forbidden": "Uživatel s id '{0}' (externí id '{1}') nemá přístup ke čtení kartotéky s id '{2}'",
+    "user-book-access-forbidden": "Uživatel s id '{0}' (externí id '{1}') nemá přístup ke knize s id '{2}'",
+    "user-resource-access-forbidden": "Uživatel s id '{0}' (externí id '{1}') nemá přístup ke knize se zdrojem s id '{2}'",
 
     //Auth service codes
     "generic-error": "Operace se nezdařila",
