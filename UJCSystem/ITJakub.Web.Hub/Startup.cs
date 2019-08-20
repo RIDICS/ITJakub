@@ -181,6 +181,10 @@ namespace ITJakub.Web.Hub
             services.Configure<PortalOption>(Configuration.GetSection("PortalConfig"));
             services.Configure<AutoLoginCookieConfiguration>(Configuration.GetSection("AutoLoginCookie"));
             services.Configure<ForumOption>(Configuration.GetSection("Forum"));
+            services.PostConfigure<AutoLoginCookieConfiguration>(config =>
+            {
+                config.CookieName = $"{AutoLoginCookieConfiguration.CookieNamePrefix}{portalConfig.PortalType}";
+            });
 
             // Localization
             var localizationConfiguration = Configuration.GetSection("Localization").Get<LocalizationConfiguration>();
