@@ -20,13 +20,12 @@
 <div class="content-container">
     <div class="row project-import-layout">
         @await Html.PartialAsync("~/Areas/RepositoryImport/Views/_LeftMenu.cshtml")
-        <div class="vertical-splitter"></div>
-
+        
         <div class="content" id="project-import-layout-content">
-            <div class="col-md-12">
+            <div class="col-xs-12">
                 <h1>@Localizer.Translate("ExternalRepositoryList", "RepositoryImport", LocTranslationSource.File)</h1>
             </div>
-            <div class="col-md-offset-10 col-md-2 right-align-btn">
+            <div class="col-xs-offset-5 col-xs-7 right-align-btn">
                 <a class="btn btn-default" href="@Url.Action("Create", "ExternalRepository", new {area = "RepositoryImport"})">
                     @Localizer.Translate("CreateRepository", "RepositoryImport", LocTranslationSource.File)
                 </a>
@@ -61,15 +60,15 @@
                                         <div class="body">
                                             @repository.Description
                                             <div>
-                                                <b>@Localizer.Translate("RepositoryType", "RepositoryImport")</b>
+                                                <div class="body-title">@Localizer.Translate("RepositoryType", "RepositoryImport")</div>
                                                 @repository.ExternalRepositoryType.Name
                                             </div>
                                             <div>
-                                                <b>@Localizer.Translate("BibliographicFormat", "RepositoryImport")</b>
+                                                <div class="body-title">@Localizer.Translate("BibliographicFormat", "RepositoryImport")</div>
                                                 @repository.BibliographicFormat.Name
                                             </div>
                                             <div>
-                                                <b>@Localizer.Translate("License", "RepositoryImport")</b>
+                                                <div class="body-title">@Localizer.Translate("License", "RepositoryImport")</div>
                                                 @repository.License
                                             </div>
                                         </div>

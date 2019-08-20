@@ -3,6 +3,7 @@
 @box-border: 1px solid #ddd;
 @even-table-row-colour: #eee;
 @odd-table-row-colour: #white;
+@border-color: #E5E5E5;
 
 .row.display-flex {
     display: flex;
@@ -23,20 +24,21 @@
 }
 
 ul.bib-listing li.list-item {
+    margin-right: 15px;
+
     .visible-content {
-        border-top: 1px solid #E5E5E5;
+        border-top: 1px solid @border-color;
     }
 
     .hidden-content {
-        border-top: none;
-        border-bottom: 1px solid #E5E5E5;
+        border: none;
+        border-bottom: 1px solid @border-color;
+        border-right: 1px solid @border-color;
         display: inherit;
         overflow-y: hidden;
     }
 
     .collapse .bottom-panel {
-        border-right: 1px solid #E5E5E5;
-
         .body {
             padding: 0;
         }
@@ -46,14 +48,24 @@ ul.bib-listing li.list-item {
         padding: 1rem;
     }
 
+    .body {
+        .body-title {
+            font-weight: bold;
+
+            @media(min-width: 400px) {
+                display: inline-block;
+            }
+        }
+    }
+
     .right-panel .checkbox {
         label {
-            padding-left: 8px;  
-            
+            padding-left: 8px;
+
             &:after {
-            content: '';
-            display: table;
-            clear: both;
+                content: '';
+                display: table;
+                clear: both;
             }
         }
 
@@ -94,7 +106,6 @@ ul.bib-listing li.list-item {
     }
 }
 
-
 .import-alert {
     word-break: break-all;
 }
@@ -122,16 +133,16 @@ ul.bib-listing li.list-item {
 }
 
 .project-import-layout {
-    display: table-row;
-
-    .left-menu, .vertical-splitter, .vertical-splitter-control, .content {
-        display: table-cell;
-    }
+    display: flex;
+    flex-wrap: wrap;
 
     .left-menu {
-        vertical-align: top;
-        width: 200px;
-        padding-right: 10px;
+        flex: 1 0 15em;
+        margin: 1em;
+
+        .list-group-item {
+            display: block;
+        }
     }
 
     .vertical-splitter-control {
@@ -146,10 +157,20 @@ ul.bib-listing li.list-item {
 
     .vertical-splitter {
         border: 1px solid #ccc;
+        display: table-cell;
     }
 
     .content {
-        width: 100%;
+        min-width: 60%;
+        flex-grow: 10;
+        margin: 1em 1em 1em 0em;
+        padding-left: 1em;
+        border-left: 2px solid #ccc;
+
+        .repository-content {
+            max-width: 75em;
+            margin: auto;
+        }
     }
 
     .form-group {
