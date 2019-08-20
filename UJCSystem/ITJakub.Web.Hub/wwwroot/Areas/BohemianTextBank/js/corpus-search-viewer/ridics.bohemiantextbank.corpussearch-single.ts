@@ -18,9 +18,9 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
     protected authorString = localization.translate("Author", "BohemianTextBank").value;
     protected titleString = localization.translate("Title", "BohemianTextBank").value;
     protected sourceDateString = localization.translate("DatingDetail", "BohemianTextBank").value;
-    protected sourceDateCenturyString = localization.translate("DatingDetail", "DatingCentury").value;
-    protected sourceAbbreviationString = localization.translate("DatingDetail", "DetailAbbr").value;
-    protected editionNoteString = localization.translate("DatingDetail", "EditionNote").value;
+    protected sourceDateCenturyString = localization.translate("DatingCentury", "BohemianTextBank").value;
+    protected sourceAbbreviationString = localization.translate("DetailAbbr", "BohemianTextBank").value;
+    protected editionNoteString = localization.translate("EditionNote", "BohemianTextBank").value;
     protected pholioString = localization.translate("Folio", "BohemianTextBank").value;
     protected verseString = localization.translate("Verse", "BohemianTextBank").value;
     protected bibleVerseString = localization.translate("BibleVerse", "BohemianTextBank").value;
