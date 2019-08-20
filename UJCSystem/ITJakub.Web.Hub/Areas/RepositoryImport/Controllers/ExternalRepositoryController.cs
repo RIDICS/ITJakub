@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ITJakub.Web.Hub.Areas.RepositoryImport.Models;
 using ITJakub.Web.Hub.Controllers;
@@ -68,6 +69,11 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                 return View("Create", model);
             }
 
+            var filteringExpressionSets = model.FilteringExpressionSets == null
+                ? new List<FilteringExpressionSetContract>()
+                : model.FilteringExpressionSets.Where(x => x.IsChecked)
+                    .Select(x => new FilteringExpressionSetContract {Id = x.Id}).ToList();
+
             var client = GetExternalRepositoryClient();
             client.CreateExternalRepository(new ExternalRepositoryDetailContract
             {
@@ -79,8 +85,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                 Configuration = GetConfiguration(Request.Form),
                 BibliographicFormat = new BibliographicFormatContract {Id = model.BibliographicFormatId},
                 ExternalRepositoryType = new ExternalRepositoryTypeContract {Id = model.ExternalRepositoryTypeId},
-                FilteringExpressionSets = model.FilteringExpressionSets.Where(x => x.IsChecked)
-                    .Select(x => new FilteringExpressionSetContract {Id = x.Id}).ToList()
+                FilteringExpressionSets = filteringExpressionSets
             });
             return RedirectToAction("List");
         }
