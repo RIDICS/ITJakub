@@ -209,7 +209,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public void ResetUserPassword(int userId)
         {
-            throw new NotImplementedException();
+            var client = m_communicationProvider.GetAuthUserApiClient();
+            client.ResetUserPasswordAsync(GetUserExternalId(userId)).GetAwaiter().GetResult();
         }
     }
 }
