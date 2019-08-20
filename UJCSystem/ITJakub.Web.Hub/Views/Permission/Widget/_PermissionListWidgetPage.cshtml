@@ -1,6 +1,8 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using ITJakub.Web.Hub.Helpers
+@using Scalesoft.Localization.AspNetCore
 @model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<ITJakub.Web.Hub.Models.PermissionViewModel>
 @inject ILocalizationService Localizer
+@inject PermissionLocalizer PermissionLocalizer
 
 <div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>
 @foreach (var permission in Model.List)
@@ -11,7 +13,7 @@
     </td>
     <td>
         <div class="name">
-            @Html.DisplayFor(modelItem => permission.Name)
+            @PermissionLocalizer.TranslatePermissionName(permission.Name)
         </div>
         <div class="status visible-xs">
             <span class="loading-spinner spin"></span>
