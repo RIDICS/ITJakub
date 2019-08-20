@@ -24,7 +24,7 @@ namespace ITJakub.BatchImport.Client
 
             container.Register(Component.For<MainServiceClientConfiguration>().Instance(mainServiceConfiguration));
             container.Register(Component.For<IMainServiceAuthTokenProvider, AuthenticationManager>());
-            container.Register(Component.For<MainServiceRestClient>());
+            container.Register(Component.For<MainServiceRestClient>().LifeStyle.Singleton);
             container.Register(Component.For<MainServiceSessionClient>());
         }
     }
