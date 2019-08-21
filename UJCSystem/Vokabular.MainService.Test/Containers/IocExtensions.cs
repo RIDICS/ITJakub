@@ -44,32 +44,5 @@ namespace Vokabular.MainService.Test.Containers
 
             return config;
         }
-
-        public static void InitNHibernate(this DryIocContainer container)
-        {
-            var config = GetConfiguration();
-            
-            var connectionString = config.GetConnectionString(SettingKeys.TestDbConnectionString) ?? throw new ArgumentException("Connection string not found");
-
-            var cfg = new Configuration()
-                .DataBaseIntegration(db =>
-                {
-                    db.ConnectionString = connectionString;
-                    db.Dialect<MsSql2008Dialect>();
-                    db.Driver<SqlClientDriver>();
-                    db.ConnectionProvider<DriverConnectionProvider>();
-                    db.BatchSize = 5000;
-                    db.Timeout = byte.MaxValue;
-                    //db.LogFormattedSql = true;
-                    //db.LogSqlInConsole = true;                     
-                })
-                .AddAssembly(typeof(DataEntitiesContainerRegistration).Assembly);
-
-            var sessionFactory = cfg.BuildSessionFactory();
-
-            container.AddInstance(cfg);
-
-            container.AddInstance(sessionFactory);
-        }
     }
 }
