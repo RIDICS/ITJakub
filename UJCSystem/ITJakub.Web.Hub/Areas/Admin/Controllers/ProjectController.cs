@@ -51,33 +51,27 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult List()
         {
-            using (var client = GetRestClient())
-            {
-                const int start = 0;
-                var result = client.GetProjectList(start, ProjectListPageSize, null, true);
-                var viewModel = CreateProjectListViewModel(result, start);
-                return View(viewModel);
-            }
+            var client = GetProjectClient();
+            const int start = 0;
+            var result = client.GetProjectList(start, ProjectListPageSize, null, true);
+            var viewModel = CreateProjectListViewModel(result, start);
+            return View(viewModel);
         }
 
         public IActionResult Project(long id)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetProject(id);
-                var viewModel = Mapper.Map<ProjectItemViewModel>(result);
-                return View(viewModel);
-            }
+            var client = GetProjectClient();
+            var result = client.GetProject(id);
+            var viewModel = Mapper.Map<ProjectItemViewModel>(result);
+            return View(viewModel);
         }
 
         public IActionResult ProjectListContent(int start, int count)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetProjectList(start, count, null, true);
-                var viewModel = CreateProjectListViewModel(result, start);
-                return PartialView("_ProjectListContent", viewModel);
-            }
+            var client = GetProjectClient();
+            var result = client.GetProjectList(start, count, null, true);
+            var viewModel = CreateProjectListViewModel(result, start);
+            return PartialView("_ProjectListContent", viewModel);
         }
 
         public IActionResult ProjectModule(ProjectModuleType moduleType)
@@ -100,48 +94,49 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 return BadRequest();
             }
 
-            using (var client = GetRestClient())
+            var projectClient = GetProjectClient();
+            var codeListClient = GetCodeListClient();
+
+            switch (tabType)
             {
-                switch (tabType)
-                {
-                    case ProjectModuleTabType.WorkPublications:
-                        var snapshotList = client.GetSnapshotList(projectId.Value);
-                        var publicationsViewModel = Mapper.Map<List<SnapshotViewModel>>(snapshotList);
-                        return PartialView("Work/_Publications", publicationsViewModel);
-                    case ProjectModuleTabType.WorkPageList:
-                        return PartialView("Work/_PageList");
-                    case ProjectModuleTabType.WorkCooperation:
-                        return PartialView("Work/_Cooperation");
-                    case ProjectModuleTabType.WorkMetadata:
-                        var literaryKinds = client.GetLiteraryKindList();
-                        var literaryGenres = client.GetLiteraryGenreList();
-                        var literaryOriginals = client.GetLiteraryOriginalList();
-                        var responsibleTypes = client.GetResponsibleTypeList();
-                        var categories = client.GetCategoryList();
-                        var projectMetadata = client.GetProjectMetadata(projectId.Value, true, true, true, true, true, true, true);
-                        var workMetadaViewModel = Mapper.Map<ProjectWorkMetadataViewModel>(projectMetadata);
-                        workMetadaViewModel.AllLiteraryKindList = literaryKinds;
-                        workMetadaViewModel.AllLiteraryGenreList = literaryGenres;
-                        workMetadaViewModel.AllLiteraryOriginalList = literaryOriginals;
-                        workMetadaViewModel.AllCategoryList = categories;
-                        workMetadaViewModel.AllResponsibleTypeList =
-                            Mapper.Map<List<ResponsibleTypeViewModel>>(responsibleTypes);
-                        return PartialView("Work/_Metadata", workMetadaViewModel);
-                    case ProjectModuleTabType.WorkHistory:
-                        return PartialView("Work/_History");
-                    case ProjectModuleTabType.WorkNote:
-                        return PartialView("Work/_Note");
-                    case ProjectModuleTabType.Forum:
-                        var forum = client.GetForum(projectId.Value);
-                        ForumViewModel forumViewModel = null;
-                        if (forum != null)
-                        {
-                            forumViewModel = Mapper.Map<ForumViewModel>(forum);
-                        }
-                        return PartialView("Work/_Forum", forumViewModel);
-                    default:
-                        return NotFound();
-                }
+                case ProjectModuleTabType.WorkPublications:
+                    var snapshotList = projectClient.GetSnapshotList(projectId.Value);
+                    var publicationsViewModel = Mapper.Map<List<SnapshotViewModel>>(snapshotList);
+                    return PartialView("Work/_Publications", publicationsViewModel);
+                case ProjectModuleTabType.WorkPageList:
+                    return PartialView("Work/_PageList");
+                case ProjectModuleTabType.WorkCooperation:
+                    return PartialView("Work/_Cooperation");
+                case ProjectModuleTabType.WorkMetadata:
+                    var literaryKinds = codeListClient.GetLiteraryKindList();
+                    var literaryGenres = codeListClient.GetLiteraryGenreList();
+                    var literaryOriginals = codeListClient.GetLiteraryOriginalList();
+                    var responsibleTypes = codeListClient.GetResponsibleTypeList();
+                    var categories = codeListClient.GetCategoryList();
+                    var projectMetadata = projectClient.GetProjectMetadata(projectId.Value, true, true, true, true, true, true, true);
+                    var workMetadaViewModel = Mapper.Map<ProjectWorkMetadataViewModel>(projectMetadata);
+                    workMetadaViewModel.AllLiteraryKindList = literaryKinds;
+                    workMetadaViewModel.AllLiteraryGenreList = literaryGenres;
+                    workMetadaViewModel.AllLiteraryOriginalList = literaryOriginals;
+                    workMetadaViewModel.AllCategoryList = categories;
+                    workMetadaViewModel.AllResponsibleTypeList =
+                        Mapper.Map<List<ResponsibleTypeViewModel>>(responsibleTypes);
+                    return PartialView("Work/_Metadata", workMetadaViewModel);
+                case ProjectModuleTabType.WorkHistory:
+                    return PartialView("Work/_History");
+                case ProjectModuleTabType.WorkNote:
+                    return PartialView("Work/_Note");
+                case ProjectModuleTabType.Forum:
+                    var forum = projectClient.GetForum(projectId.Value);
+                    ForumViewModel forumViewModel = null;
+                    if (forum != null)
+                    {
+                        forumViewModel = Mapper.Map<ForumViewModel>(forum);
+                    }
+
+                    return PartialView("Work/_Forum", forumViewModel);
+                default:
+                    return NotFound();
             }
         }
 
@@ -162,39 +157,35 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 return BadRequest();
             }
 
-            using (var client = GetRestClient())
+            var client = GetResourceClient();
+
+            switch (tabType)
             {
-                switch (tabType)
-                {
-                    case ProjectModuleTabType.ResourceDiscussion:
-                        return PartialView("Resource/_Discussion");
-                    case ProjectModuleTabType.ResourceMetadata:
-                        var resourceMetadata = client.GetResourceMetadata(resourceId.Value);
-                        var resourceMetadataViewModel = Mapper.Map<ProjectResourceMetadataViewModel>(resourceMetadata);
-                        return PartialView("Resource/_Metadata", resourceMetadataViewModel);
-                    default:
-                        return NotFound();
-                }
+                case ProjectModuleTabType.ResourceDiscussion:
+                    return PartialView("Resource/_Discussion");
+                case ProjectModuleTabType.ResourceMetadata:
+                    var resourceMetadata = client.GetResourceMetadata(resourceId.Value);
+                    var resourceMetadataViewModel = Mapper.Map<ProjectResourceMetadataViewModel>(resourceMetadata);
+                    return PartialView("Resource/_Metadata", resourceMetadataViewModel);
+                default:
+                    return NotFound();
             }
         }
 
         public IActionResult ProjectResourceVersion(long resourceId)
         {
-            using (var client = GetRestClient())
-            {
-                var resourceVersionList = client.GetResourceVersionHistory(resourceId);
-                var viewModel = Mapper.Map<List<ResourceVersionViewModel>>(resourceVersionList);
-                return PartialView("_ResourceVersion", viewModel);
-            }
+            var client = GetResourceClient();
+            var resourceVersionList = client.GetResourceVersionHistory(resourceId);
+            var viewModel = Mapper.Map<List<ResourceVersionViewModel>>(resourceVersionList);
+            return PartialView("_ResourceVersion", viewModel);
         }
 
         public IActionResult NewSnapshot(long projectId)
         {
-            using (var client = GetRestClient())
-            {
-                var resources = client.GetResourceList(projectId);
-                // TODO
-            }
+            var client = GetProjectClient();
+            var resources = client.GetResourceList(projectId);
+            // TODO
+
             var viewModel = ProjectMock.GetNewPulication(m_localizer);
             return PartialView("Work/_PublicationsNew", viewModel);
         }
@@ -202,37 +193,33 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult CreateForum(long projectId)
         {
-            using (var client = GetRestClient())
-            {
-                client.CreateForum(projectId);
-                var forum = client.GetForum(projectId);
-                ForumViewModel forumViewModel = Mapper.Map<ForumViewModel>(forum); 
-                return Json(forumViewModel);
-            }
+            var client = GetProjectClient();
+            client.CreateForum(projectId);
+            var forum = client.GetForum(projectId);
+            var forumViewModel = Mapper.Map<ForumViewModel>(forum);
+            return Json(forumViewModel);
         }
 
         [HttpPost]
         public IActionResult CreateProject([FromBody] CreateProjectRequest request)
         {
-            using (var client = GetRestClient())
+            var client = GetProjectClient();
+
+            var newProject = new ProjectContract
             {
-                var newProject = new ProjectContract
-                {
-                    Name = request.Name
-                };
-                var newProjectId = client.CreateProject(newProject);
-                return Json(newProjectId);
-            }
+                Name = request.Name
+            };
+            var newProjectId = client.CreateProject(newProject);
+            return Json(newProjectId);
         }
 
         [HttpPost]
         public IActionResult DeleteProject([FromBody] DeleteProjectRequest request)
         {
-            using (var client = GetRestClient())
-            {
-                client.DeleteProject(request.Id);
-                return Json(new { });
-            }
+            var client = GetProjectClient();
+
+            client.DeleteProject(request.Id);
+            return Json(new { });
         }
 
         [HttpPost]
@@ -257,10 +244,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
                     var fileSection = section.AsFileSection();
 
-                    using (var client = GetRestClient())
-                    {
-                        client.UploadResource(sessionId, fileSection.FileStream, fileSection.FileName);
-                    }
+                    var client = GetSessionClient();
+                    client.UploadResource(sessionId, fileSection.FileStream, fileSection.FileName);
                 }
                 else if (contentDispo.IsFormDisposition())
                 {
@@ -295,10 +280,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
                     var fileSection = section.AsFileSection();
 
-                    using (var client = GetRestClient())
-                    {
-                        client.UploadResource(sessionId, fileSection.FileStream, fileSection.FileName);
-                    }
+                    var client = GetSessionClient();
+                    client.UploadResource(sessionId, fileSection.FileStream, fileSection.FileName);
                 }
                 else if (contentDispo.IsFormDisposition())
                 {
@@ -313,130 +296,111 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult GetResourceList(long projectId, ResourceTypeEnumContract resourceType)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetResourceList(projectId, resourceType);
-                return Json(result);
-            }
+            var client = GetProjectClient();
+            var result = client.GetResourceList(projectId, resourceType);
+            return Json(result);
         }
 
         [HttpPost]
         public IActionResult ProcessUploadedResources([FromBody] ProcessResourcesRequest request)
         {
-            using (var client = GetRestClient())
+            var client = GetProjectClient();
+            var resourceId = client.ProcessUploadedResources(request.ProjectId, new NewResourceContract
             {
-                var resourceId = client.ProcessUploadedResources(request.ProjectId, new NewResourceContract
-                {
-                    SessionId = request.SessionId,
-                    Comment = request.Comment
-                });
-                return Json(resourceId);
-            }
+                SessionId = request.SessionId,
+                Comment = request.Comment
+            });
+            return Json(resourceId);
         }
 
         [HttpPost]
         public IActionResult ProcessUploadResourceVersion([FromBody] ProcessResourceVersionRequest request)
         {
-            using (var client = GetRestClient())
-            {
-                var resourceVersionId = client.ProcessUploadedResourceVersion(request.ResourceId,
-                    new NewResourceContract
-                    {
-                        SessionId = request.SessionId,
-                        Comment = request.Comment
-                    });
-                return Json(resourceVersionId);
-            }
+            var client = GetResourceClient();
+            var resourceVersionId = client.ProcessUploadedResourceVersion(request.ResourceId,
+                new NewResourceContract
+                {
+                    SessionId = request.SessionId,
+                    Comment = request.Comment
+                });
+            return Json(resourceVersionId);
         }
 
         [HttpPost]
         public IActionResult CreateKeywordsWithArray(List<KeywordContract> request)
         {
-            using (var client = GetRestClient())
+            var client = GetCodeListClient();
+            var ids = new List<int>();
+            foreach (KeywordContract t in request)
             {
-                var ids = new List<int>();
-                foreach (KeywordContract t in request)
-                {
-                    var newId = client.CreateKeyword(t);
-                    ids.Add(newId);
-                }
-                return Json(ids);
+                var newId = client.CreateKeyword(t);
+                ids.Add(newId);
             }
+
+            return Json(ids);
         }
 
         [HttpGet]
         public IActionResult GetProjectsByAuthor(int authorId, int? start, int? count)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetProjectsByAuthor(authorId, start, count);
-                return Json(result);
-            }
+            var client = GetCodeListClient();
+            var result = client.GetProjectsByAuthor(authorId, start, count);
+            return Json(result);
         }
 
         [HttpGet]
         public IActionResult GetProjectsByResponsiblePerson(int responsiblePersonId, int? start, int? count)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetProjectsByResponsiblePerson(responsiblePersonId, start, count);
-                return Json(result);
-            }
+            var client = GetCodeListClient();
+            var result = client.GetProjectsByResponsiblePerson(responsiblePersonId, start, count);
+            return Json(result);
         }
 
         [HttpGet]
         public IActionResult KeywordTypeahead([FromQuery] string keyword, [FromQuery] int? count)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetKeywordAutocomplete(keyword, count);
-                return Json(result);
-            }
+            var client = GetCodeListClient();
+            var result = client.GetKeywordAutocomplete(keyword, count);
+            return Json(result);
         }
 
         [HttpPost]
         public IActionResult DeleteResource([FromBody] DeleteResourceRequest request)
         {
-            using (var client = GetRestClient())
-            {
-                client.DeleteResource(request.ResourceId);
-                return Json(new { });
-            }
+            var client = GetResourceClient();
+            client.DeleteResource(request.ResourceId);
+            return Json(new { });
         }
 
         [HttpPost]
         public IActionResult RenameResource([FromBody] RenameResourceRequest request)
         {
-            using (var client = GetRestClient())
+            var client = GetResourceClient();
+            client.RenameResource(request.ResourceId, new ResourceContract
             {
-                client.RenameResource(request.ResourceId, new ResourceContract
-                {
-                    Name = request.NewName
-                });
-                return Json(new { });
-            }
+                Name = request.NewName
+            });
+            return Json(new { });
         }
 
         [HttpPost]
         public IActionResult DuplicateResource([FromBody] DuplicateResourceRequest request)
         {
-            using (var client = GetRestClient())
-            {
-                var newResourceId = client.DuplicateResource(request.ResourceId);
-                return Json(newResourceId);
-            }
+            var client = GetResourceClient();
+            var newResourceId = client.DuplicateResource(request.ResourceId);
+            return Json(newResourceId);
         }
 
         [HttpGet]
-        public IActionResult GetProjectMetadata([FromQuery] long projectId, [FromQuery] bool includeAuthor, [FromQuery] bool includeResponsiblePerson,
-            [FromQuery] bool includeKind, [FromQuery] bool includeGenre, [FromQuery] bool includeOriginal, [FromQuery] bool includeKeyword, [FromQuery] bool includeCategory)
+        public IActionResult GetProjectMetadata([FromQuery] long projectId, [FromQuery] bool includeAuthor,
+            [FromQuery] bool includeResponsiblePerson,
+            [FromQuery] bool includeKind, [FromQuery] bool includeGenre, [FromQuery] bool includeOriginal, [FromQuery] bool includeKeyword,
+            [FromQuery] bool includeCategory)
         {
-            using (var client = GetRestClient())
-            {
-                var response = client.GetProjectMetadata(projectId, includeAuthor,
+            var client = GetProjectClient();
+            var response = client.GetProjectMetadata(projectId, includeAuthor,
                 includeResponsiblePerson, includeKind, includeGenre, includeOriginal, includeKeyword, includeCategory);
-                return Json(response);
-            }
+            return Json(response);
         }
 
         [HttpPost]
@@ -447,117 +411,116 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 return BadRequest();
             }
 
-            using (var client = GetRestClient())
+            var client = GetProjectClient();
+
+            var contract = new ProjectMetadataContract
             {
-                var contract = new ProjectMetadataContract
-                {
-                    Authors = request.Authors,
-                    BiblText = request.BiblText,
-                    Copyright = request.Copyright,
-                    ManuscriptCountry = request.ManuscriptCountry,
-                    ManuscriptExtent = request.ManuscriptExtent,
-                    ManuscriptIdno = request.ManuscriptIdno,
-                    ManuscriptRepository = request.ManuscriptRepository,
-                    ManuscriptSettlement = request.ManuscriptSettlement,
-                    NotAfter = request.NotAfter != null ? (DateTime?) new DateTime(request.NotAfter.Value, 1, 1) : null,
-                    NotBefore = request.NotBefore != null
-                        ? (DateTime?) new DateTime(request.NotBefore.Value, 1, 1)
-                        : null,
-                    OriginDate = request.OriginDate,
-                    PublishDate = request.PublishDate,
-                    PublishPlace = request.PublishPlace,
-                    PublisherText = request.PublisherText,
-                    PublisherEmail = request.PublisherEmail,
-                    RelicAbbreviation = request.RelicAbbreviation,
-                    SourceAbbreviation = request.SourceAbbreviation,
-                    SubTitle = request.SubTitle,
-                    Title = request.Title,
-                };
-                long newResourceVersionId = -1;
-                int unsuccessRequestCount = 0;
+                Authors = request.Authors,
+                BiblText = request.BiblText,
+                Copyright = request.Copyright,
+                ManuscriptCountry = request.ManuscriptCountry,
+                ManuscriptExtent = request.ManuscriptExtent,
+                ManuscriptIdno = request.ManuscriptIdno,
+                ManuscriptRepository = request.ManuscriptRepository,
+                ManuscriptSettlement = request.ManuscriptSettlement,
+                NotAfter = request.NotAfter != null ? (DateTime?) new DateTime(request.NotAfter.Value, 1, 1) : null,
+                NotBefore = request.NotBefore != null
+                    ? (DateTime?) new DateTime(request.NotBefore.Value, 1, 1)
+                    : null,
+                OriginDate = request.OriginDate,
+                PublishDate = request.PublishDate,
+                PublishPlace = request.PublishPlace,
+                PublisherText = request.PublisherText,
+                PublisherEmail = request.PublisherEmail,
+                RelicAbbreviation = request.RelicAbbreviation,
+                SourceAbbreviation = request.SourceAbbreviation,
+                SubTitle = request.SubTitle,
+                Title = request.Title,
+            };
+            long newResourceVersionId = -1;
+            int unsuccessRequestCount = 0;
 
-                try
-                {
-                    newResourceVersionId = client.CreateNewProjectMetadataVersion(projectId, contract);
-                }
-                catch (HttpRequestException)
-                {
-                    unsuccessRequestCount++;
-                }
-
-                try
-                {
-                    client.SetProjectAuthors(projectId, new IntegerIdListContract {IdList = request.AuthorIdList});
-                }
-                catch (HttpRequestException)
-                {
-                    unsuccessRequestCount++;
-                }
-
-                try
-                {
-                    client.SetProjectResponsiblePersons(projectId, request.ProjectResponsiblePersonIdList);
-                }
-                catch (HttpRequestException)
-                {
-                    unsuccessRequestCount++;
-                }
-
-                try
-                {
-                    client.SetProjectLiteraryKinds(projectId,
-                        new IntegerIdListContract {IdList = request.LiteraryKindIdList});
-                }
-                catch (HttpRequestException)
-                {
-                    unsuccessRequestCount++;
-                }
-
-                try
-                {
-                    client.SetProjectCategories(projectId,
-                        new IntegerIdListContract { IdList = request.CategoryIdList });
-                }
-                catch (HttpRequestException)
-                {
-                    unsuccessRequestCount++;
-                }
-
-                try
-                {
-                    client.SetProjectLiteraryGenres(projectId,
-                        new IntegerIdListContract {IdList = request.LiteraryGenreIdList});
-                }
-                catch (HttpRequestException)
-                {
-                    unsuccessRequestCount++;
-                }
-
-                try
-                {
-                    client.SetProjectKeywords(projectId, new IntegerIdListContract {IdList = request.KeywordIdList});
-                }
-                catch (HttpRequestException)
-                {
-                    unsuccessRequestCount++;
-                }
-
-                if (unsuccessRequestCount > 0)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError);
-                }
-
-                var response = new SaveMetadataResponse
-                {
-                    NewResourceVersionId = newResourceVersionId,
-                    LastModificationText = DateTime.Now.ToString(CultureInfo.CurrentCulture),
-                    LiteraryOriginalText =
-                        LiteraryOriginalTextConverter.GetLiteraryOriginalText(request.ManuscriptCountry,
-                            request.ManuscriptSettlement,
-                            request.ManuscriptRepository, request.ManuscriptIdno, request.ManuscriptExtent),
-                };
-                return Json(response);
+            try
+            {
+                newResourceVersionId = client.CreateNewProjectMetadataVersion(projectId, contract);
             }
+            catch (HttpRequestException)
+            {
+                unsuccessRequestCount++;
+            }
+
+            try
+            {
+                client.SetProjectAuthors(projectId, new IntegerIdListContract {IdList = request.AuthorIdList});
+            }
+            catch (HttpRequestException)
+            {
+                unsuccessRequestCount++;
+            }
+
+            try
+            {
+                client.SetProjectResponsiblePersons(projectId, request.ProjectResponsiblePersonIdList);
+            }
+            catch (HttpRequestException)
+            {
+                unsuccessRequestCount++;
+            }
+
+            try
+            {
+                client.SetProjectLiteraryKinds(projectId,
+                    new IntegerIdListContract {IdList = request.LiteraryKindIdList});
+            }
+            catch (HttpRequestException)
+            {
+                unsuccessRequestCount++;
+            }
+
+            try
+            {
+                client.SetProjectCategories(projectId,
+                    new IntegerIdListContract {IdList = request.CategoryIdList});
+            }
+            catch (HttpRequestException)
+            {
+                unsuccessRequestCount++;
+            }
+
+            try
+            {
+                client.SetProjectLiteraryGenres(projectId,
+                    new IntegerIdListContract {IdList = request.LiteraryGenreIdList});
+            }
+            catch (HttpRequestException)
+            {
+                unsuccessRequestCount++;
+            }
+
+            try
+            {
+                client.SetProjectKeywords(projectId, new IntegerIdListContract {IdList = request.KeywordIdList});
+            }
+            catch (HttpRequestException)
+            {
+                unsuccessRequestCount++;
+            }
+
+            if (unsuccessRequestCount > 0)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            var response = new SaveMetadataResponse
+            {
+                NewResourceVersionId = newResourceVersionId,
+                LastModificationText = DateTime.Now.ToString(CultureInfo.CurrentCulture),
+                LiteraryOriginalText =
+                    LiteraryOriginalTextConverter.GetLiteraryOriginalText(request.ManuscriptCountry,
+                        request.ManuscriptSettlement,
+                        request.ManuscriptRepository, request.ManuscriptIdno, request.ManuscriptExtent),
+            };
+            return Json(response);
         }
 
 
@@ -565,29 +528,23 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult GetTypeaheadOriginalAuthor(string query)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetOriginalAuthorAutocomplete(query);
-                return Json(result);
-            }
+            var client = GetCodeListClient();
+            var result = client.GetOriginalAuthorAutocomplete(query);
+            return Json(result);
         }
 
         public IActionResult GetTypeaheadResponsiblePerson(string query)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetResponsiblePersonAutocomplete(query);
-                return Json(result);
-            }
+            var client = GetCodeListClient();
+            var result = client.GetResponsiblePersonAutocomplete(query);
+            return Json(result);
         }
 
         public IActionResult GetTypeaheadPublisher(string query)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetPublisherAutoComplete(query);
-                return Json(result);
-            }
+            var client = GetMetadataClient();
+            var result = client.GetPublisherAutoComplete(query);
+            return Json(result);
         }
 
         #endregion
@@ -622,7 +579,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             {
                 GroupId = id,
                 //Name = string.Format("Skupina {0}", id)
-                Name = localizer.TranslateFormat("Group", new object[]{id}, "Admin")
+                Name = localizer.TranslateFormat("Group", new object[] {id}, "Admin")
             };
         }
 
@@ -632,7 +589,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             {
                 Id = id,
                 //Name = string.Format("Strana {0}", id),
-                Name = localizer.TranslateFormat("Page", new object[]{id}, "Admin"),
+                Name = localizer.TranslateFormat("Page", new object[] {id}, "Admin"),
                 VersionList = new List<VersionNumberViewModel>
                 {
                     GetVersionNumber(1),

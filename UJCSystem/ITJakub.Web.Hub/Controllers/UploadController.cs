@@ -51,11 +51,9 @@ namespace ITJakub.Web.Hub.Controllers
                     }
 
                     var fileSection = section.AsFileSection();
-                    
-                    using (var client = GetRestClient())
-                    {
-                        client.UploadResource(sessionId, fileSection.FileStream, fileSection.FileName);
-                    }
+
+                    var client = GetSessionClient();
+                    client.UploadResource(sessionId, fileSection.FileStream, fileSection.FileName);
                 }
                 else if (contentDispo.IsFormDisposition())
                 {
@@ -65,21 +63,19 @@ namespace ITJakub.Web.Hub.Controllers
                 }
             }
 
-            return Json(new {});
+            return Json(new { });
         }
 
         [HttpPost]
         public ActionResult ProcessUploadedFiles([FromBody] ProcessUploadedFilesRequest request)
         {
-            using (var client = GetRestClient())
+            var client = GetSessionClient();
+            client.ProcessSessionAsImport(request.SessionId, new NewBookImportContract
             {
-                client.ProcessSessionAsImport(request.SessionId, new NewBookImportContract
-                {
-                    Comment = request.UploadMessage,
-                    ProjectId = request.ProjectId
-                });
-                return Json(new {success = true});
-            }
+                Comment = request.UploadMessage,
+                ProjectId = request.ProjectId
+            });
+            return Json(new {success = true});
         }
     }
 }

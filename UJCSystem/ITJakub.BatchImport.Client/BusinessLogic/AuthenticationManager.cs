@@ -9,10 +9,11 @@ using System.Text;
 using System.Threading.Tasks;
 using IdentityModel.OidcClient;
 using Microsoft.Net.Http.Server;
+using Vokabular.MainService.DataContracts;
 
 namespace ITJakub.BatchImport.Client.BusinessLogic
 {
-    public class AuthenticationManager
+    public class AuthenticationManager: IMainServiceAuthTokenProvider
     {
         private const string OidcUrl = "OIDCUrl";
         private const string OidcClientId = "OIDCClientId";

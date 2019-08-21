@@ -67,7 +67,7 @@
                             <form asp-action="UsersByRole" asp-controller="Permission" method="get" class="user-search-form form-inline">
                                 <div class="form-group">
                                     <div id="addRoleButton" class="btn btn-default">
-                                        <i class="fa fa-plus"></i>
+                                        <i class="fa fa-user-plus"></i>
                                     </div>
                                     <div class="search-button">
                                         <button class="btn btn-default" type="submit">
@@ -173,7 +173,7 @@
                             <span class="detail-item-title">@Localizer.Translate("Description", "Permission", LocTranslationSource.File): </span>
                             <span id="specificRoleDescription"></span>
                         </div>
-                        <div class="detail-item">
+                        <div class="detail-item top-separation-line">
                             <span class="detail-item-title">@Localizer.Translate("SelectedUser", "Permission", LocTranslationSource.File): </span>
                             <span id="selectedUser">@Localizer.Translate("UserIsNotSelected", "Permission", LocTranslationSource.File)</span>
                         </div>

@@ -23,32 +23,27 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult GetFeedbacksCount(IList<FeedbackCategoryEnumContract> categories)
         {
-            using (var client = GetRestClient())
-            {
-                var feedbacks = client.GetFeedbackList(0, 0, FeedbackSortEnumContract.Date, SortDirectionEnumContract.Desc, categories);
-                return Json(feedbacks.TotalCount);
-            }
+            var client = GetFeedbackClient();
+            var feedbacks = client.GetFeedbackList(0, 0, FeedbackSortEnumContract.Date, SortDirectionEnumContract.Desc, categories);
+            return Json(feedbacks.TotalCount);
         }
 
-        public ActionResult GetFeedbacks(IList<FeedbackCategoryEnumContract> categories, int start, int count, byte sortCriteria, bool sortAsc)
+        public ActionResult GetFeedbacks(IList<FeedbackCategoryEnumContract> categories, int start, int count, byte sortCriteria,
+            bool sortAsc)
         {
             var sortValue = (FeedbackSortEnumContract) sortCriteria;
             var sortDirection = sortAsc ? SortDirectionEnumContract.Asc : SortDirectionEnumContract.Desc;
-            using (var client = GetRestClient())
-            {
-                var feedbacks = client.GetFeedbackList(start, count, sortValue, sortDirection, categories);
-                return Json(feedbacks.List);
-            }
+            var client = GetFeedbackClient();
+            var feedbacks = client.GetFeedbackList(start, count, sortValue, sortDirection, categories);
+            return Json(feedbacks.List);
         }
 
         [HttpPost]
         public ActionResult DeleteFeedback([FromBody] DeleteFeedbackRequest request)
         {
-            using (var client = GetRestClient())
-            {
-                client.DeleteFeedback(request.FeedbackId);
-                return Json(new {});
-            }
+            var client = GetFeedbackClient();
+            client.DeleteFeedback(request.FeedbackId);
+            return Json(new { });
         }
     }
 }

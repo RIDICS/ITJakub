@@ -9,8 +9,8 @@ class RoleManager {
     private readonly delayForShowResponse = 1000;
     private readonly errorHandler: ErrorHandler;
     private currentUserSelectedItem: IUserDetail;
-    private roleList: ListWithPagination; 
     private userList: ListWithPagination;
+    private roleList: ListWithPagination;
     private permissionList: ListWithPagination; 
 
     constructor() {
@@ -22,11 +22,11 @@ class RoleManager {
         this.client = new PermissionApiClient();
         this.errorHandler = new ErrorHandler();
     }
-
+    
     public init(list?: ListWithPagination) {
         if (list == null) {
             this.roleList = new ListWithPagination("Permission/RolePermission", 10, "role", ViewType.Widget, true, this.reinitRoleList, this);
-            
+
         } else {
             this.roleList = list;
         }
@@ -117,7 +117,6 @@ class RoleManager {
     }
 
     private initPermissionManaging() {
-
         $(".permission-row input[type=checkbox]").on("input", (event) => {
             const addPermission = $(event.currentTarget as Node as HTMLElement).is(":checked");
             const permissionCheckboxInput = $(event.currentTarget as Node as HTMLElement);
@@ -165,7 +164,7 @@ class RoleManager {
             const alert = userRow.find(".alert");
             alert.hide();
 
-            const roleId = $(".role-row.active").data("role-id");
+            var roleId = $(".role-row.active").data("role-id");
             this.client.removeUserFromRole(userId, roleId).done(() => {
                 this.userList.reloadPage();
             }).fail((error) => {
@@ -201,7 +200,7 @@ class RoleManager {
     }
 
     private initEditRoleForm() {
-        let editRoleForm = $("#editRoleForm");
+        const editRoleForm = $("#editRoleForm");
 
         editRoleForm.on("submit", (event) => {
             event.preventDefault();
@@ -212,10 +211,8 @@ class RoleManager {
                 this.client.editRole(editRoleForm.serialize())
                     .done((response) => {
                         editRoleSection.html(response);
-                        editRoleForm = $("#editRoleForm");
                         if (editRoleForm.find(".alert-success").length) {
                             this.roleList.reloadPage();
-                            this.clearSections();
                         }
                     })
                     .fail((error) => {
@@ -248,7 +245,8 @@ class RoleManager {
                             this.client.deleteRole(roleId).done(() => {
                                 this.roleList.reloadPage();
                             }).fail((error) => {
-                                alert.text(this.errorHandler.getErrorMessage(error, localization.translate("RemoveRoleError", "PermissionJs").value));
+                                alert.text(this.errorHandler.getErrorMessage(error,
+                                    localization.translate("DeleteRoleError", "PermissionJs").value));
                                 alert.show();
                             });
                         }
@@ -256,7 +254,7 @@ class RoleManager {
                     cancel: {
                         label: localization.translate("Cancel", "PermissionJs").value,
                         className: "btn-default",
-                        callback: () => {}
+                        callback: () => { }
                     }
                 }
             });
@@ -268,10 +266,9 @@ class RoleManager {
         this.searchBox.create((selectedExists: boolean, selectionConfirmed: boolean) => {
             if (selectionConfirmed) {
                 this.currentUserSelectedItem = this.searchBox.getValue();
-                const userBox = $("#selectedUser");
+                const selectedUser = $("#selectedUser");
                 const name = this.getFullNameString(this.currentUserSelectedItem);
-                userBox.text(name);
-                userBox.data("user-id", this.currentUserSelectedItem.id);
+                selectedUser.text(name);
             }
         });
 
@@ -280,59 +277,68 @@ class RoleManager {
             addUserToRoleBtn.data("init", true);
 
             const initModalBtn = $("#addRoleButton");
-            const addToRoleDialog = $("#addToRoleDialog");
+            const addToRoleModal = $("#addToRoleDialog");
+            const roleError = $("#add-user-to-role-error");
+
             initModalBtn.click(() => {
                 if (!initModalBtn.hasClass("disabled")) {
                     const role = $(".role-row.active");
                     $("#specificRoleName").text(role.find(".name").text());
                     $("#specificRoleDescription").text(role.find(".description").text());
-                    addToRoleDialog.modal();
+                    addToRoleModal.modal();
                 }
             });
 
-            addToRoleDialog.on("hidden.bs.modal", () => {
+            addToRoleModal.on("hidden.bs.modal", () => {
+                roleError.empty();
                 this.currentUserSelectedItem = null; 
-                addToRoleDialog.find("#mainSearchInput").val("");
-                addToRoleDialog.find("#selectedUser").text(localization.translate("UserIsNotSelected", "Permission").value);
+                addToRoleModal.find("#mainSearchInput").val("");
+                addToRoleModal.find("#selectedUser").text(localization.translate("UserIsNotSelected", "Permission").value);
             });
 
             addUserToRoleBtn.click(() => {
-                const roleError = $("#add-user-to-role-error");
                 roleError.empty();
                 const roleId = $(".role-row.active").data("role-id");
-                let userId: number;
-
-               if (typeof this.currentUserSelectedItem == "undefined" || this.currentUserSelectedItem == null)
-                    userId = $("#selectedUser").data("user-id");
-                else {
-                    userId = this.currentUserSelectedItem.id;
-                }
-
-                this.client.addUserToRole(userId, roleId).done(() => {
-                    this.userList.reloadPage();
-                    addToRoleDialog.modal("hide");
-                }).fail((error) => {
+                if (typeof this.currentUserSelectedItem == "undefined" || this.currentUserSelectedItem == null) {
                     const errorAlert = new AlertComponentBuilder(AlertType.Error)
-                        .addContent(this.errorHandler.getErrorMessage(error, localization.translate("AddUserToRoleError", "PermissionJs").value));
+                        .addContent(localization.translate("UserIsNotSelected", "PermissionJs").value);
                     roleError.empty().append(errorAlert.buildElement());
-                });
+                    return;
+                }
+                else {
+                    const userId = this.currentUserSelectedItem.id;
+                    this.client.addUserToRole(userId, roleId).done(() => {
+                        this.userList.reloadPage();
+                        addToRoleModal.modal("hide");
+                    }).fail((error) => {
+                        const errorAlert = new AlertComponentBuilder(AlertType.Error)
+                            .addContent(this.errorHandler.getErrorMessage(error));
+                        roleError.empty().append(errorAlert.buildElement());
+                    });
+                }
             });
         }
     }
 
     private getFullNameString(user: IUser): string {
-        return `${user.userName} - ${user.firstName} - ${user.lastName}`;
+        return `${user.userName} - ${user.firstName} ${user.lastName}`;
     }
 
     private initCreateRoleModal() {
+        const createRoleModal = $("#createRoleModal");
+        const roleError = $("#create-role-error");
+
         $("#createRoleButton").click(() => {
-            $("#createRoleModal").modal();
+            createRoleModal.modal();
+        });
+
+        createRoleModal.on("hidden.bs.modal", () => {
+            roleError.empty();
         });
 
         $("#create-role").click(() => {
             var roleName = $("#new-role-name").val() as string;
             var roleDescription = $("#new-role-description").val() as string;
-            var roleError = $("#create-role-error");
             roleError.empty();
             this.client.createRole(roleName, roleDescription).done(() => {
                 $("#createRoleModal").modal("hide");

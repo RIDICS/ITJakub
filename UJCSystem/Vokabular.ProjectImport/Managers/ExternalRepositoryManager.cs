@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities.Enums;
@@ -69,15 +70,28 @@ namespace Vokabular.ProjectImport.Managers
         {
             var work = new GetExternalRepositoryStatisticsWork(m_externalRepositoryRepository, m_importHistoryRepository,externalRepositoryId);
             work.Execute();
+
+            
+            DateTime? lastUpdateDate = null;
+            bool? lastUpdateIsSuccessful = null;
+            UserContract updatedByUser = null;
+
+            if (work.LastImportHistory != null)
+            {
+                updatedByUser = work.LastImportHistory.CreatedByUser == null ? null : Mapper.Map<UserContract>(work.LastImportHistory.CreatedByUser);
+                lastUpdateDate = work.LastImportHistory.Date;
+                lastUpdateIsSuccessful = work.LastImportHistory.Status != ImportStatusEnum.Failed;
+            }
+
             return new ExternalRepositoryStatisticsContract
             {
                 TotalImportedItems = work.TotalImportStatistics.NewItems,
                 TotalItemsInLastUpdate = work.LastImportStatisticsResult.TotalItems,
                 NewItemsInLastUpdate = work.LastImportStatisticsResult.NewItems,
                 UpdatedItemsInLastUpdate = work.LastImportStatisticsResult.UpdatedItems,
-                UpdatedBy = Mapper.Map<UserContract>(work.LastImportHistory.CreatedByUser),
-                LastUpdateDate = work.LastImportHistory.Date,
-                IsSuccessful = work.LastImportHistory.Status != ImportStatusEnum.Failed
+                UpdatedBy = updatedByUser,
+                LastUpdateDate = lastUpdateDate,
+                IsSuccessful = lastUpdateIsSuccessful
             };
         }
 

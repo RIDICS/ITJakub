@@ -3,6 +3,7 @@
 @box-border: 1px solid #ddd;
 @even-table-row-colour: #eee;
 @odd-table-row-colour: #white;
+@border-color: #E5E5E5;
 
 .row.display-flex {
     display: flex;
@@ -23,20 +24,21 @@
 }
 
 ul.bib-listing li.list-item {
+    margin-right: 15px;
+
     .visible-content {
-        border-top: 1px solid #E5E5E5;
+        border-top: 1px solid @border-color;
     }
 
     .hidden-content {
-        border-top: none;
-        border-bottom: 1px solid #E5E5E5;
+        border: none;
+        border-bottom: 1px solid @border-color;
+        border-right: 1px solid @border-color;
         display: inherit;
         overflow-y: hidden;
     }
 
     .collapse .bottom-panel {
-        border-right: 1px solid #E5E5E5;
-
         .body {
             padding: 0;
         }
@@ -46,14 +48,24 @@ ul.bib-listing li.list-item {
         padding: 1rem;
     }
 
+    .body {
+        .body-title {
+            font-weight: bold;
+
+            @media(min-width: 400px) {
+                display: inline-block;
+            }
+        }
+    }
+
     .right-panel .checkbox {
         label {
-            padding-left: 8px;  
-            
+            padding-left: 8px;
+
             &:after {
-            content: '';
-            display: table;
-            clear: both;
+                content: '';
+                display: table;
+                clear: both;
             }
         }
 
@@ -94,7 +106,6 @@ ul.bib-listing li.list-item {
     }
 }
 
-
 .import-alert {
     word-break: break-all;
 }
@@ -122,16 +133,16 @@ ul.bib-listing li.list-item {
 }
 
 .project-import-layout {
-    display: table-row;
-
-    .left-menu, .vertical-splitter, .vertical-splitter-control, .content {
-        display: table-cell;
-    }
+    display: flex;
+    flex-wrap: wrap;
 
     .left-menu {
-        vertical-align: top;
-        width: 200px;
-        padding-right: 10px;
+        flex: 1 0 15em;
+        margin: 1em;
+
+        .list-group-item {
+            display: block;
+        }
     }
 
     .vertical-splitter-control {
@@ -146,17 +157,56 @@ ul.bib-listing li.list-item {
 
     .vertical-splitter {
         border: 1px solid #ccc;
+        display: table-cell;
     }
 
     .content {
-        width: 100%;
+        min-width: 60%;
+        flex-grow: 10;
+        margin: 1em 1em 1em 0em;
+        padding-left: 1em;
+        border-left: 2px solid #ccc;
+
+        .repository-content {
+            max-width: 75em;
+            margin: auto;
+        }
+
+        &.content-list {
+            padding-left: 0;
+        }
+    }
+
+    .form-group {
+        .right-align {
+            text-align: right;
+        }
+
+        .form-text {
+            padding-top: 7px;
+        }
+
+        .input-help {
+            position: relative;
+
+            input {
+                padding-right: 2em
+            }
+
+            .help {
+                font-size: 1.2em;
+                position: absolute;
+                right: 1.5em;
+                top: 50%;
+                transform: translatey(-50%);
+            }
+        }
     }
 
     .right-align-btn {
         text-align: right;
         float: right;
         padding-bottom: 10px;
-        padding-right: 0px;
     }
 
     .tab-content {
@@ -186,160 +236,164 @@ ul.bib-listing li.list-item {
     }
 }
 
-    .project-import-title {
-        font-weight: bold;
-        font-size: 120%;
-        width: 200px;
-        margin-bottom: 20px;
+.project-import-title {
+    font-weight: bold;
+    font-size: 120%;
+    width: 200px;
+    margin-bottom: 20px;
+}
+
+.resource-panel {
+    button, select {
+        width: 100%;
+        margin-bottom: 3px;
+    }
+}
+
+.project-bottom-buttons {
+    margin-top: 1rem;
+    text-align: right;
+}
+
+.project-form-bottom-buttons {
+    margin-right: 1rem;
+}
+
+.project-layout-box {
+    padding: 0.2rem 1rem 0.5rem 1rem;
+    margin-left: 0.5rem;
+    float: left;
+    width: 500px;
+
+    .control-label {
+        text-align: left;
+    }
+}
+
+.project-layout-box-500 {
+    max-width: 500px;
+}
+
+.project-layout-box-200 {
+    max-width: 200px;
+}
+
+.resource-version-button-icon {
+    margin-top: -6px;
+    margin-bottom: -8px;
+}
+
+.resource-version-panel {
+    height: 220px;
+    padding-top: 7px;
+
+    > div {
+        border: @box-border;
+        padding: 0.5rem;
+        height: 100%;
+    }
+}
+
+.resource-tab-row-fix {
+    margin-right: 0;
+}
+
+.resource-version-table {
+    height: 80%;
+    overflow-y: auto;
+    padding-right: 2px;
+    padding-bottom: 5px;
+}
+
+.resource-version-control {
+    height: 20%;
+    padding-top: 5px;
+}
+
+.input-as-text {
+    border: none;
+    background: transparent !important;
+    box-shadow: none;
+    cursor: default !important;
+}
+
+.project-history-records {
+    .panel {
+        margin-top: 7px;
+        margin-bottom: 7px;
     }
 
-    .resource-panel {
-        button, select {
-            width: 100%;
-            margin-bottom: 3px;
+    .snapshot-panel {
+        background-color: @breadcrumb-background-color;
+    }
+}
+
+.project-page-list {
+    .image-preview {
+        text-align: right;
+
+        img {
+            max-width: 100%;
+            max-height: 100%;
         }
     }
 
     .project-bottom-buttons {
-        margin-top: 1rem;
-        text-align: right;
+        padding-right: 15px;
     }
 
-    .project-form-bottom-buttons {
-        margin-right: 1rem;
+    .resource-tab-row-fix {
+        margin-left: 0;
     }
 
-    .project-layout-box {
-        padding: 0.2rem 1rem 0.5rem 1rem;
-        margin-left: 0.5rem;
-        float: left;
-        width: 500px;
+    > .row > div {
+        height: 540px;
 
-        .control-label {
-            text-align: left;
-        }
-    }
-
-    .project-layout-box-500 {
-        max-width: 500px;
-    }
-
-    .project-layout-box-200 {
-        max-width: 200px;
-    }
-
-    .resource-version-button-icon {
-        margin-top: -6px;
-        margin-bottom: -8px;
-    }
-
-    .resource-version-panel {
-        height: 220px;
-        padding-top: 7px;
-
-        > div {
-            border: @box-border;
-            padding: 0.5rem;
+        select {
             height: 100%;
         }
     }
 
-    .resource-tab-row-fix {
-        margin-right: 0;
+    .main-buttons button {
+        margin-bottom: 3px;
     }
 
-    .resource-version-table {
-        height: 80%;
-        overflow-y: auto;
-        padding-right: 2px;
-        padding-bottom: 5px;
-    }
-
-    .resource-version-control {
-        height: 20%;
-        padding-top: 5px;
-    }
-
-    .input-as-text {
-        border: none;
-        background: transparent !important;
-        box-shadow: none;
-        cursor: default !important;
-    }
-
-    .project-history-records {
-        .panel {
-            margin-top: 7px;
-            margin-bottom: 7px;
-        }
-
-        .snapshot-panel {
-            background-color: @breadcrumb-background-color;
-        }
-    }
-
-    .project-page-list {
-        .image-preview {
-            text-align: right;
-
-            img {
-                max-width: 100%;
-                max-height: 100%;
-            }
-        }
-
-        .project-bottom-buttons {
-            padding-right: 15px;
-        }
-
-        .resource-tab-row-fix {
-            margin-left: 0;
-        }
-
-        > .row > div {
-            height: 540px;
-
-            select {
-                height: 100%;
-            }
-        }
-
-        .main-buttons button {
-            margin-bottom: 3px;
-        }
-
-        .bottom-buttons {
-            position: absolute;
-            bottom: 0;
-            width: 50px;
-        }
-    }
-
-    @page-list-panel-height: 470px;
-
-    table {
-        select {
-            width: 100%;
-        }
-
-        .checkbox {
-            margin-top: 0;
-            margin-bottom: 0;
-        }
-    }
-
-    .preloading-pages-spinner {
+    .bottom-buttons {
         position: absolute;
-        top: 50%;
-        left: 50%;
-        display: none;
-        z-index: 9999;
+        bottom: 0;
+        width: 50px;
+    }
+}
+
+@page-list-panel-height: 470px;
+
+table {
+    select {
+        width: 100%;
     }
 
-    .invisible {
-        visibility: hidden;
+    .checkbox {
+        margin-top: 0;
+        margin-bottom: 0;
     }
+}
 
-    .textarea-no-resize {
-        resize: none;
-    }
+.preloading-pages-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: none;
+    z-index: 9999;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+.textarea-no-resize {
+    resize: none;
+}
+
+.float-none {
+    float: none;
+}
