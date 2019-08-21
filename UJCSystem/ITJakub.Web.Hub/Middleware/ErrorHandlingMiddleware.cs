@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using ITJakub.Web.Hub.DataContracts;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
@@ -70,7 +71,7 @@ namespace ITJakub.Web.Hub.Middleware
         private async Task ReExecute(HttpContext context, int statusCode, string errorMessage = null)
         {
             var pathString = new PathString($"/Error/{statusCode}");
-            var queryString = errorMessage == null ? QueryString.Empty : new QueryString($"?message={errorMessage}");
+            var queryString = errorMessage == null ? QueryString.Empty : new QueryString($"?message={HttpUtility.UrlEncode(errorMessage)}");
 
             var originalPath = context.Request.Path;
             var originalQueryString = context.Request.QueryString;
