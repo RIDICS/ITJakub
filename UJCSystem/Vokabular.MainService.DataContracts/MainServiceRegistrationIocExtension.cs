@@ -1,13 +1,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using Vokabular.MainService.DataContracts.Clients;
-using Vokabular.RestClient;
 
 namespace Vokabular.MainService.DataContracts
 {
     public static class MainServiceIocRegistrationExtension
     {
         public static void RegisterMainServiceClientComponents<TTokenProvider, TClientLocalization>(this IServiceCollection services,
-            ServiceCommunicationConfiguration configuration = null)
+            MainServiceClientConfiguration configuration)
             where TTokenProvider : class, IMainServiceAuthTokenProvider
             where TClientLocalization : class, IMainServiceClientLocalization
         {
@@ -16,7 +15,25 @@ namespace Vokabular.MainService.DataContracts
 
             services.AddScoped<IMainServiceAuthTokenProvider, TTokenProvider>();
             services.AddScoped<IMainServiceClientLocalization, TClientLocalization>();
-            services.AddScoped<MainServiceRestClient>();
+            
+            services.AddSingleton<MainServiceRestClient>();
+
+            services.AddScoped<MainServiceBookClient>();
+            services.AddScoped<MainServiceCardFileClient>();
+            services.AddScoped<MainServiceCodeListClient>();
+            services.AddScoped<MainServiceExternalRepositoryClient>();
+            services.AddScoped<MainServiceFavoriteClient>();
+            services.AddScoped<MainServiceFeedbackClient>();
+            services.AddScoped<MainServiceFilteringExpressionSetClient>();
+            services.AddScoped<MainServiceMetadataClient>();
+            services.AddScoped<MainServiceNewsClient>();
+            services.AddScoped<MainServicePermissionClient>();
+            services.AddScoped<MainServiceProjectClient>();
+            services.AddScoped<MainServiceResourceClient>();
+            services.AddScoped<MainServiceRoleClient>();
+            services.AddScoped<MainServiceSessionClient>();
+            services.AddScoped<MainServiceTermClient>();
+            services.AddScoped<MainServiceUserClient>();
         }
     }
 }

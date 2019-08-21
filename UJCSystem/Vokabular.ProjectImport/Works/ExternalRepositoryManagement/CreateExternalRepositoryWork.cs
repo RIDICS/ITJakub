@@ -39,9 +39,13 @@ namespace Vokabular.ProjectImport.Works.ExternalRepositoryManagement
                 FilteringExpressionSets = new List<FilteringExpressionSet>()
             };
 
-            foreach (var filteringExpressionSet in m_data.FilteringExpressionSets)
+            if (m_data.FilteringExpressionSets != null)
             {
-                externalRepository.FilteringExpressionSets.Add(m_externalRepositoryRepository.Load<FilteringExpressionSet>(filteringExpressionSet.Id));
+                foreach (var filteringExpressionSet in m_data.FilteringExpressionSets)
+                {
+                    externalRepository.FilteringExpressionSets.Add(
+                        m_externalRepositoryRepository.Load<FilteringExpressionSet>(filteringExpressionSet.Id));
+                }
             }
 
             var resultId = (int) m_externalRepositoryRepository.Create(externalRepository);

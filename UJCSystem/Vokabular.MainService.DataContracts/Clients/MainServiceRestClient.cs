@@ -14,7 +14,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         private readonly IMainServiceClientLocalization m_localization;
         private const string AuthenticationScheme = "Bearer";
 
-        public MainServiceRestClient(ServiceCommunicationConfiguration configuration, IMainServiceAuthTokenProvider tokenProvider,
+        public MainServiceRestClient(MainServiceClientConfiguration configuration, IMainServiceAuthTokenProvider tokenProvider,
             IMainServiceClientLocalization localization) : base(configuration)
         {
             m_tokenProvider = tokenProvider;

@@ -19,7 +19,7 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
         private const string OidcClientId = "OIDCClientId";
         private const string OidcClientSecret = "OIDCClientSecret";
 
-        public string AuthToken { get; set; }
+        public string AuthToken { get; private set; }
 
         public async Task SignInAsync()
         {

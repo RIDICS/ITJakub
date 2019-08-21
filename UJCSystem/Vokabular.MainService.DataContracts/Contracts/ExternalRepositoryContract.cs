@@ -39,10 +39,10 @@ namespace Vokabular.MainService.DataContracts.Contracts
 
         public int UpdatedItemsInLastUpdate { get; set; }
 
-        public DateTime LastUpdateDate { get; set; }
+        public DateTime? LastUpdateDate { get; set; }
 
         public UserContract UpdatedBy { get; set; }
         
-        public bool IsSuccessful { get; set; }
+        public bool? IsSuccessful { get; set; }
     }
 }

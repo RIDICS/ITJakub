@@ -9,7 +9,7 @@
 }
 
 @section styles {
-    <link asp-append-version="true" rel="stylesheet" href="~/Areas/RepositoryImport/css/ridics.repositoryImport.css" />
+    <link asp-append-version="true" rel="stylesheet" href="~/Areas/RepositoryImport/css/ridics.repositoryImport.css"/>
 }
 
 @section scripts {
@@ -19,19 +19,20 @@
 <div class="content-container">
     <div class="row project-import-layout">
         @await Html.PartialAsync("~/Areas/RepositoryImport/Views/_LeftMenu.cshtml")
-        <div class="vertical-splitter"></div>
 
         <div class="content" id="project-import-layout-content">
-            <div class="col-md-offset-2 col-md-11">
-                <h1>@Localizer.Translate("CreateExternalRepository", "RepositoryImport", LocTranslationSource.File)</h1>
-            </div>
+            <div class="repository-content">
+                <div class="col-md-offset-2 col-md-11">
+                    <h2>@Localizer.Translate("CreateExternalRepository", "RepositoryImport", LocTranslationSource.File)</h2>
+                </div>
 
-            <p>
-                @using (Html.BeginForm("Create", "ExternalRepository", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
-                {
-                    @await Html.PartialAsync("_ExternalRepositoryForm")
-                }
-            </p>
+                <p>
+                    @using (Html.BeginForm("Create", "ExternalRepository", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+                    {
+                        @await Html.PartialAsync("_ExternalRepositoryForm")
+                    }
+                </p>
+            </div>
         </div>
     </div>
 </div>
