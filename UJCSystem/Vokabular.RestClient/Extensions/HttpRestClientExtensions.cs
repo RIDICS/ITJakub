@@ -3,6 +3,7 @@ using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
@@ -66,7 +67,7 @@ namespace Vokabular.RestClient.Extensions
             }
         }
 
-        public static async Task<HttpResponseMessage> SendAsJsonAsync(this HttpClient httpClient, HttpRequestMessage requestMessage, object value)
+        public static async Task<HttpResponseMessage> SendAsJsonAsync(this HttpClient httpClient, HttpRequestMessage requestMessage, object value, CancellationToken cancellationToken)
         {
             var stream = new MemoryStream(); // Using block isn't used. Stream is disposed automatically by httpClient.SendAsync method.
             var textWriter = new StreamWriter(stream);
@@ -75,18 +76,18 @@ namespace Vokabular.RestClient.Extensions
             var serializer = CreateJsonSerializer();
             serializer.Serialize(jsonWriter, value);
 
-            await jsonWriter.FlushAsync();
+            await jsonWriter.FlushAsync(cancellationToken);
             stream.Seek(0, SeekOrigin.Begin);
 
             requestMessage.Content = new StreamContent(stream);
             requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(ContentTypes.JsonContentType);
 
-            var result = await httpClient.SendAsync(requestMessage);
+            var result = await httpClient.SendAsync(requestMessage, cancellationToken);
             return result;
         }
 
         public static async Task<HttpResponseMessage> SendAsWwwFormUrlEncodedAsync(this HttpClient httpClient,
-            HttpRequestMessage requestMessage, IEnumerable<KeyValuePair<string, string>> formData)
+            HttpRequestMessage requestMessage, IEnumerable<KeyValuePair<string, string>> formData, CancellationToken cancellationToken)
         {
             var sb = new StringBuilder();
             foreach (var dataItem in formData)
@@ -101,7 +102,7 @@ namespace Vokabular.RestClient.Extensions
 
             requestMessage.Content = new StringContent(sb.ToString(), Encoding.UTF8, ContentTypes.WwwFormUrlEncodedContentType);
 
-            var result = await httpClient.SendAsync(requestMessage);
+            var result = await httpClient.SendAsync(requestMessage, cancellationToken);
             return result;
         }
     }
