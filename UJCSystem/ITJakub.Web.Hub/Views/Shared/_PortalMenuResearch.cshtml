@@ -432,7 +432,7 @@
                         @if (User.HasPermission(VokabularPermissionNames.ManageBibliographyImport))
                         {
                             <li>
-                                <a href='@Url.Action("List", "ExternalRepository", new {area = "RepositoryImport"})'>
+                                <a href='@Url.Action("List", "RepositoryImport", new {area = "RepositoryImport"})'>
                                     <span>@Localizer.Translate("RepositoryImport", "layout", LocTranslationSource.File)</span>
                                 </a>
                             </li>

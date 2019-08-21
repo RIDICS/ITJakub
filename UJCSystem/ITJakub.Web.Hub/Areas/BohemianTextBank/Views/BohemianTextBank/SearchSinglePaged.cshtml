@@ -1,4 +1,7 @@
-﻿@section styles{
+﻿@using Scalesoft.Localization.AspNetCore
+@inject ILocalizationService Localization
+
+@section styles{
     <link asp-append-version="true" href="~/Areas/BohemianTextBank/css/itjakub.bohemiantextbank.css" rel="stylesheet" />
     <link asp-append-version="true" href="~/Areas/BohemianTextBank/css/ridics.bohemiantextbank-search-viewer-single.css" rel="stylesheet" />
 }
@@ -11,7 +14,7 @@
 }
 
 @{
-    ViewBag.Title = "Korpusy - Vyhledávání Single,Paged";
+    ViewBag.Title = Localization.Translate("SearchSinglePaged", "BohemianTextBank");
 }
 
 @await Html.PartialAsync("_BibliographySearch")
@@ -21,17 +24,17 @@
         <div class="corpus-search-result-controls-container col-md-2 col-md-push-10 col-sm-push-9 col-sm-3 col-xs-12">
             <div class="row">
                 <div class="col-xs-12">
-                    <div class="corpus-search-settings-label">Možnosti zobrazení</div>
+                    <div class="corpus-search-settings-label">@Localization.Translate("ViewOptions", "BohemianTextBank")</div>
                 </div>
             </div>
             <div class="corpus-search-result-view-properties-advanced">
                 <div class="corpus-search-setting-div-context">
-                    <label for="contextPositionsSelect">Pozic v kontextu:</label>
+                    <label for="contextPositionsSelect">@Localization.Translate("PositionsInContext", "BohemianTextBank"):</label>
                     <input id="contextPositionsSelect" type="number">
                     <div class="context-size-warning"></div>
                 </div>
                 <div class="number-of-results-per-viewing-page">
-                    <label for="number-of-results-per-viewing-page">Počet výsledků na stránce:</label>
+                    <label for="number-of-results-per-viewing-page">@Localization.Translate("NumberOfResultsOnPage", "BohemianTextBank"):</label>
                     <input id="number-of-results-per-viewing-page" type="number">
                     <div class="number-of-positions-size-warning"></div>
                 </div>
@@ -41,26 +44,26 @@
             </div>
             <div class="corpus-search-settings-checkboxes">
                 @*<div class="checkbox">
-                        <label><input id="wordCheckbox" type="checkbox" value="">Slovo</label>
-                    </div>*@
+            <label><input id="wordCheckbox" type="checkbox" value=""> @Localization.Translate("Word", "BohemianTextBank")</label>
+        </div>*@
                 <div class="checkbox">
-                    <label><input id="commentCheckbox" type="checkbox" value="">Komentář</label>
+                    <label><input id="commentCheckbox" type="checkbox" value="">@Localization.Translate("Comment", "BohemianTextBank")</label>
                 </div>
                 @*<div class="checkbox">
-                        <label><input id="languageCheckbox" type="checkbox" value="">Jazyk</label>
-                    </div>
-                    <div class="checkbox">
-                        <label><input id="structureCheckbox" type="checkbox" value="">Struktura textu</label>
-                    </div>*@
+            <label><input id="languageCheckbox" type="checkbox" value=""> @Localization.Translate("Language", "BohemianTextBank")</label>
+        </div>
+        <div class="checkbox">
+            <label><input id="structureCheckbox" type="checkbox" value="">@Localization.Translate("TextStructure", "BohemianTextBank")</label>
+        </div>*@
                 <div class="checkbox">
-                    <label><input id="paragraphCheckbox" type="checkbox" value="">Odstavec</label>
+                    <label><input id="paragraphCheckbox" type="checkbox" value="">@Localization.Translate("Paragraph", "BohemianTextBank")</label>
                 </div>
             </div>
             <div class="corpus-search-setting-div-results-count">
-                <div>Počet děl:</div>
+                <div>@Localization.Translate("NumberOfProjects", "BohemianTextBank"):</div>
                 <div id="totalCompositionsCountDiv"></div>
                 <div class="total-results-count" style="display: none">
-                    <div>Počet výsledků:</div>
+                    <div>@Localization.Translate("NumberOfResults", "BohemianTextBank"):</div>
                     <div id="totalResultCountDiv"></div>
                 </div>
             </div>
@@ -71,7 +74,7 @@
             <div class="row search-results-row no-gutters">
                 <div class="col-xs-12 text-center">
                     <div class="alert alert-info page-loader">
-                        Pro zobrazení výsledků použijte vyhledávání.
+                        @Localization.Translate("UseSearchForResults", "BohemianTextBank")
                     </div>
                 </div>
                 <div class="col-xs-12 results-container">

@@ -143,7 +143,7 @@ namespace Vokabular.MainService
                 LoginCheckBasePath = "Account/CheckLogin",
             });
 
-            services.RegisterFulltextServiceClientComponents(new ServiceCommunicationConfiguration
+            services.RegisterFulltextServiceClientComponents(new FulltextServiceClientConfiguration
             {
                 Url = new Uri(endpointsConfiguration.Addresses["FulltextService"]),
                 CreateCustomHandler = false
