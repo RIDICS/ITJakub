@@ -12,10 +12,6 @@ namespace ITJakub.Web.Hub.Core.Communication
             m_authApiAccessTokenProvider = authApiAccessTokenProvider;
         }
 
-        public string AuthToken
-        {
-            get => m_authApiAccessTokenProvider.GetAccessTokenAsync().GetAwaiter().GetResult();
-            set { }
-        }
+        public string AuthToken => m_authApiAccessTokenProvider.GetAccessTokenAsync().GetAwaiter().GetResult();
     }
 }

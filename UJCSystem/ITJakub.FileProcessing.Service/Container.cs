@@ -19,7 +19,6 @@ using Vokabular.Core;
 using Vokabular.DataEntities;
 using Vokabular.FulltextService.DataContracts;
 using Vokabular.Log4Net;
-using Vokabular.RestClient;
 using Vokabular.Shared;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 using Vokabular.Shared.WcfService;
@@ -76,7 +75,7 @@ namespace ITJakub.FileProcessing.Service
 
             services.AddSingleton<IOptions<PathConfiguration>, PathConfigImplementation>(); // TODO after switch to ASP.NET Core use framework options handler
 
-            services.RegisterFulltextServiceClientComponents(new ServiceCommunicationConfiguration
+            services.RegisterFulltextServiceClientComponents(new FulltextServiceClientConfiguration
             {
                 Url = new Uri(ConfigurationManager.AppSettings["FulltextServiceEndpoint"]),
                 CreateCustomHandler = false

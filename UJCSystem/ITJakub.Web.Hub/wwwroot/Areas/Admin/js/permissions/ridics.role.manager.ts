@@ -197,8 +197,6 @@ class RoleManager {
 
             editRoleDialog.modal("show");
         });
-
-        this.initEditRoleForm();
     }
 
     private initEditRoleForm() {
