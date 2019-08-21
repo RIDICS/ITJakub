@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using Vokabular.RestClient.Results;
 
@@ -78,6 +79,11 @@ namespace Vokabular.RestClient
         }
 
         protected override void ProcessResponse(HttpResponseMessage response)
+        {
+
+        }
+
+        protected override void TryParseResponseError(HttpStatusCode statusCode, string responseText)
         {
 
         }
