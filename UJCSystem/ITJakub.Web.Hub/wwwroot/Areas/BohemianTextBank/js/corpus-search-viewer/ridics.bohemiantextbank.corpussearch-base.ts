@@ -20,11 +20,10 @@
     protected totalViewPages = 0;
     protected atLeastOnSearchDone = false;
     //string for localisation
-    protected defaultErrorMessage =
-        "Vyhledávání se nezdařilo. Ujistěte se, zda máte zadáno alespoň jedno kritérium na vyhledávání v textu.";
-    protected undefinedReplaceString = "<Nezadáno>";
-    protected contextSizeWarningMessage = `Velikost kontextu by měla být mezi ${this.minContextLength} a ${this.maxContextLength}`;
-    protected numberOfResultsPerPageWarningMessage = `Počet výsledků na stránce by měl být mezi ${this.minResultsPerPage} a ${this.maxResultsPerPage}`;
+    protected defaultErrorMessage = localization.translate("SearchDefaultError", "BohemianTextBank").value;
+    protected undefinedReplaceString = `<${localization.translate("NotFilled", "BohemianTextBank").value}>`;
+    protected contextSizeWarningMessage = localization.translateFormat("ContextSizeWarning", [String(this.minContextLength), String(this.maxContextLength)], "BohemianTextBank").value;
+    protected numberOfResultsPerPageWarningMessage = localization.translateFormat("NumberOfResultsPerPageWarning", [String(this.minResultsPerPage), String(this.maxResultsPerPage)], "BohemianTextBank").value;
 
     protected urlSearchKey = "search";
     protected urlSelectionKey = "selected";
@@ -138,7 +137,6 @@
         }
         const textColumn = tableSectionEl.find(".result-text-col");
         const textResultTableEl = textColumn.find(".text-results-table-body");
-        const undefinedReplaceString = "<Nezadáno>";
         for (let i = 0; i < results.length; i++) {
             const result = results[i];
             const pageContext = result.pageResultContext;
@@ -187,7 +185,7 @@
             abbrevHref.prop("href",
                 `${getBaseUrl()}Editions/Editions/Listing?bookId=${bookId}&searchText=${query
                 }&page=${pageId}`);
-            abbrevHref.text(acronym ? acronym : undefinedReplaceString);
+            abbrevHref.text(acronym ? acronym : this.undefinedReplaceString);
             const abbrevTd = $(`<td class="abbrev-col"></td>`);
             abbrevTd.append(abbrevHref);
 

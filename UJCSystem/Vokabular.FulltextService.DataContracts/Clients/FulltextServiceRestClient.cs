@@ -1,14 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
-using Vokabular.RestClient;
-using Vokabular.Shared;
+﻿using Vokabular.RestClient;
 
 namespace Vokabular.FulltextService.DataContracts.Clients
 {
     public class FulltextServiceRestClient : FullRestClient
     {
-        private static readonly ILogger m_logger = ApplicationLogging.CreateLogger<FulltextServiceClient>();
-        
-        public FulltextServiceRestClient(ServiceCommunicationConfiguration communicationConfiguration) : base(communicationConfiguration)
+        public FulltextServiceRestClient(FulltextServiceClientConfiguration communicationConfiguration) : base(communicationConfiguration)
         {
             
         }

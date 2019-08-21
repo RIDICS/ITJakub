@@ -31,7 +31,6 @@ using Scalesoft.Localization.Core.Configuration;
 using Scalesoft.Localization.Core.Util;
 using Scalesoft.Localization.Database.NHibernate;
 using Vokabular.MainService.DataContracts;
-using Vokabular.RestClient;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
@@ -117,14 +116,16 @@ namespace ITJakub.Web.Hub
                             var returnUrl = context.Request.GetAppBaseUrl();
                             context.ProtocolMessage.SetParameter("returnUrlOnCancel", returnUrl.ToString());
 
-                            var culture = context.HttpContext.RequestServices.GetRequiredService<ILocalizationService>().GetRequestCulture();
+                            var culture = context.HttpContext.RequestServices.GetRequiredService<ILocalizationService>()
+                                .GetRequestCulture();
                             context.ProtocolMessage.SetParameter("culture", culture.Name);
 
                             return Task.CompletedTask;
                         },
                         OnRedirectToIdentityProviderForSignOut = context =>
                         {
-                            var culture = context.HttpContext.RequestServices.GetRequiredService<ILocalizationService>().GetRequestCulture();
+                            var culture = context.HttpContext.RequestServices.GetRequiredService<ILocalizationService>()
+                                .GetRequestCulture();
                             context.ProtocolMessage.SetParameter("culture", culture.Name);
 
                             return Task.CompletedTask;
@@ -159,12 +160,12 @@ namespace ITJakub.Web.Hub
             }, new OpenIdConnectConfig
             {
                 Url = openIdConnectConfig.Url,
-                Scopes = new List<string> { openIdConnectConfig.AuthServiceScopeName },
+                Scopes = new List<string> {openIdConnectConfig.AuthServiceScopeName},
                 ClientId = openIdConnectConfig.ClientId,
                 ClientSecret = openIdConnectConfig.ClientSecret,
-            }, new AuthServiceControllerBasePathsConfiguration(/*Not required to fill because client is not used*/));
+            }, new AuthServiceControllerBasePathsConfiguration( /*Not required to fill because client is not used*/));
 
-            services.RegisterMainServiceClientComponents<AuthTokenProvider>(new ServiceCommunicationConfiguration
+            services.RegisterMainServiceClientComponents<AuthTokenProvider>(new MainServiceClientConfiguration
             {
                 Url = new Uri(endpointsConfiguration.Addresses["MainService"]),
                 CreateCustomHandler = false
@@ -172,12 +173,17 @@ namespace ITJakub.Web.Hub
 
             // Configuration options
             services.AddOptions();
+            services.AddSingleton(openIdConnectConfig);
             services.Configure<EndpointOption>(Configuration.GetSection("Endpoints"));
             services.Configure<GoogleCalendarConfiguration>(Configuration.GetSection("GoogleCalendar"));
-
             services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = 1048576000; });
-
             services.Configure<PortalOption>(Configuration.GetSection("PortalConfig"));
+            services.Configure<AutoLoginCookieConfiguration>(Configuration.GetSection("AutoLoginCookie"));
+            services.Configure<ForumOption>(Configuration.GetSection("Forum"));
+            services.PostConfigure<AutoLoginCookieConfiguration>(config =>
+            {
+                config.CookieName = $"{AutoLoginCookieConfiguration.CookieNamePrefix}{portalConfig.PortalType}";
+            });
 
             // Localization
             var localizationConfiguration = Configuration.GetSection("Localization").Get<LocalizationConfiguration>();
