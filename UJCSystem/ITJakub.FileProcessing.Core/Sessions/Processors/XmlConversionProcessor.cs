@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web.Hosting;
+using System.Web;
 using Ujc.Ovj.Ooxml.Conversion;
 using Vokabular.Core.Storage.Resources;
 using Vokabular.DataEntities.Database.Repositories;
@@ -73,10 +73,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 TempDirectoryPath = tmpDirPath,
                 GetVersionList = versionProviderHelper.GetVersionsByBookXmlId,
                 SplitDocumentByPageBreaks = true,
-                DataDirectoryPath = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, m_dataDirectoryPath)
+                // HttpRuntime.BinDirectory is used instead of HostingEnvironment.ApplicationPhysicalPath because all required files are in bin folder
+                DataDirectoryPath = Path.Combine(HttpRuntime.BinDirectory, m_dataDirectoryPath)
             };
 
-            var evidenceFolderPath = Path.Combine(HostingEnvironment.ApplicationPhysicalPath,
+            var evidenceFolderPath = Path.Combine(HttpRuntime.BinDirectory,
                 m_conversionMetadataPath);
             var evidenceXmlFiles = Directory.GetFiles(evidenceFolderPath);
             ConversionResult conversionResult = null;
