@@ -24,6 +24,10 @@
     "cannot-locate-user": "Cannot locate user with ID '{0}'",
     "no-supported-search": "No supported search criteria was specified",
     "null-book-type-not-supported": "Null value of BookType is not supported",
+    "import-failed": "Import failed",
+    "import-succeed-forum-failed": "Import succeeded. Forum creation failed. {0}",
+    "project-not-exist": "The project does not exist.",
+    "forum-already-created": "The forum is already created.",
 
     //Auth service codes
     "generic-error": "Operation failed",

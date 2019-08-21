@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using ITJakub.FileProcessing.DataContracts;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Errors;
+using Vokabular.MainService.DataContracts;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -46,7 +48,7 @@ namespace Vokabular.MainService.Core.Managers
                 importResult = client.ProcessSession(sessionId, projectId, userId, comment, allAutoImportPermissions);
                 if (!importResult.Success)
                 {
-                    throw new InvalidOperationException("Import failed");
+                    throw new MainServiceException(MainServiceErrorCode.ImportFailed, "Import failed");
                 }
             }
 
@@ -56,7 +58,7 @@ namespace Vokabular.MainService.Core.Managers
             }
             catch (ForumException e)
             {
-                throw new InvalidOperationException("Import succeeded. Forum creation failed." + e.Message, e);
+                throw new MainServiceException(MainServiceErrorCode.ImportSucceedForumFailed, $"Import succeeded. Forum creation failed. {e.Message}", HttpStatusCode.BadRequest, new object[]{ e.Code});
             }
         }
     }

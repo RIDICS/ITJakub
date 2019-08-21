@@ -24,6 +24,10 @@
     "cannot-locate-user": "Nelze nalézt uživatele s ID {0}",
     "no-supported-search": "Nebylo specifikováno žádné podporované vyhledávací kritérium",
     "null-book-type-not-supported": "Hodnota Null není pro typ díla podporována",
+    "import-failed": "Import selhal",
+    "import-succeed-forum-failed": "Import proběhl úspěšně. Vytvoření fóra selhalo. {0}",
+    "project-not-exist": "Projekt neexistuje",
+    "forum-already-created": "Fórum je již vytvořeno",
 
     //Auth service codes
     "generic-error": "Operace se nezdařila",

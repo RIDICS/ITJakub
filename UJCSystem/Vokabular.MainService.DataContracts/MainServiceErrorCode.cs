@@ -23,5 +23,9 @@
         public const string CannotLocateUser = "cannot-locate-user";
         public const string NoSupportedSearch = "no-supported-search";
         public const string NullBookTypeNotSupported = "null-book-type-not-supported";
+        public const string ImportFailed = "import-failed";
+        public const string ImportSucceedForumFailed = "import-succeed-forum-failed";
+        public const string ProjectNotExist = "project-not-exist";
+        public const string ForumAlreadyCreated = "forum-already-created";
     }
 }

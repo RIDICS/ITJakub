@@ -30,6 +30,11 @@ namespace ITJakub.Web.Hub.Helpers
                     }
                     else
                     {
+                        for (var i = 0; i < ex.DescriptionParams.Length; i++)
+                        {
+                            ex.DescriptionParams[i] = TryLocalize(ex.DescriptionParams[i].ToString());
+                        }
+
                         ex.Description = m_localization.TranslateFormat(ex.Code, "MainServiceErrorCode", ex.DescriptionParams);
                     }
                 }
@@ -42,6 +47,19 @@ namespace ITJakub.Web.Hub.Helpers
                 }
 
                 //if translation is not defined, propagate original description
+            }
+        }
+
+        private string TryLocalize(string text)
+        {
+            try
+            {
+                return m_localization.Translate(text, "MainServiceErrorCode");
+            }
+            catch (Exception e) when (e is LocalizationLibraryException || e is TranslateException)
+            {
+                //if translation is not defined, propagate original text
+                return text;
             }
         }
     }
