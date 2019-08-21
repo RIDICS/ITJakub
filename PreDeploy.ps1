@@ -1,6 +1,7 @@
 #!/usr/bin/env pwsh
 
 param (
+    [string]$elasticSearchInstallationPath = "C:Program Files\Elastic\Elasticsearch",
     [bool]$recreateDatabases = $true,
     [string]$elasticSearchUrl = "localhost:9200",
     [string]$existDbUrl = "localhost:8080/exist"
@@ -14,25 +15,54 @@ Write-Host
 Write-Host
 
 try {
-    $javaVersion = (Get-Command java | Select-Object -ExpandProperty Version).toString()    
-    Write-Host "Java is installed. Vesrion: ${javaVersion}"
+    $JavaVersion = (Get-Command java | Select-Object -ExpandProperty Version).toString()    
+    Write-Host "Java is installed. Vesrion: ${JavaVersion}"
 }
 catch {
     Write-Error "Java is not installed"
 }
+
+if(Test-Path $elasticSearchInstallationPath)
+{
+    Set-Location $elasticSearchInstallationPath
+    try {
+        $Command = Get-Command .\bin\elasticsearch-plugin
+    }
+    catch {
+        Write-Error "ElasticSearch is not installed in ""${elasticSearchInstallationPath}""."
+        exit 1
+    }
+
+    $elasticSearchPlugins = & .\bin\elasticsearch-plugin list    
+    if($elasticSearchPlugins.Contains("experimental-highlighter"))
+    {
+        "experimental-highlighter-elasticsearch-plugin is installed"
+    }
+    else {
+        Write-Host "Installing experimental-highlighter-elasticsearch-plugin"
+        & ./bin/elasticsearch-plugin install org.wikimedia.search.highlighter:experimental-highlighter-elasticsearch-plugin:5.5.2.2
+    }
+    Set-Location $CurrentPath
+}
+else {
+    Write-Error "ElasticSearch installation folder ""${elasticSearchInstallationPath}"" is not valid."
+    exit 1
+}
+
+    
 
 function TestConnection {
     Param (
         [String]$serviceName,
         [String]$url)
 
-    $request = [Net.HttpWebRequest]::Create($url)  
+    $Request = [Net.HttpWebRequest]::Create($url)  
 
     try 
     {     
-        $response = [Net.HttpWebResponse]$request.GetResponse() 
+        $Response = [Net.HttpWebResponse]$Request.GetResponse() 
         Write-Host "Database ${serviceName} is running"
-        $request.Abort() 
+        $Request.Abort() 
     }     
     Catch  
     { 
@@ -41,19 +71,19 @@ function TestConnection {
     }
 }
 
-$httpScheme = "http"
+$HttpScheme = "http"
 
 function AddScheme {
     param (
         [string] $url,
-        [string] $scheme = $httpScheme       
+        [string] $scheme = $HttpScheme       
     )
 
-    $seperator = "://"
+    $Seperator = "://"
 
-    if(-Not($url.Contains($seperator)))
+    if(-Not($url.Contains($Seperator)))
     {
-        return $scheme + $seperator + $url 
+        return $scheme + $Seperator + $url 
     }
 
     if($url.Contains($scheme))
@@ -61,16 +91,16 @@ function AddScheme {
        return $url
     }
 
-    $url = $url.Remove(0, $url.IndexOf($seperator))
+    $url = $url.Remove(0, $url.IndexOf($Seperator))
     return $scheme + $url 
 }
 
 $elasticSearchUrl = AddScheme $elasticSearchUrl
-$existDbTempUrl = AddScheme $existDbUrl
+$ExistDbTempUrl = AddScheme $existDbUrl
 
 Write-Host "Testing connections"
 TestConnection "ElasticSearch" -url $elasticSearchUrl
-TestConnection "eXist-db" -url  $existDbTempUrl
+TestConnection "eXist-db" -url  $ExistDbTempUrl
 
 
 $DatabaseFolderPath = Join-Path $CurrentPath "Database"
@@ -99,9 +129,9 @@ else {
 
 $ExistDbScriptPath = Join-Path $DatabaseFolderPath $ExistDbScript
 Write-Host "Running script  ${ExistDbScript}"
-$existScheme = "xmldb:exist" 
-$existDbTempUrl = AddScheme $existDbUrl -scheme $existScheme
-$existDbTempUrl = $existDbTempUrl + "/xmlrpc"
-& $ExistDbScriptPath $existDbTempUrl
+$ExistScheme = "xmldb:exist" 
+$ExistDbTempUrl = AddScheme $existDbUrl -scheme $ExistScheme
+$ExistDbTempUrl = $ExistDbTempUrl + "/xmlrpc"
+& $ExistDbScriptPath $ExistDbTempUrl
 
 Set-Location $CurrentPath
