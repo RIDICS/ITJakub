@@ -12,7 +12,6 @@ using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
-using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
@@ -54,7 +53,11 @@ namespace Vokabular.MainService.Core.Managers
                 }
                 else
                 {
-                    throw new HttpErrorCodeException($"Not supported criteria key: {searchCriteriaContract.Key}", HttpStatusCode.BadRequest);
+                    throw new MainServiceException(MainServiceErrorCode.NotSupportedCriteriaKey,
+                        $"Not supported criteria key: {searchCriteriaContract.Key}",
+                        HttpStatusCode.BadRequest,
+                        new object[] { searchCriteriaContract.Key }
+                    );
                 }
             }
 
@@ -126,7 +129,11 @@ namespace Vokabular.MainService.Core.Managers
                 }
                 else
                 {
-                    throw new HttpErrorCodeException($"Not supported criteria key: {searchCriteriaContract.Key}", HttpStatusCode.BadRequest);
+                    throw new MainServiceException(MainServiceErrorCode.NotSupportedCriteriaKey, 
+                        $"Not supported criteria key: {searchCriteriaContract.Key}",
+                        HttpStatusCode.BadRequest,
+                        new object[] { searchCriteriaContract.Key }
+                        );
                 }
             }
             return fulltextConditions;

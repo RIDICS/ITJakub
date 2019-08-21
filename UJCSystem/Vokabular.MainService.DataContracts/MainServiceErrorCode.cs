@@ -27,5 +27,12 @@
         public const string ImportSucceedForumFailed = "import-succeed-forum-failed";
         public const string ProjectNotExist = "project-not-exist";
         public const string ForumAlreadyCreated = "forum-already-created";
+        public const string CannotRemoveDefaultFavoriteLabel = "cannot-remove-default-favorite-label";
+        public const string CannotModifyDefaultFavoriteLabel = "cannot-modify-default-favorite-label";
+        public const string FavoriteLabelNotFound = "favorite-label-not-found";
+        public const string UserDoesNotOwnLabel = "user-does-not-own-label";
+        public const string PageNotFound = "page-not-found";
+        public const string ItemNotFound = "item-not-found";
+        public const string NotSupportedCriteriaKey = "not-supported-criteria-key";
     }
 }

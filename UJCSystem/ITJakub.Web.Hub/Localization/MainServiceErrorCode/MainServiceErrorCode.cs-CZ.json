@@ -26,8 +26,15 @@
     "null-book-type-not-supported": "Hodnota Null není pro typ díla podporována",
     "import-failed": "Import selhal",
     "import-succeed-forum-failed": "Import proběhl úspěšně. Vytvoření fóra selhalo. {0}",
-    "project-not-exist": "Projekt neexistuje",
-    "forum-already-created": "Fórum je již vytvořeno",
+    "project-not-exist": "Projekt neexistuje.",
+    "forum-already-created": "Fórum je již vytvořeno.",
+    "cannot-remove-default-favorite-label": "Nelze odstranit výchozí štítek",
+    "cannot-modify-default-favorite-label": "Uživatel nemůže upravovat výchozí štítek",
+    "favorite-label-not-found": "Štítek nenalezen",
+    "user-does-not-own-label": "Aktuální uživatel nevlastní tento štítek",
+    "page-not-found": "Stránka s ID {0} nenalezena",
+    "item-not-found": "Položka nenalezana",
+    "not-supported-criteria-key": "Nepodporovaný klíč kritéria: {0}",
 
     //Auth service codes
     "generic-error": "Operace se nezdařila",

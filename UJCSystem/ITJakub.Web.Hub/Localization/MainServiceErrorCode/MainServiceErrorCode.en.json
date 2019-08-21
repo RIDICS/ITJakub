@@ -28,6 +28,13 @@
     "import-succeed-forum-failed": "Import succeeded. Forum creation failed. {0}",
     "project-not-exist": "The project does not exist.",
     "forum-already-created": "The forum is already created.",
+    "cannot-remove-default-favorite-label": "Can't remove default favorite label",
+    "cannot-modify-default-favorite-label": "User can't modify default favorite label",
+    "favorite-label-not-found": "Favorite label not found",
+    "user-does-not-own-label": "Current user doesn't own this FavoriteLabel",
+    "page-not-found": "Page with ID {0} not found",
+    "item-not-found": "Item not found",
+    "not-supported-criteria-key": "Not supported criteria key: {0}",
 
     //Auth service codes
     "generic-error": "Operation failed",
