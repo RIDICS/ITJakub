@@ -12,6 +12,8 @@ namespace Vokabular.Database.Migrations.Migrations.VokabularDB
     {
         public override void Up()
         {
+            // Create generic tables
+
             Create.Table("User")
                 .WithColumn("Id").AsInt32().NotNullable().PrimaryKey("PK_User(Id)").Identity()
                 .WithColumn("CreateTime").AsDateTime().NotNullable().WithDefaultValue(DateTime.UtcNow)
@@ -76,6 +78,8 @@ namespace Vokabular.Database.Migrations.Migrations.VokabularDB
             Create.Table("Keyword")
                 .WithColumn("Id").AsInt32().NotNullable().PrimaryKey("PK_Keyword(Id)").Identity()
                 .WithColumn("Text").AsString(255).NotNullable().Unique("UQ_Keyword(Text)");
+
+            // Create project and resource tables
 
             Create.Table("Project")
                 .WithColumn("Id").AsInt64().NotNullable().PrimaryKey("PK_Project(Id)").Identity()
@@ -210,6 +214,8 @@ namespace Vokabular.Database.Migrations.Migrations.VokabularDB
                 .WithColumn("ExternalId").AsString(100).Nullable()
                 .WithColumn("BookVersion").AsInt64().Nullable().ForeignKey("FK_EditionNoteResource(BookVersion)_BookVersionResource(ResourceVersionId)", "BookVersionResource", "ResourceVersionId");
 
+            // Other tables
+
             Create.Table("FavoriteLabel")
                 .WithColumn("Id").AsInt64().NotNullable().PrimaryKey("PK_FavoriteLabel(Id)").Identity()
                 .WithColumn("Name").AsString(150).NotNullable()
@@ -301,6 +307,8 @@ namespace Vokabular.Database.Migrations.Migrations.VokabularDB
                 .WithColumn("ResourceText").AsInt64().NotNullable().ForeignKey("FK_TextComment(ResourceText)_Resource(Id)", "Resource", "Id")
                 .WithColumn("EditCount").AsInt32().Nullable()
                 .WithColumn("LastEditTime").AsDateTime().Nullable();
+
+            // Create M:N tables
 
             Create.Table("Project_OriginalAuthor")
                 .WithColumn("Project").AsInt64().NotNullable().ForeignKey("FK_Project_OriginalAuthor(Project)_Project(Id)", "Project", "Id")
