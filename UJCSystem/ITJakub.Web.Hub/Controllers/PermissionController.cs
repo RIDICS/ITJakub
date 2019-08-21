@@ -11,6 +11,7 @@ using ITJakub.Web.Hub.Models.Requests.Permission;
 using ITJakub.Web.Hub.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Ridics.Core.Structures.Shared;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Errors;
@@ -68,6 +69,8 @@ namespace ITJakub.Web.Hub.Controllers
             };
 
             ViewData.Add(PermissionConstants.IsRoleEditAllowed, true);
+            ViewData.Add(PermissionConstants.UnregisteredRoleName, RoleNames.Unregistered);
+            ViewData.Add(PermissionConstants.RegisteredRoleName, RoleNames.RegisteredUser);
 
             switch (viewType)
             {

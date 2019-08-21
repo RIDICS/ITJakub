@@ -8,10 +8,12 @@ class RoleManager {
     private readonly client: PermissionApiClient;
     private readonly delayForShowResponse = 1000;
     private readonly errorHandler: ErrorHandler;
+    private readonly registeredRoleName: string;
+    private readonly unregisteredRoleName: string;
     private currentUserSelectedItem: IUserDetail;
     private userList: ListWithPagination;
     private roleList: ListWithPagination;
-    private permissionList: ListWithPagination; 
+    private permissionList: ListWithPagination;
 
     constructor() {
         this.searchBox = new SingleSetTypeaheadSearchBox<IUserDetail>("#mainSearchInput",
@@ -21,6 +23,8 @@ class RoleManager {
                 item.email));
         this.client = new PermissionApiClient();
         this.errorHandler = new ErrorHandler();
+        this.registeredRoleName = $("#registeredRoleName").data("name");
+        this.unregisteredRoleName = $("#unregisteredRoleName").data("name");
     }
     
     public init(list?: ListWithPagination) {
@@ -125,10 +129,10 @@ class RoleManager {
             const roleName = $(".role-row.active").find(".name").text();
             
             let defaultRoleWarningMessage = null;
-            if (roleName === "RegisteredUser") {
+            if (roleName === this.registeredRoleName) {
                 defaultRoleWarningMessage = "RegisteredRoleModifyWarning";
             }
-            else if (roleName === "Unregistered") {
+            else if (roleName === this.unregisteredRoleName) {
                 defaultRoleWarningMessage = "UnregisteredRoleModifyWarning";
             }
 
@@ -159,7 +163,7 @@ class RoleManager {
     }
 
     private modifyPermission(event: JQuery.TriggeredEvent) {
-        const addPermission = $(event.currentTarget as Node as HTMLElement).is(":checked");
+        const addPermission = !$(event.currentTarget as Node as HTMLElement).is(":checked");
         const permissionCheckboxInput = $(event.currentTarget as Node as HTMLElement);
         const permissionRow = permissionCheckboxInput.parents(".permission-row");
         const alert = permissionRow.find(".alert");
@@ -273,6 +277,11 @@ class RoleManager {
                 title: localization.translate("Warning", "PermissionJs").value,
                 message: localization.translateFormat("DeleteRoleConfirm", [roleName],"PermissionJs").value,
                 buttons: {
+                    cancel: {
+                        label: localization.translate("Cancel", "PermissionJs").value,
+                        className: "btn-default",
+                        callback: () => { }
+                    },
                     confirm: {
                         label: localization.translate("Delete", "PermissionJs").value,
                         className: "btn-default",
@@ -289,11 +298,6 @@ class RoleManager {
                                 alert.show();
                             });
                         }
-                    },
-                    cancel: {
-                        label: localization.translate("Cancel", "PermissionJs").value,
-                        className: "btn-default",
-                        callback: () => { }
                     }
                 }
             });
