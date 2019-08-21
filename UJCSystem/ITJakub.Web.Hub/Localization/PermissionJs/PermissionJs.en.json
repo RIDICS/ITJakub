@@ -40,6 +40,8 @@
     "AssignPermission": "Assign permission",
     "UnassignPermission": "Unassign permission",
     "RegisteredRoleModifyWarning": "The role {0} is automatically assigned to every registered user. Are you sure that you wanted to modify it?",
-    "UnregisteredRoleModifyWarning": "The role {0} has every user who is not signed in. Are you sure that you wanted to modify it?"
+    "UnregisteredRoleModifyWarning": "The role {0} has every user who is not signed in. Are you sure that you wanted to modify it?",
+    "RemoveUserFromRegisteredRole": "The {0} is a base role for every registered user. Are you sure that you wanted to remove the user from this role?",
+    "Remove": "Remove"
   }
 }

@@ -202,18 +202,45 @@ class RoleManager {
 
     private initRemoveUserFromRoleButton() {
         $(".remove-user-from-role").click((event) => {
-            const userRow = $(event.currentTarget as Node as HTMLElement).parents(".user-row");
-            const userId = userRow.data("user-id");
-            const alert = userRow.find(".alert");
-            alert.hide();
+            const roleName = $(".role-row.active").find(".name").text();
 
-            var roleId = $(".role-row.active").data("role-id");
-            this.client.removeUserFromRole(userId, roleId).done(() => {
-                this.userList.reloadPage();
-            }).fail((error) => {
-                alert.text(this.errorHandler.getErrorMessage(error, localization.translate("RemoveUserFromRoleError", "PermissionJs").value));
-                alert.show();
-            });
+            if (roleName === this.registeredRoleName) {
+                bootbox.dialog({
+                    title: localization.translate("Warning", "PermissionJs").value,
+                    message: localization.translateFormat("RemoveUserFromRegisteredRole", [roleName], "PermissionJs").value,
+                    buttons: {
+                        cancel: {
+                            label: localization.translate("Cancel", "PermissionJs").value,
+                            className: "btn-default",
+                            callback: () => {}
+                        },
+                        confirm: {
+                            label: localization.translate("Remove","PermissionJs").value,
+                            className: "btn-default",
+                            callback: () => {
+                                this.removeUserFromRole(event);
+                            }
+                        }
+                    }
+                });
+            } else {
+                this.removeUserFromRole(event);
+            }
+        });
+    }
+
+    private removeUserFromRole(event: JQuery.TriggeredEvent) {
+        const userRow = $(event.currentTarget as Node as HTMLElement).parents(".user-row");
+        const userId = userRow.data("user-id");
+        const alert = userRow.find(".alert");
+        alert.hide();
+
+        var roleId = $(".role-row.active").data("role-id");
+        this.client.removeUserFromRole(userId, roleId).done(() => {
+            this.userList.reloadPage();
+        }).fail((error) => {
+            alert.text(this.errorHandler.getErrorMessage(error, localization.translate("RemoveUserFromRoleError", "PermissionJs").value));
+            alert.show();
         });
     }
 
