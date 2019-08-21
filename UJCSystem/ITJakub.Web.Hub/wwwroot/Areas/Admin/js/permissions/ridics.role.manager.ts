@@ -121,39 +121,78 @@ class RoleManager {
             const addPermission = $(event.currentTarget as Node as HTMLElement).is(":checked");
             const permissionCheckboxInput = $(event.currentTarget as Node as HTMLElement);
             permissionCheckboxInput.prop("checked", !addPermission);
-            const permissionRow = permissionCheckboxInput.parents(".permission-row");
-            const alert = permissionRow.find(".alert");
-            alert.hide();
-            const specialPermissionId = permissionRow.data("permission-id");
-            const roleId = $(".role-row.active").data("role-id");
 
-            const spinner = permissionRow.find(".loading-spinner");
-            spinner.show();
-            const successLabel = permissionRow.find(".success");
-            successLabel.hide();
+            const roleName = $(".role-row.active").find(".name").text();
             
-            let result: JQuery.jqXHR<any>;
-            if (addPermission) {
-                result = this.client.addSpecialPermissionToRole(roleId, specialPermissionId);
-            } else {
-                result = this.client.removeSpecialPermissionToRole(roleId, specialPermissionId);
+            let defaultRoleWarningMessage = null;
+            if (roleName === "RegisteredUser") {
+                defaultRoleWarningMessage = "RegisteredRoleModifyWarning";
+            }
+            else if (roleName === "Unregistered") {
+                defaultRoleWarningMessage = "UnregisteredRoleModifyWarning";
             }
 
-            result.done(() => {
-                setTimeout(() => {
-                    successLabel.show();
-                    permissionCheckboxInput.prop("checked", addPermission);
-                }, this.delayForShowResponse);
-            }).fail((error) => {
-                setTimeout(() => {
-                    alert.text(this.errorHandler.getErrorMessage(error, localization.translate("PermissionError", "PermissionJs").value));
-                    alert.show();
-                }, this.delayForShowResponse);
-            }).always(() => {
-                setTimeout(() => {
-                    spinner.hide();
-                }, this.delayForShowResponse);
-            });
+            if (defaultRoleWarningMessage !== null) {
+                bootbox.dialog({
+                    title: localization.translate("Warning", "PermissionJs").value,
+                    message: localization.translateFormat(defaultRoleWarningMessage, [roleName], "PermissionJs").value,
+                    buttons: {
+                        cancel: {
+                            label: localization.translate("Cancel", "PermissionJs").value,
+                            className: "btn-default",
+                            callback: () => { }
+                        },
+                        confirm: {
+                            label: localization.translate(addPermission ? "AssignPermission" : "UnassignPermission", "PermissionJs").value,
+                            className: "btn-default",
+                            callback: () => {
+                                this.modifyPermission(event);
+                            }
+                        }
+                    }
+                });
+            }
+            else {
+                this.modifyPermission(event);
+            }
+        });
+    }
+
+    private modifyPermission(event: JQuery.TriggeredEvent) {
+        const addPermission = $(event.currentTarget as Node as HTMLElement).is(":checked");
+        const permissionCheckboxInput = $(event.currentTarget as Node as HTMLElement);
+        const permissionRow = permissionCheckboxInput.parents(".permission-row");
+        const alert = permissionRow.find(".alert");
+        alert.hide();
+        const specialPermissionId = permissionRow.data("permission-id");
+        const roleId = $(".role-row.active").data("role-id");
+
+        const spinner = permissionRow.find(".loading-spinner");
+        spinner.show();
+        const successLabel = permissionRow.find(".success");
+        successLabel.hide();
+
+        let result: JQuery.jqXHR<any>;
+        if (addPermission) {
+            result = this.client.addSpecialPermissionToRole(roleId, specialPermissionId);
+        } else {
+            result = this.client.removeSpecialPermissionToRole(roleId, specialPermissionId);
+        }
+
+        result.done(() => {
+            setTimeout(() => {
+                successLabel.show();
+                permissionCheckboxInput.prop("checked", addPermission);
+            }, this.delayForShowResponse);
+        }).fail((error) => {
+            setTimeout(() => {
+                alert.text(this.errorHandler.getErrorMessage(error, localization.translate("PermissionError", "PermissionJs").value));
+                alert.show();
+            }, this.delayForShowResponse);
+        }).always(() => {
+            setTimeout(() => {
+                spinner.hide();
+            }, this.delayForShowResponse);
         });
     }
 
