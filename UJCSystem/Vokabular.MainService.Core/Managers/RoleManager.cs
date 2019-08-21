@@ -5,7 +5,6 @@ using AutoMapper;
 using log4net;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
-using Vokabular.MainService.Core.Errors;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.MainService.DataContracts;
@@ -136,15 +135,6 @@ namespace Vokabular.MainService.Core.Managers
 
         public PagedResultList<RoleContract> GetRoleList(int? start, int? count, string filterByName)
         {
-            try
-            {
-                throw new ForumException(MainServiceErrorCode.ProjectNotExist, "The project does not exist.");
-            }
-            catch (ForumException e)
-            {
-                throw new MainServiceException(MainServiceErrorCode.ImportSucceedForumFailed, $"Import succeeded. Forum creation failed. {e.Message}", HttpStatusCode.BadRequest, new object[] { e.Code });
-            }
-
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
 
