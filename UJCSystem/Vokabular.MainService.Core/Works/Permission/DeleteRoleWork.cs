@@ -25,10 +25,16 @@ namespace Vokabular.MainService.Core.Works.Permission
 
         protected override void ExecuteWorkImplementation()
         {
-            var role = m_defaultUserProvider.GetDefaultUnregisteredRole();
-            if (role.Id == m_roleId)
+            var unregisteredRole = m_defaultUserProvider.GetDefaultUnregisteredRole();
+            if (unregisteredRole.Id == m_roleId)
             {
-                throw new ArgumentException($"The default role {role.Name} cannot be deleted.");
+                throw new ArgumentException($"The default role {unregisteredRole.Name} cannot be deleted.");
+            }
+
+            var registeredRole = m_defaultUserProvider.GetDefaultRegisteredRole();
+            if (registeredRole.Id == unregisteredRole.Id)
+            {
+                throw new ArgumentException($"The default role {unregisteredRole.Name} cannot be deleted.");
             }
 
             var group = m_permissionRepository.FindGroupByExternalId(m_roleId);
