@@ -2,17 +2,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using Ridics.Authentication.DataContracts;
+using Ridics.Core.Structures.Shared;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
-using Vokabular.Shared.Const;
+using CustomClaimTypes = Vokabular.Shared.Const.CustomClaimTypes;
 
 namespace Vokabular.MainService.Core.Managers.Authentication
 {
     public class DefaultUserProvider
     {
-        private const string Unregistered = "Unregistered";
+        private const string Unregistered = RoleNames.Unregistered;
+        private const string RegisteredUser = RoleNames.RegisteredUser;
 
         private readonly UserRepository m_userRepository;
         private readonly CommunicationProvider m_communicationProvider;
@@ -39,28 +41,25 @@ namespace Vokabular.MainService.Core.Managers.Authentication
 
         private int GetUnregisteredRoleExternalId()
         {
-            //TODO get role by name
-            var client = m_communicationProvider.GetAuthRoleApiClient();
-
-            var roleResult = client.GetAllRolesAsync().GetAwaiter().GetResult().First(role => role.Name == Unregistered);
-            return roleResult.Id;
+            return GetDefaultUnregisteredRole().Id;
         }
 
         public IList<Claim> GetDefaultUserPermissions()
         {
-            //TODO get role by name
-            var client = m_communicationProvider.GetAuthRoleApiClient();
-
-            var permissions = client.GetAllRolesAsync().GetAwaiter().GetResult().First(role => role.Name == Unregistered).Permissions;
+            var permissions = GetDefaultUnregisteredRole().Permissions;
             return permissions.Select(perm => new Claim(CustomClaimTypes.Permission, perm.Name)).ToList();
         }
 
         public RoleContract GetDefaultUnregisteredRole()
         {
-            //TODO get role by name
             var client = m_communicationProvider.GetAuthRoleApiClient();
+            return client.GetRoleByName(Unregistered).GetAwaiter().GetResult();
+        }
 
-            return client.GetAllRolesAsync().GetAwaiter().GetResult().First(role => role.Name == Unregistered);
+        public RoleContract GetDefaultRegisteredRole()
+        {
+            var client = m_communicationProvider.GetAuthRoleApiClient();
+            return client.GetRoleByName(RegisteredUser).GetAwaiter().GetResult();
         }
     }
 }

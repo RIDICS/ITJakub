@@ -38,6 +38,12 @@
     "Cancel": "Zrušit",
     "Delete": "Smazat",
     "Warning": "Upozornění",
-    "DeleteRoleConfirm": "Opravdu chcete smazat skupinu {0}?"
+    "DeleteRoleConfirm": "Opravdu chcete smazat skupinu {0}?",
+    "AssignPermission": "Přiřadit právo",
+    "UnassignPermission": "Odebrat právo",
+    "RegisteredRoleModifyWarning": "Role {0} se přiřadí automaticky každému registrovanému uživateli. Jste si jisti, že ji chcete upravit?",
+    "UnregisteredRoleModifyWarning": "Roli {0} má každý nepřihlášený uživatel. Jste si jisti, že ji chcete upravit?",
+    "RemoveUserFromRegisteredRole": "Role {0} je základní role pro všechny registrované uživatele. Opravdu chcete odstranit uživatele z této role?",
+    "Remove": "Odstranit"
   }
 }
