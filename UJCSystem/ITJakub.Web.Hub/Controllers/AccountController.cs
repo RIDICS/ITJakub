@@ -128,6 +128,10 @@ namespace ITJakub.Web.Hub.Controllers
                 {
                     AddErrors(e);
                 }
+                catch (MainServiceException e)
+                {
+                    AddErrors(e);
+                }
             }
 
             return PartialView("UserProfile/_UpdateBasicData", updateUserViewModel);
@@ -157,6 +161,10 @@ namespace ITJakub.Web.Hub.Controllers
                     return PartialView("UserProfile/_UpdatePassword", null);
                 }
                 catch (HttpErrorCodeException e)
+                {
+                    AddErrors(e);
+                }
+                catch (MainServiceException e)
                 {
                     AddErrors(e);
                 }
@@ -259,6 +267,10 @@ namespace ITJakub.Web.Hub.Controllers
                 {
                     AddErrors(e);
                 }
+                catch (MainServiceException e)
+                {
+                    AddErrors(e);
+                }
             }
 
             twoFactorVerificationViewModel = CreateUpdateTwoFactorVerificationViewModel();
@@ -284,6 +296,10 @@ namespace ITJakub.Web.Hub.Controllers
                     ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, true);
                 }
                 catch (HttpErrorCodeException e)
+                {
+                    AddErrors(e);
+                }
+                catch (MainServiceException e)
                 {
                     AddErrors(e);
                 }
