@@ -2,14 +2,19 @@
     var filteringExpressionTable = new FilteringExpressionTable();
     filteringExpressionTable.init();
 
-    var externalRepositoryConfiguration = new ExternalRepositoryConfiguration();
-    externalRepositoryConfiguration.init();
-
     var externalRepositoryImportList = new ExternalRepositoryImportList();
     externalRepositoryImportList.init();
 });
 
 class FilteringExpressionTable {
+    private readonly errorHandler: ErrorHandler;
+    private readonly client: RepositoryImportApiClient;
+
+    constructor() {
+        this.errorHandler = new ErrorHandler();
+        this.client = new RepositoryImportApiClient();
+    }
+
     init() {
         $("#addFilteringExpressionRow").click(() => {
             $.ajax({
@@ -35,74 +40,24 @@ class FilteringExpressionTable {
     }
 }
 
-class ExternalRepositoryConfiguration {
-    init() {
-        $(".repository-detail").click((e) => {
-            const repositoryId = $(e.target as Node as Element).data("repository-id");
-            $.ajax({
-                type: "GET",
-                dataType: "html",
-                url: `${getBaseUrl()}RepositoryImport/ExternalRepository/Detail?id=${repositoryId}`,
-                success: (partialView) => {
-                    $(`#repository-${repositoryId} .bib-table:last-child`).html(partialView);
-                }
-            });
-        });
-
-        $(".ResourceType").change((e) => {
-            const api = $(e.target as Node as Element).children("option:selected").text();
-            const config = $(".repository-configuration").val();
-            
-            let configParam = "";
-            if (config !== "undefined") {
-                configParam = `&config=${config}`;
-            }
-
-            $.ajax({
-                    type: "GET",
-                    url: `${getBaseUrl()}RepositoryImport/ExternalRepository/LoadApiConfiguration?api=${api}${configParam}`,
-                    dataType: "html",
-                    success: (data) => {
-                        $("#apiType").val(api);
-                        $("#apiOptions").html(data);
-                        this.initOaiPmh();
-                    }
-                });
-        });
-
-        $(".ResourceType").change();
-    }
-
-    initOaiPmh() {
-        $("#OaiPmhConnect").click(() => {
-            const config = $(".repository-configuration").val();
-            $.ajax({
-                type: "GET",
-                url: `${getBaseUrl()}RepositoryImport/ExternalRepository/OaiPmhConnect?url=${$("#OaiPmhResourceUrl")
-                    .val()}&config=${config}`,
-                dataType: "html",
-                success: (data) => {
-                    $("#oaiPmhConfig").html(data);
-                }
-            });
-        });
-    }
-}
-
 class ExternalRepositoryImportList {
+    private readonly errorHandler: ErrorHandler;
+    private readonly client: RepositoryImportApiClient;
+
+    constructor() {
+        this.errorHandler = new ErrorHandler();
+        this.client = new RepositoryImportApiClient();
+    }
+
     init() {
         const checkboxes = $(".repositories input:checkbox");
 
-        $("#select-all-repositories").click(() => {
-            if ($(".repositories input:checkbox:not(:checked)").length > 0) {
-                checkboxes.prop('checked', true);
-            } else {
-                checkboxes.prop('checked', false);
-            }
+        $("#selectAllRepositories").click(() => {
+            checkboxes.prop("checked", $(".repositories input:checkbox:not(:checked)").length > 0);
         });
             
         checkboxes.click(() => {
-            const button = $("#start-import-btn");
+            const button = $("#startImportBtn");
             if ($(".repositories input:checkbox:checked").length > 0) {
                 button.removeClass("disabled");
             } else {
