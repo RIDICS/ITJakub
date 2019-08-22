@@ -1,5 +1,6 @@
 ﻿using System;
 using ITJakub.Web.Hub.Options;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
@@ -32,7 +33,7 @@ namespace ITJakub.Web.Hub.Authorization
             {
                 if (m_requiredPortalType != m_portalOption.PortalType)
                 {
-                    context.Result = new UnauthorizedResult();
+                    context.Result = new StatusCodeResult(StatusCodes.Status403Forbidden);
                 }
             }
         }
