@@ -1,10 +1,16 @@
 #!/usr/bin/env pwsh
 
 param (
-    [string]$elasticSearchInstallationPath = "C:Program Files\Elastic\Elasticsearch",
+    [string]$elasticSearchInstallationPath = $null,
     [bool]$recreateDatabases = $true,
     [string]$elasticSearchUrl = "localhost:9200",
     [string]$existDbUrl = "localhost:8080/exist"
+)
+
+$DefaultElasticLocations = @(
+    "C:\Tools\Elastic\Elasticsearch",
+    "D:\Tools\Elastic\Elasticsearch",
+    "C:\Program Files\Elastic\Elasticsearch"
 )
 
 $CurrentPath = (Get-Location -PSProvider FileSystem).ProviderPath
@@ -14,6 +20,8 @@ Write-Host "Using root directory: ${CurrentPath}"
 Write-Host
 Write-Host
 
+# Verify Java is installed
+
 try {
     $JavaVersion = (Get-Command java | Select-Object -ExpandProperty Version).toString()    
     Write-Host "Java is installed. Vesrion: ${JavaVersion}"
@@ -22,14 +30,33 @@ catch {
     Write-Error "Java is not installed"
 }
 
+# Verify Elasticsearch is installed with required plugin
+
+if ($elasticSearchInstallationPath -eq "")
+{
+    foreach ($location in $DefaultElasticLocations)
+    {
+        $elasticSearchInstallationPath = $location
+        if (Test-Path $location)
+        {
+            break
+        }
+    }
+}
+
 if(Test-Path $elasticSearchInstallationPath)
 {
     Set-Location $elasticSearchInstallationPath
     try {
         $Command = Get-Command .\bin\elasticsearch-plugin
+        if ($Command -eq $null)
+        {
+            Throw
+        }
     }
     catch {
         Write-Error "ElasticSearch is not installed in ""${elasticSearchInstallationPath}""."
+		Set-Location $CurrentPath
         exit 1
     }
 
@@ -95,12 +122,27 @@ function AddScheme {
     return $scheme + $url 
 }
 
+# Verify Elasticsearch and eXist-DB are installed
+
 $elasticSearchUrl = AddScheme $elasticSearchUrl
 $ExistDbTempUrl = AddScheme $existDbUrl
 
+Write-Host ""
 Write-Host "Testing connections"
 TestConnection "ElasticSearch" -url $elasticSearchUrl
 TestConnection "eXist-db" -url  $ExistDbTempUrl
+
+# Create or recreate Elasticsearch indices
+
+Write-Host ""
+if ($recreateDatabases)
+{
+    Write-Host "Recreate fulltext databases (indices and xqueries)"
+}
+else
+{
+    Write-Host "Create fulltext databases (indices and xqueries)"
+}
 
 
 $DatabaseFolderPath = Join-Path $CurrentPath "Database"
@@ -115,8 +157,10 @@ if($recreateDatabases)
     & $ElasticScripthPath -url $elasticSearchUrl -recreateMode
 }
 else {
-	& $ElasticScripthPath -url $elasticSearchUrl
+    & $ElasticScripthPath -url $elasticSearchUrl
 }
+
+# Create or create eXist-DB xqueries
 
 $ExistDbScript = ""
 if($recreateDatabases)
@@ -133,5 +177,7 @@ $ExistScheme = "xmldb:exist"
 $ExistDbTempUrl = AddScheme $existDbUrl -scheme $ExistScheme
 $ExistDbTempUrl = $ExistDbTempUrl + "/xmlrpc"
 & $ExistDbScriptPath $ExistDbTempUrl
+
+# Reset current location
 
 Set-Location $CurrentPath
