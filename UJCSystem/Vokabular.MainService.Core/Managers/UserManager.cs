@@ -206,5 +206,11 @@ namespace Vokabular.MainService.Core.Managers
 
             return user.ExternalId.Value;
         }
+
+        public void ResetUserPassword(int userId)
+        {
+            var client = m_communicationProvider.GetAuthUserApiClient();
+            client.ResetUserPasswordAsync(GetUserExternalId(userId)).GetAwaiter().GetResult();
+        }
     }
 }

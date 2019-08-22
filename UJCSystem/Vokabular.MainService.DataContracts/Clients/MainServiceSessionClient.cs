@@ -38,8 +38,8 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                m_client.HttpClient.Timeout = new TimeSpan(0, 10, 0); // Import is long running operation
-                m_client.Post<object>($"session/{sessionId}", request);
+                var requestTimeout = new TimeSpan(0, 10, 0); // Import is long running operation
+                m_client.Post<object>($"session/{sessionId}", request, requestTimeout);
             }
             catch (HttpRequestException e)
             {

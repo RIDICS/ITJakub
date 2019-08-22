@@ -32,10 +32,18 @@
     "ProjectIsNotSelected": "The project is not selected.",
     "RemoveProjectFromRoleError": "An unexpected error occurred when removing the project's permission from the group.",
     "AddProjectToRoleError": "An unexpected error occurred when adding the project's permission to the group.",
+    
+    "PasswordResetSuccess": "Link for resetting password was sent to the user's email.",
 
     "Cancel": "Cancel",
     "Delete": "Delete",
     "Warning": "Warning",
-    "DeleteRoleConfirm": "Are you sure you want to delete group {0}?"
+    "DeleteRoleConfirm": "Are you sure you want to delete group {0}?",
+    "AssignPermission": "Assign permission",
+    "UnassignPermission": "Unassign permission",
+    "RegisteredRoleModifyWarning": "The role {0} is automatically assigned to every registered user. Are you sure that you wanted to modify it?",
+    "UnregisteredRoleModifyWarning": "The role {0} has every user who is not signed in. Are you sure that you wanted to modify it?",
+    "RemoveUserFromRegisteredRole": "The {0} is a base role for every registered user. Are you sure that you wanted to remove the user from this role?",
+    "Remove": "Remove"
   }
 }
