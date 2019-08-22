@@ -33,6 +33,8 @@
     "RemoveProjectFromRoleError": "Nastala neočekávaná chyba při odstraňování práva na projekt ze skupiny.",
     "AddProjectToRoleError": "Nastala neočekávaná chyba při přidávání práva na projekt skupině.",
 
+    "PasswordResetSuccess": "Odkaz pro resetování hesla byl odeslán na email uživatele.",
+
     "Cancel": "Zrušit",
     "Delete": "Smazat",
     "Warning": "Upozornění",

@@ -201,6 +201,15 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
+        public IActionResult ResetUserPassword([FromBody] ResetUserPasswordRequest request)
+        {
+            var client = GetUserClient();
+            client.ResetUserPassword(request.UserId);
+            return AjaxOkResponse();
+        }
+
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult EditRole(RoleViewModel roleViewModel)
         {
