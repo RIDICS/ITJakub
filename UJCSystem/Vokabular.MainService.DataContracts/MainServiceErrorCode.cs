@@ -34,5 +34,8 @@
         public const string PageNotFound = "page-not-found";
         public const string ItemNotFound = "item-not-found";
         public const string NotSupportedCriteriaKey = "not-supported-criteria-key";
+        public const string MissingFulltextCriteria = "missing-fulltext-criteria";
+        public const string DeleteResourceProjectRelation = "delete-resource-project-relation";
+        public const string DeleteResourcePageRelation = "delete-resource-page-relation";
     }
 }

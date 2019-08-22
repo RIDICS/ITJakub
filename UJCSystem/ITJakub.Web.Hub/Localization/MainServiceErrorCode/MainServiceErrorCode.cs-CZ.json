@@ -35,6 +35,9 @@
     "page-not-found": "Stránka s ID {0} nenalezena",
     "item-not-found": "Položka nenalezana",
     "not-supported-criteria-key": "Nepodporovaný klíč kritéria: {0}",
+    "missing-fulltext-criteria": "Chybí jakékoliv fulltextové kritérium",
+    "could-not-delete-resource": "Nelze smazat zdroj. Je zde existující propojení se projektem?",
+    "could-not-delete-resource": "Nelze smazat zdroj. Je zde existující propojení se stránkou?",
 
     //Auth service codes
     "generic-error": "Operace se nezdařila",

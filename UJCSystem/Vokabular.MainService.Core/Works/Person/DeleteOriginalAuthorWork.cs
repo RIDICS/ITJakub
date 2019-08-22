@@ -1,9 +1,7 @@
-using System.Net;
 using NHibernate.Exceptions;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts;
-using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Person
@@ -32,9 +30,9 @@ namespace Vokabular.MainService.Core.Works.Person
                 m_personRepository.Delete(dbAuthor);
                 m_personRepository.UnitOfWork.CurrentSession.Flush();
             }
-            catch (GenericADOException exception)
+            catch (GenericADOException)
             {
-                throw new HttpErrorCodeException("Could not delete resource. Existing relation to Project?", exception, HttpStatusCode.BadRequest);
+                throw new MainServiceException(MainServiceErrorCode.DeleteResourceProjectRelation, "Could not delete resource. Existing relation to Project?");
             }
         }
     }

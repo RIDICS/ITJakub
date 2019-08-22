@@ -35,6 +35,9 @@
     "page-not-found": "Page with ID {0} not found",
     "item-not-found": "Item not found",
     "not-supported-criteria-key": "Not supported criteria key: {0}",
+    "missing-fulltext-criteria": "Missing any fulltext criteria",
+    "delete-resource-project-relation": "Could not delete resource. Existing relation to Project?",
+    "delete-resource-page-relation": "Could not delete resource. Existing relation to resource Page?",
 
     //Auth service codes
     "generic-error": "Operation failed",

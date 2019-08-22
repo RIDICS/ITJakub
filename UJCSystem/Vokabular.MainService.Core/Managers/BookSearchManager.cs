@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using AutoMapper;
 using Vokabular.Core.Data;
 using Vokabular.Core.Search;
@@ -15,9 +14,9 @@ using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Search;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
-using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.QueryBuilder;
@@ -373,7 +372,7 @@ namespace Vokabular.MainService.Core.Managers
 
             if (processedCriterias.NonMetadataCriterias.Count == 0)
             {
-                throw new HttpErrorCodeException("Missing any fulltext criteria", HttpStatusCode.BadRequest);
+                throw new MainServiceException(MainServiceErrorCode.MissingFulltextCriteria,  "Missing any fulltext criteria");
             }
 
             return processedCriterias;
