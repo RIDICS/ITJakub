@@ -22,8 +22,8 @@
         @await Html.PartialAsync("~/Areas/RepositoryImport/Views/_LeftMenu.cshtml")
         
         <div class="content content-list" id="project-import-layout-content">
-            <div class="col-xs-12  float-none">
-                <h1>@Localizer.Translate("ExternalRepositoryList", "RepositoryImport", LocTranslationSource.File)</h1>
+            <div class="col-xs-12 float-none">
+                <h2>@Localizer.Translate("ExternalRepositoryList", "RepositoryImport", LocTranslationSource.File)</h2>
             </div>
             <div class="col-xs-12 right-align-btn">
                 <a class="btn btn-default" href="@Url.Action("Create", "ExternalRepository", new {area = "RepositoryImport"})">
