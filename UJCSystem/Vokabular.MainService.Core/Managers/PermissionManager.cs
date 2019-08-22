@@ -68,6 +68,8 @@ namespace Vokabular.MainService.Core.Managers
                 if (!permissionsId.Contains(permissionToAdd))
                 {
                     var permission = client.HttpClient.GetItemAsync<AuthPermissionContract>(permissionToAdd).GetAwaiter().GetResult();
+
+                    // Deny assigning special permissions to Unregistered user (not logged in)
                     if (defaultUnregisteredRole.Id == roleId && !permission.Name.Contains(VokabularPermissionNames.AutoImport) &&
                         !permission.Name.Contains(VokabularPermissionNames.CardFile))
                     {
