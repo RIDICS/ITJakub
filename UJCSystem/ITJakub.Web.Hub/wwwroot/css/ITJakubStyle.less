@@ -153,3 +153,46 @@ div.container {
         display: none;
     }
 }
+
+.tooltip {
+
+    .tooltip-arrow,
+    .tooltip-inner {
+        color: white;
+        border-radius: 0px;
+    }
+
+    .tooltip-inner {
+        background-color: @menu-item-hover-color;
+        border: 1px solid white;
+        box-shadow: 0.4em 0.4em 0.4em 0 rgba(0,0,0,0.075);
+    }
+
+    &.in {
+        opacity: 1;
+    }
+
+    &.right {
+        .tooltip-arrow {
+            border-right-color: white;
+        }
+    }
+
+    &.left {
+        .tooltip-arrow {
+            border-left-color: white;
+        }
+    }
+
+    &.bottom {
+        .tooltip-arrow {
+            border-bottom-color: white;
+        }
+    }
+
+    &.top {
+        .tooltip-arrow {
+            border-top-color: white;
+        }
+    }
+}
