@@ -85,6 +85,13 @@
             JSON.stringify({ roleId: roleId, bookIds: [projectId] }));
     }
 
+    public resetUserPassword(userId: number): JQuery.jqXHR  {
+        return this.post(
+            this.getPermissionControllerUrl() + "ResetUserPassword",
+            JSON.stringify({ userId: userId })
+        );
+    }
+
     private getPermissionControllerUrl(): string {
         return getBaseUrl() + "Permission/";
     }

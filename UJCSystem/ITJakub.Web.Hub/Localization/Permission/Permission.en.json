@@ -67,6 +67,7 @@
     "Projects": "Projects",
     "AddProjectPermissionToGroup": "Add project permission to a group",
     "SelectedProject": "Selected project",
-    "AddPermissionToGroup": "Add permission to group"
+    "AddPermissionToGroup": "Add permission to group",
+    "ResetPassword": "Reset password"
   }
 }
