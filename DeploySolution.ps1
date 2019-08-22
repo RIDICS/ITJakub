@@ -52,6 +52,40 @@ if ($NotFoundCount -gt 0)
   exit 1
 }
 
+$MigrationToRun = "Vokabular.Database.Migrator"
+$MigrationScriptPath = Join-Path $CurrentPath "${MigrationToRun}\Migrate.ps1"
+
+if (Test-Path $MigrationScriptPath)
+{
+  Write-Host "${MigrationToRun} FOUND" -foregroundcolor green
+}
+else {
+  Write-Host
+  Write-Host "Migrator project for running migrations was not found" -foregroundcolor red
+  Write-Host "Deployment cancelled" -foregroundcolor red
+  Write-Host
+  exit 1
+}
+
+Write-Host
+Write-Host
+
+$CurrentFolderName = (Get-Item $CurrentPath).Name
+$TargetEnvironment = $CurrentFolderName.Split('-')[1]
+
+$MigratorPath = Join-Path $CurrentPath "${MigrationToRun}"
+
+Set-Location $MigratorPath
+& $MigrationScriptPath ${TargetEnvironment}
+
+Set-Location $CurrentPath
+
+if ($LASTEXITCODE -ne 0)
+{
+  Write-Error "Mirgrations ${MigrationToRun} failed"
+  exit 1
+}
+
 Write-Host
 Write-Host "Starting deployment"
 Write-Host

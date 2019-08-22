@@ -244,5 +244,24 @@ namespace Vokabular.MainService.Controllers
                 return StatusCode(exception.StatusCode, exception.Message);
             }
         }
+
+        [Authorize(PermissionNames.EditAnyUsersData)]
+        [HttpPost("{userId}/reset-password")]
+        public IActionResult ResetPassword(int userId)
+        {
+            try
+            {
+                m_userManager.ResetUserPassword(userId);
+                return Ok();
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Message);
+            }
+            catch (AuthServiceApiException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Description);
+            }
+        }
     }
 }
