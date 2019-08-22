@@ -37,5 +37,8 @@
         public const string MissingFulltextCriteria = "missing-fulltext-criteria";
         public const string DeleteResourceProjectRelation = "delete-resource-project-relation";
         public const string DeleteResourcePageRelation = "delete-resource-page-relation";
+        public const string AddUserToDefaultRole = "add-user-to-default-role";
+        public const string RenameDefaultRole = "rename-default-role";
+        public const string DeleteDefaultRole = "delete-default-role";
     }
 }

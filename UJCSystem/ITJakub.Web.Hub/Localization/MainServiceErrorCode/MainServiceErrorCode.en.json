@@ -38,6 +38,9 @@
     "missing-fulltext-criteria": "Missing any fulltext criteria",
     "delete-resource-project-relation": "Could not delete resource. Existing relation to Project?",
     "delete-resource-page-relation": "Could not delete resource. Existing relation to resource Page?",
+    "add-user-to-default-role": "Users cannot be added to the default group {0}.",
+    "rename-default-role": "The name of the default group {0} cannot be changed.",
+    "delete-default-role": "The default group {0} cannot be deleted.",
 
     //Auth service codes
     "generic-error": "Operation failed",
