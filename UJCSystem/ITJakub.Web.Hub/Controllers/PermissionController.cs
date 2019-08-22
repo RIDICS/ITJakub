@@ -68,9 +68,9 @@ namespace ITJakub.Web.Hub.Controllers
                 SearchQuery = search
             };
 
-            ViewData.Add(PermissionConstants.IsRoleEditAllowed, true);
-            ViewData.Add(PermissionConstants.UnregisteredRoleName, RoleNames.Unregistered);
-            ViewData.Add(PermissionConstants.RegisteredRoleName, RoleNames.RegisteredUser);
+            ViewData.Add(RoleViewConstants.IsRoleEditAllowed, true);
+            ViewData.Add(RoleViewConstants.UnregisteredRoleName, RoleNames.Unregistered);
+            ViewData.Add(RoleViewConstants.RegisteredRoleName, RoleNames.RegisteredUser);
 
             switch (viewType)
             {
@@ -175,24 +175,6 @@ namespace ITJakub.Web.Hub.Controllers
             var model = Mapper.Map<UpdateUserViewModel>(result);
             return View(model);
         }
-
-        [HttpPost]
-        public IActionResult ResetUserPassword([FromBody] ResetUserPasswordRequest request)
-        {
-            var client = GetUserClient();
-            client.ResetUserPassword(request.UserId);
-            return AjaxOkResponse();
-        }
-
-
-        [HttpPost]
-        public IActionResult ResetUserPassword([FromBody] ResetUserPasswordRequest request)
-        {
-            var client = GetUserClient();
-            client.ResetUserPassword(request.UserId);
-            return AjaxOkResponse();
-        }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]

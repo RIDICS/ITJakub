@@ -1,6 +1,6 @@
 ﻿namespace ITJakub.Web.Hub.Constants
 {
-    public class PermissionConstants
+    public class RoleViewConstants
     {
         public const string IsRoleEditAllowed = "IsRoleEditAllowed";
         public const string UnregisteredRoleName = "UnregisteredRoleName";
