@@ -13,10 +13,9 @@ namespace Vokabular.MainService.DataContracts
 
         public HttpStatusCode StatusCode { get; set; }
 
-        public MainServiceException(string code, string description, HttpStatusCode statusCode = HttpStatusCode.BadRequest, params object[] descriptionParams)
+        public MainServiceException(string code, string message, HttpStatusCode statusCode = HttpStatusCode.BadRequest, params object[] descriptionParams) : base(message)
         {
             Code = code;
-            Description = description;
             StatusCode = statusCode;
             DescriptionParams = descriptionParams;
         }

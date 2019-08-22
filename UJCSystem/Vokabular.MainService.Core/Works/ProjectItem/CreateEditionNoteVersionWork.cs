@@ -18,7 +18,8 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
         private readonly int m_userId;
         private readonly IFulltextStorage m_fulltextStorage;
 
-        public CreateEditionNoteVersionWork(ResourceRepository resourceRepository, long projectId, CreateEditionNoteContract data, int userId, IFulltextStorage fulltextStorage) : base(resourceRepository)
+        public CreateEditionNoteVersionWork(ResourceRepository resourceRepository, long projectId, CreateEditionNoteContract data,
+            int userId, IFulltextStorage fulltextStorage) : base(resourceRepository)
         {
             m_resourceRepository = resourceRepository;
             m_projectId = projectId;
@@ -35,9 +36,11 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
 
             if (latestEditionNote != null && latestEditionNote.Id != m_data.OriginalVersionId)
             {
-                throw new MainServiceException(MainServiceErrorCode.EditionNoteConflict, 
+                throw new MainServiceException(
+                    MainServiceErrorCode.EditionNoteConflict,
                     $"Conflict. Current latest versionId is {latestEditionNote.Id}, but originalVersionId was specified {m_data.OriginalVersionId}",
-                    HttpStatusCode.Conflict, new object[]{ latestEditionNote.Id , m_data.OriginalVersionId });
+                    HttpStatusCode.Conflict
+                );
             }
 
             if (latestEditionNote == null)

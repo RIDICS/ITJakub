@@ -40,5 +40,7 @@
         public const string AddUserToDefaultRole = "add-user-to-default-role";
         public const string RenameDefaultRole = "rename-default-role";
         public const string DeleteDefaultRole = "delete-default-role";
+        public const string ResourceModified = "resource-modified";
+        public const string UserHasNotPermissionToManipulate = "user-has-not-permission-to-manipulate";
     }
 }

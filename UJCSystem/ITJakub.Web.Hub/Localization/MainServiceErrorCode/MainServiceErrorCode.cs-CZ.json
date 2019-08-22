@@ -8,7 +8,7 @@
     "category-has-sub-categories": "Kategorie má podkategorie.",
     "repository-contains-history": "Externí repozitář nemůže být odstraněn, jelikož obsahuje historii.",
     "comments-to-second-level": "Komentáře jsou povoleny pouze do druhé úrovně.",
-    "edition-note-conflict": "Konflikt - aktuální poslední versionId je, ale originalVersionId je {1}",
+    "edition-note-conflict": "Nezle uložit ediční poznámku. Ediční poznámka byla změněna jiným uživatelem.",
     "resource-version-id-null": "ResourceVersionId nemůže být prázdné pro připomínky k heslu.",
     "cannot-move-category-to-subcategory": "Nelze přesunout kategorii do její vlastní podkategorie",
     "unallowed-authorization-criteria": "Vyhledácí kritérium obsahuje nepovolené autorizační kritérium. Autorizační kritérium je generováno automaticky.",
@@ -41,6 +41,8 @@
     "add-user-to-default-role": "Nelze přidávat uživatele do výchozí skupiny {0}",
     "rename-default-role": "Název výchozí skupiny {0} nemůže být změněn.",
     "delete-default-role": "Výchozí skupina {0} nemůže být odstraněna.",
+    "resource-modified": "Nelze uložit zdroj. Zdroj byl změněn jiným uživatelem.",
+    "user-has-not-permission-to-manipulate": "Nemáte právo manipulovat s touto položkou.",
 
     //Auth service codes
     "generic-error": "Operace se nezdařila",

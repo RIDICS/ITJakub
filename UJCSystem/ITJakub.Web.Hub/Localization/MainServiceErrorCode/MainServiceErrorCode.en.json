@@ -8,7 +8,7 @@
     "category-has-sub-categories": "Category has some sub-categories",
     "repository-contains-history": "The external repository cannot be deleted, because it contains history",
     "comments-to-second-level": "Only comments to second level are allowed",
-    "edition-note-conflict": "Conflict - current latest versionId is {0}, but originalVersionId was specified {1}",
+    "edition-note-conflict": "Could not save an edition note. The edition note was changed by another user.",
     "resource-version-id-null": "resourceVersionId can't be null for HeadwordFeedback",
     "cannot-move-category-to-subcategory": "Can't move category into it's own subcategories",
     "unallowed-authorization-criteria": "Search criteria contains unallowed Authorization criteria. Authorization criteria is generated automatically.",
@@ -41,6 +41,8 @@
     "add-user-to-default-role": "Users cannot be added to the default group {0}.",
     "rename-default-role": "The name of the default group {0} cannot be changed.",
     "delete-default-role": "The default group {0} cannot be deleted.",
+    "resource-modified": "Could not save a resource. The resource was changed by another user.",
+    "user-has-not-permission-to-manipulate": "You don't have permission manipulate with specified item.",
 
     //Auth service codes
     "generic-error": "Operation failed",
