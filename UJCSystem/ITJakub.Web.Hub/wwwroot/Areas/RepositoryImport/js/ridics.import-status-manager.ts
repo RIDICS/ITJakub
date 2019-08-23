@@ -55,6 +55,9 @@ class ImportStatusManager {
                     if (completed) {
                         this.stop();
                     }
+                }).fail((error) => {
+                    const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                    $(".alert-holder").empty().append(alert);
                 });
             },
             this.refreshInterval);
