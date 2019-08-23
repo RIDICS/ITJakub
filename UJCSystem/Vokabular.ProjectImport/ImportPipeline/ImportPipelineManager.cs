@@ -96,13 +96,12 @@ namespace Vokabular.ProjectImport.ImportPipeline
 
                 progressInfo.FaultedMessage = e.Message;
             }
-            catch (Exception e)
+            catch (Exception e) // Catch every exception otherwise, ProjectImportBackgroundService will be stopped
             {
                 if (m_logger.IsErrorEnabled())
                     m_logger.LogError(e, e.Message);
 
                 progressInfo.FaultedMessage = e.Message;
-                throw;
             }
             finally
             {
