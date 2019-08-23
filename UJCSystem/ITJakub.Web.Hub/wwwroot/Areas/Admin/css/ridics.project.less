@@ -1,4 +1,5 @@
 ﻿@import "../../../css/ITJakub.Colors.less";
+@import "../../../css/ridics.checkbox.less";
 @import "@text-editor-variables.less";
 @import "@page-list-editor-vabiables.less";
 @import "@editors-common-variables.less";
@@ -1225,3 +1226,92 @@
     #forum-button-panel {
         margin-top: 10px;
     }
+
+.list-container {
+    &.selectable {
+        tbody {
+            cursor: pointer;
+
+            .active {
+                td {
+                    background-color: #DCDCDC !important;
+                }
+            }
+        }
+    }
+
+    .alert-info {
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+
+    table {
+        tr {
+            border-bottom: 1px solid @separation-line-color;
+
+            td {
+                border: none;
+            }
+
+            .alert {
+                padding: 3px 7px;
+                margin: 1px 0 0 0;
+            }
+        }
+    }
+
+    .buttons {
+        vertical-align: middle;
+        text-align: right;
+
+        .btn-default {
+            margin-left: 0.5em;
+            margin-bottom: 0.5em;
+
+            &:first-of-type {
+                margin-left: 0;
+            }
+        }
+    }
+}
+
+.panel {
+    .panel-buttons {
+        .btn {
+            max-width: fit-content;
+        }
+    }
+
+    .panel-body {
+        .panel-bottom-buttons {
+            padding-top: 1em;
+        }
+    }
+
+    .text-right {
+        text-align: right;
+    }
+}
+
+.page-listing {
+    .page-row {
+        td {
+            text-align: left;
+        }
+        
+        .buttons {
+            min-width: 90px;
+            text-align: right;
+        }
+    }
+}
+
+.ridics-checkbox {
+    width: 2em;
+}
+
+.page-move-distnace {
+    max-width: 4.5em;
+    display: inline-block;
+    vertical-align: middle;
+}

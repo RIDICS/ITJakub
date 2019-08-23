@@ -1,0 +1,54 @@
+﻿.ridics-checkbox {
+    label {
+        padding-left: 8px;
+
+        &:after {
+            content: '';
+            display: table;
+            clear: both;
+        }
+    }
+
+    .cr {
+        position: relative;
+        display: inline-block;
+        border: 1px solid #ccc;
+        width: 1.5em;
+        height: 1.5em;
+        float: left;
+        margin-right: .5em;
+
+        .cr-icon {
+            position: absolute;
+            color: #ccc;
+            font-size: 1.1em;
+            line-height: 0;
+            top: 50%;
+            left: 14%;
+        }
+    }
+
+    .cr-black {
+        border-color: black;
+
+        .cr-icon {
+            color: black;
+        }
+    }
+
+    input[type="checkbox"] {
+        display: none;
+    }
+
+    input[type="checkbox"] + .cr > .cr-icon {
+        opacity: 0;
+    }
+
+    input[type="checkbox"]:checked + .cr > .cr-icon {
+        opacity: 1;
+    }
+
+    input[type="checkbox"]:disabled + .cr {
+        opacity: .5;
+    }
+}

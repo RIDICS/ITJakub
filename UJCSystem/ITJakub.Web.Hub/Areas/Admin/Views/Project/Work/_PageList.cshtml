@@ -3,41 +3,103 @@
 
 <div class="project-page-list">
     <div class="row resource-tab-row-fix">
-        <div class="col-md-2">
-            <button type="button" class="btn btn-default form-control" id="project-pages-edit-button">@Localizer.Translate("EditPageList", "Admin")</button>
-        </div>
+        <div class="row">
+            <div class="col col-xs-12 col-md-6 col-lg-5">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-4">
+                                <div class="panel-title">
+                                    @Localizer.Translate("Page", "Admin")
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-8 panel-buttons text-right">
+                                <button type="button" class="btn btn-default form-control" id="project-pages-edit-button">@Localizer.Translate("EditPageList", "Admin")</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="list-container selectable page-listing">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <tbody>
+                                    <tr class="page-row">
+                                        <td class="ridics-checkbox">
+                                            <label>
+                                                <input type="checkbox"/>
+                                                <span class="cr cr-black"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <div>1r</div>
+                                            <div class="alert alert-danger"></div>
+                                        </td>
+                                        <td class="buttons">
+                                            <a class="edit-page btn btn-sm btn-default">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                            <a class="remove-page btn btn-sm btn-default">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr class="page-row">
+                                        <td class="ridics-checkbox">
+                                            <label>
+                                                <input type="checkbox"/>
+                                                <span class="cr cr-black"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <div>1v</div>
+                                            <div class="alert alert-danger"></div>
+                                        </td>
+                                        <td class="buttons">
+                                            <a class="edit-page btn btn-sm btn-default">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                            <a class="remove-page btn btn-sm btn-default">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr class="page-row">
+                                        <td class="ridics-checkbox">
+                                            <label>
+                                                <input type="checkbox"/>
+                                                <span class="cr cr-black"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <div>2r</div>
+                                            <div class="alert alert-danger"></div>
+                                        </td>
+                                        <td class="buttons">
+                                            <a class="edit-page btn btn-sm btn-default">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                            <a class="remove-page btn btn-sm btn-default">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
 
-        <div class="col-md-2">
-            <select size="25" class="form-control">
-                <option>1r</option>
-                <option>1v</option>
-                <option>2r</option>
-            </select>
-        </div>
-
-        <div class="col-md-2 main-buttons">
-            <button type="button" class="btn btn-default form-control">@Localizer.Translate("Pair", "Admin")</button>
-            <button type="button" class="btn btn-default form-control">@Localizer.Translate("Split", "Admin")</button>
-            <div class="bottom-buttons">
-                <button type="button" class="btn btn-default">
-                    <span class="glyphicon glyphicon-arrow-up"></span>
-                </button>
-                <button type="button" class="btn btn-default">
-                    <span class="glyphicon glyphicon-arrow-down"></span>
-                </button>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="panel-bottom-buttons text-right">
+                            <input type="number" class="page-move-distnace form-control" value="1"/>
+                            <button type="button" class="btn btn-default">
+                                <span class="glyphicon glyphicon-arrow-up"></span>
+                            </button>
+                            <button type="button" class="btn btn-default">
+                                <span class="glyphicon glyphicon-arrow-down"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div class="col-md-2">
-            <select size="25" class="form-control">
-                <option>IMG001.jpg</option>
-                <option>IMG002.jpg</option>
-                <option>IMG003.jpg</option>
-            </select>
-        </div>
-
-        <div class="col-md-4 image-preview">
-            <img alt="Náhled stránky" src="~/images/Mlceni_pink.jpg"/>
         </div>
     </div>
 
@@ -72,47 +134,47 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="generate-list-inputs">	
-                                        <div class="form-group">
-                                            <div class="col-md-12">
-                                                <div class="radio">
-                                                    <label>
-                                                        <input type="radio" name="page-type" checked="checked" /><span class="page-list-editor-controls-label">@Localizer.Translate("SinglePage", "Admin")</span>
-                                                    </label>
-                                                </div>
-                                                <div class="radio">
-                                                    <label>
-                                                        <input class="doublepage-radiobutton" type="radio" name="page-type" /><span class="page-list-editor-controls-label">@Localizer.Translate("DoublePage", "Admin")</span>
-                                                    </label>
-                                                </div>
-                                            </div>
+                            <div class="generate-list-inputs">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="page-type" checked="checked"/><span class="page-list-editor-controls-label">@Localizer.Translate("SinglePage", "Admin")</span>
+                                            </label>
                                         </div>
-                                        <div class="form-group">
-                                            <label class="col-md-2 control-label" for="project-pages-format">@Localizer.Translate("Format", "Admin")</label>
-                                            <div class="col-md-7">
-                                                <select class="form-control input-sm" id="project-pages-format">
-                                                    <option data-format-value="1r">1r, 1v, 2r, 2v, ...</option>
-                                                    <option data-format-value="I'1r">I'1r, I'1v, I'2r, ...</option>
-                                                    <option data-format-value="Roman">I, II, III, IV, V, ...</option>
-                                                    <option data-format-value="Arabic">1, 2, 3, 4, 5, ...</option>
-                                                </select>
-                                            </div>
+                                        <div class="radio">
+                                            <label>
+                                                <input class="doublepage-radiobutton" type="radio" name="page-type"/><span class="page-list-editor-controls-label">@Localizer.Translate("DoublePage", "Admin")</span>
+                                            </label>
                                         </div>
-                                        <div class="form-group-section generate-list-numberic-input-group">
-                                            <div class="generate-list-numberic-input-group-heading">@Localizer.Translate("GeneratePages", "Admin")</div>
-                                            <div class="form-group">
-                                                <label class="col-md-1 control-label" for="project-pages-generate-from">@Localizer.Translate("From", "Admin"):</label>
-                                                <div class="col-md-6">
-                                                    <input type="text" class="form-control input-sm" id="project-pages-generate-from" />
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-md-1 control-label" for="project-pages-generate-to">@Localizer.Translate("To", "Admin"):</label>
-                                                <div class="col-md-6">
-                                                    <input type="text" class="form-control input-sm" id="project-pages-generate-to" />
-                                                </div>
-                                            </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label" for="project-pages-format">@Localizer.Translate("Format", "Admin")</label>
+                                    <div class="col-md-7">
+                                        <select class="form-control input-sm" id="project-pages-format">
+                                            <option data-format-value="1r">1r, 1v, 2r, 2v, ...</option>
+                                            <option data-format-value="I'1r">I'1r, I'1v, I'2r, ...</option>
+                                            <option data-format-value="Roman">I, II, III, IV, V, ...</option>
+                                            <option data-format-value="Arabic">1, 2, 3, 4, 5, ...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group-section generate-list-numberic-input-group">
+                                    <div class="generate-list-numberic-input-group-heading">@Localizer.Translate("GeneratePages", "Admin")</div>
+                                    <div class="form-group">
+                                        <label class="col-md-1 control-label" for="project-pages-generate-from">@Localizer.Translate("From", "Admin"):</label>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control input-sm" id="project-pages-generate-from"/>
                                         </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-1 control-label" for="project-pages-generate-to">@Localizer.Translate("To", "Admin"):</label>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control input-sm" id="project-pages-generate-to"/>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-6">
@@ -141,7 +203,8 @@
                 <div class="modal-footer">
                     <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("SaveError", "Admin")</div>
                     <button type="button" class="btn btn-default cancel-page-list">@Localizer.Translate("Cancel", "Admin")</button>
-                    <button type="button" class="btn btn-default save-page-list"><span class="saving-icon loading-small-button"></span>@Localizer.Translate("Save", "Admin")</button>
+                    <button type="button" class="btn btn-default save-page-list">
+                        <span class="saving-icon loading-small-button"></span>@Localizer.Translate("Save", "Admin")</button>
                 </div>
             </div>
         </div>
