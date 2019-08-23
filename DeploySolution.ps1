@@ -21,6 +21,8 @@ $ProjectsToDeploy += "Vokabular.MainService"
 $ProjectsToDeploy += "ITJakub.Web.Hub-CommunityPortal\ITJakub.Web.Hub"
 $ProjectsToDeploy += "ITJakub.Web.Hub-ResearchPortal\ITJakub.Web.Hub"
 
+# Find all projects for deployment
+
 Write-Host "Projects to deploy:"
 Write-Host
 
@@ -52,6 +54,8 @@ if ($NotFoundCount -gt 0)
   exit 1
 }
 
+# App and services deployment
+
 Write-Host
 Write-Host "Starting deployment"
 Write-Host
@@ -81,17 +85,25 @@ foreach ($DeploymentScript in $DeploymentScripts)
   }
 }
 
-Write-Host "Creating logs folders"
+# Create log folders
+
+Write-Host
+Write-Host "Checking if logs folders must be created"
 Write-Host
 
 $DefaultWebSitePath = Get-WebFilePath 'IIS:\Sites\Default Web Site'
-$MainServiceLogsPath = Join-Path $DefaultWebSitePath "MainService\logs"
- 
-if (-Not(Test-Path $MainServiceLogsPath))
-{
-    New-Item -Path $MainServiceLogsPath -ItemType "directory" > $null
-}
+$LocalhostServicesPath = Get-WebFilePath 'IIS:\Sites\LocalhostServices'
 
+$ServiceFolders = @(
+    $DefaultWebSitePath
+    Join-Path $DefaultWebSitePath "Community"
+    Join-Path $DefaultWebSitePath "MainService"
+    Join-Path $LocalhostServicesPath "ITJakub.FileProcessing.Service"
+    Join-Path $LocalhostServicesPath "ITJakub.Lemmatization.Service"
+    Join-Path $LocalhostServicesPath "ITJakub.SearchService"
+    Join-Path $LocalhostServicesPath "Vokabular.FulltextService"
+)
+ 
 function SetFullAccessToFolder {
     Param ([String]$FolderPath)
 
@@ -103,31 +115,27 @@ function SetFullAccessToFolder {
     Set-Acl $FolderPath $Acl
 }
 
-SetFullAccessToFolder($MainServiceLogsPath)
-
-
-$LocalhostServicesPath = Get-WebFilePath 'IIS:\Sites\LocalhostServices'
-Write-Host $LocalhostServicesPath
-
-$Services = @()
-$Services += "ITJakub.FileProcessing.Service"
-$Services += "ITJakub.Lemmatization.Service"
-$Services += "ITJakub.SearchService"
-$Services += "Vokabular.FulltextService"
-
-foreach ($Service in $Services)
+foreach ($ServiceFolder in $ServiceFolders)
 {
-  $ServiceLogsPath = Join-Path $LocalhostServicesPath "${Service}\logs"
+  $ServiceLogsPath = Join-Path $ServiceFolder "logs"
+  
+  Write-Host $ServiceLogsPath
   
   if (-Not (Test-Path $ServiceLogsPath))
   {
     New-Item -Path $ServiceLogsPath -ItemType "directory" > $null
+    SetFullAccessToFolder($ServiceLogsPath)
+
+    Write-Host " - Folder created and IIS_IUSRS gained permissions to this folder"
   }
-  
-  SetFullAccessToFolder($ServiceLogsPath)
+  else
+  {
+    Write-Host " - Already created"
+  }
 }
 
-Write-Host "Logs folders created"
+Write-Host
+Write-Host "Logs folders checked or created"
 Write-Host
 
 Write-Host
