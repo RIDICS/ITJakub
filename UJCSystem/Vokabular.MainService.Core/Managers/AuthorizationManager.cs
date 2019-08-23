@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using log4net;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.MainService.Core.Communication;
-using Vokabular.MainService.Core.Errors;
-using Vokabular.MainService.Core.Works.Permission;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts.CardFile;
 using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Search.Criteria;
@@ -21,14 +19,11 @@ namespace Vokabular.MainService.Core.Managers
 
         private readonly AuthenticationManager m_authenticationManager;
         private readonly PermissionRepository m_permissionRepository;
-        private readonly CommunicationProvider m_communicationProvider;
 
-        public AuthorizationManager(AuthenticationManager authenticationManager, PermissionRepository permissionRepository,
-            CommunicationProvider communicationProvider)
+        public AuthorizationManager(AuthenticationManager authenticationManager, PermissionRepository permissionRepository)
         {
             m_authenticationManager = authenticationManager;
             m_permissionRepository = permissionRepository;
-            m_communicationProvider = communicationProvider;
         }
 
         public int GetCurrentUserId()
@@ -45,7 +40,7 @@ namespace Vokabular.MainService.Core.Managers
                 if (m_log.IsWarnEnabled)
                     m_log.WarnFormat("Recieved authorizeCriteria in request from user with id '{0}'", user.Id);
 
-                throw new ArgumentException(
+                throw new MainServiceException(MainServiceErrorCode.UnallowedAuthorizationCriteria,
                     "Search criteria contains unallowed Authorization criteria. Authorization criteria is generated automatically.");
             }
 
@@ -59,14 +54,21 @@ namespace Vokabular.MainService.Core.Managers
             if (currentUserPermissions.All(x => x.Value != VokabularPermissionNames.CardFile + cardFileId))
             {
                 var user = m_authenticationManager.GetCurrentUser();
+
                 if (user == null)
                 {
-                    throw new UnauthorizedException(
-                        $"Unregistered user does not have permission to read cardfile with id '{cardFileId}'");
+                    throw new MainServiceException(
+                        MainServiceErrorCode.UnregisteredCardFileAccessForbidden,
+                        $"Unregistered user does not have permission to read cardfile with id '{cardFileId}'",
+                        HttpStatusCode.Forbidden
+                    );
                 }
 
-                throw new UnauthorizedException(
-                    $"User with id '{user.Id}' (external id '{user.ExternalId}')  does not have permission to read cardfile with id '{cardFileId}'");
+                throw new MainServiceException(
+                    MainServiceErrorCode.UserCardFileAccessForbidden,
+                    $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission to read cardfile with id '{cardFileId}'",
+                    HttpStatusCode.Forbidden
+                );
             }
         }
 
@@ -100,7 +102,6 @@ namespace Vokabular.MainService.Core.Managers
             else
             {
                 var role = m_authenticationManager.GetUnregisteredRole();
-                new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, role.Id).Execute();
                 var group = m_permissionRepository.FindGroupByExternalIdOrCreate(role.Id, role.Name);
                 filtered = m_permissionRepository.GetFilteredBookIdListByGroupPermissions(group.Id, projectIds);
             }
@@ -117,21 +118,27 @@ namespace Vokabular.MainService.Core.Managers
                     x.GetFilteredBookIdListByUserPermissions(user.Id, new List<long> {projectId}));
                 if (filtered == null || filtered.Count == 0)
                 {
-                    throw new UnauthorizedException(
-                        $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission on book with id '{projectId}'");
+                    throw new MainServiceException(
+                        MainServiceErrorCode.UserBookAccessForbidden,
+                        $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission on book with id '{projectId}'",
+                        HttpStatusCode.Forbidden
+                    );
                 }
             }
             else
             {
                 var role = m_authenticationManager.GetUnregisteredRole();
-                new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, role.Id).Execute();
                 var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalIdOrCreate(role.Id, role.Name));
                 var filtered = m_permissionRepository.InvokeUnitOfWork(x =>
                     x.GetFilteredBookIdListByGroupPermissions(group.Id, new List<long> {projectId}));
 
                 if (filtered == null || filtered.Count == 0)
                 {
-                    throw new UnauthorizedException($"Unregistered user does not have permission on book with id '{projectId}'");
+                    throw new MainServiceException(
+                        MainServiceErrorCode.UnregisteredUserBookAccessForbidden,
+                        $"Unregistered user does not have permission on book with id '{projectId}'",
+                        HttpStatusCode.Forbidden
+                    );
                 }
             }
         }
@@ -145,21 +152,26 @@ namespace Vokabular.MainService.Core.Managers
 
                 if (filtered == null)
                 {
-                    throw new UnauthorizedException(
-                        $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission on book with resource with id '{resourceId}'");
+                    throw new MainServiceException(
+                        MainServiceErrorCode.UserResourceAccessForbidden,
+                        $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission on book with resource with id '{resourceId}'",
+                        HttpStatusCode.Forbidden
+                    );
                 }
             }
             else
             {
                 var role = m_authenticationManager.GetUnregisteredRole();
-                new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, role.Id).Execute();
                 var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalIdOrCreate(role.Id, role.Name));
                 var filtered = m_permissionRepository.InvokeUnitOfWork(x => x.GetResourceByUserGroupPermissions(group.Id, resourceId));
 
                 if (filtered == null)
                 {
-                    throw new UnauthorizedException(
-                        $"Unregistered user does not have permission on book with resource with id '{resourceId}'");
+                    throw new MainServiceException(
+                        MainServiceErrorCode.UnregisteredUserResourceAccessForbidden,
+                        $"Unregistered user does not have permission on book with resource with id '{resourceId}'",
+                        HttpStatusCode.Forbidden
+                    );
                 }
             }
         }

@@ -1,8 +1,7 @@
-using System.Net;
 using NHibernate.Exceptions;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.RestClient.Errors;
+using Vokabular.MainService.DataContracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Person
@@ -23,7 +22,7 @@ namespace Vokabular.MainService.Core.Works.Person
             var item = m_personRepository.FindById<ResponsiblePerson>(m_personId);
             if (item == null)
             {
-                throw new HttpErrorCodeException(ErrorMessages.NotFound, HttpStatusCode.NotFound);
+                throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
             }
 
             try
@@ -31,9 +30,9 @@ namespace Vokabular.MainService.Core.Works.Person
                 m_personRepository.Delete(item);
                 m_personRepository.UnitOfWork.CurrentSession.Flush();
             }
-            catch (GenericADOException exception)
+            catch (GenericADOException)
             {
-                throw new HttpErrorCodeException("Could not delete resource. Existing relation to Project?", exception, HttpStatusCode.BadRequest);
+                throw new MainServiceException(MainServiceErrorCode.DeleteResourceProjectRelation, "Could not delete resource. Existing relation to Project?");
             }
         }
     }

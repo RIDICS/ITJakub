@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using Vokabular.DataEntities.Database.Entities;
-using Vokabular.RestClient.Errors;
+using Vokabular.MainService.DataContracts;
 
 namespace Vokabular.MainService.Core.Utils
 {
@@ -10,8 +10,11 @@ namespace Vokabular.MainService.Core.Utils
         {
             if (userId != itemOwnerUserId)
             {
-                throw new HttpErrorCodeException(
-                    $"Current user ID=({userId}) doesn't have permission manipulate with specified item owned by user with ID={itemOwnerUserId}", HttpStatusCode.Forbidden);
+                throw new MainServiceException(
+                    MainServiceErrorCode.UserHasNotPermissionToManipulate,
+                    $"Current user ID=({userId}) doesn't have permission manipulate with specified item owned by user with ID={itemOwnerUserId}",
+                    HttpStatusCode.Forbidden
+                );
             }
         }
 
@@ -19,8 +22,11 @@ namespace Vokabular.MainService.Core.Utils
         {
             if (user.Id != itemOwnerUser.Id)
             {
-                throw new HttpErrorCodeException(
-                    $"Current user with id '{user.Id}' (external id '{user.ExternalId}') doesn't have permission manipulate with specified item owned by user with ID={itemOwnerUser.Id}", HttpStatusCode.Forbidden);
+                throw new MainServiceException(
+                    MainServiceErrorCode.UserHasNotPermissionToManipulate,
+                    $"Current user with id '{user.Id}' (external id '{user.ExternalId}') doesn't have permission manipulate with specified item owned by user with ID={itemOwnerUser.Id}",
+                    HttpStatusCode.Forbidden
+                );
             }
         }
     }

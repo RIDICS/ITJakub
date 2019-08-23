@@ -21,11 +21,11 @@
 
 <h2>@Localizer.Translate("GroupPermissionManagementHeadline", "Permission", LocTranslationSource.File)</h2>
 
-@if (ViewData.TryGetValue(PermissionConstants.RegisteredRoleName, out var registeredRoleName))
+@if (ViewData.TryGetValue(RoleViewConstants.RegisteredRoleName, out var registeredRoleName))
 {
     <span id="registeredRoleName" data-name="@registeredRoleName" class="hidden"></span>
 }
-@if (ViewData.TryGetValue(PermissionConstants.UnregisteredRoleName, out var unregisteredRoleName))
+@if (ViewData.TryGetValue(RoleViewConstants.UnregisteredRoleName, out var unregisteredRoleName))
 {
     <span id="unregisteredRoleName" data-name="@unregisteredRoleName" class="hidden"></span>
 }
@@ -129,34 +129,10 @@
     </div>
 </div>
 
-<div id="createRoleModal" class="modal fade" role="dialog">
+<div id="createRoleDialog" class="modal fade" role="dialog">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">@Localizer.Translate("NewGroup", "Permission", LocTranslationSource.File)</h4>
-            </div>
-            <div class="modal-body">
-                <div class="form-horizontal">
-                    <div class="form-group">
-                        <label for="new-role-name" class="col-md-3 control-label">@Localizer.Translate("GroupName", "Permission", LocTranslationSource.File)</label>
-                        <div class="col-md-8">
-                            <input class="form-control" id="new-role-name" name="new-text" type="text">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="new-role-description" class="col-md-3 control-label">@Localizer.Translate("Description", "Permission", LocTranslationSource.File)</label>
-                        <div class="col-md-8">
-                            <input class="form-control" id="new-role-description" name="new-text" type="text">
-                        </div>
-                    </div>
-                    <div id="create-role-error"></div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "Permission", LocTranslationSource.File)</button>
-                <button type="button" class="btn btn-default" id="create-role">@Localizer.Translate("Create", "Permission", LocTranslationSource.File)</button>
-            </div>
+        <div class="modal-content" id="createRoleSection">
+            @await Html.PartialAsync("_CreateRole", new RoleViewModel())
         </div>
     </div>
 </div>
@@ -198,7 +174,6 @@
         </div>
     </div>
 </div>
-
 
 <div id="editRoleDialog" class="modal fade" role="dialog">
     <div class="modal-dialog">

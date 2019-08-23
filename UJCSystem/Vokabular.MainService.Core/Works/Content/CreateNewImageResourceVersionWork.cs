@@ -3,8 +3,8 @@ using System.Net;
 using Vokabular.Core.Storage.Resources;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Content
@@ -33,7 +33,11 @@ namespace Vokabular.MainService.Core.Works.Content
             var latestImage = m_resourceRepository.GetLatestResourceVersion<ImageResource>(m_imageId);
             if (latestImage.Id != m_data.OriginalVersionId)
             {
-                throw new HttpErrorCodeException($"Conflict. Current latest versionId is {latestImage.Id}, but originalVersionId was specified {m_data.OriginalVersionId}", HttpStatusCode.Conflict);
+                throw new MainServiceException(
+                    MainServiceErrorCode.ResourceModified,
+                    $"Conflict. Current latest versionId is {latestImage.Id}, but originalVersionId was specified {m_data.OriginalVersionId}",
+                    HttpStatusCode.Conflict
+                );
             }
 
             var user = m_resourceRepository.Load<User>(m_userId);

@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Utils;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts.Favorite;
-using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Favorite
@@ -48,7 +47,7 @@ namespace Vokabular.MainService.Core.Works.Favorite
                 OwnershipHelper.CheckItemOwnership(favoriteLabel.User.Id, m_userId);
 
                 if (favoriteLabel.IsDefault)
-                    throw new HttpErrorCodeException("User can't modify default favorite label", HttpStatusCode.BadRequest);
+                    throw new MainServiceException(MainServiceErrorCode.CannotModifyDefaultFavoriteLabel,"User can't modify default favorite label");
             }
 
             favoriteLabel.Name = m_data.Name;

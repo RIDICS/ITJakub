@@ -1,7 +1,6 @@
-﻿using System.Net;
-using Vokabular.DataEntities.Database.Entities;
+﻿using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.RestClient.Errors;
+using Vokabular.MainService.DataContracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Favorite
@@ -27,12 +26,12 @@ namespace Vokabular.MainService.Core.Works.Favorite
 
             if (label == null)
             {
-                throw new HttpErrorCodeException("FavoriteLabel not found", HttpStatusCode.BadRequest);
+                throw new MainServiceException(MainServiceErrorCode.FavoriteLabelNotFound, "FavoriteLabel not found");
             }
 
             if (label.User.Id != userId)
             {
-                throw new HttpErrorCodeException("Current user doesn't own this FavoriteLabel", HttpStatusCode.Forbidden);
+                throw new MainServiceException(MainServiceErrorCode.UserDoesNotOwnLabel, "Current user doesn't own this FavoriteLabel");
             }
 
             return label;

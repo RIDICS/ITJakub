@@ -27,10 +27,12 @@
     "Edit": "Upravit",
     "Cancel": "Zrušit",
     "Error": "Chyba",
+    "Back": "Zpět",
     "DefaultTitle": "Default title",
 
     "SortBy": "Řadit podle",
     "UserAccount": "Uživatelský účet",
+    "UserProfile": "Uživatelský profil",
     "Language": "Jazyk",
     "SignIn": "Přihlášení",
     "LogOut": "Odhlásit",

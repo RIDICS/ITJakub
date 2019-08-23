@@ -29,8 +29,7 @@ class RoleManager {
     
     public init(list?: ListWithPagination) {
         if (list == null) {
-            this.roleList = new ListWithPagination("Permission/RolePermission", 10, "role", ViewType.Widget, true, this.reinitRoleList, this);
-
+            this.roleList = new ListWithPagination("Permission/RolePermission", "role", ViewType.Widget, true, this.reinitRoleList, this);
         } else {
             this.roleList = list;
         }
@@ -40,6 +39,7 @@ class RoleManager {
         this.initSearchBox();
         this.reinitRoleList();
         this.initEditRoleForm();
+        this.initCreateRoleForm();
     }
 
     public reinitRoleList() {
@@ -80,7 +80,6 @@ class RoleManager {
             container.empty().append(errorAlert.buildElement());
         }).always(() => {
             this.userList = new ListWithPagination(`Permission/UsersByRole?roleId=${roleId}`,
-                10,
                 "user",
                 ViewType.Widget,
                 false,
@@ -109,7 +108,6 @@ class RoleManager {
             container.empty().append(errorAlert.buildElement());
         }).always(() => {
             this.permissionList = new ListWithPagination(`Permission/RolePermissionList?roleId=${roleId}`,
-                10,
                 "permission",
                 ViewType.Widget,
                 false,
@@ -271,11 +269,12 @@ class RoleManager {
 
     private initEditRoleForm() {
         const editRoleForm = $("#editRoleForm");
-
+        const alertHolder = editRoleForm.find(".alert-holder");
         editRoleForm.on("submit", (event) => {
             event.preventDefault();
             event.stopPropagation();
-    
+            alertHolder.empty();
+
             if (editRoleForm.valid()) {
                 const editRoleSection = $("#editRoleSection");
                 this.client.editRole(editRoleForm.serialize())
@@ -284,11 +283,12 @@ class RoleManager {
                         if (editRoleForm.find(".alert-success").length) {
                             this.roleList.reloadPage();
                         }
+                        this.initEditRoleForm();
                     })
                     .fail((error) => {
-                        editRoleSection.html(error.responseText);
-                    }).always(() => {
-                        this.initEditRoleForm();
+                        const alert = new AlertComponentBuilder(AlertType.Error)
+                            .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                        alertHolder.empty().append(alert);
                     });
             }
         });
@@ -405,20 +405,32 @@ class RoleManager {
         createRoleModal.on("hidden.bs.modal", () => {
             roleError.empty();
         });
+    }
 
-        $("#create-role").click(() => {
-            var roleName = $("#new-role-name").val() as string;
-            var roleDescription = $("#new-role-description").val() as string;
-            roleError.empty();
-            this.client.createRole(roleName, roleDescription).done(() => {
-                $("#createRoleModal").modal("hide");
-                this.roleList.reloadPage();
-                this.clearSections();
-            }).fail((error) => {
-                const errorAlert = new AlertComponentBuilder(AlertType.Error)
-                    .addContent(this.errorHandler.getErrorMessage(error, localization.translate("CreateRoleError", "PermissionJs").value));
-                roleError.empty().append(errorAlert.buildElement());
-            });
+    private initCreateRoleForm() {
+        const createRoleForm = $("#createRoleForm");
+        const alertHolder = createRoleForm.find(".alert-holder");
+        createRoleForm.on("submit", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            alertHolder.empty();
+
+            if (createRoleForm.valid()) {
+                const createRoleSection = $("#createRoleSection");
+                this.client.createRole(createRoleForm.serialize())
+                    .done((response) => {
+                        createRoleSection.html(response);
+                        if (createRoleForm.find(".alert-success").length) {
+                            this.roleList.reloadPage();
+                        }
+                        this.initCreateRoleForm();
+                    })
+                    .fail((error) => {
+                        const alert = new AlertComponentBuilder(AlertType.Error)
+                            .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                        alertHolder.empty().append(alert);
+                    });
+            }
         });
     }
 

@@ -4,14 +4,13 @@
 @inject ILocalizationService Localizer
 
 @{
-    ViewBag.Title = Localizer.Translate("GroupEditTitle", "Permission", LocTranslationSource.File);
+    ViewBag.Title = Localizer.Translate("NewGroup", "Permission", LocTranslationSource.File);
 }
 
-
-<form asp-action="EditRole" asp-controller="Permission" method="post" id="editRoleForm" class="form-horizontal" role="form">
+<form asp-action="CreateRole" asp-controller="Permission" method="post" id="createRoleForm" class="form-horizontal" role="form">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">@Localizer.Translate("GroupEditTitle", "Permission", LocTranslationSource.File)</h4>
+        <h4 class="modal-title">@Localizer.Translate("NewGroup", "Permission", LocTranslationSource.File)</h4>
     </div>
     <div class="modal-body">
 
@@ -19,7 +18,7 @@
         @if (Model.SuccessfulUpdate)
         {
             <div class="alert alert-success" role="alert">
-                @Localizer.Translate("SuccessGroupUpdate", "Permission")
+                @Localizer.Translate("SuccessGroupCreate", "Permission")
             </div>
         }
         <div class="alert-holder"></div>

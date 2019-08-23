@@ -58,6 +58,10 @@
     <PackageReference Include="Scalesoft.Localization.Database.NHibernate" Version="2.2.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.6.1" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Areas\Admin\js\permissions\" />
+  </ItemGroup>
   
 
   <Target Name="Gulp" BeforeTargets="BeforeBuild">

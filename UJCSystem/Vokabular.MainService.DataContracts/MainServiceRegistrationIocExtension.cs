@@ -5,14 +5,17 @@ namespace Vokabular.MainService.DataContracts
 {
     public static class MainServiceIocRegistrationExtension
     {
-        public static void RegisterMainServiceClientComponents<TTokenProvider>(this IServiceCollection services,
+        public static void RegisterMainServiceClientComponents<TTokenProvider, TClientLocalization>(this IServiceCollection services,
             MainServiceClientConfiguration configuration)
             where TTokenProvider : class, IMainServiceAuthTokenProvider
+            where TClientLocalization : class, IMainServiceClientLocalization
         {
             if (configuration != null)
                 services.AddSingleton(configuration);
 
             services.AddScoped<IMainServiceAuthTokenProvider, TTokenProvider>();
+            services.AddScoped<IMainServiceClientLocalization, TClientLocalization>();
+            
             services.AddSingleton<MainServiceRestClient>();
 
             services.AddScoped<MainServiceBookClient>();
