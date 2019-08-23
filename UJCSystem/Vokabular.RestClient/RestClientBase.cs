@@ -47,7 +47,7 @@ namespace Vokabular.RestClient
 
         protected abstract void ProcessResponse(HttpResponseMessage response);
 
-        protected abstract void TryParseResponseError(HttpStatusCode responseStatusCode, string responseContent);
+        protected abstract void TryParseAndThrowResponseError(HttpStatusCode responseStatusCode, string responseContent);
 
         protected HttpClient HttpClient { get; }
 
@@ -434,7 +434,7 @@ namespace Vokabular.RestClient
             var responseStatusCode = response.StatusCode;
             var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
-            TryParseResponseError(responseStatusCode, responseContent);
+            TryParseAndThrowResponseError(responseStatusCode, responseContent);
 
             if (responseStatusCode == HttpStatusCode.BadRequest &&
                 TryDeserialize<ValidationResultContract>(responseContent, out var validationResult))

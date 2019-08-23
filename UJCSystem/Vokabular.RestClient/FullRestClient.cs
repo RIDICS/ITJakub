@@ -83,7 +83,7 @@ namespace Vokabular.RestClient
 
         }
 
-        protected override void TryParseResponseError(HttpStatusCode statusCode, string responseText)
+        protected override void TryParseAndThrowResponseError(HttpStatusCode statusCode, string responseText)
         {
 
         }

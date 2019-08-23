@@ -24,7 +24,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             requestMessage.Headers.Authorization = new AuthenticationHeaderValue(AuthenticationScheme, m_tokenProvider.AuthToken);
         }
 
-        protected override void TryParseResponseError(HttpStatusCode responseStatusCode, string responseContent)
+        protected override void TryParseAndThrowResponseError(HttpStatusCode responseStatusCode, string responseContent)
         {
             if (responseStatusCode == HttpStatusCode.BadRequest &&
                 TryDeserialize<ErrorContract>(responseContent, out var errorContract))
