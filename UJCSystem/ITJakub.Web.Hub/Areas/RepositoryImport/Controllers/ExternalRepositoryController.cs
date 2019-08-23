@@ -143,6 +143,12 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
 
             var client = GetExternalRepositoryClient();
             var config = GetConfiguration(Request.Form);
+
+            var filteringExpressionSets = model.FilteringExpressionSets == null
+                ? new List<FilteringExpressionSetContract>()
+                : model.FilteringExpressionSets.Where(x => x.IsChecked)
+                    .Select(x => new FilteringExpressionSetContract { Id = x.Id }).ToList();
+
             client.UpdateExternalRepository(model.Id, new ExternalRepositoryDetailContract
             {
                 Name = model.Name,
@@ -153,8 +159,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                 Configuration = string.IsNullOrEmpty(config) ? model.Configuration : config,
                 BibliographicFormat = new BibliographicFormatContract {Id = model.BibliographicFormatId},
                 ExternalRepositoryType = new ExternalRepositoryTypeContract {Id = model.ExternalRepositoryTypeId},
-                FilteringExpressionSets = model.FilteringExpressionSets.Where(x => x.IsChecked)
-                    .Select(x => new FilteringExpressionSetContract {Id = x.Id}).ToList()
+                FilteringExpressionSets = filteringExpressionSets
             });
             return RedirectToAction("List");
         }

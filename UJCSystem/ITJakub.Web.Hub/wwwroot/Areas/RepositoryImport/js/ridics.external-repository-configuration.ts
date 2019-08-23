@@ -22,7 +22,6 @@ class ExternalRepositoryConfiguration {
 
         $("#resourceType").change((e) => {
             const api = $(e.target as Node as Element).children("option:selected").text();
-            //TODO test
             const config = String($(".repository-configuration").val());
 
             this.client.loadApiConfiguration(api, config).done((response) => {
@@ -36,12 +35,20 @@ class ExternalRepositoryConfiguration {
     }
 
     initOaiPmh() {
-        $("#oaiPmhConnect").click(() => {
+        $("#oaiPmhConnect").click((event) => {
+            const button = $(event.target as Node as Element);
+            const loading = button.children(".loading-small-button");
+            button.addClass("disabled");
+            loading.removeClass("hide");
+
             const config = String($(".repository-configuration").val());
-            const resourceUrl = String($("#oaiPmhResourceUrl").val());
-            //TODO escape URL?
+            const resourceUrl = encodeURI(String($("#oaiPmhResourceUrl").val()));
+
             this.client.connectOaiPmh(resourceUrl, config).done((response) => {
                 $("#oaiPmhConfig").html(response);
+            }).always(() => {
+                button.removeClass("disabled");
+                loading.addClass("hide");
             });
         });
     }

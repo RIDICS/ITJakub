@@ -31,7 +31,7 @@ class ImportStatusManager {
                             progressBar.css(`width`, `${processed}%`);
                             progressBar.html(processed + "%");
 
-                            alertElement.html(`Zpracováno ${data[key].processedProjectsCount} z ${data[key].totalProjectsCount} záznamů.`);
+                            alertElement.text(localization.translateFormat("ImportStatus", [data[key].processedProjectsCount, data[key].totalProjectsCount], "RepositoryImport").value);
 
                             if (data[key].isCompleted) {
                                 if (data[key].faultedMessage != null) {

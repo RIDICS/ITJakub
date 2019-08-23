@@ -50,7 +50,7 @@
                     @using (Html.BeginForm("StartImport", "RepositoryImport", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                     {
                         @Html.AntiForgeryToken()
-                        <div class="form-group repositories">
+                        <div id="repositories" class="form-group">
                             <ul class="bib-listing">
                                 @for (var idx = 0; idx < Model.ExternalRepositoryCheckBoxes.Count; idx++)
                                 {

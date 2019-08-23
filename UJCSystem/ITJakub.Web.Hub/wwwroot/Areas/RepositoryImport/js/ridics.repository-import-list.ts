@@ -5,15 +5,15 @@
 
 class ExternalRepositoryImportList {
     init() {
-        const checkboxes = $(".repositories input:checkbox");
+        const checkboxes = $("#repositories input:checkbox");
 
         $("#selectAllRepositories").click(() => {
-            checkboxes.prop("checked", $(".repositories input:checkbox:not(:checked)").length > 0);
+            checkboxes.prop("checked", $("#repositories input:checkbox:not(:checked)").length > 0).change();
         });
             
-        checkboxes.click(() => {
+        checkboxes.on("change", () => {
             const button = $("#startImportBtn");
-            if ($(".repositories input:checkbox:checked").length > 0) {
+            if ($("#repositories input:checkbox:checked").length > 0) {
                 button.removeClass("disabled");
             } else {
                 button.addClass("disabled");
