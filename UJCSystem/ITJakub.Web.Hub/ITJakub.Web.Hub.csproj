@@ -13,9 +13,6 @@
     <Content Update="log4net.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\Areas\RepositoryImport\js\ridics.external-repository-configuration.js">
-      <DependentUpon>ridics.external-repository-configuration.ts</DependentUpon>
-    </Content>
     <Content Include="Content\**\*.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -59,10 +56,6 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.6.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\Areas\Admin\js\permissions\" />
-  </ItemGroup>
-  
 
   <Target Name="Gulp" BeforeTargets="BeforeBuild">
     <Exec Command="yarn gulp default" />
