@@ -1,8 +1,7 @@
-﻿using System.Net;
-using Vokabular.DataEntities.Database.Entities;
+﻿using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Utils;
-using Vokabular.RestClient.Errors;
+using Vokabular.MainService.DataContracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Favorite
@@ -27,8 +26,8 @@ namespace Vokabular.MainService.Core.Works.Favorite
             OwnershipHelper.CheckItemOwnership(favoriteLabel.User.Id, m_userId);
 
             if (favoriteLabel.IsDefault)
-                throw new HttpErrorCodeException("Can't remove default favorite label", HttpStatusCode.BadRequest);
-
+                throw new MainServiceException(MainServiceErrorCode.CannotRemoveDefaultFavoriteLabel, "Can't remove default favorite label");
+                
             m_favoritesRepository.Delete(favoriteLabel);
         }
     }

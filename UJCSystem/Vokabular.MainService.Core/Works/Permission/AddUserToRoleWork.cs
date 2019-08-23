@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
@@ -31,14 +32,22 @@ namespace Vokabular.MainService.Core.Works.Permission
             var role = m_defaultUserProvider.GetDefaultUnregisteredRole();
             if (role.Id == m_roleId)
             {
-                throw new ArgumentException($"Users cannot be added to the default role {role.Name}");
+                throw new MainServiceException(MainServiceErrorCode.AddUserToDefaultRole,
+                    $"Users cannot be added to the default role {role.Name}",
+                    HttpStatusCode.BadRequest,
+                    role.Name
+                );
             }
 
             var group = m_permissionRepository.FindGroupByExternalIdOrCreate(m_roleId);
             var user = m_permissionRepository.GetUserWithGroups(m_userId);
             if (user.ExternalId == null)
             {
-                throw new ArgumentException($"User with ID {user.Id} has missing ExternalID");
+                throw new MainServiceException(MainServiceErrorCode.UserHasMissingExternalId,
+                    $"User with ID {user.Id} has missing ExternalID",
+                    HttpStatusCode.BadRequest,
+                    user.Id
+                );
             }
 
             if (user.Groups == null)

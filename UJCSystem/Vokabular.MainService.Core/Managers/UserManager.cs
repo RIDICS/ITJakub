@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using AutoMapper;
 using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Entities;
@@ -7,6 +8,7 @@ using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Users;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataEntities.UnitOfWork;
@@ -55,7 +57,11 @@ namespace Vokabular.MainService.Core.Managers
             var user = m_authenticationManager.GetCurrentUser();
             if (user.ExternalId == null)
             {
-                throw new ArgumentException($"User with ID {user.Id} has missing ExternalID");
+                throw new MainServiceException(MainServiceErrorCode.UserHasMissingExternalId,
+                    $"User with ID {user.Id} has missing ExternalID",
+                    HttpStatusCode.BadRequest,
+                    new object[] { user.Id }
+                );
             }
 
             var client = m_communicationProvider.GetAuthUserApiClient();
@@ -201,7 +207,11 @@ namespace Vokabular.MainService.Core.Managers
             var user = m_userRepository.InvokeUnitOfWork(x => x.FindById<User>(userId));
             if (user.ExternalId == null)
             {
-                throw new ArgumentException($"User with ID {user.Id} has missing ExternalID");
+                throw new MainServiceException(MainServiceErrorCode.UserHasMissingExternalId,
+                    $"User with ID {user.Id} has missing ExternalID",
+                    HttpStatusCode.BadRequest,
+                    new object[] { user.Id }
+                );
             }
 
             return user.ExternalId.Value;

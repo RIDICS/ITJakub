@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using log4net;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.MainService.Core.Errors;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts.CardFile;
 using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Search.Criteria;
@@ -40,7 +40,7 @@ namespace Vokabular.MainService.Core.Managers
                 if (m_log.IsWarnEnabled)
                     m_log.WarnFormat("Recieved authorizeCriteria in request from user with id '{0}'", user.Id);
 
-                throw new ArgumentException(
+                throw new MainServiceException(MainServiceErrorCode.UnallowedAuthorizationCriteria,
                     "Search criteria contains unallowed Authorization criteria. Authorization criteria is generated automatically.");
             }
 
@@ -54,14 +54,21 @@ namespace Vokabular.MainService.Core.Managers
             if (currentUserPermissions.All(x => x.Value != VokabularPermissionNames.CardFile + cardFileId))
             {
                 var user = m_authenticationManager.GetCurrentUser();
+
                 if (user == null)
                 {
-                    throw new UnauthorizedException(
-                        $"Unregistered user does not have permission to read cardfile with id '{cardFileId}'");
+                    throw new MainServiceException(
+                        MainServiceErrorCode.UnregisteredCardFileAccessForbidden,
+                        $"Unregistered user does not have permission to read cardfile with id '{cardFileId}'",
+                        HttpStatusCode.Forbidden
+                    );
                 }
 
-                throw new UnauthorizedException(
-                    $"User with id '{user.Id}' (external id '{user.ExternalId}')  does not have permission to read cardfile with id '{cardFileId}'");
+                throw new MainServiceException(
+                    MainServiceErrorCode.UserCardFileAccessForbidden,
+                    $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission to read cardfile with id '{cardFileId}'",
+                    HttpStatusCode.Forbidden
+                );
             }
         }
 
@@ -111,8 +118,11 @@ namespace Vokabular.MainService.Core.Managers
                     x.GetFilteredBookIdListByUserPermissions(user.Id, new List<long> {projectId}));
                 if (filtered == null || filtered.Count == 0)
                 {
-                    throw new UnauthorizedException(
-                        $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission on book with id '{projectId}'");
+                    throw new MainServiceException(
+                        MainServiceErrorCode.UserBookAccessForbidden,
+                        $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission on book with id '{projectId}'",
+                        HttpStatusCode.Forbidden
+                    );
                 }
             }
             else
@@ -124,7 +134,11 @@ namespace Vokabular.MainService.Core.Managers
 
                 if (filtered == null || filtered.Count == 0)
                 {
-                    throw new UnauthorizedException($"Unregistered user does not have permission on book with id '{projectId}'");
+                    throw new MainServiceException(
+                        MainServiceErrorCode.UnregisteredUserBookAccessForbidden,
+                        $"Unregistered user does not have permission on book with id '{projectId}'",
+                        HttpStatusCode.Forbidden
+                    );
                 }
             }
         }
@@ -138,8 +152,11 @@ namespace Vokabular.MainService.Core.Managers
 
                 if (filtered == null)
                 {
-                    throw new UnauthorizedException(
-                        $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission on book with resource with id '{resourceId}'");
+                    throw new MainServiceException(
+                        MainServiceErrorCode.UserResourceAccessForbidden,
+                        $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission on book with resource with id '{resourceId}'",
+                        HttpStatusCode.Forbidden
+                    );
                 }
             }
             else
@@ -150,8 +167,11 @@ namespace Vokabular.MainService.Core.Managers
 
                 if (filtered == null)
                 {
-                    throw new UnauthorizedException(
-                        $"Unregistered user does not have permission on book with resource with id '{resourceId}'");
+                    throw new MainServiceException(
+                        MainServiceErrorCode.UnregisteredUserResourceAccessForbidden,
+                        $"Unregistered user does not have permission on book with resource with id '{resourceId}'",
+                        HttpStatusCode.Forbidden
+                    );
                 }
             }
         }

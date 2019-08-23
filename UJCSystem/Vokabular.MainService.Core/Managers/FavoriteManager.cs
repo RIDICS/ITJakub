@@ -7,8 +7,8 @@ using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Favorite;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts.Favorite;
-using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataContracts.Types.Favorite;
@@ -294,7 +294,7 @@ namespace Vokabular.MainService.Core.Managers
 
             if (favoriteItem == null)
             {
-                throw new HttpErrorCodeException("Item not found", HttpStatusCode.NotFound);
+                throw new MainServiceException(MainServiceErrorCode.ItemNotFound, "Item not found", HttpStatusCode.NotFound);
             }
 
             OwnershipHelper.CheckItemOwnership(favoriteItem.FavoriteLabel.User.Id, user.Id);

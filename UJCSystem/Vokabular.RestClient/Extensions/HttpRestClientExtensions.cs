@@ -12,7 +12,7 @@ using Vokabular.RestClient.Headers;
 
 namespace Vokabular.RestClient.Extensions
 {
-    internal static class HttpRestClientExtensions
+    public static class HttpRestClientExtensions
     {
         private static JsonSerializerSettings CreateJsonSerializerSettings()
         {

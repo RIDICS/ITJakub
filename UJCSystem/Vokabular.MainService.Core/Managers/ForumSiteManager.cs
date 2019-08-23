@@ -8,6 +8,7 @@ using Vokabular.ForumSite.Core.Managers;
 using Vokabular.ForumSite.Core.Options;
 using Vokabular.MainService.Core.Errors;
 using Vokabular.MainService.Core.Works;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 
 namespace Vokabular.MainService.Core.Managers
@@ -44,7 +45,7 @@ namespace Vokabular.MainService.Core.Managers
 
             if (project == null)
             {
-                throw new ForumException("Create of forum failed. The project does not exist.");
+                throw new ForumException(MainServiceErrorCode.ProjectNotExist, "The project does not exist.");
             }
 
             var projectDetailContract = Mapper.Map<ProjectDetailContract>(project);
@@ -53,7 +54,7 @@ namespace Vokabular.MainService.Core.Managers
 
             if (project.ForumId != null)
             {
-                throw new ForumException("Create of forum failed. The forum is already created.");
+                throw new ForumException(MainServiceErrorCode.ForumAlreadyCreated, "The forum is already created.");
             }
 
             var forum = m_forumManager.GetForumByExternalId(project.Id);
@@ -83,7 +84,7 @@ namespace Vokabular.MainService.Core.Managers
 
             if (project == null)
             {
-                throw new ForumException("Update of forum failed. Project does not exist.");
+                throw new ForumException(MainServiceErrorCode.ProjectNotExist, "Project does not exist.");
             }
 
             var projectDetailContract = Mapper.Map<ProjectDetailContract>(project);

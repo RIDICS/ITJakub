@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Net;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Works.Users;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
 using AuthUserContract = Ridics.Authentication.DataContracts.User.UserContract;
@@ -37,7 +38,11 @@ namespace Vokabular.MainService.Core.Managers
         {
             if (user.ExternalId == null)
             {
-                throw new ArgumentException($"User with ID {user.Id} has missing ExternalID");
+                throw new MainServiceException(MainServiceErrorCode.UserHasMissingExternalId,
+                    $"User with ID {user.Id} has missing ExternalID",
+                    HttpStatusCode.BadRequest,
+                    new object[] { user.Id }
+                );
             }
 
             var authUser = GetDetailUserFromAuthService(user.ExternalId.Value);

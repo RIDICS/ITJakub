@@ -1,8 +1,9 @@
-﻿using System;
+﻿using System.Net;
 using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Authentication;
+using Vokabular.MainService.DataContracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Permission
@@ -25,17 +26,8 @@ namespace Vokabular.MainService.Core.Works.Permission
 
         protected override void ExecuteWorkImplementation()
         {
-            var unregisteredRole = m_defaultUserProvider.GetDefaultUnregisteredRole();
-            if (unregisteredRole.Id == m_roleId)
-            {
-                throw new ArgumentException($"The default role {unregisteredRole.Name} cannot be deleted.");
-            }
-
-            var registeredRole = m_defaultUserProvider.GetDefaultRegisteredRole();
-            if (registeredRole.Id == unregisteredRole.Id)
-            {
-                throw new ArgumentException($"The default role {unregisteredRole.Name} cannot be deleted.");
-            }
+            CheckRoleForDeleting(m_defaultUserProvider.GetDefaultUnregisteredRole());
+            CheckRoleForDeleting(m_defaultUserProvider.GetDefaultRegisteredRole());
 
             var group = m_permissionRepository.FindGroupByExternalId(m_roleId);
             if (group != null)
@@ -46,6 +38,18 @@ namespace Vokabular.MainService.Core.Works.Permission
 
             var client = m_communicationProvider.GetAuthRoleApiClient();
             client.HttpClient.DeleteItemAsync<RoleContract>(m_roleId).GetAwaiter().GetResult();
+        }
+
+        private void CheckRoleForDeleting(RoleContractBase defaultRole)
+        {
+            if (defaultRole.Id == m_roleId)
+            {
+                throw new MainServiceException(MainServiceErrorCode.DeleteDefaultRole,
+                    $"The default role {defaultRole.Name} cannot be deleted.",
+                    HttpStatusCode.BadRequest,
+                    defaultRole.Name
+                );
+            }
         }
     }
 }

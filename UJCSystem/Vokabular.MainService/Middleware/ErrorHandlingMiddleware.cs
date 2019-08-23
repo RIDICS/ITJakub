@@ -1,7 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Vokabular.MainService.Core.Errors;
+using Newtonsoft.Json;
+using Ridics.Authentication.HttpClient.Exceptions;
+using Vokabular.MainService.DataContracts;
+using Vokabular.RestClient.Contracts;
 
 namespace Vokabular.MainService.Middleware
 {
@@ -20,17 +22,17 @@ namespace Vokabular.MainService.Middleware
             {
                 await m_next(context);
             }
-            catch (ArgumentException exception)
+            catch (AuthServiceApiException exception)
             {
-                await FillResponse(context, StatusCodes.Status400BadRequest, exception.Message);
+                await FillResponse(context, exception.StatusCode,JsonConvert.SerializeObject(new ErrorContract{Code = exception.Code, Description = exception.Message}));
             }
-            catch (AuthenticationException exception)
+            catch (AuthServiceException exception)
             {
-                await FillResponse(context, StatusCodes.Status401Unauthorized, exception.Message);
+                await FillResponse(context, exception.StatusCode, JsonConvert.SerializeObject(new ErrorContract { Description = exception.Message }));
             }
-            catch (UnauthorizedException exception)
+            catch (MainServiceException exception)
             {
-                await FillResponse(context, StatusCodes.Status403Forbidden, exception.Message);
+                await FillResponse(context, (int)exception.StatusCode, JsonConvert.SerializeObject(new ErrorContract { Code = exception.Code, Description = exception.Message, DescriptionParams = exception.DescriptionParams}));
             }
         }
 

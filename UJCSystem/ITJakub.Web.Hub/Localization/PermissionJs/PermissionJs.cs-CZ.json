@@ -41,9 +41,9 @@
     "DeleteRoleConfirm": "Opravdu chcete smazat skupinu {0}?",
     "AssignPermission": "Přiřadit právo",
     "UnassignPermission": "Odebrat právo",
-    "RegisteredRoleModifyWarning": "Role {0} se přiřadí automaticky každému registrovanému uživateli. Jste si jisti, že ji chcete upravit?",
-    "UnregisteredRoleModifyWarning": "Roli {0} má každý nepřihlášený uživatel. Jste si jisti, že ji chcete upravit?",
-    "RemoveUserFromRegisteredRole": "Role {0} je základní role pro všechny registrované uživatele. Opravdu chcete odstranit uživatele z této role?",
+    "RegisteredRoleModifyWarning": "Skupina {0} se přiřadí automaticky každému registrovanému uživateli. Jste si jisti, že ji chcete upravit?",
+    "UnregisteredRoleModifyWarning": "Skupinu {0} má každý nepřihlášený uživatel. Jste si jisti, že ji chcete upravit?",
+    "RemoveUserFromRegisteredRole": "Skupina {0} je základní skupina pro všechny registrované uživatele. Opravdu chcete odstranit uživatele z této skupiny?",
     "Remove": "Odstranit"
   }
 }

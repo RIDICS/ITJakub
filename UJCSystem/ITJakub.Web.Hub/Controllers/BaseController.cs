@@ -6,6 +6,7 @@ using ITJakub.Web.Hub.DataContracts;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Clients;
 using Vokabular.RestClient.Errors;
 
@@ -144,6 +145,11 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        protected void AddErrors(MainServiceException exception)
+        {
+            ModelState.AddModelError(string.Empty, exception.Description);
+        }
+
         protected IActionResult AjaxOkResponse()
         {
             return new JsonResult(new {});
@@ -156,7 +162,7 @@ namespace ITJakub.Web.Hub.Controllers
                 ErrorMessage = message
             };
 
-            return new ObjectResult(result)
+            return new JsonResult(result)
             {
                 StatusCode = (int)httpStatusCode
             };
