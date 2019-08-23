@@ -21,11 +21,11 @@
 
 <h2>@Localizer.Translate("GroupPermissionManagementHeadline", "Permission", LocTranslationSource.File)</h2>
 
-@if (ViewData.TryGetValue(PermissionConstants.RegisteredRoleName, out var registeredRoleName))
+@if (ViewData.TryGetValue(RoleViewConstants.RegisteredRoleName, out var registeredRoleName))
 {
     <span id="registeredRoleName" data-name="@registeredRoleName" class="hidden"></span>
 }
-@if (ViewData.TryGetValue(PermissionConstants.UnregisteredRoleName, out var unregisteredRoleName))
+@if (ViewData.TryGetValue(RoleViewConstants.UnregisteredRoleName, out var unregisteredRoleName))
 {
     <span id="unregisteredRoleName" data-name="@unregisteredRoleName" class="hidden"></span>
 }

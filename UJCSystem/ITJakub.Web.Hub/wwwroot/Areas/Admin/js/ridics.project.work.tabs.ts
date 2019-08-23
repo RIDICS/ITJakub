@@ -1175,7 +1175,7 @@ class ProjectWorkForumTab extends ProjectModuleTabBase {
 }
 
 class MetadataUiHelper {
-    static addPerson($container: JQuery,
+    static addPerson($container: JQuery<HTMLDivElement>,
         name: string,
         surname: string,
         idValue: string | number,

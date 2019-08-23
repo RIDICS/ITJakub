@@ -3,7 +3,6 @@
     private readonly pagingInfoSelector = ".paging-info";
 
     private readonly urlPath: string;
-    private readonly defaultPageSize: number;
     private readonly selector: string;
     private readonly viewType: ViewType;
     private readonly saveStateToUrl: boolean;
@@ -19,11 +18,10 @@
     private totalCount: number;
     private search: string;
 
-    constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, saveStateToUrl: boolean);
-    constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, saveStateToUrl: boolean, pageLoadCallback: (list?: ListWithPagination) => void, contextForCallback: any);
-    constructor(urlPath: string, defaultPageSize: number, selector: string, viewType: ViewType, saveStateToUrl: boolean, pageLoadCallback?: (list: ListWithPagination) => void, contextForCallback?: any) {
+    constructor(urlPath: string, selector: string, viewType: ViewType, saveStateToUrl: boolean);
+    constructor(urlPath: string, selector: string, viewType: ViewType, saveStateToUrl: boolean, pageLoadCallback: (list?: ListWithPagination) => void, contextForCallback: any);
+    constructor(urlPath: string, selector: string, viewType: ViewType, saveStateToUrl: boolean, pageLoadCallback?: (list: ListWithPagination) => void, contextForCallback?: any) {
         this.urlPath = urlPath;
-        this.defaultPageSize = defaultPageSize;
         this.selector = selector;
         this.viewType = viewType;
         this.saveStateToUrl = saveStateToUrl;
@@ -96,7 +94,7 @@
             this.pageSize = pagingInfo.data("page-size");
             this.totalCount = pagingInfo.data("total-count");
         } else {
-            this.pageSize = this.defaultPageSize;
+            this.pageSize = 1;
             this.totalCount = 0;
         }
     }

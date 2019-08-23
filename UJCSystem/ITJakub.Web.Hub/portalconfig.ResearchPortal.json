@@ -5,14 +5,10 @@
     "FaviconPath": "~/images/favicon.ResearchPortal.png",
     "MainPortal": {
       "PortalNameFull": "Vokabulář webový",
-      "PortalName1": "Vokabulář",
-      "PortalName2": "webový",
       "PortalLogoPath": "~/images/logo/logo.ResearchPortal.png"
     },
     "SecondPortal": {
       "PortalNameFull": "Komunitní portál",
-      "PortalName1": "Komunitní",
-      "PortalName2": "portál",
       "PortalLogoPath": "~/images/logo/logo.CommunityPortal.png"
     },
     "AllowedSearchOptions": {
