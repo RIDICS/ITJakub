@@ -1,7 +1,6 @@
-using System.Net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.RestClient.Errors;
+using Vokabular.MainService.DataContracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.ProjectImport.Works.FilteringExpressionSetManagement
@@ -22,7 +21,9 @@ namespace Vokabular.ProjectImport.Works.FilteringExpressionSetManagement
             var filteringExpressionSet = m_filteringExpressionSetRepository.Load<FilteringExpressionSet>(m_filteringExpressionSetId);
 
             if (filteringExpressionSet == null)
-                throw new HttpErrorCodeException(ErrorMessages.NotFound, HttpStatusCode.NotFound);
+            {
+                throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
+            }
 
             m_filteringExpressionSetRepository.Delete(filteringExpressionSet);
         }

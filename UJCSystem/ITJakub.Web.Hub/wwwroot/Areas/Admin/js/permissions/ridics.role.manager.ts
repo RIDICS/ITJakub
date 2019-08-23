@@ -8,10 +8,12 @@ class RoleManager {
     private readonly client: PermissionApiClient;
     private readonly delayForShowResponse = 1000;
     private readonly errorHandler: ErrorHandler;
+    private readonly registeredRoleName: string;
+    private readonly unregisteredRoleName: string;
     private currentUserSelectedItem: IUserDetail;
     private userList: ListWithPagination;
     private roleList: ListWithPagination;
-    private permissionList: ListWithPagination; 
+    private permissionList: ListWithPagination;
 
     constructor() {
         this.searchBox = new SingleSetTypeaheadSearchBox<IUserDetail>("#mainSearchInput",
@@ -21,12 +23,13 @@ class RoleManager {
                 item.email));
         this.client = new PermissionApiClient();
         this.errorHandler = new ErrorHandler();
+        this.registeredRoleName = $("#registeredRoleName").data("name");
+        this.unregisteredRoleName = $("#unregisteredRoleName").data("name");
     }
     
     public init(list?: ListWithPagination) {
         if (list == null) {
-            this.roleList = new ListWithPagination("Permission/RolePermission", 10, "role", ViewType.Widget, true, this.reinitRoleList, this);
-
+            this.roleList = new ListWithPagination("Permission/RolePermission", "role", ViewType.Widget, true, this.reinitRoleList, this);
         } else {
             this.roleList = list;
         }
@@ -36,6 +39,7 @@ class RoleManager {
         this.initSearchBox();
         this.reinitRoleList();
         this.initEditRoleForm();
+        this.initCreateRoleForm();
     }
 
     public reinitRoleList() {
@@ -76,7 +80,6 @@ class RoleManager {
             container.empty().append(errorAlert.buildElement());
         }).always(() => {
             this.userList = new ListWithPagination(`Permission/UsersByRole?roleId=${roleId}`,
-                10,
                 "user",
                 ViewType.Widget,
                 false,
@@ -105,7 +108,6 @@ class RoleManager {
             container.empty().append(errorAlert.buildElement());
         }).always(() => {
             this.permissionList = new ListWithPagination(`Permission/RolePermissionList?roleId=${roleId}`,
-                10,
                 "permission",
                 ViewType.Widget,
                 false,
@@ -121,56 +123,122 @@ class RoleManager {
             const addPermission = $(event.currentTarget as Node as HTMLElement).is(":checked");
             const permissionCheckboxInput = $(event.currentTarget as Node as HTMLElement);
             permissionCheckboxInput.prop("checked", !addPermission);
-            const permissionRow = permissionCheckboxInput.parents(".permission-row");
-            const alert = permissionRow.find(".alert");
-            alert.hide();
-            const specialPermissionId = permissionRow.data("permission-id");
-            const roleId = $(".role-row.active").data("role-id");
 
-            const spinner = permissionRow.find(".loading-spinner");
-            spinner.show();
-            const successLabel = permissionRow.find(".success");
-            successLabel.hide();
+            const roleName = $(".role-row.active").find(".name").text();
             
-            let result: JQuery.jqXHR<any>;
-            if (addPermission) {
-                result = this.client.addSpecialPermissionToRole(roleId, specialPermissionId);
-            } else {
-                result = this.client.removeSpecialPermissionToRole(roleId, specialPermissionId);
+            let defaultRoleWarningMessage = null;
+            if (roleName === this.registeredRoleName) {
+                defaultRoleWarningMessage = "RegisteredRoleModifyWarning";
+            }
+            else if (roleName === this.unregisteredRoleName) {
+                defaultRoleWarningMessage = "UnregisteredRoleModifyWarning";
             }
 
-            result.done(() => {
-                setTimeout(() => {
-                    successLabel.show();
-                    permissionCheckboxInput.prop("checked", addPermission);
-                }, this.delayForShowResponse);
-            }).fail((error) => {
-                setTimeout(() => {
-                    alert.text(this.errorHandler.getErrorMessage(error, localization.translate("PermissionError", "PermissionJs").value));
-                    alert.show();
-                }, this.delayForShowResponse);
-            }).always(() => {
-                setTimeout(() => {
-                    spinner.hide();
-                }, this.delayForShowResponse);
-            });
+            if (defaultRoleWarningMessage !== null) {
+                bootbox.dialog({
+                    title: localization.translate("Warning", "PermissionJs").value,
+                    message: localization.translateFormat(defaultRoleWarningMessage, [roleName], "PermissionJs").value,
+                    buttons: {
+                        cancel: {
+                            label: localization.translate("Cancel", "PermissionJs").value,
+                            className: "btn-default",
+                            callback: () => { }
+                        },
+                        confirm: {
+                            label: localization.translate(addPermission ? "AssignPermission" : "UnassignPermission", "PermissionJs").value,
+                            className: "btn-default",
+                            callback: () => {
+                                this.modifyPermission(event);
+                            }
+                        }
+                    }
+                });
+            }
+            else {
+                this.modifyPermission(event);
+            }
+        });
+    }
+
+    private modifyPermission(event: JQuery.TriggeredEvent) {
+        const addPermission = !$(event.currentTarget as Node as HTMLElement).is(":checked");
+        const permissionCheckboxInput = $(event.currentTarget as Node as HTMLElement);
+        const permissionRow = permissionCheckboxInput.parents(".permission-row");
+        const alert = permissionRow.find(".alert");
+        alert.hide();
+        const specialPermissionId = permissionRow.data("permission-id");
+        const roleId = $(".role-row.active").data("role-id");
+
+        const spinner = permissionRow.find(".loading-spinner");
+        spinner.show();
+        const successLabel = permissionRow.find(".success");
+        successLabel.hide();
+
+        let result: JQuery.jqXHR<any>;
+        if (addPermission) {
+            result = this.client.addSpecialPermissionToRole(roleId, specialPermissionId);
+        } else {
+            result = this.client.removeSpecialPermissionToRole(roleId, specialPermissionId);
+        }
+
+        result.done(() => {
+            setTimeout(() => {
+                successLabel.show();
+                permissionCheckboxInput.prop("checked", addPermission);
+            }, this.delayForShowResponse);
+        }).fail((error) => {
+            setTimeout(() => {
+                alert.text(this.errorHandler.getErrorMessage(error, localization.translate("PermissionError", "PermissionJs").value));
+                alert.show();
+            }, this.delayForShowResponse);
+        }).always(() => {
+            setTimeout(() => {
+                spinner.hide();
+            }, this.delayForShowResponse);
         });
     }
 
     private initRemoveUserFromRoleButton() {
         $(".remove-user-from-role").click((event) => {
-            const userRow = $(event.currentTarget as Node as HTMLElement).parents(".user-row");
-            const userId = userRow.data("user-id");
-            const alert = userRow.find(".alert");
-            alert.hide();
+            const roleName = $(".role-row.active").find(".name").text();
 
-            var roleId = $(".role-row.active").data("role-id");
-            this.client.removeUserFromRole(userId, roleId).done(() => {
-                this.userList.reloadPage();
-            }).fail((error) => {
-                alert.text(this.errorHandler.getErrorMessage(error, localization.translate("RemoveUserFromRoleError", "PermissionJs").value));
-                alert.show();
-            });
+            if (roleName === this.registeredRoleName) {
+                bootbox.dialog({
+                    title: localization.translate("Warning", "PermissionJs").value,
+                    message: localization.translateFormat("RemoveUserFromRegisteredRole", [roleName], "PermissionJs").value,
+                    buttons: {
+                        cancel: {
+                            label: localization.translate("Cancel", "PermissionJs").value,
+                            className: "btn-default",
+                            callback: () => {}
+                        },
+                        confirm: {
+                            label: localization.translate("Remove","PermissionJs").value,
+                            className: "btn-default",
+                            callback: () => {
+                                this.removeUserFromRole(event);
+                            }
+                        }
+                    }
+                });
+            } else {
+                this.removeUserFromRole(event);
+            }
+        });
+    }
+
+    private removeUserFromRole(event: JQuery.TriggeredEvent) {
+        const userRow = $(event.currentTarget as Node as HTMLElement).parents(".user-row");
+        const userId = userRow.data("user-id");
+        const alert = userRow.find(".alert");
+        alert.hide();
+
+        var roleId = $(".role-row.active").data("role-id");
+        this.client.removeUserFromRole(userId, roleId).done(() => {
+            this.userList.reloadPage();
+        }).fail((error) => {
+            alert.text(this.errorHandler.getErrorMessage(error, localization.translate("RemoveUserFromRoleError", "PermissionJs").value));
+            alert.show();
         });
     }
 
@@ -201,11 +269,12 @@ class RoleManager {
 
     private initEditRoleForm() {
         const editRoleForm = $("#editRoleForm");
-
+        const alertHolder = editRoleForm.find(".alert-holder");
         editRoleForm.on("submit", (event) => {
             event.preventDefault();
             event.stopPropagation();
-    
+            alertHolder.empty();
+
             if (editRoleForm.valid()) {
                 const editRoleSection = $("#editRoleSection");
                 this.client.editRole(editRoleForm.serialize())
@@ -214,11 +283,12 @@ class RoleManager {
                         if (editRoleForm.find(".alert-success").length) {
                             this.roleList.reloadPage();
                         }
+                        this.initEditRoleForm();
                     })
                     .fail((error) => {
-                        editRoleSection.html(error.responseText);
-                    }).always(() => {
-                        this.initEditRoleForm();
+                        const alert = new AlertComponentBuilder(AlertType.Error)
+                            .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                        alertHolder.empty().append(alert);
                     });
             }
         });
@@ -234,6 +304,11 @@ class RoleManager {
                 title: localization.translate("Warning", "PermissionJs").value,
                 message: localization.translateFormat("DeleteRoleConfirm", [roleName],"PermissionJs").value,
                 buttons: {
+                    cancel: {
+                        label: localization.translate("Cancel", "PermissionJs").value,
+                        className: "btn-default",
+                        callback: () => { }
+                    },
                     confirm: {
                         label: localization.translate("Delete", "PermissionJs").value,
                         className: "btn-default",
@@ -250,11 +325,6 @@ class RoleManager {
                                 alert.show();
                             });
                         }
-                    },
-                    cancel: {
-                        label: localization.translate("Cancel", "PermissionJs").value,
-                        className: "btn-default",
-                        callback: () => { }
                     }
                 }
             });
@@ -335,20 +405,32 @@ class RoleManager {
         createRoleModal.on("hidden.bs.modal", () => {
             roleError.empty();
         });
+    }
 
-        $("#create-role").click(() => {
-            var roleName = $("#new-role-name").val() as string;
-            var roleDescription = $("#new-role-description").val() as string;
-            roleError.empty();
-            this.client.createRole(roleName, roleDescription).done(() => {
-                $("#createRoleModal").modal("hide");
-                this.roleList.reloadPage();
-                this.clearSections();
-            }).fail((error) => {
-                const errorAlert = new AlertComponentBuilder(AlertType.Error)
-                    .addContent(this.errorHandler.getErrorMessage(error, localization.translate("CreateRoleError", "PermissionJs").value));
-                roleError.empty().append(errorAlert.buildElement());
-            });
+    private initCreateRoleForm() {
+        const createRoleForm = $("#createRoleForm");
+        const alertHolder = createRoleForm.find(".alert-holder");
+        createRoleForm.on("submit", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            alertHolder.empty();
+
+            if (createRoleForm.valid()) {
+                const createRoleSection = $("#createRoleSection");
+                this.client.createRole(createRoleForm.serialize())
+                    .done((response) => {
+                        createRoleSection.html(response);
+                        if (createRoleForm.find(".alert-success").length) {
+                            this.roleList.reloadPage();
+                        }
+                        this.initCreateRoleForm();
+                    })
+                    .fail((error) => {
+                        const alert = new AlertComponentBuilder(AlertType.Error)
+                            .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                        alertHolder.empty().append(alert);
+                    });
+            }
         });
     }
 

@@ -2,14 +2,12 @@
   "culture": "cs-CZ",
   "scope": "global",
   "dictionary": {
-    "Vokabulář": "Vokabulář",
-    "webový": "webový",
+    "Vokabulář webový": "Vokabulář webový",
     "VokabulářWebový": "Vokabulář webový",
     "and": "a",
 
-    "Komunitní": "Komunitní",
-    "portál": "portál",
-    "Menu": "Menu" ,
+    "Komunitní portál": "Komunitní portál",
+    "Menu": "Menu",
 
     "FeedbackFormPlaceholder": "Zde napište vaši připomínku...",
     "NameFormPlaceholder": "Zde zadejte Vaše jméno...",
@@ -29,10 +27,12 @@
     "Edit": "Upravit",
     "Cancel": "Zrušit",
     "Error": "Chyba",
+    "Back": "Zpět",
     "DefaultTitle": "Default title",
 
     "SortBy": "Řadit podle",
     "UserAccount": "Uživatelský účet",
+    "UserProfile": "Uživatelský profil",
     "Language": "Jazyk",
     "SignIn": "Přihlášení",
     "LogOut": "Odhlásit",

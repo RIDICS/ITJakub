@@ -4,8 +4,8 @@ using Vokabular.Core.Storage.Resources;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Utils;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Content
@@ -18,7 +18,8 @@ namespace Vokabular.MainService.Core.Works.Content
         private readonly SaveResourceResult m_fileInfo;
         private readonly int m_userId;
 
-        public CreateNewAudioResourceVersionWork(ResourceRepository resourceRepository, long audioId, CreateAudioContract data, SaveResourceResult fileInfo, int userId) : base(resourceRepository)
+        public CreateNewAudioResourceVersionWork(ResourceRepository resourceRepository, long audioId, CreateAudioContract data,
+            SaveResourceResult fileInfo, int userId) : base(resourceRepository)
         {
             m_resourceRepository = resourceRepository;
             m_audioId = audioId;
@@ -34,7 +35,11 @@ namespace Vokabular.MainService.Core.Works.Content
             var latestAudio = m_resourceRepository.GetLatestResourceVersion<AudioResource>(m_audioId);
             if (latestAudio.Id != m_data.OriginalVersionId)
             {
-                throw new HttpErrorCodeException($"Conflict. Current latest versionId is {latestAudio.Id}, but originalVersionId was specified {m_data.OriginalVersionId}", HttpStatusCode.Conflict);
+                throw new MainServiceException(
+                    MainServiceErrorCode.ResourceModified,
+                    $"Conflict. Current latest versionId is {latestAudio.Id}, but originalVersionId was specified {m_data.OriginalVersionId}",
+                    HttpStatusCode.Conflict
+                );
             }
 
             var audioType = AudioEnumHelper.FileNameToAudioType(m_data.FileName);

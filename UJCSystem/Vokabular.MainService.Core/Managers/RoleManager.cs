@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Reflection;
 using AutoMapper;
 using log4net;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
+using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Permission;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Results;
@@ -22,16 +24,18 @@ namespace Vokabular.MainService.Core.Managers
         private readonly UserRepository m_userRepository;
         private readonly PermissionRepository m_permissionRepository;
         private readonly UserDetailManager m_userDetailManager;
+        private readonly DefaultUserProvider m_defaultUserProvider;
 
         private readonly CommunicationProvider m_communicationProvider;
 
         public RoleManager(UserRepository userRepository, PermissionRepository permissionRepository,
-            CommunicationProvider communicationProvider, UserDetailManager userDetailManager)
+            CommunicationProvider communicationProvider, UserDetailManager userDetailManager, DefaultUserProvider defaultUserProvider)
         {
             m_userRepository = userRepository;
             m_permissionRepository = permissionRepository;
             m_communicationProvider = communicationProvider;
             m_userDetailManager = userDetailManager;
+            m_defaultUserProvider = defaultUserProvider;
         }
 
         public List<RoleContract> GetRolesByUser(int userId)
@@ -43,12 +47,21 @@ namespace Vokabular.MainService.Core.Managers
                 var message = $"Cannot locate user with id '{userId}'";
                 if (m_log.IsErrorEnabled)
                     m_log.Error(message);
-                throw new ArgumentException(message);
+
+                throw new MainServiceException(MainServiceErrorCode.CannotLocateUser,
+                    message,
+                    HttpStatusCode.BadRequest,
+                    new object[] {userId}
+                );
             }
 
             if (user.ExternalId == null)
             {
-                throw new ArgumentException($"User with ID {userId} has missing ExternalID");
+                throw new MainServiceException(MainServiceErrorCode.UserHasMissingExternalId,
+                    $"User with ID {user.Id} has missing ExternalID",
+                    HttpStatusCode.BadRequest,
+                    new object[] {user.Id}
+                );
             }
 
             var client = m_communicationProvider.GetAuthUserApiClient();
@@ -79,7 +92,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public void UpdateRole(RoleContract data)
         {
-            new UpdateRoleWork(m_permissionRepository, data, m_communicationProvider).Execute();
+            new UpdateRoleWork(m_permissionRepository, m_defaultUserProvider, m_communicationProvider, data).Execute();
         }
 
         public RoleDetailContract GetRoleDetail(int roleId)
@@ -95,7 +108,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public void DeleteRole(int roleId)
         {
-            new DeleteRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
+            new DeleteRoleWork(m_permissionRepository, m_defaultUserProvider, m_communicationProvider, roleId).Execute();
         }
 
         public void RemoveUserFromRole(int userId, int roleId)
@@ -107,7 +120,7 @@ namespace Vokabular.MainService.Core.Managers
         public void AddUserToRole(int userId, int roleId)
         {
             new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
-            new AddUserToRoleWork(m_permissionRepository, m_communicationProvider, userId, roleId).Execute();
+            new AddUserToRoleWork(m_permissionRepository, m_defaultUserProvider, m_communicationProvider, userId, roleId).Execute();
         }
 
         public List<RoleContract> GetRoleAutocomplete(string query, int? count)

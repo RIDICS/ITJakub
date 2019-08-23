@@ -2,13 +2,11 @@
   "culture": "en",
   "scope": "global",
   "dictionary": {
-    "Vokabulář": "Vokabulář",
-    "webový": "webový",
+    "Vokabulář webový": "Vokabulář webový",
     "VokabulářWebový": "Vokabulář webový",
     "and": "and",
 
-    "Komunitní": "Komunitní",
-    "portál": "portál",
+    "Komunitní portál": "Komunitní portál",
     "Menu": "Menu",
 
     "FeedbackFormPlaceholder": "Type your feedback here...",
@@ -29,10 +27,12 @@
     "Edit": "Edit",
     "Cancel": "Cancel",
     "Error": "Error",
+    "Back": "Back",
     "DefaultTitle": "Default title",
 
     "SortBy": "Sort by",
     "UserAccount": "User account",
+    "UserProfile": "User profile",
     "Language": "Language",
     "LogOut": "Log out",
     "SignIn": "Sign in",

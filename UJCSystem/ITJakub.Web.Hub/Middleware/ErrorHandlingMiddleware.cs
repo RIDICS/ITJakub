@@ -1,7 +1,13 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
+using System.Web;
+using ITJakub.Web.Hub.DataContracts;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Vokabular.MainService.DataContracts;
 using Vokabular.RestClient.Errors;
 
 namespace ITJakub.Web.Hub.Middleware
@@ -14,6 +20,9 @@ namespace ITJakub.Web.Hub.Middleware
         {
             m_next = next;
         }
+
+        private const string RequestedWithHeader = "X-Requested-With";
+        private const string XmlHttpRequest = "XMLHttpRequest";
 
         public async Task Invoke(HttpContext context)
         {
@@ -28,7 +37,6 @@ namespace ITJakub.Web.Hub.Middleware
                 {
                     case HttpStatusCode.Unauthorized:
                         statusCode = StatusCodes.Status401Unauthorized;
-                        
                         break;
                     case HttpStatusCode.Forbidden:
                         statusCode = StatusCodes.Status403Forbidden;
@@ -40,11 +48,31 @@ namespace ITJakub.Web.Hub.Middleware
 
                 await ReExecute(context, statusCode);
             }
+            catch (MainServiceException exception)
+            {
+                if (IsAjaxRequest(context.Request))
+                {
+                    context.Response.StatusCode = (int) exception.StatusCode;
+                    var result = new ErrorContract
+                    {
+                        ErrorMessage = exception.Description
+                    };
+
+                    await context.Response.WriteAsync(JsonConvert.SerializeObject(result,
+                        new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver()}));
+                }
+                else
+                {
+                    await ReExecute(context, (int) exception.StatusCode, exception.Description);
+                }
+            }
         }
 
-        private async Task ReExecute(HttpContext context, int statusCode)
+        private async Task ReExecute(HttpContext context, int statusCode, string errorMessage = null)
         {
             var pathString = new PathString($"/Error/{statusCode}");
+            var queryString = errorMessage == null ? QueryString.Empty : new QueryString($"?message={HttpUtility.UrlEncode(errorMessage)}");
+
             var originalPath = context.Request.Path;
             var originalQueryString = context.Request.QueryString;
 
@@ -55,7 +83,7 @@ namespace ITJakub.Web.Hub.Middleware
                 OriginalQueryString = originalQueryString.HasValue ? originalQueryString.Value : null
             });
             context.Request.Path = pathString;
-            context.Request.QueryString = QueryString.Empty;
+            context.Request.QueryString = queryString;
 
 
             try
@@ -68,6 +96,21 @@ namespace ITJakub.Web.Hub.Middleware
                 context.Request.Path = originalPath;
                 context.Features.Set<IStatusCodeReExecuteFeature>(null);
             }
+        }
+
+        private static bool IsAjaxRequest(HttpRequest request)
+        {
+            if (request == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            if (request.Headers != null)
+            {
+                return request.Headers[RequestedWithHeader] == XmlHttpRequest;
+            }
+
+            return false;
         }
     }
 }

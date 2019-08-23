@@ -5,6 +5,7 @@ using ITJakub.Web.Hub.AutoMapperProfiles;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Core.Markdown;
+using ITJakub.Web.Hub.Helpers;
 using Microsoft.Extensions.DependencyInjection;
 using Vokabular.MainService.DataContracts;
 using Vokabular.Shared.Container;
@@ -20,6 +21,7 @@ namespace ITJakub.Web.Hub
             services.AddScoped<StaticTextManager>();
             services.AddScoped<FeedbacksManager>();
             services.AddScoped<RefreshUserManager>();
+            services.AddScoped<PermissionLocalizer>();
 
             services.AddScoped<IMarkdownToHtmlConverter, MarkdigMarkdownToHtmlConverter>();
 
@@ -46,8 +48,6 @@ namespace ITJakub.Web.Hub
             services.AddSingleton<Profile, ResponsibleTypeProfile>();
             services.AddSingleton<Profile, SnapshotProfile>();
             services.AddSingleton<Profile, UserProfile>();
-
-            new MainServiceClientContainerRegistration().Install(services);
         }
     }
 }

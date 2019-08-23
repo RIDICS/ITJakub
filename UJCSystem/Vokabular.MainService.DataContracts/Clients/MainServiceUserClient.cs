@@ -271,5 +271,20 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+
+        public void ResetUserPassword(int userId)
+        {
+            try
+            {
+                m_client.Post<object>($"user/{userId}/reset-password", null);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
     }
 }

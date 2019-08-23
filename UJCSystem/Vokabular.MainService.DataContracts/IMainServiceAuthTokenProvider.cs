@@ -2,6 +2,6 @@
 { 
     public interface IMainServiceAuthTokenProvider
     {
-        string AuthToken { get; set; }
+        string AuthToken { get; }
     }
 }

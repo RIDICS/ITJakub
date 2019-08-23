@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using Vokabular.RestClient.Results;
 
@@ -42,29 +43,29 @@ namespace Vokabular.RestClient
             HeadAsync(uriPath).GetAwaiter().GetResult();
         }
 
-        public T Post<T>(string uriPath, object data)
+        public T Post<T>(string uriPath, object data, TimeSpan? timeout = null)
         {
-            return PostAsync<T>(uriPath, data).GetAwaiter().GetResult();
+            return PostAsync<T>(uriPath, data, timeout).GetAwaiter().GetResult();
         }
 
-        public T PostStreamAsForm<T>(string uriPath, Stream data, string fileName, IEnumerable<Tuple<string, string>> headers = null)
+        public T PostStreamAsForm<T>(string uriPath, Stream data, string fileName, IEnumerable<Tuple<string, string>> headers = null, TimeSpan? timeout = null)
         {
-            return PostStreamAsFormAsync<T>(uriPath, data, fileName, headers).GetAwaiter().GetResult();
+            return PostStreamAsFormAsync<T>(uriPath, data, fileName, headers, timeout).GetAwaiter().GetResult();
         }
 
-        public T PostStream<T>(string uriPath, Stream data, IEnumerable<Tuple<string, string>> headers = null)
+        public T PostStream<T>(string uriPath, Stream data, IEnumerable<Tuple<string, string>> headers = null, TimeSpan? timeout = null)
         {
-            return PostStreamAsync<T>(uriPath, data, headers).GetAwaiter().GetResult();
+            return PostStreamAsync<T>(uriPath, data, headers, timeout).GetAwaiter().GetResult();
         }
 
-        public string PostReturnString(string uriPath, object data)
+        public string PostReturnString(string uriPath, object data, TimeSpan? timeout = null)
         {
-            return PostReturnStringAsync(uriPath, data).GetAwaiter().GetResult();
+            return PostReturnStringAsync(uriPath, data, timeout).GetAwaiter().GetResult();
         }
 
-        public T Put<T>(string uriPath, object data)
+        public T Put<T>(string uriPath, object data, TimeSpan? timeout = null)
         {
-            return PutAsync<T>(uriPath, data).GetAwaiter().GetResult();
+            return PutAsync<T>(uriPath, data, timeout).GetAwaiter().GetResult();
         }
 
         public void Delete(string uriPath, object data = null)
@@ -78,6 +79,11 @@ namespace Vokabular.RestClient
         }
 
         protected override void ProcessResponse(HttpResponseMessage response)
+        {
+
+        }
+
+        protected override void TryParseAndThrowResponseError(HttpStatusCode statusCode, string responseText)
         {
 
         }

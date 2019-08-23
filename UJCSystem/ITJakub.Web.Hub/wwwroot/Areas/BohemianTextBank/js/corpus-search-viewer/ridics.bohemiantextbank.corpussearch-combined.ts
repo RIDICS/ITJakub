@@ -12,9 +12,9 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
     private paginationContainerEl = $("#paginationContainer");
 
     //string for localisation
-    private attentionString = "Upozornění";
-    private lastResultPageString = "Poslední stránka výsledků";
-    private allResults = "Všechny výsledky";
+    private attentionString = localization.translate("Warning", "BohemianTextBank").value;
+    private lastResultPageString = localization.translate("LastPageOfResults", "BohemianTextBank").value;
+    private allResults = localization.translate("AllResults", "BohemianTextBank").value;
 
     private loadAllResultsButtonContent = $(`<div>${this.allResults}</div>`);
 
@@ -466,7 +466,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
         const pageNumberString = (pageNumber) ? pageNumber.toString() : "";
         bootbox.alert({
             title: this.attentionString,
-            message: `Stránka ${pageNumberString} neexistuje`,
+            message: localization.translateFormat("PageWithNumberDoesNotExists", [pageNumberString], "BohemianTextBank").value,
             buttons: {
                 ok: {
                     className: "btn-default"
@@ -677,7 +677,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
                         const tableEl = $(".text-results-table");
                         this.hideLoading(tableEl);
                         const alert = new AlertComponentBuilder(AlertType.Info);
-                        alert.addContent("No results");
+                        alert.addContent(localization.translate("NoResults", "BohemianTextBank").value);
                         this.emptyResultsTable();
                         $(".text-results-table-body").append(alert.buildElement());
                     }
@@ -743,7 +743,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
                         const tableEl = $(".text-results-table");
                         this.showLoading(tableEl);
                         const alert = new AlertComponentBuilder(AlertType.Info);
-                        alert.addContent("No results");
+                        alert.addContent(localization.translate("NoResults", "BohemianTextBank").value);
                         this.emptyResultsTable();
                         $(".text-results-table-body").append(alert.buildElement());
                     }

@@ -11,6 +11,8 @@ using ITJakub.Web.Hub.Models.Requests.Permission;
 using ITJakub.Web.Hub.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.DataContracts;
+using Ridics.Core.Structures.Shared;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Errors;
@@ -67,7 +69,9 @@ namespace ITJakub.Web.Hub.Controllers
                 SearchQuery = search
             };
 
-            ViewData.Add(PermissionConstants.IsRoleEditAllowed, true);
+            ViewData.Add(RoleViewConstants.IsRoleEditAllowed, true);
+            ViewData.Add(RoleViewConstants.UnregisteredRoleName, RoleNames.Unregistered);
+            ViewData.Add(RoleViewConstants.RegisteredRoleName, RoleNames.RegisteredUser);
 
             switch (viewType)
             {
@@ -162,11 +166,8 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult EditUser(int userId, bool successUpdate = false)
         {
-            if (successUpdate)
-            {
-                ViewData.Add(AccountConstants.SuccessUserUpdate, true);
-            }
-
+            ViewData.Add(AccountConstants.SuccessUserUpdate, successUpdate);
+            
             var client = GetUserClient();
             var result = client.GetUserDetail(userId);
             var model = Mapper.Map<UpdateUserViewModel>(result);
@@ -195,31 +196,51 @@ namespace ITJakub.Web.Hub.Controllers
                 {
                     AddErrors(e);
                 }
+                catch (MainServiceException e)
+                {
+                    AddErrors(e);
+                }
             }
 
             return View(userViewModel);
         }
 
         [HttpPost]
+        public IActionResult ResetUserPassword([FromBody] ResetUserPasswordRequest request)
+        {
+            var client = GetUserClient();
+            client.ResetUserPassword(request.UserId);
+            return AjaxOkResponse();
+        }
+
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult EditRole(RoleViewModel roleViewModel)
         {
-            try
+            roleViewModel.SuccessfulUpdate = false;
+            if (ModelState.IsValid)
             {
-                var roleContract = new RoleContract
+                try
                 {
-                    Id = roleViewModel.Id,
-                    Name = roleViewModel.Name,
-                    Description = roleViewModel.Description
-                };
-                var client = GetRoleClient();
-                client.UpdateRole(roleContract.Id, roleContract);
-                roleViewModel.SuccessfulUpdate = true;
-            }
-            catch (HttpErrorCodeException e)
-            {
-                roleViewModel.SuccessfulUpdate = false;
-                AddErrors(e);
+                    var roleContract = new RoleContract
+                    {
+                        Id = roleViewModel.Id,
+                        Name = roleViewModel.Name,
+                        Description = roleViewModel.Description
+                    };
+                    var client = GetRoleClient();
+                    client.UpdateRole(roleContract.Id, roleContract);
+                    roleViewModel.SuccessfulUpdate = true;
+                }
+                catch (HttpErrorCodeException e)
+                {
+                    AddErrors(e);
+                }
+                catch (MainServiceException e)
+                {
+                    AddErrors(e);
+                }
             }
 
             return PartialView("_EditRole", roleViewModel);
@@ -278,18 +299,35 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateRole([FromBody] CreateRoleRequest request)
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateRole(RoleViewModel roleViewModel)
         {
-            var client = GetRoleClient();
-
-            var newRoleContract = new RoleContract
+            roleViewModel.SuccessfulUpdate = false;
+            if (ModelState.IsValid)
             {
-                Name = request.RoleName,
-                Description = request.RoleDescription,
-            };
-            var roleId = client.CreateRole(newRoleContract);
-            var role = client.GetRoleDetail(roleId);
-            return Json(role);
+                try
+                {
+                    var roleContract = new RoleContract
+                    {
+                        Id = roleViewModel.Id,
+                        Name = roleViewModel.Name,
+                        Description = roleViewModel.Description
+                    };
+                    var client = GetRoleClient();
+                    client.UpdateRole(roleContract.Id, roleContract);
+                    roleViewModel.SuccessfulUpdate = true;
+                }
+                catch (HttpErrorCodeException e)
+                {
+                    AddErrors(e);
+                }
+                catch (MainServiceException e)
+                {
+                    AddErrors(e);
+                }
+            }
+
+            return PartialView("_CreateRole", roleViewModel);
         }
 
         [HttpPost]

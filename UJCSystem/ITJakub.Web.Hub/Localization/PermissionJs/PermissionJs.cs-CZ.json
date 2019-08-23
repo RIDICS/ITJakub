@@ -33,9 +33,17 @@
     "RemoveProjectFromRoleError": "Nastala neočekávaná chyba při odstraňování práva na projekt ze skupiny.",
     "AddProjectToRoleError": "Nastala neočekávaná chyba při přidávání práva na projekt skupině.",
 
+    "PasswordResetSuccess": "Odkaz pro resetování hesla byl odeslán na email uživatele.",
+
     "Cancel": "Zrušit",
     "Delete": "Smazat",
     "Warning": "Upozornění",
-    "DeleteRoleConfirm": "Opravdu chcete smazat skupinu {0}?"
+    "DeleteRoleConfirm": "Opravdu chcete smazat skupinu {0}?",
+    "AssignPermission": "Přiřadit právo",
+    "UnassignPermission": "Odebrat právo",
+    "RegisteredRoleModifyWarning": "Skupina {0} se přiřadí automaticky každému registrovanému uživateli. Jste si jisti, že ji chcete upravit?",
+    "UnregisteredRoleModifyWarning": "Skupinu {0} má každý nepřihlášený uživatel. Jste si jisti, že ji chcete upravit?",
+    "RemoveUserFromRegisteredRole": "Skupina {0} je základní skupina pro všechny registrované uživatele. Opravdu chcete odstranit uživatele z této skupiny?",
+    "Remove": "Odstranit"
   }
 }
