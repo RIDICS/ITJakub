@@ -13,7 +13,10 @@
 		"MissingName" : "Nebyl vyplněn název",
 		"CreateLiteraryKind" : "Chyba při vytváření nového literárního druhu",
 		"CreateLiteraryGenre" : "Chyba při vytváření nového literárního žánru",
-		
-		"CreateResourcesError" : "Chyba při načítání zdrojů k publikaci"
+
+    "CreateResourcesError": "Chyba při načítání zdrojů k publikaci",
+
+    "Pages": "Stránky",
+    "PageContent": "Obsah stránky" 
 		}
 }
