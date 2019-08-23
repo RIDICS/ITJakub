@@ -1,5 +1,5 @@
 ﻿class RepositoryImportApiClient extends WebHubApiClient {
-
+    
     public getExternalRepositoryDetail(repositoryId: number): JQuery.jqXHR<string> {
         return this.get(URI(this.getExternalRepositoryControllerUrl() + "Detail").search(query => {
             query.id = repositoryId;
@@ -25,8 +25,30 @@
             }).toString());
     }
 
+    public getImportStatus(): JQuery.jqXHR {
+        return this.get(this.getRepositoryImportControllerUrl() + "GetImportStatus");
+    }
+
+    public cancelImportTask(repositoryId: number) {
+        return this.get(URI(this.getRepositoryImportControllerUrl() + "CancelImport").search(query => {
+            query.id = repositoryId;
+        }).toString());
+    }
+
+    public getFilteringExpressionRow(): JQuery.jqXHR<string> {
+        return this.get(this.getFilteringExpressionSetControllerUrl() + "AddFilteringExpressionRow");
+    }
+
     private getExternalRepositoryControllerUrl(): string {
         return this.getRepositoryImportAreaUrl() + "ExternalRepository/";
+    }
+
+    private getRepositoryImportControllerUrl(): string {
+        return this.getRepositoryImportAreaUrl() + "RepositoryImport/";
+    }
+
+    private getFilteringExpressionSetControllerUrl(): string {
+        return this.getRepositoryImportAreaUrl() + "FilteringExpressionSet/";
     }
 
     private getRepositoryImportAreaUrl(): string {
