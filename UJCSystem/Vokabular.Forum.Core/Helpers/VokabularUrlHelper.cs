@@ -2,12 +2,9 @@
 {
     public class VokabularUrlHelper
     {
-        public string GetBookUrl(long bookId, short bookTypeId, string hostUrl)
+        public string GetBookUrl(long bookId, string hostUrl)
         {
-            UrlBookTypeEnum urlBookType = (UrlBookTypeEnum) bookTypeId == UrlBookTypeEnum.BohemianTextBank
-                ? UrlBookTypeEnum.Editions
-                : (UrlBookTypeEnum) bookTypeId;
-            return hostUrl + "/" + urlBookType + "/" + urlBookType + "/listing?bookId=" + bookId; 
+            return $"{hostUrl}BookReader/BookReader/Listing?bookId={bookId}";
         }
     }
 }

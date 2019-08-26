@@ -17,14 +17,16 @@ namespace Vokabular.MainService.Controllers
         private readonly ProjectMetadataManager m_projectMetadataManager;
         private readonly ProjectInfoManager m_projectInfoManager;
         private readonly ForumSiteManager m_forumSiteManager;
+        private readonly SnapshotManager m_snapshotManager;
 
         public ProjectController(ProjectManager projectManager, ProjectMetadataManager projectMetadataManager,
-            ProjectInfoManager projectInfoManager, ForumSiteManager forumSiteManager)
+            ProjectInfoManager projectInfoManager, ForumSiteManager forumSiteManager, SnapshotManager snapshotManager)
         {
             m_projectManager = projectManager;
             m_projectMetadataManager = projectMetadataManager;
             m_projectInfoManager = projectInfoManager;
             m_forumSiteManager = forumSiteManager;
+            m_snapshotManager = snapshotManager;
         }
         
         [HttpGet]
@@ -213,6 +215,14 @@ namespace Vokabular.MainService.Controllers
             var forumId = m_forumSiteManager.CreateForums(projectId);
 
             return forumId != null ? (ActionResult<int>) Ok(forumId.Value) : BadRequest("Forum is disabled");
+        }
+
+        [HttpGet("{projectId}/snapshot/latest")]
+        public ActionResult<SnapshotContract> GetLatestPublishedSnapshot(long projectId)
+        {
+            var snapshot = m_snapshotManager.GetLatestPublishedSnapshot(projectId);
+
+            return Ok(snapshot);
         }
     }
 }

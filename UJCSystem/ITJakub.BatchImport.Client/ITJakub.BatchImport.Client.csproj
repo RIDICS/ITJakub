@@ -352,18 +352,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ITJakub.FileProcessing.DataContracts\ITJakub.FileProcessing.DataContracts.csproj">
-      <Project>{56512cdc-6912-49b3-8ac4-ce96a0340165}</Project>
-      <Name>ITJakub.FileProcessing.DataContracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ITJakub.ITJakubService.DataContracts\ITJakub.ITJakubService.DataContracts.csproj">
-      <Project>{8ddd85a2-4124-4470-9da5-e18bcfe3d573}</Project>
-      <Name>ITJakub.ITJakubService.DataContracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
-      <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
-      <Name>ITJakub.Shared.Contracts</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Vokabular.Log4Net\Vokabular.Log4Net.csproj">
       <Project>{105904c3-ab87-4bdd-ada3-c16ca61d7147}</Project>
       <Name>Vokabular.Log4Net</Name>

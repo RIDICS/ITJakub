@@ -39,9 +39,10 @@ namespace Vokabular.MainService.Core
             services.AddScoped<ProjectManager>();
             services.AddScoped<ProjectMetadataManager>();
             services.AddScoped<ProjectResourceManager>();
+            services.AddScoped<RoleManager>();
+            services.AddScoped<SnapshotManager>();
             services.AddScoped<TermManager>();
             services.AddScoped<UserDetailManager>();
-            services.AddScoped<RoleManager>();
             services.AddScoped<UserManager>();
 
             services.AddScoped<CommunicationConfigurationProvider>();
@@ -57,6 +58,7 @@ namespace Vokabular.MainService.Core
 
             services.AddSingleton<Profile, AudioProfile>();
             services.AddSingleton<Profile, BookProfile>();
+            services.AddSingleton<Profile, BookTypeProfile>();
             services.AddSingleton<Profile, BibliographicFormatProfile>();
             services.AddSingleton<Profile, CategoryProfile>();
             services.AddSingleton<Profile, ChapterProfile>();
@@ -83,6 +85,7 @@ namespace Vokabular.MainService.Core
             services.AddSingleton<Profile, ProjectProfile>();
             services.AddSingleton<Profile, ResourceProfile>();
             services.AddSingleton<Profile, ResponsiblePersonProfile>();
+            services.AddSingleton<Profile, SnapshotProfile>();
             services.AddSingleton<Profile, TermProfile>();
             services.AddSingleton<Profile, TextCommentProfile>();
             services.AddSingleton<Profile, TextProfile>();

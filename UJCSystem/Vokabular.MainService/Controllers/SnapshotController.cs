@@ -16,9 +16,9 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("project/{projectId}/snapshot")]
-        public List<SnapshotContract> GetSnapshotList(long projectId)
+        public List<SnapshotAggregatedInfoContract> GetSnapshotList(long projectId)
         {
-            return new List<SnapshotContract>
+            return new List<SnapshotAggregatedInfoContract>
             {
                 MockDataSnapshot.GetSnapshot(1),
                 MockDataSnapshot.GetSnapshot(2),
@@ -29,9 +29,9 @@ namespace Vokabular.MainService.Controllers
 
     public class MockDataSnapshot
     {
-        public static SnapshotContract GetSnapshot(long id)
+        public static SnapshotAggregatedInfoContract GetSnapshot(long id)
         {
-            return new SnapshotContract
+            return new SnapshotAggregatedInfoContract
             {
                 Id = 5,
                 PublishDate = DateTime.Now,
