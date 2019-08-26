@@ -28,6 +28,7 @@ namespace Vokabular.DataEntities
             services.AddScoped<PortalRepository>();
             services.AddScoped<ProjectRepository>();
             services.AddScoped<ResourceRepository>();
+            services.AddScoped<SnapshotRepository>();
             services.AddScoped<UserRepository>();
 
             services.AddScoped<ICriteriaImplementationBase, AuthorCriteriaImplementation>();

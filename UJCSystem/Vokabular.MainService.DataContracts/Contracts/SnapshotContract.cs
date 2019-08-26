@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.DataContracts.Contracts
 {
     public class SnapshotContract
     {
         public long Id { get; set; }
-        public DateTime PublishDate { get; set; }
-        public List<SnapshotResourcesInfoContract> ResourcesInfo { get; set; }
-        public string Author { get; set; }
-    }
+        public int VersionNumber { get; set; }
+        public DateTime CreateTime { get; set; }
+        public DateTime PublishTime { get; set; }
+        public string Comment { get; set; }
 
-    public class SnapshotResourcesInfoContract
-    {
-        public ResourceTypeEnumContract ResourceType { get; set; }
-        public int TotalCount { get; set; }
-        public int PublishedCount { get; set; }
+        public long ProjectId { get; set; }
+        public int CreatedByUserId { get; set; }
+        public BookTypeEnumContract DefaultBookType { get; set; }
+        //public BookVersionResource BookVersion { get; set; }
+
+        public IList<BookTypeEnumContract> BookTypes { get; set; }
     }
 }

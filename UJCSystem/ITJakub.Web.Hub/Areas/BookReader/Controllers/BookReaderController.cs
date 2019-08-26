@@ -11,8 +11,21 @@ namespace ITJakub.Web.Hub.Areas.BookReader.Controllers
         {
         }
 
-        public ActionResult Listing(long bookId, string searchText, string pageId)
+        public ActionResult Listing(long? bookId, string searchText, string pageId)
         {
+            if (bookId == null)
+            {
+                return BadRequest();
+            }
+
+            var client = GetProjectClient();
+            var snapshotInfo = client.GetLatestPublishedSnapshot(bookId.Value);
+
+            if (snapshotInfo == null)
+            {
+                return NotFound();
+            }
+            
             return RedirectToAction("Listing", "Editions",new
             {
                 Area = "Editions",

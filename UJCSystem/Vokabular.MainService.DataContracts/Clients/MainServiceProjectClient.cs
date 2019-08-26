@@ -290,11 +290,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<SnapshotContract> GetSnapshotList(long projectId)
+        public List<SnapshotAggregatedInfoContract> GetSnapshotList(long projectId)
         {
             try
             {
-                var result = m_client.Get<List<SnapshotContract>>($"project/{projectId}/snapshot");
+                var result = m_client.Get<List<SnapshotAggregatedInfoContract>>($"project/{projectId}/snapshot");
                 return result;
             }
             catch (HttpRequestException e)
@@ -521,5 +521,21 @@ namespace Vokabular.MainService.DataContracts.Clients
         }
 
         #endregion
+
+        public SnapshotContract GetLatestPublishedSnapshot(long projectId)
+        {
+            try
+            {
+                var result = m_client.Get<SnapshotContract>($"project/{projectId}/snapshot/latest");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
     }
 }
