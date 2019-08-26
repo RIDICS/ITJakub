@@ -3,7 +3,7 @@ using ITJakub.SearchService.DataContracts.Contracts.SearchResults;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Vokabular.Shared.DataContracts.Search.Old;
 
-namespace ITJakub.Shared.Contracts.Test
+namespace ITJakub.SearchService.DataContracts.Test
 {
     [TestClass]
     public class SerializationTest

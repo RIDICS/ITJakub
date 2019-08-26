@@ -21,6 +21,8 @@ $ProjectsToDeploy += "Vokabular.MainService"
 $ProjectsToDeploy += "ITJakub.Web.Hub-CommunityPortal\ITJakub.Web.Hub"
 $ProjectsToDeploy += "ITJakub.Web.Hub-ResearchPortal\ITJakub.Web.Hub"
 
+# Find all projects for deployment
+
 Write-Host "Projects to deploy:"
 Write-Host
 
@@ -67,6 +69,8 @@ else {
   exit 1
 }
 
+# DB migrator
+
 Write-Host
 Write-Host
 
@@ -85,6 +89,8 @@ if ($LASTEXITCODE -ne 0)
   Write-Error "Mirgrations ${MigrationToRun} failed"
   exit 1
 }
+
+# App and services deployment
 
 Write-Host
 Write-Host "Starting deployment"
@@ -114,6 +120,59 @@ foreach ($DeploymentScript in $DeploymentScripts)
     Write-Host
   }
 }
+
+# Create log folders
+
+Write-Host
+Write-Host "Checking if logs folders must be created"
+Write-Host
+
+$DefaultWebSitePath = Get-WebFilePath 'IIS:\Sites\Default Web Site'
+$LocalhostServicesPath = Get-WebFilePath 'IIS:\Sites\LocalhostServices'
+
+$ServiceFolders = @(
+    $DefaultWebSitePath
+    Join-Path $DefaultWebSitePath "Community"
+    Join-Path $DefaultWebSitePath "MainService"
+    Join-Path $LocalhostServicesPath "ITJakub.FileProcessing.Service"
+    Join-Path $LocalhostServicesPath "ITJakub.Lemmatization.Service"
+    Join-Path $LocalhostServicesPath "ITJakub.SearchService"
+    Join-Path $LocalhostServicesPath "Vokabular.FulltextService"
+)
+ 
+function SetFullAccessToFolder {
+    Param ([String]$FolderPath)
+
+    $Acl = Get-Acl $FolderPath 
+
+    $AccessRule = New-Object System.Security.AccessControl.FileSystemAccessRule("IIS_IUSRS", "FullControl", "ContainerInherit,ObjectInherit", "None", "Allow")
+
+    $Acl.SetAccessRule($AccessRule)
+    Set-Acl $FolderPath $Acl
+}
+
+foreach ($ServiceFolder in $ServiceFolders)
+{
+  $ServiceLogsPath = Join-Path $ServiceFolder "logs"
+  
+  Write-Host $ServiceLogsPath
+  
+  if (-Not (Test-Path $ServiceLogsPath))
+  {
+    New-Item -Path $ServiceLogsPath -ItemType "directory" > $null
+    SetFullAccessToFolder($ServiceLogsPath)
+
+    Write-Host " - Folder created and IIS_IUSRS gained permissions to this folder"
+  }
+  else
+  {
+    Write-Host " - Already created"
+  }
+}
+
+Write-Host
+Write-Host "Logs folders checked or created"
+Write-Host
 
 Write-Host
 Write-Host
