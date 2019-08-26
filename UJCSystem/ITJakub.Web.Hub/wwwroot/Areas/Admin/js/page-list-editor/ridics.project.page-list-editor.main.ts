@@ -20,12 +20,12 @@
             autoClearInputs: false
         });
 
-        $(".panel-bottom-buttons .move-page-down").click((event) => {
-            this.moveList(true);
+        $(".panel-bottom-buttons .move-page-down").click(() => {
+            this.moveList(true, $(".pages"));
         });
 
-        $(".panel-bottom-buttons .move-page-up").click((event) => {
-            this.moveList(false);
+        $(".panel-bottom-buttons .move-page-up").click(() => {
+            this.moveList(false, $(".pages"));
         });
 
         $(".page-row").click((event) => {
@@ -291,9 +291,9 @@
         }
     }
 
-    private moveList(down: boolean) {
-        const distance = Number($(".page-move-distance").val());
-        const pages = $(".page-row").toArray();
+    private moveList(down: boolean, context: JQuery) {
+        const distance = Number(context.find(".page-move-distance").val());
+        const pages = context.find(".page-row").toArray();
         const newPages = new Array<HTMLElement>(pages.length);
         
         for (let i = 0; i < pages.length; i++) {
@@ -335,7 +335,7 @@
             }
         }
 
-        const listing = $(".page-listing tbody");
+        const listing = context.find(".page-listing tbody");
         listing.empty();
         for (const page of newPages) {
             listing.append(page);

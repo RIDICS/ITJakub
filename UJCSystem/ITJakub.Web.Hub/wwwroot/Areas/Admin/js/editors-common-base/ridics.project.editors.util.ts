@@ -18,9 +18,10 @@
         return  $.get(`${this.serverPath}Admin/ContentEditor/GetPageDetail?pageId=${pageId}`);
     }
 
-    savePageList(pageList: string[]): JQueryXHR {
+    savePageList(projectId: number, pageList: IPage[]): JQueryXHR {
         const pageAjax = $.post(`${this.serverPath}Admin/ContentEditor/SavePageList`,
             {
+                projectId: projectId,
                 pageList: pageList
             } as JQuery.PlainObject);
         return pageAjax;
