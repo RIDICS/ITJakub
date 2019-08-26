@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "Vokabular.Database.Migrator": {
+      "commandName": "Project",
+		"environmentVariables": {
+			"ASPNETCORE_ENVIRONMENT": "LocalDebug"
+		}
+    }
+  }
+}

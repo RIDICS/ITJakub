@@ -1,9 +1,10 @@
-﻿using System;
+﻿using System.Net;
 using System.Reflection;
 using log4net;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
+using Vokabular.MainService.DataContracts;
 
 namespace Vokabular.MainService.Core.Works.Permission
 {
@@ -31,7 +32,11 @@ namespace Vokabular.MainService.Core.Works.Permission
             var user = m_permissionRepository.GetUserWithGroups(m_userId);
             if (user.ExternalId == null)
             {
-                throw new ArgumentException($"User with ID {user.Id} has missing ExternalID");
+                throw new MainServiceException(MainServiceErrorCode.UserHasMissingExternalId,
+                    $"User with ID {user.Id} has missing ExternalID",
+                    HttpStatusCode.BadRequest,
+                    new object[] {user.Id}
+                );
             }
 
             if (user.Groups == null)

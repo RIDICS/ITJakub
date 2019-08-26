@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Scripts\WebHub\SQLServer\CreateEmptyDatabase.sql" />
+    <None Remove="Scripts\VokabularDB\CreateEmptyDatabase.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Scripts\WebHub\SQLServer\CreateEmptyDatabase.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\VokabularDB\SQLServer\CreateEmptyDatabase.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentMigrator" Version="3.2.1" />
+    <PackageReference Include="FluentMigrator.Extensions.SqlServer" Version="3.2.1" />
+    <PackageReference Include="Ridics.DatabaseMigrator.QueryBuilder" Version="1.0.0" />
+  </ItemGroup>
+
+</Project>

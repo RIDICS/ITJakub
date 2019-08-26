@@ -2,6 +2,7 @@
 using System.Net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataEntities.UnitOfWork;
@@ -32,7 +33,7 @@ namespace Vokabular.MainService.Core.Works.Text
                 parentTextComment = m_resourceRepository.FindById<TextComment>(m_newComment.ParentCommentId);
                 if (parentTextComment.ParentComment != null)
                 {
-                    throw new HttpErrorCodeException("Only comments to second level are allowed", HttpStatusCode.BadRequest);
+                    throw new MainServiceException(MainServiceErrorCode.CommentsToSecondLevel, "Only comments to second level are allowed");
                 }
                 m_newComment.TextReferenceId = parentTextComment.TextReferenceId; // Subcomments must have the same TextReferenceId as parent
             }

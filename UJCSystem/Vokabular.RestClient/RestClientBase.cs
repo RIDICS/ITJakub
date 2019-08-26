@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Vokabular.RestClient.Contracts;
@@ -17,26 +18,28 @@ namespace Vokabular.RestClient
 {
     public abstract class RestClientBase : IDisposable
     {
+        private readonly TimeSpan m_defaultTimeout;
         private const int StreamBufferSize = 64 * 1024;
-        private readonly HttpClient m_client;
-        private readonly HttpClientHandler m_httpClientHandler;
 
-        public RestClientBase(Uri baseAddress, bool createCustomHandler = false)
+        protected RestClientBase(ServiceCommunicationConfiguration communicationConfiguration)
         {
-            if (createCustomHandler)
+            if (communicationConfiguration.CreateCustomHandler)
             {
-                m_httpClientHandler = new HttpClientHandler();
-                m_client = new HttpClient(m_httpClientHandler);
+                HttpClientHandler = new HttpClientHandler();
+                HttpClient = new HttpClient(HttpClientHandler);
             }
             else
             {
-                m_client = new HttpClient();
+                HttpClient = new HttpClient();
             }
 
-            m_client.BaseAddress = baseAddress;
-            m_client.DefaultRequestHeaders.ExpectContinue = false;
-            m_client.DefaultRequestHeaders.Accept.Clear();
-            m_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            m_defaultTimeout = HttpClient.Timeout;
+
+            HttpClient.BaseAddress = communicationConfiguration.Url;
+            HttpClient.DefaultRequestHeaders.ExpectContinue = false;
+            HttpClient.DefaultRequestHeaders.Accept.Clear();
+            HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            HttpClient.Timeout = Timeout.InfiniteTimeSpan;
             DeserializationType = DeserializationType.Json;
         }
 
@@ -44,16 +47,18 @@ namespace Vokabular.RestClient
 
         protected abstract void ProcessResponse(HttpResponseMessage response);
 
-        public void Dispose()
-        {
-            m_client.Dispose();
-        }
+        protected abstract void TryParseAndThrowResponseError(HttpStatusCode responseStatusCode, string responseContent);
 
-        protected HttpClient HttpClient => m_client;
+        protected HttpClient HttpClient { get; }
 
-        protected HttpClientHandler HttpClientHandler => m_httpClientHandler;
+        protected HttpClientHandler HttpClientHandler { get; }
 
         public DeserializationType DeserializationType { get; set; }
+
+        private CancellationTokenSource CreateCancellationTokenSource(TimeSpan? timeout = null)
+        {
+            return new CancellationTokenSource(timeout ?? m_defaultTimeout);
+        }
 
         private HttpRequestMessage CreateRequestMessage(HttpMethod method, string requestUri, IEnumerable<Tuple<string, string>> headers = null)
         {
@@ -114,20 +119,24 @@ namespace Vokabular.RestClient
         {
             return Task.Run(async () =>
             {
-                try
+                using (var cts = CreateCancellationTokenSource())
                 {
-                    var request = CreateRequestMessage(HttpMethod.Get, uriPath);
-                    var response = await m_client.SendAsync(request);
+                    try
+                    {
+                        var request = CreateRequestMessage(HttpMethod.Get, uriPath);
+                        var response = await HttpClient.SendAsync(request, cts.Token);
 
-                    ProcessResponseInternal(response);
-                    var result = GetResponseBody<T>(response);
+                        ProcessResponseInternal(response);
+                        var result = GetResponseBody<T>(response);
 
-                    return new GetResult<T>(result, response.Headers);
+                        return new GetResult<T>(result, response.Headers);
+                    }
+                    catch (TaskCanceledException e)
+                    {
+                        throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                    }
                 }
-                catch (TaskCanceledException e)
-                {
-                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
-                }
+
             });
         }
 
@@ -135,23 +144,26 @@ namespace Vokabular.RestClient
         {
             return Task.Run(async () =>
             {
-                try
+                using (var cts = CreateCancellationTokenSource())
                 {
-                    var request = CreateRequestMessage(HttpMethod.Get, uriPath);
-                    var response = await m_client.SendAsync(request);
-
-                    ProcessResponseInternal(response);
-                    var result = GetResponseBody<List<T>>(response);
-
-                    return new PagedResultList<T>
+                    try
                     {
-                        TotalCount = response.Headers.GetTotalCountHeader(),
-                        List = result,
-                    };
-                }
-                catch (TaskCanceledException e)
-                {
-                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                        var request = CreateRequestMessage(HttpMethod.Get, uriPath);
+                        var response = await HttpClient.SendAsync(request, cts.Token);
+
+                        ProcessResponseInternal(response);
+                        var result = GetResponseBody<List<T>>(response);
+
+                        return new PagedResultList<T>
+                        {
+                            TotalCount = response.Headers.GetTotalCountHeader(),
+                            List = result,
+                        };
+                    }
+                    catch (TaskCanceledException e)
+                    {
+                        throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                    }
                 }
             });
         }
@@ -160,17 +172,20 @@ namespace Vokabular.RestClient
         {
             return Task.Run(async () =>
             {
-                try
+                using (var cts = CreateCancellationTokenSource())
                 {
-                    var request = CreateRequestMessage(HttpMethod.Get, uriPath);
-                    var response = await m_client.SendAsync(request);
+                    try
+                    {
+                        var request = CreateRequestMessage(HttpMethod.Get, uriPath);
+                        var response = await HttpClient.SendAsync(request, cts.Token);
 
-                    ProcessResponseInternal(response);
-                    return GetResponseBody<T>(response);
-                }
-                catch (TaskCanceledException e)
-                {
-                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                        ProcessResponseInternal(response);
+                        return GetResponseBody<T>(response);
+                    }
+                    catch (TaskCanceledException e)
+                    {
+                        throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                    }
                 }
             });
         }
@@ -179,17 +194,20 @@ namespace Vokabular.RestClient
         {
             return Task.Run(async () =>
             {
-                try
+                using (var cts = CreateCancellationTokenSource())
                 {
-                    var request = CreateRequestMessage(HttpMethod.Get, uriPath);
-                    var response = await m_client.SendAsync(request);
+                    try
+                    {
+                        var request = CreateRequestMessage(HttpMethod.Get, uriPath);
+                        var response = await HttpClient.SendAsync(request, cts.Token);
 
-                    ProcessResponseInternal(response);
-                    return await response.Content.ReadAsStringAsync();
-                }
-                catch (TaskCanceledException e)
-                {
-                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                        ProcessResponseInternal(response);
+                        return await response.Content.ReadAsStringAsync();
+                    }
+                    catch (TaskCanceledException e)
+                    {
+                        throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                    }
                 }
             });
         }
@@ -198,29 +216,32 @@ namespace Vokabular.RestClient
         {
             return Task.Run(async () =>
             {
-                try
+                using (var cts = CreateCancellationTokenSource())
                 {
-                    var request = CreateRequestMessage(HttpMethod.Get, uriPath);
-                    var response = await m_client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-
-                    ProcessResponseInternal(response);
-                    var contentHeaders = response.Content.Headers;
-                    var contentType = contentHeaders.ContentType;
-                    var fileName = contentHeaders.ContentDisposition?.FileName;
-                    var fileSize = contentHeaders.ContentLength;
-                    var resultStream = await response.Content.ReadAsStreamAsync();
-
-                    return new FileResultData
+                    try
                     {
-                        FileName = fileName,
-                        FileSize = fileSize,
-                        MimeType = contentType.MediaType,
-                        Stream = resultStream,
-                    };
-                }
-                catch (TaskCanceledException e)
-                {
-                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                        var request = CreateRequestMessage(HttpMethod.Get, uriPath);
+                        var response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cts.Token);
+
+                        ProcessResponseInternal(response);
+                        var contentHeaders = response.Content.Headers;
+                        var contentType = contentHeaders.ContentType;
+                        var fileName = contentHeaders.ContentDisposition?.FileName;
+                        var fileSize = contentHeaders.ContentLength;
+                        var resultStream = await response.Content.ReadAsStreamAsync();
+
+                        return new FileResultData
+                        {
+                            FileName = fileName,
+                            FileSize = fileSize,
+                            MimeType = contentType.MediaType,
+                            Stream = resultStream,
+                        };
+                    }
+                    catch (TaskCanceledException e)
+                    {
+                        throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                    }
                 }
             });
         }
@@ -229,127 +250,145 @@ namespace Vokabular.RestClient
         {
             return Task.Run(async () =>
             {
-                try
+                using (var cts = CreateCancellationTokenSource())
                 {
-                    var request = CreateRequestMessage(HttpMethod.Head, uriPath);
-                    var response = await m_client.SendAsync(request);
+                    try
+                    {
+                        var request = CreateRequestMessage(HttpMethod.Head, uriPath);
+                        var response = await HttpClient.SendAsync(request, cts.Token);
 
-                    ProcessResponseInternal(response);
-                }
-                catch (TaskCanceledException e)
-                {
-                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
-                }
-            });
-        }
-
-        protected Task<T> PostAsync<T>(string uriPath, object data)
-        {
-            return Task.Run(async () =>
-            {
-                try
-                {
-                    var request = CreateRequestMessage(HttpMethod.Post, uriPath);
-                    var response = await m_client.SendAsJsonAsync(request, data);
-
-                    ProcessResponseInternal(response);
-
-                    return GetResponseBody<T>(response);
-                }
-                catch (TaskCanceledException e)
-                {
-                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                        ProcessResponseInternal(response);
+                    }
+                    catch (TaskCanceledException e)
+                    {
+                        throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                    }
                 }
             });
         }
 
-        protected Task<T> PostStreamAsFormAsync<T>(string uriPath, Stream data, string fileName, IEnumerable<Tuple<string, string>> headers = null)
+        protected Task<T> PostAsync<T>(string uriPath, object data, TimeSpan? timeout = null)
         {
             return Task.Run(async () =>
             {
-                try
+                using (var cts = CreateCancellationTokenSource(timeout))
                 {
-                    var fileStreamContent = new StreamContent(data, StreamBufferSize);
-                    fileStreamContent.Headers.ContentType = new MediaTypeHeaderValue(ContentTypes.ApplicationOctetStream);
+                    try
+                    {
+                        var request = CreateRequestMessage(HttpMethod.Post, uriPath);
+                        var response = await HttpClient.SendAsJsonAsync(request, data, cts.Token);
 
-                    var content = new MultipartFormDataContent();
-                    content.Add(fileStreamContent, "File", fileName);
+                        ProcessResponseInternal(response);
 
-                    var request = CreateRequestMessage(HttpMethod.Post, uriPath, headers);
-                    request.Content = content;
-                    request.Headers.TransferEncodingChunked = true;
-
-                    var response = await m_client.SendAsync(request);
-
-                    ProcessResponseInternal(response);
-                    return GetResponseBody<T>(response);
-                }
-                catch (TaskCanceledException e)
-                {
-                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                        return GetResponseBody<T>(response);
+                    }
+                    catch (TaskCanceledException e)
+                    {
+                        throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                    }
                 }
             });
         }
 
-        protected Task<T> PostStreamAsync<T>(string uriPath, Stream data, IEnumerable<Tuple<string, string>> headers = null)
+        protected Task<T> PostStreamAsFormAsync<T>(string uriPath, Stream data, string fileName, IEnumerable<Tuple<string, string>> headers = null, TimeSpan? timeout = null)
         {
             return Task.Run(async () =>
             {
-                try
+                using (var cts = CreateCancellationTokenSource(timeout))
                 {
-                    var content = new StreamContent(data, StreamBufferSize);
-                    content.Headers.ContentType = new MediaTypeHeaderValue(ContentTypes.ApplicationOctetStream);
+                    try
+                    {
+                        var fileStreamContent = new StreamContent(data, StreamBufferSize);
+                        fileStreamContent.Headers.ContentType = new MediaTypeHeaderValue(ContentTypes.ApplicationOctetStream);
 
-                    var request = CreateRequestMessage(HttpMethod.Post, uriPath, headers);
-                    request.Content = content;
-                    request.Headers.TransferEncodingChunked = true;
+                        var content = new MultipartFormDataContent();
+                        content.Add(fileStreamContent, "File", fileName);
 
-                    var response = await m_client.SendAsync(request);
+                        var request = CreateRequestMessage(HttpMethod.Post, uriPath, headers);
+                        request.Content = content;
+                        request.Headers.TransferEncodingChunked = true;
 
-                    ProcessResponseInternal(response);
-                    return GetResponseBody<T>(response);
-                }
-                catch (TaskCanceledException e)
-                {
-                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                        var response = await HttpClient.SendAsync(request, cts.Token);
+
+                        ProcessResponseInternal(response);
+                        return GetResponseBody<T>(response);
+                    }
+                    catch (TaskCanceledException e)
+                    {
+                        throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                    }
                 }
             });
         }
 
-        protected Task<string> PostReturnStringAsync(string uriPath, object data)
+        protected Task<T> PostStreamAsync<T>(string uriPath, Stream data, IEnumerable<Tuple<string, string>> headers = null, TimeSpan? timeout = null)
         {
             return Task.Run(async () =>
             {
-                try
+                using (var cts = CreateCancellationTokenSource(timeout))
                 {
-                    var request = CreateRequestMessage(HttpMethod.Post, uriPath);
-                    var response = await m_client.SendAsJsonAsync(request, data);
+                    try
+                    {
+                        var content = new StreamContent(data, StreamBufferSize);
+                        content.Headers.ContentType = new MediaTypeHeaderValue(ContentTypes.ApplicationOctetStream);
 
-                    ProcessResponseInternal(response);
-                    return await response.Content.ReadAsStringAsync();
-                }
-                catch (TaskCanceledException e)
-                {
-                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                        var request = CreateRequestMessage(HttpMethod.Post, uriPath, headers);
+                        request.Content = content;
+                        request.Headers.TransferEncodingChunked = true;
+
+                        var response = await HttpClient.SendAsync(request, cts.Token);
+
+                        ProcessResponseInternal(response);
+                        return GetResponseBody<T>(response);
+                    }
+                    catch (TaskCanceledException e)
+                    {
+                        throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                    }
                 }
             });
         }
 
-        protected Task<T> PutAsync<T>(string uriPath, object data)
+        protected Task<string> PostReturnStringAsync(string uriPath, object data, TimeSpan? timeout = null)
         {
             return Task.Run(async () =>
             {
-                try
+                using (var cts = CreateCancellationTokenSource(timeout))
                 {
-                    var request = CreateRequestMessage(HttpMethod.Put, uriPath);
-                    var response = await m_client.SendAsJsonAsync(request, data);
+                    try
+                    {
+                        var request = CreateRequestMessage(HttpMethod.Post, uriPath);
+                        var response = await HttpClient.SendAsJsonAsync(request, data, cts.Token);
 
-                    ProcessResponseInternal(response);
-                    return GetResponseBody<T>(response);
+                        ProcessResponseInternal(response);
+                        return await response.Content.ReadAsStringAsync();
+                    }
+                    catch (TaskCanceledException e)
+                    {
+                        throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                    }
                 }
-                catch (TaskCanceledException e)
+            });
+        }
+
+        protected Task<T> PutAsync<T>(string uriPath, object data, TimeSpan? timeout = null)
+        {
+            return Task.Run(async () =>
+            {
+                using (var cts = CreateCancellationTokenSource(timeout))
                 {
-                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                    try
+                    {
+                        var request = CreateRequestMessage(HttpMethod.Put, uriPath);
+                        var response = await HttpClient.SendAsJsonAsync(request, data, cts.Token);
+
+                        ProcessResponseInternal(response);
+                        return GetResponseBody<T>(response);
+                    }
+                    catch (TaskCanceledException e)
+                    {
+                        throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                    }
                 }
             });
         }
@@ -358,27 +397,30 @@ namespace Vokabular.RestClient
         {
             return Task.Run(async () =>
             {
-                try
+                using (var cts = CreateCancellationTokenSource())
                 {
-                    var request = CreateRequestMessage(HttpMethod.Delete, uriPath);
-                    var response = data == null
-                        ? await m_client.SendAsync(request)
-                        : await m_client.SendAsJsonAsync(request, data);
+                    try
+                    {
+                        var request = CreateRequestMessage(HttpMethod.Delete, uriPath);
+                        var response = data == null
+                            ? await HttpClient.SendAsync(request, cts.Token)
+                            : await HttpClient.SendAsJsonAsync(request, data, cts.Token);
 
-                    ProcessResponseInternal(response);
-                }
-                catch (TaskCanceledException e)
-                {
-                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                        ProcessResponseInternal(response);
+                    }
+                    catch (TaskCanceledException e)
+                    {
+                        throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                    }
                 }
             });
         }
 
         protected void EnsureSecuredClient()
         {
-            if (m_client.BaseAddress.Scheme != "https")
+            if (HttpClient.BaseAddress.Scheme != "https")
             {
-                throw new InvalidOperationException($"The client is not configured to use secured channel (HTTPS), current scheme is {m_client.BaseAddress.Scheme}");
+                throw new InvalidOperationException($"The client is not configured to use secured channel (HTTPS), current scheme is {HttpClient.BaseAddress.Scheme}");
             }
         }
 
@@ -392,19 +434,21 @@ namespace Vokabular.RestClient
             var responseStatusCode = response.StatusCode;
             var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
+            TryParseAndThrowResponseError(responseStatusCode, responseContent);
+
             if (responseStatusCode == HttpStatusCode.BadRequest &&
-                TryDeserializeValidationResult(responseContent, out var validationResult))
+                TryDeserialize<ValidationResultContract>(responseContent, out var validationResult))
             {
                 throw new HttpErrorCodeException(validationResult.Message, responseStatusCode, validationResult.Errors);
             }
 
             var exceptionMessage = responseContent.Trim('\"');
-            throw new HttpErrorCodeException(exceptionMessage, response.StatusCode);
+            throw new HttpErrorCodeException(exceptionMessage, responseStatusCode);
         }
 
-        private bool TryDeserializeValidationResult(string responseContent, out ValidationResultContract validationResult)
+        protected bool TryDeserialize<T>(string responseContent, out T validationResult)
         {
-            validationResult = null;
+            validationResult = default(T);
             if (!(responseContent.StartsWith("{") && responseContent.EndsWith("}")))
             {
                 return false;
@@ -412,7 +456,7 @@ namespace Vokabular.RestClient
 
             try
             {
-                var result = responseContent.Deserialize<ValidationResultContract>();
+                var result = responseContent.Deserialize<T>();
                 validationResult = result;
                 return true;
             }
@@ -426,7 +470,7 @@ namespace Vokabular.RestClient
             }
         }
 
-        protected string GetCurrentMethod([CallerMemberName] string methodName = null)
+        public string GetCurrentMethod([CallerMemberName] string methodName = null)
         {
             return methodName;
         }
@@ -435,6 +479,12 @@ namespace Vokabular.RestClient
         {
             var exceptionWithCode = exception as HttpErrorCodeException;
             return exceptionWithCode != null ? exceptionWithCode.StatusCode : 0;
+        }
+
+        public void Dispose()
+        {
+            HttpClient?.Dispose();
+            HttpClientHandler?.Dispose();
         }
     }
 }

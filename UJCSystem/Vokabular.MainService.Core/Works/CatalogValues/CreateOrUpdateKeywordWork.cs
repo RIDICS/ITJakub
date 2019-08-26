@@ -1,7 +1,6 @@
-﻿using System.Net;
-using Vokabular.DataEntities.Database.Entities;
+﻿using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.RestClient.Errors;
+using Vokabular.MainService.DataContracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.CatalogValues
@@ -26,8 +25,8 @@ namespace Vokabular.MainService.Core.Works.CatalogValues
                 : new Keyword();
 
             if (keywordEntity == null)
-                throw new HttpErrorCodeException(ErrorMessages.NotFound, HttpStatusCode.NotFound);
-
+                throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
+            
             keywordEntity.Text = m_name;
 
             m_catalogValueRepository.Save(keywordEntity);

@@ -41,9 +41,13 @@ a.main_logo_href {
         padding-bottom: 2px;
     }
 
+    @media screen and (min-width: @large-screen) {
+        padding-right: 0.5rem;
+    }
+
     @media screen and (min-width: @extra-large-screen + 1px) {
         padding: 0.1rem 0;
-        padding-right: 0.5rem;
+        padding-right: 1.5rem;
     }
 }
 
@@ -120,6 +124,7 @@ a.main_logo_href + .tooltip {
     margin: .85rem 0 0;
     margin-left: .75rem;
     font-weight: bold;
+    max-width: 95px;
 
     h1 {
         display: inline;
@@ -329,7 +334,7 @@ ul.navbar-language li:hover a {
     }
 
     @media screen and (min-width: @extra-large-screen + 1px) {
-        & + .tooltip {
+        &.login + .tooltip {
             display: none !important;
         }
     }

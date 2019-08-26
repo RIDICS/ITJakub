@@ -43,8 +43,8 @@
     "Search": "Search",
     "NoUsersSearch": "Sorry, but we could not find any user matching ",
     "NoUsersFound": "Sorry, but no users were found",
-    "NoRolesSearch": "Sorry, but we could not find any role matching ",
-    "NoRolesFound": "Sorry, but no roles were found",
+    "NoRolesSearch": "Sorry, but we could not find any group matching ",
+    "NoRolesFound": "Sorry, but no groups were found",
     "NoPermissionsSearch": "Sorry, but we could not find any permission matching ",
     "NoPermissionsFound": "Sorry, but no permissions were found",
     "NoProjectsSearch": "Sorry, but we could not find any project matching ",
@@ -67,6 +67,7 @@
     "Projects": "Projects",
     "AddProjectPermissionToGroup": "Add project permission to a group",
     "SelectedProject": "Selected project",
-    "AddPermissionToGroup": "Add permission to group"
+    "AddPermissionToGroup": "Add permission to group",
+    "ResetPassword": "Reset password"
   }
 }

@@ -11,6 +11,7 @@ using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Headers;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Attributes;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
+using AuthenticationManager = Vokabular.MainService.Core.Managers.AuthenticationManager;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -48,10 +49,6 @@ namespace Vokabular.MainService.Controllers
             {
                 return StatusCode(exception.StatusCode, exception.Message);
             }
-            catch (AuthServiceApiException exception)
-            {
-                return StatusCode(exception.StatusCode, exception.Description);
-            }
         }
 
         [AllowAnonymous]
@@ -67,10 +64,6 @@ namespace Vokabular.MainService.Controllers
             catch (HttpErrorCodeException exception)
             {
                 return StatusCode(exception.StatusCode, exception.Message);
-            }
-            catch (AuthServiceApiException exception)
-            {
-                return StatusCode(exception.StatusCode, exception.Description);
             }
         }
 
@@ -94,10 +87,6 @@ namespace Vokabular.MainService.Controllers
             {
                 return StatusCode(exception.StatusCode, exception.Message);
             }
-            catch (AuthServiceApiException exception)
-            {
-                return StatusCode(exception.StatusCode, exception.Description);
-            }
         }
 
         [Authorize(PermissionNames.EditSelfContacts)]
@@ -114,10 +103,6 @@ namespace Vokabular.MainService.Controllers
             {
                 return StatusCode(exception.StatusCode, exception.Message);
             }
-            catch (AuthServiceApiException exception)
-            {
-                return StatusCode(exception.StatusCode, exception.Description);
-            }
         }
 
         [HttpPut("current/password")]
@@ -132,10 +117,6 @@ namespace Vokabular.MainService.Controllers
             catch (HttpErrorCodeException exception)
             {
                 return StatusCode(exception.StatusCode, exception.Message);
-            }
-            catch (AuthServiceApiException exception)
-            {
-                return StatusCode(exception.StatusCode, exception.Description);
             }
         }
 
@@ -186,10 +167,6 @@ namespace Vokabular.MainService.Controllers
             {
                 return StatusCode(exception.StatusCode, exception.Message);
             }
-            catch (AuthServiceApiException exception)
-            {
-                return StatusCode(exception.StatusCode, exception.Description);
-            }
         }
 
         [Authorize(PermissionNames.EditAnyUsersData)]
@@ -204,10 +181,6 @@ namespace Vokabular.MainService.Controllers
             catch (HttpErrorCodeException exception)
             {
                 return StatusCode(exception.StatusCode, exception.Message);
-            }
-            catch (AuthServiceApiException exception)
-            {
-                return StatusCode(exception.StatusCode, exception.Description);
             }
         }
 
@@ -224,10 +197,6 @@ namespace Vokabular.MainService.Controllers
             {
                 return StatusCode(exception.StatusCode, exception.Message);
             }
-            catch (AuthServiceApiException exception)
-            {
-                return StatusCode(exception.StatusCode, exception.Description);
-            }
         }
 
         [HttpPost("current/contact/confirmation/resend")]
@@ -242,10 +211,6 @@ namespace Vokabular.MainService.Controllers
             catch (HttpErrorCodeException exception)
             {
                 return StatusCode(exception.StatusCode, exception.Message);
-            }
-            catch (AuthServiceApiException exception)
-            {
-                return StatusCode(exception.StatusCode, exception.Description);
             }
         }
 
@@ -263,10 +228,6 @@ namespace Vokabular.MainService.Controllers
             {
                 return StatusCode(exception.StatusCode, exception.Message);
             }
-            catch (AuthServiceApiException exception)
-            {
-                return StatusCode(exception.StatusCode, exception.Description);
-            }
         }
 
         [Authorize(PermissionNames.SelectTwoFactorProvider)]
@@ -277,6 +238,21 @@ namespace Vokabular.MainService.Controllers
             { 
                 var userId = m_authenticationManager.GetCurrentUserId();
                 m_userManager.SelectTwoFactorProvider(userId, data);
+                return Ok();
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode(exception.StatusCode, exception.Message);
+            }
+        }
+
+        [Authorize(PermissionNames.EditAnyUsersData)]
+        [HttpPost("{userId}/reset-password")]
+        public IActionResult ResetPassword(int userId)
+        {
+            try
+            {
+                m_userManager.ResetUserPassword(userId);
                 return Ok();
             }
             catch (HttpErrorCodeException exception)

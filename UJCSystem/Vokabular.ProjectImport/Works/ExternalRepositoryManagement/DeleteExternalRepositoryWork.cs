@@ -1,8 +1,7 @@
-using System;
 using System.Net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.RestClient.Errors;
+using Vokabular.MainService.DataContracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.ProjectImport.Works.ExternalRepositoryManagement
@@ -23,11 +22,13 @@ namespace Vokabular.ProjectImport.Works.ExternalRepositoryManagement
             var externalRepository = m_externalRepositoryRepository.Load<ExternalRepository>(m_externalRepositoryId);
 
             if (externalRepository == null)
-                throw new HttpErrorCodeException(ErrorMessages.NotFound, HttpStatusCode.NotFound);
-
+            {
+                throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
+            }
+            
             if (externalRepository.ImportHistories == null || externalRepository.ImportHistories.Count > 0)
             {
-                throw new InvalidOperationException($"External repository {externalRepository.Name} cannot be deleted. The external repository contains history.");
+                throw new MainServiceException(MainServiceErrorCode.RepositoryContainsHistory, "The external repository cannot be deleted, because it contains history.", HttpStatusCode.BadRequest);
             }
 
             m_externalRepositoryRepository.Delete(externalRepository);

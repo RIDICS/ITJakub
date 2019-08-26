@@ -20,7 +20,8 @@ namespace ITJakub.Web.Hub.Controllers
     {
         private readonly GoogleCalendarConfiguration m_googleCalendarConfiguration;
 
-        public NewsController(CommunicationProvider communicationProvider, IOptions<GoogleCalendarConfiguration> options) : base(communicationProvider)
+        public NewsController(CommunicationProvider communicationProvider, IOptions<GoogleCalendarConfiguration> options) : base(
+            communicationProvider)
         {
             m_googleCalendarConfiguration = options.Value;
         }
@@ -34,6 +35,7 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 throw new ArgumentException("Unknown feed type");
             }
+
             var count = Convert.ToInt32(feedCount);
             if (count <= 0)
             {
@@ -43,7 +45,7 @@ namespace ITJakub.Web.Hub.Controllers
 
             var items = new List<SyndicationItem>();
 
-            using (var client = GetRestClient())
+            var client = GetNewsClient();
             {
                 var feeds = client.GetNewsSyndicationItems(0, count, NewsTypeEnumContract.Web);
                 foreach (var feed in feeds.List)
@@ -56,7 +58,8 @@ namespace ITJakub.Web.Hub.Controllers
                         Published = feed.CreateTime,
                         LastUpdated = feed.CreateTime,
                     };
-                    var person = new SyndicationPerson($"{feed.CreatedByUser.FirstName} {feed.CreatedByUser.LastName}", feed.CreatedByUser.Email);
+                    var person = new SyndicationPerson($"{feed.CreatedByUser.FirstName} {feed.CreatedByUser.LastName}",
+                        feed.CreatedByUser.Email);
                     var url = new SyndicationLink(new Uri(feed.Url));
                     syndicationItem.AddContributor(person);
                     syndicationItem.AddLink(url);
@@ -79,13 +82,11 @@ namespace ITJakub.Web.Hub.Controllers
         [AllowAnonymous]
         public virtual ActionResult GetSyndicationItems(int start, int count)
         {
-            using (var client = GetRestClient())
-            {
-                var feeds = client.GetNewsSyndicationItems(start, count, NewsTypeEnumContract.Web);
-                return Json(feeds);
-            }
+            var client = GetNewsClient();
+            var feeds = client.GetNewsSyndicationItems(start, count, NewsTypeEnumContract.Web);
+            return Json(feeds);
         }
-        
+
         public ActionResult Add()
         {
             return View("AddNews");
@@ -102,22 +103,20 @@ namespace ITJakub.Web.Hub.Controllers
 
             return View(model);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Add(NewsSyndicationItemViewModel model)
         {
-            using (var client = GetRestClient())
+            var client = GetNewsClient();
+            var data = new CreateNewsSyndicationItemContract
             {
-                var data = new CreateNewsSyndicationItemContract
-                {
-                    Title = model.Title,
-                    ItemType = (NewsTypeEnumContract) model.ItemType,
-                    Text = model.Content,
-                    Url = model.Url,
-                };
-                client.CreateNewsSyndicationItem(data);
-            }
+                Title = model.Title,
+                ItemType = (NewsTypeEnumContract) model.ItemType,
+                Text = model.Content,
+                Url = model.Url,
+            };
+            client.CreateNewsSyndicationItem(data);
 
             return RedirectToAction("Index", "Home");
         }

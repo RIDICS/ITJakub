@@ -190,6 +190,12 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="EvidenceXml\Evidence1.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="EvidenceXml\Evidence2.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -206,10 +212,17 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ConversionData\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\itjakub-secrets\WcfServices\*.config">
       <Link>%(RecursiveDir)\%(FileName).config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\ITJakub.Xml.Conversion\Ujc.Ovj.Ooxml.Conversion\Data\**">
+      <Link>ConversionData\%(RecursiveDir)\%(FileName)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -265,6 +278,10 @@
     <ProjectReference Include="..\Vokabular.Log4Net\Vokabular.Log4Net.csproj">
       <Project>{105904c3-ab87-4bdd-ada3-c16ca61d7147}</Project>
       <Name>Vokabular.Log4Net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vokabular.RestClient\Vokabular.RestClient.csproj">
+      <Project>{2e80933f-418a-4181-aad3-84d4059fbbea}</Project>
+      <Name>Vokabular.RestClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vokabular.Shared.DataEntities\Vokabular.Shared.DataEntities.csproj">
       <Project>{1d302489-8778-4dec-9bcf-ee35f90af87b}</Project>

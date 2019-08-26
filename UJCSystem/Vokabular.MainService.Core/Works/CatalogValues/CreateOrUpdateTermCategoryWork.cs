@@ -1,8 +1,7 @@
-using System.Net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.CatalogValues
@@ -27,7 +26,7 @@ namespace Vokabular.MainService.Core.Works.CatalogValues
                 : new TermCategory();
 
             if (termCategory == null)
-                throw new HttpErrorCodeException(ErrorMessages.NotFound, HttpStatusCode.NotFound);
+                throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
 
             termCategory.Name = m_data.Name;
             

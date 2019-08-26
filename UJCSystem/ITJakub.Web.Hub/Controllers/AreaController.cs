@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
-using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Search.Request;
@@ -28,73 +27,69 @@ namespace ITJakub.Web.Hub.Controllers
 
         public virtual ActionResult GetTypeaheadAuthor(string query)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetOriginalAuthorAutocomplete(query, AreaBookType);
-                var resultStringList = result.Select(x => $"{x.LastName} {x.FirstName}");
-                return Json(resultStringList);
-            }
+            var client = GetCodeListClient();
+            var result = client.GetOriginalAuthorAutocomplete(query, AreaBookType);
+            var resultStringList = result.Select(x => $"{x.LastName} {x.FirstName}");
+            return Json(resultStringList);
         }
 
         public virtual ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetTitleAutocomplete(query, AreaBookType, selectedCategoryIds, selectedBookIds);
-                return Json(result);
-            }
+            var client = GetMetadataClient();
+            var result = client.GetTitleAutocomplete(query, AreaBookType, selectedCategoryIds, selectedBookIds);
+            return Json(result);
         }
 
         protected BooksAndCategoriesContract GetBooksAndCategories()
         {
-            using (var client = GetRestClient())
+            var bookClient = GetBookClient();
+            var categoryClient = GetCodeListClient();
+            var categories = categoryClient.GetCategoryList();
+            var books = bookClient.GetBooksByType(AreaBookType);
+
+            // Modify data for DropDownSelect usage
+
+            const int rootCategoryId = 0;
+            var rootBookTypeCategory = new CategoryContract
             {
-                var categories = client.GetCategoryList();
-                var books = client.GetBooksByType(AreaBookType);
+                Id = rootCategoryId,
+                Description = BookTypeHelper.GetCategoryName(AreaBookType),
+                ParentCategoryId = null,
+            };
 
-                // Modify data for DropDownSelect usage
-
-                const int rootCategoryId = 0;
-                var rootBookTypeCategory = new CategoryContract
-                {
-                    Id = rootCategoryId,
-                    Description = BookTypeHelper.GetCategoryName(AreaBookType),
-                    ParentCategoryId = null,
-                };
-
-                foreach (var category in categories)
-                {
-                    if (category.ParentCategoryId == null)
-                        category.ParentCategoryId = rootCategoryId;
-                }
-                categories.Add(rootBookTypeCategory);
-
-
-                var booksResult = new List<BookWithCategoryIdsContract>();
-                foreach (var book in books)
-                {
-                    var categoryIds = book.CategoryList.Select(x => x.Id).ToList();
-                    if (categoryIds.Count == 0)
-                        categoryIds.Add(rootCategoryId);
-
-                    booksResult.Add(new BookWithCategoryIdsContract
-                    {
-                        Id = book.Id,
-                        Title = book.Title,
-                        SubTitle = book.SubTitle,
-                        Guid = null,
-                        CategoryIds = categoryIds
-                    });
-                }
-
-                var result = new BooksAndCategoriesContract
-                {
-                    BookType = AreaBookType,
-                    Categories = categories,
-                    Books = booksResult
-                };
-                return result;
+            foreach (var category in categories)
+            {
+                if (category.ParentCategoryId == null)
+                    category.ParentCategoryId = rootCategoryId;
             }
+
+            categories.Add(rootBookTypeCategory);
+
+
+            var booksResult = new List<BookWithCategoryIdsContract>();
+            foreach (var book in books)
+            {
+                var categoryIds = book.CategoryList.Select(x => x.Id).ToList();
+                if (categoryIds.Count == 0)
+                    categoryIds.Add(rootCategoryId);
+
+                booksResult.Add(new BookWithCategoryIdsContract
+                {
+                    Id = book.Id,
+                    Title = book.Title,
+                    SubTitle = book.SubTitle,
+                    Guid = null,
+                    CategoryIds = categoryIds
+                });
+            }
+
+            var result = new BooksAndCategoriesContract
+            {
+                BookType = AreaBookType,
+                Categories = categories,
+                Books = booksResult
+            };
+            return result;
         }
 
         protected List<SearchCriteriaContract> CreateTextCriteriaList(CriteriaKey key, string text)
@@ -120,7 +115,8 @@ namespace ITJakub.Web.Hub.Controllers
             return listSearchCriteriaContracts;
         }
 
-        protected void AddCategoryCriteria(List<SearchCriteriaContract> listSearchCriteriaContracts, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        protected void AddCategoryCriteria(List<SearchCriteriaContract> listSearchCriteriaContracts, IList<long> selectedBookIds,
+            IList<int> selectedCategoryIds)
         {
             if (selectedBookIds != null || selectedCategoryIds != null)
             {
@@ -142,43 +138,47 @@ namespace ITJakub.Web.Hub.Controllers
 
         protected long SearchByCriteriaJsonCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
+            var deserialized =
+                JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<List<SearchCriteriaContract>>(deserialized);
 
             return SearchByCriteriaCount(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
         }
 
-        protected long SearchByCriteriaCount(List<SearchCriteriaContract> listSearchCriteriaContracts, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        protected long SearchByCriteriaCount(List<SearchCriteriaContract> listSearchCriteriaContracts, IList<long> selectedBookIds,
+            IList<int> selectedCategoryIds)
         {
             AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
 
-            using (var client = GetRestClient())
+            var client = GetBookClient();
+            var request = new SearchRequestContract
             {
-                var request = new SearchRequestContract
-                {
-                    ConditionConjunction = listSearchCriteriaContracts,
-                };
-                var count = client.SearchBookCount(request);
-                return count;
-            }
+                ConditionConjunction = listSearchCriteriaContracts,
+            };
+            var count = client.SearchBookCount(request);
+            return count;
         }
 
-        protected List<SearchResultContract> SearchByCriteriaText(CriteriaKey key, string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        protected List<SearchResultContract> SearchByCriteriaText(CriteriaKey key, string text, int start, int count, short sortingEnum,
+            bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var listSearchCriteriaContracts = CreateTextCriteriaList(key, text);
 
             return SearchByCriteria(listSearchCriteriaContracts, start, count, sortingEnum, sortAsc, selectedBookIds, selectedCategoryIds);
         }
 
-        protected List<SearchResultContract> SearchByCriteriaJson(string json, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        protected List<SearchResultContract> SearchByCriteriaJson(string json, int start, int count, short sortingEnum, bool sortAsc,
+            IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
+            var deserialized =
+                JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<List<SearchCriteriaContract>>(deserialized);
 
             return SearchByCriteria(listSearchCriteriaContracts, start, count, sortingEnum, sortAsc, selectedBookIds, selectedCategoryIds);
         }
 
-        protected List<SearchResultContract> SearchByCriteria(List<SearchCriteriaContract> listSearchCriteriaContracts, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
+        protected List<SearchResultContract> SearchByCriteria(List<SearchCriteriaContract> listSearchCriteriaContracts, int start,
+            int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
             IList<int> selectedCategoryIds)
         {
             //listSearchCriteriaContracts.Add(new ResultCriteriaContract
@@ -197,20 +197,18 @@ namespace ITJakub.Web.Hub.Controllers
 
             AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
 
-            using (var client = GetRestClient())
+            var client = GetBookClient();
+            var request = new SearchRequestContract
             {
-                var request = new SearchRequestContract
-                {
-                    ConditionConjunction = listSearchCriteriaContracts,
-                    Start = start,
-                    Count = count,
-                    Sort = (SortTypeEnumContract) sortingEnum,
-                    SortDirection = sortAsc ? SortDirectionEnumContract.Asc : SortDirectionEnumContract.Desc,
-                    FetchTerms = listSearchCriteriaContracts.Any(x => x.Key == CriteriaKey.Term),
-                };
-                var result = client.SearchBook(request);
-                return result;
-            }
+                ConditionConjunction = listSearchCriteriaContracts,
+                Start = start,
+                Count = count,
+                Sort = (SortTypeEnumContract) sortingEnum,
+                SortDirection = sortAsc ? SortDirectionEnumContract.Asc : SortDirectionEnumContract.Desc,
+                FetchTerms = listSearchCriteriaContracts.Any(x => x.Key == CriteriaKey.Term),
+            };
+            var result = client.SearchBook(request);
+            return result;
         }
     }
 }

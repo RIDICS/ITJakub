@@ -1,8 +1,7 @@
-﻿using System.Net;
-using NHibernate.Exceptions;
+﻿using NHibernate.Exceptions;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.RestClient.Errors;
+using Vokabular.MainService.DataContracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.CatalogValues
@@ -24,7 +23,7 @@ namespace Vokabular.MainService.Core.Works.CatalogValues
 
             if (item == null)
             {
-                throw new HttpErrorCodeException(ErrorMessages.NotFound, HttpStatusCode.NotFound);
+                throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
             }
 
             try
@@ -32,9 +31,9 @@ namespace Vokabular.MainService.Core.Works.CatalogValues
                 m_catalogValueRepository.Delete(item);
                 m_catalogValueRepository.UnitOfWork.CurrentSession.Flush();
             }
-            catch (GenericADOException exception)
+            catch (GenericADOException)
             {
-                throw new HttpErrorCodeException("Could not delete resource. Existing relation to resource Page?", exception, HttpStatusCode.BadRequest);
+                throw new MainServiceException(MainServiceErrorCode.DeleteResourcePageRelation, "Could not delete resource. Existing relation to resource Page?");
             }
         }
     }
