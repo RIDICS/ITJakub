@@ -25,10 +25,10 @@
                             <tbody>
                                 @foreach (var pageItem in Model)
                                 {
-                                    <tr class="page-row" data-page-id="@pageItem.Id">
+                                    <tr class="page-row" data-page-id="@pageItem.Id" data-position="@pageItem.Position">
                                         <td class="ridics-checkbox">
                                             <label>
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" class="selection-checkbox"/>
                                                 <span class="cr cr-black">
                                                     <i class="cr-icon glyphicon glyphicon-ok"></i>
                                                 </span>
@@ -53,11 +53,11 @@
                     </div>
                 </div>
                 <div class="panel-bottom-buttons text-right">
-                    <input type="number" class="page-move-distnace form-control" value="1"/>
-                    <button type="button" class="btn btn-default">
+                    <input type="number" class="page-move-distance form-control" value="1" min="1" max="@Model.Count"/>
+                    <button type="button" class="btn btn-default move-page-up">
                         <span class="glyphicon glyphicon-arrow-up"></span>
                     </button>
-                    <button type="button" class="btn btn-default">
+                    <button type="button" class="btn btn-default move-page-down">
                         <span class="glyphicon glyphicon-arrow-down"></span>
                     </button>
                 </div>

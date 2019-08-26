@@ -7,7 +7,7 @@
         this.gui = new EditorsGui();
         this.errorHandler = new ErrorHandler();
     }
-
+    
     init(projectId: number) {
 
         const util = new EditorsUtil();
@@ -19,7 +19,15 @@
             element: $("#project-pages-dialog"),
             autoClearInputs: false
         });
-        
+
+        $(".panel-bottom-buttons .move-page-down").click((event) => {
+            this.moveList(true);
+        });
+
+        $(".panel-bottom-buttons .move-page-up").click((event) => {
+            this.moveList(false);
+        });
+
         $(".page-row").click((event) => {
             const pageId = $(event.currentTarget).data("page-id");
             const pageDetail = $("#page-detail");
@@ -280,6 +288,57 @@
         } else {
             this.gui.showInfoDialog("Info", "Page names already exist for this project. Appending generated names to the end of the list.");
             listStructure.appendList(pageList, listEl);
+        }
+    }
+
+    private moveList(down: boolean) {
+        const distance = Number($(".page-move-distance").val());
+        const pages = $(".page-row").toArray();
+        const newPages = new Array<HTMLElement>(pages.length);
+        
+        for (let i = 0; i < pages.length; i++) {
+            const page = pages[i];
+            const isSelected = $(page).find(".selection-checkbox").is(":checked");
+            if (isSelected) {
+                let newPosition = i;
+                if (down) {
+                    newPosition += distance;
+                } else {
+                    newPosition -= distance;
+                }
+
+                if (newPosition >= pages.length || newPosition < 0) {
+                    newPosition = newPosition % pages.length;
+                }
+                if (newPosition < 0) {
+                    newPosition = pages.length + newPosition;
+                }
+
+                $(page).data("position", newPosition+1);
+                newPages[newPosition] = page;
+            }
+        }
+
+        let j = 0;
+        for (const page of newPages) {
+            const isSelected = $(page).find(".selection-checkbox").is(":checked");
+            if (!isSelected) {
+                while (true) {
+                    if (typeof newPages[j] == "undefined") {
+                        $(page).data("position", j+1);
+                        newPages[j] = page;
+                        break;
+                    } else {
+                        j++;
+                    }
+                }
+            }
+        }
+
+        const listing = $(".page-listing tbody");
+        listing.empty();
+        for (const page of newPages) {
+            listing.append(page);
         }
     }
 }
