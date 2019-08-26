@@ -1,4 +1,5 @@
 ﻿@using Scalesoft.Localization.AspNetCore
+@model IList<Vokabular.MainService.DataContracts.Contracts.PageContract>
 @inject ILocalizationService Localizer
 
 <div class="project-page-list">
@@ -22,50 +23,31 @@
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <tbody>
-                            <tr class="page-row">
-                                <td class="ridics-checkbox">
-                                    <label>
-                                        <input type="checkbox"/>
-                                        <span class="cr cr-black">
-                                            <i class="cr-icon glyphicon glyphicon-ok"></i>
-                                        </span>
-                                    </label>
-                                </td>
-                                <td>
-                                    <div>1r</div>
-                                    <div class="alert alert-danger"></div>
-                                </td>
-                                <td class="buttons">
-                                    <a class="edit-page btn btn-sm btn-default">
-                                        <i class="fa fa-pencil"></i>
-                                    </a>
-                                    <a class="remove-page btn btn-sm btn-default">
-                                        <i class="fa fa-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr class="page-row">
-                                <td class="ridics-checkbox">
-                                    <label>
-                                        <input type="checkbox"/>
-                                        <span class="cr cr-black">
-                                            <i class="cr-icon glyphicon glyphicon-ok"></i>
-                                        </span>
-                                    </label>
-                                </td>
-                                <td>
-                                    <div>1v</div>
-                                    <div class="alert alert-danger"></div>
-                                </td>
-                                <td class="buttons">
-                                    <a class="edit-page btn btn-sm btn-default">
-                                        <i class="fa fa-pencil"></i>
-                                    </a>
-                                    <a class="remove-page btn btn-sm btn-default">
-                                        <i class="fa fa-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                                @foreach (var pageItem in Model)
+                                {
+                                    <tr class="page-row" data-page-id="@pageItem.Id">
+                                        <td class="ridics-checkbox">
+                                            <label>
+                                                <input type="checkbox"/>
+                                                <span class="cr cr-black">
+                                                    <i class="cr-icon glyphicon glyphicon-ok"></i>
+                                                </span>
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <div>@pageItem.Name</div>
+                                            <div class="alert alert-danger"></div>
+                                        </td>
+                                        <td class="buttons">
+                                            <a class="edit-page btn btn-sm btn-default">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                            <a class="remove-page btn btn-sm btn-default">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -82,7 +64,7 @@
             </div>
         </div>
     </div>
-    <div class="col-xs-12 col-md-6 col-lg-7">
+    <div id="page-detail" class="hide col-xs-12 col-md-6 col-lg-7">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
@@ -94,9 +76,8 @@
                 </div>
             </div>
             <div class="panel-body">
-                <div class="col-md-4 image-preview">
-                    <img alt="Náhled stránky" src="~/images/Mlceni_pink.jpg"/>
-                </div>
+                <div class="alert-holder"></div>
+                <div id="bodyContent"></div>
             </div>
         </div>
     </div>
@@ -123,12 +104,14 @@
                             <div class="col-md-12">
                                 <div class="checkbox">
                                     <label>
-                                        <input disabled class="book-cover-checkbox" type="checkbox"/><span class="page-list-editor-controls-label">@Localizer.Translate("Cover", "Admin")</span>
+                                        <input disabled class="book-cover-checkbox" type="checkbox"/>
+                                        <span class="page-list-editor-controls-label">@Localizer.Translate("Cover", "Admin")</span>
                                     </label>
                                 </div>
                                 <div class="checkbox">
                                     <label>
-                                        <input disabled class="book-startpage-checkbox" type="checkbox"/><span class="page-list-editor-controls-label">@Localizer.Translate("FrontPage", "Admin")</span>
+                                        <input disabled class="book-startpage-checkbox" type="checkbox"/>
+                                        <span class="page-list-editor-controls-label">@Localizer.Translate("FrontPage", "Admin")</span>
                                     </label>
                                 </div>
                             </div>
@@ -138,12 +121,14 @@
                                 <div class="col-md-12">
                                     <div class="radio">
                                         <label>
-                                            <input type="radio" name="page-type" checked="checked"/><span class="page-list-editor-controls-label">@Localizer.Translate("SinglePage", "Admin")</span>
+                                            <input type="radio" name="page-type" checked="checked"/>
+                                            <span class="page-list-editor-controls-label">@Localizer.Translate("SinglePage", "Admin")</span>
                                         </label>
                                     </div>
                                     <div class="radio">
                                         <label>
-                                            <input class="doublepage-radiobutton" type="radio" name="page-type"/><span class="page-list-editor-controls-label">@Localizer.Translate("DoublePage", "Admin")</span>
+                                            <input class="doublepage-radiobutton" type="radio" name="page-type"/>
+                                            <span class="page-list-editor-controls-label">@Localizer.Translate("DoublePage", "Admin")</span>
                                         </label>
                                     </div>
                                 </div>
@@ -221,7 +206,7 @@
                 <p class="info-dialog-message"></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "Admin")</button>
             </div>
         </div>
     </div>

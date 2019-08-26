@@ -1,9 +1,11 @@
 ﻿class PageListEditorMain {
     private editDialog: BootstrapDialogWrapper;
     private readonly gui: EditorsGui;
+    private readonly errorHandler: ErrorHandler;
 
     constructor() {
         this.gui = new EditorsGui();
+        this.errorHandler = new ErrorHandler();
     }
 
     init(projectId: number) {
@@ -16,6 +18,25 @@
         this.editDialog = new BootstrapDialogWrapper({
             element: $("#project-pages-dialog"),
             autoClearInputs: false
+        });
+        
+        $(".page-row").click((event) => {
+            const pageId = $(event.currentTarget).data("page-id");
+            const pageDetail = $("#page-detail");
+            const content = pageDetail.find("#bodyContent");
+            const alertHolder = pageDetail.find(".alert-holder");
+
+            alertHolder.empty();
+            content.html("<div class=\"loader\"></div>");
+            pageDetail.removeClass("hide");
+
+            util.getPageDetail(pageId).done((response) => {
+                content.html(response);
+            }).fail((error) => {
+                const alert = new AlertComponentBuilder(AlertType.Error)
+                    .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                alertHolder.append(alert);
+            });
         });
 
         $("#project-pages-edit-button").click(() => {

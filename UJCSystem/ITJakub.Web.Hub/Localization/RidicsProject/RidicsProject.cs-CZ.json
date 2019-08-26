@@ -1,22 +1,23 @@
 {
 	"culture":"cs-CZ",
 	"scope":"RidicsProject",
-	"dictionary": {
-		"ListError" : "Chyba při načítání strany se seznamem projektů",
-		"ModuleError" : "Chyba při načítání modulu",
-		"BookmarkError" : "Chyba při načítání záložky.",
-		"ResourceError" : "Chyba při načítání zdrojů",
-		"VersionListError" : "Chyba při načítání seznamu verzí",
-		
-		"MissingPublisherNameError" : "Nebyl vyplněn název nakladatele",
-		"CreatePublisherError" : "Chyba při vytváření nového nakladatele",
-		"MissingName" : "Nebyl vyplněn název",
-		"CreateLiteraryKind" : "Chyba při vytváření nového literárního druhu",
-		"CreateLiteraryGenre" : "Chyba při vytváření nového literárního žánru",
+  "dictionary": {
+    "ListError": "Chyba při načítání strany se seznamem projektů",
+    "ModuleError": "Chyba při načítání modulu",
+    "BookmarkError": "Chyba při načítání záložky.",
+    "ResourceError": "Chyba při načítání zdrojů",
+    "VersionListError": "Chyba při načítání seznamu verzí",
+
+    "MissingPublisherNameError": "Nebyl vyplněn název nakladatele",
+    "CreatePublisherError": "Chyba při vytváření nového nakladatele",
+    "MissingName": "Nebyl vyplněn název",
+    "CreateLiteraryKind": "Chyba při vytváření nového literárního druhu",
+    "CreateLiteraryGenre": "Chyba při vytváření nového literárního žánru",
 
     "CreateResourcesError": "Chyba při načítání zdrojů k publikaci",
 
     "Pages": "Stránky",
-    "PageContent": "Obsah stránky" 
-		}
+    "PageContent": "Obsah stránky",
+    "PagePreview": "Náhled stránky"
+  }
 }

@@ -13,6 +13,11 @@
         return `${this.serverPath}Admin/ContentEditor/GetPageImage?pageId=${pageId}`;
     }
 
+
+    getPageDetail(pageId: number): JQuery.jqXHR<string> {
+        return  $.get(`${this.serverPath}Admin/ContentEditor/GetPageDetail?pageId=${pageId}`);
+    }
+
     savePageList(pageList: string[]): JQueryXHR {
         const pageAjax = $.post(`${this.serverPath}Admin/ContentEditor/SavePageList`,
             {

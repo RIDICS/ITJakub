@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
+using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Areas.Admin.Models.Request;
 using ITJakub.Web.Hub.Areas.Admin.Models.Response;
 using ITJakub.Web.Hub.Authorization;
@@ -9,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataContracts.Types;
 using ITJakub.Web.Hub.Options;
+using Vokabular.RestClient.Errors;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 {
@@ -104,6 +107,35 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var client = GetBookClient();
             var result = client.GetPageImage(pageId);
             return new FileStreamResult(result.Stream, result.MimeType);
+        }
+
+        [HttpGet]
+        public IActionResult GetPageDetail(long pageId)
+        {
+            var client = GetBookClient();
+            var model = new PageDetailViewModel();
+            try
+            {
+                model.Text = client.GetPageText(pageId, TextFormatEnumContract.Html);
+            }
+            catch (HttpErrorCodeException e) 
+            {
+                if(e.StatusCode != HttpStatusCode.NotFound)
+                    throw;
+            }
+
+            try
+            {
+                var result = client.GetPageImage(pageId);
+                model.Image = new FileStreamResult(result.Stream, result.MimeType);
+            }
+            catch (HttpErrorCodeException e)
+            {
+                if (e.StatusCode != HttpStatusCode.NotFound)
+                    throw;
+            }
+
+            return PartialView("../Project/Work/_PageListDetail", model);
         }
 
         [HttpPost]

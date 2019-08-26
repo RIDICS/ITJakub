@@ -1,0 +1,15 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@model ITJakub.Web.Hub.Areas.Admin.Models.PageDetailViewModel
+@inject ILocalizationService Localizer
+
+<div class="">
+    @if (!string.IsNullOrEmpty(Model.Text))
+    {
+        @Html.Raw(Model.Text)
+    }
+
+    @if (Model.Image != null)
+    {
+        <img alt="@Localizer.Translate("PagePreview", "RidicsProject")" src="@Model.Image" />
+    }
+</div>
