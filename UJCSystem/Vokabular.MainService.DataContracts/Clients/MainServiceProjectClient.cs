@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
@@ -486,12 +485,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public long SetAllPageList(string[] pageList)
+        public void SetAllPageList(long projectId, IList<CreateOrUpdatePageContract> pageList)
         {
             try
             {
-                //TODO add logic for saving page list after editing
-                throw new NotImplementedException();
+                m_client.Post<object>($"project/{projectId}/page", pageList);
             }
             catch (HttpRequestException e)
             {

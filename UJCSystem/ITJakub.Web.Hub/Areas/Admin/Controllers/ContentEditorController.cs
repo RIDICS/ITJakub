@@ -155,11 +155,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult SavePageList(string[] pageList)
+        public IActionResult SavePageList(long projectId, IList<CreateOrUpdatePageContract> pageList)
         {
             var client = GetProjectClient();
-            var result = client.SetAllPageList(pageList);
-            return Json(result);
+            client.SetAllPageList(projectId, pageList);
+            return Ok();
         }
 
         [HttpPost]

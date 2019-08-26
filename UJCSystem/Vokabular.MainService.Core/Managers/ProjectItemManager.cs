@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
@@ -149,6 +150,13 @@ namespace Vokabular.MainService.Core.Managers
             var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
             var resourceVersionId = new CreateEditionNoteVersionWork(m_resourceRepository, projectId, data, userId, fulltextStorage).Execute();
             return resourceVersionId;
+        }
+
+        public void SavePages(long projectId, List<CreateOrUpdatePageContract> data)
+        {
+            var userId = m_authenticationManager.GetCurrentUserId();
+            var work = new CreateOrUpdatePagesWork(m_resourceRepository, pageData, null, pageId, userId);
+            work.Execute();
         }
     }
 }

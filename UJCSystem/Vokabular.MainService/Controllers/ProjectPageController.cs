@@ -43,6 +43,13 @@ namespace Vokabular.MainService.Controllers
             return Ok();
         }
 
+        [HttpPost("{projectId}/page-list")]
+        public IActionResult SavePageList(long projectId, [FromBody] List<CreateOrUpdatePageContract> pageData)
+        {
+            m_projectItemManager.SavePages(projectId, pageData);
+            return Ok();
+        }
+
         [HttpGet("page/{pageId}/term")]
         public List<TermContract> GetPageTermList(long pageId)
         {
