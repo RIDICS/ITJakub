@@ -157,7 +157,7 @@ namespace Vokabular.Database.Migrations.Migrations.VokabularDB
                 .WithColumn("BookVersion").AsInt64().Nullable().ForeignKey("FK_TextResource(BookVersion)_BookVersionResource(ResourceVersionId)", "BookVersionResource", "ResourceVersionId");
 
             Create.Table("ImageResource")
-                .WithColumn("ResourceVersionId").AsInt64().NotNullable().PrimaryKey("PK_ImageResource(ResourceVersionId)").Identity().ForeignKey("ResourceVersion", "Id")
+                .WithColumn("ResourceVersionId").AsInt64().NotNullable().PrimaryKey("PK_ImageResource(ResourceVersionId)").ForeignKey("ResourceVersion", "Id")
                 .WithColumn("FileName").AsString(255).NotNullable()
                 .WithColumn("FileId").AsString(100).Nullable()
                 .WithColumn("MimeType").AsString(255).NotNullable()
