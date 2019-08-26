@@ -10,7 +10,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.AutomapperProfiles
     {
         public SnapshotProfile()
         {
-            CreateMap<SnapshotContract, SnapshotViewModel>()
+            CreateMap<SnapshotAggregatedInfoContract, SnapshotViewModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Author))
                 .ForMember(dest => dest.PublishDate, opt => opt.MapFrom(src => src.PublishDate))

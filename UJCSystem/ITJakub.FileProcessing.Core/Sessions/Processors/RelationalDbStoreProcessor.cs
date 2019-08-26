@@ -106,12 +106,12 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         private void PublishSnapshotToExternalDatabase(long snapshotId, long projectId, List<BookPageData> bookDataPages)
         {
-            var externalIds = bookDataPages.Select(x => x.XmlId)
+            var externalIds = bookDataPages?.Select(x => x.XmlId)
                 .Where(x => x != null) // the page doesn't exist in fulltext database when ID is null
                 .ToList();
             var metadata = m_metadataRepository.InvokeUnitOfWork(x => x.GetLatestMetadataResource(projectId));
 
-            if (externalIds.Count > 0)
+            if (externalIds != null && externalIds.Count > 0)
             {
                 m_fulltextResourceProcessor.PublishSnapshot(snapshotId, projectId, externalIds, metadata);
             }

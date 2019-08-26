@@ -196,8 +196,9 @@ namespace Vokabular.Database.Migrations.Migrations.VokabularDB
                 .WithColumn("Sorting").AsString(255).NotNullable()
                 .WithColumn("BookVersion").AsInt64().Nullable().ForeignKey("FK_HeadwordResource(BookVersion)_BookVersionResource(ResourceVersionId)", "BookVersionResource", "ResourceVersionId");
 
+            // HeadwordItem is not Resource but it is part of HeadwordResource
             Create.Table("HeadwordItem")
-                .WithColumn("Id").AsInt64().NotNullable().PrimaryKey("PK_HeadwordItem(Id)")
+                .WithColumn("Id").AsInt64().NotNullable().PrimaryKey("PK_HeadwordItem(Id)").Identity()
                 .WithColumn("HeadwordResource").AsInt64().NotNullable().ForeignKey("FK_HeadwordItem(HeadwordResource)_HeadwordResource(ResourceVersionId)", "HeadwordResource", "ResourceVersionId")
                 .WithColumn("Headword").AsString(255).NotNullable()
                 .WithColumn("HeadwordOriginal").AsString(255).Nullable()
