@@ -155,7 +155,7 @@ namespace Vokabular.MainService.Core.Managers
         public void SavePages(long projectId, List<CreateOrUpdatePageContract> data)
         {
             var userId = m_authenticationManager.GetCurrentUserId();
-            var work = new CreateOrUpdatePagesWork(m_resourceRepository, pageData, null, pageId, userId);
+            var work = new CreateOrUpdatePagesWork(m_resourceRepository, data, projectId, userId);
             work.Execute();
         }
     }
