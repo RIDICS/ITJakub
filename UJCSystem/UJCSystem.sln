@@ -157,7 +157,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Texty.Export.Slov
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITJakub.Lemmatization.Core", "ITJakub.Lemmatization.Core\ITJakub.Lemmatization.Core.csproj", "{0CCC8005-5A92-4A47-93DF-05FB6E333279}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITJakub.Shared.Contracts.Test", "ITJakub.Shared.Contracts.Test\ITJakub.Shared.Contracts.Test.csproj", "{EFF05D42-A0F9-49EC-B581-1D6F750A3419}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITJakub.SearchService.DataContracts.Test", "ITJakub.SearchService.DataContracts.Test\ITJakub.SearchService.DataContracts.Test.csproj", "{EFF05D42-A0F9-49EC-B581-1D6F750A3419}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITJakub.Lemmatization.DataEntities", "ITJakub.Lemmatization.DataEntities\ITJakub.Lemmatization.DataEntities.csproj", "{69076B65-4268-497A-ABF6-64D7FFA50911}"
 EndProject
