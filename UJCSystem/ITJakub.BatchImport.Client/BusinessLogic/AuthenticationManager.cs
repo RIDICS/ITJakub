@@ -44,7 +44,7 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
                     ClientId = ConfigurationManager.AppSettings[OidcClientId],
                     ClientSecret = ConfigurationManager.AppSettings[OidcClientSecret],
                     RedirectUri = redirectUri,
-                    Scope = "openid profile",
+                    Scope = "openid profile auth_api.Internal",
                     FilterClaims = true,
                     LoadProfile = true,
                     Flow = OidcClientOptions.AuthenticationFlow.Hybrid
