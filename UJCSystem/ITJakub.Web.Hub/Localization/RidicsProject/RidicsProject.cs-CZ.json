@@ -19,6 +19,9 @@
     "Pages": "Stránky",
     "PageContent": "Obsah stránky",
     "PagePreview": "Náhled stránky",
-    "UnsavedChanges": "Provedné změny nejsou uloženy."
+    "UnsavedChanges": "Provedné změny nejsou uloženy.",
+    "PageContainsText": "Stránka obsahuje text",
+    "PageContainsImage": "Stránka obsahuje obrázek",
+    "EmptyPage": "Stránka neobsahuje text ani obrázek."
   }
 }

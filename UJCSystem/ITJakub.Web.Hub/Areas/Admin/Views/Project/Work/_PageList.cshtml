@@ -78,17 +78,21 @@
             <div id="page-detail" class="hide col-xs-12 col-md-6 col-lg-7">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <div class="panel-title">
+                        <div class="panel-title">
+                            <div class="row">
+                                <div class="col-xs-10">
                                     @Localizer.Translate("PageContent", "RidicsProject")
+                                </div>
+                                <div class="col-xs-2 text-right">
+                                    <i class="hide fa fa-file-text-o" title="@Localizer.Translate("PageContainsText", "RidicsProject")"></i>
+                                    <i class="hide fa fa-image" title="@Localizer.Translate("PageContainsImage", "RidicsProject")"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="panel-body">
                         <div class="alert-holder"></div>
-                        <div id="bodyContent"></div>
+                        <div class="body-content"></div>
                     </div>
                 </div>
             </div>
@@ -107,10 +111,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-md-5 left-panel">
-                                <div class="page-list-container"></div>
-                            </div>
-                            <div class="col-md-7 form-horizontal right-panel">
+                            <div class="col-md-12 form-horizontal">
                                 <div class="form-group special-pages-controls">
                                     <div class="col-md-12">
                                         <div class="checkbox">
@@ -171,36 +172,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <div class="col-md-6">
-                                        <button type="button" class="btn btn-default generate-page-list">@Localizer.Translate("Generate", "Admin")</button>
-                                    </div>
-                                </div>
-
-                                <div class="bottom-buttons">
-                                    <button type="button" class="btn btn-default move-page-up">
-                                        <span class="glyphicon glyphicon-arrow-up"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default move-page-down">
-                                        <span class="glyphicon glyphicon-arrow-down"></span>
-                                    </button>
-                                </div>
                             </div>
-                        </div>
-                        <div class="row page-list-actions-row">
-                            <div class="col-xs-1"></div>
-                            <div class="col-xs-3">
-                                <button class="btn btn-default edit-page-list">Editovat</button>
-                            </div>
-                            <div class="col-xs-8"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("SaveError", "Admin")</div>
                         <button type="button" class="btn btn-default cancel-page-list">@Localizer.Translate("Cancel", "Admin")</button>
-                        <button type="button" class="btn btn-default save-page-list">
-                            <span class="saving-icon loading-small-button"></span>@Localizer.Translate("Save", "Admin")
-                        </button>
+                        <button type="button" class="btn btn-default generate-page-list">@Localizer.Translate("Generate", "Admin")</button>
                     </div>
                 </div>
             </div>

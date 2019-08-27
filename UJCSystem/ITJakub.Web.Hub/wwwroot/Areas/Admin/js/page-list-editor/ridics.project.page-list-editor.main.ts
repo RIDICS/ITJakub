@@ -32,51 +32,28 @@
 
         $("#project-pages-edit-button").click(() => {
             this.editDialog.show();
-            this.loadExistingPages(projectId, this.util, listStructure);
-            $(".page-list-editor-content").on("click",
-                ".edit-page-list",
-                () => {
-                    const pageListEl = $(".page-list");
-                    if (pageListEl.length) {
-                        editor.convertDivListToTextarea(pageListEl);
-                    }
+            this.enableCheckboxes();
+            const pages = $(".page-row").toArray();
+            for (let page of pages) {
+                const pageName = $(page).find(".name").text();
+                if (pageName.toLocaleLowerCase() === "fc") {
+                    this.checkmarkFC();
                 }
-            );
+                if (pageName.toLocaleLowerCase() === "fs") {
+                    this.checkmarkFS();
+                } 
+            }
+           
+            this.trackSpecialPagesCheckboxesState();
+
+            
             $(".page-list-editor-content").on("click",
                 ".generate-page-list",
                 () => {
-                    const pageListTextareaEl = $(".page-list-edit-textarea");
-                    if (pageListTextareaEl.length) {
-                        pageListTextareaEl.remove();
-                    }
                     const doublePageRadiobuttonEl = $(".doublepage-radiobutton");
                     const doublePageGeneration = doublePageRadiobuttonEl.prop("checked") as boolean;
-                    this.startGeneration(listGenerator, projectId, this.util, listStructure, doublePageGeneration);
+                    this.startGeneration(listGenerator, listStructure, doublePageGeneration);
                 });
-            $(".page-list-editor-content").on("click",
-                ".move-page-up",
-                () => {
-                    const selectedPageEl = $(".page-list").children(".ui-selected");
-                    if (selectedPageEl.length) {
-                        selectedPageEl.each((index, element) => {
-                            const selectedItemJEl = $(element as Node as HTMLElement);
-                            listStructure.movePageUp(selectedItemJEl);
-                        });
-                    }
-                });
-
-            $(".page-list-editor-content").on("click",
-                ".move-page-down",
-                () => {
-                    const selectedPageEl = $(".page-list").children(".ui-selected");
-                    if (selectedPageEl.length) {
-                        $(selectedPageEl.get().reverse()).each((index, element) => {
-                            const selectedItemJEl = $(element as Node as HTMLElement);
-                            listStructure.movePageDown(selectedItemJEl);
-                        });
-                    }
-                }
-            );
 
             $(".page-list-editor-content").on("click",
                 ".save-page-list",
@@ -104,10 +81,6 @@
                 ".cancel-page-list",
                 (event) => {
                     event.stopPropagation();
-                    const textAreaEl = $(".page-list-edit-textarea");
-                    if (textAreaEl.length) {
-                        textAreaEl.remove();
-                    }
                     this.editDialog.hide();
                     $(".page-list-editor-content").off();
                 }
@@ -116,10 +89,13 @@
     }
 
     private initPageRowClicks() {
+        $(".page-row .ridics-checkbox label").off();
         $(".page-row .ridics-checkbox label").click((event) => {
             event.stopPropagation(); //stop propagation to prevent loading detail, while is clicked on the checkbox
         });
 
+
+        $(".page-row .remove-page").off();
         $(".page-row .remove-page").click((event) => {
             event.stopPropagation();
             const pageRow = $(event.currentTarget).parents(".page-row");
@@ -127,6 +103,7 @@
             this.showUnsavedChangesAlert();
         });
 
+        $(".page-row .edit-page").off();
         $(".page-row .edit-page").click((event) => {
             event.stopPropagation();
             const editButton = $(event.currentTarget).find("i.fa");
@@ -147,20 +124,49 @@
                 }
             }
         });
-        
-        $(".page-row").click((event) => {
-            const pageId = $(event.currentTarget).data("page-id");
-            const pageDetail = $("#page-detail");
-            const content = pageDetail.find("#bodyContent");
-            const alertHolder = pageDetail.find(".alert-holder");
 
-            console.log(this.util.getImageUrlOnPage(pageId));
+        $(".page-row").off();
+        $(".page-row").click((event) => {
+            const pageRow = $(event.currentTarget);
+            pageRow.siblings().removeClass("active");
+            pageRow.addClass("active");
+
+            const pageId = pageRow.data("page-id");
+            const pageDetail = $("#page-detail");
+            const alertHolder = pageDetail.find(".alert-holder");
+            const content = pageDetail.find(".body-content");
+            const textIcon = pageDetail.find(".fa-file-text-o");
+            const imageIcon = pageDetail.find(".fa-image");
             alertHolder.empty();
+
+            if (typeof pageId == "undefined") {
+                textIcon.addClass("hide");
+                imageIcon.addClass("hide");
+                const alert = new AlertComponentBuilder(AlertType.Info)
+                    .addContent(localization.translate("EmptyPage", "RidicsProject").value).buildElement();
+                alertHolder.append(alert);
+                content.empty();
+                pageDetail.removeClass("hide");
+                return;
+            }
+            
             content.html("<div class=\"loader\"></div>");
             pageDetail.removeClass("hide");
 
             this.util.getPageDetail(pageId).done((response) => {
                 content.html(response);
+                
+                if (content.find(".page-text").length > 0) {
+                    textIcon.removeClass("hide");
+                } else {
+                    textIcon.addClass("hide");
+                }
+
+                if (content.find(".image-preview").length > 0) {
+                    imageIcon.removeClass("hide");
+                } else {
+                    imageIcon.addClass("hide");
+                }
             }).fail((error) => {
                 const alert = new AlertComponentBuilder(AlertType.Error)
                     .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
@@ -266,66 +272,69 @@
             });
     }
 
-    private loadExistingPages(projectId: number,
-        util: EditorsUtil,
-        listStructure: PageListStructure) {
-        const pageListAjax = util.getPagesList(projectId);
-        pageListAjax.done((data: IPage[]) => {
-            const pageList: string[] = [];
-            this.enableCheckboxes();
-            for (let i = 0; i < data.length; i++) {
-                const pageName = data[i].name;
-                if (pageName.toLocaleLowerCase() === "fc") {
-                    this.checkmarkFC();
+  private startGeneration(listGenerator: PageListGenerator,
+      listStructure: PageListStructure, doublePage:boolean) {
+        const fromFieldValue = $("#project-pages-generate-from").val() as string;
+        const toFieldValue = $("#project-pages-generate-to").val() as string;
+        if (/\d+/.test(fromFieldValue) && /\d+/.test(toFieldValue)) {
+            const from = parseInt(fromFieldValue);
+            const to = parseInt(toFieldValue);
+            const formatString = $("#project-pages-format").find(":selected").data("format-value") as string;
+            const format = PageListFormat[formatString] as number;
+            if (!isNaN(from) && !isNaN(to)) {
+                if (to > from) {
+                    const pageList = listGenerator.generatePageList(from, to, format, doublePage);
+                    this.populateList(pageList, listStructure);
+                    this.enableCheckboxes();
+                    this.trackSpecialPagesCheckboxesState();
+                } else {
+                    this.gui.showInfoDialog("Warning", "Please swap to and from numbers.");
                 }
-                if (pageName.toLocaleLowerCase() === "fs") {
-                    this.checkmarkFS();
-                }
-                pageList.push(pageName);
             }
-            this.populateList(pageList, listStructure);
-            this.trackSpecialPagesCheckboxesState();
-        });
-        pageListAjax.fail(() => {
-            this.gui.showInfoDialog("Error", "Load failure due to server error");
-        });
-    }
-
-    private startGeneration(listGenerator: PageListGenerator,
-        projectId: number,
-        util: EditorsUtil,
-        listStructure: PageListStructure, doublePage:boolean) {
-            const fromFieldValue = $("#project-pages-generate-from").val() as string;
-            const toFieldValue = $("#project-pages-generate-to").val() as string;
-            if (/\d+/.test(fromFieldValue) && /\d+/.test(toFieldValue)) {
-                const from = parseInt(fromFieldValue);
-                const to = parseInt(toFieldValue);
-                const formatString = $("#project-pages-format").find(":selected").data("format-value") as string;
-                const format = PageListFormat[formatString] as number;
-                if (!isNaN(from) && !isNaN(to)) {
-                    if (to > from) {
-                        const pageList = listGenerator.generatePageList(from, to, format, doublePage);
-                        this.populateList(pageList, listStructure);
-                        this.enableCheckboxes();
-                        this.trackSpecialPagesCheckboxesState();
-                    } else {
-                        this.gui.showInfoDialog("Warning", "Please swap to and from numbers.");
-                    }
-                }
-            } else {
-                this.gui.showInfoDialog("Warning", "Please enter a number.");
-            }
+        } else {
+            this.gui.showInfoDialog("Warning", "Please enter a number.");
+        }
     }
 
     private populateList(pageList: string[], listStructure: PageListStructure) {
-        const listContainerEl = $(".page-list-container");
-        const listEl = listContainerEl.children(".page-list");
-        if (!listEl.length) {
-            listStructure.createList(pageList, listContainerEl);
-        } else {
+        const listContainerEl = $(".page-listing tbody");
+        let position = 0;
+        if (listContainerEl.length) {
             this.gui.showInfoDialog("Info", "Page names already exist for this project. Appending generated names to the end of the list.");
-            listStructure.appendList(pageList, listEl);
+            position = listContainerEl.length;
         }
+
+        for (let page of pageList) {
+            const html =
+                `<tr class="page-row" data-position="${position}">
+                    <td class="ridics-checkbox">
+                        <label>
+                            <input type="checkbox" class="selection-checkbox">
+                            <span class="cr cr-black">
+                                <i class="cr-icon glyphicon glyphicon-ok"></i>
+                            </span>
+                        </label>
+                    </td>
+                    <td>
+                        <div class="name">${page}</div>
+                        <div class="alert alert-danger"></div>
+                    </td>
+                    <td class="buttons">
+                        <a class="edit-page btn btn-sm btn-default">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                        <a class="remove-page btn btn-sm btn-default">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>`;
+
+            listContainerEl.append(html);
+            position++;
+        }
+
+        this.showUnsavedChangesAlert();
+        this.initPageRowClicks();
     }
 
     private moveList(down: boolean, context: JQuery) {

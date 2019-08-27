@@ -17,6 +17,9 @@
     "Pages": "Pages",
     "PageContent": "Page content",
     "PagePreview": "Page preview",
-    "UnsavedChanges": "Made changes are not saved."
+    "UnsavedChanges": "Made changes are not saved.",
+    "PageContainsText": "Page contains text",
+    "PageContainsImage": "Page contains image",
+    "EmptyPage": "Page does not contain text nor image."
   }
 }

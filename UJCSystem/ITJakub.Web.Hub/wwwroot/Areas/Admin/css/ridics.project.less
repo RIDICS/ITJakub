@@ -1327,7 +1327,23 @@
     }
 }
 
+.body-content {
+    height: 458px;
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
 
+    .page-text {
+        flex: 1 0 55%;
+        min-width: 20em;
+        padding-right: 1.7em;
+    }
+
+    .image-preview {
+        flex: 1 0 45%;
+    }
+}
 
 .page-move-distance {
     max-width: 4.5em;
