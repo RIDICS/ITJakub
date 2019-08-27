@@ -7,7 +7,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.1.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Ridics.Authentication.HttpClient" Version="0.2.0" />
+    <PackageReference Include="Ridics.Authentication.HttpClient" Version="0.2.1" />
   </ItemGroup>
 
   <ItemGroup>
