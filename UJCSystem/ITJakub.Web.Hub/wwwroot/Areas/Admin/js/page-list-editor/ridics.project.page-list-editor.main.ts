@@ -320,7 +320,7 @@
         }
 
         let j = 0;
-        for (const page of newPages) {
+        for (const page of pages) {
             const isSelected = $(page).find(".selection-checkbox").is(":checked");
             if (!isSelected) {
                 while (true) {
