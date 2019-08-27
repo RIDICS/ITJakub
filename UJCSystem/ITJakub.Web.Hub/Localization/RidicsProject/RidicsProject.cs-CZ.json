@@ -22,6 +22,9 @@
     "UnsavedChanges": "Provedné změny nejsou uloženy.",
     "PageContainsText": "Stránka obsahuje text",
     "PageContainsImage": "Stránka obsahuje obrázek",
-    "EmptyPage": "Stránka neobsahuje text ani obrázek."
+    "EmptyPage": "Stránka neobsahuje text ani obrázek.",
+    "SwapNumbers": "Prosím prohoďte čísla od a do.",
+    "EnterValidNumbers": "Prosím vložte validní čísla",
+    "AddingGeneratedNames": "Projekt již obshauje stránky. Vygenerované stránky byly přidány na konec seznamu."
   }
 }

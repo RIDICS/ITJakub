@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
@@ -29,28 +29,46 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
             var now = DateTime.UtcNow;
             var user = m_resourceRepository.Load<User>(m_userId);
 
+            m_resourceRepository.GetProjectPages(m_projectId);
+            var pages = m_resourceRepository.GetProjectPages(m_projectId);
+            foreach (var page in pages)
+            {
+                var actualPage = m_data.FirstOrDefault(x => x.Id != null && x.Id.Value == page.Id);
+                if (actualPage == null)
+                {
+                    //TODO remove page
+                    //m_resourceRepository.Delete(page);
+                }
+                else
+                {
+                    page.Name = actualPage.Name;
+                    page.Position = actualPage.Position;
+                    page.Resource.Name = actualPage.Name;
+                    page.Resource.LatestVersion = page;
+                    page.VersionNumber++;
+                    page.CreateTime = now;
+                    page.CreatedByUser = user;
+
+                    m_resourceRepository.Save(page);
+                    m_data.Remove(actualPage);
+                }
+            }
+
             foreach (var page in m_data)
             {
-                var pageResource = page.Id != null
-                    ? m_resourceRepository.GetLatestResourceVersion<PageResource>(page.Id.Value)
-                    : new PageResource
-                    {
-                        VersionNumber = 0,
-                        Resource = new Resource
-                        {
-                            ContentType = ContentTypeEnum.Page,
-                            ResourceType = ResourceTypeEnum.Page,
-                            Project = m_resourceRepository.Load<Project>(m_projectId),
-                        }
-                    };
-
-                if (pageResource == null)
+                var pageResource = new PageResource
                 {
-                    throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
-                }
+                    VersionNumber = 0,
+                    Resource = new Resource
+                    {
+                        ContentType = ContentTypeEnum.Page,
+                        ResourceType = ResourceTypeEnum.Page,
+                        Project = m_resourceRepository.Load<Project>(m_projectId),
+                    },
+                    Name = page.Name,
+                    Position = page.Position
+                };
 
-                pageResource.Name = page.Name;
-                pageResource.Position = page.Position;
                 pageResource.Resource.Name = page.Name;
                 pageResource.Resource.LatestVersion = pageResource;
                 pageResource.VersionNumber++;
@@ -58,8 +76,6 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
                 pageResource.CreatedByUser = user;
 
                 m_resourceRepository.Save(pageResource);
-
-                
             }
         }
     }

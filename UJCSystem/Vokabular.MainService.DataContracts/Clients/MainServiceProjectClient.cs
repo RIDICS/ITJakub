@@ -489,7 +489,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                m_client.Post<object>($"project/{projectId}/page", pageList);
+                m_client.Post<object>($"project/{projectId}/page-list", pageList);
             }
             catch (HttpRequestException e)
             {
