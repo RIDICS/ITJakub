@@ -41,10 +41,11 @@
                 $(this.container).hide();
             });
 
+        var moduleContent = $(".module-content") as JQuery<HTMLDivElement>;
         $(this.container)
             .append(info)
             .append(refreshLink)
             .append(closeButton)
-            .appendTo($(".module-content"));
+            .appendTo(moduleContent);
     }
 }
