@@ -27,13 +27,27 @@ Recommended software:
 Environment configuration
 * Checkout repository to C:\Pool\itjakub\
 * Checkout itjakub-secrets repository to C:\Pool\itjakub-secrets\
-* Checkout Authentication repository to disk and setup it according to it's Readme file (ITJakub.Web.Hub won't start without running Authentication service)
+* Checkout Authentication repository (from organization RIDICS) to the disk and setup it according to it's Readme file (ITJakub.Web.Hub won't start without running Authentication service)
+* Checkout YAFNET repository (from organization RIDICS) to the disk and setup it according to it's Readme file (Vokabular defaultly creates a new forum for each imported book)
 * Configure connection strings and passwords in itjakub-secrets folder
-* Create database schema (use numbered SQL create scripts in correct order, stored in Database folder):
-  * ~~ITJakubDB - database for ITJakub.ITJakubService~~ (will be removed)
-  * ITJakubWebDB - database for ITJakub.Web.Hub for storing texts
-  * VokabularDB - new database for Vokabular.MainService
-  * VokabularForumDB - database for Forum (create empty database, install Forum, run update script)
+* Create database schema using Vokabular.Database.Migrator app - the only step is to run this application which automatically creates following databases:
+  * VokabularWebDB - database for ITJakub.Web.Hub for storing texts
+  * VokabularDB - database for Vokabular.MainService
+* Other databases which should be created automatically from Forum and Authentication setup are following:
+  * VokabularForumDB - database for Forum
+  * VokabularAuthDB - database for Authentication service
+* Prepare Elasticsearch:
+  * Install Experimental highlighter plugin using following command: "./bin/elasticsearch-plugin install org.wikimedia.search.highlighter:experimental-highlighter-elasticsearch-plugin:5.5.2.2" in Elasticsearch installation directory.
+* Run script `InitFulltextDatabases.ps1` to check if fulltext databases are correctly installed and initialize them. The script will do following steps:
+  * Check if eXist-db is correctly installed and running
+  * Check if Elasticsearch is correctly installed and running
+  * Check if Elasticsearch has installed required plugin
+  * Upload required resources to eXist-db (xqueries)
+  * Create indices in Elasticsearch
+* Restore Yarn dependencies (for development) using `YarnInstall.ps1` script.
+* Run `SelectPortalTheme.{SELECTED_PORTAL}.ps1` to choose portal style otherwise build fails because of missing styles. Run this script any time you want to change a theme.
+
+Fulltext databases manual initialization (instead of running `InitFulltextDatabases.ps1` script)
 * Prepare eXist-db collection (it's possible either to use script `ExistDB-Recreate.cmd` or copy ExistDB folder content manually).
   * Automatic script use predefined default values or values specified as parameters in following order:
     1. eXist URL (default is xmldb:exist://localhost:8080/exist/xmlrpc)
@@ -47,15 +61,12 @@ Environment configuration
 	3. copy content of "Database/ExistDB" folder except "config" folder to app collection named "jacob"
 	4. copy content of "Database/ExistDB/config" folder to collection "/system/config/db/apps/jacob"
 * Prepare Elasticsearch:
-  * Install Experimental highlighter plugin using following command: "./bin/elasticsearch-plugin install org.wikimedia.search.highlighter:experimental-highlighter-elasticsearch-plugin:5.5.2.2" in Elasticsearch installation directory.
   * Create indices using Elasticsearch-Update.ps1 script or manually using REST calls to Elasticsearch with configuration stored in "Database/Elasticsearch" folder (every file represents configuration for one index, index name is the same as file name).
   * Elasticsearch-Update.ps1 script has following parameters:
     1. -url URL of database (default is "http://localhost:9200")
     2. -path Folder with indices configuration (default is "Elasticsearch")
     3. -recreateMode Determine if indices should be deleted and then created new (default is $false)
     4. -indexSuffix Add suffix to index name (default is empty)
-* Restore Yarn dependencies (for development) using `YarnInstall.ps1` script.
-* Run `SelectPortalTheme.{SELECTED_PORTAL}.ps1` to choose portal style otherwise build fails because of missing styles. Run this script any time you want to change a theme.
 
 Optional environment configuration
 * Install certificates (required only if testing deployment to IIS)
@@ -98,13 +109,20 @@ Required software:
 * Internet Information Services
 * Elasticsearch 5.5.2
 
-Environment configuration
-* Almost same as Developer computer
+Build computer environment configuration
+* Create configuration files in itjakub-secrets folder (it is desribed in following chapter: *Configuration for different environments*)
+
+Server environment configuration
+* Setup Authentication service (from organization RIDICS) according to it's readme
+* Setup Forum YAFNET (from organization RIDICS) according to it's readme
 * Configure Application Pools in IIS
   1. Create new Application Pool (e.g. .NET Core) with ".NET CLR version" set to "No Managed Code"
   2. Configure ASP.NET Core services to use .NET Core Application Pool (every ASP.NET Core service run as separate process with Kestrel server)
+* Prepare Elasticsearch:
+  * Install Experimental highlighter plugin using following command: "./bin/elasticsearch-plugin install org.wikimedia.search.highlighter:experimental-highlighter-elasticsearch-plugin:5.5.2.2" in Elasticsearch installation directory.
+* Copy Database folder from itjakub folder to the server and run script `InitFulltextDatabases.ps1` to check if fulltext databases are correctly installed and initialize them.
 
-## Environment configuration
+## Configuration for different environments
 
 Solution is configured to load sensitive information from external location which is C:\Pool\itjakub-secrets
 The reason of separating this info from the remaining code is avoiding accidental commit of private/secret information to public git.
@@ -147,6 +165,7 @@ The configuration must be created directly in the project folder (according to R
 * Copy this folder to target server
 * Optionally update `{SERVICE_NAME}.SetParameters.xml` files with desired target path (site) in IIS
 * Run script `DeploySolution.ps1`
+  * This script run DB Migrator to update database schema, deploy the services and configure permissions to logs folders (allow logging).
   * -disableInteractive this parameter disable waiting for user input after each service deployment
   * -test run deployment simulation, it doesn't deploy anything but it creates a report
 

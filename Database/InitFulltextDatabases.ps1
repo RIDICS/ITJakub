@@ -145,8 +145,8 @@ else
 }
 
 
-$DatabaseFolderPath = Join-Path $CurrentPath "Database"
-Set-Location $DatabaseFolderPath
+# $DatabaseFolderPath = Join-Path $CurrentPath "Database"
+# Set-Location $DatabaseFolderPath
 
 $ElasticSearchScript = "Elasticsearch-Update.ps1"
 $ElasticScripthPath = Join-Path $DatabaseFolderPath $ElasticSearchScript
