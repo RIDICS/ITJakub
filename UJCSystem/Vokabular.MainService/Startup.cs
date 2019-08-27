@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,7 +30,6 @@ using Vokabular.MainService.Options;
 using Vokabular.MainService.Utils;
 using Vokabular.ProjectImport;
 using Vokabular.ProjectImport.Shared.Options;
-using Vokabular.RestClient;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore;
 using Vokabular.Shared.AspNetCore.Container;
@@ -106,7 +106,11 @@ namespace Vokabular.MainService
                 });
             });
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                })
                 .AddJwtBearer(options =>
                 {
                     options.Authority = openIdConnectConfig.Url;
@@ -115,6 +119,16 @@ namespace Vokabular.MainService
                     options.TokenValidationParameters.ValidateAudience = true;
                     options.TokenValidationParameters.ValidateIssuer = true;
                     options.TokenValidationParameters.ValidateLifetime = true;
+                })
+                // Required for app authentication against the Auth service (for background services)
+                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
+                {
+                    options.Authority = openIdConnectConfig.Url;
+                    options.ClientSecret = openIdConnectConfig.ClientSecret;
+                    options.ClientId = openIdConnectConfig.ClientId;
+
+                    options.Scope.Clear();
+                    options.Scope.Add("auth_api.Internal");
                 });
 
             services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();

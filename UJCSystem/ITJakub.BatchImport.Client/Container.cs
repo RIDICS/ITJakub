@@ -26,10 +26,7 @@ namespace ITJakub.BatchImport.Client
 
         private static ILog m_log;
 
-        public static WindsorContainer Current
-        {
-            get { return m_current.Value; }
-        }
+        public static WindsorContainer Current => m_current.Value;
 
 
         private Container()
@@ -45,11 +42,6 @@ namespace ITJakub.BatchImport.Client
 
             InstallComponents();
 
-            ////Configure Nhibernate
-            //InstallFacilities();
-
-            //configure AutoMapper
-            //ConfigureAutoMapper();
             if (m_log.IsDebugEnabled)
                 m_log.DebugFormat("Configuration castle is completed");
         }
@@ -59,16 +51,6 @@ namespace ITJakub.BatchImport.Client
             Install(FromAssembly.InThisApplication());
             //Install(Configuration.FromXml(GetConfigResource()));
         }
-
-        //private void ConfigureAutoMapper()
-        //{
-        //    var profiles = ResolveAll<Profile>();
-        //    Mapper.Reset();
-        //    foreach (var profile in profiles)
-        //    {
-        //        Mapper.AddProfile(profile);
-        //    }
-        //}
 
         private void AddSubresolvers()
         {

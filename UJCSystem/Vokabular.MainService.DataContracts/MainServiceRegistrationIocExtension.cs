@@ -13,27 +13,27 @@ namespace Vokabular.MainService.DataContracts
             if (configuration != null)
                 services.AddSingleton(configuration);
 
-            services.AddScoped<IMainServiceAuthTokenProvider, TTokenProvider>();
-            services.AddScoped<IMainServiceClientLocalization, TClientLocalization>();
+            services.AddSingleton<IMainServiceAuthTokenProvider, TTokenProvider>();
+            services.AddSingleton<IMainServiceClientLocalization, TClientLocalization>();
             
             services.AddSingleton<MainServiceRestClient>();
 
-            services.AddScoped<MainServiceBookClient>();
-            services.AddScoped<MainServiceCardFileClient>();
-            services.AddScoped<MainServiceCodeListClient>();
-            services.AddScoped<MainServiceExternalRepositoryClient>();
-            services.AddScoped<MainServiceFavoriteClient>();
-            services.AddScoped<MainServiceFeedbackClient>();
-            services.AddScoped<MainServiceFilteringExpressionSetClient>();
-            services.AddScoped<MainServiceMetadataClient>();
-            services.AddScoped<MainServiceNewsClient>();
-            services.AddScoped<MainServicePermissionClient>();
-            services.AddScoped<MainServiceProjectClient>();
-            services.AddScoped<MainServiceResourceClient>();
-            services.AddScoped<MainServiceRoleClient>();
-            services.AddScoped<MainServiceSessionClient>();
-            services.AddScoped<MainServiceTermClient>();
-            services.AddScoped<MainServiceUserClient>();
+            services.AddTransient<MainServiceBookClient>();
+            services.AddTransient<MainServiceCardFileClient>();
+            services.AddTransient<MainServiceCodeListClient>();
+            services.AddTransient<MainServiceExternalRepositoryClient>();
+            services.AddTransient<MainServiceFavoriteClient>();
+            services.AddTransient<MainServiceFeedbackClient>();
+            services.AddTransient<MainServiceFilteringExpressionSetClient>();
+            services.AddTransient<MainServiceMetadataClient>();
+            services.AddTransient<MainServiceNewsClient>();
+            services.AddTransient<MainServicePermissionClient>();
+            services.AddTransient<MainServiceProjectClient>();
+            services.AddTransient<MainServiceResourceClient>();
+            services.AddTransient<MainServiceRoleClient>();
+            services.AddTransient<MainServiceSessionClient>();
+            services.AddTransient<MainServiceTermClient>();
+            services.AddTransient<MainServiceUserClient>();
         }
     }
 }
