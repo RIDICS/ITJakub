@@ -1,16 +1,16 @@
 ﻿class PageListEditorMain {
     private editDialog: BootstrapDialogWrapper;
     private readonly gui: EditorsGui;
+    private readonly util: EditorsUtil;
     private readonly errorHandler: ErrorHandler;
 
     constructor() {
         this.gui = new EditorsGui();
         this.errorHandler = new ErrorHandler();
+        this.util = new EditorsUtil();
     }
     
     init(projectId: number) {
-
-        const util = new EditorsUtil();
         const listGenerator = new PageListGenerator();
         const listStructure = new PageListStructure();
         const editor = new PageListEditorTextEditor();
@@ -28,28 +28,11 @@
             this.moveList(false, $(".pages"));
         });
 
-        $(".page-row").click((event) => {
-            const pageId = $(event.currentTarget).data("page-id");
-            const pageDetail = $("#page-detail");
-            const content = pageDetail.find("#bodyContent");
-            const alertHolder = pageDetail.find(".alert-holder");
-
-            alertHolder.empty();
-            content.html("<div class=\"loader\"></div>");
-            pageDetail.removeClass("hide");
-
-            util.getPageDetail(pageId).done((response) => {
-                content.html(response);
-            }).fail((error) => {
-                const alert = new AlertComponentBuilder(AlertType.Error)
-                    .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
-                alertHolder.append(alert);
-            });
-        });
+       this.initPageRowClicks();
 
         $("#project-pages-edit-button").click(() => {
             this.editDialog.show();
-            this.loadExistingPages(projectId, util, listStructure);
+            this.loadExistingPages(projectId, this.util, listStructure);
             $(".page-list-editor-content").on("click",
                 ".edit-page-list",
                 () => {
@@ -68,7 +51,7 @@
                     }
                     const doublePageRadiobuttonEl = $(".doublepage-radiobutton");
                     const doublePageGeneration = doublePageRadiobuttonEl.prop("checked") as boolean;
-                    this.startGeneration(listGenerator, projectId, util, listStructure, doublePageGeneration);
+                    this.startGeneration(listGenerator, projectId, this.util, listStructure, doublePageGeneration);
                 });
             $(".page-list-editor-content").on("click",
                 ".move-page-up",
@@ -129,6 +112,60 @@
                     $(".page-list-editor-content").off();
                 }
             );
+        });
+    }
+
+    private initPageRowClicks() {
+        $(".page-row .ridics-checkbox label").click((event) => {
+            event.stopPropagation(); //stop propagation to prevent loading detail, while is clicked on the checkbox
+        });
+
+        $(".page-row .remove-page").click((event) => {
+            event.stopPropagation();
+            const pageRow = $(event.currentTarget).parents(".page-row");
+            pageRow.remove();
+            this.showUnsavedChangesAlert();
+        });
+
+        $(".page-row .edit-page").click((event) => {
+            event.stopPropagation();
+            const editButton = $(event.currentTarget).find("i.fa");
+            const pageRow = editButton.parents(".page-row");
+            const nameElement = pageRow.find(".name");
+            if (editButton.hasClass("fa-pencil")) {
+                editButton.switchClass("fa-pencil", "fa-check");
+                const name = nameElement.text();
+                nameElement.html(`<input type="text" data-old-name="${name}" class="form-control" value="${name}" />`);
+            } else {
+                editButton.switchClass("fa-check", "fa-pencil");
+                const newNameInput = nameElement.find("input");
+                const newName = String(newNameInput.val());
+                nameElement.text(newName);
+
+                if (String(newNameInput.data("old-name")) !== newName) {
+                    this.showUnsavedChangesAlert();
+                }
+            }
+        });
+        
+        $(".page-row").click((event) => {
+            const pageId = $(event.currentTarget).data("page-id");
+            const pageDetail = $("#page-detail");
+            const content = pageDetail.find("#bodyContent");
+            const alertHolder = pageDetail.find(".alert-holder");
+
+            console.log(this.util.getImageUrlOnPage(pageId));
+            alertHolder.empty();
+            content.html("<div class=\"loader\"></div>");
+            pageDetail.removeClass("hide");
+
+            this.util.getPageDetail(pageId).done((response) => {
+                content.html(response);
+            }).fail((error) => {
+                const alert = new AlertComponentBuilder(AlertType.Error)
+                    .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                alertHolder.append(alert);
+            });
         });
     }
 
@@ -340,5 +377,12 @@
         for (const page of newPages) {
             listing.append(page);
         }
+
+        this.showUnsavedChangesAlert();
+        this.initPageRowClicks();
+    }
+
+    private showUnsavedChangesAlert() {
+        $("#unsavedChanges").removeClass("hide");
     }
 }

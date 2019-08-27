@@ -124,17 +124,9 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     throw;
             }
 
-            try
-            {
-                var result = client.GetPageImage(pageId);
-                model.Image = new FileStreamResult(result.Stream, result.MimeType);
-            }
-            catch (HttpErrorCodeException e)
-            {
-                if (e.StatusCode != HttpStatusCode.NotFound)
-                    throw;
-            }
-
+            model.HasImage = client.HasPageImage(pageId);
+            model.PageId = pageId;
+            
             return PartialView("../Project/Work/_PageListDetail", model);
         }
 

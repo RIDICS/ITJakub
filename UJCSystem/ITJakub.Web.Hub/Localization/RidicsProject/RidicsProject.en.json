@@ -16,6 +16,7 @@
 
     "Pages": "Pages",
     "PageContent": "Page content",
-    "PagePreview": "Page preview"
+    "PagePreview": "Page preview",
+    "UnsavedChanges": "Made changes are not saved."
   }
 }
