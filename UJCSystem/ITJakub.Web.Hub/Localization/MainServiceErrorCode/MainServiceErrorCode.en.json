@@ -43,6 +43,12 @@
     "delete-default-role": "The default group {0} cannot be deleted.",
     "resource-modified": "Could not save a resource. The resource was changed by another user.",
     "user-has-not-permission-to-manipulate": "You don't have permission manipulate with specified item.",
+    "repository-import-manager-not-found": "The import manager was not found for repository type {0}.",
+    "repository-import-cancelled": "Import from repository {0} was canceled.",
+    "repository-import-failed": "An unexpected error occurred while importing bibliographic data from database {0}",
+    "oai-pmh-communication-error": "Error while requesting: {0}. {1} : {2}",
+    "oai-pmh-communication-failed": "Error while requesting: {0}.",
+    "project-parser-not-found": "The project parser was not found for bibliographic format {0}.",
 
     //Auth service codes
     "generic-error": "Operation failed",
