@@ -1,4 +1,5 @@
 ﻿@import "../../../css/ITJakub.Colors.less";
+@import "../../../css/ridics.checkbox.less";
 @import "@text-editor-variables.less";
 @import "@page-list-editor-vabiables.less";
 @import "@editors-common-variables.less";
@@ -251,8 +252,6 @@
         }
 
         > .row > div {
-            height: 540px;
-
             select {
                 height: 100%;
             }
@@ -1225,3 +1224,131 @@
     #forum-button-panel {
         margin-top: 10px;
     }
+
+.list-container {
+    &.selectable {
+        tbody {
+            cursor: pointer;
+
+            .active {
+                td {
+                    background-color: #DCDCDC;
+                }
+            }
+        }
+    }
+
+    .alert-info {
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+
+    table {
+        tr {
+            border-bottom: 1px solid @separation-line-color;
+
+            td {
+                border: none;
+                
+                .form-control {
+                    height: 28px;
+                }
+            }
+
+            .alert {
+                padding: 3px 7px;
+                margin: 1px 0 0 0;
+            }
+        }
+    }
+
+    .buttons {
+        vertical-align: middle;
+        text-align: right;
+
+        .btn-default {
+            margin-left: 0.5em;
+            margin-bottom: 0.5em;
+
+            &:first-of-type {
+                margin-left: 0;
+            }
+        }
+    }
+}
+
+.panel {
+    .panel-buttons {
+        .btn {
+            max-width: fit-content;
+        }
+    }
+
+    .panel-body {
+        .panel-bottom-buttons {
+            padding-top: 1em;
+        }
+    }
+
+    .text-right {
+        text-align: right;
+    }
+}
+
+.page-listing {
+    height: 400px;
+    overflow-y: auto;
+
+    .page-row {
+        td {
+            padding: 0.3em 0.3em 0.3em 0.3em;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .buttons {
+            min-width: 90px;
+            text-align: right;
+
+            a {
+                margin-bottom: 0;
+            }
+        }
+
+        .ridics-checkbox {
+            width: 2em;
+            vertical-align: bottom;
+            padding-bottom: 2px;
+
+            label {
+                margin: 0;
+            }
+        }
+    }
+}
+
+.body-content {
+    height: 458px;
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+
+    .page-text {
+        flex: 1 0 55%;
+        min-width: 20em;
+        padding-right: 1.7em;
+    }
+
+    .image-preview {
+        flex: 1 0 45%;
+        text-align: center;
+    }
+}
+
+.page-move-distance {
+    max-width: 5em;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 0.5em;
+}

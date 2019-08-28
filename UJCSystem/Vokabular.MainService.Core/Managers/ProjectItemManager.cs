@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
+using Vokabular.Core.Storage;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.ProjectItem;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
@@ -17,13 +19,15 @@ namespace Vokabular.MainService.Core.Managers
         private readonly ResourceRepository m_resourceRepository;
         private readonly BookRepository m_bookRepository;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
+        private readonly FileSystemManager m_fileSystemManager;
 
-        public ProjectItemManager(AuthenticationManager authenticationManager, ResourceRepository resourceRepository, BookRepository bookRepository, FulltextStorageProvider fulltextStorageProvider)
+        public ProjectItemManager(AuthenticationManager authenticationManager, ResourceRepository resourceRepository, BookRepository bookRepository, FulltextStorageProvider fulltextStorageProvider, FileSystemManager fileSystemManager)
         {
             m_authenticationManager = authenticationManager;
             m_resourceRepository = resourceRepository;
             m_bookRepository = bookRepository;
             m_fulltextStorageProvider = fulltextStorageProvider;
+            m_fileSystemManager = fileSystemManager;
         }
 
         public List<PageContract> GetPageList(long projectId)
@@ -149,6 +153,51 @@ namespace Vokabular.MainService.Core.Managers
             var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
             var resourceVersionId = new CreateEditionNoteVersionWork(m_resourceRepository, projectId, data, userId, fulltextStorage).Execute();
             return resourceVersionId;
+        }
+
+        public void UpdatePages(long projectId, List<CreateOrUpdatePageContract> data)
+        {
+            var userId = m_authenticationManager.GetCurrentUserId();
+            var work = new CreateOrUpdatePagesWork(m_resourceRepository, data, projectId, userId);
+            work.Execute();
+        }
+
+        public string GetPageText(long resourcePageId, TextFormatEnumContract format)
+        {
+            var textResource = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestPageText(resourcePageId));
+            if (textResource == null)
+            {
+                return null;
+            }
+
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            return fulltextStorage.GetPageText(textResource, format);
+        }
+
+        public bool HasBookPageImage(long resourcePageId)
+        {
+            var imageResource = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestPageImage(resourcePageId));
+            return imageResource != null;
+        }
+
+
+        public FileResultData GetPageImage(long resourcePageId)
+        {
+            var imageResource = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestPageImage(resourcePageId));
+            if (imageResource == null)
+            {
+                return null;
+            }
+
+            var imageStream =
+                m_fileSystemManager.GetResource(imageResource.Resource.Project.Id, null, imageResource.FileId, ResourceType.Image);
+            return new FileResultData
+            {
+                FileName = imageResource.FileName,
+                MimeType = imageResource.MimeType,
+                Stream = imageStream,
+                FileSize = imageStream.Length,
+            };
         }
     }
 }

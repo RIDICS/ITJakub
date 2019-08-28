@@ -130,6 +130,12 @@ interface IPage {
     position: number;
 }
 
+interface IUpdatePage {
+    id?: number;
+    name: string;
+    position: number;
+}
+
 interface IPageWithContext extends IPage {
     contextStructure: IKwicStructure;
 }

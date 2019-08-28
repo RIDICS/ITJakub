@@ -13,12 +13,17 @@
         return `${this.serverPath}Admin/ContentEditor/GetPageImage?pageId=${pageId}`;
     }
 
-    savePageList(pageList: string[]): JQueryXHR {
-        const pageAjax = $.post(`${this.serverPath}Admin/ContentEditor/SavePageList`,
+
+    getPageDetail(pageId: number): JQuery.jqXHR<string> {
+        return  $.get(`${this.serverPath}Admin/ContentEditor/GetPageDetail?pageId=${pageId}`);
+    }
+
+    savePageList(projectId: number, pageList: IUpdatePage[]): JQuery.jqXHR {
+        return $.post(`${this.serverPath}Admin/ContentEditor/SavePageList`,
             {
+                projectId: projectId,
                 pageList: pageList
             } as JQuery.PlainObject);
-        return pageAjax;
     }
 
     getServerAddress(): string {

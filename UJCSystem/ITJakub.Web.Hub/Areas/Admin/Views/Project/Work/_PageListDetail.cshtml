@@ -1,0 +1,26 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@model ITJakub.Web.Hub.Areas.Admin.Models.PageDetailViewModel
+@inject ILocalizationService Localizer
+
+@if (!string.IsNullOrEmpty(Model.Text) || Model.HasImage)
+{
+    @if (!string.IsNullOrEmpty(Model.Text))
+    {
+        <div class="page-text">
+            @Html.Raw(Model.Text)
+        </div>
+    }
+
+    @if (Model.HasImage)
+    {
+        <div class="image-preview">
+            <img alt="@Localizer.Translate("PagePreview", "RidicsProject")"
+                 src="/Admin/ContentEditor/GetPageImage?pageId=@Model.PageId"
+                 class=""/>
+        </div>
+    }
+}
+else
+{
+    <div class="alert alert-info">@Localizer.Translate("EmptyPage", "RidicsProject")</div>
+}
