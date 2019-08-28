@@ -1,4 +1,8 @@
-﻿@model ITJakub.Web.Hub.Models.BookListingModel
+﻿@using ITJakub.Web.Hub.Options
+@using Microsoft.Extensions.Options
+@model ITJakub.Web.Hub.Models.BookListingModel
+@inject IOptions<PortalOption> PortalOption
+
 @{
     ViewBag.Title = "Edice - Čtečka děl pokusná";
 }
@@ -12,6 +16,8 @@
     <script src="~/lib/golden-layout/dist/goldenlayout.js"></script>
     <script src="~/Areas/BookReader/js/new-reader.bundle.js"></script>
 }
+
+<div id="allowedSearchOptions" class="hide" data-options="@Html.Encode(Json.Serialize(PortalOption.Value.AllowedSearchOptions.ToArray()))"></div>
 
 <div id="SearchDiv">
 
