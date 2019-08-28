@@ -55,7 +55,6 @@
     "EditionAbbr": "translate[Zkratka památky]",
     "Preview": "Preview",
 
-
     "Cooperation": "translate[Spolupráce]",
     "DiscussionPosts": "translate[Příspěvky v diskuzi]",
     "Snapshots": "translate[Snapshoty]",
@@ -144,6 +143,7 @@
     "ListAllInLatestVersion": "translate[Zařadit vše v nejnovější verzi]",
     "Source": "translate[Zdroj]",
     "Include": "translate[Zahrnout]",
+    "IncludeAll": "Include all",
     "Version": "translate[Verze",
     "Grammar": "translate[Mluvnice]",
     "Edition": "translate[Edice]",

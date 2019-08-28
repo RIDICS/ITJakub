@@ -38,21 +38,20 @@ namespace Vokabular.MainService.Controllers
                 Author = "Jan Novák",
                 ResourcesInfo = new List<SnapshotResourcesInfoContract>
                 {
-                    GetSnapshotResourcesInfo(ResourceTypeEnumContract.Text, 3, 3),
-                    GetSnapshotResourcesInfo(ResourceTypeEnumContract.Image, 30, 30),
-                    GetSnapshotResourcesInfo(ResourceTypeEnumContract.Audio, 1, 1),
-                    GetSnapshotResourcesInfo(ResourceTypeEnumContract.Video, 0, 0)
+                    GetSnapshotResourcesInfo(ResourceTypeEnumContract.Text, 3),
+                    GetSnapshotResourcesInfo(ResourceTypeEnumContract.Image, 30),
+                    GetSnapshotResourcesInfo(ResourceTypeEnumContract.Audio, 1),
+                    GetSnapshotResourcesInfo(ResourceTypeEnumContract.Video, 0)
                 }
             };
         }
 
-        private static SnapshotResourcesInfoContract GetSnapshotResourcesInfo(ResourceTypeEnumContract resourceType, int publishedCount, int totalCount)
+        private static SnapshotResourcesInfoContract GetSnapshotResourcesInfo(ResourceTypeEnumContract resourceType, int publishedCount)
         {
             return new SnapshotResourcesInfoContract
             {
                 ResourceType = resourceType,
                 PublishedCount = publishedCount,
-                TotalCount = totalCount
             };
         }
     }

@@ -4,38 +4,67 @@
 @model NewPublicationViewModel
 @inject ILocalizationService Localizer
 
+<h3>@Localizer.Translate("CreateNewPublication", "Admin")</h3>
+
 <div class="project-snapshot-new">
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="collapse-icon">
+                        <a data-toggle="collapse" href="#publishToModules"><span class="glyphicon glyphicon-menu-down"></span></a>
+                    </div>
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#publishToModules">@Localizer.Translate("Visibility", "Admin")</a>
+                    </h4>
+                </div>
+                <div id="publishToModules" class="panel-body panel-collapse collapse in">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"/> @Localizer.Translate("Edition", "Admin")
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"/> @Localizer.Translate("Corporas", "Admin")
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"/> @Localizer.Translate("Grammar", "Admin")
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"/> @Localizer.Translate("Audio", "Admin")
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="collapse-icon">
+                        <a data-toggle="collapse" href="#snapshotVisibility"><span class="glyphicon glyphicon-menu-down"></span></a>
+                    </div>
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#snapshotVisibility">@Localizer.Translate("Visibility", "Admin")</a>
+                    </h4>
+                </div>
+                <div id="snapshotVisibility" class="panel-collapse collapse in">
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="project-snapshot-resources">
         @await Html.PartialAsync("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Text, "Textové zdroje", Model.ResourceList))
         @await Html.PartialAsync("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Image, "Obrazové zdroje", Model.ResourceList))
         @await Html.PartialAsync("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Audio, "Audio zdroje", Model.ResourceList))
         @await Html.PartialAsync("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Video, "Video zdroje", Model.ResourceList))
-        
+
         <div class="project-bottom-buttons">
             <button type="button" class="btn btn-default">@Localizer.Translate("Save", "Admin")</button>
-        </div>
-    </div>
-
-    <div class="project-snapshot-visibility">
-        <div>
-            <h4>@Localizer.Translate("Visibility", "Admin")</h4>
-            <div>
-                <button type="button" class="btn btn-default form-control">
-                    <span class="glyphicon glyphicon-plus"></span> @Localizer.Translate("AddGroupUser", "Admin")
-                </button>
-            </div>
-
-            <ul class="list-group">
-                @foreach (var group in Model.VisibilityForGroups)
-                {
-                    <li class="list-group-item" data-group-id="@group.GroupId">
-                        <div class="controls">
-                            <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
-                        </div>
-                        <span>@group.Name</span>
-                    </li>
-                }
-            </ul>
         </div>
     </div>
 </div>

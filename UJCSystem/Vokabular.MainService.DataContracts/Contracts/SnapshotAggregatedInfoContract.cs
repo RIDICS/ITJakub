@@ -15,7 +15,6 @@ namespace Vokabular.MainService.DataContracts.Contracts
     public class SnapshotResourcesInfoContract
     {
         public ResourceTypeEnumContract ResourceType { get; set; }
-        public int TotalCount { get; set; }
         public int PublishedCount { get; set; }
     }
 }

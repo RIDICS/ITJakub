@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ITJakub.Web.Hub.Areas.Admin.Models.Type;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Models

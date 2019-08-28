@@ -2,37 +2,35 @@
 @model IList<ITJakub.Web.Hub.Areas.Admin.Models.SnapshotViewModel>
 @inject ILocalizationService Localizer
 
-<h3>@Localizer.Translate("PublishedSnapshots", "Admin")</h3>
+<div id="new-snapshot-container">
+    <h3>@Localizer.Translate("PublishedSnapshots", "Admin")</h3>
 
-<table id="work-snapshots-table">
-    <tr>
-        <th>@Localizer.Translate("Date", "Admin")</th>
-        <th>@Localizer.Translate("TextSources", "Admin")</th>
-        <th>@Localizer.Translate("ImageSources", "Admin")</th>
-        <th>@Localizer.Translate("AudioSources", "Admin")</th>
-        <th>@Localizer.Translate("VideoSources", "Admin")</th>
-        <th>@Localizer.Translate("Author", "Admin")</th>
-        <th></th>
-        <th></th>
-    </tr>
-    @foreach (var snapshotViewModel in Model)
-    {
+    <table id="work-snapshots-table">
         <tr>
-            <td>@snapshotViewModel.PublishDate</td>
-            <td>@string.Format("{0}/{1}", snapshotViewModel.PublishedTextResourceCount, snapshotViewModel.TextResourceCount)</td>
-            <td>@string.Format("{0}/{1}", snapshotViewModel.PublishedImageResourceCount, snapshotViewModel.ImageResourceCount)</td>
-            <td>@string.Format("{0}/{1}", snapshotViewModel.PublishedAudioResourceCount, snapshotViewModel.AudioResourceCount)</td>
-            <td>@string.Format("{0}/{1}", snapshotViewModel.PublishedVideoResourceCount, snapshotViewModel.VideoResourceCount)</td>
-            <td>@snapshotViewModel.Author</td>
-            <td class="edit-column"><a href="#">@Localizer.Translate("Edit2", "Admin")</a></td>
-            <td class="remove-column"><a href="#">@Localizer.Translate("Delete", "Admin")</a></td>
-            <td class="duplicate-column" colspan="2"><a href="#">@Localizer.Translate("DuplicateSettings", "Admin")</a></td>
+            <th>@Localizer.Translate("Date", "Admin")</th>
+            <th>@Localizer.Translate("TextSources", "Admin")</th>
+            <th>@Localizer.Translate("ImageSources", "Admin")</th>
+            <th>@Localizer.Translate("AudioSources", "Admin")</th>
+            <th>@Localizer.Translate("Author", "Admin")</th>
+            <th></th>
+            <th></th>
         </tr>
-    }
-</table>
+        @foreach (var snapshotViewModel in Model)
+        {
+            <tr>
+                <td>@snapshotViewModel.PublishDate</td>
+                <td>@snapshotViewModel.PublishedTextResourceCount</td>
+                <td>@snapshotViewModel.PublishedImageResourceCount</td>
+                <td>@snapshotViewModel.PublishedAudioResourceCount</td>
+                <td>@snapshotViewModel.Author</td>
+                <td class="edit-column"><a href="#">@Localizer.Translate("Edit2", "Admin")</a></td>
+                <td class="remove-column"><a href="#">@Localizer.Translate("Delete", "Admin")</a></td>
+                <td class="duplicate-column" colspan="2"><a href="#">@Localizer.Translate("DuplicateSettings", "Admin")</a></td>
+            </tr>
+        }
+    </table>
 
-<div class="project-bottom-buttons">
-    <button type="button" class="btn btn-default" id="work-snapshots-new-button">@Localizer.Translate("CreateNewPublication", "Admin")</button>
+    <div class="project-bottom-buttons">
+        <button type="button" class="btn btn-default" id="work-snapshots-new-button">@Localizer.Translate("CreateNewPublication", "Admin")</button>
+    </div>
 </div>
-
-<div id="new-snapshot-container"></div>
