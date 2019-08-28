@@ -17,7 +17,7 @@
          @if (User.HasPermission(PermissionNames.ManageUserRoles))
          {
              <td class="buttons">
-                 @if (ViewData.TryGetValue(PermissionConstants.IsRoleEditAllowed, out var isEditAllowed) && (bool)isEditAllowed)
+                 @if (ViewData.TryGetValue(RoleViewConstants.IsRoleEditAllowed, out var isEditAllowed) && (bool)isEditAllowed)
                  {
                      <a class="edit-role btn btn-sm btn-default">
                          <i class="fa fa-pencil"></i>

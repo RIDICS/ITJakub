@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -15,9 +17,11 @@ using Ridics.Authentication.HttpClient.Configuration;
 using Ridics.Core.HttpClient.Config;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using Vokabular.CardFile.Core;
 using Vokabular.Core;
 using Vokabular.ForumSite.Core;
 using Vokabular.ForumSite.Core.Options;
+using Vokabular.FulltextService.DataContracts;
 using Vokabular.MainService.Authorization;
 using Vokabular.MainService.Core;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -51,7 +55,9 @@ namespace Vokabular.MainService
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             var openIdConnectConfig = Configuration.GetSection("OpenIdConnect").Get<OpenIdConnectConfiguration>();
-
+            var endpointsConfiguration = Configuration.GetSection("Endpoints").Get<EndpointOption>();
+            var credentialsConfiguration = Configuration.GetSection("Credentials").Get<List<CredentialsOption>>();
+            
             // Configuration options
             services.AddOptions();
             services.Configure<EndpointOption>(Configuration.GetSection("Endpoints"));
@@ -100,7 +106,11 @@ namespace Vokabular.MainService
                 });
             });
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                })
                 .AddJwtBearer(options =>
                 {
                     options.Authority = openIdConnectConfig.Url;
@@ -109,6 +119,16 @@ namespace Vokabular.MainService
                     options.TokenValidationParameters.ValidateAudience = true;
                     options.TokenValidationParameters.ValidateIssuer = true;
                     options.TokenValidationParameters.ValidateLifetime = true;
+                })
+                // Required for app authentication against the Auth service (for background services)
+                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
+                {
+                    options.Authority = openIdConnectConfig.Url;
+                    options.ClientSecret = openIdConnectConfig.ClientSecret;
+                    options.ClientId = openIdConnectConfig.ClientId;
+
+                    options.Scope.Clear();
+                    options.Scope.Add("auth_api.Internal");
                 });
 
             services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
@@ -135,6 +155,26 @@ namespace Vokabular.MainService
                 NonceBasePath = "api/v1/nonce/",
                 ContactBasePath = "api/v1/contact/",
                 LoginCheckBasePath = "Account/CheckLogin",
+            });
+
+            services.RegisterFulltextServiceClientComponents(new FulltextServiceClientConfiguration
+            {
+                Url = new Uri(endpointsConfiguration.Addresses["FulltextService"]),
+                CreateCustomHandler = false
+            });
+
+            var credentials = credentialsConfiguration.FirstOrDefault(x => x.Type == "CardFiles");
+            if (credentials == null)
+            {
+                throw new ArgumentException("Credentials for Card files not found");
+            }
+
+            services.RegisterCardFileClientComponents(new CardFilesCommunicationConfiguration
+            {
+                Url = new Uri(endpointsConfiguration.Addresses["CardFilesService"]),
+                CreateCustomHandler = true,
+                Username = credentials.Username,
+                Password = credentials.Password
             });
 
             services.AddProjectImportServices();

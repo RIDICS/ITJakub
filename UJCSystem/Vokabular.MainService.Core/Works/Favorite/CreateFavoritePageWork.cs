@@ -2,8 +2,8 @@
 using System.Net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts.Favorite;
-using Vokabular.RestClient.Errors;
 
 namespace Vokabular.MainService.Core.Works.Favorite
 {
@@ -30,7 +30,10 @@ namespace Vokabular.MainService.Core.Works.Favorite
 
             if (bookPage == null)
             {
-                throw new HttpErrorCodeException($"Page with ID={m_data.PageId} not found", HttpStatusCode.BadRequest);
+                throw new MainServiceException(MainServiceErrorCode.PageNotFound, 
+                    $"Page with ID {m_data.PageId} not found",
+                    HttpStatusCode.NotFound,
+                    new object[] { m_data.PageId });
             }
 
             var label = GetFavoriteLabelAndCheckAuthorization(m_data.FavoriteLabelId, user.Id);

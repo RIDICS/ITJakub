@@ -12,12 +12,10 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult EditionNote(long bookId)
         {
-            using (var client = GetRestClient())
-            {
-                var text = client.GetEditionNote(bookId, TextFormatEnumContract.Html);
-                ViewData["noteText"] = text;
-                return View();
-            }
+            var client = GetBookClient();
+            var text = client.GetEditionNote(bookId, TextFormatEnumContract.Html);
+            ViewData["noteText"] = text;
+            return View();
         }
     }
 }

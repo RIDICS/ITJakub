@@ -189,7 +189,7 @@ enum AlertType {
 class UiHelper {
     public static addSelectOptionAndSetDefault($selectElement: JQuery, optionName: string, optionValue: string | number) {
         var newOption = document.createElement("option");
-        $(newOption)
+        $(newOption as HTMLElement)
             .text(optionName)
             .attr("value", optionValue)
             .appendTo($selectElement);

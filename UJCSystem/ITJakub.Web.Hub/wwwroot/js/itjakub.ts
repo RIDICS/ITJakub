@@ -14,7 +14,7 @@ $(document as Node as Element).ready(() => {
     // Fix navigation menu behavior for touch devices
     var collapsibleMenu = $(".main-navbar-container .navbar-collapse.collapse");
     var navbarItems = $(".secondary-navbar-toggle");
-    $(".main-navbar-container [data-toggle=\"tooltip\"]").tooltip();
+    $("[data-toggle=\"tooltip\"]").tooltip();
 
     $('#main-plugins-menu').find('li').removeClass('active');
     var href = window.location.pathname;

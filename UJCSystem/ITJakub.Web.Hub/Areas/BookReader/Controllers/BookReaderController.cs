@@ -37,27 +37,56 @@ namespace ITJakub.Web.Hub.Areas.BookReader.Controllers
 
         #region Views and Feedback
                 
-        public ActionResult Listing(long bookId, string searchText, string pageId)
+        public ActionResult Listing(long? bookId, string searchText, string pageId)
         {
-            using (var client = GetRestClient())
+            if (bookId == null)
             {
-                var book = client.GetBookInfo(bookId);
-                var pages = client.GetBookPageList(bookId);
-                return
-                    View(new BookListingModel
-                    {
-                        BookId = book.Id,
-                        SnapshotId = null, 
-                        BookTitle = book.Title,
-                        BookPages = pages,
-                        SearchText = searchText,
-                        InitPageId = pageId, 
-                        CanPrintEdition = User.IsInRole("CanEditionPrint"),
-                        JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
-                    });
+                return BadRequest();
             }
+
+            var projectClient = GetProjectClient();
+            var snapshotInfo = projectClient.GetLatestPublishedSnapshot(bookId.Value);
+
+            if (snapshotInfo == null)
+            {
+                return NotFound();
+            }
+
+            switch (snapshotInfo.DefaultBookType)
+            {
+                case BookTypeEnumContract.Dictionary:
+                    return RedirectToAction("Listing", "Dictionaries", new
+                    {
+                        Area = "Dictionaries",
+                        books = $"[{bookId}]"
+                    });
+                case BookTypeEnumContract.BibliographicalItem:
+                    // No direct access to book (content doesn't exist), but at least display the bibliography list
+                    return RedirectToAction("Search", "Bibliographies", new
+                    {
+                        Area = "Bibliographies",
+                    });
+                case BookTypeEnumContract.CardFile:
+                    return BadRequest();
+            }
+
+            var client = GetBookClient();
+            var book = client.GetBookInfo(bookId.Value);
+            var pages = client.GetBookPageList(bookId.Value);
+            return
+                View(new BookListingModel
+                {
+                    BookId = book.Id,
+                    SnapshotId = null, 
+                    BookTitle = book.Title,
+                    BookPages = pages,
+                    SearchText = searchText,
+                    InitPageId = pageId, 
+                    CanPrintEdition = User.IsInRole("CanEditionPrint"),
+                    JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
+                });
         }
-        
+
         #endregion
 
         public ActionResult GetEditionsWithCategories()
@@ -73,18 +102,16 @@ namespace ITJakub.Web.Hub.Areas.BookReader.Controllers
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
 
-            using (var client = GetRestClient())
+            var client = GetBookClient();
+            var result = client.SearchHitsWithPageContext(projectId, new SearchHitsRequestContract
             {
-                var result = client.SearchHitsWithPageContext(projectId, new SearchHitsRequestContract
-                {
-                    ConditionConjunction = listSearchCriteriaContracts,
-                    ContextLength = 45,
-                    Count = count,
-                    Start = start,
-                });
+                ConditionConjunction = listSearchCriteriaContracts,
+                ContextLength = 45,
+                Count = count,
+                Start = start,
+            });
 
-                return Json(new { results = result }, GetJsonSerializerSettingsForBiblModule());
-            }
+            return Json(new { results = result }, GetJsonSerializerSettingsForBiblModule());
         }
 
         public ActionResult AdvancedSearchInBookCount(string json, long projectId, long? snapshotId)
@@ -92,15 +119,13 @@ namespace ITJakub.Web.Hub.Areas.BookReader.Controllers
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
 
-            using (var client = GetRestClient())
+            var client = GetBookClient();
+            var resultCount = client.SearchHitsResultCount(projectId, new SearchHitsRequestContract
             {
-                var resultCount = client.SearchHitsResultCount(projectId, new SearchHitsRequestContract
-                {
-                    ConditionConjunction = listSearchCriteriaContracts
-                });
+                ConditionConjunction = listSearchCriteriaContracts
+            });
 
-                return Json(new { count = resultCount });
-            }
+            return Json(new { count = resultCount });
         }
 
         public ActionResult AdvancedSearchInBookPagesWithMatchHit(string json, long projectId, long? snapshotId)
@@ -108,65 +133,57 @@ namespace ITJakub.Web.Hub.Areas.BookReader.Controllers
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<List<SearchCriteriaContract>>(deserialized);
 
-            using (var client = GetRestClient())
+            var client = GetBookClient();
+            var request = new SearchPageRequestContract
             {
-                var request = new SearchPageRequestContract
-                {
-                    ConditionConjunction = listSearchCriteriaContracts
-                };
-                var result = client.SearchPage(projectId, request);
+                ConditionConjunction = listSearchCriteriaContracts
+            };
+            var result = client.SearchPage(projectId, request);
 
-                return Json(new { pages = result });
-            }
+            return Json(new { pages = result });
         }
 
         public ActionResult TextSearchInBookPaged(string text, int start, int count, long projectId, long? snapshotId)
         {
             var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
 
-            using (var client = GetRestClient())
+            var client = GetBookClient();
+            var result = client.SearchHitsWithPageContext(projectId, new SearchHitsRequestContract
             {
-                var result = client.SearchHitsWithPageContext(projectId, new SearchHitsRequestContract
-                {
-                    ConditionConjunction = listSearchCriteriaContracts,
-                    ContextLength = 45,
-                    Count = count,
-                    Start = start,
-                });
+                ConditionConjunction = listSearchCriteriaContracts,
+                ContextLength = 45,
+                Count = count,
+                Start = start,
+            });
 
-                return Json(new { results = result }, GetJsonSerializerSettingsForBiblModule());
-            }
+            return Json(new { results = result }, GetJsonSerializerSettingsForBiblModule());
         }
 
         public ActionResult TextSearchInBookCount(string text, long projectId, long? snapshotId)
         {
             var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
 
-            using (var client = GetRestClient())
+            var client = GetBookClient();
+            var resultCount = client.SearchHitsResultCount(projectId, new SearchHitsRequestContract
             {
-                var resultCount = client.SearchHitsResultCount(projectId, new SearchHitsRequestContract
-                {
-                    ConditionConjunction = listSearchCriteriaContracts
-                });
+                ConditionConjunction = listSearchCriteriaContracts
+            });
 
-                return Json(new { count = resultCount });
-            }
+            return Json(new { count = resultCount });
         }
 
         public ActionResult TextSearchInBookPagesWithMatchHit(string text, long projectId, long? snapshotId)
         {
             var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
 
-            using (var client = GetRestClient())
+            var client = GetBookClient();
+            var request = new SearchPageRequestContract
             {
-                var request = new SearchPageRequestContract
-                {
-                    ConditionConjunction = listSearchCriteriaContracts
-                };
-                var result = client.SearchPage(projectId, request);
+                ConditionConjunction = listSearchCriteriaContracts
+            };
+            var result = client.SearchPage(projectId, request);
 
-                return Json(new { pages = result });
-            }
+            return Json(new { pages = result });
         }
 
         #endregion

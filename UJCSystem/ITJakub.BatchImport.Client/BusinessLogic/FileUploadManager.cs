@@ -53,7 +53,7 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
                 m_authenticationManager.SignInAsync().Wait();
 
                 ParallelLoopResult result = Parallel.ForEach(m_files,
-                    new ParallelOptions { MaxDegreeOfParallelism = threadCount },
+                    new ParallelOptions {MaxDegreeOfParallelism = threadCount},
                     model => ProcessFile(model, callback));
             }
             catch (AggregateException e)
@@ -72,53 +72,48 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
                 }
             }
         }
-    
+
 
         private void ProcessFile(FileModel file, Action<string, Exception> callback)
         {
             var session = Guid.NewGuid().ToString();
 
-            using (var client = m_communicationProvider.GetMainServiceClient())
-            {
-                file.CurrentState = FileStateType.Uploading;
-                using (var dataStream = GetDataStream(file.FullPath))
-                {
-                    try
-                    {
-                        client.UploadResource(session, dataStream, file.FileName);
-                    }
-                    catch (Exception)
-                    {
-                        file.CurrentState = FileStateType.Error;
-                        return;
-                        //throw;
-                    }
-                }
-            }
-
-            file.CurrentState = FileStateType.Processing;
-
-            using (var client = m_communicationProvider.GetMainServiceClient()) // new client instance required because of specific client configuration
+            var client = m_communicationProvider.GetMainServiceSessionClient();
+            file.CurrentState = FileStateType.Uploading;
+            using (var dataStream = GetDataStream(file.FullPath))
             {
                 try
                 {
-                    client.ProcessSessionAsImport(session, new NewBookImportContract
-                    {
-                        Comment = DefaultUploadMessage
-                    });
-                    file.CurrentState = FileStateType.Done;
-                }
-                catch (HttpRequestException ex)
-                {
-                    file.ErrorMessage = ex.Message;
-                    file.CurrentState = FileStateType.Error;
-                    return;
+                    client.UploadResource(session, dataStream, file.FileName);
                 }
                 catch (Exception)
                 {
                     file.CurrentState = FileStateType.Error;
                     return;
-                }                
+                    //throw;
+                }
+            }
+
+            file.CurrentState = FileStateType.Processing;
+
+            try
+            {
+                client.ProcessSessionAsImport(session, new NewBookImportContract
+                {
+                    Comment = DefaultUploadMessage
+                });
+                file.CurrentState = FileStateType.Done;
+            }
+            catch (HttpRequestException ex)
+            {
+                file.ErrorMessage = ex.Message;
+                file.CurrentState = FileStateType.Error;
+                return;
+            }
+            catch (Exception)
+            {
+                file.CurrentState = FileStateType.Error;
+                return;
             }
 
             callback(file.FullPath, null);
@@ -127,7 +122,7 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
         private Stream GetDataStream(string fullPath)
         {
             return new FileStream(fullPath, FileMode.Open);
-        }     
+        }
     }
 
     public class FileModel

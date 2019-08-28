@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Helpers;
+using ITJakub.Web.Hub.Middleware;
 using ITJakub.Web.Hub.Options;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -29,6 +30,8 @@ using Scalesoft.Localization.AspNetCore.IoC;
 using Scalesoft.Localization.Core.Configuration;
 using Scalesoft.Localization.Core.Util;
 using Scalesoft.Localization.Database.NHibernate;
+using Vokabular.MainService.DataContracts;
+using Vokabular.RestClient;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
@@ -59,6 +62,7 @@ namespace ITJakub.Web.Hub
 
             var openIdConnectConfig = Configuration.GetSection("OpenIdConnect").Get<OpenIdConnectConfiguration>();
             var portalConfig = Configuration.GetSection("PortalConfig").Get<PortalOption>();
+            var endpointsConfiguration = Configuration.GetSection("Endpoints").Get<EndpointOption>();
 
             services.AddAuthentication(options =>
                 {
@@ -113,14 +117,16 @@ namespace ITJakub.Web.Hub
                             var returnUrl = context.Request.GetAppBaseUrl();
                             context.ProtocolMessage.SetParameter("returnUrlOnCancel", returnUrl.ToString());
 
-                            var culture = context.HttpContext.RequestServices.GetRequiredService<ILocalizationService>().GetRequestCulture();
+                            var culture = context.HttpContext.RequestServices.GetRequiredService<ILocalizationService>()
+                                .GetRequestCulture();
                             context.ProtocolMessage.SetParameter("culture", culture.Name);
 
                             return Task.CompletedTask;
                         },
                         OnRedirectToIdentityProviderForSignOut = context =>
                         {
-                            var culture = context.HttpContext.RequestServices.GetRequiredService<ILocalizationService>().GetRequestCulture();
+                            var culture = context.HttpContext.RequestServices.GetRequiredService<ILocalizationService>()
+                                .GetRequestCulture();
                             context.ProtocolMessage.SetParameter("culture", culture.Name);
 
                             return Task.CompletedTask;
@@ -128,7 +134,7 @@ namespace ITJakub.Web.Hub
                         OnUserInformationReceived = context =>
                         {
                             var communicationProvider = context.HttpContext.RequestServices.GetRequiredService<CommunicationProvider>();
-                            var client = communicationProvider.GetMainServiceClient();
+                            var client = communicationProvider.GetMainServiceUserClient();
 
                             client.CreateUserIfNotExist(context.Principal.GetIdOrDefault().GetValueOrDefault());
 
@@ -155,19 +161,30 @@ namespace ITJakub.Web.Hub
             }, new OpenIdConnectConfig
             {
                 Url = openIdConnectConfig.Url,
-                Scopes = new List<string> { openIdConnectConfig.AuthServiceScopeName },
+                Scopes = new List<string> {openIdConnectConfig.AuthServiceScopeName},
                 ClientId = openIdConnectConfig.ClientId,
                 ClientSecret = openIdConnectConfig.ClientSecret,
-            }, new AuthServiceControllerBasePathsConfiguration(/*Not required to fill because client is not used*/));
+            }, new AuthServiceControllerBasePathsConfiguration( /*Not required to fill because client is not used*/));
+
+            services.RegisterMainServiceClientComponents<AuthTokenProvider, MainServiceClientLocalization>(new MainServiceClientConfiguration
+            {
+                Url = new Uri(endpointsConfiguration.Addresses["MainService"]),
+                CreateCustomHandler = false
+            });
 
             // Configuration options
             services.AddOptions();
+            services.AddSingleton(openIdConnectConfig);
             services.Configure<EndpointOption>(Configuration.GetSection("Endpoints"));
             services.Configure<GoogleCalendarConfiguration>(Configuration.GetSection("GoogleCalendar"));
-
             services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = 1048576000; });
-
             services.Configure<PortalOption>(Configuration.GetSection("PortalConfig"));
+            services.Configure<AutoLoginCookieConfiguration>(Configuration.GetSection("AutoLoginCookie"));
+            services.Configure<ForumOption>(Configuration.GetSection("Forum"));
+            services.PostConfigure<AutoLoginCookieConfiguration>(config =>
+            {
+                config.CookieName = $"{AutoLoginCookieConfiguration.CookieNamePrefix}{portalConfig.PortalType}";
+            });
 
             // Localization
             var localizationConfiguration = Configuration.GetSection("Localization").Get<LocalizationConfiguration>();
@@ -218,6 +235,8 @@ namespace ITJakub.Web.Hub
 
             app.ConfigureAutoMapper();
 
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+
             app.UseStaticFiles();
 
             app.UseMvc(routes =>
@@ -245,7 +264,7 @@ namespace ITJakub.Web.Hub
 
             // Update missing permissions on Auth service:
             var communicationProvider = app.ApplicationServices.GetRequiredService<CommunicationProvider>();
-            communicationProvider.GetMainServiceClient().EnsureAuthServiceHasRequiredPermissions();
+            communicationProvider.GetMainServicePermissionClient().EnsureAuthServiceHasRequiredPermissions();
 
             applicationLifetime.ApplicationStopped.Register(OnShutdown);
         }

@@ -49,8 +49,8 @@
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <HintPath>..\packages\Antlr3.Runtime.3.5.1\lib\net40-client\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="AutoMapper, Version=8.1.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.8.1.0\lib\net461\AutoMapper.dll</HintPath>
+    <Reference Include="AutoMapper, Version=8.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.8.1.1\lib\net461\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Core.4.4.0\lib\net45\Castle.Core.dll</HintPath>
@@ -190,6 +190,12 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="EvidenceXml\Evidence1.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="EvidenceXml\Evidence2.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -210,6 +216,12 @@
   <ItemGroup>
     <None Include="..\..\..\itjakub-secrets\WcfServices\*.config">
       <Link>%(RecursiveDir)\%(FileName).config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\ITJakub.Xml.Conversion\Ujc.Ovj.Ooxml.Conversion\Data\**">
+      <Link>ConversionData\%(RecursiveDir)\%(FileName)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -242,10 +254,6 @@
       <Project>{56512CDC-6912-49B3-8AC4-CE96A0340165}</Project>
       <Name>ITJakub.FileProcessing.DataContracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
-      <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
-      <Name>ITJakub.Shared.Contracts</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ITJakub.Xml.Conversion\Ujc.Ovj.Ooxml.Conversion\Ujc.Ovj.Ooxml.Conversion.csproj">
       <Project>{c1753d1a-9d38-4a6f-aa01-bdadecb2eac8}</Project>
       <Name>Ujc.Ovj.Ooxml.Conversion</Name>
@@ -265,6 +273,10 @@
     <ProjectReference Include="..\Vokabular.Log4Net\Vokabular.Log4Net.csproj">
       <Project>{105904c3-ab87-4bdd-ada3-c16ca61d7147}</Project>
       <Name>Vokabular.Log4Net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vokabular.RestClient\Vokabular.RestClient.csproj">
+      <Project>{2e80933f-418a-4181-aad3-84d4059fbbea}</Project>
+      <Name>Vokabular.RestClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vokabular.Shared.DataEntities\Vokabular.Shared.DataEntities.csproj">
       <Project>{1d302489-8778-4dec-9bcf-ee35f90af87b}</Project>

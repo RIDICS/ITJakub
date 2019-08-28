@@ -32,7 +32,7 @@
     }
 
     public updateAccount(accountDataForm: string): JQuery.jqXHR {
-        return this.post(this.getAccountControllerUrl() + "UpdateAccount",
+        return this.post(this.getAccountControllerUrl() + "UpdateBasicData",
             accountDataForm,
             this.formContentType,
             this.htmlDataType

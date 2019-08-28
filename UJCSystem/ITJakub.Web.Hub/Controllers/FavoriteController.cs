@@ -21,33 +21,32 @@ namespace ITJakub.Web.Hub.Controllers
         {
             m_localizer = localizer;
         }
-        
+
         public ActionResult Management()
         {
-            using (var client = GetRestClient())
+            var client = GetFavoriteClient();
+
+            var favoriteLabels = client.GetFavoriteLabelList();
+            var viewModel = new FavoriteManagementViewModel
             {
-                var favoriteLabels = client.GetFavoriteLabelList();
-                var viewModel = new FavoriteManagementViewModel
+                FavoriteLabels = Mapper.Map<IList<FavoriteLabelViewModel>>(favoriteLabels),
+                SortList = new List<FavoriteSortViewModel>
                 {
-                    FavoriteLabels = Mapper.Map<IList<FavoriteLabelViewModel>>(favoriteLabels),
-                    SortList = new List<FavoriteSortViewModel>
-                    {
-                        new FavoriteSortViewModel(FavoriteSortEnumContract.TitleAsc, m_localizer.Translate("TitleAsc", "Favorite")),
-                        new FavoriteSortViewModel(FavoriteSortEnumContract.TitleDesc, m_localizer.Translate("TitleDesc", "Favorite")),
-                        new FavoriteSortViewModel(FavoriteSortEnumContract.CreateTimeAsc, m_localizer.Translate("CreateTimeAsc", "Favorite")),
-                        new FavoriteSortViewModel(FavoriteSortEnumContract.CreateTimeDesc, m_localizer.Translate("CreateTimeDesc", "Favorite"))
-                    },
-                    FilterList = new List<FavoriteFilterViewModel>
-                    {
-                        new FavoriteFilterViewModel(FavoriteTypeEnumContract.Unknown, m_localizer.Translate("All", "Favorite")),
-                        new FavoriteFilterViewModel(FavoriteTypeEnumContract.Project, m_localizer.Translate("Books", "Favorite")),
-                        new FavoriteFilterViewModel(FavoriteTypeEnumContract.Category, m_localizer.Translate("Category", "Favorite")),
-                        new FavoriteFilterViewModel(FavoriteTypeEnumContract.Page, m_localizer.Translate("PageBookmark", "Favorite")),
-                        new FavoriteFilterViewModel(FavoriteTypeEnumContract.Query, m_localizer.Translate("Query", "Favorite"))
-                    }
-                };
-                return View("FavoriteManagement", viewModel);
-            }
+                    new FavoriteSortViewModel(FavoriteSortEnumContract.TitleAsc, m_localizer.Translate("TitleAsc", "Favorite")),
+                    new FavoriteSortViewModel(FavoriteSortEnumContract.TitleDesc, m_localizer.Translate("TitleDesc", "Favorite")),
+                    new FavoriteSortViewModel(FavoriteSortEnumContract.CreateTimeAsc, m_localizer.Translate("CreateTimeAsc", "Favorite")),
+                    new FavoriteSortViewModel(FavoriteSortEnumContract.CreateTimeDesc, m_localizer.Translate("CreateTimeDesc", "Favorite"))
+                },
+                FilterList = new List<FavoriteFilterViewModel>
+                {
+                    new FavoriteFilterViewModel(FavoriteTypeEnumContract.Unknown, m_localizer.Translate("All", "Favorite")),
+                    new FavoriteFilterViewModel(FavoriteTypeEnumContract.Project, m_localizer.Translate("Books", "Favorite")),
+                    new FavoriteFilterViewModel(FavoriteTypeEnumContract.Category, m_localizer.Translate("Category", "Favorite")),
+                    new FavoriteFilterViewModel(FavoriteTypeEnumContract.Page, m_localizer.Translate("PageBookmark", "Favorite")),
+                    new FavoriteFilterViewModel(FavoriteTypeEnumContract.Query, m_localizer.Translate("Query", "Favorite"))
+                }
+            };
+            return View("FavoriteManagement", viewModel);
         }
 
         public ActionResult NewFavorite(string itemName)
@@ -74,9 +73,9 @@ namespace ITJakub.Web.Hub.Controllers
                 };
                 return PartialView("_NewFavorite", viewModel);
             }
-
-            using (var client = GetRestClient())
+            else
             {
+                var client = GetFavoriteClient();
                 var favoriteLabels = client.GetFavoriteLabelList();
 
                 var favoriteLabelViewModels = Mapper.Map<IList<FavoriteLabelViewModel>>(favoriteLabels);
@@ -92,30 +91,30 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult Favorite(long id)
         {
-            using (var client = GetRestClient())
-            {
-                var favoriteItem = client.GetFavoriteItem(id);
+            var client = GetFavoriteClient();
+            var favoriteItem = client.GetFavoriteItem(id);
 
-                switch (favoriteItem.FavoriteType)
-                {
-                    case FavoriteTypeEnumContract.Project:
-                        return RedirectToAction("Listing", "Editions", new {area = "Editions", bookId = favoriteItem.ProjectId});
-                    case FavoriteTypeEnumContract.Category:
-                        return View("AmbiguousFavoriteRedirect");
-                    case FavoriteTypeEnumContract.Page:
-                        return RedirectToAction("Listing", "Editions", new { area = "Editions", bookId = favoriteItem.ProjectId, page = favoriteItem.PageId });
-                    case FavoriteTypeEnumContract.Query:
-                        if (favoriteItem.BookType == null || favoriteItem.QueryType == null)
-                        {
-                            return StatusCode(StatusCodes.Status502BadGateway, "Invalid response from service");
-                        }
-                        return RedirectToFavoriteQuery(favoriteItem.BookType.Value, favoriteItem.QueryType.Value, favoriteItem.Query);
-                    default:
-                        return RedirectToAction("Management");
-                }
+            switch (favoriteItem.FavoriteType)
+            {
+                case FavoriteTypeEnumContract.Project:
+                    return RedirectToAction("Listing", "Editions", new {area = "Editions", bookId = favoriteItem.ProjectId});
+                case FavoriteTypeEnumContract.Category:
+                    return View("AmbiguousFavoriteRedirect");
+                case FavoriteTypeEnumContract.Page:
+                    return RedirectToAction("Listing", "Editions",
+                        new {area = "Editions", bookId = favoriteItem.ProjectId, page = favoriteItem.PageId});
+                case FavoriteTypeEnumContract.Query:
+                    if (favoriteItem.BookType == null || favoriteItem.QueryType == null)
+                    {
+                        return StatusCode(StatusCodes.Status502BadGateway, "Invalid response from service");
+                    }
+
+                    return RedirectToFavoriteQuery(favoriteItem.BookType.Value, favoriteItem.QueryType.Value, favoriteItem.Query);
+                default:
+                    return RedirectToAction("Management");
             }
         }
-        
+
         public ActionResult Dialog()
         {
             return PartialView("Plugins/_Dialog");
@@ -168,164 +167,143 @@ namespace ITJakub.Web.Hub.Controllers
 
             return RedirectToAction(action, area, new {area = area, search = query});
         }
-        
+
         [HttpPost]
         public ActionResult GetFavoriteLabeledBooks([FromBody] GetFavoriteLabeledBookRequest request)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetFavoriteLabeledBooks(request.BookIds, request.BookType);
-                return Json(result);
-            }
+            var client = GetFavoriteClient();
+            var result = client.GetFavoriteLabeledBooks(request.BookIds, request.BookType);
+            return Json(result);
         }
 
         [HttpPost]
         public ActionResult GetFavoriteLabeledCategories([FromBody] GetFavoriteLabeledCategoryRequest request)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetFavoriteLabeledCategories();
-                return Json(result);
-            }
+            var client = GetFavoriteClient();
+            var result = client.GetFavoriteLabeledCategories();
+            return Json(result);
         }
 
         public ActionResult GetFavoriteLabelsWithBooksAndCategories(BookTypeEnumContract bookType)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetFavoriteLabelsWithBooksAndCategories(bookType);
-                return Json(result);
-            }
+            var client = GetFavoriteClient();
+            var result = client.GetFavoriteLabelsWithBooksAndCategories(bookType);
+            return Json(result);
         }
 
         public ActionResult CreateFavoriteBook([FromBody] CreateFavoriteBookRequest request)
         {
-            using (var client = GetRestClient())
+            var client = GetFavoriteClient();
+            var resultIds = new List<long>();
+            foreach (var requestLabelId in request.LabelIds)
             {
-                var resultIds = new List<long>();
-                foreach (var requestLabelId in request.LabelIds)
+                var resultId = client.CreateFavoriteBook(new CreateFavoriteProjectContract
                 {
-                    var resultId = client.CreateFavoriteBook(new CreateFavoriteProjectContract
-                    {
-                        ProjectId = request.BookId,
-                        FavoriteLabelId = requestLabelId,
-                        Title = request.Title,
-                    });
-                    resultIds.Add(resultId);
-                }
-                
-                return Json(resultIds);
+                    ProjectId = request.BookId,
+                    FavoriteLabelId = requestLabelId,
+                    Title = request.Title,
+                });
+                resultIds.Add(resultId);
             }
+
+            return Json(resultIds);
         }
 
         public ActionResult CreateFavoriteCategory([FromBody] CreateFavoriteCategoryRequest request)
         {
-            using (var client = GetRestClient())
+            var client = GetFavoriteClient();
+            var resultIds = new List<long>();
+            foreach (var requestLabelId in request.LabelIds)
             {
-                var resultIds = new List<long>();
-                foreach (var requestLabelId in request.LabelIds)
+                var resultId = client.CreateFavoriteCategory(new CreateFavoriteCategoryContract
                 {
-                    var resultId = client.CreateFavoriteCategory(new CreateFavoriteCategoryContract
-                    {
-                        CategoryId = request.CategoryId,
-                        FavoriteLabelId = requestLabelId,
-                        Title = request.Title,
-                    });
-                    resultIds.Add(resultId);
-                }
-
-                return Json(resultIds);
+                    CategoryId = request.CategoryId,
+                    FavoriteLabelId = requestLabelId,
+                    Title = request.Title,
+                });
+                resultIds.Add(resultId);
             }
+
+            return Json(resultIds);
         }
 
         public ActionResult CreateFavoriteQuery([FromBody] CreateFavoriteQueryRequest request)
         {
-            using (var client = GetRestClient())
+            var client = GetFavoriteClient();
+            var resultIds = new List<long>();
+            foreach (var requestLabelId in request.LabelIds)
             {
-                var resultIds = new List<long>();
-                foreach (var requestLabelId in request.LabelIds)
+                var resultId = client.CreateFavoriteQuery(new CreateFavoriteQueryContract
                 {
-                    var resultId = client.CreateFavoriteQuery(new CreateFavoriteQueryContract
-                    {
-                        Title = request.Title,
-                        BookType = request.BookType,
-                        FavoriteLabelId = requestLabelId,
-                        Query = request.Query,
-                        QueryType = request.QueryType,
-                    });
-                    resultIds.Add(resultId);
-                }
-
-                return Json(resultIds);
+                    Title = request.Title,
+                    BookType = request.BookType,
+                    FavoriteLabelId = requestLabelId,
+                    Query = request.Query,
+                    QueryType = request.QueryType,
+                });
+                resultIds.Add(resultId);
             }
+
+            return Json(resultIds);
         }
 
         public ActionResult CreatePageBookmark([FromBody] CreatePageBookmarkRequest request)
         {
-            using (var client = GetRestClient())
+            var client = GetFavoriteClient();
+            var resultIds = new List<long>();
+            foreach (var requestLabelId in request.LabelIds)
             {
-                var resultIds = new List<long>();
-                foreach (var requestLabelId in request.LabelIds)
+                var resultId = client.CreateFavoritePage(new CreateFavoritePageContract
                 {
-                    var resultId = client.CreateFavoritePage(new CreateFavoritePageContract
-                    {
-                        Title = request.Title,
-                        FavoriteLabelId = requestLabelId,
-                        PageId = request.PageId
-                    });
-                    resultIds.Add(resultId);
-                }
-
-                return Json(resultIds);
+                    Title = request.Title,
+                    FavoriteLabelId = requestLabelId,
+                    PageId = request.PageId
+                });
+                resultIds.Add(resultId);
             }
+
+            return Json(resultIds);
         }
 
         public ActionResult GetPageBookmarks(long bookId)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetPageBookmarks(bookId);
-                return Json(result);
-            }
+            var client = GetFavoriteClient();
+            var result = client.GetPageBookmarks(bookId);
+            return Json(result);
         }
 
-        public ActionResult GetFavoriteQueries(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, int start, int count)
+        public ActionResult GetFavoriteQueries(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType,
+            string filterByTitle, int start, int count)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetFavoriteQueries(start, count, labelId, bookType, queryType, filterByTitle);
-                return Json(result.List);
-            }
+            var client = GetFavoriteClient();
+            var result = client.GetFavoriteQueries(start, count, labelId, bookType, queryType, filterByTitle);
+            return Json(result.List);
         }
 
-        public ActionResult GetFavoriteQueriesCount(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle)
+        public ActionResult GetFavoriteQueriesCount(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType,
+            string filterByTitle)
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetFavoriteQueries(0, 0, labelId, bookType, queryType, filterByTitle);
-                return Json(result.TotalCount);
-            }
+            var client = GetFavoriteClient();
+            var result = client.GetFavoriteQueries(0, 0, labelId, bookType, queryType, filterByTitle);
+            return Json(result.TotalCount);
         }
 
         public ActionResult GetLabelList()
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetFavoriteLabelList();
-                return Json(result);
-            }
+            var client = GetFavoriteClient();
+            var result = client.GetFavoriteLabelList();
+            return Json(result);
         }
 
         public ActionResult GetLatestLabelList()
         {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetFavoriteLabelList(LatestFavoriteCount);
-                return Json(result);
-            }
+            var client = GetFavoriteClient();
+            var result = client.GetFavoriteLabelList(LatestFavoriteCount);
+            return Json(result);
         }
 
-        public ActionResult GetFavoriteList(long? labelId, FavoriteTypeEnumContract? filterByType, string filterByTitle, FavoriteSortEnumContract? sort, int start, int count)
+        public ActionResult GetFavoriteList(long? labelId, FavoriteTypeEnumContract? filterByType, string filterByTitle,
+            FavoriteSortEnumContract? sort, int start, int count)
         {
             if (sort == null)
                 sort = FavoriteSortEnumContract.TitleAsc;
@@ -333,11 +311,9 @@ namespace ITJakub.Web.Hub.Controllers
             if (filterByType != null && filterByType.Value == FavoriteTypeEnumContract.Unknown)
                 filterByType = null;
 
-            using (var client = GetRestClient())
-            {
-                var result = client.GetFavoriteItems(start, count, labelId, filterByType, filterByTitle, sort.Value);
-                return Json(result.List);
-            }
+            var client = GetFavoriteClient();
+            var result = client.GetFavoriteItems(start, count, labelId, filterByType, filterByTitle, sort.Value);
+            return Json(result.List);
         }
 
         public ActionResult GetFavoriteListCount(long? labelId, FavoriteTypeEnumContract? filterByType, string filterByTitle)
@@ -345,13 +321,11 @@ namespace ITJakub.Web.Hub.Controllers
             if (filterByType != null && filterByType.Value == FavoriteTypeEnumContract.Unknown)
                 filterByType = null;
 
-            using (var client = GetRestClient())
-            {
-                var result = client.GetFavoriteItems(0, 0, labelId, filterByType, filterByTitle, null);
-                return Json(result.TotalCount);
-            }
+            var client = GetFavoriteClient();
+            var result = client.GetFavoriteItems(0, 0, labelId, filterByType, filterByTitle, null);
+            return Json(result.TotalCount);
         }
-        
+
         public ActionResult GetFavoriteLabelManagementPartial(long id, string name, string color)
         {
             var viewModel = new FavoriteLabelViewModel
@@ -367,58 +341,48 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult CreateLabel([FromBody] CreateLabelRequest request)
         {
-            using (var client = GetRestClient())
+            var client = GetFavoriteClient();
+            var resultId = client.CreateFavoriteLabel(new FavoriteLabelContractBase
             {
-                var resultId = client.CreateFavoriteLabel(new FavoriteLabelContractBase
-                {
-                    Color = request.Color,
-                    Name = request.Name,
-                });
-                return Json(resultId);
-            }
+                Color = request.Color,
+                Name = request.Name,
+            });
+            return Json(resultId);
         }
 
         public ActionResult UpdateLabel([FromBody] UpdateLabelRequest request)
         {
-            using (var client = GetRestClient())
+            var client = GetFavoriteClient();
+            client.UpdateFavoriteLabel(request.LabelId, new FavoriteLabelContractBase
             {
-                client.UpdateFavoriteLabel(request.LabelId, new FavoriteLabelContractBase
-                {
-                    Color = request.Color,
-                    Name = request.Name,
-                });
-                return Json(new { });
-            }
+                Color = request.Color,
+                Name = request.Name,
+            });
+            return Json(new { });
         }
 
         public ActionResult DeleteLabel([FromBody] DeleteLabelRequest request)
         {
-            using (var client = GetRestClient())
-            {
-                client.DeleteFavoriteLabel(request.LabelId);
-                return Json(new {});
-            }
+            var client = GetFavoriteClient();
+            client.DeleteFavoriteLabel(request.LabelId);
+            return Json(new { });
         }
 
         public ActionResult UpdateFavoriteItem([FromBody] UpdateFavoriteItemRequest request)
         {
-            using (var client = GetRestClient())
+            var client = GetFavoriteClient();
+            client.UpdateFavoriteItem(request.Id, new UpdateFavoriteContract
             {
-                client.UpdateFavoriteItem(request.Id, new UpdateFavoriteContract
-                {
-                    Name = request.Title,
-                });
-                return Json(new {});
-            }
+                Name = request.Title,
+            });
+            return Json(new { });
         }
 
         public ActionResult DeleteFavoriteItem([FromBody] DeleteFavoriteItemRequest request)
         {
-            using (var client = GetRestClient())
-            {
-                client.DeleteFavoriteItem(request.Id);
-                return Json(new {});
-            }
+            var client = GetFavoriteClient();
+            client.DeleteFavoriteItem(request.Id);
+            return Json(new { });
         }
     }
 }

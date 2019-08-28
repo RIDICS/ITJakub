@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ITJakub.Web.Hub.Areas.RepositoryImport.Models;
 using ITJakub.Web.Hub.Controllers;
@@ -25,42 +26,38 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
 
         public IActionResult List()
         {
-            using (var client = GetRestClient())
-            {
-                var externalRepositories = client.GetAllExternalRepositories();
-                return View(externalRepositories);
-            }
+            var client = GetExternalRepositoryClient();
+            var externalRepositories = client.GetAllExternalRepositories();
+            return View(externalRepositories);
         }
 
         public IActionResult Detail(int id)
         {
-            using (var client = GetRestClient())
-            {
-                var externalRepositoryDetail = client.GetExternalRepositoryStatistics(id);
-                return PartialView("_Detail", externalRepositoryDetail);
-            }
+            var client = GetExternalRepositoryClient();
+            var externalRepositoryDetail = client.GetExternalRepositoryStatistics(id);
+            return PartialView("_Detail", externalRepositoryDetail);
         }
 
         public IActionResult Create()
         {
-            using (var client = GetRestClient())
-            {
-                var bibliographicFormats = client.GetAllBibliographicFormats();
-                var availableBibliographicFormats = new SelectList(bibliographicFormats,
-                    nameof(BibliographicFormatContract.Id),
-                    nameof(BibliographicFormatContract.Name));
-                ViewData[RepositoryImportConstants.AvailableBibliographicFormats] = availableBibliographicFormats;
+            var client = GetFilteringExpressionSetClient();
 
-                var externalRepositoryTypes = client.GetAllExternalRepositoryTypes();
-                var availableExternalRepositoryTypes = new SelectList(externalRepositoryTypes,
-                    nameof(BibliographicFormatContract.Id),
-                    nameof(BibliographicFormatContract.Name));
-                ViewData[RepositoryImportConstants.AvailableExternalRepositoryTypes] = availableExternalRepositoryTypes;
+            var bibliographicFormats = client.GetAllBibliographicFormats();
+            var availableBibliographicFormats = new SelectList(bibliographicFormats,
+                nameof(BibliographicFormatContract.Id),
+                nameof(BibliographicFormatContract.Name));
+            ViewData[RepositoryImportConstants.AvailableBibliographicFormats] = availableBibliographicFormats;
 
-                var filteringExpressionSets = client.GetAllFilteringExpressionSets();
-                return View(new CreateExternalRepositoryViewModel()
-                    {FilteringExpressionSets = filteringExpressionSets.Select(x => new CheckBoxEntity(x.Id, x.Name)).ToList()});
-            }
+            var externalRepositoryClient = GetExternalRepositoryClient();
+            var externalRepositoryTypes = externalRepositoryClient.GetAllExternalRepositoryTypes();
+            var availableExternalRepositoryTypes = new SelectList(externalRepositoryTypes,
+                nameof(BibliographicFormatContract.Id),
+                nameof(BibliographicFormatContract.Name));
+            ViewData[RepositoryImportConstants.AvailableExternalRepositoryTypes] = availableExternalRepositoryTypes;
+
+            var filteringExpressionSets = client.GetAllFilteringExpressionSets();
+            return View(new CreateExternalRepositoryViewModel()
+                {FilteringExpressionSets = filteringExpressionSets.Select(x => new CheckBoxEntity(x.Id, x.Name)).ToList()});
         }
 
         [HttpPost]
@@ -72,65 +69,67 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                 return View("Create", model);
             }
 
-            using (var client = GetRestClient())
+            var filteringExpressionSets = model.FilteringExpressionSets == null
+                ? new List<FilteringExpressionSetContract>()
+                : model.FilteringExpressionSets.Where(x => x.IsChecked)
+                    .Select(x => new FilteringExpressionSetContract {Id = x.Id}).ToList();
+
+            var client = GetExternalRepositoryClient();
+            client.CreateExternalRepository(new ExternalRepositoryDetailContract
             {
-                client.CreateExternalRepository(new ExternalRepositoryDetailContract
-                {
-                    Name = model.Name,
-                    Description = model.Description,
-                    License = model.License,
-                    Url = model.Url,
-                    UrlTemplate = model.UrlTemplate,
-                    Configuration = GetConfiguration(Request.Form),
-                    BibliographicFormat = new BibliographicFormatContract {Id = model.BibliographicFormatId},
-                    ExternalRepositoryType = new ExternalRepositoryTypeContract {Id = model.ExternalRepositoryTypeId},
-                    FilteringExpressionSets = model.FilteringExpressionSets.Where(x => x.IsChecked)
-                        .Select(x => new FilteringExpressionSetContract {Id = x.Id}).ToList()
-                });
-                return RedirectToAction("List");
-            }
+                Name = model.Name,
+                Description = model.Description,
+                License = model.License,
+                Url = model.Url,
+                UrlTemplate = model.UrlTemplate,
+                Configuration = GetConfiguration(Request.Form),
+                BibliographicFormat = new BibliographicFormatContract {Id = model.BibliographicFormatId},
+                ExternalRepositoryType = new ExternalRepositoryTypeContract {Id = model.ExternalRepositoryTypeId},
+                FilteringExpressionSets = filteringExpressionSets
+            });
+            return RedirectToAction("List");
         }
 
         public IActionResult Update(int id)
         {
-            using (var client = GetRestClient())
+            var client = GetFilteringExpressionSetClient();
+            var externalRepositoryClient = GetExternalRepositoryClient();
+
+            var externalRepositoryDetail = externalRepositoryClient.GetExternalRepositoryDetail(id);
+
+            var bibliographicFormats = client.GetAllBibliographicFormats();
+            var availableBibliographicFormats = new SelectList(bibliographicFormats,
+                nameof(BibliographicFormatContract.Id),
+                nameof(BibliographicFormatContract.Name),
+                externalRepositoryDetail.BibliographicFormat.Id);
+            ViewData[RepositoryImportConstants.AvailableBibliographicFormats] = availableBibliographicFormats;
+
+            var externalRepositoryTypes = externalRepositoryClient.GetAllExternalRepositoryTypes();
+            var availableExternalRepositoryTypes = new SelectList(externalRepositoryTypes,
+                nameof(BibliographicFormatContract.Id),
+                nameof(BibliographicFormatContract.Name),
+                externalRepositoryDetail.ExternalRepositoryType.Id);
+            ViewData[RepositoryImportConstants.AvailableExternalRepositoryTypes] = availableExternalRepositoryTypes;
+
+            var filteringExpressionSets = client.GetAllFilteringExpressionSets();
+            var availableFilteringExpressionSets = filteringExpressionSets.Select(x =>
+                new CheckBoxEntity(x.Id, x.Name, externalRepositoryDetail.FilteringExpressionSets.Any(y => y.Id == x.Id))).ToList();
+
+            var model = new CreateExternalRepositoryViewModel
             {
-                var externalRepositoryDetail = client.GetExternalRepositoryDetail(id);
+                Name = externalRepositoryDetail.Name,
+                Id = externalRepositoryDetail.Id,
+                Description = externalRepositoryDetail.Description,
+                License = externalRepositoryDetail.License,
+                Url = externalRepositoryDetail.Url,
+                UrlTemplate = externalRepositoryDetail.UrlTemplate,
+                BibliographicFormatId = externalRepositoryDetail.BibliographicFormat.Id,
+                ExternalRepositoryTypeId = externalRepositoryDetail.ExternalRepositoryType.Id,
+                Configuration = externalRepositoryDetail.Configuration,
+                FilteringExpressionSets = availableFilteringExpressionSets
+            };
 
-                var bibliographicFormats = client.GetAllBibliographicFormats();
-                var availableBibliographicFormats = new SelectList(bibliographicFormats,
-                    nameof(BibliographicFormatContract.Id),
-                    nameof(BibliographicFormatContract.Name),
-                    externalRepositoryDetail.BibliographicFormat.Id);
-                ViewData[RepositoryImportConstants.AvailableBibliographicFormats] = availableBibliographicFormats;
-
-                var externalRepositoryTypes = client.GetAllExternalRepositoryTypes();
-                var availableExternalRepositoryTypes = new SelectList(externalRepositoryTypes,
-                    nameof(BibliographicFormatContract.Id),
-                    nameof(BibliographicFormatContract.Name),
-                    externalRepositoryDetail.ExternalRepositoryType.Id);
-                ViewData[RepositoryImportConstants.AvailableExternalRepositoryTypes] = availableExternalRepositoryTypes;
-
-                var filteringExpressionSets = client.GetAllFilteringExpressionSets();
-                var availableFilteringExpressionSets = filteringExpressionSets.Select(x =>
-                    new CheckBoxEntity(x.Id, x.Name, externalRepositoryDetail.FilteringExpressionSets.Any(y => y.Id == x.Id))).ToList();
-
-                var model = new CreateExternalRepositoryViewModel
-                {
-                    Name = externalRepositoryDetail.Name,
-                    Id = externalRepositoryDetail.Id,
-                    Description = externalRepositoryDetail.Description,
-                    License = externalRepositoryDetail.License,
-                    Url = externalRepositoryDetail.Url,
-                    UrlTemplate = externalRepositoryDetail.UrlTemplate,
-                    BibliographicFormatId = externalRepositoryDetail.BibliographicFormat.Id,
-                    ExternalRepositoryTypeId = externalRepositoryDetail.ExternalRepositoryType.Id,
-                    Configuration = externalRepositoryDetail.Configuration,
-                    FilteringExpressionSets = availableFilteringExpressionSets
-                };
-
-                return View(model);
-            }
+            return View(model);
         }
 
         [HttpPost]
@@ -142,34 +141,30 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                 return View("Update", model);
             }
 
-            using (var client = GetRestClient())
+            var client = GetExternalRepositoryClient();
+            var config = GetConfiguration(Request.Form);
+            client.UpdateExternalRepository(model.Id, new ExternalRepositoryDetailContract
             {
-                var config = GetConfiguration(Request.Form);
-                client.UpdateExternalRepository(model.Id, new ExternalRepositoryDetailContract
-                {
-                    Name = model.Name,
-                    Description = model.Description,
-                    License = model.License,
-                    Url = model.Url,
-                    UrlTemplate = model.UrlTemplate,
-                    Configuration = string.IsNullOrEmpty(config) ? model.Configuration : config,
-                    BibliographicFormat = new BibliographicFormatContract {Id = model.BibliographicFormatId},
-                    ExternalRepositoryType = new ExternalRepositoryTypeContract {Id = model.ExternalRepositoryTypeId},
-                    FilteringExpressionSets = model.FilteringExpressionSets.Where(x => x.IsChecked)
-                        .Select(x => new FilteringExpressionSetContract {Id = x.Id}).ToList()
-                });
-                return RedirectToAction("List");
-            }
+                Name = model.Name,
+                Description = model.Description,
+                License = model.License,
+                Url = model.Url,
+                UrlTemplate = model.UrlTemplate,
+                Configuration = string.IsNullOrEmpty(config) ? model.Configuration : config,
+                BibliographicFormat = new BibliographicFormatContract {Id = model.BibliographicFormatId},
+                ExternalRepositoryType = new ExternalRepositoryTypeContract {Id = model.ExternalRepositoryTypeId},
+                FilteringExpressionSets = model.FilteringExpressionSets.Where(x => x.IsChecked)
+                    .Select(x => new FilteringExpressionSetContract {Id = x.Id}).ToList()
+            });
+            return RedirectToAction("List");
         }
 
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            using (var client = GetRestClient())
-            {
-                client.DeleteExternalRepository(id);
-                return RedirectToAction("List");
-            }
+            var client = GetExternalRepositoryClient();
+            client.DeleteExternalRepository(id);
+            return RedirectToAction("List");
         }
 
         public IActionResult LoadApiConfiguration(string api, string config)
@@ -188,21 +183,19 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
         public IActionResult OaiPmhConnect(string url, string config)
         {
             SetConfiguration(ExternalRepositoryTypeNameConstant.OaiPhm, config);
-            using (var client = GetRestClient())
+            var client = GetExternalRepositoryClient();
+            var result = client.GetOaiPmhRepositoryInfo(url);
+            var model = new OaiPmhConfigurationViewModel
             {
-                var result = client.GetOaiPmhRepositoryInfo(url);
-                var model = new OaiPmhConfigurationViewModel
-                {
-                    AdminMails = result.AdminMails,
-                    Description = result.Description,
-                    Url = result.Url,
-                    Name = result.Name,
-                    MetadataFormats = result.MetadataFormats,
-                    Sets = result.Sets
-                };
+                AdminMails = result.AdminMails,
+                Description = result.Description,
+                Url = result.Url,
+                Name = result.Name,
+                MetadataFormats = result.MetadataFormats,
+                Sets = result.Sets
+            };
 
-                return PartialView("_OaiPmhConfiguration", model);
-            }
+            return PartialView("_OaiPmhConfiguration", model);
         }
 
         private string GetConfiguration(IFormCollection requestForm)
@@ -243,6 +236,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                     ViewData["selectedMetadataFormat"] = config.DataFormat;
                     break;
                 }
+
                 default:
                     throw new ArgumentException($"API type {apiType} cannot be found.");
             }

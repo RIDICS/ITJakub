@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Web;
 using Ujc.Ovj.Ooxml.Conversion;
 using Vokabular.Core.Storage.Resources;
 using Vokabular.DataEntities.Database.Repositories;
@@ -66,18 +67,34 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 UploadedFilesPath = resourceSessionDirector.Resources.GroupBy(resource => resource.ResourceType).
                     ToDictionary(resourceGroup => resourceGroup.Key,
                         resourceGroup => resourceGroup.Select(resource => resource.FullPath).ToArray()),
-                MetadataFilePath = m_conversionMetadataPath,
+                //MetadataFilePath = null,
                 OutputDirectoryPath = resourceSessionDirector.SessionPath,
                 OutputMetadataFilePath = metaDataResource.FullPath,
                 TempDirectoryPath = tmpDirPath,
                 GetVersionList = versionProviderHelper.GetVersionsByBookXmlId,
                 SplitDocumentByPageBreaks = true,
-                DataDirectoryPath = m_dataDirectoryPath
+                // HttpRuntime.BinDirectory is used instead of HostingEnvironment.ApplicationPhysicalPath because all required files are in bin folder
+                DataDirectoryPath = Path.Combine(HttpRuntime.BinDirectory, m_dataDirectoryPath)
             };
 
-            var converter = new DocxToTeiConverter();
-            var conversionResult = converter.Convert(settings);
+            var evidenceFolderPath = Path.Combine(HttpRuntime.BinDirectory,
+                m_conversionMetadataPath);
+            var evidenceXmlFiles = Directory.GetFiles(evidenceFolderPath);
+            ConversionResult conversionResult = null;
 
+            foreach (var evidenceXmlFile in evidenceXmlFiles)
+            {
+                settings.MetadataFilePath = evidenceXmlFile;
+
+                var converter = new DocxToTeiConverter();
+                conversionResult = converter.Convert(settings);
+                
+                if (conversionResult.Errors.Count == 0)
+                {
+                    break;
+                }
+            }
+            
             if (conversionResult.IsConverted)
             {
                 resourceSessionDirector.Resources.Add(metaDataResource);                

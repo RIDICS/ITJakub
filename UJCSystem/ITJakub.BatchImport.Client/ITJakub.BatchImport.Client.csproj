@@ -72,8 +72,8 @@
     <Reference Include="IdentityModel, Version=3.10.10.0, Culture=neutral, PublicKeyToken=e7877f4675df049f, processorArchitecture=MSIL">
       <HintPath>..\packages\IdentityModel.3.10.10\lib\net452\IdentityModel.dll</HintPath>
     </Reference>
-    <Reference Include="IdentityModel.OidcClient, Version=2.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\IdentityModel.OidcClient.2.9.0\lib\net452\IdentityModel.OidcClient.dll</HintPath>
+    <Reference Include="IdentityModel.OidcClient, Version=2.9.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\IdentityModel.OidcClient.2.9.1\lib\net452\IdentityModel.OidcClient.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
@@ -92,6 +92,9 @@
     </Reference>
     <Reference Include="Microsoft.Extensions.Configuration.Binder, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.Configuration.Binder.2.2.4\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.2.2.0\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
@@ -283,6 +286,8 @@
     <Compile Include="DataService\DataService.cs" />
     <Compile Include="BusinessLogic\FileUploadManager.cs" />
     <Compile Include="DataService\IDataService.cs" />
+    <Compile Include="ServiceClient\MainServiceAuthTokenProvider.cs" />
+    <Compile Include="ServiceClient\MainServiceClientLocalization.cs" />
     <Compile Include="ViewModel\FileViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
@@ -352,18 +357,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ITJakub.FileProcessing.DataContracts\ITJakub.FileProcessing.DataContracts.csproj">
-      <Project>{56512cdc-6912-49b3-8ac4-ce96a0340165}</Project>
-      <Name>ITJakub.FileProcessing.DataContracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ITJakub.ITJakubService.DataContracts\ITJakub.ITJakubService.DataContracts.csproj">
-      <Project>{8ddd85a2-4124-4470-9da5-e18bcfe3d573}</Project>
-      <Name>ITJakub.ITJakubService.DataContracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
-      <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
-      <Name>ITJakub.Shared.Contracts</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Vokabular.Log4Net\Vokabular.Log4Net.csproj">
       <Project>{105904c3-ab87-4bdd-ada3-c16ca61d7147}</Project>
       <Name>Vokabular.Log4Net</Name>
@@ -376,11 +369,16 @@
       <Project>{2e80933f-418a-4181-aad3-84d4059fbbea}</Project>
       <Name>Vokabular.RestClient</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vokabular.Shared.WcfService\Vokabular.Shared.WcfService.csproj">
+      <Project>{7deba8c4-efd2-472b-9c16-35f8319ff0f5}</Project>
+      <Name>Vokabular.Shared.WcfService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj">
       <Project>{130f3c52-e563-4b9b-a70f-e7e5bbab4296}</Project>
       <Name>Vokabular.Shared</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

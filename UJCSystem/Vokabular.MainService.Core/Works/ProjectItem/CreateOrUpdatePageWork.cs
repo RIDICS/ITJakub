@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.ProjectItem
@@ -33,7 +32,7 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
             
             if ((m_projectId == null && m_resourceId == null) || (m_projectId != null && m_resourceId != null))
             {
-                throw new ArgumentException("Exactly one parameter (ProjectId or ResourceId) has to be specified");
+                throw new MainServiceException(MainServiceErrorCode.ProjectIdOrResourceId, "Exactly one parameter (ProjectId or ResourceId) has to be specified");
             }
 
             var pageResource = m_resourceId != null
@@ -51,7 +50,7 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
 
             if (pageResource == null)
             {
-                throw new HttpErrorCodeException(ErrorMessages.NotFound, HttpStatusCode.NotFound);
+                throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
             }
 
             pageResource.Name = m_pageData.Name;

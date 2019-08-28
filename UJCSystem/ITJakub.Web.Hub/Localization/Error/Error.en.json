@@ -20,8 +20,8 @@
     "forbidden-detail": "The server refused to fulfill the request. Insufficient access permissions.",
     "not-found-detail": "The URL may be misspelled or the page you are looking for is no longer available.",
     "internal-server-error-detail": "An unexpected internal server error occurred.",
-    "bad-gateway-detail": "There was an unknown problem communicating with a third party service.",
-    "gateway-timeout-detail": "Third party service is not responding (timeout expired).",
+    "bad-gateway-detail": "There was an unknown problem communicating with a server.",
+    "gateway-timeout-detail": "The server is not responding (timeout expired).",
     "page-load-error": "Error loading page",
     "generic-error": "Operation failed"
   }

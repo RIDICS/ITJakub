@@ -1,8 +1,7 @@
-﻿using System.Net;
-using Vokabular.DataEntities.Database.Entities;
+﻿using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works
@@ -30,7 +29,9 @@ namespace Vokabular.MainService.Core.Works
             var project = m_projectRepository.FindById<Project>(m_projectId);
 
             if (project == null)
-                throw new HttpErrorCodeException(ErrorMessages.NotFound, HttpStatusCode.NotFound);
+            {
+                throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found."); 
+            }
 
             project.Name = m_data.Name;
             

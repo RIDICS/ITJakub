@@ -6,6 +6,7 @@ using ITJakub.Web.Hub.DataContracts;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Clients;
 using Vokabular.RestClient.Errors;
 
@@ -20,11 +21,86 @@ namespace ITJakub.Web.Hub.Controllers
             m_communication = communicationProvider;
         }
 
-        public MainServiceRestClient GetRestClient()
+        public MainServiceBookClient GetBookClient()
         {
-            return m_communication.GetMainServiceClient();
+            return m_communication.GetMainServiceBookClient();
+        }
+
+        public MainServiceCardFileClient GetCardFileClient()
+        {
+            return m_communication.GetMainServiceCardFileClient();
+        }
+
+        public MainServiceCodeListClient GetCodeListClient()
+        {
+            return m_communication.GetMainServiceCodeListClient();
+        }
+
+        public MainServiceExternalRepositoryClient GetExternalRepositoryClient()
+        {
+            return m_communication.GetMainServiceExternalRepositoryClient();
         }
         
+        public MainServiceFavoriteClient GetFavoriteClient()
+        {
+            return m_communication.GetMainServiceFavoriteClient();
+        }
+
+        public MainServiceFeedbackClient GetFeedbackClient()
+        {
+            return m_communication.GetMainServiceFeedbackClient();
+        }
+
+        public MainServiceFilteringExpressionSetClient GetFilteringExpressionSetClient()
+        {
+            return m_communication.GetMainServiceFilteringExpressionSetClient();
+        }
+
+        public MainServiceMetadataClient GetMetadataClient()
+        {
+            return m_communication.GetMainServiceMetadataClient();
+        }
+
+        public MainServiceNewsClient GetNewsClient()
+        {
+            return m_communication.GetMainServiceNewsClient();
+        }
+
+        public MainServicePermissionClient GetPermissionClient()
+        {   
+            return m_communication.GetMainServicePermissionClient();
+        }
+
+        public MainServiceProjectClient GetProjectClient()
+        {
+            return m_communication.GetMainServiceProjectClient();
+        }
+
+        public MainServiceResourceClient GetResourceClient()
+        {
+            return m_communication.GetMainServiceResourceClient();
+        }
+
+        public MainServiceRoleClient GetRoleClient()
+        {
+            return m_communication.GetMainServiceRoleClient();
+        }
+
+        public MainServiceSessionClient GetSessionClient()
+        {
+            return m_communication.GetMainServiceSessionClient();
+        }
+
+        public MainServiceTermClient GetTermClient()
+        {
+            return m_communication.GetMainServiceTermClient();
+        }
+
+        public MainServiceUserClient GetUserClient()
+        {
+            return m_communication.GetMainServiceUserClient();
+        }
+
         public LemmatizationServiceClient GetLemmationzationServiceClient()
         {
             return m_communication.GetLemmatizationClient();
@@ -69,6 +145,11 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        protected void AddErrors(MainServiceException exception)
+        {
+            ModelState.AddModelError(string.Empty, exception.Description);
+        }
+
         protected IActionResult AjaxOkResponse()
         {
             return new JsonResult(new {});
@@ -81,7 +162,7 @@ namespace ITJakub.Web.Hub.Controllers
                 ErrorMessage = message
             };
 
-            return new ObjectResult(result)
+            return new JsonResult(result)
             {
                 StatusCode = (int)httpStatusCode
             };

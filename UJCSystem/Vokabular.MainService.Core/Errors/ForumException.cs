@@ -1,18 +1,12 @@
-﻿using System;
+﻿using System.Net;
+using Vokabular.MainService.DataContracts;
 
 namespace Vokabular.MainService.Core.Errors
 {
-    public class ForumException : Exception
+    public class ForumException : MainServiceException
     {
-        public ForumException()
-        {
-        }
-
-        public ForumException(string message) : base(message)
-        {
-        }
-
-        public ForumException(string message, Exception innerException) : base(message, innerException)
+        public ForumException(string code, string description, HttpStatusCode statusCode = HttpStatusCode.BadRequest,
+            object[] descriptionParams = null) : base(code, description, statusCode, descriptionParams)
         {
         }
     }

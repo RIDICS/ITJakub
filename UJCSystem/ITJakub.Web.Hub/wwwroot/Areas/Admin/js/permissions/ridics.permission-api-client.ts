@@ -25,13 +25,15 @@
         );
     }
 
-    public createRole(roleName: string, roleDescription: string): JQuery.jqXHR {
+    public createRole(createRoleDataForm: string): JQuery.jqXHR {
         return this.post(
             this.getPermissionControllerUrl() + "CreateRole",
-            JSON.stringify({ roleName: roleName, roleDescription: roleDescription })
+            createRoleDataForm,
+            this.formContentType,
+            this.htmlDataType
         );
     }
-
+    
     public createRoleWithUser(userId: number, roleName: string, roleDescription: string): JQuery.jqXHR {
         return this.post(
             this.getPermissionControllerUrl() + "CreateRoleWithUser",
@@ -83,6 +85,13 @@
     public addProjectToRole(projectId: number, roleId: number): JQuery.jqXHR<string> {
         return this.post(this.getPermissionControllerUrl() + "AddProjectsToRole",
             JSON.stringify({ roleId: roleId, bookIds: [projectId] }));
+    }
+
+    public resetUserPassword(userId: number): JQuery.jqXHR  {
+        return this.post(
+            this.getPermissionControllerUrl() + "ResetUserPassword",
+            JSON.stringify({ userId: userId })
+        );
     }
 
     private getPermissionControllerUrl(): string {

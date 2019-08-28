@@ -38,7 +38,7 @@ if ($CleanBuildDir)
     New-Item -Path $buildDir -Name "Publish-${TargetEnvironment}" -ItemType "directory" > $null
 }
 
-# $MigratorProjectBuild = Join-Path $SolutionDir "Ridics.Authentication.Database.Migrator\BuildRelease.cmd"
+$MigratorProjectBuild = Join-Path $SolutionDir "Vokabular.Database.Migrator\BuildRelease.cmd"
 
 $ServiceProjectsToBuild = @()
 $ServiceProjectsToBuild += "ITJakub.FileProcessing.Service"
@@ -47,7 +47,7 @@ $ServiceProjectsToBuild += "ITJakub.SearchService"
 $ServiceProjectsToBuild += "Vokabular.FulltextService"
 $ServiceProjectsToBuild += "Vokabular.MainService"
 
-# Write-Host "${MigratorProjectBuild}"
+Write-Host "${MigratorProjectBuild}"
 foreach ($ProjectToBuild in $ServiceProjectsToBuild)
 {
   Write-Host $ProjectToBuild
@@ -131,18 +131,18 @@ function BuildMigrator {
     if ($LASTEXITCODE -eq 0)
     {
         # Migrator use ASPNETCORE_ENVIRONMENT variable for filtering files during build internally in CSPROJ file
-        $MigratorProjectPublish = Join-Path $SolutionDir "Ridics.Authentication.Database.Migrator\bin\Migrator-build\*"
+        $MigratorProjectPublish = Join-Path $SolutionDir "Vokabular.Database.Migrator\bin\Migrator-build\*"
 
-        New-Item -Force -Path $OutputDir -Name "Ridics.Authentication.Database.Migrator" -ItemType "directory" > $null
+        New-Item -Force -Path $OutputDir -Name "Vokabular.Database.Migrator" -ItemType "directory" > $null
 
-        $MigratorOutputDir = Join-Path $OutputDir "Ridics.Authentication.Database.Migrator"
+        $MigratorOutputDir = Join-Path $OutputDir "Vokabular.Database.Migrator"
 
-        $MigratorOutputDirRm = Join-Path $buildDir "Ridics.Authentication.Database.Migrator.rm"
+        $MigratorOutputDirRm = Join-Path $buildDir "Vokabular.Database.Migrator.rm"
 
         Move-Item $MigratorOutputDir $MigratorOutputDirRm -Force
         Remove-Item $MigratorOutputDirRm -Recurse -Force
 
-        New-Item -Force -Path $OutputDir -Name "Ridics.Authentication.Database.Migrator" -ItemType "directory" > $null
+        New-Item -Force -Path $OutputDir -Name "Vokabular.Database.Migrator" -ItemType "directory" > $null
 
         Copy-Item $MigratorProjectPublish -Destination $MigratorOutputDir -Recurse
         #Move-Item (Join-Path $MigratorOutputDir "Migrate.${TargetEnvironment}.ps1") -Destination $OutputDir
@@ -170,7 +170,7 @@ foreach ($ProjectToBuild in $ServiceProjectsToBuild)
 BuildWebHubProject "ITJakub.Web.Hub" -ProjectType "ResearchPortal"
 BuildWebHubProject "ITJakub.Web.Hub" -ProjectType "CommunityPortal"
 
-# BuildMigrator
+BuildMigrator
 
 Copy-Item "DeploySolution.ps1" -Destination $OutputDir
 

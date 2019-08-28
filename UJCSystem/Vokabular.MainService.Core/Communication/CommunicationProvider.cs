@@ -1,42 +1,37 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using ITJakub.FileProcessing.DataContracts;
 using ITJakub.SearchService.DataContracts;
-using Microsoft.Extensions.Options;
 using Ridics.Authentication.HttpClient.Client.Auth;
 using Vokabular.CardFile.Core;
 using Vokabular.FulltextService.DataContracts.Clients;
-using Vokabular.Shared.Options;
 
 namespace Vokabular.MainService.Core.Communication
 {
     public class CommunicationProvider
     {
         private readonly CommunicationConfigurationProvider m_configurationProvider;
-        private readonly IOptions<List<CredentialsOption>> m_credentialsOptions;
         private readonly UserApiClient m_userApiClient;
         private readonly RoleApiClient m_roleApiClient;
         private readonly PermissionApiClient m_permissionApiClient;
         private readonly RegistrationApiClient m_registrationApiClient;
         private readonly ContactApiClient m_contactApiClient;
+        private readonly FulltextServiceClient m_fulltextServiceClient;
+        private readonly CardFilesClient m_cardFilesClient;
 
         private const string FileProcessingServiceEndpointName = "FileProcessingService";
-        private const string FulltextServiceEndpointName = "FulltextService";
         private const string SearchServiceEndpointName = "SearchService";
-        private const string CardFilesEndpointName = "CardFilesService";
-        private const string CardFilesCredentials = "CardFiles";
-        
-        public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider, IOptions<List<CredentialsOption>> credentialsOptions,
-            UserApiClient userApiClient, RoleApiClient roleApiClient, PermissionApiClient permissionApiClient, RegistrationApiClient registrationApiClient, ContactApiClient contactApiClient)
+
+        public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider, UserApiClient userApiClient,
+            RoleApiClient roleApiClient, PermissionApiClient permissionApiClient, RegistrationApiClient registrationApiClient,
+            ContactApiClient contactApiClient, FulltextServiceClient fulltextServiceClient, CardFilesClient cardFilesClient)
         {
             m_configurationProvider = communicationConfigurationProvider;
-            m_credentialsOptions = credentialsOptions;
             m_userApiClient = userApiClient;
             m_roleApiClient = roleApiClient;
             m_permissionApiClient = permissionApiClient;
             m_registrationApiClient = registrationApiClient;
             m_contactApiClient = contactApiClient;
+            m_fulltextServiceClient = fulltextServiceClient;
+            m_cardFilesClient = cardFilesClient;
         }
 
         public FileProcessingServiceClient GetFileProcessingClient()
@@ -49,8 +44,7 @@ namespace Vokabular.MainService.Core.Communication
 
         public FulltextServiceClient GetFulltextServiceClient()
         {
-            var uri = m_configurationProvider.GetEndpointUri(FulltextServiceEndpointName);
-            return new FulltextServiceClient(uri);
+            return m_fulltextServiceClient;
         }
 
         public SearchServiceClient GetSearchServiceClient()
@@ -63,17 +57,9 @@ namespace Vokabular.MainService.Core.Communication
 
         public CardFilesClient GetCardFilesClient()
         {
-            var uri = m_configurationProvider.GetEndpointUri(CardFilesEndpointName);
-            var credentials = m_credentialsOptions.Value.FirstOrDefault(x => x.Type == CardFilesCredentials);
-            if (credentials == null)
-            {
-                throw new ArgumentException("Credentials for Card files not found");
-            }
-
-            var client = new CardFilesClient(uri, credentials.Username, credentials.Password);
-            return client;
+            return m_cardFilesClient;
         }
-        
+
         public UserApiClient GetAuthUserApiClient()
         {
             return m_userApiClient;

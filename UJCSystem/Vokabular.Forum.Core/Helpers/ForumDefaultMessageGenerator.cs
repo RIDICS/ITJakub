@@ -15,7 +15,7 @@ namespace Vokabular.ForumSite.Core.Helpers
             m_vokabularUrlHelper = vokabularUrlHelper;
         }
 
-        public string GetCreateMessage(ProjectDetailContract project, short bookTypeForReader, string hostUrl)
+        public string GetCreateMessage(ProjectDetailContract project, string hostUrl)
         {
             var authorsBuilder = new StringBuilder();
             if (project.Authors != null)
@@ -30,7 +30,7 @@ namespace Vokabular.ForumSite.Core.Helpers
                 }
             }
 
-            var bookUrl = m_vokabularUrlHelper.GetBookUrl(project.Id, bookTypeForReader, hostUrl);
+            var bookUrl = m_vokabularUrlHelper.GetBookUrl(project.Id, hostUrl);
             var pageCount = project.PageCount == null ? "<Nezadáno>" : project.PageCount.ToString();
             var authorsLabel = project.Authors == null || project.Authors.Count == 1 ? "Autor:" : "Autoři:";
             var authors = authorsBuilder.ToString();
@@ -46,9 +46,9 @@ namespace Vokabular.ForumSite.Core.Helpers
 Počet stran: {pageCount}";
         }
 
-        public string GetUpdateMessage(ProjectDetailContract project, short bookType, string hostUrl)
+        public string GetUpdateMessage(ProjectDetailContract project, string hostUrl)
         {
-            var bookUrl = m_vokabularUrlHelper.GetBookUrl(project.Id, bookType, hostUrl);
+            var bookUrl = m_vokabularUrlHelper.GetBookUrl(project.Id, hostUrl);
 
             return $@"Nová publikace: {project.Name}
 [url={bookUrl}]Odkaz na knihu ve Vokabuláři webovém[/url]";

@@ -7,7 +7,7 @@ class AccountManager {
     private readonly client: AccountApiClient;
     private readonly errorHandler: ErrorHandler;
 
-    private accountDataForm: JQuery;
+    private basicDataForm: JQuery;
     private passwordForm: JQuery;
     private setTwoFactorForm: JQuery;
     private changeTwoFactorProviderForm: JQuery;
@@ -57,19 +57,6 @@ class AccountManager {
     }
 
     init() {
-        $("#account-edit-button").click((event) => {
-            event.preventDefault();
-            $(".editable").prop("readonly", false);
-            $("#account-view-button-panel").addClass("hide");
-            $("#account-editor-button-panel").removeClass("hide");
-        });
-
-        $("#account-cancel-button").click(() => {
-            $(".editable").prop("readonly", true);
-            $("#account-editor-button-panel").addClass("hide");
-            $("#account-view-button-panel").removeClass("hide");
-        });
-
         $("#updateEmailSubmit").click((event) => {
             event.preventDefault();
             this.sendUpdateContactRequest();
@@ -114,20 +101,38 @@ class AccountManager {
     }
 
     initAccountDataForm() {
-        this.accountDataForm = $("#updateAccountForm");
+        $("#account-edit-button").click((event) => {
+            event.preventDefault();
+            $(".editable").prop("readonly", false);
+            $("#account-view-button-panel").addClass("hide");
+            $("#account-editor-button-panel").removeClass("hide");
+        });
 
-        this.accountDataForm.on("submit",
+        $("#account-cancel-button").click((event) => {
+            event.preventDefault();
+            $(".editable").prop("readonly", true);
+            $("#account-editor-button-panel").addClass("hide");
+            $("#account-view-button-panel").removeClass("hide");
+        });
+
+        this.basicDataForm = $("#updateBasicDataForm");
+        const alertHolder = this.basicDataForm.find(this.alertHolderSelector);
+
+        this.basicDataForm.on("submit",
             (event) => {
                 event.preventDefault();
-                if (this.accountDataForm.valid()) {
-                    this.client.updateAccount(this.accountDataForm.serialize())
+                alertHolder.empty();
+
+                if (this.basicDataForm.valid()) {
+                    this.client.updateAccount(this.basicDataForm.serialize())
                         .done((response) => {
                             this.accountSection.html(response);
                             this.initAccountDataForm();
                         })
                         .fail((response) => {
-                            this.accountSection.html(response.responseText);
-                            this.initAccountDataForm();
+                            const alert = new AlertComponentBuilder(AlertType.Error)
+                                .addContent(this.errorHandler.getErrorMessage(response)).buildElement();
+                            alertHolder.empty().append(alert);
                         });
                 }
             });
@@ -135,19 +140,23 @@ class AccountManager {
 
     initPasswordForm() {
         this.passwordForm = $("#updatePasswordForm");
+        const alertHolder = this.passwordForm.find(this.alertHolderSelector);
 
         this.passwordForm.on("submit",
             (event) => {
                 event.preventDefault();
+                alertHolder.empty();
+
                 if (this.passwordForm.valid()) {
                     this.client.updatePassword(this.passwordForm.serialize())
                         .done((response) => {
                             this.passwordSection.html(response);
+                            this.initPasswordForm();
                         })
                         .fail((response) => {
-                            this.passwordSection.html(response.responseText);
-                        }).always(() => {
-                            this.initPasswordForm();
+                            const alert = new AlertComponentBuilder(AlertType.Error)
+                                .addContent(this.errorHandler.getErrorMessage(response)).buildElement();
+                            alertHolder.empty().append(alert);
                         });
                 }
             });
@@ -156,19 +165,23 @@ class AccountManager {
     initTwoFactorSettingsForm() {
         this.setTwoFactorForm = $("#setTwoFactorForm");
         this.changeTwoFactorProviderForm = $("#changeTwoFactorProviderForm");
+        const alertHolder = this.setTwoFactorForm.find(this.alertHolderSelector);
 
         this.setTwoFactorForm.on("submit",
             (event) => {
                 event.preventDefault();
+                alertHolder.empty();
+
                 if (this.setTwoFactorForm.valid()) {
                     this.client.setTwoFactor(this.setTwoFactorForm.serialize())
                         .done((response) => {
                             this.twoFactorSection.html(response);
-                        })
-                        .fail((error) => {
-                            this.twoFactorSection.html(error.responseText);
-                        }).always(() => {
                             this.initTwoFactorSettingsForm();
+                        })
+                        .fail((response) => {
+                            const alert = new AlertComponentBuilder(AlertType.Error)
+                                .addContent(this.errorHandler.getErrorMessage(response)).buildElement();
+                            alertHolder.empty().append(alert);
                         });
                 }
             });
@@ -176,16 +189,18 @@ class AccountManager {
         this.changeTwoFactorProviderForm.on("submit",
             (event) => {
                 event.preventDefault();
+                alertHolder.empty();
+
                 if (this.changeTwoFactorProviderForm.valid()) {
                     this.client.changeTwoFactorProvider(this.changeTwoFactorProviderForm.serialize())
                         .done((response) => {
                             this.twoFactorSection.html(response);
+                            this.initTwoFactorSettingsForm();
                         })
                         .fail((response) => {
-                            this.twoFactorSection.html(response.responseText);
-
-                        }).always(() => {
-                            this.initTwoFactorSettingsForm();
+                            const alert = new AlertComponentBuilder(AlertType.Error)
+                                .addContent(this.errorHandler.getErrorMessage(response)).buildElement();
+                            alertHolder.empty().append(alert);
                         });
                 }
             });

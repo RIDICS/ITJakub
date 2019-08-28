@@ -8,17 +8,23 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 using IdentityModel.OidcClient;
+using ITJakub.BatchImport.Client.ServiceClient;
 using Microsoft.Net.Http.Server;
+using Vokabular.MainService.DataContracts;
 
 namespace ITJakub.BatchImport.Client.BusinessLogic
 {
     public class AuthenticationManager
     {
+        private readonly MainServiceAuthTokenProvider m_authTokenProvider;
         private const string OidcUrl = "OIDCUrl";
         private const string OidcClientId = "OIDCClientId";
         private const string OidcClientSecret = "OIDCClientSecret";
 
-        public string AuthToken { get; private set; }
+        public AuthenticationManager(IMainServiceAuthTokenProvider authTokenProvider)
+        {
+            m_authTokenProvider = (MainServiceAuthTokenProvider) authTokenProvider;
+        }
 
         public async Task SignInAsync()
         {
@@ -28,44 +34,45 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
             // create an HttpListener to listen for requests on that redirect URI.
             var settings = new WebListenerSettings();
             settings.UrlPrefixes.Add(redirectUri);
-            var http = new WebListener(settings);
-
-            http.Start();
-
-            var options = new OidcClientOptions
+            using (var http = new WebListener(settings))
             {
-                Authority = ConfigurationManager.AppSettings[OidcUrl],
-                ClientId = ConfigurationManager.AppSettings[OidcClientId],
-                ClientSecret = ConfigurationManager.AppSettings[OidcClientSecret],
-                RedirectUri = redirectUri,
-                Scope = "openid profile",
-                FilterClaims = true,
-                LoadProfile = true,
-                Flow = OidcClientOptions.AuthenticationFlow.Hybrid
-            };
+                http.Start();
 
-            var client = new OidcClient(options);
-            var state = await client.PrepareLoginAsync();
+                var options = new OidcClientOptions
+                {
+                    Authority = ConfigurationManager.AppSettings[OidcUrl],
+                    ClientId = ConfigurationManager.AppSettings[OidcClientId],
+                    ClientSecret = ConfigurationManager.AppSettings[OidcClientSecret],
+                    RedirectUri = redirectUri,
+                    Scope = "openid profile auth_api.Internal",
+                    FilterClaims = true,
+                    LoadProfile = true,
+                    Flow = OidcClientOptions.AuthenticationFlow.Hybrid
+                };
 
-            OpenBrowser(state.StartUrl);
+                var client = new OidcClient(options);
+                var state = await client.PrepareLoginAsync();
 
-            var context = await http.AcceptAsync();
-            var formData = GetRequestPostData(context.Request);
+                OpenBrowser(state.StartUrl);
 
-            if (formData == null)
-            {
-                throw new AuthenticationException("Invalid response");
+                var context = await http.AcceptAsync();
+                var formData = GetRequestPostData(context.Request);
+
+                if (formData == null)
+                {
+                    throw new AuthenticationException("Invalid response");
+                }
+
+                await SendResponseAsync(context.Response);
+
+                var result = await client.ProcessResponseAsync(formData, state);
+
+                if (result.IsError)
+                {
+                    throw new AuthenticationException(result.Error);
+                }
+                m_authTokenProvider.AuthToken = result.AccessToken;
             }
-
-            await SendResponseAsync(context.Response);
-
-            var result = await client.ProcessResponseAsync(formData, state);
-
-            if (result.IsError)
-            {
-                throw new AuthenticationException(result.Error);
-            }
-            AuthToken = result.AccessToken;
         }
 
         private async Task SendResponseAsync(Response response)

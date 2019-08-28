@@ -12,6 +12,7 @@ using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.MainService.Core.Works.Search;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.RestClient.Results;
@@ -326,7 +327,7 @@ namespace Vokabular.MainService.Core.Managers
             var userId = m_authorizationManager.GetCurrentUserId();
 
             if (request.Category.BookType == null)
-                throw new ArgumentException("Null value of BookType is not supported");
+                throw new MainServiceException(MainServiceErrorCode.NullBookTypeNotSupported,"Null value of BookType is not supported");
 
             var searchHeadwordRowNumberWork = new SearchHeadwordRowNumberWork(m_bookRepository, m_categoryRepository, request, userId);
             var result = searchHeadwordRowNumberWork.Execute();

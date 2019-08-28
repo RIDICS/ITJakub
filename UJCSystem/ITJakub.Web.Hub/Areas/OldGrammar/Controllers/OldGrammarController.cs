@@ -27,7 +27,8 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
         private readonly StaticTextManager m_staticTextManager;
         private readonly FeedbacksManager m_feedbacksManager;
 
-        public OldGrammarController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager, CommunicationProvider communicationProvider) : base(communicationProvider)
+        public OldGrammarController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager,
+            CommunicationProvider communicationProvider) : base(communicationProvider)
         {
             m_staticTextManager = staticTextManager;
             m_feedbacksManager = feedbacksManager;
@@ -37,7 +38,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 
         private FeedbackFormIdentification GetFeedbackFormIdentification()
         {
-            return new FeedbackFormIdentification { Area = "OldGrammar", Controller = "OldGrammar" };
+            return new FeedbackFormIdentification {Area = "OldGrammar", Controller = "OldGrammar"};
         }
 
         public ActionResult Index()
@@ -57,14 +58,12 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 
         public ActionResult ListTerms()
         {
-            using (var client = GetRestClient())
+            var client = GetTermClient();
+            var termCategories = client.GetTermCategoriesWithTerms();
+            return View(new TermCategoriesWithTermsModel
             {
-                var termCategories = client.GetTermCategoriesWithTerms();
-                return View(new TermCategoriesWithTermsModel
-                {
-                    TermCategories = termCategories
-                });
-            }
+                TermCategories = termCategories
+            });
         }
 
         public ActionResult Information()
@@ -75,7 +74,8 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 
         public ActionResult Feedback()
         {
-            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, IsUserLoggedIn(), "home", User);
+            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback,
+                IsUserLoggedIn(), "home", User);
             return View(viewModel);
         }
 
@@ -104,23 +104,21 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
         {
             // TODO modify this method according to EditionsController.Listing()
 
-            using (var client = GetRestClient())
-            {
-                var book = client.GetBookInfo(bookId);
-                var pages = client.GetBookPageList(bookId);
-                
-                return
-                    View(new BookListingModel
-                    {
-                        BookId = book.Id,
+            var client = GetBookClient();
+            var book = client.GetBookInfo(bookId);
+            var pages = client.GetBookPageList(bookId);
+
+            return
+                View(new BookListingModel
+                {
+                    BookId = book.Id,
                         SnapshotId = null,
                         BookTitle = book.Title,
                         BookPages = pages,
                         SearchText = searchText,
                         InitPageId = page,
                         JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
-                    });
-            }
+                });
         }
 
         public ActionResult GetListConfiguration()
@@ -142,43 +140,47 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
         }
 
 
-        public ActionResult AdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
+        public ActionResult AdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc,
+            IList<long> selectedBookIds,
             IList<int> selectedCategoryIds)
         {
             var result = SearchByCriteriaJson(json, start, count, sortingEnum, sortAsc, selectedBookIds, selectedCategoryIds);
-            return Json(new { books = result }, GetJsonSerializerSettingsForBiblModule());
+            return Json(new {books = result}, GetJsonSerializerSettingsForBiblModule());
         }
 
         public ActionResult AdvancedSearchResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var count = SearchByCriteriaJsonCount(json, selectedBookIds, selectedCategoryIds);
-            return Json(new { count });
+            return Json(new {count});
         }
 
         public ActionResult TextSearchCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var count = SearchByCriteriaTextCount(CriteriaKey.Title, text, selectedBookIds, selectedCategoryIds);
-            return Json(new { count });
+            return Json(new {count});
         }
 
         public ActionResult TextSearchFulltextCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var count = SearchByCriteriaTextCount(CriteriaKey.Term, text, selectedBookIds, selectedCategoryIds);
-            return Json(new { count });
+            return Json(new {count});
         }
 
         public ActionResult TextSearchPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
             IList<int> selectedCategoryIds)
         {
-            var result = SearchByCriteriaText(CriteriaKey.Title, text, start, count, sortingEnum, sortAsc, selectedBookIds, selectedCategoryIds);
-            return Json(new { books = result }, GetJsonSerializerSettingsForBiblModule());
+            var result = SearchByCriteriaText(CriteriaKey.Title, text, start, count, sortingEnum, sortAsc, selectedBookIds,
+                selectedCategoryIds);
+            return Json(new {books = result}, GetJsonSerializerSettingsForBiblModule());
         }
 
-        public ActionResult TextSearchFulltextPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
+        public ActionResult TextSearchFulltextPaged(string text, int start, int count, short sortingEnum, bool sortAsc,
+            IList<long> selectedBookIds,
             IList<int> selectedCategoryIds)
         {
-            var result = SearchByCriteriaText(CriteriaKey.Term, text, start, count, sortingEnum, sortAsc, selectedBookIds, selectedCategoryIds);
-            return Json(new { books = result }, GetJsonSerializerSettingsForBiblModule());
+            var result = SearchByCriteriaText(CriteriaKey.Term, text, start, count, sortingEnum, sortAsc, selectedBookIds,
+                selectedCategoryIds);
+            return Json(new {books = result}, GetJsonSerializerSettingsForBiblModule());
         }
 
         #region search in boook
@@ -187,31 +189,28 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
         {
             var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Term, text);
 
-            using (var client = GetRestClient())
+            var client = GetBookClient();
+            var request = new SearchPageRequestContract
             {
-                var request = new SearchPageRequestContract
-                {
-                    ConditionConjunction = listSearchCriteriaContracts
-                };
-                var result = client.SearchPage(projectId, request);
-                return Json(new {results = result});
-            }
+                ConditionConjunction = listSearchCriteriaContracts
+            };
+            var result = client.SearchPage(projectId, request);
+            return Json(new {results = result});
         }
 
         public ActionResult AdvancedSearchInBook(string json, long projectId, long? snapshotId)
         {
-            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
+            var deserialized =
+                JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<List<SearchCriteriaContract>>(deserialized);
 
-            using (var client = GetRestClient())
+            var client = GetBookClient();
+            var request = new SearchPageRequestContract
             {
-                var request = new SearchPageRequestContract
-                {
-                    ConditionConjunction = listSearchCriteriaContracts
-                };
-                var result = client.SearchPage(projectId, request);
-                return Json(new {results = result});
-            }
+                ConditionConjunction = listSearchCriteriaContracts
+            };
+            var result = client.SearchPage(projectId, request);
+            return Json(new {results = result});
         }
 
         #endregion
