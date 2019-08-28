@@ -55,10 +55,10 @@
                                             <div class="alert alert-danger"></div>
                                         </td>
                                         <td class="buttons">
-                                            <a class="edit-page btn btn-sm btn-default">
+                                            <a class="edit-page btn btn-sm btn-default" title="@Localizer.Translate("EditPageName", "RidicsProject")">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
-                                            <a class="remove-page btn btn-sm btn-default">
+                                            <a class="remove-page btn btn-sm btn-default" title="@Localizer.Translate("DeletePage", "RidicsProject")">
                                                 <i class="fa fa-trash"></i>
                                             </a>
                                         </td>
@@ -69,11 +69,12 @@
                         </div>
                     </div>
                     <div class="panel-bottom-buttons text-right">
-                        <input type="number" class="page-move-distance form-control" value="1" min="1" max="@Model.Count" />
-                        <button type="button" class="btn btn-default move-page-up">
+                        <label for="pageMoveDistance">@Localizer.Translate("Shift", "RidicsProject")</label>
+                        <input type="number" id="pageMoveDistance" class="page-move-distance form-control" value="1" min="1" max="@Model.Count"/>
+                        <button type="button" class="btn btn-default move-page-up" title="@Localizer.Translate("ShiftPageUp", "RidicsProject")">
                             <span class="glyphicon glyphicon-arrow-up"></span>
                         </button>
-                        <button type="button" class="btn btn-default move-page-down">
+                        <button type="button" class="btn btn-default move-page-down" title="@Localizer.Translate("ShiftPageDown", "RidicsProject")">
                             <span class="glyphicon glyphicon-arrow-down"></span>
                         </button>
                     </div>

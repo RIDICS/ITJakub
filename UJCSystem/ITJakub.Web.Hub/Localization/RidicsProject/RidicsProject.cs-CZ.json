@@ -25,6 +25,11 @@
     "EmptyPage": "Stránka neobsahuje text ani obrázek.",
     "SwapNumbers": "Prosím prohoďte čísla od a do.",
     "EnterValidNumbers": "Prosím vložte validní čísla",
-    "AddingGeneratedNames": "Projekt již obshauje stránky. Vygenerované stránky byly přidány na konec seznamu."
+    "AddingGeneratedNames": "Projekt již obshauje stránky. Vygenerované stránky byly přidány na konec seznamu.",
+    "Shift": "Posun",
+    "ShiftPageUp": "Posunout vybrané stránky nahoru",
+    "ShiftPageDown": "Posunout vybrané stránky dolů",
+    "EditPageName": "Upravit název stránky",
+    "DeletePage": "Smazat stránku"
   }
 }

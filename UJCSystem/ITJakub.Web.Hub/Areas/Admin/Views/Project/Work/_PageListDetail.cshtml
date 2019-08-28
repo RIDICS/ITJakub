@@ -2,19 +2,25 @@
 @model ITJakub.Web.Hub.Areas.Admin.Models.PageDetailViewModel
 @inject ILocalizationService Localizer
 
-
-@if (!string.IsNullOrEmpty(Model.Text))
+@if (!string.IsNullOrEmpty(Model.Text) || Model.HasImage)
 {
-    <div class="page-text">
-        @Html.Raw(Model.Text)
-    </div>
+    @if (!string.IsNullOrEmpty(Model.Text))
+    {
+        <div class="page-text">
+            @Html.Raw(Model.Text)
+        </div>
+    }
+
+    @if (Model.HasImage)
+    {
+        <div class="image-preview">
+            <img alt="@Localizer.Translate("PagePreview", "RidicsProject")"
+                 src="/Admin/ContentEditor/GetPageImage?pageId=@Model.PageId"
+                 class=""/>
+        </div>
+    }
 }
-
-@if (Model.HasImage)
+else
 {
-    <div class="image-preview">
-        <img alt="@Localizer.Translate("PagePreview", "RidicsProject")"
-             src="/Admin/ContentEditor/GetPageImage?pageId=@Model.PageId"
-             class=""/>
-    </div>
+    <div class="alert alert-info">@Localizer.Translate("EmptyPage", "RidicsProject")</div>
 }
