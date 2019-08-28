@@ -580,7 +580,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             {
                 GroupId = id,
                 //Name = string.Format("Skupina {0}", id)
-                Name = localizer.TranslateFormat("Group", new object[] {id}, "Admin")
+                Name = localizer.TranslateFormat("Group", "Admin", id)
             };
         }
 
@@ -590,7 +590,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             {
                 Id = id,
                 //Name = string.Format("Strana {0}", id),
-                Name = localizer.TranslateFormat("Page", new object[] {id}, "Admin"),
+                Name = localizer.TranslateFormat("Page", "Admin", id),
                 VersionList = new List<VersionNumberViewModel>
                 {
                     GetVersionNumber(1),
