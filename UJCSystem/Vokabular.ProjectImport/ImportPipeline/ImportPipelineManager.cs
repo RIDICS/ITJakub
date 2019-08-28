@@ -101,14 +101,13 @@ namespace Vokabular.ProjectImport.ImportPipeline
                 progressInfo.FaultedMessage = e.Code;
                 progressInfo.FaultedMessageParams = e.CodeParams;
             }
-            catch (Exception e)
+            catch (Exception e) // Catch every exception otherwise, ProjectImportBackgroundService will be stopped
             {
                 if (m_logger.IsErrorEnabled())
                     m_logger.LogError(e, e.Message);
 
                 progressInfo.FaultedMessage = MainServiceErrorCode.RepositoryImportFailed;
                 progressInfo.FaultedMessageParams = new object[] { externalRepository.Name };
-                throw;
             }
             finally
             {

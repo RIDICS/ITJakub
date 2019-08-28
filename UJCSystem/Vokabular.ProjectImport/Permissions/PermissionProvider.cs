@@ -15,7 +15,7 @@ namespace Vokabular.ProjectImport.Permissions
 
         public PermissionContract GetPermissionByName(string name)
         {
-            var allPermissions = m_permissionApiClient.GetAllPermissionsAsync().GetAwaiter().GetResult();
+            var allPermissions = m_permissionApiClient.GetAllPermissionsAsync(name).GetAwaiter().GetResult();
             var permission =
                 allPermissions.SingleOrDefault(x => x.Name == name);
 

@@ -62,7 +62,7 @@
 <div class="form-group">
     @Html.LabelFor(model => model.ExternalRepositoryTypeId, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-9">
-        @Html.DropDownListFor(model => model.ExternalRepositoryTypeId, (SelectList)ViewData[RepositoryImportConstants.AvailableExternalRepositoryTypes], new { @class = "form-control ResourceType" })
+        @Html.DropDownListFor(model => model.ExternalRepositoryTypeId, (SelectList)ViewData[RepositoryImportConstants.AvailableExternalRepositoryTypes], new { @class = "form-control", id = "resourceType" })
         @Html.ValidationMessageFor(model => model.ExternalRepositoryTypeId, "", new { @class = "text-danger" })
     </div>
 </div>

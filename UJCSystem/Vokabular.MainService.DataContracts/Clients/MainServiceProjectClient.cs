@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
@@ -7,6 +6,7 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient;
+using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Extensions;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared;
@@ -486,12 +486,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public long SetAllPageList(string[] pageList)
+        public void SetAllPageList(long projectId, IList<CreateOrUpdatePageContract> pageList)
         {
             try
             {
-                //TODO add logic for saving page list after editing
-                throw new NotImplementedException();
+                m_client.Put<object>($"project/{projectId}/page", pageList);
             }
             catch (HttpRequestException e)
             {
@@ -531,6 +530,60 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
             catch (HttpRequestException e)
             {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public string GetPageText(long pageId, TextFormatEnumContract format)
+        {
+            try
+            {
+                var result = m_client.GetString($"project/page/{pageId}/text?format={format}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public FileResultData GetPageImage(long pageId)
+        {
+            try
+            {
+                var result = m_client.GetStream($"project/page/{pageId}/image");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+        
+        public bool HasPageImage(long pageId)
+        {
+            try
+            {
+                m_client.Head($"project/page/{pageId}/image");
+                return true;
+            }
+            catch (HttpRequestException e)
+            {
+                var statusException = e as HttpErrorCodeException;
+                if (statusException?.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return false;
+                }
+
                 if (m_logger.IsErrorEnabled())
                     m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
 

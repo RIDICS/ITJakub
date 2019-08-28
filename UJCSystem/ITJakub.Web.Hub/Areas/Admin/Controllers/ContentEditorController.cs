@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
+using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Areas.Admin.Models.Request;
 using ITJakub.Web.Hub.Areas.Admin.Models.Response;
 using ITJakub.Web.Hub.Authorization;
@@ -9,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataContracts.Types;
 using ITJakub.Web.Hub.Options;
+using Vokabular.RestClient.Errors;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 {
@@ -101,9 +104,30 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult GetPageImage(long pageId)
         {
-            var client = GetBookClient();
+            var client = GetProjectClient();
             var result = client.GetPageImage(pageId);
             return new FileStreamResult(result.Stream, result.MimeType);
+        }
+
+        [HttpGet]
+        public IActionResult GetPageDetail(long pageId)
+        {
+            var client = GetProjectClient();
+            var model = new PageDetailViewModel();
+            try
+            {
+                model.Text = client.GetPageText(pageId, TextFormatEnumContract.Html);
+            }
+            catch (HttpErrorCodeException e) 
+            {
+                if(e.StatusCode != HttpStatusCode.NotFound)
+                    throw;
+            }
+
+            model.HasImage = client.HasPageImage(pageId);
+            model.PageId = pageId;
+            
+            return PartialView("../Project/Work/_PageListDetail", model);
         }
 
         [HttpPost]
@@ -123,11 +147,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult SavePageList(string[] pageList)
+        public IActionResult SavePageList(long projectId, IList<CreateOrUpdatePageContract> pageList)
         {
             var client = GetProjectClient();
-            var result = client.SetAllPageList(pageList);
-            return Json(result);
+            client.SetAllPageList(projectId, pageList);
+            return Ok();
         }
 
         [HttpPost]

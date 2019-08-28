@@ -1,17 +1,33 @@
 {
 	"culture":"en",
 	"scope":"RidicsProject",
-	"dictionary": {
-		"ListError" : "Chyba při načítání strany se seznamem projektů",
-		"ModuleError" : "Chyba při načítání modulu",
-		"BookmarkError" : "Chyba při načítání záložky.",
-		"ResourceError" : "Chyba při načítání zdrojů",
-		"VersionListError" : "Chyba při načítání seznamu verzí",
-		
-		"MissingPublisherNameError" : "Nebyl vyplněn název nakladatele",
-		"CreatePublisherError" : "Chyba při vytváření nového nakladatele",
-		"MissingName" : "Nebyl vyplněn název",
-		"CreateLiteraryKind" : "Chyba při vytváření nového literárního druhu",
-		"CreateLiteraryGenre" : "Chyba při vytváření nového literárního žánru"
-		}
+  "dictionary": {
+    "ListError": "Chyba při načítání strany se seznamem projektů",
+    "ModuleError": "Chyba při načítání modulu",
+    "BookmarkError": "Chyba při načítání záložky.",
+    "ResourceError": "Chyba při načítání zdrojů",
+    "VersionListError": "Chyba při načítání seznamu verzí",
+
+    "MissingPublisherNameError": "Nebyl vyplněn název nakladatele",
+    "CreatePublisherError": "Chyba při vytváření nového nakladatele",
+    "MissingName": "Nebyl vyplněn název",
+    "CreateLiteraryKind": "Chyba při vytváření nového literárního druhu",
+    "CreateLiteraryGenre": "Chyba při vytváření nového literárního žánru",
+
+    "Pages": "Pages",
+    "PageContent": "Page content",
+    "PagePreview": "Page preview",
+    "UnsavedChanges": "Made changes are not saved.",
+    "PageContainsText": "Page contains text",
+    "PageContainsImage": "Page contains image",
+    "EmptyPage": "Page does not contain text nor image.",
+    "SwapNumbers": "Please swap to and from numbers.",
+    "EnterValidNumbers": "Please enter a number.",
+    "AddingGeneratedNames": "Page names already exist for this project. Appending generated names to the end of the list.",
+    "Shift": "Shift",
+    "ShiftPageUp": "Shift selected pages up",
+    "ShiftPageDown": "Shift selected pages down",
+    "EditPageName": "Edit page name",
+    "DeletePage": "Delete page"
+  }
 }

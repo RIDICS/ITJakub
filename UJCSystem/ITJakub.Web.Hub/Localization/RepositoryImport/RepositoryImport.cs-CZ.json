@@ -48,6 +48,7 @@
     "Here": "zde",
     "EmptyFilteringExpressionList": "Zatím nebyl vytvořen žádný filtrační set.",
     "UrlTemplateHelp": "Doplňte adresu ve tvaru např. \"www.example.com/path/{0}\", kde se za \"{0}\" automaticky doplní ID importovaného záznamu.",
-    "NoImport" : "Zatím nebyl proveden žádný import"
+    "NoImport": "Zatím nebyl proveden žádný import",
+    "ImportStatus": "Zpracováno {0} z {1} záznamů."
   }
 }

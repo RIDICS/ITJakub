@@ -104,7 +104,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     var publicationsViewModel = Mapper.Map<List<SnapshotViewModel>>(snapshotList);
                     return PartialView("Work/_Publications", publicationsViewModel);
                 case ProjectModuleTabType.WorkPageList:
-                    return PartialView("Work/_PageList");
+                    var pages = projectClient.GetAllPageList(projectId.Value);
+                    return PartialView("Work/_PageList", pages);
                 case ProjectModuleTabType.WorkCooperation:
                     return PartialView("Work/_Cooperation");
                 case ProjectModuleTabType.WorkMetadata:

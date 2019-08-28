@@ -200,6 +200,28 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public bool HasPageImage(long pageId)
+        {
+            try
+            {
+                m_client.Head($"book/page/{pageId}/image");
+                return true;
+            }
+            catch (HttpRequestException e)
+            {
+                var statusException = e as HttpErrorCodeException;
+                if (statusException?.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return false;
+                }
+
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public string GetPageText(long pageId, TextFormatEnumContract format)
         {
             try

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -43,6 +44,13 @@ namespace Vokabular.MainService.Controllers
             return Ok();
         }
 
+        [HttpPut("{projectId}/page")]
+        public IActionResult UpdatePageList(long projectId, [FromBody] List<CreateOrUpdatePageContract> pageData)
+        {
+            m_projectItemManager.UpdatePages(projectId, pageData);
+            return Ok();
+        }
+
         [HttpGet("page/{pageId}/term")]
         public List<TermContract> GetPageTermList(long pageId)
         {
@@ -55,6 +63,35 @@ namespace Vokabular.MainService.Controllers
         {
             m_projectItemManager.SetPageTerms(pageId, termIdList.IdList);
             return Ok();
+        }
+
+        [HttpGet("page/{pageId}/text")]
+        public IActionResult GetPageText(long pageId, [FromQuery] TextFormatEnumContract? format)
+        {
+            var formatValue = format ?? TextFormatEnumContract.Html;
+            var result = m_projectItemManager.GetPageText(pageId, formatValue);
+            if (result == null)
+                return NotFound();
+
+            return Content(result);
+        }
+
+        [HttpGet("page/{pageId}/image")]
+        public IActionResult GetPageImage(long pageId)
+        {
+            var result = m_projectItemManager.GetPageImage(pageId);
+            if (result == null)
+                return NotFound();
+
+            Response.ContentLength = result.FileSize;
+            return File(result.Stream, result.MimeType, result.FileName);
+        }
+
+        [HttpHead("page/{pageId}/image")]
+        public IActionResult HasPageImage(long pageId)
+        {
+            var hasImage = m_projectItemManager.HasBookPageImage(pageId);
+            return hasImage ? (IActionResult)Ok() : NotFound();
         }
     }
 }
