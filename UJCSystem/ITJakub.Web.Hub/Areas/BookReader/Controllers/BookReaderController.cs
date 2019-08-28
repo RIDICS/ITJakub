@@ -7,6 +7,8 @@ using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Vokabular.Shared.AspNetCore.Extensions;
+using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
@@ -82,18 +84,19 @@ namespace ITJakub.Web.Hub.Areas.BookReader.Controllers
                     BookPages = pages,
                     SearchText = searchText,
                     InitPageId = pageId, 
-                    CanPrintEdition = User.IsInRole("CanEditionPrint"),
+                    CanPrintEdition = User.HasPermission(VokabularPermissionNames.EditionPrintText),
                     JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
                 });
         }
-
+        
         #endregion
 
-        public ActionResult GetEditionsWithCategories()
-        {
-            var result = GetBooksAndCategories();
-            return Json(result);
-        }
+        // TODO this method is probably not used - check it and remove it:
+        //public ActionResult GetEditionsWithCategories()
+        //{
+        //    var result = GetBooksAndCategories();
+        //    return Json(result);
+        //}
 
         #region Search in book
 
