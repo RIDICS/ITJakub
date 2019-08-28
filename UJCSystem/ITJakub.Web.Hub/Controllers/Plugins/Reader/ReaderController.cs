@@ -31,13 +31,13 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
         public ActionResult HasBookImage(long bookId, long? snapshotId)
         {
             var client = GetBookClient();
-            return Json(new { hasBookImage = client.HasBookAnyImage(bookId) }, GetJsonSerializerSettings());
+            return Json(new {hasBookImage = client.HasBookAnyImage(bookId)}, GetJsonSerializerSettings());
         }
 
         public ActionResult HasBookText(long bookId, long? snapshotId)
         {
             var client = GetBookClient();
-            return Json(new {HasBookPage = client.HasBookAnyText(bookId)}, GetJsonSerializerSettings());
+            return Json(new {hasBookPage = client.HasBookAnyText(bookId)}, GetJsonSerializerSettings());
         }
 
         public ActionResult GetBookPage(long? snapshotId, long pageId)
