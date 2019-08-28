@@ -15,8 +15,10 @@ class ExternalRepositoryImportList {
             const button = $("#startImportBtn");
             if ($("#repositories input:checkbox:checked").length > 0) {
                 button.removeClass("disabled");
+                button.removeAttr("disabled");
             } else {
                 button.addClass("disabled");
+                button.attr("disabled", "disabled");
             }
         });
     }
