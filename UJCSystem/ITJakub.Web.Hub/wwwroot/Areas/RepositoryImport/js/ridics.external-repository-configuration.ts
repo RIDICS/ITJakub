@@ -15,13 +15,16 @@ class ExternalRepositoryConfiguration {
     init() {
         $(".repository-detail").click((e) => {
             const repositoryId = $(e.target as Node as Element).data("repository-id");
-            const repositoryDetail = $(`#repository-${repositoryId} .bib-table:last-child`);
-            this.client.getExternalRepositoryDetail(repositoryId).done((response) => {
-                repositoryDetail.html(response);
-            }).fail((error) => {
-                const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
-                repositoryDetail.empty().append(alert);
-            });
+            if (typeof repositoryId != "undefined") {
+                const repositoryDetail = $(`#repository-${repositoryId} .bib-table:last-child`);
+                this.client.getExternalRepositoryDetail(repositoryId).done((response) => {
+                    repositoryDetail.html(response);
+                }).fail((error) => {
+                    const alert = new AlertComponentBuilder(AlertType.Error)
+                        .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                    repositoryDetail.empty().append(alert);
+                });
+            }
         });
 
         $("#resourceType").change((e) => {
