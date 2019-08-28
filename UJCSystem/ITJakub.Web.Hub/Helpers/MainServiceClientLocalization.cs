@@ -12,6 +12,7 @@ namespace ITJakub.Web.Hub.Helpers
     {
         private static readonly ILogger m_logger = ApplicationLogging.CreateLogger<MainServiceRestClient>();
         private readonly ILocalizationService m_localization;
+        private const string Scope = "MainServiceErrorCode";
 
         public MainServiceClientLocalization(ILocalizationService localizationService)
         {
@@ -20,47 +21,58 @@ namespace ITJakub.Web.Hub.Helpers
 
         public void LocalizeApiException(MainServiceException ex)
         {
-            try
+            if (TryLocalizeErrorCode(ex.Code, out var localizedDescription, ex.DescriptionParams))
             {
-                if (!string.IsNullOrEmpty(ex.Code))
-                {
-                    if (ex.DescriptionParams == null)
-                    {
-                        ex.Description = m_localization.Translate(ex.Code, "MainServiceErrorCode");
-                    }
-                    else
-                    {
-                        for (var i = 0; i < ex.DescriptionParams.Length; i++)
-                        {
-                            ex.DescriptionParams[i] = TryLocalize(ex.DescriptionParams[i].ToString());
-                        }
-
-                        ex.Description = m_localization.TranslateFormat(ex.Code, "MainServiceErrorCode", ex.DescriptionParams);
-                    }
-                }
+                ex.Description = localizedDescription;
             }
-            catch (Exception e) when (e is LocalizationLibraryException || e is TranslateException)
-            {
-                if (m_logger.IsEnabled(LogLevel.Warning))
-                {
-                    m_logger.LogWarning("Translation for main service code '{0}' not found", ex.Code);
-                }
-
-                //if translation is not defined, propagate original description
-            }
+            //if translation is not defined, propagate original description
         }
 
-        private string TryLocalize(string text)
+        private string LocalizeErrorCode(string text)
         {
             try
             {
-                return m_localization.Translate(text, "MainServiceErrorCode");
+                return m_localization.Translate(text, Scope);
             }
             catch (Exception e) when (e is LocalizationLibraryException || e is TranslateException)
             {
                 //if translation is not defined, propagate original text
                 return text;
             }
+        }
+
+        public bool TryLocalizeErrorCode(string code, out string localizedString, params object[] codeParams)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(code))
+                {
+                    if (codeParams == null)
+                    {
+                        localizedString = m_localization.Translate(code, Scope);
+                        return true;
+                    }
+                    
+                    var localizationParams = new object[codeParams.Length];
+                    for (var i = 0; i < codeParams.Length; i++)
+                    {
+                        localizationParams[i] = LocalizeErrorCode(codeParams[i].ToString());
+                    }
+
+                    localizedString = m_localization.TranslateFormat(code, Scope, localizationParams);
+                    return true;
+                }
+            }
+            catch (Exception e) when (e is LocalizationLibraryException || e is TranslateException)
+            {
+                if (m_logger.IsEnabled(LogLevel.Warning))
+                {
+                    m_logger.LogWarning("Translation for main service code '{0}' not found", code);
+                }
+            }
+
+            localizedString = string.Empty;
+            return false;
         }
     }
 }
