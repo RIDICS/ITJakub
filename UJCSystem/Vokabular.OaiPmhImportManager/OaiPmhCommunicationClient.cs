@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Xml.Serialization;
+using Vokabular.MainService.DataContracts;
 using Vokabular.OaiPmhImportManager.Model;
 using Vokabular.ProjectImport.Model.Exceptions;
 
@@ -71,8 +72,9 @@ namespace Vokabular.OaiPmhImportManager
                     if (oaiPmhRecordResponse.Items.First().GetType() == typeof(OAIPMHerrorType))
                     {
                         var error = (OAIPMHerrorType)oaiPmhRecordResponse.Items.First();
-                        throw new ImportFailedException(
-                            $"Error while requesting: {uriBuilder.Uri}. {error.code} : {error.Value}");
+                        throw new ImportFailedException(MainServiceErrorCode.OaiPmhCommunicationError,
+                            $"Error while requesting: {uriBuilder.Uri}. {error.code} : {error.Value}",
+                            uriBuilder.Uri, error.code, error.Value);
                     }
 
                     return oaiPmhRecordResponse;

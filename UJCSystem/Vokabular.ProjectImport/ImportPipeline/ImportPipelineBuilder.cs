@@ -5,6 +5,7 @@ using System.Threading.Tasks.Dataflow;
 using Microsoft.Extensions.DependencyInjection;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.DataContracts;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
 using Vokabular.ProjectImport.Model.Exceptions;
@@ -55,7 +56,7 @@ namespace Vokabular.ProjectImport.ImportPipeline
             m_projectImportManagers.TryGetValue(repositoryType, out var importManager);
             if (importManager == null)
             {
-                throw new ImportFailedException($"Import manager was not found for repository type {repositoryType}.");
+                throw new ImportFailedException(MainServiceErrorCode.RepositoryImportManagerNotFound, $"The import manager was not found for repository type {repositoryType}.", repositoryType);
             }
 
             return new TransformBlock<object, ImportedRecord>(
@@ -70,7 +71,7 @@ namespace Vokabular.ProjectImport.ImportPipeline
             m_projectParsers.TryGetValue(formatName, out var parser);
             if (parser == null)
             {
-                throw new ImportFailedException($"Project parser was not found for bibliographic format {formatName}.");
+                throw new ImportFailedException(MainServiceErrorCode.ProjectParserNotFound, $"The project parser was not found for bibliographic format {formatName}.", formatName);
             }
 
             var filteringExpressions =
@@ -99,7 +100,7 @@ namespace Vokabular.ProjectImport.ImportPipeline
             m_projectParsers.TryGetValue(bibliographicFormat, out var parser);
             if (parser == null)
             {
-                throw new ImportFailedException($"Project parser was not found for bibliographic format {bibliographicFormat}.");
+                throw new ImportFailedException(MainServiceErrorCode.ProjectParserNotFound, $"The project parser was not found for bibliographic format {bibliographicFormat}.", bibliographicFormat);
             }
 
             return new TransformBlock<ImportedRecord, ImportedRecord>(importedRecord =>

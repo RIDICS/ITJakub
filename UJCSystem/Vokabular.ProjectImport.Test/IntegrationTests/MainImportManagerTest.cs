@@ -54,7 +54,7 @@ namespace Vokabular.ProjectImport.Test.IntegrationTests
                     {
                         if (config == ThrowExc)
                         {
-                            throw new ImportFailedException("ImportFailed");
+                            throw new ImportFailedException("ImportFailed", "ImportFailed");
                         }
                         else if (config == ImportTwoRecords)
                         {
