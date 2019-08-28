@@ -104,7 +104,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult GetPageImage(long pageId)
         {
-            var client = GetBookClient();
+            var client = GetProjectClient();
             var result = client.GetPageImage(pageId);
             return new FileStreamResult(result.Stream, result.MimeType);
         }
@@ -112,7 +112,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult GetPageDetail(long pageId)
         {
-            var client = GetBookClient();
+            var client = GetProjectClient();
             var model = new PageDetailViewModel();
             try
             {

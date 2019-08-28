@@ -263,5 +263,28 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SingleOrDefault();
             return result;
         }
+
+        public virtual TextResource GetLatestPageText(long pageId)
+        {
+            Resource resourceAlias = null;
+            
+            return GetSession().QueryOver<TextResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && x.ResourcePage.Id == pageId)
+                .OrderBy(x => x.CreateTime).Desc
+                .Fetch(SelectMode.Fetch, x => x.BookVersion)
+                .SingleOrDefault();
+        }
+
+        public virtual ImageResource GetLatestPageImage(long pageId)
+        {
+            Resource resourceAlias = null;
+
+            return GetSession().QueryOver<ImageResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && x.ResourcePage.Id == pageId)
+                .OrderBy(x => x.CreateTime).Desc
+                .SingleOrDefault();
+        }
     }
 }
