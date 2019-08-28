@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Logging;
 using Scalesoft.Localization.AspNetCore;
 using Scalesoft.Localization.Core.Exception;
+using Scalesoft.Localization.Core.Manager;
+using Scalesoft.Localization.Core.Util;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Clients;
 using Vokabular.Shared;
@@ -12,11 +14,13 @@ namespace ITJakub.Web.Hub.Helpers
     {
         private static readonly ILogger m_logger = ApplicationLogging.CreateLogger<MainServiceRestClient>();
         private readonly ILocalizationService m_localization;
+        private readonly IAutoLocalizationManager m_localizationManager;
         private const string Scope = "MainServiceErrorCode";
 
-        public MainServiceClientLocalization(ILocalizationService localizationService)
+        public MainServiceClientLocalization(ILocalizationService localization, IAutoLocalizationManager localizationService)
         {
-            m_localization = localizationService;
+            m_localization = localization;
+            m_localizationManager = localizationService;
         }
 
         public void LocalizeApiException(MainServiceException ex)
@@ -49,18 +53,22 @@ namespace ITJakub.Web.Hub.Helpers
                 {
                     if (codeParams == null)
                     {
-                        localizedString = m_localization.Translate(code, Scope);
-                        return true;
+                        var localizeResult = m_localizationManager.Translate(LocTranslationSource.File, m_localization.GetRequestCulture(), Scope, code);
+                        localizedString = localizeResult.Value;
+                        return !localizeResult.ResourceNotFound;
                     }
-                    
-                    var localizationParams = new object[codeParams.Length];
-                    for (var i = 0; i < codeParams.Length; i++)
+                    else
                     {
-                        localizationParams[i] = LocalizeErrorCode(codeParams[i].ToString());
-                    }
+                        var localizationParams = new object[codeParams.Length];
+                        for (var i = 0; i < codeParams.Length; i++)
+                        {
+                            localizationParams[i] = LocalizeErrorCode(codeParams[i].ToString());
+                        }
 
-                    localizedString = m_localization.TranslateFormat(code, Scope, localizationParams);
-                    return true;
+                        var localizeResult = m_localizationManager.TranslateFormat(LocTranslationSource.File, m_localization.GetRequestCulture(), Scope, code, localizationParams);
+                        localizedString = localizeResult.Value;
+                        return !localizeResult.ResourceNotFound;
+                    }
                 }
             }
             catch (Exception e) when (e is LocalizationLibraryException || e is TranslateException)
@@ -71,7 +79,7 @@ namespace ITJakub.Web.Hub.Helpers
                 }
             }
 
-            localizedString = string.Empty;
+            localizedString = code;
             return false;
         }
     }
