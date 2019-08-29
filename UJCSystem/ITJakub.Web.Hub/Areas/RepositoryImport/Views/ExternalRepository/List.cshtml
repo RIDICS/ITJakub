@@ -83,8 +83,8 @@
                                         <a type="button" class="btn btn-sm information-button button" href="@Url.Action("Delete", "ExternalRepository", new {area = "RepositoryImport", id = repository.Id})">
                                             <span class="glyphicon glyphicon-trash"></span>
                                         </a>
-                                        <button type="button" class="btn btn-sm content-button" data-toggle="collapse" aria-expanded="false" data-target="#repository-@repository.Id">
-                                            <span class="glyphicon glyphicon-chevron-down repository-detail" data-repository-id="@repository.Id"></span>
+                                        <button type="button" class="btn btn-sm content-button repository-detail" data-toggle="collapse" aria-expanded="false" data-target="#repository-@repository.Id">
+                                            <span class="glyphicon glyphicon-chevron-down" data-repository-id="@repository.Id"></span>
                                             <span class="glyphicon glyphicon-chevron-up"></span>
                                         </button>
                                     </div>
