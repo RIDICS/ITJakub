@@ -248,7 +248,7 @@ namespace Vokabular.Database.Migrations.Migrations.VokabularDB
                 .WithColumn("Text").AsString(2000).NotNullable()
                 .WithColumn("CreateTime").AsDateTime().NotNullable()
                 .WithColumn("AuthorName").AsString(255).Nullable()
-                .WithColumn("AuthorTitle").AsString(255).Nullable()
+                .WithColumn("AuthorEmail").AsString(255).Nullable()
                 .WithColumn("AuthorUser").AsInt32().Nullable().ForeignKey("FK_Feedback(AuthorUser)_User(Id)", "User", "Id")
                 .WithColumn("FeedbackCategory").AsInt16().NotNullable()
                 .WithColumn("Project").AsInt64().Nullable().ForeignKey("FK_Feedback(Project)_Project(Id)", "Project", "Id")
