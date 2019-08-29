@@ -106,6 +106,8 @@
 
         $(".page-row").off();
         $(".page-row").on("click", (event) => {
+            const checkbox = $(event.currentTarget).find(".selection-checkbox");
+            checkbox.prop("checked", !checkbox.is(":checked"));
             this.selectPage($(event.currentTarget));
         });
     }
@@ -304,7 +306,11 @@
         const distance = Number(context.find(".page-move-distance").val());
         const pages = context.find(".page-row").toArray();
         const newPages = new Array<HTMLElement>(pages.length);
-        
+
+        if (context.find(".selection-checkbox:checked").length == 0) {
+            return;
+        }
+
         for (let i = 0; i < pages.length; i++) {
             const page = pages[i];
             const isSelected = $(page).find(".selection-checkbox").is(":checked");
