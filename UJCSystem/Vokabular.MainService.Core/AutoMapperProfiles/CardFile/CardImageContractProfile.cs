@@ -2,11 +2,11 @@
 using Vokabular.CardFile.Core.DataContractEntities;
 using Vokabular.MainService.DataContracts.Contracts.CardFile;
 
-namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
+namespace Vokabular.MainService.Core.AutoMapperProfiles.CardFile
 {
-    public class ImageContractProfile : Profile
+    public class CardImageContractProfile : Profile
     {
-        public ImageContractProfile()
+        public CardImageContractProfile()
         {
             CreateMap<image, CardImageContract>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.id));
