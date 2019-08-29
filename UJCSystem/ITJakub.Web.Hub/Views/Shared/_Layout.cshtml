@@ -61,11 +61,11 @@
 
                     @if (PortalConfig.Value.PortalType == PortalType.CommunityPortal)
                     {
-                        @await Html.PartialAsync("_PortalMenuCommunity")
+                        @await Html.PartialAsync("Menu/_PortalMenuCommunity")
                     }
                     else
                     {
-                        @await Html.PartialAsync("_PortalMenuResearch")
+                        @await Html.PartialAsync("Menu/_PortalMenuResearch")
                     }
 
                 </div>
