@@ -25,6 +25,7 @@
     "no-supported-search": "No supported search criteria was specified",
     "null-book-type-not-supported": "It is not set the valid book type",
     "import-failed": "Import failed",
+    "import-failed-with-error": "Import failed. {0}",
     "import-succeed-forum-failed": "Import succeeded. Forum creation failed. {0}",
     "project-not-exist": "The project does not exist.",
     "forum-already-created": "The forum is already created.",

@@ -41,6 +41,10 @@ namespace ITJakub.FileProcessing.DataContracts
             {
                 return Channel.ProcessSession(sessionId, projectId, userId, uploadMessage, autoImportPermissions);
             }
+            catch (FaultException ex)
+            {
+                throw new FileProcessingImportFailedException("File processing failed. See inner exception.", ex);
+            }
             catch (TimeoutException ex)
             {
                 throw new FileProcessingException("Communication with FileProcessing service failed. See inner exception.", ex);
@@ -60,6 +64,13 @@ namespace ITJakub.FileProcessing.DataContracts
     {
         public FileProcessingException(string message,Exception innerException):base(message, innerException)
         {            
+        }
+    }
+
+    public class FileProcessingImportFailedException : Exception
+    {
+        public FileProcessingImportFailedException(string message, Exception innerException) : base(message, innerException)
+        {
         }
     }
 }

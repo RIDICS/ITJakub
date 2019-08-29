@@ -25,6 +25,7 @@
     "no-supported-search": "Nebylo specifikováno žádné podporované vyhledávací kritérium",
     "null-book-type-not-supported": "Není nastaven validní typ díla",
     "import-failed": "Import selhal",
+    "import-failed-with-error": "Import selhal. {0}",
     "import-succeed-forum-failed": "Import proběhl úspěšně. Vytvoření fóra selhalo. {0}",
     "project-not-exist": "Projekt neexistuje.",
     "forum-already-created": "Fórum je již vytvořeno.",

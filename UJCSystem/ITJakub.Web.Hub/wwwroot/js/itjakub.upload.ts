@@ -4,6 +4,12 @@
 });
 
 class BookUploader {
+    private readonly errorHandler: ErrorHandler;
+
+    constructor() {
+        this.errorHandler = new ErrorHandler();
+    }
+
     public init() {
         var self = this;
         var dropzoneOptions = DropzoneHelper.getFullConfiguration({
@@ -76,9 +82,10 @@ class BookUploader {
                     //player.stopVideo();
                 },
                 error: (xmlHttpRequest, textStatus, errorMessage) => {
+                    var errorMessageToDisplay = this.errorHandler.getErrorMessage(xmlHttpRequest);
                     var done = $("#done");
                     var error = done.find(".error");
-                    error.children(".message").append(localization.translateFormat("Error:", new Array<string>(errorMessage), "ItJakubJs").value);
+                    error.children(".message").append(localization.translateFormat("Error:", new Array<string>(errorMessageToDisplay), "ItJakubJs").value);
                     error.show();
                     $("#processing").hide();
                     done.show();
