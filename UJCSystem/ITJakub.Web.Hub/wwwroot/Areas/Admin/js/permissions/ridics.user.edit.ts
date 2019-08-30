@@ -26,11 +26,11 @@ class UserEditor {
             this.client.resetUserPassword(this.userId).done(() => {
                 const errorAlert = new AlertComponentBuilder(AlertType.Success)
                     .addContent(localization.translate("PasswordResetSuccess", "PermissionJs").value);
-                alertHolder.append(errorAlert.buildElement());
+                alertHolder.empty().append(errorAlert.buildElement());
             }).fail(error => {
                 const errorAlert = new AlertComponentBuilder(AlertType.Error)
                     .addContent(this.errorHandler.getErrorMessage(error));
-                alertHolder.append(errorAlert.buildElement());
+                alertHolder.empty().append(errorAlert.buildElement());
             });
         });
     }

@@ -148,7 +148,7 @@
             imageIcon.addClass("hide");
             const alert = new AlertComponentBuilder(AlertType.Info)
                 .addContent(localization.translate("EmptyPage", "RidicsProject").value).buildElement();
-            alertHolder.append(alert);
+            alertHolder.empty().append(alert);
             content.empty();
             pageDetail.removeClass("hide");
             return;
@@ -174,7 +174,7 @@
         }).fail((error) => {
             const alert = new AlertComponentBuilder(AlertType.Error)
                 .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
-            alertHolder.append(alert);
+            alertHolder.empty().append(alert);
         });
     }
 
