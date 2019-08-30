@@ -96,6 +96,13 @@ interface IBookPageBookmark extends IFavoriteBaseInfo {
     favoriteLabel: IFavoriteLabel;
 }
 
+interface IResourceInfo {
+    id: number;
+    name: string;
+    versionNumber: string;
+    resourceVersionId: number;
+}
+
 interface IOriginalAuthor {
     id: number;
     firstName: string;

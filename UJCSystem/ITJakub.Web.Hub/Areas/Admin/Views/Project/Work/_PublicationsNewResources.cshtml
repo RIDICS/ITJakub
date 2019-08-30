@@ -28,17 +28,14 @@
             </tr>
             @foreach (var resource in Model.ResourceList)
             {
-                <tr data-id="@resource.Id">
+                <tr class="resource-row" data-id="@resource.Id">
                     <td class="include-checkboxes">
                         <input type="checkbox" />
                     </td>
                     <td>@resource.Name</td>
                     <td>
-                        <select>
-                            @foreach (var version in resource.VersionList)
-                            {
-                                <option value="@version.ResourceVersionId">@version.VersionNumber</option>
-                            }
+                        <select id="example-select" name="version" class="select-version" data-loaded="false">
+                            <option value="@resource.ResourceVersionId" data-name="@resource.Name">@resource.VersionNumber</option>
                         </select>
                     </td>
                     <td>

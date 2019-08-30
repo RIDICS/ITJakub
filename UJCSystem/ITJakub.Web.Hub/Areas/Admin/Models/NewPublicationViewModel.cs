@@ -13,13 +13,13 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
     {
         public long Id { get; set; }
         public string Name { get; set; }
-        public IList<VersionNumberViewModel> VersionList { get; set; }
+        public int ResourceVersionId { get; set; }
+        public int VersionNumber { get; set; }
     }
 
-    public class VersionNumberViewModel
+    public class ResourceVersionsViewModel
     {
-        public long ResourceVersionId { get; set; }
-        public int VersionNumber { get; set; }
+        public IList<ResourceViewModel> ResourceList { get; set; }
     }
 
     public class GroupInfoViewModel

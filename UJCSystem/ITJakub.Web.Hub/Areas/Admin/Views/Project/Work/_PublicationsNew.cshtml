@@ -61,8 +61,6 @@
         @await Html.PartialAsync("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Text, "Textové zdroje", Model.ResourceList))
         @await Html.PartialAsync("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Image, "Obrazové zdroje", Model.ResourceList))
         @await Html.PartialAsync("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Audio, "Audio zdroje", Model.ResourceList))
-        @await Html.PartialAsync("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Video, "Video zdroje", Model.ResourceList))
-
         <div class="project-bottom-buttons">
             <button type="button" class="btn btn-default">@Localizer.Translate("Save", "Admin")</button>
         </div>

@@ -191,6 +191,16 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return PartialView("Work/_PublicationsNew", viewModel);
         }
 
+        public IActionResult VersionList(long resourceId)
+        {
+            var client = GetProjectClient();
+            //var resources = client.Get(projectId);
+            // TODO
+
+            var viewModel = ProjectMock.GetResourceVersionsViewModel(resourceId, m_localizer);
+            return Json(viewModel.ResourceList);
+        }
+
         [HttpPost]
         public IActionResult CreateForum(long projectId)
         {
@@ -574,6 +584,21 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             };
         }
 
+        public static ResourceVersionsViewModel GetResourceVersionsViewModel(long id, ILocalizationService localizer)
+        {
+            return new ResourceVersionsViewModel
+            {
+                ResourceList = new List<ResourceViewModel>
+                {
+                    GetResourceViewModel(1, localizer,1),
+                    GetResourceViewModel(1, localizer, 2),
+                    GetResourceViewModel(1, localizer,3),
+                    GetResourceViewModel(1, localizer, 4),
+                    GetResourceViewModel(1, localizer, 5)
+                },
+            };
+        }
+
         private static GroupInfoViewModel GetVisibilityForGroup(int id, ILocalizationService localizer)
         {
             return new GroupInfoViewModel
@@ -591,20 +616,19 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 Id = id,
                 //Name = string.Format("Strana {0}", id),
                 Name = localizer.TranslateFormat("Page", "Admin", id),
-                VersionList = new List<VersionNumberViewModel>
-                {
-                    GetVersionNumber(1),
-                    GetVersionNumber(2),
-                }
+                VersionNumber = 1,
+                ResourceVersionId = id
             };
         }
 
-        private static VersionNumberViewModel GetVersionNumber(int id)
+        private static ResourceViewModel GetResourceViewModel(int id, ILocalizationService localizer, int version)
         {
-            return new VersionNumberViewModel
+            return new ResourceViewModel
             {
-                ResourceVersionId = id,
-                VersionNumber = id
+                Id = id,
+                Name = string.Format("Strana {0} v. {1}", id, version),
+                VersionNumber = version,
+                ResourceVersionId = version
             };
         }
     }
