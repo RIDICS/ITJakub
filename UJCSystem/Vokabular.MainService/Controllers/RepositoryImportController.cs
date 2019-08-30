@@ -9,7 +9,7 @@ using Vokabular.Shared.Const;
 
 namespace Vokabular.MainService.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/bibliography/import")]
     [Authorize(VokabularPermissionNames.ManageBibliographyImport)]
     public class RepositoryImportController : BaseController
     {
@@ -36,7 +36,7 @@ namespace Vokabular.MainService.Controllers
             }
         }
        
-        [HttpGet("importStatus")]
+        [HttpGet("status")]
         public IList<RepositoryImportProgressInfoContract> GetActualProgress()
         {
             return m_mainImportManager.GetActualProgressInfo();

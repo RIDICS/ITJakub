@@ -7,7 +7,7 @@ using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Project")]
     public class ProjectEditionNoteController : BaseController
     {
         private readonly ProjectItemManager m_projectItemManager;
@@ -17,7 +17,7 @@ namespace Vokabular.MainService.Controllers
             m_projectItemManager = projectItemManager;
         }
 
-        [HttpGet("{projectId}")]
+        [HttpGet("{projectId}/edition-note")]
         [ProducesResponseType(typeof(EditionNoteContract), StatusCodes.Status200OK)]
         public IActionResult GetEditionNote(long projectId, TextFormatEnumContract? format)
         {
@@ -29,7 +29,7 @@ namespace Vokabular.MainService.Controllers
             return Ok(result);
         }
 
-        [HttpPost("{projectId}")]
+        [HttpPost("{projectId}/edition-note")]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
         public IActionResult CreateEditionNoteVersion(long projectId, [FromBody] CreateEditionNoteContract data)
         {
