@@ -210,6 +210,7 @@ namespace Vokabular.MainService
             app.ConfigureAutoMapper();
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
+            app.UseMiddleware<PortalTypeMiddleware>();
 
             app.UseAuthentication();
 
