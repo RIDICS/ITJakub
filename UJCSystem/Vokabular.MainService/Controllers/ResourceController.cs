@@ -1,44 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
-using Vokabular.MainService.Models;
-using Vokabular.Shared.Const;
 
 namespace Vokabular.MainService.Controllers
 {
     [Route("api")]
-    public class ResourceController : Controller
+    public class ResourceController : BaseController
     {
-        private readonly ProjectResourceManager m_resourceManager;
-        private readonly NamedResourceGroupManager m_namedResourceGroupManager;
-
-        public ResourceController(ProjectResourceManager resourceManager, NamedResourceGroupManager namedResourceGroupManager)
-        {
-            m_resourceManager = resourceManager;
-            m_namedResourceGroupManager = namedResourceGroupManager;
-        }
-
-        [Authorize(VokabularPermissionNames.UploadBook)]
-        [HttpPost("session/{sessionId}/resource")]
-        public void UploadResource(string sessionId, [FromForm] FormFileContract formData)
-        {
-            using (var fileStream = formData.File.OpenReadStream())
-            {
-                m_resourceManager.UploadResource(sessionId, fileStream, formData.File.FileName);
-            }
-        }
-
-        [Authorize(VokabularPermissionNames.UploadBook)]
-        [HttpPost("session/{sessionId}")]
-        public void ProcessSessionAsImport(string sessionId, [FromBody] NewBookImportContract info)
-        {
-            m_resourceManager.ProcessSessionAsImport(sessionId, info.ProjectId, info.Comment);
-        }
+        // TODO determine which methods are required and finish their implementation (or do any required modification). Remove other non-required methods.
 
         [HttpPost("project/{projectId}/resource")]
         public long ProcessUploadedResources(long projectId, [FromBody] NewResourceContract resourceInfo)
@@ -118,32 +90,6 @@ namespace Vokabular.MainService.Controllers
                 EditionNote = "xxxxxxx"
             };
             return Ok(resultData);
-        }
-
-        [HttpGet("project/{projectId}/resource/group")]
-        public List<NamedResourceGroupContract> GetResourceGroupList(long projectId, [FromQuery] ResourceTypeEnumContract? filterResourceType)
-        {
-            var result = m_namedResourceGroupManager.GetResourceGroupList(projectId, filterResourceType);
-            return result;
-        }
-
-        [HttpPost("project/{projectId}/resource/group/")]
-        public long CreateResourceGroup(long projectId, [FromBody] NamedResourceGroupContract request)
-        {
-            var resultId = m_namedResourceGroupManager.CreateResourceGroup(projectId, request);
-            return resultId;
-        }
-
-        [HttpPut("resource/group/{resourceGroupId}")]
-        public void UpdateResourceGroup(long resourceGroupId, [FromBody] NamedResourceGroupContract request)
-        {
-            m_namedResourceGroupManager.UpdateResourceGroup(resourceGroupId, request);
-        }
-
-        [HttpDelete("resource/group/{resourceGroupId}")]
-        public void DeleteResourceGroup(long resourceGroupId)
-        {
-            m_namedResourceGroupManager.DeleteResourceGroup(resourceGroupId);
         }
     }
 
