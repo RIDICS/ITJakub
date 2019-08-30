@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.ExternalBibliography;
 using Vokabular.MainService.DataContracts.Contracts.OaiPmh;
 using Vokabular.ProjectImport;
 using Vokabular.ProjectImport.Managers;

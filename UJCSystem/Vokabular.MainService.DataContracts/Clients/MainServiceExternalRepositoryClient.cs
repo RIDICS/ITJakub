@@ -2,6 +2,7 @@
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.ExternalBibliography;
 using Vokabular.MainService.DataContracts.Contracts.OaiPmh;
 using Vokabular.RestClient.Extensions;
 using Vokabular.RestClient.Results;
