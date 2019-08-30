@@ -18,6 +18,19 @@
         pageImageEl.off();
     }
 
+    addImageContent(element: JQuery, imageId: number) {
+        //TODO fix url
+        const imgUrl = this.util.getImageUrlOnPage(imageId);
+        const imageString = `<img src="${imgUrl}">`;
+        element.fadeOut(150, () => {
+            element.empty();
+            element.append(imageString);
+            this.onError(element);
+        });
+        element.fadeIn(150);
+        element.off();
+    }
+
     private onError(pageImageEl) {
         const imageEl = pageImageEl.children("img");
         imageEl.on("error", () => {

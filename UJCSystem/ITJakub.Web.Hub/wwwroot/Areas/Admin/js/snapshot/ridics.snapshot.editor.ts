@@ -17,7 +17,7 @@
 
         $(".include-checkboxes input").click((event) => {
             const table = $(event.currentTarget).parents(".table");
-     
+
             let isAllChecked = true;
             table.find(".include-checkboxes input").each((index, elem) => {
                 if (!(elem as Node as HTMLInputElement).checked) {
@@ -31,8 +31,7 @@
         $(".select-version").click((event) => {
             const selectBox = $(event.currentTarget);
             const dataLoaded = $(event.currentTarget).data("loaded");
-            if(!dataLoaded)
-            {
+            if (!dataLoaded) {
                 const resourceId = selectBox.parents(".resource-row").data("id");
                 this.client.getVersionList(resourceId).done((data) => {
                     for (let resource of data) {
@@ -46,6 +45,37 @@
                     //TODO error, where to place it? Gui.something
                 });
             }
+        });
+
+        $(".resource-preview").click((event) => {
+            const resourceRow = $(event.currentTarget).parents(".resource-row");
+            const resourceId = resourceRow.data("id");
+            const resourceType = Number(resourceRow.parents(".publish-resource-panel").data("resource-type"));
+            const resourcePreviewModal = $("#resourcePreviewModal");
+            switch (resourceType) {
+            case ResourceType.Audio:
+                {
+
+                }
+                break;
+            case ResourceType.Image:
+                {
+                    //TODO refactor
+                    const imageViewer = new ImageViewerContentAddition(new EditorsUtil());
+                    imageViewer.addImageContent(resourcePreviewModal.find(".modal-body"), 561);
+                }
+                break;
+            case ResourceType.Text:
+                {
+
+                }
+                break;
+            default:
+                {
+                    //TODO error unknown resource type
+                }
+            }
+            resourcePreviewModal.modal("show");
         });
     }
 }

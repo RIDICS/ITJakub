@@ -21,22 +21,22 @@
                 <div id="publishToModules" class="panel-body panel-collapse collapse in">
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox"/> @Localizer.Translate("Edition", "Admin")
+                            <input type="checkbox" /> @Localizer.Translate("Edition", "Admin")
                         </label>
                     </div>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox"/> @Localizer.Translate("Corporas", "Admin")
+                            <input type="checkbox" /> @Localizer.Translate("Corporas", "Admin")
                         </label>
                     </div>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox"/> @Localizer.Translate("Grammar", "Admin")
+                            <input type="checkbox" /> @Localizer.Translate("Grammar", "Admin")
                         </label>
                     </div>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox"/> @Localizer.Translate("Audio", "Admin")
+                            <input type="checkbox" /> @Localizer.Translate("Audio", "Admin")
                         </label>
                     </div>
                 </div>
@@ -63,6 +63,19 @@
         @await Html.PartialAsync("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Audio, "Audio zdroje", Model.ResourceList))
         <div class="project-bottom-buttons">
             <button type="button" class="btn btn-default">@Localizer.Translate("Save", "Admin")</button>
+        </div>
+    </div>
+   
+    <div id="resourcePreviewModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                   
+                </div>
+            </div>
         </div>
     </div>
 </div>

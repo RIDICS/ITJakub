@@ -32,6 +32,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
     {
         public ResourcesViewModel(ResourceTypeEnumContract resourceType, string title, IList<ResourceViewModel> resourceList)
         {
+            ResourceType = resourceType;
             Title = title;
             ResourceList = resourceList;
         }
