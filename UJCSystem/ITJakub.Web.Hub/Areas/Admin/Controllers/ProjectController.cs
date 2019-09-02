@@ -644,10 +644,12 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return new ResourceViewModel
             {
                 Id = id,
-                //Name = string.Format("Strana {0}", id),
                 Name = localizer.TranslateFormat("Page", "Admin", id),
                 VersionNumber = 1,
-                ResourceVersionId = id
+                ResourceVersionId = id,
+                Author = "Jan Testovič",
+                Comment = "Bla bla bla",
+                Created = DateTime.Now
             };
         }
 
@@ -658,7 +660,10 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 Id = id,
                 Name = string.Format("Strana {0} v. {1}", id, version),
                 VersionNumber = version,
-                ResourceVersionId = version
+                ResourceVersionId = version,
+                Author = "Jan Testovič",
+                Comment = "Bla bla bla",
+                Created = DateTime.Now
             };
         }
     }

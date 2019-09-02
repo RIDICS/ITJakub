@@ -14,33 +14,47 @@
     <div id="panel-@Html.Raw((int) Model.ResourceType)" class="panel-collapse collapse in">
         <table class="table">
             <tr class="header">
-                <th>
+                <th class="include-all">
                     <div class="checkbox">
                         <label title="@Localizer.Translate("IncludeAll", "Admin")">
-                            <input type="checkbox" class="include-all" /> @Localizer.Translate("Include", "Admin")
+                            <input type="checkbox" class="include-all-checkbox" /> @Localizer.Translate("Include", "Admin")
                         </label>
                     </div>
                 </th>
                 <th>@Localizer.Translate("Source", "Admin")</th>
-                <th>@Localizer.Translate("Version", "Admin")</th>
+                <th class="version-label">@Localizer.Translate("Version", "Admin")</th>
+                <th>@Localizer.Translate("Created", "Admin")</th>
+                <th>@Localizer.Translate("Author", "Admin")</th>
+                <th>@Localizer.Translate("Comment", "Admin")</th>
                 <th></th>
             </tr>
             @foreach (var resource in Model.ResourceList)
             {
-                <tr class="resource-row" data-id="@resource.Id">
-                    <td class="include-checkboxes">
-                        <input type="checkbox" />
-                    </td>
-                    <td>@resource.Name</td>
-                    <td>
-                        <select id="example-select" name="version" class="select-version" data-loaded="false">
-                            <option value="@resource.ResourceVersionId" data-name="@resource.Name">@resource.VersionNumber</option>
-                        </select>
-                    </td>
-                    <td>
-                        <button class="resource-preview btn btn-default">@Localizer.Translate("Preview", "Admin")</button>
-                    </td>
-                </tr>
+            <tr class="resource-row" data-id="@resource.Id" data-version-id="@resource.ResourceVersionId">
+                <td class="include-checkboxes">
+                    <input type="checkbox" />
+                </td>
+                <td class="name">
+                    @resource.Name
+                </td>
+                <td>
+                    <select name="version" class="select-version" data-loaded="false">
+                        <option value="@resource.ResourceVersionId" data-name="@resource.Name">@resource.VersionNumber</option>
+                    </select>
+                </td>
+                <td class="created">
+                    @resource.Created
+                </td>
+                <td class="author">
+                    @resource.Author
+                </td>
+                <td class="comment">
+                    @resource.Comment
+                </td>
+                <td>
+                    <button class="resource-preview btn btn-default">@Localizer.Translate("Preview", "Admin")</button>
+                </td>
+            </tr>
             }
         </table>
     </div>

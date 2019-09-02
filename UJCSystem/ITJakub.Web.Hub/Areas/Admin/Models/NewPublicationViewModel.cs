@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Models
@@ -15,6 +16,9 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
         public string Name { get; set; }
         public int ResourceVersionId { get; set; }
         public int VersionNumber { get; set; }
+        public DateTime Created { get; set; }
+        public string Author { get; set; }
+        public string Comment { get; set; }
     }
 
     public class ResourceVersionsViewModel

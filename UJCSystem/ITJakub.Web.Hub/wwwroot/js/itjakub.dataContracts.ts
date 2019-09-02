@@ -101,6 +101,9 @@ interface IResourceInfo {
     name: string;
     versionNumber: string;
     resourceVersionId: number;
+    author: string;
+    created: string;
+    comment: string;
 }
 
 interface IOriginalAuthor {
