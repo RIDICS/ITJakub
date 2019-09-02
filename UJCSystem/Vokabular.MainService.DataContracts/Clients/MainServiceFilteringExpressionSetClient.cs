@@ -24,7 +24,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             {
                 var result =
                     m_client.GetPagedList<FilteringExpressionSetDetailContract>(
-                        $"filteringExpressionSet?start={start}&count={count}&fetchPageCount={fetchPageCount}");
+                        $"bibliography/filtering-expression-set?start={start}&count={count}&fetchPageCount={fetchPageCount}");
                 return result;
             }
             catch (HttpRequestException e)
@@ -40,7 +40,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = m_client.Get<IList<FilteringExpressionSetContract>>($"filteringExpressionSet/allFilteringExpressionSets");
+                var result = m_client.Get<IList<FilteringExpressionSetContract>>($"bibliography/filtering-expression-set/all");
                 return result;
             }
             catch (HttpRequestException e)
@@ -56,7 +56,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = m_client.Get<FilteringExpressionSetDetailContract>($"filteringExpressionSet/{filteringExpressionSetId}");
+                var result = m_client.Get<FilteringExpressionSetDetailContract>($"bibliography/filtering-expression-set/{filteringExpressionSetId}");
                 return result;
             }
             catch (HttpRequestException e)
@@ -72,7 +72,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var filteringExpressionSetId = m_client.Post<int>("filteringExpressionSet", filteringExpressionSet);
+                var filteringExpressionSetId = m_client.Post<int>("bibliography/filtering-expression-set", filteringExpressionSet);
                 return filteringExpressionSetId;
             }
             catch (HttpRequestException e)
@@ -88,7 +88,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                m_client.Delete($"filteringExpressionSet/{filteringExpressionSetId}");
+                m_client.Delete($"bibliography/filtering-expression-set/{filteringExpressionSetId}");
             }
             catch (HttpRequestException e)
             {
@@ -103,7 +103,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                m_client.Put<object>($"filteringExpressionSet/{filteringExpressionSetId}", filteringExpressionSet);
+                m_client.Put<object>($"bibliography/filtering-expression-set/{filteringExpressionSetId}", filteringExpressionSet);
             }
             catch (HttpRequestException e)
             {
@@ -118,7 +118,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                return m_client.Get<IList<BibliographicFormatContract>>($"filteringExpressionSet/allBibliographicFormats");
+                return m_client.Get<IList<BibliographicFormatContract>>($"bibliography/bibliography-format");
             }
             catch (HttpRequestException e)
             {

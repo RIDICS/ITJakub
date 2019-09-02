@@ -31,7 +31,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
         public ActionResult HasBookImage(long bookId, long? snapshotId)
         {
             var client = GetBookClient();
-            return Json(new {HasBookImage = client.HasBookAnyImage(bookId)});
+            return Json(new {HasBookImage = client.HasBookAnyImage(bookId)}, GetJsonSerializerSettings());
         }
 
         public ActionResult HasBookText(long bookId, long? snapshotId)

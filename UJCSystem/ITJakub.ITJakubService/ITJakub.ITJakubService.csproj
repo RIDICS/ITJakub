@@ -247,10 +247,6 @@
       <Project>{36a4ca21-a99d-48d3-9dff-76878cf1de0c}</Project>
       <Name>ITJakub.DataEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Vokabular.CardFile.Core\Vokabular.CardFile.Core.csproj">
-      <Project>{dd3ea4c0-3500-4576-adbe-3c187ab018b1}</Project>
-      <Name>Vokabular.CardFile.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Vokabular.Core\Vokabular.Core.csproj">
       <Project>{88ef00d2-ce46-4054-a764-9093ba9dde4e}</Project>
       <Name>Vokabular.Core</Name>
@@ -282,15 +278,6 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Development|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

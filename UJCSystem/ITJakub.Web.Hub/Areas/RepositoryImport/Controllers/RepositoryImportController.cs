@@ -4,6 +4,7 @@ using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.DataContracts;
 
 namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
 {
@@ -12,8 +13,11 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
     [Area("RepositoryImport")]
     public class RepositoryImportController : BaseController
     {
-        public RepositoryImportController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        private readonly IMainServiceClientLocalization m_mainServiceLocalization;
+
+        public RepositoryImportController(CommunicationProvider communicationProvider, IMainServiceClientLocalization serviceClientLocalization) : base(communicationProvider)
         {
+            m_mainServiceLocalization = serviceClientLocalization;
         }
 
         public IActionResult List()
@@ -51,6 +55,14 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
         {
             var client = GetExternalRepositoryClient();
             var status = client.GetImportStatus();
+            foreach (var statusItem in status)
+            {
+                if (m_mainServiceLocalization.TryLocalizeErrorCode(statusItem.FaultedMessage, out var localizedString,
+                    statusItem.FaultedMessageParams))
+                {
+                    statusItem.FaultedMessage = localizedString;
+                }
+            }
             return Json(status);
         }
 

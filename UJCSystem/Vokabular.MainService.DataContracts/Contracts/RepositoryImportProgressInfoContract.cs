@@ -9,5 +9,6 @@
         public string FaultedMessage { get; set; }
         public int ProcessedProjectsCount { get; set; }
         public int FailedProjectsCount { get; set; }
+        public object[] FaultedMessageParams { get; set; }
     }
 }

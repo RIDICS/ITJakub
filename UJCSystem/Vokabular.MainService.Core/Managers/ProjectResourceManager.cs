@@ -45,10 +45,17 @@ namespace Vokabular.MainService.Core.Managers
             ImportResultContract importResult;
             using (var client = m_communicationProvider.GetFileProcessingClient())
             {
-                importResult = client.ProcessSession(sessionId, projectId, userId, comment, allAutoImportPermissions);
-                if (!importResult.Success)
+                try
                 {
-                    throw new MainServiceException(MainServiceErrorCode.ImportFailed, "Import failed");
+                    importResult = client.ProcessSession(sessionId, projectId, userId, comment, allAutoImportPermissions);
+                    if (!importResult.Success)
+                    {
+                        throw new MainServiceException(MainServiceErrorCode.ImportFailed, "Import failed");
+                    }
+                }
+                catch (FileProcessingImportFailedException exception)
+                {
+                    throw new MainServiceException(MainServiceErrorCode.ImportFailedWithError, $"Import failed with error: {exception.InnerException?.Message}", descriptionParams: exception.InnerException?.Message);
                 }
             }
 

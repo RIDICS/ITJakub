@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Vokabular.DataEntities.Database.Entities.Enums;
+using Vokabular.MainService.DataContracts;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
 using Vokabular.ProjectImport.Model.Exceptions;
@@ -59,8 +60,9 @@ namespace Vokabular.ProjectImport.ImportPipeline
                 m_projectImportManagers.TryGetValue(externalRepository.ExternalRepositoryType.Name, out var importManager);
                 if (importManager == null)
                 {
-                    throw new ArgumentNullException(
-                        $"Import manager was not found for repository type {externalRepository.ExternalRepositoryType.Name}.");
+                    throw new ImportFailedException(MainServiceErrorCode.RepositoryImportManagerNotFound,
+                        $"The import manager was not found for repository type {externalRepository.ExternalRepositoryType.Name}.",
+                        externalRepository.ExternalRepositoryType.Name);
                 }
 
                 importPipeline = m_importPipelineDirector.Build(m_importPipelineBuilder, externalRepository, importHistoryId, progressInfo, cancellationToken);
@@ -73,7 +75,8 @@ namespace Vokabular.ProjectImport.ImportPipeline
             }
             catch (OperationCanceledException)
             {
-                progressInfo.FaultedMessage = $"Import from repository {externalRepository.Name} was canceled.";
+                progressInfo.FaultedMessage = MainServiceErrorCode.RepositoryImportCancelled;
+                progressInfo.FaultedMessageParams = new object[]{externalRepository.Name};
             }
             catch (AggregateException e)
             {
@@ -87,22 +90,24 @@ namespace Vokabular.ProjectImport.ImportPipeline
                 if (m_logger.IsErrorEnabled())
                     m_logger.LogError(e, errorMessages.ToString());
 
-                progressInfo.FaultedMessage = errorMessages.ToString();
+                progressInfo.FaultedMessage = MainServiceErrorCode.RepositoryImportFailed;
+                progressInfo.FaultedMessageParams = new object[] { externalRepository.Name };
             }
             catch (ImportFailedException e)
             {
                 if (m_logger.IsErrorEnabled())
                     m_logger.LogError(e, e.Message);
 
-                progressInfo.FaultedMessage = e.Message;
+                progressInfo.FaultedMessage = e.Code;
+                progressInfo.FaultedMessageParams = e.CodeParams;
             }
-            catch (Exception e)
+            catch (Exception e) // Catch every exception otherwise, ProjectImportBackgroundService will be stopped
             {
                 if (m_logger.IsErrorEnabled())
                     m_logger.LogError(e, e.Message);
 
-                progressInfo.FaultedMessage = e.Message;
-                throw;
+                progressInfo.FaultedMessage = MainServiceErrorCode.RepositoryImportFailed;
+                progressInfo.FaultedMessageParams = new object[] { externalRepository.Name };
             }
             finally
             {
@@ -111,15 +116,13 @@ namespace Vokabular.ProjectImport.ImportPipeline
 
                 if (cancellationTokenSource != null && cancellationTokenSource.IsCancellationRequested)
                 {
-                    progressInfo.FaultedMessage =
-                        $"Error occurred executing import task (import from repository {externalRepository.Name}). Error message: Import was cancelled.";
+                    progressInfo.FaultedMessage = MainServiceErrorCode.RepositoryImportCancelled;
+                    progressInfo.FaultedMessageParams = new object[] { externalRepository.Name };
                     importHistory.Message = progressInfo.FaultedMessage;
                     importHistory.Status = ImportStatusEnum.Failed;
                 }
                 else if (!string.IsNullOrEmpty(progressInfo.FaultedMessage))
                 {
-                    progressInfo.FaultedMessage =
-                        $"Error occurred executing import task (import from repository {externalRepository.Name}). Error message: {progressInfo.FaultedMessage}";
                     importHistory.Message = progressInfo.FaultedMessage;
                     importHistory.Status = ImportStatusEnum.Failed;
                     m_importManager.CancelTask(externalRepositoryId);

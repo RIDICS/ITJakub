@@ -1,5 +1,8 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using ITJakub.Web.Hub.Options
+@using Microsoft.Extensions.Options
+@using Scalesoft.Localization.AspNetCore
 @inject ILocalizationService Localizer
+@inject IOptions<PortalOption> PortalOption
 
 @section styles{
     <link asp-append-version="true" href="~/Areas/Dictionaries/css/itjakub.dictionaries.css" rel="stylesheet" />
@@ -11,6 +14,8 @@
 @{
     ViewBag.Title = @Localizer.Translate("DictionariesSearch", "Dictionaries");
 }
+
+<div id="allowedSearchOptions" class="hide" data-options="@Html.Encode(Json.Serialize(PortalOption.Value.AllowedSearchOptions.ToArray()))"></div>
 
 <div class="transparent-content-container">
     <div class="search-with-saved-word-area">

@@ -24,6 +24,7 @@
         public const string NoSupportedSearch = "no-supported-search";
         public const string NullBookTypeNotSupported = "null-book-type-not-supported";
         public const string ImportFailed = "import-failed";
+        public const string ImportFailedWithError = "import-failed-with-error";
         public const string ImportSucceedForumFailed = "import-succeed-forum-failed";
         public const string ProjectNotExist = "project-not-exist";
         public const string ForumAlreadyCreated = "forum-already-created";
@@ -42,5 +43,11 @@
         public const string DeleteDefaultRole = "delete-default-role";
         public const string ResourceModified = "resource-modified";
         public const string UserHasNotPermissionToManipulate = "user-has-not-permission-to-manipulate";
+        public const string RepositoryImportManagerNotFound = "repository-import-manager-not-found";
+        public const string RepositoryImportCancelled = "repository-import-cancelled";
+        public const string RepositoryImportFailed = "repository-import-failed";
+        public const string OaiPmhCommunicationError = "oai-pmh-communication-error";
+        public const string OaiPmhCommunicationFailed = "oai-pmh-communication-failed";
+        public const string ProjectParserNotFound = "project-parser-not-found";
     }
 }

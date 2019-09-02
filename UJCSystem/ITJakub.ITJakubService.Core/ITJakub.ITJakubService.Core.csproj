@@ -30,15 +30,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Development|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Development\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AutoMapper, Version=8.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.8.1.1\lib\net461\AutoMapper.dll</HintPath>
@@ -84,7 +75,6 @@
     <Compile Include="AutoMapperProfiles\FavoriteProfile.cs" />
     <Compile Include="AutoMapperProfiles\FeedbackProfile.cs" />
     <Compile Include="AutoMapperProfiles\GroupProfile.cs" />
-    <Compile Include="AutoMapperProfiles\ImageContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\CategoryProfile.cs" />
     <Compile Include="AutoMapperProfiles\ManuscriptProfile.cs" />
     <Compile Include="AutoMapperProfiles\NewsSyndicationItemProfile.cs" />
@@ -140,10 +130,6 @@
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
       <Name>ITJakub.Shared.Contracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vokabular.CardFile.Core\Vokabular.CardFile.Core.csproj">
-      <Project>{dd3ea4c0-3500-4576-adbe-3c187ab018b1}</Project>
-      <Name>Vokabular.CardFile.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vokabular.Core\Vokabular.Core.csproj">
       <Project>{88ef00d2-ce46-4054-a764-9093ba9dde4e}</Project>

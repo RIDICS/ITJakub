@@ -1,7 +1,9 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using ITJakub.Web.Hub.Options
+@using Microsoft.Extensions.Options
+@using Scalesoft.Localization.AspNetCore
 @model ITJakub.Web.Hub.Models.BookListingModel
 @inject ILocalizationService Localizer
-
+@inject IOptions<PortalOption> PortalOption
 
 @{
     ViewBag.Title = Localizer.Translate("EditionsListing", "Editions");
@@ -15,11 +17,12 @@
 }
 
 
+<div id="allowedSearchOptions" class="hide" data-options="@Html.Encode(Json.Serialize(PortalOption.Value.AllowedSearchOptions.ToArray()))"></div>
 <div id="SearchDiv">
 
 </div>
 
-<div id="ReaderDiv" data-bookid="@Model.BookXmlId" data-versionid="@Model.VersionXmlId"  data-has-image-url="@Url.Action("HasBookImage", "Reader", new {Area = ""})" data-can-print="@Model.CanPrintEdition">
+<div id="ReaderDiv" data-bookid="@Model.BookXmlId" data-versionid="@Model.VersionXmlId" data-has-image-url="@Url.Action("HasBookImage", "Reader", new {Area = ""})" data-can-print="@Model.CanPrintEdition">
 
 </div>
 

@@ -101,12 +101,14 @@
 
             @if (User.Identity.IsAuthenticated)
             {
-                <li id="admin-menu" class="last">
+                <li id="projects-menu" class="">
                     <a href='@Url.Action("List", "Project", new {area = "Admin"})'>
                         <span>@Localizer.Translate("MyProjects", "layout", LocTranslationSource.File)</span>
                     </a>
                 </li>
             }
+            
+            @await Html.PartialAsync("Menu/_AdminMenuItems")
         </ul>
     </div>
 </div>

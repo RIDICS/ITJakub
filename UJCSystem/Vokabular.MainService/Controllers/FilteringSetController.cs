@@ -13,14 +13,15 @@ using Vokabular.Shared.Const;
 
 namespace Vokabular.MainService.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/bibliography/filtering-expression-set")]
     [Authorize(VokabularPermissionNames.ManageBibliographyImport)]
     public class FilteringExpressionSetController : BaseController
     {
         private readonly FilteringExpressionSetManager m_filteringExpressionSetManager;
         private readonly AuthenticationManager m_authenticationManager;
-        
-        public FilteringExpressionSetController(FilteringExpressionSetManager filteringExpressionSetManager, AuthenticationManager authenticationManager)
+
+        public FilteringExpressionSetController(FilteringExpressionSetManager filteringExpressionSetManager,
+            AuthenticationManager authenticationManager)
         {
             m_filteringExpressionSetManager = filteringExpressionSetManager;
             m_authenticationManager = authenticationManager;
@@ -34,7 +35,8 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPut("{filteringExpressionSetId}")]
-        public IActionResult UpdateFilteringExpressionSet(int filteringExpressionSetId, [FromBody] FilteringExpressionSetDetailContract data)
+        public IActionResult UpdateFilteringExpressionSet(int filteringExpressionSetId,
+            [FromBody] FilteringExpressionSetDetailContract data)
         {
             try
             {
@@ -43,7 +45,7 @@ namespace Vokabular.MainService.Controllers
             }
             catch (HttpErrorCodeException exception)
             {
-                return StatusCode((int)exception.StatusCode, exception.Message);
+                return StatusCode((int) exception.StatusCode, exception.Message);
             }
         }
 
@@ -57,7 +59,7 @@ namespace Vokabular.MainService.Controllers
             }
             catch (HttpErrorCodeException exception)
             {
-                return StatusCode((int)exception.StatusCode, exception.Message);
+                return StatusCode((int) exception.StatusCode, exception.Message);
             }
         }
 
@@ -85,14 +87,26 @@ namespace Vokabular.MainService.Controllers
             return result.List;
         }
 
-        [HttpGet("allFilteringExpressionSets")]
+        [HttpGet("all")]
         public IList<FilteringExpressionSetContract> GetAllFilteringExpressionSets()
         {
             var result = m_filteringExpressionSetManager.GetAllFilteringExpressionSets();
             return result;
         }
+    }
 
-        [HttpGet("allBibliographicFormats")]
+    [Route("api/bibliography/bibliography-format")]
+    [Authorize(VokabularPermissionNames.ManageBibliographyImport)]
+    public class BibliographyFormatController : BaseController
+    {
+        private readonly FilteringExpressionSetManager m_filteringExpressionSetManager;
+
+        public BibliographyFormatController(FilteringExpressionSetManager filteringExpressionSetManager)
+        {
+            m_filteringExpressionSetManager = filteringExpressionSetManager;
+        }
+
+        [HttpGet("")]
         public IList<BibliographicFormatContract> GetAllBibliographicFormats()
         {
             return m_filteringExpressionSetManager.GetAllBibliographicFormats();

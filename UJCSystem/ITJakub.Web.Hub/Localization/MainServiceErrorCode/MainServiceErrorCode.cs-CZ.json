@@ -25,6 +25,7 @@
     "no-supported-search": "Nebylo specifikováno žádné podporované vyhledávací kritérium",
     "null-book-type-not-supported": "Není nastaven validní typ díla",
     "import-failed": "Import selhal",
+    "import-failed-with-error": "Import selhal. {0}",
     "import-succeed-forum-failed": "Import proběhl úspěšně. Vytvoření fóra selhalo. {0}",
     "project-not-exist": "Projekt neexistuje.",
     "forum-already-created": "Fórum je již vytvořeno.",
@@ -43,6 +44,12 @@
     "delete-default-role": "Výchozí skupina {0} nemůže být odstraněna.",
     "resource-modified": "Nelze uložit zdroj. Zdroj byl změněn jiným uživatelem.",
     "user-has-not-permission-to-manipulate": "Nemáte právo manipulovat s touto položkou.",
+    "repository-import-manager-not-found": "Importní manažer nebyl nalezen pro typ externí databáze {0}.",
+    "repository-import-cancelled": "Import z externí databáze {0} byl zrušen.",
+    "repository-import-failed": "Nastala neočekávaná chyba při importu z externí databáze {0}.",
+    "oai-pmh-communication-error": "Chyba při získávání dat z: {0}. {1} : {2}",
+    "oai-pmh-communication-failed": "Chyba při získávání dat z: {0}.",
+    "project-parser-not-found": "Konvertor pro bibilografický formát {0} nebyl nalezen.",
 
     //Auth service codes
     "generic-error": "Operace se nezdařila",

@@ -3,14 +3,17 @@
 @inject ILocalizationService Localizer
 
 <div class="form-group">
-    <label for="OaiPmhResourceUrl" class="control-label col-md-3">@Localizer.Translate("RepositoryUrl", "RepositoryImport")</label>
+    <label for="oaiPmhResourceUrl" class="control-label col-md-3">@Localizer.Translate("RepositoryUrl", "RepositoryImport")</label>
     <div class="col-md-8">
-        <input type="url" id="OaiPmhResourceUrl" name="OaiPmhResourceUrl" class="form-control" value="@(ViewData.TryGetValue("oaiPmhUrl", out var url) ? url : string.Empty)">
+        <input type="url" id="oaiPmhResourceUrl" name="OaiPmhResourceUrl" class="form-control" value="@(ViewData.TryGetValue("oaiPmhUrl", out var url) ? url : string.Empty)">
     </div>
 </div>
 <div class="form-group">
     <div class="col-md-offset-3 col-md-9">
-        <div id="OaiPmhConnect" class="btn btn-default">@Localizer.Translate("Connect", "RepositoryImport")</div>
+        <div id="oaiPmhConnect" class="btn btn-default">
+            <span class="loading-small-button hide"></span>
+            @Localizer.Translate("Connect", "RepositoryImport")
+        </div>
     </div>
 </div>
 <div id="oaiPmhConfig">

@@ -98,6 +98,7 @@ namespace Vokabular.MainService.Core
             services.AddSingleton<Profile, BucketShortContractProfile>();
             services.AddSingleton<Profile, CardContractProfile>();
             services.AddSingleton<Profile, CardFileContractProfile>();
+            services.AddSingleton<Profile, CardImageContractProfile>();
             services.AddSingleton<Profile, CardShortContractProfile>();
 
             new CoreContainerRegistration().Install(services);
