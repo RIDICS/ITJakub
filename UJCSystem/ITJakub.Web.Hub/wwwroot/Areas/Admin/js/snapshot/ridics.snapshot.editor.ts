@@ -70,9 +70,15 @@
         $(".resource-preview").click((event) => {
             const resourceRow = $(event.currentTarget).parents(".resource-row");
             const resourceVersionId = resourceRow.data("version-id");
+            const resourceName = resourceRow.find(".name").text();
             const resourceType = Number(resourceRow.parents(".publish-resource-panel").data("resource-type"));
             const resourcePreviewModal = $("#resourcePreviewModal");
+
             const modalBody = resourcePreviewModal.find(".modal-body");
+            modalBody.html(`<div class="loader"></div>`);
+
+            const modalTitle = resourcePreviewModal.find(".modal-title");
+            modalTitle.text(resourceName);
             
             switch (resourceType) {
             case ResourceType.Audio:
