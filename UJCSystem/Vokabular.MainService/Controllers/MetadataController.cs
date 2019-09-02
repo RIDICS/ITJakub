@@ -6,7 +6,7 @@ using Vokabular.Shared.DataContracts.Types;
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
-    public class MetadataController : Controller
+    public class MetadataController : BaseController
     {
         private readonly ProjectMetadataManager m_projectMetadataManager;
 

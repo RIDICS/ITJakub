@@ -168,7 +168,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             var count = client.SearchCorpusCount(new CorpusSearchRequestContract
             {
                 ConditionConjunction = listSearchCriteriaContracts
-            });
+            }, GetDefaultProjectType());
             return Json(new {count});
         }
 
@@ -193,7 +193,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 ContextLength = contextLength,
                 ConditionConjunction = listSearchCriteriaContracts,
                 // TODO is sorting required? is sorting possible?
-            });
+            }, GetDefaultProjectType());
             return Json(new {results = resultList});
         }
 
@@ -217,7 +217,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             var count = client.SearchCorpusCount(new CorpusSearchRequestContract
             {
                 ConditionConjunction = listSearchCriteriaContracts,
-            });
+            }, GetDefaultProjectType());
             return Json(new {count});
         }
 
@@ -246,7 +246,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 ContextLength = contextLength,
                 ConditionConjunction = listSearchCriteriaContracts,
                 // TODO is sorting required? is sorting possible?
-            });
+            }, GetDefaultProjectType());
             return Json(new {results = resultList});
         }
 
@@ -496,14 +496,14 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         private CorpusSearchSnapshotsResultContract GetCorpusSearchResultSnapshotList(CorpusSearchRequestContract request)
         {
             var client = GetBookClient();
-            var result = client.SearchCorpusGetSnapshotList(request);
+            var result = client.SearchCorpusGetSnapshotList(request, GetDefaultProjectType());
             return result;
         }
 
         private ActionResult GetTotalNumberOfCorpusSearchResults(SearchRequestContractBase request)
         {
             var client = GetBookClient();
-            var result = client.SearchCorpusTotalResultCount(request);
+            var result = client.SearchCorpusTotalResultCount(request, GetDefaultProjectType());
             return Json(new {totalCount = result});
         }
 

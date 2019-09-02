@@ -4,6 +4,7 @@ using System.Net.Http;
 using Microsoft.Extensions.Logging;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Extensions;
@@ -400,11 +401,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<SearchResultContract> SearchBook(SearchRequestContract request)
+        public List<SearchResultContract> SearchBook(SearchRequestContract request, ProjectTypeContract projectType)
         {
             try
             {
-                var result = m_client.Post<List<SearchResultContract>>("book/search", request);
+                var result = m_client.Post<List<SearchResultContract>>($"book/search?projectType={projectType}", request);
                 return result;
             }
             catch (HttpRequestException e)
@@ -416,11 +417,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public long SearchBookCount(SearchRequestContract request)
+        public long SearchBookCount(SearchRequestContract request, ProjectTypeContract projectType)
         {
             try
             {
-                var result = m_client.Post<long>("book/search-count", request);
+                var result = m_client.Post<long>($"book/search-count?projectType={projectType}", request);
                 return result;
             }
             catch (HttpRequestException e)
@@ -436,11 +437,11 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         #region Headword
 
-        public long SearchHeadwordCount(HeadwordSearchRequestContract request)
+        public long SearchHeadwordCount(HeadwordSearchRequestContract request, ProjectTypeContract projectType)
         {
             try
             {
-                var result = m_client.Post<long>("headword/search-count", request);
+                var result = m_client.Post<long>($"headword/search-count?projectType={projectType}", request);
                 return result;
             }
             catch (HttpRequestException e)
@@ -452,11 +453,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public long SearchHeadwordRowNumber(HeadwordRowNumberSearchRequestContract request)
+        public long SearchHeadwordRowNumber(HeadwordRowNumberSearchRequestContract request, ProjectTypeContract projectType)
         {
             try
             {
-                var result = m_client.Post<long>("headword/search-row-number", request);
+                var result = m_client.Post<long>($"headword/search-row-number?projectType={projectType}", request);
                 return result;
             }
             catch (HttpRequestException e)
@@ -469,11 +470,11 @@ namespace Vokabular.MainService.DataContracts.Clients
         }
 
 
-        public List<HeadwordContract> SearchHeadword(HeadwordSearchRequestContract request)
+        public List<HeadwordContract> SearchHeadword(HeadwordSearchRequestContract request, ProjectTypeContract projectType)
         {
             try
             {
-                var result = m_client.Post<List<HeadwordContract>>("headword/search", request);
+                var result = m_client.Post<List<HeadwordContract>>($"headword/search?projectType={projectType}", request);
                 return result;
             }
             catch (HttpRequestException e)
@@ -485,13 +486,14 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<string> GetHeadwordAutocomplete(string query, BookTypeEnumContract? bookType = null,
+        public List<string> GetHeadwordAutocomplete(string query, ProjectTypeContract projectType, BookTypeEnumContract? bookType = null,
             IList<int> selectedCategoryIds = null, IList<long> selectedProjectIds = null)
         {
             try
             {
                 var url = UrlQueryBuilder.Create("headword/autocomplete")
                     .AddParameter("query", query)
+                    .AddParameter("projectType", projectType)
                     .AddParameter("bookType", bookType)
                     .AddParameterList("selectedCategoryIds", selectedCategoryIds)
                     .AddParameterList("selectedProjectIds", selectedProjectIds)
@@ -513,11 +515,11 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         #region Corpus
 
-        public List<CorpusSearchResultContract> SearchCorpus(CorpusSearchRequestContract request)
+        public List<CorpusSearchResultContract> SearchCorpus(CorpusSearchRequestContract request, ProjectTypeContract projectType)
         {
             try
             {
-                var result = m_client.Post<List<CorpusSearchResultContract>>("corpus/search", request);
+                var result = m_client.Post<List<CorpusSearchResultContract>>($"corpus/search?projectType={projectType}", request);
                 return result;
             }
             catch (HttpRequestException e)
@@ -529,11 +531,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public long SearchCorpusCount(CorpusSearchRequestContract request)
+        public long SearchCorpusCount(CorpusSearchRequestContract request, ProjectTypeContract projectType)
         {
             try
             {
-                var result = m_client.Post<long>("corpus/search-count", request);
+                var result = m_client.Post<long>($"corpus/search-count?projectType={projectType}", request);
                 return result;
             }
             catch (HttpRequestException e)
@@ -549,11 +551,11 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         #region BookPagedCorpus
 
-        public CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotList(CorpusSearchRequestContract request)
+        public CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotList(CorpusSearchRequestContract request, ProjectTypeContract projectType)
         {
             try
             {
-                var result = m_client.Post<CorpusSearchSnapshotsResultContract>("bookpagedcorpus/search", request);
+                var result = m_client.Post<CorpusSearchSnapshotsResultContract>($"bookpagedcorpus/search?projectType={projectType}", request);
                 return result;
             }
             catch (HttpRequestException e)
@@ -581,11 +583,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public long SearchCorpusTotalResultCount(SearchRequestContractBase request)
+        public long SearchCorpusTotalResultCount(SearchRequestContractBase request, ProjectTypeContract projectType)
         {
             try
             {
-                var result = m_client.Post<long>("bookpagedcorpus/search-count", request);
+                var result = m_client.Post<long>($"bookpagedcorpus/search-count?projectType={projectType}", request);
                 return result;
             }
             catch (HttpRequestException e)
@@ -617,11 +619,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<AudioBookSearchResultContract> SearchAudioBook(SearchRequestContract request)
+        public List<AudioBookSearchResultContract> SearchAudioBook(SearchRequestContract request, ProjectTypeContract projectType)
         {
             try
             {
-                var result = m_client.Post<List<AudioBookSearchResultContract>>("audiobook/search", request);
+                var result = m_client.Post<List<AudioBookSearchResultContract>>($"audiobook/search?projectType={projectType}", request);
                 return result;
             }
             catch (HttpRequestException e)

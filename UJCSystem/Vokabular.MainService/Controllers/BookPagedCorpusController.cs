@@ -12,7 +12,7 @@ using Vokabular.Shared.DataContracts.Search.Request;
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
-    public class BookPagedCorpusController : Controller
+    public class BookPagedCorpusController : BaseController
     {
         private readonly BookSearchManager m_bookSearchManager;
 
@@ -23,8 +23,13 @@ namespace Vokabular.MainService.Controllers
 
         [HttpPost("search")]
         [ProducesResponseType(typeof(CorpusSearchSnapshotsResultContract), StatusCodes.Status200OK)]
-        public IActionResult SearchCorpusGetSnapshotListResult([FromBody] CorpusSearchRequestContract request, [FromQuery] ProjectTypeContract projectType)
+        public IActionResult SearchCorpusGetSnapshotListResult([FromBody] CorpusSearchRequestContract request, [FromQuery] ProjectTypeContract? projectType)
         {
+            if (projectType == null)
+            {
+                return Error($"Required parameter {nameof(projectType)} is not specified");
+            }
+
             try
             {
                 var result = m_bookSearchManager.SearchCorpusGetSnapshotListByCriteria(request);
@@ -61,8 +66,13 @@ namespace Vokabular.MainService.Controllers
 
         [HttpPost("search-count")]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-        public IActionResult SearchCorpusTotalResultCount([FromBody] SearchRequestContractBase request, [FromQuery] ProjectTypeContract projectType)
+        public IActionResult SearchCorpusTotalResultCount([FromBody] SearchRequestContractBase request, [FromQuery] ProjectTypeContract? projectType)
         {
+            if (projectType == null)
+            {
+                return Error($"Required parameter {nameof(projectType)} is not specified");
+            }
+
             try
             {
                 var result = m_bookSearchManager.SearchCorpusTotalResultCount(request);

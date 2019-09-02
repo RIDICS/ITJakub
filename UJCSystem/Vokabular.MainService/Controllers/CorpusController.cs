@@ -11,7 +11,7 @@ using Vokabular.RestClient.Errors;
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
-    public class CorpusController : Controller
+    public class CorpusController : BaseController
     {
         private readonly BookSearchManager m_bookSearchManager;
 
@@ -46,8 +46,13 @@ namespace Vokabular.MainService.Controllers
         /// <returns></returns>
         [HttpPost("search")]
         [ProducesResponseType(typeof(List<CorpusSearchResultContract>), StatusCodes.Status200OK)]
-        public IActionResult SearchCorpus([FromBody] CorpusSearchRequestContract request, [FromQuery] ProjectTypeContract projectType)
+        public IActionResult SearchCorpus([FromBody] CorpusSearchRequestContract request, [FromQuery] ProjectTypeContract? projectType)
         {
+            if (projectType == null)
+            {
+                return Error($"Required parameter {nameof(projectType)} is not specified");
+            }
+
             try
             {
                 var result = m_bookSearchManager.SearchCorpusByCriteria(request);
@@ -72,8 +77,13 @@ namespace Vokabular.MainService.Controllers
         /// <returns></returns>
         [HttpPost("search-count")]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-        public IActionResult SearchCorpusResultCount([FromBody] CorpusSearchRequestContract request, [FromQuery] ProjectTypeContract projectType)
+        public IActionResult SearchCorpusResultCount([FromBody] CorpusSearchRequestContract request, [FromQuery] ProjectTypeContract? projectType)
         {
+            if (projectType == null)
+            {
+                return Error($"Required parameter {nameof(projectType)} is not specified");
+            }
+
             try
             {
                 var result = m_bookSearchManager.SearchCorpusByCriteriaCount(request);

@@ -11,7 +11,7 @@ using Vokabular.RestClient.Errors;
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
-    public class AudioBookController : Controller
+    public class AudioBookController : BaseController
     {
         private readonly BookManager m_bookManager;
         private readonly BookSearchManager m_bookSearchManager;
@@ -48,8 +48,13 @@ namespace Vokabular.MainService.Controllers
         /// <returns></returns>
         [HttpPost("search")]
         [ProducesResponseType(typeof(List<AudioBookSearchResultContract>), StatusCodes.Status200OK)]
-        public IActionResult SearchBook([FromBody] SearchRequestContract request, [FromQuery] ProjectTypeContract projectType)
+        public IActionResult SearchBook([FromBody] SearchRequestContract request, [FromQuery] ProjectTypeContract? projectType)
         {
+            if (projectType == null)
+            {
+                return Error($"Required parameter {nameof(projectType)} is not specified");
+            }
+
             try
             {
                 var result = m_bookSearchManager.SearchAudioByCriteria(request);
@@ -73,8 +78,13 @@ namespace Vokabular.MainService.Controllers
         /// <returns></returns>
         [HttpPost("search-count")]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-        public IActionResult SearchBookResultCount([FromBody] SearchRequestContract request, [FromQuery] ProjectTypeContract projectType)
+        public IActionResult SearchBookResultCount([FromBody] SearchRequestContract request, [FromQuery] ProjectTypeContract? projectType)
         {
+            if (projectType == null)
+            {
+                return Error($"Required parameter {nameof(projectType)} is not specified");
+            }
+
             try
             {
                 var result = m_bookSearchManager.SearchByCriteriaCount(request);

@@ -13,7 +13,7 @@ using Vokabular.Shared.DataContracts.Types;
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
-    public class BookController : Controller
+    public class BookController : BaseController
     {
         private readonly BookManager m_bookManager;
         private readonly BookSearchManager m_bookSearchManager;
@@ -81,9 +81,14 @@ namespace Vokabular.MainService.Controllers
         /// <returns></returns>
         [HttpPost("search")]
         [ProducesResponseType(typeof(List<SearchResultContract>), StatusCodes.Status200OK)]
-        public IActionResult SearchBook([FromBody] SearchRequestContract request, [FromQuery] ProjectTypeContract projectType)
+        public IActionResult SearchBook([FromBody] SearchRequestContract request, [FromQuery] ProjectTypeContract? projectType)
             // TODO possible switch SearchResultContract to BookContract
         {
+            if (projectType == null)
+            {
+                return Error($"Required parameter {nameof(projectType)} is not specified");
+            }
+
             try
             {
                 var result = m_bookSearchManager.SearchByCriteria(request);
@@ -95,7 +100,7 @@ namespace Vokabular.MainService.Controllers
             }
             catch (HttpErrorCodeException exception)
             {
-                return StatusCode((int)exception.StatusCode, exception.Message);
+                return StatusCode((int) exception.StatusCode, exception.Message);
             }
         }
 
@@ -107,8 +112,13 @@ namespace Vokabular.MainService.Controllers
         /// <returns></returns>
         [HttpPost("search-count")]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-        public IActionResult SearchBookResultCount([FromBody] SearchRequestContract request, [FromQuery] ProjectTypeContract projectType)
+        public IActionResult SearchBookResultCount([FromBody] SearchRequestContract request, [FromQuery] ProjectTypeContract? projectType)
         {
+            if (projectType == null)
+            {
+                return Error($"Required parameter {nameof(projectType)} is not specified");
+            }
+
             try
             {
                 var result = m_bookSearchManager.SearchByCriteriaCount(request);

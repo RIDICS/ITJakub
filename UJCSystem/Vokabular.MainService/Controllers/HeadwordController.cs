@@ -10,7 +10,7 @@ using Vokabular.Shared.DataContracts.Types;
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
-    public class HeadwordController : Controller
+    public class HeadwordController : BaseController
     {
         private readonly BookManager m_bookManager;
         private readonly BookSearchManager m_bookSearchManager;
@@ -46,8 +46,13 @@ namespace Vokabular.MainService.Controllers
         /// <param name="projectType">Target project database for searching</param>
         /// <returns></returns>
         [HttpPost("search")]
-        public List<HeadwordContract> SearchHeadword([FromBody] HeadwordSearchRequestContract request, [FromQuery] ProjectTypeContract projectType)
+        public ActionResult<List<HeadwordContract>> SearchHeadword([FromBody] HeadwordSearchRequestContract request, [FromQuery] ProjectTypeContract? projectType)
         {
+            if (projectType == null)
+            {
+                return Error($"Required parameter {nameof(projectType)} is not specified");
+            }
+
             var result = m_bookSearchManager.SearchHeadwordByCriteria(request);
             return result;
         }
@@ -59,8 +64,13 @@ namespace Vokabular.MainService.Controllers
         /// <param name="projectType"></param>
         /// <returns></returns>
         [HttpPost("search-count")]
-        public long SearchHeadwordResultCount([FromBody] HeadwordSearchRequestContract request, [FromQuery] ProjectTypeContract projectType)
+        public ActionResult<long> SearchHeadwordResultCount([FromBody] HeadwordSearchRequestContract request, [FromQuery] ProjectTypeContract? projectType)
         {
+            if (projectType == null)
+            {
+                return Error($"Required parameter {nameof(projectType)} is not specified");
+            }
+
             var result = m_bookSearchManager.SearchHeadwordByCriteriaCount(request);
             return result;
         }
@@ -75,15 +85,25 @@ namespace Vokabular.MainService.Controllers
         /// <param name="projectType"></param>
         /// <returns></returns>
         [HttpPost("search-row-number")]
-        public long SearchHeadwordRowNumber([FromBody] HeadwordRowNumberSearchRequestContract request, [FromQuery] ProjectTypeContract projectType)
+        public ActionResult<long> SearchHeadwordRowNumber([FromBody] HeadwordRowNumberSearchRequestContract request, [FromQuery] ProjectTypeContract? projectType)
         {
+            if (projectType == null)
+            {
+                return Error($"Required parameter {nameof(projectType)} is not specified");
+            }
+
             var result = m_bookManager.SearchHeadwordRowNumber(request);
             return result;
         }
 
         [HttpGet("autocomplete")]
-        public List<string> GetAutocomplete([FromQuery] string query, [FromQuery] ProjectTypeContract projectType, BookTypeEnumContract? bookType = null, IList<int> selectedCategoryIds = null, IList<long> selectedProjectIds = null)
+        public ActionResult<List<string>> GetAutocomplete([FromQuery] string query, [FromQuery] ProjectTypeContract? projectType, BookTypeEnumContract? bookType = null, IList<int> selectedCategoryIds = null, IList<long> selectedProjectIds = null)
         {
+            if (projectType == null)
+            {
+                return Error($"Required parameter {nameof(projectType)} is not specified");
+            }
+
             return m_bookManager.GetHeadwordAutocomplete(query, bookType, selectedCategoryIds, selectedProjectIds);
         }
     }
