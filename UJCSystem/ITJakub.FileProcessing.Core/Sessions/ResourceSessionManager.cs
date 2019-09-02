@@ -67,7 +67,8 @@ namespace ITJakub.FileProcessing.Core.Sessions
             director.AddResourceAndFillResourceTypeByExtension(fileName, data);
         }
 
-        public ImportResultContract ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage, IList<PermissionFromAuthContract> autoImportPermissions)
+        public ImportResultContract ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage,
+            ProjectTypeContract projectType, IList<PermissionFromAuthContract> autoImportPermissions)
         {
             if (!m_activeSessionManager.ContainsSessionId(sessionId))
             {
@@ -80,6 +81,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
             director.SetSessionInfoValue(SessionInfo.ProjectId, projectId);
             director.SetSessionInfoValue(SessionInfo.UserId, userId);
             director.SetSessionInfoValue(SessionInfo.AutoImportPermissions, autoImportPermissions);
+            director.SetSessionInfoValue(SessionInfo.ProjectType, projectType);
             bool result = m_resourceProcessorManager.ProcessSessionResources(director);
             ImportResultContract importResult = new ImportResultContract(
                 director.GetSessionInfoValue<long>(SessionInfo.ProjectId),

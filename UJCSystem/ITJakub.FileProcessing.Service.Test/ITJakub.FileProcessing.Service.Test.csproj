@@ -84,6 +84,10 @@
       <Project>{5cef4267-5e27-4acb-b832-74852be6ce1e}</Project>
       <Name>ITJakub.FileProcessing.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ITJakub.FileProcessing.DataContracts\ITJakub.FileProcessing.DataContracts.csproj">
+      <Project>{56512CDC-6912-49B3-8AC4-CE96A0340165}</Project>
+      <Name>ITJakub.FileProcessing.DataContracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vokabular.Core\Vokabular.Core.csproj">
       <Project>{88ef00d2-ce46-4054-a764-9093ba9dde4e}</Project>
       <Name>Vokabular.Core</Name>

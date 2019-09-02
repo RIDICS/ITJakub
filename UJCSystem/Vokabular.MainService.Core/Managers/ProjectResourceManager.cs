@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Net;
 using ITJakub.FileProcessing.DataContracts;
 using Vokabular.MainService.Core.Communication;
@@ -14,13 +13,16 @@ namespace Vokabular.MainService.Core.Managers
         private readonly AuthenticationManager m_authenticationManager;
         private readonly PermissionManager m_permissionManager;
         private readonly ForumSiteManager m_forumSiteManager;
+        private readonly PortalTypeProvider m_portalTypeProvider;
 
-        public ProjectResourceManager(CommunicationProvider communicationProvider, AuthenticationManager authenticationManager, PermissionManager permissionManager, ForumSiteManager forumSiteManager)
+        public ProjectResourceManager(CommunicationProvider communicationProvider, AuthenticationManager authenticationManager,
+            PermissionManager permissionManager, ForumSiteManager forumSiteManager, PortalTypeProvider portalTypeProvider)
         {
             m_communicationProvider = communicationProvider;
             m_authenticationManager = authenticationManager;
             m_permissionManager = permissionManager;
             m_forumSiteManager = forumSiteManager;
+            m_portalTypeProvider = portalTypeProvider;
         }
 
         public void UploadResource(string sessionId, Stream data, string fileName)
@@ -47,7 +49,7 @@ namespace Vokabular.MainService.Core.Managers
             {
                 try
                 {
-                    importResult = client.ProcessSession(sessionId, projectId, userId, comment, allAutoImportPermissions);
+                    importResult = client.ProcessSession(sessionId, projectId, userId, comment, (ProjectTypeContract) m_portalTypeProvider.GetDefaultProjectType(), allAutoImportPermissions);
                     if (!importResult.Success)
                     {
                         throw new MainServiceException(MainServiceErrorCode.ImportFailed, "Import failed");

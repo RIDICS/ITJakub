@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ITJakub.FileProcessing.Core.Data;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Works.CreateProject
@@ -15,7 +16,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.CreateProject
             m_projectRepository = projectRepository;
         }
 
-        public long UpdateProject(long? projectId, int userId, BookData bookData)
+        public long UpdateProject(long? projectId, int userId, BookData bookData, ProjectTypeEnum projectType)
         {
             long projectIdValue;
 
@@ -42,6 +43,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.CreateProject
                     var newProject = new Project
                     {
                         Name = bookData.Title,
+                        ProjectType = projectType,
                         CreateTime = DateTime.UtcNow,
                         CreatedByUser = m_projectRepository.Load<User>(userId),
                         ExternalId = bookData.BookXmlId,
