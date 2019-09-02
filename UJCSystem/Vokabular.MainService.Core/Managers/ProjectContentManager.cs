@@ -66,6 +66,19 @@ namespace Vokabular.MainService.Core.Managers
             return result;
         }
 
+        public FullTextContract GetTextResourceVersion(long textVersionId, TextFormatEnumContract formatValue)
+        {
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetResourceVersion<TextResource>(textVersionId, true, true));
+            var result = Mapper.Map<FullTextContract>(dbResult);
+
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+
+            var text = fulltextStorage.GetPageText(dbResult, formatValue);
+            result.Text = text;
+
+            return result;
+        }
+
         public List<GetTextCommentContract> GetCommentsForText(long textId)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetCommentsForText(textId));
@@ -96,6 +109,20 @@ namespace Vokabular.MainService.Core.Managers
         public FileResultData GetImageResource(long imageId)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestResourceVersion<ImageResource>(imageId));
+
+            var imageStream = m_fileSystemManager.GetResource(dbResult.Resource.Project.Id, null, dbResult.FileId, ResourceType.Image);
+            return new FileResultData
+            {
+                FileName = dbResult.FileName,
+                MimeType = dbResult.MimeType,
+                Stream = imageStream,
+                FileSize = imageStream.Length,
+            };
+        }
+
+        public FileResultData GetImageResourceVersion(long imageVersionId)
+        {
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetResourceVersion<ImageResource>(imageVersionId, true, true));
 
             var imageStream = m_fileSystemManager.GetResource(dbResult.Resource.Project.Id, null, dbResult.FileId, ResourceType.Image);
             return new FileResultData

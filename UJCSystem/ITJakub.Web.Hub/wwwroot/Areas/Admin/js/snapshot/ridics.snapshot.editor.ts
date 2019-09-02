@@ -1,10 +1,12 @@
 ﻿class SnapshotEditor {
     private readonly $container: JQuery;
     private readonly client: SnapshotApiClient;
+    private readonly imageViewer: ImageViewerContentAddition;
 
     constructor(panelElement: JQuery) {
         this.$container = panelElement;
         this.client = new SnapshotApiClient();
+        this.imageViewer = new ImageViewerContentAddition(new EditorsUtil());
     }
 
     public init() {
@@ -52,22 +54,30 @@
             const resourceId = resourceRow.data("id");
             const resourceType = Number(resourceRow.parents(".publish-resource-panel").data("resource-type"));
             const resourcePreviewModal = $("#resourcePreviewModal");
+            const modalBody = resourcePreviewModal.find(".modal-body");
             switch (resourceType) {
             case ResourceType.Audio:
-                {
-
-                }
+                    {
+                        this.client.getAudio(resourceId).done((response) => {
+                            modalBody.html(response);
+                        }).fail((error) => {
+                            //TODO error
+                        });
+                    }
                 break;
             case ResourceType.Image:
                 {
-                    //TODO refactor
-                    const imageViewer = new ImageViewerContentAddition(new EditorsUtil());
-                    imageViewer.addImageContent(resourcePreviewModal.find(".modal-body"), 561);
+                    const imageUrl = this.client.getImageUrl(resourceId);
+                    this.imageViewer.addImageContent(modalBody, imageUrl);
                 }
                 break;
             case ResourceType.Text:
                 {
-
+                    this.client.getText(resourceId).done((response) => {
+                        modalBody.html(response.text);
+                    }).fail((error) => {
+                        //TODO error
+                    });
                 }
                 break;
             default:

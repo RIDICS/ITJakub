@@ -158,6 +158,21 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
+        public virtual IList<AudioResource> GetRecordings(long trackResourceVersionId)
+        {
+            Resource resourceAlias = null;
+
+            var result = GetSession().QueryOver<AudioResource>()
+                .JoinAlias(x => x.ResourceTrack, () => resourceAlias)
+                .Where(() => resourceAlias.Id == trackResourceVersionId)
+                .Fetch(SelectMode.Fetch, x => x.Resource)
+                .OrderBy(x => x.ResourceTrack).Asc
+                .OrderBy(x => x.AudioType).Asc
+                .List();
+
+            return result;
+        }
+
         public virtual IList<TrackResource> GetProjectTracks(long projectId)
         {
             Resource resourceAlias = null;
@@ -190,16 +205,35 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
-        public virtual TextResource GetTextResource(long resourceId)
+        public virtual T GetResourceVersion<T>(long resourceVersionId, bool fetchResource = false, bool fetchProject = false) where T : ResourceVersion
         {
-            Resource resourceAlias = null;
+            var query = GetSession().QueryOver<T>()
+                .Where(x => x.Id == resourceVersionId);
 
-            return GetSession().QueryOver<TextResource>()
+            if (fetchResource || fetchProject)
+            {
+                query.Fetch(SelectMode.Fetch, x => x.Resource);
+            }
+
+            if (fetchProject)
+            {
+                query.Fetch(SelectMode.Fetch, x => x.Resource.Project);
+            }
+            
+            return query.SingleOrDefault();
+        }
+
+        public virtual T GetPublishedResourceVersion<T>(long resourceId) where T : ResourceVersion
+        {
+            Snapshot snapshotAlias = null;
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+
+            return GetSession().QueryOver<T>()
+                .JoinAlias(x => x.Snapshots, () => snapshotAlias)
                 .JoinAlias(x => x.Resource, () => resourceAlias)
-                .Where(x => x.Id == resourceAlias.LatestVersion.Id && resourceAlias.Id == resourceId)
-                .Fetch(SelectMode.Fetch, x => x.BookVersion)
-                .Fetch(SelectMode.Fetch, x => x.Resource)
-                .Fetch(SelectMode.Fetch, x => x.Resource.Project)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .Where(x => x.Resource.Id == resourceId && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
                 .SingleOrDefault();
         }
 
@@ -210,6 +244,19 @@ namespace Vokabular.DataEntities.Database.Repositories
             return GetSession().QueryOver<T>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .Where(x => x.Id == resourceAlias.LatestVersion.Id && resourceAlias.Id == resourceId)
+                .SingleOrDefault();
+        }
+
+        public virtual TextResource GetTextResource(long resourceId)
+        {
+            Resource resourceAlias = null;
+
+            return GetSession().QueryOver<TextResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && resourceAlias.Id == resourceId)
+                .Fetch(SelectMode.Fetch, x => x.BookVersion)
+                .Fetch(SelectMode.Fetch, x => x.Resource)
+                .Fetch(SelectMode.Fetch, x => x.Resource.Project)
                 .SingleOrDefault();
         }
 

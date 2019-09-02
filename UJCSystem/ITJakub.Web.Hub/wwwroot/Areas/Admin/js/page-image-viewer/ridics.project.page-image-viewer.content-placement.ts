@@ -18,10 +18,8 @@
         pageImageEl.off();
     }
 
-    addImageContent(element: JQuery, imageId: number) {
-        //TODO fix url
-        const imgUrl = this.util.getImageUrlOnPage(imageId);
-        const imageString = `<img src="${imgUrl}">`;
+    addImageContent(element: JQuery, imageUrl: string) {
+        const imageString = `<img src="${imageUrl}">`;
         element.fadeOut(150, () => {
             element.empty();
             element.append(imageString);

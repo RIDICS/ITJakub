@@ -22,6 +22,7 @@ using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.AspNetCore.Helpers;
 using ITJakub.Web.Hub.Options;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 {
@@ -199,6 +200,35 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
             var viewModel = ProjectMock.GetResourceVersionsViewModel(resourceId, m_localizer);
             return Json(viewModel.ResourceList);
+        }
+
+        public IActionResult GetText(long textId)
+        {
+            var client = GetProjectClient();
+            var result = client.GetTextResourceVersion(textId, TextFormatEnumContract.Html);
+            return Json(result);
+        }
+
+        public IActionResult GetImage(long imageId)
+        {
+            var client = GetProjectClient();
+            var result = client.GetImageResourceVersion(imageId);
+            return new FileStreamResult(result.Stream, result.MimeType);
+        }
+
+        public IActionResult GetRecordings(long trackId)
+        {
+            var client = GetProjectClient();
+            var result = client.GetAudioTrackRecordings(trackId);
+            return PartialView("Work/_AudioResource", result);
+        }
+
+        public FileResult DownloadAudio(long audioId)
+        {
+            var client = GetProjectClient();
+            var fileData = client.GetAudio(audioId);
+            Response.ContentLength = fileData.FileSize;
+            return File(fileData.Stream, fileData.MimeType, fileData.FileName);
         }
 
         [HttpPost]

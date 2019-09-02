@@ -354,6 +354,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public FullTextContract GetTextResourceVersion(long textVersionId, TextFormatEnumContract? format)
+        {
+            try
+            {
+                var result = m_client.Get<FullTextContract>($"project/text/version/{textVersionId}?format={format.ToString()}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public List<GetTextCommentContract> GetCommentsForText(long textId)
         {
             try
@@ -584,6 +600,102 @@ namespace Vokabular.MainService.DataContracts.Clients
                     return false;
                 }
 
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public FileResultData GetImageResource(long imageId)
+        {
+            try
+            {
+                var result = m_client.GetStream($"project/image/{imageId}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public FileResultData GetImageResourceVersion(long imageVersionId)
+        {
+            try
+            {
+                var result = m_client.GetStream($"project/image/version/{imageVersionId}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public IList<ImageWithPageContract> GetProjectImages(long projectId)
+        {
+            try
+            {
+                var result = m_client.Get<IList<ImageWithPageContract>>($"project/{projectId}/image");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public TrackContract GetAudioTrack(long trackId)
+        {
+            try
+            {
+                var result = m_client.Get<TrackContract>($"project/track/{trackId}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public IList<AudioContract> GetAudioTrackRecordings(long trackId)
+        {
+            try
+            {
+                var result = m_client.Get<IList<AudioContract>>($"project/track/{trackId}/recordings");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public FileResultData GetAudio(long audioId)
+        {
+            try
+            {
+                var result = m_client.GetStream($"project/audio/{audioId}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
                 if (m_logger.IsErrorEnabled())
                     m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
 
