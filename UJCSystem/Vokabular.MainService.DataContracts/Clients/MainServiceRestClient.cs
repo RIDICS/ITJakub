@@ -17,6 +17,8 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             m_tokenProvider = tokenProvider;
             m_localization = localization;
+
+            HttpClient.DefaultRequestHeaders.Add(MainServiceHeaders.PortalTypeHeader, configuration.PortalType.ToString());
         }
 
         protected override void FillRequestMessage(HttpRequestMessage requestMessage)

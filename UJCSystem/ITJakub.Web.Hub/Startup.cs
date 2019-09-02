@@ -31,6 +31,7 @@ using Scalesoft.Localization.Core.Configuration;
 using Scalesoft.Localization.Core.Util;
 using Scalesoft.Localization.Database.NHibernate;
 using Vokabular.MainService.DataContracts;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
@@ -168,6 +169,7 @@ namespace ITJakub.Web.Hub
 
             services.RegisterMainServiceClientComponents<AuthTokenProvider, MainServiceClientLocalization>(new MainServiceClientConfiguration
             {
+                PortalType = (PortalTypeContract) portalConfig.PortalType,
                 Url = new Uri(endpointsConfiguration.Addresses["MainService"]),
                 CreateCustomHandler = false
             });
