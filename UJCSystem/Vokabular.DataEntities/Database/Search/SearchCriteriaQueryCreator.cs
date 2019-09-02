@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NHibernate.Criterion;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.Shared.DataContracts.Search.QueryBuilder;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -16,12 +17,15 @@ namespace Vokabular.DataEntities.Database.Search
 
         private readonly List<SearchCriteriaQuery> m_conjunctionQuery;
         private readonly Dictionary<string, object> m_metadataParameters;
+        private readonly ProjectTypeEnum m_projectType;
 
         public SearchCriteriaQueryCreator(List<SearchCriteriaQuery> conjunctionQuery,
-            Dictionary<string, object> metadataParameters)
+            Dictionary<string, object> metadataParameters,
+            ProjectTypeEnum projectType)
         {
             m_conjunctionQuery = conjunctionQuery;
             m_metadataParameters = metadataParameters;
+            m_projectType = projectType;
         }
 
         public SortTypeEnumContract? Sort { get; set; }
@@ -43,7 +47,7 @@ namespace Vokabular.DataEntities.Database.Search
 
         public string GetQueryString()
         {
-            var joinAndWhereClause = CreateJoinAndWhereClause(m_conjunctionQuery);
+            var joinAndWhereClause = CreateJoinAndWhereClause(m_conjunctionQuery, m_projectType);
             var orderByClause = CreateOrderByClause("metadata1");
 
             var queryString = $"select metadata1 {ResultFromClause} where resource1.LatestVersion.Id = metadata1.Id and resource1.Project.Id in (select distinct project.Id {FromClause} {joinAndWhereClause}) {orderByClause}";
@@ -53,7 +57,7 @@ namespace Vokabular.DataEntities.Database.Search
 
         public string GetProjectIdentificationListQueryString()
         {
-            var joinAndWhereClause = CreateJoinAndWhereClause(m_conjunctionQuery);
+            var joinAndWhereClause = CreateJoinAndWhereClause(m_conjunctionQuery, m_projectType);
             
             var queryString = $"select distinct project.Id as ProjectId, project.ExternalId as ProjectExternalId, snapshot.Id as SnapshotId, bookVersion.ExternalId as BookVersionExternalId {FromClause} {joinAndWhereClause}";
 
@@ -62,7 +66,7 @@ namespace Vokabular.DataEntities.Database.Search
 
         public string GetQueryStringForCount()
         {
-            var joinAndWhereClause = CreateJoinAndWhereClause(m_conjunctionQuery);
+            var joinAndWhereClause = CreateJoinAndWhereClause(m_conjunctionQuery, m_projectType);
 
             var queryString = $"select count(distinct metadata.Id) {FromClause} {joinAndWhereClause}";
 
@@ -81,12 +85,12 @@ namespace Vokabular.DataEntities.Database.Search
             return conjunction;
         }
 
-        private string CreateJoinAndWhereClause(List<SearchCriteriaQuery> conjunctionQuery)
+        private string CreateJoinAndWhereClause(List<SearchCriteriaQuery> conjunctionQuery, ProjectTypeEnum projectType)
         {
             var joinBuilder = new StringBuilder();
             var whereBuilder = new StringBuilder();
 
-            whereBuilder.Append(" where metadata.Id = resource.LatestVersion.Id");
+            whereBuilder.Append($" where metadata.Id = resource.LatestVersion.Id and project.ProjectType = {(short) projectType}");
 
             foreach (var criteriaQuery in conjunctionQuery.Where(x => x.CriteriaKey != CriteriaKey.Headword))
             {

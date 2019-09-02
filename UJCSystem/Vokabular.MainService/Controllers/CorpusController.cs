@@ -55,7 +55,7 @@ namespace Vokabular.MainService.Controllers
 
             try
             {
-                var result = m_bookSearchManager.SearchCorpusByCriteria(request);
+                var result = m_bookSearchManager.SearchCorpusByCriteria(request, projectType.Value);
                 return Ok(result);
             }
             catch (ArgumentException exception)
@@ -86,7 +86,7 @@ namespace Vokabular.MainService.Controllers
 
             try
             {
-                var result = m_bookSearchManager.SearchCorpusByCriteriaCount(request);
+                var result = m_bookSearchManager.SearchCorpusByCriteriaCount(request, projectType.Value);
                 return Ok(result);
             }
             catch (ArgumentException exception)

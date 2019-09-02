@@ -101,7 +101,7 @@ namespace ITJakub.Web.Hub.Controllers
         public ActionResult GetTypeaheadTitle(string query)
         {
             var client = GetMetadataClient();
-            var result = client.GetTitleAutocomplete(query);
+            var result = client.GetTitleAutocomplete(query, projectType: GetDefaultProjectType());
             return Json(result);
         }
 

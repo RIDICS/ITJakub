@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Vokabular.Core.Storage;
@@ -15,6 +14,7 @@ using Vokabular.MainService.Core.Works.Search;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
@@ -303,30 +303,33 @@ namespace Vokabular.MainService.Core.Managers
             return result;
         }
 
-        public List<string> GetHeadwordAutocomplete(string query, BookTypeEnumContract? bookType, IList<int> selectedCategoryIds,
+        public List<string> GetHeadwordAutocomplete(string query, ProjectTypeContract projectType, BookTypeEnumContract? bookType,
+            IList<int> selectedCategoryIds,
             IList<long> selectedProjectIds)
         {
             var userId = m_authorizationManager.GetCurrentUserId();
             var bookTypeEnum = Mapper.Map<BookTypeEnum?>(bookType);
+            var projectTypeEnum = Mapper.Map<ProjectTypeEnum>(projectType);
             var result = m_bookRepository.InvokeUnitOfWork(x =>
             {
                 var allCategoryIds = selectedCategoryIds.Count > 0
                     ? m_categoryRepository.GetAllSubcategoryIds(selectedCategoryIds)
                     : selectedCategoryIds;
-                return x.GetHeadwordAutocomplete(query, bookTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteCount,
+                return x.GetHeadwordAutocomplete(query, projectTypeEnum, bookTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteCount,
                     userId);
             });
             return result.ToList();
         }
 
-        public long SearchHeadwordRowNumber(HeadwordRowNumberSearchRequestContract request)
+        public long SearchHeadwordRowNumber(HeadwordRowNumberSearchRequestContract request, ProjectTypeContract projectType)
         {
             var userId = m_authorizationManager.GetCurrentUserId();
+            var projectTypeEnum = Mapper.Map<ProjectTypeEnum>(projectType);
 
             if (request.Category.BookType == null)
                 throw new MainServiceException(MainServiceErrorCode.NullBookTypeNotSupported,"Null value of BookType is not supported");
 
-            var searchHeadwordRowNumberWork = new SearchHeadwordRowNumberWork(m_bookRepository, m_categoryRepository, request, userId);
+            var searchHeadwordRowNumberWork = new SearchHeadwordRowNumberWork(m_bookRepository, m_categoryRepository, request, userId, projectTypeEnum);
             var result = searchHeadwordRowNumberWork.Execute();
 
             return result;

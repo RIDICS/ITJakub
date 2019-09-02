@@ -36,7 +36,7 @@ namespace ITJakub.Web.Hub.Controllers
         public virtual ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
             var client = GetMetadataClient();
-            var result = client.GetTitleAutocomplete(query, AreaBookType, selectedCategoryIds, selectedBookIds);
+            var result = client.GetTitleAutocomplete(query, AreaBookType, GetDefaultProjectType(), selectedCategoryIds, selectedBookIds);
             return Json(result);
         }
 

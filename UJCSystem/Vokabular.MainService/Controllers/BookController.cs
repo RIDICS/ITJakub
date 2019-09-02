@@ -91,7 +91,7 @@ namespace Vokabular.MainService.Controllers
 
             try
             {
-                var result = m_bookSearchManager.SearchByCriteria(request);
+                var result = m_bookSearchManager.SearchByCriteria(request, projectType.Value);
                 return Ok(result);
             }
             catch (ArgumentException exception)
@@ -121,7 +121,7 @@ namespace Vokabular.MainService.Controllers
 
             try
             {
-                var result = m_bookSearchManager.SearchByCriteriaCount(request);
+                var result = m_bookSearchManager.SearchByCriteriaCount(request, projectType.Value);
                 return Ok(result);
             }
             catch (ArgumentException exception)

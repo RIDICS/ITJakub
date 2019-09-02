@@ -398,7 +398,8 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List<string>();
         }
 
-        public virtual IList<string> GetTitleAutocomplete(string queryString, BookTypeEnum? bookType, IList<int> selectedCategoryIds, IList<long> selectedProjectIds, int count, int userId)
+        public virtual IList<string> GetTitleAutocomplete(string queryString, BookTypeEnum? bookType, ProjectTypeEnum? projectType,
+            IList<int> selectedCategoryIds, IList<long> selectedProjectIds, int count, int userId)
         {
             queryString = EscapeQuery(queryString);
 
@@ -427,6 +428,11 @@ namespace Vokabular.DataEntities.Database.Repositories
             {
                 query.JoinAlias(() => snapshotAlias.BookTypes, () => bookTypeAlias)
                     .Where(() => bookTypeAlias.Type == bookType.Value);
+            }
+
+            if (projectType != null)
+            {
+                query.Where(() => projectAlias.ProjectType == projectType.Value);
             }
 
             if (selectedCategoryIds.Count > 0 || selectedProjectIds.Count > 0)

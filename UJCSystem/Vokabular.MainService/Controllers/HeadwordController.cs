@@ -53,7 +53,7 @@ namespace Vokabular.MainService.Controllers
                 return Error($"Required parameter {nameof(projectType)} is not specified");
             }
 
-            var result = m_bookSearchManager.SearchHeadwordByCriteria(request);
+            var result = m_bookSearchManager.SearchHeadwordByCriteria(request, projectType.Value);
             return result;
         }
 
@@ -71,7 +71,7 @@ namespace Vokabular.MainService.Controllers
                 return Error($"Required parameter {nameof(projectType)} is not specified");
             }
 
-            var result = m_bookSearchManager.SearchHeadwordByCriteriaCount(request);
+            var result = m_bookSearchManager.SearchHeadwordByCriteriaCount(request, projectType.Value);
             return result;
         }
 
@@ -92,7 +92,7 @@ namespace Vokabular.MainService.Controllers
                 return Error($"Required parameter {nameof(projectType)} is not specified");
             }
 
-            var result = m_bookManager.SearchHeadwordRowNumber(request);
+            var result = m_bookManager.SearchHeadwordRowNumber(request, projectType.Value);
             return result;
         }
 
@@ -104,7 +104,7 @@ namespace Vokabular.MainService.Controllers
                 return Error($"Required parameter {nameof(projectType)} is not specified");
             }
 
-            return m_bookManager.GetHeadwordAutocomplete(query, bookType, selectedCategoryIds, selectedProjectIds);
+            return m_bookManager.GetHeadwordAutocomplete(query, projectType.Value, bookType, selectedCategoryIds, selectedProjectIds);
         }
     }
 }

@@ -207,7 +207,8 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SingleOrDefault();
         }
 
-        public virtual IList<string> GetHeadwordAutocomplete(string queryString, BookTypeEnum? bookType, IList<int> selectedCategoryIds, IList<long> selectedProjectIds, int count, int userId)
+        public virtual IList<string> GetHeadwordAutocomplete(string queryString, ProjectTypeEnum projectType, BookTypeEnum? bookType,
+            IList<int> selectedCategoryIds, IList<long> selectedProjectIds, int count, int userId)
         {
             queryString = EscapeQuery(queryString);
 
@@ -229,7 +230,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => projectAlias.Permissions, () => permissionAlias)
                 .JoinAlias(() => permissionAlias.UserGroup, () => userGroupAlias)
                 .JoinAlias(() => userGroupAlias.Users, () => userAlias)
-                .Where(() => headwordResourceAlias.Id == resourceAlias.LatestVersion.Id && userAlias.Id == userId)
+                .Where(() => headwordResourceAlias.Id == resourceAlias.LatestVersion.Id && userAlias.Id == userId && projectAlias.ProjectType == projectType)
                 .AndRestrictionOn(x => x.Headword).IsLike(queryString, MatchMode.Start)
                 .Select(Projections.Distinct(Projections.Property<HeadwordItem>(x => x.Headword)))
                 .OrderBy(x => x.Headword).Asc;
@@ -350,7 +351,8 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        public virtual IList<long> GetProjectIds(BookTypeEnum bookType, int userId, IList<long> projectIds, IList<int> categoryIds)
+        public virtual IList<long> GetProjectIds(BookTypeEnum bookType, int userId, ProjectTypeEnum projectType, IList<long> projectIds,
+            IList<int> categoryIds)
         {
             Project projectAlias = null;
             BookType bookTypeAlias = null;
@@ -366,7 +368,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => projectAlias.Permissions, () => permissionAlias)
                 .JoinAlias(() => permissionAlias.UserGroup, () => userGroupAlias)
                 .JoinAlias(() => userGroupAlias.Users, () => userAlias)
-                .And(() => bookTypeAlias.Type == bookType && userAlias.Id == userId)
+                .And(() => bookTypeAlias.Type == bookType && userAlias.Id == userId && projectAlias.ProjectType == projectType)
                 .Select(Projections.Distinct(Projections.Property(() => projectAlias.Id)));
 
             if (projectIds != null && categoryIds != null)
