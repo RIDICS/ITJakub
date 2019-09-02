@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Request;
@@ -22,7 +23,7 @@ namespace Vokabular.MainService.Controllers
 
         [HttpPost("search")]
         [ProducesResponseType(typeof(CorpusSearchSnapshotsResultContract), StatusCodes.Status200OK)]
-        public IActionResult SearchCorpusGetSnapshotListResult([FromBody] CorpusSearchRequestContract request)
+        public IActionResult SearchCorpusGetSnapshotListResult([FromBody] CorpusSearchRequestContract request, [FromQuery] ProjectTypeContract projectType)
         {
             try
             {
@@ -60,7 +61,7 @@ namespace Vokabular.MainService.Controllers
 
         [HttpPost("search-count")]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-        public IActionResult SearchCorpusTotalResultCount([FromBody] SearchRequestContractBase request)
+        public IActionResult SearchCorpusTotalResultCount([FromBody] SearchRequestContractBase request, [FromQuery] ProjectTypeContract projectType)
         {
             try
             {

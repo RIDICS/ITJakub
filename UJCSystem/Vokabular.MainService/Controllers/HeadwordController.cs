@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -42,9 +43,10 @@ namespace Vokabular.MainService.Controllers
         /// <param name="request">
         /// Request contains list of search criteria with different data types described in method description
         /// </param>
+        /// <param name="projectType">Target project database for searching</param>
         /// <returns></returns>
         [HttpPost("search")]
-        public List<HeadwordContract> SearchHeadword([FromBody] HeadwordSearchRequestContract request)
+        public List<HeadwordContract> SearchHeadword([FromBody] HeadwordSearchRequestContract request, [FromQuery] ProjectTypeContract projectType)
         {
             var result = m_bookSearchManager.SearchHeadwordByCriteria(request);
             return result;
@@ -54,9 +56,10 @@ namespace Vokabular.MainService.Controllers
         /// Search audio books, return count
         /// </summary>
         /// <param name="request"></param>
+        /// <param name="projectType"></param>
         /// <returns></returns>
         [HttpPost("search-count")]
-        public long SearchHeadwordResultCount([FromBody] HeadwordSearchRequestContract request)
+        public long SearchHeadwordResultCount([FromBody] HeadwordSearchRequestContract request, [FromQuery] ProjectTypeContract projectType)
         {
             var result = m_bookSearchManager.SearchHeadwordByCriteriaCount(request);
             return result;
@@ -69,16 +72,17 @@ namespace Vokabular.MainService.Controllers
         /// Search for headword location in headword listing (in list with all headwords from selected dictionaries sorted by name)
         /// </remarks>
         /// <param name="request"></param>
+        /// <param name="projectType"></param>
         /// <returns></returns>
         [HttpPost("search-row-number")]
-        public long SearchHeadwordRowNumber([FromBody] HeadwordRowNumberSearchRequestContract request)
+        public long SearchHeadwordRowNumber([FromBody] HeadwordRowNumberSearchRequestContract request, [FromQuery] ProjectTypeContract projectType)
         {
             var result = m_bookManager.SearchHeadwordRowNumber(request);
             return result;
         }
 
         [HttpGet("autocomplete")]
-        public List<string> GetAutocomplete([FromQuery] string query, BookTypeEnumContract? bookType = null, IList<int> selectedCategoryIds = null, IList<long> selectedProjectIds = null)
+        public List<string> GetAutocomplete([FromQuery] string query, [FromQuery] ProjectTypeContract projectType, BookTypeEnumContract? bookType = null, IList<int> selectedCategoryIds = null, IList<long> selectedProjectIds = null)
         {
             return m_bookManager.GetHeadwordAutocomplete(query, bookType, selectedCategoryIds, selectedProjectIds);
         }

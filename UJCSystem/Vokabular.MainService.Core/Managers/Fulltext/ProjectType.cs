@@ -2,7 +2,8 @@
 {
     public enum ProjectType
     {
-        Research,
-        Community,
+        Research = 0,
+        Community = 1,
+        Bibliography = 2,
     }
 }

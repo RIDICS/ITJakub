@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataContracts.Types;
@@ -76,10 +77,11 @@ namespace Vokabular.MainService.Controllers
         /// <param name="request">
         /// Request contains list of search criteria with different data types described in method description
         /// </param>
+        /// <param name="projectType">Target project database for searching</param>
         /// <returns></returns>
         [HttpPost("search")]
         [ProducesResponseType(typeof(List<SearchResultContract>), StatusCodes.Status200OK)]
-        public IActionResult SearchBook([FromBody] SearchRequestContract request)
+        public IActionResult SearchBook([FromBody] SearchRequestContract request, [FromQuery] ProjectTypeContract projectType)
             // TODO possible switch SearchResultContract to BookContract
         {
             try
@@ -101,10 +103,11 @@ namespace Vokabular.MainService.Controllers
         /// Search books, return count
         /// </summary>
         /// <param name="request"></param>
+        /// <param name="projectType"></param>
         /// <returns></returns>
         [HttpPost("search-count")]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-        public IActionResult SearchBookResultCount([FromBody] SearchRequestContract request)
+        public IActionResult SearchBookResultCount([FromBody] SearchRequestContract request, [FromQuery] ProjectTypeContract projectType)
         {
             try
             {
