@@ -7,7 +7,6 @@ using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Core.Markdown;
 using ITJakub.Web.Hub.Helpers;
 using Microsoft.Extensions.DependencyInjection;
-using Vokabular.MainService.DataContracts;
 using Vokabular.Shared.Container;
 
 namespace ITJakub.Web.Hub
@@ -31,6 +30,7 @@ namespace ITJakub.Web.Hub
             services.AddSingleton<Profile, DatingListCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, FavoriteProfile>();
             services.AddSingleton<Profile, PermissionProfile>();
+            services.AddSingleton<Profile, PortalTypeProfile>();
             services.AddSingleton<Profile, RoleProfile>();
             services.AddSingleton<Profile, TokenDistanceCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, TokenDistanceListCriteriaDescriptionProfile>();

@@ -90,6 +90,7 @@ namespace Vokabular.ProjectImport.Works
             var project = new Project
             {
                 Name = m_importedRecord.ImportedProject.ProjectMetadata.Title,
+                ProjectType = ProjectTypeEnum.Bibliography,
                 CreateTime = now,
                 CreatedByUser = user,
                 OriginalUrl = string.Format(externalRepository.UrlTemplate, m_importedRecord.ImportedProject.Id)
