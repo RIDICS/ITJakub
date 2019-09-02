@@ -20,7 +20,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             m_communicationProvider = communicationProvider;
         }
 
-        public ProjectType ProjectType => ProjectType.Community;
+        public FulltextStorageType StorageType => FulltextStorageType.ElasticSearch;
 
         public string GetPageText(TextResource textResource, TextFormatEnumContract format)
         {

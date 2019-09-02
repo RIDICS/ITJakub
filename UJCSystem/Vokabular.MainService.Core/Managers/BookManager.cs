@@ -232,7 +232,7 @@ namespace Vokabular.MainService.Core.Managers
                 return null;
             }
 
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(textResource.Resource.Project.ProjectType);
 
             var result = searchRequest == null
                 ? fulltextStorage.GetPageText(textResource, format)
@@ -295,7 +295,7 @@ namespace Vokabular.MainService.Core.Managers
                 return null;
             }
 
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(headwordResource.Resource.Project.ProjectType);
 
             var result = request == null
                 ? fulltextStorage.GetHeadwordText(headwordResource, format)
@@ -343,7 +343,7 @@ namespace Vokabular.MainService.Core.Managers
             if (editionNoteResource == null)
                 return null;
 
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(editionNoteResource.Resource.Project.ProjectType);
             var resultText = fulltextStorage.GetEditionNote(editionNoteResource, format);
 
             return resultText;

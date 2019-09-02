@@ -101,7 +101,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             return transformation;
         }
 
-        public ProjectType ProjectType => ProjectType.Research;
+        public FulltextStorageType StorageType => FulltextStorageType.ExistDb;
 
         public string GetPageText(TextResource textResource, TextFormatEnumContract format)
         {
