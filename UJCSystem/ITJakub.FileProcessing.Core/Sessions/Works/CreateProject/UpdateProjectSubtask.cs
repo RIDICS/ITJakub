@@ -33,7 +33,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.CreateProject
             }
             else
             {
-                var dbProject = m_projectRepository.GetProjectByExternalId(bookData.BookXmlId);
+                var dbProject = m_projectRepository.GetProjectByExternalId(bookData.BookXmlId, projectType);
                 if (dbProject != null)
                 {
                     projectIdValue = dbProject.Id;

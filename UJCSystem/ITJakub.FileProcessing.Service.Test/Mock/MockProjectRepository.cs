@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
@@ -115,13 +116,14 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             throw new NotSupportedException();
         }
 
-        public override Project GetProjectByExternalId(string externalId)
+        public override Project GetProjectByExternalId(string externalId, ProjectTypeEnum projectType)
         {
             if (CanFindProjectByExternalId)
             {
                 return new Project
                 {
                     Id = GetProjectIdValue,
+                    ProjectType = projectType,
                     ExternalId = externalId
                 };
             }
