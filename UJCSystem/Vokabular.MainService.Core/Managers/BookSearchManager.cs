@@ -106,7 +106,7 @@ namespace Vokabular.MainService.Core.Managers
             return termCriteria;
         }
 
-        public List<SearchResultContract> SearchByCriteria(SearchRequestContract request, ProjectTypeContract projectType)
+        public List<SearchResultContract> SearchByCriteria(AdvancedSearchRequestContract request, ProjectTypeContract projectType)
         {
             m_authorizationManager.AddAuthorizationCriteria(request.ConditionConjunction);
 
@@ -194,7 +194,7 @@ namespace Vokabular.MainService.Core.Managers
             return resultList;
         }
 
-        public long SearchByCriteriaCount(SearchRequestContract request, ProjectTypeContract projectType)
+        public long SearchByCriteriaCount(AdvancedSearchRequestContract request, ProjectTypeContract projectType)
         {
             m_authorizationManager.AddAuthorizationCriteria(request.ConditionConjunction);
 

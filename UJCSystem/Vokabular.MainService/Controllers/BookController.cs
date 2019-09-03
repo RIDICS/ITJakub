@@ -81,7 +81,7 @@ namespace Vokabular.MainService.Controllers
         /// <returns></returns>
         [HttpPost("search")]
         [ProducesResponseType(typeof(List<SearchResultContract>), StatusCodes.Status200OK)]
-        public IActionResult SearchBook([FromBody] SearchRequestContract request, [FromQuery] ProjectTypeContract? projectType)
+        public IActionResult SearchBook([FromBody] AdvancedSearchRequestContract request, [FromQuery] ProjectTypeContract? projectType)
             // TODO possible switch SearchResultContract to BookContract
         {
             if (projectType == null)
@@ -112,7 +112,7 @@ namespace Vokabular.MainService.Controllers
         /// <returns></returns>
         [HttpPost("search-count")]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-        public IActionResult SearchBookResultCount([FromBody] SearchRequestContract request, [FromQuery] ProjectTypeContract? projectType)
+        public IActionResult SearchBookResultCount([FromBody] AdvancedSearchRequestContract request, [FromQuery] ProjectTypeContract? projectType)
         {
             if (projectType == null)
             {
