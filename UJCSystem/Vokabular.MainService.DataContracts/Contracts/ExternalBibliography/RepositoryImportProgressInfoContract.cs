@@ -1,4 +1,4 @@
-﻿namespace Vokabular.MainService.DataContracts.Contracts
+﻿namespace Vokabular.MainService.DataContracts.Contracts.ExternalBibliography
 {
     public class RepositoryImportProgressInfoContract
     {

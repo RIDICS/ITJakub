@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.ExternalBibliography;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Headers;

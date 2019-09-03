@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Net;
 using ITJakub.Lemmatization.Shared.Contracts;
@@ -8,7 +9,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Clients;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Errors;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -19,6 +22,21 @@ namespace ITJakub.Web.Hub.Controllers
         protected BaseController(CommunicationProvider communicationProvider)
         {
             m_communication = communicationProvider;
+        }
+
+        public PortalTypeContract PortalTypeValue => m_communication.PortalType;
+
+        public ProjectTypeContract GetDefaultProjectType()
+        {
+            switch (PortalTypeValue)
+            {
+                case PortalTypeContract.Research:
+                    return ProjectTypeContract.Research;
+                case PortalTypeContract.Community:
+                    return ProjectTypeContract.Community;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         public MainServiceBookClient GetBookClient()

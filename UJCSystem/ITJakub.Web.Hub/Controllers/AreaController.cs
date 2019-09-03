@@ -36,7 +36,7 @@ namespace ITJakub.Web.Hub.Controllers
         public virtual ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
             var client = GetMetadataClient();
-            var result = client.GetTitleAutocomplete(query, AreaBookType, selectedCategoryIds, selectedBookIds);
+            var result = client.GetTitleAutocomplete(query, AreaBookType, GetDefaultProjectType(), selectedCategoryIds, selectedBookIds);
             return Json(result);
         }
 
@@ -155,7 +155,7 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 ConditionConjunction = listSearchCriteriaContracts,
             };
-            var count = client.SearchBookCount(request);
+            var count = client.SearchBookCount(request, GetDefaultProjectType());
             return count;
         }
 
@@ -207,7 +207,7 @@ namespace ITJakub.Web.Hub.Controllers
                 SortDirection = sortAsc ? SortDirectionEnumContract.Asc : SortDirectionEnumContract.Desc,
                 FetchTerms = listSearchCriteriaContracts.Any(x => x.Key == CriteriaKey.Term),
             };
-            var result = client.SearchBook(request);
+            var result = client.SearchBook(request, GetDefaultProjectType());
             return result;
         }
     }

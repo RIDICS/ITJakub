@@ -36,7 +36,7 @@ namespace ITJakub.FileProcessing.Service.Test
             var subtask = new UpdateProjectSubtask(projectRepository);
 
             long? projectId = 12;
-            subtask.UpdateProject(projectId, 1, bookData);
+            subtask.UpdateProject(projectId, 1, bookData, ProjectTypeEnum.Research);
 
             Assert.AreEqual(1, projectRepository.UpdatedObjects.Count);
             Assert.AreEqual(0, projectRepository.CreatedObjects.Count);
@@ -49,7 +49,7 @@ namespace ITJakub.FileProcessing.Service.Test
             projectRepository = new MockProjectRepository(unitOfWorkProvider) {CanFindProjectByExternalId = true};
             subtask = new UpdateProjectSubtask(projectRepository);
 
-            var dbProjectId = subtask.UpdateProject(null, 1, bookData);
+            var dbProjectId = subtask.UpdateProject(null, 1, bookData, ProjectTypeEnum.Research);
 
             Assert.AreEqual(0, projectRepository.CreatedObjects.Count);
             Assert.AreEqual(0, projectRepository.UpdatedObjects.Count);
@@ -60,7 +60,7 @@ namespace ITJakub.FileProcessing.Service.Test
             projectRepository = new MockProjectRepository(unitOfWorkProvider) {CanFindProjectByExternalId = false};
             subtask = new UpdateProjectSubtask(projectRepository);
 
-            subtask.UpdateProject(null, 1, bookData);
+            subtask.UpdateProject(null, 1, bookData, ProjectTypeEnum.Research);
 
             Assert.AreEqual(1, projectRepository.CreatedObjects.Count);
             Assert.AreEqual(0, projectRepository.UpdatedObjects.Count);

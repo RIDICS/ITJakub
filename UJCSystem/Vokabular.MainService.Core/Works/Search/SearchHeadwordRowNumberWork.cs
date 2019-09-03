@@ -13,13 +13,16 @@ namespace Vokabular.MainService.Core.Works.Search
         private readonly CategoryRepository m_categoryRepository;
         private readonly HeadwordRowNumberSearchRequestContract m_request;
         private readonly int m_userId;
+        private readonly ProjectTypeEnum m_projectType;
 
-        public SearchHeadwordRowNumberWork(BookRepository bookRepository, CategoryRepository categoryRepository, HeadwordRowNumberSearchRequestContract request, int userId) : base(bookRepository)
+        public SearchHeadwordRowNumberWork(BookRepository bookRepository, CategoryRepository categoryRepository,
+            HeadwordRowNumberSearchRequestContract request, int userId, ProjectTypeEnum projectType) : base(bookRepository)
         {
             m_bookRepository = bookRepository;
             m_categoryRepository = categoryRepository;
             m_request = request;
             m_userId = userId;
+            m_projectType = projectType;
         }
 
         protected override long ExecuteWorkImplementation()
@@ -35,11 +38,11 @@ namespace Vokabular.MainService.Core.Works.Search
                     categoryIds = m_categoryRepository.GetAllSubcategoryIds(categoryIds);
                 }
 
-                projectIds = m_bookRepository.GetProjectIds(bookTypeEnum, m_userId, projectIds, categoryIds);
+                projectIds = m_bookRepository.GetProjectIds(bookTypeEnum, m_userId, m_projectType, projectIds, categoryIds);
             }
             else
             {
-                projectIds = m_bookRepository.GetProjectIds(bookTypeEnum, m_userId, null, null);
+                projectIds = m_bookRepository.GetProjectIds(bookTypeEnum, m_userId, m_projectType, null, null);
             }
 
             return m_bookRepository.GetHeadwordRowNumber(m_request.Query, projectIds);

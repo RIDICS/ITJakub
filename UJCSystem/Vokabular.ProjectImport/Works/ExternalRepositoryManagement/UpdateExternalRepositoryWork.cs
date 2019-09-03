@@ -2,6 +2,7 @@ using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.ExternalBibliography;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.ProjectImport.Works.ExternalRepositoryManagement

@@ -24,7 +24,9 @@ using Vokabular.ForumSite.Core.Options;
 using Vokabular.FulltextService.DataContracts;
 using Vokabular.MainService.Authorization;
 using Vokabular.MainService.Core;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.MainService.Middleware;
 using Vokabular.MainService.Options;
 using Vokabular.MainService.Utils;
@@ -86,6 +88,12 @@ namespace Vokabular.MainService
                 options.IncludeXmlComments(ServiceUtils.GetAppXmlDocumentationPath(typeof(BookContract)));
                 options.OperationFilter<AddResponseHeadersFilter>();
                 options.OperationFilter<FileOperationFilter>();
+                options.OperationFilter<AddGlobalHeaderFilter>(new GlobalHeaderValues
+                {
+                    Name = MainServiceHeaders.PortalTypeHeader,
+                    Values = Enum.GetNames(typeof(PortalTypeContract)).ToList<object>(),
+                    DefaultValue = PortalTypeContract.Research.ToString(),
+                });
 
                 options.DocumentFilter<PolymorphismDocumentFilter<SearchCriteriaContract>>();
                 options.SchemaFilter<PolymorphismSchemaFilter<SearchCriteriaContract>>();
@@ -202,6 +210,7 @@ namespace Vokabular.MainService
             app.ConfigureAutoMapper();
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
+            app.UseMiddleware<PortalTypeMiddleware>();
 
             app.UseAuthentication();
 

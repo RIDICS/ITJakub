@@ -101,7 +101,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             return transformation;
         }
 
-        public ProjectType ProjectType => ProjectType.Research;
+        public FulltextStorageType StorageType => FulltextStorageType.ExistDb;
 
         public string GetPageText(TextResource textResource, TextFormatEnumContract format)
         {
@@ -409,7 +409,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             throw new NotSupportedException("Paged search in corpus in eXist-db isn't supported.");
         }
 
-        public CorpusSearchResultDataList SearchCorpusInSnapshotByCriteria(long projectId, int start, int count, int contextLength, List<SearchCriteriaContract> criteria)
+        public CorpusSearchResultDataList SearchCorpusInSnapshotByCriteria(long snapshotId, int start, int count, int contextLength, List<SearchCriteriaContract> criteria)
         {
             throw new NotSupportedException("Paged search in corpus in eXist-db isn't supported.");
         }

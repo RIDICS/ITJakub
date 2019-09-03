@@ -208,7 +208,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
             var newProject = new ProjectContract
             {
-                Name = request.Name
+                Name = request.Name,
+                ProjectType = GetDefaultProjectType(),
             };
             var newProjectId = client.CreateProject(newProject);
             return Json(newProjectId);

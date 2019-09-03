@@ -5,6 +5,7 @@ using AutoMapper;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.ExternalBibliography;
 using Vokabular.MainService.DataContracts.Contracts.OaiPmh;
 using Vokabular.ProjectImport.Works.ExternalRepositoryManagement;
 using Vokabular.RestClient.Results;

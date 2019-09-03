@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.ExternalBibliography;
 using Vokabular.MainService.DataContracts.Contracts.OaiPmh;
 using Vokabular.ProjectImport.Shared.Const;
 

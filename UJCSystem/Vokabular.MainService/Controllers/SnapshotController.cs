@@ -7,7 +7,7 @@ using Vokabular.MainService.DataContracts.Contracts.Type;
 namespace Vokabular.MainService.Controllers
 {
     [Route("api")]
-    public class SnapshotController : Controller
+    public class SnapshotController : BaseController
     {
         [HttpPost("project/{projectId}/snapshot")]
         public long CreateSnapshot(long projectId)

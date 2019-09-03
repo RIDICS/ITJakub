@@ -11,7 +11,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
 {
     public interface IFulltextStorage
     {
-        ProjectType ProjectType { get; }
+        FulltextStorageType StorageType { get; }
         string GetPageText(TextResource textResource, TextFormatEnumContract format);
         string GetPageTextFromSearch(TextResource textResource, TextFormatEnumContract format, SearchPageRequestContract searchRequest);
         string GetHeadwordText(HeadwordResource headwordResource, TextFormatEnumContract format);
@@ -30,7 +30,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         string CreateNewHeadwordVersion(HeadwordResource headwordResource);
         string CreateNewEditionNoteVersion(EditionNoteResource editionNoteResource);
         CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotListByCriteria(int start, int count, SortTypeEnumContract? sort, SortDirectionEnumContract? sortDirection, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects, bool fetchNumberOfresults);
-        CorpusSearchResultDataList SearchCorpusInSnapshotByCriteria(long projectId, int start, int count, int contextLength, List<SearchCriteriaContract> criteria);
+        CorpusSearchResultDataList SearchCorpusInSnapshotByCriteria(long snapshotId, int start, int count, int contextLength, List<SearchCriteriaContract> criteria);
         long SearchCorpusTotalResultCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects);
        }
 }

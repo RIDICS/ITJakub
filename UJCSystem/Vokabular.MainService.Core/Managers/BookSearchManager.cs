@@ -6,6 +6,7 @@ using Vokabular.Core.Data;
 using Vokabular.Core.Search;
 using Vokabular.DataEntities.Database.ConditionCriteria;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.Search;
@@ -17,6 +18,7 @@ using Vokabular.MainService.Core.Works.Search;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.QueryBuilder;
@@ -29,6 +31,7 @@ namespace Vokabular.MainService.Core.Managers
     public class BookSearchManager
     {
         private readonly MetadataRepository m_metadataRepository;
+        private readonly SnapshotRepository m_snapshotRepository;
         private readonly MetadataSearchCriteriaProcessor m_metadataSearchCriteriaProcessor;
         private readonly BookRepository m_bookRepository;
         private readonly CorpusSearchManager m_corpusSearchManager;
@@ -37,12 +40,13 @@ namespace Vokabular.MainService.Core.Managers
         private readonly AuthorizationManager m_authorizationManager;
         private readonly ForumSiteUrlHelper m_forumSiteUrlHelper;
 
-        public BookSearchManager(MetadataRepository metadataRepository,
+        public BookSearchManager(MetadataRepository metadataRepository, SnapshotRepository snapshotRepository,
             MetadataSearchCriteriaProcessor metadataSearchCriteriaProcessor, BookRepository bookRepository,
             CorpusSearchManager corpusSearchManager, HeadwordSearchManager headwordSearchManager,
             FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager, ForumSiteUrlHelper forumSiteUrlHelper)
         {
             m_metadataRepository = metadataRepository;
+            m_snapshotRepository = snapshotRepository;
             m_metadataSearchCriteriaProcessor = metadataSearchCriteriaProcessor;
             m_bookRepository = bookRepository;
             m_corpusSearchManager = corpusSearchManager;
@@ -102,14 +106,15 @@ namespace Vokabular.MainService.Core.Managers
             return termCriteria;
         }
 
-        public List<SearchResultContract> SearchByCriteria(SearchRequestContract request)
+        public List<SearchResultContract> SearchByCriteria(SearchRequestContract request, ProjectTypeContract projectType)
         {
             m_authorizationManager.AddAuthorizationCriteria(request.ConditionConjunction);
 
             var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
+            var projectTypeEnum = Mapper.Map<ProjectTypeEnum>(projectType);
 
-            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters)
+            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters, projectTypeEnum)
             {
                 Sort = request.Sort,
                 SortDirection = request.SortDirection,
@@ -125,7 +130,7 @@ namespace Vokabular.MainService.Core.Managers
                 var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
 
                 // 2) search in fulltext
-                var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+                var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectType);
                 var fulltextSearchResultData = fulltextStorage.SearchProjectIdByCriteria(queryCreator.GetStart(), queryCreator.GetCount(), request.Sort, request.SortDirection, nonMetadataCriterias, projectIdentificatorList);
 
                 // 3) load paged result
@@ -149,13 +154,14 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
-        public List<AudioBookSearchResultContract> SearchAudioByCriteria(SearchRequestContract request)
+        public List<AudioBookSearchResultContract> SearchAudioByCriteria(SearchRequestContract request, ProjectTypeContract projectType)
         {
             m_authorizationManager.AddAuthorizationCriteria(request.ConditionConjunction);
 
             var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
+            var projectTypeEnum = Mapper.Map<ProjectTypeEnum>(projectType);
 
-            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters)
+            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters, projectTypeEnum)
             {
                 Sort = request.Sort,
                 SortDirection = request.SortDirection,
@@ -188,13 +194,14 @@ namespace Vokabular.MainService.Core.Managers
             return resultList;
         }
 
-        public long SearchByCriteriaCount(SearchRequestContract request)
+        public long SearchByCriteriaCount(SearchRequestContract request, ProjectTypeContract projectType)
         {
             m_authorizationManager.AddAuthorizationCriteria(request.ConditionConjunction);
 
             var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
+            var projectTypeEnum = Mapper.Map<ProjectTypeEnum>(projectType);
 
-            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters)
+            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters, projectTypeEnum)
             {
                 Sort = request.Sort,
                 SortDirection = request.SortDirection,
@@ -210,7 +217,7 @@ namespace Vokabular.MainService.Core.Managers
                 var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
 
                 // 2) search in fulltext
-                var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+                var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectType);
                 var result = fulltextStorage.SearchByCriteriaCount(processedCriterias.NonMetadataCriterias, projectIdentificatorList);
                 return result;
             }
@@ -223,14 +230,15 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
-        public List<HeadwordContract> SearchHeadwordByCriteria(HeadwordSearchRequestContract request)
+        public List<HeadwordContract> SearchHeadwordByCriteria(HeadwordSearchRequestContract request, ProjectTypeContract projectType)
         {
             m_authorizationManager.AddAuthorizationCriteria(request.ConditionConjunction);
 
             var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
+            var projectTypeEnum = Mapper.Map<ProjectTypeEnum>(projectType);
 
-            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters)
+            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters, projectTypeEnum)
             {
                 Start = PagingHelper.GetStart(request.Start),
                 Count = PagingHelper.GetCount(request.Count)
@@ -244,7 +252,7 @@ namespace Vokabular.MainService.Core.Managers
                 var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
 
                 // 2) search in fulltext
-                var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+                var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectType);
                 var fulltextSearchResultData = fulltextStorage.SearchHeadwordByCriteria(queryCreator.GetStart(), queryCreator.GetCount(), nonMetadataCriterias, projectIdentificatorList);
 
                 // 3) load paged result
@@ -270,13 +278,14 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
-        public long SearchHeadwordByCriteriaCount(HeadwordSearchRequestContract request)
+        public long SearchHeadwordByCriteriaCount(HeadwordSearchRequestContract request, ProjectTypeContract projectType)
         {
             m_authorizationManager.AddAuthorizationCriteria(request.ConditionConjunction);
 
             var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
+            var projectTypeEnum = Mapper.Map<ProjectTypeEnum>(projectType);
 
-            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters)
+            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters, projectTypeEnum)
             {
                 Start = PagingHelper.GetStart(request.Start),
                 Count = PagingHelper.GetCount(request.Count)
@@ -290,7 +299,7 @@ namespace Vokabular.MainService.Core.Managers
                 var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
 
                 // 2) search in fulltext
-                var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+                var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectType);
                 var result = fulltextStorage.SearchHeadwordByCriteriaCount(processedCriterias.NonMetadataCriterias, projectIdentificatorList);
                 return result;
             }
@@ -303,15 +312,16 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
-        public CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotListByCriteria(CorpusSearchRequestContract request)
+        public CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotListByCriteria(CorpusSearchRequestContract request,
+            ProjectTypeContract projectType)
         {
             var processedCriterias = GetAuthorizatedProcessedCriterias(request.ConditionConjunction);
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
 
-            var projectIdentificatorList = GetProjectIdentificatorList(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters);
+            var projectIdentificatorList = GetProjectIdentificatorList(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters, projectType);
             
             // Search in fulltext DB
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectType);
             var start = m_corpusSearchManager.GetCorpusStart(request.Start);
             var count = m_corpusSearchManager.GetCorpusCount(request.Count);
 
@@ -326,7 +336,8 @@ namespace Vokabular.MainService.Core.Managers
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
             
             // Search in fulltext DB
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            var snapshotInfo = m_snapshotRepository.InvokeUnitOfWork(x => x.GetSnapshot(snapshotId));
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(snapshotInfo.Project.ProjectType);
             var start = m_corpusSearchManager.GetCorpusStart(request.Start);
             var count = m_corpusSearchManager.GetCorpusCount(request.Count);
 
@@ -343,23 +354,25 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
-        public long SearchCorpusTotalResultCount(SearchRequestContractBase request)
+        public long SearchCorpusTotalResultCount(SearchRequestContractBase request, ProjectTypeContract projectType)
         {
             var processedCriterias = GetAuthorizatedProcessedCriterias(request.ConditionConjunction);
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
 
-            var projectIdentificatorList = GetProjectIdentificatorList(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters);
+            var projectIdentificatorList = GetProjectIdentificatorList(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters, projectType);
 
             //Search in fulltext DB
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectType);
             var resultCount = fulltextStorage.SearchCorpusTotalResultCount(nonMetadataCriterias, projectIdentificatorList);
 
             return resultCount;
         }
 
-        private IList<ProjectIdentificationResult> GetProjectIdentificatorList(List<SearchCriteriaQuery> processedCriteriasConjunctionQuery, Dictionary<string, object> processedCriteriasMetadataParameters)
+        private IList<ProjectIdentificationResult> GetProjectIdentificatorList(List<SearchCriteriaQuery> processedCriteriasConjunctionQuery, Dictionary<string, object> processedCriteriasMetadataParameters, ProjectTypeContract projectType)
         {
-            var queryCreator = new SearchCriteriaQueryCreator(processedCriteriasConjunctionQuery, processedCriteriasMetadataParameters);
+            var projectTypeEnum = Mapper.Map<ProjectTypeEnum>(projectType);
+
+            var queryCreator = new SearchCriteriaQueryCreator(processedCriteriasConjunctionQuery, processedCriteriasMetadataParameters, projectTypeEnum);
             var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
 
             return projectIdentificatorList;
@@ -378,16 +391,16 @@ namespace Vokabular.MainService.Core.Managers
             return processedCriterias;
         }
 
-        public List<CorpusSearchResultContract> SearchCorpusByCriteria(CorpusSearchRequestContract request)
+        public List<CorpusSearchResultContract> SearchCorpusByCriteria(CorpusSearchRequestContract request, ProjectTypeContract projectType)
         {
             var processedCriterias = GetAuthorizatedProcessedCriterias(request.ConditionConjunction);
 
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
 
-            var projectIdentificatorList = GetProjectIdentificatorList(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters);
+            var projectIdentificatorList = GetProjectIdentificatorList(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters, projectType);
             // Search in fulltext DB
             
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectType);
             var start = m_corpusSearchManager.GetCorpusStart(request.Start);
             var count = m_corpusSearchManager.GetCorpusCount(request.Count);
             var result = fulltextStorage.SearchCorpusByCriteria(start, count, request.ContextLength, nonMetadataCriterias, projectIdentificatorList);
@@ -403,16 +416,16 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
-        public long SearchCorpusByCriteriaCount(CorpusSearchRequestContract request)
+        public long SearchCorpusByCriteriaCount(CorpusSearchRequestContract request, ProjectTypeContract projectType)
         {
             var processedCriterias = GetAuthorizatedProcessedCriterias(request.ConditionConjunction);
 
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
 
-            var projectIdentificatorList = GetProjectIdentificatorList(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters);
+            var projectIdentificatorList = GetProjectIdentificatorList(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters, projectType);
             
             // Search in fulltext DB
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectType);
             var resultCount = fulltextStorage.SearchCorpusByCriteriaCount(nonMetadataCriterias, projectIdentificatorList);
 
             return resultCount;

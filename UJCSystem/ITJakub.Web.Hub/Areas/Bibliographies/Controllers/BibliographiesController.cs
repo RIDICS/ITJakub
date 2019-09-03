@@ -84,7 +84,7 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
         public override ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
             var client = GetMetadataClient();
-            var result = client.GetTitleAutocomplete(query, null, selectedCategoryIds, selectedBookIds);
+            var result = client.GetTitleAutocomplete(query, null, GetDefaultProjectType(), selectedCategoryIds, selectedBookIds);
             return Json(result);
         }
 

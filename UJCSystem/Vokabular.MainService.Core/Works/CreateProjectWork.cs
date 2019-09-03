@@ -1,5 +1,7 @@
 ﻿using System;
+using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
@@ -23,10 +25,12 @@ namespace Vokabular.MainService.Core.Works
         {
             var now = DateTime.UtcNow;
             var currentUser = m_projectRepository.Load<User>(m_userId);
+            var projectType = Mapper.Map<ProjectTypeEnum>(m_newData.ProjectType);
 
             var project = new Project
             {
                 Name = m_newData.Name,
+                ProjectType = projectType,
                 CreateTime = now,
                 CreatedByUser = currentUser
             };

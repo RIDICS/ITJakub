@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Vokabular.MainService.DataContracts.Contracts
+namespace Vokabular.MainService.DataContracts.Contracts.ExternalBibliography
 {
     public class ExternalRepositoryContract
     {

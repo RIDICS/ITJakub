@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient;
 using Vokabular.Shared;
 using Vokabular.Shared.DataContracts.Types;
@@ -35,6 +36,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         }
 
         public List<string> GetTitleAutocomplete(string query, BookTypeEnumContract? bookType = null,
+            ProjectTypeContract? projectType = null,
             IList<int> selectedCategoryIds = null, IList<long> selectedProjectIds = null)
         {
             try
@@ -42,6 +44,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                 var url = UrlQueryBuilder.Create("metadata/title/autocomplete")
                     .AddParameter("query", query)
                     .AddParameter("bookType", bookType)
+                    .AddParameter("projectType", projectType)
                     .AddParameterList("selectedCategoryIds", selectedCategoryIds)
                     .AddParameterList("selectedProjectIds", selectedProjectIds)
                     .ToQuery();

@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks.Dataflow;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.ExternalBibliography;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
 
