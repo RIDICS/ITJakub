@@ -23,25 +23,37 @@
                 </div>
                 <div id="publishToModules" class="panel-collapse collapse in">
                     <div class="panel-body">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox"/> @Localizer.Translate("Edition", "Admin")
-                            </label>
+                        <div class="col-xs-6">
+                            <div>@Localizer.Translate("DefaultModule", "Admin"):</div>
+                            @{
+                                var firstRadio = true;
+                                foreach (var bookType in Model.AvailableBookTypes)
+                                {
+                                    <div>
+                                        <label>
+                                            <input type="radio" name="default-book-type" class="default-book-type" checked="@firstRadio" value="@bookType"/>
+                                            @Localizer.Translate(bookType.ToString(), "Admin")
+                                        </label>
+                                    </div>
+                                    firstRadio = false;
+                                }
+                            }
                         </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox"/> @Localizer.Translate("Corporas", "Admin")
-                            </label>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox"/> @Localizer.Translate("Grammar", "Admin")
-                            </label>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox"/> @Localizer.Translate("Audio", "Admin")
-                            </label>
+                        <div class="col-xs-6">
+                            <div>@Localizer.Translate("VisibilityInModules", "Admin"):</div>
+                            @{
+                                var firstCheckbox = true;
+                                foreach (var bookType in Model.AvailableBookTypes)
+                                {
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" value="@bookType" name="book-types" class="book-types" checked="@firstCheckbox" disabled="@firstCheckbox"/>
+                                            @Localizer.Translate(bookType.ToString(), "Admin")
+                                        </label>
+                                    </div>
+                                    firstCheckbox = false;
+                                }
+                            }
                         </div>
                     </div>
                 </div>
@@ -72,7 +84,7 @@
         @await Html.PartialAsync("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Image, "Obrazové zdroje", Model.ImageResourceList))
         @await Html.PartialAsync("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Audio, "Audio zdroje", Model.AudioResourceList))
         <div class="project-bottom-buttons">
-            <button type="button" class="btn btn-default">@Localizer.Translate("Save", "Admin")</button>
+            <button id="createSnapshot" type="button" class="btn btn-default">@Localizer.Translate("Save", "Admin")</button>
         </div>
     </div>
    

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Models
 {
@@ -10,6 +11,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
         public IList<ResourceViewModel> ImageResourceList { get; set; }
         public IList<ResourceViewModel> TextResourceList { get; set; }
         public IList<GroupInfoViewModel> VisibilityForGroups { get; set; }
+        public IList<BookTypeEnumContract> AvailableBookTypes { get; set; }
     }
 
     public class ResourceViewModel

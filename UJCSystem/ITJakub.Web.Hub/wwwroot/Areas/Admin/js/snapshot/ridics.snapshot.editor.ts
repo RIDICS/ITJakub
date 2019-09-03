@@ -1,17 +1,17 @@
 ﻿class SnapshotEditor {
-    private readonly $container: JQuery;
+    private readonly projectId: number;
     private readonly client: SnapshotApiClient;
     private readonly imageViewer: ImageViewerContentAddition;
     private readonly errorHandler: ErrorHandler;
 
-    constructor(panelElement: JQuery) {
-        this.$container = panelElement;
+    constructor(projectId: number) {
+        this.projectId = projectId;
         this.client = new SnapshotApiClient();
         this.imageViewer = new ImageViewerContentAddition(new EditorsUtil());
         this.errorHandler = new ErrorHandler();
     }
 
-    public init() {
+    init() {
         $(".include-all-checkbox").click((event) => {
             const checkbox = $(event.currentTarget);
             const table = checkbox.parents(".table");
@@ -60,7 +60,6 @@
             const selectBox = $(event.currentTarget);
             const resourceRow = selectBox.parents(".resource-row");
             const selectedVersion = selectBox.find("option:selected");
-            var test = selectedVersion.data("created");
             resourceRow.data("version-id", selectedVersion.val());
             resourceRow.find(".author").text(selectedVersion.data("author"));
             resourceRow.find(".comment").text(selectedVersion.data("comment"));
@@ -114,6 +113,34 @@
                 }
             }
             resourcePreviewModal.modal("show");
+        });
+
+        $("#createSnapshot").click(() => {
+            const defaultBookType = String($("#publishToModules").find(".default-book-type:checked").val());
+            
+            const publishToModules = [];
+            $("#publishToModules").find(".book-types:checked").toArray().forEach((element, index) => {
+                publishToModules.push((String($(element).val())));
+            });
+            
+            const selectedResourceCheckboxes = $(".resource-row .include-checkboxes input:checked").parents(".resource-row").toArray();
+            const selectedResources = [];
+            for (let selectedResource of selectedResourceCheckboxes) {
+                selectedResources.push($(selectedResource).data("version-id"));    
+            }
+
+            //TODO comment
+            this.client.createSnapshot(this.projectId, "", defaultBookType, publishToModules, selectedResources);
+        });
+
+        $(".default-book-type").click((event) => {
+            const value = $(event.currentTarget).val();
+            const defaultBookType = $("#publishToModules").find(`.book-types[value="${value}"]`);
+            defaultBookType.prop("checked", true);
+            defaultBookType.attr("disabled", "disabled");
+
+            const otherBookTypes = $("#publishToModules").find(`.book-types:not([value="${value}"])`);
+            otherBookTypes.removeAttr("disabled");
         });
     }
 }

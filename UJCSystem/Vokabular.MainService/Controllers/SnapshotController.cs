@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 
@@ -9,10 +10,17 @@ namespace Vokabular.MainService.Controllers
     [Route("api")]
     public class SnapshotController : Controller
     {
-        [HttpPost("project/{projectId}/snapshot")]
-        public long CreateSnapshot(long projectId)
+        private readonly SnapshotManager m_snapshotManager;
+
+        public SnapshotController(SnapshotManager snapshotManager)
         {
-            return 73;
+            m_snapshotManager = snapshotManager;
+        }
+
+        [HttpPost("project/{projectId}/snapshot")]
+        public long CreateSnapshot(long projectId, [FromBody] CreateSnapshotContract data)
+        {
+            return m_snapshotManager.CreateSnapshot(projectId, data);
         }
 
         [HttpGet("project/{projectId}/snapshot")]

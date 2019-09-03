@@ -5,8 +5,8 @@
         this.projectId = projectId;
     }
 
-    public init() {
-        var $table = $("#work-snapshots-table");
+    init() {
+        const $table = $("#work-snapshots-table");
         $(".duplicate-column", $table).hide();
 
         $("#work-snapshots-new-button").click((event) => {
@@ -19,7 +19,7 @@
     }
 
     private openNewSnapshotPanel() {
-        var url = getBaseUrl() + "Admin/Project/NewSnapshot?projectId=" + this.projectId;
+        const url = getBaseUrl() + "Admin/Project/NewSnapshot?projectId=" + this.projectId;
 
         $("#new-snapshot-container").append("<div class=\"loader\"></div>").load(url,
             null,
@@ -37,7 +37,7 @@
     }
 
     private initSnapshotEditor() {
-        const snapshotEditor = new SnapshotEditor($(".project-dropdown-panel").first());
+        const snapshotEditor = new SnapshotEditor(this.projectId);
         snapshotEditor.init();
     }
 }

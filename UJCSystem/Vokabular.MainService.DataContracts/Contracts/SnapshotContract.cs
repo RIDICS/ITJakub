@@ -19,4 +19,12 @@ namespace Vokabular.MainService.DataContracts.Contracts
 
         public IList<BookTypeEnumContract> BookTypes { get; set; }
     }
+
+    public class CreateSnapshotContract
+    {
+        public IList<long> ResourceVersionIds { get; set; }
+        public string Comment { get; set; }
+        public IList<BookTypeEnumContract> BookTypes { get; set; }
+        public BookTypeEnumContract DefaultBookType { get; set; }
+    }
 }

@@ -274,11 +274,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public long CreateSnapshot(long projectId)
+        public long CreateSnapshot(long projectId, CreateSnapshotContract createSnapshotContract)
         {
             try
             {
-                var snapshotId = m_client.Post<long>($"project/{projectId}/snapshot", null);
+                var snapshotId = m_client.Post<long>($"project/{projectId}/snapshot", createSnapshotContract);
                 return snapshotId;
             }
             catch (HttpRequestException e)

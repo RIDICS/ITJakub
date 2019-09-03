@@ -24,6 +24,17 @@
         }).toString();
     }
 
+    createSnapshot(projectId: number, comment: string, defaultBookType: string, bookTypes: string[], resourceVersionIds: number[]): JQuery.jqXHR<any> {
+        return this.post(this.getSnapshotControllerUrl() + "NewSnapshot",
+            JSON.stringify({
+                projectId: projectId,
+                comment: comment,
+                defaultBookType: defaultBookType,
+                bookTypes: bookTypes,
+                resourceVersionIds: resourceVersionIds
+            }));
+    }
+
     //TODO create Snapshot controller
     private getSnapshotControllerUrl() {
         return getBaseUrl() + "Admin/Project/";

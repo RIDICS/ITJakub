@@ -16,7 +16,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
-using Scalesoft.Localization.AspNetCore;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
@@ -195,6 +194,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 TextResourceList = Mapper.Map<IList<ResourceViewModel>>(text)
             };
 
+            model.AvailableBookTypes = new List<BookTypeEnumContract>{BookTypeEnumContract.Edition, BookTypeEnumContract.TextBank, BookTypeEnumContract.Grammar, BookTypeEnumContract.AudioBook};
+          
             return PartialView("Work/_PublicationsNew", model);
         }
 
@@ -205,6 +206,24 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var viewModel = Mapper.Map<List<ResourceVersionViewModel>>(resourceVersionList);
             return Json(viewModel);
         }
+
+        [HttpPost]
+        public IActionResult NewSnapshot([FromBody] CreateSnapshotViewModel viewModel)
+        {
+            var client = GetProjectClient();
+
+            var createSnapshotContract = new CreateSnapshotContract
+            {
+                BookTypes = viewModel.BookTypes,
+                DefaultBookType = viewModel.DefaultBookType,
+                ResourceVersionIds = viewModel.ResourceVersionIds
+            };
+
+            var snapShotId = client.CreateSnapshot(viewModel.ProjectId, createSnapshotContract);
+            //TODO return?
+            return Ok();
+        }
+
 
         public IActionResult GetText(long textId)
         {
