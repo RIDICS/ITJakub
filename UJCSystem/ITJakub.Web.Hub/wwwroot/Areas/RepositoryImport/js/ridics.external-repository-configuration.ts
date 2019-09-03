@@ -14,8 +14,9 @@ class ExternalRepositoryConfiguration {
 
     init() {
         $(".repository-detail").click((e) => {
-            const repositoryId = $(e.target as Node as Element).data("repository-id");
-            if (typeof repositoryId != "undefined") {
+            const button = $(e.currentTarget as Node as Element);
+            const repositoryId = button.data("repository-id");
+            if (button.hasClass("collapsed")) {
                 const repositoryDetail = $(`#repository-${repositoryId} .bib-table:last-child`);
                 this.client.getExternalRepositoryDetail(repositoryId).done((response) => {
                     repositoryDetail.html(response);
