@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Types;
 using ITJakub.Web.Hub.Options;
+using Vokabular.MainService.DataContracts.Contracts.Search;
 
 namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
 {
@@ -90,26 +91,38 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
 
         public ActionResult AdvancedSearchResultsCount(string json)
         {
-            var count = SearchByCriteriaJsonCount(json, null, null);
+            var count = SearchByCriteriaJsonCount(json, null, null, GetAdvancedSearchParameters());
             return Json(new {count});
         }
 
         public ActionResult AdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc)
         {
-            var result = SearchByCriteriaJson(json, start, count, sortingEnum, sortAsc, null, null);
+            var result = SearchByCriteriaJson(json, start, count, sortingEnum, sortAsc, null, null, GetAdvancedSearchParameters());
             return Json(new {results = result}, GetJsonSerializerSettingsForBiblModule());
         }
 
         public ActionResult TextSearchCount(string text)
         {
-            var count = SearchByCriteriaTextCount(CriteriaKey.Title, text, null, null);
+            var count = SearchByCriteriaTextCount(CriteriaKey.Title, text, null, null, GetAdvancedSearchParameters());
             return Json(new {count});
         }
 
         public ActionResult TextSearchPaged(string text, int start, int count, short sortingEnum, bool sortAsc)
         {
-            var result = SearchByCriteriaText(CriteriaKey.Title, text, start, count, sortingEnum, sortAsc, null, null);
+            var result = SearchByCriteriaText(CriteriaKey.Title, text, start, count, sortingEnum, sortAsc, null, null, GetAdvancedSearchParameters());
             return Json(new {results = result}, GetJsonSerializerSettingsForBiblModule());
+        }
+
+        private SearchAdvancedParametersContract GetAdvancedSearchParameters()
+        {
+            return new SearchAdvancedParametersContract
+            {
+                IncludeAdditionalProjectTypes = true,
+                AdditionalProjectTypes = new List<ProjectTypeContract>
+                {
+                    ProjectTypeContract.Bibliography
+                }
+            };
         }
     }
 }

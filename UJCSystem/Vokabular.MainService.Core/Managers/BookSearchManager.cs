@@ -112,9 +112,14 @@ namespace Vokabular.MainService.Core.Managers
 
             var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
-            var projectTypeEnum = Mapper.Map<ProjectTypeEnum>(projectType);
+            var projectTypeEnums = new List<ProjectTypeEnum> {Mapper.Map<ProjectTypeEnum>(projectType)};
 
-            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters, projectTypeEnum)
+            if (request.Parameters != null && request.Parameters.IncludeAdditionalProjectTypes)
+            {
+                projectTypeEnums.AddRange(request.Parameters.AdditionalProjectTypes.Select(x => Mapper.Map<ProjectTypeEnum>(x)));
+            }
+
+            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters, projectTypeEnums)
             {
                 Sort = request.Sort,
                 SortDirection = request.SortDirection,
@@ -199,9 +204,14 @@ namespace Vokabular.MainService.Core.Managers
             m_authorizationManager.AddAuthorizationCriteria(request.ConditionConjunction);
 
             var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
-            var projectTypeEnum = Mapper.Map<ProjectTypeEnum>(projectType);
+            var projectTypeEnums = new List<ProjectTypeEnum> {Mapper.Map<ProjectTypeEnum>(projectType)};
 
-            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters, projectTypeEnum)
+            if (request.Parameters != null && request.Parameters.IncludeAdditionalProjectTypes)
+            {
+                projectTypeEnums.AddRange(request.Parameters.AdditionalProjectTypes.Select(x => Mapper.Map<ProjectTypeEnum>(x)));
+            }
+
+            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters, projectTypeEnums)
             {
                 Sort = request.Sort,
                 SortDirection = request.SortDirection,

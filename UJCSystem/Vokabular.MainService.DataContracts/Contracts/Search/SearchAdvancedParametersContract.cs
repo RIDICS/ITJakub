@@ -5,7 +5,7 @@ namespace Vokabular.MainService.DataContracts.Contracts.Search
 {
     public class SearchAdvancedParametersContract
     {
-        public bool IncludeAdditionalMetadata { get; set; }
+        public bool IncludeAdditionalProjectTypes { get; set; }
 
         public List<ProjectTypeContract> AdditionalProjectTypes { get; set; }
     }
