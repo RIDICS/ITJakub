@@ -164,5 +164,6 @@ namespace ITJakub.FileProcessing.Core.Sessions
         SnapshotId = 7,
         AutoImportPermissions = 8,
         ProjectType = 9,
+        StoreType = 10,
     }
 }

@@ -26,7 +26,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             return m_fulltextStorages[storageType];
         }
 
-        private FulltextStorageType GetStorageType(ProjectTypeEnum projectType)
+        public FulltextStorageType GetStorageType(ProjectTypeEnum projectType)
         {
             switch (projectType)
             {

@@ -79,6 +79,7 @@
     <Compile Include="Communication\FileProcessingCommunicationProvider.cs" />
     <Compile Include="Sessions\Processors\Fulltext\ElasticSearchStoreProcessor.cs" />
     <Compile Include="Sessions\Processors\Fulltext\ExistDbStoreProcessor.cs" />
+    <Compile Include="Sessions\Processors\Fulltext\FulltextStoreProcessorProvider.cs" />
     <Compile Include="Sessions\Processors\Fulltext\IFulltextResourceProcessor.cs" />
     <Compile Include="Sessions\Processors\BasicProjectDataRelationalDbStoreProcessor.cs" />
     <Compile Include="Sessions\ResourceTypeResolvers\AudioTypeResolver.cs" />

@@ -36,11 +36,11 @@ namespace ITJakub.FileProcessing.DataContracts
         }
 
         public ImportResultContract ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage,
-            ProjectTypeContract projectType, IList<PermissionFromAuthContract> autoImportPermissions)
+            ProjectTypeContract projectType, FulltextStoreTypeContract storeType, IList<PermissionFromAuthContract> autoImportPermissions)
         {
             try
             {
-                return Channel.ProcessSession(sessionId, projectId, userId, uploadMessage, projectType, autoImportPermissions);
+                return Channel.ProcessSession(sessionId, projectId, userId, uploadMessage, projectType, storeType, autoImportPermissions);
             }
             catch (FaultException ex)
             {

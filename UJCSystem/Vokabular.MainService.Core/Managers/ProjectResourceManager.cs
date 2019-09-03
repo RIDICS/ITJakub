@@ -1,8 +1,10 @@
 ﻿using System.IO;
 using System.Net;
 using ITJakub.FileProcessing.DataContracts;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Errors;
+using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.DataContracts;
 
 namespace Vokabular.MainService.Core.Managers
@@ -14,15 +16,17 @@ namespace Vokabular.MainService.Core.Managers
         private readonly PermissionManager m_permissionManager;
         private readonly ForumSiteManager m_forumSiteManager;
         private readonly PortalTypeProvider m_portalTypeProvider;
+        private readonly FulltextStorageProvider m_fulltextStorageProvider;
 
         public ProjectResourceManager(CommunicationProvider communicationProvider, AuthenticationManager authenticationManager,
-            PermissionManager permissionManager, ForumSiteManager forumSiteManager, PortalTypeProvider portalTypeProvider)
+            PermissionManager permissionManager, ForumSiteManager forumSiteManager, PortalTypeProvider portalTypeProvider, FulltextStorageProvider fulltextStorageProvider)
         {
             m_communicationProvider = communicationProvider;
             m_authenticationManager = authenticationManager;
             m_permissionManager = permissionManager;
             m_forumSiteManager = forumSiteManager;
             m_portalTypeProvider = portalTypeProvider;
+            m_fulltextStorageProvider = fulltextStorageProvider;
         }
 
         public void UploadResource(string sessionId, Stream data, string fileName)
@@ -43,13 +47,15 @@ namespace Vokabular.MainService.Core.Managers
         {
             var userId = m_authenticationManager.GetCurrentUserId();
             var allAutoImportPermissions = m_permissionManager.GetAutoImportSpecialPermissions();
+            var projectType = m_portalTypeProvider.GetDefaultProjectType();
+            var fulltextStorageType = m_fulltextStorageProvider.GetStorageType((ProjectTypeEnum) projectType);
 
             ImportResultContract importResult;
             using (var client = m_communicationProvider.GetFileProcessingClient())
             {
                 try
                 {
-                    importResult = client.ProcessSession(sessionId, projectId, userId, comment, (ProjectTypeContract) m_portalTypeProvider.GetDefaultProjectType(), allAutoImportPermissions);
+                    importResult = client.ProcessSession(sessionId, projectId, userId, comment, (ProjectTypeContract) projectType, (FulltextStoreTypeContract) fulltextStorageType, allAutoImportPermissions);
                     if (!importResult.Success)
                     {
                         throw new MainServiceException(MainServiceErrorCode.ImportFailed, "Import failed");

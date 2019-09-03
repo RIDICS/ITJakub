@@ -2,7 +2,7 @@
 {
     public enum FulltextStorageType
     {
-        ExistDb,
-        ElasticSearch,
+        ExistDb = 0,
+        ElasticSearch = 1,
     }
 }

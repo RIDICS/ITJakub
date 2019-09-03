@@ -11,6 +11,6 @@ namespace ITJakub.FileProcessing.DataContracts
 
         [OperationContract]
         ImportResultContract ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage,
-            ProjectTypeContract projectType, IList<PermissionFromAuthContract> autoImportPermissions);
+            ProjectTypeContract projectType, FulltextStoreTypeContract storeType, IList<PermissionFromAuthContract> autoImportPermissions);
     }
 }
