@@ -409,7 +409,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             throw new NotSupportedException("Paged search in corpus in eXist-db isn't supported.");
         }
 
-        public CorpusSearchResultDataList SearchCorpusInSnapshotByCriteria(long projectId, int start, int count, int contextLength, List<SearchCriteriaContract> criteria)
+        public CorpusSearchResultDataList SearchCorpusInSnapshotByCriteria(long snapshotId, int start, int count, int contextLength, List<SearchCriteriaContract> criteria)
         {
             throw new NotSupportedException("Paged search in corpus in eXist-db isn't supported.");
         }

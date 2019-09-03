@@ -23,5 +23,14 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SingleOrDefault();
             return result;
         }
+
+        public Snapshot GetSnapshot(long snapshotId)
+        {
+            var result = GetSession().QueryOver<Snapshot>()
+                .Where(x => x.Id == snapshotId)
+                .Fetch(SelectMode.Fetch, x => x.Project)
+                .SingleOrDefault();
+            return result;
+        }
     }
 }

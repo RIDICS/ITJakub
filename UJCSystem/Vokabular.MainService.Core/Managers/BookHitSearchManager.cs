@@ -76,7 +76,7 @@ namespace Vokabular.MainService.Core.Managers
             {
                 var projectIdentification = m_bookRepository.InvokeUnitOfWork(x => x.GetProjectIdentification(projectId));
 
-                var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+                var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectIdentification.ProjectType);
                 var fulltextResult = fulltextStorage.SearchPageByCriteria(fulltextConditions, projectIdentification);
 
                 switch (fulltextResult.SearchResultType)
@@ -153,7 +153,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var projectIdentification = m_bookRepository.InvokeUnitOfWork(x => x.GetProjectIdentification(projectId));
 
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectIdentification.ProjectType);
             var start = PagingHelper.GetStart(request.Start);
             var count = PagingHelper.GetCount(request.Count);
             var fulltextResult = fulltextStorage.SearchHitsWithPageContext(start, count, request.ContextLength, fulltextConditions, projectIdentification);
@@ -183,7 +183,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var projectIdentification = m_bookRepository.InvokeUnitOfWork(x => x.GetProjectIdentification(projectId));
 
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectIdentification.ProjectType);
             var fulltextResultCount = fulltextStorage.SearchHitsResultCount(fulltextConditions, projectIdentification);
 
             return fulltextResultCount;

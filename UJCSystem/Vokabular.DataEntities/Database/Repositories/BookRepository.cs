@@ -32,6 +32,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                     .Select(x => x.ExternalId).WithAlias(() => resultAlias.ProjectExternalId)
                     .Select(() => snapshotAlias.Id).WithAlias(() => resultAlias.SnapshotId)
                     .Select(() => bookVersionResourceAlias.ExternalId).WithAlias(() => resultAlias.BookVersionExternalId)
+                    .Select(x => x.ProjectType).WithAlias(() => resultAlias.ProjectType)
                 )
                 .Where(x => x.Id == projectId)
                 .TransformUsing(Transformers.AliasToBean<ProjectIdentificationResult>())

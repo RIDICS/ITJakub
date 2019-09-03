@@ -59,7 +59,7 @@ namespace Vokabular.DataEntities.Database.Search
         {
             var joinAndWhereClause = CreateJoinAndWhereClause(m_conjunctionQuery, m_projectType);
             
-            var queryString = $"select distinct project.Id as ProjectId, project.ExternalId as ProjectExternalId, snapshot.Id as SnapshotId, bookVersion.ExternalId as BookVersionExternalId {FromClause} {joinAndWhereClause}";
+            var queryString = $"select distinct project.Id as ProjectId, project.ExternalId as ProjectExternalId, snapshot.Id as SnapshotId, bookVersion.ExternalId as BookVersionExternalId, project.ProjectType as ProjectType {FromClause} {joinAndWhereClause}";
 
             return queryString;
         }

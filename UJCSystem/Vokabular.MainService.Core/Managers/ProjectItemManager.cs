@@ -140,7 +140,7 @@ namespace Vokabular.MainService.Core.Managers
                 return null;
             }
 
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(dbResult.Resource.Project.ProjectType);
             var editionNoteText = fulltextStorage.GetEditionNote(dbResult, format);
 
             result.Text = editionNoteText;
@@ -150,7 +150,8 @@ namespace Vokabular.MainService.Core.Managers
         public long CreateEditionNoteVersion(long projectId, CreateEditionNoteContract data)
         {
             var userId = m_authenticationManager.GetCurrentUserId();
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            var project = m_resourceRepository.FindById<Project>(projectId);
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(project.ProjectType);
             var resourceVersionId = new CreateEditionNoteVersionWork(m_resourceRepository, projectId, data, userId, fulltextStorage).Execute();
             return resourceVersionId;
         }
@@ -170,7 +171,7 @@ namespace Vokabular.MainService.Core.Managers
                 return null;
             }
 
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(textResource.Resource.Project.ProjectType);
             return fulltextStorage.GetPageText(textResource, format);
         }
 

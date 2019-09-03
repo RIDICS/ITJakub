@@ -15,7 +15,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             m_fulltextStorages = fulltextStorages.ToDictionary(x => x.StorageType);
         }
 
-        public IFulltextStorage GetFulltextStorage(ProjectTypeContract projectType = ProjectTypeContract.Community) // TODO remove default value
+        public IFulltextStorage GetFulltextStorage(ProjectTypeContract projectType)
         {
             return GetFulltextStorage((ProjectTypeEnum) projectType);
         }
