@@ -40,8 +40,7 @@ namespace Vokabular.MainService.Controllers
                 {
                     GetSnapshotResourcesInfo(ResourceTypeEnumContract.Text, 3),
                     GetSnapshotResourcesInfo(ResourceTypeEnumContract.Image, 30),
-                    GetSnapshotResourcesInfo(ResourceTypeEnumContract.Audio, 1),
-                    GetSnapshotResourcesInfo(ResourceTypeEnumContract.Video, 0)
+                    GetSnapshotResourcesInfo(ResourceTypeEnumContract.Audio, 1)
                 }
             };
         }

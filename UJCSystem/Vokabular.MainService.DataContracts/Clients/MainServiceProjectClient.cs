@@ -236,17 +236,17 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<ResourceContract> GetResourceList(long projectId, ResourceTypeEnumContract? resourceType = null)
+        public List<ResourceWithLatestVersionContract> GetResourceList(long projectId, ResourceTypeEnumContract? resourceType = null)
         {
             try
             {
                 var url = $"project/{projectId}/resource";
                 if (resourceType != null)
                 {
-                    url.AddQueryString("resourceType", resourceType.ToString());
+                    url = url.AddQueryString("resourceType", resourceType.ToString());
                 }
 
-                var result = m_client.Get<List<ResourceContract>>(url);
+                var result = m_client.Get<List<ResourceWithLatestVersionContract>>(url);
                 return result;
             }
             catch (HttpRequestException e)

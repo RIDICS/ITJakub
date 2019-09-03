@@ -38,14 +38,14 @@
             if (!dataLoaded) {
                 const resourceId = selectBox.parents(".resource-row").data("id");
                 this.client.getVersionList(resourceId).done((data) => {
-                    for (let i = 1; i < data.length; i++) { // skip first element - already loaded latest version
+                    selectBox.empty();
+                    for (let i = 0; i < data.length; i++) { 
                         const resource = data[i];
-                        const option = new Option(resource.versionNumber, String(resource.resourceVersionId));
+                        const option = new Option(resource.versionNumber, String(resource.id));
                         $(option).html(resource.versionNumber);
                         $(option).data("author", resource.author);
                         $(option).data("comment", resource.comment);
-                        $(option).data("created", resource.created);
-                        $(option).data("name", resource.name);
+                        $(option).data("created", resource.createDate);
                         selectBox.append(option);
                     }
                     selectBox.data("loaded", true);
@@ -60,11 +60,11 @@
             const selectBox = $(event.currentTarget);
             const resourceRow = selectBox.parents(".resource-row");
             const selectedVersion = selectBox.find("option:selected");
+            var test = selectedVersion.data("created");
             resourceRow.data("version-id", selectedVersion.val());
             resourceRow.find(".author").text(selectedVersion.data("author"));
             resourceRow.find(".comment").text(selectedVersion.data("comment"));
             resourceRow.find(".created").text(selectedVersion.data("created"));
-            resourceRow.find(".name").text(selectedVersion.data("name"));
         });
 
         $(".resource-preview").click((event) => {

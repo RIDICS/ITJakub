@@ -8,4 +8,9 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public string Name { get; set; }
         public ResourceTypeEnumContract ResourceType { get; set; }
     }
+
+    public class ResourceWithLatestVersionContract : ResourceContract
+    {
+        public ResourceVersionContract LatestVersion { get; set; }
+    }
 }

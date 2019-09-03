@@ -38,6 +38,31 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
+        public virtual IList<ResourceVersion> GetResourceVersionHistory(long resourceId)
+        {
+            return GetSession().QueryOver<ResourceVersion>()
+                .Where(x => x.Resource.Id == resourceId)
+                .Fetch(SelectMode.Fetch, x => x.CreatedByUser)
+                .OrderBy(x => x.VersionNumber).Desc
+                .List();
+        }
+
+        public virtual IList<Resource> GetProjectLatestResources(long projectId, ResourceTypeEnum? resourceType)
+        {
+            var query = GetSession().QueryOver<Resource>()
+                .Where(x => x.Project.Id == projectId)
+                .Fetch(SelectMode.Fetch, x => x.LatestVersion)
+                .Fetch(SelectMode.Fetch, x => x.LatestVersion.CreatedByUser);
+
+            if (resourceType.HasValue)
+            {
+                query.Where(x => x.ResourceType == resourceType);
+            }
+
+            return query.OrderBy(x => x.Id).Asc
+                .List();
+        }
+
         public virtual IList<TextResource> GetProjectTexts(long projectId, long? namedResourceGroupId, bool fetchParentPage)
         {
             Resource resourceAlias = null;

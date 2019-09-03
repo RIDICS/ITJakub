@@ -106,6 +106,14 @@ interface IResourceInfo {
     comment: string;
 }
 
+interface IResourceVersion {
+    id: number;
+    versionNumber: string;
+    author: string;
+    createDate: string;
+    comment: string;
+}
+
 interface IOriginalAuthor {
     id: number;
     firstName: string;

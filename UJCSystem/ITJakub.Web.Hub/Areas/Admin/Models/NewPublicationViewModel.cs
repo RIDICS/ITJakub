@@ -6,7 +6,9 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
 {
     public class NewPublicationViewModel
     {
-        public IList<ResourceViewModel> ResourceList { get; set; }
+        public IList<ResourceViewModel> AudioResourceList { get; set; }
+        public IList<ResourceViewModel> ImageResourceList { get; set; }
+        public IList<ResourceViewModel> TextResourceList { get; set; }
         public IList<GroupInfoViewModel> VisibilityForGroups { get; set; }
     }
 
@@ -20,12 +22,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
         public string Author { get; set; }
         public string Comment { get; set; }
     }
-
-    public class ResourceVersionsViewModel
-    {
-        public IList<ResourceViewModel> ResourceList { get; set; }
-    }
-
+    
     public class GroupInfoViewModel
     {
         public long GroupId { get; set; }

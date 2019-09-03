@@ -4,12 +4,14 @@ using System.Linq;
 using AutoMapper;
 using Vokabular.Core.Storage;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Works.Content;
 using Vokabular.MainService.Core.Works.Text;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataEntities.UnitOfWork;
@@ -35,6 +37,57 @@ namespace Vokabular.MainService.Core.Managers
             m_fulltextStorageProvider = fulltextStorageProvider;
             m_communicationProvider = communicationProvider;
             m_userDetailManager = userDetailManager;
+        }
+
+        public IList<ResourceWithLatestVersionContract> GetResourceList(long projectId, ResourceTypeEnumContract? resourceTypeContract)
+        {
+            ResourceTypeEnum? resourceType = null;
+            if (resourceTypeContract.HasValue)
+            {
+                resourceType = Mapper.Map<ResourceTypeEnum>(resourceTypeContract);
+            }
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestResources(projectId, resourceType));
+
+            var resultList = new List<ResourceWithLatestVersionContract>();
+            var userCache = new Dictionary<int, string>();
+            foreach (var resource in dbResult)
+            {
+                var resourceContract = Mapper.Map<ResourceWithLatestVersionContract>(resource);
+                var userId = resource.LatestVersion.CreatedByUser.Id;
+                if (!userCache.TryGetValue(userId, out var userName))
+                {
+                     userCache.Add(userId, m_userDetailManager.GetUserName(resource.LatestVersion.CreatedByUser));
+                     userCache.TryGetValue(userId, out userName);
+                }
+
+                resourceContract.LatestVersion.Author = userName;
+                resultList.Add(resourceContract);
+            }
+            
+            return resultList;
+        }
+
+        public IList<ResourceVersionContract> GetResourceVersionHistory(long resourceId)
+        {
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetResourceVersionHistory(resourceId));
+
+            var resultList = new List<ResourceVersionContract>();
+            var userCache = new Dictionary<int, string>();
+            foreach (var resource in dbResult)
+            {
+                var resourceContract = Mapper.Map<ResourceVersionContract>(resource);
+                var userId = resource.CreatedByUser.Id;
+                if (!userCache.TryGetValue(userId, out var userName))
+                {
+                    userCache.Add(userId, m_userDetailManager.GetUserName(resource.CreatedByUser));
+                    userCache.TryGetValue(userId, out userName);
+                }
+
+                resourceContract.Author = userName;
+                resultList.Add(resourceContract);
+            }
+
+            return resultList;
         }
 
         public List<TextWithPageContract> GetTextResourceList(long projectId, long? resourceGroupId)

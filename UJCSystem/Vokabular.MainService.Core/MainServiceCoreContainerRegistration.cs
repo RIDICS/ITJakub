@@ -84,6 +84,7 @@ namespace Vokabular.MainService.Core
             services.AddSingleton<Profile, PageProfile>();
             services.AddSingleton<Profile, ProjectProfile>();
             services.AddSingleton<Profile, ResourceProfile>();
+            services.AddSingleton<Profile, ResourceVersionProfile>();
             services.AddSingleton<Profile, ResponsiblePersonProfile>();
             services.AddSingleton<Profile, SnapshotProfile>();
             services.AddSingleton<Profile, TermProfile>();
