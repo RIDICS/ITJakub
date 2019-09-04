@@ -71,12 +71,15 @@
     private loadResourceVersions(selectBox: JQuery) {
         const dataLoaded = selectBox.data("loaded");
         if (!dataLoaded) {
+            selectBox.parent(".dropdown").find(".dropdown-menu.inner").append(`<li><a><i class="fa fa-refresh fa-spin"></i></a></li>`);
             const resourceId = selectBox.parents(".resource-row").data("id");
             this.client.getVersionList(resourceId).done((data) => {
+                const selectedValue = Number(selectBox.val());
                 selectBox.empty();
                 for (let i = 0; i < data.length; i++) {
                     const resource = data[i];
-                    const option = new Option(resource.versionNumber, String(resource.id));
+                    const checked = selectedValue === resource.id;
+                    const option = new Option(resource.versionNumber, String(resource.id), checked, checked);
                     $(option).html(resource.versionNumber);
                     $(option).data("author", resource.author);
                     $(option).data("comment", resource.comment);
@@ -86,7 +89,7 @@
                 selectBox.selectpicker("refresh");
                 selectBox.data("loaded", true);
             }).fail((error) => {
-                console.log(error);
+                console.log(this.errorHandler.getErrorMessage(error));
                 //TODO error, where to place it? Gui.something
             });
         }

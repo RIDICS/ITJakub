@@ -216,7 +216,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             {
                 BookTypes = viewModel.BookTypes,
                 DefaultBookType = viewModel.DefaultBookType,
-                ResourceVersionIds = viewModel.ResourceVersionIds
+                ResourceVersionIds = viewModel.ResourceVersionIds,
+                Comment = viewModel.Comment
             };
 
             client.CreateSnapshot(viewModel.ProjectId, createSnapshotContract);
