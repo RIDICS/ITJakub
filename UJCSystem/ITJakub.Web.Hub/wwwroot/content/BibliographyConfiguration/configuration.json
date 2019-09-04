@@ -163,7 +163,7 @@
         },
         "$forumLink": {
           "type": "basic",
-          "pattern": "<a href='{ForumUrl}'>Link</a>",
+          "pattern": "<a href='{ForumUrl}'>{@Link}</a>",
           "printIfNullValue": false
         }
       }
@@ -395,7 +395,7 @@
         },
         "$forumLink": {
           "type": "basic",
-          "pattern": "<a href='{ForumUrl}'>Link</a>",
+          "pattern": "<a href='{ForumUrl}'>{@Link}</a>",
           "printIfNullValue": false
         }
       }
@@ -731,7 +731,7 @@
         },
         "$forumLink": {
           "type": "basic",
-          "pattern": "<a href='{ForumUrl}'>Link</a>",
+          "pattern": "<a href='{ForumUrl}'>{@Link}</a>",
           "printIfNullValue": false
         }
       }
@@ -919,7 +919,7 @@
         },
         "$forumLink": {
           "type": "basic",
-          "pattern": "<a href='{ForumUrl}'>Link</a>",
+          "pattern": "<a href='{ForumUrl}'>{@Link}</a>",
           "printIfNullValue": false
         }
       }
@@ -1116,7 +1116,7 @@
         },
         "$forumLink": {
           "type": "basic",
-          "pattern": "<a href='{ForumUrl}'>Link</a>",
+          "pattern": "<a href='{ForumUrl}'>{@Link}</a>",
           "printIfNullValue": false
         }
       }
