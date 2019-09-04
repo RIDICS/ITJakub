@@ -18,7 +18,7 @@
         @foreach (var snapshotViewModel in Model)
         {
             <tr>
-                <td>@snapshotViewModel.PublishDate</td>
+                <td>@snapshotViewModel.PublishDate.ToLocalTime().ToString(Localizer.GetRequestCulture())</td>
                 <td>@snapshotViewModel.PublishedTextResourceCount</td>
                 <td>@snapshotViewModel.PublishedImageResourceCount</td>
                 <td>@snapshotViewModel.PublishedAudioResourceCount</td>

@@ -54,7 +54,7 @@
                         </select>
                     </td>
                     <td class="created">
-                        @resource.Created
+                        @resource.Created.ToLocalTime().ToString(Localizer.GetRequestCulture())
                     </td>
                     <td class="author">
                         @resource.Author

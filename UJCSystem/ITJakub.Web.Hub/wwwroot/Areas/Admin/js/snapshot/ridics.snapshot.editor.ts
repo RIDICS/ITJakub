@@ -80,7 +80,7 @@
                     $(option).html(resource.versionNumber);
                     $(option).data("author", resource.author);
                     $(option).data("comment", resource.comment);
-                    $(option).data("created", resource.createDate);
+                    $(option).data("created", new Date(resource.createDate).toLocaleString());
                     selectBox.append(option);
                 }
                 selectBox.selectpicker("refresh");
