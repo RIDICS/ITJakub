@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.ExternalBibliography;
 using Vokabular.ProjectImport.Model;
 
