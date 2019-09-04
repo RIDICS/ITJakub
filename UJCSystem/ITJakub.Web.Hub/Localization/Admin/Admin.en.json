@@ -157,6 +157,7 @@
     "CardFile": "translate[Kartotéky]",
     "AudioBook": "translate[Audioknihy]",
     "All": "translate[Vše]",
+    "ProjectNotContains": "The project does not contain {0}",
 
     "DefaultModule": "Default module",
     "VisibilityInModules": "Visibility in modules",

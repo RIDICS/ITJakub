@@ -31,7 +31,7 @@
                                 {
                                     <div>
                                         <label>
-                                            <input type="radio" name="default-book-type" class="default-book-type" checked="@firstRadio" value="@bookType"/>
+                                            <input type="radio" name="default-book-type" checked="@firstRadio" value="@bookType" />
                                             @Localizer.Translate(bookType.ToString(), "Admin")
                                         </label>
                                     </div>
@@ -47,7 +47,7 @@
                                 {
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" value="@bookType" name="book-types" class="book-types" checked="@firstCheckbox" disabled="@firstCheckbox"/>
+                                            <input type="checkbox" value="@bookType" name="book-types" checked="@firstCheckbox" disabled="@firstCheckbox" />
                                             @Localizer.Translate(bookType.ToString(), "Admin")
                                         </label>
                                     </div>
@@ -80,14 +80,14 @@
         </div>
     </div>
     <div class="project-snapshot-resources">
-        @await Html.PartialAsync("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Text, "Textové zdroje", Model.TextResourceList))
-        @await Html.PartialAsync("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Image, "Obrazové zdroje", Model.ImageResourceList))
-        @await Html.PartialAsync("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Audio, "Audio zdroje", Model.AudioResourceList))
+        @await Html.PartialAsync("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Text, Localizer.Translate("TextSources", "Admin"), Model.TextResourceList))
+        @await Html.PartialAsync("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Image, Localizer.Translate("ImageSources", "Admin"), Model.ImageResourceList))
+        @await Html.PartialAsync("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Audio, Localizer.Translate("AudioSources", "Admin"), Model.AudioResourceList))
         <div class="project-bottom-buttons">
             <button id="createSnapshot" type="button" class="btn btn-default">@Localizer.Translate("Save", "Admin")</button>
         </div>
     </div>
-   
+
     <div id="resourcePreviewModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">

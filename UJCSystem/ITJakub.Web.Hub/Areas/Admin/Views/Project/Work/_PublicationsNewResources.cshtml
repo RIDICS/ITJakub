@@ -31,33 +31,41 @@
                 <th>@Localizer.Translate("Comment", "Admin")</th>
                 <th></th>
             </tr>
+            @if (Model.ResourceList.Count == 0)
+            {
+                <tr>
+                    <td colspan="7">
+                        @Localizer.TranslateFormat("ProjectNotContains", "Admin",Model.Title.ToLower())
+                    </td>
+                </tr>
+            }
             @foreach (var resource in Model.ResourceList)
             {
-            <tr class="resource-row" data-id="@resource.Id" data-version-id="@resource.ResourceVersionId">
-                <td class="include-checkboxes">
-                    <input type="checkbox" />
-                </td>
-                <td class="name">
-                    @resource.Name
-                </td>
-                <td>
-                    <select name="version" class="select-version form-control" data-loaded="false">
-                        <option value="@resource.ResourceVersionId" data-name="@resource.Name">@resource.VersionNumber</option>
-                    </select>
-                </td>
-                <td class="created">
-                    @resource.Created
-                </td>
-                <td class="author">
-                    @resource.Author
-                </td>
-                <td class="comment">
-                    @resource.Comment
-                </td>
-                <td>
-                    <button class="resource-preview btn btn-default">@Localizer.Translate("Preview", "Admin")</button>
-                </td>
-            </tr>
+                <tr class="resource-row" data-id="@resource.Id" data-version-id="@resource.ResourceVersionId">
+                    <td class="include-checkboxes">
+                        <input type="checkbox" />
+                    </td>
+                    <td class="name">
+                        @resource.Name
+                    </td>
+                    <td>
+                        <select name="version" class="selectpicker select-version" data-loaded="false">
+                            <option value="@resource.ResourceVersionId" data-name="@resource.Name">@resource.VersionNumber</option>
+                        </select>
+                    </td>
+                    <td class="created">
+                        @resource.Created
+                    </td>
+                    <td class="author">
+                        @resource.Author
+                    </td>
+                    <td class="comment">
+                        @resource.Comment
+                    </td>
+                    <td>
+                        <button class="resource-preview btn btn-default">@Localizer.Translate("Preview", "Admin")</button>
+                    </td>
+                </tr>
             }
         </table>
     </div>

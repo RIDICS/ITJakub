@@ -12,6 +12,8 @@
     }
 
     init() {
+        $(".selectpicker").selectpicker();
+
         $(".include-all-checkbox").click((event) => {
             const checkbox = $(event.currentTarget);
             const table = checkbox.parents(".table");
@@ -33,27 +35,8 @@
         });
 
         $(".select-version").click((event) => {
-            const selectBox = $(event.currentTarget);
-            const dataLoaded = $(event.currentTarget).data("loaded");
-            if (!dataLoaded) {
-                const resourceId = selectBox.parents(".resource-row").data("id");
-                this.client.getVersionList(resourceId).done((data) => {
-                    selectBox.empty();
-                    for (let i = 0; i < data.length; i++) { 
-                        const resource = data[i];
-                        const option = new Option(resource.versionNumber, String(resource.id));
-                        $(option).html(resource.versionNumber);
-                        $(option).data("author", resource.author);
-                        $(option).data("comment", resource.comment);
-                        $(option).data("created", resource.createDate);
-                        selectBox.append(option);
-                    }
-                    selectBox.data("loaded", true);
-                }).fail((error) => {
-                    console.log(error);
-                    //TODO error, where to place it? Gui.something
-                });
-            }
+            const selectBox = $(event.currentTarget).find(".select-version");
+            this.loadResourceVersions(selectBox);
         });
 
         $(".select-version").on("change", (event) => {
@@ -71,76 +54,111 @@
             const resourceVersionId = resourceRow.data("version-id");
             const resourceName = resourceRow.find(".name").text();
             const resourceType = Number(resourceRow.parents(".publish-resource-panel").data("resource-type"));
-            const resourcePreviewModal = $("#resourcePreviewModal");
-
-            const modalBody = resourcePreviewModal.find(".modal-body");
-            modalBody.html(`<div class="loader"></div>`);
-
-            const modalTitle = resourcePreviewModal.find(".modal-title");
-            modalTitle.text(resourceName);
-            
-            switch (resourceType) {
-            case ResourceType.Audio:
-                    {
-                        this.client.getAudio(resourceVersionId).done((response) => {
-                            modalBody.html(response);
-                        }).fail((error) => {
-                            const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
-                            modalBody.html(alert);
-                        });
-                    }
-                break;
-            case ResourceType.Image:
-                {
-                    const imageUrl = this.client.getImageUrl(resourceVersionId);
-                    this.imageViewer.addImageContent(modalBody, imageUrl);
-                }
-                break;
-            case ResourceType.Text:
-                {
-                    this.client.getText(resourceVersionId).done((response) => {
-                        modalBody.html(response.text);
-                    }).fail((error) => {
-                        const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
-                        modalBody.html(alert);
-                    });
-                }
-                break;
-            default:
-                {
-                    const alert = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("UnsupportedResourceType","Admin").value).buildElement();
-                    modalBody.html(alert);
-                }
-            }
-            resourcePreviewModal.modal("show");
+            this.showResourcePreview(resourceVersionId, resourceName, resourceType);
         });
 
         $("#createSnapshot").click(() => {
-            const defaultBookType = String($("#publishToModules").find(".default-book-type:checked").val());
-            
-            const publishToModules = [];
-            $("#publishToModules").find(".book-types:checked").toArray().forEach((element, index) => {
-                publishToModules.push((String($(element).val())));
+           this.createSnapshot();
+        });
+
+        $("input[name=\"default-book-type\"]").click((event) => {
+            const value = String($(event.currentTarget).val());
+            this.selectDefaultBookType(value);
+        }); 
+    }
+
+    private loadResourceVersions(selectBox: JQuery) {
+        const dataLoaded = selectBox.data("loaded");
+        if (!dataLoaded) {
+            const resourceId = selectBox.parents(".resource-row").data("id");
+            this.client.getVersionList(resourceId).done((data) => {
+                selectBox.empty();
+                for (let i = 0; i < data.length; i++) {
+                    const resource = data[i];
+                    const option = new Option(resource.versionNumber, String(resource.id));
+                    $(option).html(resource.versionNumber);
+                    $(option).data("author", resource.author);
+                    $(option).data("comment", resource.comment);
+                    $(option).data("created", resource.createDate);
+                    selectBox.append(option);
+                }
+                selectBox.selectpicker("refresh");
+                selectBox.data("loaded", true);
+            }).fail((error) => {
+                console.log(error);
+                //TODO error, where to place it? Gui.something
             });
-            
-            const selectedResourceCheckboxes = $(".resource-row .include-checkboxes input:checked").parents(".resource-row").toArray();
-            const selectedResources = [];
-            for (let selectedResource of selectedResourceCheckboxes) {
-                selectedResources.push($(selectedResource).data("version-id"));    
+        }
+    }
+
+    private selectDefaultBookType(bookType: string) {
+        const defaultBookType = $("#publishToModules").find(`input[name="book-types"][value="${bookType}"]`);
+        defaultBookType.prop("checked", true);
+        defaultBookType.attr("disabled", "disabled");
+
+        const otherBookTypes = $("#publishToModules").find(`input[name="book-types"]:not([value="${bookType}"])`);
+        otherBookTypes.removeAttr("disabled");
+    }
+
+    private createSnapshot() {
+        const defaultBookType = String($("#publishToModules").find("input[name=\"default-book-type\"]:checked").val());
+
+        const publishToModules: string[] = [];
+        $("#publishToModules").find("input[name=\"book-types\"]:checked").toArray().forEach((module) => {
+            publishToModules.push(String($(module).val()));
+        });
+
+        const selectedResources: number[] = [];
+        $(".resource-row .include-checkboxes input:checked").parents(".resource-row").toArray().forEach((resource) => {
+            selectedResources.push(Number($(resource).data("version-id")));
+        });
+
+        //TODO comment
+        this.client.createSnapshot(this.projectId, "", defaultBookType, publishToModules, selectedResources);
+    }
+
+    private showResourcePreview(resourceVersionId: number, resourceName: string, resourceType: ResourceType) {
+        const resourcePreviewModal = $("#resourcePreviewModal");
+
+        const modalBody = resourcePreviewModal.find(".modal-body");
+        modalBody.html(`<div class="loader"></div>`);
+
+        const modalTitle = resourcePreviewModal.find(".modal-title");
+        modalTitle.text(resourceName);
+
+        switch (resourceType) {
+        case ResourceType.Audio:
+            {
+                this.client.getAudio(resourceVersionId).done((response) => {
+                    modalBody.html(response);
+                }).fail((error) => {
+                    const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                    modalBody.html(alert);
+                });
             }
-
-            //TODO comment
-            this.client.createSnapshot(this.projectId, "", defaultBookType, publishToModules, selectedResources);
-        });
-
-        $(".default-book-type").click((event) => {
-            const value = $(event.currentTarget).val();
-            const defaultBookType = $("#publishToModules").find(`.book-types[value="${value}"]`);
-            defaultBookType.prop("checked", true);
-            defaultBookType.attr("disabled", "disabled");
-
-            const otherBookTypes = $("#publishToModules").find(`.book-types:not([value="${value}"])`);
-            otherBookTypes.removeAttr("disabled");
-        });
+            break;
+        case ResourceType.Image:
+            {
+                const imageUrl = this.client.getImageUrl(resourceVersionId);
+                this.imageViewer.addImageContent(modalBody, imageUrl);
+            }
+            break;
+        case ResourceType.Text:
+            {
+                this.client.getText(resourceVersionId).done((response) => {
+                    modalBody.html(response.text);
+                }).fail((error) => {
+                    const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                    modalBody.html(alert);
+                });
+            }
+            break;
+        default:
+        {
+            const alert = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("UnsupportedResourceType", "Admin").value).buildElement();
+            modalBody.html(alert);
+        }
+        }
+        resourcePreviewModal.modal("show");
     }
 }

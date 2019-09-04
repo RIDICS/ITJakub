@@ -156,6 +156,7 @@
     "CardFile": "Kartotéky",
     "AudioBook": "Audioknihy",
     "All": "Vše",
+    "ProjectNotContains": "Projekt neobsahuje {0}" ,
 
     "DefaultModule": "Výchozí modul",
     "VisibilityInModules": "Viditelnost v modulech",

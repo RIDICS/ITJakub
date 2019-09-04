@@ -1351,7 +1351,7 @@ table {
         .panel-heading {
             border-radius: 0;
             border: none;
-            background-color: @button-color;
+            background-color: @menu-background-color;
             color: white;
             font-weight: bold;
 
@@ -1387,7 +1387,7 @@ table {
 
         table {
             .include-all {
-                max-width: 4em;
+                padding: 8px 0px;
             }
 
             .version-label {
@@ -1409,11 +1409,24 @@ table {
                     padding: 2px 6px;
                 }
 
+                .bootstrap-select {
+                    max-width: 5em;
+
+                    .dropdown-menu {
+                        .active {
+                            a,
+                            a:hover,
+                            a:focus {
+                                background-color: @button-background-color;
+                            }
+                        }
+                    }
+                }
+
                 select {
                     padding: 2px 6px;
                     height: 24px;
                     display: initial;
-                
                 }
             }
         }
