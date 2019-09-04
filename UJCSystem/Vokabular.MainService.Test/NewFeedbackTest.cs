@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.MainService.Core;
 using Vokabular.MainService.Core.Works.Portal;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.MainService.Test.Containers;
@@ -47,7 +47,7 @@ namespace Vokabular.MainService.Test
             repository = new MockPortalRepository();
             var work2 = new CreateFeedbackWork(repository, data, FeedbackType.Headword, userId);
 
-            Assert.ThrowsException<ArgumentException>(() => work2.Execute());
+            Assert.ThrowsException<MainServiceException>(() => work2.Execute());
 
 
             repository = new MockPortalRepository();
@@ -92,7 +92,7 @@ namespace Vokabular.MainService.Test
             repository = new MockPortalRepository();
             var work2 = new CreateFeedbackWork(repository, new CreateFeedbackContract(), FeedbackType.Headword);
 
-            Assert.ThrowsException<ArgumentException>(() => work2.Execute());
+            Assert.ThrowsException<MainServiceException>(() => work2.Execute());
 
 
             repository = new MockPortalRepository();

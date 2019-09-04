@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -12,7 +14,6 @@ using NHibernate.Driver;
 using NHibernate.Tool.hbm2ddl;
 using Vokabular.DataEntities;
 using Vokabular.ProjectImport.Shared.Options;
-using Vokabular.Shared.DataEntities.Daos;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
@@ -28,6 +29,10 @@ namespace Vokabular.ProjectImport.Test.Mock
             ServiceCollection = new ServiceCollection();
             ServiceCollection.AddProjectImportServices();
             new DataEntitiesContainerRegistration().Install(ServiceCollection);
+            ServiceCollection.AddScoped(serviceProvider => new UnitOfWorkProvider(serviceProvider.GetServices<IUnitOfWork>()
+                .Select(x => new KeyValuePair<object, IUnitOfWork>(null, x))
+                .ToList()));
+
             ServiceCollection.AddOptions();
             ServiceCollection.Configure(new Action<OaiPmhClientOption>(option =>
             {
@@ -67,7 +72,7 @@ namespace Vokabular.ProjectImport.Test.Mock
                     //db.LogFormattedSql = true;
                     //db.LogSqlInConsole = true;   
                 })
-                .AddAssembly(typeof(NHibernateDao).Assembly);
+                .AddAssembly(typeof(DataEntitiesContainerRegistration).Assembly);
            
             var sessionFactory = cfg.BuildSessionFactory();
             var session = sessionFactory.OpenSession();
