@@ -401,7 +401,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<SearchResultContract> SearchBook(SearchRequestContract request, ProjectTypeContract projectType)
+        public List<SearchResultContract> SearchBook(AdvancedSearchRequestContract request, ProjectTypeContract projectType)
         {
             try
             {
@@ -417,7 +417,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public long SearchBookCount(SearchRequestContract request, ProjectTypeContract projectType)
+        public long SearchBookCount(AdvancedSearchRequestContract request, ProjectTypeContract projectType)
         {
             try
             {
