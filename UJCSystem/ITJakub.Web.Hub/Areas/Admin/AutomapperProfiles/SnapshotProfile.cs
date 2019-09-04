@@ -15,11 +15,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.AutomapperProfiles
                 .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Author))
                 .ForMember(dest => dest.PublishDate, opt => opt.MapFrom(src => src.PublishDate))
                 .ForMember(dest => dest.PublishedAudioResourceCount,
-                    opt => opt.MapFrom(src => src.ResourcesInfo.First(x => x.ResourceType == ResourceTypeEnumContract.Audio).PublishedCount))
+                    opt => opt.MapFrom(src => src.ResourcesInfo.FirstOrDefault(x => x.ResourceType == ResourceTypeEnumContract.Audio).PublishedCount))
                 .ForMember(dest => dest.PublishedImageResourceCount,
-                    opt => opt.MapFrom(src => src.ResourcesInfo.First(x => x.ResourceType == ResourceTypeEnumContract.Image).PublishedCount))
+                    opt => opt.MapFrom(src => src.ResourcesInfo.FirstOrDefault(x => x.ResourceType == ResourceTypeEnumContract.Image).PublishedCount))
                 .ForMember(dest => dest.PublishedTextResourceCount,
-                    opt => opt.MapFrom(src => src.ResourcesInfo.First(x => x.ResourceType == ResourceTypeEnumContract.Text).PublishedCount));
+                    opt => opt.MapFrom(src => src.ResourcesInfo.FirstOrDefault(x => x.ResourceType == ResourceTypeEnumContract.Text).PublishedCount));
         }
     }
 }

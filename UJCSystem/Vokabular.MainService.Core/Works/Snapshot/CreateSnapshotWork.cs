@@ -6,7 +6,7 @@ using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
-namespace Vokabular.MainService.Core.Works
+namespace Vokabular.MainService.Core.Works.Snapshot
 {
     public class CreateSnapshotWork : UnitOfWorkBase
     {
@@ -46,7 +46,7 @@ namespace Vokabular.MainService.Core.Works
 
             var versionNumber = latestSnapshot?.VersionNumber ?? 0;
 
-            var newDbSnapshot = new Snapshot
+            var newDbSnapshot = new DataEntities.Database.Entities.Snapshot
             {
                 Project = project,
                 BookTypes = bookTypes,

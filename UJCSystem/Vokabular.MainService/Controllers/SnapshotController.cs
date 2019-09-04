@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -24,42 +23,9 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("project/{projectId}/snapshot")]
-        public List<SnapshotAggregatedInfoContract> GetSnapshotList(long projectId)
+        public IList<SnapshotAggregatedInfoContract> GetSnapshotList(long projectId)
         {
-            return new List<SnapshotAggregatedInfoContract>
-            {
-                MockDataSnapshot.GetSnapshot(1),
-                MockDataSnapshot.GetSnapshot(2),
-                MockDataSnapshot.GetSnapshot(3),
-            };
-        }
-    }
-
-    public class MockDataSnapshot
-    {
-        public static SnapshotAggregatedInfoContract GetSnapshot(long id)
-        {
-            return new SnapshotAggregatedInfoContract
-            {
-                Id = 5,
-                PublishDate = DateTime.Now,
-                Author = "Jan Novák",
-                ResourcesInfo = new List<SnapshotResourcesInfoContract>
-                {
-                    GetSnapshotResourcesInfo(ResourceTypeEnumContract.Text, 3),
-                    GetSnapshotResourcesInfo(ResourceTypeEnumContract.Image, 30),
-                    GetSnapshotResourcesInfo(ResourceTypeEnumContract.Audio, 1)
-                }
-            };
-        }
-
-        private static SnapshotResourcesInfoContract GetSnapshotResourcesInfo(ResourceTypeEnumContract resourceType, int publishedCount)
-        {
-            return new SnapshotResourcesInfoContract
-            {
-                ResourceType = resourceType,
-                PublishedCount = publishedCount,
-            };
+            return m_snapshotManager.GetPublishedSnapshotWithAggregatedInfo(projectId);
         }
     }
 }
