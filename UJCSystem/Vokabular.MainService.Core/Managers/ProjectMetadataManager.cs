@@ -7,6 +7,7 @@ using Vokabular.MainService.Core.Parameter;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.ProjectMetadata;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
@@ -98,16 +99,18 @@ namespace Vokabular.MainService.Core.Managers
             return result.ToList();
         }
 
-        public List<string> GetTitleAutocomplete(string query, BookTypeEnumContract? bookType, List<int> selectedCategoryIds, List<long> selectedProjectIds)
+        public List<string> GetTitleAutocomplete(string query, BookTypeEnumContract? bookType, ProjectTypeContract? projectType,
+            List<int> selectedCategoryIds, List<long> selectedProjectIds)
         {
             var userId = m_authorizationManager.GetCurrentUserId();
             var bookTypeEnum = Mapper.Map<BookTypeEnum?>(bookType);
+            var projectTypeEnum = Mapper.Map<ProjectTypeEnum?>(projectType);
             var result = m_metadataRepository.InvokeUnitOfWork(x =>
             {
                 var allCategoryIds = selectedCategoryIds.Count > 0
                     ? m_categoryRepository.GetAllSubcategoryIds(selectedCategoryIds)
                     : selectedCategoryIds;
-                return x.GetTitleAutocomplete(query, bookTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteCount, userId);
+                return x.GetTitleAutocomplete(query, bookTypeEnum, projectTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteCount, userId);
             });
             return result.ToList();
         }

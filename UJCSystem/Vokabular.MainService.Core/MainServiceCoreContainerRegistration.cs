@@ -51,6 +51,7 @@ namespace Vokabular.MainService.Core
             services.AddScoped<FulltextStorageProvider>();
             services.AddScoped<IFulltextStorage, ExistDbStorage>();
             services.AddScoped<IFulltextStorage, ElasticSearchStorage>();
+            services.AddScoped<PortalTypeProvider>();
 
             services.AddSingleton<Profile, AuthUserProfile>();
             services.AddSingleton<Profile, RoleProfile>();

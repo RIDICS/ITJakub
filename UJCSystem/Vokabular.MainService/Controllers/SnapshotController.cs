@@ -8,7 +8,7 @@ using Vokabular.MainService.DataContracts.Contracts.Type;
 namespace Vokabular.MainService.Controllers
 {
     [Route("api")]
-    public class SnapshotController : Controller
+    public class SnapshotController : BaseController
     {
         private readonly SnapshotManager m_snapshotManager;
 

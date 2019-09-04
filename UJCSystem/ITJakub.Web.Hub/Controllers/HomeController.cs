@@ -101,14 +101,14 @@ namespace ITJakub.Web.Hub.Controllers
         public ActionResult GetTypeaheadTitle(string query)
         {
             var client = GetMetadataClient();
-            var result = client.GetTitleAutocomplete(query);
+            var result = client.GetTitleAutocomplete(query, projectType: GetDefaultProjectType());
             return Json(result);
         }
 
         public ActionResult GetTypeaheadDictionaryHeadword(string query)
         {
             var client = GetBookClient();
-            var result = client.GetHeadwordAutocomplete(query);
+            var result = client.GetHeadwordAutocomplete(query, GetDefaultProjectType());
             return Json(result);
         }
     }

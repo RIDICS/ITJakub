@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext;
+using ITJakub.FileProcessing.DataContracts;
 using ITJakub.SearchService.DataContracts.Contracts;
 using log4net;
 using Vokabular.Core.Storage.Resources;
@@ -13,13 +14,13 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
     public class FulltextDbStoreProcessor : IResourceProcessor
     {
-        private readonly IFulltextResourceProcessor m_fulltextResourceProcessor;
+        private readonly FulltextStoreProcessorProvider m_fulltextStoreProcessorProvider;
 
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public FulltextDbStoreProcessor(IFulltextResourceProcessor fulltextResourceProcessor)
+        public FulltextDbStoreProcessor(FulltextStoreProcessorProvider fulltextStoreProcessorProvider)
         {
-            m_fulltextResourceProcessor = fulltextResourceProcessor;
+            m_fulltextStoreProcessorProvider = fulltextStoreProcessorProvider;
         }
 
         public void Process(ResourceSessionDirector resourceDirector)
@@ -32,7 +33,10 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                         resource.ResourceType == ResourceType.BibliographyDocument ||
                         resource.ResourceType == ResourceType.Transformation);
 
+            var storeType = resourceDirector.GetSessionInfoValue<FulltextStoreTypeContract>(SessionInfo.StoreType);
             var bookData = resourceDirector.GetSessionInfoValue<BookData>(SessionInfo.BookData);
+
+            var fulltextResourceProcessor = m_fulltextStoreProcessorProvider.GetByStoreType(storeType);
 
             foreach (var resource in existFileResources)
             {
@@ -51,15 +55,15 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                     switch (resource.ResourceType)
                     {
                         case ResourceType.BibliographyDocument:
-                            m_fulltextResourceProcessor.UploadBibliographyFile(resourceUploadContract);
+                            fulltextResourceProcessor.UploadBibliographyFile(resourceUploadContract);
                             break;
 
                         case ResourceType.Book:
-                            m_fulltextResourceProcessor.UploadFullbookToBookVersion(resourceUploadContract);
+                            fulltextResourceProcessor.UploadFullbookToBookVersion(resourceUploadContract);
                             break;
 
                         case ResourceType.Page:
-                            var pageId = m_fulltextResourceProcessor.UploadPageToBookVersion(resourceUploadContract);
+                            var pageId = fulltextResourceProcessor.UploadPageToBookVersion(resourceUploadContract);
                             if (pageId != null)
                             {
                                 var bookPageData = bookData.Pages.FirstOrDefault(x => x.XmlResource == resource.FileName);
@@ -71,7 +75,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                             break;
 
                         case ResourceType.Transformation:
-                            m_fulltextResourceProcessor.UploadTransformationResource(resourceUploadContract);
+                            fulltextResourceProcessor.UploadTransformationResource(resourceUploadContract);
                             break;
                             
                         default:

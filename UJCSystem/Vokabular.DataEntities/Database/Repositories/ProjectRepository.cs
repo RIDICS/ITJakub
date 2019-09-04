@@ -57,10 +57,10 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
-        public virtual Project GetProjectByExternalId(string externalId)
+        public virtual Project GetProjectByExternalId(string externalId, ProjectTypeEnum projectType)
         {
             return GetSession().QueryOver<Project>()
-                .Where(x => x.ExternalId == externalId)
+                .Where(x => x.ExternalId == externalId && x.ProjectType == projectType)
                 .SingleOrDefault();
         }
 

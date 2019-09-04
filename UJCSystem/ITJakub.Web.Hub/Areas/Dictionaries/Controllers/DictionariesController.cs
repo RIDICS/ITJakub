@@ -170,7 +170,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                 ConditionConjunction = searchContractBasic,
             };
             var client = GetBookClient();
-            var resultCount = client.SearchHeadwordCount(newRequest);
+            var resultCount = client.SearchHeadwordCount(newRequest, GetDefaultProjectType());
             return Json(resultCount);
         }
 
@@ -185,7 +185,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                 ConditionConjunction = searchContractFulltext,
             };
             var client = GetBookClient();
-            var resultCount = client.SearchHeadwordCount(newRequest);
+            var resultCount = client.SearchHeadwordCount(newRequest, GetDefaultProjectType());
             return Json(resultCount);
         }
 
@@ -223,7 +223,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                 ConditionConjunction = listSearchCriteriaContracts,
             };
             var client = GetBookClient();
-            var resultCount = client.SearchHeadwordCount(newRequest);
+            var resultCount = client.SearchHeadwordCount(newRequest, GetDefaultProjectType());
             return Json(resultCount);
         }
 
@@ -249,7 +249,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                 Start = start,
                 Count = count,
             };
-            var resultHeadwords = client.SearchHeadword(newRequest);
+            var resultHeadwords = client.SearchHeadword(newRequest, GetDefaultProjectType());
 
             // Load info about dictionaries/books
             var bookListDictionary = new Dictionary<long, BookContract>();
@@ -343,7 +343,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             };
 
             var client = GetBookClient();
-            var resultCount = client.SearchHeadwordCount(newRequest);
+            var resultCount = client.SearchHeadwordCount(newRequest, GetDefaultProjectType());
             return Json(resultCount);
         }
 
@@ -370,7 +370,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                 }
             };
             var client = GetBookClient();
-            var rowNumber = client.SearchHeadwordRowNumber(request);
+            var rowNumber = client.SearchHeadwordRowNumber(request, GetDefaultProjectType());
 
             var resultPageNumber = (rowNumber - 1) / pageSize + 1;
 
@@ -420,7 +420,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         public ActionResult GetTypeaheadDictionaryHeadword(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
             var client = GetBookClient();
-            var result = client.GetHeadwordAutocomplete(query, AreaBookType, selectedCategoryIds, selectedBookIds);
+            var result = client.GetHeadwordAutocomplete(query, GetDefaultProjectType(), AreaBookType, selectedCategoryIds, selectedBookIds);
             return Json(result);
         }
 

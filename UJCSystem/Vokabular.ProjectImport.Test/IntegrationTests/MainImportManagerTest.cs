@@ -14,6 +14,7 @@ using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.ExternalBibliography;
 using Vokabular.OaiPmhImportManager;
 using Vokabular.OaiPmhImportManager.Model;
 using Vokabular.ProjectImport.Managers;

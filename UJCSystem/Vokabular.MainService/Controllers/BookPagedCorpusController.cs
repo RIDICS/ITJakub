@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Request;
@@ -11,7 +12,7 @@ using Vokabular.Shared.DataContracts.Search.Request;
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
-    public class BookPagedCorpusController : Controller
+    public class BookPagedCorpusController : BaseController
     {
         private readonly BookSearchManager m_bookSearchManager;
 
@@ -22,11 +23,16 @@ namespace Vokabular.MainService.Controllers
 
         [HttpPost("search")]
         [ProducesResponseType(typeof(CorpusSearchSnapshotsResultContract), StatusCodes.Status200OK)]
-        public IActionResult SearchCorpusGetSnapshotListResult([FromBody] CorpusSearchRequestContract request)
+        public IActionResult SearchCorpusGetSnapshotListResult([FromBody] CorpusSearchRequestContract request, [FromQuery] ProjectTypeContract? projectType)
         {
+            if (projectType == null)
+            {
+                return Error($"Required parameter {nameof(projectType)} is not specified");
+            }
+
             try
             {
-                var result = m_bookSearchManager.SearchCorpusGetSnapshotListByCriteria(request);
+                var result = m_bookSearchManager.SearchCorpusGetSnapshotListByCriteria(request, projectType.Value);
                 return Ok(result);
             }
             catch (ArgumentException exception)
@@ -60,11 +66,16 @@ namespace Vokabular.MainService.Controllers
 
         [HttpPost("search-count")]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-        public IActionResult SearchCorpusTotalResultCount([FromBody] SearchRequestContractBase request)
+        public IActionResult SearchCorpusTotalResultCount([FromBody] SearchRequestContractBase request, [FromQuery] ProjectTypeContract? projectType)
         {
+            if (projectType == null)
+            {
+                return Error($"Required parameter {nameof(projectType)} is not specified");
+            }
+
             try
             {
-                var result = m_bookSearchManager.SearchCorpusTotalResultCount(request);
+                var result = m_bookSearchManager.SearchCorpusTotalResultCount(request, projectType.Value);
                 return Ok(result);
             }
             catch (ArgumentException exception)

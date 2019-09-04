@@ -13,9 +13,9 @@ namespace ITJakub.FileProcessing.Service
             m_sessionManager.AddResource(resourceInfoSkeleton.SessionId, resourceInfoSkeleton.FileName, resourceInfoSkeleton.Data);
         }
 
-        public ImportResultContract ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage, IList<PermissionFromAuthContract> autoImportPermissions)
+        public ImportResultContract ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage, ProjectTypeContract projectType, FulltextStoreTypeContract storeType, IList<PermissionFromAuthContract> autoImportPermissions)
         {
-            return m_sessionManager.ProcessSession(sessionId, projectId, userId, uploadMessage, autoImportPermissions);
+            return m_sessionManager.ProcessSession(sessionId, projectId, userId, uploadMessage, projectType, storeType, autoImportPermissions);
         }
     }
 }

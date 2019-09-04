@@ -112,7 +112,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             };
 
             var client = GetBookClient();
-            var results = client.SearchAudioBook(request);
+            var results = client.SearchAudioBook(request, GetDefaultProjectType());
             return Json(new {books = results}, GetJsonSerializerSettingsForBiblModule());
         }
 
@@ -139,7 +139,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                 SortDirection = sortAsc ? SortDirectionEnumContract.Asc : SortDirectionEnumContract.Desc,
             };
             var client = GetBookClient();
-            var results = client.SearchAudioBook(request);
+            var results = client.SearchAudioBook(request, GetDefaultProjectType());
             return Json(new {books = results}, GetJsonSerializerSettingsForBiblModule());
         }
 
