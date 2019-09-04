@@ -124,7 +124,7 @@ namespace Vokabular.MainService.Core.Managers
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetResourceVersion<TextResource>(textVersionId, true, true));
             var result = Mapper.Map<FullTextContract>(dbResult);
 
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(ProjectTypeContract.Community);
 
             var text = fulltextStorage.GetPageText(dbResult, formatValue);
             result.Text = text;
