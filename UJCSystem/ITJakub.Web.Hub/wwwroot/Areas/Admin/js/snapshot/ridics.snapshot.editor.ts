@@ -39,15 +39,16 @@
             this.loadResourceVersions(selectBox);
         });
 
-        $(".select-version").on("change", (event) => {
-            const selectBox = $(event.currentTarget);
-            const resourceRow = selectBox.parents(".resource-row");
-            const selectedVersion = selectBox.find("option:selected");
-            resourceRow.data("version-id", selectedVersion.val());
-            resourceRow.find(".author").text(selectedVersion.data("author"));
-            resourceRow.find(".comment").text(selectedVersion.data("comment"));
-            resourceRow.find(".created").text(selectedVersion.data("created"));
-        });
+        $(".select-version").on("change",
+            (event) => {
+                const selectBox = $(event.currentTarget);
+                const resourceRow = selectBox.parents(".resource-row");
+                const selectedVersion = selectBox.find("option:selected");
+                resourceRow.data("version-id", selectedVersion.val());
+                resourceRow.find(".author").text(selectedVersion.data("author"));
+                resourceRow.find(".comment").text(selectedVersion.data("comment"));
+                resourceRow.find(".created").text(selectedVersion.data("created"));
+            });
 
         $(".resource-preview").click((event) => {
             const resourceRow = $(event.currentTarget).parents(".resource-row");
@@ -58,13 +59,13 @@
         });
 
         $("#createSnapshot").click(() => {
-           this.createSnapshot();
+            this.createSnapshot();
         });
 
         $("input[name=\"default-book-type\"]").click((event) => {
             const value = String($(event.currentTarget).val());
             this.selectDefaultBookType(value);
-        }); 
+        });
     }
 
     private loadResourceVersions(selectBox: JQuery) {
@@ -102,7 +103,8 @@
 
     private createSnapshot() {
         const defaultBookType = String($("#publishToModules").find("input[name=\"default-book-type\"]:checked").val());
-
+        const comment = String($("#publishToModules").find("input[name=\"comment\"]").val());
+        
         const publishToModules: string[] = [];
         $("#publishToModules").find("input[name=\"book-types\"]:checked").toArray().forEach((module) => {
             publishToModules.push(String($(module).val()));
@@ -113,8 +115,14 @@
             selectedResources.push(Number($(resource).data("version-id")));
         });
 
-        //TODO comment
-        this.client.createSnapshot(this.projectId, "", defaultBookType, publishToModules, selectedResources);
+        const alertHolder = $("#snapshotCreatingResult");
+        this.client.createSnapshot(this.projectId, comment, defaultBookType, publishToModules, selectedResources).done(() => {
+            const alert = new AlertComponentBuilder(AlertType.Success).addContent(localization.translate("SnapshotCreated", "Admin").value).buildElement();
+            alertHolder.html(alert);
+        }).fail((error) => {
+            const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+            alertHolder.html(alert);
+        });
     }
 
     private showResourcePreview(resourceVersionId: number, resourceName: string, resourceType: ResourceType) {
@@ -132,7 +140,8 @@
                 this.client.getAudio(resourceVersionId).done((response) => {
                     modalBody.html(response);
                 }).fail((error) => {
-                    const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                    const alert = new AlertComponentBuilder(AlertType.Error)
+                        .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
                     modalBody.html(alert);
                 });
             }
@@ -148,14 +157,16 @@
                 this.client.getText(resourceVersionId).done((response) => {
                     modalBody.html(response.text);
                 }).fail((error) => {
-                    const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                    const alert = new AlertComponentBuilder(AlertType.Error)
+                        .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
                     modalBody.html(alert);
                 });
             }
             break;
         default:
         {
-            const alert = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("UnsupportedResourceType", "Admin").value).buildElement();
+            const alert = new AlertComponentBuilder(AlertType.Error)
+                .addContent(localization.translate("UnsupportedResourceType", "Admin").value).buildElement();
             modalBody.html(alert);
         }
         }

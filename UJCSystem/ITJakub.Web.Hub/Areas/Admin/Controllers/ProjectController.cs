@@ -219,9 +219,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 ResourceVersionIds = viewModel.ResourceVersionIds
             };
 
-            var snapShotId = client.CreateSnapshot(viewModel.ProjectId, createSnapshotContract);
-            //TODO return?
-            return Ok();
+            client.CreateSnapshot(viewModel.ProjectId, createSnapshotContract);
+            return AjaxOkResponse();
         }
 
 

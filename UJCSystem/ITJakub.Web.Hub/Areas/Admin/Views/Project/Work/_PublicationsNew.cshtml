@@ -84,7 +84,22 @@
         @await Html.PartialAsync("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Image, Localizer.Translate("ImageSources", "Admin"), Model.ImageResourceList))
         @await Html.PartialAsync("Work/_PublicationsNewResources", new ResourcesViewModel(ResourceTypeEnumContract.Audio, Localizer.Translate("AudioSources", "Admin"), Model.AudioResourceList))
         <div class="project-bottom-buttons">
-            <button id="createSnapshot" type="button" class="btn btn-default">@Localizer.Translate("Save", "Admin")</button>
+            <div class="row">
+                <div class="col-xs-12 col-md-6 form-horizontal">
+                    <div class="form-group">
+                        <label for="comment" class="control-label col-md-3">@Localizer.Translate("Comment", "Admin")</label>
+                        <div class="col-md-9">
+                            <input type="text" name="comment" id="comment" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-4">
+                    <div id="snapshotCreatingResult"></div>
+                </div>
+                    <div class="col-xs-12 col-md-2">
+                        <button id="createSnapshot" type="button" class="btn btn-default">@Localizer.Translate("Save", "Admin")</button>
+                    </div>
+                </div>
         </div>
     </div>
 
