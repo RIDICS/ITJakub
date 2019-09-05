@@ -44,28 +44,36 @@
                 const selectBox = $(event.currentTarget);
                 const resourceRow = selectBox.parents(".resource-row");
                 const selectedVersion = selectBox.find("option:selected");
-                resourceRow.data("version-id", selectedVersion.val());
                 resourceRow.find(".author").text(selectedVersion.data("author"));
                 resourceRow.find(".comment").text(selectedVersion.data("comment"));
                 resourceRow.find(".created").text(selectedVersion.data("created"));
+                resourceRow.find(".resource-version-id").val(selectedVersion.val());
             });
 
         $(".resource-preview").click((event) => {
             const resourceRow = $(event.currentTarget).parents(".resource-row");
-            const resourceVersionId = resourceRow.data("version-id");
+            const resourceVersionId = Number(resourceRow.find(".resource-version-id").val());
             const resourceName = resourceRow.find(".name").text();
             const resourceType = Number(resourceRow.parents(".publish-resource-panel").data("resource-type"));
             this.showResourcePreview(resourceVersionId, resourceName, resourceType);
         });
 
-        $("#createSnapshot").click(() => {
-            this.createSnapshot();
-        });
-
-        $("input[name=\"default-book-type\"]").click((event) => {
+        $(".default-book-type").click((event) => {
             const value = String($(event.currentTarget).val());
             this.selectDefaultBookType(value);
         });
+
+        $(".book-types").change((event) => {
+            const bookTypeState = $(event.currentTarget).next(".book-types-state");
+            if ($(event.currentTarget).prop("checked")) {
+                bookTypeState.val("true");
+            } else {
+                bookTypeState.val("false");
+            }
+        });
+
+        const defaultBookType = String($(".default-book-type:checked").val());
+        this.selectDefaultBookType(defaultBookType);
     }
 
     private loadResourceVersions(selectBox: JQuery) {
@@ -96,36 +104,13 @@
     }
 
     private selectDefaultBookType(bookType: string) {
-        const defaultBookType = $("#publishToModules").find(`input[name="book-types"][value="${bookType}"]`);
+        const defaultBookType = $("#publishToModules").find(`.book-types-value[value="${bookType}"] + .book-types`);
         defaultBookType.prop("checked", true);
         defaultBookType.attr("disabled", "disabled");
+        defaultBookType.trigger("change");
 
-        const otherBookTypes = $("#publishToModules").find(`input[name="book-types"]:not([value="${bookType}"])`);
+        const otherBookTypes = $("#publishToModules").find(`.book-types-value:not([value="${bookType}"]) + .book-types`);
         otherBookTypes.removeAttr("disabled");
-    }
-
-    private createSnapshot() {
-        const defaultBookType = String($("#publishToModules").find("input[name=\"default-book-type\"]:checked").val());
-        const comment = String($("#publishToModules").find("input[name=\"comment\"]").val());
-        
-        const publishToModules: string[] = [];
-        $("#publishToModules").find("input[name=\"book-types\"]:checked").toArray().forEach((module) => {
-            publishToModules.push(String($(module).val()));
-        });
-
-        const selectedResources: number[] = [];
-        $(".resource-row .include-checkboxes input:checked").parents(".resource-row").toArray().forEach((resource) => {
-            selectedResources.push(Number($(resource).data("version-id")));
-        });
-
-        const alertHolder = $("#snapshotCreatingResult");
-        this.client.createSnapshot(this.projectId, comment, defaultBookType, publishToModules, selectedResources).done(() => {
-            const alert = new AlertComponentBuilder(AlertType.Success).addContent(localization.translate("SnapshotCreated", "Admin").value).buildElement();
-            alertHolder.html(alert);
-        }).fail((error) => {
-            const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
-            alertHolder.html(alert);
-        });
     }
 
     private showResourcePreview(resourceVersionId: number, resourceName: string, resourceType: ResourceType) {

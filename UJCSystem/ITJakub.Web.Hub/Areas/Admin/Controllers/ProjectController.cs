@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -21,6 +22,7 @@ using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.AspNetCore.Helpers;
 using ITJakub.Web.Hub.Options;
+using Scalesoft.Localization.AspNetCore;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
@@ -30,9 +32,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
     public class ProjectController : BaseController
     {
         private const int ProjectListPageSize = 5;
+        private readonly ILocalizationService m_localization;
 
-        public ProjectController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        public ProjectController(CommunicationProvider communicationProvider, ILocalizationService localization) : base(communicationProvider)
         {
+            m_localization = localization;
         }
 
         private ProjectListViewModel CreateProjectListViewModel(PagedResultList<ProjectDetailContract> data, int start)
@@ -189,13 +193,39 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
             var model = new NewPublicationViewModel
             {
-                AudioResourceList = Mapper.Map<IList<ResourceViewModel>>(audio),
-                ImageResourceList = Mapper.Map<IList<ResourceViewModel>>(images),
-                TextResourceList = Mapper.Map<IList<ResourceViewModel>>(text)
+                ProjectId = projectId,
+                Resources = new List<ResourcesViewModel>
+                {
+                    new ResourcesViewModel
+                    {
+                        ResourceList = Mapper.Map<IList<ResourceViewModel>>(text),
+                        ResourceType = ResourceTypeEnumContract.Text,
+                        Title = m_localization.Translate("TextSources", "Admin"),
+                    },
+                    new ResourcesViewModel
+                    {
+                        ResourceList = Mapper.Map<IList<ResourceViewModel>>(images),
+                        ResourceType = ResourceTypeEnumContract.Image,
+                        Title = m_localization.Translate("ImageSources", "Admin"),
+                    },
+                    new ResourcesViewModel
+                    {
+                        ResourceList = Mapper.Map<IList<ResourceViewModel>>(audio),
+                        ResourceType = ResourceTypeEnumContract.Audio,
+                        Title = m_localization.Translate("AudioSources", "Admin"),
+                    }
+                },
+                AvailableBookTypes = new List<BookTypeEnumContract>
+                {
+                    BookTypeEnumContract.Edition,
+                    BookTypeEnumContract.TextBank,
+                    BookTypeEnumContract.Grammar,
+                    BookTypeEnumContract.AudioBook
+                }
             };
 
-            model.AvailableBookTypes = new List<BookTypeEnumContract>{BookTypeEnumContract.Edition, BookTypeEnumContract.TextBank, BookTypeEnumContract.Grammar, BookTypeEnumContract.AudioBook};
-          
+            model.PublishBookTypes = model.AvailableBookTypes.Select(x => new SelectableBookType{BookType = x}).ToList();
+
             return PartialView("Work/_PublicationsNew", model);
         }
 
@@ -206,22 +236,29 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var viewModel = Mapper.Map<List<ResourceVersionViewModel>>(resourceVersionList);
             return Json(viewModel);
         }
-
+        
         [HttpPost]
-        public IActionResult NewSnapshot([FromBody] CreateSnapshotViewModel viewModel)
+        public IActionResult NewSnapshot(NewPublicationViewModel viewModel)
         {
             var client = GetProjectClient();
 
+            var versionIds = new List<long>();
+            foreach (var resource in viewModel.Resources)
+            {
+                if (resource.ResourceList != null)
+                    versionIds.AddRange(resource.ResourceList.Where(x => x.IsSelected).Select(x => x.ResourceVersionId).ToList());
+            }
+            
             var createSnapshotContract = new CreateSnapshotContract
             {
-                BookTypes = viewModel.BookTypes,
+                BookTypes = viewModel.PublishBookTypes.Where(x => x.IsSelected).Select(x => x.BookType).ToList(),
                 DefaultBookType = viewModel.DefaultBookType,
-                ResourceVersionIds = viewModel.ResourceVersionIds,
+                ResourceVersionIds = versionIds,
                 Comment = viewModel.Comment
             };
 
             client.CreateSnapshot(viewModel.ProjectId, createSnapshotContract);
-            return AjaxOkResponse();
+            return RedirectToAction("Project", new { id = viewModel.ProjectId });
         }
 
 

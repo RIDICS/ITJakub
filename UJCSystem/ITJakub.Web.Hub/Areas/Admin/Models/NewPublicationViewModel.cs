@@ -7,24 +7,35 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
 {
     public class NewPublicationViewModel
     {
-        public IList<ResourceViewModel> AudioResourceList { get; set; }
-        public IList<ResourceViewModel> ImageResourceList { get; set; }
-        public IList<ResourceViewModel> TextResourceList { get; set; }
+        public long ProjectId { get; set; }
+        public IList<ResourcesViewModel> Resources { get; set; }
+        public int ActualResource { get; set; }
+        public string Comment { get; set; }
         public IList<GroupInfoViewModel> VisibilityForGroups { get; set; }
         public IList<BookTypeEnumContract> AvailableBookTypes { get; set; }
+        public BookTypeEnumContract DefaultBookType { get; set; }
+        public IList<SelectableBookType> PublishBookTypes { get; set; }
     }
 
     public class ResourceViewModel
     {
         public long Id { get; set; }
         public string Name { get; set; }
-        public int ResourceVersionId { get; set; }
+        public long ResourceVersionId { get; set; }
         public int VersionNumber { get; set; }
         public DateTime Created { get; set; }
         public string Author { get; set; }
         public string Comment { get; set; }
+        public bool IsSelected { get; set; }
     }
-    
+
+    public class SelectableBookType
+    {
+        public BookTypeEnumContract BookType { get; set; }
+        public bool IsSelected { get; set; }
+    }
+
+
     public class GroupInfoViewModel
     {
         public long GroupId { get; set; }
@@ -33,15 +44,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
 
     public class ResourcesViewModel
     {
-        public ResourcesViewModel(ResourceTypeEnumContract resourceType, string title, IList<ResourceViewModel> resourceList)
-        {
-            ResourceType = resourceType;
-            Title = title;
-            ResourceList = resourceList;
-        }
-
-        public ResourceTypeEnumContract ResourceType { get; set; }
         public string Title { get; set; }
+        public ResourceTypeEnumContract ResourceType { get; set; }
         public IList<ResourceViewModel> ResourceList { get; set; }
     }
 }
