@@ -17,11 +17,13 @@ namespace Vokabular.MainService.Core.Managers
         private const int CorpusDefaultStart = 0;
         private readonly MetadataRepository m_metadataRepository;
         private readonly BookRepository m_bookRepository;
+        private readonly IMapper m_mapper;
 
-        public CorpusSearchManager(MetadataRepository metadataRepository, BookRepository bookRepository)
+        public CorpusSearchManager(MetadataRepository metadataRepository, BookRepository bookRepository, IMapper mapper)
         {
             m_metadataRepository = metadataRepository;
             m_bookRepository = bookRepository;
+            m_mapper = mapper;
         }
 
         public int GetCorpusStart(int? start)
@@ -61,7 +63,7 @@ namespace Vokabular.MainService.Core.Managers
                 var pageInfo = orderedPageResourceList[i];
                 var projectMetadata = bookDictionary[corpusResultData.ProjectId];
 
-                var pageContextContract = Mapper.Map<PageWithContextContract>(pageInfo);
+                var pageContextContract = m_mapper.Map<PageWithContextContract>(pageInfo);
                 pageContextContract.ContextStructure = corpusResultData.PageResultContext.ContextStructure;
 
                 var corpusItemContract = new CorpusSearchResultContract
@@ -110,7 +112,7 @@ namespace Vokabular.MainService.Core.Managers
                 var pageInfo = orderedPageResourceList[i];
                 var projectMetadata = bookDictionary[corpusResultData.ProjectExternalId];
 
-                var pageContextContract = Mapper.Map<PageWithContextContract>(pageInfo);
+                var pageContextContract = m_mapper.Map<PageWithContextContract>(pageInfo);
                 pageContextContract.ContextStructure = corpusResultData.PageResultContext.ContextStructure;
 
                 var corpusItemContract = new CorpusSearchResultContract

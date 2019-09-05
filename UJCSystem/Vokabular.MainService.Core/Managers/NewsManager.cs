@@ -16,26 +16,28 @@ namespace Vokabular.MainService.Core.Managers
         private readonly PortalRepository m_portalRepository;
         private readonly AuthenticationManager m_authenticationManager;
         private readonly UserDetailManager m_userDetailManager;
+        private readonly IMapper m_mapper;
 
-        public NewsManager(PortalRepository portalRepository, AuthenticationManager authenticationManager, UserDetailManager userDetailManager)
+        public NewsManager(PortalRepository portalRepository, AuthenticationManager authenticationManager, UserDetailManager userDetailManager, IMapper mapper)
         {
             m_portalRepository = portalRepository;
             m_authenticationManager = authenticationManager;
             m_userDetailManager = userDetailManager;
+            m_mapper = mapper;
         }
 
         public PagedResultList<NewsSyndicationItemContract> GetNewsSyndicationItems(int? start, int? count, NewsTypeEnumContract? itemType)
         {
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
-            var syndicationItemType = Mapper.Map<SyndicationItemType?>(itemType);
+            var syndicationItemType = m_mapper.Map<SyndicationItemType?>(itemType);
 
             var result = m_portalRepository.InvokeUnitOfWork(x =>
                 x.GetNewsSyndicationItems(startValue, countValue, syndicationItemType));
 
             return new PagedResultList<NewsSyndicationItemContract>
             {
-                List = m_userDetailManager.AddUserDetails(Mapper.Map<List<NewsSyndicationItemContract>>(result.List)),
+                List = m_userDetailManager.AddUserDetails(m_mapper.Map<List<NewsSyndicationItemContract>>(result.List)),
                 TotalCount = result.Count
             };
         }
@@ -43,7 +45,7 @@ namespace Vokabular.MainService.Core.Managers
         public long CreateNewsSyndicationItem(CreateNewsSyndicationItemContract data)
         {
             var userId = m_authenticationManager.GetCurrentUserId();
-            var work = new CreateNewsWork(m_portalRepository, data, userId);
+            var work = new CreateNewsWork(m_portalRepository, data, userId, m_mapper);
             var resultId = work.Execute();
             return resultId;
         }
