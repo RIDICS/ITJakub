@@ -38,7 +38,7 @@ namespace ITJakub.Web.Hub.Core.Communication
             MainServiceMetadataClient metadataClient, MainServiceNewsClient newsClient, MainServicePermissionClient permissionClient,
             MainServiceProjectClient projectClient, MainServiceResourceClient resourceClient, MainServiceRoleClient roleClient,
             MainServiceSessionClient sessionClient, MainServiceTermClient termClient, MainServiceUserClient userClient,
-            IOptions<PortalOption> portalOption)
+            IOptions<PortalOption> portalOption, IMapper mapper)
         {
             m_configurationProvider = communicationConfigurationProvider;
             m_bookClient = bookClient;
@@ -58,9 +58,12 @@ namespace ITJakub.Web.Hub.Core.Communication
             m_termClient = termClient;
             m_userClient = userClient;
             m_portalOption = portalOption;
+            Mapper = mapper;
         }
 
         public PortalTypeContract PortalType => Mapper.Map<PortalTypeContract>(m_portalOption.Value.PortalType);
+
+        public IMapper Mapper { get; }
 
         public MainServiceBookClient GetMainServiceBookClient()
         {

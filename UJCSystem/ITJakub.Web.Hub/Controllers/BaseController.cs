@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Net;
+using AutoMapper;
 using ITJakub.Lemmatization.Shared.Contracts;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.DataContracts;
@@ -11,7 +12,6 @@ using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Clients;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Errors;
-using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -24,7 +24,9 @@ namespace ITJakub.Web.Hub.Controllers
             m_communication = communicationProvider;
         }
 
-        public PortalTypeContract PortalTypeValue => m_communication.PortalType;
+        protected PortalTypeContract PortalTypeValue => m_communication.PortalType;
+
+        protected IMapper Mapper => m_communication.Mapper;
 
         public ProjectTypeContract GetDefaultProjectType()
         {
