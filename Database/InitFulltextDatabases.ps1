@@ -158,21 +158,20 @@ else {
 
 # Create or create eXist-DB xqueries
 
-$ExistDbScript = ""
-if($recreateDatabases)
-{
-    $ExistDbScript = "ExistDB-Recreate.cmd"
-}
-else {
-    $ExistDbScript = "ExistDB-Update.cmd"
-}
-
+$ExistDbScript = "ExistDB-Update.ps1"
 $ExistDbScriptPath = Join-Path $CurrentPath $ExistDbScript
 Write-Host "Running script  ${ExistDbScript}"
 $ExistScheme = "xmldb:exist" 
 $ExistDbTempUrl = AddScheme $existDbUrl -scheme $ExistScheme
 $ExistDbTempUrl = $ExistDbTempUrl + "/xmlrpc"
-& $ExistDbScriptPath $ExistDbTempUrl
+if ($recreateDatabases)
+{
+    & $ExistDbScriptPath -url $ExistDbTempUrl -recreateMode
+}
+else
+{
+    & $ExistDbScriptPath -url $ExistDbTempUrl
+}
 
 # Reset current location
 
