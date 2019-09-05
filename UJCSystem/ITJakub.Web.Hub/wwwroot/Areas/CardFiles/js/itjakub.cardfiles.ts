@@ -133,9 +133,9 @@ function createDelegate() {
 
 function createListing() {
     var cardFileSelector = $("#card-file-select");
-    var cardFileLoadingDiv = $("div.card-file-select div.loading");
+    var cardFileLoadingDiv = $("div.card-file-select div.lv-dots");
     var bucketSelector = $("#bucket-select");
-    var bucketLoadingDiv = $("div.bucket-select div.loading");
+    var bucketLoadingDiv = $("div.bucket-select div.lv-dots");
 
     $(cardFileSelector).hide();
     $(bucketSelector).hide();

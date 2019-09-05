@@ -93,10 +93,6 @@ class BookUploader {
             });
         });
 
-        $("#progressbar").progressbar({
-            value: false
-        });
-
         //TODO COMMENT THIS 2 lines FOR MUSIC DISABLE
         //var easterEgg = new YouTubeEasterEgg();
         //easterEgg.init();

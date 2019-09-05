@@ -176,24 +176,28 @@ class BibliographyModule {
     }
 
     public clearLoading() {
-        $(this.booksContainer).removeClass("loader");
+//        $(this.booksContainer).removeClass("loader");
+        $(this.booksContainer).empty();
     }
 
     public showLoading() {
-        $(this.booksContainer).addClass("loader");
+//        $(this.booksContainer).addClass("loader");
+        $(this.booksContainer).append('<div class="lv-circles md lv-mid lvt-5"></div>');
     }
 
     public showSearchError() {
         var errorDiv = BibliographyFactory.makeError(localization.translate("SearchError", "PluginsJs").value);
         $(this.booksContainer)
-            .removeClass("loader")
+            //.removeClass("loader")
+            .empty()
             .append(errorDiv);
     }
 
     public showPageLoadError() {
         var errorDiv = BibliographyFactory.makeError(localization.translate("LoadingBookListError", "PluginsJs").value);
         $(this.booksContainer)
-            .removeClass("loader")
+            //.removeClass("loader")
+            .empty()
             .append(errorDiv);
     }
 

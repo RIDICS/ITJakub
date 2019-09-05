@@ -111,7 +111,7 @@
         }).toString();
 
         const $listContainer = $(this.listContainerSelector);
-        $listContainer.html("<div class=\"loader\"></div>");
+        $listContainer.html("<div class=\"lv-dots sm lv-mid lvt-2 lvb-2\"></div>");
 
         this.adminApiClient.getHtmlPageByUrl(url).done((response) => {
             $listContainer.html(String(response));
