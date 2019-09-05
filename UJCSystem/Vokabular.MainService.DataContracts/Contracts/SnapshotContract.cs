@@ -11,13 +11,15 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public DateTime CreateTime { get; set; }
         public DateTime PublishTime { get; set; }
         public string Comment { get; set; }
-
         public long ProjectId { get; set; }
         public int CreatedByUserId { get; set; }
         public BookTypeEnumContract DefaultBookType { get; set; }
-        //public BookVersionResource BookVersion { get; set; }
-
         public IList<BookTypeEnumContract> BookTypes { get; set; }
+    }
+
+    public class SnapshotDetailContract : SnapshotContract
+    {
+        public IList<ResourceVersionDetailContract> ResourceVersions { get; set; }
     }
 
     public class CreateSnapshotContract

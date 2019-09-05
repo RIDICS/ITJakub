@@ -35,6 +35,13 @@ namespace Vokabular.MainService.Core.Managers
             return snapshotContract;
         }
 
+        public SnapshotDetailContract GetSnapshotDetail(long snapshotId)
+        {
+            var work = new GetSnapshotDetailWork(m_snapshotRepository, snapshotId);
+            work.Execute();
+            return work.Snapshot;
+        }
+
         public long CreateSnapshot(long projectId, CreateSnapshotContract data)
         {
             var userId = m_authorizationManager.GetCurrentUserId();

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 
@@ -22,10 +21,16 @@ namespace Vokabular.MainService.Controllers
             return m_snapshotManager.CreateSnapshot(projectId, data);
         }
 
+        [HttpGet("project/project/snapshot/{snapshotId}")]
+        public SnapshotDetailContract GetSnapshot(long snapshotId)
+        {
+            return m_snapshotManager.GetSnapshotDetail(snapshotId);
+        }
+
         [HttpGet("project/{projectId}/snapshot")]
         public IList<SnapshotAggregatedInfoContract> GetSnapshotList(long projectId)
         {
             return m_snapshotManager.GetPublishedSnapshotWithAggregatedInfo(projectId);
-        }
+        } 
     }
 }

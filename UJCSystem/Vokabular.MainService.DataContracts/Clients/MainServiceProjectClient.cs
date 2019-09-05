@@ -553,6 +553,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public SnapshotDetailContract GetSnapshot(long snapshotId)
+        {
+            try
+            {
+                var result = m_client.Get<SnapshotDetailContract>($"project/project/snapshot/{snapshotId}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public string GetPageText(long pageId, TextFormatEnumContract format)
         {
             try
