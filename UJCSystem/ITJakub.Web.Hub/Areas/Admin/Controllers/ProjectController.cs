@@ -183,50 +183,42 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return PartialView("_ResourceVersion", viewModel);
         }
 
+
         public IActionResult NewSnapshot(long projectId)
         {
+            var model = CreateNewPublicationViewModel(projectId);
+            return View("Publication/PublicationsNew", model);
+        }
+
+        public IActionResult DuplicateSnapshot(long snapshotId)
+        {
             var client = GetProjectClient();
+            var snapshot = client.GetSnapshot(snapshotId);
+            var model = CreateNewPublicationViewModel(snapshot.ProjectId);
 
-            var audio = client.GetResourceList(projectId, ResourceTypeEnumContract.Audio);
-            var images = client.GetResourceList(projectId, ResourceTypeEnumContract.Image);
-            var text = client.GetResourceList(projectId, ResourceTypeEnumContract.Text);
+            model.DefaultBookType = snapshot.DefaultBookType;
+            model.Comment = snapshot.Comment;
 
-            var model = new NewPublicationViewModel
+            foreach (var selectableBookType in model.PublishBookTypes)
             {
-                ProjectId = projectId,
-                Resources = new List<ResourcesViewModel>
+                selectableBookType.IsSelected = snapshot.BookTypes.Any(x => x == selectableBookType.BookType);
+            }
+
+            foreach (var resourceList in model.Resources)
+            {
+                foreach (var resource in resourceList.ResourceList)
                 {
-                    new ResourcesViewModel
+                    var versionResource = snapshot.ResourceVersions.FirstOrDefault(x => x.ResourceType == resourceList.ResourceType && x.ResourceId == resource.Id);
+                    if (versionResource != null)
                     {
-                        ResourceList = Mapper.Map<IList<ResourceViewModel>>(text),
-                        ResourceType = ResourceTypeEnumContract.Text,
-                        Title = m_localization.Translate("TextSources", "Admin"),
-                    },
-                    new ResourcesViewModel
-                    {
-                        ResourceList = Mapper.Map<IList<ResourceViewModel>>(images),
-                        ResourceType = ResourceTypeEnumContract.Image,
-                        Title = m_localization.Translate("ImageSources", "Admin"),
-                    },
-                    new ResourcesViewModel
-                    {
-                        ResourceList = Mapper.Map<IList<ResourceViewModel>>(audio),
-                        ResourceType = ResourceTypeEnumContract.Audio,
-                        Title = m_localization.Translate("AudioSources", "Admin"),
+                        resource.IsSelected = true;
+                        resource.ResourceVersionId = versionResource.Id;
+                        resource.VersionNumber = versionResource.VersionNumber;
                     }
-                },
-                AvailableBookTypes = new List<BookTypeEnumContract>
-                {
-                    BookTypeEnumContract.Edition,
-                    BookTypeEnumContract.TextBank,
-                    BookTypeEnumContract.Grammar,
-                    BookTypeEnumContract.AudioBook
                 }
-            };
-
-            model.PublishBookTypes = model.AvailableBookTypes.Select(x => new SelectableBookType{BookType = x}).ToList();
-
-            return PartialView("Work/_PublicationsNew", model);
+            }
+            
+            return View("Publication/PublicationsNew", model);
         }
 
         public IActionResult VersionList(long resourceId)
@@ -650,5 +642,48 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         #endregion
+
+        private NewPublicationViewModel CreateNewPublicationViewModel(long projectId)
+        {
+            var client = GetProjectClient();
+            var audio = client.GetResourceList(projectId, ResourceTypeEnumContract.Audio);
+            var images = client.GetResourceList(projectId, ResourceTypeEnumContract.Image);
+            var text = client.GetResourceList(projectId, ResourceTypeEnumContract.Text);
+            var availableBookTypes = new List<BookTypeEnumContract>
+            {
+                BookTypeEnumContract.Edition,
+                BookTypeEnumContract.TextBank,
+                BookTypeEnumContract.Grammar,
+                BookTypeEnumContract.AudioBook
+            };
+
+            return new NewPublicationViewModel
+            {
+                ProjectId = projectId,
+                Resources = new List<ResourcesViewModel>
+                {
+                    new ResourcesViewModel
+                    {
+                        ResourceList = Mapper.Map<IList<ResourceViewModel>>(text),
+                        ResourceType = ResourceTypeEnumContract.Text,
+                        Title = m_localization.Translate("TextSources", "Admin"),
+                    },
+                    new ResourcesViewModel
+                    {
+                        ResourceList = Mapper.Map<IList<ResourceViewModel>>(images),
+                        ResourceType = ResourceTypeEnumContract.Image,
+                        Title = m_localization.Translate("ImageSources", "Admin"),
+                    },
+                    new ResourcesViewModel
+                    {
+                        ResourceList = Mapper.Map<IList<ResourceViewModel>>(audio),
+                        ResourceType = ResourceTypeEnumContract.Audio,
+                        Title = m_localization.Translate("AudioSources", "Admin"),
+                    }
+                },
+                AvailableBookTypes = availableBookTypes,
+                PublishBookTypes = availableBookTypes.Select(x => new SelectableBookType { BookType = x }).ToList()
+             };
+        }
     }
 }

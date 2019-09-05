@@ -13,7 +13,6 @@
             <th>@Localizer.Translate("AudioSources", "Admin")</th>
             <th>@Localizer.Translate("Author", "Admin")</th>
             <th></th>
-            <th></th>
         </tr>
         @foreach (var snapshotViewModel in Model)
         {
@@ -23,14 +22,12 @@
                 <td>@snapshotViewModel.PublishedImageResourceCount</td>
                 <td>@snapshotViewModel.PublishedAudioResourceCount</td>
                 <td>@snapshotViewModel.Author</td>
-                <td class="edit-column"><a href="#">@Localizer.Translate("Edit2", "Admin")</a></td>
-                <td class="remove-column"><a href="#">@Localizer.Translate("Delete", "Admin")</a></td>
-                <td class="duplicate-column" colspan="2"><a href="#">@Localizer.Translate("DuplicateSettings", "Admin")</a></td>
+                <td class="duplicate-column"><a asp-controller="Project" asp-action="DuplicateSnapshot" asp-route-snapshotId="@snapshotViewModel.Id">@Localizer.Translate("Edit2", "Admin")</a></td>
             </tr>
         }
     </table>
 
     <div class="project-bottom-buttons">
-        <button type="button" class="btn btn-default" id="work-snapshots-new-button">@Localizer.Translate("CreateNewPublication", "Admin")</button>
+        <a asp-controller="Project" asp-action="NewSnapshot" asp-route-projectId="5" class="btn btn-default">@Localizer.Translate("CreateNewPublication", "Admin")</a>
     </div>
 </div>

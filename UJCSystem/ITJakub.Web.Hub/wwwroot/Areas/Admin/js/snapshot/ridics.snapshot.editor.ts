@@ -1,11 +1,14 @@
-﻿class SnapshotEditor {
-    private readonly projectId: number;
+﻿$(document.documentElement).ready(() => {
+    var snapshotEditor = new SnapshotEditor();
+    snapshotEditor.init();
+});
+
+class SnapshotEditor {
     private readonly client: SnapshotApiClient;
     private readonly imageViewer: ImageViewerContentAddition;
     private readonly errorHandler: ErrorHandler;
 
-    constructor(projectId: number) {
-        this.projectId = projectId;
+    constructor() {
         this.client = new SnapshotApiClient();
         this.imageViewer = new ImageViewerContentAddition(new EditorsUtil());
         this.errorHandler = new ErrorHandler();
