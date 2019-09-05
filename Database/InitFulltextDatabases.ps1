@@ -2,7 +2,7 @@
 
 param (
     [string]$elasticSearchInstallationPath = $null,
-    [bool]$recreateDatabases = $true,
+    [switch]$recreateDatabases = $false,
     [string]$elasticSearchUrl = "localhost:9200",
     [string]$existDbUrl = "localhost:8080/exist"
 )
@@ -144,12 +144,8 @@ else
     Write-Host "Create fulltext databases (indices and xqueries)"
 }
 
-
-# $DatabaseFolderPath = Join-Path $CurrentPath "Database"
-# Set-Location $DatabaseFolderPath
-
 $ElasticSearchScript = "Elasticsearch-Update.ps1"
-$ElasticScripthPath = Join-Path $DatabaseFolderPath $ElasticSearchScript
+$ElasticScripthPath = Join-Path $CurrentPath $ElasticSearchScript
 Write-Host "Running script  ${ElasticSearchScript}"
 
 if($recreateDatabases)
@@ -171,7 +167,7 @@ else {
     $ExistDbScript = "ExistDB-Update.cmd"
 }
 
-$ExistDbScriptPath = Join-Path $DatabaseFolderPath $ExistDbScript
+$ExistDbScriptPath = Join-Path $CurrentPath $ExistDbScript
 Write-Host "Running script  ${ExistDbScript}"
 $ExistScheme = "xmldb:exist" 
 $ExistDbTempUrl = AddScheme $existDbUrl -scheme $ExistScheme
