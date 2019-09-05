@@ -11,11 +11,13 @@ namespace ITJakub.Lemmatization.Core
     public class LemmatizationManager
     {
         private readonly LemmatizationRepository m_repository;
+        private readonly IMapper m_mapper;
         private const int PrefetchRecordCount = 10;
 
-        public LemmatizationManager(LemmatizationRepository repository)
+        public LemmatizationManager(LemmatizationRepository repository, IMapper mapper)
         {
             m_repository = repository;
+            m_mapper = mapper;
         }
 
         private string EscapeQuery(string query)
@@ -29,7 +31,7 @@ namespace ITJakub.Lemmatization.Core
         {
             query = EscapeQuery(query);
             var result = m_repository.InvokeUnitOfWork(x => x.GetTypeaheadToken(query, PrefetchRecordCount));
-            return Mapper.Map<IList<TokenContract>>(result);
+            return m_mapper.Map<IList<TokenContract>>(result);
         }
 
         public long CreateToken(string token, string description)
@@ -40,7 +42,7 @@ namespace ITJakub.Lemmatization.Core
         public IList<TokenCharacteristicDetailContract> GetTokenCharacteristic(long tokenId)
         {
             var result = m_repository.InvokeUnitOfWork(x => x.GetTokenCharacteristicDetail(tokenId));
-            return Mapper.Map<IList<TokenCharacteristicDetailContract>>(result);
+            return m_mapper.Map<IList<TokenCharacteristicDetailContract>>(result);
         }
 
         public long AddTokenCharacteristic(long tokenId, string morphologicalCharacteristic, string description)
@@ -51,22 +53,23 @@ namespace ITJakub.Lemmatization.Core
         public IList<CanonicalFormTypeaheadContract> GetTypeaheadCannonicalForm(CanonicalFormTypeContract type, string query)
         {
             query = EscapeQuery(query);
-            var canonicalFormType = Mapper.Map<CanonicalFormType>(type);
+            var canonicalFormType = m_mapper.Map<CanonicalFormType>(type);
             var result = m_repository.InvokeUnitOfWork(x => x.GetTypeaheadCannonicalForm(canonicalFormType, query, PrefetchRecordCount));
-            return Mapper.Map<IList<CanonicalFormTypeaheadContract>>(result);
+            return m_mapper.Map<IList<CanonicalFormTypeaheadContract>>(result);
         }
 
         public IList<HyperCanonicalFormContract> GetTypeaheadHyperCannonicalForm(HyperCanonicalFormTypeContract type, string query)
         {
             query = EscapeQuery(query);
-            var formType = Mapper.Map<HyperCanonicalFormType>(type);
+            var formType = m_mapper.Map<HyperCanonicalFormType>(type);
             var result = m_repository.InvokeUnitOfWork(x => x.GetTypeaheadHyperCannonicalForm(formType, query, PrefetchRecordCount));
-            return Mapper.Map<IList<HyperCanonicalFormContract>>(result);
+            return m_mapper.Map<IList<HyperCanonicalFormContract>>(result);
         }
 
         public long CreateCanonicalForm(long tokenCharacteristicId, CanonicalFormTypeContract type, string text, string description)
         {
-            return new CreateCanonicalFormWork(m_repository, tokenCharacteristicId, type, text, description).Execute();
+            var canonicalFormType = m_mapper.Map<CanonicalFormType>(type);
+            return new CreateCanonicalFormWork(m_repository, tokenCharacteristicId, canonicalFormType, text, description).Execute();
         }
 
         public void AddCanonicalForm(long tokenCharacteristicId, long canonicalFormId)
@@ -81,7 +84,8 @@ namespace ITJakub.Lemmatization.Core
 
         public long CreateHyperCanonicalForm(long canonicalFormId, HyperCanonicalFormTypeContract type, string text, string description)
         {
-            return new CreateHyperCanonicalFormWork(m_repository, canonicalFormId, type, text, description).Execute();
+            var hyperCanonicalFormType = m_mapper.Map<HyperCanonicalFormType>(type);
+            return new CreateHyperCanonicalFormWork(m_repository, canonicalFormId, hyperCanonicalFormType, text, description).Execute();
         }
 
         public void EditToken(long tokenId, string description)
@@ -96,12 +100,14 @@ namespace ITJakub.Lemmatization.Core
 
         public void EditCanonicalForm(long canonicalFormId, string text, CanonicalFormTypeContract type, string description)
         {
-            new EditCanonicalFormWork(m_repository, canonicalFormId, text, type, description).Execute();
+            var canonicalFormType = m_mapper.Map<CanonicalFormType>(type);
+            new EditCanonicalFormWork(m_repository, canonicalFormId, text, canonicalFormType, description).Execute();
         }
 
         public void EditHyperCanonicalForm(long hyperCanonicalFormId, string text, HyperCanonicalFormTypeContract type, string description)
         {
-            new EditHyperCanonicalFormWork(m_repository, hyperCanonicalFormId, text, type, description).Execute();
+            var hyperCanonicalFormType = m_mapper.Map<HyperCanonicalFormType>(type);
+            new EditHyperCanonicalFormWork(m_repository, hyperCanonicalFormId, text, hyperCanonicalFormType, description).Execute();
         }
 
         public int GetTokenCount()
@@ -112,7 +118,7 @@ namespace ITJakub.Lemmatization.Core
         public IList<TokenContract> GetTokenList(int start, int count)
         {
             var result = m_repository.InvokeUnitOfWork(x => x.GetTokenList(start, count));
-            var resultContract = Mapper.Map<IList<TokenContract>>(result);
+            var resultContract = m_mapper.Map<IList<TokenContract>>(result);
             return resultContract;
         }
 
@@ -125,14 +131,14 @@ namespace ITJakub.Lemmatization.Core
         public InverseCanonicalFormContract GetCanonicalFormDetail(long canonicalFormId)
         {
             var result = m_repository.InvokeUnitOfWork(x => x.GetCanonicalFormDetail(canonicalFormId));
-            var contract = Mapper.Map<InverseCanonicalFormContract>(result);
+            var contract = m_mapper.Map<InverseCanonicalFormContract>(result);
             return contract;
         }
 
         public TokenContract GetToken(long tokenId)
         {
             var result = m_repository.InvokeUnitOfWork(x => x.FindById<Token>(tokenId));
-            var contract = Mapper.Map<TokenContract>(result);
+            var contract = m_mapper.Map<TokenContract>(result);
             return contract;
         }
 
