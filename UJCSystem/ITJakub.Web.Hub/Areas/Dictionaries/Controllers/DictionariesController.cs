@@ -424,15 +424,16 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return Json(result);
         }
 
-        //public FileResult GetHeadwordImage(string bookXmlId, string bookVersionXmlId, string fileName) // Original signature
         public ActionResult GetHeadwordImage(long pageId)
         {
-            return NotFound();
-            //using (var client = GetMainServiceClient())
-            //{
-            //    var resultStream = client.GetHeadwordImage(bookXmlId, bookVersionXmlId, fileName);
-            //    return File(resultStream, MediaTypeNames.Image.Jpeg); //TODO resolve content type properly
-            //}
+            var client = GetBookClient();
+            var image = client.GetPageImage(pageId);
+            if (image == null)
+            {
+                return NotFound();
+            }
+
+            return File(image.Stream, image.MimeType, image.FileName, image.FileSize);
         }
 
         private void AddHeadwordFeedback(string content, long headwordVersionId, string name, string email)
