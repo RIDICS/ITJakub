@@ -56,7 +56,6 @@ namespace Vokabular.MainService.Core.Works.Snapshot
                 PublishTime = now,
                 CreatedByUser = user,
                 VersionNumber = versionNumber + 1,
-                BookVersion = null, //bookVersionResource, TODO create booVersionResource
                 ResourceVersions = resourceVersions
             };
 
