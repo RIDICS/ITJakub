@@ -35,7 +35,7 @@ namespace Vokabular.MainService.Core.Managers
         {
             var client = m_communicationProvider.GetAuthPermissionApiClient();
 
-            var permissions = client.GetAllPermissionsAsync().GetAwaiter().GetResult();
+            var permissions = client.GetAllPermissionsAsync(VokabularPermissionNames.AutoImport).GetAwaiter().GetResult();
 
             var result = permissions.Where(x => x.Name.StartsWith(VokabularPermissionNames.AutoImport)).Select(p =>
                 new PermissionFromAuthContract
@@ -111,14 +111,6 @@ namespace Vokabular.MainService.Core.Managers
         {
             new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
             new RemoveProjectsFromRoleWork(m_permissionRepository, roleId, bookIds).Execute();
-        }
-
-        public List<PermissionContract> GetAllPermissions()
-        {
-            var client = m_communicationProvider.GetAuthPermissionApiClient();
-
-            var permissions = client.GetAllPermissionsAsync().GetAwaiter().GetResult();
-            return Mapper.Map<List<PermissionContract>>(permissions);
         }
 
         public PagedResultList<PermissionContract> GetPermissions(int? start, int? count, string filterByName)
