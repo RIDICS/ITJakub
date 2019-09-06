@@ -10,6 +10,7 @@
 }
 
 @section styles{
+    <link asp-append-version="true" href="~/css/ridics.list.css" rel="stylesheet" />
     <link asp-append-version="true" href="~/css/ridics.permissions.css" rel="stylesheet" />
 }
 
@@ -40,7 +41,7 @@
                             @Localizer.Translate("Group", "Permission")
                         </div>
                         <div class="col col-xs-12 col col-sm-10">
-                            <form asp-action="RolePermission" asp-controller="Permission" method="get" class="role-search-form form-inline">
+                            <form asp-action="RolePermission" asp-controller="Permission" method="get" class="role-search-form search-form form-inline">
                                 <div class="form-group">
                                     <div id="createRoleButton" class="btn btn-default">
                                         <i class="fa fa-plus"></i>
@@ -74,7 +75,7 @@
                             @Localizer.Translate("User", "Permission")
                         </div>
                         <div class="col col-xs-12 col col-sm-10">
-                            <form asp-action="UsersByRole" asp-controller="Permission" method="get" class="user-search-form form-inline">
+                            <form asp-action="UsersByRole" asp-controller="Permission" method="get" class="user-search-form search-form form-inline">
                                 <div class="form-group">
                                     <div id="addRoleButton" class="btn btn-default">
                                         <i class="fa fa-user-plus"></i>
@@ -107,7 +108,7 @@
                             @Localizer.Translate("Permissions", "Permission")
                         </div>
                         <div class="col col-xs-12 col col-sm-10">
-                            <form asp-action="RolePermissionList" asp-controller="Permission" method="get" class="permission-search-form form-inline">
+                            <form asp-action="RolePermissionList" asp-controller="Permission" method="get" class="permission-search-form search-form form-inline">
                                 <div class="form-group">
                                     <div class="search-button">
                                         <button class="btn btn-default" type="submit">
