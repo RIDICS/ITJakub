@@ -193,7 +193,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return View("Publication/PublicationsNew", model);
         }
 
-        public IActionResult SnapshotList(long projectId, string search, int start, int count = SnapshotListPageSize, ViewType viewType = ViewType.Full)
+        public IActionResult SnapshotList(long projectId, string search, int start, int count = SnapshotListPageSize)
         {
             var client = GetProjectClient();
 
@@ -202,18 +202,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var model = CreateListViewModel<SnapshotViewModel, SnapshotAggregatedInfoContract>(snapshotList, start, count, search);
 
             return PartialView("Publication/_SnapshotListPage", model);
-            /*
-            switch (viewType)
-            {
-                case ViewType.Partial:
-                    return PartialView("_UserList", model);
-                case ViewType.Widget:
-                    return PartialView("Widget/_UserListWidget", model);
-                case ViewType.Full:
-                    return View(model);
-                default:
-                    return View(model);
-            }*/
         }
 
         public IActionResult DuplicateSnapshot(long snapshotId)
