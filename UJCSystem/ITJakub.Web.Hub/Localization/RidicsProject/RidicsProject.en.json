@@ -33,6 +33,13 @@
     "Fail": "Fail",
     "PageLoadFailed": "An unexpected error occurred while loading page {0}.",
     "ProjectLoadFailed": "An unexpected error occurred while loading project information.",
-    "NoTextPages":  "This project does not contain text pages."
+    "ContentLoadFailed": "An unexpected error occurred while loading content.",
+    "NoTextPages": "This project does not contain text pages.",
+    "NoImageOnPage": "There is no image on this page",
+    "NoComments": "No comments yet.",
+    "ToggleEditingMode": "Toggle editing mode",
+    "DisplayPageNumbers": "Display page numbers",
+    "GoToPage": "Go to page...",
+    "UploadNewVersion": "Upload new version"
   }
 }

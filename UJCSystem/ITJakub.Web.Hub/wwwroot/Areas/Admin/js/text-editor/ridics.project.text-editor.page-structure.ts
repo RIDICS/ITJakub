@@ -64,7 +64,6 @@
         renderedText.fail(() => {
             const pageName = pageEl.data("page-name");
             const alert = new AlertComponentBuilder(AlertType.Error)
-                .addHeading(localization.translate("Fail", "RidicsProject").value)
                 .addContent(localization.translateFormat("PageLoadFailed", [pageName], "RidicsProject").value)
                 .buildElement();
             compositionAreaDiv.empty().append(alert);
@@ -90,7 +89,7 @@
             textAreaEl.trigger(event);
         });
         plainText.fail(() => {
-            textAreaEl.val("Failed to load content.");
+            textAreaEl.val(localization.translate("ContentLoadFailed", "RidicsProject").value);
         });
         plainText.always(() => {
             pageEl.find(".loading").hide();
