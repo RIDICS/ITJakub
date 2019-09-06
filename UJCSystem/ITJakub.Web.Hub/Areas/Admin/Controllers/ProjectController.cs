@@ -32,6 +32,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
     public class ProjectController : BaseController
     {
         private const int ProjectListPageSize = 5;
+        private const int SnapshotListPageSize = 10;
         private readonly ILocalizationService m_localization;
 
         public ProjectController(CommunicationProvider communicationProvider, ILocalizationService localization) : base(communicationProvider)
@@ -102,9 +103,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             switch (tabType)
             {
                 case ProjectModuleTabType.WorkPublications:
-                    var snapshotList = projectClient.GetSnapshotList(projectId.Value);
-                    var publicationsViewModel = Mapper.Map<List<SnapshotViewModel>>(snapshotList);
-                    return PartialView("Work/_Publications", publicationsViewModel);
+                    var search = string.Empty;
+                    var start = 0;
+                    var snapshotList = projectClient.GetSnapshotList(projectId.Value, start, SnapshotListPageSize, search);
+                    var model = CreateListViewModel<SnapshotViewModel, SnapshotAggregatedInfoContract>(snapshotList, start, SnapshotListPageSize, search);
+                    return PartialView("Work/_Publications", model);
                 case ProjectModuleTabType.WorkPageList:
                     var pages = projectClient.GetAllPageList(projectId.Value);
                     return PartialView("Work/_PageList", pages);
@@ -188,6 +191,29 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             var model = CreateNewPublicationViewModel(projectId);
             return View("Publication/PublicationsNew", model);
+        }
+
+        public IActionResult SnapshotList(long projectId, string search, int start, int count = SnapshotListPageSize, ViewType viewType = ViewType.Full)
+        {
+            var client = GetProjectClient();
+
+            search = search ?? string.Empty;
+            var snapshotList = client.GetSnapshotList(projectId, start, count, search);
+            var model = CreateListViewModel<SnapshotViewModel, SnapshotAggregatedInfoContract>(snapshotList, start, count, search);
+
+            return PartialView("Publication/_SnapshotListPage", model);
+            /*
+            switch (viewType)
+            {
+                case ViewType.Partial:
+                    return PartialView("_UserList", model);
+                case ViewType.Widget:
+                    return PartialView("Widget/_UserListWidget", model);
+                case ViewType.Full:
+                    return View(model);
+                default:
+                    return View(model);
+            }*/
         }
 
         public IActionResult DuplicateSnapshot(long snapshotId)

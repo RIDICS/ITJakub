@@ -289,12 +289,18 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
-
-        public List<SnapshotAggregatedInfoContract> GetSnapshotList(long projectId)
+ 
+        public PagedResultList<SnapshotAggregatedInfoContract> GetSnapshotList(long projectId, int start, int count, string query)
         {
             try
             {
-                var result = m_client.Get<List<SnapshotAggregatedInfoContract>>($"project/{projectId}/snapshot");
+                var url = UrlQueryBuilder.Create($"project/{projectId}/snapshot")
+                    .AddParameter("start", start)
+                    .AddParameter("count", count)
+                    .AddParameter("filterByComment", query)
+                    .ToQuery();
+
+                var result = m_client.GetPagedList<SnapshotAggregatedInfoContract>(url);
                 return result;
             }
             catch (HttpRequestException e)

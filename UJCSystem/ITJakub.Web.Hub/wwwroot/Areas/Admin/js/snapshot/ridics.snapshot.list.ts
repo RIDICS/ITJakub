@@ -6,6 +6,7 @@
     }
 
     init() {
-        const $table = $("#work-snapshots-table");
+        const snapshotList = new ListWithPagination(`Admin/Project/SnapshotList?projectId=${this.projectId}`, "snapshot", ViewType.Partial, true);
+        snapshotList.init();
     }
 }

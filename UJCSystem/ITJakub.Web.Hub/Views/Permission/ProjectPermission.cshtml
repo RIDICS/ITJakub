@@ -8,6 +8,7 @@
 }
 
 @section styles{
+    <link asp-append-version="true" href="~/css/ridics.list.css" rel="stylesheet" />
     <link asp-append-version="true" href="~/css/ridics.permissions.css" rel="stylesheet" />
 }
 
@@ -31,12 +32,15 @@
                     <div class="col col-xs-12 col col-sm-10">
                         <form asp-action="ProjectPermission" asp-controller="Permission" method="get" class="project-search-form search-form form-inline">
                             <div class="form-group">
+                                <div class="search-input">
+                                    <input class="form-control search-value" name="search" placeholder=" " value="@Model.SearchQuery" />
+                                    <i class="fa fa-close reset-search-button"></i>
+                                </div>
                                 <div class="search-button">
                                     <button class="btn btn-default" type="submit">
                                         <i class="fa fa-search"></i>
                                     </button>
                                 </div>
-                                <input class="form-control search-value" name="search" value="@Model.SearchQuery" />
                             </div>
                         </form>
                     </div>
@@ -59,17 +63,20 @@
                             @Localizer.Translate("Groups", "Permission")
                         </div>
                         <div class="col col-xs-12 col col-sm-10">
-                            <form asp-action="RolesByProject" asp-controller="Permission" method="get" class="role-search-form form-inline">
+                            <form asp-action="RolesByProject" asp-controller="Permission" method="get" class="role-search-form search-form form-inline">
                                 <div class="form-group">
                                     <button id="addPermissionButton" class="btn btn-default">
                                         <i class="fa fa-plus"></i>
                                     </button>
+                                    <div class="search-input">
+                                        <input class="form-control search-value" name="search" placeholder=" " value="@Model.SearchQuery" />
+                                        <i class="fa fa-close reset-search-button"></i>
+                                    </div>
                                     <div class="search-button">
                                         <button class="btn btn-default" type="submit">
                                             <i class="fa fa-search"></i>
                                         </button>
                                     </div>
-                                    <input class="form-control search-value" name="search" value="@Model.SearchQuery" />
                                 </div>
                             </form>
                         </div>

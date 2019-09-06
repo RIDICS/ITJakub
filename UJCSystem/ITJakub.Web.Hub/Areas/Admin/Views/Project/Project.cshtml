@@ -10,10 +10,12 @@
 
 @section styles {
     <link asp-append-version="true" rel="stylesheet" href="~/Areas/Admin/css/ridics.project.css" />
+    <link asp-append-version="true" rel="stylesheet" href="~/css/ridics.list.css"/>
     <link asp-append-version="true" rel="stylesheet" href="~/lib/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.css" />
     <link asp-append-version="true" rel="stylesheet" href="~/lib/gijgo/combined/css/gijgo.css" />
 }
 @section scripts {
+    <script asp-append-version="true" src="~/js/ridics.list.js"></script>
     <script asp-append-version="true" src="~/Areas/Admin/js/ridics.project.module.js"></script>
     <script asp-append-version="true" src="~/Areas/Admin/js/ridics.project.work.tabs.js"></script>
     <script asp-append-version="true" src="~/Areas/Admin/js/ridics.project.resource.tabs.js"></script>
@@ -85,7 +87,7 @@
                         <div class="col-md-12">
                             <form action="@Url.Action("UploadResource", "Project")" method="post" class="dropzone" enctype="multipart/form-data" id="new-resource-upload">
                                 <div class="hidden">
-                                    <input type="hidden" id="new-resource-session-id" name="sessionId" value="0"/>
+                                    <input type="hidden" id="new-resource-session-id" name="sessionId" value="0" />
                                 </div>
                             </form>
                         </div>
@@ -119,7 +121,7 @@
                     <div class="form-group">
                         <label for="rename-resource-original" class="col-md-3 control-label">@Localizer.Translate("OriginalTitle", "Admin")</label>
                         <div class="col-md-8">
-                            <input type="text" id="rename-resource-original" class="form-control" disabled="disabled"/>
+                            <input type="text" id="rename-resource-original" class="form-control" disabled="disabled" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -190,7 +192,7 @@
                         <div class="col-md-12">
                             <form action="@Url.Action("UploadNewResourceVersion", "Project")" method="post" class="dropzone" enctype="multipart/form-data" id="new-resource-version-upload">
                                 <div class="hidden">
-                                    <input type="hidden" id="new-resource-version-session-id" name="sessionId" value="0"/>
+                                    <input type="hidden" id="new-resource-version-session-id" name="sessionId" value="0" />
                                 </div>
                             </form>
                         </div>

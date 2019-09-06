@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
@@ -38,14 +39,29 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        public IList<Snapshot> GetPublishedSnapshots(long projectId)
+        public ListWithTotalCountResult<Snapshot> GetPublishedSnapshots(long projectId, int start, int count, string filterByComment = null)
         {
-            var result = GetSession().QueryOver<Snapshot>()
+            var query = GetSession().QueryOver<Snapshot>()
                 .Where(x => x.Project.Id == projectId)
-                .Fetch(SelectMode.Fetch, x => x.CreatedByUser)
-              .List();
+                .Fetch(SelectMode.Fetch, x => x.CreatedByUser);
+           
+            if (!string.IsNullOrEmpty(filterByComment))
+            {
+                query.WhereRestrictionOn(x => x.Comment).IsInsensitiveLike(filterByComment, MatchMode.Anywhere);
+            }
 
-            return result;
+            query.OrderBy(x => x.VersionNumber).Desc
+                .Skip(start)
+                .Take(count);
+
+            var list = query.Future();
+            var totalCount = query.ToRowCountQuery().FutureValue<int>();
+
+            return new ListWithTotalCountResult<Snapshot>
+            {
+                List = list.ToList(),
+                Count = totalCount.Value
+            };
         }
 
         public IList<SnapshotAggregatedInfo> GetSnapshotsResourcesCount(long[] snapshotIds)

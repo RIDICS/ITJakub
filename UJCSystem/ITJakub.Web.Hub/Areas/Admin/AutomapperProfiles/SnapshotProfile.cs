@@ -13,6 +13,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.AutomapperProfiles
             CreateMap<SnapshotAggregatedInfoContract, SnapshotViewModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Author))
+                .ForMember(dest => dest.Comment, opt => opt.MapFrom(src => src.Comment))
                 .ForMember(dest => dest.PublishDate, opt => opt.MapFrom(src => src.PublishDate))
                 .ForMember(dest => dest.PublishedAudioResourceCount,
                     opt => opt.MapFrom(src => src.ResourcesInfo.FirstOrDefault(x => x.ResourceType == ResourceTypeEnumContract.Audio).PublishedCount))

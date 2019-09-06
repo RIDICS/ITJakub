@@ -1,33 +1,49 @@
 ﻿@using Scalesoft.Localization.AspNetCore
-@model IList<ITJakub.Web.Hub.Areas.Admin.Models.SnapshotViewModel>
+@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<ITJakub.Web.Hub.Areas.Admin.Models.SnapshotViewModel>
 @inject ILocalizationService Localizer
 
 <div id="new-snapshot-container">
-    <h3>@Localizer.Translate("PublishedSnapshots", "Admin")</h3>
+    <div id="snapshot-section" class="section">
+      
+        <h3>@Localizer.Translate("PublishedSnapshots", "Admin")</h3>
+       
+        <div class="row">
+            <div class="col-sm-offset-6 col-sm-6 col-lg-offset-8 col-lg-4">
+                <form asp-action="SnapshotList" asp-controller="Project" method="get" class="snapshot-search-form search-form form-inline">
+                    <div class="form-group">
+                        <div class="search-input">
+                            <label for="search">@Localizer.Translate("Comment", "Admin"):</label>
+                            <input class="form-control search-value" id="search" name="search" placeholder=" " value="@Model.SearchQuery" />
+                            <i class="fa fa-close reset-search-button"></i>
+                        </div>
+                        <div class="search-button">
+                            <button class="btn btn-default" type="submit">@Localizer.Translate("Search", "Permission")</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
 
-    <table id="work-snapshots-table">
-        <tr>
-            <th>@Localizer.Translate("Date", "Admin")</th>
-            <th>@Localizer.Translate("TextSources", "Admin")</th>
-            <th>@Localizer.Translate("ImageSources", "Admin")</th>
-            <th>@Localizer.Translate("AudioSources", "Admin")</th>
-            <th>@Localizer.Translate("Author", "Admin")</th>
-            <th></th>
-        </tr>
-        @foreach (var snapshotViewModel in Model)
-        {
+        <table id="work-snapshots-table">
+            <thead>
             <tr>
-                <td>@snapshotViewModel.PublishDate.ToLocalTime().ToString(Localizer.GetRequestCulture())</td>
-                <td>@snapshotViewModel.PublishedTextResourceCount</td>
-                <td>@snapshotViewModel.PublishedImageResourceCount</td>
-                <td>@snapshotViewModel.PublishedAudioResourceCount</td>
-                <td>@snapshotViewModel.Author</td>
-                <td class="duplicate-column"><a asp-controller="Project" asp-action="DuplicateSnapshot" asp-route-snapshotId="@snapshotViewModel.Id">@Localizer.Translate("Edit2", "Admin")</a></td>
+                <th>@Localizer.Translate("Date", "Admin")</th>
+                <th>@Localizer.Translate("TextSources", "Admin")</th>
+                <th>@Localizer.Translate("ImageSources", "Admin")</th>
+                <th>@Localizer.Translate("AudioSources", "Admin")</th>
+                <th>@Localizer.Translate("Author", "Admin")</th>
+                <th>@Localizer.Translate("Comment", "Admin")</th>
+                <th></th>
             </tr>
-        }
-    </table>
+            </thead>
+            <tbody id="snapshotListContainer" class="list-container">
+            @await Html.PartialAsync("Publication/_SnapshotListPage", Model)
+            </tbody>
+        </table>
+        <div id="snapshotPagination" class="text-center"></div>
 
-    <div class="project-bottom-buttons">
-        <a asp-controller="Project" asp-action="NewSnapshot" asp-route-projectId="5" class="btn btn-default">@Localizer.Translate("CreateNewPublication", "Admin")</a>
+        <div class="project-bottom-buttons">
+            <a asp-controller="Project" asp-action="NewSnapshot" asp-route-projectId="5" class="btn btn-default">@Localizer.Translate("CreateNewPublication", "Admin")</a>
+        </div>
     </div>
 </div>

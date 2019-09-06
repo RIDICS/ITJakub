@@ -3,9 +3,11 @@ using System.Linq;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Snapshot;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Managers
@@ -53,17 +55,19 @@ namespace Vokabular.MainService.Core.Managers
             return work.SnapshotId;
         }
 
-        public IList<SnapshotAggregatedInfoContract> GetPublishedSnapshotWithAggregatedInfo(long projectId)
+        public PagedResultList<SnapshotAggregatedInfoContract> GetPublishedSnapshotWithAggregatedInfo(long projectId, int? start, int? count, string filterByComment)
         {
-            var publishedSnapshots = m_snapshotRepository.InvokeUnitOfWork(x => x.GetPublishedSnapshots(projectId));
-            var snapshotInfo =
-                m_snapshotRepository.InvokeUnitOfWork(x => x.GetSnapshotsResourcesCount(publishedSnapshots.Select(s => s.Id).ToArray()));
+            var startValue = PagingHelper.GetStart(start);
+            var countValue = PagingHelper.GetCount(count);
 
-            var snapshotContracts = Mapper.Map<IList<SnapshotAggregatedInfoContract>>(publishedSnapshots);
+            var publishedSnapshots = m_snapshotRepository.InvokeUnitOfWork(x => x.GetPublishedSnapshots(projectId, startValue, countValue, filterByComment));
+            var snapshotInfo = m_snapshotRepository.InvokeUnitOfWork(x => x.GetSnapshotsResourcesCount(publishedSnapshots.List.Select(s => s.Id).ToArray()));
+
+            var snapshotContracts = Mapper.Map<List<SnapshotAggregatedInfoContract>>(publishedSnapshots.List);
 
             foreach (var snapshotContract in snapshotContracts)
             {
-                var dbSnapshot = publishedSnapshots.FirstOrDefault(x => x.Id == snapshotContract.Id);
+                var dbSnapshot = publishedSnapshots.List.FirstOrDefault(x => x.Id == snapshotContract.Id);
                 if (dbSnapshot != null)
                 {
                     snapshotContract.Author = m_userDetailManager.GetUserName(dbSnapshot.CreatedByUser);
@@ -80,7 +84,11 @@ namespace Vokabular.MainService.Core.Managers
                 }
             }
 
-            return snapshotContracts;
+            return new PagedResultList<SnapshotAggregatedInfoContract>
+            {
+                List = snapshotContracts,
+                TotalCount = publishedSnapshots.Count
+            };
         }
     }
 }

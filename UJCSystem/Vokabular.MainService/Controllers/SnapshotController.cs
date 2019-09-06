@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.RestClient.Headers;
+using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -28,9 +31,13 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("project/{projectId}/snapshot")]
-        public IList<SnapshotAggregatedInfoContract> GetSnapshotList(long projectId)
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
+        public IList<SnapshotAggregatedInfoContract> GetUserList(long projectId, [FromQuery] int? start, [FromQuery] int? count, [FromQuery] string filterByComment)
         {
-            return m_snapshotManager.GetPublishedSnapshotWithAggregatedInfo(projectId);
-        } 
+            var result = m_snapshotManager.GetPublishedSnapshotWithAggregatedInfo(projectId, start, count, filterByComment);
+
+            SetTotalCountHeader(result.TotalCount);
+            return result.List;
+        }
     }
 }

@@ -16,7 +16,6 @@ using Ridics.Core.Structures.Shared;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Errors;
-using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Controllers
@@ -452,19 +451,6 @@ namespace ITJakub.Web.Hub.Controllers
             var client = GetRoleClient();
             client.RemoveSpecialPermissionsFromRole(request.RoleId, new List<int> {request.SpecialPermissionId});
             return Json(new { });
-        }
-
-        private ListViewModel<TTarget> CreateListViewModel<TTarget, TSource>(PagedResultList<TSource> data, int start, int pageSize,
-            string search)
-        {
-            return new ListViewModel<TTarget>
-            {
-                TotalCount = data.TotalCount,
-                List = Mapper.Map<List<TTarget>>(data.List),
-                PageSize = pageSize,
-                Start = start,
-                SearchQuery = search
-            };
         }
     }
 }
