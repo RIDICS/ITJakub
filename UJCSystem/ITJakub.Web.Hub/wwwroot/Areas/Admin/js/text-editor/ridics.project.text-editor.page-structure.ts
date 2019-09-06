@@ -51,28 +51,23 @@
         const renderedText = this.util.loadRenderedText(textId);
         const compositionAreaDiv = pageEl.find(".rendered-text");
         renderedText.done((data: ITextWithContent) => {
-            const compositionAreaEl = pageEl.children(".composition-area");
             const pageBody = data.text;
             const id = data.id;
             const versionNumber = data.versionNumber;
+            const compositionAreaEl = pageEl.children(".composition-area");
             compositionAreaEl.attr({ "data-id": id, "data-version-number": versionNumber } as JQuery.PlainObject);
-            compositionAreaDiv.append(pageBody);
+            compositionAreaDiv.empty().append(pageBody);
             pageEl.css("min-height", "0");
             var event = $.Event("pageConstructed", { page: textId });
             compositionAreaDiv.trigger(event);
         });
         renderedText.fail(() => {
             const pageName = pageEl.data("page-name");
-            bootbox.alert({
-                title: "Fail",
-                message: `Failed to load page ${pageName}`,
-                buttons: {
-                    ok: {
-                        className: "btn-default"
-                    }
-                }
-            });
-            $(compositionAreaDiv).text();
+            const alert = new AlertComponentBuilder(AlertType.Error)
+                .addHeading(localization.translate("Fail", "RidicsProject").value)
+                .addContent(localization.translateFormat("PageLoadFailed", [pageName], "RidicsProject").value)
+                .buildElement();
+            compositionAreaDiv.empty().append(alert);
             pageEl.css("min-height", "0");
         });
         renderedText.always(() => {

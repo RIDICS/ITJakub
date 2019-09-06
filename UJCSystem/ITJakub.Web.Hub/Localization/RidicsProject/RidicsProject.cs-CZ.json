@@ -30,6 +30,9 @@
     "ShiftPageUp": "Posunout vybrané stránky nahoru",
     "ShiftPageDown": "Posunout vybrané stránky dolů",
     "EditPageName": "Upravit název stránky",
-    "DeletePage": "Smazat stránku"
+    "DeletePage": "Smazat stránku",
+
+    "Fail": "Chyba",
+    "PageLoadFailed": "Při načítání stránky {0} nastala neočekávaná chyba."
   }
 }
