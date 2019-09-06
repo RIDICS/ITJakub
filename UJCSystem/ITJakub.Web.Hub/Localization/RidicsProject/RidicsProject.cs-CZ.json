@@ -33,6 +33,8 @@
     "DeletePage": "Smazat stránku",
 
     "Fail": "Chyba",
-    "PageLoadFailed": "Při načítání stránky {0} nastala neočekávaná chyba."
+    "PageLoadFailed": "Při načítání stránky {0} nastala neočekávaná chyba.",
+    "ProjectLoadFailed": "Při načítání informací o projektu nastala neočekávaná chyba.",
+    "NoTextPages": "Tento projekt neobsahuje textové stránky."
   }
 }

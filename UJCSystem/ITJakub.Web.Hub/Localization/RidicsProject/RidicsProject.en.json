@@ -31,6 +31,8 @@
     "DeletePage": "Delete page",
 
     "Fail": "Fail",
-    "PageLoadFailed": "An unexpected error occurred, while loading page {0}."
+    "PageLoadFailed": "An unexpected error occurred while loading page {0}.",
+    "ProjectLoadFailed": "An unexpected error occurred while loading project information.",
+    "NoTextPages":  "This project does not contain text pages."
   }
 }
