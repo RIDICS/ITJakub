@@ -32,16 +32,44 @@
     .form-group {
         width: 100%;
 
+        .search-input {
+            display: inline-block;
+            position: relative;
+
+            .search-value {
+                display: inline-block;
+                width: auto;
+                vertical-align: middle;
+                margin-left: 0.2em;
+                padding-right: 2em;
+
+                &:not(:placeholder-shown) + .reset-search-button {
+                    display: block;
+                }
+
+                &:placeholder-shown + .reset-search-button {
+                    display: none;
+                }
+            }
+
+            .reset-search-button {
+                font-size: 1em;
+                position: absolute;
+                right: 0.8em;
+                top: 50%;
+                transform: translatey(-50%);
+                cursor: pointer;
+                color: #cdcdcd;
+
+                &:hover {
+                    color: black;
+                }
+            }
+        }
+
         .search-button {
             float: right;
             margin-left: 0.4em;
-        }
-
-        .search-value {
-            display: inline-block;
-            width: 55%;
-            vertical-align: middle;
-            margin-left: 0.2em;
         }
     }
 }

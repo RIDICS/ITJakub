@@ -33,6 +33,7 @@
             pageClickCallback: this.loadPage.bind(this)
         });
         this.searchForm = $(`.${this.selector}-search-form`);
+        this.search = null;
     }
 
     public init() {
@@ -42,6 +43,15 @@
             event.preventDefault();
             this.search = searchValue;
             this.loadPage(this.firstPageNumber);
+        });
+
+        const resetSearchButton = this.searchForm.find(`.reset-search-button`);
+        resetSearchButton.click(() => {
+            if (this.search == null) {
+                this.searchForm.find(".search-value").val("");
+            } else {
+                this.resetSearch();
+            }
         });
 
         let startPage = this.pagination.getCurrentPage();
@@ -123,11 +133,8 @@
             if (this.search) {
                 this.resetSearchForm = $listContainer.find(".reset-search-form");
                 this.resetSearchForm.submit((event) => {
-                    this.searchForm.find(".search-value").val("");
                     event.preventDefault();
-                    this.removeSearchFromUri();
-                    this.search = null;
-                    this.loadPage(this.firstPageNumber);
+                    this.resetSearch();
                 });
             }
 
@@ -141,6 +148,13 @@
                 .empty()
                 .append(alert.buildElement());
         });
+    }
+
+    private resetSearch() {
+        this.searchForm.find(".search-value").val("");
+        this.removeSearchFromUri();
+        this.search = null;
+        this.loadPage(this.firstPageNumber);
     }
 
     private computeInitPage(itemsPerPage: number, startItem: number): number {
