@@ -33,7 +33,7 @@ namespace Vokabular.MainService.Core.Managers
             m_forumOptions = forumOptions.Value;
         }
 
-        public int? CreateForums(long projectId)
+        public int? CreateOrUpdateForums(long projectId)
         {
             if (m_forumOptions.IsEnabled == false)
             {
