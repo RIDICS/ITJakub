@@ -214,10 +214,10 @@ gulp.task("bundle:itjakub_audiobooks", ["build:ts"], function () {
             paths.webroot + "Areas/AudioBooks/js/itjakub.audiobooks.modul.inicializator.js",
             paths.webroot + "Areas/AudioBooks/js/itjakub.audiobooks.js"
         ])
-        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("itjakub.audiobooks.bundle.js"))
-        .pipe(sourcemaps.write())
         //.pipe(uglify())
+        .pipe(sourcemaps.write("."))
         .pipe(gulp.dest(paths.webroot + "Areas/AudioBooks/js"));
 });
 
@@ -228,10 +228,10 @@ gulp.task("bundle:itjakub_bohemiantextbank", ["build:ts"], function () {
             paths.webroot + "Areas/BohemianTextBank/js/itjakub.bohemiantextbank.list.js",
             paths.webroot + "Areas/BohemianTextBank/js/corpus-search-viewer/ridics.bohemiantextbank.*.js"
         ])
-        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("itjakub.bohemiantextbank.bundle.js"))
-        .pipe(sourcemaps.write())
         //.pipe(uglify())
+        .pipe(sourcemaps.write("."))
         .pipe(gulp.dest(paths.webroot + "Areas/BohemianTextBank/js"));
 });
 
@@ -240,10 +240,10 @@ gulp.task("bundle:itjakub_cardfiles", ["build:ts"], function () {
             paths.webroot + "Areas/CardFiles/js/itjakub.cardfiles.js",
             paths.webroot + "Areas/CardFiles/js/itjakub.cardfileManager.js"
         ])
-        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("itjakub.cardfiles.bundle.js"))
-        .pipe(sourcemaps.write())
         //.pipe(uglify())
+        .pipe(sourcemaps.write("."))
         .pipe(gulp.dest(paths.webroot + "Areas/CardFiles/js"));
 });
 
@@ -252,10 +252,10 @@ gulp.task("bundle:itjakub_derivation", ["build:ts"], function () {
             paths.webroot + "Areas/Derivation/js/itjakub.derivation.js",
             paths.webroot + "js/Plugins/Lemmatization/itjakub.lemmatization.shared.js"
         ])
-        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("itjakub.derivation.bundle.js"))
-        .pipe(sourcemaps.write())
         //.pipe(uglify())
+        .pipe(sourcemaps.write("."))
         .pipe(gulp.dest(paths.webroot + "Areas/Derivation/js"));
 });
 
@@ -264,10 +264,10 @@ gulp.task("bundle:itjakub_dictionary_search", ["build:ts"], function () {
             paths.webroot + "Areas/Dictionaries/js/itjakub.dictionaries.search.js",
             paths.webroot + "Areas/Dictionaries/js/itjakub.dictionariesViewer.js"
         ])
-        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("itjakub.dictionaries.search.bundle.js"))
-        .pipe(sourcemaps.write())
         //.pipe(uglify())
+        .pipe(sourcemaps.write("."))
         .pipe(gulp.dest(paths.webroot + "Areas/Dictionaries/js"));
 });
 
@@ -277,10 +277,10 @@ gulp.task("bundle:itjakub_dictionary_headwords", ["build:ts"], function () {
             paths.webroot + "Areas/Dictionaries/js/itjakub.dictionariesFavoriteHeadwords.js",
             paths.webroot + "Areas/Dictionaries/js/itjakub.dictionariesViewer.js"
         ])
-        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("itjakub.dictionaries.headwords.bundle.js"))
-        .pipe(sourcemaps.write())
         //.pipe(uglify())
+        .pipe(sourcemaps.write("."))
         .pipe(gulp.dest(paths.webroot + "Areas/Dictionaries/js"));
 });
 
@@ -290,10 +290,10 @@ gulp.task("bundle:itjakub_lemmatization", ["build:ts"], function () {
             paths.webroot + "Areas/Lemmatization/js/itjakub.lemmatization.list.js",
             paths.webroot + "js/Plugins/Lemmatization/itjakub.lemmatization.shared.js"
         ])
-        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("itjakub.lemmatization.bundle.js"))
-        .pipe(sourcemaps.write())
         //.pipe(uglify())
+        .pipe(sourcemaps.write("."))
         .pipe(gulp.dest(paths.webroot + "Areas/Lemmatization/js"));
 });
 
@@ -302,10 +302,10 @@ gulp.task("bundle:itjakub_professionalliterature_list", ["build:ts"], function (
             paths.webroot + "Areas/ProfessionalLiterature/js/itjakub.professionalliterature.modul.inicializator.js",
             paths.webroot + "Areas/ProfessionalLiterature/js/itjakub.professionalliterature.list.js"
         ])
-        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("itjakub.professionalliterature.list.bundle.js"))
-        .pipe(sourcemaps.write())
         //.pipe(uglify())
+        .pipe(sourcemaps.write("."))
         .pipe(gulp.dest(paths.webroot + "Areas/ProfessionalLiterature/js"));
 });
 
@@ -313,10 +313,10 @@ gulp.task("bundle:ridics_admin_text-editor", ["build:ts"], function () {
     return gulp.src([
             paths.webroot + "Areas/Admin/js/text-editor/ridics.project.text-editor*.js"
         ])
-        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("ridics.project.text-editor.bundle.js"))
-        .pipe(sourcemaps.write())
         //.pipe(uglify())
+        .pipe(sourcemaps.write("."))
         .pipe(gulp.dest(paths.webroot + "Areas/Admin/js"));
 });
 
@@ -324,10 +324,10 @@ gulp.task("bundle:ridics_admin_page-image-viewer", ["build:ts"], function () {
     return gulp.src([
         paths.webroot + "Areas/Admin/js/page-image-viewer/ridics.project.page-image-viewer*.js"
         ])
-        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("ridics.project.page-image-viewer.bundle.js"))
-        .pipe(sourcemaps.write())
         //.pipe(uglify())
+        .pipe(sourcemaps.write("."))
         .pipe(gulp.dest(paths.webroot + "Areas/Admin/js"));
 });
 
@@ -335,10 +335,10 @@ gulp.task("bundle:ridics_admin_page-list-editor", ["build:ts"], function () {
     return gulp.src([
         paths.webroot + "Areas/Admin/js/page-list-editor/ridics.project.page-list-editor*.js"
         ])
-        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("ridics.project.page-list-editor.bundle.js"))
-        .pipe(sourcemaps.write())
         //.pipe(uglify())
+        .pipe(sourcemaps.write("."))
         .pipe(gulp.dest(paths.webroot + "Areas/Admin/js"));
 });
 
@@ -346,10 +346,10 @@ gulp.task("bundle:ridics_admin_editors-common-base", ["build:ts"], function () {
     return gulp.src([
         paths.webroot + "Areas/Admin/js/editors-common-base/ridics.project.editors*.js"
         ])
-        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("ridics.project.editors-common-base.bundle.js"))
-        .pipe(sourcemaps.write())
         //.pipe(uglify())
+        .pipe(sourcemaps.write("."))
         .pipe(gulp.dest(paths.webroot + "Areas/Admin/js"));
 });
 
@@ -358,10 +358,10 @@ gulp.task("bundle:ridics_admin_composition-key-table-editor", ["build:ts"], func
         paths.webroot + "Areas/Admin/js/composition-key-table-editor/ridics.project.key-table-editor.table-base.js",
         paths.webroot + "Areas/Admin/js/composition-key-table-editor/ridics.project.key-table-editor!(table-base)*.js"
         ])
-        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("ridics.project.composition-key-table-editor.bundle.js"))
-        .pipe(sourcemaps.write())
         //.pipe(uglify())
+        .pipe(sourcemaps.write("."))
         .pipe(gulp.dest(paths.webroot + "Areas/Admin/js"));
 });
 
