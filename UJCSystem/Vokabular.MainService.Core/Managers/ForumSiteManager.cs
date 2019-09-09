@@ -33,7 +33,7 @@ namespace Vokabular.MainService.Core.Managers
             m_forumOptions = forumOptions.Value;
         }
 
-        public int? CreateForums(long projectId)
+        public int? CreateOrUpdateForums(long projectId)
         {
             if (m_forumOptions.IsEnabled == false)
             {
@@ -54,7 +54,7 @@ namespace Vokabular.MainService.Core.Managers
 
             if (project.ForumId != null)
             {
-                throw new ForumException(MainServiceErrorCode.ForumAlreadyCreated, "The forum is already created.");
+                m_forumManager.UpdateForum(projectDetailContract, bookTypeIds);
             }
 
             var forum = m_forumManager.GetForumByExternalId(project.Id);
@@ -72,7 +72,7 @@ namespace Vokabular.MainService.Core.Managers
             return forum.ForumID;
         }
 
-        public void UpdateForums(long projectId, string hostUrl)
+        public void UpdateForums(long projectId)
         {
             if (m_forumOptions.IsEnabled == false)
             {
@@ -93,11 +93,10 @@ namespace Vokabular.MainService.Core.Managers
 
             if (project.ForumId != null)
             {
-                m_forumManager.UpdateForum(projectDetailContract, bookTypeIds, hostUrl);
+                m_forumManager.UpdateForum(projectDetailContract, bookTypeIds);
             }
         }
-
-
+        
         public ForumContract GetForum(long projectId)
         {
             if (m_forumOptions.IsEnabled == false)
