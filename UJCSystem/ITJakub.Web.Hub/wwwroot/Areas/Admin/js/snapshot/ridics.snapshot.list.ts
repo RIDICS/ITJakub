@@ -6,7 +6,7 @@
     }
 
     init() {
-        const snapshotList = new ListWithPagination(`Admin/Project/SnapshotList?projectId=${this.projectId}`, "snapshot", ViewType.Partial, true);
+        const snapshotList = new ListWithPagination(`Admin/Publication/SnapshotList?projectId=${this.projectId}`, "snapshot", ViewType.Partial, true);
         snapshotList.init();
     }
 }

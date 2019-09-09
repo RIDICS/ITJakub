@@ -12,6 +12,6 @@
         <td>@snapshotViewModel.PublishedAudioResourceCount</td>
         <td>@snapshotViewModel.Author</td>
         <td>@snapshotViewModel.Comment</td>
-        <td class="duplicate-column"><a asp-controller="Project" asp-action="DuplicateSnapshot" asp-route-snapshotId="@snapshotViewModel.Id">@Localizer.Translate("Duplicate", "Admin")</a></td>
+        <td class="duplicate-column"><a asp-controller="Publication" asp-action="DuplicateSnapshot" asp-route-snapshotId="@snapshotViewModel.Id">@Localizer.Translate("Duplicate", "Admin")</a></td>
     </tr>
 }

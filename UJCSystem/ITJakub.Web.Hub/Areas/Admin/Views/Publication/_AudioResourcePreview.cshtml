@@ -1,15 +1,13 @@
 ﻿@using Scalesoft.Localization.AspNetCore
 @model IList<Vokabular.MainService.DataContracts.Contracts.AudioContract>
 @inject ILocalizationService Localization
-@{
-}
 
 <div class="audio">
     @*<div class="audio-text"></div>*@
     <audio controls="controls" preload="none">
         @foreach (var audio in Model)
         {
-            <source src=@Url.Action("DownloadAudio" ,"Project", new {area = "Admin", audioId = audio.Id, audioType = audio.AudioType})
+            <source src=@Url.Action("DownloadAudio" ,"Publication", new {area = "Admin", audioId = audio.Id, audioType = audio.AudioType})
                     type="@audio.MimeType">
         }
         @Localization.Translate("BrowserDoesNotSupportHtmlAudio", "BibliographyModule")
@@ -29,7 +27,7 @@
         @Localization.Translate("DownloadChapter", "BibliographyModule")
         @foreach (var audio in Model)
         {
-            <a href=@Url.Action("DownloadAudio" ,"Project", new {area = "Admin", audioId = audio.Id, audioType = audio.AudioType})
+            <a href=@Url.Action("DownloadAudio" ,"Publication", new {area = "Admin", audioId = audio.Id, audioType = audio.AudioType})
                class="audio-download-href">@audio.AudioType</a>
         }
     </div>

@@ -1,6 +1,5 @@
 ﻿@using ITJakub.Web.Hub.Areas.Admin.Models
 @using ITJakub.Web.Hub.Areas.Admin.Models.Constants
-@using NHibernate.Util
 @using Scalesoft.Localization.AspNetCore
 @model NewPublicationViewModel
 @inject ILocalizationService Localizer
@@ -24,7 +23,7 @@
 <div class="content-container">
     <div class="snapshot-layout">
         <div id="new-snapshot-container">
-            <form asp-controller="Project" asp-action="NewSnapshot" method="post">
+            <form asp-controller="Publication" asp-action="NewSnapshot" method="post">
                 <div asp-validation-summary="All" class="alert alert-danger"></div>
                 <input type="hidden" asp-for="ProjectId" />
                 <div class="project-snapshot-new">
@@ -69,7 +68,7 @@
                                                             <input type="hidden" asp-for="@Model.PublishBookTypes[i].BookType" class="book-types-value" />
                                                             <input type="checkbox" asp-for="@Model.PublishBookTypes[i].IsSelected" class="book-types" />
                                                             <input type="hidden" asp-for="@Model.PublishBookTypes[i].IsSelected" class="book-types-state" />
-                                                            @Localizer.Translate(@Model.PublishBookTypes[i].BookType.ToString(), "Admin")
+                                                            @Localizer.Translate(Model.PublishBookTypes[i].BookType.ToString(), "Admin")
                                                         </label>
                                                     </div>
                                                 }
@@ -104,7 +103,7 @@
                             for (var i = 0; i < Model.ResourceTypes.Count; i++)
                             {
                                 ViewData[PublicationViewConstants.ActualResourceType] = i;
-                                @await Html.PartialAsync("Publication/_PublicationsNewResources", Model, ViewData)
+                                @await Html.PartialAsync("_PublicationsNewResources", Model, ViewData)
                             }
                         }
                         <div class="project-bottom-buttons">

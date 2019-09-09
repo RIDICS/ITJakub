@@ -9,7 +9,7 @@
        
         <div class="row">
             <div class="col-sm-offset-6 col-sm-6 col-lg-offset-8 col-lg-4">
-                <form asp-action="SnapshotList" asp-controller="Project" method="get" class="snapshot-search-form search-form form-inline">
+                <form asp-action="SnapshotList" asp-controller="Publication" method="get" class="snapshot-search-form search-form form-inline">
                     <div class="form-group">
                         <div class="search-input">
                             <label for="search">@Localizer.Translate("Comment", "Admin"):</label>
@@ -37,13 +37,13 @@
             </tr>
             </thead>
             <tbody id="snapshotListContainer" class="list-container">
-            @await Html.PartialAsync("Publication/_SnapshotListPage", Model)
+            @await Html.PartialAsync("../Publication/_SnapshotListPage", Model)
             </tbody>
         </table>
         <div id="snapshotPagination" class="text-center"></div>
 
         <div class="project-bottom-buttons">
-            <a asp-controller="Project" asp-action="NewSnapshot" asp-route-projectId="5" class="btn btn-default">@Localizer.Translate("CreateNewPublication", "Admin")</a>
+            <a asp-controller="Publication" asp-action="NewSnapshot" asp-route-projectId="5" class="btn btn-default">@Localizer.Translate("CreateNewPublication", "Admin")</a>
         </div>
     </div>
 </div>

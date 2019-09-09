@@ -35,9 +35,8 @@
             }));
     }
 
-    //TODO create Snapshot controller
     private getSnapshotControllerUrl() {
-        return getBaseUrl() + "Admin/Project/";
+        return getBaseUrl() + "Admin/Publication/";
     }
 }
 
