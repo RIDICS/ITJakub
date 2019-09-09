@@ -24,7 +24,7 @@ namespace Vokabular.MainService.Controllers
             return m_snapshotManager.CreateSnapshot(projectId, data);
         }
 
-        [HttpGet("project/project/snapshot/{snapshotId}")]
+        [HttpGet("snapshot/{snapshotId}")]
         public SnapshotDetailContract GetSnapshot(long snapshotId)
         {
             return m_snapshotManager.GetSnapshotDetail(snapshotId);
@@ -32,7 +32,7 @@ namespace Vokabular.MainService.Controllers
 
         [HttpGet("project/{projectId}/snapshot")]
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
-        public IList<SnapshotAggregatedInfoContract> GetUserList(long projectId, [FromQuery] int? start, [FromQuery] int? count, [FromQuery] string filterByComment)
+        public IList<SnapshotAggregatedInfoContract> GetSnapshotList(long projectId, [FromQuery] int? start, [FromQuery] int? count, [FromQuery] string filterByComment)
         {
             var result = m_snapshotManager.GetPublishedSnapshotWithAggregatedInfo(projectId, start, count, filterByComment);
 

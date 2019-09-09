@@ -563,7 +563,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = m_client.Get<SnapshotDetailContract>($"project/project/snapshot/{snapshotId}");
+                var result = m_client.Get<SnapshotDetailContract>($"snapshot/{snapshotId}");
                 return result;
             }
             catch (HttpRequestException e)

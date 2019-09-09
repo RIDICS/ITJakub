@@ -39,6 +39,7 @@ namespace Vokabular.MainService.Core
             services.AddScoped<ProjectManager>();
             services.AddScoped<ProjectMetadataManager>();
             services.AddScoped<ProjectResourceManager>();
+            services.AddScoped<ResourceManager>();
             services.AddScoped<RoleManager>();
             services.AddScoped<SnapshotManager>();
             services.AddScoped<TermManager>();

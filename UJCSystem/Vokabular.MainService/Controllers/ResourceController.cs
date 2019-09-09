@@ -12,11 +12,13 @@ namespace Vokabular.MainService.Controllers
     public class ResourceController : BaseController
     {
         private readonly ProjectContentManager m_projectContentManager;
+        private readonly ResourceManager m_resourceManager;
 
 
-        public ResourceController(ProjectContentManager projectContentManager)
+        public ResourceController(ProjectContentManager projectContentManager, ResourceManager resourceManager)
         {
             m_projectContentManager = projectContentManager;
+            m_resourceManager = resourceManager;
         }
         // TODO determine which methods are required and finish their implementation (or do any required modification). Remove other non-required methods.
 
@@ -59,7 +61,7 @@ namespace Vokabular.MainService.Controllers
         [HttpGet("resource/{resourceId}/version")]
         public IList<ResourceVersionContract> GetResourceVersionHistory(long resourceId)
         {
-            return m_projectContentManager.GetResourceVersionHistory(resourceId);
+            return m_resourceManager.GetResourceVersionHistory(resourceId);
         }
 
         [HttpGet("resource/{resourceId}/metadata")]

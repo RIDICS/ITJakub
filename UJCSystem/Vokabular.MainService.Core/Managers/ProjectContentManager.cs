@@ -67,29 +67,6 @@ namespace Vokabular.MainService.Core.Managers
             return resultList;
         }
 
-        public IList<ResourceVersionContract> GetResourceVersionHistory(long resourceId)
-        {
-            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetResourceVersionHistory(resourceId));
-
-            var resultList = new List<ResourceVersionContract>();
-            var userCache = new Dictionary<int, string>();
-            foreach (var resource in dbResult)
-            {
-                var resourceContract = Mapper.Map<ResourceVersionContract>(resource);
-                var userId = resource.CreatedByUser.Id;
-                if (!userCache.TryGetValue(userId, out var userName))
-                {
-                    userCache.Add(userId, m_userDetailManager.GetUserName(resource.CreatedByUser));
-                    userCache.TryGetValue(userId, out userName);
-                }
-
-                resourceContract.Author = userName;
-                resultList.Add(resourceContract);
-            }
-
-            return resultList;
-        }
-
         public List<TextWithPageContract> GetTextResourceList(long projectId, long? resourceGroupId)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectTexts(projectId, resourceGroupId, true));
@@ -124,7 +101,7 @@ namespace Vokabular.MainService.Core.Managers
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetResourceVersion<TextResource>(textVersionId, true, true));
             var result = Mapper.Map<FullTextContract>(dbResult);
 
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(ProjectTypeContract.Community);
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(dbResult.Resource.Project.ProjectType);
 
             var text = fulltextStorage.GetPageText(dbResult, formatValue);
             result.Text = text;

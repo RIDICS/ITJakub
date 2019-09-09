@@ -259,6 +259,8 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .Where(x => x.Resource.Id == resourceId && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
+                .Fetch(SelectMode.Fetch, x => x.Resource)
+                .Fetch(SelectMode.Fetch, x => x.Resource.Project)
                 .SingleOrDefault();
         }
 
