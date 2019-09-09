@@ -64,8 +64,8 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
                 CreateTime = now,
                 CreatedByUser = user,
                 Comment = m_data.Comment,
-                ExternalId = null, // Temporary value
                 VersionNumber = latestEditionNote.VersionNumber + 1,
+                Text = m_data.Text
             };
             newEditionNote.Resource.LatestVersion = newEditionNote;
 

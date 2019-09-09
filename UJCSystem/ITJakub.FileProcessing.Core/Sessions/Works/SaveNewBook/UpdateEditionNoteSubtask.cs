@@ -51,7 +51,6 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             {
                 Resource = resource,
                 BookVersion = bookVersion,
-                ExternalId = null,
                 VersionNumber = version,
                 Comment = comment,
                 CreateTime = now,
