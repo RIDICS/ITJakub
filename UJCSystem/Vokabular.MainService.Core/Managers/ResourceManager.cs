@@ -29,7 +29,7 @@ namespace Vokabular.MainService.Core.Managers
                 var userId = resource.CreatedByUser.Id;
                 if (!userCache.TryGetValue(userId, out var userName))
                 {
-                    userCache.Add(userId, m_userDetailManager.GetUserName(resource.CreatedByUser));
+                    userCache.Add(userId, m_userDetailManager.GetUserFirstNameAndLastName(resource.CreatedByUser));
                     userCache.TryGetValue(userId, out userName);
                 }
 

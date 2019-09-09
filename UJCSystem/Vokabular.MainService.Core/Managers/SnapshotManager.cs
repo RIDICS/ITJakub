@@ -70,7 +70,7 @@ namespace Vokabular.MainService.Core.Managers
                 var dbSnapshot = publishedSnapshots.List.FirstOrDefault(x => x.Id == snapshotContract.Id);
                 if (dbSnapshot != null)
                 {
-                    snapshotContract.Author = m_userDetailManager.GetUserName(dbSnapshot.CreatedByUser);
+                    snapshotContract.Author = m_userDetailManager.GetUserFirstNameAndLastName(dbSnapshot.CreatedByUser);
                     snapshotContract.ResourcesInfo = new List<SnapshotResourcesInfoContract>();
 
                     foreach (var aggregatedInfo in snapshotInfo.Where(x => x.Id == snapshotContract.Id))
