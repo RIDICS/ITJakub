@@ -150,9 +150,7 @@ namespace Vokabular.MainService.Core.Managers
         public long CreateEditionNoteVersion(long projectId, CreateEditionNoteContract data)
         {
             var userId = m_authenticationManager.GetCurrentUserId();
-            var project = m_resourceRepository.FindById<Project>(projectId);
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(project.ProjectType);
-            var resourceVersionId = new CreateEditionNoteVersionWork(m_resourceRepository, projectId, data, userId, fulltextStorage).Execute();
+            var resourceVersionId = new CreateEditionNoteVersionWork(m_resourceRepository, projectId, data, userId).Execute();
             return resourceVersionId;
         }
 

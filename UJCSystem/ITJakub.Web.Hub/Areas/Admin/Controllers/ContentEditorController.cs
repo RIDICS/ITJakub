@@ -179,11 +179,15 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult SetEditionNote([FromBody] CreateEditionNoteRequest request)
+        public IActionResult SetEditionNote(CreateEditionNoteRequest request)
         {
-            //var result = client.
-            var result = "TODO"; //TODO add logic
-            return Json(result);
+            var client = GetProjectClient();
+            var data = new CreateEditionNoteContract
+            {
+                Text = request.Content
+            };
+            client.CreateEditionNote(request.ProjectId, data);
+            return AjaxOkResponse();
         }
     }
 }

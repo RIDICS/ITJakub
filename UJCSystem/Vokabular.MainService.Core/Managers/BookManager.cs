@@ -16,6 +16,7 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
+using Vokabular.Shared.Converters;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataEntities.UnitOfWork;
@@ -36,13 +37,16 @@ namespace Vokabular.MainService.Core.Managers
         private readonly CategoryRepository m_categoryRepository;
         private readonly ForumSiteUrlHelper m_forumSiteUrlHelper;
         private readonly BookTypeEnum[] m_filterBookType;
+        private readonly IMarkdownToHtmlConverter m_markdownConverter;
 
         public BookManager(MetadataRepository metadataRepository, CategoryRepository categoryRepository,
             BookRepository bookRepository, ResourceRepository resourceRepository, PermissionRepository permissionRepository,
             FileSystemManager fileSystemManager, FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager,
-            AuthenticationManager authenticationManager, CommunicationProvider communicationProvider, ForumSiteUrlHelper forumSiteUrlHelper)
+            AuthenticationManager authenticationManager, CommunicationProvider communicationProvider, ForumSiteUrlHelper forumSiteUrlHelper,
+            IMarkdownToHtmlConverter markdownConverter)
         {
             m_metadataRepository = metadataRepository;
+            m_categoryRepository = categoryRepository;
             m_bookRepository = bookRepository;
             m_resourceRepository = resourceRepository;
             m_permissionRepository = permissionRepository;
@@ -52,7 +56,7 @@ namespace Vokabular.MainService.Core.Managers
             m_authenticationManager = authenticationManager;
             m_communicationProvider = communicationProvider;
             m_forumSiteUrlHelper = forumSiteUrlHelper;
-            m_categoryRepository = categoryRepository;
+            m_markdownConverter = markdownConverter;
             m_filterBookType = new[] {BookTypeEnum.CardFile};
         }
 
@@ -66,7 +70,7 @@ namespace Vokabular.MainService.Core.Managers
         }
 
         public List<BookContract> GetAllBooksByType(BookTypeEnumContract bookType)
-        {           
+        {
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
             var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetAllMetadataByBookType(bookTypeEnum));
             var resultList = Mapper.Map<List<BookContract>>(dbMetadataList);
@@ -113,17 +117,17 @@ namespace Vokabular.MainService.Core.Managers
             var result = Mapper.Map<BookContract>(metadataResult);
             return result;
         }
-        
+
         public SearchResultDetailContract GetBookDetail(long projectId)
         {
             m_authorizationManager.AuthorizeBook(projectId);
 
             var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataWithDetail(projectId));
             var result = Mapper.Map<SearchResultDetailContract>(metadataResult);
-            
+
             if (metadataResult.Resource.Project.ForumId != null)
             {
-                result.ForumUrl = m_forumSiteUrlHelper.GetTopicsUrl((int)metadataResult.Resource.Project.ForumId);
+                result.ForumUrl = m_forumSiteUrlHelper.GetTopicsUrl((int) metadataResult.Resource.Project.ForumId);
             }
 
             return result;
@@ -174,7 +178,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var dbResult = m_bookRepository.InvokeUnitOfWork(x => x.GetChapterList(projectId));
             var resultList = ChaptersHelper.ChapterToHierarchyContracts(dbResult);
-            
+
             return resultList;
         }
 
@@ -315,7 +319,8 @@ namespace Vokabular.MainService.Core.Managers
                 var allCategoryIds = selectedCategoryIds.Count > 0
                     ? m_categoryRepository.GetAllSubcategoryIds(selectedCategoryIds)
                     : selectedCategoryIds;
-                return x.GetHeadwordAutocomplete(query, projectTypeEnum, bookTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteCount,
+                return x.GetHeadwordAutocomplete(query, projectTypeEnum, bookTypeEnum, allCategoryIds, selectedProjectIds,
+                    DefaultValues.AutocompleteCount,
                     userId);
             });
             return result.ToList();
@@ -327,9 +332,10 @@ namespace Vokabular.MainService.Core.Managers
             var projectTypeEnum = Mapper.Map<ProjectTypeEnum>(projectType);
 
             if (request.Category.BookType == null)
-                throw new MainServiceException(MainServiceErrorCode.NullBookTypeNotSupported,"Null value of BookType is not supported");
+                throw new MainServiceException(MainServiceErrorCode.NullBookTypeNotSupported, "Null value of BookType is not supported");
 
-            var searchHeadwordRowNumberWork = new SearchHeadwordRowNumberWork(m_bookRepository, m_categoryRepository, request, userId, projectTypeEnum);
+            var searchHeadwordRowNumberWork =
+                new SearchHeadwordRowNumberWork(m_bookRepository, m_categoryRepository, request, userId, projectTypeEnum);
             var result = searchHeadwordRowNumberWork.Execute();
 
             return result;
@@ -343,10 +349,28 @@ namespace Vokabular.MainService.Core.Managers
             if (editionNoteResource == null)
                 return null;
 
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(editionNoteResource.Resource.Project.ProjectType);
-            var resultText = fulltextStorage.GetEditionNote(editionNoteResource, format);
+            if (editionNoteResource.Resource.Project.ProjectType == ProjectTypeEnum.Research)
+            {
+                var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(editionNoteResource.Resource.Project.ProjectType);
+                return fulltextStorage.GetEditionNote(editionNoteResource, format);
+            }
 
-            return resultText;
+            if (editionNoteResource.Text == null)
+            {
+                return string.Empty;
+            }
+
+            switch (format)
+            {
+                case TextFormatEnumContract.Html:
+                {
+                    return m_markdownConverter.ConvertToHtml(editionNoteResource.Text);
+                }
+                default:
+                {
+                    return editionNoteResource.Text;
+                }
+            }
         }
     }
 }
