@@ -65,23 +65,27 @@ gulp.task("clean", ["clean:css", "clean:css_areas", "clean:js", "clean:js_areas"
 
 gulp.task("build:less_root", function () {
     return gulp.src(paths.less)
+        .pipe(sourcemaps.init())
         .pipe(less({
             relativeUrls: true
         }).on("error", (err) => {
             console.error("Error building LESS:", err.message);
             process.exit(1);
         }))
+        .pipe(sourcemaps.write("."))
         .pipe(gulp.dest(paths.webroot + "css"));
 });
 
 gulp.task("build:less_areas", function () {
     return gulp.src(paths.areaLess)
+        .pipe(sourcemaps.init())
         .pipe(less({
             relativeUrls: true
         }).on("error", (err) => {
             console.error("Error building LESS:", err.message);
             process.exit(1);
         }))
+        .pipe(sourcemaps.write("."))
         .pipe(gulp.dest(paths.webroot + "Areas"));
 });
 
