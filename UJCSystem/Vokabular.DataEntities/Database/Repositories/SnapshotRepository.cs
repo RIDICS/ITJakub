@@ -31,12 +31,19 @@ namespace Vokabular.DataEntities.Database.Repositories
         
         public Snapshot GetSnapshotWithResources(long snapshotId)
         {
-            var result = GetSession().QueryOver<Snapshot>()
+            var session = GetSession();
+
+            session.QueryOver<Snapshot>()
+                .Where(x => x.Id == snapshotId)
+                .Fetch(SelectMode.Fetch, x => x.ResourceVersions)
+                .Fetch(SelectMode.Fetch, x => x.ResourceVersions[0].Resource)
+                .FutureValue();
+
+            return session.QueryOver<Snapshot>()
                 .Where(x => x.Id == snapshotId)
                 .Fetch(SelectMode.Fetch, x => x.BookTypes)
                 .Fetch(SelectMode.Fetch, x => x.DefaultBookType)
-                .SingleOrDefault();
-            return result;
+                .Future().FirstOrDefault();
         }
 
         public ListWithTotalCountResult<Snapshot> GetPublishedSnapshots(long projectId, int start, int count, string filterByComment = null)

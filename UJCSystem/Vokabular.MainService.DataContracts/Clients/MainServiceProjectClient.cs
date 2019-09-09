@@ -274,22 +274,6 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public long CreateSnapshot(long projectId, CreateSnapshotContract createSnapshotContract)
-        {
-            try
-            {
-                var snapshotId = m_client.Post<long>($"project/{projectId}/snapshot", createSnapshotContract);
-                return snapshotId;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
- 
         public PagedResultList<SnapshotAggregatedInfoContract> GetSnapshotList(long projectId, int start, int count, string query)
         {
             try
@@ -548,22 +532,6 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 var result = m_client.Get<SnapshotContract>($"project/{projectId}/snapshot/latest");
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public SnapshotDetailContract GetSnapshot(long snapshotId)
-        {
-            try
-            {
-                var result = m_client.Get<SnapshotDetailContract>($"snapshot/{snapshotId}");
                 return result;
             }
             catch (HttpRequestException e)

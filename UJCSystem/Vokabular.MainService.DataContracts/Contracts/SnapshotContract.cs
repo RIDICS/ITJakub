@@ -26,6 +26,7 @@ namespace Vokabular.MainService.DataContracts.Contracts
     {
         public IList<long> ResourceVersionIds { get; set; }
         public string Comment { get; set; }
+        public long ProjectId { get; set; }
         public IList<BookTypeEnumContract> BookTypes { get; set; }
         public BookTypeEnumContract DefaultBookType { get; set; }
     }

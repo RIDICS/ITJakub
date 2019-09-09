@@ -39,20 +39,19 @@ namespace Vokabular.MainService.Core.Managers
 
         public SnapshotDetailContract GetSnapshotDetail(long snapshotId)
         {
-            var work = new GetSnapshotDetailWork(m_snapshotRepository, snapshotId);
-            work.Execute();
-            return work.Snapshot;
+            var snapshot = m_snapshotRepository.InvokeUnitOfWork(x => x.GetSnapshotWithResources(snapshotId));
+            var snapshotContract = Mapper.Map<SnapshotDetailContract>(snapshot);
+            return snapshotContract;
         }
 
-        public long CreateSnapshot(long projectId, CreateSnapshotContract data)
+        public long CreateSnapshot(CreateSnapshotContract data)
         {
             var userId = m_authorizationManager.GetCurrentUserId();
             var bookTypes = Mapper.Map<IList<BookTypeEnum>>(data.BookTypes);
             var defaultBookTypes = Mapper.Map<BookTypeEnum>(data.DefaultBookType);
-            var work = new CreateSnapshotWork(m_projectRepository, projectId, userId, data.ResourceVersionIds, data.Comment, bookTypes,
-                defaultBookTypes);
-            work.Execute();
-            return work.SnapshotId;
+            var snapshotId = new CreateSnapshotWork(m_projectRepository, data.ProjectId, userId, data.ResourceVersionIds, data.Comment, bookTypes,
+                defaultBookTypes).Execute();
+            return snapshotId;
         }
 
         public PagedResultList<SnapshotAggregatedInfoContract> GetPublishedSnapshotWithAggregatedInfo(long projectId, int? start, int? count, string filterByComment)

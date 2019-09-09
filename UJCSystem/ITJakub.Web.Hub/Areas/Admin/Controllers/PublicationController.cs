@@ -46,7 +46,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult DuplicateSnapshot(long snapshotId)
         {
-            var client = GetProjectClient();
+            var client = GetSnapshotClient();
             var snapshot = client.GetSnapshot(snapshotId);
             var model = CreateNewPublicationViewModel(snapshot.ProjectId);
 
@@ -86,7 +86,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult NewSnapshot(NewPublicationViewModel viewModel)
         {
-            var client = GetProjectClient();
+            var client = GetSnapshotClient();
 
             var versionIds = new List<long>();
             foreach (var resource in viewModel.ResourceTypes)
@@ -100,10 +100,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 BookTypes = viewModel.PublishBookTypes.Where(x => x.IsSelected).Select(x => x.BookType).ToList(),
                 DefaultBookType = viewModel.DefaultBookType,
                 ResourceVersionIds = versionIds,
-                Comment = viewModel.Comment
+                Comment = viewModel.Comment,
+                ProjectId = viewModel.ProjectId
             };
 
-            client.CreateSnapshot(viewModel.ProjectId, createSnapshotContract);
+            client.CreateSnapshot(createSnapshotContract);
             return RedirectToAction("Project", "Project", new { id = viewModel.ProjectId });
         }
 

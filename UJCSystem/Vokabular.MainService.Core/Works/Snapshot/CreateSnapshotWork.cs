@@ -8,7 +8,7 @@ using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Snapshot
 {
-    public class CreateSnapshotWork : UnitOfWorkBase
+    public class CreateSnapshotWork : UnitOfWorkBase<long>
     {
         private readonly ProjectRepository m_projectRepository;
         private readonly long m_projectId;
@@ -30,20 +30,15 @@ namespace Vokabular.MainService.Core.Works.Snapshot
             m_defaultBookType = defaultBookType;
         }
 
-        public long SnapshotId { get; private set; }
-
-        protected override void ExecuteWorkImplementation()
+        protected override long ExecuteWorkImplementation()
         {
             var now = DateTime.UtcNow;
             var user = m_projectRepository.Load<User>(m_userId);
             var project = m_projectRepository.Load<Project>(m_projectId);
             var latestSnapshot = m_projectRepository.GetLatestSnapshot(m_projectId);
-            var bookTypes = CreateBookTypes();
-            var defaultBookType = CreateBookType(m_defaultBookType);
-
-            var resourceVersions =
-                m_resourceVersionIds.Select(x => m_projectRepository.Load<ResourceVersion>(x)).ToList();
-
+            var bookTypes = m_bookTypes.Select(bookTypeEnum => m_projectRepository.GetBookTypeByEnum(bookTypeEnum)).ToList();
+            var defaultBookType = m_projectRepository.GetBookTypeByEnum(m_defaultBookType);
+            var resourceVersions = m_resourceVersionIds.Select(x => m_projectRepository.Load<ResourceVersion>(x)).ToList();
             var versionNumber = latestSnapshot?.VersionNumber ?? 0;
 
             var newDbSnapshot = new DataEntities.Database.Entities.Snapshot
@@ -59,37 +54,10 @@ namespace Vokabular.MainService.Core.Works.Snapshot
                 ResourceVersions = resourceVersions
             };
 
-            SnapshotId = (long) m_projectRepository.Create(newDbSnapshot);
-
             project.LatestPublishedSnapshot = newDbSnapshot;
             m_projectRepository.Update(project);
-        }
 
-        private IList<BookType> CreateBookTypes()
-        {
-            var resultList = new List<BookType>();
-            foreach (var bookType in m_bookTypes)
-            {
-                var dbBookType = CreateBookType(bookType);
-                resultList.Add(dbBookType);
-            }
-
-            return resultList;
-        }
-
-        private BookType CreateBookType(BookTypeEnum bookTypeEnum)
-        {
-            var dbBookType = m_projectRepository.GetBookTypeByEnum(bookTypeEnum);
-            if (dbBookType == null)
-            {
-                dbBookType = new BookType
-                {
-                    Type = bookTypeEnum
-                };
-                m_projectRepository.Create(dbBookType);
-            }
-
-            return dbBookType;
+            return (long)m_projectRepository.Create(newDbSnapshot);
         }
     }
 }

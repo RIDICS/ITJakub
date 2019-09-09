@@ -112,6 +112,11 @@ namespace ITJakub.Web.Hub.Controllers
             return m_communication.GetMainServiceSessionClient();
         }
 
+        public MainServiceSnapshotClient GetSnapshotClient()
+        {
+            return m_communication.GetMainServiceSnapshotClient();
+        }
+
         public MainServiceTermClient GetTermClient()
         {
             return m_communication.GetMainServiceTermClient();
