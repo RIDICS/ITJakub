@@ -21,20 +21,12 @@ class SnapshotEditor {
             const checkbox = $(event.currentTarget);
             const table = checkbox.parents(".table");
             const isChecked = checkbox.is(":checked");
-            table.find(".include-checkboxes input").prop("checked", isChecked);
+            table.find(".include-checkboxes input[type=\"checkbox\"]").prop("checked", isChecked);
         });
 
-        $(".include-checkboxes input").click((event) => {
+        $(".include-checkboxes input[type=\"checkbox\"]").click((event) => {
             const table = $(event.currentTarget).parents(".table");
-
-            let isAllChecked = true;
-            table.find(".include-checkboxes input").each((index, elem) => {
-                if (!(elem as Node as HTMLInputElement).checked) {
-                    isAllChecked = false;
-                }
-            });
-
-            table.find(".include-all-checkbox").prop("checked", isAllChecked);
+            this.setIncludeAllCheckbox(table);
         });
 
         $(".select-version").click((event) => {
@@ -77,6 +69,27 @@ class SnapshotEditor {
 
         const defaultBookType = String($(".default-book-type:checked").val());
         this.selectDefaultBookType(defaultBookType);
+
+        for (let table of $(".publish-resource-panel table").toArray()) {
+            this.setIncludeAllCheckbox($(table));
+        }
+    }
+
+    private setIncludeAllCheckbox(table: JQuery) {
+        const checkboxes = table.find(".include-checkboxes input[type=\"checkbox\"]").toArray();
+        if (checkboxes.length == 0) {
+            return;
+        }
+
+        let isAllChecked = true;
+        for (let checkbox of checkboxes) {
+            if (!(checkbox as HTMLInputElement).checked) {
+                isAllChecked = false;
+                break;
+            }
+        }
+
+        table.find(".include-all-checkbox").prop("checked", isAllChecked);
     }
 
     private loadResourceVersions(selectBox: JQuery) {
