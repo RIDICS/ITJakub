@@ -1,6 +1,5 @@
 ﻿using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
-using ITJakub.Web.Hub.Core.Markdown;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Requests;
 using ITJakub.Web.Hub.Models.Type;
@@ -8,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Scalesoft.Localization.AspNetCore;
 using Vokabular.Shared.Const;
+using Vokabular.Shared.Converters;
 
 namespace ITJakub.Web.Hub.Controllers
 {

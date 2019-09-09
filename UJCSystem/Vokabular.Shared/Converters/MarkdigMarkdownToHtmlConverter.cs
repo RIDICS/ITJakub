@@ -1,6 +1,6 @@
 ﻿using Markdig;
 
-namespace ITJakub.Web.Hub.Core.Markdown
+namespace Vokabular.Shared.Converters
 {
     public class MarkdigMarkdownToHtmlConverter : IMarkdownToHtmlConverter
     {
@@ -21,7 +21,7 @@ namespace ITJakub.Web.Hub.Core.Markdown
                 .UseListExtras()
                 .UseTaskLists()
                 .Build();
-            var result = Markdig.Markdown.ToHtml(markdownText, pipeline);
+            var result = Markdown.ToHtml(markdownText, pipeline);
             return result;
         }
     }

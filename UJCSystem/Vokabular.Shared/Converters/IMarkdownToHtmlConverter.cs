@@ -1,4 +1,4 @@
-﻿namespace ITJakub.Web.Hub.Core.Markdown
+﻿namespace Vokabular.Shared.Converters
 {
     public interface IMarkdownToHtmlConverter
     {
