@@ -58,7 +58,7 @@ gulp.task("clean:jsmap_areas", function (cb) {
     rimraf(paths.areaJsMap, cb);
 });
 
-gulp.task("clean", ["clean:css", "clean:css_areas"/*, "clean:js", "clean:js_areas", "clean:jsmap", "clean:jsmap_areas"*/]);
+gulp.task("clean", ["clean:css", "clean:css_areas", "clean:js", "clean:js_areas", "clean:jsmap", "clean:jsmap_areas"]);
 
 
 // Less build
@@ -101,9 +101,12 @@ gulp.task("watch:less", ["watch:less_root", "watch:less_areas"]);
 // TypeScript build
 gulp.task("build:ts", function () {
     var tsResult = tsProject.src()
+        .pipe(sourcemaps.init())
         .pipe(tsProject());
 
-    return tsResult.js.pipe(gulp.dest(paths.webroot));
+    return tsResult.js
+        .pipe(sourcemaps.write(".", { sourceRoot: "." }))
+        .pipe(gulp.dest(paths.webroot));
 });
 
 gulp.task("watch:ts_root", function () {
@@ -124,13 +127,14 @@ gulp.task("bundle:itjakub", ["build:ts"], function () {
             paths.webroot + "js/itjakub.dataContracts.js",
             paths.webroot + "js/Plugins/itjakub.tools.js",
             paths.webroot + "js/Plugins/itjakub.components.js",
-            paths.webroot + "js/Plugins/itjakub.eucookiepopup.js"
+            paths.webroot + "js/Plugins/itjakub.eucookiepopup.js",
+            paths.webroot + "js/ridics.form-validation.js"
         ])
-        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("itjakub.bundle.js"))
-        .pipe(sourcemaps.write())
         //.pipe(uglify())
-        .pipe(gulp.dest(paths.webroot + "js/bundles"));
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest(paths.webroot + "js"));
 });
 
 gulp.task("bundle:itjakub_plugins", ["build:ts"], function () {
@@ -149,14 +153,13 @@ gulp.task("bundle:itjakub_plugins", ["build:ts"], function () {
             paths.webroot + "js/Plugins/DropdownSelect/itjakub.plugins.dropdownselect2.js",
             paths.webroot + "js/Plugins/RegExSearch/itjakub.plugins.regexsearch.js",
             paths.webroot + "js/Plugins/SearchBox/itjakub.plugins.searchbox.js",
-            paths.webroot + "js/Plugins/SearchBox/itjakub.plugins.singlesearchbox.js",
-            paths.webroot + "js/Plugins/itjakub.helper.js"
+            paths.webroot + "js/Plugins/SearchBox/itjakub.plugins.singlesearchbox.js"
         ])
-        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("itjakub.plugins.bundle.js"))
-        .pipe(sourcemaps.write())
         //.pipe(uglify())
-        .pipe(gulp.dest(paths.webroot + "js/bundles"));
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest(paths.webroot + "js/Plugins"));
 });
 
 gulp.task("bundle:itjakub_keyboard", ["build:ts"], function () {
@@ -165,11 +168,11 @@ gulp.task("bundle:itjakub_keyboard", ["build:ts"], function () {
             paths.webroot + "js/Plugins/Keyboard/itjakub.plugins.keyboardComponent.js",
             paths.webroot + "js/Plugins/Keyboard/itjakub.plugins.keyboardManager.js"
         ])
-        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("itjakub.keyboard.bundle.js"))
-        .pipe(sourcemaps.write())
         //.pipe(uglify())
-        .pipe(gulp.dest(paths.webroot + "js/bundles"));
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest(paths.webroot + "js/Plugins/Keyboard"));
 });
 
 gulp.task("bundle:itjakub_storage", ["build:ts"], function () {
@@ -178,11 +181,11 @@ gulp.task("bundle:itjakub_storage", ["build:ts"], function () {
             paths.webroot + "js/Plugins/Storage/itjakub.plugins.storage.cookiestorage.js",
             paths.webroot + "js/Plugins/Storage/itjakub.plugins.storage.localstorage.js"
         ])
-        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("itjakub.storage.bundle.js"))
-        .pipe(sourcemaps.write())
         //.pipe(uglify())
-        .pipe(gulp.dest(paths.webroot + "js/bundles"));
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest(paths.webroot + "js/Plugins/Storage"));
 });
 
 gulp.task("bundle:itjakub_favorite", ["build:ts"], function () {
@@ -194,11 +197,11 @@ gulp.task("bundle:itjakub_favorite", ["build:ts"], function () {
             paths.webroot + "js/Favorite/itjakub.newFavoriteDialog.js",
             paths.webroot + "js/Favorite/itjakub.newFavoriteNotification.js"
         ])
-        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("itjakub.favorite.bundle.js"))
-        .pipe(sourcemaps.write())
         //.pipe(uglify())
-        .pipe(gulp.dest(paths.webroot + "js/bundles"));
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest(paths.webroot + "js/Favorite"));
 });
 
 gulp.task("bundlejs", ["bundle:itjakub", "bundle:itjakub_plugins", "bundle:itjakub_keyboard", "bundle:itjakub_storage", "bundle:itjakub_favorite"]);
