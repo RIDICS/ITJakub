@@ -1,48 +1,66 @@
 ﻿class EditionNote {
     private readonly projectId;
-    private simplemde: SimpleMDE;
+    private simpleMde: SimpleMDE;
+    private simpleMdeIcons: SimpleMdeIcons;
     private util: EditorsUtil;
-    private gui: EditorsGui;
+    private errorHandler: ErrorHandler;
+    private alertHolder: JQuery;
 
     constructor(projectId: number) {
         this.projectId = projectId;
     }
 
     init() {
-        const util = new EditorsUtil();
-        const gui = new EditorsGui();
-        this.util = util;
-        this.gui = gui;
-        const noteContentAjax = util.loadEditionNote(this.projectId);
-        noteContentAjax.done((note: string) => {
+        this.util = new EditorsUtil();
+        this.simpleMdeIcons = new SimpleMdeIcons();
+        const noteTab = $("#project-work-note");
+        this.alertHolder = noteTab.find(".alert-holder");
+        const noteEditorLoader = noteTab.find(".loader");    
+
+        this.util.loadEditionNote(this.projectId).done((note: string) => {
             this.initEditorOnTextarea(note);
-        });
-        noteContentAjax.fail(() => {
-            const error = new AlertComponentBuilder(AlertType.Error).addContent("Failed to load edition note");
-            $("#project-work-note").empty().append(error.buildElement());
+        }).fail((error) => {
+            const alert = new AlertComponentBuilder(AlertType.Error)
+                .addContent(this.errorHandler.getErrorMessage(error, localization.translate("EditionNoteLoadFailed", "RidicsProject").value));
+            this.alertHolder.empty().append(alert.buildElement());
+        }).always(() => {
+            noteEditorLoader.addClass("hide");
         });
     }
 
     private initEditorOnTextarea(note: string) {
         const textAreaEl = $(".note-editor-textarea");
+        textAreaEl.removeClass("hide");
         const simpleMdeOptions: SimpleMDE.Options = {
             element: textAreaEl[0] as Node as HTMLElement,
             autoDownloadFontAwesome: false,
             spellChecker: false,
             mode: "gfm",
             toolbar: [
-                "bold", "italic", "|", "unordered-list", "ordered-list", "|", "heading-1", "heading-2", "heading-3",
-                "|", "quote", "preview", "horizontal-rule", "|", {
+                this.simpleMdeIcons.toolBold,
+                this.simpleMdeIcons.toolItalic,
+                this.simpleMdeIcons.toolSeparator,
+                this.simpleMdeIcons.toolUnorderedList,
+                this.simpleMdeIcons.toolOrderedList,
+                this.simpleMdeIcons.toolSeparator,
+                this.simpleMdeIcons.toolHeading1,
+                this.simpleMdeIcons.toolHeading2,
+                this.simpleMdeIcons.toolHeading3,
+                this.simpleMdeIcons.toolSeparator,
+                this.simpleMdeIcons.toolQuote,
+                this.simpleMdeIcons.toolPreview,
+                this.simpleMdeIcons.toolHorizontalRule,
+                this.simpleMdeIcons.toolSeparator, {
                     name: "save",
                     action: (editor) => { this.saveNote(editor.value()) },
                     className: "fa fa-floppy-o",
-                    title: "Save"
+                    title: localization.translate("Save", "ItJakubJs").value
                 }
             ]
         };
-        this.simplemde = new SimpleMDE(simpleMdeOptions);
-        this.simplemde.value(note);
-        this.simplemde.codemirror.focus();
+        this.simpleMde = new SimpleMDE(simpleMdeOptions);
+        this.simpleMde.value(note);
+        this.simpleMde.codemirror.focus();
     }
 
     private saveNote(noteValue: string) {
@@ -50,12 +68,13 @@
             projectId: this.projectId,
             content: noteValue
         };
-        const saveNoteAjax = this.util.saveEditionNote(request);
-        saveNoteAjax.done(() => {
-            this.gui.showInfoDialog("Success", "Note has been saved successfully");
-        });
-        saveNoteAjax.fail(() => {
-            this.gui.showInfoDialog("Fail", "Note has not been saved");
+        this.util.saveEditionNote(request).done(() => {
+            const error = new AlertComponentBuilder(AlertType.Success).addContent(localization.translate("EditionNoteSaveSuccess", "RidicsProject").value);
+            this.alertHolder.empty().append(error.buildElement());
+        }).fail((error) => {
+            const alert = new AlertComponentBuilder(AlertType.Error)
+                .addContent(this.errorHandler.getErrorMessage(error, localization.translate("EditionNoteSaveFailed", "RidicsProject").value));
+            this.alertHolder.empty().append(alert.buildElement());          
         });
     }
 }

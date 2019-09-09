@@ -28,6 +28,10 @@
     "ShiftPageUp": "Shift selected pages up",
     "ShiftPageDown": "Shift selected pages down",
     "EditPageName": "Edit page name",
-    "DeletePage": "Delete page"
+    "DeletePage": "Delete page",
+
+    "EditionNoteLoadFailed": "An unexpected error occurred while loading edition note.",
+    "EditionNoteSaveSuccess": "Note has been saved successfully",
+    "EditionNoteSaveFailed": "An unexpected error occurred while saving edition note."
   }
 }

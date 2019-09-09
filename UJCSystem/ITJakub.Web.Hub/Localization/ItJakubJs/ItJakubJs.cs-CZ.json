@@ -59,6 +59,7 @@
 		"MarkdownGuide" : "Nápověda k formátu Markdown",
 		"Undo" : "Zpět",
 		"Redo" : "Znovu",	
+		"Save" : "Uložit",	
 		
 		"Error:" : "Chyba: {0}"
 		}
