@@ -24,10 +24,11 @@ namespace Vokabular.MainService.Core.Managers
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
         private readonly CommunicationProvider m_communicationProvider;
         private readonly UserDetailManager m_userDetailManager;
+        private readonly IMapper m_mapper;
 
         public ProjectContentManager(ResourceRepository resourceRepository, FileSystemManager fileSystemManager,
             AuthenticationManager authenticationManager, FulltextStorageProvider fulltextStorageProvider,
-            CommunicationProvider communicationProvider, UserDetailManager userDetailManager)
+            CommunicationProvider communicationProvider, UserDetailManager userDetailManager, IMapper mapper)
         {
             m_resourceRepository = resourceRepository;
             m_fileSystemManager = fileSystemManager;
@@ -35,13 +36,14 @@ namespace Vokabular.MainService.Core.Managers
             m_fulltextStorageProvider = fulltextStorageProvider;
             m_communicationProvider = communicationProvider;
             m_userDetailManager = userDetailManager;
+            m_mapper = mapper;
         }
 
         public List<TextWithPageContract> GetTextResourceList(long projectId, long? resourceGroupId)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectTexts(projectId, resourceGroupId, true));
             var sortedDbResult = dbResult.OrderBy(x => ((PageResource) x.ResourcePage.LatestVersion).Position);
-            var result = Mapper.Map<List<TextWithPageContract>>(sortedDbResult);
+            var result = m_mapper.Map<List<TextWithPageContract>>(sortedDbResult);
             return result;
         }
 
@@ -49,14 +51,14 @@ namespace Vokabular.MainService.Core.Managers
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectImages(projectId, null, true));
             var sortedDbResult = dbResult.OrderBy(x => ((PageResource) x.ResourcePage.LatestVersion).Position);
-            var result = Mapper.Map<List<ImageWithPageContract>>(sortedDbResult);
+            var result = m_mapper.Map<List<ImageWithPageContract>>(sortedDbResult);
             return result;
         }
 
         public FullTextContract GetTextResource(long textId, TextFormatEnumContract formatValue)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetTextResource(textId));
-            var result = Mapper.Map<FullTextContract>(dbResult);
+            var result = m_mapper.Map<FullTextContract>(dbResult);
 
             var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(dbResult.Resource.Project.ProjectType);
 
@@ -69,7 +71,7 @@ namespace Vokabular.MainService.Core.Managers
         public List<GetTextCommentContract> GetCommentsForText(long textId)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetCommentsForText(textId));
-            var result = m_userDetailManager.AddUserDetails(Mapper.Map<List<GetTextCommentContract>>(dbResult));
+            var result = m_userDetailManager.AddUserDetails(m_mapper.Map<List<GetTextCommentContract>>(dbResult));
             return result;
         }
 

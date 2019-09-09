@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using ITJakub.Lemmatization.DataEntities.Entities;
+﻿using ITJakub.Lemmatization.DataEntities.Entities;
 using ITJakub.Lemmatization.DataEntities.Repositories;
-using ITJakub.Lemmatization.Shared.Contracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace ITJakub.Lemmatization.Core.Works
@@ -11,10 +9,10 @@ namespace ITJakub.Lemmatization.Core.Works
         private readonly LemmatizationRepository m_repository;
         private readonly long m_canonicalFormId;
         private readonly string m_text;
-        private readonly CanonicalFormTypeContract m_type;
+        private readonly CanonicalFormType m_type;
         private readonly string m_description;
 
-        public EditCanonicalFormWork(LemmatizationRepository lemmatizationRepository, long canonicalFormId, string text, CanonicalFormTypeContract type, string description) : base(lemmatizationRepository)
+        public EditCanonicalFormWork(LemmatizationRepository lemmatizationRepository, long canonicalFormId, string text, CanonicalFormType type, string description) : base(lemmatizationRepository)
         {
             m_repository = lemmatizationRepository;
             m_canonicalFormId = canonicalFormId;
@@ -25,10 +23,9 @@ namespace ITJakub.Lemmatization.Core.Works
 
         protected override void ExecuteWorkImplementation()
         {
-            var canonicalFormType = Mapper.Map<CanonicalFormType>(m_type);
             var canonicalForm = m_repository.FindById<CanonicalForm>(m_canonicalFormId);
             canonicalForm.Text = m_text;
-            canonicalForm.Type = canonicalFormType;
+            canonicalForm.Type = m_type;
             canonicalForm.Description = m_description;
 
             m_repository.Update(canonicalForm);

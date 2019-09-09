@@ -57,6 +57,9 @@ namespace Vokabular.FulltextService
                 options.SchemaFilter<PolymorphismSchemaFilter<SearchCriteriaContract>>();
             });
 
+            // AutoMapper
+            services.AddAutoMapper();
+
             // IoC
             var container = new DryIocContainerWrapper();
             container.Install<FulltextServiceContainerRegistration>();
@@ -74,8 +77,6 @@ namespace Vokabular.FulltextService
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.ConfigureAutoMapper();
 
             app.UseMvc();
 

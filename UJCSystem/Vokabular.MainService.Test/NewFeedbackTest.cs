@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
@@ -9,17 +12,27 @@ using Vokabular.MainService.DataContracts.Contracts.Feedback;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.MainService.Test.Containers;
 using Vokabular.MainService.Test.Mock;
+using Vokabular.Shared.AspNetCore.Container.Extensions;
 
 namespace Vokabular.MainService.Test
 {
     [TestClass]
-    public class NewFeedbackTest
+    public class NewFeedbackTest : IDisposable
     {
+        private readonly DryIocContainer m_container;
+        private readonly IMapper m_mapper;
+
         public NewFeedbackTest()
         {
+            var services = new ServiceCollection();
+            services.AddAutoMapper();
+
             var container = new DryIocContainer();
             container.Install<MainServiceCoreContainerRegistration>();
-            container.InitAutoMapper();
+            container.Populate(services);
+
+            m_container = container;
+            m_mapper = container.Resolve<IMapper>();
         }
 
         [TestMethod]
@@ -36,7 +49,7 @@ namespace Vokabular.MainService.Test
                 Text = "Feedback text"
             };
 
-            var work1 = new CreateFeedbackWork(repository, data, FeedbackType.Generic, userId);
+            var work1 = new CreateFeedbackWork(m_mapper, repository, data, FeedbackType.Generic, userId);
             work1.Execute();
 
             Assert.AreEqual(1, repository.CreatedObjects.Count);
@@ -45,13 +58,13 @@ namespace Vokabular.MainService.Test
 
             
             repository = new MockPortalRepository();
-            var work2 = new CreateFeedbackWork(repository, data, FeedbackType.Headword, userId);
+            var work2 = new CreateFeedbackWork(m_mapper, repository, data, FeedbackType.Headword, userId);
 
             Assert.ThrowsException<MainServiceException>(() => work2.Execute());
 
 
             repository = new MockPortalRepository();
-            var work3 = new CreateFeedbackWork(repository, data, FeedbackType.Headword, userId, resourceVersionId);
+            var work3 = new CreateFeedbackWork(m_mapper, repository, data, FeedbackType.Headword, userId, resourceVersionId);
             work3.Execute();
 
             Assert.AreEqual(1, repository.CreatedObjects.Count);
@@ -81,7 +94,7 @@ namespace Vokabular.MainService.Test
                 AuthorName = "Author Name"
             };
 
-            var work1 = new CreateFeedbackWork(repository, data, FeedbackType.Generic, null, resourceVersionId);
+            var work1 = new CreateFeedbackWork(m_mapper, repository, data, FeedbackType.Generic, null, resourceVersionId);
             work1.Execute();
 
             Assert.AreEqual(1, repository.CreatedObjects.Count);
@@ -90,13 +103,13 @@ namespace Vokabular.MainService.Test
 
 
             repository = new MockPortalRepository();
-            var work2 = new CreateFeedbackWork(repository, new CreateFeedbackContract(), FeedbackType.Headword);
+            var work2 = new CreateFeedbackWork(m_mapper, repository, new CreateFeedbackContract(), FeedbackType.Headword);
 
             Assert.ThrowsException<MainServiceException>(() => work2.Execute());
 
 
             repository = new MockPortalRepository();
-            var work3 = new CreateFeedbackWork(repository, data, FeedbackType.Headword, null, resourceVersionId);
+            var work3 = new CreateFeedbackWork(m_mapper, repository, data, FeedbackType.Headword, null, resourceVersionId);
             work3.Execute();
 
             Assert.AreEqual(1, repository.CreatedObjects.Count);
@@ -109,6 +122,11 @@ namespace Vokabular.MainService.Test
             Assert.AreEqual(data.AuthorEmail, feedbackEntity.AuthorEmail);
             Assert.AreEqual(data.AuthorName, feedbackEntity.AuthorName);
             Assert.AreEqual(data.Text, feedbackEntity.Text);
+        }
+
+        public void Dispose()
+        {
+            m_container.Dispose();
         }
     }
 }

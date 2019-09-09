@@ -20,16 +20,18 @@ namespace Vokabular.MainService.Core.Managers
         private readonly ForumManager m_forumManager;
         private readonly SubForumManager m_subForumManager;
         private readonly ForumSiteUrlHelper m_forumSiteUrlHelper;
+        private readonly IMapper m_mapper;
         private readonly ForumOption m_forumOptions;
 
         public ForumSiteManager(ProjectRepository projectRepository, MetadataRepository metadataRepository, ForumManager forumManager,
-            SubForumManager subForumManager, ForumSiteUrlHelper forumSiteUrlHelper, IOptions<ForumOption> forumOptions)
+            SubForumManager subForumManager, ForumSiteUrlHelper forumSiteUrlHelper, IOptions<ForumOption> forumOptions, IMapper mapper)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
             m_forumManager = forumManager;
             m_subForumManager = subForumManager;
             m_forumSiteUrlHelper = forumSiteUrlHelper;
+            m_mapper = mapper;
             m_forumOptions = forumOptions.Value;
         }
 
@@ -48,7 +50,7 @@ namespace Vokabular.MainService.Core.Managers
                 throw new ForumException(MainServiceErrorCode.ProjectNotExist, "The project does not exist.");
             }
 
-            var projectDetailContract = Mapper.Map<ProjectDetailContract>(project);
+            var projectDetailContract = m_mapper.Map<ProjectDetailContract>(project);
             projectDetailContract.PageCount = work.GetPageCount();
             var bookTypeIds = project.LatestPublishedSnapshot.BookTypes.Select(x => (short) x.Type).ToArray();
 
@@ -87,7 +89,7 @@ namespace Vokabular.MainService.Core.Managers
                 throw new ForumException(MainServiceErrorCode.ProjectNotExist, "Project does not exist.");
             }
 
-            var projectDetailContract = Mapper.Map<ProjectDetailContract>(project);
+            var projectDetailContract = m_mapper.Map<ProjectDetailContract>(project);
             projectDetailContract.PageCount = work.GetPageCount();
             var bookTypeIds = project.LatestPublishedSnapshot.BookTypes.Select(x => (short) x.Type).ToArray();
 
@@ -110,7 +112,7 @@ namespace Vokabular.MainService.Core.Managers
                 return null;
             }
 
-            var result = Mapper.Map<ForumContract>(forum);
+            var result = m_mapper.Map<ForumContract>(forum);
             result.Url = m_forumSiteUrlHelper.GetTopicsUrl(result.Id);
             return result;
         }

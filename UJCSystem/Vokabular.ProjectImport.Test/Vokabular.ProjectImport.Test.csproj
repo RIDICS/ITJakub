@@ -34,6 +34,7 @@
     <ProjectReference Include="..\Vokabular.ProjectImport.Model\Vokabular.ProjectImport.Model.csproj" />
     <ProjectReference Include="..\Vokabular.ProjectImport.Shared\Vokabular.ProjectImport.Shared.csproj" />
     <ProjectReference Include="..\Vokabular.ProjectImport\Vokabular.ProjectImport.csproj" />
+    <ProjectReference Include="..\Vokabular.Shared.AspNetCore\Vokabular.Shared.AspNetCore.csproj" />
   </ItemGroup>
 
 </Project>

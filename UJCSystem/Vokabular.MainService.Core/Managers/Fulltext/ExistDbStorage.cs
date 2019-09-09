@@ -10,7 +10,6 @@ using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
-using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
@@ -24,11 +23,13 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
     {
         private readonly CommunicationProvider m_communicationProvider;
         private readonly BookRepository m_bookRepository;
+        private readonly IMapper m_mapper;
 
-        public ExistDbStorage(CommunicationProvider communicationProvider, BookRepository bookRepository)
+        public ExistDbStorage(CommunicationProvider communicationProvider, BookRepository bookRepository, IMapper mapper)
         {
             m_communicationProvider = communicationProvider;
             m_bookRepository = bookRepository;
+            m_mapper = mapper;
         }
 
         private OutputFormatEnum ConvertOutputTextFormat(TextFormatEnumContract format)
@@ -88,7 +89,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         {
             var outputFormat = ConvertOutputTextFormat(format);
             var dbTtransformation = m_bookRepository.InvokeUnitOfWork(x => x.GetDefaultTransformation(outputFormat, bookType));
-            var transformation = Mapper.Map<TransformationData>(dbTtransformation);
+            var transformation = m_mapper.Map<TransformationData>(dbTtransformation);
             if (transformation == null)
             {
                 transformation = new TransformationData

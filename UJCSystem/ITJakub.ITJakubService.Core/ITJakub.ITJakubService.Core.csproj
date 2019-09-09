@@ -89,6 +89,7 @@
     <Compile Include="AuthorizationManager.cs" />
     <Compile Include="CommunicationTokenGenerator.cs" />
     <Compile Include="DefaultUserProvider.cs" />
+    <Compile Include="Mapper.cs" />
     <Compile Include="PermissionManager.cs" />
     <Compile Include="FavoriteManager.cs" />
     <Compile Include="FeedbackManager.cs" />

@@ -10,8 +10,8 @@ namespace ITJakub.Web.Hub.AutoMapperProfiles
         {
             CreateMap<TokenDistanceCriteriaDescription, TokenDistanceCriteriaContract>()
                 .ForMember(dest => dest.Distance, opt => opt.MapFrom(src => src.Distance))
-                .ForMember(dest => dest.First, opt => opt.MapFrom(src =>  Mapper.Map<WordCriteriaContract>(src.First))) 
-                .ForMember(dest => dest.Second, opt => opt.MapFrom(src => Mapper.Map<WordCriteriaContract>(src.Second))) 
+                .ForMember(dest => dest.First, opt => opt.MapFrom(src => src.First)) 
+                .ForMember(dest => dest.Second, opt => opt.MapFrom(src => src.Second)) 
                 .ForAllMembers(opt => opt.Condition(src => src != null));
         }
     }

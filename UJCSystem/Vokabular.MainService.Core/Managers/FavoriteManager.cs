@@ -21,15 +21,18 @@ namespace Vokabular.MainService.Core.Managers
         private readonly AuthenticationManager m_authenticationManager;
         private readonly CatalogValueRepository m_catalogValueRepository;
         private readonly FavoritesRepository m_favoritesRepository;
+        private readonly IMapper m_mapper;
         private readonly ResourceRepository m_resourceRepository;
 
         //private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public FavoriteManager(AuthenticationManager authenticationManager, CatalogValueRepository catalogValueRepository, ResourceRepository resourceRepository, FavoritesRepository favoritesRepository)
+        public FavoriteManager(AuthenticationManager authenticationManager, CatalogValueRepository catalogValueRepository,
+            ResourceRepository resourceRepository, FavoritesRepository favoritesRepository, IMapper mapper)
         {
             m_authenticationManager = authenticationManager;
             m_catalogValueRepository = catalogValueRepository;
             m_favoritesRepository = favoritesRepository;
+            m_mapper = mapper;
             m_resourceRepository = resourceRepository;
         }
 
@@ -53,7 +56,7 @@ namespace Vokabular.MainService.Core.Managers
         //        return new List<HeadwordBookmarkContract>();
 
         //    var headwordResults = m_favoritesRepository.GetAllHeadwordBookmarks(userName);
-        //    return Mapper.Map<IList<HeadwordBookmarkContract>>(headwordResults);
+        //    return m_mapper.Map<IList<HeadwordBookmarkContract>>(headwordResults);
         //}
 
         //public void AddHeadwordBookmark(string bookXmlId, string entryXmlId)
@@ -87,7 +90,7 @@ namespace Vokabular.MainService.Core.Managers
                 projectIds = new List<long>();
             }
             var user = TryGetUser();
-            var bookTypeEnum = Mapper.Map<BookTypeEnum?>(bookType);
+            var bookTypeEnum = m_mapper.Map<BookTypeEnum?>(bookType);
             var dbResult = m_favoritesRepository.InvokeUnitOfWork(x => x.GetFavoriteLabeledBooks(projectIds, bookTypeEnum, user.Id));
 
             var resultList = new List<FavoriteBookGroupedContract>();
@@ -96,7 +99,7 @@ namespace Vokabular.MainService.Core.Managers
                 var favoriteItems = new FavoriteBookGroupedContract
                 {
                     Id = favoriteBookGroup.Key,
-                    FavoriteInfo = favoriteBookGroup.Select(Mapper.Map<FavoriteBaseWithLabelContract>).ToList()
+                    FavoriteInfo = favoriteBookGroup.Select(m_mapper.Map<FavoriteBaseWithLabelContract>).ToList()
                 };
                 resultList.Add(favoriteItems);
             }
@@ -114,7 +117,7 @@ namespace Vokabular.MainService.Core.Managers
                 var favoriteItems = new FavoriteCategoryGroupedContract
                 {
                     Id = favoriteCategoryGroup.Key,
-                    FavoriteInfo = favoriteCategoryGroup.Select(Mapper.Map<FavoriteBaseWithLabelContract>).ToList()
+                    FavoriteInfo = favoriteCategoryGroup.Select(m_mapper.Map<FavoriteBaseWithLabelContract>).ToList()
                 };
                 resultList.Add(favoriteItems);
             }
@@ -140,7 +143,7 @@ namespace Vokabular.MainService.Core.Managers
         public long CreateFavoriteQuery(CreateFavoriteQueryContract data)
         {
             var userId = m_authenticationManager.GetCurrentUserId();
-            var work = new CreateFavoriteQueryWork(m_favoritesRepository, m_catalogValueRepository, data, userId);
+            var work = new CreateFavoriteQueryWork(m_favoritesRepository, m_catalogValueRepository, data, userId, m_mapper);
             var resultId = work.Execute();
             return resultId;
         }
@@ -156,7 +159,7 @@ namespace Vokabular.MainService.Core.Managers
                     : repository.GetLatestFavoriteLabels(latestLabelCount.Value, user.Id);
             });
 
-            return Mapper.Map<List<FavoriteLabelContract>>(dbResult);
+            return m_mapper.Map<List<FavoriteLabelContract>>(dbResult);
         }
 
         public PagedResultList<FavoriteBaseInfoContract> GetFavoriteItems(int? start, int? count, long? labelId, FavoriteTypeEnumContract? filterByType, string filterByTitle, FavoriteSortEnumContract sort)
@@ -164,13 +167,13 @@ namespace Vokabular.MainService.Core.Managers
             var user = TryGetUser();
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
-            var typeFilter = Mapper.Map<FavoriteTypeEnum?>(filterByType);
+            var typeFilter = m_mapper.Map<FavoriteTypeEnum?>(filterByType);
 
             var dbResult = m_favoritesRepository.InvokeUnitOfWork(x => x.GetFavoriteItems(labelId, typeFilter, filterByTitle, sort, startValue, countValue, user.Id));
             
             return new PagedResultList<FavoriteBaseInfoContract>
             {
-                List = Mapper.Map<List<FavoriteBaseInfoContract>>(dbResult.List),
+                List = m_mapper.Map<List<FavoriteBaseInfoContract>>(dbResult.List),
                 TotalCount = dbResult.Count
             };
         }
@@ -180,14 +183,14 @@ namespace Vokabular.MainService.Core.Managers
             var user = TryGetUser();
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
-            var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
-            var queryTypeEnum = Mapper.Map<QueryTypeEnum>(queryType);
+            var bookTypeEnum = m_mapper.Map<BookTypeEnum>(bookType);
+            var queryTypeEnum = m_mapper.Map<QueryTypeEnum>(queryType);
 
             var dbResult = m_favoritesRepository.InvokeUnitOfWork(x => x.GetFavoriteQueries(labelId, bookTypeEnum, queryTypeEnum, filterByTitle, startValue, countValue, user.Id));
 
             return new PagedResultList<FavoriteQueryContract>
             {
-                List = Mapper.Map<List<FavoriteQueryContract>>(dbResult.List),
+                List = m_mapper.Map<List<FavoriteQueryContract>>(dbResult.List),
                 TotalCount = dbResult.Count,
             };
         }
@@ -198,7 +201,7 @@ namespace Vokabular.MainService.Core.Managers
             
             var allBookmarks = m_favoritesRepository.InvokeUnitOfWork(x => x.GetAllPageBookmarksByBookId(projectId, user.Id));
 
-            return Mapper.Map<List<FavoritePageContract>>(allBookmarks);
+            return m_mapper.Map<List<FavoritePageContract>>(allBookmarks);
         }
 
         private FavoriteLabelWithBooksAndCategories CreateFavoriteLabelWithBooksAndCategories(FavoriteLabel favoriteLabelEntity)
@@ -220,7 +223,7 @@ namespace Vokabular.MainService.Core.Managers
             var favoriteLabels = new Dictionary<long, FavoriteLabelWithBooksAndCategories>();
 
             var user = TryGetUser();
-            var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
+            var bookTypeEnum = m_mapper.Map<BookTypeEnum>(bookType);
             
             m_favoritesRepository.InvokeUnitOfWork(repository =>
             {
@@ -299,7 +302,7 @@ namespace Vokabular.MainService.Core.Managers
 
             OwnershipHelper.CheckItemOwnership(favoriteItem.FavoriteLabel.User.Id, user.Id);
 
-            var result = Mapper.Map<FavoriteFullInfoContract>(favoriteItem);
+            var result = m_mapper.Map<FavoriteFullInfoContract>(favoriteItem);
             switch (favoriteItem.FavoriteTypeEnum)
             {
                 case FavoriteTypeEnum.Project:
@@ -319,8 +322,8 @@ namespace Vokabular.MainService.Core.Managers
                 case FavoriteTypeEnum.Query:
                     var favoriteQuery = (FavoriteQuery) favoriteItem;
                     var bookType = m_favoritesRepository.InvokeUnitOfWork(x => x.FindById<BookType>(favoriteQuery.BookType.Id));
-                    result.BookType = Mapper.Map<BookTypeEnumContract>(bookType.Type);
-                    result.QueryType = Mapper.Map<QueryTypeEnumContract>(favoriteQuery.QueryType);
+                    result.BookType = m_mapper.Map<BookTypeEnumContract>(bookType.Type);
+                    result.QueryType = m_mapper.Map<QueryTypeEnumContract>(favoriteQuery.QueryType);
                     result.Query = favoriteQuery.Query;
                     break;
             }

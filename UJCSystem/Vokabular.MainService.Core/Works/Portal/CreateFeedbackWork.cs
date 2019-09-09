@@ -11,14 +11,16 @@ namespace Vokabular.MainService.Core.Works.Portal
 {
     public class CreateFeedbackWork : UnitOfWorkBase<long>
     {
+        private readonly IMapper m_mapper;
         private readonly PortalRepository m_portalRepository;
         private readonly CreateFeedbackContract m_data;
         private readonly FeedbackType m_feedbackType;
         private readonly int? m_userId;
         private readonly long? m_resourceVersionId;
 
-        public CreateFeedbackWork(PortalRepository portalRepository, CreateFeedbackContract data, FeedbackType feedbackType, int? userId = null, long? resourceVersionId = null) : base(portalRepository)
+        public CreateFeedbackWork(IMapper mapper, PortalRepository portalRepository, CreateFeedbackContract data, FeedbackType feedbackType, int? userId = null, long? resourceVersionId = null) : base(portalRepository)
         {
+            m_mapper = mapper;
             m_portalRepository = portalRepository;
             m_data = data;
             m_feedbackType = feedbackType;
@@ -57,7 +59,7 @@ namespace Vokabular.MainService.Core.Works.Portal
 
             feedback.Text = m_data.Text;
             feedback.CreateTime = now;
-            feedback.FeedbackCategory = Mapper.Map<FeedbackCategoryEnum>(m_data.FeedbackCategory);
+            feedback.FeedbackCategory = m_mapper.Map<FeedbackCategoryEnum>(m_data.FeedbackCategory);
 
             if (m_userId != null)
             {
