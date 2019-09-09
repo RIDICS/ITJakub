@@ -6,10 +6,12 @@
     private readonly selector: string;
     private readonly viewType: ViewType;
     private readonly saveStateToUrl: boolean;
+    private readonly useLoadingContainer: boolean;
     private readonly pageLoadCallback: (list: ListWithPagination) => void;
     private readonly contextForCallback;
     private readonly listContainerSelector;
     private readonly pagination: Pagination;
+    private readonly loadingContainer: JQuery;
     private readonly searchForm: JQuery;
     private readonly adminApiClient = new AdminApiClient();
 
@@ -17,17 +19,19 @@
     private pageSize: number;
     private totalCount: number;
     private search: string;
+    
 
-    constructor(urlPath: string, selector: string, viewType: ViewType, saveStateToUrl: boolean);
-    constructor(urlPath: string, selector: string, viewType: ViewType, saveStateToUrl: boolean, pageLoadCallback: (list?: ListWithPagination) => void, contextForCallback: any);
-    constructor(urlPath: string, selector: string, viewType: ViewType, saveStateToUrl: boolean, pageLoadCallback?: (list: ListWithPagination) => void, contextForCallback?: any) {
-        this.urlPath = urlPath;
+    constructor(urlPath: string, selector: string, viewType: ViewType, saveStateToUrl: boolean = true, useLoadingContainer: boolean = false,
+        pageLoadCallback: (list?: ListWithPagination) => void = null, contextForCallback: any = null) {
+    this.urlPath = urlPath;
         this.selector = selector;
         this.viewType = viewType;
         this.saveStateToUrl = saveStateToUrl;
+        this.useLoadingContainer = useLoadingContainer;
         this.pageLoadCallback = pageLoadCallback;
         this.contextForCallback = contextForCallback;
         this.listContainerSelector = `#${this.selector}ListContainer`;
+        this.loadingContainer = $(`#${this.selector}LoadingContainer`);
         this.pagination = new Pagination({
             container: document.getElementById(selector + "Pagination") as HTMLDivElement,
             pageClickCallback: this.loadPage.bind(this)
@@ -121,7 +125,14 @@
         }).toString();
 
         const $listContainer = $(this.listContainerSelector);
-        $listContainer.html("<div class=\"loader\"></div>");
+
+        if (this.useLoadingContainer) {
+            $listContainer.empty();
+            this.loadingContainer.html("<div class=\"loader\"></div>");
+        } else {
+            $listContainer.html("<div class=\"loader\"></div>");
+        }
+        
 
         this.adminApiClient.getHtmlPageByUrl(url).done((response) => {
             $listContainer.html(String(response));
@@ -138,15 +149,21 @@
                 });
             }
 
-            if (typeof this.pageLoadCallback !== "undefined") {
+            if (this.pageLoadCallback !== null) {
                 this.pageLoadCallback.call(this.contextForCallback, this);
             }
         }).fail(() => {
             var alert = new AlertComponentBuilder(AlertType.Error).addContent(localization
                 .translate("ListError", "PermissionJs").value);
-            $listContainer
-                .empty()
-                .append(alert.buildElement());
+            if (this.useLoadingContainer) {
+                this.loadingContainer.empty().append(alert.buildElement());
+            } else {
+                $listContainer.empty().append(alert.buildElement());
+            }
+        }).always(() => {
+            if (this.useLoadingContainer) {
+                this.loadingContainer.empty();
+            }
         });
     }
 

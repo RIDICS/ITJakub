@@ -77,7 +77,7 @@ class SnapshotEditor {
 
     private setIncludeAllCheckbox(table: JQuery) {
         const checkboxes = table.find(".include-checkboxes input[type=\"checkbox\"]").toArray();
-        if (checkboxes.length == 0) {
+        if (checkboxes.length === 0) {
             return;
         }
 

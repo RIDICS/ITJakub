@@ -4,9 +4,9 @@
 
 <div id="new-snapshot-container">
     <div id="snapshot-section" class="section">
-      
+
         <h3>@Localizer.Translate("PublishedSnapshots", "Admin")</h3>
-       
+
         <div class="row">
             <div class="col-sm-offset-6 col-sm-6 col-lg-offset-8 col-lg-4">
                 <form asp-action="SnapshotList" asp-controller="Publication" method="get" class="snapshot-search-form search-form form-inline">
@@ -26,20 +26,21 @@
 
         <table id="work-snapshots-table">
             <thead>
-            <tr>
-                <th>@Localizer.Translate("Date", "Admin")</th>
-                <th>@Localizer.Translate("TextSources", "Admin")</th>
-                <th>@Localizer.Translate("ImageSources", "Admin")</th>
-                <th>@Localizer.Translate("AudioSources", "Admin")</th>
-                <th>@Localizer.Translate("Author", "Admin")</th>
-                <th>@Localizer.Translate("Comment", "Admin")</th>
-                <th></th>
-            </tr>
+                <tr>
+                    <th>@Localizer.Translate("Date", "Admin")</th>
+                    <th>@Localizer.Translate("TextSources", "Admin")</th>
+                    <th>@Localizer.Translate("ImageSources", "Admin")</th>
+                    <th>@Localizer.Translate("AudioSources", "Admin")</th>
+                    <th>@Localizer.Translate("Author", "Admin")</th>
+                    <th>@Localizer.Translate("Comment", "Admin")</th>
+                    <th></th>
+                </tr>
             </thead>
             <tbody id="snapshotListContainer" class="list-container">
-            @await Html.PartialAsync("../Publication/_SnapshotListPage", Model)
+                @await Html.PartialAsync("../Publication/_SnapshotListPage", Model)
             </tbody>
         </table>
+        <div id="snapshotLoadingContainer"></div>
         <div id="snapshotPagination" class="text-center"></div>
 
         <div class="project-bottom-buttons">
