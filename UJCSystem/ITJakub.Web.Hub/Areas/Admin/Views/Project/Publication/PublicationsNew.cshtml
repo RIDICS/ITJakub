@@ -1,4 +1,6 @@
 ﻿@using ITJakub.Web.Hub.Areas.Admin.Models
+@using ITJakub.Web.Hub.Areas.Admin.Models.Constants
+@using NHibernate.Util
 @using Scalesoft.Localization.AspNetCore
 @model NewPublicationViewModel
 @inject ILocalizationService Localizer
@@ -98,10 +100,12 @@
                         </div>
                     </div>
                     <div class="project-snapshot-resources">
-                        @for (var i = 0; i < Model.Resources.Count; i++)
-                        {
-                            Model.ActualResource = i;
-                        @await Html.PartialAsync("Publication/_PublicationsNewResources", Model)
+                        @{
+                            for (var i = 0; i < Model.ResourceTypes.Count; i++)
+                            {
+                                ViewData[PublicationViewConstants.ActualResourceType] = i;
+                                @await Html.PartialAsync("Publication/_PublicationsNewResources", Model, ViewData)
+                            }
                         }
                         <div class="project-bottom-buttons">
                             <div class="row">

@@ -218,7 +218,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 selectableBookType.IsSelected = snapshot.BookTypes.Any(x => x == selectableBookType.BookType);
             }
 
-            foreach (var resourceList in model.Resources)
+            foreach (var resourceList in model.ResourceTypes)
             {
                 foreach (var resource in resourceList.ResourceList)
                 {
@@ -249,7 +249,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var client = GetProjectClient();
 
             var versionIds = new List<long>();
-            foreach (var resource in viewModel.Resources)
+            foreach (var resource in viewModel.ResourceTypes)
             {
                 if (resource.ResourceList != null)
                     versionIds.AddRange(resource.ResourceList.Where(x => x.IsSelected).Select(x => x.ResourceVersionId).ToList());
@@ -674,21 +674,21 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return new NewPublicationViewModel
             {
                 ProjectId = projectId,
-                Resources = new List<ResourcesViewModel>
+                ResourceTypes = new List<ResourceTypeViewModel>
                 {
-                    new ResourcesViewModel
+                    new ResourceTypeViewModel
                     {
                         ResourceList = Mapper.Map<IList<ResourceViewModel>>(text),
                         ResourceType = ResourceTypeEnumContract.Text,
                         Title = m_localization.Translate("TextSources", "Admin"),
                     },
-                    new ResourcesViewModel
+                    new ResourceTypeViewModel
                     {
                         ResourceList = Mapper.Map<IList<ResourceViewModel>>(images),
                         ResourceType = ResourceTypeEnumContract.Image,
                         Title = m_localization.Translate("ImageSources", "Admin"),
                     },
-                    new ResourcesViewModel
+                    new ResourceTypeViewModel
                     {
                         ResourceList = Mapper.Map<IList<ResourceViewModel>>(audio),
                         ResourceType = ResourceTypeEnumContract.Audio,

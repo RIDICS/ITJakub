@@ -8,8 +8,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
     public class NewPublicationViewModel
     {
         public long ProjectId { get; set; }
-        public IList<ResourcesViewModel> Resources { get; set; }
-        public int ActualResource { get; set; }
+        public IList<ResourceTypeViewModel> ResourceTypes { get; set; }
         public string Comment { get; set; }
         public IList<GroupInfoViewModel> VisibilityForGroups { get; set; }
         public IList<BookTypeEnumContract> AvailableBookTypes { get; set; }
@@ -42,7 +41,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
         public string Name { get; set; }
     }
 
-    public class ResourcesViewModel
+    public class ResourceTypeViewModel
     {
         public string Title { get; set; }
         public ResourceTypeEnumContract ResourceType { get; set; }

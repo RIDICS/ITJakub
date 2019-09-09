@@ -1,22 +1,27 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using ITJakub.Web.Hub.Areas.Admin.Models.Constants
+@using Scalesoft.Localization.AspNetCore
 @model ITJakub.Web.Hub.Areas.Admin.Models.NewPublicationViewModel
 @inject ILocalizationService Localizer
 
-<input type="hidden" asp-for="@Model.Resources[Model.ActualResource].ResourceType" />
-<div class="panel panel-default publish-resource-panel" data-resource-type="@Html.Raw((int) Model.Resources[Model.ActualResource].ResourceType)">
+@{
+    var actualResourceTypeIndex = (int)ViewData[PublicationViewConstants.ActualResourceType];
+    var resourceTypeViewModel = Model.ResourceTypes[actualResourceTypeIndex];
+}
+<input type="hidden" asp-for="@resourceTypeViewModel.ResourceType" />
+<div class="panel panel-default publish-resource-panel" data-resource-type="@Html.Raw((int) resourceTypeViewModel.ResourceType)">
     <div class="panel-heading">
         <div class="collapse-icon">
-            <a data-toggle="collapse" href="#panel-@Html.Raw((int) Model.Resources[Model.ActualResource].ResourceType)" aria-expanded="true">
+            <a data-toggle="collapse" href="#panel-@Html.Raw((int) resourceTypeViewModel.ResourceType)" aria-expanded="true">
                 <span class="fa fa-chevron-up"></span>
                 <span class="fa fa-chevron-down"></span>
             </a>
         </div>
         <h4 class="panel-title">
-            <a data-toggle="collapse" href="#panel-@Html.Raw((int) Model.Resources[Model.ActualResource].ResourceType)" aria-expanded="true">@Model.Resources[Model.ActualResource].Title</a>
+            <a data-toggle="collapse" href="#panel-@Html.Raw((int) resourceTypeViewModel.ResourceType)" aria-expanded="true">@resourceTypeViewModel.Title</a>
         </h4>
     </div>
     
-    <div id="panel-@Html.Raw((int) Model.Resources[Model.ActualResource].ResourceType)" class="panel-collapse collapse in">
+    <div id="panel-@Html.Raw((int) resourceTypeViewModel.ResourceType)" class="panel-collapse collapse in">
         <table class="table">
             <tr class="header">
                 <th class="include-all">
@@ -33,42 +38,42 @@
                 <th>@Localizer.Translate("Comment", "Admin")</th>
                 <th></th>
             </tr>
-            @if (Model.Resources[Model.ActualResource].ResourceList.Count == 0)
+            @if (resourceTypeViewModel.ResourceList.Count == 0)
             {
                 <tr>
                     <td colspan="7">
-                        @Localizer.TranslateFormat("ProjectNotContains", "Admin", Model.Resources[Model.ActualResource].Title.ToLower())
+                        @Localizer.TranslateFormat("ProjectNotContains", "Admin", resourceTypeViewModel.Title.ToLower())
                     </td>
                 </tr>
             }
             
-            @for (var i = 0; i < Model.Resources[Model.ActualResource].ResourceList.Count; i++)
+            @for (var i = 0; i < resourceTypeViewModel.ResourceList.Count; i++)
             {
-                <tr class="resource-row" data-id="@Model.Resources[Model.ActualResource].ResourceList[i].Id" data-version-id="@Model.Resources[Model.ActualResource].ResourceList[i].ResourceVersionId">
+                <tr class="resource-row" data-id="@resourceTypeViewModel.ResourceList[i].Id" data-version-id="@resourceTypeViewModel.ResourceList[i].ResourceVersionId">
                     <td class="include-checkboxes">
-                        <input type="hidden" asp-for="@Model.Resources[Model.ActualResource].ResourceList[i].Id" />
-                        <input type="hidden" class="resource-version-id" asp-for="@Model.Resources[Model.ActualResource].ResourceList[i].ResourceVersionId" />
-                        <input type="checkbox" asp-for="@Model.Resources[Model.ActualResource].ResourceList[i].IsSelected" />
+                        <input type="hidden" asp-for="@resourceTypeViewModel.ResourceList[i].Id" />
+                        <input type="hidden" class="resource-version-id" asp-for="@resourceTypeViewModel.ResourceList[i].ResourceVersionId" />
+                        <input type="checkbox" asp-for="@resourceTypeViewModel.ResourceList[i].IsSelected" />
                     </td>
                     <td class="name">
-                        @Model.Resources[Model.ActualResource].ResourceList[i].Name
+                        @resourceTypeViewModel.ResourceList[i].Name
                     </td>
                     <td>
-                        <select asp-for="@Model.Resources[Model.ActualResource].ResourceList[i].ResourceVersionId" class="selectpicker select-version" data-loaded="false">
-                            <option value="@Model.Resources[Model.ActualResource].ResourceList[i].ResourceVersionId"
-                                    data-name="@Model.Resources[Model.ActualResource].ResourceList[i].Name">
-                                @Model.Resources[Model.ActualResource].ResourceList[i].VersionNumber
+                        <select asp-for="@resourceTypeViewModel.ResourceList[i].ResourceVersionId" class="selectpicker select-version" data-loaded="false">
+                            <option value="@resourceTypeViewModel.ResourceList[i].ResourceVersionId"
+                                    data-name="@resourceTypeViewModel.ResourceList[i].Name">
+                                @resourceTypeViewModel.ResourceList[i].VersionNumber
                             </option>
                         </select>
                     </td>
                     <td class="created">
-                        @Model.Resources[Model.ActualResource].ResourceList[i].Created.ToLocalTime().ToString(Localizer.GetRequestCulture())
+                        @resourceTypeViewModel.ResourceList[i].Created.ToLocalTime().ToString(Localizer.GetRequestCulture())
                     </td>
                     <td class="author">
-                        @Model.Resources[Model.ActualResource].ResourceList[i].Author
+                        @resourceTypeViewModel.ResourceList[i].Author
                     </td>
                     <td class="comment">
-                        @Model.Resources[Model.ActualResource].ResourceList[i].Comment
+                        @resourceTypeViewModel.ResourceList[i].Comment
                     </td>
                     <td>
                         <button class="resource-preview btn btn-default">@Localizer.Translate("Preview", "Admin")</button>
