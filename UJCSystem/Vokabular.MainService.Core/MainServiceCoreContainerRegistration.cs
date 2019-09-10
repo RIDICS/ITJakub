@@ -39,6 +39,7 @@ namespace Vokabular.MainService.Core
             services.AddScoped<ProjectManager>();
             services.AddScoped<ProjectMetadataManager>();
             services.AddScoped<ProjectResourceManager>();
+            services.AddScoped<ResourceManager>();
             services.AddScoped<RoleManager>();
             services.AddScoped<SnapshotManager>();
             services.AddScoped<TermManager>();
@@ -80,6 +81,7 @@ namespace Vokabular.MainService.Core
             services.AddSingleton<Profile, PageProfile>();
             services.AddSingleton<Profile, ProjectProfile>();
             services.AddSingleton<Profile, ResourceProfile>();
+            services.AddSingleton<Profile, ResourceVersionProfile>();
             services.AddSingleton<Profile, ResponsiblePersonProfile>();
             services.AddSingleton<Profile, SnapshotProfile>();
             services.AddSingleton<Profile, TermProfile>();
