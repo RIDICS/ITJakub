@@ -414,21 +414,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row new-responsibility-type-row">
-                                        <div class="form-group" id="add-responsible-type-container">
-                                            <div class="col-md-3 col-no-padding">
-                                                @Html.DropDownListFor(x => x.ResponsibleTypeEnumEmpty, Html.GetEnumSelectList<ResponsibleTypeEnumViewModel>(), htmlAttributes: new {@class = "form-control", id = "add-responsible-type-type"})
-                                            </div>
-                                            <div class="col-md-6">
-                                                <input class="form-control" id="add-responsible-type-text" type="text" placeholder="Nový typ"/>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <button class="btn btn-default" id="add-responsible-type-save">
-                                                    <span id="add-responsible-type-saving-icon" class="loading-small-button"></span>@Localizer.Translate("Create", "Admin")
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>

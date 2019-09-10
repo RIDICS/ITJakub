@@ -80,8 +80,7 @@
     initTab(): void {
         super.initTab();
         var $addResponsibleTypeButton = $("#add-responsible-type-button");
-        var $addResponsibleTypeContainer = $("#add-responsible-type-container");
-
+        
         this.rangePeriodViewSliderClass = new RegExDatingConditionRangePeriodView();
         this.rangePeriodViewSliderClass.makeRangeView(
             $("#select-range-dialog").find(".regex-dating-precision-div")[0] as Node as HTMLDivElement);
@@ -190,7 +189,6 @@
 
         $("#add-editor-button").click(() => {
             $addResponsibleTypeButton.prop("disabled", false);
-            $addResponsibleTypeContainer.hide();
             this.addEditorDialog.show();
         });
 
@@ -454,11 +452,7 @@
         $addResponsibleTypeButton.click(() => {
             $addResponsibleTypeButton.prop("disabled", true);
             $("#responsibility-type-input-elements").hide();
-            $addResponsibleTypeContainer.show();
-            $("#add-responsible-type-saving-icon").hide();
         });
-
-        $("#add-responsible-type-save").click(this.createResponsibleType.bind(this));
 
         this.addRemovePersonEvent($("#work-metadata-authors .remove-button, #work-metadata-editors .remove-button"));
         
@@ -614,33 +608,7 @@
 
         }
     }
-
-    private createResponsibleType() {
-        $("#responsibility-type-input-elements").show();
-        var text = $("#add-responsible-type-text").val() as string;
-        const type = $("#add-responsible-type-type").val() as ResponsibleTypeEnum;
-        var typeLabel = $("#add-responsible-type-type option:selected").text();
-
-        var $savingIcon = $("#add-responsible-type-saving-icon");
-        $savingIcon.show();
-
-        this.projectClient.createResponsibleType(type, text).done((newResponsibleTypeId: number) => {
-            $("#add-responsible-type-container").hide();
-            $("#add-responsible-type-button").prop("disabled", false);
-            $("#add-responsible-type-type").val(0);
-            $("#add-responsible-type-text").val("");
-            var optionName = `${text} (${typeLabel})`;
-            UiHelper.addSelectOptionAndSetDefault($("#add-editor-type"), optionName, newResponsibleTypeId);
-        }).fail(() => {
-            bootbox.alert({
-                title: "Fail",
-                message: "Failed to create reponbility type"
-            });
-        }).always(() => {
-            $savingIcon.hide();
-        });
-    }
-
+    
     private addEditor() {
         var id: string;
         var responsibilityText: string;
