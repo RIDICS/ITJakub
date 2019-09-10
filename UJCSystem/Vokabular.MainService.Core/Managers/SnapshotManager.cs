@@ -42,15 +42,15 @@ namespace Vokabular.MainService.Core.Managers
         public SnapshotDetailContract GetSnapshotDetail(long snapshotId)
         {
             var snapshot = m_snapshotRepository.InvokeUnitOfWork(x => x.GetSnapshotWithResources(snapshotId));
-            var snapshotContract = Mapper.Map<SnapshotDetailContract>(snapshot);
+            var snapshotContract = m_mapper.Map<SnapshotDetailContract>(snapshot);
             return snapshotContract;
         }
 
         public long CreateSnapshot(CreateSnapshotContract data)
         {
             var userId = m_authorizationManager.GetCurrentUserId();
-            var bookTypes = Mapper.Map<IList<BookTypeEnum>>(data.BookTypes);
-            var defaultBookTypes = Mapper.Map<BookTypeEnum>(data.DefaultBookType);
+            var bookTypes = m_mapper.Map<IList<BookTypeEnum>>(data.BookTypes);
+            var defaultBookTypes = m_mapper.Map<BookTypeEnum>(data.DefaultBookType);
             var snapshotId = new CreateSnapshotWork(m_projectRepository, data.ProjectId, userId, data.ResourceVersionIds, data.Comment, bookTypes,
                 defaultBookTypes).Execute();
             return snapshotId;
@@ -64,7 +64,7 @@ namespace Vokabular.MainService.Core.Managers
             var publishedSnapshots = m_snapshotRepository.InvokeUnitOfWork(x => x.GetPublishedSnapshots(projectId, startValue, countValue, filterByComment));
             var snapshotInfo = m_snapshotRepository.InvokeUnitOfWork(x => x.GetSnapshotsResourcesCount(publishedSnapshots.List.Select(s => s.Id).ToArray()));
 
-            var snapshotContracts = Mapper.Map<List<SnapshotAggregatedInfoContract>>(publishedSnapshots.List);
+            var snapshotContracts = m_mapper.Map<List<SnapshotAggregatedInfoContract>>(publishedSnapshots.List);
 
             foreach (var snapshotContract in snapshotContracts)
             {
@@ -78,7 +78,7 @@ namespace Vokabular.MainService.Core.Managers
                     {
                         snapshotContract.ResourcesInfo.Add(new SnapshotResourcesInfoContract
                         {
-                            ResourceType = Mapper.Map<ResourceTypeEnumContract>(aggregatedInfo.Type),
+                            ResourceType = m_mapper.Map<ResourceTypeEnumContract>(aggregatedInfo.Type),
                             PublishedCount = aggregatedInfo.ResourcesCount
                         });
                     }

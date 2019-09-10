@@ -10,11 +10,13 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly ResourceRepository m_resourceRepository;
         private readonly UserDetailManager m_userDetailManager;
+        private readonly IMapper m_mapper;
 
-        public ResourceManager(ResourceRepository resourceRepository, UserDetailManager userDetailManager)
+        public ResourceManager(ResourceRepository resourceRepository, UserDetailManager userDetailManager, IMapper mapper)
         {
             m_resourceRepository = resourceRepository;
             m_userDetailManager = userDetailManager;
+            m_mapper = mapper;
         }
 
         public IList<ResourceVersionContract> GetResourceVersionHistory(long resourceId)
@@ -25,7 +27,7 @@ namespace Vokabular.MainService.Core.Managers
             var userCache = new Dictionary<int, string>();
             foreach (var resource in dbResult)
             {
-                var resourceContract = Mapper.Map<ResourceVersionContract>(resource);
+                var resourceContract = m_mapper.Map<ResourceVersionContract>(resource);
                 var userId = resource.CreatedByUser.Id;
                 if (!userCache.TryGetValue(userId, out var userName))
                 {

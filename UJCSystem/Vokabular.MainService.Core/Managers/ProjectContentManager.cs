@@ -46,7 +46,7 @@ namespace Vokabular.MainService.Core.Managers
             ResourceTypeEnum? resourceType = null;
             if (resourceTypeContract.HasValue)
             {
-                resourceType = Mapper.Map<ResourceTypeEnum>(resourceTypeContract);
+                resourceType = m_mapper.Map<ResourceTypeEnum>(resourceTypeContract);
             }
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestResources(projectId, resourceType));
 
@@ -54,7 +54,7 @@ namespace Vokabular.MainService.Core.Managers
             var userCache = new Dictionary<int, string>();
             foreach (var resource in dbResult)
             {
-                var resourceContract = Mapper.Map<ResourceWithLatestVersionContract>(resource);
+                var resourceContract = m_mapper.Map<ResourceWithLatestVersionContract>(resource);
                 var userId = resource.LatestVersion.CreatedByUser.Id;
                 if (!userCache.TryGetValue(userId, out var userName))
                 {
@@ -101,7 +101,7 @@ namespace Vokabular.MainService.Core.Managers
         public FullTextContract GetTextResourceVersion(long textVersionId, TextFormatEnumContract formatValue)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetResourceVersion<TextResource>(textVersionId, true, true));
-            var result = Mapper.Map<FullTextContract>(dbResult);
+            var result = m_mapper.Map<FullTextContract>(dbResult);
 
             var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(dbResult.Resource.Project.ProjectType);
 
