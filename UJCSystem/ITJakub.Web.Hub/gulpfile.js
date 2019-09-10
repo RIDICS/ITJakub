@@ -134,7 +134,8 @@ gulp.task("bundle:itjakub", ["build:ts"], function () {
             paths.webroot + "js/Plugins/itjakub.eucookiepopup.js",
             paths.webroot + "js/ridics.form-validation.js",
             paths.webroot + "js/ridics.errorHandler.js",
-            paths.webroot + "js/ridics.web-hub-api-client.js"
+            paths.webroot + "js/ridics.web-hub-api-client.js",
+            paths.webroot + "js/ridics.list.js"
         ])
         .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("itjakub.bundle.js"))
