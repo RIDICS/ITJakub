@@ -445,7 +445,7 @@
                 $(".responsible-person-list-items").empty();
                 const newResponsiblePersonButtonEl = $(".new-responsible-person-button");
                 newResponsiblePersonButtonEl.prop("disabled", false);
-                $(".new-responsible-person-finish-button").hide();
+                $(".new-responsible-person-button-group").hide();
                 const worksParticipatedEl = $(".works-participated");
                 const tableBodyEl = worksParticipatedEl.find(".works-list-items");
                 tableBodyEl.empty();
@@ -666,10 +666,14 @@
             firstName = selectedExistingResponsiblePersonEl.children(".existing-responsible-person-name").text();
             lastName = selectedExistingResponsiblePersonEl.children(".existing-responsible-person-surname").text();
             responsibilityTypeId = $("#add-editor-type").find(":selected").val() as number;
-            const responsibilityTextWithParenthesis = $("#add-editor-type").find(":selected").text();
-            responsibilityText = responsibilityTextWithParenthesis.replace(/ *\([^)]*\) */g, "");
-            $(".responsible-person-list-items").children(".responsible-person-list-item").remove();
-            finishAddingEditor();
+            if (typeof responsibilityTypeId == "undefined") {
+                this.addEditorDialog.showError("Please select responsible type");
+            } else {
+                const responsibilityTextWithParenthesis = $("#add-editor-type").find(":selected").text();
+                responsibilityText = responsibilityTextWithParenthesis.replace(/ *\([^)]*\) */g, "");
+                $(".responsible-person-list-items").children(".responsible-person-list-item").remove();
+                finishAddingEditor();
+            }
         } else {
             this.addEditorDialog.showError("Please select one responsible person from list");
         }
@@ -705,19 +709,6 @@
         $(".genre-item").find("select").each((index, elem: Node) => {
             selectedGenreIds.push(parseInt($(elem as Element).val() as string));
         });
-
-        const keywordsInputEl = $(".keywords-container").children(".tokenfield").children(".keywords-textarea");
-        const keywordsArray = $.map((keywordsInputEl.val() as string).split(","), $.trim);
-        const uniqueKeywordArray = this.returnUniqueElsArray(keywordsArray);
-        var keywordNonIdList: string[] = [];
-        const onlyNumbersRegex = new RegExp(/^[0-9]*$/);
-        for (let i = 0; i < uniqueKeywordArray.length; i++) {
-            if (onlyNumbersRegex.test(uniqueKeywordArray[i])) {
-                keywordIdList.push(uniqueKeywordArray[i]);
-            } else {
-                keywordNonIdList.push(uniqueKeywordArray[i]);
-            }
-        }
         
         var publisherText = "";
         if (this.publisherName == null) {
@@ -766,7 +757,7 @@
         $errorAlert.hide();
         this.projectClient.saveMetadata(this.projectId, data).done((responseData) => {
             $successAlert.show().delay(3000).fadeOut(2000);
-            $("#work-metadata-last-modification").text(responseData.lastModificationText);
+            $("#work-metadata-last-modification").text(responseData.lastModificationText.toLocaleString());
             $("#work-metadata-literary-original").text(responseData.literaryOriginalText);
         }).fail(() => {
             $errorAlert.show();
@@ -959,7 +950,8 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
 
         this.createCategoriesNestedStructure();
 
-        this.categoryTree = ($("#category-tree") as any).tree({
+        const categoryTreeElement = $("#category-tree");
+        this.categoryTree = (categoryTreeElement as any).tree({
             primaryKey: "id",
             uiLibrary: "bootstrap",
             checkedField: "categorySelected",
@@ -970,11 +962,26 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
 
         this.checkSelectedCategoriesInTree(this.categoryTree);
 
-        $("#category-tree").find("input").prop("disabled", true);
+        categoryTreeElement.find("input").prop("disabled", true);
+        const categoryTreeLabels = categoryTreeElement.find(".list-group-item span[data-role=\"display\"]");
+        categoryTreeLabels.addClass("disabled");
+        categoryTreeLabels.click((event) => {
+            if (!$(event.currentTarget).hasClass("disabled")) {
+                const node = $(event.currentTarget).parent("div").parent(".list-group-item");
+                if (node.find("input").prop("checked")) {
+                    this.categoryTree.uncheck(node);
+                } else {
+                    this.categoryTree.check(node);
+                }
+                
+            }
+        });
+
 
         $("#work-categorization-edit-button").click(() => {
             this.enabledEdit();
-            $("#category-tree").children("input").prop("disabled", false);
+            categoryTreeElement.children("input").prop("disabled", false);
+            categoryTreeLabels.removeClass("disabled");
         });
 
         $("#work-categorization-cancel-button").click(() => {
@@ -983,7 +990,8 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
             var tabPanelEl = $(metadataTabSelector);
             tabPanelEl.empty();
             this.workModule.loadTabPanel(metadataTabSelector);
-            $("#category-tree").children("input").prop("disabled", true);
+            categoryTreeElement.children("input").prop("disabled", true);
+            categoryTreeLabels.addClass("disabled");
         });
 
         $("#add-literary-kind-button").click(() => {
@@ -1060,9 +1068,8 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
                 keywordNonIdList.push(uniqueKeywordArray[i]);
             }
         }
-        const createNewKeywordAjax = this.adminApiClient.createNewKeywordsByArray(keywordNonIdList);
 
-        createNewKeywordAjax.done((newIds: number[]) => {
+        this.adminApiClient.createNewKeywordsByArray(keywordNonIdList).done((newIds: number[]) => {
             const allKeywordIds = keywordIdList.concat(newIds);
             const data: IOnlySaveCategorization = {
                 keywordIdList: allKeywordIds,

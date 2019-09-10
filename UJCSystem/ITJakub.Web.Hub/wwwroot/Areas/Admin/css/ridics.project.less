@@ -8,6 +8,7 @@
 @box-border: 1px solid #ddd;
 @even-table-row-colour: #eee;
 @odd-table-row-colour: white;
+@selected-row-color: #dcdcdc;
 
 .project-list {
     hr {
@@ -490,10 +491,6 @@ table {
     }
 }
 
-.existing-original-author-selected {
-    background-color: orange; //TODO debug
-}
-
 .table-of-keys-content {
 
     .table-of-keys-container {
@@ -556,18 +553,15 @@ table {
     }
 }
 
-#project-work-categorization,
-#project-work-metadata {
-    .person-surname {
-        margin: 0 3px;
+#project-work-categorization {
+    .add-button {
+        button {
+            margin-left: 15px;
+        }
     }
 
-    #work-metadata-copyright {
-        resize: none;
-        width: 100%;
-    }
-
-    #work-categorization-literary-genre, #work-categorization-literary-kind {
+    #work-categorization-literary-genre,
+    #work-categorization-literary-kind {
         .button-float-right {
             float: right;
         }
@@ -579,6 +573,22 @@ table {
                 width: 100%;
             }
         }
+    }
+
+    #work-categorization-invalid-keyword-fail {
+        display: none;
+    }
+}
+
+#project-work-categorization,
+#project-work-metadata {
+    .person-surname {
+        margin: 0 3px;
+    }
+
+    #work-metadata-copyright {
+        resize: none;
+        width: 100%;
     }
 
     .regex-slider-div {
@@ -595,16 +605,13 @@ table {
         }
     }
 
-    #work-categorization-invalid-keyword-fail {
-        display: none;
-    }
-
     .person-list-manipulate {
         float: right;
     }
 
     .generate-bibliography-row {
-        margin: 6px 0;
+        margin-top: 6px;
+        margin-bottom: 6px;
     }
 
     .move-button {
@@ -619,6 +626,17 @@ table {
     .category-container {
         height: 300px;
         overflow-y: scroll;
+
+        .list-group-item {
+            &.active{
+                background-color: white;
+                color: black;
+            }
+
+            .disabled {
+                cursor: initial;
+            }
+        }
     }
 
     .email-group, .publication-years-group {
@@ -681,6 +699,11 @@ table {
 
                 .new-original-author-button-group {
                     display: none;
+                    float: right;
+
+                    button:not(:first-of-type) {
+                        margin-left: 1em;
+                    }
                 }
             }
 
@@ -734,13 +757,14 @@ table {
                 }
 
                 .author-list-items {
-                    overflow-y: scroll;
+                    overflow-y: auto;
                     border: solid 1px gray;
                     border-top: none;
                     height: 200px;
 
                     .author-list-item {
                         border-bottom: solid 1px gray;
+                        cursor: pointer;
 
                         &:nth-child(even) {
                             background-color: @even-table-row-colour;
@@ -750,13 +774,13 @@ table {
                             background-color: @odd-table-row-colour;
                         }
 
+                        &.existing-original-author-selected {
+                            background-color: @selected-row-color;
+                        }
+
                         .list-group-item {
                             padding: 4px;
                         }
-                    }
-
-                    .existing-original-author-selected {
-                        background-color: orange;
                     }
 
                     .existing-original-author-name {
@@ -769,7 +793,6 @@ table {
                 }
 
                 .author-table-header {
-                    overflow-y: scroll;
                     border: solid 1px gray;
                     font-weight: bold;
                 }
@@ -808,7 +831,6 @@ table {
 
             .responsible-people-table {
                 .responsible-person-table-header {
-                    overflow-y: scroll;
                     border: solid 1px gray;
                     font-weight: bold;
                 }
@@ -826,10 +848,11 @@ table {
                 border: solid 1px gray;
                 border-top: none;
                 height: 200px;
-                overflow-y: scroll;
+                overflow-y: auto;
 
                 .responsible-person-list-item {
                     border-bottom: solid 1px gray;
+                    cursor: pointer;
 
                     &:nth-child(even) {
                         background-color: @even-table-row-colour;
@@ -839,13 +862,13 @@ table {
                         background-color: @odd-table-row-colour;
                     }
 
+                    &.existing-responsible-person-selected {
+                        background-color: @selected-row-color;
+                    }
+
                     .list-group-item {
                         padding: 4px;
                     }
-                }
-
-                .existing-responsible-person-selected {
-                    background-color: orange;
                 }
 
                 .existing-responsible-person-name {
@@ -873,6 +896,11 @@ table {
 
                 .new-responsible-person-button-group {
                     display: none;
+                    float: right;
+
+                    button:not(:first-of-type) {
+                        margin-left: 1em;
+                    }
                 }
             }
 
@@ -1226,7 +1254,7 @@ table {
 
             .active {
                 td {
-                    background-color: #DCDCDC;
+                    background-color: @selected-row-color;
                 }
             }
         }
@@ -1243,7 +1271,7 @@ table {
 
             td {
                 border: none;
-                
+
                 .form-control {
                     height: 28px;
                 }
