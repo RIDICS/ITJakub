@@ -56,9 +56,10 @@ font-awesome@4.7.0:
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/font-awesome/-/font-awesome-4.7.0.tgz#8fa8cf0411a1a31afd07b06d2902bb9fc815a133"
 
-gijgo@1.8.0:
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/gijgo/-/gijgo-1.8.0.tgz#2ce1433be9bc5b542d203e342bbd2b65d7fb6d66"
+gijgo@1.9.13:
+  version "1.9.13"
+  resolved "https://registry.yarnpkg.com/gijgo/-/gijgo-1.9.13.tgz#22c6186252369de3a618e1e6369a923849128b6e"
+  integrity sha512-VxUzueysKaSRpjNM6jiMdoTJuUEWiPJNir5PCVKat6uA1R6vH7crKyFnR/Ey1k2r0i1yvYeJ3QKsPFkTB7aZxg==
   dependencies:
     jquery "^3.2.1"
 
