@@ -69,7 +69,7 @@ namespace Vokabular.MainService.Core.Managers
 
             try
             {
-                m_forumSiteManager.CreateForums(importResult.ProjectId);
+                m_forumSiteManager.CreateOrUpdateForums(importResult.ProjectId);
             }
             catch (ForumException e)
             {

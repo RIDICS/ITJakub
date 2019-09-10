@@ -210,7 +210,7 @@ namespace Vokabular.MainService.Controllers
         [HttpPost("{projectId}/forum")]
         public ActionResult<int> CreateForum(long projectId)
         {
-            var forumId = m_forumSiteManager.CreateForums(projectId);
+            var forumId = m_forumSiteManager.CreateOrUpdateForums(projectId);
 
             return forumId != null ? (ActionResult<int>) Ok(forumId.Value) : BadRequest("Forum is disabled");
         }

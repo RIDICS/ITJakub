@@ -93,15 +93,21 @@ namespace ITJakub.FileProcessing.Service
 
         private void ConfigureAutoMapper()
         {
-            var profiles = ResolveAll<Profile>();
-
-            Mapper.Initialize(cfg =>
-            {
-                foreach (var profile in profiles)
+            Register(Component.For<IConfigurationProvider>()
+                .UsingFactoryMethod(c => new MapperConfiguration(cfg =>
                 {
-                    cfg.AddProfile(profile);
-                }
-            });
+                    var profiles = c.ResolveAll<Profile>();
+
+                    foreach (var profile in profiles)
+                    {
+                        cfg.AddProfile(profile);
+                    }
+                }))
+                .LifestyleSingleton());
+
+            Register(Component.For<IMapper>()
+                .UsingFactoryMethod(c => new Mapper(c.Resolve<IConfigurationProvider>()))
+                .LifestyleSingleton());
         }
 
         private void AddSubresolvers()

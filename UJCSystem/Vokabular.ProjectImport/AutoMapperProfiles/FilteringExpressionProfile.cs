@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
-using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.ExternalBibliography;
 
-namespace Vokabular.MainService.Core.AutoMapperProfiles
+namespace Vokabular.ProjectImport.AutoMapperProfiles
 {
     public class FilteringExpressionProfile : Profile
     {

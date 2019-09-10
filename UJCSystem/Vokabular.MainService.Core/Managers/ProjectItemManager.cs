@@ -20,27 +20,31 @@ namespace Vokabular.MainService.Core.Managers
         private readonly BookRepository m_bookRepository;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
         private readonly FileSystemManager m_fileSystemManager;
+        private readonly IMapper m_mapper;
 
-        public ProjectItemManager(AuthenticationManager authenticationManager, ResourceRepository resourceRepository, BookRepository bookRepository, FulltextStorageProvider fulltextStorageProvider, FileSystemManager fileSystemManager)
+        public ProjectItemManager(AuthenticationManager authenticationManager, ResourceRepository resourceRepository,
+            BookRepository bookRepository, FulltextStorageProvider fulltextStorageProvider, FileSystemManager fileSystemManager,
+            IMapper mapper)
         {
             m_authenticationManager = authenticationManager;
             m_resourceRepository = resourceRepository;
             m_bookRepository = bookRepository;
             m_fulltextStorageProvider = fulltextStorageProvider;
             m_fileSystemManager = fileSystemManager;
+            m_mapper = mapper;
         }
 
         public List<PageContract> GetPageList(long projectId)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectPages(projectId));
-            var result = Mapper.Map<List<PageContract>>(dbResult);
+            var result = m_mapper.Map<List<PageContract>>(dbResult);
             return result;
         }
 
         public PageContract GetPage(long pageId)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestResourceVersion<PageResource>(pageId));
-            var result = Mapper.Map<PageContract>(dbResult);
+            var result = m_mapper.Map<PageContract>(dbResult);
             return result;
         }
 
@@ -63,7 +67,7 @@ namespace Vokabular.MainService.Core.Managers
         public List<TermContract> GetPageTermList(long pageId)
         {
             var dbResult = m_bookRepository.InvokeUnitOfWork(x => x.GetPageTermList(pageId));
-            var result = Mapper.Map<List<TermContract>>(dbResult);
+            var result = m_mapper.Map<List<TermContract>>(dbResult);
             return result;
         }
 
@@ -75,14 +79,14 @@ namespace Vokabular.MainService.Core.Managers
         public List<ChapterHierarchyContract> GetChapterList(long projectId)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectChapters(projectId));
-            var result = ChaptersHelper.ChapterToHierarchyContracts(dbResult);
+            var result = ChaptersHelper.ChapterToHierarchyContracts(dbResult, m_mapper);
             return result;
         }
 
         public GetChapterContract GetChapterResource(long chapterId)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestResourceVersion<ChapterResource>(chapterId));
-            var result = Mapper.Map<GetChapterContract>(dbResult);
+            var result = m_mapper.Map<GetChapterContract>(dbResult);
             return result;
         }
 
@@ -104,14 +108,14 @@ namespace Vokabular.MainService.Core.Managers
         public List<TrackContract> GetTrackList(long projectId)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectTracks(projectId));
-            var result = Mapper.Map<List<TrackContract>>(dbResult);
+            var result = m_mapper.Map<List<TrackContract>>(dbResult);
             return result;
         }
 
         public TrackContract GetTrackResource(long trackId)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestResourceVersion<TrackResource>(trackId));
-            var result = Mapper.Map<TrackContract>(dbResult);
+            var result = m_mapper.Map<TrackContract>(dbResult);
             return result;
         }
 
@@ -160,7 +164,7 @@ namespace Vokabular.MainService.Core.Managers
         public EditionNoteContract GetEditionNote(long projectId, TextFormatEnumContract format)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestEditionNote(projectId));
-            var result = Mapper.Map<EditionNoteContract>(dbResult);
+            var result = m_mapper.Map<EditionNoteContract>(dbResult);
 
             if (result == null)
             {

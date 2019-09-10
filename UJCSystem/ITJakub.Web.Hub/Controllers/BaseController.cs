@@ -27,7 +27,9 @@ namespace ITJakub.Web.Hub.Controllers
             m_communication = communicationProvider;
         }
 
-        public PortalTypeContract PortalTypeValue => m_communication.PortalType;
+        protected PortalTypeContract PortalTypeValue => m_communication.PortalType;
+
+        protected IMapper Mapper => m_communication.Mapper;
 
         public ProjectTypeContract GetDefaultProjectType()
         {

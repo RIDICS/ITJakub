@@ -1,5 +1,6 @@
 ﻿using System;
-using AutoMapper;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
@@ -12,7 +13,7 @@ using NHibernate.Driver;
 using NHibernate.Tool.hbm2ddl;
 using Vokabular.DataEntities;
 using Vokabular.ProjectImport.Shared.Options;
-using Vokabular.Shared.DataEntities.Daos;
+using Vokabular.Shared.AspNetCore.Container.Extensions;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
@@ -28,12 +29,17 @@ namespace Vokabular.ProjectImport.Test.Mock
             ServiceCollection = new ServiceCollection();
             ServiceCollection.AddProjectImportServices();
             new DataEntitiesContainerRegistration().Install(ServiceCollection);
+            ServiceCollection.AddScoped(serviceProvider => new UnitOfWorkProvider(serviceProvider.GetServices<IUnitOfWork>()
+                .Select(x => new KeyValuePair<object, IUnitOfWork>(null, x))
+                .ToList()));
+
             ServiceCollection.AddOptions();
             ServiceCollection.Configure(new Action<OaiPmhClientOption>(option =>
             {
                 option.Delay = 5;
                 option.DisableSslValidation = true;
             }));
+            ServiceCollection.AddAutoMapper();
             MockLogging();
 
             if (initDatabase)
@@ -67,7 +73,7 @@ namespace Vokabular.ProjectImport.Test.Mock
                     //db.LogFormattedSql = true;
                     //db.LogSqlInConsole = true;   
                 })
-                .AddAssembly(typeof(NHibernateDao).Assembly);
+                .AddAssembly(typeof(DataEntitiesContainerRegistration).Assembly);
            
             var sessionFactory = cfg.BuildSessionFactory();
             var session = sessionFactory.OpenSession();
@@ -85,24 +91,9 @@ namespace Vokabular.ProjectImport.Test.Mock
             ServiceCollection.AddScoped<MockDataManager>();
         }
 
-        private void InitAutoMapper(IServiceProvider serviceProvider)
-        {
-            var profiles = serviceProvider.GetServices<Profile>();
-
-            Mapper.Reset();
-            Mapper.Initialize(cfg =>
-            {
-                foreach (var profile in profiles)
-                {
-                    cfg.AddProfile(profile);
-                }
-            });
-        }
-
         public IServiceProvider CreateServiceProvider()
         {
-            var serviceProvider =  ServiceCollection.BuildServiceProvider();
-            InitAutoMapper(serviceProvider);
+            var serviceProvider = ServiceCollection.BuildServiceProvider();
             return serviceProvider;
         }
     }

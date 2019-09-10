@@ -63,6 +63,7 @@ namespace Vokabular.ProjectImport.Works
 
             CreateSnapshot();
             ProcessExternalImportPermission();
+            m_projectRepository.UnitOfWork.CurrentSession.Flush();
             m_projectRepository.UnitOfWork.CurrentSession.Evict(project); //because of unit tests - unit test is running in one session
         }
 

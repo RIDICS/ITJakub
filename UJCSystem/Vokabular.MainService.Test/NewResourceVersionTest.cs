@@ -6,9 +6,9 @@ using Vokabular.Core.Storage.Resources;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.MainService.Core.Works.Content;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.Test.Mock;
-using Vokabular.RestClient.Errors;
 
 namespace Vokabular.MainService.Test
 {
@@ -39,7 +39,7 @@ namespace Vokabular.MainService.Test
                 new CreateNewImageResourceVersionWork(repository, resourceId, data, fileInfo, userId).Execute();
                 Assert.Fail("Create new ImageResouce should fail, because version conflict");
             }
-            catch (HttpErrorCodeException e)
+            catch (MainServiceException e)
             {
                 Assert.AreEqual(HttpStatusCode.Conflict, e.StatusCode);
             }
@@ -88,7 +88,7 @@ namespace Vokabular.MainService.Test
                 new CreateNewAudioResourceVersionWork(repository, resourceId, data, fileInfo, userId).Execute();
                 Assert.Fail("Create new AudioResouce should fail, because version conflict");
             }
-            catch (HttpErrorCodeException e)
+            catch (MainServiceException e)
             {
                 Assert.AreEqual(HttpStatusCode.Conflict, e.StatusCode);
             }

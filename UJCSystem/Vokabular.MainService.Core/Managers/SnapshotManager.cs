@@ -18,14 +18,16 @@ namespace Vokabular.MainService.Core.Managers
         private readonly SnapshotRepository m_snapshotRepository;
         private readonly AuthorizationManager m_authorizationManager;
         private readonly UserDetailManager m_userDetailManager;
+        private readonly IMapper m_mapper;
 
         public SnapshotManager(ProjectRepository projectRepository, SnapshotRepository snapshotRepository,
-            AuthorizationManager authorizationManager, UserDetailManager userDetailManager)
+            AuthorizationManager authorizationManager, UserDetailManager userDetailManager, IMapper mapper)
         {
             m_projectRepository = projectRepository;
             m_snapshotRepository = snapshotRepository;
             m_authorizationManager = authorizationManager;
             m_userDetailManager = userDetailManager;
+            m_mapper = mapper;
         }
 
         public SnapshotContract GetLatestPublishedSnapshot(long projectId)
@@ -33,7 +35,7 @@ namespace Vokabular.MainService.Core.Managers
             m_authorizationManager.AuthorizeBook(projectId);
 
             var latestSnapshot = m_snapshotRepository.InvokeUnitOfWork(x => x.GetLatestPublishedSnapshot(projectId));
-            var snapshotContract = Mapper.Map<SnapshotContract>(latestSnapshot);
+            var snapshotContract = m_mapper.Map<SnapshotContract>(latestSnapshot);
             return snapshotContract;
         }
 

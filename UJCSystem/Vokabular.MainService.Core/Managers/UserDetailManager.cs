@@ -16,11 +16,13 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly CommunicationProvider m_communicationProvider;
         private readonly UserRepository m_userRepository;
+        private readonly IMapper m_mapper;
 
-        public UserDetailManager(CommunicationProvider communicationProvider, UserRepository userRepository)
+        public UserDetailManager(CommunicationProvider communicationProvider, UserRepository userRepository, IMapper mapper)
         {
             m_communicationProvider = communicationProvider;
             m_userRepository = userRepository;
+            m_mapper = mapper;
         }
         
         public UserContract GetUserContractForUser(UserContract user)
@@ -29,7 +31,7 @@ namespace Vokabular.MainService.Core.Managers
             if (authUser == null)
                 return user;
 
-            var userDetailContract = Mapper.Map<UserContract>(authUser);
+            var userDetailContract = m_mapper.Map<UserContract>(authUser);
             userDetailContract.Id = user.Id;
             return userDetailContract;
         }
@@ -67,7 +69,7 @@ namespace Vokabular.MainService.Core.Managers
             if (authUser == null)
                 return null;
 
-            var userDetailContract = Mapper.Map<UserDetailContract>(authUser);
+            var userDetailContract = m_mapper.Map<UserDetailContract>(authUser);
             userDetailContract.Id = user.Id;
             return userDetailContract;
         }
@@ -78,7 +80,7 @@ namespace Vokabular.MainService.Core.Managers
             if (authUser == null)
                 return user;
 
-            var userDetailContract = Mapper.Map<UserDetailContract>(authUser);
+            var userDetailContract = m_mapper.Map<UserDetailContract>(authUser);
             userDetailContract.Id = user.Id;
             return userDetailContract;
         }

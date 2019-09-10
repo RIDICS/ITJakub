@@ -12,11 +12,13 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly CategoryRepository m_categoryRepository;
         private readonly ForumSiteManager m_forumSiteManager;
+        private readonly IMapper m_mapper;
 
-        public CategoryManager(CategoryRepository categoryRepository, ForumSiteManager forumSiteManager)
+        public CategoryManager(CategoryRepository categoryRepository, ForumSiteManager forumSiteManager, IMapper mapper)
         {
             m_categoryRepository = categoryRepository;
             m_forumSiteManager = forumSiteManager;
+            m_mapper = mapper;
         }
 
         public int CreateCategory(CategoryContract category)
@@ -29,7 +31,7 @@ namespace Vokabular.MainService.Core.Managers
         public List<CategoryContract> GetCategoryList()
         {
             var result = m_categoryRepository.InvokeUnitOfWork(x => x.GetCategoryList());
-            return Mapper.Map<List<CategoryContract>>(result);
+            return m_mapper.Map<List<CategoryContract>>(result);
         }
 
         public void DeleteCategory(int categoryId)
@@ -50,13 +52,13 @@ namespace Vokabular.MainService.Core.Managers
         public CategoryContract GetCategory(int categoryId)
         {
             var result = m_categoryRepository.InvokeUnitOfWork(x => x.FindById<Category>(categoryId));
-            return Mapper.Map<CategoryContract>(result);
+            return m_mapper.Map<CategoryContract>(result);
         }
 
         public List<CategoryTreeContract> GetCategoryTree()
         {
             var result = m_categoryRepository.InvokeUnitOfWork(x => x.GetCategoriesWithSubcategories());
-            return Mapper.Map<List<CategoryTreeContract>>(result);
+            return m_mapper.Map<List<CategoryTreeContract>>(result);
         }
     }
 }

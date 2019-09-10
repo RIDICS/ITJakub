@@ -87,7 +87,17 @@ namespace Vokabular.MainService.Controllers
 
             try
             {
-                var result = m_bookSearchManager.SearchByCriteriaCount(request, projectType.Value);
+                var advancedRequest = new AdvancedSearchRequestContract
+                {
+                    ConditionConjunction = request.ConditionConjunction,
+                    Start = request.Start,
+                    Count = request.Count,
+                    Sort = request.Sort,
+                    SortDirection = request.SortDirection,
+                    FetchTerms = request.FetchTerms,
+                    Parameters = null,
+                };
+                var result = m_bookSearchManager.SearchByCriteriaCount(advancedRequest, projectType.Value);
                 return Ok(result);
             }
             catch (ArgumentException exception)
