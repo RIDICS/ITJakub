@@ -127,7 +127,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             model.HasImage = client.HasPageImage(pageId);
             model.PageId = pageId;
             
-            return PartialView("../Project/Work/_PageListDetail", model);
+            return PartialView("../Project/Work/SubView/_PageListDetail", model);
         }
 
         [HttpPost]
