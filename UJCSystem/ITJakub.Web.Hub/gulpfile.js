@@ -317,6 +317,21 @@ gulp.task("bundle:itjakub_professionalliterature_list", ["build:ts"], function (
         .pipe(gulp.dest(paths.webroot + "Areas/ProfessionalLiterature/js"));
 });
 
+gulp.task("bundle:ridics_admin_project-editor", ["build:ts"], function () {
+    return gulp.src([
+            paths.webroot + "Areas/Admin/js/ridics.admin-api-client.js",
+            paths.webroot + "Areas/Admin/js/ridics.project.client.js",
+            paths.webroot + "Areas/Admin/js/ridics.project.module.js",
+            paths.webroot + "Areas/Admin/js/ridics.project.resource.tabs.js",
+            paths.webroot + "Areas/Admin/js/ridics.project.work.tabs.js",
+        ])
+        .pipe(sourcemaps.init({ loadMaps: true }))
+        .pipe(concat("ridics.project.bundle.js"))
+        //.pipe(uglify())
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest(paths.webroot + "Areas/Admin/js"));
+});
+
 gulp.task("bundle:ridics_admin_text-editor", ["build:ts"], function () {
     return gulp.src([
             paths.webroot + "Areas/Admin/js/text-editor/ridics.project.text-editor*.js"
@@ -383,6 +398,7 @@ gulp.task("bundlejs_areas",
     "bundle:itjakub_dictionary_headwords",
     "bundle:itjakub_lemmatization",
     "bundle:itjakub_professionalliterature_list",
+    "bundle:ridics_admin_project-editor",
     "bundle:ridics_admin_editors-common-base",
     "bundle:ridics_admin_text-editor",
     "bundle:ridics_admin_page-image-viewer",
