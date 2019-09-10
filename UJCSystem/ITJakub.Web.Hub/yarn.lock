@@ -19,6 +19,13 @@
     normalize-path "^2.0.1"
     through2 "^2.0.3"
 
+"@types/bootbox@4.4.36":
+  version "4.4.36"
+  resolved "https://registry.yarnpkg.com/@types/bootbox/-/bootbox-4.4.36.tgz#e93f34884b3a55aa21b189a2b967e7d1c9196a94"
+  integrity sha512-RNNb0guOAm9RXPMOHlRILqLfuNaSjL/VEXej6izAwpWrN7pTtHLLhmh/eCkCLaItcrXuivXNdJLQT2okBT0Dog==
+  dependencies:
+    "@types/jquery" "*"
+
 "@types/bootstrap-select@^1.11.1":
   version "1.11.1"
   resolved "https://registry.yarnpkg.com/@types/bootstrap-select/-/bootstrap-select-1.11.1.tgz#05dcbc0018f50428cf7943e6a1cda4d3a122051f"
@@ -41,9 +48,10 @@
   dependencies:
     "@types/jquery" "*"
 
-"@types/gijgo@0.6.6":
-  version "0.6.6"
-  resolved "https://registry.yarnpkg.com/@types/gijgo/-/gijgo-0.6.6.tgz#301a7310764a06ef2b10e558d524e1fdb9ea2e08"
+"@types/gijgo@1.9.1":
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/@types/gijgo/-/gijgo-1.9.1.tgz#4bc8b1fa9a411a533d0aac17909b5750b98ceec7"
+  integrity sha512-0AfEwm4+n931FR3mfOTEyAeRslIb/HdRbK372/ToKgI2I9XlByRY+QDj73fAJsrkz+Z07MzdwgVnD8trsdCSXg==
 
 "@types/he@1.1.0":
   version "1.1.0"

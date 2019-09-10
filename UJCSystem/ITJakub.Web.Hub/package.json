@@ -3,11 +3,12 @@
   "name": "asp.net",
   "private": true,
   "devDependencies": {
+    "@types/bootbox": "4.4.36",
     "@types/bootstrap": "3.3.42",
     "@types/bootstrap-select": "^1.11.1",
     "@types/codemirror": "0.0.46",
     "@types/dropzone": "5.0.6",
-    "@types/gijgo": "0.6.6",
+    "@types/gijgo": "1.9.1",
     "@types/he": "1.1.0",
     "@types/jquery": "3.3.31",
     "@types/jquery-validation-unobtrusive": "3.2.32",
