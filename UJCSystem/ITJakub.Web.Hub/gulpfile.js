@@ -197,6 +197,7 @@ gulp.task("bundle:itjakub_storage", ["build:ts"], function () {
 
 gulp.task("bundle:itjakub_favorite", ["build:ts"], function () {
     return gulp.src([
+            paths.webroot + "js/Favorite/itjakub.favoriteApiClient.js",
             paths.webroot + "js/Favorite/itjakub.favoriteBook.js",
             paths.webroot + "js/Favorite/itjakub.favoriteManager.js",
             paths.webroot + "js/Favorite/itjakub.favoriteQuery.js",
