@@ -224,7 +224,7 @@
                 var lastName = lastNameEl.val() as string;
                 var id: number;
                 if (!firstName || !lastName) {
-                    this.addAuthorDialog.showError("Please enter a name and surname");
+                    this.addAuthorDialog.showError(localization.translate("EnterValidName", "Admin").value);
                     return;
                 }
                 const createAuthorAjax = this.projectClient.createAuthor(firstName,
@@ -283,7 +283,7 @@
                 const lastName = lastNameEl.val() as string;
                 var id: number;
                 if (firstName === "" || lastName === "") {
-                    this.addEditorDialog.showError("Please enter a name and surname");
+                    this.addEditorDialog.showError(localization.translate("EnterValidName", "Admin").value);
                     return;
                 }
                 this.projectClient.createResponsiblePerson(firstName, lastName).done(
@@ -478,7 +478,7 @@
             this.generateWorkAuthorTableItem(data.list);
             numberOfWorksEl.text(data.totalCount);
         }).fail(() => {
-            tableBodyEl.text("Error loading works");
+            tableBodyEl.text(localization.translate("WorksLoadFailed", "Admin").value);
         }).always(() => {
             tableBodyEl.removeClass("loading");
         });
@@ -529,7 +529,7 @@
             this.generateWorkResponsiblePersonItem(data.list, responsiblePersonId);
             numberOfWorksEl.text(data.totalCount);
         }).fail(() => {
-            tableBodyEl.text("Error loading works");
+            tableBodyEl.text(localization.translate("WorksLoadFailed", "Admin").value);
         }).always(() => {
             tableBodyEl.removeClass("loading");
         });
@@ -604,7 +604,7 @@
 
             finishAddingAuthor();
         } else {
-            this.addAuthorDialog.showError("Please select one author from list");
+            this.addAuthorDialog.showError(localization.translate("SelectAuthor", "Admin").value);
 
         }
     }
@@ -635,7 +635,7 @@
             lastName = selectedExistingResponsiblePersonEl.children(".existing-responsible-person-surname").text();
             responsibilityTypeId = $("#add-editor-type").find(":selected").val() as number;
             if (typeof responsibilityTypeId == "undefined") {
-                this.addEditorDialog.showError("Please select responsible type");
+                this.addEditorDialog.showError(localization.translate("SelectResponsibleType", "Admin").value);
             } else {
                 const responsibilityTextWithParenthesis = $("#add-editor-type").find(":selected").text();
                 responsibilityText = responsibilityTextWithParenthesis.replace(/ *\([^)]*\) */g, "");
@@ -643,7 +643,7 @@
                 finishAddingEditor();
             }
         } else {
-            this.addEditorDialog.showError("Please select one responsible person from list");
+            this.addEditorDialog.showError(localization.translate("SelectResponsiblePerson", "Admin").value);
         }
     }
 

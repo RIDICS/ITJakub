@@ -215,6 +215,12 @@
     "Repair": "Repair",
     "ForumRepairText": "The forum is not created or is not connected with Vokabulář webový.",
     "ForumRepairSuccess": "The forum was created",
-    "ForumRepairError": "Error, the forum was not created"
+    "ForumRepairError": "Error, the forum was not created",
+
+    "EnterValidName": "Please enter a name and surname.",
+    "WorksLoadFailed": "An unexpected error occurred while loading works.",
+    "SelectAuthor": "Please select one author from list.",
+    "SelectResponsiblePerson": "Please select one responsible person from list.",
+    "SelectResponsibleType": "Please select responsible type."
   }
 }

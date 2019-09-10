@@ -215,6 +215,12 @@
     "Repair": "Opravit",
     "ForumRepairText": "Fórum není vytvořeno, nebo propojeno s Vokabulářem webovým.",
     "ForumRepairSuccess": "Fórum vytvořeno",
-    "ForumRepairError": "Fórum se nepodařilo vytvořit"
+    "ForumRepairError": "Fórum se nepodařilo vytvořit",
+
+    "EnterValidName": "Prosím zadejte jméno a přijímení.",
+    "WorksLoadFailed": "Při načítání prací nastala neočekávaná chyba.",
+    "SelectAuthor": "Prosím vyberte autora ze seznamu.",
+    "SelectResponsiblePerson": "Prosím vyberte odpovědnou osobu ze seznamu.",
+    "SelectResponsibleType": "Prosím vyberte typ odpovědnosti."
   }
 }
