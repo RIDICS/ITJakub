@@ -34,7 +34,7 @@ namespace Vokabular.MainService.Core.Managers
             return userDetailContract;
         }
 
-        public string GetUserFirstNameAndLastName(User user)
+        public string GetUserFullName(User user)
         {
             if (user.ExternalId == null)
             {
