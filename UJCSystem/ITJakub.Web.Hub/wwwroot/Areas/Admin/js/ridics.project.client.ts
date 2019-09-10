@@ -135,6 +135,18 @@
         });
     }
 
+    saveCategorization(projectId: number, data: ISaveCategorization): JQuery.jqXHR {
+        return $.ajax({
+            url: `${getBaseUrl()}Admin/Project/SaveCategorization?projectId=${projectId}`,
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            cache: false,
+            async: true,
+            dataType: "json"
+        });
+    }
+
     getProjectsByAuthor(authorId: number, start?: number, count?: number): JQuery.jqXHR<IPagedResult<IProjectDetailContract>> {
         return $.get(`${getBaseUrl()}Admin/Project/GetProjectsByAuthor?authorId=${authorId}&start=${start}&count=${count}`);
     }

@@ -9,8 +9,6 @@
     private selectedResponsiblePersonId: number;
     private publisherTypeahead: SingleSetTypeaheadSearchBox<string>;
     private publisherName: string = null;
-    private existingGenres: JQuery = null;
-    private existingLitKinds: JQuery = null;
     private workModule: ProjectWorkModule;
     private adminApiClient = new AdminApiClient();
 
@@ -49,48 +47,7 @@
             $editorButtonPanel: $("#work-metadata-editor-button-panel")
         };
     }
-
-    private initKeywords() {
-        const count = 10;
-        const selectedKeywordEls = $(".keywords-list-selected").children();
-        const engine = new Bloodhound({
-            datumTokenizer: (d: any) => Bloodhound.tokenizers.whitespace(d.label),
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: {
-                url: `${getBaseUrl()}Admin/Project/KeywordTypeahead?keyword=%QUERY&count=${count}`,
-                wildcard: "%QUERY",
-                transform: (response: IKeywordContract[]) =>
-                    $.map(response,
-                        (keyword: IKeywordContract) => ({
-                            value: keyword.id,
-                            label: keyword.name
-                        }))
-
-            }
-        });
-        engine.initialize();
-        ($(".keywords-textarea")as any).tokenfield({
-            typeahead: [
-                {
-                    hint: true,
-                    highlight: true,
-                    minLength: 1
-                },
-                {
-                    source: engine.ttAdapter(),
-                    display: "label",
-                    limit: 15
-                }
-            ]
-        });
-        var tags = [];
-        selectedKeywordEls.each((index, element) => {
-            const jEl = $(element as Node as Element);
-            tags.push({ value: jEl.data("id"), label: jEl.data("name") });
-        });
-        ($(".keywords-textarea") as any).tokenfield("setTokens", tags);
-    }
-
+    
     private returnUniqueElsArray(array: any[]) {
         var seen = {};
         return array.filter(item => seen.hasOwnProperty(item) ? false : (seen[item] = true));
@@ -119,122 +76,15 @@
         jEl.append(elm);
         return jEl;
     }
-
-    private categoryTree: any; //TODO investigate d ts
-
-    private parseExistingGenres() {
-        const genresEl = $("#all-existing-genres");
-        const genreEls = genresEl.children(".existing-genre");
-        this.existingGenres = genreEls;
-    }
-
-    private parseExistingKinds() {
-        const kindsEl = $("#all-existing-lit-kinds");
-        const kindEls = kindsEl.children(".existing-kind");
-        this.existingLitKinds = kindEls;
-    }
-
-    private createGenreKindSelectBoxEl(items: JQuery, isGenre: boolean) {
-        var elm = "";
-        if (isGenre) {
-            elm += `<div class="genre-item clearfix">`;
-        } else {
-            elm += `<div class="lit-kind-item clearfix">`;
-        }
-        elm += `<div class="col-xs-9">`;
-        elm += `<select class="item-select-box">`;
-        items.each((index, elem) => {
-            const genreEl = $(elem);
-            elm += `<option value="${genreEl.data("id")}">${genreEl.data("name")}</option>`;
-        });
-        elm += "</select>";
-        elm += "</div>";
-        elm += `<div class="button-float-right">`;
-        elm +=
-            `<button class="btn btn-default remove-button"><span class="glyphicon glyphicon-remove"></span></button>`;
-        elm += "</div>";
-        elm += "</div>";
-        return $.parseHTML(elm);
-    }
-
-    private createCategoriesNestedStructure() {
-        const existingCategoriesEl = $(".all-category-list");
-        const existingCategoriesElList = existingCategoriesEl.children(".existing-category-list-item");
-        existingCategoriesElList.each((index, elem) => {
-            const categoryEl = $(elem as Node as Element);
-            const id = categoryEl.data("category-id");
-            const childCategories = $(`[data-parent-category-id=${id}]`);
-            if (childCategories.length) {
-                childCategories.addClass("child-category").detach();
-                categoryEl.addClass("parent-category").append(childCategories);
-            }
-        });
-    }
-
-    private checkSelectedCategoriesInTree(categoryTree: any) {
-        const selectedCategoriesEl = $(".selected-category-list");
-        const selectedCategoriesElList = selectedCategoriesEl.children(".selected-category-list-item");
-        if (selectedCategoriesElList.length) {
-            selectedCategoriesElList.each((index, elem) => {
-                const categoryEl = $(elem as Node as Element);
-                const catId = categoryEl.data("category-id");
-                const catChechbox = categoryTree.getNodeById(catId);
-                if (catChechbox) {
-                    categoryTree.check(catChechbox);
-                }
-            });
-        }
-    }
-
-    private convertCategoryArrayToCategoryTreeObject() {
-        const categoryTreeObject = new Array<ICategoryTreeContract>();
-        const existingCategoriesEl = $(".all-category-list");
-        const existingCategoriesElList = existingCategoriesEl.children(".existing-category-list-item");
-        existingCategoriesElList.each((index, elem) => {
-            const catEl = $(elem as Node as HTMLElement);
-            var categoryTreeEl = this.convertCateroryElToCategoryTreeEl(catEl);
-            categoryTreeObject.push(categoryTreeEl);
-        });
-        return categoryTreeObject;
-    }
-
-    private convertCateroryElToCategoryTreeEl(categoryEl: JQuery) {
-        var categoryTreeEl = <ICategoryTreeContract>{};
-        categoryTreeEl.id = categoryEl.data("category-id");
-        categoryTreeEl.text = categoryEl.data("category-description");
-        if (categoryEl.hasClass("parent-category")) {
-            const childrenCats = categoryEl.children(".child-category");
-            categoryTreeEl.children = Array<ICategoryTreeContract>();
-            childrenCats.each((index, elem) => {
-                const childCat = $(elem);
-                categoryTreeEl.children.push(this.convertCateroryElToCategoryTreeEl(childCat));
-            });
-        }
-        return categoryTreeEl;
-    }
-
+    
     initTab(): void {
         super.initTab();
-        this.initKeywords();
         var $addResponsibleTypeButton = $("#add-responsible-type-button");
         var $addResponsibleTypeContainer = $("#add-responsible-type-container");
 
         this.rangePeriodViewSliderClass = new RegExDatingConditionRangePeriodView();
         this.rangePeriodViewSliderClass.makeRangeView(
             $("#select-range-dialog").find(".regex-dating-precision-div")[0] as Node as HTMLDivElement);
-
-        this.createCategoriesNestedStructure();
-
-        this.categoryTree = ($("#category-tree")as any).tree({
-            primaryKey: "id",
-            uiLibrary: "bootstrap",
-            checkedField: "categorySelected",
-            dataSource: this.convertCategoryArrayToCategoryTreeObject(),
-            checkboxes: true,
-            cascadeCheck: false
-        });
-
-        this.checkSelectedCategoriesInTree(this.categoryTree);
 
         $("#work-metadata-publisher-email").on("input",
             () => {
@@ -309,8 +159,6 @@
                 }
             });
 
-        $("#category-tree").find("input").prop("disabled", true);
-
         $("#work-metadata-edit-button").click(() => {
             this.enabledEdit();
             this.publisherTypeahead.create((selectedExists, selectConfirmed) => {
@@ -321,7 +169,6 @@
                     this.publisherName = null;
                 }
             });
-            $("#category-tree").children("input").prop("disabled", false);
         });
 
         $("#work-metadata-cancel-button").click(() => {
@@ -331,27 +178,6 @@
             tabPanelEl.empty();
             this.workModule.loadTabPanel(metadataTabSelector);
             this.publisherTypeahead.destroy();
-            $("#category-tree").children("input").prop("disabled", true);
-        });
-
-        $("#add-literary-kind-button").click(() => {
-            const kindSelectsEl = $("#work-metadata-literary-kind");
-            if (this.existingLitKinds == null) {
-                this.parseExistingKinds();
-            }
-            const isGenre = false;
-            const selectBox = this.createGenreKindSelectBoxEl(this.existingLitKinds, isGenre);
-            kindSelectsEl.append(selectBox);
-        });
-
-        $("#add-literary-genre-button").click(() => {
-            const genreSelectsEl = $("#work-metadata-literary-genre");
-            if (this.existingGenres == null) {
-                this.parseExistingGenres();
-            }
-            const isGenre = true;
-            const selectBox = this.createGenreKindSelectBoxEl(this.existingGenres, isGenre);
-            genreSelectsEl.append(selectBox);
         });
 
         $("#add-author-button").click(() => {
@@ -635,11 +461,7 @@
         $("#add-responsible-type-save").click(this.createResponsibleType.bind(this));
 
         this.addRemovePersonEvent($("#work-metadata-authors .remove-button, #work-metadata-editors .remove-button"));
-
-        this.addRemoveGenreEvent();
-
-        this.addRemoveLiteraryKindEvent();
-
+        
         var $saveButton = $("#work-metadata-save-button");
         $saveButton.click(() => {
             this.saveMetadata();
@@ -859,22 +681,6 @@
         });
     }
 
-    private addRemoveGenreEvent() {
-        $("#work-metadata-literary-genre").on("click",
-            ".remove-button",
-            (event) => {
-                $(event.currentTarget as Node as Element).closest(".genre-item").remove();
-            });
-    }
-
-    private addRemoveLiteraryKindEvent() {
-        $("#work-metadata-literary-kind").on("click",
-            ".remove-button",
-            (event) => {
-                $(event.currentTarget as Node as Element).closest(".lit-kind-item").remove();
-            });
-    }
-
     private saveMetadata() {
         const keywordFailAlertEl = $("#work-metadata-keyword-fail");
         var selectedAuthorIds = new Array<number>();
@@ -912,42 +718,23 @@
                 keywordNonIdList.push(uniqueKeywordArray[i]);
             }
         }
-        const createNewKeywordAjax = this.adminApiClient.createNewKeywordsByArray(keywordNonIdList);
+        
         var publisherText = "";
         if (this.publisherName == null) {
             publisherText = $("#work-metadata-publisher").val() as string;
         } else {
             publisherText = this.publisherTypeahead.getInputValue();
         }
-        createNewKeywordAjax.done((newIds: number[]) => {
-            const allKeywordIds = keywordIdList.concat(newIds);
-            const data: IOnlySaveMetadataResource = {
-                keywordIdList: allKeywordIds,
-                categoryIdList: this.categoryTree.getCheckedNodes(),
-                literaryKindIdList: selectedKindIds,
-                literaryGenreIdList: selectedGenreIds,
-                authorIdList: selectedAuthorIds,
-                projectResponsiblePersonIdList: selectedResponsibleIds
-            };
-            this.formMetadataObjectAndSendRequest(data, publisherText);
-        }).fail(() => {
-            keywordFailAlertEl.show().delay(3000).fadeOut(2000);
-            const data: IOnlySaveMetadataResource = {
-                keywordIdList: keywordIdList,
-                categoryIdList: this.categoryTree.getCheckedNodes(),
-                literaryKindIdList: selectedKindIds,
-                literaryGenreIdList: selectedGenreIds,
-                authorIdList: selectedAuthorIds,
-                projectResponsiblePersonIdList: selectedResponsibleIds
-            };
-            this.formMetadataObjectAndSendRequest(data, publisherText);
-        });
+
+        const data: IOnlySaveMetadataResource = {
+            authorIdList: selectedAuthorIds,
+            projectResponsiblePersonIdList: selectedResponsibleIds
+        };
+        this.formMetadataObjectAndSendRequest(data, publisherText)
     }
 
     private formMetadataObjectAndSendRequest(contract: IOnlySaveMetadataResource, publisherText: string) {
         var data: ISaveMetadataResource = {
-            categoryIdList: contract.categoryIdList,
-            keywordIdList: contract.keywordIdList,
             biblText: $("#work-metadata-bibl-text").val() as string,
             copyright: $("#work-metadata-copyright").val() as string,
             manuscriptCountry: $("#work-metadata-original-country").val() as string,
@@ -967,8 +754,6 @@
             subTitle: $("#work-metadata-subtitle").val() as string,
             title: $("#work-metadata-title").val() as string,
             authorIdList: contract.authorIdList,
-            literaryGenreIdList: contract.literaryGenreIdList,
-            literaryKindIdList: contract.literaryKindIdList,
             projectResponsiblePersonIdList: contract.projectResponsiblePersonIdList
         };
         var $loadingGlyph = $("#work-metadata-save-button .saving-icon");
@@ -1003,6 +788,324 @@ class ProjectWorkPageListTab extends ProjectModuleTabBase {
     initTab() {
         const main = new PageListEditorMain();
         main.init(this.projectId);
+    }
+}
+
+class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
+    private projectId: number;
+    private projectClient: ProjectClient;
+    private existingGenres: JQuery = null;
+    private existingLitKinds: JQuery = null;
+    private workModule: ProjectWorkModule;
+    private adminApiClient = new AdminApiClient();
+
+    constructor(projectId: number, workModule: ProjectWorkModule) {
+        super();
+        this.projectId = projectId;
+        this.projectClient = new ProjectClient();
+        this.workModule = workModule;
+    }
+
+    getConfiguration(): IProjectMetadataTabConfiguration {
+        return {
+            $panel: $("#work-categorization-container"),
+            $viewButtonPanel: $("#work-categorization-view-button-panel"),
+            $editorButtonPanel: $("#work-categorization-editor-button-panel")
+        };
+    }
+
+    private initKeywords() {
+        const count = 10;
+        const selectedKeywordEls = $(".keywords-list-selected").children();
+        const engine = new Bloodhound({
+            datumTokenizer: (d: any) => Bloodhound.tokenizers.whitespace(d.label),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                url: `${getBaseUrl()}Admin/Project/KeywordTypeahead?keyword=%QUERY&count=${count}`,
+                wildcard: "%QUERY",
+                transform: (response: IKeywordContract[]) =>
+                    $.map(response,
+                        (keyword: IKeywordContract) => ({
+                            value: keyword.id,
+                            label: keyword.name
+                        }))
+
+            }
+        });
+        engine.initialize();
+        ($(".keywords-textarea") as any).tokenfield({
+            typeahead: [
+                {
+                    hint: true,
+                    highlight: true,
+                    minLength: 1
+                },
+                {
+                    source: engine.ttAdapter(),
+                    display: "label",
+                    limit: 15
+                }
+            ]
+        });
+        var tags = [];
+        selectedKeywordEls.each((index, element) => {
+            const jEl = $(element as Node as Element);
+            tags.push({ value: jEl.data("id"), label: jEl.data("name") });
+        });
+        ($(".keywords-textarea") as any).tokenfield("setTokens", tags);
+    }
+
+    private returnUniqueElsArray(array: any[]) {
+        var seen = {};
+        return array.filter(item => seen.hasOwnProperty(item) ? false : (seen[item] = true));
+    }
+
+    private categoryTree: any; //TODO investigate d ts
+
+    private parseExistingGenres() {
+        const genresEl = $("#all-existing-genres");
+        const genreEls = genresEl.children(".existing-genre");
+        this.existingGenres = genreEls;
+    }
+
+    private parseExistingKinds() {
+        const kindsEl = $("#all-existing-lit-kinds");
+        const kindEls = kindsEl.children(".existing-kind");
+        this.existingLitKinds = kindEls;
+    }
+
+    private createGenreKindSelectBoxEl(items: JQuery, isGenre: boolean) {
+        var elm = "";
+        if (isGenre) {
+            elm += `<div class="genre-item clearfix">`;
+        } else {
+            elm += `<div class="lit-kind-item clearfix">`;
+        }
+        elm += `<div class="col-xs-9">`;
+        elm += `<select class="item-select-box form-control">`;
+        items.each((index, elem) => {
+            const genreEl = $(elem);
+            elm += `<option value="${genreEl.data("id")}">${genreEl.data("name")}</option>`;
+        });
+        elm += "</select>";
+        elm += "</div>";
+        elm += `<div class="button-float-right">`;
+        elm +=
+            `<button class="btn btn-default remove-button"><span class="glyphicon glyphicon-remove"></span></button>`;
+        elm += "</div>";
+        elm += "</div>";
+        return $.parseHTML(elm);
+    }
+
+    private createCategoriesNestedStructure() {
+        const existingCategoriesEl = $(".all-category-list");
+        const existingCategoriesElList = existingCategoriesEl.children(".existing-category-list-item");
+        existingCategoriesElList.each((index, elem) => {
+            const categoryEl = $(elem as Node as Element);
+            const id = categoryEl.data("category-id");
+            const childCategories = $(`[data-parent-category-id=${id}]`);
+            if (childCategories.length) {
+                childCategories.addClass("child-category").detach();
+                categoryEl.addClass("parent-category").append(childCategories);
+            }
+        });
+    }
+
+    private checkSelectedCategoriesInTree(categoryTree: any) {
+        const selectedCategoriesEl = $(".selected-category-list");
+        const selectedCategoriesElList = selectedCategoriesEl.children(".selected-category-list-item");
+        if (selectedCategoriesElList.length) {
+            selectedCategoriesElList.each((index, elem) => {
+                const categoryEl = $(elem as Node as Element);
+                const catId = categoryEl.data("category-id");
+                const catChechbox = categoryTree.getNodeById(catId);
+                if (catChechbox) {
+                    categoryTree.check(catChechbox);
+                }
+            });
+        }
+    }
+
+    private convertCategoryArrayToCategoryTreeObject() {
+        const categoryTreeObject = new Array<ICategoryTreeContract>();
+        const existingCategoriesEl = $(".all-category-list");
+        const existingCategoriesElList = existingCategoriesEl.children(".existing-category-list-item");
+        existingCategoriesElList.each((index, elem) => {
+            const catEl = $(elem as Node as HTMLElement);
+            var categoryTreeEl = this.convertCateroryElToCategoryTreeEl(catEl);
+            categoryTreeObject.push(categoryTreeEl);
+        });
+        return categoryTreeObject;
+    }
+
+    private convertCateroryElToCategoryTreeEl(categoryEl: JQuery) {
+        var categoryTreeEl = <ICategoryTreeContract>{};
+        categoryTreeEl.id = categoryEl.data("category-id");
+        categoryTreeEl.text = categoryEl.data("category-description");
+        if (categoryEl.hasClass("parent-category")) {
+            const childrenCats = categoryEl.children(".child-category");
+            categoryTreeEl.children = Array<ICategoryTreeContract>();
+            childrenCats.each((index, elem) => {
+                const childCat = $(elem);
+                categoryTreeEl.children.push(this.convertCateroryElToCategoryTreeEl(childCat));
+            });
+        }
+        return categoryTreeEl;
+    }
+
+    initTab(): void {
+        super.initTab();
+        this.initKeywords();
+
+        this.createCategoriesNestedStructure();
+
+        this.categoryTree = ($("#category-tree") as any).tree({
+            primaryKey: "id",
+            uiLibrary: "bootstrap",
+            checkedField: "categorySelected",
+            dataSource: this.convertCategoryArrayToCategoryTreeObject(),
+            checkboxes: true,
+            cascadeCheck: false
+        });
+
+        this.checkSelectedCategoriesInTree(this.categoryTree);
+
+        $("#category-tree").find("input").prop("disabled", true);
+
+        $("#work-categorization-edit-button").click(() => {
+            this.enabledEdit();
+            $("#category-tree").children("input").prop("disabled", false);
+        });
+
+        $("#work-categorization-cancel-button").click(() => {
+            this.disableEdit();
+            const metadataTabSelector = "#project-work-categorization";
+            var tabPanelEl = $(metadataTabSelector);
+            tabPanelEl.empty();
+            this.workModule.loadTabPanel(metadataTabSelector);
+            $("#category-tree").children("input").prop("disabled", true);
+        });
+
+        $("#add-literary-kind-button").click(() => {
+            const kindSelectsEl = $("#work-categorization-literary-kind");
+            if (this.existingLitKinds == null) {
+                this.parseExistingKinds();
+            }
+            const isGenre = false;
+            const selectBox = this.createGenreKindSelectBoxEl(this.existingLitKinds, isGenre);
+            kindSelectsEl.append(selectBox);
+        });
+
+        $("#add-literary-genre-button").click(() => {
+            const genreSelectsEl = $("#work-categorization-literary-genre");
+            if (this.existingGenres == null) {
+                this.parseExistingGenres();
+            }
+            const isGenre = true;
+            const selectBox = this.createGenreKindSelectBoxEl(this.existingGenres, isGenre);
+            genreSelectsEl.append(selectBox);
+        });
+
+        this.addRemoveGenreEvent();
+
+        this.addRemoveLiteraryKindEvent();
+
+        var $saveButton = $("#work-categorization-save-button");
+        $saveButton.click(() => {
+            this.saveMetadata();
+        });
+        $(".saving-icon", $saveButton).hide();
+
+        $("#work-categorization-save-error, #work-categorization-save-success").hide();
+    }
+
+    private addRemoveGenreEvent() {
+        $("#work-categorization-literary-genre").on("click",
+            ".remove-button",
+            (event) => {
+                $(event.currentTarget as Node as Element).closest(".genre-item").remove();
+            });
+    }
+
+    private addRemoveLiteraryKindEvent() {
+        $("#work-categorization-literary-kind").on("click",
+            ".remove-button",
+            (event) => {
+                $(event.currentTarget as Node as Element).closest(".lit-kind-item").remove();
+            });
+    }
+
+    private saveMetadata() {
+        const keywordFailAlertEl = $("#work-categorization-keyword-fail");
+        var selectedKindIds = new Array<number>();
+        var selectedGenreIds = new Array<number>();
+        var keywordIdList = new Array<number>();
+
+        $(".lit-kind-item").find("select").each((index, elem: Node) => {
+            selectedKindIds.push(parseInt($(elem as Element).val() as string));
+        });
+        $(".genre-item").find("select").each((index, elem: Node) => {
+            selectedGenreIds.push(parseInt($(elem as Element).val() as string));
+        });
+
+        const keywordsInputEl = $(".keywords-container").children(".tokenfield").children(".keywords-textarea");
+        const keywordsArray = $.map((keywordsInputEl.val() as string).split(","), $.trim);
+        const uniqueKeywordArray = this.returnUniqueElsArray(keywordsArray);
+        var keywordNonIdList: string[] = [];
+        const onlyNumbersRegex = new RegExp(/^[0-9]*$/);
+        for (let i = 0; i < uniqueKeywordArray.length; i++) {
+            if (onlyNumbersRegex.test(uniqueKeywordArray[i])) {
+                keywordIdList.push(uniqueKeywordArray[i]);
+            } else {
+                keywordNonIdList.push(uniqueKeywordArray[i]);
+            }
+        }
+        const createNewKeywordAjax = this.adminApiClient.createNewKeywordsByArray(keywordNonIdList);
+
+        createNewKeywordAjax.done((newIds: number[]) => {
+            const allKeywordIds = keywordIdList.concat(newIds);
+            const data: IOnlySaveCategorization = {
+                keywordIdList: allKeywordIds,
+                categoryIdList: this.categoryTree.getCheckedNodes(),
+                literaryKindIdList: selectedKindIds,
+                literaryGenreIdList: selectedGenreIds
+            };
+            this.formCategorizationObjectAndSendRequest(data);
+        }).fail(() => {
+            keywordFailAlertEl.show().delay(3000).fadeOut(2000);
+            const data: IOnlySaveCategorization = {
+                keywordIdList: keywordIdList,
+                categoryIdList: this.categoryTree.getCheckedNodes(),
+                literaryKindIdList: selectedKindIds,
+                literaryGenreIdList: selectedGenreIds
+            };
+            this.formCategorizationObjectAndSendRequest(data);
+        });
+    }
+
+    private formCategorizationObjectAndSendRequest(contract: IOnlySaveCategorization) {
+        var data: ISaveCategorization = {
+            categoryIdList: contract.categoryIdList,
+            keywordIdList: contract.keywordIdList,
+            literaryGenreIdList: contract.literaryGenreIdList,
+            literaryKindIdList: contract.literaryKindIdList
+        };
+        var $loadingGlyph = $("#work-categorization-save-button .saving-icon");
+        var $buttons = $("#work-categorization-editor-button-panel button");
+        var $successAlert = $("#work-categorization-save-success");
+        var $errorAlert = $("#work-categorization-save-error");
+        $loadingGlyph.show();
+        $buttons.prop("disabled", true);
+        $successAlert.finish().hide();
+        $errorAlert.hide();
+        this.projectClient.saveCategorization(this.projectId, data).done(() => {
+            $successAlert.show().delay(3000).fadeOut(2000);
+        }).fail(() => {
+            $errorAlert.show();
+        }).always(() => {
+            $loadingGlyph.hide();
+            $buttons.prop("disabled", false);
+        });
     }
 }
 

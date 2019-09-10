@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
-using AutoMapper;
 using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Areas.Admin.Models.Request;
 using ITJakub.Web.Hub.Areas.Admin.Models.Response;
@@ -109,20 +108,23 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 case ProjectModuleTabType.WorkCooperation:
                     return PartialView("Work/_Cooperation");
                 case ProjectModuleTabType.WorkMetadata:
-                    var literaryKinds = codeListClient.GetLiteraryKindList();
-                    var literaryGenres = codeListClient.GetLiteraryGenreList();
                     var literaryOriginals = codeListClient.GetLiteraryOriginalList();
                     var responsibleTypes = codeListClient.GetResponsibleTypeList();
+                    var projectMetadata = projectClient.GetProjectMetadata(projectId.Value, true, true, false, false, true, false, false);
+                    var workMetadataViewModel = Mapper.Map<ProjectWorkMetadataViewModel>(projectMetadata);
+                    workMetadataViewModel.AllLiteraryOriginalList = literaryOriginals;
+                    workMetadataViewModel.AllResponsibleTypeList = Mapper.Map<List<ResponsibleTypeViewModel>>(responsibleTypes);
+                    return PartialView("Work/_Metadata", workMetadataViewModel);
+                case ProjectModuleTabType.WorkCategorization:
+                    var literaryKinds = codeListClient.GetLiteraryKindList();
+                    var literaryGenres = codeListClient.GetLiteraryGenreList();
                     var categories = codeListClient.GetCategoryList();
-                    var projectMetadata = projectClient.GetProjectMetadata(projectId.Value, true, true, true, true, true, true, true);
-                    var workMetadaViewModel = Mapper.Map<ProjectWorkMetadataViewModel>(projectMetadata);
-                    workMetadaViewModel.AllLiteraryKindList = literaryKinds;
-                    workMetadaViewModel.AllLiteraryGenreList = literaryGenres;
-                    workMetadaViewModel.AllLiteraryOriginalList = literaryOriginals;
-                    workMetadaViewModel.AllCategoryList = categories;
-                    workMetadaViewModel.AllResponsibleTypeList =
-                        Mapper.Map<List<ResponsibleTypeViewModel>>(responsibleTypes);
-                    return PartialView("Work/_Metadata", workMetadaViewModel);
+                    var projectCategorization = projectClient.GetProjectMetadata(projectId.Value, false, false, true, true, false, true, true);
+                    var workCategorizationViewModel = Mapper.Map<ProjectWorkCategorizationViewModel>(projectCategorization);
+                    workCategorizationViewModel.AllLiteraryKindList = literaryKinds;
+                    workCategorizationViewModel.AllLiteraryGenreList = literaryGenres;
+                    workCategorizationViewModel.AllCategoryList = categories;
+                    return PartialView("Work/_Categorization", workCategorizationViewModel);
                 case ProjectModuleTabType.WorkHistory:
                     return PartialView("Work/_History");
                 case ProjectModuleTabType.WorkNote:
@@ -430,7 +432,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 Title = request.Title,
             };
             long newResourceVersionId = -1;
-            int unsuccessRequestCount = 0;
+            var unsuccessfulRequestCount = 0;
 
             try
             {
@@ -438,7 +440,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
             catch (HttpRequestException)
             {
-                unsuccessRequestCount++;
+                unsuccessfulRequestCount++;
             }
 
             try
@@ -447,7 +449,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
             catch (HttpRequestException)
             {
-                unsuccessRequestCount++;
+                unsuccessfulRequestCount++;
             }
 
             try
@@ -456,49 +458,10 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
             catch (HttpRequestException)
             {
-                unsuccessRequestCount++;
+                unsuccessfulRequestCount++;
             }
 
-            try
-            {
-                client.SetProjectLiteraryKinds(projectId,
-                    new IntegerIdListContract {IdList = request.LiteraryKindIdList});
-            }
-            catch (HttpRequestException)
-            {
-                unsuccessRequestCount++;
-            }
-
-            try
-            {
-                client.SetProjectCategories(projectId,
-                    new IntegerIdListContract {IdList = request.CategoryIdList});
-            }
-            catch (HttpRequestException)
-            {
-                unsuccessRequestCount++;
-            }
-
-            try
-            {
-                client.SetProjectLiteraryGenres(projectId,
-                    new IntegerIdListContract {IdList = request.LiteraryGenreIdList});
-            }
-            catch (HttpRequestException)
-            {
-                unsuccessRequestCount++;
-            }
-
-            try
-            {
-                client.SetProjectKeywords(projectId, new IntegerIdListContract {IdList = request.KeywordIdList});
-            }
-            catch (HttpRequestException)
-            {
-                unsuccessRequestCount++;
-            }
-
-            if (unsuccessRequestCount > 0)
+            if (unsuccessfulRequestCount > 0)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -515,6 +478,63 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return Json(response);
         }
 
+        [HttpPost]
+        public IActionResult SaveCategorization([FromQuery] long projectId, [FromBody] SaveCategorizationRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest();
+            }
+
+            var client = GetProjectClient();
+            var unsuccessfulRequestCount = 0;
+
+            try
+            {
+                client.SetProjectLiteraryKinds(projectId,
+                    new IntegerIdListContract { IdList = request.LiteraryKindIdList });
+            }
+            catch (HttpRequestException)
+            {
+                unsuccessfulRequestCount++;
+            }
+
+            try
+            {
+                client.SetProjectCategories(projectId,
+                    new IntegerIdListContract { IdList = request.CategoryIdList });
+            }
+            catch (HttpRequestException)
+            {
+                unsuccessfulRequestCount++;
+            }
+
+            try
+            {
+                client.SetProjectLiteraryGenres(projectId,
+                    new IntegerIdListContract { IdList = request.LiteraryGenreIdList });
+            }
+            catch (HttpRequestException)
+            {
+                unsuccessfulRequestCount++;
+            }
+
+            try
+            {
+                client.SetProjectKeywords(projectId, new IntegerIdListContract { IdList = request.KeywordIdList });
+            }
+            catch (HttpRequestException)
+            {
+                unsuccessfulRequestCount++;
+            }
+
+            if (unsuccessfulRequestCount > 0)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return AjaxOkResponse();
+        }
 
         #region Typeahead
 
