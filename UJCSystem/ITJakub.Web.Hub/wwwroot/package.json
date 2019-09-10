@@ -10,7 +10,7 @@
     "bootstrap-tokenfield": "https://github.com/tilonet/bootstrap-tokenfield.git#0.12.3",
     "dropzone": "3.12.0",
     "font-awesome": "4.7.0",
-    "gijgo": "1.9.13",
+    "gijgo": "https://github.com/atatanasov/gijgo.git#1.9.13",
     "he": "1.2.0",
     "jquery": "3.3.1",
     "jquery-appear": "https://github.com/emn178/jquery-appear.git#0.2.6",
