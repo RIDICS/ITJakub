@@ -68,7 +68,7 @@ class RoleManager {
         const container = userSection.find(".list-container");
         const searchForm = userSection.find(".user-search-form");
         searchForm.find("input.search-value").val("");
-        container.html("<div class=\"lv-dots lv-mid sm lvt-2 lvb-2\"></div>");
+        container.html("<div class=\"lv-dots lv-mid sm\"></div>");
         userSection.removeClass("hide");
 
         this.client.getUsersByRole(roleId).done(response => {
@@ -94,7 +94,7 @@ class RoleManager {
     private loadPermissions(roleId: number) {
         const permissionSection = $("#permission-section .section");
         const container = permissionSection.find(".list-container");
-        container.html("<div class=\"lv-dots lv-mid sm lvt-2 lvb-2\"></div>");
+        container.html("<div class=\"lv-dots lv-mid sm\"></div>");
         const searchForm = permissionSection.find(".permission-search-form");
         searchForm.find("input.search").val("");
         permissionSection.removeClass("hide");
