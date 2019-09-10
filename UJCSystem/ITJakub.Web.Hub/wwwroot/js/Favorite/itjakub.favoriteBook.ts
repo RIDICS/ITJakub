@@ -88,10 +88,13 @@
         this.loading = true;
         $(this.bodyDiv)
             .empty()
-            .append($('<span class="loading" style="display: block;"></span>'));
+            .css("text-align", "center")
+            .append($('<div class="lv-circles sm" style="transform: translateX(-50%);"></div>'));
 
         this.favoriteManager.getFavoriteLabelsForBooksAndCategories(this.bookType, (favoriteLabels) => {
-            $(this.bodyDiv).empty();
+            $(this.bodyDiv)
+                .empty()
+                .css("text-align", "left");
 
             for (var i = 0; i < favoriteLabels.length; i++) {
                 var favoriteLabel = favoriteLabels[i];

@@ -129,7 +129,7 @@
         this.books = {};
 
         var loadDiv = document.createElement("div");
-        $(loadDiv).addClass("loading");
+        $(loadDiv).addClass("lv-circles lv-mid sm lvb-1");
         $(dropDownItemsDiv).append(loadDiv);
 
         $.ajax({
@@ -140,7 +140,7 @@
             dataType: "json",
             contentType: "application/json",
             success: (response) => {
-                $(dropDownItemsDiv).children("div.loading").remove();
+                $(dropDownItemsDiv).children("div.lv-circles").remove();
                 this.processDownloadedData(response);
                 this.makeTreeStructure(this.categories, this.books, dropDownItemsDiv);
                 this.rootCategory.checkBox = ($(dropDownItemsDiv).parent().children(".dropdown-select-header").children("span.dropdown-select-checkbox").children("input").get(0) as Node as HTMLInputElement);

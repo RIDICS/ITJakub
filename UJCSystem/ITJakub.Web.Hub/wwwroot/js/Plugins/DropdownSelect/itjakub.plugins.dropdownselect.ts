@@ -192,8 +192,12 @@ class DropDownSelect {
 
         dropDownHeadDiv.appendChild(textSpan);
 
-        var loadSpan = document.createElement("span");
-        $(loadSpan).addClass("dropdown-select-text-loading");
+        var loadSpan = document.createElement("div");
+        $(loadSpan).addClass("lv-circles lv-right");
+        $(loadSpan).css("height", "20px");
+        $(loadSpan).css("width", "20px");
+        $(loadSpan).css("display", "inline-block");
+        $(loadSpan).css("margin-left", "50%");
 
         dropDownHeadDiv.appendChild(loadSpan);
 
@@ -278,7 +282,7 @@ class DropDownSelect {
 
     protected downloadData(dropDownItemsDiv: HTMLDivElement) {
         var loadDiv = document.createElement("div");
-        $(loadDiv).addClass("loading");
+        $(loadDiv).addClass("lv-circles sm lv-mid");
         $(dropDownItemsDiv).append(loadDiv);
         var self = this;
 
@@ -294,7 +298,7 @@ class DropDownSelect {
                 var categories = this.getCategories(response);
                 var items = this.getLeafItems(response);
 
-                $(dropDownItemsDiv).children("div.loading").remove();
+                $(dropDownItemsDiv).children("div.lv-circles").remove();
 
                 this.makeTreeStructure(categories, items, dropDownItemsDiv);
 
@@ -360,7 +364,7 @@ class DropDownSelect {
 
         var selectHeader = $(dropDownItemsDiv).parent().children(".dropdown-select-header");
         $(selectHeader).children(".dropdown-select-text").append(this.getCategoryName(rootCategory));
-        $(selectHeader).children(".dropdown-select-text-loading").hide();
+        $(selectHeader).children(".lv-circles").hide();
 
         $(selectHeader).data("id", this.getCategoryId(rootCategory));
         $(selectHeader).data("name", this.getCategoryName(rootCategory));
