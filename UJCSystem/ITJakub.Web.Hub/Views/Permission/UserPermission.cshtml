@@ -9,12 +9,13 @@
 }
 
 @section styles{
-    <link asp-append-version="true" href="~/css/ridics.permissions.css" rel="stylesheet"/>
+    <link asp-append-version="true" href="~/css/ridics.list.css" rel="stylesheet" />
+    <link asp-append-version="true" href="~/css/ridics.permissions.css" rel="stylesheet" />
 }
 
 @section scripts{
-    <script asp-append-version="true" src="~/Areas/Admin/js/permissions/ridics.list.js"></script>
-    <script asp-append-version="true" src="~/Areas/Admin/js/permissions/ridics.user.list.js"></script>
+    <script asp-append-version="true" src="~/js/ridics.list.js"></script>
+    <script asp-append-version="true" src="~/js/permissions/ridics.user.list.js"></script>
 }
 
 <h2>@Localizer.Translate("UserPermissionManagementHeadline", "Permission", LocTranslationSource.File)</h2>
@@ -23,12 +24,15 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-sm-offset-6 col-sm-6 col-lg-offset-8 col-lg-4">
-                    <form asp-action="UserPermission" asp-controller="Permission" method="get" class="user-search-form form-inline">
+                    <form asp-action="UserPermission" asp-controller="Permission" method="get" class="user-search-form search-form form-inline">
                         <div class="form-group">
+                            <div class="search-input">
+                                <input class="form-control search-value" name="search" placeholder=" " value="@Model.SearchQuery" />
+                                <i class="fa fa-close reset-search-button"></i>
+                            </div>
                             <div class="search-button">
                                 <button class="btn btn-default" type="submit">@Localizer.Translate("Search", "Permission")</button>
                             </div>
-                            <input class="form-control search-value" name="search" value="@Model.SearchQuery"/>
                         </div>
                     </form>
                 </div>

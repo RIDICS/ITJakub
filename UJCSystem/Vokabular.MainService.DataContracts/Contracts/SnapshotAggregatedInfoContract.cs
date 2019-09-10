@@ -10,12 +10,12 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public DateTime PublishDate { get; set; }
         public List<SnapshotResourcesInfoContract> ResourcesInfo { get; set; }
         public string Author { get; set; }
+        public string Comment { get; set; }
     }
 
     public class SnapshotResourcesInfoContract
     {
         public ResourceTypeEnumContract ResourceType { get; set; }
-        public int TotalCount { get; set; }
         public int PublishedCount { get; set; }
     }
 }

@@ -15,6 +15,8 @@ namespace Vokabular.MainService.DataContracts.Contracts.Type
         Text = 6,
         Image = 7,
         Audio = 8,
-        Video = 9,
+        AudioTrack = 9,
+        BookVersion = 10,
+        EditionNote = 11
     }
 }

@@ -35,6 +35,16 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
+        [HttpGet("text/version/{textVersionId}")]
+        public FullTextContract GetTextResourceVersion(long textVersionId, [FromQuery] TextFormatEnumContract? format)
+        {
+            if (format == null)
+                format = TextFormatEnumContract.Html;
+
+            var result = m_projectContentManager.GetTextResourceVersion(textVersionId, format.Value);
+            return result;
+        }
+
         [HttpPost("text/{textId}")]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
         public IActionResult CreateNewTextResourceVersion([FromBody] CreateTextRequestContract request)

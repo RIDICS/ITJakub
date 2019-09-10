@@ -1,0 +1,17 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<ITJakub.Web.Hub.Areas.Admin.Models.SnapshotViewModel>
+@inject ILocalizationService Localizer
+
+<tr class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></tr>
+@foreach (var snapshotViewModel in Model.List)
+{
+    <tr>
+        <td>@snapshotViewModel.PublishDate.ToLocalTime().ToString(Localizer.GetRequestCulture())</td>
+        <td>@snapshotViewModel.PublishedTextResourceCount</td>
+        <td>@snapshotViewModel.PublishedImageResourceCount</td>
+        <td>@snapshotViewModel.PublishedAudioResourceCount</td>
+        <td>@snapshotViewModel.Author</td>
+        <td>@snapshotViewModel.Comment</td>
+        <td class="duplicate-column"><a asp-controller="Publication" asp-action="DuplicateSnapshot" asp-route-snapshotId="@snapshotViewModel.Id">@Localizer.Translate("Duplicate", "Admin")</a></td>
+    </tr>
+}

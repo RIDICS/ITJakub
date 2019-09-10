@@ -1015,82 +1015,8 @@ class ProjectWorkPublicationsTab extends ProjectModuleTabBase {
     }
 
     initTab() {
-        var $table = $("#work-snapshots-table");
-        $(".duplicate-column", $table).hide();
-
-        $("#work-snapshots-new-button").click((event) => {
-            $(".edit-column, .remove-column").hide();
-            $(".duplicate-column", $table).show();
-            $(event.currentTarget as Node as Element).hide();
-
-            this.openNewSnapshotPanel();
-        });
-    }
-
-    private openNewSnapshotPanel() {
-        var url = getBaseUrl() + "Admin/Project/NewSnapshot?projectId=" + this.projectId;
-
-        $("#new-snapshot-container").append("<div class=\"loader\"></div>").load(url,
-            null,
-            (responseText, textStatus, xmlHttpRequest) => {
-                if (xmlHttpRequest.status !== HttpStatusCode.Success) {
-                    var errorElement = new AlertComponentBuilder(AlertType.Error)
-                        .addContent(localization.translate("CreateResourcesError", "Admin").value)
-                        .buildElement();
-                    $("#new-snapshot-container").empty().append(errorElement);
-                    return;
-                }
-
-                this.initNewSnapshotPanel();
-            });
-    }
-
-    private initNewSnapshotPanel() {
-        var textResources = new ProjectWorkPublicationsResource($(".project-dropdown-panel").first());
-        textResources.init();
-    }
-}
-
-class ProjectWorkPublicationsResource {
-    private $container: JQuery;
-
-    constructor(panelElement: JQuery) {
-        this.$container = panelElement;
-    }
-
-    public init() {
-        $(".subheader", this.$container).children().each((index, elem) => {
-            var $checkbox = $("input[type=checkbox]", elem as Node as Element);
-            if ($checkbox.length === 0) return;
-
-            $checkbox.change((event) => {
-                var checkbox = event.currentTarget as Node as HTMLInputElement;
-                var isChecked = checkbox.checked;
-
-                $(`td:nth-child(${index + 1}) input[type=checkbox]`, this.$container).each((index, elem) => {
-                    var checkbox2 = elem as Node as HTMLInputElement;
-                    checkbox2.checked = isChecked;
-                });
-            });
-        });
-
-        $("td input[type=checkbox]", this.$container).change((event) => {
-            var $parentTd = $(event.currentTarget as Node as HTMLElement).closest("td");
-            var $parentTr = $parentTd.closest("tr");
-            var position = $parentTr.children().index($parentTd) + 1;
-
-            var isAllChecked = true;
-            $(`td:nth-child(${position}) input[type=checkbox]`, this.$container).each((index, elem) => {
-                if (!(elem as Node as HTMLInputElement).checked) {
-                    isAllChecked = false;
-                }
-            });
-
-            var allCheckBox =
-                $(`.subheader th:nth-child(${position}) input[type=checkbox]`, this.$container)
-                    .get(0) as Node as HTMLInputElement;
-            allCheckBox.checked = isAllChecked;
-        });
+        var snapshotList = new SnapshotList(this.projectId);
+        snapshotList.init();
     }
 }
 

@@ -33,6 +33,16 @@ namespace Vokabular.MainService.Controllers
             return File(result.Stream, result.MimeType, result.FileName, result.FileSize);
         }
 
+        [HttpGet("image/version/{imageVersionId}")]
+        public IActionResult GetImageVersion(long imageVersionId)
+        {
+            var result = m_projectContentManager.GetImageResourceVersion(imageVersionId);
+            if (result == null)
+                return NotFound();
+
+            return File(result.Stream, result.MimeType, result.FileName, result.FileSize);
+        }
+
         [HttpPost("image/{imageId}")]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
         public IActionResult CreateNewImageResourceVersion(long imageId, [FromQuery] string fileName, [FromQuery] long? originalVersionId, [FromQuery] long? pageId, [FromQuery] string comment)
