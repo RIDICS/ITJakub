@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using AutoMapper;
 using ITJakub.Lemmatization.Shared.Contracts;
+using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.DataContracts;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +14,7 @@ using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Clients;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Errors;
+using Vokabular.RestClient.Results;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -111,6 +114,11 @@ namespace ITJakub.Web.Hub.Controllers
             return m_communication.GetMainServiceSessionClient();
         }
 
+        public MainServiceSnapshotClient GetSnapshotClient()
+        {
+            return m_communication.GetMainServiceSnapshotClient();
+        }
+
         public MainServiceTermClient GetTermClient()
         {
             return m_communication.GetMainServiceTermClient();
@@ -185,6 +193,19 @@ namespace ITJakub.Web.Hub.Controllers
             return new JsonResult(result)
             {
                 StatusCode = (int)httpStatusCode
+            };
+        }
+
+        protected ListViewModel<TTarget> CreateListViewModel<TTarget, TSource>(PagedResultList<TSource> data, int start, int pageSize,
+            string search)
+        {
+            return new ListViewModel<TTarget>
+            {
+                TotalCount = data.TotalCount,
+                List = Mapper.Map<List<TTarget>>(data.List),
+                PageSize = pageSize,
+                Start = start,
+                SearchQuery = search
             };
         }
     }

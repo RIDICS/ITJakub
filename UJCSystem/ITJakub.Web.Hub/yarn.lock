@@ -19,6 +19,12 @@
     normalize-path "^2.0.1"
     through2 "^2.0.3"
 
+"@types/bootstrap-select@^1.11.1":
+  version "1.11.1"
+  resolved "https://registry.yarnpkg.com/@types/bootstrap-select/-/bootstrap-select-1.11.1.tgz#05dcbc0018f50428cf7943e6a1cda4d3a122051f"
+  dependencies:
+    "@types/jquery" "*"
+
 "@types/bootstrap@3.3.42":
   version "3.3.42"
   resolved "https://registry.yarnpkg.com/@types/bootstrap/-/bootstrap-3.3.42.tgz#003a089fe86888804115f856e4ff4bfd2650d055"
@@ -32,7 +38,6 @@
 "@types/dropzone@5.0.6":
   version "5.0.6"
   resolved "https://registry.yarnpkg.com/@types/dropzone/-/dropzone-5.0.6.tgz#766fc512c2816403c7a97dd6d41bd9187355ff6c"
-  integrity sha512-/bR/dUj1bhlGCpIUEzXUy5E9YQyPPcfbQTNOX+xpGZ7aoBdZ2VdwuBNromSACgtsfzXSatqvurHvxJ3QrEV93g==
   dependencies:
     "@types/jquery" "*"
 
@@ -43,7 +48,6 @@
 "@types/he@1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@types/he/-/he-1.1.0.tgz#0ddc2ae80f0814f729f0f7e5aa77b191ab4a9598"
-  integrity sha512-HyiLOiJhclRBPzcbYrNThdi0JOdq7bT4hq9jFBPQk4HGjzkwYVQnMj9IDi7qvYkg9QTly2oZ9kjm4j7d8Ic9eA==
 
 "@types/jquery-validation-unobtrusive@3.2.32":
   version "3.2.32"
@@ -70,7 +74,6 @@
 "@types/jquery@3.3.31":
   version "3.3.31"
   resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.3.31.tgz#27c706e4bf488474e1cb54a71d8303f37c93451b"
-  integrity sha512-Lz4BAJihoFw5nRzKvg4nawXPzutkv7wmfQ5121avptaSIXlDNJCUuxZxX/G+9EVidZGuO0UBlk+YjKbwRKJigg==
   dependencies:
     "@types/sizzle" "*"
 
@@ -91,7 +94,6 @@
 "@types/sizzle@*":
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/@types/sizzle/-/sizzle-2.3.2.tgz#a811b8c18e2babab7d542b3365887ae2e4d9de47"
-  integrity sha512-7EJYyKTL7tFR8+gDbB6Wwz/arpGa0Mywk1TJbNzKzHtzbwVmY4HR9WqS5VV7dsBUKQmPNr192jHr/VpBluj/hg==
 
 "@types/typeahead@0.11.32":
   version "0.11.32"
@@ -3292,7 +3294,6 @@ type@^1.0.1:
 typescript@3.5.3:
   version "3.5.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.5.3.tgz#c830f657f93f1ea846819e929092f5fe5983e977"
-  integrity sha512-ACzBtm/PhXBDId6a6sDJfroT2pOWt/oOnk4/dElG5G33ZL776N3Y6/6bKZJBFpd+b05F3Ct9qDjMeJmRWtE2/g==
 
 uglify-js@^2.8.22:
   version "2.8.29"

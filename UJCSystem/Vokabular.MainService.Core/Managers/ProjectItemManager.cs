@@ -119,6 +119,33 @@ namespace Vokabular.MainService.Core.Managers
             return result;
         }
 
+        public IList<AudioContract> GetTrackRecordings(long trackId)
+        {
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetRecordings(trackId));
+            var result = m_mapper.Map<IList<AudioContract>>(dbResult);
+            return result;
+        }
+
+        public FileResultData GetAudio(long audioId)
+        {
+            var audioResource = m_resourceRepository.InvokeUnitOfWork(x => x.GetResourceVersion<AudioResource>(audioId, true, true));
+            if (audioResource == null)
+            {
+                return null;
+            }
+
+            var fileStream =
+                m_fileSystemManager.GetResource(audioResource.Resource.Project.Id, null, audioResource.FileId, ResourceType.Audio);
+
+            return new FileResultData
+            {
+                FileName = audioResource.FileName,
+                MimeType = audioResource.MimeType,
+                Stream = fileStream,
+                FileSize = fileStream.Length,
+            };
+        }
+
         public long CreateTrackResource(long projectId, CreateTrackContract trackData)
         {
             var userId = m_authenticationManager.GetCurrentUserId();
