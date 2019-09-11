@@ -48,11 +48,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<ResourceVersionContract> GetResourceVersionHistory(long resourceId)
+        public IList<ResourceVersionContract> GetResourceVersionHistory(long resourceId)
         {
             try
             {
-                var result = m_client.Get<List<ResourceVersionContract>>($"resource/{resourceId}/version");
+                var result = m_client.Get<IList<ResourceVersionContract>>($"resource/{resourceId}/version");
                 return result;
             }
             catch (HttpRequestException e)

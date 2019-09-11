@@ -187,6 +187,8 @@ namespace Vokabular.MainService
 
             services.AddProjectImportServices();
 
+            services.AddAutoMapper();
+
             // IoC
             var container = new DryIocContainerWrapper();
             container.RegisterLogger();
@@ -206,8 +208,6 @@ namespace Vokabular.MainService
             IApplicationLifetime applicationLifetime)
         {
             ApplicationLogging.LoggerFactory = loggerFactory;
-
-            app.ConfigureAutoMapper();
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
             app.UseMiddleware<PortalTypeMiddleware>();

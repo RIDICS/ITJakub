@@ -11,10 +11,12 @@ namespace Vokabular.MainService.Core.Managers
     public class TermManager
     {
         private readonly CatalogValueRepository m_catalogValueRepository;
+        private readonly IMapper m_mapper;
 
-        public TermManager(CatalogValueRepository catalogValueRepository)
+        public TermManager(CatalogValueRepository catalogValueRepository, IMapper mapper)
         {
             m_catalogValueRepository = catalogValueRepository;
+            m_mapper = mapper;
         }
 
         public int CreateTerm(TermContract data)
@@ -35,13 +37,13 @@ namespace Vokabular.MainService.Core.Managers
         public TermContract GetTerm(int termId)
         {
             var term = m_catalogValueRepository.InvokeUnitOfWork(x => x.FindById<Term>(termId));
-            return Mapper.Map<TermContract>(term);
+            return m_mapper.Map<TermContract>(term);
         }
 
         public List<TermContract> GetTermList(int? categoryId)
         {
             var resultList = m_catalogValueRepository.InvokeUnitOfWork(x => x.GetTermList(categoryId));
-            return Mapper.Map<List<TermContract>>(resultList);
+            return m_mapper.Map<List<TermContract>>(resultList);
         }
     }
 }

@@ -32,7 +32,6 @@ using Scalesoft.Localization.Core.Util;
 using Scalesoft.Localization.Database.NHibernate;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
-using Vokabular.RestClient;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
@@ -194,6 +193,8 @@ namespace ITJakub.Web.Hub
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddLocalizationService(localizationConfiguration, new NHibernateDatabaseConfiguration());
 
+            // Core configuration
+            services.AddAutoMapper();
             services.AddMvc()
                 .AddDataAnnotationsLocalization(options =>
                 {
@@ -234,8 +235,6 @@ namespace ITJakub.Web.Hub
             app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
             app.UseAuthentication();
-
-            app.ConfigureAutoMapper();
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
 

@@ -16,7 +16,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
-using Scalesoft.Localization.AspNetCore;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
@@ -30,11 +29,10 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
     public class ProjectController : BaseController
     {
         private const int ProjectListPageSize = 5;
-        private readonly ILocalizationService m_localizer;
+        private const int SnapshotListPageSize = 10;
 
-        public ProjectController(CommunicationProvider communicationProvider, ILocalizationService localizer) : base(communicationProvider)
+        public ProjectController(CommunicationProvider communicationProvider) : base(communicationProvider)
         {
-            m_localizer = localizer;
         }
 
         private ProjectListViewModel CreateProjectListViewModel(PagedResultList<ProjectDetailContract> data, int start)
@@ -100,9 +98,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             switch (tabType)
             {
                 case ProjectModuleTabType.WorkPublications:
-                    var snapshotList = projectClient.GetSnapshotList(projectId.Value);
-                    var publicationsViewModel = Mapper.Map<List<SnapshotViewModel>>(snapshotList);
-                    return PartialView("Work/_Publications", publicationsViewModel);
+                    var search = string.Empty;
+                    var start = 0;
+                    var snapshotList = projectClient.GetSnapshotList(projectId.Value, start, SnapshotListPageSize, search);
+                    var model = CreateListViewModel<SnapshotViewModel, SnapshotAggregatedInfoContract>(snapshotList, start, SnapshotListPageSize, search);
+                    return PartialView("Work/_Publications", model);
                 case ProjectModuleTabType.WorkPageList:
                     var pages = projectClient.GetAllPageList(projectId.Value);
                     return PartialView("Work/_PageList", pages);
@@ -179,16 +179,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var resourceVersionList = client.GetResourceVersionHistory(resourceId);
             var viewModel = Mapper.Map<List<ResourceVersionViewModel>>(resourceVersionList);
             return PartialView("_ResourceVersion", viewModel);
-        }
-
-        public IActionResult NewSnapshot(long projectId)
-        {
-            var client = GetProjectClient();
-            var resources = client.GetResourceList(projectId);
-            // TODO
-
-            var viewModel = ProjectMock.GetNewPulication(m_localizer);
-            return PartialView("Work/_PublicationsNew", viewModel);
         }
 
         [HttpPost]
@@ -550,63 +540,5 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         #endregion
-    }
-
-    public static class ProjectMock
-    {
-        public static NewPublicationViewModel GetNewPulication(ILocalizationService localizer)
-        {
-            return new NewPublicationViewModel
-            {
-                ResourceList = new List<ResourceViewModel>
-                {
-                    GetResourceViewModel(1, localizer),
-                    GetResourceViewModel(2, localizer),
-                    GetResourceViewModel(3, localizer),
-                    GetResourceViewModel(4, localizer),
-                    GetResourceViewModel(5, localizer)
-                },
-                VisibilityForGroups = new List<GroupInfoViewModel>
-                {
-                    GetVisibilityForGroup(1, localizer),
-                    GetVisibilityForGroup(2, localizer),
-                    GetVisibilityForGroup(3, localizer),
-                }
-            };
-        }
-
-        private static GroupInfoViewModel GetVisibilityForGroup(int id, ILocalizationService localizer)
-        {
-            return new GroupInfoViewModel
-            {
-                GroupId = id,
-                //Name = string.Format("Skupina {0}", id)
-                Name = localizer.TranslateFormat("Group", new object[] {id}, "Admin")
-            };
-        }
-
-        private static ResourceViewModel GetResourceViewModel(int id, ILocalizationService localizer)
-        {
-            return new ResourceViewModel
-            {
-                Id = id,
-                //Name = string.Format("Strana {0}", id),
-                Name = localizer.TranslateFormat("Page", new object[] {id}, "Admin"),
-                VersionList = new List<VersionNumberViewModel>
-                {
-                    GetVersionNumber(1),
-                    GetVersionNumber(2),
-                }
-            };
-        }
-
-        private static VersionNumberViewModel GetVersionNumber(int id)
-        {
-            return new VersionNumberViewModel
-            {
-                ResourceVersionId = id,
-                VersionNumber = id
-            };
-        }
     }
 }

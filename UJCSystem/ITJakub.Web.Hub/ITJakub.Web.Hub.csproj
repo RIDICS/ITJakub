@@ -37,9 +37,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="8.1.1" />
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="BeginCollectionItemCore" Version="1.0.8" />
-    <PackageReference Include="DryIoc.dll" Version="4.0.5" />
+    <PackageReference Include="DryIoc.dll" Version="4.0.7" />
     <PackageReference Include="DryIoc.Microsoft.DependencyInjection" Version="3.0.3" />
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -53,6 +53,10 @@
     <PackageReference Include="Scalesoft.Localization.AspNetCore.Service" Version="2.2.2" />
     <PackageReference Include="Scalesoft.Localization.Database.NHibernate" Version="2.2.2" />
     <PackageReference Include="System.Data.SqlClient" Version="4.6.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\js\Permission\" />
   </ItemGroup>
 
 

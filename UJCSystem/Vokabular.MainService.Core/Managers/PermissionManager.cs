@@ -22,13 +22,15 @@ namespace Vokabular.MainService.Core.Managers
         private readonly PermissionRepository m_permissionRepository;
         private readonly CommunicationProvider m_communicationProvider;
         private readonly DefaultUserProvider m_defaultUserProvider;
+        private readonly IMapper m_mapper;
 
         public PermissionManager(PermissionRepository permissionRepository, CommunicationProvider communicationProvider,
-            DefaultUserProvider defaultUserProvider)
+            DefaultUserProvider defaultUserProvider, IMapper mapper)
         {
             m_permissionRepository = permissionRepository;
             m_communicationProvider = communicationProvider;
             m_defaultUserProvider = defaultUserProvider;
+            m_mapper = mapper;
         }
 
         public List<PermissionFromAuthContract> GetAutoImportSpecialPermissions()
@@ -122,7 +124,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var result = client.HttpClient.GetListAsync<AuthPermissionContract>(startValue, countValue, filterByName).GetAwaiter()
                 .GetResult();
-            var permissionContracts = Mapper.Map<List<PermissionContract>>(result.Items);
+            var permissionContracts = m_mapper.Map<List<PermissionContract>>(result.Items);
 
             return new PagedResultList<PermissionContract>
             {

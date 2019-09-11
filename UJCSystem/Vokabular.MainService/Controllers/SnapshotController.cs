@@ -1,59 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace Vokabular.MainService.Controllers
 {
-    [Route("api")]
+    [Route("api/[controller]")]
     public class SnapshotController : BaseController
     {
-        [HttpPost("project/{projectId}/snapshot")]
-        public long CreateSnapshot(long projectId)
+        private readonly SnapshotManager m_snapshotManager;
+
+        public SnapshotController(SnapshotManager snapshotManager)
         {
-            return 73;
+            m_snapshotManager = snapshotManager;
         }
 
-        [HttpGet("project/{projectId}/snapshot")]
-        public List<SnapshotAggregatedInfoContract> GetSnapshotList(long projectId)
+        [HttpPost]
+        public long CreateSnapshot([FromBody] CreateSnapshotContract data)
         {
-            return new List<SnapshotAggregatedInfoContract>
-            {
-                MockDataSnapshot.GetSnapshot(1),
-                MockDataSnapshot.GetSnapshot(2),
-                MockDataSnapshot.GetSnapshot(3),
-            };
-        }
-    }
-
-    public class MockDataSnapshot
-    {
-        public static SnapshotAggregatedInfoContract GetSnapshot(long id)
-        {
-            return new SnapshotAggregatedInfoContract
-            {
-                Id = 5,
-                PublishDate = DateTime.Now,
-                Author = "Jan Novák",
-                ResourcesInfo = new List<SnapshotResourcesInfoContract>
-                {
-                    GetSnapshotResourcesInfo(ResourceTypeEnumContract.Text, 3, 3),
-                    GetSnapshotResourcesInfo(ResourceTypeEnumContract.Image, 30, 30),
-                    GetSnapshotResourcesInfo(ResourceTypeEnumContract.Audio, 1, 1),
-                    GetSnapshotResourcesInfo(ResourceTypeEnumContract.Video, 0, 0)
-                }
-            };
+            return m_snapshotManager.CreateSnapshot(data);
         }
 
-        private static SnapshotResourcesInfoContract GetSnapshotResourcesInfo(ResourceTypeEnumContract resourceType, int publishedCount, int totalCount)
+        [HttpGet("{snapshotId}")]
+        public SnapshotDetailContract GetSnapshot(long snapshotId)
         {
-            return new SnapshotResourcesInfoContract
-            {
-                ResourceType = resourceType,
-                PublishedCount = publishedCount,
-                TotalCount = totalCount
-            };
+            return m_snapshotManager.GetSnapshotDetail(snapshotId);
         }
     }
 }

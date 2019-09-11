@@ -2,7 +2,6 @@
 using System.Linq;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.ExternalBibliography;
 using Vokabular.ProjectImport.Works.FilteringExpressionSetManagement;
 using Vokabular.RestClient.Results;
@@ -13,10 +12,12 @@ namespace Vokabular.ProjectImport.Managers
     public class FilteringExpressionSetManager
     {
         private readonly FilteringExpressionSetRepository m_filteringExpressionSetRepository;
+        private readonly IMapper m_mapper;
 
-        public FilteringExpressionSetManager(FilteringExpressionSetRepository filteringExpressionSetRepository)
+        public FilteringExpressionSetManager(FilteringExpressionSetRepository filteringExpressionSetRepository, IMapper mapper)
         {
             m_filteringExpressionSetRepository = filteringExpressionSetRepository;
+            m_mapper = mapper;
         }
 
         public int CreateFilteringExpressionSet(FilteringExpressionSetDetailContract data, int userId)
@@ -44,7 +45,7 @@ namespace Vokabular.ProjectImport.Managers
         public FilteringExpressionSetDetailContract GetFilteringExpressionSet(int externalRepositoryId)
         {
             var result = m_filteringExpressionSetRepository.InvokeUnitOfWork(x => x.GetFilteringExpressionSet(externalRepositoryId));
-            return Mapper.Map<FilteringExpressionSetDetailContract>(result);
+            return m_mapper.Map<FilteringExpressionSetDetailContract>(result);
         }
 
         public PagedResultList<FilteringExpressionSetContract> GetFilteringExpressionSetList(int startValue, int countValue)
@@ -53,7 +54,7 @@ namespace Vokabular.ProjectImport.Managers
 
             return new PagedResultList<FilteringExpressionSetContract>
             {
-                List = Mapper.Map<List<FilteringExpressionSetContract>>(result.List),
+                List = m_mapper.Map<List<FilteringExpressionSetContract>>(result.List),
                 TotalCount = result.Count,
             };
         }
@@ -61,13 +62,13 @@ namespace Vokabular.ProjectImport.Managers
         public IList<BibliographicFormatContract> GetAllBibliographicFormats()
         {
             var result = m_filteringExpressionSetRepository.InvokeUnitOfWork(x => x.GetAllBibliographicFormats());
-            return Mapper.Map<IList<BibliographicFormatContract>>(result);
+            return m_mapper.Map<IList<BibliographicFormatContract>>(result);
         }
 
         public IList<FilteringExpressionSetContract> GetAllFilteringExpressionSets()
         {
             var result = m_filteringExpressionSetRepository.InvokeUnitOfWork(x => x.GetAllFilteringExpressionSets());
-            return Mapper.Map<IList<FilteringExpressionSetContract>>(result);
+            return m_mapper.Map<IList<FilteringExpressionSetContract>>(result);
         }
     }
 }

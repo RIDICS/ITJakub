@@ -4,6 +4,7 @@
   "private": true,
   "devDependencies": {
     "@types/bootstrap": "3.3.42",
+    "@types/bootstrap-select": "^1.11.1",
     "@types/codemirror": "0.0.46",
     "@types/dropzone": "5.0.6",
     "@types/gijgo": "0.6.6",

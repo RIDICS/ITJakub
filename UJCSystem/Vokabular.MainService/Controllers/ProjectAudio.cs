@@ -33,6 +33,24 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
+        [HttpGet("track/{trackId}/recordings")]
+        public IList<AudioContract> GetTrackRecordings(long trackId)
+        {
+            var result = m_projectItemManager.GetTrackRecordings(trackId);
+            return result;
+        }
+
+        [HttpGet("audio/{audioId}")]
+        public IActionResult GetAudio(long audioId)
+        {
+            var result = m_projectItemManager.GetAudio(audioId);
+            if (result == null)
+                return NotFound();
+
+            Response.ContentLength = result.FileSize;
+            return File(result.Stream, result.MimeType, result.FileName);
+        }
+
         [HttpPost("{projectId}/track")]
         public IActionResult CreateTrackResource(long projectId, [FromBody] CreateTrackContract trackData)
         {

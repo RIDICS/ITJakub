@@ -11,10 +11,12 @@ namespace Vokabular.MainService.Core.Managers
     public class HeadwordSearchManager
     {
         private readonly MetadataRepository m_metadataRepository;
+        private readonly IMapper m_mapper;
 
-        public HeadwordSearchManager(MetadataRepository metadataRepository)
+        public HeadwordSearchManager(MetadataRepository metadataRepository, IMapper mapper)
         {
             m_metadataRepository = metadataRepository;
+            m_mapper = mapper;
         }
 
         public List<HeadwordContract> GetHeadwordSearchResultByStandardIds(List<HeadwordDictionaryEntryData> list)
@@ -28,7 +30,7 @@ namespace Vokabular.MainService.Core.Managers
             foreach (var headwordDictionaryEntryData in list)
             {
                 var headwordInfo = m_metadataRepository.InvokeUnitOfWork(x => x.GetHeadwordWithFetchByExternalId(headwordDictionaryEntryData.ProjectExternalId, headwordDictionaryEntryData.HeadwordExternalId));
-                var headwordContract = Mapper.Map<HeadwordContract>(headwordInfo);
+                var headwordContract = m_mapper.Map<HeadwordContract>(headwordInfo);
                 orderedResultList.Add(headwordContract);
             }
 

@@ -25,6 +25,7 @@ namespace ITJakub.Web.Hub.Core.Communication
         private readonly MainServiceResourceClient m_resourceClient;
         private readonly MainServiceRoleClient m_roleClient;
         private readonly MainServiceSessionClient m_sessionClient;
+        private readonly MainServiceSnapshotClient m_snapshotClient;
         private readonly MainServiceTermClient m_termClient;
         private readonly MainServiceUserClient m_userClient;
         private readonly IOptions<PortalOption> m_portalOption;
@@ -37,8 +38,8 @@ namespace ITJakub.Web.Hub.Core.Communication
             MainServiceFeedbackClient feedbackClient, MainServiceFilteringExpressionSetClient filteringExpressionSetClient,
             MainServiceMetadataClient metadataClient, MainServiceNewsClient newsClient, MainServicePermissionClient permissionClient,
             MainServiceProjectClient projectClient, MainServiceResourceClient resourceClient, MainServiceRoleClient roleClient,
-            MainServiceSessionClient sessionClient, MainServiceTermClient termClient, MainServiceUserClient userClient,
-            IOptions<PortalOption> portalOption)
+            MainServiceSessionClient sessionClient, MainServiceSnapshotClient snapshotClient, MainServiceTermClient termClient,
+            MainServiceUserClient userClient, IOptions<PortalOption> portalOption, IMapper mapper)
         {
             m_configurationProvider = communicationConfigurationProvider;
             m_bookClient = bookClient;
@@ -55,12 +56,16 @@ namespace ITJakub.Web.Hub.Core.Communication
             m_resourceClient = resourceClient;
             m_roleClient = roleClient;
             m_sessionClient = sessionClient;
+            m_snapshotClient = snapshotClient;
             m_termClient = termClient;
             m_userClient = userClient;
             m_portalOption = portalOption;
+            Mapper = mapper;
         }
 
         public PortalTypeContract PortalType => Mapper.Map<PortalTypeContract>(m_portalOption.Value.PortalType);
+
+        public IMapper Mapper { get; }
 
         public MainServiceBookClient GetMainServiceBookClient()
         {
@@ -130,6 +135,11 @@ namespace ITJakub.Web.Hub.Core.Communication
         public MainServiceSessionClient GetMainServiceSessionClient()
         {
             return m_sessionClient;
+        }
+
+        public MainServiceSnapshotClient GetMainServiceSnapshotClient()
+        {
+            return m_snapshotClient;
         }
 
         public MainServiceTermClient GetMainServiceTermClient()

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.ExternalBibliography;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;
@@ -14,10 +13,12 @@ namespace Vokabular.ProjectImport
     public class MainImportManager
     {
         private readonly ImportManager m_importManager;
+        private readonly IMapper m_mapper;
 
-        public MainImportManager(ImportManager importManager)
+        public MainImportManager(ImportManager importManager, IMapper mapper)
         {
             m_importManager = importManager;
+            m_mapper = mapper;
         }
 
         public IReadOnlyDictionary<int, RepositoryImportProgressInfo> ActualProgress => m_importManager.ActualProgress;
@@ -44,7 +45,7 @@ namespace Vokabular.ProjectImport
 
         public IList<RepositoryImportProgressInfoContract> GetActualProgressInfo()
         {
-            var result = Mapper.Map<IList<RepositoryImportProgressInfoContract>>(ActualProgress.Select(x => x.Value));
+            var result = m_mapper.Map<IList<RepositoryImportProgressInfoContract>>(ActualProgress.Select(x => x.Value));
             return result;
         }
     }

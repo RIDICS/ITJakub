@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 using AutoMapper;
 using Ridics.Authentication.DataContracts;
@@ -28,14 +27,16 @@ namespace Vokabular.MainService.Core.Managers
         private readonly CommunicationProvider m_communicationProvider;
         private readonly AuthenticationManager m_authenticationManager;
         private readonly UserDetailManager m_userDetailManager;
+        private readonly IMapper m_mapper;
 
         public UserManager(UserRepository userRepository, CommunicationProvider communicationProvider,
-            AuthenticationManager authenticationManager, UserDetailManager userDetailManager)
+            AuthenticationManager authenticationManager, UserDetailManager userDetailManager, IMapper mapper)
         {
             m_userRepository = userRepository;
             m_communicationProvider = communicationProvider;
             m_authenticationManager = authenticationManager;
             m_userDetailManager = userDetailManager;
+            m_mapper = mapper;
         }
 
         public int CreateNewUser(CreateUserContract data)
@@ -92,7 +93,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var contract = new AuthChangeContactContract
             {
-                ContactType = Mapper.Map<ContactTypeEnum>(data.ContactType),
+                ContactType = m_mapper.Map<ContactTypeEnum>(data.ContactType),
                 UserId = userExternalId,
                 NewContactValue = data.NewContactValue
             };
@@ -123,7 +124,7 @@ namespace Vokabular.MainService.Core.Managers
             var client = m_communicationProvider.GetAuthUserApiClient();
 
             var result = client.HttpClient.GetListAsync<AuthUserContract>(startValue, countValue, filterByName).GetAwaiter().GetResult();
-            var userDetailContracts = Mapper.Map<List<UserDetailContract>>(result.Items);
+            var userDetailContracts = m_mapper.Map<List<UserDetailContract>>(result.Items);
             m_userDetailManager.AddIdForExternalUsers(userDetailContracts);
 
             return new PagedResultList<UserDetailContract>
@@ -143,7 +144,7 @@ namespace Vokabular.MainService.Core.Managers
             var client = m_communicationProvider.GetAuthUserApiClient();
 
             var result = client.HttpClient.GetListAsync<AuthUserContract>(0, countValue, query).GetAwaiter().GetResult();
-            var userDetailContracts = Mapper.Map<List<UserDetailContract>>(result.Items);
+            var userDetailContracts = m_mapper.Map<List<UserDetailContract>>(result.Items);
             m_userDetailManager.AddIdForExternalUsers(userDetailContracts);
             return userDetailContracts;
         }
@@ -161,7 +162,7 @@ namespace Vokabular.MainService.Core.Managers
             {
                 UserId = GetUserExternalId(userId),
                 ConfirmCode = data.ConfirmCode,
-                ContactType = Mapper.Map<ContactTypeEnum>(data.ContactType),
+                ContactType = m_mapper.Map<ContactTypeEnum>(data.ContactType),
             };
 
             var client = m_communicationProvider.GetAuthContactApiClient();
@@ -173,7 +174,7 @@ namespace Vokabular.MainService.Core.Managers
             var contract = new AuthContactContract
             {
                 UserId = GetUserExternalId(userId),
-                ContactType = Mapper.Map<ContactTypeEnum>(data.ContactType),
+                ContactType = m_mapper.Map<ContactTypeEnum>(data.ContactType),
             };
 
             var client = m_communicationProvider.GetAuthContactApiClient();
