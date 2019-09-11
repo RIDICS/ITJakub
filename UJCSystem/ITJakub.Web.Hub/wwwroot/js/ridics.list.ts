@@ -13,7 +13,7 @@
     private readonly pagination: Pagination;
     private readonly loadingContainer: JQuery;
     private readonly searchForm: JQuery;
-    private readonly adminApiClient = new AdminApiClient();
+    private readonly apiClient = new WebHubApiClient();
 
     private resetSearchForm: JQuery;
     private pageSize: number;
@@ -134,7 +134,7 @@
         }
         
 
-        this.adminApiClient.getHtmlPageByUrl(url).done((response) => {
+        this.apiClient.getHtmlPageByUrl(url).done((response) => {
             $listContainer.html(String(response));
             this.initPagination();
 

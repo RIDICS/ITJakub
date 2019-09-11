@@ -120,7 +120,7 @@
         return jEl;
     }
 
-    private categoryTree: any; //TODO investigate d ts
+    private categoryTree: Types.Tree;
 
     private parseExistingGenres() {
         const genresEl = $("#all-existing-genres");
@@ -225,7 +225,7 @@
 
         this.createCategoriesNestedStructure();
 
-        this.categoryTree = ($("#category-tree")as any).tree({
+        this.categoryTree = $("#category-tree").tree({
             primaryKey: "id",
             uiLibrary: "bootstrap",
             checkedField: "categorySelected",
@@ -923,7 +923,7 @@
             const allKeywordIds = keywordIdList.concat(newIds);
             const data: IOnlySaveMetadataResource = {
                 keywordIdList: allKeywordIds,
-                categoryIdList: this.categoryTree.getCheckedNodes(),
+                categoryIdList: this.convertToNumberArray(this.categoryTree.getCheckedNodes()),
                 literaryKindIdList: selectedKindIds,
                 literaryGenreIdList: selectedGenreIds,
                 authorIdList: selectedAuthorIds,
@@ -934,7 +934,7 @@
             keywordFailAlertEl.show().delay(3000).fadeOut(2000);
             const data: IOnlySaveMetadataResource = {
                 keywordIdList: keywordIdList,
-                categoryIdList: this.categoryTree.getCheckedNodes(),
+                categoryIdList: this.convertToNumberArray(this.categoryTree.getCheckedNodes()),
                 literaryKindIdList: selectedKindIds,
                 literaryGenreIdList: selectedGenreIds,
                 authorIdList: selectedAuthorIds,
@@ -942,6 +942,14 @@
             };
             this.formMetadataObjectAndSendRequest(data, publisherText);
         });
+    }
+
+    private convertToNumberArray(stringArray: string[]): number[] {
+        var array: number[] = [];
+        for (var i = 0; i < stringArray.length; i++) {
+            array.push(Number(stringArray[i]));
+        }
+        return array;
     }
 
     private formMetadataObjectAndSendRequest(contract: IOnlySaveMetadataResource, publisherText: string) {
