@@ -58,7 +58,7 @@ gulp.task("clean:jsmap_areas", function (cb) {
     rimraf(paths.areaJsMap, cb);
 });
 
-gulp.task("clean", ["clean:css", "clean:css_areas", "clean:js", "clean:js_areas", "clean:jsmap", "clean:jsmap_areas"]);
+gulp.task("clean", gulp.parallel("clean:css", "clean:css_areas", "clean:js", "clean:js_areas", "clean:jsmap", "clean:jsmap_areas"));
 
 
 // Less build
@@ -89,7 +89,7 @@ gulp.task("build:less_areas", function () {
         .pipe(gulp.dest(paths.webroot + "Areas"));
 });
 
-gulp.task("build:less", ["build:less_root", "build:less_areas"]);
+gulp.task("build:less", gulp.parallel("build:less_root", "build:less_areas"));
 
 gulp.task("watch:less_root", function() {
     return gulp.watch(paths.less, ["build:less_root"]);
@@ -99,7 +99,7 @@ gulp.task("watch:less_areas", function () {
     return gulp.watch(paths.areaLess, ["build:less_areas"]);
 });
 
-gulp.task("watch:less", ["watch:less_root", "watch:less_areas"]);
+gulp.task("watch:less", gulp.parallel("watch:less_root", "watch:less_areas"));
 
 
 // TypeScript build
@@ -121,11 +121,11 @@ gulp.task("watch:ts_areas", function () {
 	return gulp.watch(paths.areaTs, ["build:ts"]);
 });
 
-gulp.task("watch:ts", ["watch:ts_root", "watch:ts_areas"]);
+gulp.task("watch:ts", gulp.parallel("watch:ts_root", "watch:ts_areas"));
 
 // Bundle JavaScript
 
-gulp.task("bundle:itjakub", ["build:ts"], function () {
+gulp.task("bundle:itjakub", function () {
     return gulp.src([
             paths.webroot + "js/itjakub.js",
             paths.webroot + "js/itjakub.dataContracts.js",
@@ -144,7 +144,7 @@ gulp.task("bundle:itjakub", ["build:ts"], function () {
         .pipe(gulp.dest(paths.webroot + "js"));
 });
 
-gulp.task("bundle:itjakub_plugins", ["build:ts"], function () {
+gulp.task("bundle:itjakub_plugins", function () {
     return gulp.src([
             paths.webroot + "js/Plugins/Progress/itjakub.plugins.progress.js",
             paths.webroot + "js/Plugins/itjakub.modul.inicializator.js",
@@ -169,7 +169,7 @@ gulp.task("bundle:itjakub_plugins", ["build:ts"], function () {
         .pipe(gulp.dest(paths.webroot + "js/Plugins"));
 });
 
-gulp.task("bundle:itjakub_keyboard", ["build:ts"], function () {
+gulp.task("bundle:itjakub_keyboard", function () {
     return gulp.src([
             paths.webroot + "js/Plugins/Keyboard/itjakub.plugins.keyboard.js",
             paths.webroot + "js/Plugins/Keyboard/itjakub.plugins.keyboardComponent.js",
@@ -182,7 +182,7 @@ gulp.task("bundle:itjakub_keyboard", ["build:ts"], function () {
         .pipe(gulp.dest(paths.webroot + "js/Plugins/Keyboard"));
 });
 
-gulp.task("bundle:itjakub_storage", ["build:ts"], function () {
+gulp.task("bundle:itjakub_storage", function () {
     return gulp.src([
             paths.webroot + "js/Plugins/Storage/itjakub.plugins.storage.manager.js",
             paths.webroot + "js/Plugins/Storage/itjakub.plugins.storage.cookiestorage.js",
@@ -195,7 +195,7 @@ gulp.task("bundle:itjakub_storage", ["build:ts"], function () {
         .pipe(gulp.dest(paths.webroot + "js/Plugins/Storage"));
 });
 
-gulp.task("bundle:itjakub_favorite", ["build:ts"], function () {
+gulp.task("bundle:itjakub_favorite", function () {
     return gulp.src([
             paths.webroot + "js/Favorite/itjakub.favoriteApiClient.js",
             paths.webroot + "js/Favorite/itjakub.favoriteBook.js",
@@ -212,12 +212,12 @@ gulp.task("bundle:itjakub_favorite", ["build:ts"], function () {
         .pipe(gulp.dest(paths.webroot + "js/Favorite"));
 });
 
-gulp.task("bundlejs", ["bundle:itjakub", "bundle:itjakub_plugins", "bundle:itjakub_keyboard", "bundle:itjakub_storage", "bundle:itjakub_favorite"]);
+gulp.task("bundlejs", gulp.parallel("bundle:itjakub", "bundle:itjakub_plugins", "bundle:itjakub_keyboard", "bundle:itjakub_storage", "bundle:itjakub_favorite"));
 
 
 // Bundle JavaScript in Areas
 
-gulp.task("bundle:itjakub_audiobooks", ["build:ts"], function () {
+gulp.task("bundle:itjakub_audiobooks", function () {
     return gulp.src([
             paths.webroot + "Areas/AudioBooks/js/itjakub.audiobooks.modul.inicializator.js",
             paths.webroot + "Areas/AudioBooks/js/itjakub.audiobooks.js"
@@ -229,7 +229,7 @@ gulp.task("bundle:itjakub_audiobooks", ["build:ts"], function () {
         .pipe(gulp.dest(paths.webroot + "Areas/AudioBooks/js"));
 });
 
-gulp.task("bundle:itjakub_bohemiantextbank", ["build:ts"], function () {
+gulp.task("bundle:itjakub_bohemiantextbank", function () {
     return gulp.src([
             paths.webroot + "Areas/BohemianTextBank/js/itjakub.bohemiantextbank.modul.inicializator.js",
             paths.webroot + "Areas/BohemianTextBank/js/itjakub.bohemiantextbank.search.js",
@@ -243,7 +243,7 @@ gulp.task("bundle:itjakub_bohemiantextbank", ["build:ts"], function () {
         .pipe(gulp.dest(paths.webroot + "Areas/BohemianTextBank/js"));
 });
 
-gulp.task("bundle:itjakub_cardfiles", ["build:ts"], function () {
+gulp.task("bundle:itjakub_cardfiles", function () {
     return gulp.src([
             paths.webroot + "Areas/CardFiles/js/itjakub.cardfiles.js",
             paths.webroot + "Areas/CardFiles/js/itjakub.cardfileManager.js"
@@ -255,7 +255,7 @@ gulp.task("bundle:itjakub_cardfiles", ["build:ts"], function () {
         .pipe(gulp.dest(paths.webroot + "Areas/CardFiles/js"));
 });
 
-gulp.task("bundle:itjakub_derivation", ["build:ts"], function () {
+gulp.task("bundle:itjakub_derivation", function () {
     return gulp.src([
             paths.webroot + "Areas/Derivation/js/itjakub.derivation.js",
             paths.webroot + "js/Plugins/Lemmatization/itjakub.lemmatization.shared.js"
@@ -267,7 +267,7 @@ gulp.task("bundle:itjakub_derivation", ["build:ts"], function () {
         .pipe(gulp.dest(paths.webroot + "Areas/Derivation/js"));
 });
 
-gulp.task("bundle:itjakub_dictionary_search", ["build:ts"], function () {
+gulp.task("bundle:itjakub_dictionary_search", function () {
     return gulp.src([
             paths.webroot + "Areas/Dictionaries/js/itjakub.dictionaries.search.js",
             paths.webroot + "Areas/Dictionaries/js/itjakub.dictionariesViewer.js"
@@ -279,7 +279,7 @@ gulp.task("bundle:itjakub_dictionary_search", ["build:ts"], function () {
         .pipe(gulp.dest(paths.webroot + "Areas/Dictionaries/js"));
 });
 
-gulp.task("bundle:itjakub_dictionary_headwords", ["build:ts"], function () {
+gulp.task("bundle:itjakub_dictionary_headwords", function () {
     return gulp.src([
             paths.webroot + "Areas/Dictionaries/js/itjakub.dictionaries.headwords.js",
             paths.webroot + "Areas/Dictionaries/js/itjakub.dictionariesFavoriteHeadwords.js",
@@ -292,7 +292,7 @@ gulp.task("bundle:itjakub_dictionary_headwords", ["build:ts"], function () {
         .pipe(gulp.dest(paths.webroot + "Areas/Dictionaries/js"));
 });
 
-gulp.task("bundle:itjakub_lemmatization", ["build:ts"], function () {
+gulp.task("bundle:itjakub_lemmatization", function () {
     return gulp.src([
             paths.webroot + "Areas/Lemmatization/js/itjakub.lemmatization.js",
             paths.webroot + "Areas/Lemmatization/js/itjakub.lemmatization.list.js",
@@ -305,7 +305,7 @@ gulp.task("bundle:itjakub_lemmatization", ["build:ts"], function () {
         .pipe(gulp.dest(paths.webroot + "Areas/Lemmatization/js"));
 });
 
-gulp.task("bundle:itjakub_professionalliterature_list", ["build:ts"], function () {
+gulp.task("bundle:itjakub_professionalliterature_list", function () {
     return gulp.src([
             paths.webroot + "Areas/ProfessionalLiterature/js/itjakub.professionalliterature.modul.inicializator.js",
             paths.webroot + "Areas/ProfessionalLiterature/js/itjakub.professionalliterature.list.js"
@@ -317,7 +317,7 @@ gulp.task("bundle:itjakub_professionalliterature_list", ["build:ts"], function (
         .pipe(gulp.dest(paths.webroot + "Areas/ProfessionalLiterature/js"));
 });
 
-gulp.task("bundle:ridics_admin_project-editor", ["build:ts"], function () {
+gulp.task("bundle:ridics_admin_project-editor", function () {
     return gulp.src([
             paths.webroot + "Areas/Admin/js/ridics.admin-api-client.js",
             paths.webroot + "Areas/Admin/js/ridics.project.client.js",
@@ -334,7 +334,7 @@ gulp.task("bundle:ridics_admin_project-editor", ["build:ts"], function () {
         .pipe(gulp.dest(paths.webroot + "Areas/Admin/js"));
 });
 
-gulp.task("bundle:ridics_admin_text-editor", ["build:ts"], function () {
+gulp.task("bundle:ridics_admin_text-editor", function () {
     return gulp.src([
             paths.webroot + "Areas/Admin/js/text-editor/ridics.project.text-editor*.js"
         ])
@@ -345,7 +345,7 @@ gulp.task("bundle:ridics_admin_text-editor", ["build:ts"], function () {
         .pipe(gulp.dest(paths.webroot + "Areas/Admin/js/text-editor"));
 });
 
-gulp.task("bundle:ridics_admin_page-image-viewer", ["build:ts"], function () {
+gulp.task("bundle:ridics_admin_page-image-viewer", function () {
     return gulp.src([
             paths.webroot + "Areas/Admin/js/page-image-viewer/ridics.project.page-image-viewer*.js"
         ])
@@ -356,7 +356,7 @@ gulp.task("bundle:ridics_admin_page-image-viewer", ["build:ts"], function () {
         .pipe(gulp.dest(paths.webroot + "Areas/Admin/js/page-image-viewer"));
 });
 
-gulp.task("bundle:ridics_admin_page-list-editor", ["build:ts"], function () {
+gulp.task("bundle:ridics_admin_page-list-editor", function () {
     return gulp.src([
             paths.webroot + "Areas/Admin/js/page-list-editor/ridics.project.page-list-editor*.js"
         ])
@@ -367,7 +367,7 @@ gulp.task("bundle:ridics_admin_page-list-editor", ["build:ts"], function () {
         .pipe(gulp.dest(paths.webroot + "Areas/Admin/js/page-list-editor"));
 });
 
-gulp.task("bundle:ridics_admin_editors-common-base", ["build:ts"], function () {
+gulp.task("bundle:ridics_admin_editors-common-base", function () {
     return gulp.src([
             paths.webroot + "Areas/Admin/js/editors-common-base/ridics.project.editors*.js"
         ])
@@ -378,7 +378,7 @@ gulp.task("bundle:ridics_admin_editors-common-base", ["build:ts"], function () {
         .pipe(gulp.dest(paths.webroot + "Areas/Admin/js/editors-common-base"));
 });
 
-gulp.task("bundle:ridics_admin_composition-key-table-editor", ["build:ts"], function () {
+gulp.task("bundle:ridics_admin_composition-key-table-editor", function () {
     return gulp.src([
             paths.webroot + "Areas/Admin/js/composition-key-table-editor/ridics.project.key-table-editor.table-base.js",
             paths.webroot + "Areas/Admin/js/composition-key-table-editor/ridics.project.key-table-editor!(table-base)*.js"
@@ -390,7 +390,7 @@ gulp.task("bundle:ridics_admin_composition-key-table-editor", ["build:ts"], func
         .pipe(gulp.dest(paths.webroot + "Areas/Admin/js/composition-key-table-editor"));
 });
 
-gulp.task("bundle:ridics_admin-snapshot-editor", ["build:ts"], function () {
+gulp.task("bundle:ridics_admin-snapshot-editor", function () {
     return gulp.src([
             paths.webroot + "Areas/Admin/js/ridics.project.client.js",
             paths.webroot + "Areas/Admin/js/snapshot/ridics.snapshot.api-client.js",
@@ -403,8 +403,8 @@ gulp.task("bundle:ridics_admin-snapshot-editor", ["build:ts"], function () {
         .pipe(gulp.dest(paths.webroot + "Areas/Admin/js/snapshot"));
 });
 
-gulp.task("bundlejs_areas",
-[
+gulp.task("bundlejs_areas", gulp.parallel
+(
     "bundle:itjakub_audiobooks",
     "bundle:itjakub_bohemiantextbank",
     "bundle:itjakub_cardfiles",
@@ -420,7 +420,9 @@ gulp.task("bundlejs_areas",
     "bundle:ridics_admin_page-list-editor",
     "bundle:ridics_admin_composition-key-table-editor",
     "bundle:ridics_admin-snapshot-editor"
-]);
+));
+
+gulp.task("build_bundle:ts", gulp.series("build:ts", gulp.parallel("bundlejs", "bundlejs_areas")));
 
 //Download yarn dependencies
 
@@ -431,6 +433,6 @@ gulp.task("yarn-runtime", function () {
 
 // Main build
 
-gulp.task("default", ["build:less", "bundlejs", "bundlejs_areas"]);
+gulp.task("default", gulp.parallel("build_bundle:ts", "build:less"));
 
-gulp.task("watch", ["watch:less", "watch:ts"]);
+gulp.task("watch", gulp.parallel("watch:less", "watch:ts"));
