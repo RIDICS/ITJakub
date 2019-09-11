@@ -47,13 +47,13 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SingleOrDefault();
         }
 
-        public virtual IList<FullProjectImportLog> GetAllImportLogByExternalId(string projectExternalId)
+        public virtual IList<FullProjectImportLog> GetAllImportLogByExternalId(string projectExternalId, ProjectTypeEnum projectType)
         {
             Project projectAlias = null;
 
             return GetSession().QueryOver<FullProjectImportLog>()
                 .JoinAlias(x => x.Project, () => projectAlias)
-                .Where(x => projectAlias.ExternalId == projectExternalId)
+                .Where(x => projectAlias.ExternalId == projectExternalId && projectAlias.ProjectType == projectType)
                 .List();
         }
 

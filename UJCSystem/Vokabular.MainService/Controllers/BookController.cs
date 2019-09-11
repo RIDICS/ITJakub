@@ -437,12 +437,15 @@ namespace Vokabular.MainService.Controllers
 
         [HttpGet("info")]
         [ProducesResponseType(typeof(BookContract), StatusCodes.Status200OK)]
-        public IActionResult GetBookByExternalId([FromQuery] string externalId)
+        public IActionResult GetBookByExternalId([FromQuery] string externalId, [FromQuery] ProjectTypeContract? projectType)
         {
             if (string.IsNullOrEmpty(externalId))
                 return BadRequest("Required ExternalId parameter is null");
 
-            var result = m_bookManager.GetBookInfoByExternalId(externalId);
+            if (projectType == null)
+                return BadRequest("Required ProjectType parameter is null");
+
+            var result = m_bookManager.GetBookInfoByExternalId(externalId, projectType.Value);
             return result != null ? (IActionResult) Ok(result) : NotFound();
         }
     }

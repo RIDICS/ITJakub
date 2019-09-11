@@ -31,7 +31,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return query.SingleOrDefault();
         }
         
-        public virtual MetadataResource GetLatestMetadataResourceByExternalId(string projectExternalId)
+        public virtual MetadataResource GetLatestMetadataResourceByExternalId(string projectExternalId, ProjectTypeEnum projectType)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;
@@ -39,7 +39,8 @@ namespace Vokabular.DataEntities.Database.Repositories
             var query = GetSession().QueryOver<MetadataResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
-                .Where(x => projectAlias.ExternalId == projectExternalId && resourceAlias.ResourceType == ResourceTypeEnum.ProjectMetadata && resourceAlias.LatestVersion.Id == x.Id)
+                .Where(x => projectAlias.ExternalId == projectExternalId && projectAlias.ProjectType == projectType &&
+                            resourceAlias.ResourceType == ResourceTypeEnum.ProjectMetadata && resourceAlias.LatestVersion.Id == x.Id)
                 .Fetch(SelectMode.Fetch, x => x.Resource);
 
             return query.SingleOrDefault();
@@ -209,7 +210,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        public virtual IList<MetadataResource> GetMetadataWithFetchForBiblModuleByProjectExternalIds(IEnumerable<string> projectExternalIdList)
+        public virtual IList<MetadataResource> GetMetadataWithFetchForBiblModuleByProjectExternalIds(IEnumerable<string> projectExternalIdList, ProjectTypeEnum projectType)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;
@@ -220,6 +221,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .WhereRestrictionOn(() => projectAlias.ExternalId).IsInG(projectExternalIdList)
+                .And(() => projectAlias.ProjectType == projectType)
                 .And(x => x.Id == resourceAlias.LatestVersion.Id)
                 .Fetch(SelectMode.Fetch, x => x.Resource)
                 .Fetch(SelectMode.Fetch, x => x.Resource.Project)
@@ -241,7 +243,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        public virtual HeadwordResource GetHeadwordWithFetchByExternalId(string projectExternalId, string headwordExternalId)
+        public virtual HeadwordResource GetHeadwordWithFetchByExternalId(string projectExternalId, string headwordExternalId, ProjectTypeEnum projectType)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;
@@ -249,7 +251,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             var result = GetSession().QueryOver<HeadwordResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
-                .Where(x => x.ExternalId == headwordExternalId && projectAlias.ExternalId == projectExternalId && x.Id == resourceAlias.LatestVersion.Id)
+                .Where(x => x.ExternalId == headwordExternalId && projectAlias.ExternalId == projectExternalId && projectAlias.ProjectType == projectType && x.Id == resourceAlias.LatestVersion.Id)
                 .Fetch(SelectMode.Fetch, x => x.Resource)
                 .Fetch(SelectMode.Fetch, x => x.HeadwordItems)
                 .TransformUsing(Transformers.DistinctRootEntity)
@@ -497,7 +499,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return metadataListFuture.ToList();
         }
 
-        public virtual IList<MetadataResource> GetMetadataByProjectExternalIds(IEnumerable<string> projectExternalIds)
+        public virtual IList<MetadataResource> GetMetadataByProjectExternalIds(IEnumerable<string> projectExternalIds, ProjectTypeEnum projectType)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;
@@ -506,6 +508,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .WhereRestrictionOn(() => projectAlias.ExternalId).IsInG(projectExternalIds)
+                .And(() => projectAlias.ProjectType == projectType)
                 .And(x => x.Id == resourceAlias.LatestVersion.Id)
                 .List();
         }

@@ -103,11 +103,12 @@ namespace Vokabular.MainService.Core.Managers
             return result;
         }
 
-        public BookContract GetBookInfoByExternalId(string projectExternalId)
+        public BookContract GetBookInfoByExternalId(string projectExternalId, ProjectTypeContract projectType)
         {
             // Authorize after getting projectId
 
-            var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetLatestMetadataResourceByExternalId(projectExternalId));
+            var projectTypeEnum = m_mapper.Map<ProjectTypeEnum>(projectType);
+            var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetLatestMetadataResourceByExternalId(projectExternalId, projectTypeEnum));
             if (metadataResult == null)
                 return null;
 
