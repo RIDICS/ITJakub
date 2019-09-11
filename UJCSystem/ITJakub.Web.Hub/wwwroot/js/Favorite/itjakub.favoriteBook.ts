@@ -92,9 +92,9 @@
 
         this.favoriteManager.getFavoriteLabelsForBooksAndCategories(this.bookType, (favoriteLabels) => {
             $(this.bodyDiv)
-                //.empty();
+                .empty();
 
-                for (var i = 0; i < favoriteLabels.length; i++) {
+            for (var i = 0; i < favoriteLabels.length; i++) {
                 var favoriteLabel = favoriteLabels[i];
                 var itemDiv = this.createFavoriteLabel(favoriteLabel);
                 this.bodyDiv.appendChild(itemDiv);
