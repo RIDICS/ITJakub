@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Vokabular.Core.Storage;
@@ -59,6 +60,7 @@ namespace Vokabular.MainService.Core.Managers
             m_filterBookType = new[] {BookTypeEnum.CardFile};
         }
 
+        [Obsolete]
         public List<BookWithCategoriesContract> GetBooksByTypeForUser(BookTypeEnumContract bookType)
         {
             var bookTypeEnum = m_mapper.Map<BookTypeEnum>(bookType);
@@ -68,29 +70,11 @@ namespace Vokabular.MainService.Core.Managers
             return resultList;
         }
 
-        public List<BookContract> GetAllBooksByType(BookTypeEnumContract bookType)
-        {           
-            var bookTypeEnum = m_mapper.Map<BookTypeEnum>(bookType);
-            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetAllMetadataByBookType(bookTypeEnum));
-            var resultList = m_mapper.Map<List<BookContract>>(dbMetadataList);
-            return resultList;
-        }
-
         public List<BookTypeContract> GetBookTypeList()
         {
             var dbResult = m_bookRepository.InvokeUnitOfWork(x => x.GetBookTypes());
             var filteredResult = dbResult.Where(x => !m_filterBookType.Contains(x.Type));
             var result = m_mapper.Map<List<BookTypeContract>>(filteredResult);
-            return result;
-        }
-
-        public List<BookContract> GetBooksForRole(int roleId, BookTypeEnumContract bookType)
-        {
-            new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
-            var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalIdOrCreate(roleId));
-            var bookTypeEnum = m_mapper.Map<BookTypeEnum>(bookType);
-            var dbResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataForUserGroup(bookTypeEnum, group.Id));
-            var result = m_mapper.Map<List<BookContract>>(dbResult);
             return result;
         }
 

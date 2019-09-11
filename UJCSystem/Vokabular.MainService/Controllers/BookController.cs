@@ -26,6 +26,7 @@ namespace Vokabular.MainService.Controllers
             m_bookHitSearchManager = bookHitSearchManager;
         }
 
+        [Obsolete("This method will be replaced by paged variant")] // TODO replace this method with paged variant
         [HttpGet("type/{bookType}")]
         [ProducesResponseType(typeof(List<BookWithCategoriesContract>), StatusCodes.Status200OK)]
         public IActionResult GetBooksByType(BookTypeEnumContract? bookType)
@@ -34,17 +35,6 @@ namespace Vokabular.MainService.Controllers
                 return NotFound();
 
             var result = m_bookManager.GetBooksByTypeForUser(bookType.Value);
-            return Ok(result);
-        }
-
-        [HttpGet("type/{bookType}/all")]
-        [ProducesResponseType(typeof(List<BookContract>), StatusCodes.Status200OK)]
-        public IActionResult GetAllBooksByType(BookTypeEnumContract? bookType)
-        {
-            if (bookType == null)
-                return NotFound();
-
-            var result = m_bookManager.GetAllBooksByType(bookType.Value);
             return Ok(result);
         }
 
