@@ -25,13 +25,14 @@ namespace Vokabular.MainService.DataContracts.Clients
             m_client = client;
         }
 
-        public PagedResultList<ProjectDetailContract> GetProjectList(int start, int count, string filterByName = null, bool fetchPageCount = false)
+        public PagedResultList<ProjectDetailContract> GetProjectList(int start, int count, ProjectTypeContract projectType, string filterByName = null, bool fetchPageCount = false)
         {
             try
             {
                 var url = UrlQueryBuilder.Create("project")
                     .AddParameter("start", start)
                     .AddParameter("count", count)
+                    .AddParameter("projectType", projectType)
                     .AddParameter("filterByName", filterByName)
                     .AddParameter("fetchPageCount", fetchPageCount)
                     .ToQuery();

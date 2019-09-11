@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
-using AutoMapper;
 using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Areas.Admin.Models.Request;
 using ITJakub.Web.Hub.Areas.Admin.Models.Response;
