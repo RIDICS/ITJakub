@@ -1,4 +1,4 @@
-﻿class SimpleMdeIcons {
+﻿class SimpleMdeTools {
     public toolSeparator = "|";
 
     public toolBold: SimpleMDE.ToolbarIcon = {

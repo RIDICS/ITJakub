@@ -74,7 +74,7 @@ interface IModificationUpdateViewModel {
 
 class TextEditorWrapper {
     private simpleMde: SimpleMDE;
-    private simpleMdeIcons: SimpleMdeIcons;
+    private simpleMdeIcons: SimpleMdeTools;
     private options: SimpleMDE.Options;
     private dialogInsertImage: BootstrapDialogWrapper;
     private dialogInsertLink: BootstrapDialogWrapper;
@@ -82,7 +82,7 @@ class TextEditorWrapper {
     private originalPreviewRender: (plaintext: string, preview?: HTMLElement) => string;
 
     constructor(textArea: HTMLElement) {
-        this.simpleMdeIcons = new SimpleMdeIcons();
+        this.simpleMdeIcons = new SimpleMdeTools();
         this.options = {
             element: textArea,
             autoDownloadFontAwesome: false,

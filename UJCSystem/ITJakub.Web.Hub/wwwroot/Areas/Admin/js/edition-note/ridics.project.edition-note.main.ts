@@ -1,7 +1,7 @@
 ﻿class EditionNote {
     private readonly projectId;
     private simpleMde: SimpleMDE;
-    private simpleMdeIcons: SimpleMdeIcons;
+    private simpleMdeIcons: SimpleMdeTools;
     private util: EditorsUtil;
     private errorHandler: ErrorHandler;
     private alertHolder: JQuery;
@@ -12,7 +12,7 @@
 
     init() {
         this.util = new EditorsUtil();
-        this.simpleMdeIcons = new SimpleMdeIcons();
+        this.simpleMdeIcons = new SimpleMdeTools();
         const noteTab = $("#project-work-note");
         this.alertHolder = noteTab.find(".alert-holder");
         const noteEditorLoader = noteTab.find(".loader");    
