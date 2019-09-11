@@ -9,6 +9,7 @@ using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.Shared.Container;
+using Vokabular.TextConverter;
 
 namespace Vokabular.MainService.Core
 {
@@ -100,6 +101,7 @@ namespace Vokabular.MainService.Core
             services.AddSingleton<Profile, CardShortContractProfile>();
 
             new CoreContainerRegistration().Install(services);
+            services.AddTextConverterServices();
         }
     }
 }

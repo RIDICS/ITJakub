@@ -34,6 +34,7 @@
     <ProjectReference Include="..\Vokabular.Shared.AspNetCore\Vokabular.Shared.AspNetCore.csproj" />
     <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj" />
+    <ProjectReference Include="..\Vokabular.TextConverter\Vokabular.TextConverter.csproj" />
   </ItemGroup>
 
   <ItemGroup>

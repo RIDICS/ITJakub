@@ -16,10 +16,10 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
-using Vokabular.Shared.Converters;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataEntities.UnitOfWork;
+using Vokabular.TextConverter;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -36,7 +36,7 @@ namespace Vokabular.MainService.Core.Managers
         private readonly CommunicationProvider m_communicationProvider;
         private readonly CategoryRepository m_categoryRepository;
         private readonly ForumSiteUrlHelper m_forumSiteUrlHelper;
-        private readonly IMarkdownToHtmlConverter m_markdownConverter;
+        private readonly ITextConverter m_textConverter;
         private readonly IMapper m_mapper;
         private readonly BookTypeEnum[] m_filterBookType;
         
@@ -45,7 +45,7 @@ namespace Vokabular.MainService.Core.Managers
             BookRepository bookRepository, ResourceRepository resourceRepository, PermissionRepository permissionRepository,
             FileSystemManager fileSystemManager, FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager,
             AuthenticationManager authenticationManager, CommunicationProvider communicationProvider, ForumSiteUrlHelper forumSiteUrlHelper,
-            IMarkdownToHtmlConverter markdownConverter, IMapper mapper)
+            ITextConverter textConverter, IMapper mapper)
         {
             m_metadataRepository = metadataRepository;
             m_categoryRepository = categoryRepository;
@@ -58,7 +58,7 @@ namespace Vokabular.MainService.Core.Managers
             m_authenticationManager = authenticationManager;
             m_communicationProvider = communicationProvider;
             m_forumSiteUrlHelper = forumSiteUrlHelper;
-            m_markdownConverter = markdownConverter;
+            m_textConverter = textConverter;
             m_mapper = mapper;
             m_filterBookType = new[] {BookTypeEnum.CardFile};
         }
@@ -351,28 +351,13 @@ namespace Vokabular.MainService.Core.Managers
             if (editionNoteResource == null)
                 return null;
 
-            if (editionNoteResource.Resource.Project.ProjectType == ProjectTypeEnum.Research)
+            if (!string.IsNullOrEmpty(editionNoteResource.Text))
             {
-                var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(editionNoteResource.Resource.Project.ProjectType);
-                return fulltextStorage.GetEditionNote(editionNoteResource, format);
+                return m_textConverter.ConvertText(editionNoteResource.Text, format);
             }
 
-            if (editionNoteResource.Text == null)
-            {
-                return string.Empty;
-            }
-
-            switch (format)
-            {
-                case TextFormatEnumContract.Html:
-                {
-                    return m_markdownConverter.ConvertToHtml(editionNoteResource.Text);
-                }
-                default:
-                {
-                    return editionNoteResource.Text;
-                }
-            }
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(editionNoteResource.Resource.Project.ProjectType);
+            return fulltextStorage.GetEditionNote(editionNoteResource, format);
         }
     }
 }

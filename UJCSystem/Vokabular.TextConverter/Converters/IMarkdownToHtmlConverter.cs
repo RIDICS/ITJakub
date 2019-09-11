@@ -1,4 +1,4 @@
-﻿namespace Vokabular.Shared.Converters
+﻿namespace Vokabular.TextConverter.Converters
 {
     public interface IMarkdownToHtmlConverter
     {

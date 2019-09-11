@@ -4,7 +4,7 @@ using ITJakub.Web.Hub.Models.Type;
 using Scalesoft.Localization.AspNetCore;
 using Scalesoft.Localization.Core.Model;
 using Scalesoft.Localization.Core.Util;
-using Vokabular.Shared.Converters;
+using Vokabular.TextConverter.Converters;
 
 namespace ITJakub.Web.Hub.Core.Managers
 {

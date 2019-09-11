@@ -1,6 +1,6 @@
 ﻿using Markdig;
 
-namespace Vokabular.Shared.Converters
+namespace Vokabular.TextConverter.Converters
 {
     public class MarkdigMarkdownToHtmlConverter : IMarkdownToHtmlConverter
     {
