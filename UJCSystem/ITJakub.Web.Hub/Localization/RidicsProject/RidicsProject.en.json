@@ -28,6 +28,18 @@
     "ShiftPageUp": "Shift selected pages up",
     "ShiftPageDown": "Shift selected pages down",
     "EditPageName": "Edit page name",
-    "DeletePage": "Delete page"
+    "DeletePage": "Delete page",
+
+    "Fail": "Fail",
+    "PageLoadFailed": "An unexpected error occurred while loading page {0}.",
+    "ProjectLoadFailed": "An unexpected error occurred while loading project information.",
+    "ContentLoadFailed": "An unexpected error occurred while loading content.",
+    "NoTextPages": "This project does not contain text pages.",
+    "NoImageOnPage": "There is no image on this page",
+    "NoComments": "No comments yet.",
+    "ToggleEditingMode": "Toggle editing mode",
+    "DisplayPageNumbers": "Display page numbers",
+    "GoToPage": "Go to page...",
+    "UploadNewVersion": "Upload new version"
   }
 }

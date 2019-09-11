@@ -32,7 +32,7 @@
     private onError(pageImageEl) {
         const imageEl = pageImageEl.children("img");
         imageEl.on("error", () => {
-            const error = new AlertComponentBuilder(AlertType.Error).addContent("There is no image on this page");
+            const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("NoImageOnPage","RidicsProject").value);
             pageImageEl.empty().append(error.buildElement());
         });
     }
