@@ -16,18 +16,21 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly ProjectRepository m_projectRepository;
         private readonly SnapshotRepository m_snapshotRepository;
+        private readonly ResourceRepository m_resourceRepository;
         private readonly AuthorizationManager m_authorizationManager;
         private readonly UserDetailManager m_userDetailManager;
         private readonly IMapper m_mapper;
 
         public SnapshotManager(ProjectRepository projectRepository, SnapshotRepository snapshotRepository,
-            AuthorizationManager authorizationManager, UserDetailManager userDetailManager, IMapper mapper)
+            ResourceRepository resourceRepository, AuthorizationManager authorizationManager, UserDetailManager userDetailManager,
+            IMapper mapper)
         {
             m_projectRepository = projectRepository;
             m_snapshotRepository = snapshotRepository;
             m_authorizationManager = authorizationManager;
             m_userDetailManager = userDetailManager;
             m_mapper = mapper;
+            m_resourceRepository = resourceRepository;
         }
 
         public SnapshotContract GetLatestPublishedSnapshot(long projectId)
@@ -51,7 +54,8 @@ namespace Vokabular.MainService.Core.Managers
             var userId = m_authorizationManager.GetCurrentUserId();
             var bookTypes = m_mapper.Map<IList<BookTypeEnum>>(data.BookTypes);
             var defaultBookTypes = m_mapper.Map<BookTypeEnum>(data.DefaultBookType);
-            var snapshotId = new CreateSnapshotWork(m_projectRepository, data.ProjectId, userId, data.ResourceVersionIds, data.Comment, bookTypes,
+            var snapshotId = new CreateSnapshotWork(m_projectRepository, m_resourceRepository, data.ProjectId, userId,
+                data.ResourceVersionIds, data.Comment, bookTypes,
                 defaultBookTypes).Execute();
             return snapshotId;
         }

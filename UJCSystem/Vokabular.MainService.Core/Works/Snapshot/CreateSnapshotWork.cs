@@ -11,6 +11,7 @@ namespace Vokabular.MainService.Core.Works.Snapshot
     public class CreateSnapshotWork : UnitOfWorkBase<long>
     {
         private readonly ProjectRepository m_projectRepository;
+        private readonly ResourceRepository m_resourceRepository;
         private readonly long m_projectId;
         private readonly int m_userId;
         private readonly IList<long> m_resourceVersionIds;
@@ -18,10 +19,11 @@ namespace Vokabular.MainService.Core.Works.Snapshot
         private readonly IList<BookTypeEnum> m_bookTypes;
         private readonly BookTypeEnum m_defaultBookType;
 
-        public CreateSnapshotWork(ProjectRepository projectRepository, long projectId, int userId, IList<long> resourceVersionIds,
+        public CreateSnapshotWork(ProjectRepository projectRepository, ResourceRepository resourceRepository, long projectId, int userId, IList<long> resourceVersionIds,
             string comment, IList<BookTypeEnum> bookTypes, BookTypeEnum defaultBookType) : base(projectRepository)
         {
             m_projectRepository = projectRepository;
+            m_resourceRepository = resourceRepository;
             m_projectId = projectId;
             m_userId = userId;
             m_resourceVersionIds = resourceVersionIds;
@@ -40,6 +42,9 @@ namespace Vokabular.MainService.Core.Works.Snapshot
             var defaultBookType = m_projectRepository.GetBookTypeByEnum(m_defaultBookType);
             var resourceVersions = m_resourceVersionIds.Select(x => m_projectRepository.Load<ResourceVersion>(x)).ToList();
             var versionNumber = latestSnapshot?.VersionNumber ?? 0;
+
+            var editionNote = m_resourceRepository.GetLatestEditionNote(m_projectId);
+            resourceVersions.Add(editionNote);
 
             var newDbSnapshot = new DataEntities.Database.Entities.Snapshot
             {
