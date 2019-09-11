@@ -232,10 +232,5 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         {
             throw new System.NotImplementedException();
         }
-
-        public string CreateNewEditionNoteVersion(EditionNoteResource editionNoteResource)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }
