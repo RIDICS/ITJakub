@@ -5,6 +5,8 @@
 @inject ILocalizationService Localizer
 <div class="row resource-tab-row-fix">
 <div class="project-layout-box project-layout-box-500">
+@await Html.PartialAsync("Work/SubView/_EditMetadataButtons")
+
 <div class="panel-group" id="work-metadata-container">
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -81,7 +83,7 @@
                                             <i class="fa fa-chevron-down" aria-hidden="true"></i>
                                         </button>
                                     </span>
-                                    <button class="btn btn-default remove-button"><span class="glyphicon glyphicon-remove"></span>
+                                    <button class="btn btn-default remove-button" title="@Localizer.Translate("Delete", "Admin")"><span class="glyphicon glyphicon-remove"></span>
                                     </button>
                                 </span>
                                 <span class="text-as-form-control">
@@ -91,7 +93,7 @@
                         }
                     </div>
 
-                    <button class="btn btn-default" id="add-editor-button">
+                    <button class="btn btn-default" id="add-editor-button" title="@Localizer.Translate("Add", "Admin")">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </button>
                 </div>
@@ -182,7 +184,10 @@
                                         <button type="button" class="btn btn-default move-person-down">
                                             <i class="fa fa-chevron-down" aria-hidden="true"></i>
                                         </button>
-                                    </span><button class="btn btn-default remove-button"><span class="glyphicon glyphicon-remove"></span></button>
+                                    </span>
+                                    <button class="btn btn-default remove-button" title="@Localizer.Translate("Delete", "Admin")">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
                                 </span>
                                 <span class="text-as-form-control">
                                     <span class="person-name">@author.FirstName</span><span class="person-surname">@author.LastName</span>
@@ -191,33 +196,30 @@
                         }
                     </div>
 
-                    <button class="btn btn-default" id="add-author-button">
+                    <button class="btn btn-default" id="add-author-button" title="@Localizer.Translate("Add", "Admin")">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-4 control-label" for="work-metadata-origin-date">@Localizer.Translate("OriginDate", "Admin")</label>
-                <div class="col-md-7">
-                    <input type="text" id="work-metadata-origin-date" class="form-control" value="@Model.OriginDate"/>
+                <div class="col-md-6">
+                    <input type="text" id="work-metadata-origin-date" class="form-control" value="@Model.OriginDate" />
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-default edit-date-range" title="@Localizer.Translate("Edit", "Admin")"><i class="fa fa-pencil"></i></button>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-4 control-label" for="work-metadata-not-before">@Localizer.Translate("NotBefore", "Admin")</label>
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <input type="text" id="work-metadata-not-before" class="form-control" value="@Model.NotBefore?.Year"/>
-                </div>
-                <div class="col-md-3">
-                    <button class="btn btn-default edit-date-range">@Localizer.Translate("Edit", "Admin")</button>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-4 control-label" for="work-metadata-not-after">@Localizer.Translate("NotAfter", "Admin")</label>
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <input type="text" id="work-metadata-not-after" class="form-control" value="@Model.NotAfter?.Year"/>
-                </div>
-                <div class="col-md-3">
-                    <button class="btn btn-default edit-date-range">@Localizer.Translate("Edit", "Admin")</button>
                 </div>
             </div>
         </div>
@@ -236,17 +238,7 @@
         </div>
     </div>
 </div>
-<div class="project-form-bottom-buttons" style="margin-top: 10px;">
-    <div id="work-metadata-view-button-panel">
-        <button class="btn btn-default" id="work-metadata-edit-button">@Localizer.Translate("Edit", "Admin")</button>
-    </div>
-    <div id="work-metadata-editor-button-panel">
-        <div class="alert alert-success" id="work-metadata-save-success">@Localizer.Translate("MetadataSaveSuccess", "Admin")</div>
-        <div class="alert alert-danger" id="work-metadata-save-error">@Localizer.Translate("MetadataSaveError", "Admin")</div>
-        <button class="btn btn-default" id="work-metadata-cancel-button">@Localizer.Translate("Cancel", "Admin")</button>
-        <button class="btn btn-default" id="work-metadata-save-button"><span class="saving-icon loading-small-button"></span> @Localizer.Translate("Save", "Admin")</button>
-    </div>
-</div>
+@await Html.PartialAsync("Work/SubView/_EditMetadataButtons")
 </div>
 
 <div class="modal fade" role="dialog" id="select-range-dialog">

@@ -43,8 +43,8 @@
     getConfiguration(): IProjectMetadataTabConfiguration {
         return {
             $panel: $("#work-metadata-container"),
-            $viewButtonPanel: $("#work-metadata-view-button-panel"),
-            $editorButtonPanel: $("#work-metadata-editor-button-panel")
+            $viewButtonPanel: $(".work-metadata-view-button-panel"),
+            $editorButtonPanel: $(".work-metadata-editor-button-panel")
         };
     }
 
@@ -156,7 +156,7 @@
                 }
             });
 
-        $("#work-metadata-edit-button").click(() => {
+        $(".work-metadata-edit-button").click(() => {
             this.enabledEdit();
             this.publisherTypeahead.create((selectedExists, selectConfirmed) => {
                 if (selectedExists) {
@@ -168,7 +168,7 @@
             });
         });
 
-        $("#work-metadata-cancel-button").click(() => {
+        $(".work-metadata-cancel-button").click(() => {
             this.disableEdit();
             const metadataTabSelector = "#project-work-metadata";
             var tabPanelEl = $(metadataTabSelector);
@@ -454,13 +454,13 @@
 
         this.addRemovePersonEvent($("#work-metadata-authors .remove-button, #work-metadata-editors .remove-button"));
         
-        var $saveButton = $("#work-metadata-save-button");
+        var $saveButton = $(".work-metadata-save-button");
         $saveButton.click(() => {
             this.saveMetadata();
         });
         $(".saving-icon", $saveButton).hide();
 
-        $("#work-metadata-save-error, #work-metadata-save-success").hide();
+        $(".work-metadata-save-error, .work-metadata-save-success").hide();
     }
 
     private loadProjectsByAuthor(authorId: number) {
@@ -716,10 +716,10 @@
             authorIdList: contract.authorIdList,
             projectResponsiblePersonIdList: contract.projectResponsiblePersonIdList
         };
-        var $loadingGlyph = $("#work-metadata-save-button .saving-icon");
-        var $buttons = $("#work-metadata-editor-button-panel button");
-        var $successAlert = $("#work-metadata-save-success");
-        var $errorAlert = $("#work-metadata-save-error");
+        var $loadingGlyph = $(".work-metadata-save-button .saving-icon");
+        var $buttons = $(".work-metadata-editor-button-panel button");
+        var $successAlert = $(".work-metadata-save-success");
+        var $errorAlert = $(".work-metadata-save-error");
         $loadingGlyph.show();
         $buttons.prop("disabled", true);
         $successAlert.finish().hide();

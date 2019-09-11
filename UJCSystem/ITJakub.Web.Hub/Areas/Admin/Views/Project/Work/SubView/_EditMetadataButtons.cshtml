@@ -1,0 +1,14 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@inject ILocalizationService Localizer
+
+<div class="project-form-bottom-buttons">
+    <div class="work-metadata-view-button-panel">
+        <button class="btn btn-default work-metadata-edit-button">@Localizer.Translate("Edit", "Admin")</button>
+    </div>
+    <div class="work-metadata-editor-button-panel">
+        <div class="alert alert-success work-metadata-save-success">@Localizer.Translate("MetadataSaveSuccess", "Admin")</div>
+        <div class="alert alert-danger work-metadata-save-error">@Localizer.Translate("MetadataSaveError", "Admin")</div>
+        <button class="btn btn-default work-metadata-cancel-button">@Localizer.Translate("Cancel", "Admin")</button>
+        <button class="btn btn-default work-metadata-save-button"><span class="saving-icon loading-small-button"></span> @Localizer.Translate("Save", "Admin")</button>
+    </div>
+</div>
