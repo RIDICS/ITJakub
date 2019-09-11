@@ -7,7 +7,7 @@
     "BookmarkError": "Chyba při načítání záložky.",
     "ResourceError": "Chyba při načítání zdrojů",
     "VersionListError": "Chyba při načítání seznamu verzí",
-
+    
     "MissingPublisherNameError": "Nebyl vyplněn název nakladatele",
     "CreatePublisherError": "Chyba při vytváření nového nakladatele",
     "MissingName": "Nebyl vyplněn název",
