@@ -137,8 +137,6 @@ function createListing() {
     var bucketSelector = $("#bucket-select");
     var bucketLoadingDiv = $("div.bucket-select div.lv-dots");
 
-    $(cardFileSelector).hide();
-    $(bucketSelector).hide();
     var cardFileManager = new CardFileManager("#cardfile-result-area");
     var cardFileIdListed: string = "";
     var cardFileNameListed: string = "";
@@ -171,7 +169,7 @@ function createListing() {
             $(cardFileSelector).find(`option[value = ${cardFileId}]`).prop("selected", "selected");
             }
 
-            $(cardFileSelector).show();
+            $(cardFileSelector).removeClass("hidden");
             $(cardFileSelector).change();
         },
         error: (response) => {
@@ -193,7 +191,6 @@ function createListing() {
         cardFileIdListed = optionSelected.val() as string;
         cardFileNameListed = optionSelected.text();
         $(bucketSelector).empty();
-        $(bucketSelector).hide();
         $(bucketLoadingDiv).show();
 
         $.ajax({
@@ -217,7 +214,7 @@ function createListing() {
                 }
 
                 $(bucketLoadingDiv).hide();
-                $(bucketSelector).show();
+                $(bucketSelector).removeClass("hidden");
                 $(bucketSelector).change();
             },
             error: (response) => {
