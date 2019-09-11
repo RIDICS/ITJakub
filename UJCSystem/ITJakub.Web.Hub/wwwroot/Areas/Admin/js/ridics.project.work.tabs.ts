@@ -47,11 +47,6 @@
             $editorButtonPanel: $("#work-metadata-editor-button-panel")
         };
     }
-    
-    private returnUniqueElsArray(array: any[]) {
-        var seen = {};
-        return array.filter(item => seen.hasOwnProperty(item) ? false : (seen[item] = true));
-    }
 
     private createAuthorListStructure(authorList: IOriginalAuthor[], jEl: JQuery): JQuery {
         var elm = "";
@@ -82,8 +77,11 @@
         var $addResponsibleTypeButton = $("#add-responsible-type-button");
         
         this.rangePeriodViewSliderClass = new RegExDatingConditionRangePeriodView();
-        this.rangePeriodViewSliderClass.makeRangeView(
-            $("#select-range-dialog").find(".regex-dating-precision-div")[0] as Node as HTMLDivElement);
+        this.rangePeriodViewSliderClass.makeRangeView($("#select-range-dialog").find(".regex-dating-precision-div")[0] as Node as HTMLDivElement);
+        const low = Number($("#work-metadata-not-before").val());
+        const high = Number($("#work-metadata-not-after").val());
+        console.log("test");
+        this.rangePeriodViewSliderClass.setValues(low, high);
 
         $("#work-metadata-publisher-email").on("input",
             () => {
@@ -542,10 +540,13 @@
     private dateRangeSelected() {
         const notBeforeEl = $("#work-metadata-not-before");
         const notAfterEl = $("#work-metadata-not-after");
+        const originDateText = $("#work-metadata-origin-date");
         const notBefore = this.rangePeriodViewSliderClass.getLowerValue();
         const notAfter = this.rangePeriodViewSliderClass.getHigherValue();
+        const dateText = this.rangePeriodViewSliderClass.getTextValue();
         notBeforeEl.val(notBefore);
         notAfterEl.val(notAfter);
+        originDateText.val(dateText);
         this.selectRangeDialog.hide();
     }
 

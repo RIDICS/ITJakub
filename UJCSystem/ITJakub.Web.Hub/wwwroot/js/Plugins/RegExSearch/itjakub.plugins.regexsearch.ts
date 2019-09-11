@@ -894,12 +894,9 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
     private minCenturyValue: number = 8;
     private maxCenturyValue: number = 21;
 
-    private selectedCenturyLowerValue: number;
-    private selectedCenturyHigherValue: number;
-    private selectedPeriodLowerValue: number;
-    private selectedPeriodHigherValue: number;
-    private selectedDecadeLowerValue: number;
-    private selectedDecadeHigherValue: number;
+    private selectedCentury: DatingSliderValue;
+    private selectedPeriod: DatingSliderValue;
+    private selectedDecade: DatingSliderValue;
 
 
     private centurySliderValues: Array<DatingSliderValue>;
@@ -908,9 +905,13 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
 
     private lowerValue: number;
     private higherValue: number;
+    private textValue: string;
 
     private periodEnabled: boolean;
     private decadeEnabled: boolean;
+
+    private periodEnabledCheckbox: HTMLInputElement;
+    private decadeEnabledCheckbox: HTMLInputElement;
 
     private dateDisplayDiv: HTMLDivElement;
 
@@ -934,7 +935,7 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
 
         var centuryArray = new Array<DatingSliderValue>();
         for (var century = this.minCenturyValue; century <= this.maxCenturyValue; century++) {
-            centuryArray.push(new DatingSliderValue(century.toString(), century * 100 - 100, century * 100 - 1)); //calculate century low and high values (i.e 18. century is 1700 - 1799)
+            centuryArray.push(new DatingSliderValue(century.toString(), century * 100 - 99, century * 100)); //calculate century low and high values (i.e 18. century is 1701 - 1800)
         }
 
         this.centurySliderValues = centuryArray;
@@ -952,6 +953,7 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
         $(periodCheckboxDiv).addClass("regex-dating-checkbox-div");
         var periodValueCheckbox: HTMLInputElement = window.document.createElement("input");
         periodValueCheckbox.type = "checkbox";
+        this.periodEnabledCheckbox = periodValueCheckbox;
         $(periodValueCheckbox).change((eventData) => {
             var currentTarget: HTMLInputElement = eventData.currentTarget as Node as HTMLInputElement;
             const targetEl = $(eventData.target as Node as HTMLElement);
@@ -978,13 +980,19 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
         precisionInputDiv.appendChild(periodSliderDiv);
 
         this.periodSliderValues = new Array<DatingSliderValue>(
+            new DatingSliderValue(localization.translate("CenturyTurn", "PluginsJs").value, -9, -90),
             new DatingSliderValue(localization.translate("Start", "PluginsJs").value, 0, -85),
-            new DatingSliderValue(localization.translate("Quarter", "PluginsJs").value, 0, -75),
-            new DatingSliderValue(localization.translate("Third", "PluginsJs").value, 0, -66),
-            new DatingSliderValue(localization.translate("Half", "PluginsJs").value, 0, -50),
-            new DatingSliderValue("3. třetina", 66, 0), // TODO add localization
-            new DatingSliderValue("4. čtvrtina", 75, 0), // TODO add localization
-            new DatingSliderValue(localization.translate("end", "PluginsJs").value, 85, 0));
+            new DatingSliderValue(localization.translateFormat("SpecifiedQuarter", ["1"], "PluginsJs").value, 0, -75),
+            new DatingSliderValue(localization.translateFormat("SpecifiedThird", ["1"], "PluginsJs").value, 0, -66),
+            new DatingSliderValue(localization.translateFormat("SpecifiedHalf", ["1"], "PluginsJs").value, 0, -50),
+            new DatingSliderValue(localization.translateFormat("SpecifiedQuarter", ["2"], "PluginsJs").value, 25, -50),
+            new DatingSliderValue(localization.translate("Half", "PluginsJs").value, 28, -29),
+            new DatingSliderValue(localization.translateFormat("SpecifiedQuarter", ["3"], "PluginsJs").value, 50, -25),
+            new DatingSliderValue(localization.translateFormat("SpecifiedHalf", ["2"], "PluginsJs").value, 50, 0),
+            new DatingSliderValue(localization.translateFormat("SpecifiedThird", ["3"], "PluginsJs").value, 66, 0), 
+            new DatingSliderValue(localization.translateFormat("SpecifiedQuarter", ["4"], "PluginsJs").value, 75, 0),
+            new DatingSliderValue(localization.translate("End", "PluginsJs").value, 85, 0),
+            new DatingSliderValue(localization.translate("CenturyTurn", "PluginsJs").value, 90, 9));
 
         var sliderPeriod = this.makeSlider(this.periodSliderValues, "",(selectedValue: DatingSliderValue) => { this.periodChanged(selectedValue) });
         $(sliderPeriod).slider("option", "disabled", true);
@@ -1002,6 +1010,7 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
 
         var decadesCheckbox: HTMLInputElement = window.document.createElement("input");
         decadesCheckbox.type = "checkbox";
+        this.decadeEnabledCheckbox = decadesCheckbox;
         $(decadesCheckbox).change((eventData) => {
             var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget as Node as HTMLElement);
             const targetEl = $(eventData.target as Node as HTMLElement);
@@ -1042,50 +1051,74 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
 
         this.decadesSlider = sliderDecades;
 
+        const datingDiv: HTMLDivElement = window.document.createElement("div");
+        $(datingDiv).addClass("regex-slider-div");
+        precisionInputDiv.appendChild(datingDiv);
+
+        const datingLabelDiv: HTMLDivElement = window.document.createElement("div");
+        $(datingLabelDiv).addClass("regex-dating-checkbox-div");
+
+        var decadesNameSpan: HTMLSpanElement = window.document.createElement("span");
+        decadesNameSpan.innerHTML = localization.translate("VerbalDescription", "PluginsJs").value;
+        datingLabelDiv.appendChild(decadesNameSpan);
+        datingDiv.appendChild(datingLabelDiv);
+
         var datingDisplayedValueDiv = document.createElement('div');
         $(datingDisplayedValueDiv).addClass("regex-dating-condition-displayed-value");
         this.dateDisplayDiv = datingDisplayedValueDiv;
-        precisionInputDiv.appendChild(datingDisplayedValueDiv);
-
+        datingDiv.appendChild(datingDisplayedValueDiv);
         this.changedValue();
     }
 
     private centuryChanged(sliderValue: DatingSliderValue) {
-        this.selectedCenturyLowerValue = sliderValue.lowNumberValue;
-        this.selectedCenturyHigherValue = sliderValue.highNumberValue;
+        this.selectedCentury = sliderValue;
         this.changedValue();
     }
 
     private periodChanged(sliderValue: DatingSliderValue) {
-        this.selectedPeriodLowerValue = sliderValue.lowNumberValue;
-        this.selectedPeriodHigherValue = sliderValue.highNumberValue;
+        this.selectedPeriod = sliderValue;
         this.changedValue();
     }
 
     private decadeChanged(sliderValue: DatingSliderValue) {
-        this.selectedDecadeLowerValue = sliderValue.lowNumberValue;
-        this.selectedDecadeHigherValue = sliderValue.highNumberValue;
+        this.selectedDecade = sliderValue;
         this.changedValue();
     }
 
     private changedValue() {
         $(this.dateDisplayDiv).empty();
-        var lower = this.selectedCenturyLowerValue;
-        var higher = this.selectedCenturyHigherValue;
+        var lower = this.selectedCentury.lowNumberValue;
+        var higher = this.selectedCentury.highNumberValue;
+        let text = "";
 
         if (this.periodEnabled) {
-            lower += this.selectedPeriodLowerValue;
-            higher += this.selectedPeriodHigherValue;
+            lower += this.selectedPeriod.lowNumberValue;
+            higher += this.selectedPeriod.highNumberValue;
+            text = this.selectedPeriod.name;
         }
 
         if (this.decadeEnabled) {
-            lower += this.selectedDecadeLowerValue;
-            higher += this.selectedDecadeHigherValue;
+            lower += this.selectedDecade.lowNumberValue;
+            higher += this.selectedDecade.highNumberValue;
+            text = this.selectedDecade.name + localization.translate(".Decades", "PluginsJs").value; 
+        }
+
+        if (lower < this.selectedCentury.lowNumberValue) {
+            const previousCentury = Number(this.selectedCentury.name) - 1;
+            text = localization.translateFormat("SpecifiedCenturyTurn", [previousCentury.toString(), this.selectedCentury.name], "PluginsJs").value;
+        } else if (higher > this.selectedCentury.highNumberValue) {
+            const nextCentury = Number(this.selectedCentury.name) + 1;
+            text = localization.translateFormat("SpecifiedCenturyTurn", [this.selectedCentury.name, nextCentury.toString()], "PluginsJs").value;
+        }
+        else {
+            text += " " + this.selectedCentury.name + localization.translate(".Century", "PluginsJs").value;
         }
 
         this.lowerValue = lower;
         this.higherValue = higher;
-        $(this.dateDisplayDiv).html("(" + lower + "-" + higher + ")");
+        this.textValue = text;
+
+        $(this.dateDisplayDiv).html(`${text} (${lower}-${higher})`);
     }
 
     private makeSlider(valuesArray: Array<DatingSliderValue>, nameEnding: string, callbackFunction: (selectedValue: DatingSliderValue) => void) {
@@ -1128,6 +1161,8 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
 
     getHigherValue(): number { return this.higherValue; }
 
+    getTextValue(): string { return this.textValue; }
+
     setValues(lower?: number, higher?: number) {
         var century: number = lower !== null ? Math.floor(lower/100) : Math.floor(higher/100);
         var centuryIndex: number = 0;
@@ -1148,6 +1183,8 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
             if ((lower === null || (periodSliderValue.lowNumberValue + importedCentury.lowNumberValue) === lower) && (higher === null || (periodSliderValue.highNumberValue + importedCentury.highNumberValue) === higher)) {
                 $(this.periodSlider).slider("value", i);
                 periodIndex = i;
+                this.periodEnabledCheckbox.checked = true;
+                $(this.periodEnabledCheckbox).change();
                 break;
             }
         }
@@ -1157,6 +1194,8 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
                 var decadeSliderValue = this.decadeSliderValues[i];
                 if ((lower === null || (decadeSliderValue.lowNumberValue + importedCentury.lowNumberValue) === lower) && (higher === null || (decadeSliderValue.highNumberValue + importedCentury.highNumberValue) === higher)) {
                     $(this.decadesSlider).slider("value", i);
+                    this.decadeEnabledCheckbox.checked = true;
+                    $(this.decadeEnabledCheckbox).change();
                     break;
                 }
             }
