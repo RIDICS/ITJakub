@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
@@ -31,17 +30,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             var model = CreateNewPublicationViewModel(projectId);
             return View("PublicationsNew", model);
-        }
-
-        public IActionResult SnapshotList(long projectId, string search, int start, int count = SnapshotListPageSize)
-        {
-            var client = GetProjectClient();
-
-            search = search ?? string.Empty;
-            var snapshotList = client.GetSnapshotList(projectId, start, count, search);
-            var model = CreateListViewModel<SnapshotViewModel, SnapshotAggregatedInfoContract>(snapshotList, start, count, search);
-
-            return PartialView("_SnapshotListPage", model);
         }
 
         public IActionResult DuplicateSnapshot(long snapshotId)

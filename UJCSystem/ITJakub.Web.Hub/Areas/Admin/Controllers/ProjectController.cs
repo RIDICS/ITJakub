@@ -153,6 +153,17 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return PartialView("Resource/_Preview");
         }
 
+        public IActionResult SnapshotList(long projectId, string search, int start, int count = SnapshotListPageSize)
+        {
+            var client = GetProjectClient();
+
+            search = search ?? string.Empty;
+            var snapshotList = client.GetSnapshotList(projectId, start, count, search);
+            var model = CreateListViewModel<SnapshotViewModel, SnapshotAggregatedInfoContract>(snapshotList, start, count, search);
+
+            return PartialView("Work/SubView/_PublicationListPage", model);
+        }
+
         public IActionResult ProjectResourceModuleTab(ProjectModuleTabType tabType, long? resourceId)
         {
             if (resourceId == null)
