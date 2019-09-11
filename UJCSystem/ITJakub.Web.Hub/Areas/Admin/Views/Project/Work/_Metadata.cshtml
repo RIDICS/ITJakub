@@ -53,25 +53,6 @@
                     <div class="panel-body">
                         <div class="form-horizontal">
                             <div class="form-group">
-                                <label class="col-md-4 control-label" for="work-metadata-publisher">@Localizer.Translate("Publisher", "Admin")</label>
-                                <div class="col-md-7">
-                                    <input type="text" id="work-metadata-publisher" class="form-control" value="@Model.PublisherText" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="work-metadata-publish-place">@Localizer.Translate("PublishPlace", "Admin")</label>
-                                <div class="col-md-7">
-                                    <input type="text" id="work-metadata-publish-place" class="form-control" value="@Model.PublishPlace" />
-                                </div>
-                            </div>
-                            <div class="form-group publication-years-group">
-                                <label class="col-md-4 control-label" for="work-metadata-publish-date">@Localizer.Translate("PublishDate", "Admin")</label>
-                                <div class="col-md-7">
-                                    <input type="text" id="work-metadata-publish-date" class="form-control" value="@Model.PublishDate" />
-                                    <span class="glyphicon form-control-feedback"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
                                 <label class="col-md-4 control-label">@Localizer.Translate("ResponsiblePeople", "Admin")</label>
                                 <div class="col-md-8">
                                     <div id="work-metadata-editors">
@@ -102,6 +83,26 @@
                                     <button class="btn btn-default" id="add-editor-button" title="@Localizer.Translate("Add", "Admin")">
                                         <i class="fa fa-plus" aria-hidden="true"></i>
                                     </button>
+                                </div>
+                            </div>
+                            <hr/>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="work-metadata-publisher">@Localizer.Translate("Publisher", "Admin")</label>
+                                <div class="col-md-7">
+                                    <input type="text" id="work-metadata-publisher" class="form-control" value="@Model.PublisherText" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="work-metadata-publish-place">@Localizer.Translate("PublishPlace", "Admin")</label>
+                                <div class="col-md-7">
+                                    <input type="text" id="work-metadata-publish-place" class="form-control" value="@Model.PublishPlace" />
+                                </div>
+                            </div>
+                            <div class="form-group publication-years-group">
+                                <label class="col-md-4 control-label" for="work-metadata-publish-date">@Localizer.Translate("PublishDate", "Admin")</label>
+                                <div class="col-md-7">
+                                    <input type="text" id="work-metadata-publish-date" class="form-control" value="@Model.PublishDate" />
+                                    <span class="glyphicon form-control-feedback"></span>
                                 </div>
                             </div>
                             <form id="email-form">
@@ -140,6 +141,40 @@
                     <div class="panel-body">
                         <div class="form-horizontal">
                             <div class="form-group">
+                                <label class="col-md-4 control-label">@Localizer.Translate("AuthorsFromBook", "Admin")</label>
+                                <div class="col-md-8">
+                                    <div id="work-metadata-authors">
+                                        <input type="hidden" id="add-author-id-preview" />
+                                        @foreach (var author in Model.Authors)
+                                        {
+                                            <div class="author-item" data-id="@author.Id">
+                                                <span class="person-list-manipulate">
+                                                    <span class="btn-group-vertical move-button">
+                                                        <button type="button" class="btn btn-default move-person-up">
+                                                            <i class="fa fa-chevron-up" aria-hidden="true"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-default move-person-down">
+                                                            <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                                                        </button>
+                                                    </span>
+                                                    <button class="btn btn-default remove-button" title="@Localizer.Translate("Delete", "Admin")">
+                                                        <span class="glyphicon glyphicon-remove"></span>
+                                                    </button>
+                                                </span>
+                                                <span class="text-as-form-control">
+                                                    <span class="person-name">@author.FirstName</span><span class="person-surname">@author.LastName</span>
+                                                </span>
+                                            </div>
+                                        }
+                                    </div>
+
+                                    <button class="btn btn-default" id="add-author-button" title="@Localizer.Translate("Add", "Admin")">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="form-group">
                                 <label class="col-md-4 control-label" for="work-metadata-literary-original">@Localizer.Translate("LiteraryOriginal", "Admin")</label>
                                 <div class="col-md-7">
                                     <span class="text-as-form-control" id="work-metadata-literary-original">@Model.LiteraryOriginalText</span>
@@ -175,39 +210,6 @@
                                     <div class="col-md-7">
                                         <input type="text" id="work-metadata-original-extent" class="form-control" value="@Model.ManuscriptExtent" />
                                     </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-4 control-label">@Localizer.Translate("AuthorsFromBook", "Admin")</label>
-                                <div class="col-md-8">
-                                    <div id="work-metadata-authors">
-                                        <input type="hidden" id="add-author-id-preview" />
-                                        @foreach (var author in Model.Authors)
-                                        {
-                                            <div class="author-item" data-id="@author.Id">
-                                                <span class="person-list-manipulate">
-                                                    <span class="btn-group-vertical move-button">
-                                                        <button type="button" class="btn btn-default move-person-up">
-                                                            <i class="fa fa-chevron-up" aria-hidden="true"></i>
-                                                        </button>
-                                                        <button type="button" class="btn btn-default move-person-down">
-                                                            <i class="fa fa-chevron-down" aria-hidden="true"></i>
-                                                        </button>
-                                                    </span>
-                                                    <button class="btn btn-default remove-button" title="@Localizer.Translate("Delete", "Admin")">
-                                                        <span class="glyphicon glyphicon-remove"></span>
-                                                    </button>
-                                                </span>
-                                                <span class="text-as-form-control">
-                                                    <span class="person-name">@author.FirstName</span><span class="person-surname">@author.LastName</span>
-                                                </span>
-                                            </div>
-                                        }
-                                    </div>
-
-                                    <button class="btn btn-default" id="add-author-button" title="@Localizer.Translate("Add", "Admin")">
-                                        <i class="fa fa-plus" aria-hidden="true"></i>
-                                    </button>
                                 </div>
                             </div>
                             <div class="form-group">
