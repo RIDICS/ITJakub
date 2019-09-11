@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
@@ -14,6 +13,7 @@ using NHibernate.Driver;
 using NHibernate.Tool.hbm2ddl;
 using Vokabular.DataEntities;
 using Vokabular.ProjectImport.Shared.Options;
+using Vokabular.Shared.AspNetCore.Container.Extensions;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
@@ -39,6 +39,7 @@ namespace Vokabular.ProjectImport.Test.Mock
                 option.Delay = 5;
                 option.DisableSslValidation = true;
             }));
+            ServiceCollection.AddAutoMapper();
             MockLogging();
 
             if (initDatabase)
@@ -90,24 +91,9 @@ namespace Vokabular.ProjectImport.Test.Mock
             ServiceCollection.AddScoped<MockDataManager>();
         }
 
-        private void InitAutoMapper(IServiceProvider serviceProvider)
-        {
-            var profiles = serviceProvider.GetServices<Profile>();
-
-            Mapper.Reset();
-            Mapper.Initialize(cfg =>
-            {
-                foreach (var profile in profiles)
-                {
-                    cfg.AddProfile(profile);
-                }
-            });
-        }
-
         public IServiceProvider CreateServiceProvider()
         {
-            var serviceProvider =  ServiceCollection.BuildServiceProvider();
-            InitAutoMapper(serviceProvider);
+            var serviceProvider = ServiceCollection.BuildServiceProvider();
             return serviceProvider;
         }
     }

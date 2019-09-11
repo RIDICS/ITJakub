@@ -26,13 +26,15 @@ namespace Vokabular.MainService.Core.Managers
         private readonly AuthorizationManager m_authorizationManager;
         private readonly BookRepository m_bookRepository;
         private readonly MetadataRepository m_metadataRepository;
+        private readonly IMapper m_mapper;
 
-        public BookHitSearchManager(FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager, BookRepository bookRepository, MetadataRepository metadataRepository)
+        public BookHitSearchManager(FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager, BookRepository bookRepository, MetadataRepository metadataRepository, IMapper mapper)
         {
             m_fulltextStorageProvider = fulltextStorageProvider;
             m_authorizationManager = authorizationManager;
             m_bookRepository = bookRepository;
             m_metadataRepository = metadataRepository;
+            m_mapper = mapper;
         }
 
         public List<PageContract> SearchPage(long projectId, SearchPageRequestContract request)
@@ -114,7 +116,7 @@ namespace Vokabular.MainService.Core.Managers
                 );
             }
 
-            var result = Mapper.Map<List<PageContract>>(resultPages);
+            var result = m_mapper.Map<List<PageContract>>(resultPages);
             return result;
         }
 

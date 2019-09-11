@@ -13,19 +13,21 @@ namespace Vokabular.MainService.Core.Works
         private readonly ProjectRepository m_projectRepository;
         private readonly ProjectContract m_newData;
         private readonly int m_userId;
+        private readonly IMapper m_mapper;
 
-        public CreateProjectWork(ProjectRepository projectRepository, ProjectContract newData, int userId) : base(projectRepository)
+        public CreateProjectWork(ProjectRepository projectRepository, ProjectContract newData, int userId, IMapper mapper) : base(projectRepository)
         {
             m_projectRepository = projectRepository;
             m_newData = newData;
             m_userId = userId;
+            m_mapper = mapper;
         }
 
         protected override long ExecuteWorkImplementation()
         {
             var now = DateTime.UtcNow;
             var currentUser = m_projectRepository.Load<User>(m_userId);
-            var projectType = Mapper.Map<ProjectTypeEnum>(m_newData.ProjectType);
+            var projectType = m_mapper.Map<ProjectTypeEnum>(m_newData.ProjectType);
 
             var project = new Project
             {

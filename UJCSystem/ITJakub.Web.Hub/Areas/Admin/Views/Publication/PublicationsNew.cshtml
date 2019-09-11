@@ -1,0 +1,146 @@
+﻿@using ITJakub.Web.Hub.Areas.Admin.Models
+@using ITJakub.Web.Hub.Areas.Admin.Models.Constants
+@using Scalesoft.Localization.AspNetCore
+@model NewPublicationViewModel
+@inject ILocalizationService Localizer
+
+@{
+    ViewBag.Title = Localizer.Translate("CreateNewPublication", "Admin");
+}
+@section styles {
+    <link asp-append-version="true" rel="stylesheet" href="~/Areas/Admin/css/ridics.project.css" />
+    <link asp-append-version="true" rel="stylesheet" href="~/lib/bootstrap-select/dist/css/bootstrap-select.min.css" />
+}
+@section scripts {
+    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.project.client.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.project.page-image-viewer.bundle.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.project.editors-common-base.bundle.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/snapshot/ridics.snapshot.editor.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/snapshot/ridics.snapshot.api-client.js"></script>
+    <script asp-append-version="true" src="~/lib/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+}
+
+<div class="content-container">
+    <div class="snapshot-layout">
+        <div id="new-snapshot-container">
+            <form asp-controller="Publication" asp-action="NewSnapshot" method="post">
+                <div asp-validation-summary="All" class="alert alert-danger"></div>
+                <input type="hidden" asp-for="ProjectId" />
+                <div class="project-snapshot-new">
+                    <h2>@Localizer.Translate("CreateNewPublication", "Admin")</h2>
+                    <div class="row">
+                        <div class="col-xs-12 col-md-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <div class="collapse-icon">
+                                        <a data-toggle="collapse" href="#publishToModules" aria-expanded="true">
+                                            <span class="fa fa-chevron-up"></span>
+                                            <span class="fa fa-chevron-down"></span>
+                                        </a>
+                                    </div>
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" href="#publishToModules" aria-expanded="true">@Localizer.Translate("Visibility", "Admin")</a>
+                                    </h4>
+                                </div>
+                                <div id="publishToModules" class="panel-collapse collapse in">
+                                    <div class="panel-body">
+                                        <div class="col-xs-6">
+                                            <div>@Localizer.Translate("DefaultModule", "Admin"):</div>
+                                            @{
+                                                foreach (var bookType in Model.AvailableBookTypes)
+                                                {
+                                                    <div class="radio">
+                                                        <label>
+                                                            <input type="radio" asp-for="DefaultBookType" value="@bookType" class="default-book-type" />
+                                                            @Localizer.Translate(bookType.ToString(), "Admin")
+                                                        </label>
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <div>@Localizer.Translate("VisibilityInModules", "Admin"):</div>
+                                            @{
+                                                @for (var i = 0; i < Model.PublishBookTypes.Count; i++)
+                                                {
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="hidden" asp-for="@Model.PublishBookTypes[i].BookType" class="book-types-value" />
+                                                            <input type="checkbox" asp-for="@Model.PublishBookTypes[i].IsSelected" class="book-types" />
+                                                            <input type="hidden" asp-for="@Model.PublishBookTypes[i].IsSelected" class="book-types-state" />
+                                                            @Localizer.Translate(Model.PublishBookTypes[i].BookType.ToString(), "Admin")
+                                                        </label>
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <div class="collapse-icon">
+                                        <a data-toggle="collapse" href="#snapshotVisibility" aria-expanded="true">
+                                            <span class="fa fa-chevron-up"></span>
+                                            <span class="fa fa-chevron-down"></span>
+                                        </a>
+                                    </div>
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" href="#snapshotVisibility" aria-expanded="true">@Localizer.Translate("Visibility", "Admin")</a>
+                                    </h4>
+                                </div>
+                                <div id="snapshotVisibility" class="panel-collapse collapse in">
+                                    <div class="panel-body">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-snapshot-resources">
+                        @{
+                            for (var i = 0; i < Model.ResourceTypes.Count; i++)
+                            {
+                                ViewData[PublicationViewConstants.ActualResourceType] = i;
+                                @await Html.PartialAsync("_PublicationsNewResources", Model, ViewData)
+                            }
+                        }
+                        <div class="project-bottom-buttons">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-6 form-horizontal">
+                                    <div class="form-group">
+                                        <label for="comment" class="control-label col-md-3 col-lg-2">@Localizer.Translate("Comment", "Admin")</label>
+                                        <div class="col-md-9 col-lg-10">
+                                            <input type="text" asp-for="Comment" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-md-4">
+                                    <div id="snapshotCreatingResult"></div>
+                                </div>
+                                <div class="col-xs-12 col-md-2">
+                                    <button type="submit" class="btn btn-default">@Localizer.Translate("Save", "Admin")</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="resourcePreviewModal" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <span class="modal-title"></span>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

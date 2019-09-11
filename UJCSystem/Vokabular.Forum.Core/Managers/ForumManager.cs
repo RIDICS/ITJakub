@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Vokabular.ForumSite.Core.Helpers;
 using Vokabular.ForumSite.Core.Options;
 using Vokabular.ForumSite.Core.Works;
@@ -46,9 +45,9 @@ namespace Vokabular.ForumSite.Core.Managers
             return resultId;
         }
 
-        public void UpdateForum(ProjectDetailContract project, short[] bookTypeIds, string hostUrl)
+        public void UpdateForum(ProjectDetailContract project, short[] bookTypeIds)
         {
-            var messageText = m_forumDefaultMessageGenerator.GetUpdateMessage(project, hostUrl);
+            var messageText = m_forumDefaultMessageGenerator.GetUpdateMessage(project, m_forumOptions.WebHubUrl);
             new UpdateForumWork(m_forumRepository, m_messageSubwork,
                 m_userRepository, project, messageText, m_forumOptions.DefaultAuthorUsername).Execute();
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 
@@ -10,6 +11,15 @@ namespace Vokabular.MainService.Controllers
     [Route("api")]
     public class ResourceController : BaseController
     {
+        private readonly ProjectContentManager m_projectContentManager;
+        private readonly ResourceManager m_resourceManager;
+
+
+        public ResourceController(ProjectContentManager projectContentManager, ResourceManager resourceManager)
+        {
+            m_projectContentManager = projectContentManager;
+            m_resourceManager = resourceManager;
+        }
         // TODO determine which methods are required and finish their implementation (or do any required modification). Remove other non-required methods.
 
         [HttpPost("project/{projectId}/resource")]
@@ -25,26 +35,9 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("project/{projectId}/resource")]
-        public List<ResourceContract> GetResourceList(long projectId, [FromQuery] ResourceTypeEnumContract? resourceType)
+        public IList<ResourceWithLatestVersionContract> GetResourceList(long projectId, [FromQuery] ResourceTypeEnumContract? resourceType)
         {
-            var list = new List<ResourceContract>();
-            if (resourceType != null)
-            {
-                for (int i = 5; i >= 0; i--)
-                {
-                    list.Add(MockResourceData.GetResourceContract(i, resourceType.Value));
-                }
-            }
-            else
-            {
-                var random = new Random();
-                for (int i = 11; i >= 0; i--)
-                {
-                    ResourceTypeEnumContract type = (ResourceTypeEnumContract)random.Next(4);
-                    list.Add(MockResourceData.GetResourceContract(i, type));
-                }
-            }
-            return list;
+            return m_projectContentManager.GetResourceList(projectId, resourceType);
         }
 
         [HttpDelete("resource/{resourceId}")]
@@ -66,16 +59,9 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("resource/{resourceId}/version")]
-        public List<ResourceVersionContract> GetResourceVersionHistory(long resourceId)
+        public IList<ResourceVersionContract> GetResourceVersionHistory(long resourceId)
         {
-            return new List<ResourceVersionContract>
-            {
-                MockResourceData.GetResourceVersionContract(5),
-                MockResourceData.GetResourceVersionContract(4),
-                MockResourceData.GetResourceVersionContract(3),
-                MockResourceData.GetResourceVersionContract(2),
-                MockResourceData.GetResourceVersionContract(1)
-            };
+            return m_resourceManager.GetResourceVersionHistory(resourceId);
         }
 
         [HttpGet("resource/{resourceId}/metadata")]
@@ -90,31 +76,6 @@ namespace Vokabular.MainService.Controllers
                 EditionNote = "xxxxxxx"
             };
             return Ok(resultData);
-        }
-    }
-
-    public class MockResourceData
-    {
-        public static ResourceContract GetResourceContract(int id, ResourceTypeEnumContract resourceType)
-        {
-            return new ResourceContract
-            {
-                Id = id,
-                ResourceType = resourceType,
-                Name = string.Format("Zdroj {0}", id)
-            };
-        }
-
-        public static ResourceVersionContract GetResourceVersionContract(int versionNumber)
-        {
-            return new ResourceVersionContract
-            {
-                Id = versionNumber,
-                Author = "Jan Novák",
-                Comment = "První verze dokumentu [název díla]",
-                CreateDate = DateTime.Now,
-                VersionNumber = versionNumber
-            };
         }
     }
 }

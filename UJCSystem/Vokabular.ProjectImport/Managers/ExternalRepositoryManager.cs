@@ -18,13 +18,15 @@ namespace Vokabular.ProjectImport.Managers
         private readonly ExternalRepositoryRepository m_externalRepositoryRepository;
         private readonly ImportHistoryRepository m_importHistoryRepository;
         private readonly CommunicationFactory m_communicationFactory;
+        private readonly IMapper m_mapper;
 
         public ExternalRepositoryManager(ExternalRepositoryRepository externalRepositoryRepository, ImportHistoryRepository importHistoryRepository,
-            CommunicationFactory communicationFactory)
+            CommunicationFactory communicationFactory, IMapper mapper)
         {
             m_externalRepositoryRepository = externalRepositoryRepository;
             m_importHistoryRepository = importHistoryRepository;
             m_communicationFactory = communicationFactory;
+            m_mapper = mapper;
         }
 
         public int CreateExternalRepository(ExternalRepositoryDetailContract externalRepository, int userId)
@@ -36,7 +38,7 @@ namespace Vokabular.ProjectImport.Managers
         public ExternalRepositoryDetailContract GetExternalRepository(int externalRepositoryId)
         {
             var result = m_externalRepositoryRepository.InvokeUnitOfWork(x => x.GetExternalRepository(externalRepositoryId));
-            return Mapper.Map<ExternalRepositoryDetailContract>(result);
+            return m_mapper.Map<ExternalRepositoryDetailContract>(result);
         }
 
         public void UpdateExternalRepository(int externalRepositoryId, ExternalRepositoryDetailContract externalRepositoryDetailContract)
@@ -56,7 +58,7 @@ namespace Vokabular.ProjectImport.Managers
 
             return new PagedResultList<ExternalRepositoryContract>
             {
-                List = Mapper.Map<List<ExternalRepositoryContract>>(result.List),
+                List = m_mapper.Map<List<ExternalRepositoryContract>>(result.List),
                 TotalCount = result.Count,
             };
         }
@@ -64,7 +66,7 @@ namespace Vokabular.ProjectImport.Managers
         public IList<ExternalRepositoryContract> GetAllExternalRepositories()
         {
             var result = m_externalRepositoryRepository.InvokeUnitOfWork(x => x.GetAllExternalRepositories());
-            return Mapper.Map<IList<ExternalRepositoryContract>>(result);
+            return m_mapper.Map<IList<ExternalRepositoryContract>>(result);
         }
 
         public ExternalRepositoryStatisticsContract GetExternalRepositoryStatistics(int externalRepositoryId)
@@ -79,7 +81,7 @@ namespace Vokabular.ProjectImport.Managers
 
             if (work.LastImportHistory != null)
             {
-                updatedByUser = work.LastImportHistory.CreatedByUser == null ? null : Mapper.Map<UserContract>(work.LastImportHistory.CreatedByUser);
+                updatedByUser = work.LastImportHistory.CreatedByUser == null ? null : m_mapper.Map<UserContract>(work.LastImportHistory.CreatedByUser);
                 lastUpdateDate = work.LastImportHistory.Date;
                 lastUpdateIsSuccessful = work.LastImportHistory.Status != ImportStatusEnum.Failed;
             }
@@ -99,7 +101,7 @@ namespace Vokabular.ProjectImport.Managers
         public IList<ExternalRepositoryTypeContract> GetAllExternalRepositoryTypes()
         {
             var result = m_externalRepositoryRepository.InvokeUnitOfWork(x => x.GetAllExternalRepositoryTypes());
-            return Mapper.Map<IList<ExternalRepositoryTypeContract>>(result);
+            return m_mapper.Map<IList<ExternalRepositoryTypeContract>>(result);
         }
 
         public async Task<OaiPmhRepositoryInfoContract> GetOaiPmhRepositoryInfo(string url)
@@ -107,7 +109,7 @@ namespace Vokabular.ProjectImport.Managers
             using (var client = m_communicationFactory.CreateOaiPmhCommunicationClient(url))
             {
                 var result = await client.GetRepositoryInfoAsync();
-                return Mapper.Map<OaiPmhRepositoryInfoContract>(result);
+                return m_mapper.Map<OaiPmhRepositoryInfoContract>(result);
             }
         }
     }

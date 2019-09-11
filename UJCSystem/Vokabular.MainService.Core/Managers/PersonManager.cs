@@ -15,10 +15,12 @@ namespace Vokabular.MainService.Core.Managers
     public class PersonManager
     {
         private readonly PersonRepository m_personRepository;
+        private readonly IMapper m_mapper;
 
-        public PersonManager(PersonRepository personRepository)
+        public PersonManager(PersonRepository personRepository, IMapper mapper)
         {
             m_personRepository = personRepository;
+            m_mapper = mapper;
         }
 
         #region OriginalAuthor CRUD
@@ -32,7 +34,7 @@ namespace Vokabular.MainService.Core.Managers
         public OriginalAuthorContract GetOriginalAuthor(int authorId)
         {
             var dbResult = m_personRepository.InvokeUnitOfWork(x => x.FindById<OriginalAuthor>(authorId));
-            var result = Mapper.Map<OriginalAuthorContract>(dbResult);
+            var result = m_mapper.Map<OriginalAuthorContract>(dbResult);
             return result;
         }
 
@@ -71,7 +73,7 @@ namespace Vokabular.MainService.Core.Managers
         public ResponsiblePersonContract GetResponsiblePerson(int responsiblePersonId)
         {
             var responsiblePerson = m_personRepository.InvokeUnitOfWork(x => x.FindById<ResponsiblePerson>(responsiblePersonId));
-            return Mapper.Map<ResponsiblePersonContract>(responsiblePerson);
+            return m_mapper.Map<ResponsiblePersonContract>(responsiblePerson);
         }
 
         #endregion
@@ -83,10 +85,10 @@ namespace Vokabular.MainService.Core.Managers
                 query = string.Empty;
 
             var countValue = PagingHelper.GetAutocompleteCount(count);
-            var bookTypeEnum = Mapper.Map<BookTypeEnum?>(bookType);
+            var bookTypeEnum = m_mapper.Map<BookTypeEnum?>(bookType);
 
             var result = m_personRepository.InvokeUnitOfWork(x => x.GetAuthorAutocomplete(query, bookTypeEnum, countValue));
-            return Mapper.Map<List<OriginalAuthorContract>>(result);
+            return m_mapper.Map<List<OriginalAuthorContract>>(result);
         }
 
         public List<ResponsiblePersonContract> GetResponsiblePersonAutocomplete(string query, int? count)
@@ -97,7 +99,7 @@ namespace Vokabular.MainService.Core.Managers
             var countValue = PagingHelper.GetAutocompleteCount(count);
 
             var result = m_personRepository.InvokeUnitOfWork(x => x.GetResponsiblePersonAutocomplete(query, countValue));
-            return Mapper.Map<List<ResponsiblePersonContract>>(result);
+            return m_mapper.Map<List<ResponsiblePersonContract>>(result);
         }
 
         public PagedResultList<ResponsiblePersonContract> GetResponsiblePersonList(int? start, int? count)
@@ -105,7 +107,7 @@ namespace Vokabular.MainService.Core.Managers
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
             var dbResult = m_personRepository.InvokeUnitOfWork(x => x.GetResponsiblePersonList(startValue, countValue));
-            var resultList = Mapper.Map<List<ResponsiblePersonContract>>(dbResult.List);
+            var resultList = m_mapper.Map<List<ResponsiblePersonContract>>(dbResult.List);
 
             return new PagedResultList<ResponsiblePersonContract>
             {
@@ -119,7 +121,7 @@ namespace Vokabular.MainService.Core.Managers
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
             var dbResult = m_personRepository.InvokeUnitOfWork(x => x.GetOriginalAuthorList(startValue, countValue));
-            var resultList = Mapper.Map<List<OriginalAuthorContract>>(dbResult.List);
+            var resultList = m_mapper.Map<List<OriginalAuthorContract>>(dbResult.List);
 
             return new PagedResultList<OriginalAuthorContract>
             {
