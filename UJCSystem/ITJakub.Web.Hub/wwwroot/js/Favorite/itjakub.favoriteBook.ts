@@ -88,15 +88,13 @@
         this.loading = true;
         $(this.bodyDiv)
             .empty()
-            .css("text-align", "center")
-            .append($('<div class="lv-circles sm" style="transform: translateX(-50%);"></div>'));
+            .append($('<div class="lv-circles sm" style="left: 41.1%; pointer-events: none"></div>'));
 
         this.favoriteManager.getFavoriteLabelsForBooksAndCategories(this.bookType, (favoriteLabels) => {
             $(this.bodyDiv)
-                .empty()
-                .css("text-align", "left");
+                //.empty();
 
-            for (var i = 0; i < favoriteLabels.length; i++) {
+                for (var i = 0; i < favoriteLabels.length; i++) {
                 var favoriteLabel = favoriteLabels[i];
                 var itemDiv = this.createFavoriteLabel(favoriteLabel);
                 this.bodyDiv.appendChild(itemDiv);
