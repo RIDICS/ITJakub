@@ -114,7 +114,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         }
 
         [Obsolete]
-        public virtual IList<MetadataResource> GetMetadataByBookType(BookTypeEnum bookTypeEnum, int userId)
+        public virtual IList<MetadataResource> GetMetadataByBookType(BookTypeEnum bookTypeEnum, int userId, ProjectTypeEnum projectType)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;
@@ -133,7 +133,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => permissionAlias.UserGroup, () => userGroupAlias)
                 .JoinAlias(() => userGroupAlias.Users, () => userAlias)
                 .Where(x => x.Id == resourceAlias.LatestVersion.Id && bookTypeAlias.Type == bookTypeEnum)
-                .And(() => userAlias.Id == userId)
+                .And(() => userAlias.Id == userId && projectAlias.ProjectType == projectType)
                 .OrderBy(x => x.Title).Asc
                 .Fetch(SelectMode.Fetch, x => x.Resource.Project.Categories)
                 .List();
