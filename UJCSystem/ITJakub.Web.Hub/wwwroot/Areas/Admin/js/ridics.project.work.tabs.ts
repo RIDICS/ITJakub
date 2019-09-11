@@ -80,7 +80,6 @@
         this.rangePeriodViewSliderClass.makeRangeView($("#select-range-dialog").find(".regex-dating-precision-div")[0] as Node as HTMLDivElement);
         const low = Number($("#work-metadata-not-before").val());
         const high = Number($("#work-metadata-not-after").val());
-        console.log("test");
         this.rangePeriodViewSliderClass.setValues(low, high);
 
         $("#work-metadata-publisher-email").on("input",

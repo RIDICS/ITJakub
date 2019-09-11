@@ -1,14 +1,36 @@
 ﻿@using Scalesoft.Localization.AspNetCore
 @inject ILocalizationService Localizer
 
-<div class="project-form-bottom-buttons">
-    <div class="work-metadata-view-button-panel">
-        <button class="btn btn-default work-metadata-edit-button">@Localizer.Translate("Edit", "Admin")</button>
-    </div>
-    <div class="work-metadata-editor-button-panel">
-        <div class="alert alert-success work-metadata-save-success">@Localizer.Translate("MetadataSaveSuccess", "Admin")</div>
-        <div class="alert alert-danger work-metadata-save-error">@Localizer.Translate("MetadataSaveError", "Admin")</div>
-        <button class="btn btn-default work-metadata-cancel-button">@Localizer.Translate("Cancel", "Admin")</button>
-        <button class="btn btn-default work-metadata-save-button"><span class="saving-icon loading-small-button"></span> @Localizer.Translate("Save", "Admin")</button>
+<div class="col-xs-12">
+    <div class="panel panel-default metadata-edit-bar">
+        <div class="panel-body">
+            <div class="col-xs-12 col-md-4">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="work-metadata-last-modification">@Localizer.Translate("LastModification", "Admin")</label>
+                        <div class="col-md-7">
+                            <span class="text-as-form-control" id="work-metadata-last-modification">@Model.LastModification?.ToLocalTime().ToString(Localizer.GetRequestCulture())</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-8">
+                <div class="project-form-bottom-buttons">
+                    <div class="work-metadata-view-button-panel">
+                        <button class="btn btn-default work-metadata-edit-button">@Localizer.Translate("Edit", "Admin")</button>
+                    </div>
+                    <div class="work-metadata-editor-button-panel">
+                        <div class="col-xs-12 col-md-8">
+                            <div class="alert alert-success work-metadata-save-success">@Localizer.Translate("MetadataSaveSuccess", "Admin")</div>
+                            <div class="alert alert-danger work-metadata-save-error">@Localizer.Translate("MetadataSaveError", "Admin")</div>
+                        </div>
+                        <div class="col-xs-12 col-md-4">
+                            <button class="btn btn-default work-metadata-save-button"><span class="saving-icon loading-small-button"></span> @Localizer.Translate("Save", "Admin")</button>
+                            <button class="btn btn-default work-metadata-cancel-button">@Localizer.Translate("Cancel", "Admin")</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
