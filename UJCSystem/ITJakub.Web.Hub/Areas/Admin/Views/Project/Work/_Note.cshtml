@@ -1,4 +1,7 @@
-﻿<div class="container-fluid">
+﻿@using Scalesoft.Localization.AspNetCore
+@inject ILocalizationService Localizer
+
+<div class="container-fluid">
     <div class="row">
         <div class="col-xs-12">
             <div class="alert-holder"></div>
@@ -8,7 +11,9 @@
         <div class="col-xs-12 note-editor">
             <div class="loader"></div>
             <textarea class="note-editor-textarea hide"></textarea>
+            <div class="bottom-buttons hide">
+                <button class="btn btn-default" id="saveNote">@Localizer.Translate("Save", "Admin")</button>
+            </div>
         </div>
     </div>
-    <div class="row"></div>
 </div>

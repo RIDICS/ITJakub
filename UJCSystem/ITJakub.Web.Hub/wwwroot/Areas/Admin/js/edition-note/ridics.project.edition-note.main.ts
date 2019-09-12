@@ -42,6 +42,7 @@
 
     private initEditorOnTextarea(note: string) {
         const textAreaEl = $(".note-editor-textarea");
+        $(".note-editor .bottom-buttons").removeClass("hide");
         textAreaEl.removeClass("hide");
         const simpleMdeOptions: SimpleMDE.Options = {
             element: textAreaEl[0] as Node as HTMLElement,
