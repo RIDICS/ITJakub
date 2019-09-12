@@ -95,82 +95,38 @@
 
     private processAreaSwitch = () => {
         var editorExistsInTab = false;
-        $("#project-resource-preview").on("click",
-            ".editor",
-            (e) => { //dynamically instantiating SimpleMDE editor on textarea
-                if (this.editingMode) {
-                    let pageDiffers = false;
-                    const elSelected = e.target as HTMLElement;
-                    const jElSelected = $(elSelected).closest(".page-row");
-                    const textId = jElSelected.data("page") as number;
-                    if (textId !== this.currentTextId) {
-                        pageDiffers = true;
-                    }
-                    const editorEl = $(".CodeMirror");
-                    editorExistsInTab = (editorEl.length !== 0);
-                    if (!editorExistsInTab) {
-                        if (typeof this.simplemde !== "undefined" && this.simplemde !== null) {
-                            this.simplemde.toTextArea();
-                            this.simplemde = null;
-                        }
-                        this.addEditor(jElSelected);
-                        this.originalContent = this.simplemde.value();
-                    }
-                    if (editorExistsInTab && pageDiffers) {
-                        const previousPageEl = $(`*[data-page="${this.currentTextId}"]`);
-                        const contentBeforeClose = this.simplemde.value();
-                        if (contentBeforeClose !== this.originalContent) {
-                            const editorPageName = editorEl.parents(".page-row").data("page-name");
-                            bootbox.dialog({
-                                title: "Warning",
-                                message: `There's an open editor in page ${editorPageName
-                                    }. Are you sure you want to close it without saving?`,
-                                buttons: {
-                                    confirm: {
-                                        label: "Close",
-                                        className: "btn-default",
-                                        callback: () => {
-                                            this.editorChangePage(previousPageEl, jElSelected);
-                                        }
-                                    },
-                                    cancel: {
-                                        label: "Cancel",
-                                        className: "btn-default",
-                                        callback: () => {
-                                            const textareaEl = jElSelected.find(".editor")
-                                                .children(".textarea-plain-text");
-                                            textareaEl.trigger("blur");
-                                            this.simplemde.codemirror.focus();
-                                        }
-                                    },
-                                    save: {
-                                        label: "Save and close",
-                                        className: "btn-default",
-                                        callback: () => {
-                                            this.saveContents(this.currentTextId, contentBeforeClose);
-                                        }
-                                    }
-                                }
-                            });
-                        } else if (contentBeforeClose === this.originalContent) {
-                            this.editorChangePage(previousPageEl, jElSelected);
-                        }
-                    }
-                }
-            });
 
-        $("#project-resource-preview").on("click",
-            ".editing-mode-button",
-            () => {
-                const thisClass = this;
-                this.editingMode = !this.editingMode;
-                if (typeof this.simplemde === "undefined" || this.simplemde === null) {
-                    this.toggleDivAndTextarea();
+        $(".page-toolbar .edit-page").click((event) => {
+            const button = $(event.currentTarget);
+            button.addClass("hide");
+            const pageRow = button.parents(".page-row");
+            this.editingMode = true;
+            this.togglePageRows(pageRow);
+        });
+
+        $("#project-resource-preview").on("click", ".editor", (e) => { //dynamically instantiating SimpleMDE editor on textarea
+            if (this.editingMode) {
+                let pageDiffers = false;
+                const elSelected = e.target as HTMLElement;
+                const jElSelected = $(elSelected).closest(".page-row");
+                const textId = jElSelected.data("page") as number;
+                if (textId !== this.currentTextId) {
+                    pageDiffers = true;
                 }
-                if (typeof this.simplemde !== "undefined" && !this.editingMode && this.simplemde !== null) {
+                const editorEl = $(".CodeMirror");
+                editorExistsInTab = (editorEl.length !== 0);
+                if (!editorExistsInTab) {
+                    if (typeof this.simplemde !== "undefined" && this.simplemde !== null) {
+                        this.simplemde.toTextArea();
+                        this.simplemde = null;
+                    }
+                    this.addEditor(jElSelected);
+                    this.originalContent = this.simplemde.value();
+                }
+                if (editorExistsInTab && pageDiffers) {
+                    const previousPageEl = $(`*[data-page="${this.currentTextId}"]`);
                     const contentBeforeClose = this.simplemde.value();
                     if (contentBeforeClose !== this.originalContent) {
-                        const editorEl = $(".CodeMirror");
                         const editorPageName = editorEl.parents(".page-row").data("page-name");
                         bootbox.dialog({
                             title: "Warning",
@@ -181,16 +137,17 @@
                                     label: "Close",
                                     className: "btn-default",
                                     callback: () => {
-                                        this.simplemde.toTextArea();
-                                        this.simplemde = null;
-                                        this.toggleDivAndTextarea();
+                                        this.editorChangePage(previousPageEl, jElSelected);
                                     }
                                 },
                                 cancel: {
                                     label: "Cancel",
                                     className: "btn-default",
                                     callback: () => {
-                                        this.editingMode = !this.editingMode; //Switch back to editing mode on cancel
+                                        const textareaEl = jElSelected.find(".editor")
+                                            .children(".textarea-plain-text");
+                                        textareaEl.trigger("blur");
+                                        this.simplemde.codemirror.focus();
                                     }
                                 },
                                 save: {
@@ -198,20 +155,68 @@
                                     className: "btn-default",
                                     callback: () => {
                                         this.saveContents(this.currentTextId, contentBeforeClose);
-                                        thisClass.simplemde.toTextArea();
-                                        thisClass.simplemde = null;
-                                        thisClass.toggleDivAndTextarea();
                                     }
                                 }
                             }
                         });
                     } else if (contentBeforeClose === this.originalContent) {
-                        thisClass.simplemde.toTextArea();
-                        thisClass.simplemde = null;
-                        thisClass.toggleDivAndTextarea();
+                        this.editorChangePage(previousPageEl, jElSelected);
                     }
                 }
-            });
+            }
+        });
+
+        $("#project-resource-preview").on("click", ".editing-mode-button", () => {
+            const thisClass = this;
+            this.editingMode = !this.editingMode;
+            if (typeof this.simplemde === "undefined" || this.simplemde === null) {
+                this.toggleDivAndTextarea();
+            }
+            if (typeof this.simplemde !== "undefined" && !this.editingMode && this.simplemde !== null) {
+                const contentBeforeClose = this.simplemde.value();
+                if (contentBeforeClose !== this.originalContent) {
+                    const editorEl = $(".CodeMirror");
+                    const editorPageName = editorEl.parents(".page-row").data("page-name");
+                    bootbox.dialog({
+                        title: "Warning",
+                        message: `There's an open editor in page ${editorPageName
+                            }. Are you sure you want to close it without saving?`,
+                        buttons: {
+                            confirm: {
+                                label: "Close",
+                                className: "btn-default",
+                                callback: () => {
+                                    this.simplemde.toTextArea();
+                                    this.simplemde = null;
+                                    this.toggleDivAndTextarea();
+                                }
+                            },
+                            cancel: {
+                                label: "Cancel",
+                                className: "btn-default",
+                                callback: () => {
+                                    this.editingMode = !this.editingMode; //Switch back to editing mode on cancel
+                                }
+                            },
+                            save: {
+                                label: "Save and close",
+                                className: "btn-default",
+                                callback: () => {
+                                    this.saveContents(this.currentTextId, contentBeforeClose);
+                                    thisClass.simplemde.toTextArea();
+                                    thisClass.simplemde = null;
+                                    thisClass.toggleDivAndTextarea();
+                                }
+                            }
+                        }
+                    });
+                } else if (contentBeforeClose === this.originalContent) {
+                    thisClass.simplemde.toTextArea();
+                    thisClass.simplemde = null;
+                    thisClass.toggleDivAndTextarea();
+                }
+            }
+        });
     }
 
     private editorChangePage(previousPageEl: JQuery, currentPageEl: JQuery) {
@@ -382,7 +387,10 @@
     }
 
     toggleDivAndTextarea = () => {
-        const pageRow = $(".page-row");
+        this.togglePageRows($(".page-row"));
+    }
+
+    togglePageRows = (pageRow: JQuery) => {
         const lazyloadedCompositionEl = pageRow.children(".composition-area");
         if (pageRow.hasClass("lazyloaded") && !lazyloadedCompositionEl.hasClass("lazyloaded")) {
             lazyloadedCompositionEl.addClass("lazyload");

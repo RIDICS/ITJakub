@@ -21,7 +21,7 @@
         if (content === null) {
             return null;
         }
-        const textId = commentAreaEl.parent(".page-row").data("page") as number;
+        const textId = commentAreaEl.parents(".page-row").data("page") as number;
         const threadsContainerStart = `<div class="threads-container">`;
         const threadStart = `<ul class="media-list">`;
         const threadEnd = `</ul>`;
