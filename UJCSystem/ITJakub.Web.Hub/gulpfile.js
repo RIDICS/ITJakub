@@ -336,7 +336,8 @@ gulp.task("bundle:ridics_admin_project-editor", function () {
 
 gulp.task("bundle:ridics_admin_text-editor", function () {
     return gulp.src([
-            paths.webroot + "Areas/Admin/js/text-editor/ridics.project.text-editor*.js"
+            paths.webroot + "Areas/Admin/js/text-editor/ridics.project.text-editor*.js",
+            "!" + paths.webroot + "Areas/Admin/js/text-editor/ridics.project.text-editor.bundle.js",
         ])
         .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("ridics.project.text-editor.bundle.js"))
@@ -347,7 +348,8 @@ gulp.task("bundle:ridics_admin_text-editor", function () {
 
 gulp.task("bundle:ridics_admin_page-image-viewer", function () {
     return gulp.src([
-            paths.webroot + "Areas/Admin/js/page-image-viewer/ridics.project.page-image-viewer*.js"
+            paths.webroot + "Areas/Admin/js/page-image-viewer/ridics.project.page-image-viewer*.js",
+            "!" + paths.webroot + "Areas/Admin/js/page-image-viewer/ridics.project.page-image-viewer.bundle.js"
         ])
         .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("ridics.project.page-image-viewer.bundle.js"))
@@ -358,7 +360,8 @@ gulp.task("bundle:ridics_admin_page-image-viewer", function () {
 
 gulp.task("bundle:ridics_admin_page-list-editor", function () {
     return gulp.src([
-            paths.webroot + "Areas/Admin/js/page-list-editor/ridics.project.page-list-editor*.js"
+            paths.webroot + "Areas/Admin/js/page-list-editor/ridics.project.page-list-editor*.js",
+            "!" + paths.webroot + "Areas/Admin/js/page-list-editor/ridics.project.page-list-editor.bundle.js"
         ])
         .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("ridics.project.page-list-editor.bundle.js"))
@@ -369,7 +372,8 @@ gulp.task("bundle:ridics_admin_page-list-editor", function () {
 
 gulp.task("bundle:ridics_admin_editors-common-base", function () {
     return gulp.src([
-            paths.webroot + "Areas/Admin/js/editors-common-base/ridics.project.editors*.js"
+            paths.webroot + "Areas/Admin/js/editors-common-base/ridics.project.editors*.js",
+            "!" + paths.webroot + "Areas/Admin/js/editors-common-base/ridics.project.editors.bundle.js",
         ])
         .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("ridics.project.editors.bundle.js"))
@@ -381,7 +385,8 @@ gulp.task("bundle:ridics_admin_editors-common-base", function () {
 gulp.task("bundle:ridics_admin_composition-key-table-editor", function () {
     return gulp.src([
             paths.webroot + "Areas/Admin/js/composition-key-table-editor/ridics.project.key-table-editor.table-base.js",
-            paths.webroot + "Areas/Admin/js/composition-key-table-editor/ridics.project.key-table-editor!(table-base)*.js"
+            paths.webroot + "Areas/Admin/js/composition-key-table-editor/ridics.project.key-table-editor!(table-base)*.js",
+            "!" + paths.webroot + "Areas/Admin/js/composition-key-table-editor/ridics.project.key-table-editor.bundle.js.js"
         ])
         .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("ridics.project.key-table-editor.bundle.js"))
