@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
 using Vokabular.MainService.DataContracts.Contracts.Search;
@@ -85,10 +86,10 @@ namespace Vokabular.MainService.Core.Managers
             return orderedResultList;
         }
 
-        public List<CorpusSearchResultContract> GetCorpusSearchResultByExternalIds(List<CorpusSearchResultData> list)
+        public List<CorpusSearchResultContract> GetCorpusSearchResultByExternalIds(List<CorpusSearchResultData> list, ProjectTypeEnum projectType)
         {
             var projectExternalIds = list.Select(x => x.ProjectExternalId);
-            var dbProjects = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByProjectExternalIds(projectExternalIds));
+            var dbProjects = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByProjectExternalIds(projectExternalIds, projectType));
             var bookDictionary = dbProjects.ToDictionary(x => x.Resource.Project.ExternalId);
 
             // Load all pages in one transaction
@@ -97,7 +98,7 @@ namespace Vokabular.MainService.Core.Managers
                 var result = new List<PageResource>();
                 foreach (var corpusSearchResultData in list)
                 {
-                    var page = repository.GetPagesByTextExternalId(new [] {corpusSearchResultData.PageResultContext.TextExternalId}, null, corpusSearchResultData.ProjectExternalId);
+                    var page = repository.GetPagesByTextExternalId(new [] {corpusSearchResultData.PageResultContext.TextExternalId}, corpusSearchResultData.ProjectExternalId, projectType);
                     result.Add(page.First());
                 }
 

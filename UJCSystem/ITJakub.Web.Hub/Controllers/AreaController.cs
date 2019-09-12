@@ -42,6 +42,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             var bookClient = GetBookClient();
             var categoryClient = GetCodeListClient();
+
             var categories = categoryClient.GetCategoryList();
             var books = bookClient.GetBooksByType(AreaBookType);
 

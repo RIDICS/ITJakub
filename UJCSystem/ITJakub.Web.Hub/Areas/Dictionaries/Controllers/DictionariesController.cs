@@ -65,7 +65,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             if (!string.IsNullOrEmpty(externalId)) // request to one specific book using externalId
             {
                 var client = GetBookClient();
-                var book = client.GetBookInfoByExternalId(externalId);
+                var book = client.GetBookInfoByExternalId(externalId, GetDefaultProjectType());
                 var bookArrId = $"[{book.Id}]";
 
                 return RedirectToAction("Listing", "Dictionaries", new {books = bookArrId});

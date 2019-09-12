@@ -689,7 +689,7 @@
             authorIdList: selectedAuthorIds,
             projectResponsiblePersonIdList: selectedResponsibleIds
         };
-        this.formMetadataObjectAndSendRequest(data, publisherText)
+        this.formMetadataObjectAndSendRequest(data, publisherText);
     }
 
     private formMetadataObjectAndSendRequest(contract: IOnlySaveMetadataResource, publisherText: string) {
@@ -819,7 +819,7 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
         return array.filter(item => seen.hasOwnProperty(item) ? false : (seen[item] = true));
     }
 
-    private categoryTree: any; //TODO investigate d ts
+    private categoryTree: Types.Tree;
 
     private parseExistingGenres() {
         const genresEl = $("#all-existing-genres");
@@ -919,7 +919,7 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
         this.createCategoriesNestedStructure();
 
         const categoryTreeElement = $("#category-tree");
-        this.categoryTree = (categoryTreeElement as any).tree({
+        this.categoryTree = categoryTreeElement.tree({
             primaryKey: "id",
             uiLibrary: "bootstrap",
             checkedField: "categorySelected",
@@ -988,7 +988,7 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
 
         var $saveButton = $("#work-categorization-save-button");
         $saveButton.click(() => {
-            this.saveMetadata();
+            this.saveCategorization();
         });
         $(".saving-icon", $saveButton).hide();
 
@@ -1011,7 +1011,7 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
             });
     }
 
-    private saveMetadata() {
+    private saveCategorization() {
         const keywordFailAlertEl = $("#work-categorization-keyword-fail");
         var selectedKindIds = new Array<number>();
         var selectedGenreIds = new Array<number>();
@@ -1041,7 +1041,7 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
             const allKeywordIds = keywordIdList.concat(newIds);
             const data: IOnlySaveCategorization = {
                 keywordIdList: allKeywordIds,
-                categoryIdList: this.categoryTree.getCheckedNodes(),
+                categoryIdList: this.convertToNumberArray(this.categoryTree.getCheckedNodes()),
                 literaryKindIdList: selectedKindIds,
                 literaryGenreIdList: selectedGenreIds
             };
@@ -1050,12 +1050,20 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
             keywordFailAlertEl.show().delay(3000).fadeOut(2000);
             const data: IOnlySaveCategorization = {
                 keywordIdList: keywordIdList,
-                categoryIdList: this.categoryTree.getCheckedNodes(),
+                categoryIdList: this.convertToNumberArray(this.categoryTree.getCheckedNodes()),
                 literaryKindIdList: selectedKindIds,
                 literaryGenreIdList: selectedGenreIds
             };
             this.formCategorizationObjectAndSendRequest(data);
         });
+    }
+
+    private convertToNumberArray(stringArray: string[]): number[] {
+        let array: number[] = [];
+        for (var i = 0; i < stringArray.length; i++) {
+            array.push(Number(stringArray[i]));
+        }
+        return array;
     }
 
     private formCategorizationObjectAndSendRequest(contract: IOnlySaveCategorization) {
