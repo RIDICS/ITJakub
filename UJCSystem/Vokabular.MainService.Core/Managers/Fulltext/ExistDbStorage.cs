@@ -419,5 +419,10 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         {
             throw new NotSupportedException("Paged search in corpus in eXist-db isn't supported.");
         }
+
+        public void CreateSnapshot(Snapshot snapshot, IList<TextResource> textResources, MetadataResource metadata)
+        {
+            throw new NotSupportedException("Snapshot creating is not supported in eXist-db.");
+        }
     }
 }
