@@ -50,7 +50,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             var client = GetProjectClient();
             const int start = 0;
-            var result = client.GetProjectList(start, ProjectListPageSize, null, true);
+            var result = client.GetProjectList(start, ProjectListPageSize, GetDefaultProjectType(), null, true);
             var viewModel = CreateProjectListViewModel(result, start);
             return View(viewModel);
         }
@@ -66,7 +66,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         public IActionResult ProjectListContent(int start, int count)
         {
             var client = GetProjectClient();
-            var result = client.GetProjectList(start, count, null, true);
+            var result = client.GetProjectList(start, count, GetDefaultProjectType(), null, true);
             var viewModel = CreateProjectListViewModel(result, start);
             return PartialView("_ProjectListContent", viewModel);
         }

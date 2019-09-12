@@ -13,7 +13,6 @@ using Moq;
 using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.ExternalBibliography;
 using Vokabular.OaiPmhImportManager;
 using Vokabular.OaiPmhImportManager.Model;
@@ -139,7 +138,7 @@ namespace Vokabular.ProjectImport.Test.IntegrationTests
             Assert.AreEqual(null, importHistory.Message);
             Assert.AreEqual(ImportStatusEnum.Completed, importHistory.Status);
 
-            var projects = m_projectRepository.GetProjectList(0, 5);
+            var projects = m_projectRepository.GetProjectList(0, 5, ProjectTypeEnum.Bibliography);
             Assert.AreEqual(1, projects.Count);
         }
 
@@ -178,7 +177,7 @@ namespace Vokabular.ProjectImport.Test.IntegrationTests
             Assert.AreEqual(null, importHistory.Message);
             Assert.AreEqual(ImportStatusEnum.Completed, importHistory.Status);
 
-            var projects = m_projectRepository.GetProjectList(0, 5);
+            var projects = m_projectRepository.GetProjectList(0, 5, ProjectTypeEnum.Bibliography);
             Assert.AreEqual(2, projects.Count);
         }
 
@@ -223,7 +222,7 @@ namespace Vokabular.ProjectImport.Test.IntegrationTests
                 Assert.AreEqual(ImportStatusEnum.Completed, importHistory.Status);
             }
 
-            var projects = m_projectRepository.GetProjectList(0, 5);
+            var projects = m_projectRepository.GetProjectList(0, 5, ProjectTypeEnum.Bibliography);
             Assert.AreEqual(2, projects.Count);
         }
 
@@ -280,7 +279,7 @@ namespace Vokabular.ProjectImport.Test.IntegrationTests
             Assert.AreNotEqual(null, importHistory2.Message);
             Assert.AreEqual(ImportStatusEnum.Failed, importHistory2.Status);
 
-            var projects = m_projectRepository.GetProjectList(0, 5);
+            var projects = m_projectRepository.GetProjectList(0, 5, ProjectTypeEnum.Bibliography);
             Assert.AreEqual(1, projects.Count);
         }
 
