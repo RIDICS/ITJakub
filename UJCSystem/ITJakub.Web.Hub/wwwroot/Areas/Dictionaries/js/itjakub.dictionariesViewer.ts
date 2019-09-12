@@ -21,6 +21,8 @@
 
     private localization : Localization;
 
+    private loadingItemsElement: string = '<div class="lv-circles lv-mid sm"></div>';
+
     constructor(headwordListContainer: string, paginationContainer: string, headwordDescriptionContainer: string, lazyLoad: boolean) {
         this.headwordDescriptionContainer = headwordDescriptionContainer;
         this.paginationContainer = paginationContainer;
@@ -128,11 +130,11 @@
         var backgroundDiv1 = document.createElement("div");
         var backgroundDiv2 = document.createElement("div");
         var loadingDiv = document.createElement("div");
+        $(loadingDiv).addClass("lv-dots lv-mid md");
 
         $(backgroundDiv1).addClass("dictionary-loading");
         $(backgroundDiv2).addClass("dictionary-loading");
         $(backgroundDiv1).append(loadingDiv);
-        $(loadingDiv).addClass("loader");
         $(this.headwordListContainer).append(backgroundDiv1);
         $(this.headwordDescriptionContainer).append(backgroundDiv2);
     }
@@ -189,6 +191,8 @@
                 // create description
                 var mainHeadwordDiv = document.createElement("div");
 
+                $(mainHeadwordDiv).append($(this.loadingItemsElement));
+
                 if (dictionary.pageId) { //image may be exists
                     var imageCheckBoxDiv = document.createElement("div");
                     var imageCheckBox = document.createElement("input");
@@ -222,7 +226,7 @@
                 $(imageContainerDiv).addClass("dictionary-entry-image");
 
                 var descriptionDiv = document.createElement("div");
-                $(mainHeadwordDiv).addClass("loading-background");
+                
                 $(descriptionDiv).addClass("dictionary-entry-description-container");
                 
                 var commentsDiv = document.createElement("div");
@@ -289,6 +293,7 @@
     private updateImageVisibility(checkBox: HTMLInputElement) {
         var mainDiv = $(checkBox).closest("[data-entry-index]");
         var imageContainer = $(".dictionary-entry-image", mainDiv);
+        var loadingElement = '<div class="lv-circles lv-mid tiny"></div>';
         if (checkBox.checked) {
             if (imageContainer.hasClass("hidden")) {
                 imageContainer.removeClass("hidden");
@@ -302,12 +307,11 @@
             imageElement.setAttribute("src", imageLink);
             imageContainer.append(imageElement);
 
-            $(imageContainer).addClass("loading");
+            $(imageContainer).html(loadingElement);
             imageElement.onload = () => {
-                $(imageContainer).removeClass("loading");
+                $(imageContainer).empty();
             };
             imageElement.onerror = () => {
-                $(imageContainer).removeClass("loading");
                 $(imageContainer).empty();
 
                 var errorDiv = document.createElement("div");
@@ -372,7 +376,7 @@
 
     private showLoadHeadword(response: string, container: HTMLDivElement) {
         $(container).empty();
-        $(container).parent().removeClass("loading-background");
+        $(container).siblings().remove('.lv-circles');
         container.innerHTML = response;
         if (this.isRequestToPrint)
             this.print();
@@ -380,7 +384,7 @@
 
     private showLoadError(headword: string, container: HTMLDivElement) {
         $(container).empty();
-        $(container).parent().removeClass("loading-background");
+        $(container).siblings().remove('.lv-circles');
 
         var errorDiv = document.createElement("div");
         //$(errorDiv).text("Chyba při náčítání hesla '" + headword + "'.");
@@ -395,7 +399,7 @@
 
     private loadImageOnError(index: number, container: HTMLDivElement) {
         $(container).empty();
-        $(container).parent().removeClass("loading-background");
+        $(container).siblings().remove('.lv-circles');
 
         var mainDiv = this.headwordDescriptionDivs[index];
         var headwordDescriptionContainer = $(".dictionary-entry-description-container", mainDiv);
@@ -485,7 +489,7 @@
 
     private isAllLoaded(): boolean {
         var descriptions = $(this.headwordDescriptionContainer);
-        var notLoaded = $(".loading-background", descriptions);
+        var notLoaded = $(".lv-circles", descriptions);
         var notLoadedVisible = notLoaded.filter(":not(.hidden)");
         return notLoadedVisible.length === 0;
     }
