@@ -25,7 +25,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
         public List<long> ImportedResourceVersionIds => m_allImportedResourceVersionIds;
 
-        public void UpdatePages(long projectId, long bookVersionId, int userId, string comment, BookData bookData, Dictionary<string, Term> dbTermCache)
+        public void UpdatePages(long projectId, long bookVersionId, int userId, BookData bookData, Dictionary<string, Term> dbTermCache)
         {
             m_allImportedResourceVersionIds = new List<long>();
             if (bookData.Pages == null)
@@ -68,7 +68,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     {
                         Resource = newResource,
                         Name = page.Text,
-                        Comment = comment,
+                        Comment = string.Empty,
                         CreateTime = now,
                         CreatedByUser = user,
                         Position = page.Position,
@@ -88,7 +88,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         dbPageResource.Position = page.Position;
                         dbPageResource.CreateTime = now;
                         dbPageResource.CreatedByUser = user;
-                        dbPageResource.Comment = comment;
+                        dbPageResource.Comment = string.Empty;
                         dbPageResource.Terms = PrepareTermList(page.TermXmlIds, dbTermCache);
                         // Update resource name is not required (PageResources are distinguish by name)
 
@@ -102,7 +102,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     var newTextResource = new TextResource
                     {
                         Resource = null,
-                        Comment = comment,
+                        Comment = string.Empty,
                         CreateTime = now,
                         CreatedByUser = user,
                         ExternalId = page.XmlId,
@@ -124,7 +124,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     var newImageResource = new ImageResource
                     {
                         Resource = null,
-                        Comment = comment,
+                        Comment = string.Empty,
                         CreateTime = now,
                         CreatedByUser = user,
                         FileName = page.Image,
