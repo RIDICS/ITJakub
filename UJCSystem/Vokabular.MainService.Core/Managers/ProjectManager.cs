@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
@@ -11,6 +12,7 @@ using Vokabular.MainService.Core.Works;
 using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
 using AuthRoleContract = Ridics.Authentication.DataContracts.RoleContract;
 using Vokabular.Shared.DataEntities.UnitOfWork;
@@ -62,12 +64,14 @@ namespace Vokabular.MainService.Core.Managers
             throw new NotImplementedException();
         }
 
-        public PagedResultList<ProjectDetailContract> GetProjectList(int? start, int? count, string filterByName, bool fetchPageCount, bool fetchAuthors, bool fetchResponsiblePersons)
+        public PagedResultList<ProjectDetailContract> GetProjectList(int? start, int? count, ProjectTypeContract? projectType,
+            string filterByName, bool fetchPageCount, bool fetchAuthors, bool fetchResponsiblePersons)
         {
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCountForProject(count);
+            var projectTypeEnum = m_mapper.Map<ProjectTypeEnum?>(projectType);
 
-            var work = new GetProjectListWork(m_projectRepository, m_metadataRepository, startValue, countValue, filterByName, fetchPageCount, fetchAuthors, fetchResponsiblePersons);
+            var work = new GetProjectListWork(m_projectRepository, m_metadataRepository, startValue, countValue, projectTypeEnum, filterByName, fetchPageCount, fetchAuthors, fetchResponsiblePersons);
             var resultEntities = work.Execute();
 
             var metadataList = work.GetMetadataResources();

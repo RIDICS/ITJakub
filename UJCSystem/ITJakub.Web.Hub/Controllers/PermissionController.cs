@@ -84,7 +84,7 @@ namespace ITJakub.Web.Hub.Controllers
             search = search ?? string.Empty;
 
             var client = GetProjectClient();
-            var result = client.GetProjectList(start, count, search);
+            var result = client.GetProjectList(start, count, GetDefaultProjectType(), search);
             var model = new ListViewModel<ProjectDetailContract>
             {
                 TotalCount = result.TotalCount,

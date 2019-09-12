@@ -16,7 +16,7 @@ using ITJakub.Web.Hub.Options;
 
 namespace ITJakub.Web.Hub.Controllers
 {
-    [LimitedAccess(PortalType.ResearchPortal)]
+    //[LimitedAccess(PortalType.ResearchPortal)]
     [Authorize(VokabularPermissionNames.UploadBook)]
     public class UploadController : BaseController
     {
