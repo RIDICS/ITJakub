@@ -424,15 +424,23 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [HttpGet("{projectId}/edition-note")]
-        public IActionResult GetEditionNote(long projectId, [FromQuery] TextFormatEnumContract? format)
+        [HttpGet("{projectId}/edition-note/text")]
+        public IActionResult GetEditionNoteText(long projectId, [FromQuery] TextFormatEnumContract? format)
         {
             var formatValue = format ?? TextFormatEnumContract.Html;
-            var result = m_bookManager.GetEditionNote(projectId, formatValue);
+            var result = m_bookManager.GetEditionNoteText(projectId, formatValue);
             if (result == null)
                 return NotFound();
 
             return Content(result);
+        }
+
+        [HttpGet("{projectId}/edition-note")]
+        public EditionNoteContract GetEditionNote(long projectId, [FromQuery] TextFormatEnumContract? format)
+        {
+            var formatValue = format ?? TextFormatEnumContract.Html;
+            var result = m_bookManager.GetEditionNote(projectId, formatValue);
+            return result;
         }
 
         [HttpGet("info")]

@@ -184,7 +184,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var client = GetProjectClient();
             var data = new CreateEditionNoteContract
             {
-                Text = request.Content
+                Text = request.Content,
+                OriginalVersionId = request.OriginalVersionId
             };
             client.CreateEditionNote(request.ProjectId, data);
             return AjaxOkResponse();

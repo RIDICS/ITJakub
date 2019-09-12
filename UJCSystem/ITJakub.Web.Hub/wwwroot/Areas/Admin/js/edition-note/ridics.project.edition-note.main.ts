@@ -1,5 +1,6 @@
 ﻿class EditionNote {
-    private readonly projectId;
+    private readonly projectId: number;
+    private editionNoteVersionId?: number;
     private simpleMde: SimpleMDE;
     private simpleMdeIcons: SimpleMdeTools;
     private util: EditorsUtil;
@@ -8,6 +9,7 @@
 
     constructor(projectId: number) {
         this.projectId = projectId;
+        this.errorHandler = new ErrorHandler();
     }
 
     init() {
@@ -17,14 +19,24 @@
         this.alertHolder = noteTab.find(".alert-holder");
         const noteEditorLoader = noteTab.find(".loader");    
 
-        this.util.loadEditionNote(this.projectId).done((note: string) => {
-            this.initEditorOnTextarea(note);
+        this.util.loadEditionNote(this.projectId).done((result) => {
+            if (result !== null) {
+                this.initEditorOnTextarea(result.text);
+                this.editionNoteVersionId = result.versionId;
+            } else {
+                this.initEditorOnTextarea("");
+                this.editionNoteVersionId = null;
+            }
         }).fail((error) => {
             const alert = new AlertComponentBuilder(AlertType.Error)
                 .addContent(this.errorHandler.getErrorMessage(error, localization.translate("EditionNoteLoadFailed", "RidicsProject").value));
             this.alertHolder.empty().append(alert.buildElement());
         }).always(() => {
             noteEditorLoader.addClass("hide");
+        });
+
+        $("#saveNote").click(() => {
+            this.saveNote(this.simpleMde.value());
         });
     }
 
@@ -64,10 +76,12 @@
     }
 
     private saveNote(noteValue: string) {
-        const request: IEditionNote = {
+        const request: ICreateEditionNote = {
             projectId: this.projectId,
-            content: noteValue
+            content: noteValue,
+            originalVersionId: this.editionNoteVersionId
         };
+        this.alertHolder.empty();
         this.util.saveEditionNote(request).done(() => {
             const error = new AlertComponentBuilder(AlertType.Success).addContent(localization.translate("EditionNoteSaveSuccess", "RidicsProject").value);
             this.alertHolder.empty().append(error.buildElement());

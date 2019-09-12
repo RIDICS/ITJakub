@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
@@ -28,6 +30,15 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
             var now = DateTime.UtcNow;
             var user = m_resourceRepository.Load<User>(m_userId);
             var latestEditionNote = m_resourceRepository.GetLatestEditionNote(m_projectId);
+
+            if (latestEditionNote != null && latestEditionNote.Id != m_data.OriginalVersionId)
+            {
+                throw new MainServiceException(
+                    MainServiceErrorCode.EditionNoteConflict,
+                    $"Conflict. Current latest versionId is {latestEditionNote.Id}, but originalVersionId was specified {m_data.OriginalVersionId}",
+                    HttpStatusCode.Conflict
+                );
+            }
 
             if (latestEditionNote == null)
             {
