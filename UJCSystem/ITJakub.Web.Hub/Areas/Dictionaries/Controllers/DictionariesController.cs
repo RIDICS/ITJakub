@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using ITJakub.Web.Hub.Areas.Dictionaries.Models;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
@@ -23,6 +24,8 @@ using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 using ITJakub.Web.Hub.Options;
+using Vokabular.MainService.DataContracts;
+using Vokabular.RestClient.Errors;
 
 namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 {
@@ -59,7 +62,14 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult Listing(string externalId /*, string books*/) // the books parameter is used in JavaScript
         {
-            if (!string.IsNullOrEmpty(externalId)) // request to one specific book using externalId
+            if (string.IsNullOrEmpty(externalId))
+            {
+                // show all dictionaries
+                return View();
+            }
+
+            // if externalId is specified, redirect to loading only one book by projectId:
+            try
             {
                 var client = GetBookClient();
                 var book = client.GetBookInfoByExternalId(externalId, GetDefaultProjectType());
@@ -67,8 +77,14 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
                 return RedirectToAction("Listing", "Dictionaries", new {books = bookArrId});
             }
-
-            return View();
+            catch (HttpErrorCodeException exception)
+            {
+                if (exception.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return NotFound();
+                }
+                throw;
+            }
         }
 
         public ActionResult Help()
