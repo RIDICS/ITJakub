@@ -57,11 +57,8 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return View();
         }
 
-        public ActionResult Listing(string xmlId, string externalId) // string[] books - this parameter is used in JavaScript
+        public ActionResult Listing(string externalId /*, string books*/) // the books parameter is used in JavaScript
         {
-            // xmlId paramater is for already existing hyperlinks, new parameter is externalId
-            externalId = externalId ?? xmlId;
-
             if (!string.IsNullOrEmpty(externalId)) // request to one specific book using externalId
             {
                 var client = GetBookClient();
