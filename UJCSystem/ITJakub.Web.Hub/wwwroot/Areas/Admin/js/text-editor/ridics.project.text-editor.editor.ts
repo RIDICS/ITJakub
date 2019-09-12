@@ -7,6 +7,7 @@
     private readonly util: EditorsUtil;
     private readonly commentArea: CommentArea;
     private commentInputDialog: BootstrapDialogWrapper;
+    private isPreviewRendering = false;
 
     private commentIdPattern =
         "([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}";
@@ -287,30 +288,45 @@
             spellChecker: false,
             mode: "gfm",
             toolbar: [
-                "bold", "italic", "|", "unordered-list", "ordered-list", "|", "heading-1", "heading-2", "heading-3",
-                "|", "quote", "preview", "horizontal-rule", "|", {
+                {
+                    name: "save",
+                    action: (editor) => { this.saveContents(textId, editor.value()) },
+                    className: "fa fa-floppy-o",
+                    title: "Save"
+                }, "|", "bold", "italic", "|", "unordered-list", "ordered-list", "|", "heading-1", "heading-2", "heading-3",
+                "|", "quote",
+                {
+                    name: "preview",
+                    action: (editor: SimpleMDE) => {
+                        simpleMdeOptions.previewRender = (plainText: string, preview: HTMLElement) => {
+                            this.previewRemoteRender(plainText, preview);
+                            return "<div class=\"loading\"></div>";
+                        };
+                        SimpleMDE.togglePreview(editor);
+                    },
+                    className: "fa fa-eye no-disable",
+                    title: localization.translate("TogglePreview", "ItJakubJs").value
+                },
+                "horizontal-rule", "|", {
                     name: "comment",
                     action: ((editor) => {
                         this.toggleCommentFromEditor(editor, true);
                     }),
                     className: "fa fa-comment",
                     title: "Add comment"
-                },
+                }
                 //{Temporarily hide while there is no markdown manual yet
                 //    name: "help",
                 //    action: (() => { this.openMarkdownHelp(); }),
                 //    className: "fa fa-question-circle",
                 //    title: "Markdown help"
                 //},
-                "|", {
-                    name: "save",
-                    action: (editor) => { this.saveContents(textId, editor.value()) },
-                    className: "fa fa-floppy-o",
-                    title: "Save"
-                }
+               
             ]
         };
+
         this.simplemde = new SimpleMDE(simpleMdeOptions);
+       
         const commentIdRegex = new RegExp(`${this.commentIdPattern}`);
         const commentBeginRegex = new RegExp(`(\\$${this.commentIdPattern}\\%)`);
         const commentEndRegex = new RegExp(`(\\%${this.commentIdPattern}\\$)`);
@@ -335,6 +351,34 @@
         this.simplemde.codemirror.focus();
         this.commentArea.updateCommentAreaHeight(jEl);
         this.commentArea.toggleAreaSizeIconHide(jEl.children(".comment-area"));
+
+       
+    }
+
+    private previewRemoteRender(text: string, previewElement: HTMLElement) {
+        if (this.isPreviewRendering) {
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Text/RenderPreview",
+            data: JSON.stringify({
+                text: text,
+                inputTextFormat: "markdown"
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            success: (generatedHtml) => {
+                previewElement.innerHTML = generatedHtml;
+                this.isPreviewRendering = false;
+            },
+            error: () => {
+                previewElement.innerHTML = "<div>" + localization.translate("RenderError", "ItJakubJs").value + "</div>";
+                this.isPreviewRendering = false;
+            }
+        });
     }
 
     toggleDivAndTextarea = () => {
