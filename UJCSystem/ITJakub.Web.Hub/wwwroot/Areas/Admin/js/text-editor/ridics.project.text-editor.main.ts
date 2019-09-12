@@ -53,7 +53,7 @@ class TextEditorMain {
                         }]</div>`;
                     $(".pages-start")
                         .append(
-                            `<div class="row page-row lazyload" data-page="${textProjectPage.id}" data-page-name="${
+                            `<div class="page-splitter"></div><div class="row page-row lazyload" data-page="${textProjectPage.id}" data-page-name="${
                             textProjectPage.parentPage.name
                             }">${pageNameDiv}${compositionAreaDiv}${
                             commentAreaDiv}</div>`);
