@@ -2,6 +2,7 @@
     private paginator: Pagination;
     private newsOnPage = 5;
     private newsContainer: HTMLElement;
+    private loaderElement: string = '<div class="lv-dots md lv-mid lvt-3 lvb-3"></div>';
 
     public initNews() {
         this.paginator = new Pagination({
@@ -78,10 +79,10 @@
     }
 
     private clearLoading() {
-        $(this.newsContainer).removeClass("loader");
+        $(this.newsContainer).empty();
     }
 
     private showLoading() {
-        $(this.newsContainer).addClass("loader");
+        $(this.newsContainer).html(this.loaderElement);
     }
 }
