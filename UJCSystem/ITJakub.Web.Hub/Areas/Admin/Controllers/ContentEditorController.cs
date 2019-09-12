@@ -30,7 +30,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return Json(guid);
         }
 
-        [HttpPost]
         public IActionResult LoadCommentFile(long textId)
         {
             var parts = new List<CommentStructureResponse>();
