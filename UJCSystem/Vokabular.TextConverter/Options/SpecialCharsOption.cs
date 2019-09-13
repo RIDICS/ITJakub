@@ -1,4 +1,4 @@
-﻿namespace Vokabular.FulltextService.Core.Options
+﻿namespace Vokabular.TextConverter.Options
 {
     public class SpecialCharsOption
     {

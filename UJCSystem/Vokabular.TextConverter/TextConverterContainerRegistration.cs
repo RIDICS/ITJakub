@@ -1,14 +1,16 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Vokabular.TextConverter.Converters;
+using Vokabular.TextConverter.Html;
+using Vokabular.TextConverter.Markdown;
 
 namespace Vokabular.TextConverter
 {
     public static class TextConverterContainerRegistration 
     {
-        public static void AddTextConverterServices(this IServiceCollection container)
+        public static void AddTextConverterServices(this IServiceCollection services)
         {
-            container.AddScoped<IMarkdownToHtmlConverter, MarkdigMarkdownToHtmlConverter>();
-            container.AddScoped<ITextConverter, TextConverter>();
+            services.AddScoped<IMarkdownToHtmlConverter, MarkdigMarkdownToHtmlConverter>();
+            services.AddScoped<IHtmlToPlainTextConverter, HtmlToPlainTextConverter>();
+            services.AddScoped<IMarkdownToPlainTextConverter, MarkdownToPlainTextConverter>();
         }
     }
 }

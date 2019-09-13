@@ -5,7 +5,7 @@ using Vokabular.MainService.Core.Works.ProjectItem;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataEntities.UnitOfWork;
-using Vokabular.TextConverter;
+using Vokabular.TextConverter.Markdown;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -15,19 +15,18 @@ namespace Vokabular.MainService.Core.Managers
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
         private readonly AuthorizationManager m_authorizationManager;
         private readonly AuthenticationManager m_authenticationManager;
-        private readonly ITextConverter m_textConverter;
+        private readonly IMarkdownToHtmlConverter m_markdownConverter;
         private readonly IMapper m_mapper;
 
-
         public EditionNoteManager(ResourceRepository resourceRepository, FulltextStorageProvider fulltextStorageProvider,
-            AuthorizationManager authorizationManager, AuthenticationManager authenticationManager, ITextConverter textConverter,
-            IMapper mapper)
+            AuthorizationManager authorizationManager, AuthenticationManager authenticationManager,
+            IMarkdownToHtmlConverter markdownConverter, IMapper mapper)
         {
             m_resourceRepository = resourceRepository;
             m_fulltextStorageProvider = fulltextStorageProvider;
             m_authorizationManager = authorizationManager;
             m_authenticationManager = authenticationManager;
-            m_textConverter = textConverter;
+            m_markdownConverter = markdownConverter;
             m_mapper = mapper;
         }
 
@@ -43,7 +42,19 @@ namespace Vokabular.MainService.Core.Managers
 
             if (!string.IsNullOrEmpty(editionNoteResource.Text))
             {
-                contract.Text = m_textConverter.ConvertText(editionNoteResource.Text, format);
+                switch (format)
+                {
+                    case TextFormatEnumContract.Html:
+                    {
+                        contract.Text = m_markdownConverter.ConvertToHtml(editionNoteResource.Text);
+                        break;
+                    }
+                    default:
+                    {
+                        contract.Text = editionNoteResource.Text;
+                        break;
+                    }
+                }
             }
             else
             {

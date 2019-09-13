@@ -1,6 +1,6 @@
-﻿using Vokabular.FulltextService.Core.Helpers.Hml;
+﻿using Vokabular.TextConverter.Html;
 
-namespace Vokabular.FulltextService.Core.Helpers.Markdown
+namespace Vokabular.TextConverter.Markdown
 {
     public class MarkdownToPlainTextConverter : IMarkdownToPlainTextConverter
     {

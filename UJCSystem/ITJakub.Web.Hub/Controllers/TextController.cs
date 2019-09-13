@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Scalesoft.Localization.AspNetCore;
 using Vokabular.Shared.Const;
-using Vokabular.TextConverter.Converters;
+using Vokabular.TextConverter.Markdown;
 
 namespace ITJakub.Web.Hub.Controllers
 {

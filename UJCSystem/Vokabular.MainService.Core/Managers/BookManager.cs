@@ -19,7 +19,6 @@ using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataEntities.UnitOfWork;
-using Vokabular.TextConverter;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -27,7 +26,6 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly MetadataRepository m_metadataRepository;
         private readonly BookRepository m_bookRepository;
-        private readonly ResourceRepository m_resourceRepository;
         private readonly PermissionRepository m_permissionRepository;
         private readonly FileSystemManager m_fileSystemManager;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
@@ -36,21 +34,19 @@ namespace Vokabular.MainService.Core.Managers
         private readonly CommunicationProvider m_communicationProvider;
         private readonly CategoryRepository m_categoryRepository;
         private readonly ForumSiteUrlHelper m_forumSiteUrlHelper;
-        private readonly ITextConverter m_textConverter;
         private readonly IMapper m_mapper;
         private readonly BookTypeEnum[] m_filterBookType;
-        
+
 
         public BookManager(MetadataRepository metadataRepository, CategoryRepository categoryRepository,
-            BookRepository bookRepository, ResourceRepository resourceRepository, PermissionRepository permissionRepository,
-            FileSystemManager fileSystemManager, FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager,
+            BookRepository bookRepository, PermissionRepository permissionRepository, FileSystemManager fileSystemManager,
+            FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager,
             AuthenticationManager authenticationManager, CommunicationProvider communicationProvider, ForumSiteUrlHelper forumSiteUrlHelper,
-            ITextConverter textConverter, IMapper mapper)
+            IMapper mapper)
         {
             m_metadataRepository = metadataRepository;
             m_categoryRepository = categoryRepository;
             m_bookRepository = bookRepository;
-            m_resourceRepository = resourceRepository;
             m_permissionRepository = permissionRepository;
             m_fileSystemManager = fileSystemManager;
             m_fulltextStorageProvider = fulltextStorageProvider;
@@ -58,7 +54,6 @@ namespace Vokabular.MainService.Core.Managers
             m_authenticationManager = authenticationManager;
             m_communicationProvider = communicationProvider;
             m_forumSiteUrlHelper = forumSiteUrlHelper;
-            m_textConverter = textConverter;
             m_mapper = mapper;
             m_filterBookType = new[] {BookTypeEnum.CardFile};
         }
@@ -73,7 +68,7 @@ namespace Vokabular.MainService.Core.Managers
         }
 
         public List<BookContract> GetAllBooksByType(BookTypeEnumContract bookType)
-        {           
+        {
             var bookTypeEnum = m_mapper.Map<BookTypeEnum>(bookType);
             var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetAllMetadataByBookType(bookTypeEnum));
             var resultList = m_mapper.Map<List<BookContract>>(dbMetadataList);
@@ -337,7 +332,8 @@ namespace Vokabular.MainService.Core.Managers
             if (request.Category.BookType == null)
                 throw new MainServiceException(MainServiceErrorCode.NullBookTypeNotSupported, "Null value of BookType is not supported");
 
-            var searchHeadwordRowNumberWork = new SearchHeadwordRowNumberWork(m_bookRepository, m_categoryRepository, request, userId, projectTypeEnum, m_mapper);
+            var searchHeadwordRowNumberWork =
+                new SearchHeadwordRowNumberWork(m_bookRepository, m_categoryRepository, request, userId, projectTypeEnum, m_mapper);
             var result = searchHeadwordRowNumberWork.Execute();
 
             return result;
