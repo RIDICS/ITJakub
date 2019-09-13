@@ -77,10 +77,10 @@
         "$editionTable": {
           "type": "table",
           "printRowIfNullValue": true,
-          "replaceNullValueBy": "&lt;{@Nezadáno}&gt;",
+          "replaceNullValueBy": "NotFilled",
           "rows": [
             {
-              "label": "Editon",
+              "label": "Editor",
               "pattern": "{$editor}"
             },
             {
