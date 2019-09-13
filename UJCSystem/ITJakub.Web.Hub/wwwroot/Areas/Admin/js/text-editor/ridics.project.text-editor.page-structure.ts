@@ -13,13 +13,20 @@
 
     loadSection(targetEl: JQuery) {
         if (targetEl.hasClass("composition-area")) {
-            const isEditingMode = this.editor.getIsEditingMode();
+            const pageRow = targetEl.parent(".page-row");
+            const isEditingMode = pageRow.data(this.editor.getEditModeSelector());
+
+            let ajax;
             if (isEditingMode) {
-                this.appendPlainText(targetEl.parent(".page-row"));
+                ajax = this.appendPlainText(pageRow);
             }
             if (!isEditingMode) {
-                this.appendRenderedText(targetEl.parent(".page-row"));
+                ajax = this.appendRenderedText(pageRow);
             }
+
+            ajax.always(() => {
+                this.commentArea.updateCommentAreaHeight(pageRow);
+            });
         }
 
         if (targetEl.hasClass("comment-area")) {
@@ -29,11 +36,12 @@
 
     loadPage(pageEl: JQuery) {
         const commentArea = pageEl.children(".comment-area");
-        const isEditingMode = this.editor.getIsEditingMode();
+        const isEditingMode = pageEl.data(this.editor.getEditModeSelector());
         if (isEditingMode) {
             const ajax = this.appendPlainText(pageEl);
             const ajax2 = this.commentArea.asyncConstructCommentArea(commentArea);
             $.when(ajax, ajax2).done(() => {
+                this.commentArea.updateCommentAreaHeight(pageEl);
                 this.commentArea.collapseIfCommentAreaIsTall(commentArea, true, true);
             });
         }
@@ -41,6 +49,7 @@
             const ajax = this.appendRenderedText(pageEl);
             const ajax2 = this.commentArea.asyncConstructCommentArea(commentArea);
             $.when(ajax, ajax2).done(() => {
+                this.commentArea.updateCommentAreaHeight(pageEl);
                 this.commentArea.collapseIfCommentAreaIsTall(commentArea, true, true);
             });
         }
@@ -87,6 +96,10 @@
             compositionAreaEl.attr({ "data-id": id, "data-version-number": versionNumber } as JQuery.PlainObject);
             var event = $.Event("pageConstructed", { page: textId });
             textAreaEl.trigger(event);
+            if (pageEl.hasClass("init-editor")) {
+                pageEl.removeClass("init-editor");
+                this.editor.changeOrInitEditor(pageEl);
+            }
         });
         plainText.fail(() => {
             textAreaEl.val(localization.translate("ContentLoadFailed", "RidicsProject").value);

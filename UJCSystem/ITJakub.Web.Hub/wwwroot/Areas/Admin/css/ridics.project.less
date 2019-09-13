@@ -1003,6 +1003,15 @@ table {
                         background: rgba(255,0,0,0.4);
                     }
 
+                    .CodeMirror,
+                    .editor-toolbar {
+                        border-radius: 0;
+
+                        a {
+                            border-radius: 0;
+                        }
+                    }
+
                     .comment-area {
                         min-height: @comment-area-min-height;
                         position: relative;
@@ -1115,7 +1124,7 @@ table {
 
                             & textarea {
                                 width: 100%;
-                                min-height: 100px;
+                                min-height: 170px;
                             }
                         }
 

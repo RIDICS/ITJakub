@@ -43,6 +43,8 @@
     "NoImageOnPage": "There is no image on this page",
     "NoComments": "No comments yet.",
     "ToggleEditingMode": "Toggle editing mode",
+    "TurnOnEditingMode": "Turn on editing mode",
+    "TurnOffEditingMode": "Turn off editing mode",
     "DisplayPageNumbers": "Display page numbers",
     "GoToPage": "Go to page...",
     "UploadNewVersion": "Upload new version",

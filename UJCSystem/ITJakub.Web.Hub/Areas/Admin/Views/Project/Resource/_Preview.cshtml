@@ -2,8 +2,11 @@
 @inject ILocalizationService Localization
 <div id="project-resource-preview">
     <div class="toggle-mode-panel container-fluid text-center">
-        <button type="button" class="btn btn-default editing-mode-button">
-            @Localization.Translate("ToggleEditingMode", "RidicsProject")
+        <button type="button" class="btn btn-default turn-on-editing-mode">
+            @Localization.Translate("TurnOnEditingMode", "RidicsProject")
+        </button>
+        <button type="button" class="btn btn-default turn-off-editing-mode hide">
+            @Localization.Translate("TurnOffEditingMode", "RidicsProject")
         </button>
     </div>
     <div id="page-slider" class="text-editor-page-slider">
