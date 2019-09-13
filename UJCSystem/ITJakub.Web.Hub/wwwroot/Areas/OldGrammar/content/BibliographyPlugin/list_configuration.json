@@ -169,9 +169,6 @@
       }
     },
     "right-panel": {
-      "info-button": {
-        "onclick-callable": "listGrammarBookReadClicked(this)"
-      },
       "read-button": {
         "onclick-callable": "listGrammarBookReadClicked(this)"
       },

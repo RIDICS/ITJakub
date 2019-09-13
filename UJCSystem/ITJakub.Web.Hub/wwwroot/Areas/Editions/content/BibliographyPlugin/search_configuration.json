@@ -169,9 +169,6 @@
       }
     },
     "right-panel": {
-      "info-button": {
-        "onclick-callable": "searchBookReadClicked(this)"
-      },
       "read-button": {
         "onclick-callable": "searchBookReadClicked(this)"
       },
