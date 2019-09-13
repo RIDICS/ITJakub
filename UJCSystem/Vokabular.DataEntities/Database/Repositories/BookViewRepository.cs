@@ -12,9 +12,9 @@ using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
 {
-    public class BookRepository : MainDbRepositoryBase
+    public class BookViewRepository : MainDbRepositoryBase
     {
-        public BookRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
+        public BookViewRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
         }
 

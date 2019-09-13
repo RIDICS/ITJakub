@@ -9,10 +9,10 @@ namespace Vokabular.MainService.Core.Works.Search
     public class GetAudioBookDetailWork : UnitOfWorkBase<MetadataResource>
     {
         private readonly MetadataRepository m_metadataRepository;
-        private readonly BookRepository m_bookRepository;
+        private readonly BookViewRepository m_bookRepository;
         private readonly long m_projectId;
 
-        public GetAudioBookDetailWork(MetadataRepository metadataRepository, BookRepository bookRepository, long projectId) : base(metadataRepository)
+        public GetAudioBookDetailWork(MetadataRepository metadataRepository, BookViewRepository bookRepository, long projectId) : base(metadataRepository)
         {
             m_metadataRepository = metadataRepository;
             m_bookRepository = bookRepository;

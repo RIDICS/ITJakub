@@ -8,7 +8,7 @@ using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
-namespace Vokabular.DataEntities.Database.Repositories
+namespace Vokabular.DataEntities.Database.Repositories.BibliographyImport
 {
     public class ExternalRepositoryRepository : MainDbRepositoryBase
     {

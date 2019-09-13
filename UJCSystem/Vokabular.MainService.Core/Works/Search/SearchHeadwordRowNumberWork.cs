@@ -9,14 +9,14 @@ namespace Vokabular.MainService.Core.Works.Search
 {
     public class SearchHeadwordRowNumberWork : UnitOfWorkBase<long>
     {
-        private readonly BookRepository m_bookRepository;
+        private readonly BookViewRepository m_bookRepository;
         private readonly CategoryRepository m_categoryRepository;
         private readonly HeadwordRowNumberSearchRequestContract m_request;
         private readonly int m_userId;
         private readonly ProjectTypeEnum m_projectType;
         private readonly IMapper m_mapper;
 
-        public SearchHeadwordRowNumberWork(BookRepository bookRepository, CategoryRepository categoryRepository,
+        public SearchHeadwordRowNumberWork(BookViewRepository bookRepository, CategoryRepository categoryRepository,
             HeadwordRowNumberSearchRequestContract request, int userId, ProjectTypeEnum projectType, IMapper mapper) : base(bookRepository)
         {
             m_bookRepository = bookRepository;

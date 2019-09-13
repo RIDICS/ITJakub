@@ -5,7 +5,6 @@ using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
 using Vokabular.DataEntities.Database.Entities;
-using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
@@ -15,14 +14,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         public CategoryRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
         }
-
-        public virtual BookType GetBookTypeByEnum(BookTypeEnum bookType)
-        {
-            return GetSession().QueryOver<BookType>()
-                .Where(x => x.Type == bookType)
-                .SingleOrDefault();
-        }
-
+        
         public virtual IList<Category> GetCategoryList()
         {
             return GetSession().QueryOver<Category>()
@@ -73,18 +65,6 @@ namespace Vokabular.DataEntities.Database.Repositories
             return GetSession().QueryOver<Category>()
                 .WhereRestrictionOn(x => x.Path).IsLike(categoryPath, MatchMode.Start)
                 .List();
-        }
-
-        public virtual long GetAnyProjectIdByCategory(IEnumerable<int> categoryIds)
-        {
-            Project projectAlias = null;
-
-            return GetSession().QueryOver<Category>()
-                .WhereRestrictionOn(x => x.Id).IsInG(categoryIds)
-                .JoinAlias(x => x.Projects, () => projectAlias)
-                .Select(x => projectAlias.Id)
-                .Take(1)
-                .SingleOrDefault<long>();
         }
     }
 }

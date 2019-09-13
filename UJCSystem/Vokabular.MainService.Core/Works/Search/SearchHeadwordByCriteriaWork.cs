@@ -10,10 +10,10 @@ namespace Vokabular.MainService.Core.Works.Search
     public class SearchHeadwordByCriteriaWork : UnitOfWorkBase<IList<HeadwordResource>>
     {
         private readonly MetadataRepository m_metadataRepository;
-        private readonly BookRepository m_bookRepository;
+        private readonly BookViewRepository m_bookRepository;
         private readonly SearchCriteriaQueryCreator m_queryCreator;
 
-        public SearchHeadwordByCriteriaWork(MetadataRepository metadataRepository, BookRepository bookRepository, SearchCriteriaQueryCreator queryCreator) : base(metadataRepository)
+        public SearchHeadwordByCriteriaWork(MetadataRepository metadataRepository, BookViewRepository bookRepository, SearchCriteriaQueryCreator queryCreator) : base(metadataRepository)
         {
             m_metadataRepository = metadataRepository;
             m_bookRepository = bookRepository;

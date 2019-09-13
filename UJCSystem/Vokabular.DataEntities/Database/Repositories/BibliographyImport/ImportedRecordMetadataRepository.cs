@@ -3,7 +3,7 @@ using NHibernate;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
-namespace Vokabular.DataEntities.Database.Repositories
+namespace Vokabular.DataEntities.Database.Repositories.BibliographyImport
 {
     public class ImportedRecordMetadataRepository : MainDbRepositoryBase
     {

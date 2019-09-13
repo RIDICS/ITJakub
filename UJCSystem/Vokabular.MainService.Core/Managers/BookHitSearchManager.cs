@@ -24,11 +24,11 @@ namespace Vokabular.MainService.Core.Managers
         private readonly CriteriaKey[] m_supportedSearchPageCriteria = { CriteriaKey.Fulltext, CriteriaKey.Heading, CriteriaKey.Sentence, CriteriaKey.Term, CriteriaKey.TokenDistance };
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
         private readonly AuthorizationManager m_authorizationManager;
-        private readonly BookRepository m_bookRepository;
+        private readonly BookViewRepository m_bookRepository;
         private readonly MetadataRepository m_metadataRepository;
         private readonly IMapper m_mapper;
 
-        public BookHitSearchManager(FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager, BookRepository bookRepository, MetadataRepository metadataRepository, IMapper mapper)
+        public BookHitSearchManager(FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager, BookViewRepository bookRepository, MetadataRepository metadataRepository, IMapper mapper)
         {
             m_fulltextStorageProvider = fulltextStorageProvider;
             m_authorizationManager = authorizationManager;

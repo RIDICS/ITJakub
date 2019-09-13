@@ -12,11 +12,11 @@ namespace Vokabular.MainService.Core.Works.Search
     public class SearchByCriteriaWork : UnitOfWorkBase<IList<MetadataResource>>
     {
         private readonly MetadataRepository m_metadataRepository;
-        private readonly BookRepository m_bookRepository;
+        private readonly BookViewRepository m_bookRepository;
         private readonly SearchCriteriaQueryCreator m_queryCreator;
         private readonly TermCriteriaPageConditionCreator m_termCriteriaCreator;
 
-        public SearchByCriteriaWork(MetadataRepository metadataRepository, BookRepository bookRepository,
+        public SearchByCriteriaWork(MetadataRepository metadataRepository, BookViewRepository bookRepository,
             SearchCriteriaQueryCreator queryCreator, TermCriteriaPageConditionCreator termCriteriaCreator) : base(
             metadataRepository)
         {

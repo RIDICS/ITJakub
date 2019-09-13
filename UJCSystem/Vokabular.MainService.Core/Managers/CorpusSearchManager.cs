@@ -17,10 +17,10 @@ namespace Vokabular.MainService.Core.Managers
         private const int CorpusDefaultCount = 50;
         private const int CorpusDefaultStart = 0;
         private readonly MetadataRepository m_metadataRepository;
-        private readonly BookRepository m_bookRepository;
+        private readonly BookViewRepository m_bookRepository;
         private readonly IMapper m_mapper;
 
-        public CorpusSearchManager(MetadataRepository metadataRepository, BookRepository bookRepository, IMapper mapper)
+        public CorpusSearchManager(MetadataRepository metadataRepository, BookViewRepository bookRepository, IMapper mapper)
         {
             m_metadataRepository = metadataRepository;
             m_bookRepository = bookRepository;

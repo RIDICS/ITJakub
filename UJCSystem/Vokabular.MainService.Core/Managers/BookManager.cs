@@ -24,7 +24,7 @@ namespace Vokabular.MainService.Core.Managers
     public class BookManager
     {
         private readonly MetadataRepository m_metadataRepository;
-        private readonly BookRepository m_bookRepository;
+        private readonly BookViewRepository m_bookRepository;
         private readonly ResourceRepository m_resourceRepository;
         private readonly FileSystemManager m_fileSystemManager;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
@@ -37,7 +37,7 @@ namespace Vokabular.MainService.Core.Managers
         private readonly BookTypeEnum[] m_filterBookType;
 
         public BookManager(MetadataRepository metadataRepository, CategoryRepository categoryRepository,
-            BookRepository bookRepository, ResourceRepository resourceRepository,
+            BookViewRepository bookRepository, ResourceRepository resourceRepository,
             FileSystemManager fileSystemManager, FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager,
             AuthenticationManager authenticationManager, ForumSiteUrlHelper forumSiteUrlHelper,
             IMapper mapper, PortalTypeProvider portalTypeProvider)

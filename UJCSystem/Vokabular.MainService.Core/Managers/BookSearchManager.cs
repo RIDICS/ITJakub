@@ -33,7 +33,7 @@ namespace Vokabular.MainService.Core.Managers
         private readonly MetadataRepository m_metadataRepository;
         private readonly SnapshotRepository m_snapshotRepository;
         private readonly MetadataSearchCriteriaProcessor m_metadataSearchCriteriaProcessor;
-        private readonly BookRepository m_bookRepository;
+        private readonly BookViewRepository m_bookRepository;
         private readonly CorpusSearchManager m_corpusSearchManager;
         private readonly HeadwordSearchManager m_headwordSearchManager;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
@@ -42,7 +42,7 @@ namespace Vokabular.MainService.Core.Managers
         private readonly IMapper m_mapper;
 
         public BookSearchManager(MetadataRepository metadataRepository, SnapshotRepository snapshotRepository,
-            MetadataSearchCriteriaProcessor metadataSearchCriteriaProcessor, BookRepository bookRepository,
+            MetadataSearchCriteriaProcessor metadataSearchCriteriaProcessor, BookViewRepository bookRepository,
             CorpusSearchManager corpusSearchManager, HeadwordSearchManager headwordSearchManager,
             FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager,
             ForumSiteUrlHelper forumSiteUrlHelper, IMapper mapper)

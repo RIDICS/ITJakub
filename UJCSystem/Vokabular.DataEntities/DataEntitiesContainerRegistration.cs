@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.DataEntities.Database.Repositories.BibliographyImport;
 using Vokabular.DataEntities.Database.SearchCriteria;
 using Vokabular.Shared.DataContracts.Search.QueryBuilder;
 using Vokabular.Shared.DataEntities.UnitOfWork;
@@ -13,7 +14,7 @@ namespace Vokabular.DataEntities
         {
             services.TryAddScoped<UnitOfWorkProvider>();
 
-            services.AddScoped<BookRepository>();
+            services.AddScoped<BookViewRepository>();
             services.AddScoped<CatalogValueRepository>();
             services.AddScoped<CategoryRepository>();
             services.AddScoped<FavoritesRepository>();
