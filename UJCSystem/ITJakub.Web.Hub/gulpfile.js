@@ -9,8 +9,9 @@ var gulp = require("gulp"),
   concat = require("gulp-concat"),
   cssmin = require("gulp-cssmin"),
   less = require("gulp-less"),
+  lessToScss = require("gulp-less-to-scss"),
   watch = require("gulp-watch"),
-  sourcemaps = require('gulp-sourcemaps'),
+  sourcemaps = require("gulp-sourcemaps"),
   uglify = require("gulp-uglify"),
   ts = require("gulp-typescript"),
   yarn = require("gulp-yarn");
@@ -100,6 +101,14 @@ gulp.task("watch:less_areas", function () {
 });
 
 gulp.task("watch:less", gulp.parallel("watch:less_root", "watch:less_areas"));
+
+
+// Sass build
+gulp.task("convert:sass_colors", function() {
+    return gulp.src(paths.webroot + "css/ITJakub.Colors-selected.less")
+        .pipe(lessToScss())
+        .pipe(gulp.dest(paths.webroot + "css"));
+});
 
 
 // TypeScript build
