@@ -342,45 +342,5 @@ namespace Vokabular.MainService.Core.Managers
 
             return result;
         }
-
-        public string GetEditionNoteText(long projectId, TextFormatEnumContract format)
-        {
-            m_authorizationManager.AuthorizeBook(projectId);
-
-            var editionNoteResource = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestEditionNote(projectId));
-            if (editionNoteResource == null)
-                return null;
-
-            if (!string.IsNullOrEmpty(editionNoteResource.Text))
-            {
-                return m_textConverter.ConvertText(editionNoteResource.Text, format);
-            }
-
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(editionNoteResource.Resource.Project.ProjectType);
-            return fulltextStorage.GetEditionNote(editionNoteResource, format);
-        }
-
-        public EditionNoteContract GetEditionNote(long projectId, TextFormatEnumContract format)
-        {
-            m_authorizationManager.AuthorizeBook(projectId);
-
-            var editionNoteResource = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestEditionNote(projectId));
-            if (editionNoteResource == null)
-                return null;
-
-            var contract = m_mapper.Map<EditionNoteContract>(editionNoteResource);
-
-            if (!string.IsNullOrEmpty(editionNoteResource.Text))
-            {
-                contract.Text = m_textConverter.ConvertText(editionNoteResource.Text, format);
-            }
-            else
-            {
-                var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(editionNoteResource.Resource.Project.ProjectType);
-                contract.Text = fulltextStorage.GetEditionNote(editionNoteResource, format);
-            }
-
-            return contract;
-        }
     }
 }

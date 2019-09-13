@@ -160,31 +160,7 @@ namespace Vokabular.MainService.Core.Managers
             var userId = m_authenticationManager.GetCurrentUserId();
             new CreateOrUpdateTrackWork(m_resourceRepository, trackData, null, trackId, userId).Execute();
         }
-
-        public EditionNoteContract GetEditionNote(long projectId, TextFormatEnumContract format)
-        {
-            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestEditionNote(projectId));
-            var result = m_mapper.Map<EditionNoteContract>(dbResult);
-
-            if (result == null)
-            {
-                return null;
-            }
-
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(dbResult.Resource.Project.ProjectType);
-            var editionNoteText = fulltextStorage.GetEditionNote(dbResult, format);
-
-            result.Text = editionNoteText;
-            return result;
-        }
-
-        public long CreateEditionNoteVersion(long projectId, CreateEditionNoteContract data)
-        {
-            var userId = m_authenticationManager.GetCurrentUserId();
-            var resourceVersionId = new CreateEditionNoteVersionWork(m_resourceRepository, projectId, data, userId).Execute();
-            return resourceVersionId;
-        }
-
+        
         public void UpdatePages(long projectId, List<CreateOrUpdatePageContract> data)
         {
             var userId = m_authenticationManager.GetCurrentUserId();

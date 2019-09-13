@@ -18,12 +18,15 @@ namespace Vokabular.MainService.Controllers
         private readonly BookManager m_bookManager;
         private readonly BookSearchManager m_bookSearchManager;
         private readonly BookHitSearchManager m_bookHitSearchManager;
+        private readonly EditionNoteManager m_editionNoteManager;
 
-        public BookController(BookManager bookManager, BookSearchManager bookSearchManager, BookHitSearchManager bookHitSearchManager)
+        public BookController(BookManager bookManager, BookSearchManager bookSearchManager, BookHitSearchManager bookHitSearchManager,
+            EditionNoteManager editionNoteManager)
         {
             m_bookManager = bookManager;
             m_bookSearchManager = bookSearchManager;
             m_bookHitSearchManager = bookHitSearchManager;
+            m_editionNoteManager = editionNoteManager;
         }
 
         [HttpGet("type/{bookType}")]
@@ -112,7 +115,8 @@ namespace Vokabular.MainService.Controllers
         /// <returns></returns>
         [HttpPost("search-count")]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-        public IActionResult SearchBookResultCount([FromBody] AdvancedSearchRequestContract request, [FromQuery] ProjectTypeContract? projectType)
+        public IActionResult SearchBookResultCount([FromBody] AdvancedSearchRequestContract request,
+            [FromQuery] ProjectTypeContract? projectType)
         {
             if (projectType == null)
             {
@@ -130,7 +134,7 @@ namespace Vokabular.MainService.Controllers
             }
             catch (HttpErrorCodeException exception)
             {
-                return StatusCode((int)exception.StatusCode, exception.Message);
+                return StatusCode((int) exception.StatusCode, exception.Message);
             }
         }
 
@@ -173,7 +177,7 @@ namespace Vokabular.MainService.Controllers
             }
             catch (HttpErrorCodeException exception)
             {
-                return StatusCode((int)exception.StatusCode, exception.Message);
+                return StatusCode((int) exception.StatusCode, exception.Message);
             }
         }
 
@@ -192,7 +196,7 @@ namespace Vokabular.MainService.Controllers
             }
             catch (HttpErrorCodeException exception)
             {
-                return StatusCode((int)exception.StatusCode, exception.Message);
+                return StatusCode((int) exception.StatusCode, exception.Message);
             }
         }
 
@@ -211,7 +215,7 @@ namespace Vokabular.MainService.Controllers
             }
             catch (HttpErrorCodeException exception)
             {
-                return StatusCode((int)exception.StatusCode, exception.Message);
+                return StatusCode((int) exception.StatusCode, exception.Message);
             }
         }
 
@@ -247,14 +251,14 @@ namespace Vokabular.MainService.Controllers
         public IActionResult HasBookAnyText(long projectId)
         {
             var hasAny = m_bookManager.HasBookAnyText(projectId);
-            return hasAny ? (IActionResult)Ok() : NotFound();
+            return hasAny ? (IActionResult) Ok() : NotFound();
         }
 
         [HttpHead("{projectId}/image")]
         public IActionResult HasBookAnyImage(long projectId)
         {
             var hasAny = m_bookManager.HasBookAnyImage(projectId);
-            return hasAny ? (IActionResult)Ok() : NotFound();
+            return hasAny ? (IActionResult) Ok() : NotFound();
         }
 
         [HttpGet("page/{pageId}/term")]
@@ -284,7 +288,7 @@ namespace Vokabular.MainService.Controllers
             var result = m_bookManager.GetPageText(pageId, formatValue);
             if (result == null)
                 return NotFound();
-            
+
             return Content(result);
         }
 
@@ -312,7 +316,8 @@ namespace Vokabular.MainService.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost("page/{pageId}/text/search")]
-        public IActionResult GetPageTextFromSearch(long pageId, [FromQuery] TextFormatEnumContract? format, [FromBody] SearchPageRequestContract request)
+        public IActionResult GetPageTextFromSearch(long pageId, [FromQuery] TextFormatEnumContract? format,
+            [FromBody] SearchPageRequestContract request)
         {
             try
             {
@@ -329,7 +334,7 @@ namespace Vokabular.MainService.Controllers
             }
             catch (HttpErrorCodeException exception)
             {
-                return StatusCode((int)exception.StatusCode, exception.Message);
+                return StatusCode((int) exception.StatusCode, exception.Message);
             }
         }
 
@@ -403,7 +408,8 @@ namespace Vokabular.MainService.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost("headword/{headwordId}/text/search")]
-        public IActionResult GetHeadwordTextFromSearch(long headwordId, [FromQuery] TextFormatEnumContract? format, [FromBody] SearchPageRequestContract request)
+        public IActionResult GetHeadwordTextFromSearch(long headwordId, [FromQuery] TextFormatEnumContract? format,
+            [FromBody] SearchPageRequestContract request)
         {
             try
             {
@@ -420,7 +426,7 @@ namespace Vokabular.MainService.Controllers
             }
             catch (HttpErrorCodeException exception)
             {
-                return StatusCode((int)exception.StatusCode, exception.Message);
+                return StatusCode((int) exception.StatusCode, exception.Message);
             }
         }
 
@@ -428,7 +434,7 @@ namespace Vokabular.MainService.Controllers
         public IActionResult GetEditionNoteText(long projectId, [FromQuery] TextFormatEnumContract? format)
         {
             var formatValue = format ?? TextFormatEnumContract.Html;
-            var result = m_bookManager.GetEditionNoteText(projectId, formatValue);
+            var result = m_editionNoteManager.GetEditionNote(projectId, formatValue).Text;
             if (result == null)
                 return NotFound();
 
@@ -439,7 +445,7 @@ namespace Vokabular.MainService.Controllers
         public EditionNoteContract GetEditionNote(long projectId, [FromQuery] TextFormatEnumContract? format)
         {
             var formatValue = format ?? TextFormatEnumContract.Html;
-            var result = m_bookManager.GetEditionNote(projectId, formatValue);
+            var result = m_editionNoteManager.GetEditionNote(projectId, formatValue);
             return result;
         }
 
