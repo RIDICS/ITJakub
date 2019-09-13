@@ -43,6 +43,8 @@
     "NoImageOnPage": "Stránka neobsahuje obrázek",
     "NoComments": "Zatím žádné komentáře.",
     "ToggleEditingMode": "Přepnout editační mód",
+    "TurnOnEditingMode": "Zapnout editační mód",
+    "TurnOffEditingMode": "Vypnout editační mód",
     "DisplayPageNumbers": "Zobrazit čísla stránek",
     "GoToPage": "Přejít na stránku...",
     "UploadNewVersion": "Nahrát novou verzi",
