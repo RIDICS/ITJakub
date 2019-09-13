@@ -36,11 +36,11 @@
                 step: 1,
                 create: function() {
                     const pageName = compositionPages[$(this).slider("value")].parentPage.name;
-                    tooltipText.text(`Page: ${pageName}`);
+                    tooltipText.text(localization.translateFormat("PageName", [pageName], "RidicsProject").value);
                     thisClass.updatePageIndicator(pageName);
                 },
                 slide(event, ui) {
-                    tooltipText.text(`Page: ${compositionPages[ui.value].parentPage.name}`);
+                    tooltipText.text(localization.translateFormat("PageName", [compositionPages[ui.value].parentPage.name], "RidicsProject").value);
                     tooltip.show();
                 },
                 change: () => {
@@ -64,7 +64,7 @@
         const pageName = pageEl.data("page-name") as string;
         const index = $(".page-row").index(pageEl);
         $("#page-slider").slider("option", "value", index);
-        $(".slider-tooltip-text").text(`Page: ${pageName}`);
+        $(".slider-tooltip-text").text(localization.translateFormat("PageName", [pageName], "RidicsProject").value);
         this.updatePageIndicator(pageName);
     }
 
@@ -126,8 +126,8 @@
         const inputFieldValue = inputField.val() as string;
         if (inputFieldValue === "") {
             bootbox.alert({
-                title: "Warning",
-                message: "You haven't entered anything. Please enter a page name.",
+                title: localization.translate("Warning", "RidicsProject").value,
+                message: localization.translate("EnterPageName", "RidicsProject").value,
                 buttons: {
                     ok: {
                         className: "btn-default"
@@ -139,8 +139,8 @@
             const pageId = pageEl.data("page");
             if (!pageEl.length) {
                 bootbox.alert({
-                    title: "Warning",
-                    message: `Page ${inputFieldValue} does not exist.`,
+                    title: localization.translate("Warning", "RidicsProject").value,
+                    message: localization.translateFormat("PageDoesNotExist", [inputFieldValue], "RidicsProject").value,
                     buttons: {
                         ok: {
                             className: "btn-default"
@@ -211,5 +211,4 @@
         this.updatePageNames(textId);
         this.updateOnlySliderValue = false;
     }
-
 }

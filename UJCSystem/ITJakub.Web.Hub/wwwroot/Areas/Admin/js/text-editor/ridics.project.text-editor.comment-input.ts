@@ -29,8 +29,8 @@
         const serverAddress = this.util.getServerAddress();
         if (!commentText) {
             bootbox.alert({
-                title: "Warning",
-                message: "Comment is empty. Please fill it",
+                title: localization.translate("Warning", "RidicsProject").value,
+                message: localization.translate("EmptyComment", "RidicsProject").value,
                 buttons: {
                     ok: {
                         className: "btn-default"
@@ -52,8 +52,8 @@
             );
             sendAjax.done(() => {
                 bootbox.alert({
-                    title: "Success",
-                    message: "Successfully sent",
+                    title: localization.translate("Success", "RidicsProject").value,
+                    message: localization.translate("CommentCreateSuccess", "RidicsProject").value,
                     buttons: {
                         ok: {
                             className: "btn-default"
@@ -68,8 +68,8 @@
             });
             sendAjax.fail(() => {
                 bootbox.alert({
-                    title: "Error",
-                    message: "Sending failed. Server error.",
+                    title: localization.translate("Fail", "RidicsProject").value,
+                    message: localization.translate("Failed to create comment.", "RidicsProject").value,
                     buttons: {
                         ok: {
                             className: "btn-default"
@@ -225,8 +225,8 @@
     private onCommentSendRequest(sendAjax:JQueryXHR, textAreaEl:JQuery, textId:number) {
         sendAjax.done(() => {
             bootbox.alert({
-                title: "Success",
-                message: "Successfully sent",
+                title: localization.translate("Success", "RidicsProject").value,
+                message: localization.translate("CommentCreateSuccess", "RidicsProject").value,
                 buttons: {
                     ok: {
                         className: "btn-default"
@@ -239,8 +239,8 @@
         });
         sendAjax.fail(() => {
             bootbox.alert({
-                title: "Error",
-                message: "Sending failed. Server error.",
+                title: localization.translate("Fail", "RidicsProject").value,
+                message: localization.translate("CommentCreateFail", "RidicsProject").value,
                 buttons: {
                     ok: {
                         className: "btn-default"

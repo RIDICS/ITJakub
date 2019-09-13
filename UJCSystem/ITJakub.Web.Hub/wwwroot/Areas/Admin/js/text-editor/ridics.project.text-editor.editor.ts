@@ -11,7 +11,6 @@
 
     private commentIdPattern =
         "([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}";
-    private overlappingCommentString = "Your comment overlaps with another comment. Please select other part of text.";
 
     constructor(commentInput: CommentInput, util: EditorsUtil, commentArea: CommentArea) {
         this.commentInput = commentInput;
@@ -56,8 +55,8 @@
             const commentEndRegex = new RegExp(`(\\%${this.commentIdPattern}\\$)`);
             if (commentBeginRegex.test(commentText) || commentEndRegex.test(commentText)) {
                 bootbox.alert({
-                    title: "Warning",
-                    message: this.overlappingCommentString,
+                    title: localization.translate("Warning", "RidicsProject").value,
+                    message: localization.translate("OverlappingComment", "RidicsProject").value,
                     buttons: {
                         ok: {
                             className: "btn-default"
@@ -67,7 +66,7 @@
                 return;
             }
             bootbox.prompt({
-                title: "Please enter your comment here:",
+                title: localization.translate("EnterComment", "RidicsProject").value,
                 inputType: "textarea",
                 buttons: {
                     confirm: {
@@ -102,6 +101,7 @@
             const pageRow = button.parents(".page-row");
             this.editingMode = true;
             this.togglePageRows(pageRow);
+          //  pageRow.find(".editor").click();
         });
 
         $("#project-resource-preview").on("click", ".editor", (e) => { //dynamically instantiating SimpleMDE editor on textarea
@@ -129,19 +129,18 @@
                     if (contentBeforeClose !== this.originalContent) {
                         const editorPageName = editorEl.parents(".page-row").data("page-name");
                         bootbox.dialog({
-                            title: "Warning",
-                            message: `There's an open editor in page ${editorPageName
-                                }. Are you sure you want to close it without saving?`,
+                            title: localization.translate("Warning", "RidicsProject").value,
+                            message: localization.translateFormat("CloseEditedPage", [editorPageName], "RidicsProject").value, 
                             buttons: {
                                 confirm: {
-                                    label: "Close",
+                                    label: localization.translate("CloseWithoutSaving", "RidicsProject").value,
                                     className: "btn-default",
                                     callback: () => {
                                         this.editorChangePage(previousPageEl, jElSelected);
                                     }
                                 },
                                 cancel: {
-                                    label: "Cancel",
+                                    label: localization.translate("Cancel", "RidicsProject").value,
                                     className: "btn-default",
                                     callback: () => {
                                         const textareaEl = jElSelected.find(".editor")
@@ -151,7 +150,7 @@
                                     }
                                 },
                                 save: {
-                                    label: "Save and close",
+                                    label: localization.translate("SaveAndClose", "RidicsProject").value,
                                     className: "btn-default",
                                     callback: () => {
                                         this.saveContents(this.currentTextId, contentBeforeClose);
@@ -178,12 +177,11 @@
                     const editorEl = $(".CodeMirror");
                     const editorPageName = editorEl.parents(".page-row").data("page-name");
                     bootbox.dialog({
-                        title: "Warning",
-                        message: `There's an open editor in page ${editorPageName
-                            }. Are you sure you want to close it without saving?`,
+                        title: localization.translate("Warning", "RidicsProject").value,
+                        message: localization.translateFormat("CloseEditedPage", [editorPageName], "RidicsProject").value, 
                         buttons: {
                             confirm: {
-                                label: "Close",
+                                label: localization.translate("CloseWithoutSaving", "RidicsProject").value,
                                 className: "btn-default",
                                 callback: () => {
                                     this.simplemde.toTextArea();
@@ -192,14 +190,14 @@
                                 }
                             },
                             cancel: {
-                                label: "Cancel",
+                                label: localization.translate("Cancel", "RidicsProject").value,
                                 className: "btn-default",
                                 callback: () => {
                                     this.editingMode = !this.editingMode; //Switch back to editing mode on cancel
                                 }
                             },
                             save: {
-                                label: "Save and close",
+                                label: localization.translate("SaveAndClose", "RidicsProject").value,
                                 className: "btn-default",
                                 callback: () => {
                                     this.saveContents(this.currentTextId, contentBeforeClose);
@@ -242,8 +240,8 @@
         const saveAjax = this.util.savePlainText(textId, request);
         saveAjax.done(() => {
             bootbox.alert({
-                title: "Success!",
-                message: "Your changes have been successfully saved.",
+                title: localization.translate("Success", "RidicsProject").value,
+                message: localization.translate("ChangesSaveSuccess", "RidicsProject").value,
                 buttons: {
                     ok: {
                         className: "btn-default"
@@ -255,8 +253,8 @@
         saveAjax.fail(() => {
             if (saveAjax.status === 409) {
                 bootbox.alert({
-                    title: "Fail",
-                    message: "Failed to save your changes due to version conflict.",
+                    title: localization.translate("Fail", "RidicsProject").value,
+                    message: localization.translate("ChangesSaveConflict", "RidicsProject").value,
                     buttons: {
                         ok: {
                             className: "btn-default"
@@ -265,8 +263,8 @@
                 });
             } else {
                 bootbox.alert({
-                    title: "Fail",
-                    message: "There was an error while saving your changes.",
+                    title: localization.translate("Fail", "RidicsProject").value,
+                    message: localization.translate("ChangesSaveFail", "RidicsProject").value,
                     buttons: {
                         ok: {
                             className: "btn-default"
@@ -292,7 +290,7 @@
             autoDownloadFontAwesome: false,
             spellChecker: false,
             mode: "gfm",
-            toolbar: [
+            toolbar: [ //TODO use SimpleMdeTools
                 {
                     name: "save",
                     action: (editor) => { this.saveContents(textId, editor.value()) },

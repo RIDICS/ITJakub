@@ -51,7 +51,9 @@ class TextEditorMain {
                     const pageToolbarDiv = `<div class="col-xs-12 page-toolbar">
                                                 <div class="row">
                                                     <div class="col-xs-4">
-                                                        <button type="button" class="btn btn-default edit-page"><i class="fa fa-pencil"></i></button>
+                                                        <button type="button" class="btn btn-default edit-page" title="${localization.translate("EditPage", "RidicsProject").value}">
+                                                            <i class="fa fa-pencil"></i>
+                                                        </button>
                                                     </div>
                                                     <div class="col-xs-4 page-number text-center invisible">
                                                         [${textProjectPage.parentPage.name}]
