@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
 using Vokabular.MainService.DataContracts.Contracts.Search;
@@ -17,11 +18,13 @@ namespace Vokabular.MainService.Core.Managers
         private const int CorpusDefaultStart = 0;
         private readonly MetadataRepository m_metadataRepository;
         private readonly BookRepository m_bookRepository;
+        private readonly IMapper m_mapper;
 
-        public CorpusSearchManager(MetadataRepository metadataRepository, BookRepository bookRepository)
+        public CorpusSearchManager(MetadataRepository metadataRepository, BookRepository bookRepository, IMapper mapper)
         {
             m_metadataRepository = metadataRepository;
             m_bookRepository = bookRepository;
+            m_mapper = mapper;
         }
 
         public int GetCorpusStart(int? start)
@@ -61,7 +64,7 @@ namespace Vokabular.MainService.Core.Managers
                 var pageInfo = orderedPageResourceList[i];
                 var projectMetadata = bookDictionary[corpusResultData.ProjectId];
 
-                var pageContextContract = Mapper.Map<PageWithContextContract>(pageInfo);
+                var pageContextContract = m_mapper.Map<PageWithContextContract>(pageInfo);
                 pageContextContract.ContextStructure = corpusResultData.PageResultContext.ContextStructure;
 
                 var corpusItemContract = new CorpusSearchResultContract
@@ -83,10 +86,10 @@ namespace Vokabular.MainService.Core.Managers
             return orderedResultList;
         }
 
-        public List<CorpusSearchResultContract> GetCorpusSearchResultByExternalIds(List<CorpusSearchResultData> list)
+        public List<CorpusSearchResultContract> GetCorpusSearchResultByExternalIds(List<CorpusSearchResultData> list, ProjectTypeEnum projectType)
         {
             var projectExternalIds = list.Select(x => x.ProjectExternalId);
-            var dbProjects = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByProjectExternalIds(projectExternalIds));
+            var dbProjects = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByProjectExternalIds(projectExternalIds, projectType));
             var bookDictionary = dbProjects.ToDictionary(x => x.Resource.Project.ExternalId);
 
             // Load all pages in one transaction
@@ -95,7 +98,7 @@ namespace Vokabular.MainService.Core.Managers
                 var result = new List<PageResource>();
                 foreach (var corpusSearchResultData in list)
                 {
-                    var page = repository.GetPagesByTextExternalId(new [] {corpusSearchResultData.PageResultContext.TextExternalId}, null, corpusSearchResultData.ProjectExternalId);
+                    var page = repository.GetPagesByTextExternalId(new [] {corpusSearchResultData.PageResultContext.TextExternalId}, corpusSearchResultData.ProjectExternalId, projectType);
                     result.Add(page.First());
                 }
 
@@ -110,7 +113,7 @@ namespace Vokabular.MainService.Core.Managers
                 var pageInfo = orderedPageResourceList[i];
                 var projectMetadata = bookDictionary[corpusResultData.ProjectExternalId];
 
-                var pageContextContract = Mapper.Map<PageWithContextContract>(pageInfo);
+                var pageContextContract = m_mapper.Map<PageWithContextContract>(pageInfo);
                 pageContextContract.ContextStructure = corpusResultData.PageResultContext.ContextStructure;
 
                 var corpusItemContract = new CorpusSearchResultContract

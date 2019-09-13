@@ -67,6 +67,12 @@ namespace Vokabular.ProjectImport
                         }
                     }
                 }
+                catch (Exception e)
+                {
+                    if (m_logger.IsErrorEnabled())
+                        m_logger.LogError(e, "Unknown error occured in BackgroundService");
+                    throw;
+                }
                 finally
                 {
                     foreach (var cancellationTokenSource in m_importManager.CancellationTokens)

@@ -1,6 +1,10 @@
-﻿<div id="project-resource-preview">
+﻿@using Scalesoft.Localization.AspNetCore
+@inject ILocalizationService Localization
+<div id="project-resource-preview">
     <div class="toggle-mode-panel container-fluid text-center">
-        <button type="button" class="btn btn-default editing-mode-button">Toggle editing mode</button>
+        <button type="button" class="btn btn-default editing-mode-button">
+            @Localization.Translate("ToggleEditingMode", "RidicsProject")
+        </button>
     </div>
     <div id="page-slider" class="text-editor-page-slider">
         <div class="ui-slider-handle page-slider-handle">
@@ -12,7 +16,7 @@
     <div class="row page-menu-row">
         <div class="col-xs-2">
             <div class="input-group">
-                <input type="text" class="form-control go-to-page-field" placeholder="Go to page..." aria-label="Go to page...">
+                <input type="text" class="form-control go-to-page-field" placeholder="@Localization.Translate("GoToPage", "RidicsProject")" aria-label="@Localization.Translate("GoToPage", "RidicsProject")">
                 <span class="input-group-btn">
                     <button class="btn btn-default go-to-page-button" type="button">
                         <span class="glyphicon glyphicon-arrow-right"></span>
@@ -25,7 +29,10 @@
         <div class="col-xs-2"></div>
         <div class="col-xs-2">
             <div class="checkbox">
-                <label class="checkbox-inline"><input type="checkbox" value="" class="display-page-checkbox">Display page numbers</label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" value="" class="display-page-checkbox">
+                    @Localization.Translate("DisplayPageNumbers", "RidicsProject")
+                </label>
             </div>
         </div>
     </div>

@@ -29,7 +29,7 @@ class RoleManager {
     
     public init(list?: ListWithPagination) {
         if (list == null) {
-            this.roleList = new ListWithPagination("Permission/RolePermission", "role", ViewType.Widget, true, this.reinitRoleList, this);
+            this.roleList = new ListWithPagination("Permission/RolePermission", "role", ViewType.Widget, true, false, this.reinitRoleList, this);
         } else {
             this.roleList = list;
         }
@@ -83,6 +83,7 @@ class RoleManager {
                 "user",
                 ViewType.Widget,
                 false,
+                false,
                 this.initRemoveUserFromRoleButton,
                 this);
             this.userList.init();
@@ -110,6 +111,7 @@ class RoleManager {
             this.permissionList = new ListWithPagination(`Permission/RolePermissionList?roleId=${roleId}`,
                 "permission",
                 ViewType.Widget,
+                false,
                 false,
                 this.initPermissionManaging,
                 this);

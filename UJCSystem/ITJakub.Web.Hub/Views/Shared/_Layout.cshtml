@@ -27,7 +27,6 @@
     <link asp-append-version="true" href="~/lib/s-pagination/dist/pagination.css" rel="stylesheet" />
     <link asp-append-version="true" href="~/css/ITJakubStyle.css" rel="stylesheet" />
     <link asp-append-version="true" href="~/lib/loading-visualization/dist/main.css" rel="stylesheet" />
-    <script asp-append-version="true" src="~/lib/modernizr/modernizr.js"></script>
     @RenderSection("styles", false)
     <partial name="_AutoLogin" />
 </head>
@@ -101,65 +100,14 @@
         <script asp-append-version="true" src="~/lib/dropzone/downloads/dropzone.js"></script>
         <script asp-append-version="true" src="~/lib/he/he.js"></script>
         <script asp-append-version="true" src="~/lib/urijs/src/URI.min.js"></script>
+        @*<script asp-append-version="true" src="~/lib/modernizr/modernizr.js"></script>*@
 
-        <script asp-append-version="true" src="~/js/ridics.errorHandler.js"></script>
-        <script asp-append-version="true" src="~/js/ridics.web-hub-api-client.js"></script>
-        <script asp-append-version="true" src="~/Areas/Admin/js/ridics.admin-api-client.js"></script>
+        <script asp-append-version="true" src="~/js/Plugins/Keyboard/itjakub.keyboard.bundle.js"></script>
+        <script asp-append-version="true" src="~/js/Plugins/Storage/itjakub.storage.bundle.js"></script>
+        <script asp-append-version="true" src="~/js/itjakub.bundle.js"></script>
+        <script asp-append-version="true" src="~/js/Plugins/itjakub.plugins.bundle.js"></script>
+        <script asp-append-version="true" src="~/js/Favorite/itjakub.favorite.bundle.js"></script>
         <script asp-append-version="true" src="~/lib/loading-visualization/dist/main.js"></script>
-
-        <environment names="Staging,Production">
-            <script asp-append-version="true" src="~/js/bundles/itjakub.keyboard.bundle.js"></script>
-            <script asp-append-version="true" src="~/js/bundles/itjakub.storage.bundle.js"></script>
-            <script asp-append-version="true" src="~/js/bundles/itjakub.bundle.js"></script>
-            <script asp-append-version="true" src="~/js/bundles/itjakub.plugins.bundle.js"></script>
-            <script asp-append-version="true" src="~/js/bundles/itjakub.favorite.bundle.js"></script>
-        </environment>
-        <environment names="Development">
-            @*Bundle keyboard*@
-            <script asp-append-version="true" src="~/js/Plugins/Keyboard/itjakub.plugins.keyboard.js"></script>
-            <script asp-append-version="true" src="~/js/Plugins/Keyboard/itjakub.plugins.keyboardComponent.js"></script>
-            <script asp-append-version="true" src="~/js/Plugins/Keyboard/itjakub.plugins.keyboardManager.js"></script>
-
-            @*Bundle storage*@
-            <script asp-append-version="true" src="~/js/Plugins/Storage/itjakub.plugins.storage.manager.js"></script>
-            <script asp-append-version="true" src="~/js/Plugins/Storage/itjakub.plugins.storage.cookiestorage.js"></script>
-            <script asp-append-version="true" src="~/js/Plugins/Storage/itjakub.plugins.storage.localstorage.js"></script>
-
-            @*Bundle itjakub*@
-            <script asp-append-version="true" src="~/js/itjakub.js"></script>
-            <script asp-append-version="true" src="~/js/itjakub.dataContracts.js"></script>
-            <script asp-append-version="true" src="~/js/Plugins/itjakub.tools.js"></script>
-            <script asp-append-version="true" src="~/js/Plugins/itjakub.components.js"></script>
-            <script asp-append-version="true" src="~/js/Plugins/itjakub.eucookiepopup.js"></script>
-            <script asp-append-version="true" src="~/js/Plugins/itjakub.helper.js"></script>
-
-            <script asp-append-version="true" src="~/js/ridics.form-validation.js"></script>
-
-            @*Bundle plugins*@
-            <script asp-append-version="true" src="~/js/Plugins/Progress/itjakub.plugins.progress.js"></script>
-            <script asp-append-version="true" src="~/js/Plugins/itjakub.modul.inicializator.js"></script>
-            <script asp-append-version="true" src="~/js/Plugins/itjakub.list.modul.inicializator.js"></script>
-            <script asp-append-version="true" src="~/js/Plugins/itjakub.search.modul.inicializator.js"></script>
-            <script asp-append-version="true" src="~/js/Plugins/Reader/itjakub.plugins.reader.js"></script>
-            <script asp-append-version="true" src="~/js/Plugins/Bibliography/itjakub.plugins.bibliography.variableInterpreter.js"></script>
-            <script asp-append-version="true" src="~/js/Plugins/Bibliography/itjakub.plugins.bibliography.factories.js"></script>
-            <script asp-append-version="true" src="~/js/Plugins/Bibliography/itjakub.plugins.bibliography.configuration.js"></script>
-            <script asp-append-version="true" src="~/js/Plugins/Bibliography/itjakub.plugins.bibliography.js"></script>
-            <script asp-append-version="true" src="~/js/Plugins/Sort/itjakub.plugins.sort.js"></script>
-            <script asp-append-version="true" src="~/js/Plugins/DropdownSelect/itjakub.plugins.dropdownselect.js"></script>
-            <script asp-append-version="true" src="~/js/Plugins/DropdownSelect/itjakub.plugins.dropdownselect2.js"></script>
-            <script asp-append-version="true" src="~/js/Plugins/RegExSearch/itjakub.plugins.regexsearch.js"></script>
-            <script asp-append-version="true" src="~/js/Plugins/SearchBox/itjakub.plugins.searchbox.js"></script>
-            <script asp-append-version="true" src="~/js/Plugins/SearchBox/itjakub.plugins.singlesearchbox.js"></script>
-
-            @*Bundle favorite*@
-            <script asp-append-version="true" src="~/js/Favorite/itjakub.favoriteBook.js"></script>
-            <script asp-append-version="true" src="~/js/Favorite/itjakub.favoriteManager.js"></script>
-            <script asp-append-version="true" src="~/js/Favorite/itjakub.favoriteQuery.js"></script>
-            <script asp-append-version="true" src="~/js/Favorite/itjakub.favoriteStar.js"></script>
-            <script asp-append-version="true" src="~/js/Favorite/itjakub.newFavoriteDialog.js"></script>
-            <script asp-append-version="true" src="~/js/Favorite/itjakub.newFavoriteNotification.js"></script>
-        </environment>
 
         @RenderSection("scripts", false)
 

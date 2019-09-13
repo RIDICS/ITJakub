@@ -64,20 +64,15 @@ class TextEditorMain {
                 commentInput.init();
                 commentArea.init();
             } else {
-                const error = new AlertComponentBuilder(AlertType.Error).addContent("No text pages for this project");
+                const error = new AlertComponentBuilder(AlertType.Error)
+                    .addContent(localization.translate("NoTextPages", "RidicsProject").value);
                 $("#project-resource-preview").empty().append(error.buildElement());
             }
         });
         projectAjax.fail(() => {
-            bootbox.alert({
-                title: "Error",
-                message: "Failed to get project information.",
-                buttons: {
-                    ok: {
-                        className: "btn-default"
-                    }
-                }
-            });
+            const error = new AlertComponentBuilder(AlertType.Error)
+                .addContent(localization.translate("ProjectLoadFailed", "RidicsProject").value);
+            $("#project-resource-preview").empty().append(error.buildElement());
         });
     }
 

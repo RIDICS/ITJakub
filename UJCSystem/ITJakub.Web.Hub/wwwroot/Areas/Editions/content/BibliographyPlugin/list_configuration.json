@@ -163,16 +163,13 @@
         },
         "$forumLink": {
           "type": "basic",
-          "pattern": "<a href='{ForumUrl}'>Link</a>",
+          "pattern": "<a href='{ForumUrl}'>{@Link}</a>",
           "printIfNullValue": false
         } 
 
       }
     },
     "right-panel": {
-      "info-button": {
-        "onclick-callable": "listBookReadClicked(this)"
-      },
       "read-button": {
         "onclick-callable": "listBookReadClicked(this)"
       },

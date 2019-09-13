@@ -22,20 +22,22 @@ namespace Vokabular.MainService.Core.Managers
         private readonly PermissionRepository m_permissionRepository;
         private readonly CommunicationProvider m_communicationProvider;
         private readonly DefaultUserProvider m_defaultUserProvider;
+        private readonly IMapper m_mapper;
 
         public PermissionManager(PermissionRepository permissionRepository, CommunicationProvider communicationProvider,
-            DefaultUserProvider defaultUserProvider)
+            DefaultUserProvider defaultUserProvider, IMapper mapper)
         {
             m_permissionRepository = permissionRepository;
             m_communicationProvider = communicationProvider;
             m_defaultUserProvider = defaultUserProvider;
+            m_mapper = mapper;
         }
 
         public List<PermissionFromAuthContract> GetAutoImportSpecialPermissions()
         {
             var client = m_communicationProvider.GetAuthPermissionApiClient();
 
-            var permissions = client.GetAllPermissionsAsync().GetAwaiter().GetResult();
+            var permissions = client.GetAllPermissionsAsync(VokabularPermissionNames.AutoImport).GetAwaiter().GetResult();
 
             var result = permissions.Where(x => x.Name.StartsWith(VokabularPermissionNames.AutoImport)).Select(p =>
                 new PermissionFromAuthContract
@@ -113,14 +115,6 @@ namespace Vokabular.MainService.Core.Managers
             new RemoveProjectsFromRoleWork(m_permissionRepository, roleId, bookIds).Execute();
         }
 
-        public List<PermissionContract> GetAllPermissions()
-        {
-            var client = m_communicationProvider.GetAuthPermissionApiClient();
-
-            var permissions = client.GetAllPermissionsAsync().GetAwaiter().GetResult();
-            return Mapper.Map<List<PermissionContract>>(permissions);
-        }
-
         public PagedResultList<PermissionContract> GetPermissions(int? start, int? count, string filterByName)
         {
             var startValue = PagingHelper.GetStart(start);
@@ -130,7 +124,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var result = client.HttpClient.GetListAsync<AuthPermissionContract>(startValue, countValue, filterByName).GetAwaiter()
                 .GetResult();
-            var permissionContracts = Mapper.Map<List<PermissionContract>>(result.Items);
+            var permissionContracts = m_mapper.Map<List<PermissionContract>>(result.Items);
 
             return new PagedResultList<PermissionContract>
             {

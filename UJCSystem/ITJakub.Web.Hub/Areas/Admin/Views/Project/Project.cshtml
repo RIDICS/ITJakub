@@ -9,23 +9,23 @@
 }
 
 @section styles {
-    <link asp-append-version="true" rel="stylesheet" href="~/Areas/Admin/css/ridics.project.css"/>
-    <link asp-append-version="true" rel="stylesheet" href="~/lib/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.css"/>
-    <link asp-append-version="true" rel="stylesheet" href="~/lib/gijgo/combined/css/gijgo.css"/>
+    <link asp-append-version="true" rel="stylesheet" href="~/Areas/Admin/css/ridics.project.css" />
+    <link asp-append-version="true" rel="stylesheet" href="~/css/ridics.list.css" />
+    <link asp-append-version="true" rel="stylesheet" href="~/lib/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.css" />
+    <link asp-append-version="true" rel="stylesheet" href="~/lib/gijgo/dist/modular/css/tree.min.css" />
 }
 @section scripts {
-    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.project.module.js"></script>
-    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.project.work.tabs.js"></script>
-    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.project.resource.tabs.js"></script>
-    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.project.client.js"></script>
-    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.project.editors-common-base.bundle.js"></script>
-    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.project.text-editor.bundle.js"></script>
-    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.project.page-image-viewer.bundle.js"></script>
-    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.project.page-list-editor.bundle.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/ridics.project.bundle.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/editors-common-base/ridics.project.editors.bundle.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/text-editor/ridics.project.text-editor.bundle.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/page-image-viewer/ridics.project.page-image-viewer.bundle.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/page-list-editor/ridics.project.page-list-editor.bundle.js"></script>
     <script asp-append-version="true" src="~/Areas/Admin/js/edition-note/ridics.project.edition-note.main.js"></script>
-    <script asp-append-version="true" type="text/javascript" src="~/lib/lazysizes/lazysizes.min.js"></script>
-    <script asp-append-version="true" type="text/javascript" src="~/lib/bootstrap-tokenfield/dist/bootstrap-tokenfield.js"></script>
-    <script asp-append-version="true" type="text/javascript" src="~/lib/gijgo/combined/js/gijgo.min.js"></script>
+
+    <script asp-append-version="true" src="~/lib/bootstrap-tokenfield/dist/bootstrap-tokenfield.js"></script>
+    <script asp-append-version="true" src="~/lib/gijgo/dist/modular/js/core.min.js"></script>
+    <script asp-append-version="true" src="~/lib/gijgo/dist/modular/js/tree.min.js"></script>
+    <script asp-append-version="true" src="~/lib/lazysizes/lazysizes.min.js"></script>
 }
 
 <div id="project-id" class="hidden">@Model.Id</div>
@@ -83,7 +83,7 @@
                         <div class="col-md-12">
                             <form action="@Url.Action("UploadResource", "Project")" method="post" class="dropzone" enctype="multipart/form-data" id="new-resource-upload">
                                 <div class="hidden">
-                                    <input type="hidden" id="new-resource-session-id" name="sessionId" value="0"/>
+                                    <input type="hidden" id="new-resource-session-id" name="sessionId" value="0" />
                                 </div>
                             </form>
                         </div>
@@ -117,7 +117,7 @@
                     <div class="form-group">
                         <label for="rename-resource-original" class="col-md-3 control-label">@Localizer.Translate("OriginalTitle", "Admin")</label>
                         <div class="col-md-8">
-                            <input type="text" id="rename-resource-original" class="form-control" disabled="disabled"/>
+                            <input type="text" id="rename-resource-original" class="form-control" disabled="disabled" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -188,7 +188,7 @@
                         <div class="col-md-12">
                             <form action="@Url.Action("UploadNewResourceVersion", "Project")" method="post" class="dropzone" enctype="multipart/form-data" id="new-resource-version-upload">
                                 <div class="hidden">
-                                    <input type="hidden" id="new-resource-version-session-id" name="sessionId" value="0"/>
+                                    <input type="hidden" id="new-resource-version-session-id" name="sessionId" value="0" />
                                 </div>
                             </form>
                         </div>

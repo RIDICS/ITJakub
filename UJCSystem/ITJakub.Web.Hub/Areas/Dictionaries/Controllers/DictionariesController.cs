@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
+using System.Net;
 using ITJakub.Web.Hub.Areas.Dictionaries.Models;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
@@ -24,6 +24,8 @@ using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 using ITJakub.Web.Hub.Options;
+using Vokabular.MainService.DataContracts;
+using Vokabular.RestClient.Errors;
 
 namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 {
@@ -58,21 +60,31 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return View();
         }
 
-        public ActionResult Listing(string xmlId, string externalId) // string[] books - this parameter is used in JavaScript
+        public ActionResult Listing(string externalId /*, string books*/) // the books parameter is used in JavaScript
         {
-            // xmlId paramater is for already existing hyperlinks, new parameter is externalId
-            externalId = externalId ?? xmlId;
+            if (string.IsNullOrEmpty(externalId))
+            {
+                // show all dictionaries
+                return View();
+            }
 
-            if (!string.IsNullOrEmpty(externalId)) // request to one specific book using externalId
+            // if externalId is specified, redirect to loading only one book by projectId:
+            try
             {
                 var client = GetBookClient();
-                var book = client.GetBookInfoByExternalId(externalId);
+                var book = client.GetBookInfoByExternalId(externalId, GetDefaultProjectType());
                 var bookArrId = $"[{book.Id}]";
 
                 return RedirectToAction("Listing", "Dictionaries", new {books = bookArrId});
             }
-
-            return View();
+            catch (HttpErrorCodeException exception)
+            {
+                if (exception.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return NotFound();
+                }
+                throw;
+            }
         }
 
         public ActionResult Help()
@@ -424,15 +436,16 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return Json(result);
         }
 
-        //public FileResult GetHeadwordImage(string bookXmlId, string bookVersionXmlId, string fileName) // Original signature
         public ActionResult GetHeadwordImage(long pageId)
         {
-            return NotFound();
-            //using (var client = GetMainServiceClient())
-            //{
-            //    var resultStream = client.GetHeadwordImage(bookXmlId, bookVersionXmlId, fileName);
-            //    return File(resultStream, MediaTypeNames.Image.Jpeg); //TODO resolve content type properly
-            //}
+            var client = GetBookClient();
+            var image = client.GetPageImage(pageId);
+            if (image == null)
+            {
+                return NotFound();
+            }
+
+            return File(image.Stream, image.MimeType, image.FileName, image.FileSize);
         }
 
         private void AddHeadwordFeedback(string content, long headwordVersionId, string name, string email)

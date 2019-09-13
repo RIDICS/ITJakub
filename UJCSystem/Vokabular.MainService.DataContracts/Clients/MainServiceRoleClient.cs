@@ -6,7 +6,6 @@ using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Extensions;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared;
-using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.Extensions;
 
 namespace Vokabular.MainService.DataContracts.Clients
@@ -157,22 +156,6 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 m_client.Delete($"role/{roleId}");
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public List<BookContract> GetBooksForRole(int roleId, BookTypeEnumContract bookType)
-        {
-            try
-            {
-                var result = m_client.Get<List<BookContract>>($"role/{roleId}/book?filterByBookType={bookType}");
-                return result;
             }
             catch (HttpRequestException e)
             {

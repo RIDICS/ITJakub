@@ -77,10 +77,10 @@
         "$editionTable": {
           "type": "table",
           "printRowIfNullValue": true,
-          "replaceNullValueBy": "&lt;{@Nezadáno}&gt;",
+          "replaceNullValueBy": "NotFilled",
           "rows": [
             {
-              "label": "Editon",
+              "label": "Editor",
               "pattern": "{$editor}"
             },
             {
@@ -163,15 +163,12 @@
         },
         "$forumLink": {
           "type": "basic",
-          "pattern": "<a href='{ForumUrl}'>Link</a>",
+          "pattern": "<a href='{ForumUrl}'>{@Link}</a>",
           "printIfNullValue": false
         }
       }
     },
     "right-panel": {
-      "info-button": {
-        "onclick-callable": "listGrammarBookReadClicked(this)"
-      },
       "read-button": {
         "onclick-callable": "listGrammarBookReadClicked(this)"
       },

@@ -32,6 +32,7 @@ namespace Vokabular.MainService.DataContracts
             services.AddTransient<MainServiceResourceClient>();
             services.AddTransient<MainServiceRoleClient>();
             services.AddTransient<MainServiceSessionClient>();
+            services.AddTransient<MainServiceSnapshotClient>();
             services.AddTransient<MainServiceTermClient>();
             services.AddTransient<MainServiceUserClient>();
         }

@@ -107,23 +107,6 @@ namespace Vokabular.MainService.Controllers
             m_roleManager.AddUserToRole(userId, roleId);
         }
 
-        [Authorize]
-        [HttpGet("{roleId}/book")] //TODO categoryId -> bookTypeId as filtering query parameter
-        [ProducesResponseType(typeof(List<BookContract>), StatusCodes.Status200OK)]
-        public IActionResult GetBooksForRole(int roleId, [FromQuery] BookTypeEnumContract? filterByBookType)
-        //public CategoryContentContract GetCategoryContentForGroup(int groupId, int categoryId) // TODO use correct return type
-        {
-            if (filterByBookType == null)
-                return BadRequest();
-
-            var result = m_bookManager.GetBooksForRole(roleId, filterByBookType.Value);
-            return Ok(result);
-        }
-
-        //public CategoryContentContract GetAllCategoryContent(int categoryId) // TODO this method belongs to different controller
-        //{
-        //}
-
         [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpPost("{roleId}/permission/special")]
         public void AddSpecialPermissionsToGroup(int roleId, [FromBody] IntegerIdListContract specialPermissionsIds)

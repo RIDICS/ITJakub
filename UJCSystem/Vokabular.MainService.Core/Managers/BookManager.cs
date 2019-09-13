@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Vokabular.Core.Storage;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.MainService.Core.Communication;
 using Vokabular.ForumSite.Core.Helpers;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Utils;
-using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.MainService.Core.Works.Search;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -27,49 +26,45 @@ namespace Vokabular.MainService.Core.Managers
         private readonly MetadataRepository m_metadataRepository;
         private readonly BookRepository m_bookRepository;
         private readonly ResourceRepository m_resourceRepository;
-        private readonly PermissionRepository m_permissionRepository;
         private readonly FileSystemManager m_fileSystemManager;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
         private readonly AuthorizationManager m_authorizationManager;
         private readonly AuthenticationManager m_authenticationManager;
-        private readonly CommunicationProvider m_communicationProvider;
         private readonly CategoryRepository m_categoryRepository;
         private readonly ForumSiteUrlHelper m_forumSiteUrlHelper;
+        private readonly IMapper m_mapper;
+        private readonly PortalTypeProvider m_portalTypeProvider;
         private readonly BookTypeEnum[] m_filterBookType;
 
         public BookManager(MetadataRepository metadataRepository, CategoryRepository categoryRepository,
-            BookRepository bookRepository, ResourceRepository resourceRepository, PermissionRepository permissionRepository,
+            BookRepository bookRepository, ResourceRepository resourceRepository,
             FileSystemManager fileSystemManager, FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager,
-            AuthenticationManager authenticationManager, CommunicationProvider communicationProvider, ForumSiteUrlHelper forumSiteUrlHelper)
+            AuthenticationManager authenticationManager, ForumSiteUrlHelper forumSiteUrlHelper,
+            IMapper mapper, PortalTypeProvider portalTypeProvider)
         {
             m_metadataRepository = metadataRepository;
             m_bookRepository = bookRepository;
             m_resourceRepository = resourceRepository;
-            m_permissionRepository = permissionRepository;
             m_fileSystemManager = fileSystemManager;
             m_fulltextStorageProvider = fulltextStorageProvider;
             m_authorizationManager = authorizationManager;
             m_authenticationManager = authenticationManager;
-            m_communicationProvider = communicationProvider;
             m_forumSiteUrlHelper = forumSiteUrlHelper;
+            m_mapper = mapper;
+            m_portalTypeProvider = portalTypeProvider;
             m_categoryRepository = categoryRepository;
             m_filterBookType = new[] {BookTypeEnum.CardFile};
         }
 
+        [Obsolete]
         public List<BookWithCategoriesContract> GetBooksByTypeForUser(BookTypeEnumContract bookType)
         {
-            var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
+            var projectType = m_portalTypeProvider.GetDefaultProjectType();
+            var projectTypeEnum = m_mapper.Map<ProjectTypeEnum>(projectType);
+            var bookTypeEnum = m_mapper.Map<BookTypeEnum>(bookType);
             var user = m_authenticationManager.GetCurrentUser(true);
-            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByBookType(bookTypeEnum, user.Id));
-            var resultList = Mapper.Map<List<BookWithCategoriesContract>>(dbMetadataList);
-            return resultList;
-        }
-
-        public List<BookContract> GetAllBooksByType(BookTypeEnumContract bookType)
-        {           
-            var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
-            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetAllMetadataByBookType(bookTypeEnum));
-            var resultList = Mapper.Map<List<BookContract>>(dbMetadataList);
+            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByBookType(bookTypeEnum, user.Id, projectTypeEnum));
+            var resultList = m_mapper.Map<List<BookWithCategoriesContract>>(dbMetadataList);
             return resultList;
         }
 
@@ -77,17 +72,7 @@ namespace Vokabular.MainService.Core.Managers
         {
             var dbResult = m_bookRepository.InvokeUnitOfWork(x => x.GetBookTypes());
             var filteredResult = dbResult.Where(x => !m_filterBookType.Contains(x.Type));
-            var result = Mapper.Map<List<BookTypeContract>>(filteredResult);
-            return result;
-        }
-
-        public List<BookContract> GetBooksForRole(int roleId, BookTypeEnumContract bookType)
-        {
-            new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
-            var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalIdOrCreate(roleId));
-            var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
-            var dbResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataForUserGroup(bookTypeEnum, group.Id));
-            var result = Mapper.Map<List<BookContract>>(dbResult);
+            var result = m_mapper.Map<List<BookTypeContract>>(filteredResult);
             return result;
         }
 
@@ -96,21 +81,22 @@ namespace Vokabular.MainService.Core.Managers
             m_authorizationManager.AuthorizeBook(projectId);
 
             var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetLatestMetadataResource(projectId));
-            var result = Mapper.Map<BookContract>(metadataResult);
+            var result = m_mapper.Map<BookContract>(metadataResult);
             return result;
         }
 
-        public BookContract GetBookInfoByExternalId(string projectExternalId)
+        public BookContract GetBookInfoByExternalId(string projectExternalId, ProjectTypeContract projectType)
         {
             // Authorize after getting projectId
 
-            var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetLatestMetadataResourceByExternalId(projectExternalId));
+            var projectTypeEnum = m_mapper.Map<ProjectTypeEnum>(projectType);
+            var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetLatestMetadataResourceByExternalId(projectExternalId, projectTypeEnum));
             if (metadataResult == null)
                 return null;
 
             m_authorizationManager.AuthorizeBook(metadataResult.Resource.Project.Id);
 
-            var result = Mapper.Map<BookContract>(metadataResult);
+            var result = m_mapper.Map<BookContract>(metadataResult);
             return result;
         }
         
@@ -119,7 +105,7 @@ namespace Vokabular.MainService.Core.Managers
             m_authorizationManager.AuthorizeBook(projectId);
 
             var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataWithDetail(projectId));
-            var result = Mapper.Map<SearchResultDetailContract>(metadataResult);
+            var result = m_mapper.Map<SearchResultDetailContract>(metadataResult);
             
             if (metadataResult.Resource.Project.ForumId != null)
             {
@@ -136,7 +122,7 @@ namespace Vokabular.MainService.Core.Managers
             var audioBookDetailWork = new GetAudioBookDetailWork(m_metadataRepository, m_bookRepository, projectId);
             var dbResult = audioBookDetailWork.Execute();
 
-            var bookInfo = Mapper.Map<AudioBookSearchResultContract>(dbResult);
+            var bookInfo = m_mapper.Map<AudioBookSearchResultContract>(dbResult);
 
             var audioResourceByTrackId = audioBookDetailWork.Recordings.Where(x => x.ResourceTrack != null)
                 .GroupBy(key => key.ResourceTrack.Id)
@@ -145,12 +131,12 @@ namespace Vokabular.MainService.Core.Managers
             var trackList = new List<TrackWithRecordingContract>(audioBookDetailWork.Tracks.Count);
             foreach (var trackResource in audioBookDetailWork.Tracks)
             {
-                var track = Mapper.Map<TrackWithRecordingContract>(trackResource);
+                var track = m_mapper.Map<TrackWithRecordingContract>(trackResource);
                 trackList.Add(track);
 
                 if (audioResourceByTrackId.TryGetValue(trackResource.Resource.Id, out var audioList))
                 {
-                    track.Recordings = Mapper.Map<List<AudioContract>>(audioList);
+                    track.Recordings = m_mapper.Map<List<AudioContract>>(audioList);
                 }
             }
 
@@ -164,7 +150,7 @@ namespace Vokabular.MainService.Core.Managers
             m_authorizationManager.AuthorizeBook(projectId);
 
             var listResult = m_bookRepository.InvokeUnitOfWork(x => x.GetPageList(projectId));
-            var result = Mapper.Map<List<PageContract>>(listResult);
+            var result = m_mapper.Map<List<PageContract>>(listResult);
             return result;
         }
 
@@ -173,7 +159,7 @@ namespace Vokabular.MainService.Core.Managers
             m_authorizationManager.AuthorizeBook(projectId);
 
             var dbResult = m_bookRepository.InvokeUnitOfWork(x => x.GetChapterList(projectId));
-            var resultList = ChaptersHelper.ChapterToHierarchyContracts(dbResult);
+            var resultList = ChaptersHelper.ChapterToHierarchyContracts(dbResult, m_mapper);
             
             return resultList;
         }
@@ -183,7 +169,7 @@ namespace Vokabular.MainService.Core.Managers
             m_authorizationManager.AuthorizeResource(resourcePageId);
 
             var listResult = m_bookRepository.InvokeUnitOfWork(x => x.GetPageTermList(resourcePageId));
-            var result = Mapper.Map<List<TermContract>>(listResult);
+            var result = m_mapper.Map<List<TermContract>>(listResult);
             return result;
         }
 
@@ -308,8 +294,8 @@ namespace Vokabular.MainService.Core.Managers
             IList<long> selectedProjectIds)
         {
             var userId = m_authorizationManager.GetCurrentUserId();
-            var bookTypeEnum = Mapper.Map<BookTypeEnum?>(bookType);
-            var projectTypeEnum = Mapper.Map<ProjectTypeEnum>(projectType);
+            var bookTypeEnum = m_mapper.Map<BookTypeEnum?>(bookType);
+            var projectTypeEnum = m_mapper.Map<ProjectTypeEnum>(projectType);
             var result = m_bookRepository.InvokeUnitOfWork(x =>
             {
                 var allCategoryIds = selectedCategoryIds.Count > 0
@@ -324,12 +310,12 @@ namespace Vokabular.MainService.Core.Managers
         public long SearchHeadwordRowNumber(HeadwordRowNumberSearchRequestContract request, ProjectTypeContract projectType)
         {
             var userId = m_authorizationManager.GetCurrentUserId();
-            var projectTypeEnum = Mapper.Map<ProjectTypeEnum>(projectType);
+            var projectTypeEnum = m_mapper.Map<ProjectTypeEnum>(projectType);
 
             if (request.Category.BookType == null)
                 throw new MainServiceException(MainServiceErrorCode.NullBookTypeNotSupported,"Null value of BookType is not supported");
 
-            var searchHeadwordRowNumberWork = new SearchHeadwordRowNumberWork(m_bookRepository, m_categoryRepository, request, userId, projectTypeEnum);
+            var searchHeadwordRowNumberWork = new SearchHeadwordRowNumberWork(m_bookRepository, m_categoryRepository, request, userId, projectTypeEnum, m_mapper);
             var result = searchHeadwordRowNumberWork.Execute();
 
             return result;

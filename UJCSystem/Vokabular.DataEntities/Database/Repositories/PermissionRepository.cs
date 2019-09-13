@@ -4,6 +4,7 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
@@ -74,7 +75,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return (int) GetSession().Save(group);
         }
 
-        public virtual IList<string> GetFilteredBookXmlIdListByUserPermissions(int userId, IEnumerable<string> projectExternalIds)
+        public virtual IList<string> GetFilteredBookXmlIdListByUserPermissions(int userId, IEnumerable<string> projectExternalIds, ProjectTypeEnum projectType)
         {
             Project projectAlias = null;
             Permission permissionAlias = null;
@@ -88,6 +89,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Select(Projections.Distinct(Projections.Property(() => projectAlias.ExternalId)))
                 .Where(() => userAlias.Id == userId)
                 .AndRestrictionOn(() => projectAlias.ExternalId).IsInG(projectExternalIds)
+                .And(() => projectAlias.ProjectType == projectType)
                 .List<string>();
 
             return filteredBookXmlIds;

@@ -23,6 +23,7 @@ class UserRolesEditor {
             "role",
             ViewType.Partial,
             false,
+            false,
             this.initRemoveUserFromRoleButton,
             this);
         this.roleList.init();

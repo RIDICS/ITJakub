@@ -280,7 +280,7 @@
                     }
                 } else {
                     const placeHolderText =
-                        `<div class="comment-placeholder-container"><div class="comment-placeholder-text">No comments yet.</div></div>`;
+                        `<div class="comment-placeholder-container"><div class="comment-placeholder-text">${localization.translate("NoComments", "RidicsProject").value}</div></div>`;
                     commentAreaEl.append(placeHolderText);
                 }
             });
