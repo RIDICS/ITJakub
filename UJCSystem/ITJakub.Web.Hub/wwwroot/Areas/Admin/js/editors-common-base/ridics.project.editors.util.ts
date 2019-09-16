@@ -120,7 +120,7 @@
         return result;
     }
 
-    loadEditionNote(projectId: number): JQuery.jqXHR<string> {//TODO
+    loadEditionNote(projectId: number): JQuery.jqXHR<IEditionNoteContract> {
         const format: TextFormatEnumContract = TextFormatEnumContract.Raw;
         const ajax = $.get(`${this.serverPath}Admin/ContentEditor/GetEditionNote`,
             {
@@ -130,7 +130,7 @@
         return ajax;
     }
 
-    saveEditionNote(noteRequest: IEditionNote): JQuery.jqXHR {
+    saveEditionNote(noteRequest: ICreateEditionNote): JQuery.jqXHR {
         const ajax = $.post(`${this.serverPath}Admin/ContentEditor/SetEditionNote`,
             noteRequest as JQuery.PlainObject);
         return ajax;

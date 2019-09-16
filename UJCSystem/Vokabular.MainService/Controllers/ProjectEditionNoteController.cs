@@ -10,11 +10,11 @@ namespace Vokabular.MainService.Controllers
     [Route("api/Project")]
     public class ProjectEditionNoteController : BaseController
     {
-        private readonly ProjectItemManager m_projectItemManager;
+        private readonly EditionNoteManager m_editionNoteManager;
 
-        public ProjectEditionNoteController(ProjectItemManager projectItemManager)
+        public ProjectEditionNoteController(EditionNoteManager editionNoteManager)
         {
-            m_projectItemManager = projectItemManager;
+            m_editionNoteManager = editionNoteManager;
         }
 
         [HttpGet("{projectId}/edition-note")]
@@ -22,7 +22,7 @@ namespace Vokabular.MainService.Controllers
         public IActionResult GetEditionNote(long projectId, TextFormatEnumContract? format)
         {
             var formatValue = format ?? TextFormatEnumContract.Html;
-            var result = m_projectItemManager.GetEditionNote(projectId, formatValue);
+            var result = m_editionNoteManager.GetEditionNote(projectId, formatValue);
             if (result == null)
                 return NotFound();
 
@@ -35,7 +35,7 @@ namespace Vokabular.MainService.Controllers
         {
             try
             {
-                var resultId = m_projectItemManager.CreateEditionNoteVersion(projectId, data);
+                var resultId = m_editionNoteManager.CreateEditionNoteVersion(projectId, data);
                 return Ok(resultId);
             }
             catch (HttpErrorCodeException exception)

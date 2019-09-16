@@ -25,7 +25,6 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly MetadataRepository m_metadataRepository;
         private readonly BookRepository m_bookRepository;
-        private readonly ResourceRepository m_resourceRepository;
         private readonly FileSystemManager m_fileSystemManager;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
         private readonly AuthorizationManager m_authorizationManager;
@@ -36,15 +35,16 @@ namespace Vokabular.MainService.Core.Managers
         private readonly PortalTypeProvider m_portalTypeProvider;
         private readonly BookTypeEnum[] m_filterBookType;
 
+
         public BookManager(MetadataRepository metadataRepository, CategoryRepository categoryRepository,
-            BookRepository bookRepository, ResourceRepository resourceRepository,
-            FileSystemManager fileSystemManager, FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager,
+            BookRepository bookRepository, FileSystemManager fileSystemManager,
+            FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager,
             AuthenticationManager authenticationManager, ForumSiteUrlHelper forumSiteUrlHelper,
             IMapper mapper, PortalTypeProvider portalTypeProvider)
         {
             m_metadataRepository = metadataRepository;
+            m_categoryRepository = categoryRepository;
             m_bookRepository = bookRepository;
-            m_resourceRepository = resourceRepository;
             m_fileSystemManager = fileSystemManager;
             m_fulltextStorageProvider = fulltextStorageProvider;
             m_authorizationManager = authorizationManager;
@@ -52,7 +52,6 @@ namespace Vokabular.MainService.Core.Managers
             m_forumSiteUrlHelper = forumSiteUrlHelper;
             m_mapper = mapper;
             m_portalTypeProvider = portalTypeProvider;
-            m_categoryRepository = categoryRepository;
             m_filterBookType = new[] {BookTypeEnum.CardFile};
         }
 
@@ -99,17 +98,17 @@ namespace Vokabular.MainService.Core.Managers
             var result = m_mapper.Map<BookContract>(metadataResult);
             return result;
         }
-        
+
         public SearchResultDetailContract GetBookDetail(long projectId)
         {
             m_authorizationManager.AuthorizeBook(projectId);
 
             var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataWithDetail(projectId));
             var result = m_mapper.Map<SearchResultDetailContract>(metadataResult);
-            
+
             if (metadataResult.Resource.Project.ForumId != null)
             {
-                result.ForumUrl = m_forumSiteUrlHelper.GetTopicsUrl((int)metadataResult.Resource.Project.ForumId);
+                result.ForumUrl = m_forumSiteUrlHelper.GetTopicsUrl((int) metadataResult.Resource.Project.ForumId);
             }
 
             return result;
@@ -160,7 +159,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var dbResult = m_bookRepository.InvokeUnitOfWork(x => x.GetChapterList(projectId));
             var resultList = ChaptersHelper.ChapterToHierarchyContracts(dbResult, m_mapper);
-            
+
             return resultList;
         }
 
@@ -301,7 +300,8 @@ namespace Vokabular.MainService.Core.Managers
                 var allCategoryIds = selectedCategoryIds.Count > 0
                     ? m_categoryRepository.GetAllSubcategoryIds(selectedCategoryIds)
                     : selectedCategoryIds;
-                return x.GetHeadwordAutocomplete(query, projectTypeEnum, bookTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteCount,
+                return x.GetHeadwordAutocomplete(query, projectTypeEnum, bookTypeEnum, allCategoryIds, selectedProjectIds,
+                    DefaultValues.AutocompleteCount,
                     userId);
             });
             return result.ToList();
@@ -313,26 +313,13 @@ namespace Vokabular.MainService.Core.Managers
             var projectTypeEnum = m_mapper.Map<ProjectTypeEnum>(projectType);
 
             if (request.Category.BookType == null)
-                throw new MainServiceException(MainServiceErrorCode.NullBookTypeNotSupported,"Null value of BookType is not supported");
+                throw new MainServiceException(MainServiceErrorCode.NullBookTypeNotSupported, "Null value of BookType is not supported");
 
-            var searchHeadwordRowNumberWork = new SearchHeadwordRowNumberWork(m_bookRepository, m_categoryRepository, request, userId, projectTypeEnum, m_mapper);
+            var searchHeadwordRowNumberWork =
+                new SearchHeadwordRowNumberWork(m_bookRepository, m_categoryRepository, request, userId, projectTypeEnum, m_mapper);
             var result = searchHeadwordRowNumberWork.Execute();
 
             return result;
-        }
-
-        public string GetEditionNote(long projectId, TextFormatEnumContract format)
-        {
-            m_authorizationManager.AuthorizeBook(projectId);
-
-            var editionNoteResource = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestEditionNote(projectId));
-            if (editionNoteResource == null)
-                return null;
-
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(editionNoteResource.Resource.Project.ProjectType);
-            var resultText = fulltextStorage.GetEditionNote(editionNoteResource, format);
-
-            return resultText;
         }
     }
 }

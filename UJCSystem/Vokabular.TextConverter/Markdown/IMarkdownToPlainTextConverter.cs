@@ -1,4 +1,4 @@
-﻿namespace Vokabular.FulltextService.Core.Helpers.Markdown
+﻿namespace Vokabular.TextConverter.Markdown
 {
     public interface IMarkdownToPlainTextConverter
     {

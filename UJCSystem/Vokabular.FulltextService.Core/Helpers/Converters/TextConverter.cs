@@ -1,7 +1,6 @@
 ﻿using System;
-using Vokabular.FulltextService.Core.Helpers.Hml;
-using Vokabular.FulltextService.Core.Helpers.Markdown;
 using Vokabular.Shared.DataContracts.Types;
+using Vokabular.TextConverter.Markdown;
 
 namespace Vokabular.FulltextService.Core.Helpers.Converters
 {

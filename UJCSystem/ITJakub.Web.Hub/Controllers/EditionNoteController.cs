@@ -13,7 +13,7 @@ namespace ITJakub.Web.Hub.Controllers
         public ActionResult EditionNote(long bookId)
         {
             var client = GetBookClient();
-            var text = client.GetEditionNote(bookId, TextFormatEnumContract.Html);
+            var text = client.GetEditionNoteText(bookId, TextFormatEnumContract.Html);
             ViewData["noteText"] = text;
             return View();
         }

@@ -46,6 +46,9 @@ namespace Vokabular.MainService.Core.Works.Snapshot
             var resourceVersions = m_resourceVersionIds.Select(x => m_projectRepository.Load<ResourceVersion>(x)).ToList();
             var versionNumber = latestSnapshot?.VersionNumber ?? 0;
 
+            var editionNote = m_resourceRepository.GetLatestEditionNote(m_projectId);
+            resourceVersions.Add(editionNote);
+
             var newDbSnapshot = new DataEntities.Database.Entities.Snapshot
             {
                 Project = project,
