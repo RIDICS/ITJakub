@@ -424,7 +424,7 @@ namespace Vokabular.MainService.Controllers
         public IActionResult GetEditionNoteText(long projectId, [FromQuery] TextFormatEnumContract? format)
         {
             var formatValue = format ?? TextFormatEnumContract.Html;
-            var result = m_editionNoteManager.GetEditionNote(projectId, formatValue).Text;
+            var result = m_editionNoteManager.GetEditionNote(projectId, formatValue)?.Text;
             if (result == null)
                 return NotFound();
 
