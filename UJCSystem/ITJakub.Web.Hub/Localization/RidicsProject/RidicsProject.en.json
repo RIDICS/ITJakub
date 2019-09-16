@@ -42,7 +42,7 @@
     "ToggleEditingMode": "Toggle editing mode",
     "DisplayPageNumbers": "Display page numbers",
     "GoToPage": "Go to page...",
-    "UploadNewVersion": "Upload new version"
+    "UploadNewVersion": "Upload new version",
 
     "EditionNoteLoadFailed": "An unexpected error occurred while loading edition note.",
     "EditionNoteSaveSuccess": "Note has been saved successfully",
