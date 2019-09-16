@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Options;
-using Vokabular.FulltextService.Core.Options;
+using Vokabular.TextConverter.Options;
 
 namespace Vokabular.FulltextService.Core.Helpers.Validators
 {

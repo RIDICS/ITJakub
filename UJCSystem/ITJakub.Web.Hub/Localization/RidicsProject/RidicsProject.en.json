@@ -76,6 +76,9 @@
     "ChangesSaveFail": "There was an error while saving your changes.",
     "ChangesSaveConflict": "Failed to save your changes due to version conflict.",
     "EnterPageName": "Please enter a page name.",
-    "PageDoesNotExist": "Page {0} does not exist."
+    "PageDoesNotExist": "Page {0} does not exist.",
+    "EditionNoteLoadFailed": "An unexpected error occurred while loading edition note.",
+    "EditionNoteSaveSuccess": "Note has been saved successfully",
+    "EditionNoteSaveFailed": "An unexpected error occurred while saving edition note."
   }
 }

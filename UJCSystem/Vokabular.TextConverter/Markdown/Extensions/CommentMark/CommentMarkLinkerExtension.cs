@@ -1,9 +1,9 @@
 ﻿using Markdig;
 using Markdig.Helpers;
 using Microsoft.Extensions.Options;
-using Vokabular.FulltextService.Core.Options;
+using Vokabular.TextConverter.Options;
 
-namespace Vokabular.FulltextService.Core.Helpers.Markdown.Extensions.CommentMark
+namespace Vokabular.TextConverter.Markdown.Extensions.CommentMark
 {
     public static class CommentMarkLinkerExtension
     {

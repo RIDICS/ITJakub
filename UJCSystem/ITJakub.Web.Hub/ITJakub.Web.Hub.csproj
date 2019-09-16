@@ -34,6 +34,7 @@
     <ProjectReference Include="..\Vokabular.Shared.AspNetCore\Vokabular.Shared.AspNetCore.csproj" />
     <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj" />
+    <ProjectReference Include="..\Vokabular.TextConverter\Vokabular.TextConverter.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,7 +43,6 @@
     <PackageReference Include="DryIoc.dll" Version="4.0.7" />
     <PackageReference Include="DryIoc.Microsoft.DependencyInjection" Version="3.0.3" />
     <PackageReference Include="log4net" Version="2.0.8" />
-    <PackageReference Include="Markdig" Version="0.17.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="2.1.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />

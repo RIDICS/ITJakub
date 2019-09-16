@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Snapshot;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -19,15 +21,20 @@ namespace Vokabular.MainService.Core.Managers
         private readonly AuthorizationManager m_authorizationManager;
         private readonly UserDetailManager m_userDetailManager;
         private readonly IMapper m_mapper;
+        private readonly ResourceRepository m_resourceRepository;
+        private readonly FulltextStorageProvider m_fulltextStorageProvider;
 
         public SnapshotManager(ProjectRepository projectRepository, SnapshotRepository snapshotRepository,
-            AuthorizationManager authorizationManager, UserDetailManager userDetailManager, IMapper mapper)
+            AuthorizationManager authorizationManager, UserDetailManager userDetailManager, IMapper mapper,
+            ResourceRepository resourceRepository, FulltextStorageProvider fulltextStorageProvider)
         {
             m_projectRepository = projectRepository;
             m_snapshotRepository = snapshotRepository;
             m_authorizationManager = authorizationManager;
             m_userDetailManager = userDetailManager;
             m_mapper = mapper;
+            m_resourceRepository = resourceRepository;
+            m_fulltextStorageProvider = fulltextStorageProvider;
         }
 
         public SnapshotContract GetLatestPublishedSnapshot(long projectId)
@@ -51,8 +58,12 @@ namespace Vokabular.MainService.Core.Managers
             var userId = m_authorizationManager.GetCurrentUserId();
             var bookTypes = m_mapper.Map<IList<BookTypeEnum>>(data.BookTypes);
             var defaultBookTypes = m_mapper.Map<BookTypeEnum>(data.DefaultBookType);
-            var snapshotId = new CreateSnapshotWork(m_projectRepository, data.ProjectId, userId, data.ResourceVersionIds, data.Comment, bookTypes,
-                defaultBookTypes).Execute();
+
+            var projectInfo = m_projectRepository.InvokeUnitOfWork(x => x.FindById<Project>(data.ProjectId));
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectInfo.ProjectType);
+
+            var snapshotId = new CreateSnapshotWork(m_projectRepository, m_resourceRepository, data.ProjectId, userId,
+                data.ResourceVersionIds, data.Comment, bookTypes, defaultBookTypes, fulltextStorage).Execute();
             return snapshotId;
         }
 

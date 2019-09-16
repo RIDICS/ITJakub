@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using Vokabular.FulltextService.Core.Helpers.Converters;
-using Vokabular.FulltextService.Core.Helpers.Markdown;
 using Vokabular.FulltextService.Core.Managers;
 using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.Shared.DataContracts.Types;
+using Vokabular.TextConverter.Markdown;
 
 namespace Vokabular.FulltextService.Core.Helpers
 {

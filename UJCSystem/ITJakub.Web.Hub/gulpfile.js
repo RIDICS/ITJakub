@@ -9,8 +9,10 @@ var gulp = require("gulp"),
   concat = require("gulp-concat"),
   cssmin = require("gulp-cssmin"),
   less = require("gulp-less"),
+  lessToScss = require("gulp-less-to-scss"),
+  sass = require("gulp-dart-sass"),
   watch = require("gulp-watch"),
-  sourcemaps = require('gulp-sourcemaps'),
+  sourcemaps = require("gulp-sourcemaps"),
   uglify = require("gulp-uglify"),
   ts = require("gulp-typescript"),
   yarn = require("gulp-yarn");
@@ -100,6 +102,24 @@ gulp.task("watch:less_areas", function () {
 });
 
 gulp.task("watch:less", gulp.parallel("watch:less_root", "watch:less_areas"));
+
+
+// Sass build
+gulp.task("convert:sass_colors", function() {
+    return gulp.src(paths.webroot + "css/ITJakub.Colors-selected.less")
+        .pipe(lessToScss())
+        .pipe(gulp.dest(paths.webroot + "css"));
+});
+
+gulp.task("build:sass_lib_list", function() {
+    return gulp.src([
+            paths.webroot + "css/lib.loading-visualization.scss"
+        ])
+        .pipe(sass().on("error", sass.logError))
+        .pipe(gulp.dest(paths.webroot + "css"));
+});
+
+gulp.task("build:sass_lib", gulp.series("convert:sass_colors", "build:sass_lib_list"));
 
 
 // TypeScript build
@@ -438,6 +458,6 @@ gulp.task("yarn-runtime", function () {
 
 // Main build
 
-gulp.task("default", gulp.parallel("build_bundle:ts", "build:less"));
+gulp.task("default", gulp.parallel("build_bundle:ts", "build:less", "build:sass_lib"));
 
 gulp.task("watch", gulp.parallel("watch:less", "watch:ts"));

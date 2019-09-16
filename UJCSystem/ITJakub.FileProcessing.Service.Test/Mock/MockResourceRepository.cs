@@ -557,8 +557,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                         Id = projectId
                     }
                 },
-                VersionNumber = 1,
-                ExternalId = null,
+                VersionNumber = 1
             };
         }
     }

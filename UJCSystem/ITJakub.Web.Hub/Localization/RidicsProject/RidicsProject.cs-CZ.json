@@ -76,6 +76,9 @@
     "ChangesSaveFail": "Při ukládání změn došlo k neočekávané chybě.",
     "ChangesSaveConflict": "Nelze uložit změny. Jiný editor uložil změny dříve než Vy.",
     "EnterPageName": "Prosím vyplňte název stránky.",
-    "PageDoesNotExist": "Stránka {0} neexistuje."
+    "PageDoesNotExist": "Stránka {0} neexistuje.",
+    "EditionNoteLoadFailed": "Při načítání ediční poznámky nastala neočekávaná chyba.",
+    "EditionNoteSaveSuccess": "Ediční poznámka byla úspěšně uložena.",
+    "EditionNoteSaveFailed": "Při ukládání ediční poznámky nastala neočekávaná chyba."
   }
 }

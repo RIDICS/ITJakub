@@ -158,7 +158,7 @@ namespace ITJakub.FileProcessing.Service.Test
             };
             var subtask = new UpdateMetadataSubtask(metadataRepository);
 
-            subtask.UpdateMetadata(40, 1, "comment", bookData);
+            subtask.UpdateMetadata(40, 1, bookData);
 
             var createdMetadata = (MetadataResource) metadataRepository.CreatedObjects.Single();
             Assert.AreEqual(30, createdMetadata.VersionNumber);
@@ -177,7 +177,7 @@ namespace ITJakub.FileProcessing.Service.Test
             };
             subtask = new UpdateMetadataSubtask(metadataRepository);
 
-            subtask.UpdateMetadata(40, 1, "comment", bookData);
+            subtask.UpdateMetadata(40, 1, bookData);
 
             createdMetadata = (MetadataResource)metadataRepository.CreatedObjects.Single();
             Assert.AreEqual(1, createdMetadata.VersionNumber);
@@ -235,7 +235,7 @@ namespace ITJakub.FileProcessing.Service.Test
             };
             
             var subtask = new UpdatePagesSubtask(resourceRepository);
-            subtask.UpdatePages(40, 3, 1, "comment", bookData, GetTestTermCache());
+            subtask.UpdatePages(40, 3, 1, bookData, GetTestTermCache());
 
             Assert.AreEqual(1, resourceRepository.CreatedObjects.Count);
             Assert.AreEqual(2, resourceRepository.UpdatedObjects.Count);
@@ -276,7 +276,7 @@ namespace ITJakub.FileProcessing.Service.Test
             };
 
             var subtask = new UpdatePagesSubtask(resourceRepository);
-            subtask.UpdatePages(40, 3, 1, "comment", bookData, GetTestTermCache());
+            subtask.UpdatePages(40, 3, 1, bookData, GetTestTermCache());
 
             var createdTexts = resourceRepository.CreatedObjects.OfType<TextResource>().ToList();
             var updatedTexts = resourceRepository.UpdatedObjects.OfType<TextResource>().ToList();
@@ -320,7 +320,7 @@ namespace ITJakub.FileProcessing.Service.Test
             };
 
             var subtask = new UpdatePagesSubtask(resourceRepository);
-            subtask.UpdatePages(41, 3, 2, "upload comment", bookData, GetTestTermCache());
+            subtask.UpdatePages(41, 3, 2, bookData, GetTestTermCache());
 
             var createdImages = resourceRepository.CreatedObjects.OfType<ImageResource>().ToList();
             var updatedImages = resourceRepository.UpdatedObjects.OfType<ImageResource>().ToList();
@@ -381,7 +381,7 @@ namespace ITJakub.FileProcessing.Service.Test
 
             var subtask = new UpdateChaptersSubtask(resourceRepository);
             var pageResources = resourceRepository.GetProjectPages(0).ToList();
-            subtask.UpdateChapters(41, 2, "upload", bookData, pageResources);
+            subtask.UpdateChapters(41, 2, bookData, pageResources);
 
             var createdChapters = resourceRepository.CreatedObjects.OfType<ChapterResource>().ToList();
             var updatedChapters = resourceRepository.UpdatedObjects.OfType<ChapterResource>().ToList();
@@ -460,7 +460,7 @@ namespace ITJakub.FileProcessing.Service.Test
             };
 
             var subtask = new UpdateHeadwordsSubtask(resourceRepository);
-            subtask.UpdateHeadwords(41, MockResourceRepository.HeadwordBookVersionId, 2, "upload", bookData, null);
+            subtask.UpdateHeadwords(41, MockResourceRepository.HeadwordBookVersionId, 2, bookData, null);
             
             var createdHeadwordResources = resourceRepository.CreatedObjects.OfType<HeadwordResource>().ToList();
             var createdHeadwordItems = resourceRepository.CreatedObjects.OfType<HeadwordItem>().ToList();
@@ -549,7 +549,7 @@ namespace ITJakub.FileProcessing.Service.Test
             }).ToList();
 
             var subtask = new UpdateHeadwordsSubtask(resourceRepository);
-            subtask.UpdateHeadwords(41, MockResourceRepository.HeadwordBookVersionId, 2, "upload", bookData, dbPages);
+            subtask.UpdateHeadwords(41, MockResourceRepository.HeadwordBookVersionId, 2, bookData, dbPages);
 
             var createdHeadwordItems = resourceRepository.CreatedObjects.OfType<HeadwordItem>().ToList();
             Assert.AreEqual(2, createdHeadwordItems.Count);
@@ -662,7 +662,7 @@ namespace ITJakub.FileProcessing.Service.Test
             };
 
             var subtask = new UpdateTracksSubtask(resourceRepository);
-            subtask.UpdateTracks(40, 1, "comment", bookData);
+            subtask.UpdateTracks(40, 1, bookData);
 
             var createdTracks = resourceRepository.CreatedObjects.OfType<TrackResource>().ToList();
             var updatedTracks = resourceRepository.UpdatedObjects.OfType<TrackResource>().ToList();
@@ -715,7 +715,7 @@ namespace ITJakub.FileProcessing.Service.Test
             };
 
             var subtask = new UpdateTracksSubtask(resourceRepository);
-            subtask.UpdateFullBookTracks(40, 1, "comment", bookData);
+            subtask.UpdateFullBookTracks(40, 1, bookData);
 
             var createdRecordings = resourceRepository.CreatedObjects.OfType<AudioResource>().ToList();
             var updatedRecordings = resourceRepository.UpdatedObjects.OfType<AudioResource>().ToList();
@@ -748,8 +748,8 @@ namespace ITJakub.FileProcessing.Service.Test
             };
 
             var subtask = new UpdateBookVersionSubtask(resourceRepository);
-            subtask.UpdateBookVersion(0, 1, "comment", bookData);
-            subtask.UpdateBookVersion(40, 1, "comment", bookData);
+            subtask.UpdateBookVersion(0, 1, bookData);
+            subtask.UpdateBookVersion(40, 1, bookData);
 
             var createdBookVersions = resourceRepository.CreatedObjects.OfType<BookVersionResource>().ToList();
             var updatedBookVersions = resourceRepository.UpdatedObjects.OfType<BookVersionResource>().ToList();
@@ -775,8 +775,8 @@ namespace ITJakub.FileProcessing.Service.Test
             };
 
             var subtask = new UpdateEditionNoteSubtask(resourceRepository);
-            subtask.UpdateEditionNote(0, 155, 1, "comment", bookData);
-            subtask.UpdateEditionNote(40, 155, 1, "comment", bookData);
+            subtask.UpdateEditionNote(0, 155, 1, bookData);
+            subtask.UpdateEditionNote(40, 155, 1, bookData);
 
             var createdEditionNotes = resourceRepository.CreatedObjects.OfType<EditionNoteResource>().ToList();
             var updatedEditionNotes = resourceRepository.UpdatedObjects.OfType<EditionNoteResource>().ToList();

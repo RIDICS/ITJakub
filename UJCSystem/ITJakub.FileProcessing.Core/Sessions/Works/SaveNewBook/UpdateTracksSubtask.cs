@@ -12,7 +12,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
     public class UpdateTracksSubtask
     {
         private readonly ResourceRepository m_resourceRepository;
-        private List<long> m_allImportedResourceVersionIds;
+        private readonly List<long> m_allImportedResourceVersionIds;
         
         public UpdateTracksSubtask(ResourceRepository resourceRepository)
         {
@@ -22,7 +22,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
         public List<long> ImportedResourceVersionIds => m_allImportedResourceVersionIds;
 
-        public void UpdateTracks(long projectId, int userId, string comment, BookData bookData)
+        public void UpdateTracks(long projectId, int userId, BookData bookData)
         {
             if (bookData.Tracks == null)
                 return;
@@ -53,7 +53,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     {
                         VersionNumber = 1,
                         Resource = newResource,
-                        Comment = comment,
+                        Comment = string.Empty,
                         CreatedByUser = user,
                         CreateTime = now,
                         Name = track.Name,
@@ -70,7 +70,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     dbTrack.Name = track.Name;
                     dbTrack.Text = track.Text;
                     dbTrack.Position = track.Position;
-                    dbTrack.Comment = comment;
+                    dbTrack.Comment = string.Empty;
                     dbTrack.CreateTime = now;
                     dbTrack.CreatedByUser = user;
                     // Update resource name is not required (TrackResources are distinguish by name)
@@ -84,7 +84,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 }
 
                 m_allImportedResourceVersionIds.Add(dbTrack.Id);
-                UpdateAudioResources(track.Recordings, dbAudioGroups, dbTrack, project, comment, user, now, bookData.FileNameMapping);
+                UpdateAudioResources(track.Recordings, dbAudioGroups, dbTrack, project, user, now, bookData.FileNameMapping);
             }
 
             // Update positions of unused tracks
@@ -103,7 +103,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                    dbTrack.Position != trackData.Position;
         }
 
-        private void UpdateAudioResources(IList<TrackRecordingData> trackRecordings, Dictionary<long, List<AudioResource>> dbAudioGroups, TrackResource dbTrack, Project project, string comment, User user, DateTime now, Dictionary<string, FileResource> fileNameMapping)
+        private void UpdateAudioResources(IList<TrackRecordingData> trackRecordings, Dictionary<long, List<AudioResource>> dbAudioGroups, TrackResource dbTrack, Project project, User user, DateTime now, Dictionary<string, FileResource> fileNameMapping)
         {
             List<AudioResource> dbAudioResources;
             if (!dbAudioGroups.TryGetValue(dbTrack.Resource.Id, out dbAudioResources))
@@ -126,17 +126,17 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                             Project = project,
                         };
 
-                        CreateAudioResource(newDbResource, dbTrack.Resource, 1, trackRecordingData, comment, user, now, fileNameMapping);
+                        CreateAudioResource(newDbResource, dbTrack.Resource, 1, trackRecordingData, user, now, fileNameMapping);
                     }
                     else
                     {
-                        CreateAudioResource(dbAudioResource.Resource, dbTrack.Resource, dbAudioResource.VersionNumber + 1, trackRecordingData, comment, user, now, fileNameMapping);
+                        CreateAudioResource(dbAudioResource.Resource, dbTrack.Resource, dbAudioResource.VersionNumber + 1, trackRecordingData, user, now, fileNameMapping);
                     }
                 }
             }
         }
 
-        private void CreateAudioResource(Resource resource, Resource resourceTrack, int version, TrackRecordingData data, string comment, User user, DateTime now, Dictionary<string, FileResource> fileNameMapping)
+        private void CreateAudioResource(Resource resource, Resource resourceTrack, int version, TrackRecordingData data, User user, DateTime now, Dictionary<string, FileResource> fileNameMapping)
         {
             fileNameMapping.TryGetValue(data.FileName, out var fileInfo);
 
@@ -149,7 +149,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 FileName = data.FileName,
                 FileId = fileInfo?.NewNameInStorage,
                 VersionNumber = version,
-                Comment = comment,
+                Comment = string.Empty,
                 CreateTime = now,
                 CreatedByUser = user,
                 ResourceTrack = resourceTrack
@@ -160,7 +160,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             m_allImportedResourceVersionIds.Add(newDbAudio.Id);
         }
 
-        public void UpdateFullBookTracks(long projectId, int userId, string comment, BookData bookData)
+        public void UpdateFullBookTracks(long projectId, int userId, BookData bookData)
         {
             if (bookData.FullBookRecordings == null)
                 return;
@@ -184,11 +184,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         Project = project,
                     };
 
-                    CreateAudioResource(newDbResource, null, 1, fullBookRecording, comment, user, now, bookData.FileNameMapping);
+                    CreateAudioResource(newDbResource, null, 1, fullBookRecording, user, now, bookData.FileNameMapping);
                 }
                 else
                 {
-                    CreateAudioResource(dbFullBookAudio.Resource, null, dbFullBookAudio.VersionNumber + 1, fullBookRecording, comment, user, now, bookData.FileNameMapping);
+                    CreateAudioResource(dbFullBookAudio.Resource, null, dbFullBookAudio.VersionNumber + 1, fullBookRecording, user, now, bookData.FileNameMapping);
                 }
             }
         }

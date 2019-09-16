@@ -44,8 +44,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
 
             m_importedResourceVersionIds = new List<long>();
 
-            m_bookVersionId = new UpdateBookVersionSubtask(m_resourceRepository).UpdateBookVersion(m_projectId, m_userId, m_message, m_bookData);
-            new UpdateEditionNoteSubtask(m_resourceRepository).UpdateEditionNote(m_projectId, m_bookVersionId, m_userId, m_message, m_bookData);
+            m_bookVersionId = new UpdateBookVersionSubtask(m_resourceRepository).UpdateBookVersion(m_projectId, m_userId, m_bookData);
+            new UpdateEditionNoteSubtask(m_resourceRepository).UpdateEditionNote(m_projectId, m_bookVersionId, m_userId, m_bookData);
             
             //TODO update: transformations
 
@@ -53,7 +53,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
             new UpdateResponsiblePersonSubtask(m_projectRepository, m_personRepository).UpdateResponsiblePersonList(m_projectId, m_bookData);
 
             var updateMetadataSubtask = new UpdateMetadataSubtask(m_metadataRepository);
-            updateMetadataSubtask.UpdateMetadata(m_projectId, m_userId, m_message, m_bookData);
+            updateMetadataSubtask.UpdateMetadata(m_projectId, m_userId, m_bookData);
 
             // Categories are not updated from import (XMD doesn't contain detailed categorization)
             //new UpdateCategoriesSubtask(m_categoryRepository).UpdateCategoryList(m_projectId, m_bookData);
@@ -67,20 +67,20 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
             updateTermsSubtask.UpdateTerms(m_projectId, m_bookData);
 
             var updatePagesSubtask = new UpdatePagesSubtask(m_resourceRepository);
-            updatePagesSubtask.UpdatePages(m_projectId, m_bookVersionId, m_userId, m_message, m_bookData, updateTermsSubtask.ResultTermCache);
+            updatePagesSubtask.UpdatePages(m_projectId, m_bookVersionId, m_userId, m_bookData, updateTermsSubtask.ResultTermCache);
             m_importedResourceVersionIds.AddRange(updatePagesSubtask.ImportedResourceVersionIds);
 
             var updateChaptersSubtask = new UpdateChaptersSubtask(m_resourceRepository);
-            updateChaptersSubtask.UpdateChapters(m_projectId, m_userId, m_message, m_bookData, updatePagesSubtask.ResultPageResourceList);
+            updateChaptersSubtask.UpdateChapters(m_projectId, m_userId, m_bookData, updatePagesSubtask.ResultPageResourceList);
             m_importedResourceVersionIds.AddRange(updateChaptersSubtask.ImportedResourceVersionIds);
 
             var updateHeadwordsSubtask = new UpdateHeadwordsSubtask(m_resourceRepository);
-            updateHeadwordsSubtask.UpdateHeadwords(m_projectId, m_bookVersionId, m_userId, m_message, m_bookData, updatePagesSubtask.ResultPageResourceList);
+            updateHeadwordsSubtask.UpdateHeadwords(m_projectId, m_bookVersionId, m_userId, m_bookData, updatePagesSubtask.ResultPageResourceList);
             m_importedResourceVersionIds.AddRange(updateHeadwordsSubtask.ImportedResourceVersionIds);
 
             var updateTracksSubtask = new UpdateTracksSubtask(m_resourceRepository);
-            updateTracksSubtask.UpdateTracks(m_projectId, m_userId, m_message, m_bookData);
-            updateTracksSubtask.UpdateFullBookTracks(m_projectId, m_userId, m_message, m_bookData);
+            updateTracksSubtask.UpdateTracks(m_projectId, m_userId, m_bookData);
+            updateTracksSubtask.UpdateFullBookTracks(m_projectId, m_userId, m_bookData);
             m_importedResourceVersionIds.AddRange(updateTracksSubtask.ImportedResourceVersionIds);
             
             new UpdateHistoryLogSubtask(m_projectRepository).UpdateHistoryLog(m_projectId, m_userId, m_message, m_bookData);

@@ -400,11 +400,6 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             throw new NotSupportedException("Saving resources to eXist-db isn't supported. eXist-db storage supports only full book import.");
         }
 
-        public string CreateNewEditionNoteVersion(EditionNoteResource editionNoteResource)
-        {
-            throw new NotSupportedException("Saving resources to eXist-db isn't supported. eXist-db storage supports only full book import.");
-        }
-
         public CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotListByCriteria(int start, int count, SortTypeEnumContract? sort, SortDirectionEnumContract? sortDirection, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects, bool fetchNumberOfResults)
         {
             throw new NotSupportedException("Paged search in corpus in eXist-db isn't supported.");
@@ -418,6 +413,11 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         public long SearchCorpusTotalResultCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
             throw new NotSupportedException("Paged search in corpus in eXist-db isn't supported.");
+        }
+
+        public void CreateSnapshot(Snapshot snapshot, IList<TextResource> textResources, MetadataResource metadata)
+        {
+            throw new NotSupportedException("Snapshot creating is not supported in eXist-db.");
         }
     }
 }
