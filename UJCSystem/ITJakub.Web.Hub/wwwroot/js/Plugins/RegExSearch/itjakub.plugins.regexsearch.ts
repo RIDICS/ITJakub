@@ -974,6 +974,9 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
 
         var periodNameSpan: HTMLSpanElement = window.document.createElement("span");
         $(periodNameSpan).text(localization.translate("ApproxTime", "PluginsJs").value);
+        $(periodNameSpan).click((event) => {
+            this.changeCheckbox(event);
+        })
         periodCheckboxDiv.appendChild(periodValueCheckbox);
         periodCheckboxDiv.appendChild(periodNameSpan);
         periodSliderDiv.appendChild(periodCheckboxDiv);
@@ -1031,6 +1034,9 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
 
         var decadesNameSpan: HTMLSpanElement = window.document.createElement("span");
         $(decadesNameSpan).text(localization.translate("Decades", "PluginsJs").value);
+        $(decadesNameSpan).click((event) => {
+           this.changeCheckbox(event);
+        })
         decadeCheckboxDiv.appendChild(decadesCheckbox);
         decadeCheckboxDiv.appendChild(decadesNameSpan);
         decadesSliderDiv.appendChild(decadeCheckboxDiv);
@@ -1068,6 +1074,12 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
         this.dateDisplayDiv = datingDisplayedValueDiv;
         datingDiv.appendChild(datingDisplayedValueDiv);
         this.changedValue();
+    }
+
+    private changeCheckbox(labelClikcEvent: JQuery.ClickEvent) {
+        var checkbox = $(event.currentTarget).parent().find("input");
+        checkbox.prop("checked", !checkbox.prop("checked"));
+        checkbox.change();
     }
 
     private centuryChanged(sliderValue: DatingSliderValue) {
