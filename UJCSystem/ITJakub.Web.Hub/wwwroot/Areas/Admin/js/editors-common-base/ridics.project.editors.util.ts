@@ -29,16 +29,7 @@
     getServerAddress(): string {
         return this.serverPath;
     }
-
-    /**
- * Generates guid on the server
- * @returns {JQueryXHR} Ajax conraining GUID
- */
-    createTextRefereceId(): string {
-        const guid = Guid.generate();
-        return guid;
-    }
-
+    
     getProjectContent(projectId: number): JQuery.jqXHR<ITextWithPage[]> {
         const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetProjectContent`,
             {

@@ -10,9 +10,6 @@
     private isPreviewRendering = false;
     private editorExistsInTab = false;
 
-    private commentIdPattern =
-        "([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}";
-
     constructor(commentInput: CommentInput, util: EditorsUtil, commentArea: CommentArea) {
         this.commentInput = commentInput;
         this.util = util;
@@ -78,8 +75,8 @@
         const cm = editor.codemirror as CodeMirror.Doc;
         if (userIsEnteringText) {
             const commentText = cm.getSelection();
-            const commentBeginRegex = new RegExp(`(\\$${this.commentIdPattern}\\%)`);
-            const commentEndRegex = new RegExp(`(\\%${this.commentIdPattern}\\$)`);
+            const commentBeginRegex = new RegExp(`(\\$${this.commentInput.commentRegexExpr}\\%)`);
+            const commentEndRegex = new RegExp(`(\\%${this.commentInput.commentRegexExpr}\\$)`);
             if (commentBeginRegex.test(commentText) || commentEndRegex.test(commentText)) {
                 bootbox.alert({
                     title: localization.translate("Warning", "RidicsProject").value,
@@ -355,9 +352,9 @@
 
         this.simplemde = new SimpleMDE(simpleMdeOptions);
        
-        const commentIdRegex = new RegExp(`${this.commentIdPattern}`);
-        const commentBeginRegex = new RegExp(`(\\$${this.commentIdPattern}\\%)`);
-        const commentEndRegex = new RegExp(`(\\%${this.commentIdPattern}\\$)`);
+        const commentIdRegex = new RegExp(`${this.commentInput.commentRegexExpr}`);
+        const commentBeginRegex = new RegExp(`(\\$${this.commentInput.commentRegexExpr}\\%)`);
+        const commentEndRegex = new RegExp(`(\\%${this.commentInput.commentRegexExpr}\\$)`);
         this.simplemde.defineMode("comment",
             () => ({
                 token(stream: CodeMirror.StringStream) {

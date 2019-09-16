@@ -2,6 +2,9 @@
     private readonly commentArea: CommentArea;
     private readonly util: EditorsUtil;
 
+    readonly commentPattern = `comment-`;
+    readonly commentRegexExpr = `(${this.commentPattern}\\w+)`;
+
     constructor(commentArea: CommentArea, util: EditorsUtil) {
         this.commentArea = commentArea;
         this.util = util;
@@ -124,27 +127,18 @@
     }
 
     toggleCommentSignsAndReturnCommentNumber(codeMirror: CodeMirror.Doc, addSigns: boolean): string {
-        let output = "";
+        let output: string;
         let markSize: number;
         const selectedText = codeMirror.getSelection();
         const selectionStartChar = codeMirror.getCursor("from").ch;
         const selectionStartLine = codeMirror.getCursor("from").line;
         const selectionEndChar = codeMirror.getCursor("to").ch;
         const selectionEndLine = codeMirror.getCursor("to").line;
-        const guidRegExpString =
-            "([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}";
-        const customCommentarySign =
-            selectedText.match(
-                new RegExp(
-                    `\\$${guidRegExpString}\\%`)); //searching on one side only because of the same amount of characters.
+        const customCommentarySign = selectedText.match(new RegExp(`\\$${this.commentRegexExpr}\\%`)); //searching on one side only because of the same amount of characters.
         if (!addSigns) {
             if (customCommentarySign) {
-                output = selectedText.replace(
-                    new RegExp(`\\$${guidRegExpString}\\%`),
-                    "");
-                output = output.replace(
-                    new RegExp(`\\%${guidRegExpString}\\$`),
-                    "");
+                output = selectedText.replace(new RegExp(`\\$${this.commentRegexExpr}\\%`),"");
+                output = output.replace(new RegExp(`\\%${this.commentRegexExpr}\\$`),"");
                 markSize = customCommentarySign[0].length;
                 codeMirror.replaceSelection(output);
                 codeMirror.setSelection({ line: selectionStartLine, ch: selectionStartChar },
@@ -152,7 +146,7 @@
             }
             return null;
         } else {
-            const textReferenceId = this.util.createTextRefereceId();
+            const textReferenceId = this.createTextReferenceId(codeMirror.getValue());
                 if (addSigns) {
                     const uniqueNumberLength = textReferenceId.length;
                     markSize = uniqueNumberLength + 2; // + $ + %
@@ -163,6 +157,11 @@
                 }
                 return textReferenceId;
         }
+    }
+
+    createTextReferenceId(text: string): string {
+        const comments = text.match(new RegExp(`\\$${this.commentRegexExpr}\\%`, "g"));
+        return `${this.commentPattern}${comments == null ? 1 : comments.length + 1}`;
     }
 
     private addCommentFromCommentArea(textReferenceId: string,

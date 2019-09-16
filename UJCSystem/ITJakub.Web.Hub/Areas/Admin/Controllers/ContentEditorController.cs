@@ -23,13 +23,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
         }
 
-        [HttpPost]
-        public IActionResult GetGuid()
-        {
-            var guid = Guid.NewGuid();
-            return Json(guid);
-        }
-
         public IActionResult LoadCommentFile(long textId)
         {
             var parts = new List<CommentStructureResponse>();

@@ -9,9 +9,9 @@ namespace Vokabular.TextConverter.Markdown.Extensions.CommentMark
 {
     public class CommentMarkParser : InlineParser
     {
+        private const string CommentMark = "comment-";
         private readonly char m_closingChar;
         private readonly char m_escapeChar;
-        private readonly int m_idLenght = 36;
         private readonly char m_openingChar;
 
         public CommentMarkParser(IOptions<SpecialCharsOption> options)
@@ -33,21 +33,21 @@ namespace Vokabular.TextConverter.Markdown.Extensions.CommentMark
             processor.Inline = GetInlineContainer(processor, ref slice);
             return true;
         }
-
+        
         private CommentMarkContainer GetInlineContainer(InlineProcessor processor, ref StringSlice slice)
         {
             var start = slice.Start;
             int newStart;
             slice.NextChar();
 
-            var openingId = slice.Text.Substring(slice.Start, m_idLenght);
+            var openingId = GetCommentId(ref slice);
             string closingId;
             
-            List<Inline> childList = new List<Inline>();
+            var childList = new List<Inline>();
 
             do //While closing tag for this opening tag is not found
             {
-                slice.Start = slice.Start + m_idLenght;
+                slice.Start = slice.Start + openingId.Length;
                 
                 newStart = slice.Start + 1;
                 do //While closing char is escaped or it is not beginning of tag
@@ -84,7 +84,7 @@ namespace Vokabular.TextConverter.Markdown.Extensions.CommentMark
                 } while (!IsBeginningOfTag(slice, m_openingChar) && IsCurrentCharEscaped(slice));
 
                 slice.NextChar();
-                closingId = slice.Text.Substring(slice.Start, m_idLenght);
+                closingId = slice.Text.Substring(slice.Start, openingId.Length);
 
             } while (!openingId.Equals(closingId));
 
@@ -94,7 +94,7 @@ namespace Vokabular.TextConverter.Markdown.Extensions.CommentMark
             };
             childList.Add(lastCommentText);
 
-            slice.Start = slice.Start + m_idLenght + 1;
+            slice.Start = slice.Start + openingId.Length + 1;
             int inlineStart = processor.GetSourcePosition(start, out int line, out int column);
 
             return new CommentMarkContainer
@@ -130,13 +130,27 @@ namespace Vokabular.TextConverter.Markdown.Extensions.CommentMark
             return false;
         }
 
+        private string GetCommentId(ref StringSlice slice)
+        {
+            var commentId = slice.Text.Substring(slice.Start, CommentMark.Length);
+            var i = slice.Start + CommentMark.Length;
+            while (slice.Text[i].IsDigit())
+            {
+                commentId += slice.Text[i];
+                i++;
+            }
+
+            return commentId;
+        }
+
         private bool IsBeginningOfTag(StringSlice slice, char tagClosingChar)
         {
-            if (slice.PeekCharExtra(m_idLenght + 1) != tagClosingChar) //Not comment mark
+            var i = slice.Start + CommentMark.Length + 1;
+            while (slice.Text[i].IsDigit())
             {
-                return false;
+                i++;
             }
-            return true;
+            return slice.Text[i] == tagClosingChar;
         }
     }
 }
