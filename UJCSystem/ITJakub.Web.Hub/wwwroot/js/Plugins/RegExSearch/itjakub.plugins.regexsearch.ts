@@ -17,7 +17,7 @@
     public static createButton(label: string): HTMLButtonElement {
         var button = document.createElement("button");
         button.type = "button";
-        button.innerHTML = label;
+        $(button).text(label);
         $(button).addClass("btn");
         $(button).addClass("btn-default");
         $(button).addClass("regexsearch-button");
@@ -97,7 +97,7 @@ class Search {
         
         var searchButton = document.createElement("button");
         searchButton.type = "button";
-        searchButton.innerHTML = localization.translate("Search", "Home").value;
+        $(searchButton).text(localization.translate("Search", "Home").value);
         searchButton.classList.add("btn");
         searchButton.classList.add("btn-default");
         searchButton.classList.add("searchbar-button");
@@ -109,7 +109,7 @@ class Search {
        
             var advancedButton = document.createElement("button");
             advancedButton.type = "button";
-            advancedButton.innerHTML = localization.translate("Advanced", "PluginsJs").value;
+            $(advancedButton).text(localization.translate("Advanced", "PluginsJs").value);
             advancedButton.classList.add("btn");
             advancedButton.classList.add("btn-default");
             advancedButton.classList.add("searchbar-button");
@@ -563,7 +563,7 @@ class RegExConditionListItem {
 
     private createTextDelimeter(): HTMLDivElement {
         var delimeterDiv = document.createElement("div");
-        delimeterDiv.innerHTML = localization.translate("And", "PluginsJs").value;
+        $(delimeterDiv).text(localization.translate("And", "PluginsJs").value);
 
         var trashButton = document.createElement("button");
         $(trashButton).addClass("regexsearch-delimiter-remove-button");
@@ -616,7 +616,7 @@ class RegExConditionListItem {
         mainSearchDiv.appendChild(searchDestinationDiv);
 
         var searchDestinationSpan = document.createElement("span");
-        searchDestinationSpan.innerHTML = localization.translate("ChooseSearchFiled", "PluginsJs").value;
+        $(searchDestinationSpan).text(localization.translate("ChooseSearchFiled", "PluginsJs").value);
         $(searchDestinationSpan).addClass("regexsearch-upper-select-label");
         searchDestinationDiv.appendChild(searchDestinationSpan);
 
@@ -928,7 +928,7 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
         $(centuryCheckboxDiv).addClass("regex-dating-checkbox-div");
 
         var centuryNameSpan: HTMLSpanElement = window.document.createElement("span");
-        centuryNameSpan.innerHTML = localization.translate("Century", "PluginsJs").value;
+        $(centuryNameSpan).text(localization.translate("Century", "PluginsJs").value);
         centuryCheckboxDiv.appendChild(centuryNameSpan);
         centurySliderDiv.appendChild(centuryCheckboxDiv);
         precisionInputDiv.appendChild(centurySliderDiv);
@@ -973,7 +973,7 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
         });
 
         var periodNameSpan: HTMLSpanElement = window.document.createElement("span");
-        periodNameSpan.innerHTML = localization.translate("ApproxTime", "PluginsJs").value;
+        $(periodNameSpan).text(localization.translate("ApproxTime", "PluginsJs").value);
         periodCheckboxDiv.appendChild(periodValueCheckbox);
         periodCheckboxDiv.appendChild(periodNameSpan);
         periodSliderDiv.appendChild(periodCheckboxDiv);
@@ -1030,7 +1030,7 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
         });
 
         var decadesNameSpan: HTMLSpanElement = window.document.createElement("span");
-        decadesNameSpan.innerHTML = localization.translate("Decades", "PluginsJs").value;
+        $(decadesNameSpan).text(localization.translate("Decades", "PluginsJs").value);
         decadeCheckboxDiv.appendChild(decadesCheckbox);
         decadeCheckboxDiv.appendChild(decadesNameSpan);
         decadesSliderDiv.appendChild(decadeCheckboxDiv);
@@ -1059,7 +1059,7 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
         $(datingLabelDiv).addClass("regex-dating-checkbox-div");
 
         var decadesNameSpan: HTMLSpanElement = window.document.createElement("span");
-        decadesNameSpan.innerHTML = localization.translate("VerbalDescription", "PluginsJs").value;
+        $(decadesNameSpan).text(localization.translate("VerbalDescription", "PluginsJs").value);
         datingLabelDiv.appendChild(decadesNameSpan);
         datingDiv.appendChild(datingLabelDiv);
 
@@ -1241,7 +1241,7 @@ class RegExDatingConditionRangeYearView implements IRegExDatingConditionView {
 
         var spanInput: HTMLSpanElement = document.createElement("span");
         $(spanInput).addClass("regex-dating-input-span");
-        spanInput.innerHTML = localization.translate("Year:", "PluginsJs").value;
+        $(spanInput).text(localization.translate("Year:", "PluginsJs").value);
         
         precisionInpuDiv.appendChild(spanInput);
         precisionInpuDiv.appendChild(textInput);
@@ -1438,7 +1438,7 @@ class RegExDatingCondition implements IRegExConditionItemBase{
         var delimeterDiv = document.createElement("div");
         var addWordSpan = document.createElement("span");
         $(addWordSpan).addClass("regex-clickable-text");
-        addWordSpan.innerHTML = localization.translate("+Or", "PluginsJs").value;
+        $(addWordSpan).text(localization.translate("+Or", "PluginsJs").value);
         $(addWordSpan).click(() => {
             this.parent.addItem();
         });
@@ -1462,7 +1462,7 @@ class RegExDatingCondition implements IRegExConditionItemBase{
 
     private createTextDelimeter(): HTMLDivElement {
         var delimeterDiv = document.createElement("div");
-        delimeterDiv.innerHTML = localization.translate("Or", "PluginsJs").value;
+        $(delimeterDiv).text(localization.translate("Or", "PluginsJs").value);
         $(delimeterDiv).addClass(this.delimeterClass);
 
         var trashButton = document.createElement("button");
@@ -1582,7 +1582,7 @@ class RegExDatingCondition implements IRegExConditionItemBase{
 
         if (this.datingRange === DatingRangeEnum.Between) {
             var delimeter = document.createElement("div");
-            delimeter.innerHTML = localization.translate("Till", "PluginsJs").value;
+            $(delimeter).text(localization.translate("Till", "PluginsJs").value);
             this.precisionInputDiv.appendChild(delimeter);
 
             var oldSecondView = this.secondDateView;
@@ -1719,7 +1719,7 @@ class RegExWordCondition implements IRegExConditionItemBase{
         var delimeterDiv = document.createElement("div");
         var addWordSpan = document.createElement("span");
         $(addWordSpan).addClass("regex-clickable-text");
-        addWordSpan.innerHTML = localization.translate("+Or", "PluginsJs").value;
+        $(addWordSpan).text(localization.translate("+Or", "PluginsJs").value);
         $(addWordSpan).click(() => {
             this.parent.addItem();
         });
@@ -1743,7 +1743,7 @@ class RegExWordCondition implements IRegExConditionItemBase{
 
     private createTextDelimeter(): HTMLDivElement {
         var delimeterDiv = document.createElement("div");
-        delimeterDiv.innerHTML = localization.translate("Or", "PluginsJs").value;
+        $(delimeterDiv).text(localization.translate("Or", "PluginsJs").value);
         $(delimeterDiv).addClass(this.delimeterClass);
 
         var trashButton = document.createElement("button");
@@ -1925,7 +1925,7 @@ class RegExWordInput {
         this.editorDiv = editorDiv;
 
         var conditionTitleDiv = document.createElement("div");
-        conditionTitleDiv.innerHTML = localization.translate("Constraint", "PluginsJs").value;
+        $(conditionTitleDiv).text(localization.translate("Constraint", "PluginsJs").value);
         editorDiv.appendChild(conditionTitleDiv);
         
         var conditionTypeDivEl = $(document.createElement("div"));
@@ -2238,7 +2238,7 @@ class RegExTokenDistanceCondition implements IRegExConditionItemBase {
         var delimeterDiv = document.createElement("div");
         var addWordSpan = document.createElement("span");
         $(addWordSpan).addClass("regex-clickable-text");
-        addWordSpan.innerHTML = localization.translate("+Or", "PluginsJs").value;
+        $(addWordSpan).text(localization.translate("+Or", "PluginsJs").value);
         $(addWordSpan).click(() => {
             this.parent.addItem();
         });
@@ -2262,7 +2262,7 @@ class RegExTokenDistanceCondition implements IRegExConditionItemBase {
 
     private createTextDelimeter(): HTMLDivElement {
         var delimeterDiv = document.createElement("div");
-        delimeterDiv.innerHTML = localization.translate("Or", "PluginsJs").value;
+        $(delimeterDiv).text(localization.translate("Or", "PluginsJs").value);
         $(delimeterDiv).addClass(this.delimeterClass);
 
         var trashButton = document.createElement("button");
@@ -2298,7 +2298,7 @@ class RegExTokenDistanceCondition implements IRegExConditionItemBase {
 
         var inputTextSpan = document.createElement("span");
         $(inputTextSpan).addClass("regexsearch-token-distance-condition-input-text");
-        inputTextSpan.innerHTML = localization.translate("Distance:", "PluginsJs").value;
+        $(inputTextSpan).text(localization.translate("Distance:", "PluginsJs").value);
         inputTextDiv.appendChild(inputTextSpan);
 
         var tokenDistanceInput = document.createElement("input");
