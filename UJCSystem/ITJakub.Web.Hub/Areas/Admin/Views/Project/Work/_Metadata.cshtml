@@ -234,22 +234,25 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-md-4 control-label" for="work-metadata-origin-date">@Localizer.Translate("OriginDate", "Admin")</label>
-                                <div class="col-md-6">
-                                    <input type="text" id="work-metadata-origin-date" class="form-control" value="@Model.OriginDate" />
-                                </div>
-                                <div class="col-md-2">
-                                    <button class="btn btn-default edit-date-range" title="@Localizer.Translate("Edit", "Admin")"><i class="fa fa-pencil"></i></button>
+                                <div class="col-md-7">
+                                    <div class="input-group">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default edit-date-range" title="@Localizer.Translate("Edit", "Admin")"><i class="fa fa-pencil"></i></button>
+                                        </span>
+                                        <input type="text" id="work-metadata-origin-date" class="form-control" value="@Model.OriginDate" />
+                                    </div>
+                                    
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-4 control-label" for="work-metadata-not-before">@Localizer.Translate("NotBefore", "Admin")</label>
-                                <div class="col-md-6">
+                                <div class="col-md-5">
                                     <input type="text" id="work-metadata-not-before" class="form-control" value="@Model.NotBefore?.Year" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-4 control-label" for="work-metadata-not-after">@Localizer.Translate("NotAfter", "Admin")</label>
-                                <div class="col-md-6">
+                                <div class="col-md-5">
                                     <input type="text" id="work-metadata-not-after" class="form-control" value="@Model.NotAfter?.Year" />
                                 </div>
                             </div>
