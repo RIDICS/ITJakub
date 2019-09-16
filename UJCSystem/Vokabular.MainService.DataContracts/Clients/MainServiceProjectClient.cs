@@ -597,6 +597,22 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+        
+        public EditionNoteContract GetLatestEditionNote(long projectId, TextFormatEnumContract format)
+        {
+            try
+            {
+                var result = m_client.Get<EditionNoteContract>($"project/{projectId}/edition-note?format={format}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
 
         public void CreateEditionNote(long projectId, CreateEditionNoteContract data)
         {
