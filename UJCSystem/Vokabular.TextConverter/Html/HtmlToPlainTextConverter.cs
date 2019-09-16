@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using HtmlAgilityPack;
 
-namespace Vokabular.FulltextService.Core.Helpers.Hml
+namespace Vokabular.TextConverter.Html
 {
     public class HtmlToPlainTextConverter : IHtmlToPlainTextConverter
     {

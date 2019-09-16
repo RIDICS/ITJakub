@@ -170,9 +170,6 @@
       }
     },
     "right-panel": {
-      "info-button": {
-        "onclick-callable": "listBookReadClicked(this)"
-      },
       "read-button": {
         "onclick-callable": "listBookReadClicked(this)"
       },

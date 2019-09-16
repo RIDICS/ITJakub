@@ -1,4 +1,4 @@
-﻿namespace Vokabular.FulltextService.Core.Helpers.Hml
+﻿namespace Vokabular.TextConverter.Html
 {
     public interface IHtmlToPlainTextConverter
     {

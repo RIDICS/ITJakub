@@ -14,6 +14,7 @@ using Vokabular.Shared.AspNetCore.Container.Extensions;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.Options;
+using Vokabular.TextConverter.Options;
 
 namespace Vokabular.FulltextService
 {

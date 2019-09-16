@@ -1,24 +1,18 @@
-﻿<div class="container-fluid">
-    <div class="row"></div>
+﻿@using Scalesoft.Localization.AspNetCore
+@inject ILocalizationService Localizer
+
+<div class="container-fluid">
     <div class="row">
         <div class="col-xs-12">
-            <textarea class="note-editor-textarea"></textarea>
+            <div class="alert-holder"></div>
         </div>
     </div>
-    <div class="row"></div>
-</div>
-<div class="modal fade info-modal-dialog" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title info-dialog-title"></h4>
-            </div>
-            <div class="modal-body">
-                <p class="info-dialog-message"></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    <div class="row">
+        <div class="col-xs-12 note-editor">
+            <div class="loader"></div>
+            <textarea class="note-editor-textarea hide"></textarea>
+            <div class="bottom-buttons hide">
+                <button class="btn btn-default" id="saveNote">@Localizer.Translate("Save", "Admin")</button>
             </div>
         </div>
     </div>

@@ -438,8 +438,16 @@ interface ICategoryTreeContract {
     children?: ICategoryTreeContract[];
 }
 
-interface IEditionNote { //TODO expand after server functionality is done
+interface IEditionNoteContract {
+    id: number;
+    versionId: number;
+    versionNumber: number;
+    text: string;
+}
+
+interface ICreateEditionNote {
     projectId: number;
+    originalVersionId: number;
     content: string;
 }
 

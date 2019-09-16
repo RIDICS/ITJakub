@@ -77,10 +77,10 @@
         "$editionTable": {
           "type": "table",
           "printRowIfNullValue": true,
-          "replaceNullValueBy": "&lt;{@Nezadáno}&gt;",
+          "replaceNullValueBy": "NotFilled",
           "rows": [
             {
-              "label": "Editon",
+              "label": "Editor",
               "pattern": "{$editor}"
             },
             {
@@ -169,9 +169,6 @@
       }
     },
     "right-panel": {
-      "info-button": {
-        "onclick-callable": "listGrammarBookReadClicked(this)"
-      },
       "read-button": {
         "onclick-callable": "listGrammarBookReadClicked(this)"
       },

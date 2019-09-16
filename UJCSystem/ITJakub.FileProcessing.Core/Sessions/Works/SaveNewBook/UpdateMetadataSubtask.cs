@@ -16,7 +16,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             m_metadataRepository = metadataRepository;
         }
 
-        public void UpdateMetadata(long projectId, int userId, string comment, BookData bookData)
+        public void UpdateMetadata(long projectId, int userId, BookData bookData)
         {
             var now = DateTime.UtcNow;
             var lastMetadata = m_metadataRepository.GetLatestMetadataResource(projectId);
@@ -29,7 +29,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             {
                 AuthorsLabel = authorsString,
                 BiblText = bookData.BiblText,
-                Comment = comment,
+                Comment = string.Empty,
                 Copyright = bookData.Copyright,
                 CreatedByUser = m_metadataRepository.Load<User>(userId),
                 CreateTime = now,

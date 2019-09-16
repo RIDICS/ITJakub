@@ -99,4 +99,5 @@ project.fragment.lock.json
 
 !**/lib-custom/jq-simple-connect/source/*
 UJCSystem/ITJakub.Web.Hub/wwwroot/css/ITJakub.Colors-selected.less
+UJCSystem/ITJakub.Web.Hub/wwwroot/css/ITJakub.Colors-selected.scss
 UJCSystem/ITJakub.Web.Hub/wwwroot/css/ITJakub.Images-selected.less

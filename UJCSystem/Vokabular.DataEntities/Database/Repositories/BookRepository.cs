@@ -26,7 +26,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             var dbResult = GetSession().QueryOver<Project>()
                 .JoinAlias(x => x.LatestPublishedSnapshot, () => snapshotAlias)
-                .JoinAlias(() => snapshotAlias.BookVersion, () => bookVersionResourceAlias)
+                .JoinAlias(() => snapshotAlias.BookVersion, () => bookVersionResourceAlias, JoinType.LeftOuterJoin)
                 .SelectList(list => list
                     .Select(x => x.Id).WithAlias(() => resultAlias.ProjectId)
                     .Select(x => x.ExternalId).WithAlias(() => resultAlias.ProjectExternalId)

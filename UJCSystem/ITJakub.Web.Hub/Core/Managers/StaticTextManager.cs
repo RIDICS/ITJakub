@@ -1,10 +1,10 @@
 ﻿using System.Globalization;
-using ITJakub.Web.Hub.Core.Markdown;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Type;
 using Scalesoft.Localization.AspNetCore;
 using Scalesoft.Localization.Core.Model;
 using Scalesoft.Localization.Core.Util;
+using Vokabular.TextConverter.Markdown;
 
 namespace ITJakub.Web.Hub.Core.Managers
 {

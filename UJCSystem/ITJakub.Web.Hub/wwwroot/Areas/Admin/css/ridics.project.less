@@ -1276,6 +1276,17 @@ table {
     margin-top: 10px;
 }
 
+.note-editor {
+    .editor-toolbar {
+        a {
+            border-radius: 0;
+        }
+    }
+    .bottom-buttons {
+        text-align: right;
+    }
+}
+
 .list-container {
     &.selectable {
         tbody {
@@ -1404,6 +1415,12 @@ table {
     display: inline-block;
     vertical-align: middle;
     margin-left: 0.5em;
+}
+
+
+.editor-toolbar,
+.CodeMirror {
+    border-radius: 0;
 }
 
 .project-snapshot-new {
