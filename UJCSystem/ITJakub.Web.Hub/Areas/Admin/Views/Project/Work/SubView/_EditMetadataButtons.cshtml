@@ -1,4 +1,6 @@
 ﻿@using Scalesoft.Localization.AspNetCore
+@model ITJakub.Web.Hub.Areas.Admin.Models.ProjectWorkMetadataViewModel
+
 @inject ILocalizationService Localizer
 
 <div class="col-xs-12">
@@ -9,7 +11,16 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="work-metadata-last-modification">@Localizer.Translate("LastModification", "Admin")</label>
                         <div class="col-md-7">
-                            <span class="text-as-form-control" id="work-metadata-last-modification">@Model.LastModification?.ToLocalTime().ToString(Localizer.GetRequestCulture())</span>
+                            <span class="text-as-form-control" id="work-metadata-last-modification">
+                                @if (Model.LastModification.HasValue)
+                                {
+                                    @Model.LastModification.Value.ToLocalTime().ToString(Localizer.GetRequestCulture())
+                                }
+                                else
+                                {
+                                    @Localizer.Translate("MetadataWasNotEdited", "Admin")
+                                }
+                            </span>
                         </div>
                     </div>
                 </div>
