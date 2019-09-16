@@ -58,6 +58,8 @@
     "CloseWithoutSaving": "Close without saving",
     "Cancel": "Cancel",
     "SaveAndClose": "Save and close",
+    "Save": "Save",
+    "AddComment": "Add comment",
     "ExpandCommentArea": "Expand comment area",
     "CollapseCommentArea": "Collapse comment area",
     "LoadCommentsFailed": "Failed to construct comment area for page {0}",

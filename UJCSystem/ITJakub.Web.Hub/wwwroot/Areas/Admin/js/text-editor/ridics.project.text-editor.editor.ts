@@ -2,11 +2,13 @@
     private currentTextId = 0; //default initialisation
     private originalContent = "";
     private simplemde: IExtendedSimpleMDE;
+    private simpleMdeOptions: SimpleMDE.Options;
     private readonly commentInput: CommentInput;
     private readonly util: EditorsUtil;
     private readonly commentArea: CommentArea;
     private readonly editModeSelector = "is-edited";
     private readonly client: TextApiClient;
+    private readonly simpleMdeTools: SimpleMdeTools;
     private commentInputDialog: BootstrapDialogWrapper;
     private isPreviewRendering = true;
     private editorExistsInTab = false;
@@ -16,6 +18,7 @@
         this.util = util;
         this.commentArea = commentArea;
         this.client = new TextApiClient();
+        this.simpleMdeTools = new SimpleMdeTools();
 
         this.commentInputDialog = new BootstrapDialogWrapper({
             element: $("#comment-input-dialog"),
@@ -294,65 +297,60 @@
         return saveAjax;
     }
 
-    private openMarkdownHelp() {
-        const url = "#";
-        window.open(url, "_blank");
-    }
-
-    public addEditor(pageRow: JQuery) {
+    addEditor(pageRow: JQuery) {
         const editorEl = pageRow.find(".editor");
         const textAreaEl = editorEl.children("textarea");
         const textId = parseInt(pageRow.data("page") as string);
         this.currentTextId = textId;
-        const simpleMdeOptions: SimpleMDE.Options = {
+        this.simpleMdeOptions = {
             element: textAreaEl[0],
             autoDownloadFontAwesome: false,
             spellChecker: false,
             mode: "gfm",
-            toolbar: [ //TODO use SimpleMdeTools
+            toolbar: [ 
                 {
                     name: "save",
                     action: (editor) => { this.saveContents(textId, editor.value()) },
                     className: "fa fa-floppy-o",
-                    title: "Save"
+                    title: localization.translate("Save", "RidicsProject").value
                 },{
                     name: "close",
                     action: () => { this.closeEditor(pageRow) },
                     className: "fa fa-times",
-                    title: "Close"
-                }, "|", "bold", "italic", "|", "unordered-list", "ordered-list", "|", "heading-1", "heading-2", "heading-3",
-                "|", "quote",
-                {
-                    name: "preview",
-                    action: (editor: SimpleMDE) => {
-                        simpleMdeOptions.previewRender = (plainText: string, preview: HTMLElement) => {
-                            this.previewRemoteRender(plainText, preview);
-                            return "<div class=\"loading\"></div>";
-                        };
-                        SimpleMDE.togglePreview(editor);
-                    },
-                    className: "fa fa-eye no-disable",
-                    title: localization.translate("TogglePreview", "ItJakubJs").value
+                    title: localization.translate("Close", "RidicsProject").value
                 },
-                "horizontal-rule", "|", {
+                this.simpleMdeTools.toolSeparator,
+                this.simpleMdeTools.toolUndo,
+                this.simpleMdeTools.toolRedo,
+                this.simpleMdeTools.toolSeparator,
+                this.simpleMdeTools.toolBold,
+                this.simpleMdeTools.toolItalic,
+                this.simpleMdeTools.toolSeparator,
+                this.simpleMdeTools.toolUnorderedList,
+                this.simpleMdeTools.toolOrderedList,
+                this.simpleMdeTools.toolSeparator,
+                this.simpleMdeTools.toolHeading1,
+                this.simpleMdeTools.toolHeading2,
+                this.simpleMdeTools.toolHeading3,
+                this.simpleMdeTools.toolSeparator,
+                this.simpleMdeTools.toolQuote,
+                this.simpleMdeTools.toolPreview,
+                this.simpleMdeTools.toolHorizontalRule,
+                this.simpleMdeTools.toolSeparator,
+                {
                     name: "comment",
                     action: ((editor) => {
                         this.toggleCommentFromEditor(editor, true);
                     }),
                     className: "fa fa-comment",
-                    title: "Add comment"
-                }
-                //{Temporarily hide while there is no markdown manual yet
-                //    name: "help",
-                //    action: (() => { this.openMarkdownHelp(); }),
-                //    className: "fa fa-question-circle",
-                //    title: "Markdown help"
-                //},
-               
+                    title: localization.translate("AddComment", "RidicsProject").value
+                },
+                this.simpleMdeTools.toolGuide
             ]
         };
 
-        this.simplemde = new SimpleMDE(simpleMdeOptions);
+        this.setCustomPreviewRender();
+        this.simplemde = new SimpleMDE(this.simpleMdeOptions);
        
         const commentIdRegex = new RegExp(`${this.commentInput.commentRegexExpr}`);
         const commentBeginRegex = new RegExp(`(\\$${this.commentInput.commentRegexExpr}\\%)`);
@@ -377,6 +375,17 @@
         this.simplemde.codemirror.focus();
         this.commentArea.updateCommentAreaHeight(pageRow);
         this.commentArea.toggleAreaSizeIconHide(pageRow.children(".comment-area"));
+    }
+
+
+    private setCustomPreviewRender() {
+        this.simpleMdeTools.toolPreview.action = (editor: SimpleMDE) => {
+            this.simpleMdeOptions.previewRender = (plainText: string, preview: HTMLElement) => {
+                this.previewRemoteRender(plainText, preview);
+                return "<div class=\"loading\"></div>";
+            };
+            SimpleMDE.togglePreview(editor);
+        };
     }
 
     private previewRemoteRender(text: string, previewElement: HTMLElement) {

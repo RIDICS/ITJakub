@@ -58,6 +58,8 @@
     "CloseWithoutSaving": "Zavřít bez uložení",
     "Cancel": "Zrušit",
     "SaveAndClose": "Uložit a zavřít",
+    "Save": "Uložit",
+    "AddComment": "Přidat komentář",
     "ExpandCommentArea": "Zvětšit sekci komentářů",
     "CollapseCommentArea": "Zmenšit sekci komentářů",
     "LoadCommentsFailed": "Při načítání komentářů stránky {0} nastala neočekávaná chyba.",
