@@ -345,6 +345,24 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
+        public virtual EditionNoteResource GetPublishedEditionNote(long projectId)
+        {
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+            Snapshot snapshotAlias = null;
+
+            var result = GetSession().QueryOver<EditionNoteResource>()
+                .JoinAlias(x => x.Snapshots, () => snapshotAlias)
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .Where(() => projectAlias.Id == projectId && projectAlias.LatestPublishedSnapshot.Id == snapshotAlias.Id)
+                .OrderBy(x => x.CreateTime).Desc
+                .Fetch(SelectMode.Fetch, x => x.BookVersion)
+                .Take(1)
+                .SingleOrDefault();
+            return result;
+        }
+
         public virtual TextResource GetLatestPageText(long pageId)
         {
             Resource resourceAlias = null;

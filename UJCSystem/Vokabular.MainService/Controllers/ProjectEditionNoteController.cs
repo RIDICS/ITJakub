@@ -19,10 +19,10 @@ namespace Vokabular.MainService.Controllers
 
         [HttpGet("{projectId}/edition-note")]
         [ProducesResponseType(typeof(EditionNoteContract), StatusCodes.Status200OK)]
-        public IActionResult GetEditionNote(long projectId, TextFormatEnumContract? format)
+        public IActionResult GetLatestEditionNote(long projectId, TextFormatEnumContract? format)
         {
             var formatValue = format ?? TextFormatEnumContract.Html;
-            var result = m_editionNoteManager.GetEditionNote(projectId, formatValue);
+            var result = m_editionNoteManager.GetLatestEditionNote(projectId, formatValue);
             if (result == null)
                 return NotFound();
 

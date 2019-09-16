@@ -424,21 +424,13 @@ namespace Vokabular.MainService.Controllers
         public IActionResult GetEditionNoteText(long projectId, [FromQuery] TextFormatEnumContract? format)
         {
             var formatValue = format ?? TextFormatEnumContract.Html;
-            var result = m_editionNoteManager.GetEditionNote(projectId, formatValue)?.Text;
+            var result = m_editionNoteManager.GetPublishedEditionNote(projectId, formatValue)?.Text;
             if (result == null)
                 return NotFound();
 
             return Content(result);
         }
-
-        [HttpGet("{projectId}/edition-note")]
-        public EditionNoteContract GetEditionNote(long projectId, [FromQuery] TextFormatEnumContract? format)
-        {
-            var formatValue = format ?? TextFormatEnumContract.Html;
-            var result = m_editionNoteManager.GetEditionNote(projectId, formatValue);
-            return result;
-        }
-
+        
         [HttpGet("info")]
         [ProducesResponseType(typeof(BookContract), StatusCodes.Status200OK)]
         public IActionResult GetBookByExternalId([FromQuery] string externalId, [FromQuery] ProjectTypeContract? projectType)
