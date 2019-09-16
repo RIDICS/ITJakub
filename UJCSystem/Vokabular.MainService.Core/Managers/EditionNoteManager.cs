@@ -2,6 +2,7 @@
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Works.ProjectItem;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataEntities.UnitOfWork;
@@ -42,19 +43,7 @@ namespace Vokabular.MainService.Core.Managers
 
             if (!string.IsNullOrEmpty(editionNoteResource.Text))
             {
-                switch (format)
-                {
-                    case TextFormatEnumContract.Html:
-                    {
-                        contract.Text = m_markdownConverter.ConvertToHtml(editionNoteResource.Text);
-                        break;
-                    }
-                    default:
-                    {
-                        contract.Text = editionNoteResource.Text;
-                        break;
-                    }
-                }
+                contract.Text = ConvertTextFormat(format, editionNoteResource.Text);
             }
             else
             {
@@ -63,6 +52,21 @@ namespace Vokabular.MainService.Core.Managers
             }
 
             return contract;
+        }
+
+        private string ConvertTextFormat(TextFormatEnumContract targetFormat, string text)
+        {
+            switch (targetFormat)
+            {
+                case TextFormatEnumContract.Html:
+                    return m_markdownConverter.ConvertToHtml(text);
+                case TextFormatEnumContract.Raw:
+                    return text;
+                case TextFormatEnumContract.Rtf:
+                    throw new MainServiceException(MainServiceErrorCode.UnsupportedFormatType, "Converting text to RTF format is not supported");
+                default:
+                    throw new MainServiceException(MainServiceErrorCode.UnsupportedFormatType, $"Converting text to unknown format {targetFormat} is not supported");
+            }
         }
 
         public long CreateEditionNoteVersion(long projectId, CreateEditionNoteContract data)
