@@ -45,7 +45,7 @@
 
     protected search: Search;
 
-    protected basicApiClient = new BasicApiClient();
+    protected basicApiClient = new TextBankApiClient();
 
     protected showLoading(tableEl: JQuery) {
         const loaderEl = tableEl.siblings(".corpus-search-results-table-div-loader");

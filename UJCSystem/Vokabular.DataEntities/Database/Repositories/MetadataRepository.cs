@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
@@ -31,7 +32,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return query.SingleOrDefault();
         }
         
-        public virtual MetadataResource GetLatestMetadataResourceByExternalId(string projectExternalId)
+        public virtual MetadataResource GetLatestMetadataResourceByExternalId(string projectExternalId, ProjectTypeEnum projectType)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;
@@ -39,7 +40,8 @@ namespace Vokabular.DataEntities.Database.Repositories
             var query = GetSession().QueryOver<MetadataResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
-                .Where(x => projectAlias.ExternalId == projectExternalId && resourceAlias.ResourceType == ResourceTypeEnum.ProjectMetadata && resourceAlias.LatestVersion.Id == x.Id)
+                .Where(x => projectAlias.ExternalId == projectExternalId && projectAlias.ProjectType == projectType &&
+                            resourceAlias.ResourceType == ResourceTypeEnum.ProjectMetadata && resourceAlias.LatestVersion.Id == x.Id)
                 .Fetch(SelectMode.Fetch, x => x.Resource);
 
             return query.SingleOrDefault();
@@ -111,25 +113,8 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .FutureValue().Value;
         }
 
-        public virtual IList<MetadataResource> GetAllMetadataByBookType(BookTypeEnum bookTypeEnum)
-        {
-            Resource resourceAlias = null;
-            Project projectAlias = null;
-            Snapshot snapshotAlias = null;
-            BookType bookTypeAlias = null;
-
-            return GetSession().QueryOver<MetadataResource>()
-                .JoinAlias(x => x.Resource, () => resourceAlias)
-                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
-                .JoinAlias(() => projectAlias.LatestPublishedSnapshot, () => snapshotAlias)
-                .JoinAlias(() => snapshotAlias.BookTypes, () => bookTypeAlias)
-                .Where(x => x.Id == resourceAlias.LatestVersion.Id && bookTypeAlias.Type == bookTypeEnum)
-                .OrderBy(x => x.Title).Asc
-                //.Fetch(SelectMode.Fetch, x => x.Resource.Project.Categories)
-                .List();
-        }
-
-        public virtual IList<MetadataResource> GetMetadataByBookType(BookTypeEnum bookTypeEnum, int userId)
+        [Obsolete]
+        public virtual IList<MetadataResource> GetMetadataByBookType(BookTypeEnum bookTypeEnum, int userId, ProjectTypeEnum projectType)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;
@@ -148,31 +133,9 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => permissionAlias.UserGroup, () => userGroupAlias)
                 .JoinAlias(() => userGroupAlias.Users, () => userAlias)
                 .Where(x => x.Id == resourceAlias.LatestVersion.Id && bookTypeAlias.Type == bookTypeEnum)
-                .And(() => userAlias.Id == userId)
+                .And(() => userAlias.Id == userId && projectAlias.ProjectType == projectType)
                 .OrderBy(x => x.Title).Asc
                 .Fetch(SelectMode.Fetch, x => x.Resource.Project.Categories)
-                .List();
-        }
-
-
-        public virtual IList<MetadataResource> GetMetadataForUserGroup(BookTypeEnum bookTypeEnum, int userGroupId)
-        {
-            Resource resourceAlias = null;
-            Project projectAlias = null;
-            Snapshot snapshotAlias = null;
-            BookType bookTypeAlias = null;
-            Permission permissionAlias = null;
-
-            return GetSession().QueryOver<MetadataResource>()
-                .JoinAlias(x => x.Resource, () => resourceAlias)
-                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
-                .JoinAlias(() => projectAlias.LatestPublishedSnapshot, () => snapshotAlias)
-                .JoinAlias(() => snapshotAlias.BookTypes, () => bookTypeAlias)
-                .JoinAlias(() => projectAlias.Permissions, () => permissionAlias)
-                .Where(x => x.Id == resourceAlias.LatestVersion.Id && bookTypeAlias.Type == bookTypeEnum)
-                .And(() => permissionAlias.UserGroup.Id == userGroupId)
-                .OrderBy(x => x.Title).Asc
-                //.Fetch(SelectMode.Fetch, x => x.Resource.Project.Categories)
                 .List();
         }
 
@@ -209,7 +172,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        public virtual IList<MetadataResource> GetMetadataWithFetchForBiblModuleByProjectExternalIds(IEnumerable<string> projectExternalIdList)
+        public virtual IList<MetadataResource> GetMetadataWithFetchForBiblModuleByProjectExternalIds(IEnumerable<string> projectExternalIdList, ProjectTypeEnum projectType)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;
@@ -220,6 +183,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .WhereRestrictionOn(() => projectAlias.ExternalId).IsInG(projectExternalIdList)
+                .And(() => projectAlias.ProjectType == projectType)
                 .And(x => x.Id == resourceAlias.LatestVersion.Id)
                 .Fetch(SelectMode.Fetch, x => x.Resource)
                 .Fetch(SelectMode.Fetch, x => x.Resource.Project)
@@ -241,7 +205,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        public virtual HeadwordResource GetHeadwordWithFetchByExternalId(string projectExternalId, string headwordExternalId)
+        public virtual HeadwordResource GetHeadwordWithFetchByExternalId(string projectExternalId, string headwordExternalId, ProjectTypeEnum projectType)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;
@@ -249,7 +213,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             var result = GetSession().QueryOver<HeadwordResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
-                .Where(x => x.ExternalId == headwordExternalId && projectAlias.ExternalId == projectExternalId && x.Id == resourceAlias.LatestVersion.Id)
+                .Where(x => x.ExternalId == headwordExternalId && projectAlias.ExternalId == projectExternalId && projectAlias.ProjectType == projectType && x.Id == resourceAlias.LatestVersion.Id)
                 .Fetch(SelectMode.Fetch, x => x.Resource)
                 .Fetch(SelectMode.Fetch, x => x.HeadwordItems)
                 .TransformUsing(Transformers.DistinctRootEntity)
@@ -497,7 +461,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return metadataListFuture.ToList();
         }
 
-        public virtual IList<MetadataResource> GetMetadataByProjectExternalIds(IEnumerable<string> projectExternalIds)
+        public virtual IList<MetadataResource> GetMetadataByProjectExternalIds(IEnumerable<string> projectExternalIds, ProjectTypeEnum projectType)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;
@@ -506,6 +470,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .WhereRestrictionOn(() => projectAlias.ExternalId).IsInG(projectExternalIds)
+                .And(() => projectAlias.ProjectType == projectType)
                 .And(x => x.Id == resourceAlias.LatestVersion.Id)
                 .List();
         }

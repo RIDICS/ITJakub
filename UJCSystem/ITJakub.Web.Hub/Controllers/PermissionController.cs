@@ -3,8 +3,6 @@ using System.Linq;
 using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Constants;
 using ITJakub.Web.Hub.Core.Communication;
-using ITJakub.Web.Hub.DataContracts;
-using ITJakub.Web.Hub.Helpers;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Requests.Permission;
 using ITJakub.Web.Hub.Models.User;
@@ -15,7 +13,6 @@ using Ridics.Core.Structures.Shared;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Errors;
-using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -87,7 +84,7 @@ namespace ITJakub.Web.Hub.Controllers
             search = search ?? string.Empty;
 
             var client = GetProjectClient();
-            var result = client.GetProjectList(start, count, search);
+            var result = client.GetProjectList(start, count, GetDefaultProjectType(), search);
             var model = new ListViewModel<ProjectDetailContract>
             {
                 TotalCount = result.TotalCount,
@@ -274,20 +271,6 @@ namespace ITJakub.Web.Hub.Controllers
             return Json(result);
         }
 
-        public IActionResult GetUser(int userId)
-        {
-            var client = GetUserClient();
-            var result = client.GetUserDetail(userId);
-            return Json(result);
-        }
-
-        public IActionResult GetRole(int roleId)
-        {
-            var client = GetRoleClient();
-            var result = client.GetRoleDetail(roleId);
-            return Json(result);
-        }
-
         [HttpPost]
         public IActionResult AddUserToRole([FromBody] AddUserToRoleRequest request)
         {
@@ -363,53 +346,6 @@ namespace ITJakub.Web.Hub.Controllers
             };
 
             return PartialView("Widget/_RoleListWidget", model);
-        }
-
-        public IActionResult GetRootCategories()
-        {
-            var client = GetBookClient();
-
-            var result = client.GetBookTypeList();
-            var convertedResult = result.Select(x => new CategoryOrBookTypeContract
-            {
-                BookType = x.Type,
-                Description = BookTypeHelper.GetCategoryName(x.Type),
-            });
-            return Json(convertedResult);
-        }
-
-        public IActionResult GetCategoryContent(int groupId, BookTypeEnumContract? bookType)
-        {
-            if (bookType == null)
-            {
-                return BadRequest("BookType parameter is required");
-            }
-
-            var client = GetRoleClient();
-            var books = client.GetBooksForRole(groupId, bookType.Value);
-            var result = new CategoryContentContract
-            {
-                Categories = new List<CategoryContract>(), // Categories are currently not used after migration to new MainService
-                Books = books,
-            };
-            return Json(result);
-        }
-
-        public IActionResult GetAllCategoryContent(BookTypeEnumContract? bookType)
-        {
-            if (bookType == null)
-            {
-                return BadRequest("BookType parameter is required");
-            }
-
-            var client = GetBookClient();
-            var books = client.GetAllBooksByType(bookType.Value);
-            var result = new CategoryContentContract
-            {
-                Categories = new List<CategoryContract>(), // Categories are currently not used after migration to new MainService
-                Books = books,
-            };
-            return Json(result);
         }
 
         [HttpPost]

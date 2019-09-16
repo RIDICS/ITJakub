@@ -10,10 +10,6 @@ interface ICategory {
     description: string;
 }
 
-interface ICategoryOrBookType extends ICategory {
-    bookType: BookTypeEnum;
-}
-
 interface IBook {
     id: number;
     guid: string;
@@ -37,9 +33,4 @@ interface IAutoImportPermission extends ISpecialPermission {
 interface IBookCategory {
     id: number;
     description: string;
-}
-
-interface ICategoryContent {
-    categories: ICategoryOrBookType[];
-    books: IBook[];
 }

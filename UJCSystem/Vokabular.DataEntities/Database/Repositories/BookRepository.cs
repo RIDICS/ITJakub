@@ -26,7 +26,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             var dbResult = GetSession().QueryOver<Project>()
                 .JoinAlias(x => x.LatestPublishedSnapshot, () => snapshotAlias)
-                .JoinAlias(() => snapshotAlias.BookVersion, () => bookVersionResourceAlias)
+                .JoinAlias(() => snapshotAlias.BookVersion, () => bookVersionResourceAlias, JoinType.LeftOuterJoin)
                 .SelectList(list => list
                     .Select(x => x.Id).WithAlias(() => resultAlias.ProjectId)
                     .Select(x => x.ExternalId).WithAlias(() => resultAlias.ProjectExternalId)
@@ -403,7 +403,17 @@ namespace Vokabular.DataEntities.Database.Repositories
             return pageResourceIds;
         }
 
-        public virtual IList<PageResource> GetPagesByTextExternalId(IEnumerable<string> textExternalIds, long? projectId, string projectExternalId = null)
+        public virtual IList<PageResource> GetPagesByTextExternalId(IEnumerable<string> textExternalIds, long projectId)
+        {
+            return GetPagesByTextExternalIdInner(textExternalIds, projectId, null, null);
+        }
+
+        public virtual IList<PageResource> GetPagesByTextExternalId(IEnumerable<string> textExternalIds, string projectExternalId, ProjectTypeEnum projectType)
+        {
+            return GetPagesByTextExternalIdInner(textExternalIds, null, projectExternalId, projectType);
+        }
+
+        private IList<PageResource> GetPagesByTextExternalIdInner(IEnumerable<string> textExternalIds, long? projectId, string projectExternalId, ProjectTypeEnum? projectType)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;
@@ -427,7 +437,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             }
             if (projectExternalId != null)
             {
-                query.And(() => projectAlias.ExternalId == projectExternalId);
+                query.And(() => projectAlias.ExternalId == projectExternalId && projectAlias.ProjectType == projectType.Value);
             }
 
             var pageResourceIds = query.List();

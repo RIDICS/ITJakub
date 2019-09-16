@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
@@ -7,7 +8,6 @@ using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient;
 using Vokabular.RestClient.Errors;
-using Vokabular.RestClient.Extensions;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared;
 using Vokabular.Shared.DataContracts.Search.Corpus;
@@ -93,11 +93,15 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public BookContract GetBookInfoByExternalId(string externalId)
+        public BookContract GetBookInfoByExternalId(string externalId, ProjectTypeContract projectType)
         {
             try
             {
-                var result = m_client.Get<BookContract>("book/info".AddQueryString("externalId", externalId));
+                var url = UrlQueryBuilder.Create("book/info")
+                    .AddParameter("externalId", externalId)
+                    .AddParameter("projectType", projectType)
+                    .ToQuery();
+                var result = m_client.Get<BookContract>(url);
                 return result;
             }
             catch (HttpRequestException e)
@@ -369,22 +373,6 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<BookContract> GetAllBooksByType(BookTypeEnumContract bookType)
-        {
-            try
-            {
-                var result = m_client.Get<List<BookContract>>($"book/type/{bookType}/all");
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
         public List<BookTypeContract> GetBookTypeList()
         {
             try
@@ -401,6 +389,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        [Obsolete("This method will be replaced by paged variant")]
         public List<BookWithCategoriesContract> GetBooksByType(BookTypeEnumContract bookTypeEnum)
         {
             try

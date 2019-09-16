@@ -248,6 +248,13 @@ namespace Vokabular.DataEntities.Database.Repositories
             return query.SingleOrDefault();
         }
 
+        public virtual IList<T> GetResourceVersions<T>(IEnumerable<long> resourceVersionIds) where T : ResourceVersion
+        {
+            return GetSession().QueryOver<T>()
+                .WhereRestrictionOn(x => x.Id).IsInG(resourceVersionIds)
+                .List();
+        }
+
         public virtual T GetPublishedResourceVersion<T>(long resourceId) where T : ResourceVersion
         {
             Snapshot snapshotAlias = null;
@@ -360,6 +367,17 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .Where(x => x.Id == resourceAlias.LatestVersion.Id && x.ResourcePage.Id == pageId)
                 .OrderBy(x => x.CreateTime).Desc
+                .SingleOrDefault();
+        }
+
+        public virtual MetadataResource GetLatestMetadata(long projectId)
+        {
+            Resource resourceAlias = null;
+
+            return GetSession().QueryOver<MetadataResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && resourceAlias.Project.Id == projectId)
+                .Fetch(SelectMode.Fetch, x => x.Resource)
                 .SingleOrDefault();
         }
     }

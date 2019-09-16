@@ -14,6 +14,8 @@
     "CreateLiteraryKind": "Chyba při vytváření nového literárního druhu",
     "CreateLiteraryGenre": "Chyba při vytváření nového literárního žánru",
 
+    "CreateResourcesError": "Chyba při načítání zdrojů k publikaci",
+
     "Pages": "Pages",
     "PageContent": "Page content",
     "PagePreview": "Page preview",
@@ -29,6 +31,18 @@
     "ShiftPageDown": "Shift selected pages down",
     "EditPageName": "Edit page name",
     "DeletePage": "Delete page",
+
+    "Fail": "Fail",
+    "PageLoadFailed": "An unexpected error occurred while loading page {0}.",
+    "ProjectLoadFailed": "An unexpected error occurred while loading project information.",
+    "ContentLoadFailed": "An unexpected error occurred while loading content.",
+    "NoTextPages": "This project does not contain text pages.",
+    "NoImageOnPage": "There is no image on this page",
+    "NoComments": "No comments yet.",
+    "ToggleEditingMode": "Toggle editing mode",
+    "DisplayPageNumbers": "Display page numbers",
+    "GoToPage": "Go to page...",
+    "UploadNewVersion": "Upload new version"
 
     "EditionNoteLoadFailed": "An unexpected error occurred while loading edition note.",
     "EditionNoteSaveSuccess": "Note has been saved successfully",

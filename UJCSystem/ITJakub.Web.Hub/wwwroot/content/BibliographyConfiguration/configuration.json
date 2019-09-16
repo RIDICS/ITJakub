@@ -169,9 +169,6 @@
       }
     },
     "right-panel": {
-      "info-button": {
-        "url": "Editions\\Editions\\Listing?bookId={BookId}"
-      },
       "read-button": {
         "url": "Editions\\Editions\\Listing?bookId={BookId}"
       },
@@ -220,9 +217,6 @@
       }
     },
     "right-panel": {
-      "info-button": {
-        "url": "Dictionaries\\Dictionaries\\List?bookId={BookId}"
-      },
       "read-button": {
         "url": "Dictionaries\\Dictionaries\\Listing?books=[{BookId}]"
       },
@@ -401,9 +395,6 @@
       }
     },
     "right-panel": {
-      "info-button": {
-        "url": "Editions\\Editions\\Listing?bookId={BookId}"
-      },
       "read-button": {
         "url": "Editions\\Editions\\Listing?bookId={BookId}"
       },
@@ -512,9 +503,6 @@
       }
     },
     "right-panel": {
-      "info-button": {
-        "url": "AudioBooks\\AudioBooks\\Listing?bookId={BookId}"
-      },
       "favorite-button": {},
       "load-detail-url": "Bibliography/GetAudioBookDetailInfo?bookId={BookId}"
     },
@@ -737,9 +725,6 @@
       }
     },
     "right-panel": {
-      "info-button": {
-        "url": "OldGrammar\\OldGrammar\\Listing?bookId={BookId}"
-      },
       "read-button": {
         "url": "OldGrammar\\OldGrammar\\Listing?bookId={BookId}"
       },
@@ -925,9 +910,6 @@
       }
     },
     "right-panel": {
-      "info-button": {
-        "url": "ProfessionalLiterature\\ProfessionalLiterature\\Listing?bookId={BookId}"
-      },
       "read-button": {
         "url": "ProfessionalLiterature\\ProfessionalLiterature\\Listing?bookId={BookId}"
       },

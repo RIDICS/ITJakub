@@ -4,6 +4,7 @@
     private static localStorageVersion = 2;
     private storage: IStorage;
     private isUserLoggedIn: boolean;
+    private apiClient: FavoriteApiClient;
 
     //private localization : Localization;
 	private localizationScope = "FavoriteJs";
@@ -16,6 +17,7 @@
             this.updateLocalStorage();
         }
 
+        this.apiClient = new FavoriteApiClient();
        // this.localization = new Localization();
     }
 
@@ -135,17 +137,7 @@
             return;
         }
 
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            url: getBaseUrl() + "Favorite/GetLatestLabelList",
-            data: {},
-            dataType: "json",
-            contentType: "application/json",
-            success: (favoriteLabels: Array<IFavoriteLabel>) => {
-                callback(favoriteLabels);
-            }
-        });
+        this.apiClient.getLatestFavoriteLabels(callback);
     }
 
     public getFavoriteLabels(callback: (favoriteLabels: IFavoriteLabel[]) => void) {
@@ -155,17 +147,7 @@
             return;
         }
 
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            url: getBaseUrl() + "Favorite/GetLabelList",
-            data: {},
-            dataType: "json",
-            contentType: "application/json",
-            success: (favoriteLabels: Array<IFavoriteLabel>) => {
-                callback(favoriteLabels);
-            }
-        });
+        this.apiClient.getFavoriteLabels(callback);
     }
 
     public getFavorites(labelId: number, filterByType: number, filterByTitle: string, sort: number, start: number, count: number, callback: (favorites: IFavoriteBaseInfo[]) => void) {
@@ -173,24 +155,7 @@
             throw new Error("Not supported for anonymous users");
         }
 
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            url: getBaseUrl() + "Favorite/GetFavoriteList",
-            data: {
-                labelId: labelId,
-                filterByType: filterByType,
-                filterByTitle: filterByTitle,
-                sort: sort,
-                start: start,
-                count: count
-            } as JQuery.PlainObject,
-            dataType: "json",
-            contentType: "application/json",
-            success: (favorites: Array<IFavoriteBaseInfo>) => {
-                callback(favorites);
-            }
-        });
+        this.apiClient.getFavorites(labelId, filterByType, filterByTitle, sort, start, count, callback);
     }
 
     public getFavoritesCount(labelId: number, filterByType: number, filterByTitle: string, callback: (count: number) => void) {
@@ -198,21 +163,7 @@
             throw new Error("Not supported for anonymous users");
         }
 
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            url: getBaseUrl() + "Favorite/GetFavoriteListCount",
-            data: {
-                labelId: labelId,
-                filterByType: filterByType,
-                filterByTitle: filterByTitle
-            } as JQuery.PlainObject,
-            dataType: "json",
-            contentType: "application/json",
-            success: (count: number) => {
-                callback(count);
-            }
-        });
+        this.apiClient.getFavoritesCount(labelId, filterByType, filterByTitle, callback);
     }
 
     public getFavoritesForBooks(orBookType: BookTypeEnum, orBookIds: Array<number>, callback: (favoriteBooks: Array<IFavoriteLabeledBook>) => void): void {
@@ -237,20 +188,7 @@
             orBookIds = null; // because max ID count limit
         }
 
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            url: getBaseUrl() + "Favorite/GetFavoriteLabeledBooks",
-            data: JSON.stringify({
-                bookType: orBookType,
-                bookIds: orBookIds
-            }),
-            dataType: "json",
-            contentType: "application/json",
-            success: (bookList: Array<IFavoriteLabeledBook>) => {
-                callback(bookList);
-            }
-        });
+        this.apiClient.getFavoritesForBooks(orBookType, orBookIds, callback);
     }
 
     public getFavoritesForCategories(categoryIds: Array<number>, callback: (favoriteCategories: Array<IFavoriteLabeledCategory>) => void) {
@@ -271,19 +209,7 @@
             return;
         }
 
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            url: getBaseUrl() + "Favorite/GetFavoriteLabeledCategories",
-            data: JSON.stringify({
-                categoryIds: categoryIds
-            }),
-            dataType: "json",
-            contentType: "application/json",
-            success: (bookList: Array<IFavoriteLabeledCategory>) => {
-                callback(bookList);
-            }
-        });
+        this.apiClient.getFavoritesForCategories(categoryIds, callback);
     }
     
     public getFavoriteLabelsForBooksAndCategories(bookType: BookTypeEnum, callback: (favoriteLabels: IFavoriteLabelsWithBooksAndCategories[], error: string) => void) {
@@ -316,22 +242,7 @@
             return;
         }
 
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            url: getBaseUrl() + "Favorite/GetFavoriteLabelsWithBooksAndCategories",
-            data: {
-                bookType: bookType
-            } as JQuery.PlainObject,
-            dataType: "json",
-            contentType: "application/json",
-            success: (favoriteLabels) => {
-                callback(favoriteLabels, null);
-            },
-            error: (request, status) => {
-                callback(null, status);
-            }
-        });
+        this.apiClient.getFavoriteLabelsForBooksAndCategories(bookType, callback);
     }
 
     public getFavoriteQueries(labelId: number, bookType: BookTypeEnum, queryType: QueryTypeEnum, filterByTitle: string, start: number, count: number, callback: (favoriteQueries: IFavoriteQuery[]) => void) {
@@ -361,24 +272,7 @@
             return;
         }
 
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            url: getBaseUrl() + "Favorite/GetFavoriteQueries",
-            data: {
-                labelId: labelId,
-                bookType: bookType,
-                queryType: queryType,
-                filterByTitle: filterByTitle,
-                start: start,
-                count: count
-            } as JQuery.PlainObject,
-            dataType: "json",
-            contentType: "application/json",
-            success: (queries) => {
-                callback(queries);
-            }
-        });
+        this.apiClient.getFavoriteQueries(labelId, bookType, queryType, filterByTitle, start, count, callback);
     }
 
     public getFavoriteQueriesCount(labelId: number, bookType: BookTypeEnum, queryType: QueryTypeEnum, filterByTitle: string, callback: (count: number) => void) {
@@ -387,22 +281,7 @@
             return;
         }
 
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            url: getBaseUrl() + "Favorite/GetFavoriteQueriesCount",
-            data: {
-                labelId: labelId,
-                bookType: bookType,
-                queryType: queryType,
-                filterByTitle: filterByTitle
-            } as JQuery.PlainObject,
-            dataType: "json",
-            contentType: "application/json",
-            success: (count) => {
-                callback(count);
-            }
-        });
+        this.apiClient.getFavoriteQueriesCount(labelId, bookType, queryType, filterByTitle, callback);
     }
 
     public getPageBookmarks(bookId: number, callback: (bookmarks: IBookPageBookmark[]) => void) {
@@ -424,19 +303,7 @@
             return;
         }
 
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            url: getBaseUrl() + "Favorite/GetPageBookmarks",
-            data: {
-                bookId: bookId
-            } as JQuery.PlainObject,
-            dataType: "json",
-            contentType: "application/json",
-            success: (bookmarks) => {
-                callback(bookmarks);
-            }
-        });
+        this.apiClient.getPageBookmarks(bookId, callback);
     }
 
     public createFavoriteLabel(labelName: string, colorHex: string, callback: (id: number, error: string) => void) {
@@ -444,23 +311,7 @@
             throw Error("Not supported for anonymous user");
         }
 
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            url: getBaseUrl() + "Favorite/CreateLabel",
-            data: JSON.stringify({
-                name: labelName,
-                color: colorHex
-            }),
-            dataType: "json",
-            contentType: "application/json",
-            success: (id) => {
-                callback(id, null);
-            },
-            error: (request, status) => {
-                callback(null, status);
-            }
-        });
+        this.apiClient.createFavoriteLabel(labelName, colorHex, callback);
     }
 
     public updateFavoriteLabel(labelId: number, labelName: string, colorHex: string, callback: (error: string) => void) {
@@ -468,24 +319,7 @@
             throw Error("Not supported for anonymous user");
         }
 
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            url: getBaseUrl() + "Favorite/UpdateLabel",
-            data: JSON.stringify({
-                labelId: labelId,
-                name: labelName,
-                color: colorHex
-            }),
-            dataType: "json",
-            contentType: "application/json",
-            success: () => {
-                callback(null);
-            },
-            error: (request, status) => {
-                callback(status);
-            }
-        });
+        this.apiClient.updateFavoriteLabel(labelId, labelName, colorHex, callback);
     }
 
     public deleteFavoriteLabel(labelId: number, callback: (error: string) => void) {
@@ -493,22 +327,7 @@
             throw Error("Not supported for anonymous user");
         }
 
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            url: getBaseUrl() + "Favorite/DeleteLabel",
-            data: JSON.stringify({
-                labelId: labelId
-            }),
-            dataType: "json",
-            contentType: "application/json",
-            success: () => {
-                callback(null);
-            },
-            error: (request, status) => {
-                callback(status);
-            }
-        });
+        this.apiClient.deleteFavoriteLabel(labelId, callback);
     }
 
     public updateFavoriteItem(favoriteId: number, title: string, callback: (error: string) => void) {
@@ -556,23 +375,7 @@
             return;
         }
 
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            url: getBaseUrl() + "Favorite/UpdateFavoriteItem",
-            data: JSON.stringify({
-                id: favoriteId,
-                title: title
-            }),
-            dataType: "json",
-            contentType: "application/json",
-            success: () => {
-                callback(null);
-            },
-            error: (request, status) => {
-                callback(status);
-            }
-        });
+        this.apiClient.updateFavoriteItem(favoriteId, title, callback);
     }
 
     public deleteFavoriteItem(favoriteId: number, callback: (error: string) => void) {
@@ -628,22 +431,7 @@
             return;
         }
 
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            url: getBaseUrl() + "Favorite/DeleteFavoriteItem",
-            data: JSON.stringify({
-                id: favoriteId
-            }),
-            dataType: "json",
-            contentType: "application/json",
-            success: () => {
-                callback(null);
-            },
-            error: (request, status) => {
-                callback(status);
-            }
-        });
+        this.apiClient.deleteFavoriteItem(favoriteId, callback);
     }
 
     public createFavoriteItem(itemType: FavoriteType, itemId: string, favoriteTitle: string, favoriteLabelIds: number[], callback: (ids: number[], error: string) => void) {
@@ -693,24 +481,7 @@
             return;
         }
 
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            url: getBaseUrl() + "Favorite/CreateFavoriteBook",
-            data: JSON.stringify({
-                bookId: bookId,
-                title: favoriteTitle,
-                labelIds: favoriteLabelIds
-            }),
-            dataType: "json",
-            contentType: "application/json",
-            success: (resultIds) => {
-                callback(resultIds, null);
-            },
-            error: (request, status) => {
-                callback(null, status);
-            }
-        });
+        this.apiClient.createFavoriteBook(bookId, favoriteTitle, favoriteLabelIds, callback);
     }
 
     private createFavoriteCategory(categoryId: number, favoriteTitle: string, favoriteLabelIds: number[], callback: (ids: number[], error: string) => void) {
@@ -747,24 +518,7 @@
             return;
         }
 
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            url: getBaseUrl() + "Favorite/CreateFavoriteCategory",
-            data: JSON.stringify({
-                categoryId: categoryId,
-                title: favoriteTitle,
-                labelIds: favoriteLabelIds
-            }),
-            dataType: "json",
-            contentType: "application/json",
-            success: (resultIds) => {
-                callback(resultIds, null);
-            },
-            error: (request, status) => {
-                callback(null, status);
-            }
-        });
+        this.apiClient.createFavoriteCategory(categoryId, favoriteTitle, favoriteLabelIds, callback);
     }
 
     public createFavoriteQuery(bookType: BookTypeEnum, queryType: QueryTypeEnum, query: string, favoriteTitle: string, favoriteLabelIds: number[], callback: (ids: number[], error: string) => void) {
@@ -787,26 +541,7 @@
             return;
         }
 
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            url: getBaseUrl() + "Favorite/CreateFavoriteQuery",
-            data: JSON.stringify({
-                bookType: bookType,
-                queryType: queryType,
-                query: query,
-                title: favoriteTitle,
-                labelIds: favoriteLabelIds
-            }),
-            dataType: "json",
-            contentType: "application/json",
-            success: (resultIds) => {
-                callback(resultIds, null);
-            },
-            error: (request, status) => {
-                callback(null, status);
-            }
-        });
+        this.apiClient.createFavoriteQuery(bookType, queryType, query, favoriteTitle, favoriteLabelIds, callback);
     }
 
     public createPageBookmark(bookId: number, pageId: number, favoriteTitle: string, favoriteLabelIds: number[], callback: (ids: number[], error: string) => void) {
@@ -841,25 +576,7 @@
             return;
         }
 
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            url: getBaseUrl() + "Favorite/CreatePageBookmark",
-            data: JSON.stringify({
-                bookId: bookId,
-                pageId: pageId,
-                title: favoriteTitle,
-                labelIds: favoriteLabelIds
-            }),
-            dataType: "json",
-            contentType: "application/json",
-            success: (resultIds) => {
-                callback(resultIds, null);
-            },
-            error: (request, status) => {
-                callback(null, status);
-            }
-        });
+        this.apiClient.createPageBookmark(bookId, pageId, favoriteTitle, favoriteLabelIds, callback);
     }
 }
 

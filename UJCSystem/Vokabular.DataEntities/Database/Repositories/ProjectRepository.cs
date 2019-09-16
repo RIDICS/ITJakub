@@ -15,10 +15,16 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
         }
 
-        public virtual ListWithTotalCountResult<Project> GetProjectList(int start, int count, string filterByName = null)
+        public virtual ListWithTotalCountResult<Project> GetProjectList(int start, int count, ProjectTypeEnum? projectType,
+            string filterByName = null)
         {
             var query = GetSession().QueryOver<Project>()
                 .Fetch(SelectMode.Fetch, x => x.CreatedByUser);
+
+            if (projectType != null)
+            {
+                query.Where(x => x.ProjectType == projectType.Value);
+            }
 
             if (!string.IsNullOrEmpty(filterByName))
             {
@@ -47,13 +53,13 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SingleOrDefault();
         }
 
-        public virtual IList<FullProjectImportLog> GetAllImportLogByExternalId(string projectExternalId)
+        public virtual IList<FullProjectImportLog> GetAllImportLogByExternalId(string projectExternalId, ProjectTypeEnum projectType)
         {
             Project projectAlias = null;
 
             return GetSession().QueryOver<FullProjectImportLog>()
                 .JoinAlias(x => x.Project, () => projectAlias)
-                .Where(x => projectAlias.ExternalId == projectExternalId)
+                .Where(x => projectAlias.ExternalId == projectExternalId && projectAlias.ProjectType == projectType)
                 .List();
         }
 

@@ -32,6 +32,18 @@
     "EditPageName": "Upravit název stránky",
     "DeletePage": "Smazat stránku",
 
+    "Fail": "Chyba",
+    "PageLoadFailed": "Při načítání stránky {0} nastala neočekávaná chyba.",
+    "ProjectLoadFailed": "Při načítání informací o projektu nastala neočekávaná chyba.",
+    "ContentLoadFailed": "Při načítání obsahu nastala neočekávaná chyba.",
+    "NoTextPages": "Tento projekt neobsahuje textové stránky.",
+    "NoImageOnPage": "Stránka neobsahuje obrázek",
+    "NoComments": "Zatím žádné komentáře.",
+    "ToggleEditingMode": "Přepnout editační mód",
+    "DisplayPageNumbers": "Zobrazit čísla stránek",
+    "GoToPage": "Přejít na stránku...",
+    "UploadNewVersion": "Nahrát novou verzi",
+
     "EditionNoteLoadFailed": "Při načítání ediční poznámky nastala neočekávaná chyba.",
     "EditionNoteSaveSuccess": "Ediční poznámka byla úspěšně uložena.",
     "EditionNoteSaveFailed": "Při ukládání ediční poznámky nastala neočekávaná chyba."

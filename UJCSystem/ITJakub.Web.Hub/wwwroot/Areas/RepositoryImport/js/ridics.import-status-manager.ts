@@ -6,7 +6,7 @@
 class ImportStatusManager {
     private readonly errorHandler: ErrorHandler;
     private readonly client: RepositoryImportApiClient;
-    private timer: NodeJS.Timer;
+    private timer: number;
     private refreshInterval = 5000;
 
     constructor() {

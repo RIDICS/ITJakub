@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Vokabular.DataEntities.Database.ConditionCriteria;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
@@ -15,12 +16,14 @@ namespace Vokabular.MainService.Core.Works.Search
         private readonly MetadataRepository m_metadataRepository;
         private readonly FulltextSearchResultData m_fulltextSearchResultData;
         private readonly TermCriteriaPageConditionCreator m_termCriteriaCreator;
+        private readonly ProjectTypeEnum m_projectType;
 
-        public SearchByCriteriaFulltextResultWork(MetadataRepository metadataRepository, FulltextSearchResultData fulltextSearchResultData, TermCriteriaPageConditionCreator termCriteriaCreator) : base(metadataRepository)
+        public SearchByCriteriaFulltextResultWork(MetadataRepository metadataRepository, FulltextSearchResultData fulltextSearchResultData, TermCriteriaPageConditionCreator termCriteriaCreator, ProjectTypeEnum projectType) : base(metadataRepository)
         {
             m_metadataRepository = metadataRepository;
             m_fulltextSearchResultData = fulltextSearchResultData;
             m_termCriteriaCreator = termCriteriaCreator;
+            m_projectType = projectType;
         }
 
         protected override IList<MetadataResource> ExecuteWorkImplementation()
@@ -37,7 +40,7 @@ namespace Vokabular.MainService.Core.Works.Search
                     orderedList = CreateOrderedListById(projectIds, metadataList);
                     break;
                 case FulltextSearchResultType.ProjectExternalId:
-                    metadataList = m_metadataRepository.GetMetadataWithFetchForBiblModuleByProjectExternalIds(m_fulltextSearchResultData.StringList);
+                    metadataList = m_metadataRepository.GetMetadataWithFetchForBiblModuleByProjectExternalIds(m_fulltextSearchResultData.StringList, m_projectType);
                     orderedList = CreateOrderedListByExternalId(m_fulltextSearchResultData.StringList, metadataList);
                     projectIds = metadataList.Select(x => x.Resource.Project.Id).ToList();
                     break;

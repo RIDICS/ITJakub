@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Vokabular.Core.Storage;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.MainService.Core.Communication;
 using Vokabular.ForumSite.Core.Helpers;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Utils;
-using Vokabular.MainService.Core.Works.Permission;
 using Vokabular.MainService.Core.Works.Search;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -26,52 +25,45 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly MetadataRepository m_metadataRepository;
         private readonly BookRepository m_bookRepository;
-        private readonly PermissionRepository m_permissionRepository;
         private readonly FileSystemManager m_fileSystemManager;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
         private readonly AuthorizationManager m_authorizationManager;
         private readonly AuthenticationManager m_authenticationManager;
-        private readonly CommunicationProvider m_communicationProvider;
         private readonly CategoryRepository m_categoryRepository;
         private readonly ForumSiteUrlHelper m_forumSiteUrlHelper;
         private readonly IMapper m_mapper;
+        private readonly PortalTypeProvider m_portalTypeProvider;
         private readonly BookTypeEnum[] m_filterBookType;
 
 
         public BookManager(MetadataRepository metadataRepository, CategoryRepository categoryRepository,
-            BookRepository bookRepository, PermissionRepository permissionRepository, FileSystemManager fileSystemManager,
+            BookRepository bookRepository, FileSystemManager fileSystemManager,
             FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager,
-            AuthenticationManager authenticationManager, CommunicationProvider communicationProvider, ForumSiteUrlHelper forumSiteUrlHelper,
-            IMapper mapper)
+            AuthenticationManager authenticationManager, ForumSiteUrlHelper forumSiteUrlHelper,
+            IMapper mapper, PortalTypeProvider portalTypeProvider)
         {
             m_metadataRepository = metadataRepository;
             m_categoryRepository = categoryRepository;
             m_bookRepository = bookRepository;
-            m_permissionRepository = permissionRepository;
             m_fileSystemManager = fileSystemManager;
             m_fulltextStorageProvider = fulltextStorageProvider;
             m_authorizationManager = authorizationManager;
             m_authenticationManager = authenticationManager;
-            m_communicationProvider = communicationProvider;
             m_forumSiteUrlHelper = forumSiteUrlHelper;
             m_mapper = mapper;
+            m_portalTypeProvider = portalTypeProvider;
             m_filterBookType = new[] {BookTypeEnum.CardFile};
         }
 
+        [Obsolete]
         public List<BookWithCategoriesContract> GetBooksByTypeForUser(BookTypeEnumContract bookType)
         {
+            var projectType = m_portalTypeProvider.GetDefaultProjectType();
+            var projectTypeEnum = m_mapper.Map<ProjectTypeEnum>(projectType);
             var bookTypeEnum = m_mapper.Map<BookTypeEnum>(bookType);
             var user = m_authenticationManager.GetCurrentUser(true);
-            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByBookType(bookTypeEnum, user.Id));
+            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByBookType(bookTypeEnum, user.Id, projectTypeEnum));
             var resultList = m_mapper.Map<List<BookWithCategoriesContract>>(dbMetadataList);
-            return resultList;
-        }
-
-        public List<BookContract> GetAllBooksByType(BookTypeEnumContract bookType)
-        {
-            var bookTypeEnum = m_mapper.Map<BookTypeEnum>(bookType);
-            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetAllMetadataByBookType(bookTypeEnum));
-            var resultList = m_mapper.Map<List<BookContract>>(dbMetadataList);
             return resultList;
         }
 
@@ -80,16 +72,6 @@ namespace Vokabular.MainService.Core.Managers
             var dbResult = m_bookRepository.InvokeUnitOfWork(x => x.GetBookTypes());
             var filteredResult = dbResult.Where(x => !m_filterBookType.Contains(x.Type));
             var result = m_mapper.Map<List<BookTypeContract>>(filteredResult);
-            return result;
-        }
-
-        public List<BookContract> GetBooksForRole(int roleId, BookTypeEnumContract bookType)
-        {
-            new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
-            var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalIdOrCreate(roleId));
-            var bookTypeEnum = m_mapper.Map<BookTypeEnum>(bookType);
-            var dbResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataForUserGroup(bookTypeEnum, group.Id));
-            var result = m_mapper.Map<List<BookContract>>(dbResult);
             return result;
         }
 
@@ -102,11 +84,12 @@ namespace Vokabular.MainService.Core.Managers
             return result;
         }
 
-        public BookContract GetBookInfoByExternalId(string projectExternalId)
+        public BookContract GetBookInfoByExternalId(string projectExternalId, ProjectTypeContract projectType)
         {
             // Authorize after getting projectId
 
-            var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetLatestMetadataResourceByExternalId(projectExternalId));
+            var projectTypeEnum = m_mapper.Map<ProjectTypeEnum>(projectType);
+            var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetLatestMetadataResourceByExternalId(projectExternalId, projectTypeEnum));
             if (metadataResult == null)
                 return null;
 

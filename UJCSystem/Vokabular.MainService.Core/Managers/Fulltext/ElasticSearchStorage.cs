@@ -2,6 +2,7 @@
 using System.Linq;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
+using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
 using Vokabular.Shared.DataContracts.Search.Corpus;
@@ -204,6 +205,42 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient();
             var result = fulltextServiceClient.SearchCorpusTotalResultCount(criteria);
             return result;
+        }
+
+        public void CreateSnapshot(Snapshot snapshot, IList<TextResource> textResources, MetadataResource metadata)
+        {
+            var snapshotResource = new SnapshotPageIdsResourceContract
+            {
+                PageIds = textResources.Select(x => x.ExternalId).ToList(),
+                SnapshotId = snapshot.Id,
+                ProjectId = snapshot.Project.Id,
+                MetadataResource = new SnapshotMetadataResourceContract
+                {
+                    Title = metadata.Title,
+                    SubTitle = metadata.SubTitle,
+                    AuthorsLabel = metadata.AuthorsLabel,
+                    RelicAbbreviation = metadata.RelicAbbreviation,
+                    SourceAbbreviation = metadata.SourceAbbreviation,
+                    PublishPlace = metadata.PublishPlace,
+                    PublishDate = metadata.PublishDate,
+                    PublisherText = metadata.PublisherText,
+                    PublisherEmail = metadata.PublisherEmail,
+                    Copyright = metadata.Copyright,
+                    BiblText = metadata.BiblText,
+                    OriginDate = metadata.OriginDate,
+                    NotBefore = metadata.NotBefore,
+                    NotAfter = metadata.NotAfter,
+                    ManuscriptIdno = metadata.ManuscriptIdno,
+                    ManuscriptSettlement = metadata.ManuscriptSettlement,
+                    ManuscriptCountry = metadata.ManuscriptCountry,
+                    ManuscriptRepository = metadata.ManuscriptRepository,
+                    ManuscriptExtent = metadata.ManuscriptExtent,
+                    ManuscriptTitle = metadata.ManuscriptTitle
+                }
+            };
+
+            var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient();
+            fulltextServiceClient.CreateSnapshot(snapshotResource);
         }
 
         public long SearchHeadwordByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)

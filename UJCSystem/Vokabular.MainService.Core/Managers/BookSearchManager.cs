@@ -115,7 +115,8 @@ namespace Vokabular.MainService.Core.Managers
 
             var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
-            var projectTypeEnums = new List<ProjectTypeEnum> {m_mapper.Map<ProjectTypeEnum>(projectType)};
+            var mainProjectTypeEnum = m_mapper.Map<ProjectTypeEnum>(projectType);
+            var projectTypeEnums = new List<ProjectTypeEnum> {mainProjectTypeEnum};
 
             if (request.Parameters != null && request.Parameters.IncludeAdditionalProjectTypes)
             {
@@ -143,7 +144,7 @@ namespace Vokabular.MainService.Core.Managers
 
                 // 3) load paged result
                 var termCriteria = CreateTermConditionCreatorOrDefault(request, processedCriterias);
-                var searchByCriteriaFulltextResultWork = new SearchByCriteriaFulltextResultWork(m_metadataRepository, fulltextSearchResultData, termCriteria);
+                var searchByCriteriaFulltextResultWork = new SearchByCriteriaFulltextResultWork(m_metadataRepository, fulltextSearchResultData, termCriteria, mainProjectTypeEnum);
                 var dbResult = searchByCriteriaFulltextResultWork.Execute();
 
                 var resultList = MapToSearchResult(dbResult, searchByCriteriaFulltextResultWork.PageCounts, searchByCriteriaFulltextResultWork.TermHits);
@@ -274,7 +275,7 @@ namespace Vokabular.MainService.Core.Managers
                     case FulltextSearchResultType.ProjectId:
                         return m_headwordSearchManager.GetHeadwordSearchResultByStandardIds(fulltextSearchResultData.List);
                     case FulltextSearchResultType.ProjectExternalId:
-                        return m_headwordSearchManager.GetHeadwordSearchResultByExternalIds(fulltextSearchResultData.List);
+                        return m_headwordSearchManager.GetHeadwordSearchResultByExternalIds(fulltextSearchResultData.List, projectTypeEnum);
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -361,7 +362,7 @@ namespace Vokabular.MainService.Core.Managers
                 case FulltextSearchResultType.ProjectId:
                     return m_corpusSearchManager.GetCorpusSearchResultByStandardIds(result.List);
                 case FulltextSearchResultType.ProjectExternalId:
-                    return m_corpusSearchManager.GetCorpusSearchResultByExternalIds(result.List);
+                    return m_corpusSearchManager.GetCorpusSearchResultByExternalIds(result.List, snapshotInfo.Project.ProjectType);
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -418,12 +419,13 @@ namespace Vokabular.MainService.Core.Managers
             var count = m_corpusSearchManager.GetCorpusCount(request.Count);
             var result = fulltextStorage.SearchCorpusByCriteria(start, count, request.ContextLength, nonMetadataCriterias, projectIdentificatorList);
 
+            var projectTypeEnum = m_mapper.Map<ProjectTypeEnum>(projectType);
             switch (result.SearchResultType)
             {
                 case FulltextSearchResultType.ProjectId:
                     return m_corpusSearchManager.GetCorpusSearchResultByStandardIds(result.List);
                 case FulltextSearchResultType.ProjectExternalId:
-                    return m_corpusSearchManager.GetCorpusSearchResultByExternalIds(result.List);
+                    return m_corpusSearchManager.GetCorpusSearchResultByExternalIds(result.List, projectTypeEnum);
                 default:
                     throw new ArgumentOutOfRangeException();
             }
