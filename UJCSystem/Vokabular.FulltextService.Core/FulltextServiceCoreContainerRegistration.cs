@@ -26,8 +26,6 @@ namespace Vokabular.FulltextService.Core
             services.AddScoped<ITextConverter, Helpers.Converters.TextConverter>();
             services.AddScoped<ITextValidator, TextValidator>();
             services.AddScoped<IPageWithHtmlTagsCreator, PageWithHtmlTagsCreator>();
-
-            services.AddTextConverterServices();
         }
     }
 }
