@@ -100,7 +100,12 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     var search = string.Empty;
                     var start = 0;
                     var snapshotList = projectClient.GetSnapshotList(projectId.Value, start, SnapshotListPageSize, search);
-                    var model = CreateListViewModel<SnapshotViewModel, SnapshotAggregatedInfoContract>(snapshotList, start, SnapshotListPageSize, search);
+                    var listModel = CreateListViewModel<SnapshotViewModel, SnapshotAggregatedInfoContract>(snapshotList, start, SnapshotListPageSize, search);
+                    var model = new SnapshotListViewModel
+                    {
+                        ProjectId = projectId.Value,
+                        ListWrapper = listModel,
+                    };
                     return PartialView("Work/_Publications", model);
                 case ProjectModuleTabType.WorkPageList:
                     var pages = projectClient.GetAllPageList(projectId.Value);
