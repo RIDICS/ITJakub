@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Models
 {
@@ -15,12 +13,9 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
         public string Comment { get; set; }
     }
 
-    public class CreateSnapshotViewModel
+    public class SnapshotListViewModel
     {
         public long ProjectId { get; set; }
-        public string Comment { get; set; }
-        public IList<long> ResourceVersionIds { get; set; }
-        public IList<BookTypeEnumContract> BookTypes { get; set; }
-        public BookTypeEnumContract DefaultBookType { get; set; }
+        public ListViewModel<SnapshotViewModel> ListWrapper { get; set; }
     }
 }

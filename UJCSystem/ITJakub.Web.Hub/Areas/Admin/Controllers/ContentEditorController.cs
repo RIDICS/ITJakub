@@ -173,8 +173,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult GetEditionNote(long projectId, TextFormatEnumContract format)
         {
-            var client = GetBookClient();
-            var result = client.GetEditionNote(projectId, format);
+            var client = GetProjectClient();
+            var result = client.GetLatestEditionNote(projectId, format);
             return Json(result);
         }
 
