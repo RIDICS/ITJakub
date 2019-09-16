@@ -6,14 +6,16 @@
     private readonly util: EditorsUtil;
     private readonly commentArea: CommentArea;
     private readonly editModeSelector = "is-edited";
+    private readonly client: TextApiClient;
     private commentInputDialog: BootstrapDialogWrapper;
-    private isPreviewRendering = false;
+    private isPreviewRendering = true;
     private editorExistsInTab = false;
 
     constructor(commentInput: CommentInput, util: EditorsUtil, commentArea: CommentArea) {
         this.commentInput = commentInput;
         this.util = util;
         this.commentArea = commentArea;
+        this.client = new TextApiClient();
 
         this.commentInputDialog = new BootstrapDialogWrapper({
             element: $("#comment-input-dialog"),
@@ -378,29 +380,15 @@
     }
 
     private previewRemoteRender(text: string, previewElement: HTMLElement) {
+        this.isPreviewRendering = !this.isPreviewRendering;
         if (this.isPreviewRendering) {
             return;
         }
 
-        //TODO to client
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            url: getBaseUrl() + "Text/RenderPreview",
-            data: JSON.stringify({
-                text: text,
-                inputTextFormat: "markdown"
-            }),
-            dataType: "json",
-            contentType: "application/json",
-            success: (generatedHtml) => {
-                previewElement.innerHTML = generatedHtml;
-                this.isPreviewRendering = false;
-            },
-            error: () => {
-                previewElement.innerHTML = `<div>${localization.translate("RenderError", "ItJakubJs").value}</div>`;
-                this.isPreviewRendering = false;
-            }
+        this.client.renderPreview(text, "markdown").done((generatedHtml) => {
+            previewElement.innerHTML = generatedHtml;
+        }).fail(() => {
+            previewElement.innerHTML = `<div>${localization.translate("RenderError", "ItJakubJs").value}</div>`;
         });
     }
 

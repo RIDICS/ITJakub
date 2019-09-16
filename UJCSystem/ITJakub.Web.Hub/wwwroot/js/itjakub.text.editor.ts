@@ -5,10 +5,15 @@
 
 class StaticTextEditor {
     private textEditor: TextEditorWrapper;
+    private readonly client: TextApiClient;
+
+    constructor() {
+        this.client = new TextApiClient();
+    }
 
     public init() {
         var textArea = document.getElementById("text");
-        this.textEditor = new TextEditorWrapper(textArea);
+        this.textEditor = new TextEditorWrapper(textArea, this.client);
         this.textEditor.create();
 
         $("#save-button").click(() => {
@@ -17,11 +22,11 @@ class StaticTextEditor {
     }
 
     private saveText() {
-        var textName = $("#name").val() as string;
-        var category = $("#scope").val() as string;
-        var markdownText = this.textEditor.getValue();
+        const textName = $("#name").val() as string;
+        const category = $("#scope").val() as string;
+        const markdownText = this.textEditor.getValue();
 
-        var data: IStaticTextViewModel = {
+        const data: IStaticTextViewModel = {
             name: textName,
             scope: category,
             text: markdownText,
@@ -33,29 +38,20 @@ class StaticTextEditor {
         $("#save-progress").removeClass("hidden");
         $("#save-button").prop("disabled", true);
 
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            url: getBaseUrl() + "Text/SaveText",
-            data: JSON.stringify(data),
-            dataType: "json",
-            contentType: "application/json",
-            success: (modificationUpdate: IModificationUpdateViewModel) => {
-                $("#save-success")
-                    .removeClass("hidden")
-                    .show();
-                $("#save-progress").addClass("hidden");
-                $("#save-button").prop("disabled", false);
-                $("#save-success").delay(3000).fadeOut(2000);
+        this.client.saveText(data).done((modificationUpdate) => {
+            $("#save-success")
+                .removeClass("hidden")
+                .show();
+            $("#save-progress").addClass("hidden");
+            $("#save-button").prop("disabled", false);
+            $("#save-success").delay(3000).fadeOut(2000);
 
-                $("#modification-author").text(modificationUpdate.user ? modificationUpdate.user : localization.translate("Anonymous", "ItJakubJs").value);
-                $("#modification-time").text(modificationUpdate.modificationTime);
-            },
-            error: () => {
-                $("#save-error").removeClass("hidden");
-                $("#save-progress").addClass("hidden");
-                $("#save-button").prop("disabled", false);
-            }
+            $("#modification-author").text(modificationUpdate.user ? modificationUpdate.user : localization.translate("Anonymous", "ItJakubJs").value);
+            $("#modification-time").text(modificationUpdate.modificationTime);
+        }).fail(() => {
+            $("#save-error").removeClass("hidden");
+            $("#save-progress").addClass("hidden");
+            $("#save-button").prop("disabled", false);
         });
     }
 }
@@ -73,15 +69,16 @@ interface IModificationUpdateViewModel {
 }
 
 class TextEditorWrapper {
+    private readonly client: TextApiClient;
     private simpleMde: SimpleMDE;
     private simpleMdeIcons: SimpleMdeTools;
     private options: SimpleMDE.Options;
     private dialogInsertImage: BootstrapDialogWrapper;
     private dialogInsertLink: BootstrapDialogWrapper;
-    private isPreviewRendering = false;
+    private isPreviewRendering = true;
     private originalPreviewRender: (plaintext: string, preview?: HTMLElement) => string;
 
-    constructor(textArea: HTMLElement) {
+    constructor(textArea: HTMLElement, client: TextApiClient) {
         this.simpleMdeIcons = new SimpleMdeTools();
         this.options = {
             element: textArea,
@@ -120,6 +117,7 @@ class TextEditorWrapper {
                 this.simpleMdeIcons.toolGuide
             ]
         };
+        this.client = client;
     }
 
     public create(initValue?: string) {
@@ -138,28 +136,15 @@ class TextEditorWrapper {
     }
 
     private previewRemoteRender(text: string, previewElement: HTMLElement) {
+        this.isPreviewRendering = !this.isPreviewRendering;
         if (this.isPreviewRendering) {
             return;
         }
 
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            url: getBaseUrl() + "Text/RenderPreview",
-            data: JSON.stringify({
-                text: text,
-                inputTextFormat: "markdown"
-            }),
-            dataType: "json",
-            contentType: "application/json",
-            success: (generatedHtml) => {
-                previewElement.innerHTML = generatedHtml;
-                this.isPreviewRendering = false;
-            },
-            error: () => {
-                previewElement.innerHTML = "<div>" + localization.translate("RenderError", "ItJakubJs").value + "</div>";
-                this.isPreviewRendering = false;
-            }
+        this.client.renderPreview(text, "markdown").done((generatedHtml) => {
+            previewElement.innerHTML = generatedHtml;
+        }).fail(() => {
+            previewElement.innerHTML = `<div>${localization.translate("RenderError", "ItJakubJs").value}</div>`;
         });
     }
 
