@@ -41,6 +41,9 @@
     }
 
     private initEditorOnTextarea(note: string) {
+        if (note == null) {
+            note = "";
+        }
         const textAreaEl = $(".note-editor-textarea");
         $(".note-editor .bottom-buttons").removeClass("hide");
         textAreaEl.removeClass("hide");
@@ -63,7 +66,8 @@
                 this.simpleMdeIcons.toolQuote,
                 this.simpleMdeIcons.toolPreview,
                 this.simpleMdeIcons.toolHorizontalRule,
-                this.simpleMdeIcons.toolSeparator, {
+                this.simpleMdeIcons.toolSeparator,
+                {
                     name: "save",
                     action: (editor) => { this.saveNote(editor.value()) },
                     className: "fa fa-floppy-o",

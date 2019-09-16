@@ -41,7 +41,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var contract = m_mapper.Map<EditionNoteContract>(editionNoteResource);
 
-            if (!string.IsNullOrEmpty(editionNoteResource.Text))
+            if (editionNoteResource.Text != null)
             {
                 contract.Text = ConvertTextFormat(format, editionNoteResource.Text);
             }

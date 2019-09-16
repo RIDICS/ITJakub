@@ -256,7 +256,8 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
 
         public string GetEditionNote(EditionNoteResource editionNoteResource, TextFormatEnumContract format)
         {
-            throw new System.NotImplementedException();
+            // ElasticSearch storage doesn't support edition notes
+            return null;
         }
 
         public string CreateNewTextVersion(TextResource textResource)
