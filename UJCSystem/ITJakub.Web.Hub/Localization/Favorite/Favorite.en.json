@@ -1,6 +1,6 @@
 {
-	"culture":"en",
-	"scope":"Favorite",
+  "culture": "en",
+  "scope": "Favorite",
   "dictionary": {
     "DeleteLabel": "Remove label",
     "EditLabel": "Edit label",
@@ -17,10 +17,12 @@
     "Color": "Color",
     "LabelView": "translate[Náhled štítku]",
     "FunctionLoggedOnly": "translate[Tato funkcionalita je dostupná pouze pro přihlášené uživatele]",
-    "FunctionLoggedOnlySimple": "translate[Funkcionalita přidávání nových štítků je dostupná pouze pro přihlášené uživatele. Pro nepřihlášené uživatele je k dispozici pouze zjednodušená varianta pracující pouze s jedním přednastaveným štítkem.]",
+    "FunctionLoggedOnlySimple":
+      "translate[Funkcionalita přidávání nových štítků je dostupná pouze pro přihlášené uživatele. Pro nepřihlášené uživatele je k dispozici pouze zjednodušená varianta pracující pouze s jedním přednastaveným štítkem.]",
 
     "FavoriteItemRedirectErrorTitle": "translate[Chyba přesměrování na oblíbenou položku]",
-    "FavoriteItemRedirectErrorText": "translate[Pro zvolenou oblíbenou položku není jednoznačně určeno, co se má zobrazit.]",
+    "FavoriteItemRedirectErrorText":
+      "translate[Pro zvolenou oblíbenou položku není jednoznačně určeno, co se má zobrazit.]",
 
 
     "FavoriteManagementTitle": "translate[Administrace - Správa oblíbených položek]",
@@ -52,15 +54,15 @@
     "FavoriteItemSaveError": "translate[Chyba při ukládání oblíbené položky]",
     "FilterLabels": "Filter labels",
     "FilterByType": "Filter labels by name",
-	
-	"TitleAsc" : "translate[Název vzestupně]",
-	"TitleDesc" : "translate[Název sestupně]",
-	"CreateTimeAsc" : "translate[Čas vytvoření vzestupně]",
-	"CreateTimeDesc" : "translate[Čas vytvoření sestupně]",
-	"All" : "translate[Vše]",
-	"Books" : "translate[Knihy]",
-	"Category" : "translate[Kategorie]",
-	"PageBookmark" : "translate[Záložky na stránky]",
-	"Query" : "translate[Vyhledávací dotazy]"
+
+    "TitleAsc": "translate[Název vzestupně]",
+    "TitleDesc": "translate[Název sestupně]",
+    "CreateTimeAsc": "translate[Čas vytvoření vzestupně]",
+    "CreateTimeDesc": "translate[Čas vytvoření sestupně]",
+    "All": "translate[Vše]",
+    "Books": "translate[Knihy]",
+    "Category": "translate[Kategorie]",
+    "PageBookmark": "translate[Záložky na stránky]",
+    "Query": "translate[Vyhledávací dotazy]"
   }
 }

@@ -1,6 +1,6 @@
 {
-	"culture":"cs-CZ",
-	"scope":"Permission",
+  "culture": "cs-CZ",
+  "scope": "Permission",
   "dictionary": {
     "GroupPermissionManagementTitle": "Administrace - Správa skupin",
     "GroupManagementHeadline": "Správa skupin",
@@ -68,6 +68,6 @@
     "AddProjectPermissionToGroup": "Přidat právo na projekt skupině",
     "SelectedProject": "Vybraný projekt",
     "AddPermissionToGroup": "Přidat oprávnění skupině",
-    "ResetPassword":  "Resetovat heslo"
+    "ResetPassword": "Resetovat heslo"
   }
 }

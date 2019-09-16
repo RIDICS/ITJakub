@@ -1,6 +1,6 @@
 {
-	"culture":"en",
-	"scope":"Admin",
+  "culture": "en",
+  "scope": "Admin",
   "dictionary": {
     "ListError": "translate[...]",
     "ModuleError": "translate[...]",
