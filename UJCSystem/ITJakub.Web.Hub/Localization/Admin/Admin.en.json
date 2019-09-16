@@ -217,7 +217,7 @@
     "ForumRepairSuccess": "The forum was created",
     "ForumRepairError": "Error, the forum was not created",
 
-    "EnterValidName": "Please enter a name and surname.",
+    "EnterValidName": "Please enter a first name and last name.",
     "WorksLoadFailed": "An unexpected error occurred while loading works.",
     "SelectAuthor": "Please select one author from list.",
     "SelectResponsiblePerson": "Please select one responsible person from list.",
