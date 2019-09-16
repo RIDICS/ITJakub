@@ -26,6 +26,7 @@ namespace Vokabular.MainService.Core
             services.AddScoped<CatalogValueManager>();
             services.AddScoped<CategoryManager>();
             services.AddScoped<CorpusSearchManager>();
+            services.AddScoped<EditionNoteManager>();
             services.AddScoped<FavoriteManager>();
             services.AddScoped<FeedbackManager>();
             services.AddScoped<ForumSiteManager>();
