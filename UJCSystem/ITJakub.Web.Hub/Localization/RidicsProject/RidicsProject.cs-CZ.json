@@ -71,7 +71,7 @@
     "CommentCreateFail": "Komentář se nepodařilo vytvořit.",
     "CommentDeleteSuccess": "Komentář úspěšně smazán.",
     "CommentDeleteFail": "Komentář se nepodařilo smazat.",
-    "OverlappingComment": "Váš komentář se překrývá s jiným komentářem. Prosím, vyberte jinou částe textu.",
+    "OverlappingComment": "Váš komentář se překrývá s jiným komentářem. Prosím, vyberte jinou část textu.",
     "EnterComment": "Vložte svůj komentář sem:",
     "CloseEditedPage": "Je otevřen editor pro stránku {0}. Opravdu chtete editor zavřít bez uložení?",
     "ChangesSaveSuccess": "Vaše změny byly úspěšně uloženy.",
