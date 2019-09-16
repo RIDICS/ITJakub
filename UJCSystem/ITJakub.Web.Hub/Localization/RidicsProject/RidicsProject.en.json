@@ -1,6 +1,6 @@
 {
-	"culture":"en",
-	"scope":"RidicsProject",
+  "culture": "en",
+  "scope": "RidicsProject",
   "dictionary": {
     "ListError": "An unexpected error occurred while a page with the project list.",
     "ModuleError": "An unexpected error occurred while loading the module.",

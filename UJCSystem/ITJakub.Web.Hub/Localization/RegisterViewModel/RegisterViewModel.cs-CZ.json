@@ -1,6 +1,6 @@
 {
-	"culture":"cs-CZ",
-	"scope":"RegisterViewModel",
+  "culture": "cs-CZ",
+  "scope": "RegisterViewModel",
   "dictionary": {
     "UserName": "Uživatelské jméno",
     "Email": "E-mail",
