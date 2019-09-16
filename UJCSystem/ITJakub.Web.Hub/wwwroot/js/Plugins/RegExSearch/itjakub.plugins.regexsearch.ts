@@ -1038,7 +1038,7 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
 
         var decadesArray = new Array<DatingSliderValue>();
         for (var decades = 0; decades <= 90; decades += 10) {
-            decadesArray.push(new DatingSliderValue(decades.toString(), decades, -(100 - (decades + 10)))); //calculate decades low and high values (i.e 20. decades of 18. century is 1720-1729)
+            decadesArray.push(new DatingSliderValue(decades.toString(), decades -1, -(100 - (decades + 9)))); //calculate decades low and high values (i.e 20. decades of 18. century is 1720-1729)
         }
 
         this.decadeSliderValues = decadesArray;
