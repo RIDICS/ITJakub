@@ -6,8 +6,6 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.12" />
-    <PackageReference Include="Markdig" Version="0.17.1" />
     <PackageReference Include="NEST" Version="5.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>
@@ -15,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Vokabular.FulltextService.DataContracts\Vokabular.FulltextService.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj" />
+    <ProjectReference Include="..\Vokabular.TextConverter\Vokabular.TextConverter.csproj" />
   </ItemGroup>
 
 </Project>

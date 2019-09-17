@@ -273,21 +273,27 @@ interface IChapterHieararchyContract {
 }
 
 interface IOnlySaveMetadataResource {
-    keywordIdList: Array<number>;
-    categoryIdList: Array<number>;
-    literaryKindIdList: Array<number>;
-    literaryGenreIdList: Array<number>;
     authorIdList: Array<number>;
     projectResponsiblePersonIdList: Array<ISaveProjectResponsiblePerson>;
 }
 
-interface ISaveMetadataResource extends IMetadataResource {
+interface IOnlySaveCategorization {
     keywordIdList: Array<number>;
     categoryIdList: Array<number>;
     literaryKindIdList: Array<number>;
     literaryGenreIdList: Array<number>;
+}
+
+interface ISaveMetadataResource extends IMetadataResource {
     authorIdList: Array<number>;
     projectResponsiblePersonIdList: Array<ISaveProjectResponsiblePerson>;
+}
+
+interface ISaveCategorization {
+    keywordIdList: Array<number>;
+    categoryIdList: Array<number>;
+    literaryKindIdList: Array<number>;
+    literaryGenreIdList: Array<number>;
 }
 
 interface IGetMetadataResource extends IMetadataResource {
@@ -388,7 +394,7 @@ interface ITextWithPage {
 interface ICreateTextVersion {
     text: string;
     id: number;
-    versionNumber: number;
+    resourceVersionId: number;
 }
 
 interface ITextWithContent {
@@ -432,8 +438,16 @@ interface ICategoryTreeContract {
     children?: ICategoryTreeContract[];
 }
 
-interface IEditionNote { //TODO expand after server functionality is done
+interface IEditionNoteContract {
+    id: number;
+    versionId: number;
+    versionNumber: number;
+    text: string;
+}
+
+interface ICreateEditionNote {
     projectId: number;
+    originalVersionId: number;
     content: string;
 }
 

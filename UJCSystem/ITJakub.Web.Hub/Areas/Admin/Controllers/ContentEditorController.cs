@@ -127,7 +127,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             model.HasImage = client.HasPageImage(pageId);
             model.PageId = pageId;
             
-            return PartialView("../Project/Work/_PageListDetail", model);
+            return PartialView("../Project/Work/SubView/_PageListDetail", model);
         }
 
         [HttpPost]
@@ -166,24 +166,29 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         public IActionResult SetTextResource(long textId, CreateTextRequestContract request)
         {
             var client = GetProjectClient();
-            var result = client.CreateTextResourceVersion(textId, request);
-            return Json(result);
+            var resourceVersionId = client.CreateTextResourceVersion(textId, request);
+            return Json(resourceVersionId);
         }
 
         [HttpGet]
         public IActionResult GetEditionNote(long projectId, TextFormatEnumContract format)
         {
-            var client = GetBookClient();
-            var result = client.GetEditionNote(projectId, format);
+            var client = GetProjectClient();
+            var result = client.GetLatestEditionNote(projectId, format);
             return Json(result);
         }
 
         [HttpPost]
-        public IActionResult SetEditionNote([FromBody] CreateEditionNoteRequest request)
+        public IActionResult SetEditionNote(CreateEditionNoteRequest request)
         {
-            //var result = client.
-            var result = "TODO"; //TODO add logic
-            return Json(result);
+            var client = GetProjectClient();
+            var data = new CreateEditionNoteContract
+            {
+                Text = request.Content,
+                OriginalVersionId = request.OriginalVersionId
+            };
+            client.CreateEditionNote(request.ProjectId, data);
+            return AjaxOkResponse();
         }
     }
 }

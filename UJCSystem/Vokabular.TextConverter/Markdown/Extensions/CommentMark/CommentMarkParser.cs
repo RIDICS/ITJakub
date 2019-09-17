@@ -3,9 +3,9 @@ using Markdig.Helpers;
 using Markdig.Parsers;
 using Markdig.Syntax.Inlines;
 using Microsoft.Extensions.Options;
-using Vokabular.FulltextService.Core.Options;
+using Vokabular.TextConverter.Options;
 
-namespace Vokabular.FulltextService.Core.Helpers.Markdown.Extensions.CommentMark
+namespace Vokabular.TextConverter.Markdown.Extensions.CommentMark
 {
     public class CommentMarkParser : InlineParser
     {

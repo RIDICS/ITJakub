@@ -341,11 +341,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public string GetEditionNote(long projectId, TextFormatEnumContract format)
+        public string GetEditionNoteText(long projectId, TextFormatEnumContract format)
         {
             try
             {
-                var result = m_client.GetString($"book/{projectId}/edition-note?format={format}");
+                var result = m_client.GetString($"book/{projectId}/edition-note/text?format={format}");
                 return result;
             }
             catch (HttpRequestException e)
@@ -356,7 +356,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
-
+        
         public List<BookTypeContract> GetBookTypeList()
         {
             try

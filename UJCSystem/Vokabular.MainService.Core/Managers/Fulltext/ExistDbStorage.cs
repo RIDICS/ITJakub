@@ -390,17 +390,12 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             }
         }
 
-        public string CreateNewTextVersion(TextResource textResource)
+        public string CreateNewTextVersion(TextResource textResource, string text)
         {
             throw new NotSupportedException("Saving resources to eXist-db isn't supported. eXist-db storage supports only full book import.");
         }
 
         public string CreateNewHeadwordVersion(HeadwordResource headwordResource)
-        {
-            throw new NotSupportedException("Saving resources to eXist-db isn't supported. eXist-db storage supports only full book import.");
-        }
-
-        public string CreateNewEditionNoteVersion(EditionNoteResource editionNoteResource)
         {
             throw new NotSupportedException("Saving resources to eXist-db isn't supported. eXist-db storage supports only full book import.");
         }

@@ -38,6 +38,7 @@ using Vokabular.Shared.AspNetCore.Container.Extensions;
 using Vokabular.Shared.AspNetCore.Extensions;
 using Vokabular.Shared.Const;
 using Vokabular.Shared.Options;
+using Vokabular.TextConverter.Options;
 
 namespace ITJakub.Web.Hub
 {
@@ -182,6 +183,7 @@ namespace ITJakub.Web.Hub
             services.Configure<PortalOption>(Configuration.GetSection("PortalConfig"));
             services.Configure<AutoLoginCookieConfiguration>(Configuration.GetSection("AutoLoginCookie"));
             services.Configure<ForumOption>(Configuration.GetSection("Forum"));
+            services.Configure<SpecialCharsOption>(Configuration.GetSection("SpecialChars"));
             services.PostConfigure<AutoLoginCookieConfiguration>(config =>
             {
                 config.CookieName = $"{AutoLoginCookieConfiguration.CookieNamePrefix}{portalConfig.PortalType}";

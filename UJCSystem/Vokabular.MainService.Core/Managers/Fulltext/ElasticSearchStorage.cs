@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
@@ -40,13 +41,13 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
 
         public string GetHeadwordText(HeadwordResource headwordResource, TextFormatEnumContract format)
         {
-            throw new System.NotImplementedException();
+            throw new NotSupportedException("Headwords/dictionaries are not supported in ElasticSearch storage.");
         }
 
         public string GetHeadwordTextFromSearch(HeadwordResource headwordResource, TextFormatEnumContract format,
             SearchPageRequestContract searchRequest)
         {
-            throw new System.NotImplementedException();
+            throw new NotSupportedException("Headwords/dictionaries are not supported in ElasticSearch storage.");
         }
 
         private void UpdateCriteriaWithSnapshotRestriction(List<SearchCriteriaContract> criteria,
@@ -245,34 +246,31 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
 
         public long SearchHeadwordByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
-            throw new System.NotImplementedException();
+            throw new NotSupportedException("Headwords/dictionaries are not supported in ElasticSearch storage.");
         }
 
         public HeadwordSearchResultDataList SearchHeadwordByCriteria(int start, int count, List<SearchCriteriaContract> criteria,
             IList<ProjectIdentificationResult> projects)
         {
-            throw new System.NotImplementedException();
+            throw new NotSupportedException("Headwords/dictionaries are not supported in ElasticSearch storage.");
         }
 
         public string GetEditionNote(EditionNoteResource editionNoteResource, TextFormatEnumContract format)
         {
-            throw new System.NotImplementedException();
+            // ElasticSearch storage doesn't support edition notes
+            return null;
         }
 
-        public string CreateNewTextVersion(TextResource textResource)
+        public string CreateNewTextVersion(TextResource textResource, string text)
         {
-            // TODO implement and change usage in CreateNewTextResourceWork
-            throw new System.NotImplementedException();
+            var fulltextClient = m_communicationProvider.GetFulltextServiceClient();
+            var externalTextId = fulltextClient.CreateTextResource(text, textResource.VersionNumber);
+            return externalTextId;
         }
 
         public string CreateNewHeadwordVersion(HeadwordResource headwordResource)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public string CreateNewEditionNoteVersion(EditionNoteResource editionNoteResource)
-        {
-            throw new System.NotImplementedException();
+            throw new NotSupportedException("Headwords/dictionaries are not supported in ElasticSearch storage.");
         }
     }
 }

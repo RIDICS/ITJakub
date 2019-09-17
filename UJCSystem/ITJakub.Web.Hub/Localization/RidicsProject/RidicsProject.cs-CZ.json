@@ -1,6 +1,6 @@
 {
-	"culture":"cs-CZ",
-	"scope":"RidicsProject",
+  "culture": "cs-CZ",
+  "scope": "RidicsProject",
   "dictionary": {
     "ListError": "Chyba při načítání strany se seznamem projektů",
     "ModuleError": "Chyba při načítání modulu",
@@ -42,6 +42,10 @@
     "ToggleEditingMode": "Přepnout editační mód",
     "DisplayPageNumbers": "Zobrazit čísla stránek",
     "GoToPage": "Přejít na stránku...",
-    "UploadNewVersion": "Nahrát novou verzi"
+    "UploadNewVersion": "Nahrát novou verzi",
+
+    "EditionNoteLoadFailed": "Při načítání ediční poznámky nastala neočekávaná chyba.",
+    "EditionNoteSaveSuccess": "Ediční poznámka byla úspěšně uložena.",
+    "EditionNoteSaveFailed": "Při ukládání ediční poznámky nastala neočekávaná chyba."
   }
 }

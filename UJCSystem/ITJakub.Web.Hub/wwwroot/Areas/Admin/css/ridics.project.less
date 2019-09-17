@@ -8,6 +8,7 @@
 @box-border: 1px solid #ddd;
 @even-table-row-colour: #eee;
 @odd-table-row-colour: white;
+@selected-row-color: #dcdcdc;
 
 .project-list {
     hr {
@@ -163,8 +164,25 @@
     text-align: right;
 }
 
-.project-form-bottom-buttons {
-    margin-right: 1rem;
+.metadata-edit-bar {
+    .project-form-bottom-buttons {
+        button {
+            float: right;
+        }
+
+        .work-metadata-save-button {
+            margin-right: -15px;
+            margin-left: 1em;
+        }
+
+        .alert {
+            margin-bottom: 0;
+        }
+    }
+
+    .form-group {
+        margin-bottom: 0;
+    }
 }
 
 .project-layout-box {
@@ -204,6 +222,7 @@
 
 .resource-tab-row-fix {
     margin-right: 0;
+    margin-left: 0;
 }
 
 .resource-version-table {
@@ -490,10 +509,6 @@ table {
     }
 }
 
-.existing-original-author-selected {
-    background-color: orange; //TODO debug
-}
-
 .table-of-keys-content {
 
     .table-of-keys-container {
@@ -556,17 +571,15 @@ table {
     }
 }
 
-#project-work-metadata {
-    .person-surname {
-        margin: 0 3px;
+#project-work-categorization {
+    .add-button {
+        button {
+            margin-left: 15px;
+        }
     }
 
-    #work-metadata-copyright {
-        resize: none;
-        width: 100%;
-    }
-
-    #work-metadata-literary-genre, #work-metadata-literary-kind {
+    #work-categorization-literary-genre,
+    #work-categorization-literary-kind {
         .button-float-right {
             float: right;
         }
@@ -580,6 +593,22 @@ table {
         }
     }
 
+    #work-categorization-invalid-keyword-fail {
+        display: none;
+    }
+}
+
+#project-work-categorization,
+#project-work-metadata {
+    .person-surname {
+        margin: 0 3px;
+    }
+
+    #work-metadata-copyright {
+        resize: none;
+        width: 100%;
+    }
+
     .regex-slider-div {
         .slider {
             width: 65%;
@@ -590,12 +619,17 @@ table {
 
             span {
                 margin-left: 3px;
+                cursor: pointer;
             }
         }
     }
 
-    #work-metadata-invalid-keyword-fail {
-        display: none;
+    .input-group {
+        .btn {
+            border: none;
+            color: #fff;
+            background-color: @button-background-color;
+        }
     }
 
     .person-list-manipulate {
@@ -603,7 +637,8 @@ table {
     }
 
     .generate-bibliography-row {
-        margin: 6px 0;
+        margin-top: 6px;
+        margin-bottom: 6px;
     }
 
     .move-button {
@@ -616,8 +651,18 @@ table {
     }
 
     .category-container {
-        height: 300px;
-        overflow-y: scroll;
+        margin-bottom: 1em;
+
+        .list-group-item {
+            &.active {
+                background-color: white;
+                color: black;
+            }
+
+            .disabled {
+                cursor: initial;
+            }
+        }
     }
 
     .email-group, .publication-years-group {
@@ -641,6 +686,18 @@ table {
     .keywords-container {
         .bootstrap-tagsinput {
             width: 100%;
+        }
+    }
+
+    #work-metadata-container {
+        padding: 0 1em;
+
+        .panel {
+            margin-bottom: 30px;
+
+            .control-label {
+                text-align: left;
+            }
         }
     }
 
@@ -680,6 +737,11 @@ table {
 
                 .new-original-author-button-group {
                     display: none;
+                    float: right;
+
+                    button:not(:first-of-type) {
+                        margin-left: 1em;
+                    }
                 }
             }
 
@@ -733,13 +795,14 @@ table {
                 }
 
                 .author-list-items {
-                    overflow-y: scroll;
+                    overflow-y: auto;
                     border: solid 1px gray;
                     border-top: none;
                     height: 200px;
 
                     .author-list-item {
                         border-bottom: solid 1px gray;
+                        cursor: pointer;
 
                         &:nth-child(even) {
                             background-color: @even-table-row-colour;
@@ -749,13 +812,13 @@ table {
                             background-color: @odd-table-row-colour;
                         }
 
+                        &.existing-original-author-selected {
+                            background-color: @selected-row-color;
+                        }
+
                         .list-group-item {
                             padding: 4px;
                         }
-                    }
-
-                    .existing-original-author-selected {
-                        background-color: orange;
                     }
 
                     .existing-original-author-name {
@@ -768,7 +831,6 @@ table {
                 }
 
                 .author-table-header {
-                    overflow-y: scroll;
                     border: solid 1px gray;
                     font-weight: bold;
                 }
@@ -807,7 +869,6 @@ table {
 
             .responsible-people-table {
                 .responsible-person-table-header {
-                    overflow-y: scroll;
                     border: solid 1px gray;
                     font-weight: bold;
                 }
@@ -825,10 +886,11 @@ table {
                 border: solid 1px gray;
                 border-top: none;
                 height: 200px;
-                overflow-y: scroll;
+                overflow-y: auto;
 
                 .responsible-person-list-item {
                     border-bottom: solid 1px gray;
+                    cursor: pointer;
 
                     &:nth-child(even) {
                         background-color: @even-table-row-colour;
@@ -838,13 +900,13 @@ table {
                         background-color: @odd-table-row-colour;
                     }
 
+                    &.existing-responsible-person-selected {
+                        background-color: @selected-row-color;
+                    }
+
                     .list-group-item {
                         padding: 4px;
                     }
-                }
-
-                .existing-responsible-person-selected {
-                    background-color: orange;
                 }
 
                 .existing-responsible-person-name {
@@ -872,6 +934,11 @@ table {
 
                 .new-responsible-person-button-group {
                     display: none;
+                    float: right;
+
+                    button:not(:first-of-type) {
+                        margin-left: 1em;
+                    }
                 }
             }
 
@@ -1218,6 +1285,17 @@ table {
     margin-top: 10px;
 }
 
+.note-editor {
+    .editor-toolbar {
+        a {
+            border-radius: 0;
+        }
+    }
+    .bottom-buttons {
+        text-align: right;
+    }
+}
+
 .list-container {
     &.selectable {
         tbody {
@@ -1225,7 +1303,7 @@ table {
 
             .active {
                 td {
-                    background-color: #DCDCDC;
+                    background-color: @selected-row-color;
                 }
             }
         }
@@ -1242,7 +1320,7 @@ table {
 
             td {
                 border: none;
-                
+
                 .form-control {
                     height: 28px;
                 }
@@ -1266,6 +1344,12 @@ table {
             &:first-of-type {
                 margin-left: 0;
             }
+        }
+    }
+
+    .info-row {
+        td {
+            padding: 1em;
         }
     }
 }
@@ -1346,6 +1430,12 @@ table {
     display: inline-block;
     vertical-align: middle;
     margin-left: 0.5em;
+}
+
+
+.editor-toolbar,
+.CodeMirror {
+    border-radius: 0;
 }
 
 .project-snapshot-new {

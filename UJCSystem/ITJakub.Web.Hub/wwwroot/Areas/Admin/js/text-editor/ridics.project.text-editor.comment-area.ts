@@ -1,8 +1,8 @@
 ﻿class CommentArea {
-    private readonly util: EditorsUtil;
+    private readonly util: EditorsApiClient;
     private readonly adminApiClient = new AdminApiClient();
 
-    constructor(util: EditorsUtil) {
+    constructor(util: EditorsApiClient) {
         this.util = util;
     }
 

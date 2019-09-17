@@ -26,9 +26,8 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         long SearchHeadwordByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects);
         HeadwordSearchResultDataList SearchHeadwordByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects);
         string GetEditionNote(EditionNoteResource editionNoteResource, TextFormatEnumContract format);
-        string CreateNewTextVersion(TextResource textResource);
+        string CreateNewTextVersion(TextResource textResource, string text);
         string CreateNewHeadwordVersion(HeadwordResource headwordResource);
-        string CreateNewEditionNoteVersion(EditionNoteResource editionNoteResource);
         CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotListByCriteria(int start, int count, SortTypeEnumContract? sort, SortDirectionEnumContract? sortDirection, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects, bool fetchNumberOfresults);
         CorpusSearchResultDataList SearchCorpusInSnapshotByCriteria(long snapshotId, int start, int count, int contextLength, List<SearchCriteriaContract> criteria);
         long SearchCorpusTotalResultCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects);

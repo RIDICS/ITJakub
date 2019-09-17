@@ -1,7 +1,7 @@
 ﻿using Markdig.Helpers;
 using Markdig.Syntax.Inlines;
 
-namespace Vokabular.FulltextService.Core.Helpers.Markdown.Extensions.CommentMark
+namespace Vokabular.TextConverter.Markdown.Extensions.CommentMark
 {
     public class CommentMarkText : LeafInline
     {

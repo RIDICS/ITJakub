@@ -251,6 +251,8 @@ class ProjectWorkModule extends ProjectModuleBase {
             return new ProjectWorkNoteTab(this.projectId);
         case ProjectModuleTabType.Forum:
             return new ProjectWorkForumTab(this.projectId);
+        case ProjectModuleTabType.WorkCategorization:
+            return new ProjectWorkCategorizationTab(this.projectId, this);
         default:
             return null;
         }
@@ -635,6 +637,7 @@ enum ProjectModuleTabType {
     WorkMetadata = 3,
     WorkHistory = 4,
     WorkNote = 5,
+    WorkCategorization = 6,
     ResourceDiscussion = 102,
     ResourceMetadata = 103,
     Forum = 200,

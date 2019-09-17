@@ -1,6 +1,6 @@
 {
-	"culture":"en",
-	"scope":"Admin",
+  "culture": "en",
+  "scope": "Admin",
   "dictionary": {
     "ListError": "translate[...]",
     "ModuleError": "translate[...]",
@@ -13,7 +13,6 @@
     "MissingName": "translate[...]",
     "CreateLiteraryKind": "translate[..]",
     "CreateLiteraryGenre": "translate[...]",
-
     "CreateResourcesError": "translate[...]",
 
     "ProjectHeader": "translate[Projekt - ]",
@@ -52,6 +51,7 @@
     "Editor": "Editor",
     "Editor2": "Editor 2",
     "LastModification": "translate[Poslední úprava]",
+    "MetadataWasNotEdited": "The metadata was not edited yet.",
     "EditionAbbr": "translate[Zkratka památky]",
     "Preview": "Preview",
 
@@ -60,8 +60,9 @@
     "Snapshots": "translate[Snapshoty]",
     "ResourcesHistory": "translate[Změny zdrojů]",
 
-    "CommonInformations": "translate[Obecné informace]",
-    "ProjectName": "translate[Název projektu]",
+    "CommonInformation": "translate[Obecné informace]",
+    "ProjectName": "translate[Název díla]",
+    "ProjectSubName": "translate[Podnázev díla]",
     "Title": "translate[Titul]",
     "Subtitle": "translate[Podtitul]",
     "SourceAbbr": "translate[Zkratka pramene]",
@@ -69,18 +70,25 @@
     "Publisher": "translate[Nakladatel]",
     "PublishPlace": "translate[Místo publikace]",
     "PublishDate": "translate[Rok/roky publikace]",
-    "Bibliogprahy": "translate[Bibliografie]",
+    "ResponsiblePeople": "Responsible people",
+    "NoResponsiblePeople": "No responsible people were added",
+    "AddNewResponsiblePerson": "Add new responsible person",
+    "FindResponsiblePerson": "Find responsible person",
+    "Bibliography": "translate[Bibliografie]",
     "Copyright": "translate[Copyright]",
     "Editors": "translate[Editoři]",
     "Add": "translate[Přidat]",
     "Original/Handwriting": "translate[Předloha/rukopis]",
     "LiteraryOriginal": "translate[Předloha]",
+    "NoLiteraryOriginal": "The literary original was not entered.",
     "Country": "translate[Země]",
     "City": "translate[Město]",
     "Institution": "translate[Instituce]",
     "Signature": "translate[Signatura]",
     "Extent": "translate[Rozsah]",
     "Authors": "translate[Autoři]",
+    "NoAuthors": "No authors were added",
+    "AuthorsFromBook": "Authors (from book)",
     "OriginDate": "translate[Vydáno (slovní popis)]",
     "NotBefore": "translate[Nevydáno před rokem]",
     "NotAfter": "translate[Nevydáno po roce]",
@@ -90,6 +98,10 @@
     "LiteraryGenre": "translate[Literární žánr]",
     "MetadataSaveSuccess": "translate[Metadata uložena]",
     "MetadataSaveError": "translate[Některá metadata se nepodařilo uložit]",
+    "DataSaveSuccess": "translate[Data uložena]",
+    "DataSaveError": "translate[Některá data se nepodařilo uložit]",
+    "SpecifiedDataSaveError": "translate[Nepodařilo se uložit následující data: {0}.]",
+    "KeywordsSaveError": "Failed to save keywords. Please check for duplicates.",
     "OldBohemian": "translate[Staročeský]",
     "MiddleBohemian": "translate[Středněčeský]",
     "AddNewPublisher": "translate[Přidat nového nakladatele]",
@@ -109,6 +121,12 @@
     "Type": "translate[Typ]",
     "AddType": "translate[Přidat typ]",
     "Create": "translate[Vytvořit]",
+    "Keywords": "Keywords",
+    "Works": "Works",
+    "NumberOfWorksWritten": "Number of works written",
+    "WorksParticipatedRole": "Works participated - role",
+    "WorksParticipatedNumber": "Number of works participated in",
+    "SelectTimePeriod": "Select time period",
 
     "EditPageList": "translate[Upravit seznam stránek]",
     "NewPages": "New pages",
@@ -136,6 +154,7 @@
     "VideoSources": "translate[Video zdroje]",
     "Author": "translate[Autor]",
     "DuplicateSettings": "translate[Duplikovat nastavení]",
+    "NoSnapshotCreated": "translate[Žádný snapshot zatím nebyl vytvořen]",
     "CreateNewPublication": "translate[Vytvořit novou publikaci]",
 
     "Visibility": "translate[Viditelnost]",
@@ -173,6 +192,7 @@
     "Publication": "translate[Publikace]",
     "PageList": "translate[Seznam stránek]",
     "History": "translate[Historie]",
+    "EditionNote": "Edition note",
 
     "VersionNumber": "translate[Číslo verze]",
     "Comment": "translate[Komentář]",
@@ -201,6 +221,12 @@
     "Repair": "Repair",
     "ForumRepairText": "The forum is not created or is not connected with Vokabulář webový.",
     "ForumRepairSuccess": "The forum was created",
-    "ForumRepairError": "Error, the forum was not created"
+    "ForumRepairError": "Error, the forum was not created",
+
+    "EnterValidName": "Please enter a first name and last name.",
+    "WorksLoadFailed": "An unexpected error occurred while loading works.",
+    "SelectAuthor": "Please select one author from list.",
+    "SelectResponsiblePerson": "Please select one responsible person from list.",
+    "SelectResponsibleType": "Please select responsible type."
   }
 }

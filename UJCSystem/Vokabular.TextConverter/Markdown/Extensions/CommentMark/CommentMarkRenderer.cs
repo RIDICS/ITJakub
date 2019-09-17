@@ -1,7 +1,7 @@
 ﻿using Markdig.Renderers;
 using Markdig.Renderers.Html;
 
-namespace Vokabular.FulltextService.Core.Helpers.Markdown.Extensions.CommentMark
+namespace Vokabular.TextConverter.Markdown.Extensions.CommentMark
 {
     public class CommentMarkRenderer : HtmlObjectRenderer<CommentMarkContainer>
     {

@@ -39,6 +39,7 @@ using Vokabular.Shared.AspNetCore.Container.Extensions;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.Options;
+using Vokabular.TextConverter.Options;
 
 namespace Vokabular.MainService
 {
@@ -67,6 +68,7 @@ namespace Vokabular.MainService
             services.Configure<PathConfiguration>(Configuration.GetSection("PathConfiguration"));
             services.Configure<OaiPmhClientOption>(Configuration.GetSection("OaiPmhClientOption"));
             services.Configure<ForumOption>(Configuration.GetSection("ForumOptions"));
+            services.Configure<SpecialCharsOption>(Configuration.GetSection("SpecialChars"));
 
             services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = 1048576000; });
 

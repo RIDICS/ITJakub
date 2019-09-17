@@ -1,9 +1,9 @@
 ﻿using Markdig;
 using Microsoft.Extensions.Options;
-using Vokabular.FulltextService.Core.Helpers.Markdown.Extensions.CommentMark;
-using Vokabular.FulltextService.Core.Options;
+using Vokabular.TextConverter.Markdown.Extensions.CommentMark;
+using Vokabular.TextConverter.Options;
 
-namespace Vokabular.FulltextService.Core.Helpers.Markdown
+namespace Vokabular.TextConverter.Markdown
 {
     public class MarkdigMarkdownToHtmlConverter : IMarkdownToHtmlConverter
     {
