@@ -5,7 +5,9 @@
 <tr class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></tr>
 @if (Model.List.Count == 0)
 {
-
+    <tr class="info-row">
+        <td colspan="7">@Localizer.Translate("NoSnapshotCreated", "Admin")</td>
+    </tr>
 }
 else
 {
