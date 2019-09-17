@@ -67,9 +67,16 @@
             var unixTimeMilliseconds = content[i].time;
             var timeUtc = new Date(unixTimeMilliseconds);
             var commentBodyStart = `<div class="media-body" data-comment-id=${id}>`;
-            var commentImage =
-                `<a href="#"><img alt="48x48" class="media-object" src="${picture
-                    }" style="width: 48px; height: 48px;"></a>`;
+            let commentImage;
+            if (picture == null) {
+                commentImage =
+                    `<i class="fa fa-4x fa-user"></i>`;
+            } else {
+                commentImage =
+                    `<a href="#"><img alt="48x48" class="media-object" src="${picture
+                        }" style="width: 48px; height: 48px;"></a>`;
+            }
+
             var mainCommentLeftPartStart =
                 `<div class="media-left main-comment" id="${textReferenceId}-comment" data-parent-comment-id="${id}">`;
             var commentName = `<h5 class="media-heading">${name} ${surname}</h5>`;
