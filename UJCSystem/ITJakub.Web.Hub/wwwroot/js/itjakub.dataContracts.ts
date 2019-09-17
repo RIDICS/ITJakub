@@ -273,21 +273,27 @@ interface IChapterHieararchyContract {
 }
 
 interface IOnlySaveMetadataResource {
-    keywordIdList: Array<number>;
-    categoryIdList: Array<number>;
-    literaryKindIdList: Array<number>;
-    literaryGenreIdList: Array<number>;
     authorIdList: Array<number>;
     projectResponsiblePersonIdList: Array<ISaveProjectResponsiblePerson>;
 }
 
-interface ISaveMetadataResource extends IMetadataResource {
+interface IOnlySaveCategorization {
     keywordIdList: Array<number>;
     categoryIdList: Array<number>;
     literaryKindIdList: Array<number>;
     literaryGenreIdList: Array<number>;
+}
+
+interface ISaveMetadataResource extends IMetadataResource {
     authorIdList: Array<number>;
     projectResponsiblePersonIdList: Array<ISaveProjectResponsiblePerson>;
+}
+
+interface ISaveCategorization {
+    keywordIdList: Array<number>;
+    categoryIdList: Array<number>;
+    literaryKindIdList: Array<number>;
+    literaryGenreIdList: Array<number>;
 }
 
 interface IGetMetadataResource extends IMetadataResource {
