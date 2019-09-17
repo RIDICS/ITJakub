@@ -13,7 +13,6 @@
     "MissingName": "translate[...]",
     "CreateLiteraryKind": "translate[..]",
     "CreateLiteraryGenre": "translate[...]",
-
     "CreateResourcesError": "translate[...]",
 
     "ProjectHeader": "translate[Projekt - ]",
@@ -136,6 +135,7 @@
     "VideoSources": "translate[Video zdroje]",
     "Author": "translate[Autor]",
     "DuplicateSettings": "translate[Duplikovat nastavení]",
+    "NoSnapshotCreated": "translate[Žádný snapshot zatím nebyl vytvořen]",
     "CreateNewPublication": "translate[Vytvořit novou publikaci]",
 
     "Visibility": "translate[Viditelnost]",
