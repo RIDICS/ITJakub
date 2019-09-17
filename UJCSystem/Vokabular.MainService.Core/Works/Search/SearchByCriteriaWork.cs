@@ -34,7 +34,7 @@ namespace Vokabular.MainService.Core.Works.Search
             m_metadataRepository.GetMetadataWithFetchForBiblModule(metadataIdList);
 
             var projectIdList = metadataList.Select(x => x.Resource.Project.Id).ToList();
-            PageCounts = m_metadataRepository.GetPageCount(projectIdList);
+            PageCounts = m_bookRepository.GetPublishedPageCount(projectIdList);
             
             if (m_termCriteriaCreator != null)
             {

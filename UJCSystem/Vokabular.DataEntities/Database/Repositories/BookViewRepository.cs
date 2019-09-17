@@ -104,6 +104,29 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
+        public virtual IList<PageCountResult> GetPublishedPageCount(IEnumerable<long> projectIdList)
+        {
+            PageResource pageResourceAlias = null;
+            Snapshot snapshotAlias = null;
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+            PageCountResult resultAlias = null;
+
+            var result = GetSession().QueryOver(() => pageResourceAlias)
+                .JoinAlias(x => x.Snapshots, () => snapshotAlias)
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .WhereRestrictionOn(() => resourceAlias.Project.Id).IsInG(projectIdList)
+                .And(() => snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
+                .SelectList(list => list
+                    .SelectGroup(() => projectAlias.Id).WithAlias(() => resultAlias.ProjectId)
+                    .SelectCount(() => pageResourceAlias.Id).WithAlias(() => resultAlias.PageCount))
+                .TransformUsing(Transformers.AliasToBean<PageCountResult>())
+                .List<PageCountResult>();
+
+            return result;
+        }
+
         public virtual IList<ChapterResource> GetChapterList(long projectId)
         {
             Resource resourceAlias = null;

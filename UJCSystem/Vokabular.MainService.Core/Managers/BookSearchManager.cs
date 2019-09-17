@@ -147,7 +147,7 @@ namespace Vokabular.MainService.Core.Managers
 
                 // 3) load paged result
                 var termCriteria = CreateTermConditionCreatorOrDefault(request, processedCriterias);
-                var searchByCriteriaFulltextResultWork = new SearchByCriteriaFulltextResultWork(m_metadataRepository, fulltextSearchResultData, termCriteria, mainProjectTypeEnum);
+                var searchByCriteriaFulltextResultWork = new SearchByCriteriaFulltextResultWork(m_metadataRepository, m_bookRepository, fulltextSearchResultData, termCriteria, mainProjectTypeEnum);
                 var dbResult = searchByCriteriaFulltextResultWork.Execute();
 
                 var resultList = MapToSearchResult(dbResult, searchByCriteriaFulltextResultWork.PageCounts, searchByCriteriaFulltextResultWork.TermHits);

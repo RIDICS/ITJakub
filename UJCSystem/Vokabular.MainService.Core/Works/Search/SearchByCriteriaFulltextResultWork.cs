@@ -14,13 +14,17 @@ namespace Vokabular.MainService.Core.Works.Search
     public class SearchByCriteriaFulltextResultWork : UnitOfWorkBase<IList<MetadataResource>>
     {
         private readonly MetadataRepository m_metadataRepository;
+        private readonly BookViewRepository m_bookRepository;
         private readonly FulltextSearchResultData m_fulltextSearchResultData;
         private readonly TermCriteriaPageConditionCreator m_termCriteriaCreator;
         private readonly ProjectTypeEnum m_projectType;
 
-        public SearchByCriteriaFulltextResultWork(MetadataRepository metadataRepository, FulltextSearchResultData fulltextSearchResultData, TermCriteriaPageConditionCreator termCriteriaCreator, ProjectTypeEnum projectType) : base(metadataRepository)
+        public SearchByCriteriaFulltextResultWork(MetadataRepository metadataRepository, BookViewRepository bookRepository,
+            FulltextSearchResultData fulltextSearchResultData, TermCriteriaPageConditionCreator termCriteriaCreator,
+            ProjectTypeEnum projectType) : base(metadataRepository)
         {
             m_metadataRepository = metadataRepository;
+            m_bookRepository = bookRepository;
             m_fulltextSearchResultData = fulltextSearchResultData;
             m_termCriteriaCreator = termCriteriaCreator;
             m_projectType = projectType;
@@ -48,7 +52,7 @@ namespace Vokabular.MainService.Core.Works.Search
                     throw new ArgumentOutOfRangeException();
             }
             
-            PageCounts = m_metadataRepository.GetPageCount(projectIds);
+            PageCounts = m_bookRepository.GetPublishedPageCount(projectIds);
 
             if (m_termCriteriaCreator != null)
             {

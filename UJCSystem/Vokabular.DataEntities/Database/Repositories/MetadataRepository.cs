@@ -193,26 +193,6 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        // TODO split info - published/all page count
-        public virtual IList<PageCountResult> GetPageCount(IEnumerable<long> projectIdList)
-        {
-            PageResource pageResourceAlias = null;
-            Resource resourceAlias = null;
-            PageCountResult resultAlias = null;
-
-            var result = GetSession().QueryOver(() => pageResourceAlias)
-                .JoinAlias(x => x.Resource, () => resourceAlias)
-                .WhereRestrictionOn(() => resourceAlias.Project.Id).IsInG(projectIdList)
-                .And(x => x.Id == resourceAlias.LatestVersion.Id)
-                .SelectList(list => list
-                    .SelectGroup(() => resourceAlias.Project.Id).WithAlias(() => resultAlias.ProjectId)
-                    .SelectCount(() => pageResourceAlias.Id).WithAlias(() => resultAlias.PageCount))
-                .TransformUsing(Transformers.AliasToBean<PageCountResult>())
-                .List<PageCountResult>();
-
-            return result;
-        }
-
         public virtual IList<PageResource> GetPagesWithTerms(TermCriteriaPageConditionCreator creator)
         {
             var query = GetSession().CreateQuery(creator.GetQueryString())
