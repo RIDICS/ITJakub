@@ -9,7 +9,6 @@
     init() {
         this.processToggleCommentAresSizeClick();
         this.processToggleNestedCommentClick();
-        this.processDeleteCommentClick();
     }
 
     /**
@@ -339,6 +338,7 @@
                 }
                 const sortedContent = this.util.splitArrayToArrays(content, indexes);
                 this.constructCommentArea(sortedContent, commentAreaEl);
+                this.processDeleteCommentClick(commentAreaEl);
             }
         }
     }
@@ -349,8 +349,8 @@
         commentAreaEl.append(html);
     }
 
-    private processDeleteCommentClick() {
-        $(".delete-comment").on("click", (event) => {
+    private processDeleteCommentClick(commentAreaEl: JQuery) {
+        commentAreaEl.find(".delete-comment").on("click", (event) => {
             const target = $(event.target as Node as HTMLElement);
             const commentActionsRowEl = target.parents(".comment-actions-row");
             const commentId = parseInt(commentActionsRowEl.siblings(".media-body").attr("data-comment-id"));

@@ -397,7 +397,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                m_client.Put<HttpStatusCode>($"project/text/comment/{commentId}", request);
+                m_client.Put<object>($"project/text/comment/{commentId}", request);
             }
             catch (HttpRequestException e)
             {
