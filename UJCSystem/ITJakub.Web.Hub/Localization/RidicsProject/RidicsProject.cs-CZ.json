@@ -60,6 +60,7 @@
     "SaveAndClose": "Uložit a zavřít",
     "Save": "Uložit",
     "AddComment": "Přidat komentář",
+    "CreateCommentWarning": "Upozornění, přidání nového komentáře provede uložení stránky.",
     "ExpandCommentArea": "Zvětšit sekci komentářů",
     "CollapseCommentArea": "Zmenšit sekci komentářů",
     "LoadCommentsFailed": "Při načítání komentářů stránky {0} nastala neočekávaná chyba.",

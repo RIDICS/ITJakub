@@ -60,6 +60,7 @@
     "SaveAndClose": "Save and close",
     "Save": "Save",
     "AddComment": "Add comment",
+    "CreateCommentWarning": "Warning, adding new comment will save the page.",
     "ExpandCommentArea": "Expand comment area",
     "CollapseCommentArea": "Collapse comment area",
     "LoadCommentsFailed": "Failed to construct comment area for page {0}",

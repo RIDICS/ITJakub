@@ -126,7 +126,7 @@
             });
     }
 
-    toggleCommentSignsAndCreateComment(codeMirror: CodeMirror.Doc, addSigns: boolean, commentText?: string, textId?: number) {
+    toggleCommentSignsAndCreateComment(codeMirror: CodeMirror.Doc, addSigns: boolean, commentText?: string, textId?: number, saveTextFunction?: (textId: number, text: string) => JQuery.jqXHR, thisForCallback?) {
         let output: string;
         let markSize: number;
         const selectedText = codeMirror.getSelection();
@@ -152,11 +152,24 @@
                     markSize = uniqueNumberLength + 2; // + $ + %
                     output = `$${textReferenceId}%${selectedText}%${textReferenceId}$`;
                     codeMirror.replaceSelection(output);
-                    codeMirror.setSelection({ line: selectionStartLine, ch: selectionStartChar }, //setting caret
-                        { line: selectionEndLine, ch: selectionEndChar + 2 * markSize });
-
-                    const id = 0; //creating comment
-                    this.processCommentSendClick(textId, textReferenceId, id, null, commentText);
+                    
+                    saveTextFunction.call(thisForCallback, textId, codeMirror.getValue()).done(() => {
+                        const id = 0; //creating comment
+                        this.processCommentSendClick(textId, textReferenceId, id, null, commentText);
+                        codeMirror.setSelection({ line: selectionStartLine, ch: selectionStartChar }, //setting caret
+                            { line: selectionEndLine, ch: selectionEndChar + 2 * markSize });
+                    }).fail((error) => {
+                        codeMirror.replaceSelection(selectedText);
+                        bootbox.alert({
+                            title: localization.translate("Fail", "RidicsProject").value,
+                            message: localization.translate("Failed to create comment.", "RidicsProject").value,
+                            buttons: {
+                                ok: {
+                                    className: "btn-default"
+                                }
+                            }
+                        });
+                    });
                 }
             }).fail(() => {
                 bootbox.alert({

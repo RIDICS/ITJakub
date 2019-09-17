@@ -9,7 +9,6 @@
     private readonly editModeSelector = "is-edited";
     private readonly client: TextApiClient;
     private readonly simpleMdeTools: SimpleMdeTools;
-    private commentInputDialog: BootstrapDialogWrapper;
     private isPreviewRendering = true;
     private editorExistsInTab = false;
 
@@ -19,12 +18,6 @@
         this.commentArea = commentArea;
         this.client = new TextApiClient();
         this.simpleMdeTools = new SimpleMdeTools();
-
-        this.commentInputDialog = new BootstrapDialogWrapper({
-            element: $("#comment-input-dialog"),
-            autoClearInputs: true,
-            submitCallback: this.onSendButtonClick.bind(this)
-        });
 
         bootbox.setLocale("cs");
     }
@@ -61,7 +54,7 @@
     private onSendButtonClick(text: string) {
         const textId = this.getCurrentTextId();
         const cm = this.simplemde.codemirror as CodeMirror.Doc;
-        (this.commentInput).toggleCommentSignsAndCreateComment(cm, true, text, textId);
+        (this.commentInput).toggleCommentSignsAndCreateComment(cm, true, text, textId, this.saveText, this);
     }
 
     private toggleCommentFromEditor = (editor: SimpleMDE, userIsEnteringText: boolean) => {
@@ -82,25 +75,35 @@
                 });
                 return;
             }
-            bootbox.prompt({
+            bootbox.dialog({
                 title: localization.translate("EnterComment", "RidicsProject").value,
-                inputType: "textarea",
+                message: `<div class="alert alert-warning">
+                                <i class="fa fa-warning"></i> ${localization.translate("CreateCommentWarning", "RidicsProject").value}
+                            </div>
+                            <div class="bootbox-body">
+                                <form class="bootbox-form">
+                                    <textarea id="commentInput" class="bootbox-input bootbox-input-textarea form-control" spellcheck="false"></textarea>
+                                </form>
+                            </div>`, 
                 buttons: {
-                    confirm: {
-                        className: "btn-default"
-                    },
                     cancel: {
+                        label: localization.translate("Cancel", "RidicsProject").value,
                         className: "btn-default",
                         callback: () => {
                             this.toggleCommentFromEditor(editor, false);
                         }
-                    }
-                },
-                callback: (result) => {
-                    if (!result) {
-                        this.toggleCommentFromEditor(editor, false);
-                    } else {
-                        this.onSendButtonClick(result);
+                    },
+                    confirm: {
+                        label: localization.translate("AddComment", "RidicsProject").value,
+                        className: "btn-default",
+                        callback: () => {
+                            const result = String($("#commentInput").val());
+                            if (!result) {
+                                this.toggleCommentFromEditor(editor, false);
+                            } else {
+                                this.onSendButtonClick(result);
+                            }
+                        }
                     }
                 }
             });
@@ -231,7 +234,7 @@
         this.originalContent = this.simplemde.value();
     }
 
-    private saveContents(textId: number, contents: string): JQuery.jqXHR {
+    saveText(textId: number, contents: string): JQuery.jqXHR {
         const pageEl = $(`*[data-page="${textId}"]`);
         const compositionArea = pageEl.children(".composition-area");
         const id = compositionArea.data("id");
@@ -241,7 +244,16 @@
             text: contents,
             versionNumber: versionNumber
         };
-        const saveAjax = this.util.savePlainText(textId, request).done(() => {
+        const ajax = this.util.savePlainText(textId, request);
+        ajax.done(() => {
+            this.originalContent = contents;
+        });
+        return ajax;
+    }
+
+    saveContents(textId: number, contents: string): JQuery.jqXHR {
+        const saveAjax = this.saveText(textId, contents);
+        saveAjax.done(() => {
             bootbox.alert({
                 title: localization.translate("Success", "RidicsProject").value,
                 message: localization.translate("ChangesSaveSuccess", "RidicsProject").value,
@@ -251,9 +263,8 @@
                     }
                 }
             });
-            this.originalContent = contents;
-        }).fail(() => {
-            if (saveAjax.status === 409) {
+        }).fail((error) => {
+            if (error.status === 409) {
                 bootbox.alert({
                     title: localization.translate("Fail", "RidicsProject").value,
                     message: localization.translate("ChangesSaveConflict", "RidicsProject").value,
