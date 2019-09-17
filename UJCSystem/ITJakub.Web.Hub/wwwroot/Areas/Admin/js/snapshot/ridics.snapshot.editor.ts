@@ -22,6 +22,7 @@ class SnapshotEditor {
             const table = checkbox.parents(".table");
             const isChecked = checkbox.is(":checked");
             table.find(".include-checkboxes input[type=\"checkbox\"]").prop("checked", isChecked);
+            this.setResourcesCount();
         });
 
         $(".include-checkboxes input[type=\"checkbox\"]").click((event) => {
@@ -90,6 +91,44 @@ class SnapshotEditor {
         }
 
         table.find(".include-all-checkbox").prop("checked", isAllChecked);
+        this.setResourcesCount();
+    }
+
+    private setResourcesCount(): void {
+        let textResources;
+        let textSelectedResources;
+        let imageResources;
+        let imageSelectedResources;
+        let audioResources;
+        let audioSelectedResources;
+        for (let panel of $(".publish-resource-panel").toArray()) {
+            const resourceType = Number($(panel).data("resource-type"));
+            const resources = $(panel).find("table .include-checkboxes input[type=\"checkbox\"]").length;
+            const selectedResources = $(panel).find("table .include-checkboxes input[type=\"checkbox\"]:checked").length;
+
+            switch (resourceType) {
+            case ResourceType.Audio:
+                {
+                    audioResources = String(resources);
+                    audioSelectedResources = String(selectedResources);
+                }
+                break;
+            case ResourceType.Image:
+                {
+                    imageResources = String(resources);
+                    imageSelectedResources = String(selectedResources);
+                }
+            break;
+            case ResourceType.Text:
+                {
+                    textResources = String(resources);
+                    textSelectedResources = String(selectedResources);
+                }
+            break;
+            }
+        }
+
+        $("#snapshotCreatingResult").text(localization.translateFormat("SelectedResources", [textSelectedResources, textResources, imageSelectedResources, imageResources, audioSelectedResources, audioResources], "RidicsProject").value);
     }
 
     private loadResourceVersions(selectBox: JQuery) {

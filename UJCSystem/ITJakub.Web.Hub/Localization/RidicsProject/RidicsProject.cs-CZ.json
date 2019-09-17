@@ -13,8 +13,8 @@
     "MissingName": "Nebyl vyplněn název",
     "CreateLiteraryKind": "Chyba při vytváření nového literárního druhu",
     "CreateLiteraryGenre": "Chyba při vytváření nového literárního žánru",
-
     "CreateResourcesError": "Chyba při načítání zdrojů k publikaci",
+    "SelectedResources": "Vybráno {0}/{1} textů, {2}/{3} obrázků, {4}/{5} audio zdrojů.",
 
     "Pages": "Stránky",
     "PageContent": "Obsah stránky",
