@@ -10,7 +10,7 @@ class SnapshotEditor {
 
     constructor() {
         this.client = new SnapshotApiClient();
-        this.imageViewer = new ImageViewerContentAddition(new EditorsUtil());
+        this.imageViewer = new ImageViewerContentAddition(new EditorsApiClient());
         this.errorHandler = new ErrorHandler();
     }
 

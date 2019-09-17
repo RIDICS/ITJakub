@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.MainService.Core.Communication;
+using Vokabular.MainService.Core.Managers.Fulltext;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
@@ -12,39 +14,53 @@ namespace Vokabular.MainService.Core.Works.Text
         private readonly ResourceRepository m_resourceRepository;
         private readonly CreateTextRequestContract m_newTextContract;
         private readonly int m_userId;
-        private readonly CommunicationProvider m_communicationProvider;
+        private readonly IFulltextStorage m_fulltextStorage;
 
-        public CreateNewTextResourceWork(ResourceRepository resourceRepository, CreateTextRequestContract newTextContract, int userId, CommunicationProvider communicationProvider) : base(resourceRepository)
+        public CreateNewTextResourceWork(ResourceRepository resourceRepository, CreateTextRequestContract newTextContract, int userId, IFulltextStorage fulltextStorage) : base(resourceRepository)
         {
             m_resourceRepository = resourceRepository;
             m_newTextContract = newTextContract;
             m_userId = userId;
-            m_communicationProvider = communicationProvider;
+            m_fulltextStorage = fulltextStorage;
         }
 
         protected override long ExecuteWorkImplementation()
         {
             var timeNow = DateTime.UtcNow;
             var latestVersion = m_resourceRepository.GetTextResource(m_newTextContract.Id);
-            var newVersionNumber = latestVersion.VersionNumber + 1;
-            //TODO check version conflict
 
-            var fulltextClient = m_communicationProvider.GetFulltextServiceClient();
-            var externalTextId = fulltextClient.CreateTextResource(m_newTextContract.Text, newVersionNumber);
-            //TODO check succes 
+            if (latestVersion == null)
+            {
+                throw new MainServiceException(MainServiceErrorCode.EntityNotFound, $"TextResource with ResourceId={m_newTextContract.Id} was not found");
+            }
+
+            if (latestVersion.Id != m_newTextContract.ResourceVersionId)
+            {
+                throw new MainServiceException(
+                    MainServiceErrorCode.ChangeInConflict,
+                    $"Conflict. Current latest versionId is {latestVersion.Id}, but originalVersionId was specified {m_newTextContract.ResourceVersionId}",
+                    HttpStatusCode.Conflict
+                );
+            }
 
             var newVersion = new TextResource
             {
                 CreatedByUser = m_resourceRepository.Load<User>(m_userId),
                 CreateTime = timeNow,
-                ExternalId = externalTextId,
+                ExternalId = null,
                 ResourcePage = latestVersion.ResourcePage,
                 Resource = latestVersion.Resource,
-                VersionNumber = newVersionNumber,
+                VersionNumber = latestVersion.VersionNumber + 1,
             };
             newVersion.Resource.LatestVersion = newVersion;
 
-            var result = (long)m_resourceRepository.Create(newVersion);
+            var result = (long) m_resourceRepository.Create(newVersion);
+
+            var externalTextId = m_fulltextStorage.CreateNewTextVersion(newVersion, m_newTextContract.Text);
+
+            newVersion.ExternalId = externalTextId;
+            m_resourceRepository.Update(newVersion);
+
             return result;
         }
     }

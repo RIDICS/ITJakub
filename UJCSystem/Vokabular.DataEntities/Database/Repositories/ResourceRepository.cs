@@ -274,9 +274,11 @@ namespace Vokabular.DataEntities.Database.Repositories
         public virtual T GetLatestResourceVersion<T>(long resourceId) where T : ResourceVersion
         {
             Resource resourceAlias = null;
+            Project projectAlias = null;
 
             return GetSession().QueryOver<T>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .Where(x => x.Id == resourceAlias.LatestVersion.Id && resourceAlias.Id == resourceId)
                 .SingleOrDefault();
         }

@@ -261,10 +261,11 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             return null;
         }
 
-        public string CreateNewTextVersion(TextResource textResource)
+        public string CreateNewTextVersion(TextResource textResource, string text)
         {
-            // TODO implement and change usage in CreateNewTextResourceWork
-            throw new System.NotImplementedException();
+            var fulltextClient = m_communicationProvider.GetFulltextServiceClient();
+            var externalTextId = fulltextClient.CreateTextResource(text, textResource.VersionNumber);
+            return externalTextId;
         }
 
         public string CreateNewHeadwordVersion(HeadwordResource headwordResource)

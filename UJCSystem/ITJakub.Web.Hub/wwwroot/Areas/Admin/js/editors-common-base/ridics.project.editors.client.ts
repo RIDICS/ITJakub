@@ -1,4 +1,4 @@
-﻿class EditorsUtil {
+﻿class EditorsApiClient {
     private serverPath = getBaseUrl();
 
     getPagesList(projectId: number): JQuery.jqXHR<IPage[]> {

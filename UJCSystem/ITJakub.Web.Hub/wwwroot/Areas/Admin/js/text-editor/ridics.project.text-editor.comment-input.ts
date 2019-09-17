@@ -1,8 +1,8 @@
 ﻿class CommentInput {
     private readonly commentArea: CommentArea;
-    private readonly util: EditorsUtil;
+    private readonly util: EditorsApiClient;
 
-    constructor(commentArea: CommentArea, util: EditorsUtil) {
+    constructor(commentArea: CommentArea, util: EditorsApiClient) {
         this.commentArea = commentArea;
         this.util = util;
     }
