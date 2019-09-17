@@ -57,7 +57,7 @@
 
     "Cooperation": "translate[Spolupráce]",
     "DiscussionPosts": "translate[Příspěvky v diskuzi]",
-    "Snapshots": "translate[Snapshoty]",
+    "Snapshots": "Publications",
     "ResourcesHistory": "translate[Změny zdrojů]",
 
     "CommonInformation": "translate[Obecné informace]",
@@ -146,7 +146,7 @@
     "Transliteration": "translate[Transliterace]",
     "Generate": "translate[Generovat]",
 
-    "PublishedSnapshots": "translate[Zveřejněné snapshoty]",
+    "PublishedSnapshots": "Published publications",
     "Date": "translate[Datum]",
     "TextSources": "translate[Textové zdroje]",
     "ImageSources": "translate[Obrazové zdroje]",
@@ -154,7 +154,7 @@
     "VideoSources": "translate[Video zdroje]",
     "Author": "translate[Autor]",
     "DuplicateSettings": "translate[Duplikovat nastavení]",
-    "NoSnapshotCreated": "translate[Žádný snapshot zatím nebyl vytvořen]",
+    "NoSnapshotCreated": "No publication was created yet",
     "CreateNewPublication": "translate[Vytvořit novou publikaci]",
 
     "Visibility": "translate[Viditelnost]",

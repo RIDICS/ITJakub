@@ -57,7 +57,7 @@
 
     "Cooperation": "Spolupráce",
     "DiscussionPosts": "Příspěvky v diskuzi",
-    "Snapshots": "Snapshoty",
+    "Snapshots": "Publikace",
     "ResourcesHistory": "Změny zdrojů",
 
     "CommonInformation": "Obecné informace",
@@ -146,7 +146,7 @@
     "Transliteration": "Transliterace",
     "Generate": "Generovat",
 
-    "PublishedSnapshots": "Zveřejněné snapshoty",
+    "PublishedSnapshots": "Zveřejněné publikace",
     "Date": "Datum",
     "TextSources": "Textové zdroje",
     "ImageSources": "Obrazové zdroje",
@@ -155,7 +155,7 @@
     "Author": "Autor",
     "DuplicateSettings": "Duplikovat nastavení",
     "CreateNewPublication": "Vytvořit novou publikaci",
-    "NoSnapshotCreated": "Žádný snapshot zatím nebyl vytvořen",
+    "NoSnapshotCreated": "Žádná publikace zatím nebyla vytvořena",
     "Visibility": "Viditelnost",
     "AddGroupUser": "Přidat skupinu/uživatele",
 
