@@ -32,6 +32,7 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly MetadataRepository m_metadataRepository;
         private readonly SnapshotRepository m_snapshotRepository;
+        private readonly ResourceRepository m_resourceRepository;
         private readonly MetadataSearchCriteriaProcessor m_metadataSearchCriteriaProcessor;
         private readonly BookViewRepository m_bookRepository;
         private readonly CorpusSearchManager m_corpusSearchManager;
@@ -42,6 +43,7 @@ namespace Vokabular.MainService.Core.Managers
         private readonly IMapper m_mapper;
 
         public BookSearchManager(MetadataRepository metadataRepository, SnapshotRepository snapshotRepository,
+            ResourceRepository resourceRepository,
             MetadataSearchCriteriaProcessor metadataSearchCriteriaProcessor, BookViewRepository bookRepository,
             CorpusSearchManager corpusSearchManager, HeadwordSearchManager headwordSearchManager,
             FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager,
@@ -49,6 +51,7 @@ namespace Vokabular.MainService.Core.Managers
         {
             m_metadataRepository = metadataRepository;
             m_snapshotRepository = snapshotRepository;
+            m_resourceRepository = resourceRepository;
             m_metadataSearchCriteriaProcessor = metadataSearchCriteriaProcessor;
             m_bookRepository = bookRepository;
             m_corpusSearchManager = corpusSearchManager;
@@ -284,7 +287,7 @@ namespace Vokabular.MainService.Core.Managers
             {
                 // Search in relational DB
 
-                var searchByCriteriaWork = new SearchHeadwordByCriteriaWork(m_metadataRepository, m_bookRepository, queryCreator);
+                var searchByCriteriaWork = new SearchHeadwordByCriteriaWork(m_resourceRepository, m_bookRepository, queryCreator);
                 var dbResult = searchByCriteriaWork.Execute();
 
                 var resultList = m_mapper.Map<List<HeadwordContract>>(dbResult);

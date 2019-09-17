@@ -139,12 +139,12 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
-        public virtual IList<MetadataResource> GetMetadataWithFetchForBiblModule(IEnumerable<long> metadataIdList)
+        public virtual IList<MetadataResource> GetMetadataWithFetchForBiblModule(IEnumerable<long> metadataVersionIdList)
         {
             var session = GetSession();
 
             var result = session.QueryOver<MetadataResource>()
-                .WhereRestrictionOn(x => x.Id).IsInG(metadataIdList)
+                .WhereRestrictionOn(x => x.Id).IsInG(metadataVersionIdList)
                 .Fetch(SelectMode.Fetch, x => x.Resource)
                 .Fetch(SelectMode.Fetch, x => x.Resource.Project)
                 //.Fetch(SelectMode.Fetch, x => x.Resource.Project.Authors) // Authors are used from Metadata
@@ -193,34 +193,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        // TODO MOVE THIS AWAY: (THIS IS NOT METADATA!)
-        public virtual IList<HeadwordResource> GetHeadwordWithFetch(IEnumerable<long> headwordIds)
-        {
-            var result = GetSession().QueryOver<HeadwordResource>()
-                .WhereRestrictionOn(x => x.Id).IsInG(headwordIds)
-                .Fetch(SelectMode.Fetch, x => x.Resource)
-                .Fetch(SelectMode.Fetch, x => x.HeadwordItems)
-                .TransformUsing(Transformers.DistinctRootEntity)
-                .List();
-            return result;
-        }
-
-        public virtual HeadwordResource GetHeadwordWithFetchByExternalId(string projectExternalId, string headwordExternalId, ProjectTypeEnum projectType)
-        {
-            Resource resourceAlias = null;
-            Project projectAlias = null;
-
-            var result = GetSession().QueryOver<HeadwordResource>()
-                .JoinAlias(x => x.Resource, () => resourceAlias)
-                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
-                .Where(x => x.ExternalId == headwordExternalId && projectAlias.ExternalId == projectExternalId && projectAlias.ProjectType == projectType && x.Id == resourceAlias.LatestVersion.Id)
-                .Fetch(SelectMode.Fetch, x => x.Resource)
-                .Fetch(SelectMode.Fetch, x => x.HeadwordItems)
-                .TransformUsing(Transformers.DistinctRootEntity)
-                .SingleOrDefault();
-            return result;
-        }
-
+        // TODO split info - published/all page count
         public virtual IList<PageCountResult> GetPageCount(IEnumerable<long> projectIdList)
         {
             PageResource pageResourceAlias = null;

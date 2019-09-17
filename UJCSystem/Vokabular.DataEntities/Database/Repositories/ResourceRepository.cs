@@ -183,6 +183,33 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
+        public virtual IList<HeadwordResource> GetHeadwordWithFetch(IEnumerable<long> headwordVersionIds)
+        {
+            var result = GetSession().QueryOver<HeadwordResource>()
+                .WhereRestrictionOn(x => x.Id).IsInG(headwordVersionIds)
+                .Fetch(SelectMode.Fetch, x => x.Resource)
+                .Fetch(SelectMode.Fetch, x => x.HeadwordItems)
+                .TransformUsing(Transformers.DistinctRootEntity)
+                .List();
+            return result;
+        }
+
+        public virtual HeadwordResource GetHeadwordWithFetchByExternalId(string projectExternalId, string headwordExternalId, ProjectTypeEnum projectType)
+        {
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+
+            var result = GetSession().QueryOver<HeadwordResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .Where(x => x.ExternalId == headwordExternalId && projectAlias.ExternalId == projectExternalId && projectAlias.ProjectType == projectType && x.Id == resourceAlias.LatestVersion.Id)
+                .Fetch(SelectMode.Fetch, x => x.Resource)
+                .Fetch(SelectMode.Fetch, x => x.HeadwordItems)
+                .TransformUsing(Transformers.DistinctRootEntity)
+                .SingleOrDefault();
+            return result;
+        }
+
         public virtual IList<AudioResource> GetRecordings(long trackResourceVersionId)
         {
             Resource resourceAlias = null;
