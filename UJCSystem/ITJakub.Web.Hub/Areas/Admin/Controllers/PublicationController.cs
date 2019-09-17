@@ -17,7 +17,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
     [Area("Admin")]
     public class PublicationController : BaseController
     {
-        private const int SnapshotListPageSize = 10;
         private readonly ILocalizationService m_localization;
 
         public PublicationController(CommunicationProvider communicationProvider, ILocalizationService localization) : base(communicationProvider)

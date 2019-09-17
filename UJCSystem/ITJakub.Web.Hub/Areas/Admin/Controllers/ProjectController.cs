@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using ITJakub.Web.Hub.Areas.Admin.Models;
@@ -11,7 +12,6 @@ using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Helpers;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
@@ -20,6 +20,7 @@ using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.AspNetCore.Helpers;
 using ITJakub.Web.Hub.Options;
+using Scalesoft.Localization.AspNetCore;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 {
@@ -30,8 +31,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         private const int ProjectListPageSize = 5;
         private const int SnapshotListPageSize = 10;
 
-        public ProjectController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        private readonly ILocalizationService m_localization;
+
+        public ProjectController(CommunicationProvider communicationProvider, ILocalizationService localization) : base(communicationProvider)
         {
+            m_localization = localization;
         }
 
         private ProjectListViewModel CreateProjectListViewModel(PagedResultList<ProjectDetailContract> data, int start)
@@ -443,7 +447,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 Title = request.Title,
             };
             long newResourceVersionId = -1;
-            var unsuccessfulRequestCount = 0;
+            var unsuccessfulData = new List<string>();
 
             try
             {
@@ -451,7 +455,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
             catch (HttpRequestException)
             {
-                unsuccessfulRequestCount++;
+                unsuccessfulData.Add(m_localization.Translate("Metadata", "Admin"));
             }
 
             try
@@ -460,7 +464,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
             catch (HttpRequestException)
             {
-                unsuccessfulRequestCount++;
+                unsuccessfulData.Add(m_localization.Translate("Authors", "Admin"));
             }
 
             try
@@ -469,12 +473,15 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
             catch (HttpRequestException)
             {
-                unsuccessfulRequestCount++;
+                unsuccessfulData.Add(m_localization.Translate("ResponsiblePeople", "Admin"));
             }
 
-            if (unsuccessfulRequestCount > 0)
+            if (unsuccessfulData.Count > 0)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return new JsonResult(unsuccessfulData)
+                {
+                    StatusCode = (int)HttpStatusCode.BadGateway
+                };
             }
 
             var response = new SaveMetadataResponse
@@ -498,7 +505,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
 
             var client = GetProjectClient();
-            var unsuccessfulRequestCount = 0;
+            var unsuccessfulData = new List<string>();
 
             try
             {
@@ -507,7 +514,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
             catch (HttpRequestException)
             {
-                unsuccessfulRequestCount++;
+                unsuccessfulData.Add(m_localization.Translate("LiteraryKind", "Admin"));
             }
 
             try
@@ -517,7 +524,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
             catch (HttpRequestException)
             {
-                unsuccessfulRequestCount++;
+                unsuccessfulData.Add(m_localization.Translate("Category", "Admin"));
             }
 
             try
@@ -527,7 +534,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
             catch (HttpRequestException)
             {
-                unsuccessfulRequestCount++;
+                unsuccessfulData.Add(m_localization.Translate("LiteraryGenre", "Admin"));
             }
 
             try
@@ -536,12 +543,15 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
             catch (HttpRequestException)
             {
-                unsuccessfulRequestCount++;
+                unsuccessfulData.Add(m_localization.Translate("Keywords", "Admin"));
             }
 
-            if (unsuccessfulRequestCount > 0)
+            if (unsuccessfulData.Count > 0)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return new JsonResult(unsuccessfulData)
+                {
+                    StatusCode = (int)HttpStatusCode.BadGateway
+                };
             }
 
             return AjaxOkResponse();

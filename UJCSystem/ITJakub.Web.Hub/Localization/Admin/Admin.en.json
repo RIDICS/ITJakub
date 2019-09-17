@@ -100,6 +100,7 @@
     "MetadataSaveError": "translate[Některá metadata se nepodařilo uložit]",
     "DataSaveSuccess": "translate[Data uložena]",
     "DataSaveError": "translate[Některá data se nepodařilo uložit]",
+    "SpecifiedDataSaveError": "translate[Nepodařilo se uložit následující data: {0}.]",
     "KeywordsSaveError": "Failed to save keywords. Please check for duplicates.",
     "OldBohemian": "translate[Staročeský]",
     "MiddleBohemian": "translate[Středněčeský]",

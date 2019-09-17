@@ -10,12 +10,15 @@
     private publisherTypeahead: SingleSetTypeaheadSearchBox<string>;
     private publisherName: string = null;
     private workModule: ProjectWorkModule;
-    private adminApiClient = new AdminApiClient();
+    private adminApiClient: AdminApiClient;
+    private readonly errorHandler: ErrorHandler;
 
     constructor(projectId: number, workModule: ProjectWorkModule) {
         super();
         this.projectId = projectId;
         this.projectClient = new ProjectClient();
+        this.adminApiClient = new AdminApiClient();
+        this.errorHandler = new ErrorHandler();
         this.workModule = workModule;
         this.publisherTypeahead =
             new SingleSetTypeaheadSearchBox<string>("#work-metadata-publisher", "Admin/Project", x => `${x}`, null);
@@ -693,7 +696,7 @@
     }
 
     private formMetadataObjectAndSendRequest(contract: IOnlySaveMetadataResource, publisherText: string) {
-        var data: ISaveMetadataResource = {
+        const data: ISaveMetadataResource = {
             biblText: $("#work-metadata-bibl-text").val() as string,
             copyright: $("#work-metadata-copyright").val() as string,
             manuscriptCountry: $("#work-metadata-original-country").val() as string,
@@ -731,7 +734,13 @@
             } else {
                 $("#work-metadata-literary-original").text(responseData.literaryOriginalText);
             }
-        }).fail(() => {
+        }).fail((error) => {
+            if (typeof error.responseJSON !== "undefined") {
+                $errorAlert.text(localization
+                    .translateFormat("SpecifiedDataSaveError", [error.responseJSON.join(", ")], "Admin").value);
+            } else {
+                $errorAlert.text(this.errorHandler.getErrorMessage(error, localization.translate("MetadataSaveError", "Admin").value));
+            }
             $errorAlert.show();
         }).always(() => {
             $loadingGlyph.hide();
@@ -760,12 +769,15 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
     private existingGenres: JQuery = null;
     private existingLitKinds: JQuery = null;
     private workModule: ProjectWorkModule;
-    private adminApiClient = new AdminApiClient();
+    private adminApiClient: AdminApiClient;
+    private readonly errorHandler: ErrorHandler;
 
     constructor(projectId: number, workModule: ProjectWorkModule) {
         super();
         this.projectId = projectId;
         this.projectClient = new ProjectClient();
+        this.adminApiClient = new AdminApiClient();
+        this.errorHandler = new ErrorHandler();
         this.workModule = workModule;
     }
 
@@ -945,7 +957,6 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
                 } else {
                     this.categoryTree.check(node);
                 }
-                
             }
         });
 
@@ -1031,47 +1042,48 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
         const keywordsInputEl = $(".keywords-container").children(".tokenfield").children(".keywords-textarea");
         const keywordsArray = $.map((keywordsInputEl.val() as string).split(","), $.trim);
         const uniqueKeywordArray = this.returnUniqueElsArray(keywordsArray);
-        var keywordNonIdList: string[] = [];
+        const keywordNonIdList: string[] = [];
         const onlyNumbersRegex = new RegExp(/^[0-9]*$/);
         for (let i = 0; i < uniqueKeywordArray.length; i++) {
             if (onlyNumbersRegex.test(uniqueKeywordArray[i])) {
-                keywordIdList.push(uniqueKeywordArray[i]);
+                if (uniqueKeywordArray[i] !== "") {
+                    keywordIdList.push(uniqueKeywordArray[i]);
+                }
             } else {
                 keywordNonIdList.push(uniqueKeywordArray[i]);
             }
         }
 
-        this.adminApiClient.createNewKeywordsByArray(keywordNonIdList).done((newIds: number[]) => {
-            const allKeywordIds = keywordIdList.concat(newIds);
-            const data: IOnlySaveCategorization = {
-                keywordIdList: allKeywordIds,
-                categoryIdList: this.convertToNumberArray(this.categoryTree.getCheckedNodes()),
-                literaryKindIdList: selectedKindIds,
-                literaryGenreIdList: selectedGenreIds
-            };
+        const data: IOnlySaveCategorization = {
+            keywordIdList: keywordIdList,
+            categoryIdList: this.convertToNumberArray(this.categoryTree.getCheckedNodes()),
+            literaryKindIdList: selectedKindIds,
+            literaryGenreIdList: selectedGenreIds
+        };
+
+        if (keywordNonIdList.length > 0) {
+            this.adminApiClient.createNewKeywordsByArray(keywordNonIdList).done((newIds: number[]) => {
+                data.keywordIdList = keywordIdList.concat(newIds);
+                this.formCategorizationObjectAndSendRequest(data);
+            }).fail(() => {
+                keywordFailAlertEl.show().delay(3000).fadeOut(2000);
+                this.formCategorizationObjectAndSendRequest(data);
+            });
+        } else {
             this.formCategorizationObjectAndSendRequest(data);
-        }).fail(() => {
-            keywordFailAlertEl.show().delay(3000).fadeOut(2000);
-            const data: IOnlySaveCategorization = {
-                keywordIdList: keywordIdList,
-                categoryIdList: this.convertToNumberArray(this.categoryTree.getCheckedNodes()),
-                literaryKindIdList: selectedKindIds,
-                literaryGenreIdList: selectedGenreIds
-            };
-            this.formCategorizationObjectAndSendRequest(data);
-        });
+        }
     }
 
     private convertToNumberArray(stringArray: string[]): number[] {
-        let array: number[] = [];
-        for (var i = 0; i < stringArray.length; i++) {
+        const array: number[] = [];
+        for (let i = 0; i < stringArray.length; i++) {
             array.push(Number(stringArray[i]));
         }
         return array;
     }
 
     private formCategorizationObjectAndSendRequest(contract: IOnlySaveCategorization) {
-        var data: ISaveCategorization = {
+        const data: ISaveCategorization = {
             categoryIdList: contract.categoryIdList,
             keywordIdList: contract.keywordIdList,
             literaryGenreIdList: contract.literaryGenreIdList,
@@ -1087,7 +1099,13 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
         $errorAlert.hide();
         this.projectClient.saveCategorization(this.projectId, data).done(() => {
             $successAlert.show().delay(3000).fadeOut(2000);
-        }).fail(() => {
+        }).fail((error) => {
+            if (typeof error.responseJSON !== "undefined") {
+                $errorAlert.text(localization
+                    .translateFormat("SpecifiedDataSaveError", [error.responseJSON.join(", ")], "Admin").value);
+            } else {
+                $errorAlert.text(this.errorHandler.getErrorMessage(error, localization.translate("DataSaveError", "Admin").value));
+            }
             $errorAlert.show();
         }).always(() => {
             $loadingGlyph.hide();
