@@ -4,6 +4,7 @@ using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
+using Vokabular.DataEntities.Database.ConditionCriteria;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
@@ -372,6 +373,15 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Take(creator.GetCount())
                 .Skip(creator.GetStart())
                 .List<HeadwordSearchResult>();
+            return result;
+        }
+
+        public virtual IList<PageResource> GetPagesWithTerms(TermCriteriaPageConditionCreator creator)
+        {
+            var query = GetSession().CreateQuery(creator.GetQueryString())
+                .SetParameters(creator)
+                .SetResultTransformer(Transformers.DistinctRootEntity);
+            var result = query.List<PageResource>();
             return result;
         }
 

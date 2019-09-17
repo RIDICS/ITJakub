@@ -58,7 +58,7 @@ namespace Vokabular.MainService.Core.Works.Search
             {
                 m_termCriteriaCreator.SetProjectIds(projectIds);
                 TermHits = projectIds.Count > 0
-                    ? m_metadataRepository.GetPagesWithTerms(m_termCriteriaCreator)
+                    ? m_bookRepository.GetPagesWithTerms(m_termCriteriaCreator)
                     : new List<PageResource>();
             }
 

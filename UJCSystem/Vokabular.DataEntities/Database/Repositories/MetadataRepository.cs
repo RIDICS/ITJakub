@@ -4,12 +4,9 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
-using NHibernate.Transform;
-using Vokabular.DataEntities.Database.ConditionCriteria;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
-using Vokabular.DataEntities.Database.Search;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
@@ -193,15 +190,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        public virtual IList<PageResource> GetPagesWithTerms(TermCriteriaPageConditionCreator creator)
-        {
-            var query = GetSession().CreateQuery(creator.GetQueryString())
-                .SetParameters(creator)
-                .SetResultTransformer(Transformers.DistinctRootEntity);
-            var result = query.List<PageResource>();
-            return result;
-        }
-
+        //TODO continue here:
         public virtual MetadataResource GetMetadataWithDetail(long projectId)
         {
             Resource resourceAlias = null;
