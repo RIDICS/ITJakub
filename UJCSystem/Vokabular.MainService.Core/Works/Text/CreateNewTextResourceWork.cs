@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Managers.Fulltext;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
@@ -26,8 +28,20 @@ namespace Vokabular.MainService.Core.Works.Text
         {
             var timeNow = DateTime.UtcNow;
             var latestVersion = m_resourceRepository.GetTextResource(m_newTextContract.Id);
-            var newVersionNumber = latestVersion.VersionNumber + 1;
-            //TODO check version conflict
+
+            if (latestVersion == null)
+            {
+                throw new MainServiceException(MainServiceErrorCode.EntityNotFound, $"TextResource with ResourceId={m_newTextContract.Id} was not found");
+            }
+
+            if (latestVersion.VersionNumber != m_newTextContract.VersionNumber)
+            {
+                throw new MainServiceException(
+                    MainServiceErrorCode.ChangeInConflict,
+                    $"Conflict. Current latest versionNumber is {latestVersion.Id}, but originalVersionNumber was specified {m_newTextContract.VersionNumber}",
+                    HttpStatusCode.Conflict
+                );
+            }
 
             var newVersion = new TextResource
             {
@@ -36,7 +50,7 @@ namespace Vokabular.MainService.Core.Works.Text
                 ExternalId = null,
                 ResourcePage = latestVersion.ResourcePage,
                 Resource = latestVersion.Resource,
-                VersionNumber = newVersionNumber,
+                VersionNumber = latestVersion.VersionNumber + 1,
             };
             newVersion.Resource.LatestVersion = newVersion;
 

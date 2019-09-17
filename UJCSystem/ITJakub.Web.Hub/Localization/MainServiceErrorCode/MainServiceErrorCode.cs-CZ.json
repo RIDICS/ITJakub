@@ -8,7 +8,7 @@
     "category-has-sub-categories": "Kategorie má podkategorie.",
     "repository-contains-history": "Externí repozitář nemůže být odstraněn, jelikož obsahuje historii.",
     "comments-to-second-level": "Komentáře jsou povoleny pouze do druhé úrovně.",
-    "edition-note-conflict": "Nezle uložit ediční poznámku. Ediční poznámka byla změněna jiným uživatelem.",
+    "edition-note-conflict": "Nelze uložit ediční poznámku. Ediční poznámka byla změněna jiným uživatelem.",
     "resource-version-id-null": "ResourceVersionId nemůže být prázdné pro připomínky k heslu.",
     "cannot-move-category-to-subcategory": "Nelze přesunout kategorii do její vlastní podkategorie",
     "unallowed-authorization-criteria":
@@ -52,6 +52,7 @@
     "oai-pmh-communication-error": "Chyba při získávání dat z: {0}. {1} : {2}",
     "oai-pmh-communication-failed": "Chyba při získávání dat z: {0}.",
     "project-parser-not-found": "Konvertor pro bibilografický formát {0} nebyl nalezen.",
+    "change-in-conflict": "Nelze uložit provedné změny, protože konfliktní změny už byly provedeny jiným uživatelem.",
 
     //Auth service codes
     "generic-error": "Operace se nezdařila",
