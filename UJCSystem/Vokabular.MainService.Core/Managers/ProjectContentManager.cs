@@ -165,28 +165,18 @@ namespace Vokabular.MainService.Core.Managers
 
         public long CreateNewImageVersion(long imageId, CreateImageContract data, Stream stream)
         {
-            var latestImage = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestResourceVersion<ImageResource>(imageId));
-            var projectId = latestImage.Resource.Project.Id;
-
-            var fileInfo = m_fileSystemManager.SaveResource(ResourceType.Image, projectId, stream);
-
             var userId = m_authenticationManager.GetCurrentUserId();
-            var resultVersionId = new CreateNewImageResourceVersionWork(m_resourceRepository, imageId,
-                data, fileInfo, userId).Execute();
+            var resultVersionId = new CreateNewImageResourceVersionWork(m_resourceRepository, m_fileSystemManager, imageId,
+                data, stream, userId).Execute();
 
             return resultVersionId;
         }
 
         public long CreateNewAudioVersion(long audioId, CreateAudioContract data, Stream stream)
         {
-            var latestAudio = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestResourceVersion<AudioResource>(audioId));
-            var projectId = latestAudio.Resource.Project.Id;
-
-            var fileInfo = m_fileSystemManager.SaveResource(ResourceType.Audio, projectId, stream);
-
             var userId = m_authenticationManager.GetCurrentUserId();
-            var resultVersionId = new CreateNewAudioResourceVersionWork(m_resourceRepository, audioId,
-                data, fileInfo, userId).Execute();
+            var resultVersionId = new CreateNewAudioResourceVersionWork(m_resourceRepository, m_fileSystemManager, audioId,
+                data, stream, userId).Execute();
 
             return resultVersionId;
         }

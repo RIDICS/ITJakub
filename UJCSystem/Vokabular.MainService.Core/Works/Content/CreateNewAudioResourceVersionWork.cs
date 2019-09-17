@@ -1,11 +1,13 @@
 ﻿using System;
+using System.IO;
 using System.Net;
-using Vokabular.Core.Storage.Resources;
+using Vokabular.Core.Storage;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Content
@@ -13,18 +15,20 @@ namespace Vokabular.MainService.Core.Works.Content
     public class CreateNewAudioResourceVersionWork : UnitOfWorkBase<long>
     {
         private readonly ResourceRepository m_resourceRepository;
+        private readonly FileSystemManager m_fileSystemManager;
         private readonly long m_audioId;
         private readonly CreateAudioContract m_data;
-        private readonly SaveResourceResult m_fileInfo;
+        private readonly Stream m_fileStream;
         private readonly int m_userId;
 
-        public CreateNewAudioResourceVersionWork(ResourceRepository resourceRepository, long audioId, CreateAudioContract data,
-            SaveResourceResult fileInfo, int userId) : base(resourceRepository)
+        public CreateNewAudioResourceVersionWork(ResourceRepository resourceRepository, FileSystemManager fileSystemManager, long audioId,
+            CreateAudioContract data, Stream fileStream, int userId) : base(resourceRepository)
         {
             m_resourceRepository = resourceRepository;
+            m_fileSystemManager = fileSystemManager;
             m_audioId = audioId;
             m_data = data;
-            m_fileInfo = fileInfo;
+            m_fileStream = fileStream;
             m_userId = userId;
         }
 
@@ -49,12 +53,12 @@ namespace Vokabular.MainService.Core.Works.Content
                 ? m_resourceRepository.Load<Resource>(m_data.ResourceTrackId.Value)
                 : null;
 
-            var newImageResource = new AudioResource
+            var newAudioResource = new AudioResource
             {
                 CreateTime = now,
                 CreatedByUser = user,
                 Comment = m_data.Comment,
-                FileId = m_fileInfo.FileNameId,
+                FileId = null, // Must be added after saving in FileStorageManager
                 FileName = m_data.FileName,
                 MimeType = mimeType,
                 Resource = latestAudio.Resource,
@@ -63,9 +67,16 @@ namespace Vokabular.MainService.Core.Works.Content
                 Duration = m_data.Duration,
                 VersionNumber = latestAudio.VersionNumber + 1,
             };
-            newImageResource.Resource.LatestVersion = newImageResource;
+            newAudioResource.Resource.LatestVersion = newAudioResource;
 
-            return (long) m_resourceRepository.Create(newImageResource);
+            var resourceVersionId = (long) m_resourceRepository.Create(newAudioResource);
+
+            var fileInfo = m_fileSystemManager.SaveResource(ResourceType.Audio, latestAudio.Resource.Project.Id, m_fileStream);
+
+            newAudioResource.FileId = fileInfo.FileNameId;
+            m_resourceRepository.Update(newAudioResource);
+
+            return resourceVersionId;
         }
     }
 }
