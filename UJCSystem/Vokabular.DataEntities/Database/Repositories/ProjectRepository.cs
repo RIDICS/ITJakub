@@ -2,6 +2,7 @@
 using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
+using NHibernate.Transform;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
@@ -75,6 +76,25 @@ namespace Vokabular.DataEntities.Database.Repositories
             return GetSession().QueryOver<BookType>()
                 .Where(x => x.Type == bookTypeEnum)
                 .SingleOrDefault();
+        }
+
+        public virtual IList<PageCountResult> GetAllPageCount(IEnumerable<long> projectIdList)
+        {
+            PageResource pageResourceAlias = null;
+            Resource resourceAlias = null;
+            PageCountResult resultAlias = null;
+
+            var result = GetSession().QueryOver(() => pageResourceAlias)
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .WhereRestrictionOn(() => resourceAlias.Project.Id).IsInG(projectIdList)
+                .And(x => x.Id == resourceAlias.LatestVersion.Id)
+                .SelectList(list => list
+                    .SelectGroup(() => resourceAlias.Project.Id).WithAlias(() => resultAlias.ProjectId)
+                    .SelectCount(() => pageResourceAlias.Id).WithAlias(() => resultAlias.PageCount))
+                .TransformUsing(Transformers.AliasToBean<PageCountResult>())
+                .List<PageCountResult>();
+
+            return result;
         }
 
         public virtual Snapshot GetLatestSnapshot(long projectId)

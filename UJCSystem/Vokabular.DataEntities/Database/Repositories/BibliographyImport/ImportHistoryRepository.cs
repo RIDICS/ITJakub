@@ -3,7 +3,7 @@ using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
-namespace Vokabular.DataEntities.Database.Repositories
+namespace Vokabular.DataEntities.Database.Repositories.BibliographyImport
 {
     public class ImportHistoryRepository : MainDbRepositoryBase
     {

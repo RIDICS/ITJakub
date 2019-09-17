@@ -32,8 +32,9 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly MetadataRepository m_metadataRepository;
         private readonly SnapshotRepository m_snapshotRepository;
+        private readonly ResourceRepository m_resourceRepository;
         private readonly MetadataSearchCriteriaProcessor m_metadataSearchCriteriaProcessor;
-        private readonly BookRepository m_bookRepository;
+        private readonly BookViewRepository m_bookRepository;
         private readonly CorpusSearchManager m_corpusSearchManager;
         private readonly HeadwordSearchManager m_headwordSearchManager;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
@@ -42,13 +43,15 @@ namespace Vokabular.MainService.Core.Managers
         private readonly IMapper m_mapper;
 
         public BookSearchManager(MetadataRepository metadataRepository, SnapshotRepository snapshotRepository,
-            MetadataSearchCriteriaProcessor metadataSearchCriteriaProcessor, BookRepository bookRepository,
+            ResourceRepository resourceRepository,
+            MetadataSearchCriteriaProcessor metadataSearchCriteriaProcessor, BookViewRepository bookRepository,
             CorpusSearchManager corpusSearchManager, HeadwordSearchManager headwordSearchManager,
             FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager,
             ForumSiteUrlHelper forumSiteUrlHelper, IMapper mapper)
         {
             m_metadataRepository = metadataRepository;
             m_snapshotRepository = snapshotRepository;
+            m_resourceRepository = resourceRepository;
             m_metadataSearchCriteriaProcessor = metadataSearchCriteriaProcessor;
             m_bookRepository = bookRepository;
             m_corpusSearchManager = corpusSearchManager;
@@ -144,7 +147,7 @@ namespace Vokabular.MainService.Core.Managers
 
                 // 3) load paged result
                 var termCriteria = CreateTermConditionCreatorOrDefault(request, processedCriterias);
-                var searchByCriteriaFulltextResultWork = new SearchByCriteriaFulltextResultWork(m_metadataRepository, fulltextSearchResultData, termCriteria, mainProjectTypeEnum);
+                var searchByCriteriaFulltextResultWork = new SearchByCriteriaFulltextResultWork(m_metadataRepository, m_bookRepository, fulltextSearchResultData, termCriteria, mainProjectTypeEnum);
                 var dbResult = searchByCriteriaFulltextResultWork.Execute();
 
                 var resultList = MapToSearchResult(dbResult, searchByCriteriaFulltextResultWork.PageCounts, searchByCriteriaFulltextResultWork.TermHits);
@@ -284,7 +287,7 @@ namespace Vokabular.MainService.Core.Managers
             {
                 // Search in relational DB
 
-                var searchByCriteriaWork = new SearchHeadwordByCriteriaWork(m_metadataRepository, m_bookRepository, queryCreator);
+                var searchByCriteriaWork = new SearchHeadwordByCriteriaWork(m_resourceRepository, m_bookRepository, queryCreator);
                 var dbResult = searchByCriteriaWork.Execute();
 
                 var resultList = m_mapper.Map<List<HeadwordContract>>(dbResult);

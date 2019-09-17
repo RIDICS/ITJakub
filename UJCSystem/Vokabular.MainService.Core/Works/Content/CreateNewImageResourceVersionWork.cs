@@ -14,13 +14,13 @@ namespace Vokabular.MainService.Core.Works.Content
     public class CreateNewImageResourceVersionWork : UnitOfWorkBase<long>
     {
         private readonly ResourceRepository m_resourceRepository;
-        private readonly FileSystemManager m_fileSystemManager;
+        private readonly IFileSystemManager m_fileSystemManager;
         private readonly long m_imageId;
         private readonly CreateImageContract m_data;
         private readonly Stream m_fileStream;
         private readonly int m_userId;
 
-        public CreateNewImageResourceVersionWork(ResourceRepository resourceRepository, FileSystemManager fileSystemManager, long imageId, CreateImageContract data, Stream fileStream, int userId) : base(resourceRepository)
+        public CreateNewImageResourceVersionWork(ResourceRepository resourceRepository, IFileSystemManager fileSystemManager, long imageId, CreateImageContract data, Stream fileStream, int userId) : base(resourceRepository)
         {
             m_resourceRepository = resourceRepository;
             m_fileSystemManager = fileSystemManager;

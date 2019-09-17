@@ -380,7 +380,7 @@ namespace ITJakub.FileProcessing.Service.Test
             };
 
             var subtask = new UpdateChaptersSubtask(resourceRepository);
-            var pageResources = resourceRepository.GetProjectPages(0).ToList();
+            var pageResources = resourceRepository.GetProjectLatestPages(0).ToList();
             subtask.UpdateChapters(41, 2, bookData, pageResources);
 
             var createdChapters = resourceRepository.CreatedObjects.OfType<ChapterResource>().ToList();

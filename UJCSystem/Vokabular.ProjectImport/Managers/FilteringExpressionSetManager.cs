@@ -2,6 +2,7 @@
 using System.Linq;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.DataEntities.Database.Repositories.BibliographyImport;
 using Vokabular.MainService.DataContracts.Contracts.ExternalBibliography;
 using Vokabular.ProjectImport.Works.FilteringExpressionSetManagement;
 using Vokabular.RestClient.Results;

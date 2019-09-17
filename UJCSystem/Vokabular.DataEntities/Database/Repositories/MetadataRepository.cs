@@ -4,12 +4,9 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
-using NHibernate.Transform;
-using Vokabular.DataEntities.Database.ConditionCriteria;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
-using Vokabular.DataEntities.Database.Search;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
@@ -139,12 +136,12 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
-        public virtual IList<MetadataResource> GetMetadataWithFetchForBiblModule(IEnumerable<long> metadataIdList)
+        public virtual IList<MetadataResource> GetMetadataWithFetchForBiblModule(IEnumerable<long> metadataVersionIdList)
         {
             var session = GetSession();
 
             var result = session.QueryOver<MetadataResource>()
-                .WhereRestrictionOn(x => x.Id).IsInG(metadataIdList)
+                .WhereRestrictionOn(x => x.Id).IsInG(metadataVersionIdList)
                 .Fetch(SelectMode.Fetch, x => x.Resource)
                 .Fetch(SelectMode.Fetch, x => x.Resource.Project)
                 //.Fetch(SelectMode.Fetch, x => x.Resource.Project.Authors) // Authors are used from Metadata
@@ -190,62 +187,6 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Fetch(SelectMode.Fetch, x => x.Resource.Project.LatestPublishedSnapshot)
                 .Fetch(SelectMode.Fetch, x => x.Resource.Project.LatestPublishedSnapshot.DefaultBookType)
                 .List();
-            return result;
-        }
-
-        // TODO MOVE THIS AWAY: (THIS IS NOT METADATA!)
-        public virtual IList<HeadwordResource> GetHeadwordWithFetch(IEnumerable<long> headwordIds)
-        {
-            var result = GetSession().QueryOver<HeadwordResource>()
-                .WhereRestrictionOn(x => x.Id).IsInG(headwordIds)
-                .Fetch(SelectMode.Fetch, x => x.Resource)
-                .Fetch(SelectMode.Fetch, x => x.HeadwordItems)
-                .TransformUsing(Transformers.DistinctRootEntity)
-                .List();
-            return result;
-        }
-
-        public virtual HeadwordResource GetHeadwordWithFetchByExternalId(string projectExternalId, string headwordExternalId, ProjectTypeEnum projectType)
-        {
-            Resource resourceAlias = null;
-            Project projectAlias = null;
-
-            var result = GetSession().QueryOver<HeadwordResource>()
-                .JoinAlias(x => x.Resource, () => resourceAlias)
-                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
-                .Where(x => x.ExternalId == headwordExternalId && projectAlias.ExternalId == projectExternalId && projectAlias.ProjectType == projectType && x.Id == resourceAlias.LatestVersion.Id)
-                .Fetch(SelectMode.Fetch, x => x.Resource)
-                .Fetch(SelectMode.Fetch, x => x.HeadwordItems)
-                .TransformUsing(Transformers.DistinctRootEntity)
-                .SingleOrDefault();
-            return result;
-        }
-
-        public virtual IList<PageCountResult> GetPageCount(IEnumerable<long> projectIdList)
-        {
-            PageResource pageResourceAlias = null;
-            Resource resourceAlias = null;
-            PageCountResult resultAlias = null;
-
-            var result = GetSession().QueryOver(() => pageResourceAlias)
-                .JoinAlias(x => x.Resource, () => resourceAlias)
-                .WhereRestrictionOn(() => resourceAlias.Project.Id).IsInG(projectIdList)
-                .And(x => x.Id == resourceAlias.LatestVersion.Id)
-                .SelectList(list => list
-                    .SelectGroup(() => resourceAlias.Project.Id).WithAlias(() => resultAlias.ProjectId)
-                    .SelectCount(() => pageResourceAlias.Id).WithAlias(() => resultAlias.PageCount))
-                .TransformUsing(Transformers.AliasToBean<PageCountResult>())
-                .List<PageCountResult>();
-
-            return result;
-        }
-
-        public virtual IList<PageResource> GetPagesWithTerms(TermCriteriaPageConditionCreator creator)
-        {
-            var query = GetSession().CreateQuery(creator.GetQueryString())
-                .SetParameters(creator)
-                .SetResultTransformer(Transformers.DistinctRootEntity);
-            var result = query.List<PageResource>();
             return result;
         }
 

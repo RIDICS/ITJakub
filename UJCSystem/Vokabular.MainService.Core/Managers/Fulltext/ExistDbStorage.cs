@@ -22,10 +22,10 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
     public class ExistDbStorage : IFulltextStorage
     {
         private readonly CommunicationProvider m_communicationProvider;
-        private readonly BookRepository m_bookRepository;
+        private readonly BookViewRepository m_bookRepository;
         private readonly IMapper m_mapper;
 
-        public ExistDbStorage(CommunicationProvider communicationProvider, BookRepository bookRepository, IMapper mapper)
+        public ExistDbStorage(CommunicationProvider communicationProvider, BookViewRepository bookRepository, IMapper mapper)
         {
             m_communicationProvider = communicationProvider;
             m_bookRepository = bookRepository;

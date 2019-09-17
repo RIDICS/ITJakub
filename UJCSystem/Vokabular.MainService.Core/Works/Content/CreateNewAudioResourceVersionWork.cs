@@ -15,13 +15,13 @@ namespace Vokabular.MainService.Core.Works.Content
     public class CreateNewAudioResourceVersionWork : UnitOfWorkBase<long>
     {
         private readonly ResourceRepository m_resourceRepository;
-        private readonly FileSystemManager m_fileSystemManager;
+        private readonly IFileSystemManager m_fileSystemManager;
         private readonly long m_audioId;
         private readonly CreateAudioContract m_data;
         private readonly Stream m_fileStream;
         private readonly int m_userId;
 
-        public CreateNewAudioResourceVersionWork(ResourceRepository resourceRepository, FileSystemManager fileSystemManager, long audioId,
+        public CreateNewAudioResourceVersionWork(ResourceRepository resourceRepository, IFileSystemManager fileSystemManager, long audioId,
             CreateAudioContract data, Stream fileStream, int userId) : base(resourceRepository)
         {
             m_resourceRepository = resourceRepository;
