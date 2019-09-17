@@ -1,17 +1,15 @@
 ﻿class ProjectWorkMetadataTab extends ProjectMetadataTabBase {
-    private projectId: number;
-    private addAuthorDialog: BootstrapDialogWrapper;
-    private addEditorDialog: BootstrapDialogWrapper;
-    private selectRangeDialog: BootstrapDialogWrapper;
-    private rangePeriodViewSliderClass: RegExDatingConditionRangePeriodView;
-    private projectClient: ProjectClient;
-    private selectedAuthorId: number;
-    private selectedResponsiblePersonId: number;
-    private publisherTypeahead: SingleSetTypeaheadSearchBox<string>;
-    private publisherName: string = null;
-    private workModule: ProjectWorkModule;
-    private adminApiClient: AdminApiClient;
+    private readonly projectId: number;
+    private readonly addAuthorDialog: BootstrapDialogWrapper;
+    private readonly addEditorDialog: BootstrapDialogWrapper;
+    private readonly selectRangeDialog: BootstrapDialogWrapper;
+    private readonly projectClient: ProjectClient;
+    private readonly publisherTypeahead: SingleSetTypeaheadSearchBox<string>;
+    private readonly workModule: ProjectWorkModule;
+    private readonly adminApiClient: AdminApiClient;
     private readonly errorHandler: ErrorHandler;
+    private rangePeriodViewSliderClass: RegExDatingConditionRangePeriodView;
+    private publisherName: string = null;
 
     constructor(projectId: number, workModule: ProjectWorkModule) {
         super();
@@ -339,15 +337,13 @@
                 }
                 $(".existing-original-author-selected").not(targetEl).removeClass("existing-original-author-selected");
                 targetEl.toggleClass("existing-original-author-selected");
-                var authorId = null;
+                var authorId;
                 if ($(".existing-original-author-selected").length) {
                     authorId = $(".existing-original-author-selected").data("author-id");
                     $authorId.val(authorId);
-                    this.selectedAuthorId = authorId;
                     this.loadProjectsByAuthor(authorId);
                 } else {
                     $authorId.val("");
-                    this.selectedAuthorId = null;
                 }
             });
 
@@ -358,7 +354,6 @@
                 if (enteredText === "") {
                     $(".author-list-item").remove();
                     $authorId.val("");
-                    this.selectedAuthorId = null;
                     return;
                 }
                 this.adminApiClient.getOriginalAuthorTypeahead(enteredText).done(
@@ -366,13 +361,11 @@
                         if (data.length) {
                             $authorId.val("");
                             const listItemsEl = $(".author-list-items");
-                            this.selectedAuthorId = null;
                             listItemsEl.children(".author-list-item").remove();
                             this.createAuthorListStructure(data, listItemsEl);
                         } else {
                             $(".author-list-item").remove();
                             $authorId.val("");
-                            this.selectedAuthorId = null;
                         }
                     });
             });
@@ -393,20 +386,17 @@
                     newResponsiblePersonNameEl.prop("disabled", false);
                     newResponsiblePersonSurnameEl.prop("disabled", false);
                     $editorId.val("");
-                    this.selectedResponsiblePersonId = null;
                     return;
                 }
                 this.adminApiClient.getResponsiblePersonTypeahead(enteredText).done(
                     (data: IResponsiblePerson[]) => {
                         if (data.length) {
                             $editorId.val("");
-                            this.selectedResponsiblePersonId = null;
                             $(".responsible-person-list-items").children(".responsible-person-list-item").remove();
                             this.createResponsiblePersonListStructure(data, $(".responsible-person-list-items"));
                         } else {
                             $(".responsible-person-list-item").remove();
                             $editorId.val("");
-                            this.selectedResponsiblePersonId = null;
                         }
                     });
             });
@@ -421,17 +411,15 @@
                 $(".existing-responsible-person-selected").not(targetEl)
                     .removeClass("existing-responsible-person-selected");
                 targetEl.toggleClass("existing-responsible-person-selected");
-                var responsiblePersonId = null;
+                var responsiblePersonId;
                 if ($(".existing-responsible-person-selected").length) {
                     isResponsiblePersonSelected = true;
                     responsiblePersonId = $(".existing-responsible-person-selected").data("responsible-person-id");
                     $editorId.val(responsiblePersonId);
-                    this.selectedResponsiblePersonId = responsiblePersonId;
                     this.loadProjectsByResponsiblePerson(responsiblePersonId);
                 } else {
                     isResponsiblePersonSelected = false;
                     $editorId.val("");
-                    this.selectedResponsiblePersonId = null;
                 }
             });
         const addResponsiblePersonDialogCancelButton = $("#add-editor-dialog").find(`[data-dismiss="modal"]`);
@@ -657,12 +645,10 @@
     }
 
     private saveMetadata() {
-        const keywordFailAlertEl = $("#work-metadata-keyword-fail");
         var selectedAuthorIds = new Array<number>();
         var selectedResponsibleIds = new Array<ISaveProjectResponsiblePerson>();
         var selectedKindIds = new Array<number>();
         var selectedGenreIds = new Array<number>();
-        var keywordIdList = new Array<number>();
 
         $("#work-metadata-authors .author-item").each((index, elem: Node) => {
             selectedAuthorIds.push($(elem as Element).data("id"));
@@ -681,7 +667,7 @@
             selectedGenreIds.push(parseInt($(elem as Element).val() as string));
         });
         
-        var publisherText = "";
+        let publisherText;
         if (this.publisherName == null) {
             publisherText = $("#work-metadata-publisher").val() as string;
         } else {
@@ -729,7 +715,7 @@
         this.projectClient.saveMetadata(this.projectId, data).done((responseData) => {
             $successAlert.show().delay(3000).fadeOut(2000);
             $("#work-metadata-last-modification").text(responseData.lastModificationText.toLocaleString());
-            if (responseData.literaryOriginalText == null || responseData.literaryOriginalText == "") {
+            if (responseData.literaryOriginalText == null || responseData.literaryOriginalText === "") {
                 $("#work-metadata-literary-original").text(localization.translate("NoLiteraryOriginal", "Admin").value);
             } else {
                 $("#work-metadata-literary-original").text(responseData.literaryOriginalText);
@@ -750,7 +736,7 @@
 }
 
 class ProjectWorkPageListTab extends ProjectModuleTabBase {
-    private projectId: number;
+    private readonly projectId: number;
 
     constructor(projectId: number) {
         super();
@@ -764,13 +750,13 @@ class ProjectWorkPageListTab extends ProjectModuleTabBase {
 }
 
 class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
-    private projectId: number;
-    private projectClient: ProjectClient;
+    private readonly projectId: number;
+    private readonly projectClient: ProjectClient;
+    private readonly workModule: ProjectWorkModule;
+    private readonly adminApiClient: AdminApiClient;
+    private readonly errorHandler: ErrorHandler;
     private existingGenres: JQuery = null;
     private existingLitKinds: JQuery = null;
-    private workModule: ProjectWorkModule;
-    private adminApiClient: AdminApiClient;
-    private readonly errorHandler: ErrorHandler;
 
     constructor(projectId: number, workModule: ProjectWorkModule) {
         super();
@@ -982,8 +968,8 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
             if (this.existingLitKinds == null) {
                 this.parseExistingKinds();
             }
-            const isGenre = false;
-            const selectBox = this.createGenreKindSelectBoxEl(this.existingLitKinds, isGenre);
+
+            const selectBox = this.createGenreKindSelectBoxEl(this.existingLitKinds, false);
             kindSelectsEl.append(selectBox);
         });
 
@@ -992,8 +978,8 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
             if (this.existingGenres == null) {
                 this.parseExistingGenres();
             }
-            const isGenre = true;
-            const selectBox = this.createGenreKindSelectBoxEl(this.existingGenres, isGenre);
+
+            const selectBox = this.createGenreKindSelectBoxEl(this.existingGenres, true);
             genreSelectsEl.append(selectBox);
         });
 
@@ -1001,7 +987,7 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
 
         this.addRemoveLiteraryKindEvent();
 
-        var $saveButton = $("#work-categorization-save-button");
+        const $saveButton = $("#work-categorization-save-button");
         $saveButton.click(() => {
             this.saveCategorization();
         });
