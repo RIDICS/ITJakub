@@ -317,8 +317,6 @@
                     title: localization.translate("Close", "RidicsProject").value
                 },
                 this.simpleMdeTools.toolSeparator,
-                this.simpleMdeTools.toolUndo,
-                this.simpleMdeTools.toolRedo,
                 this.simpleMdeTools.toolSeparator,
                 this.simpleMdeTools.toolBold,
                 this.simpleMdeTools.toolItalic,
