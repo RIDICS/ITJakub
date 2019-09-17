@@ -36,7 +36,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<PageContract> GetPageList(long projectId)
         {
-            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectPages(projectId));
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestPages(projectId));
             var result = m_mapper.Map<List<PageContract>>(dbResult);
             return result;
         }
@@ -78,7 +78,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<ChapterHierarchyContract> GetChapterList(long projectId)
         {
-            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectChapters(projectId));
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestChapters(projectId));
             var result = ChaptersHelper.ChapterToHierarchyContracts(dbResult, m_mapper);
             return result;
         }
@@ -107,7 +107,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<TrackContract> GetTrackList(long projectId)
         {
-            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectTracks(projectId));
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestTracks(projectId));
             var result = m_mapper.Map<List<TrackContract>>(dbResult);
             return result;
         }

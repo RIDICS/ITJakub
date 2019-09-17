@@ -190,7 +190,6 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        //TODO continue here:
         public virtual MetadataResource GetMetadataWithDetail(long projectId)
         {
             Resource resourceAlias = null;

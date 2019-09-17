@@ -68,7 +68,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<TextWithPageContract> GetTextResourceList(long projectId, long? resourceGroupId)
         {
-            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectTexts(projectId, resourceGroupId, true));
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestTexts(projectId, resourceGroupId, true));
             var sortedDbResult = dbResult.OrderBy(x => ((PageResource) x.ResourcePage.LatestVersion).Position);
             var result = m_mapper.Map<List<TextWithPageContract>>(sortedDbResult);
             return result;
@@ -76,7 +76,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<ImageWithPageContract> GetImageResourceList(long projectId)
         {
-            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectImages(projectId, null, true));
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestImages(projectId, null, true));
             var sortedDbResult = dbResult.OrderBy(x => ((PageResource) x.ResourcePage.LatestVersion).Position);
             var result = m_mapper.Map<List<ImageWithPageContract>>(sortedDbResult);
             return result;

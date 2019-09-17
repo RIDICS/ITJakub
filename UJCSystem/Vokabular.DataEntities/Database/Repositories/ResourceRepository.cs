@@ -25,7 +25,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SingleOrDefault();
         }
 
-        public virtual IList<PageResource> GetProjectPages(long projectId)
+        public virtual IList<PageResource> GetProjectLatestPages(long projectId)
         {
             Resource resourceAlias = null;
 
@@ -63,7 +63,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
-        public virtual IList<TextResource> GetProjectTexts(long projectId, long? namedResourceGroupId, bool fetchParentPage)
+        public virtual IList<TextResource> GetProjectLatestTexts(long projectId, long? namedResourceGroupId, bool fetchParentPage)
         {
             Resource resourceAlias = null;
 
@@ -91,7 +91,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result.ToList();
         }
 
-        public virtual IList<ImageResource> GetProjectImages(long projectId, long? namedResourceGroupId, bool fetchParentPage)
+        public virtual IList<ImageResource> GetProjectLatestImages(long projectId, long? namedResourceGroupId, bool fetchParentPage)
         {
             Resource resourceAlias = null;
 
@@ -128,7 +128,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SingleOrDefault();
         }
 
-        public virtual IList<ChapterResource> GetProjectChapters(long projectId)
+        public virtual IList<ChapterResource> GetProjectLatestChapters(long projectId)
         {
             Resource resourceAlias = null;
 
@@ -225,7 +225,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        public virtual IList<TrackResource> GetProjectTracks(long projectId)
+        public virtual IList<TrackResource> GetProjectLatestTracks(long projectId)
         {
             Resource resourceAlias = null;
 
@@ -236,7 +236,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
-        public virtual IList<AudioResource> GetProjectAudioResources(long projectId)
+        public virtual IList<AudioResource> GetProjectLatestAudioResources(long projectId)
         {
             Resource resourceAlias = null;
 
@@ -246,7 +246,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
-        public virtual IList<AudioResource> GetProjectFullAudioResources(long projectId)
+        public virtual IList<AudioResource> GetProjectLatestFullAudioResources(long projectId)
         {
             Resource resourceAlias = null;
 

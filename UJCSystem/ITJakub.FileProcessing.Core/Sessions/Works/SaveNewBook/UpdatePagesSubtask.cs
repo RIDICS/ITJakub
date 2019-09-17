@@ -40,7 +40,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             var project = m_resourceRepository.Load<Project>(projectId);
             var user = m_resourceRepository.Load<User>(userId);
             var bookVersion = m_resourceRepository.Load<BookVersionResource>(bookVersionId);
-            var dbPages = m_resourceRepository.GetProjectPages(projectId);
+            var dbPages = m_resourceRepository.GetProjectLatestPages(projectId);
             var dbPagesDict = dbPages.ToDictionaryMultipleValues(x => x.Name);
 
             // Update page list
@@ -170,7 +170,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
             var projectId = project.Id;
             var resourceGroup = GetOrCreateNamedResourceGroup(projectId, TextTypeEnum.Transcribed, DefaultImportResourceGroupName);
-            var dbTexts = m_resourceRepository.GetProjectTexts(projectId, resourceGroup.Id, false);
+            var dbTexts = m_resourceRepository.GetProjectLatestTexts(projectId, resourceGroup.Id, false);
             var dbTextsByPageResId = new Dictionary<long, List<TextResource>>();
             foreach (var textResourceByPageGroup in dbTexts.GroupBy(x => x.ResourcePage.Id))
             {
@@ -222,7 +222,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
             var projectId = project.Id;
             var imageResourceGroup = GetOrCreateNamedResourceGroup(projectId, TextTypeEnum.Original, DefaultImportResourceGroupName);
-            var dbImages = m_resourceRepository.GetProjectImages(projectId, imageResourceGroup.Id, false);
+            var dbImages = m_resourceRepository.GetProjectLatestImages(projectId, imageResourceGroup.Id, false);
             var dbImagesByPageResId = new Dictionary<long, List<ImageResource>>();
             foreach (var imageResourceByPageGroup in dbImages.GroupBy(x => x.ResourcePage.Id))
             {

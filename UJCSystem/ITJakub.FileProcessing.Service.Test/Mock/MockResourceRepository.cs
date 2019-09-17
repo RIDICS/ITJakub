@@ -131,7 +131,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             };
         }
 
-        public override IList<PageResource> GetProjectPages(long projectId)
+        public override IList<PageResource> GetProjectLatestPages(long projectId)
         {
             var project = new Project
             {
@@ -170,7 +170,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             };
         }
 
-        public override IList<TextResource> GetProjectTexts(long projectId, long? namedResourceGroupId, bool fetchParentPage)
+        public override IList<TextResource> GetProjectLatestTexts(long projectId, long? namedResourceGroupId, bool fetchParentPage)
         {
             return new List<TextResource>
             {
@@ -213,7 +213,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             };
         }
 
-        public override IList<ImageResource> GetProjectImages(long projectId, long? namedResourceGroupId, bool fetchParentPage)
+        public override IList<ImageResource> GetProjectLatestImages(long projectId, long? namedResourceGroupId, bool fetchParentPage)
         {
             return new List<ImageResource>
             {
@@ -266,7 +266,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             };
         }
 
-        public override IList<ChapterResource> GetProjectChapters(long projectId)
+        public override IList<ChapterResource> GetProjectLatestChapters(long projectId)
         {
             return new List<ChapterResource>
             {
@@ -424,7 +424,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             };
         }
 
-        public override IList<TrackResource> GetProjectTracks(long projectId)
+        public override IList<TrackResource> GetProjectLatestTracks(long projectId)
         {
             if (projectId == 0)
                 return null;
@@ -456,7 +456,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             };
         }
 
-        public override IList<AudioResource> GetProjectAudioResources(long projectId)
+        public override IList<AudioResource> GetProjectLatestAudioResources(long projectId)
         {
             if (projectId == 0)
                 return null;
@@ -505,7 +505,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             };
         }
 
-        public override IList<AudioResource> GetProjectFullAudioResources(long projectId)
+        public override IList<AudioResource> GetProjectLatestFullAudioResources(long projectId)
         {
             if (projectId == 0)
                 return null;
