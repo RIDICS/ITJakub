@@ -1,6 +1,6 @@
 {
-	"culture":"en",
-	"scope":"RidicsProject",
+  "culture": "en",
+  "scope": "RidicsProject",
   "dictionary": {
     "ListError": "Chyba při načítání strany se seznamem projektů",
     "ModuleError": "Chyba při načítání modulu",

@@ -22,6 +22,6 @@
     {
         public string Text { get; set; }
         public long Id { get; set; }
-        public long VersionNumber { get; set; }
+        public long ResourceVersionId { get; set; }
     }
 }

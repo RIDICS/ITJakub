@@ -1,7 +1,7 @@
 ﻿class PageListEditorMain {
     private editDialog: BootstrapDialogWrapper;
     private readonly gui: EditorsGui;
-    private readonly util: EditorsUtil;
+    private readonly util: EditorsApiClient;
     private readonly errorHandler: ErrorHandler;
     private readonly listGenerator: PageListGenerator;
     private readonly fsPageName = "FS";
@@ -10,7 +10,7 @@
     constructor() {
         this.gui = new EditorsGui();
         this.errorHandler = new ErrorHandler();
-        this.util = new EditorsUtil();
+        this.util = new EditorsApiClient();
         this.listGenerator = new PageListGenerator();
     }
     

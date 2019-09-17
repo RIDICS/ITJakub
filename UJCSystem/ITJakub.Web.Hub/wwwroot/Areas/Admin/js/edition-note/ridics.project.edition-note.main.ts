@@ -3,7 +3,7 @@
     private editionNoteVersionId?: number;
     private simpleMde: SimpleMDE;
     private simpleMdeIcons: SimpleMdeTools;
-    private util: EditorsUtil;
+    private util: EditorsApiClient;
     private errorHandler: ErrorHandler;
     private alertHolder: JQuery;
 
@@ -13,7 +13,7 @@
     }
 
     init() {
-        this.util = new EditorsUtil();
+        this.util = new EditorsApiClient();
         this.simpleMdeIcons = new SimpleMdeTools();
         const noteTab = $("#project-work-note");
         this.alertHolder = noteTab.find(".alert-holder");

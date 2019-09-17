@@ -1,6 +1,6 @@
 {
-	"culture":"cs-CZ",
-	"scope":"PluginsJs",
+  "culture": "cs-CZ",
+  "scope": "PluginsJs",
   "dictionary": {
     "ShowAllAssignedLabels": "Zobrazit všechny přiřazené štítky",
     "SavedAs:": "Uloženo jako: {0}",
@@ -123,7 +123,8 @@
     "CannotUploadMoreFiles": "Nelze nahrát žádné další soubory.",
 
     "WebUseCookies": "Tento web používá cookies.",
-    "CookieInfo": "Tyto stránky používají soubory cookies s cílem zajistit uživatelům lepší internetový zážitek a dále také zlepšit výkonnost a funkčnost stránek. Používáním těchto webových stránek souhlasíte s použitím souborů cookie.",
+    "CookieInfo":
+      "Tyto stránky používají soubory cookies s cílem zajistit uživatelům lepší internetový zážitek a dále také zlepšit výkonnost a funkčnost stránek. Používáním těchto webových stránek souhlasíte s použitím souborů cookie.",
     "Continue": "Pokračovat",
     "LearnMore": "Zjistit více",
 

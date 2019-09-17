@@ -1,6 +1,6 @@
 {
-	"culture":"en",
-	"scope":"Home",
+  "culture": "en",
+  "scope": "Home",
   "dictionary": {
     "AboutTitle": "About Vokabulář webový",
     "VokabularVersion": "Vokabulář webový version: {0}",

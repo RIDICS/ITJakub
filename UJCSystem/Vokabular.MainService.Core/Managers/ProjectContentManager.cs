@@ -6,7 +6,6 @@ using Vokabular.Core.Storage;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Works.Content;
 using Vokabular.MainService.Core.Works.Text;
@@ -24,19 +23,17 @@ namespace Vokabular.MainService.Core.Managers
         private readonly FileSystemManager m_fileSystemManager;
         private readonly AuthenticationManager m_authenticationManager;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
-        private readonly CommunicationProvider m_communicationProvider;
         private readonly UserDetailManager m_userDetailManager;
         private readonly IMapper m_mapper;
 
         public ProjectContentManager(ResourceRepository resourceRepository, FileSystemManager fileSystemManager,
             AuthenticationManager authenticationManager, FulltextStorageProvider fulltextStorageProvider,
-            CommunicationProvider communicationProvider, UserDetailManager userDetailManager, IMapper mapper)
+            UserDetailManager userDetailManager, IMapper mapper)
         {
             m_resourceRepository = resourceRepository;
             m_fileSystemManager = fileSystemManager;
             m_authenticationManager = authenticationManager;
             m_fulltextStorageProvider = fulltextStorageProvider;
-            m_communicationProvider = communicationProvider;
             m_userDetailManager = userDetailManager;
             m_mapper = mapper;
         }
@@ -168,36 +165,31 @@ namespace Vokabular.MainService.Core.Managers
 
         public long CreateNewImageVersion(long imageId, CreateImageContract data, Stream stream)
         {
-            var latestImage = m_resourceRepository.GetLatestResourceVersion<ImageResource>(imageId);
-            var projectId = latestImage.Resource.Project.Id;
-
-            var fileInfo = m_fileSystemManager.SaveResource(ResourceType.Image, projectId, stream);
-
             var userId = m_authenticationManager.GetCurrentUserId();
-            var resultVersionId = new CreateNewImageResourceVersionWork(m_resourceRepository, imageId,
-                data, fileInfo, userId).Execute();
+            var resultVersionId = new CreateNewImageResourceVersionWork(m_resourceRepository, m_fileSystemManager, imageId,
+                data, stream, userId).Execute();
 
             return resultVersionId;
         }
 
         public long CreateNewAudioVersion(long audioId, CreateAudioContract data, Stream stream)
         {
-            var latestAudio = m_resourceRepository.GetLatestResourceVersion<AudioResource>(audioId);
-            var projectId = latestAudio.Resource.Project.Id;
-
-            var fileInfo = m_fileSystemManager.SaveResource(ResourceType.Audio, projectId, stream);
-
             var userId = m_authenticationManager.GetCurrentUserId();
-            var resultVersionId = new CreateNewAudioResourceVersionWork(m_resourceRepository, audioId,
-                data, fileInfo, userId).Execute();
+            var resultVersionId = new CreateNewAudioResourceVersionWork(m_resourceRepository, m_fileSystemManager, audioId,
+                data, stream, userId).Execute();
 
             return resultVersionId;
         }
 
         public long CreateNewTextResourceVersion(CreateTextRequestContract request)
         {
+            var latestText = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestResourceVersion<TextResource>(request.Id));
+            var project = latestText.Resource.Project;
+
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(project.ProjectType);
+
             var userId = m_authenticationManager.GetCurrentUserId();
-            var createNewTextResourceWork = new CreateNewTextResourceWork(m_resourceRepository, request, userId, m_communicationProvider);
+            var createNewTextResourceWork = new CreateNewTextResourceWork(m_resourceRepository, request, userId, fulltextStorage);
             var resultId = createNewTextResourceWork.Execute();
             return resultId;
         }

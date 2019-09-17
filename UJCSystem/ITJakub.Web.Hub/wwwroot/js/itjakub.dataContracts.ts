@@ -394,7 +394,7 @@ interface ITextWithPage {
 interface ICreateTextVersion {
     text: string;
     id: number;
-    versionNumber: number;
+    resourceVersionId: number;
 }
 
 interface ITextWithContent {

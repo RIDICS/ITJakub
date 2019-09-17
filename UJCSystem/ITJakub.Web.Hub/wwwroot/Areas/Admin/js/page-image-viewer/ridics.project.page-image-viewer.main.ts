@@ -1,6 +1,6 @@
 ﻿class ImageViewerMain {
     init(projectId: number) {
-        const util = new EditorsUtil();
+        const util = new EditorsApiClient();
         const gui = new EditorsGui();
         const contentAddition = new ImageViewerContentAddition(util);
         const upload = new ImageViewerUpload(projectId);

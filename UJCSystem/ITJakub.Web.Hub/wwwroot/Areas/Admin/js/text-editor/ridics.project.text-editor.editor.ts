@@ -4,7 +4,7 @@
     private originalContent = "";
     private simplemde: IExtendedSimpleMDE;
     private readonly commentInput: CommentInput;
-    private readonly util: EditorsUtil;
+    private readonly util: EditorsApiClient;
     private readonly commentArea: CommentArea;
     private commentInputDialog: BootstrapDialogWrapper;
 
@@ -12,7 +12,7 @@
         "([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}";
     private overlappingCommentString = "Your comment overlaps with another comment. Please select other part of text.";
 
-    constructor(commentInput: CommentInput, util: EditorsUtil, commentArea: CommentArea) {
+    constructor(commentInput: CommentInput, util: EditorsApiClient, commentArea: CommentArea) {
         this.commentInput = commentInput;
         this.util = util;
         this.commentArea = commentArea;
@@ -227,14 +227,14 @@
         const pageEl = $(`*[data-page="${textId}"]`);
         const compositionArea = pageEl.children(".composition-area");
         const id = compositionArea.data("id");
-        const versionNumber = compositionArea.data("version-number");
+        const versionId = compositionArea.data("version-id");
         const request: ICreateTextVersion = {
             id: id,
             text: contents,
-            versionNumber: versionNumber
+            resourceVersionId: versionId
         };
         const saveAjax = this.util.savePlainText(textId, request);
-        saveAjax.done(() => {
+        saveAjax.done((versionId: number) => {
             bootbox.alert({
                 title: "Success!",
                 message: "Your changes have been successfully saved.",
@@ -245,6 +245,7 @@
                 }
             });
             this.originalContent = contents;
+            compositionArea.data("version-id", versionId);
         });
         saveAjax.fail(() => {
             if (saveAjax.status === 409) {

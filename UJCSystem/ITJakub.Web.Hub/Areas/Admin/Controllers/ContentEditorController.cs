@@ -166,15 +166,15 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         public IActionResult SetTextResource(long textId, CreateTextRequestContract request)
         {
             var client = GetProjectClient();
-            var result = client.CreateTextResourceVersion(textId, request);
-            return Json(result);
+            var resourceVersionId = client.CreateTextResourceVersion(textId, request);
+            return Json(resourceVersionId);
         }
 
         [HttpGet]
         public IActionResult GetEditionNote(long projectId, TextFormatEnumContract format)
         {
-            var client = GetBookClient();
-            var result = client.GetEditionNote(projectId, format);
+            var client = GetProjectClient();
+            var result = client.GetLatestEditionNote(projectId, format);
             return Json(result);
         }
 
