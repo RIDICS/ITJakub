@@ -37,6 +37,9 @@ namespace Vokabular.ForumSite.Core.Works
 
             var mainForum = m_forumRepository.GetMainForumByExternalProjectId(m_projectId);
 
+            if(mainForum == null)
+                return;
+
             var forumCategoriesToDelete = m_forumRepository.GetForumsByExternalCategoryIds(deletedCategories);
             var forums = m_forumRepository.GetForumsByExternalProjectId(m_projectId);
             foreach (var forum in forums)

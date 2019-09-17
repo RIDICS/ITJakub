@@ -8,6 +8,7 @@
         WorkMetadata = 3,
         WorkHistory = 4,
         WorkNote = 5,
+        WorkCategorization = 6,
         ResourceDiscussion = 102,
         ResourceMetadata = 103,
         Forum = 200,

@@ -17,7 +17,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
     [Area("Admin")]
     public class PublicationController : BaseController
     {
-        private const int SnapshotListPageSize = 10;
         private readonly ILocalizationService m_localization;
 
         public PublicationController(CommunicationProvider communicationProvider, ILocalizationService localization) : base(communicationProvider)
@@ -30,17 +29,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             var model = CreateNewPublicationViewModel(projectId);
             return View("PublicationsNew", model);
-        }
-
-        public IActionResult SnapshotList(long projectId, string search, int start, int count = SnapshotListPageSize)
-        {
-            var client = GetProjectClient();
-
-            search = search ?? string.Empty;
-            var snapshotList = client.GetSnapshotList(projectId, start, count, search);
-            var model = CreateListViewModel<SnapshotViewModel, SnapshotAggregatedInfoContract>(snapshotList, start, count, search);
-
-            return PartialView("_SnapshotListPage", model);
         }
 
         public IActionResult DuplicateSnapshot(long snapshotId)
