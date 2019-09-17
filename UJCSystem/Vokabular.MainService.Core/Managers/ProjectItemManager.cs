@@ -19,11 +19,11 @@ namespace Vokabular.MainService.Core.Managers
         private readonly ResourceRepository m_resourceRepository;
         private readonly BookViewRepository m_bookRepository;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
-        private readonly FileSystemManager m_fileSystemManager;
+        private readonly IFileSystemManager m_fileSystemManager;
         private readonly IMapper m_mapper;
 
         public ProjectItemManager(AuthenticationManager authenticationManager, ResourceRepository resourceRepository,
-            BookViewRepository bookRepository, FulltextStorageProvider fulltextStorageProvider, FileSystemManager fileSystemManager,
+            BookViewRepository bookRepository, FulltextStorageProvider fulltextStorageProvider, IFileSystemManager fileSystemManager,
             IMapper mapper)
         {
             m_authenticationManager = authenticationManager;

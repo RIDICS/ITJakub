@@ -20,13 +20,13 @@ namespace Vokabular.MainService.Core.Managers
     public class ProjectContentManager
     {
         private readonly ResourceRepository m_resourceRepository;
-        private readonly FileSystemManager m_fileSystemManager;
+        private readonly IFileSystemManager m_fileSystemManager;
         private readonly AuthenticationManager m_authenticationManager;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
         private readonly UserDetailManager m_userDetailManager;
         private readonly IMapper m_mapper;
 
-        public ProjectContentManager(ResourceRepository resourceRepository, FileSystemManager fileSystemManager,
+        public ProjectContentManager(ResourceRepository resourceRepository, IFileSystemManager fileSystemManager,
             AuthenticationManager authenticationManager, FulltextStorageProvider fulltextStorageProvider,
             UserDetailManager userDetailManager, IMapper mapper)
         {
