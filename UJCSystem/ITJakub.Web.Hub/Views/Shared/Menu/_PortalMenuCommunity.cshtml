@@ -88,6 +88,65 @@
                 </li>
             </ul>
         </li>
+        <li id="grammars-menu" class="has-sub">
+            <a href='@Url.Action("List", "OldGrammar", new {area = "OldGrammar"})'>
+                <span>@Localizer.Translate("Grammar", "layout", LocTranslationSource.File)</span>
+            </a>
+            <ul>
+                <li>
+                    <a href='@Url.Action("Information", "OldGrammar", new {area = "OldGrammar"})'>
+                        <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
+                    </a>
+                </li>
+                <li>
+                    <a href='@Url.Action("List", "OldGrammar", new {area = "OldGrammar"})'>
+                        <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
+                    </a>
+                </li>
+                <li>
+                    <a href='@Url.Action("Search", "OldGrammar", new {area = "OldGrammar"})'>
+                        <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
+                    </a>
+                </li>
+                <li>
+                    <a href='@Url.Action("ListTerms", "OldGrammar", new {area = "OldGrammar"})'>
+                        <span>@Localizer.Translate("ListTerms", "layout", LocTranslationSource.File)</span>
+                    </a>
+                </li>
+                <li>
+                    <a href='@Url.Action("Help", "OldGrammar", new {area = "OldGrammar"})'>
+                        <span>@Localizer.Translate("Help", "layout", LocTranslationSource.File)</span>
+                    </a>
+                </li>
+                <li>
+                    <a href='@Url.Action("Feedback", "OldGrammar", new {area = "OldGrammar"})'>
+                        <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li id="audio-menu" class="has-sub">
+            <a href='@Url.Action("List", "AudioBooks", new {area = "AudioBooks"})'>
+                <span>@Localizer.Translate("AudioBooks", "layout", LocTranslationSource.File)</span>
+            </a>
+            <ul>
+                <li>
+                    <a href='@Url.Action("Information", "AudioBooks", new {area = "AudioBooks"})'>
+                        <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
+                    </a>
+                </li>
+                <li>
+                    <a href='@Url.Action("List", "AudioBooks", new {area = "AudioBooks"})'>
+                        <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
+                    </a>
+                </li>
+                <li>
+                    <a href='@Url.Action("Feedback", "AudioBooks", new {area = "AudioBooks"})'>
+                        <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
         <li>
             <a href='@ForumOption.Value.Url'>
                 <span>@Localizer.Translate("Forum", "layout", LocTranslationSource.File)</span>
