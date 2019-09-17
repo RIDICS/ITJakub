@@ -98,7 +98,7 @@
             textAreaEl.trigger(event);
             if (pageEl.hasClass("init-editor")) {
                 pageEl.removeClass("init-editor");
-                this.editor.changeOrInitEditor(pageEl);
+                this.editor.addEditor(pageEl);
             }
         });
         plainText.fail(() => {

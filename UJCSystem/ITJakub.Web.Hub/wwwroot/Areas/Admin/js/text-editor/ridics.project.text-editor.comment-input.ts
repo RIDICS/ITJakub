@@ -156,8 +156,7 @@
                         { line: selectionEndLine, ch: selectionEndChar + 2 * markSize });
 
                     const id = 0; //creating comment
-                    const parentComment = null; //creating comment
-                    this.processCommentSendClick(textId, textReferenceId, id, parentComment, commentText);
+                    this.processCommentSendClick(textId, textReferenceId, id, null, commentText);
                 }
             }).fail(() => {
                 bootbox.alert({

@@ -46,24 +46,15 @@
 
         $(".page-toolbar .edit-page").click((event) => {
             const pageRow = $(event.currentTarget).parents(".page-row");
-            pageRow.data(this.editModeSelector, true);
-            this.togglePageRows(pageRow);
             pageRow.addClass("init-editor");
+            pageRow.data(this.editModeSelector, true);
+            this.changeOrInitEditor(pageRow);
         });
 
         $("#project-resource-preview").on("click", ".editor", (e) => { //dynamically instantiating SimpleMDE editor on textarea
             const elSelected = e.target as HTMLElement;
             const selectedPageRow = $(elSelected).closest(".page-row");
             this.changeOrInitEditor(selectedPageRow);
-        });
-
-        $(".turn-on-editing-mode").on("click", () => {
-            $(".page-row").data(this.editModeSelector, true);
-            this.togglePageRows($(".page-row"));
-        });
-
-        $(".turn-off-editing-mode").on("click", () => {
-            this.closeEditor($(".page-row"));
         });
     }
 
@@ -132,8 +123,7 @@
                     this.simplemde.toTextArea();
                     this.simplemde = null;
                 }
-                this.addEditor(selectedPageRow);
-                this.originalContent = this.simplemde.value();
+                this.togglePageRows(selectedPageRow);
             }
             if (this.editorExistsInTab && pageDiffers) {
                 const previousPageEl = $(`*[data-page="${this.currentTextId}"]`);
@@ -198,7 +188,6 @@
                                 this.simplemde.toTextArea();
                                 this.simplemde = null;
                                 this.togglePageRows(pageRows);
-                                this.changeEditButtons();
                             }
                         },
                         cancel: {
@@ -216,7 +205,6 @@
                                     thisClass.simplemde.toTextArea();
                                     thisClass.simplemde = null;
                                     this.togglePageRows(pageRows);
-                                    this.changeEditButtons();
                                 });
                             }
                         }
@@ -225,24 +213,21 @@
             } else if (contentBeforeClose === this.originalContent) {
                 thisClass.simplemde.toTextArea();
                 thisClass.simplemde = null;
-                this.changeEditButtons();
                 this.togglePageRows(pageRows);
             }
         } else {
-            this.changeEditButtons();
             this.togglePageRows(pageRows);
         }
     }
 
     private editorChangePage(previousPageEl: JQuery, currentPageEl: JQuery) {
         previousPageEl.data(this.editModeSelector, false);
-        currentPageEl.data(this.editModeSelector, true);
+        this.togglePageRows(previousPageEl);
         const previousPageCommentAreaEl = previousPageEl.children(".comment-area");
-        this.simplemde.toTextArea();
-        this.simplemde = null;
         this.commentArea.updateCommentAreaHeight(previousPageEl);
         this.commentArea.toggleAreaSizeIconHide(previousPageCommentAreaEl);
-        this.addEditor(currentPageEl);
+        currentPageEl.data(this.editModeSelector, true);
+        this.togglePageRows(currentPageEl);
         this.originalContent = this.simplemde.value();
     }
 
@@ -346,7 +331,7 @@
 
         this.setCustomPreviewRender();
         this.simplemde = new SimpleMDE(this.simpleMdeOptions);
-       
+        
         const commentIdRegex = new RegExp(`${this.commentInput.commentRegexExpr}`);
         const commentBeginRegex = new RegExp(`(\\$${this.commentInput.commentRegexExpr}\\%)`);
         const commentEndRegex = new RegExp(`(\\%${this.commentInput.commentRegexExpr}\\$)`);
@@ -370,6 +355,7 @@
         this.simplemde.codemirror.focus();
         this.commentArea.updateCommentAreaHeight(pageRow);
         this.commentArea.toggleAreaSizeIconHide(pageRow.children(".comment-area"));
+        this.originalContent = this.simplemde.value();
     }
 
 
@@ -397,7 +383,6 @@
     }
 
     togglePageRows = (pageRow: JQuery) => {
-        this.changeEditButtons();
         const lazyloadedCompositionEl = pageRow.children(".composition-area");
         if (pageRow.hasClass("lazyloaded") && !lazyloadedCompositionEl.hasClass("lazyloaded")) {
             lazyloadedCompositionEl.addClass("lazyload");
@@ -448,25 +433,5 @@
         editorElement.remove();
         const elm = `<div class="viewer"><span class="rendered-text"></span></div>`;
         child.append(elm);
-    }
-
-    private changeEditButtons() {
-        if (!$(".turn-on-editing-mode").hasClass("hide")) {
-            for (let pageRow of $(".page-row").toArray()) {
-                if ($(pageRow).data(this.editModeSelector)) {
-                    $(".turn-on-editing-mode").addClass("hide");
-                    $(".turn-off-editing-mode").removeClass("hide");
-                    break;
-                }
-            }
-        } else if(!$(".turn-off-editing-mode").hasClass("hide")) {
-            for (let pageRow of $(".page-row").toArray()) {
-                if (Boolean($(pageRow).data(this.editModeSelector)) === false) {
-                    $(".turn-off-editing-mode").addClass("hide");
-                    $(".turn-on-editing-mode").removeClass("hide");
-                    break;
-                }
-            }
-        }
     }
 }
