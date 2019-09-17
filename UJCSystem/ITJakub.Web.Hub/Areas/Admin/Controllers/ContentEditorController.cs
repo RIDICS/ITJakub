@@ -166,8 +166,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         public IActionResult SetTextResource(long textId, CreateTextRequestContract request)
         {
             var client = GetProjectClient();
-            var result = client.CreateTextResourceVersion(textId, request);
-            return Json(result);
+            var resourceVersionId = client.CreateTextResourceVersion(textId, request);
+            return Json(resourceVersionId);
         }
 
         [HttpGet]

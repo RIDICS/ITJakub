@@ -34,11 +34,11 @@ namespace Vokabular.MainService.Core.Works.Text
                 throw new MainServiceException(MainServiceErrorCode.EntityNotFound, $"TextResource with ResourceId={m_newTextContract.Id} was not found");
             }
 
-            if (latestVersion.VersionNumber != m_newTextContract.VersionNumber)
+            if (latestVersion.Id != m_newTextContract.ResourceVersionId)
             {
                 throw new MainServiceException(
                     MainServiceErrorCode.ChangeInConflict,
-                    $"Conflict. Current latest versionNumber is {latestVersion.Id}, but originalVersionNumber was specified {m_newTextContract.VersionNumber}",
+                    $"Conflict. Current latest versionId is {latestVersion.Id}, but originalVersionId was specified {m_newTextContract.ResourceVersionId}",
                     HttpStatusCode.Conflict
                 );
             }
