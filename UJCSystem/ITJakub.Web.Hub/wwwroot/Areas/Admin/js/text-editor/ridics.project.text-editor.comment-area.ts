@@ -69,7 +69,7 @@
             let commentImage;
             if (picture == null) {
                 commentImage =
-                    `<i class="fa fa-4x fa-user"></i>`;
+                    `<div><i class="fa fa-4x fa-user media-object"></i></div>`;
             } else {
                 commentImage =
                     `<a href="#"><img alt="48x48" class="media-object" src="${picture
