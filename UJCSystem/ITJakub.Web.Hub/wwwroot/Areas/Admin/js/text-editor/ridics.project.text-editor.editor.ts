@@ -70,10 +70,7 @@
     private onSendButtonClick(text: string) {
         const textId = this.getCurrentTextId();
         const cm = this.simplemde.codemirror as CodeMirror.Doc;
-        const textReferenceId = (this.commentInput).toggleCommentSignsAndReturnCommentNumber(cm, true);
-        const id = 0; //creating comment
-        const parentComment = null; //creating comment
-        this.commentInput.processCommentSendClick(textId, textReferenceId, id, parentComment, text);
+        (this.commentInput).toggleCommentSignsAndCreateComment(cm, true, text, textId);
     }
 
     private toggleCommentFromEditor = (editor: SimpleMDE, userIsEnteringText: boolean) => {
@@ -117,7 +114,7 @@
                 }
             });
         } else {
-            (this.commentInput).toggleCommentSignsAndReturnCommentNumber(cm, false);
+            (this.commentInput).toggleCommentSignsAndCreateComment(cm, false);
         }
     }
 

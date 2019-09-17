@@ -126,4 +126,9 @@
             noteRequest as JQuery.PlainObject);
         return ajax;
     }
+
+    createTextReferenceId(textId: number): JQuery.jqXHR<string> {
+        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GenerateCommentId`, { textId: textId } as JQuery.PlainObject);
+        return ajax;
+    }
 }

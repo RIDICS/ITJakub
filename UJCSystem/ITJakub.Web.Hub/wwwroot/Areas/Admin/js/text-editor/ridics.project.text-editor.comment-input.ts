@@ -2,8 +2,8 @@
     private readonly commentArea: CommentArea;
     private readonly util: EditorsUtil;
 
-    readonly commentPattern = `comment-`;
-    readonly commentRegexExpr = `(${this.commentPattern}\\w+)`;
+    readonly commentPattern = `komentar-`;
+    readonly commentRegexExpr = `(${this.commentPattern}\\w+-\\w+)`;
 
     constructor(commentArea: CommentArea, util: EditorsUtil) {
         this.commentArea = commentArea;
@@ -126,7 +126,7 @@
             });
     }
 
-    toggleCommentSignsAndReturnCommentNumber(codeMirror: CodeMirror.Doc, addSigns: boolean): string {
+    toggleCommentSignsAndCreateComment(codeMirror: CodeMirror.Doc, addSigns: boolean, commentText?: string, textId?: number) {
         let output: string;
         let markSize: number;
         const selectedText = codeMirror.getSelection();
@@ -137,31 +137,40 @@
         const customCommentarySign = selectedText.match(new RegExp(`\\$${this.commentRegexExpr}\\%`)); //searching on one side only because of the same amount of characters.
         if (!addSigns) {
             if (customCommentarySign) {
-                output = selectedText.replace(new RegExp(`\\$${this.commentRegexExpr}\\%`),"");
-                output = output.replace(new RegExp(`\\%${this.commentRegexExpr}\\$`),"");
+                output = selectedText.replace(new RegExp(`\\$${this.commentRegexExpr}\\%`), "");
+                output = output.replace(new RegExp(`\\%${this.commentRegexExpr}\\$`), "");
                 markSize = customCommentarySign[0].length;
                 codeMirror.replaceSelection(output);
                 codeMirror.setSelection({ line: selectionStartLine, ch: selectionStartChar },
                     { line: selectionEndLine, ch: selectionEndChar - markSize });
             }
-            return null;
         } else {
-            const textReferenceId = this.createTextReferenceId(codeMirror.getValue());
+            this.util.createTextReferenceId(textId).done((commentId) => {
                 if (addSigns) {
+                    const textReferenceId = `${this.commentPattern}${textId}-${commentId}`;
                     const uniqueNumberLength = textReferenceId.length;
                     markSize = uniqueNumberLength + 2; // + $ + %
                     output = `$${textReferenceId}%${selectedText}%${textReferenceId}$`;
                     codeMirror.replaceSelection(output);
                     codeMirror.setSelection({ line: selectionStartLine, ch: selectionStartChar }, //setting caret
                         { line: selectionEndLine, ch: selectionEndChar + 2 * markSize });
-                }
-                return textReferenceId;
-        }
-    }
 
-    createTextReferenceId(text: string): string {
-        const comments = text.match(new RegExp(`\\$${this.commentRegexExpr}\\%`, "g"));
-        return `${this.commentPattern}${comments == null ? 1 : comments.length + 1}`;
+                    const id = 0; //creating comment
+                    const parentComment = null; //creating comment
+                    this.processCommentSendClick(textId, textReferenceId, id, parentComment, commentText);
+                }
+            }).fail(() => {
+                bootbox.alert({
+                    title: localization.translate("Fail", "RidicsProject").value,
+                    message: localization.translate("Failed to create comment.", "RidicsProject").value,
+                    buttons: {
+                        ok: {
+                            className: "btn-default"
+                        }
+                    }
+                });
+            });
+        }
     }
 
     private addCommentFromCommentArea(textReferenceId: string,

@@ -9,7 +9,7 @@ namespace Vokabular.TextConverter.Markdown.Extensions.CommentMark
 {
     public class CommentMarkParser : InlineParser
     {
-        private const string CommentMark = "comment-";
+        private const string CommentMark = "komentar-";
         private readonly char m_closingChar;
         private readonly char m_escapeChar;
         private readonly char m_openingChar;
@@ -134,6 +134,15 @@ namespace Vokabular.TextConverter.Markdown.Extensions.CommentMark
         {
             var commentId = slice.Text.Substring(slice.Start, CommentMark.Length);
             var i = slice.Start + CommentMark.Length;
+            while (slice.Text[i].IsDigit()) // add textId
+            {
+                commentId += slice.Text[i];
+                i++;
+            }
+
+            commentId += slice.Text[i]; // add '-'
+            i++;
+
             while (slice.Text[i].IsDigit())
             {
                 commentId += slice.Text[i];
@@ -150,6 +159,21 @@ namespace Vokabular.TextConverter.Markdown.Extensions.CommentMark
             {
                 i++;
             }
+
+            if (slice.Text[i] == '-')
+            {
+                i++;
+            }
+            else
+            {
+                return false;
+            }
+
+            while (slice.Text[i].IsDigit())
+            {
+                i++;
+            }
+
             return slice.Text[i] == tagClosingChar;
         }
     }

@@ -93,6 +93,24 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             client.DeleteComment(commentId);
         }
 
+        [HttpPost]
+        public IActionResult GenerateCommentId(long textId)
+        {
+            var client = GetProjectClient();
+            var comments = client.GetCommentsForText(textId);
+            var maxId = 0;
+            foreach (var comment in comments)
+            {
+                var isNumber = int.TryParse(comment.TextReferenceId.Split('-')[2], out var value);
+                if (isNumber && value > maxId)
+                {
+                    maxId = value;
+                }
+            }
+
+            return Json(maxId + 1);
+        }
+
         [HttpGet]
         public IActionResult GetPageImage(long pageId)
         {
