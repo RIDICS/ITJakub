@@ -96,11 +96,15 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public virtual IList<PageResource> GetPageList(long projectId)
         {
+            Snapshot snapshotAlias = null;
             Resource resourceAlias = null;
+            Project projectAlias = null;
 
             return GetSession().QueryOver<PageResource>()
+                .JoinAlias(x => x.Snapshots, () => snapshotAlias)
                 .JoinAlias(x => x.Resource, () => resourceAlias)
-                .Where(() => resourceAlias.Project.Id == projectId)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .Where(() => projectAlias.Id == projectId && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
                 .OrderBy(x => x.Position).Asc
                 .List();
         }
@@ -130,11 +134,15 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public virtual IList<ChapterResource> GetChapterList(long projectId)
         {
+            Snapshot snapshotAlias = null;
             Resource resourceAlias = null;
+            Project projectAlias = null;
 
             return GetSession().QueryOver<ChapterResource>()
+                .JoinAlias(x => x.Snapshots, () => snapshotAlias)
                 .JoinAlias(x => x.Resource, () => resourceAlias)
-                .Where(() => resourceAlias.Project.Id == projectId)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .Where(() => projectAlias.Id == projectId && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
                 .OrderBy(x => x.Position).Asc
                 .List();
         }
@@ -142,12 +150,16 @@ namespace Vokabular.DataEntities.Database.Repositories
         public virtual IList<Term> GetPageTermList(long resourcePageId)
         {
             PageResource pageResourceAlias = null;
+            Snapshot snapshotAlias = null;
             Resource resourceAlias = null;
+            Project projectAlias = null;
 
             return GetSession().QueryOver<Term>()
                 .JoinAlias(x => x.PageResources, () => pageResourceAlias)
+                .JoinAlias(() => pageResourceAlias.Snapshots, () => snapshotAlias)
                 .JoinAlias(() => pageResourceAlias.Resource, () => resourceAlias)
-                .Where(() => resourceAlias.Id == resourcePageId && resourceAlias.LatestVersion.Id == pageResourceAlias.Id)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .Where(() => resourceAlias.Id == resourcePageId && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
                 .OrderBy(x => x.Position).Asc
                 .List();
         }
@@ -418,19 +430,23 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public virtual IList<PageResource> GetPagesByTextVersionId(IEnumerable<long> textVersionIds)
         {
+            Snapshot snapshotAlias = null;
             Resource resourceAlias = null;
+            Project projectAlias = null;
 
             var subquery = QueryOver.Of<TextResource>()
                 .WhereRestrictionOn(x => x.Id).IsInG(textVersionIds)
                 .Select(x => x.ResourcePage.Id);
 
             var pageResourceIds = GetSession().QueryOver<PageResource>()
+                .JoinAlias(x => x.Snapshots, () => snapshotAlias)
                 .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .Fetch(SelectMode.Fetch, x => x.Resource)
                 .OrderBy(x => x.Position).Asc
                 .WithSubquery
                 .WhereProperty(() => resourceAlias.Id).In(subquery)
-                .And(x => x.Id == resourceAlias.LatestVersion.Id)
+                .And(() => snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
                 .List();
 
             return pageResourceIds;
@@ -448,6 +464,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         private IList<PageResource> GetPagesByTextExternalIdInner(IEnumerable<string> textExternalIds, long? projectId, string projectExternalId, ProjectTypeEnum? projectType)
         {
+            Snapshot snapshotAlias = null;
             Resource resourceAlias = null;
             Project projectAlias = null;
 
@@ -456,13 +473,14 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Select(x => x.ResourcePage.Id);
 
             var query = GetSession().QueryOver<PageResource>()
+                .JoinAlias(x => x.Snapshots, () => snapshotAlias)
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .Fetch(SelectMode.Fetch, x => x.Resource)
                 .OrderBy(x => x.Position).Asc
                 .WithSubquery
                 .WhereProperty(() => resourceAlias.Id).In(subquery)
-                .And(x => x.Id == resourceAlias.LatestVersion.Id);
+                .And(() => snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id);
 
             if (projectId != null)
             {

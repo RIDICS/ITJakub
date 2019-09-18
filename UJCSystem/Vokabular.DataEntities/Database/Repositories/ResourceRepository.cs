@@ -141,6 +141,19 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
+        public virtual IList<Term> GetLatestPageTermList(long resourcePageId)
+        {
+            PageResource pageResourceAlias = null;
+            Resource resourceAlias = null;
+
+            return GetSession().QueryOver<Term>()
+                .JoinAlias(x => x.PageResources, () => pageResourceAlias)
+                .JoinAlias(() => pageResourceAlias.Resource, () => resourceAlias)
+                .Where(() => resourceAlias.Id == resourcePageId && pageResourceAlias.Id == resourceAlias.LatestVersion.Id)
+                .OrderBy(x => x.Position).Asc
+                .List();
+        }
+
         public virtual Term GetTermByExternalId(string externalId)
         {
             return GetSession().QueryOver<Term>()
