@@ -192,7 +192,8 @@ class SnapshotEditor {
         defaultBookType.attr("disabled", "disabled");
         defaultBookType.trigger("change");
 
-        const otherBookTypes = $("#publishToModules").find(`.book-types-value:not([value="${bookType}"]) + .book-types`);
+        const otherBookTypes =
+            $("#publishToModules").find(`.book-types-value:not([value="${bookType}"]) + .book-types`);
         otherBookTypes.removeAttr("disabled");
     }
 
@@ -207,39 +208,31 @@ class SnapshotEditor {
 
         switch (resourceType) {
         case ResourceType.Audio:
-            {
-                this.client.getAudio(resourceVersionId).done((response) => {
-                    modalBody.html(response);
-                }).fail((error) => {
-                    const alert = new AlertComponentBuilder(AlertType.Error)
-                        .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
-                    modalBody.html(alert);
-                });
-            }
+            this.client.getAudio(resourceVersionId).done((response) => {
+                modalBody.html(response);
+            }).fail((error) => {
+                const alert = new AlertComponentBuilder(AlertType.Error)
+                    .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                modalBody.html(alert);
+            });
             break;
         case ResourceType.Image:
-            {
-                const imageUrl = this.client.getImageUrl(resourceVersionId);
-                this.imageViewer.addImageContent(modalBody, imageUrl);
-            }
+            const imageUrl = this.client.getImageUrl(resourceVersionId);
+            this.imageViewer.addImageContent(modalBody, imageUrl);
             break;
         case ResourceType.Text:
-            {
-                this.client.getText(resourceVersionId).done((response) => {
-                    modalBody.html(response.text);
-                }).fail((error) => {
-                    const alert = new AlertComponentBuilder(AlertType.Error)
-                        .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
-                    modalBody.html(alert);
-                });
-            }
+            this.client.getText(resourceVersionId).done((response) => {
+                modalBody.html(response.text);
+            }).fail((error) => {
+                const alert = new AlertComponentBuilder(AlertType.Error)
+                    .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                modalBody.html(alert);
+            });
             break;
         default:
-        {
             const alert = new AlertComponentBuilder(AlertType.Error)
                 .addContent(localization.translate("UnsupportedResourceType", "Admin").value).buildElement();
             modalBody.html(alert);
-        }
         }
         resourcePreviewModal.modal("show");
     }
