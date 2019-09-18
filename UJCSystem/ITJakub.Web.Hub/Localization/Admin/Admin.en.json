@@ -45,6 +45,9 @@
     "ResourceNewVersion": "translate[Nová verze zdroje ]",
     "NewVersionComment": "translate[Komentář k nové verzi]",
     "ProjectsList": "translate[Projekty - Seznam]",
+    "PublicationInfo": "Information about publication",
+    "EditionNotePublish": "The edition note will be published with work",
+    "NoEditionNote": "The edition note to this work is not created",
 
     "Edit": "Edit",
     "Close": "Close",

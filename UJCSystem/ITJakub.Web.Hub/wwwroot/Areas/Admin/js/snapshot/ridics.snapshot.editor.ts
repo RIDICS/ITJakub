@@ -125,12 +125,12 @@ class SnapshotEditor {
     
     
     private setResourcesCount(): void {
-        let textResources;
-        let textSelectedResources;
-        let imageResources;
-        let imageSelectedResources;
-        let audioResources;
-        let audioSelectedResources;
+        let textResources = "0";
+        let textSelectedResources = "0";
+        let imageResources = "0";
+        let imageSelectedResources = "0";
+        let audioResources = "0";
+        let audioSelectedResources = "0";
         for (let panel of $(".publish-resource-panel").toArray()) {
             const resourceType = Number($(panel).data("resource-type"));
             const resources = $(panel).find("table .include-checkboxes input[type=\"checkbox\"]").length;
@@ -158,7 +158,7 @@ class SnapshotEditor {
             }
         }
 
-        $("#snapshotCreatingResult").text(localization.translateFormat("SelectedResources", [textSelectedResources, textResources, imageSelectedResources, imageResources, audioSelectedResources, audioResources], "RidicsProject").value);
+        $("#selectedResourcesCount").text(localization.translateFormat("SelectedResources", [textSelectedResources, textResources, imageSelectedResources, imageResources, audioSelectedResources, audioResources], "RidicsProject").value);
     }
 
     private loadResourceVersions(selectBox: JQuery) {

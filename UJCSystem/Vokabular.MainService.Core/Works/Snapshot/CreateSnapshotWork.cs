@@ -47,7 +47,10 @@ namespace Vokabular.MainService.Core.Works.Snapshot
             var versionNumber = latestSnapshot?.VersionNumber ?? 0;
 
             var editionNote = m_resourceRepository.GetLatestEditionNote(m_projectId);
-            resourceVersions.Add(editionNote);
+            if (editionNote != null)
+            {
+                resourceVersions.Add(editionNote);
+            }
 
             var newDbSnapshot = new DataEntities.Database.Entities.Snapshot
             {

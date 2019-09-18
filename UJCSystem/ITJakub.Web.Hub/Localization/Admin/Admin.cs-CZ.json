@@ -45,6 +45,10 @@
     "ResourceNewVersion": "Nová verze zdroje ",
     "NewVersionComment": "Komentář k nové verzi",
     "ProjectsList": "Projekty - Seznam",
+    "PublicationInfo": "Informace o publikaci",
+    "EditionNotePublish": "Ediční poznámka bude publikována s dílem",
+    "NoEditionNote": "Ediční poznámka k dílu není vytvořena",
+
 
     "Edit": "Upravit",
     "Close": "Uzavřít",
